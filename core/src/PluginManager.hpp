@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef PluginManager_hpp
-#define PluginManager_hpp
+#ifndef EE_CORE_PLUGIN_MANAGER_HPP_
+#define EE_CORE_PLUGIN_MANAGER_HPP_
 
 #include <string>
 #include <unordered_map>
@@ -40,4 +40,4 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif /* PluginManager_hpp */
+#endif /* EE_CORE_PLUGIN_MANAGER_HPP_ */

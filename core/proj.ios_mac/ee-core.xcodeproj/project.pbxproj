@@ -1,0 +1,535 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6F68F56C1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */; };
+		6F68F56D1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */; };
+		6F68F56E1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */; };
+		6F68F56F1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */; };
+		6F68F5951D26724800F9D3F2 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5931D26724800F9D3F2 /* PluginManager.cpp */; };
+		6F68F5961D26724800F9D3F2 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5931D26724800F9D3F2 /* PluginManager.cpp */; };
+		6F68F5971D26724800F9D3F2 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5941D26724800F9D3F2 /* PluginManager.hpp */; };
+		6F68F5981D26724800F9D3F2 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5941D26724800F9D3F2 /* PluginManager.hpp */; };
+		6F68F59B1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */; };
+		6F68F59C1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */; };
+		6F68F5A61D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */; };
+		6F68F5A71D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */; };
+		6F68F5A81D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */; };
+		6F68F5A91D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */; };
+		6F68F5AA1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */; };
+		6F68F5AB1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */; };
+		6F68F5AC1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */; };
+		6F68F5AD1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */; };
+		6F68F5AE1D26736A00F9D3F2 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */; };
+		6F68F5AF1D26736A00F9D3F2 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */; };
+		6F68F5B01D26736A00F9D3F2 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */; };
+		6F68F5B11D26736A00F9D3F2 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */; };
+		6F68F5B21D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */; };
+		6F68F5B31D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */; };
+		6F68F5B41D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */; };
+		6F68F5B51D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */; };
+		6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F68F5B81D26740500F9D3F2 /* Foundation.framework */; };
+		6F748AA61D29F7AF004A0802 /* JniUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA31D29F7AF004A0802 /* JniUtils.hpp */; };
+		6F748AA71D29F7AF004A0802 /* JniUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA31D29F7AF004A0802 /* JniUtils.hpp */; };
+		6F748AAC1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */; };
+		6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */; };
+		6F748AB21D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
+		6F748AB31D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6C43A8041BDDDF1800D0597F /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProtocol.cpp; path = ../src/PluginProtocol.cpp; sourceTree = "<group>"; };
+		6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PluginProtocol.hpp; path = ../src/PluginProtocol.hpp; sourceTree = "<group>"; };
+		6F68F5891D26708A00F9D3F2 /* optional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
+		6F68F58B1D26708A00F9D3F2 /* test_optional.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_optional.cpp; sourceTree = "<group>"; };
+		6F68F58C1D26708A00F9D3F2 /* test_type_traits.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_type_traits.cpp; sourceTree = "<group>"; };
+		6F68F58F1D26708A00F9D3F2 /* json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		6F68F5921D26710600F9D3F2 /* ExperimentalOptional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ExperimentalOptional.hpp; path = ../src/ExperimentalOptional.hpp; sourceTree = "<group>"; };
+		6F68F5931D26724800F9D3F2 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginManager.cpp; path = ../src/PluginManager.cpp; sourceTree = "<group>"; };
+		6F68F5941D26724800F9D3F2 /* PluginManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PluginManager.hpp; path = ../src/PluginManager.hpp; sourceTree = "<group>"; };
+		6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "PluginProtocol-iOS.mm"; path = "../src/PluginProtocol-iOS.mm"; sourceTree = "<group>"; };
+		6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEDictionaryUtils.h; path = src/EEDictionaryUtils.h; sourceTree = "<group>"; };
+		6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEDictionaryUtils.m; path = src/EEDictionaryUtils.m; sourceTree = "<group>"; };
+		6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEJsonUtils.h; path = src/EEJsonUtils.h; sourceTree = "<group>"; };
+		6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEJsonUtils.m; path = src/EEJsonUtils.m; sourceTree = "<group>"; };
+		6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEPluginManager.h; path = src/EEPluginManager.h; sourceTree = "<group>"; };
+		6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEPluginManager.m; path = src/EEPluginManager.m; sourceTree = "<group>"; };
+		6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEPluginProtocol.h; path = src/EEPluginProtocol.h; sourceTree = "<group>"; };
+		6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EEPluginProtocol.mm; path = src/EEPluginProtocol.mm; sourceTree = "<group>"; };
+		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "PluginProtocol-Android.cpp"; path = "../src/PluginProtocol-Android.cpp"; sourceTree = "<group>"; };
+		6F748AA21D29F7AF004A0802 /* JniUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniUtils.cpp; path = ../src/JniUtils.cpp; sourceTree = "<group>"; };
+		6F748AA31D29F7AF004A0802 /* JniUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniUtils.hpp; path = ../src/JniUtils.hpp; sourceTree = "<group>"; };
+		6F748AA81D2A024A004A0802 /* JniMethodInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniMethodInfo.cpp; path = ../src/JniMethodInfo.cpp; sourceTree = "<group>"; };
+		6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniMethodInfo.hpp; path = ../src/JniMethodInfo.hpp; sourceTree = "<group>"; };
+		6F748AAE1D2A04BF004A0802 /* JniString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniString.cpp; path = ../src/JniString.cpp; sourceTree = "<group>"; };
+		6F748AAF1D2A04BF004A0802 /* JniString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniString.hpp; path = ../src/JniString.hpp; sourceTree = "<group>"; };
+		6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C43A8031BDDDF1800D0597F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B60F1CCA7AA00008EFAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5841D26708A00F9D3F2 /* libraries */,
+				46880B8319C43A87006E1F66 /* src */,
+				6F68F59D1D26733700F9D3F2 /* ios */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				6FC1CA921CEAB89C00DCDC8E /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5B81D26740500F9D3F2 /* Foundation.framework */,
+				6F68F5B61D2673E800F9D3F2 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		46880B8319C43A87006E1F66 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5921D26710600F9D3F2 /* ExperimentalOptional.hpp */,
+				6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */,
+				6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */,
+				6F68F5931D26724800F9D3F2 /* PluginManager.cpp */,
+				6F68F5941D26724800F9D3F2 /* PluginManager.hpp */,
+				6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */,
+				6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */,
+				6F748AA21D29F7AF004A0802 /* JniUtils.cpp */,
+				6F748AA31D29F7AF004A0802 /* JniUtils.hpp */,
+				6F748AA81D2A024A004A0802 /* JniMethodInfo.cpp */,
+				6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */,
+				6F748AAE1D2A04BF004A0802 /* JniString.cpp */,
+				6F748AAF1D2A04BF004A0802 /* JniString.hpp */,
+			);
+			name = src;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		6F68F5841D26708A00F9D3F2 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5851D26708A00F9D3F2 /* akrzemi1-optional */,
+				6F68F58D1D26708A00F9D3F2 /* nlohmann-json */,
+			);
+			name = libraries;
+			path = ../libraries;
+			sourceTree = "<group>";
+		};
+		6F68F5851D26708A00F9D3F2 /* akrzemi1-optional */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5891D26708A00F9D3F2 /* optional.hpp */,
+				6F68F58B1D26708A00F9D3F2 /* test_optional.cpp */,
+				6F68F58C1D26708A00F9D3F2 /* test_type_traits.cpp */,
+			);
+			path = "akrzemi1-optional";
+			sourceTree = "<group>";
+		};
+		6F68F58D1D26708A00F9D3F2 /* nlohmann-json */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F58F1D26708A00F9D3F2 /* json.hpp */,
+			);
+			path = "nlohmann-json";
+			sourceTree = "<group>";
+		};
+		6F68F59D1D26733700F9D3F2 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */,
+				6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */,
+				6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */,
+				6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */,
+				6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */,
+				6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */,
+				6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */,
+				6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+		6FC1CA921CEAB89C00DCDC8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */,
+				6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6C1952961C44E97F00185F01 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5AA1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */,
+				6F68F56E1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */,
+				6F68F5AE1D26736A00F9D3F2 /* EEPluginManager.h in Headers */,
+				6F748AB21D2A04BF004A0802 /* JniString.hpp in Headers */,
+				6F748AA61D29F7AF004A0802 /* JniUtils.hpp in Headers */,
+				6F68F5971D26724800F9D3F2 /* PluginManager.hpp in Headers */,
+				6F748AAC1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
+				6F68F5A61D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
+				6F68F5B21D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B6101CCA7AA00008EFAC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5AB1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */,
+				6F68F56F1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */,
+				6F68F5AF1D26736A00F9D3F2 /* EEPluginManager.h in Headers */,
+				6F748AB31D2A04BF004A0802 /* JniString.hpp in Headers */,
+				6F748AA71D29F7AF004A0802 /* JniUtils.hpp in Headers */,
+				6F68F5981D26724800F9D3F2 /* PluginManager.hpp in Headers */,
+				6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
+				6F68F5A71D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
+				6F68F5B31D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		6C43A8051BDDDF1800D0597F /* ee-core-mobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C43A80D1BDDDF1900D0597F /* Build configuration list for PBXNativeTarget "ee-core-mobile" */;
+			buildPhases = (
+				6C43A8021BDDDF1800D0597F /* Sources */,
+				6C43A8031BDDDF1800D0597F /* Frameworks */,
+				6C43A8041BDDDF1800D0597F /* Copy Files */,
+				6C1952961C44E97F00185F01 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ee-core-mobile";
+			productName = "ee-library";
+			productReference = 6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F79B6111CCA7AA00008EFAC /* ee-core-desktop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F79B61B1CCA7AA00008EFAC /* Build configuration list for PBXNativeTarget "ee-core-desktop" */;
+			buildPhases = (
+				6F79B60E1CCA7AA00008EFAC /* Sources */,
+				6F79B60F1CCA7AA00008EFAC /* Frameworks */,
+				6F79B6101CCA7AA00008EFAC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ee-core-desktop";
+			productName = "ee-library-desktop";
+			productReference = 6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					6C43A8051BDDDF1800D0597F = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					6F79B6111CCA7AA00008EFAC = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ee-core" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C43A8051BDDDF1800D0597F /* ee-core-mobile */,
+				6F79B6111CCA7AA00008EFAC /* ee-core-desktop */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C43A8021BDDDF1800D0597F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5AC1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
+				6F68F5951D26724800F9D3F2 /* PluginManager.cpp in Sources */,
+				6F68F5B41D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
+				6F68F56C1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
+				6F68F59B1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
+				6F68F5B01D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
+				6F68F5A81D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B60E1CCA7AA00008EFAC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5AD1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
+				6F68F5961D26724800F9D3F2 /* PluginManager.cpp in Sources */,
+				6F68F5B51D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
+				6F68F56D1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
+				6F68F59C1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
+				6F68F5B11D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
+				6F68F5A91D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6C43A80E1BDDDF1900D0597F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6C43A80F1BDDDF1900D0597F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6F79B6181CCA7AA00008EFAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6F79B6191CCA7AA00008EFAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../libraries\"";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../libraries\"";
+				LLVM_LTO = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C43A80D1BDDDF1900D0597F /* Build configuration list for PBXNativeTarget "ee-core-mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C43A80E1BDDDF1900D0597F /* Debug */,
+				6C43A80F1BDDDF1900D0597F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F79B61B1CCA7AA00008EFAC /* Build configuration list for PBXNativeTarget "ee-core-desktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F79B6181CCA7AA00008EFAC /* Debug */,
+				6F79B6191CCA7AA00008EFAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ee-core" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

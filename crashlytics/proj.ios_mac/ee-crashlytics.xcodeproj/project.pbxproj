@@ -1,0 +1,525 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F68F5B81D26740500F9D3F2 /* Foundation.framework */; };
+		6F748ACA1D2A0A93004A0802 /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F748AC81D2A0A93004A0802 /* CrashlyticsProtocol.cpp */; };
+		6F748ACB1D2A0A93004A0802 /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F748AC81D2A0A93004A0802 /* CrashlyticsProtocol.cpp */; };
+		6F748ACC1D2A0A93004A0802 /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AC91D2A0A93004A0802 /* CrashlyticsProtocol.hpp */; };
+		6F748ACD1D2A0A93004A0802 /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AC91D2A0A93004A0802 /* CrashlyticsProtocol.hpp */; };
+		6F748ADE1D2A0DED004A0802 /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F748ADD1D2A0DED004A0802 /* EECrashlyticsProtocol.m */; };
+		6F748ADF1D2A0DED004A0802 /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F748ADD1D2A0DED004A0802 /* EECrashlyticsProtocol.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6C43A8041BDDDF1800D0597F /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile.release.xcconfig"; sourceTree = "<group>"; };
+		15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile.debug.xcconfig"; sourceTree = "<group>"; };
+		52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop.release.xcconfig"; sourceTree = "<group>"; };
+		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6F748AC81D2A0A93004A0802 /* CrashlyticsProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CrashlyticsProtocol.cpp; path = ../src/CrashlyticsProtocol.cpp; sourceTree = "<group>"; };
+		6F748AC91D2A0A93004A0802 /* CrashlyticsProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CrashlyticsProtocol.hpp; path = ../src/CrashlyticsProtocol.hpp; sourceTree = "<group>"; };
+		6F748ADD1D2A0DED004A0802 /* EECrashlyticsProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EECrashlyticsProtocol.m; path = src/EECrashlyticsProtocol.m; sourceTree = "<group>"; };
+		6F748AE01D2A0DFA004A0802 /* EECrashlyticsProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EECrashlyticsProtocol.h; path = src/EECrashlyticsProtocol.h; sourceTree = "<group>"; };
+		6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C43A8031BDDDF1800D0597F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B60F1CCA7AA00008EFAC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				46880B8319C43A87006E1F66 /* src */,
+				6F68F59D1D26733700F9D3F2 /* ios */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				6FC1CA921CEAB89C00DCDC8E /* Products */,
+				6B66E8F8D32DEFF096B455AB /* Pods */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6F68F5B81D26740500F9D3F2 /* Foundation.framework */,
+				6F68F5B61D2673E800F9D3F2 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		46880B8319C43A87006E1F66 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				6F748AC81D2A0A93004A0802 /* CrashlyticsProtocol.cpp */,
+				6F748AC91D2A0A93004A0802 /* CrashlyticsProtocol.hpp */,
+			);
+			name = src;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		6B66E8F8D32DEFF096B455AB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */,
+				0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */,
+				B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */,
+				52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		6F68F59D1D26733700F9D3F2 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				6F748ADD1D2A0DED004A0802 /* EECrashlyticsProtocol.m */,
+				6F748AE01D2A0DFA004A0802 /* EECrashlyticsProtocol.h */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+		6FC1CA921CEAB89C00DCDC8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */,
+				6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6C1952961C44E97F00185F01 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F748ACC1D2A0A93004A0802 /* CrashlyticsProtocol.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B6101CCA7AA00008EFAC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F748ACD1D2A0A93004A0802 /* CrashlyticsProtocol.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		6C43A8051BDDDF1800D0597F /* ee-crashlytics-mobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C43A80D1BDDDF1900D0597F /* Build configuration list for PBXNativeTarget "ee-crashlytics-mobile" */;
+			buildPhases = (
+				8B5F827BB7EEF0B730613154 /* [CP] Check Pods Manifest.lock */,
+				6C43A8021BDDDF1800D0597F /* Sources */,
+				6C43A8031BDDDF1800D0597F /* Frameworks */,
+				6C43A8041BDDDF1800D0597F /* Copy Files */,
+				6C1952961C44E97F00185F01 /* Headers */,
+				8C243F487CF29F7F720AC5BC /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ee-crashlytics-mobile";
+			productName = "ee-library";
+			productReference = 6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F79B6111CCA7AA00008EFAC /* ee-crashlytics-desktop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F79B61B1CCA7AA00008EFAC /* Build configuration list for PBXNativeTarget "ee-crashlytics-desktop" */;
+			buildPhases = (
+				2B9220EA8CC8D67AE9309B3E /* [CP] Check Pods Manifest.lock */,
+				6F79B60E1CCA7AA00008EFAC /* Sources */,
+				6F79B60F1CCA7AA00008EFAC /* Frameworks */,
+				6F79B6101CCA7AA00008EFAC /* Headers */,
+				152085902023DBB6B205B260 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ee-crashlytics-desktop";
+			productName = "ee-library-desktop";
+			productReference = 6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					6C43A8051BDDDF1800D0597F = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					6F79B6111CCA7AA00008EFAC = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ee-crashlytics" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C43A8051BDDDF1800D0597F /* ee-crashlytics-mobile */,
+				6F79B6111CCA7AA00008EFAC /* ee-crashlytics-desktop */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		152085902023DBB6B205B260 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2B9220EA8CC8D67AE9309B3E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8B5F827BB7EEF0B730613154 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8C243F487CF29F7F720AC5BC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C43A8021BDDDF1800D0597F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F748ACA1D2A0A93004A0802 /* CrashlyticsProtocol.cpp in Sources */,
+				6F748ADE1D2A0DED004A0802 /* EECrashlyticsProtocol.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F79B60E1CCA7AA00008EFAC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F748ACB1D2A0A93004A0802 /* CrashlyticsProtocol.cpp in Sources */,
+				6F748ADF1D2A0DED004A0802 /* EECrashlyticsProtocol.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6C43A80E1BDDDF1900D0597F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_IOS,
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6C43A80F1BDDDF1900D0597F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_IOS,
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6F79B6181CCA7AA00008EFAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_MAC,
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6F79B6191CCA7AA00008EFAC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_MAC,
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../core/src\"",
+					"\"$(SRCROOT)/../../core/libraries\"",
+					"\"$(SRCROOT)/../../core/proj.ios_mac/src\"",
+					"\"$(SRCROOT)/Pods/Crashlytics/iOS\"",
+					"\"$(SRCROOT)/Pods/Fabric/iOS\"",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../core/src\"",
+					"\"$(SRCROOT)/../../core/libraries\"",
+					"\"$(SRCROOT)/../../core/proj.ios_mac/src\"",
+					"\"$(SRCROOT)/Pods/Crashlytics/iOS\"",
+					"\"$(SRCROOT)/Pods/Fabric/iOS\"",
+				);
+				LLVM_LTO = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C43A80D1BDDDF1900D0597F /* Build configuration list for PBXNativeTarget "ee-crashlytics-mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C43A80E1BDDDF1900D0597F /* Debug */,
+				6C43A80F1BDDDF1900D0597F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F79B61B1CCA7AA00008EFAC /* Build configuration list for PBXNativeTarget "ee-crashlytics-desktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F79B6181CCA7AA00008EFAC /* Debug */,
+				6F79B6191CCA7AA00008EFAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ee-crashlytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

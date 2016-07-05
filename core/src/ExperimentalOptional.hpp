@@ -9,7 +9,7 @@
 #ifndef EE_CORE_EXPERIMENTAL_OPTIONAL_HPP_
 #define EE_CORE_EXPERIMENTAL_OPTIONAL_HPP_
 
-#include <akrzemi1-optional/optional.hpp>
+#include <optional.hpp>
 
 namespace ee {
 namespace core {

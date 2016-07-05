@@ -30,9 +30,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile.release.xcconfig"; sourceTree = "<group>"; };
-		15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile.debug.xcconfig"; sourceTree = "<group>"; };
-		52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop.release.xcconfig"; sourceTree = "<group>"; };
 		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		6F748AC81D2A0A93004A0802 /* CrashlyticsProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CrashlyticsProtocol.cpp; path = ../src/CrashlyticsProtocol.cpp; sourceTree = "<group>"; };
@@ -42,7 +39,6 @@
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF8A7381D2B639400DF651A /* plugin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = plugin; path = "../proj.android_studio/ee-crashlytics/src/main/java/com/ee/plugin"; sourceTree = "<group>"; };
-		B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +68,6 @@
 				6F68F59D1D26733700F9D3F2 /* ios */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				6FC1CA921CEAB89C00DCDC8E /* Products */,
-				6B66E8F8D32DEFF096B455AB /* Pods */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -94,17 +89,6 @@
 			);
 			name = src;
 			path = ../Classes;
-			sourceTree = "<group>";
-		};
-		6B66E8F8D32DEFF096B455AB /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */,
-				0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */,
-				B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */,
-				52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		6F68F59D1D26733700F9D3F2 /* ios */ = {
@@ -151,12 +135,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6C43A80D1BDDDF1900D0597F /* Build configuration list for PBXNativeTarget "ee-crashlytics-mobile" */;
 			buildPhases = (
-				8B5F827BB7EEF0B730613154 /* [CP] Check Pods Manifest.lock */,
 				6C43A8021BDDDF1800D0597F /* Sources */,
 				6C43A8031BDDDF1800D0597F /* Frameworks */,
 				6C43A8041BDDDF1800D0597F /* Copy Files */,
 				6C1952961C44E97F00185F01 /* Headers */,
-				8C243F487CF29F7F720AC5BC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -171,11 +153,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6F79B61B1CCA7AA00008EFAC /* Build configuration list for PBXNativeTarget "ee-crashlytics-desktop" */;
 			buildPhases = (
-				2B9220EA8CC8D67AE9309B3E /* [CP] Check Pods Manifest.lock */,
 				6F79B60E1CCA7AA00008EFAC /* Sources */,
 				6F79B60F1CCA7AA00008EFAC /* Frameworks */,
 				6F79B6101CCA7AA00008EFAC /* Headers */,
-				152085902023DBB6B205B260 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -223,69 +203,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		152085902023DBB6B205B260 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2B9220EA8CC8D67AE9309B3E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		8B5F827BB7EEF0B730613154 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		8C243F487CF29F7F720AC5BC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ee-crashlytics-mobile/Pods-ee-crashlytics-mobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		6C43A8021BDDDF1800D0597F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -310,7 +227,6 @@
 /* Begin XCBuildConfiguration section */
 		6C43A80E1BDDDF1900D0597F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15225CCBB6B636B3AEB9D0ED /* Pods-ee-crashlytics-mobile.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -326,7 +242,6 @@
 		};
 		6C43A80F1BDDDF1900D0597F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F14123EDD090BDE83BEDD07 /* Pods-ee-crashlytics-mobile.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -342,7 +257,6 @@
 		};
 		6F79B6181CCA7AA00008EFAC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -356,7 +270,6 @@
 		};
 		6F79B6191CCA7AA00008EFAC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52A0B094AABD77D76E17C13D /* Pods-ee-crashlytics-desktop.release.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -419,10 +332,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../core/src\"",
-					"\"$(SRCROOT)/../../core/libraries\"",
 					"\"$(SRCROOT)/../../core/proj.ios_mac/src\"",
-					"\"$(SRCROOT)/Pods/Crashlytics/iOS\"",
-					"\"$(SRCROOT)/Pods/Fabric/iOS\"",
+					"\"$(SRCROOT)/../../core/libraries/akrzemi1-optional\"",
+					"\"$(SRCROOT)/../../core/libraries/nlohmann-json\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -480,10 +392,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../core/src\"",
-					"\"$(SRCROOT)/../../core/libraries\"",
 					"\"$(SRCROOT)/../../core/proj.ios_mac/src\"",
-					"\"$(SRCROOT)/Pods/Crashlytics/iOS\"",
-					"\"$(SRCROOT)/Pods/Fabric/iOS\"",
+					"\"$(SRCROOT)/../../core/libraries/akrzemi1-optional\"",
+					"\"$(SRCROOT)/../../core/libraries/nlohmann-json\"",
 				);
 				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";

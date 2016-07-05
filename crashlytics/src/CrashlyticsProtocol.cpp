@@ -8,7 +8,7 @@
 
 #include "CrashlyticsProtocol.hpp"
 
-#include <nlohmann-json/json.hpp>
+#include <json.hpp>
 
 namespace ee {
 namespace crashlytics {

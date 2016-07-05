@@ -349,6 +349,7 @@
 					EE_PLATFORM_MAC,
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -362,6 +363,7 @@
 					EE_PLATFORM_MAC,
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
 			name = Release;

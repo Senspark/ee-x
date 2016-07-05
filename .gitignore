@@ -1,10 +1,5 @@
 core/proj.android_studio/ee-core/build
-core/proj.ios_mac/ee-core.xcodeproj/project.xcworkspace
-core/proj.ios_mac/ee-core.xcodeproj/xcuserdata
-crashlytics/proj.ios_mac/Pods
-crashlytics/proj.ios_mac/ee-crashlytics.xcworkspace
-crashlytics/proj.ios_mac/ee-crashlytics.xcodeproj/xcuserdata
-crashlytics/proj.ios_mac/ee-crashlytics.xcodeproj/project.xcworkspace
-Podfile.lock
+xcuserdata
+project.xcworkspace
 crashlytics/proj.android_studio/ee-crashlytics/build
-ee-crashlytics.iml
+*.iml

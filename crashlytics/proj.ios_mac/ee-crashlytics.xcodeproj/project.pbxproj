@@ -41,6 +41,7 @@
 		6F748AE01D2A0DFA004A0802 /* EECrashlyticsProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EECrashlyticsProtocol.h; path = src/EECrashlyticsProtocol.h; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FF8A7381D2B639400DF651A /* plugin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = plugin; path = "../proj.android_studio/ee-crashlytics/src/main/java/com/ee/plugin"; sourceTree = "<group>"; };
 		B49AD74BEF05849552A62A68 /* Pods-ee-crashlytics-desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee-crashlytics-desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee-crashlytics-desktop/Pods-ee-crashlytics-desktop.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +67,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				6FF8A7381D2B639400DF651A /* plugin */,
 				46880B8319C43A87006E1F66 /* src */,
 				6F68F59D1D26733700F9D3F2 /* ios */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,

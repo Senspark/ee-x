@@ -21,7 +21,9 @@ class JniString;
 
 class JniUtils final {
 public:
-    static void initialize(JavaVM* vm, JNIEnv* env) noexcept;
+    static void setVm(JavaVM* vm) noexcept;
+    
+    static void initialize();
 
     static JNIEnv* getEnv();
 
@@ -36,6 +38,8 @@ public:
                         const char* signature);
 
 private:
+    static void cacheEnv();
+    
     static std::thread::id threadId_;
 
     static JNIEnv* env_;

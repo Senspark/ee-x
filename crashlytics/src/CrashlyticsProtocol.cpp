@@ -9,21 +9,11 @@
 #include "CrashlyticsProtocol.hpp"
 
 #include <PluginProtocol.hpp>
+#include <LogLevel.hpp>
 #include <json.hpp>
 
 namespace ee {
 namespace crashlytics {
-LogLevel::LogLevel(int priority, const std::string& desc)
-    : priority_{priority}
-    , desc_{desc} {}
-
-const LogLevel LogLevel::Verbose(2, "[VERBOSE]");
-const LogLevel LogLevel::Debug(3, "[DEBUG]");
-const LogLevel LogLevel::Info(4, "[INFO]");
-const LogLevel LogLevel::Warn(5, "[WARN]");
-const LogLevel LogLevel::Error(6, "[ERROR]");
-const LogLevel LogLevel::Assert(7, "[ASSERT]");
-
 CrashlyticsProtocol::CrashlyticsProtocol()
     : protocol_{new core::PluginProtocol{"CrashlyticsProtocol"}} {}
 
@@ -37,13 +27,14 @@ void CrashlyticsProtocol::causeException() const {
     protocol_->callNative("causeException");
 }
 
-void CrashlyticsProtocol::log(const LogLevel& level, const std::string& tag,
+void CrashlyticsProtocol::log(const core::LogLevel& level,
+                              const std::string& tag,
                               const std::string& message) const {
     nlohmann::json json;
 #if defined(EE_PLATFORM_IOS) || defined(EE_PLATFORM_MAC)
-    json["priorityDescription"] = level.desc_;
+    json["priorityDescription"] = level.desc;
 #elif defined(EE_PLATFORM_ANDROID)
-    json["priority"] = level.priority_;
+    json["priority"] = level.priority;
 #endif
     json["tag"] = tag;
     json["message"] = message;

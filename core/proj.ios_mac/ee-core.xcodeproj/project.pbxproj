@@ -40,6 +40,16 @@
 		6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */; };
 		6F748AB21D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
 		6F748AB31D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
+		6FB2D0E21D2CBFE3007D47B6 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */; };
+		6FB2D0E31D2CBFE3007D47B6 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */; };
+		6FB2D0E41D2CBFE3007D47B6 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */; };
+		6FB2D0E51D2CBFE3007D47B6 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */; };
+		6FB2D0E81D2CC08A007D47B6 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */; };
+		6FB2D0E91D2CC08A007D47B6 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */; };
+		6FB2D0EA1D2CC08A007D47B6 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */; };
+		6FB2D0EB1D2CC08A007D47B6 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */; };
+		6FC406251D2CC82C002C100F /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FC406241D2CC82C002C100F /* Logger-iOS.mm */; };
+		6FC406261D2CC82C002C100F /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FC406241D2CC82C002C100F /* Logger-iOS.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -84,8 +94,14 @@
 		6F748AAE1D2A04BF004A0802 /* JniString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniString.cpp; path = ../src/JniString.cpp; sourceTree = "<group>"; };
 		6F748AAF1D2A04BF004A0802 /* JniString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniString.hpp; path = ../src/JniString.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
+		6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger.cpp; path = ../src/Logger.cpp; sourceTree = "<group>"; };
+		6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Logger.hpp; path = ../src/Logger.hpp; sourceTree = "<group>"; };
+		6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LogLevel.cpp; path = ../src/LogLevel.cpp; sourceTree = "<group>"; };
+		6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LogLevel.hpp; path = ../src/LogLevel.hpp; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FC406241D2CC82C002C100F /* Logger-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "Logger-iOS.mm"; path = "../src/Logger-iOS.mm"; sourceTree = "<group>"; };
+		6FC406271D2CC836002C100F /* Logger-Android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Logger-Android.cpp"; path = "../src/Logger-Android.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,10 +151,16 @@
 				6F68F5921D26710600F9D3F2 /* ExperimentalOptional.hpp */,
 				6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */,
 				6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */,
+				6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */,
+				6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */,
 				6F68F5931D26724800F9D3F2 /* PluginManager.cpp */,
 				6F68F5941D26724800F9D3F2 /* PluginManager.hpp */,
-				6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */,
-				6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */,
+				6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */,
+				6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */,
+				6FC406271D2CC836002C100F /* Logger-Android.cpp */,
+				6FC406241D2CC82C002C100F /* Logger-iOS.mm */,
+				6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */,
+				6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */,
 				6F748AA21D29F7AF004A0802 /* JniUtils.cpp */,
 				6F748AA31D29F7AF004A0802 /* JniUtils.hpp */,
 				6F748AA81D2A024A004A0802 /* JniMethodInfo.cpp */,
@@ -216,6 +238,8 @@
 				6F748AA61D29F7AF004A0802 /* JniUtils.hpp in Headers */,
 				6F68F5971D26724800F9D3F2 /* PluginManager.hpp in Headers */,
 				6F748AAC1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
+				6FB2D0EA1D2CC08A007D47B6 /* LogLevel.hpp in Headers */,
+				6FB2D0E41D2CBFE3007D47B6 /* Logger.hpp in Headers */,
 				6F68F5A61D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
 				6F68F5B21D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
 			);
@@ -232,6 +256,8 @@
 				6F748AA71D29F7AF004A0802 /* JniUtils.hpp in Headers */,
 				6F68F5981D26724800F9D3F2 /* PluginManager.hpp in Headers */,
 				6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
+				6FB2D0EB1D2CC08A007D47B6 /* LogLevel.hpp in Headers */,
+				6FB2D0E51D2CBFE3007D47B6 /* Logger.hpp in Headers */,
 				6F68F5A71D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
 				6F68F5B31D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
 			);
@@ -317,10 +343,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FB2D0E21D2CBFE3007D47B6 /* Logger.cpp in Sources */,
 				6F68F5AC1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
 				6F68F5951D26724800F9D3F2 /* PluginManager.cpp in Sources */,
+				6FC406251D2CC82C002C100F /* Logger-iOS.mm in Sources */,
 				6F68F5B41D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
 				6F68F56C1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
+				6FB2D0E81D2CC08A007D47B6 /* LogLevel.cpp in Sources */,
 				6F68F59B1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
 				6F68F5B01D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
 				6F68F5A81D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
@@ -331,10 +360,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FB2D0E31D2CBFE3007D47B6 /* Logger.cpp in Sources */,
 				6F68F5AD1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
 				6F68F5961D26724800F9D3F2 /* PluginManager.cpp in Sources */,
+				6FC406261D2CC82C002C100F /* Logger-iOS.mm in Sources */,
 				6F68F5B51D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
 				6F68F56D1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
+				6FB2D0E91D2CC08A007D47B6 /* LogLevel.cpp in Sources */,
 				6F68F59C1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
 				6F68F5B11D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
 				6F68F5A91D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
@@ -348,7 +380,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_IOS,
+				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
@@ -360,7 +395,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_IOS,
+				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
@@ -371,7 +409,10 @@
 		6F79B6181CCA7AA00008EFAC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_MAC,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -380,7 +421,10 @@
 		6F79B6191CCA7AA00008EFAC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					EE_PLATFORM_MAC,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};

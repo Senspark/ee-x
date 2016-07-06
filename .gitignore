@@ -1,5 +1,5 @@
-core/proj.android_studio/ee-core/build
+build
 xcuserdata
-project.xcworkspace
-crashlytics/proj.android_studio/ee-crashlytics/build
+*.xcworkspace
 *.iml
+Pods

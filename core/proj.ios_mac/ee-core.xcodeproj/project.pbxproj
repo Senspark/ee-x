@@ -83,9 +83,9 @@
 		6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniMethodInfo.hpp; path = ../src/JniMethodInfo.hpp; sourceTree = "<group>"; };
 		6F748AAE1D2A04BF004A0802 /* JniString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniString.cpp; path = ../src/JniString.cpp; sourceTree = "<group>"; };
 		6F748AAF1D2A04BF004A0802 /* JniString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniString.hpp; path = ../src/JniString.hpp; sourceTree = "<group>"; };
+		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FF8A7391D2B63C400DF651A /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = "../proj.android_studio/ee-core/src/main/java/com/ee/core"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +110,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				6FF8A7391D2B63C400DF651A /* core */,
+				6FB2D0CF1D2C9FAC007D47B6 /* java */,
 				6F68F5841D26708A00F9D3F2 /* libraries */,
 				46880B8319C43A87006E1F66 /* src */,
 				6F68F59D1D26733700F9D3F2 /* ios */,

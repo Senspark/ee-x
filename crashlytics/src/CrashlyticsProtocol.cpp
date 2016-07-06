@@ -8,6 +8,7 @@
 
 #include "CrashlyticsProtocol.hpp"
 
+#include <PluginProtocol.hpp>
 #include <json.hpp>
 
 namespace ee {
@@ -24,12 +25,16 @@ const LogLevel LogLevel::Error(6, "[ERROR]");
 const LogLevel LogLevel::Assert(7, "[ASSERT]");
 
 CrashlyticsProtocol::CrashlyticsProtocol()
-    : PluginProtocol("CrashlyticsProtocol") {}
+    : protocol_{new core::PluginProtocol{"CrashlyticsProtocol"}} {}
 
-void CrashlyticsProtocol::causeCrash() const { callNative("causeCrash"); }
+CrashlyticsProtocol::~CrashlyticsProtocol() = default;
+
+void CrashlyticsProtocol::causeCrash() const {
+    protocol_->callNative("causeCrash");
+}
 
 void CrashlyticsProtocol::causeException() const {
-    callNative("causeException");
+    protocol_->callNative("causeException");
 }
 
 void CrashlyticsProtocol::log(const LogLevel& level, const std::string& tag,
@@ -42,7 +47,7 @@ void CrashlyticsProtocol::log(const LogLevel& level, const std::string& tag,
 #endif
     json["tag"] = tag;
     json["message"] = message;
-    callNative("log", json.dump());
+    protocol_->callNative("log", json.dump());
 }
 } // namespace crashlytics
 } // namespace ee

@@ -12,7 +12,10 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = "5.0"
     s.osx.deployment_target = "10.7"
   
-    s.source            = { :git => "https://github.com/enrevol/ee-x.git", :commit => "51795226bd19d1380e57257242228ff3eafada2a" }
+    s.source = {
+        :git => "https://github.com/enrevol/ee-x.git",
+        :branch => "master"
+    }
   
     s.source_files      = "core/libraries/**/*.{h,hpp,cpp}", 
                           "core/src/**/*.{hpp,cpp,mm}", 
@@ -30,7 +33,8 @@ Pod::Spec.new do |s|
 
     s.requires_arc = false
   
-    s.xcconfig = { "HEADER_SEARCH_PATHS" => "../libraries" }
+    s.ios.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "EE_PLATFORM_IOS" }
+    s.osx.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "EE_PLATFORM_MAC" }
 
     s.dependency 'Crashlytics', '~> 3.7'
     s.dependency 'Fabric', '~> 1.6' 

@@ -1,0 +1,4 @@
+target 'ee-crashlytics-mobile' do
+    pod 'Crashlytics', '~> 3.7'
+    pod 'Fabric', '~> 1.6' 
+end

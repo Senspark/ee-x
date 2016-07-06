@@ -11,6 +11,7 @@
 #include "JniUtils.hpp"
 #include "JniMethodInfo.hpp"
 #include "JniString.hpp"
+#include "Logger.hpp"
 
 extern "C" {
 JNIEXPORT void JNICALL

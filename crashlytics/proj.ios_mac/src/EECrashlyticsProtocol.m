@@ -43,13 +43,10 @@
 - (void) _log:(NSString* _Nonnull) priorityDescription
           tag:(NSString* _Nonnull) tag
       message:(NSString* _Nonnull) message {
-    
-    NSString* fullMessage = [NSString stringWithFormat:@"%s %s: %s",
-                             [priorityDescription UTF8String],
-                             [tag UTF8String],
-                             [message UTF8String]];
-    
-    CLS_LOG(@"%s", [fullMessage UTF8String]);
+    CLS_LOG(@"%s %s: %s",
+            [priorityDescription UTF8String],
+            [tag UTF8String],
+            [message UTF8String]);
 }
 
 - (void) log:(NSDictionary* _Nonnull) dict {

@@ -27,7 +27,9 @@ Pod::Spec.new do |s|
                           "core/src/Jni*",
                           "core/src/*-Android*"
   
-    s.public_header_files = "crashlytics/src/CrashlyticsProtocol.hpp"
+    s.public_header_files = "core/src/Logger.hpp",
+                            "core/src/LogLevel.hpp",
+                            "crashlytics/src/CrashlyticsProtocol.hpp"
   
     s.ios.frameworks  = "Foundation"
 

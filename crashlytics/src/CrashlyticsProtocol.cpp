@@ -40,5 +40,46 @@ void CrashlyticsProtocol::log(const core::LogLevel& level,
     json["message"] = message;
     protocol_->callNative("log", json.dump());
 }
+
+void CrashlyticsProtocol::setString(const std::string& key,
+                                    const std::string& value) const {
+    nlohmann::json json;
+    json["key"] = key;
+    json["value"] = value;
+    protocol_->callNative("setString", json.dump());
+}
+
+void CrashlyticsProtocol::setBool(const std::string& key, bool value) const {
+    nlohmann::json json;
+    json["key"] = key;
+    json["value"] = value;
+    protocol_->callNative("setBool", json.dump());
+}
+
+void CrashlyticsProtocol::setInt(const std::string& key, int value) const {
+    nlohmann::json json;
+    json["key"] = key;
+    json["value"] = value;
+    protocol_->callNative("setInt", json.dump());
+}
+
+void CrashlyticsProtocol::setUserIdentifier(
+    const std::string& identifier) const {
+    nlohmann::json json;
+    json["identifier"] = identifier;
+    protocol_->callNative("setUserIdentifier", json.dump());
+}
+
+void CrashlyticsProtocol::setUserName(const std::string& name) const {
+    nlohmann::json json;
+    json["name"] = name;
+    protocol_->callNative("setUserName", json.dump());
+}
+
+void CrashlyticsProtocol::setUserEmail(const std::string& email) const {
+    nlohmann::json json;
+    json["email"] = email;
+    protocol_->callNative("setUserEmail", json.dump());
+}
 } // namespace crashlytics
 } // namespace ee

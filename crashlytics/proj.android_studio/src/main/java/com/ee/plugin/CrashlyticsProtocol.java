@@ -62,10 +62,6 @@ public class CrashlyticsProtocol extends PluginProtocol {
         (new CrashTest()).throwRuntimeException("This is a test exception!");
     }
 
-    private void _log(@NonNull Integer priority, @NonNull String tag, @NonNull String message) {
-        Crashlytics.log(priority, tag, message);
-    }
-
     public void log(@NonNull Map<String, Object> dict) {
         assert (dict.size() == 3);
 
@@ -73,6 +69,76 @@ public class CrashlyticsProtocol extends PluginProtocol {
         String tag = (String) dict.get("tag");
         String message = (String) dict.get("message");
 
-        _log(priority, tag, message);
+        assert (priority != null);
+        assert (tag != null);
+        assert (message != null);
+
+        Crashlytics.log(priority, tag, message);
+    }
+
+    public void setString(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 2);
+
+        String key = (String) dict.get("key");
+        String value = (String) dict.get("value");
+
+        assert (key != null);
+        assert (value != null);
+
+        Crashlytics.setString(key, value);
+    }
+
+    public void setBool(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 2);
+
+        String key = (String) dict.get("key");
+        Boolean value = (Boolean) dict.get("value");
+
+        assert (key != null);
+        assert (value != null);
+
+        Crashlytics.setBool(key, value);
+    }
+
+    public void setInt(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 2);
+
+        String key = (String) dict.get("key");
+        Integer value = (Integer) dict.get("value");
+
+        assert (key != null);
+        assert (value != null);
+
+        Crashlytics.setInt(key, value);
+    }
+
+    public void setUserIdentifier(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 1);
+
+        String identifier = (String) dict.get("identifier");
+
+        assert (identifier != null);
+
+        Crashlytics.setUserIdentifier(identifier);
+    }
+
+    public void setUserName(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 1);
+
+        String name = (String) dict.get("name");
+
+        assert (name != null);
+
+        Crashlytics.setUserName(name);
+    }
+
+    public void setUserEmail(@NonNull Map<String, Object> dict) {
+        assert (dict.size() == 1);
+
+        String email = (String) dict.get("email");
+
+        assert (email != null);
+
+        Crashlytics.setUserName(email);
     }
 }

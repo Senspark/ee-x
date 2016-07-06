@@ -20,6 +20,18 @@
 
 - (void) log:(NSDictionary* _Nonnull) dict;
 
+- (void) setString:(NSDictionary* _Nonnull) dict;
+
+- (void) setBool:(NSDictionary* _Nonnull) dict;
+
+- (void) setInt:(NSDictionary* _Nonnull) dict;
+
+- (void) setUserIdentifier:(NSDictionary* _Nonnull) dict;
+
+- (void) setUserName:(NSDictionary* _Nonnull) dict;
+
+- (void) setUserEmail:(NSDictionary* _Nonnull) dict;
+
 @end
 
 // clang-format on

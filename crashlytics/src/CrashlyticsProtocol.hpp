@@ -31,6 +31,18 @@ public:
     void log(const core::LogLevel& level, const std::string& tag,
              const std::string& message) const;
 
+    void setString(const std::string& key, const std::string& value) const;
+
+    void setBool(const std::string& key, bool value) const;
+
+    void setInt(const std::string& key, int value) const;
+
+    void setUserIdentifier(const std::string& identifier) const;
+
+    void setUserName(const std::string& name) const;
+
+    void setUserEmail(const std::string& email) const;
+
 private:
     std::unique_ptr<core::PluginProtocol> protocol_;
 };

@@ -3,12 +3,17 @@ package com.ee.plugin;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.BuildConfig;
 import com.crashlytics.android.core.CrashTest;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.ee.core.PluginProtocol;
 
 import java.util.Map;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Zinge on 7/4/16.
@@ -16,6 +21,12 @@ import java.util.Map;
 public class CrashlyticsProtocol extends PluginProtocol {
     public CrashlyticsProtocol(Context context) {
         super(context);
+        Fabric.Builder builder = new Fabric.Builder(context)
+            .debuggable(BuildConfig.DEBUG)
+            .logger(new CrashlyticsLogger(BuildConfig.DEBUG ? Log.DEBUG : Log.INFO))
+            .kits(new Crashlytics(), new CrashlyticsNdk());
+
+        Fabric.with(builder.build());
     }
 
     @NonNull

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.BuildConfig;
 import com.crashlytics.android.core.CrashTest;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.ee.core.PluginProtocol;

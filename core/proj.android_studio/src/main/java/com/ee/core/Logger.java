@@ -2,8 +2,6 @@ package com.ee.core;
 
 import android.util.Log;
 
-import com.ee.library.core.BuildConfig;
-
 /**
  * Created by enrevol on 4/13/16.
  */

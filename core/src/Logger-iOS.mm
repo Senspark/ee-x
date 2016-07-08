@@ -13,8 +13,8 @@
 
 namespace ee {
 namespace core {
-void Logger::log(const LogLevel& level, const std::string& tag,
-                 const std::string& message) {
+void Logger::log0(const LogLevel& level, const std::string& tag,
+                  const std::string& message) {
     NSLog(@"%s %s: %s", level.desc.c_str(), tag.c_str(), message.c_str());
 }
 } // namespace core

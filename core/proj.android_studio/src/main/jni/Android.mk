@@ -2,8 +2,6 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS := -DEE_PLATFORM_ANDROID
-
 LOCAL_MODULE := ee_core_static
 
 LOCAL_MODULE_FILENAME := lib_ee_core

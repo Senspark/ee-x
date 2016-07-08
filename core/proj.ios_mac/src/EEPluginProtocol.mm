@@ -6,13 +6,17 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
 #import "EEPluginProtocol.h"
+
+#if TARGET_OS_IOS
+#import <UIKit/UIKit.h>
+#endif
 
 #include "PluginManager.hpp"
 
 @implementation EEPluginProtocol
+
+// clang-format off
 
 - (void) sendCppMessage:(NSString* _Nonnull) msg
          withCallbackId:(NSNumber* _Nonnull) callbackId {
@@ -32,9 +36,13 @@
         [[self pluginName] UTF8String], [msg UTF8String], [tag UTF8String]);
 }
 
+#if TARGET_OS_IOS
 - (UIViewController* _Nullable) getCurrentRootViewController {
     // [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     return [[[UIApplication sharedApplication] keyWindow] rootViewController];
 }
+#endif
+
+// clang-format on
 
 @end

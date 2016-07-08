@@ -10,7 +10,9 @@
 
 @class EEPluginProtocol;
 
-@interface EEPluginManager : NSObject;
+@interface EEPluginManager : NSObject
+
+// clang-format off
 
 + (EEPluginProtocol* _Null_unspecified) getPluginByName:(NSString* _Nonnull) pluginName;
 
@@ -18,5 +20,7 @@
                            method:(NSString* _Nonnull) methodName
                           message:(NSString* _Nullable) json
                        callbackId:(NSNumber* _Nullable) callbackId;
+
+// clang-format on
 
 @end

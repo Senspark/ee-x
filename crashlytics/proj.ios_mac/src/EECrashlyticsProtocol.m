@@ -6,7 +6,6 @@
 //
 //
 
-#import <UIKit/UIKit.h>
 #import <Crashlytics/Crashlytics.h>
 
 #import "EECrashlyticsProtocol.h"
@@ -41,7 +40,7 @@
 }
 
 - (void) log:(NSDictionary* _Nonnull) dict {
-    NSAssert([dict count] == 3, @"...");
+    NSAssert([dict count] == 4, @"...");
     
     NSString* priorityDescription = dict[@"priorityDescription"];
     NSString* tag = dict[@"tag"];

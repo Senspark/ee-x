@@ -31,11 +31,8 @@ void CrashlyticsProtocol::log(const core::LogLevel& level,
                               const std::string& tag,
                               const std::string& message) const {
     nlohmann::json json;
-#if defined(EE_PLATFORM_IOS) || defined(EE_PLATFORM_MAC)
     json["priorityDescription"] = level.desc;
-#elif defined(EE_PLATFORM_ANDROID)
     json["priority"] = level.priority;
-#endif
     json["tag"] = tag;
     json["message"] = message;
     protocol_->callNative("log", json.dump());

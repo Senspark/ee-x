@@ -11,6 +11,8 @@
 
 @implementation EEDictionaryUtils
 
+// clang-format off
+
 + (NSString* _Nonnull) emptyResult {
     return [EEJsonUtils convertDictionaryToString:@{}];
 }
@@ -33,5 +35,7 @@
         [dict setObject:(id _Nonnull) result forKey:@"result"];
     }
 }
+
+// clang-format on
 
 @end

@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface EEDictionaryUtils : NSObject;
+@interface EEDictionaryUtils : NSObject
+
+// clang-format off
 
 + (NSString* _Nonnull) emptyResult;
 
@@ -17,5 +19,7 @@
 
 + (void) setResult:(id _Nullable) result
            forDict:(NSMutableDictionary* _Nonnull) dict;
+
+// clang-format on
 
 @end

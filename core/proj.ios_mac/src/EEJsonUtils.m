@@ -10,6 +10,8 @@
 
 @implementation EEJsonUtils
 
+// clang-format off
+
 + (NSString*) convertDictionaryToString:(NSDictionary*) dict {
     NSError* error;
     NSUInteger options = NSJSONWritingPrettyPrinted;
@@ -41,5 +43,7 @@
     NSCAssert([object isKindOfClass:[NSMutableDictionary class]], @"...");
     return object;
 }
+
+// clang-format on
 
 @end

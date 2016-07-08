@@ -83,7 +83,7 @@ public class CrashlyticsProtocol extends PluginProtocol {
     }
 
     public void log(@NonNull Map<String, Object> dict) {
-        assert (dict.size() == 3);
+        assert (dict.size() == 4);
 
         Integer priority = (Integer) dict.get("priority");
         String tag = (String) dict.get("tag");

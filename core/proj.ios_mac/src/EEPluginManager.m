@@ -6,8 +6,6 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
 #import "EEPluginManager.h"
 #import "EEJsonUtils.h"
 #import "EEDictionaryUtils.h"
@@ -15,6 +13,8 @@
 #import "EEPluginManager.h"
 
 @implementation EEPluginManager
+
+// clang-format off
 
 + (EEPluginProtocol* _Null_unspecified) getPluginByName:(NSString* _Nonnull) pluginName {
     static NSMutableDictionary* plugins;
@@ -95,5 +95,7 @@
     
     return [EEDictionaryUtils emptyResult];
 }
+
+// clang-format on
 
 @end

@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
  * Created by Zinge on 6/1/16.
  */
 public abstract class PluginProtocol {
-    private static final Logger logger = new Logger(PluginProtocol.class.getName());
+    private final Logger _logger = new Logger(PluginProtocol.class.getName());
 
     private native void _sendCppMessage0(@NonNull String pluginName,
                                          @NonNull String msg,
@@ -19,12 +19,12 @@ public abstract class PluginProtocol {
                                          @NonNull String tag);
 
     protected void sendCppMessage(@NonNull String msg, @NonNull Integer callbackId) {
-        logger.debug("sendCppMessage: msg = %s callbackId = %d", msg, callbackId);
+        _logger.debug("sendCppMessage: msg = %s callbackId = %d", msg, callbackId);
         _sendCppMessage0(getPluginName(), msg, callbackId);
     }
 
     protected void sendCppMessage(@NonNull String msg, @NonNull String tag) {
-        logger.debug("sendCppMessage: msg = %s tag = %s", msg, tag);
+        _logger.debug("sendCppMessage: msg = %s tag = %s", msg, tag);
         _sendCppMessage1(getPluginName(), msg, tag);
     }
 
@@ -32,6 +32,10 @@ public abstract class PluginProtocol {
 
     public PluginProtocol(Context context) {
         _context = context;
+    }
+
+    public void setDebuggable(boolean debuggable) {
+        _logger.setDebuggable(debuggable);
     }
 
     @NonNull

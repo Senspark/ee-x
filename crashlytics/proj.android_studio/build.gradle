@@ -10,19 +10,6 @@ android {
         versionCode 1
         versionName "1.0"
     }
-
-    buildTypes {
-        debug {
-            debuggable true
-            jniDebuggable true
-            minifyEnabled false
-        }
-        release {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled false
-        }
-    }
 }
 
 dependencies {

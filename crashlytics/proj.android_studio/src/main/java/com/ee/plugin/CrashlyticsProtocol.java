@@ -20,9 +20,9 @@ import io.fabric.sdk.android.Fabric;
 public class CrashlyticsProtocol extends PluginProtocol {
     public CrashlyticsProtocol(Context context) {
         super(context);
+
         Fabric.Builder builder = new Fabric.Builder(context)
-            .debuggable(BuildConfig.DEBUG)
-            .logger(new CrashlyticsLogger(BuildConfig.DEBUG ? Log.DEBUG : Log.INFO))
+            .logger(new CrashlyticsLogger(Log.DEBUG))
             .kits(new Crashlytics(), new CrashlyticsNdk());
 
         Fabric.with(builder.build());
@@ -32,6 +32,16 @@ public class CrashlyticsProtocol extends PluginProtocol {
     @Override
     public String getPluginName() {
         return "CrashlyticsProtocol";
+    }
+
+    @Override
+    public void setDebuggable(boolean debuggable) {
+        super.setDebuggable(debuggable);
+        if (debuggable) {
+            Fabric.getLogger().setLogLevel(Log.DEBUG);
+        } else {
+            Fabric.getLogger().setLogLevel(Log.INFO);
+        }
     }
 
     @Override

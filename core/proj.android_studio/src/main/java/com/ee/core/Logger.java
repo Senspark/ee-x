@@ -11,7 +11,16 @@ public class Logger {
 
     public Logger(String tag) {
         _tag = tag;
-        if (BuildConfig.DEBUG) {
+        setDebuggable(true);
+    }
+
+    public Logger(String tag, boolean debuggable) {
+        _tag = tag;
+        setDebuggable(debuggable);
+    }
+
+    public void setDebuggable(boolean debuggable) {
+        if (debuggable) {
             _logLevel = Log.VERBOSE;
         } else {
             _logLevel = Log.INFO;

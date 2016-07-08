@@ -18,7 +18,7 @@ import java.util.Map.Entry;
  * Created by Zinge on 6/5/16.
  */
 public class PluginManager {
-    private static final Logger logger = new Logger(PluginManager.class.getName());
+    private static final Logger _logger = new Logger(PluginManager.class.getName());
 
     private static boolean _initialized = false;
     private static Context _context = null;
@@ -40,7 +40,7 @@ public class PluginManager {
     }
 
     private static void loadPlugin(@NonNull String pluginName) {
-        logger.debug("loadPlugin: attempt to load plugin: %s", pluginName);
+        _logger.debug("loadPlugin: attempt to load plugin: %s", pluginName);
 
         try {
             Class<?> clazz = Class.forName("com.ee.plugin." + pluginName);
@@ -72,6 +72,13 @@ public class PluginManager {
     public static PluginProtocol getProtocolByName(@NonNull String pluginName) {
         assert (_plugins.containsKey(pluginName));
         return _plugins.get(pluginName);
+    }
+
+    public static void setDebuggable(boolean debuggable) {
+        _logger.setDebuggable(debuggable);
+        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+            entry.getValue().setDebuggable(debuggable);
+        }
     }
 
     public static void onStart() {
@@ -135,7 +142,7 @@ public class PluginManager {
                                       @Nullable String json,
                                       @Nullable Integer callbackId) throws
         InvocationTargetException {
-        logger.debug("callNative: pluginName = %s methodName = %s json = %s callbackId = %d",
+        _logger.debug("callNative: pluginName = %s methodName = %s json = %s callbackId = %d",
             pluginName,
             methodName,
             json,
@@ -150,7 +157,7 @@ public class PluginManager {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(json);
             assert (dict != null);
 
-            logger.debug("callNative: dict = " + dict);
+            _logger.debug("callNative: dict = " + dict);
 
             params.add(dict);
             classes.add(Map.class);
@@ -185,13 +192,13 @@ public class PluginManager {
 
         if (result != null) {
             assert (result instanceof String);
-            logger.debug("callNative: result = %s", result);
+            _logger.debug("callNative: result = %s", result);
             return (String) result;
         }
 
         String emptyResult = JsonUtils.convertDictionaryToString(new HashMap<String, Object>());
         assert (emptyResult != null);
-        logger.debug("callNative: empty result = %s", emptyResult);
+        _logger.debug("callNative: empty result = %s", emptyResult);
         return emptyResult;
     }
 }

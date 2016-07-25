@@ -15,6 +15,7 @@
 
 namespace ee {
 namespace core {
+/// RAII class for encapsulating jstring.
 class JniString {
 public:
     static std::unique_ptr<JniString> create(JNIEnv* env, const char* str);

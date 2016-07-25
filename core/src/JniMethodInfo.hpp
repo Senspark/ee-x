@@ -15,6 +15,7 @@
 
 namespace ee {
 namespace core {
+/// RAII class for encapsulating jclass and jmethodID.
 class JniMethodInfo final {
 public:
     static std::unique_ptr<JniMethodInfo> create(JNIEnv* env, jclass clazz,

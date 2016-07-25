@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <pthread.h>
 
 #include "JniUtils.hpp"
 #include "JniMethodInfo.hpp"
@@ -16,63 +17,95 @@
 namespace ee {
 namespace core {
 namespace {
+/// Retrieves the logger for JNIUtils.
 const Logger& getLogger() {
     static Logger logger{"ee-core"};
     return logger;
 }
+
+pthread_key_t key_value;
 } // namespace
 
-std::thread::id JniUtils::threadId_{};
-JNIEnv* JniUtils::env_ = nullptr;
+std::thread::id JniUtils::cocosThreadId_;
+bool JniUtils::isCocosThreadMarked_ = false;
 JavaVM* JniUtils::vm_ = nullptr;
 
-void JniUtils::setVm(JavaVM* vm) noexcept { vm_ = vm; }
+void JniUtils::setVm(JavaVM* vm) {
+    vm_ = vm;
+    pthread_key_create(&key_value, &JniUtils::detachCurrentThread);
+}
 
-void JniUtils::initialize() {
-    cacheEnv();
-    threadId_ = std::this_thread::get_id();
+void JniUtils::markCocosThread() noexcept {
+    isCocosThreadMarked_ = false;
+    cocosThreadId_ = std::this_thread::get_id();
 }
 
 JNIEnv* JniUtils::getEnv() {
-    if (env_ == nullptr) {
-        throw std::runtime_error{
-            "env has not been set, call initialize in AppDelegate.cpp first"};
+    // Retrieve the thread local JNIEnv pointer.
+    JNIEnv* env = static_cast<JNIEnv*>(pthread_getspecific(key_value));
+
+    if (env == nullptr) {
+        // The JNIEnv pointer has not been created.
+        // Attempt to create it.
+        env = cacheEnv();
     }
-    if (threadId_ != std::this_thread::get_id()) {
+
+    // Check Cocos thread.
+    if (isCocosThreadMarked_ && cocosThreadId_ != std::this_thread::get_id()) {
         getLogger().error(__PRETTY_FUNCTION__,
                           ": current thread is not cocos2d-x thread!");
     }
-    return env_;
+
+    return env;
 }
 
-void JniUtils::cacheEnv() {
+JNIEnv* JniUtils::cacheEnv() {
     if (vm_ == nullptr) {
+        // JavaVM has not been set.
         throw std::runtime_error{
             "java vm has not been set, call setVm in main.cpp first!"};
     }
 
-    jint result = vm_->GetEnv(reinterpret_cast<void**>(&env_), JNI_VERSION_1_4);
+    JNIEnv* env = nullptr;
+    jint result = vm_->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4);
+
     switch (result) {
-    case JNI_OK:
-        break;
+    case JNI_OK: {
+        // Succeed.
+        pthread_setspecific(key_value, static_cast<const void*>(env));
+        return env;
+    }
+
     case JNI_EDETACHED: {
-        auto status = vm_->AttachCurrentThread(&env_, nullptr);
+        // Thread detached.
+        // Attempt to reattach.
+        auto status = vm_->AttachCurrentThread(&env, nullptr);
         if (status < 0) {
             getLogger().error(
                 __PRETTY_FUNCTION__,
                 ": failed to get the environment using AttachCurrentThread!");
+            return nullptr;
         }
+
+        pthread_setspecific(key_value, static_cast<const void*>(env));
+        return env;
     }
+
     case JNI_EVERSION: {
         getLogger().error(__PRETTY_FUNCTION__,
                           ": JNI interface version 1.4 not supported!");
+        return nullptr;
     }
+
     default: {
         getLogger().error(__PRETTY_FUNCTION__,
                           ": failed to get the environment using GetEnv!");
+        return nullptr;
     }
     }
 }
+
+void JniUtils::detachCurrentThread(void*) { vm_->DetachCurrentThread(); }
 
 void JniUtils::checkException() {
     JNIEnv* env = getEnv();

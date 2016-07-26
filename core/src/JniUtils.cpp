@@ -36,7 +36,7 @@ void JniUtils::setVm(JavaVM* vm) {
 }
 
 void JniUtils::markCocosThread() noexcept {
-    isCocosThreadMarked_ = false;
+    isCocosThreadMarked_ = true;
     cocosThreadId_ = std::this_thread::get_id();
 }
 

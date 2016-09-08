@@ -6,7 +6,7 @@
 //
 //
 
-#import <EEPluginProtocol.h>
+#import <ee/EEPluginProtocol.h>
 
 // clang-format off
 

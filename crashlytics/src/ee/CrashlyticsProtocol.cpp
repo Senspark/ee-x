@@ -6,11 +6,11 @@
 //
 //
 
-#include "CrashlyticsProtocol.hpp"
+#include "ee/CrashlyticsProtocol.hpp"
 
-#include <PluginProtocol.hpp>
-#include <LogLevel.hpp>
-#include <json.hpp>
+#include <ee/PluginProtocol.hpp>
+#include <ee/LogLevel.hpp>
+#include <nlohmann/json.hpp>
 
 namespace ee {
 namespace crashlytics {

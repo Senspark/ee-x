@@ -6,7 +6,7 @@
 //
 //
 
-#import "EEJsonUtils.h"
+#import "ee/EEJsonUtils.h"
 
 @implementation EEJsonUtils
 

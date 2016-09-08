@@ -6,11 +6,11 @@
 //
 //
 
-#import "EEPluginManager.h"
-#import "EEJsonUtils.h"
-#import "EEDictionaryUtils.h"
-#import "EEPluginProtocol.h"
-#import "EEPluginManager.h"
+#import "ee/EEPluginManager.h"
+#import "ee/EEJsonUtils.h"
+#import "ee/EEDictionaryUtils.h"
+#import "ee/EEPluginProtocol.h"
+#import "ee/EEPluginManager.h"
 
 @implementation EEPluginManager
 

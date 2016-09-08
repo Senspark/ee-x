@@ -6,7 +6,7 @@
 //
 //
 
-#include "LogLevel.hpp"
+#include "ee/LogLevel.hpp"
 
 namespace ee {
 namespace core {

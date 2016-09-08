@@ -8,8 +8,8 @@
 
 #include <cassert>
 
-#include "PluginProtocol.hpp"
-#include "PluginManager.hpp"
+#include "ee/PluginProtocol.hpp"
+#include "ee/PluginManager.hpp"
 
 namespace ee {
 namespace core {

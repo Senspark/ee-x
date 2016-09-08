@@ -1,43 +1,45 @@
-Pod::Spec.new do |s|
-    s.name              = "ee-x"
-    s.version           = "0.0.1"
-    s.summary           = "ee-x"
-    s.description       = "ee-x"
+Pod::Spec.new do |spec|
+    spec.name           = "ee-x"
+    spec.version        = "0.0.1"
+    spec.summary        = "ee-x"
+    spec.description    = "ee-x"
   
-    s.homepage          = "https://github.com/enrevol/ee-x"
+    spec.homepage       = "https://github.com/enrevol/ee-x"
   
     # s.license         = { :type => "MIT", :file => "FILE_LICENSE" }
-    s.author            = "Hoang Hai"
+    spec.author         = "Hoang Hai"
+
+    spec.ios.deployment_target = "5.0"
+    spec.osx.deployment_target = "10.7"
   
-    s.ios.deployment_target = "5.0"
-    s.osx.deployment_target = "10.7"
-  
-    s.source = {
+    spec.source = {
         :git => "https://github.com/enrevol/ee-x.git",
         :branch => "master"
     }
-  
-    s.source_files      = "core/libraries/**/*.{h,hpp,cpp}", 
-                          "core/src/**/*.{hpp,cpp,mm}", 
-                          "core/proj.ios_mac/src/**/*.{h,m,mm}",
-                          "crashlytics/src/**/*.{hpp,cpp,mm}",
-                          "crashlytics/proj.ios_mac/src/**/*.{h,m,mm}"
 
-    s.exclude_files     = "core/libraries/akrzemi1-optional/*.cpp",
-                          "core/src/Jni*",
-                          "core/src/*-Android*"
-  
-    s.public_header_files = "core/src/Logger.hpp",
-                            "core/src/LogLevel.hpp",
-                            "crashlytics/src/CrashlyticsProtocol.hpp"
-  
-    s.ios.frameworks  = "Foundation"
+    spec.ios.frameworks  = "Foundation"
 
-    s.requires_arc = false
-  
-    s.ios.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "EE_PLATFORM_IOS" }
-    s.osx.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "EE_PLATFORM_MAC" }
+    spec.requires_arc = false
 
-    s.dependency 'Crashlytics', '~> 3.7'
-    s.dependency 'Fabric', '~> 1.6' 
+    spec.subspec 'core' do |core|
+        core.source_files   = "core/src/**/*.{m,mm,cpp}",
+                              "core/include/**/*.{h,hpp}"
+
+        core.public_header_files = "core/include/ee/Logger.hpp",
+                                   "core/include/ee/LogLevel.hpp"
+
+        core.header_mappings_dir = "core/include"
+    end                             
+
+    spec.subspec 'crash' do |crash|
+        crash.source_files  = "crashlytics/src/**/*.{m,cpp}",
+                              "crashlytics/include/**/*.{h,hpp}"
+
+        crash.public_header_files = "crashlytics/include/ee/CrashlyticsProtocol.hpp"
+
+        crash.header_mappings_dir = "crashlytics/include"
+
+        crash.dependency 'Crashlytics', '~> 3.7'
+        crash.dependency 'Fabric', '~> 1.6'
+    end
 end

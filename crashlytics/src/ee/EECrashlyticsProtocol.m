@@ -8,7 +8,7 @@
 
 #import <Crashlytics/Crashlytics.h>
 
-#import "EECrashlyticsProtocol.h"
+#import "ee/EECrashlyticsProtocol.h"
 
 #undef CLS_LOG
 #ifdef __OBJC__

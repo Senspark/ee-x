@@ -6,12 +6,12 @@
 //
 //
 
-#include "PluginProtocol.hpp"
-#include "PluginManager.hpp"
-#include "JniUtils.hpp"
-#include "JniMethodInfo.hpp"
-#include "JniString.hpp"
-#include "Logger.hpp"
+#include "ee/PluginProtocol.hpp"
+#include "ee/PluginManager.hpp"
+#include "ee/JniUtils.hpp"
+#include "ee/JniMethodInfo.hpp"
+#include "ee/JniString.hpp"
+#include "ee/Logger.hpp"
 
 extern "C" {
 JNIEXPORT void JNICALL

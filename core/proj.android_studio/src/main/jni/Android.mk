@@ -6,12 +6,15 @@ LOCAL_MODULE := ee_core_static
 
 LOCAL_MODULE_FILENAME := lib_ee_core
 
-LOCAL_SRC_FILES := ${shell find $(LOCAL_PATH)/../../../../src -name "*.cpp" -print}
-                   
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../../src
-LOCAL_C_INCLUDES += ${shell find $(LOCAL_PATH)/../../../../libraries -type d -print}
+PROJ_DIR = $(LOCAL_PATH)/../../../..
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../src
-LOCAL_EXPORT_C_INCLUDES += ${shell find $(LOCAL_PATH)/../../../../libraries -type d -print}
+LOCAL_SRC_FILES := ${shell find $(PROJ_DIR)/src/ee -name "*.cpp" -print}
+LOCAL_SRC_FILES += ${shell find $(PROJ_DIR)/proj.android_studio/cpp/src/ee -name "*.cpp" -print}
+                   
+LOCAL_C_INCLUDES := $(PROJ_DIR)/include
+LOCAL_C_INCLUDES += $(PROJ_DIR)/proj.android_studio/cpp/include
+
+LOCAL_EXPORT_C_INCLUDES := $(PROJ_DIR)/include
+LOCAL_EXPORT_C_INCLUDES += $(PROJ_DIR)/proj.android_studio/cpp/include
 
 include $(BUILD_STATIC_LIBRARY)

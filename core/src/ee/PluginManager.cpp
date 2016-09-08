@@ -6,8 +6,8 @@
 //
 //
 
-#include "PluginManager.hpp"
-#include "PluginProtocol.hpp"
+#include "ee/PluginManager.hpp"
+#include "ee/PluginProtocol.hpp"
 
 namespace ee {
 namespace core {

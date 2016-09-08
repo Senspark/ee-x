@@ -7,49 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F68F56C1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */; };
-		6F68F56D1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */; };
-		6F68F56E1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */; };
-		6F68F56F1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */; };
-		6F68F5951D26724800F9D3F2 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5931D26724800F9D3F2 /* PluginManager.cpp */; };
-		6F68F5961D26724800F9D3F2 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5931D26724800F9D3F2 /* PluginManager.cpp */; };
-		6F68F5971D26724800F9D3F2 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5941D26724800F9D3F2 /* PluginManager.hpp */; };
-		6F68F5981D26724800F9D3F2 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5941D26724800F9D3F2 /* PluginManager.hpp */; };
-		6F68F59B1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */; };
-		6F68F59C1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */; };
-		6F68F5A61D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */; };
-		6F68F5A71D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */; };
-		6F68F5A81D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */; };
-		6F68F5A91D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */; };
-		6F68F5AA1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */; };
-		6F68F5AB1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */; };
-		6F68F5AC1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */; };
-		6F68F5AD1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */; };
-		6F68F5AE1D26736A00F9D3F2 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */; };
-		6F68F5AF1D26736A00F9D3F2 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */; };
-		6F68F5B01D26736A00F9D3F2 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */; };
-		6F68F5B11D26736A00F9D3F2 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */; };
-		6F68F5B21D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */; };
-		6F68F5B31D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */; };
-		6F68F5B41D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */; };
-		6F68F5B51D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */; };
 		6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F68F5B81D26740500F9D3F2 /* Foundation.framework */; };
-		6F748AA61D29F7AF004A0802 /* JniUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA31D29F7AF004A0802 /* JniUtils.hpp */; };
-		6F748AA71D29F7AF004A0802 /* JniUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA31D29F7AF004A0802 /* JniUtils.hpp */; };
-		6F748AAC1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */; };
-		6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */; };
-		6F748AB21D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
-		6F748AB31D2A04BF004A0802 /* JniString.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F748AAF1D2A04BF004A0802 /* JniString.hpp */; };
-		6FB2D0E21D2CBFE3007D47B6 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */; };
-		6FB2D0E31D2CBFE3007D47B6 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */; };
-		6FB2D0E41D2CBFE3007D47B6 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */; };
-		6FB2D0E51D2CBFE3007D47B6 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */; };
-		6FB2D0E81D2CC08A007D47B6 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */; };
-		6FB2D0E91D2CC08A007D47B6 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */; };
-		6FB2D0EA1D2CC08A007D47B6 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */; };
-		6FB2D0EB1D2CC08A007D47B6 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */; };
-		6FC406251D2CC82C002C100F /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FC406241D2CC82C002C100F /* Logger-iOS.mm */; };
-		6FC406261D2CC82C002C100F /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FC406241D2CC82C002C100F /* Logger-iOS.mm */; };
+		6FA4BA141D80FAEC009DEF3D /* optional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9F41D80FAEC009DEF3D /* optional.hpp */; };
+		6FA4BA1B1D80FAEC009DEF3D /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9F91D80FAEC009DEF3D /* EEDictionaryUtils.h */; };
+		6FA4BA1C1D80FAEC009DEF3D /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9F91D80FAEC009DEF3D /* EEDictionaryUtils.h */; };
+		6FA4BA1D1D80FAEC009DEF3D /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FA1D80FAEC009DEF3D /* EEJsonUtils.h */; };
+		6FA4BA1E1D80FAEC009DEF3D /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FA1D80FAEC009DEF3D /* EEJsonUtils.h */; };
+		6FA4BA1F1D80FAEC009DEF3D /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FB1D80FAEC009DEF3D /* EEPluginManager.h */; };
+		6FA4BA201D80FAEC009DEF3D /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FB1D80FAEC009DEF3D /* EEPluginManager.h */; };
+		6FA4BA211D80FAEC009DEF3D /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FC1D80FAEC009DEF3D /* EEPluginProtocol.h */; };
+		6FA4BA221D80FAEC009DEF3D /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FC1D80FAEC009DEF3D /* EEPluginProtocol.h */; };
+		6FA4BA231D80FAEC009DEF3D /* ExperimentalOptional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FD1D80FAEC009DEF3D /* ExperimentalOptional.hpp */; };
+		6FA4BA241D80FAEC009DEF3D /* ExperimentalOptional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FD1D80FAEC009DEF3D /* ExperimentalOptional.hpp */; };
+		6FA4BA251D80FAEC009DEF3D /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FE1D80FAEC009DEF3D /* Logger.hpp */; };
+		6FA4BA261D80FAEC009DEF3D /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FE1D80FAEC009DEF3D /* Logger.hpp */; };
+		6FA4BA271D80FAEC009DEF3D /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FF1D80FAEC009DEF3D /* LogLevel.hpp */; };
+		6FA4BA281D80FAEC009DEF3D /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9FF1D80FAEC009DEF3D /* LogLevel.hpp */; };
+		6FA4BA291D80FAEC009DEF3D /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA001D80FAEC009DEF3D /* PluginManager.hpp */; };
+		6FA4BA2A1D80FAEC009DEF3D /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA001D80FAEC009DEF3D /* PluginManager.hpp */; };
+		6FA4BA2B1D80FAEC009DEF3D /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA011D80FAEC009DEF3D /* PluginProtocol.hpp */; };
+		6FA4BA2C1D80FAEC009DEF3D /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA011D80FAEC009DEF3D /* PluginProtocol.hpp */; };
+		6FA4BA2F1D80FAEC009DEF3D /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA041D80FAEC009DEF3D /* json.hpp */; };
+		6FA4BA301D80FAEC009DEF3D /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA041D80FAEC009DEF3D /* json.hpp */; };
+		6FA4BA331D80FAEC009DEF3D /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA091D80FAEC009DEF3D /* EEDictionaryUtils.m */; };
+		6FA4BA341D80FAEC009DEF3D /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA091D80FAEC009DEF3D /* EEDictionaryUtils.m */; };
+		6FA4BA351D80FAEC009DEF3D /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0A1D80FAEC009DEF3D /* EEJsonUtils.m */; };
+		6FA4BA361D80FAEC009DEF3D /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0A1D80FAEC009DEF3D /* EEJsonUtils.m */; };
+		6FA4BA371D80FAEC009DEF3D /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0B1D80FAEC009DEF3D /* EEPluginManager.m */; };
+		6FA4BA381D80FAEC009DEF3D /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0B1D80FAEC009DEF3D /* EEPluginManager.m */; };
+		6FA4BA391D80FAEC009DEF3D /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0C1D80FAEC009DEF3D /* EEPluginProtocol.mm */; };
+		6FA4BA3A1D80FAEC009DEF3D /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0C1D80FAEC009DEF3D /* EEPluginProtocol.mm */; };
+		6FA4BA3B1D80FAEC009DEF3D /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0D1D80FAEC009DEF3D /* Logger-iOS.mm */; };
+		6FA4BA3C1D80FAEC009DEF3D /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0D1D80FAEC009DEF3D /* Logger-iOS.mm */; };
+		6FA4BA3D1D80FAEC009DEF3D /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0E1D80FAEC009DEF3D /* Logger.cpp */; };
+		6FA4BA3E1D80FAEC009DEF3D /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0E1D80FAEC009DEF3D /* Logger.cpp */; };
+		6FA4BA3F1D80FAEC009DEF3D /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0F1D80FAEC009DEF3D /* LogLevel.cpp */; };
+		6FA4BA401D80FAEC009DEF3D /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA0F1D80FAEC009DEF3D /* LogLevel.cpp */; };
+		6FA4BA411D80FAEC009DEF3D /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA101D80FAEC009DEF3D /* PluginManager.cpp */; };
+		6FA4BA421D80FAEC009DEF3D /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA101D80FAEC009DEF3D /* PluginManager.cpp */; };
+		6FA4BA431D80FAEC009DEF3D /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA111D80FAEC009DEF3D /* PluginProtocol-iOS.mm */; };
+		6FA4BA441D80FAEC009DEF3D /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA111D80FAEC009DEF3D /* PluginProtocol-iOS.mm */; };
+		6FA4BA451D80FAEC009DEF3D /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA121D80FAEC009DEF3D /* PluginProtocol.cpp */; };
+		6FA4BA461D80FAEC009DEF3D /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA121D80FAEC009DEF3D /* PluginProtocol.cpp */; };
+		6FA4BA471D80FB09009DEF3D /* optional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4B9F41D80FAEC009DEF3D /* optional.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,42 +66,41 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProtocol.cpp; path = ../src/PluginProtocol.cpp; sourceTree = "<group>"; };
-		6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PluginProtocol.hpp; path = ../src/PluginProtocol.hpp; sourceTree = "<group>"; };
-		6F68F5891D26708A00F9D3F2 /* optional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
-		6F68F58B1D26708A00F9D3F2 /* test_optional.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_optional.cpp; sourceTree = "<group>"; };
-		6F68F58C1D26708A00F9D3F2 /* test_type_traits.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_type_traits.cpp; sourceTree = "<group>"; };
-		6F68F58F1D26708A00F9D3F2 /* json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
-		6F68F5921D26710600F9D3F2 /* ExperimentalOptional.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ExperimentalOptional.hpp; path = ../src/ExperimentalOptional.hpp; sourceTree = "<group>"; };
-		6F68F5931D26724800F9D3F2 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginManager.cpp; path = ../src/PluginManager.cpp; sourceTree = "<group>"; };
-		6F68F5941D26724800F9D3F2 /* PluginManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PluginManager.hpp; path = ../src/PluginManager.hpp; sourceTree = "<group>"; };
-		6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "PluginProtocol-iOS.mm"; path = "../src/PluginProtocol-iOS.mm"; sourceTree = "<group>"; };
-		6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEDictionaryUtils.h; path = src/EEDictionaryUtils.h; sourceTree = "<group>"; };
-		6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEDictionaryUtils.m; path = src/EEDictionaryUtils.m; sourceTree = "<group>"; };
-		6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEJsonUtils.h; path = src/EEJsonUtils.h; sourceTree = "<group>"; };
-		6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEJsonUtils.m; path = src/EEJsonUtils.m; sourceTree = "<group>"; };
-		6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEPluginManager.h; path = src/EEPluginManager.h; sourceTree = "<group>"; };
-		6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEPluginManager.m; path = src/EEPluginManager.m; sourceTree = "<group>"; };
-		6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEPluginProtocol.h; path = src/EEPluginProtocol.h; sourceTree = "<group>"; };
-		6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EEPluginProtocol.mm; path = src/EEPluginProtocol.mm; sourceTree = "<group>"; };
 		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "PluginProtocol-Android.cpp"; path = "../src/PluginProtocol-Android.cpp"; sourceTree = "<group>"; };
-		6F748AA21D29F7AF004A0802 /* JniUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniUtils.cpp; path = ../src/JniUtils.cpp; sourceTree = "<group>"; };
-		6F748AA31D29F7AF004A0802 /* JniUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniUtils.hpp; path = ../src/JniUtils.hpp; sourceTree = "<group>"; };
-		6F748AA81D2A024A004A0802 /* JniMethodInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniMethodInfo.cpp; path = ../src/JniMethodInfo.cpp; sourceTree = "<group>"; };
-		6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniMethodInfo.hpp; path = ../src/JniMethodInfo.hpp; sourceTree = "<group>"; };
-		6F748AAE1D2A04BF004A0802 /* JniString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JniString.cpp; path = ../src/JniString.cpp; sourceTree = "<group>"; };
-		6F748AAF1D2A04BF004A0802 /* JniString.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JniString.hpp; path = ../src/JniString.hpp; sourceTree = "<group>"; };
+		6FA4B9F11D80FAEC009DEF3D /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		6FA4B9F21D80FAEC009DEF3D /* copyright.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyright.txt; sourceTree = "<group>"; };
+		6FA4B9F31D80FAEC009DEF3D /* LICENSE_1_0.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE_1_0.txt; sourceTree = "<group>"; };
+		6FA4B9F41D80FAEC009DEF3D /* optional.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
+		6FA4B9F51D80FAEC009DEF3D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6FA4B9F61D80FAEC009DEF3D /* test_optional.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_optional.cpp; sourceTree = "<group>"; };
+		6FA4B9F71D80FAEC009DEF3D /* test_type_traits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_type_traits.cpp; sourceTree = "<group>"; };
+		6FA4B9F91D80FAEC009DEF3D /* EEDictionaryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
+		6FA4B9FA1D80FAEC009DEF3D /* EEJsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEJsonUtils.h; sourceTree = "<group>"; };
+		6FA4B9FB1D80FAEC009DEF3D /* EEPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
+		6FA4B9FC1D80FAEC009DEF3D /* EEPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEPluginProtocol.h; sourceTree = "<group>"; };
+		6FA4B9FD1D80FAEC009DEF3D /* ExperimentalOptional.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExperimentalOptional.hpp; sourceTree = "<group>"; };
+		6FA4B9FE1D80FAEC009DEF3D /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
+		6FA4B9FF1D80FAEC009DEF3D /* LogLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LogLevel.hpp; sourceTree = "<group>"; };
+		6FA4BA001D80FAEC009DEF3D /* PluginManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PluginManager.hpp; sourceTree = "<group>"; };
+		6FA4BA011D80FAEC009DEF3D /* PluginProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PluginProtocol.hpp; sourceTree = "<group>"; };
+		6FA4BA031D80FAEC009DEF3D /* ChangeLog.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
+		6FA4BA041D80FAEC009DEF3D /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		6FA4BA051D80FAEC009DEF3D /* LICENSE.MIT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.MIT; sourceTree = "<group>"; };
+		6FA4BA061D80FAEC009DEF3D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6FA4BA091D80FAEC009DEF3D /* EEDictionaryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEDictionaryUtils.m; sourceTree = "<group>"; };
+		6FA4BA0A1D80FAEC009DEF3D /* EEJsonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEJsonUtils.m; sourceTree = "<group>"; };
+		6FA4BA0B1D80FAEC009DEF3D /* EEPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
+		6FA4BA0C1D80FAEC009DEF3D /* EEPluginProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EEPluginProtocol.mm; sourceTree = "<group>"; };
+		6FA4BA0D1D80FAEC009DEF3D /* Logger-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "Logger-iOS.mm"; sourceTree = "<group>"; };
+		6FA4BA0E1D80FAEC009DEF3D /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		6FA4BA0F1D80FAEC009DEF3D /* LogLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
+		6FA4BA101D80FAEC009DEF3D /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginManager.cpp; sourceTree = "<group>"; };
+		6FA4BA111D80FAEC009DEF3D /* PluginProtocol-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "PluginProtocol-iOS.mm"; sourceTree = "<group>"; };
+		6FA4BA121D80FAEC009DEF3D /* PluginProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginProtocol.cpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
-		6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger.cpp; path = ../src/Logger.cpp; sourceTree = "<group>"; };
-		6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Logger.hpp; path = ../src/Logger.hpp; sourceTree = "<group>"; };
-		6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LogLevel.cpp; path = ../src/LogLevel.cpp; sourceTree = "<group>"; };
-		6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LogLevel.hpp; path = ../src/LogLevel.hpp; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-core-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-core-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-core-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FC406241D2CC82C002C100F /* Logger-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "Logger-iOS.mm"; path = "../src/Logger-iOS.mm"; sourceTree = "<group>"; };
-		6FC406271D2CC836002C100F /* Logger-Android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Logger-Android.cpp"; path = "../src/Logger-Android.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,9 +126,8 @@
 			isa = PBXGroup;
 			children = (
 				6FB2D0CF1D2C9FAC007D47B6 /* java */,
-				6F68F5841D26708A00F9D3F2 /* libraries */,
-				46880B8319C43A87006E1F66 /* src */,
-				6F68F59D1D26733700F9D3F2 /* ios */,
+				6FA4B9EF1D80FAEC009DEF3D /* include */,
+				6FA4BA071D80FAEC009DEF3D /* src */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				6FC1CA921CEAB89C00DCDC8E /* Products */,
 			);
@@ -145,74 +143,82 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		46880B8319C43A87006E1F66 /* src */ = {
+		6FA4B9EF1D80FAEC009DEF3D /* include */ = {
 			isa = PBXGroup;
 			children = (
-				6F68F5921D26710600F9D3F2 /* ExperimentalOptional.hpp */,
-				6F68F56A1D2654E900F9D3F2 /* PluginProtocol.cpp */,
-				6F68F56B1D2654E900F9D3F2 /* PluginProtocol.hpp */,
-				6F68F5D21D26782F00F9D3F2 /* PluginProtocol-Android.cpp */,
-				6F68F59A1D26731600F9D3F2 /* PluginProtocol-iOS.mm */,
-				6F68F5931D26724800F9D3F2 /* PluginManager.cpp */,
-				6F68F5941D26724800F9D3F2 /* PluginManager.hpp */,
-				6FB2D0E01D2CBFE3007D47B6 /* Logger.cpp */,
-				6FB2D0E11D2CBFE3007D47B6 /* Logger.hpp */,
-				6FC406271D2CC836002C100F /* Logger-Android.cpp */,
-				6FC406241D2CC82C002C100F /* Logger-iOS.mm */,
-				6FB2D0E61D2CC08A007D47B6 /* LogLevel.cpp */,
-				6FB2D0E71D2CC08A007D47B6 /* LogLevel.hpp */,
-				6F748AA21D29F7AF004A0802 /* JniUtils.cpp */,
-				6F748AA31D29F7AF004A0802 /* JniUtils.hpp */,
-				6F748AA81D2A024A004A0802 /* JniMethodInfo.cpp */,
-				6F748AA91D2A024A004A0802 /* JniMethodInfo.hpp */,
-				6F748AAE1D2A04BF004A0802 /* JniString.cpp */,
-				6F748AAF1D2A04BF004A0802 /* JniString.hpp */,
+				6FA4B9F01D80FAEC009DEF3D /* akrzemi1 */,
+				6FA4B9F81D80FAEC009DEF3D /* ee */,
+				6FA4BA021D80FAEC009DEF3D /* nlohmann */,
+			);
+			name = include;
+			path = ../include;
+			sourceTree = "<group>";
+		};
+		6FA4B9F01D80FAEC009DEF3D /* akrzemi1 */ = {
+			isa = PBXGroup;
+			children = (
+				6FA4B9F11D80FAEC009DEF3D /* CMakeLists.txt */,
+				6FA4B9F21D80FAEC009DEF3D /* copyright.txt */,
+				6FA4B9F31D80FAEC009DEF3D /* LICENSE_1_0.txt */,
+				6FA4B9F41D80FAEC009DEF3D /* optional.hpp */,
+				6FA4B9F51D80FAEC009DEF3D /* README.md */,
+				6FA4B9F61D80FAEC009DEF3D /* test_optional.cpp */,
+				6FA4B9F71D80FAEC009DEF3D /* test_type_traits.cpp */,
+			);
+			path = akrzemi1;
+			sourceTree = "<group>";
+		};
+		6FA4B9F81D80FAEC009DEF3D /* ee */ = {
+			isa = PBXGroup;
+			children = (
+				6FA4B9F91D80FAEC009DEF3D /* EEDictionaryUtils.h */,
+				6FA4B9FA1D80FAEC009DEF3D /* EEJsonUtils.h */,
+				6FA4B9FB1D80FAEC009DEF3D /* EEPluginManager.h */,
+				6FA4B9FC1D80FAEC009DEF3D /* EEPluginProtocol.h */,
+				6FA4B9FD1D80FAEC009DEF3D /* ExperimentalOptional.hpp */,
+				6FA4B9FE1D80FAEC009DEF3D /* Logger.hpp */,
+				6FA4B9FF1D80FAEC009DEF3D /* LogLevel.hpp */,
+				6FA4BA001D80FAEC009DEF3D /* PluginManager.hpp */,
+				6FA4BA011D80FAEC009DEF3D /* PluginProtocol.hpp */,
+			);
+			path = ee;
+			sourceTree = "<group>";
+		};
+		6FA4BA021D80FAEC009DEF3D /* nlohmann */ = {
+			isa = PBXGroup;
+			children = (
+				6FA4BA031D80FAEC009DEF3D /* ChangeLog.md */,
+				6FA4BA041D80FAEC009DEF3D /* json.hpp */,
+				6FA4BA051D80FAEC009DEF3D /* LICENSE.MIT */,
+				6FA4BA061D80FAEC009DEF3D /* README.md */,
+			);
+			path = nlohmann;
+			sourceTree = "<group>";
+		};
+		6FA4BA071D80FAEC009DEF3D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				6FA4BA081D80FAEC009DEF3D /* ee */,
 			);
 			name = src;
-			path = ../Classes;
+			path = ../src;
 			sourceTree = "<group>";
 		};
-		6F68F5841D26708A00F9D3F2 /* libraries */ = {
+		6FA4BA081D80FAEC009DEF3D /* ee */ = {
 			isa = PBXGroup;
 			children = (
-				6F68F5851D26708A00F9D3F2 /* akrzemi1-optional */,
-				6F68F58D1D26708A00F9D3F2 /* nlohmann-json */,
+				6FA4BA091D80FAEC009DEF3D /* EEDictionaryUtils.m */,
+				6FA4BA0A1D80FAEC009DEF3D /* EEJsonUtils.m */,
+				6FA4BA0B1D80FAEC009DEF3D /* EEPluginManager.m */,
+				6FA4BA0C1D80FAEC009DEF3D /* EEPluginProtocol.mm */,
+				6FA4BA0D1D80FAEC009DEF3D /* Logger-iOS.mm */,
+				6FA4BA0E1D80FAEC009DEF3D /* Logger.cpp */,
+				6FA4BA0F1D80FAEC009DEF3D /* LogLevel.cpp */,
+				6FA4BA101D80FAEC009DEF3D /* PluginManager.cpp */,
+				6FA4BA111D80FAEC009DEF3D /* PluginProtocol-iOS.mm */,
+				6FA4BA121D80FAEC009DEF3D /* PluginProtocol.cpp */,
 			);
-			name = libraries;
-			path = ../libraries;
-			sourceTree = "<group>";
-		};
-		6F68F5851D26708A00F9D3F2 /* akrzemi1-optional */ = {
-			isa = PBXGroup;
-			children = (
-				6F68F5891D26708A00F9D3F2 /* optional.hpp */,
-				6F68F58B1D26708A00F9D3F2 /* test_optional.cpp */,
-				6F68F58C1D26708A00F9D3F2 /* test_type_traits.cpp */,
-			);
-			path = "akrzemi1-optional";
-			sourceTree = "<group>";
-		};
-		6F68F58D1D26708A00F9D3F2 /* nlohmann-json */ = {
-			isa = PBXGroup;
-			children = (
-				6F68F58F1D26708A00F9D3F2 /* json.hpp */,
-			);
-			path = "nlohmann-json";
-			sourceTree = "<group>";
-		};
-		6F68F59D1D26733700F9D3F2 /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				6F68F59E1D26736A00F9D3F2 /* EEDictionaryUtils.h */,
-				6F68F59F1D26736A00F9D3F2 /* EEDictionaryUtils.m */,
-				6F68F5A01D26736A00F9D3F2 /* EEJsonUtils.h */,
-				6F68F5A11D26736A00F9D3F2 /* EEJsonUtils.m */,
-				6F68F5A21D26736A00F9D3F2 /* EEPluginManager.h */,
-				6F68F5A31D26736A00F9D3F2 /* EEPluginManager.m */,
-				6F68F5A41D26736A00F9D3F2 /* EEPluginProtocol.h */,
-				6F68F5A51D26736A00F9D3F2 /* EEPluginProtocol.mm */,
-			);
-			name = ios;
+			path = ee;
 			sourceTree = "<group>";
 		};
 		6FC1CA921CEAB89C00DCDC8E /* Products */ = {
@@ -231,17 +237,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F68F5AA1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */,
-				6F68F56E1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */,
-				6F68F5AE1D26736A00F9D3F2 /* EEPluginManager.h in Headers */,
-				6F748AB21D2A04BF004A0802 /* JniString.hpp in Headers */,
-				6F748AA61D29F7AF004A0802 /* JniUtils.hpp in Headers */,
-				6F68F5971D26724800F9D3F2 /* PluginManager.hpp in Headers */,
-				6F748AAC1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
-				6FB2D0EA1D2CC08A007D47B6 /* LogLevel.hpp in Headers */,
-				6FB2D0E41D2CBFE3007D47B6 /* Logger.hpp in Headers */,
-				6F68F5A61D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
-				6F68F5B21D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
+				6FA4BA1B1D80FAEC009DEF3D /* EEDictionaryUtils.h in Headers */,
+				6FA4BA1D1D80FAEC009DEF3D /* EEJsonUtils.h in Headers */,
+				6FA4BA1F1D80FAEC009DEF3D /* EEPluginManager.h in Headers */,
+				6FA4BA271D80FAEC009DEF3D /* LogLevel.hpp in Headers */,
+				6FA4BA291D80FAEC009DEF3D /* PluginManager.hpp in Headers */,
+				6FA4BA231D80FAEC009DEF3D /* ExperimentalOptional.hpp in Headers */,
+				6FA4BA2B1D80FAEC009DEF3D /* PluginProtocol.hpp in Headers */,
+				6FA4BA471D80FB09009DEF3D /* optional.hpp in Headers */,
+				6FA4BA251D80FAEC009DEF3D /* Logger.hpp in Headers */,
+				6FA4BA2F1D80FAEC009DEF3D /* json.hpp in Headers */,
+				6FA4BA211D80FAEC009DEF3D /* EEPluginProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,17 +255,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F68F5AB1D26736A00F9D3F2 /* EEJsonUtils.h in Headers */,
-				6F68F56F1D2654E900F9D3F2 /* PluginProtocol.hpp in Headers */,
-				6F68F5AF1D26736A00F9D3F2 /* EEPluginManager.h in Headers */,
-				6F748AB31D2A04BF004A0802 /* JniString.hpp in Headers */,
-				6F748AA71D29F7AF004A0802 /* JniUtils.hpp in Headers */,
-				6F68F5981D26724800F9D3F2 /* PluginManager.hpp in Headers */,
-				6F748AAD1D2A024A004A0802 /* JniMethodInfo.hpp in Headers */,
-				6FB2D0EB1D2CC08A007D47B6 /* LogLevel.hpp in Headers */,
-				6FB2D0E51D2CBFE3007D47B6 /* Logger.hpp in Headers */,
-				6F68F5A71D26736A00F9D3F2 /* EEDictionaryUtils.h in Headers */,
-				6F68F5B31D26736A00F9D3F2 /* EEPluginProtocol.h in Headers */,
+				6FA4BA1C1D80FAEC009DEF3D /* EEDictionaryUtils.h in Headers */,
+				6FA4BA141D80FAEC009DEF3D /* optional.hpp in Headers */,
+				6FA4BA1E1D80FAEC009DEF3D /* EEJsonUtils.h in Headers */,
+				6FA4BA201D80FAEC009DEF3D /* EEPluginManager.h in Headers */,
+				6FA4BA281D80FAEC009DEF3D /* LogLevel.hpp in Headers */,
+				6FA4BA2A1D80FAEC009DEF3D /* PluginManager.hpp in Headers */,
+				6FA4BA241D80FAEC009DEF3D /* ExperimentalOptional.hpp in Headers */,
+				6FA4BA2C1D80FAEC009DEF3D /* PluginProtocol.hpp in Headers */,
+				6FA4BA261D80FAEC009DEF3D /* Logger.hpp in Headers */,
+				6FA4BA301D80FAEC009DEF3D /* json.hpp in Headers */,
+				6FA4BA221D80FAEC009DEF3D /* EEPluginProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,16 +349,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FB2D0E21D2CBFE3007D47B6 /* Logger.cpp in Sources */,
-				6F68F5AC1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
-				6F68F5951D26724800F9D3F2 /* PluginManager.cpp in Sources */,
-				6FC406251D2CC82C002C100F /* Logger-iOS.mm in Sources */,
-				6F68F5B41D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
-				6F68F56C1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
-				6FB2D0E81D2CC08A007D47B6 /* LogLevel.cpp in Sources */,
-				6F68F59B1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
-				6F68F5B01D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
-				6F68F5A81D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
+				6FA4BA371D80FAEC009DEF3D /* EEPluginManager.m in Sources */,
+				6FA4BA391D80FAEC009DEF3D /* EEPluginProtocol.mm in Sources */,
+				6FA4BA451D80FAEC009DEF3D /* PluginProtocol.cpp in Sources */,
+				6FA4BA3B1D80FAEC009DEF3D /* Logger-iOS.mm in Sources */,
+				6FA4BA411D80FAEC009DEF3D /* PluginManager.cpp in Sources */,
+				6FA4BA431D80FAEC009DEF3D /* PluginProtocol-iOS.mm in Sources */,
+				6FA4BA3D1D80FAEC009DEF3D /* Logger.cpp in Sources */,
+				6FA4BA331D80FAEC009DEF3D /* EEDictionaryUtils.m in Sources */,
+				6FA4BA351D80FAEC009DEF3D /* EEJsonUtils.m in Sources */,
+				6FA4BA3F1D80FAEC009DEF3D /* LogLevel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,16 +366,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FB2D0E31D2CBFE3007D47B6 /* Logger.cpp in Sources */,
-				6F68F5AD1D26736A00F9D3F2 /* EEJsonUtils.m in Sources */,
-				6F68F5961D26724800F9D3F2 /* PluginManager.cpp in Sources */,
-				6FC406261D2CC82C002C100F /* Logger-iOS.mm in Sources */,
-				6F68F5B51D26736A00F9D3F2 /* EEPluginProtocol.mm in Sources */,
-				6F68F56D1D2654E900F9D3F2 /* PluginProtocol.cpp in Sources */,
-				6FB2D0E91D2CC08A007D47B6 /* LogLevel.cpp in Sources */,
-				6F68F59C1D26731600F9D3F2 /* PluginProtocol-iOS.mm in Sources */,
-				6F68F5B11D26736A00F9D3F2 /* EEPluginManager.m in Sources */,
-				6F68F5A91D26736A00F9D3F2 /* EEDictionaryUtils.m in Sources */,
+				6FA4BA381D80FAEC009DEF3D /* EEPluginManager.m in Sources */,
+				6FA4BA3A1D80FAEC009DEF3D /* EEPluginProtocol.mm in Sources */,
+				6FA4BA461D80FAEC009DEF3D /* PluginProtocol.cpp in Sources */,
+				6FA4BA3C1D80FAEC009DEF3D /* Logger-iOS.mm in Sources */,
+				6FA4BA421D80FAEC009DEF3D /* PluginManager.cpp in Sources */,
+				6FA4BA441D80FAEC009DEF3D /* PluginProtocol-iOS.mm in Sources */,
+				6FA4BA3E1D80FAEC009DEF3D /* Logger.cpp in Sources */,
+				6FA4BA341D80FAEC009DEF3D /* EEDictionaryUtils.m in Sources */,
+				6FA4BA361D80FAEC009DEF3D /* EEJsonUtils.m in Sources */,
+				6FA4BA401D80FAEC009DEF3D /* LogLevel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,14 +473,12 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../libraries/akrzemi1-optional\"",
-					"\"$(SRCROOT)/../libraries/nlohmann-json\"",
-				);
+				HEADER_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../include";
 			};
 			name = Debug;
 		};
@@ -525,14 +529,12 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../libraries/akrzemi1-optional\"",
-					"\"$(SRCROOT)/../libraries/nlohmann-json\"",
-				);
+				HEADER_SEARCH_PATHS = "";
 				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../include";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

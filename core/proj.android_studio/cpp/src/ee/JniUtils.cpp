@@ -9,10 +9,10 @@
 #include <cassert>
 #include <pthread.h>
 
-#include "JniUtils.hpp"
-#include "JniMethodInfo.hpp"
-#include "JniString.hpp"
-#include "Logger.hpp"
+#include "ee/JniUtils.hpp"
+#include "ee/JniMethodInfo.hpp"
+#include "ee/JniString.hpp"
+#include "ee/Logger.hpp"
 
 namespace ee {
 namespace core {

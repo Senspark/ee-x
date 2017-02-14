@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/JniMethodInfo.hpp"
+#include "ee/internal/JniMethodInfo.hpp"
 
 namespace ee {
 namespace core {

@@ -10,8 +10,8 @@
 #include <pthread.h>
 
 #include "ee/JniUtils.hpp"
-#include "ee/JniMethodInfo.hpp"
-#include "ee/JniString.hpp"
+#include "ee/internal/JniMethodInfo.hpp"
+#include "ee/internal/JniString.hpp"
 #include "ee/Logger.hpp"
 
 namespace ee {

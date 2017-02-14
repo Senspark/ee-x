@@ -22,22 +22,23 @@ Pod::Spec.new do |spec|
     spec.requires_arc = false
 
     spec.subspec 'core' do |core|
-        core.source_files   = "core/src/**/*.{m,mm,cpp}",
-                              "core/include/**/*.{h,hpp}"
+        core.source_files   = "core/src/ee/*.{h,hpp,m,mm,cpp}",
+                              "core/src/ee/**/*.{h,hpp,m,mm,cpp}",
+                              "core/src/ee/**/**/*.{h,hpp,m,mm,cpp}"
 
-        core.public_header_files = "core/include/ee/Logger.hpp",
-                                   "core/include/ee/LogLevel.hpp"
+        core.public_header_files = "core/src/ee/Logger.hpp",
+                                   "core/src/ee/LogLevel.hpp"
 
-        core.header_mappings_dir = "core/include"
+        core.header_mappings_dir = "core/src"
     end                             
 
     spec.subspec 'crash' do |crash|
-        crash.source_files  = "crashlytics/src/**/*.{m,cpp}",
-                              "crashlytics/include/**/*.{h,hpp}"
+        crash.source_files  = "crashlytics/src/ee/*.{h,hpp,m,mm,cpp}",
+                              "crashlytics/src/ee/**/*.{h,hpp,m,mm,cpp}"
 
-        crash.public_header_files = "crashlytics/include/ee/CrashlyticsProtocol.hpp"
+        crash.public_header_files = "crashlytics/src/ee/CrashlyticsProtocol.hpp"
 
-        crash.header_mappings_dir = "crashlytics/include"
+        crash.header_mappings_dir = "crashlytics/src"
 
         crash.dependency 'Crashlytics', '~> 3.7'
         crash.dependency 'Fabric', '~> 1.6'

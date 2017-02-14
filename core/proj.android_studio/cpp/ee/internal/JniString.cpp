@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/JniString.hpp"
+#include "ee/internal/JniString.hpp"
 
 namespace ee {
 namespace core {

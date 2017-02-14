@@ -8,9 +8,9 @@
 
 #include "ee/CrashlyticsProtocol.hpp"
 
-#include <ee/PluginProtocol.hpp>
+#include <ee/internal/PluginProtocol.hpp>
 #include <ee/LogLevel.hpp>
-#include <nlohmann/json.hpp>
+#include <ee/libs/nlohmann/json.hpp>
 
 namespace ee {
 namespace crashlytics {

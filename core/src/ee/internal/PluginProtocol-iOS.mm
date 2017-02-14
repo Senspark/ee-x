@@ -6,9 +6,9 @@
 //
 //
 
-#include "ee/PluginProtocol.hpp"
+#include "ee/internal/PluginProtocol.hpp"
 
-#import "ee/EEPluginManager.h"
+#import "ee/internal/EEPluginManager.h"
 
 namespace ee {
 namespace core {

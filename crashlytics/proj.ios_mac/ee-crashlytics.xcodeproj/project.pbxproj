@@ -7,17 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F68F5B81D26740500F9D3F2 /* Foundation.framework */; };
-		6FA4BA501D80FB46009DEF3D /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA4A1D80FB46009DEF3D /* CrashlyticsProtocol.hpp */; };
-		6FA4BA511D80FB46009DEF3D /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA4A1D80FB46009DEF3D /* CrashlyticsProtocol.hpp */; };
-		6FA4BA521D80FB46009DEF3D /* EECrashlyticsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA4B1D80FB46009DEF3D /* EECrashlyticsProtocol.h */; };
-		6FA4BA531D80FB46009DEF3D /* EECrashlyticsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FA4BA4B1D80FB46009DEF3D /* EECrashlyticsProtocol.h */; };
-		6FA4BA541D80FB46009DEF3D /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA4E1D80FB46009DEF3D /* CrashlyticsProtocol.cpp */; };
-		6FA4BA551D80FB46009DEF3D /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA4E1D80FB46009DEF3D /* CrashlyticsProtocol.cpp */; };
-		6FA4BA561D80FB46009DEF3D /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA4F1D80FB46009DEF3D /* EECrashlyticsProtocol.m */; };
-		6FA4BA571D80FB46009DEF3D /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4BA4F1D80FB46009DEF3D /* EECrashlyticsProtocol.m */; };
+		6F2DDCD51E52A3D00094C241 /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCD01E52A3D00094C241 /* CrashlyticsProtocol.cpp */; };
+		6F2DDCD61E52A3D00094C241 /* CrashlyticsProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCD01E52A3D00094C241 /* CrashlyticsProtocol.cpp */; };
+		6F2DDCD71E52A3D00094C241 /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCD11E52A3D00094C241 /* CrashlyticsProtocol.hpp */; };
+		6F2DDCD81E52A3D00094C241 /* CrashlyticsProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCD11E52A3D00094C241 /* CrashlyticsProtocol.hpp */; };
+		6F2DDCD91E52A3D00094C241 /* EECrashlyticsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCD31E52A3D00094C241 /* EECrashlyticsProtocol.h */; };
+		6F2DDCDA1E52A3D00094C241 /* EECrashlyticsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCD31E52A3D00094C241 /* EECrashlyticsProtocol.h */; };
+		6F2DDCDB1E52A3D00094C241 /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCD41E52A3D00094C241 /* EECrashlyticsProtocol.m */; };
+		6F2DDCDC1E52A3D00094C241 /* EECrashlyticsProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCD41E52A3D00094C241 /* EECrashlyticsProtocol.m */; };
 		B9A0F86F11CE4C2F73D93067 /* libPods-common-ee-crashlytics-desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DBC0E9B333753B6F71D0A532 /* libPods-common-ee-crashlytics-desktop.a */; };
-		CCD70602D888D9567FEDE859 /* libPods-ee-crashlytics-mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFCF518E0B3FB4456DDA418 /* libPods-ee-crashlytics-mobile.a */; };
 		F8B64A041C60F8D992CCB897 /* libPods-common-ee-crashlytics-mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7364A244E42560ECEE0C18 /* libPods-common-ee-crashlytics-mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -36,12 +34,12 @@
 
 /* Begin PBXFileReference section */
 		4DFD8F5C8F32FEEF4987B187 /* Pods-common-ee-crashlytics-mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee-crashlytics-mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee-crashlytics-mobile/Pods-common-ee-crashlytics-mobile.debug.xcconfig"; sourceTree = "<group>"; };
+		6F2DDCD01E52A3D00094C241 /* CrashlyticsProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashlyticsProtocol.cpp; sourceTree = "<group>"; };
+		6F2DDCD11E52A3D00094C241 /* CrashlyticsProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsProtocol.hpp; sourceTree = "<group>"; };
+		6F2DDCD31E52A3D00094C241 /* EECrashlyticsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EECrashlyticsProtocol.h; sourceTree = "<group>"; };
+		6F2DDCD41E52A3D00094C241 /* EECrashlyticsProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EECrashlyticsProtocol.m; sourceTree = "<group>"; };
 		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		6FA4BA4A1D80FB46009DEF3D /* CrashlyticsProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsProtocol.hpp; sourceTree = "<group>"; };
-		6FA4BA4B1D80FB46009DEF3D /* EECrashlyticsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EECrashlyticsProtocol.h; sourceTree = "<group>"; };
-		6FA4BA4E1D80FB46009DEF3D /* CrashlyticsProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashlyticsProtocol.cpp; sourceTree = "<group>"; };
-		6FA4BA4F1D80FB46009DEF3D /* EECrashlyticsProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EECrashlyticsProtocol.m; sourceTree = "<group>"; };
 		6FB2D0D01D2C9FCE007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee-crashlytics-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee-crashlytics-desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "ee-crashlytics-desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,8 +58,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F68F5B91D26740500F9D3F2 /* Foundation.framework in Frameworks */,
-				CCD70602D888D9567FEDE859 /* libPods-ee-crashlytics-mobile.a in Frameworks */,
 				F8B64A041C60F8D992CCB897 /* libPods-common-ee-crashlytics-mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,9 +76,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				6F2DDCCE1E52A3D00094C241 /* src */,
 				6FB2D0D01D2C9FCE007D47B6 /* java */,
-				6FA4BA481D80FB46009DEF3D /* include */,
-				6FA4BA4C1D80FB46009DEF3D /* src */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				6FC1CA921CEAB89C00DCDC8E /* Products */,
 				4FB419E589DFE86716B7D085 /* Pods */,
@@ -115,40 +110,32 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		6FA4BA481D80FB46009DEF3D /* include */ = {
+		6F2DDCCE1E52A3D00094C241 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				6FA4BA491D80FB46009DEF3D /* ee */,
-			);
-			name = include;
-			path = ../include;
-			sourceTree = "<group>";
-		};
-		6FA4BA491D80FB46009DEF3D /* ee */ = {
-			isa = PBXGroup;
-			children = (
-				6FA4BA4A1D80FB46009DEF3D /* CrashlyticsProtocol.hpp */,
-				6FA4BA4B1D80FB46009DEF3D /* EECrashlyticsProtocol.h */,
-			);
-			path = ee;
-			sourceTree = "<group>";
-		};
-		6FA4BA4C1D80FB46009DEF3D /* src */ = {
-			isa = PBXGroup;
-			children = (
-				6FA4BA4D1D80FB46009DEF3D /* ee */,
+				6F2DDCCF1E52A3D00094C241 /* ee */,
 			);
 			name = src;
 			path = ../src;
 			sourceTree = "<group>";
 		};
-		6FA4BA4D1D80FB46009DEF3D /* ee */ = {
+		6F2DDCCF1E52A3D00094C241 /* ee */ = {
 			isa = PBXGroup;
 			children = (
-				6FA4BA4E1D80FB46009DEF3D /* CrashlyticsProtocol.cpp */,
-				6FA4BA4F1D80FB46009DEF3D /* EECrashlyticsProtocol.m */,
+				6F2DDCD01E52A3D00094C241 /* CrashlyticsProtocol.cpp */,
+				6F2DDCD11E52A3D00094C241 /* CrashlyticsProtocol.hpp */,
+				6F2DDCD21E52A3D00094C241 /* internal */,
 			);
 			path = ee;
+			sourceTree = "<group>";
+		};
+		6F2DDCD21E52A3D00094C241 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				6F2DDCD31E52A3D00094C241 /* EECrashlyticsProtocol.h */,
+				6F2DDCD41E52A3D00094C241 /* EECrashlyticsProtocol.m */,
+			);
+			path = internal;
 			sourceTree = "<group>";
 		};
 		6FC1CA921CEAB89C00DCDC8E /* Products */ = {
@@ -167,8 +154,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FA4BA521D80FB46009DEF3D /* EECrashlyticsProtocol.h in Headers */,
-				6FA4BA501D80FB46009DEF3D /* CrashlyticsProtocol.hpp in Headers */,
+				6F2DDCD91E52A3D00094C241 /* EECrashlyticsProtocol.h in Headers */,
+				6F2DDCD71E52A3D00094C241 /* CrashlyticsProtocol.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,8 +163,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FA4BA531D80FB46009DEF3D /* EECrashlyticsProtocol.h in Headers */,
-				6FA4BA511D80FB46009DEF3D /* CrashlyticsProtocol.hpp in Headers */,
+				6F2DDCDA1E52A3D00094C241 /* EECrashlyticsProtocol.h in Headers */,
+				6F2DDCD81E52A3D00094C241 /* CrashlyticsProtocol.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,8 +315,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FA4BA541D80FB46009DEF3D /* CrashlyticsProtocol.cpp in Sources */,
-				6FA4BA561D80FB46009DEF3D /* EECrashlyticsProtocol.m in Sources */,
+				6F2DDCD51E52A3D00094C241 /* CrashlyticsProtocol.cpp in Sources */,
+				6F2DDCDB1E52A3D00094C241 /* EECrashlyticsProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,8 +324,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FA4BA551D80FB46009DEF3D /* CrashlyticsProtocol.cpp in Sources */,
-				6FA4BA571D80FB46009DEF3D /* EECrashlyticsProtocol.m in Sources */,
+				6F2DDCD61E52A3D00094C241 /* CrashlyticsProtocol.cpp in Sources */,
+				6F2DDCDC1E52A3D00094C241 /* EECrashlyticsProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +338,6 @@
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -364,7 +350,6 @@
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -376,7 +361,6 @@
 			baseConfigurationReference = D5EF53C08BA1F3D4AED0D59D /* Pods-common-ee-crashlytics-desktop.debug.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -387,7 +371,6 @@
 			baseConfigurationReference = CC578A74DA1CA1FD07DB63B1 /* Pods-common-ee-crashlytics-desktop.release.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -442,12 +425,12 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../core/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../core/src";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../include";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../src";
 			};
 			name = Debug;
 		};
@@ -498,12 +481,12 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../core/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../core/src";
 				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../include";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../src";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

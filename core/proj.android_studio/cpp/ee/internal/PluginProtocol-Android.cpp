@@ -6,11 +6,11 @@
 //
 //
 
-#include "ee/PluginProtocol.hpp"
-#include "ee/PluginManager.hpp"
+#include "ee/internal/PluginProtocol.hpp"
+#include "ee/internal/PluginManager.hpp"
 #include "ee/JniUtils.hpp"
-#include "ee/JniMethodInfo.hpp"
-#include "ee/JniString.hpp"
+#include "ee/internal/JniMethodInfo.hpp"
+#include "ee/internal/JniString.hpp"
 #include "ee/Logger.hpp"
 
 extern "C" {

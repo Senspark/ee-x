@@ -3,3 +3,4 @@ xcuserdata
 *.xcworkspace
 *.iml
 Pods
+Podfile.lock

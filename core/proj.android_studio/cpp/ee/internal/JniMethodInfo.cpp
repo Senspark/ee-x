@@ -19,18 +19,26 @@ std::unique_ptr<JniMethodInfo> JniMethodInfo::create(JNIEnv* env, jclass clazz,
 JniMethodInfo::JniMethodInfo(JNIEnv* env, jclass clazz, jmethodID methodId)
     : env_{env}
     , clazz_{clazz}
-    , methodId_{methodId} {}
+    , methodId_{methodId} {
+}
 
 JniMethodInfo::~JniMethodInfo() {
     if (env_ != nullptr && clazz_ != nullptr) {
+        // Release resources.
         env_->DeleteLocalRef(clazz_);
     }
 }
 
-jclass JniMethodInfo::getClass() const noexcept { return clazz_; }
+jclass JniMethodInfo::getClass() const noexcept {
+    return clazz_;
+}
 
-jmethodID JniMethodInfo::getMethodId() const noexcept { return methodId_; }
+jmethodID JniMethodInfo::getMethodId() const noexcept {
+    return methodId_;
+}
 
-JNIEnv* JniMethodInfo::getEnv() const noexcept { return env_; }
+JNIEnv* JniMethodInfo::getEnv() const noexcept {
+    return env_;
+}
 } // namespace core
 } // namespace ee

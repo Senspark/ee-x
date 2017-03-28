@@ -20,19 +20,28 @@ class JniMethodInfo final {
 public:
     static std::unique_ptr<JniMethodInfo> create(JNIEnv* env, jclass clazz,
                                                  jmethodID methodId);
+
     ~JniMethodInfo();
 
+    /// Gets the pointer to the jclass.
     jclass getClass() const noexcept;
 
+    /// Gets the method id.
     jmethodID getMethodId() const noexcept;
 
+    /// Gets the pointer to the JNIEnv.
     JNIEnv* getEnv() const noexcept;
 
 private:
     explicit JniMethodInfo(JNIEnv* env, jclass clazz, jmethodID methodId);
 
+    /// Weak pointer to the JNIEnv.
     JNIEnv* env_;
+
+    /// Strong pointer to the jclass.
     jclass clazz_;
+
+    /// The method id.
     jmethodID methodId_;
 };
 } // namespace core

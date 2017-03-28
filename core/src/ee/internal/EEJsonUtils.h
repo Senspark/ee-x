@@ -8,16 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+/// Utility class to convert between @c NSString and @c NSDictionary.
 @interface EEJsonUtils : NSObject
 
-// clang-format off
-
 /// Converts @c NSDictionary to JSON formatted @c NSString.
-+ (NSString*) convertDictionaryToString:(NSDictionary*) dict;
++ (NSString*)convertDictionaryToString:(NSDictionary*)dict;
 
 /// Converts JSON formatted @c NSString to @c NSDictionary.
-+ (NSMutableDictionary*) convertStringToDictionary:(NSString*) str;
-
-// clang-format on
++ (NSMutableDictionary*)convertStringToDictionary:(NSString*)str;
 
 @end

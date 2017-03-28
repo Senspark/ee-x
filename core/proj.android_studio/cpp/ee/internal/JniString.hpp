@@ -27,7 +27,10 @@ public:
 private:
     explicit JniString(JNIEnv* env, const char* str);
 
+    /// Weak pointer to the JNIEnv.
     JNIEnv* env_;
+
+    /// Strong pointer the jstring.
     jstring javaString_;
 };
 } // namespace core

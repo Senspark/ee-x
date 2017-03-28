@@ -24,10 +24,13 @@ JniString::JniString(JNIEnv* env, const char* str)
 
 JniString::~JniString() {
     if (javaString_ != nullptr) {
+        // Release resources.
         env_->DeleteLocalRef(javaString_);
     }
 }
 
-jstring JniString::get() const noexcept { return javaString_; }
+jstring JniString::get() const noexcept {
+    return javaString_;
+}
 } // namespace core
 } // namespace ee

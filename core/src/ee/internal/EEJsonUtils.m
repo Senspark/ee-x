@@ -10,9 +10,7 @@
 
 @implementation EEJsonUtils
 
-// clang-format off
-
-+ (NSString*) convertDictionaryToString:(NSDictionary*) dict {
++ (NSString*)convertDictionaryToString:(NSDictionary*)dict {
     NSError* error;
     NSUInteger options = NSJSONWritingPrettyPrinted;
     NSData* data = [NSJSONSerialization dataWithJSONObject:dict
@@ -27,11 +25,11 @@
                                   encoding:NSUTF8StringEncoding] autorelease];
 }
 
-+ (NSMutableDictionary*) convertStringToDictionary:(NSString*) str {
++ (NSMutableDictionary*)convertStringToDictionary:(NSString*)str {
     NSError* error;
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
-    NSUInteger options = (NSJSONReadingMutableContainers |
-                          NSJSONReadingMutableLeaves);
+    NSUInteger options =
+        (NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves);
     id object = [NSJSONSerialization JSONObjectWithData:data
                                                 options:options
                                                   error:&error];
@@ -43,7 +41,5 @@
     NSCAssert([object isKindOfClass:[NSMutableDictionary class]], @"...");
     return object;
 }
-
-// clang-format on
 
 @end

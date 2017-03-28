@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+/// Utility class to manipulate dictionary.
 @interface EEDictionaryUtils : NSObject
 
-// clang-format off
+/// Creates an empty JSON formatted string.
++ (NSString* _Nonnull)emptyResult;
 
-+ (NSString* _Nonnull) emptyResult;
+/// Adds the specified error to the specified dictionary.
++ (void)setError:(NSError* _Nullable)error
+         forDict:(NSMutableDictionary* _Nonnull)dict;
 
-+ (void) setError:(NSError* _Nullable) error
-          forDict:(NSMutableDictionary* _Nonnull) dict;
-
-+ (void) setResult:(id _Nullable) result
-           forDict:(NSMutableDictionary* _Nonnull) dict;
-
-// clang-format on
+/// Adds the result to the specified dictionary.
++ (void)setResult:(id _Nullable)result
+          forDict:(NSMutableDictionary* _Nonnull)dict;
 
 @end

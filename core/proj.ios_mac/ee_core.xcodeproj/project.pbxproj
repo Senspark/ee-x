@@ -15,42 +15,20 @@
 		6F2DDD061E52A3DF0094C241 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE21E52A3DE0094C241 /* EEJsonUtils.h */; };
 		6F2DDD071E52A3DF0094C241 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE31E52A3DE0094C241 /* EEJsonUtils.m */; };
 		6F2DDD081E52A3DF0094C241 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE31E52A3DE0094C241 /* EEJsonUtils.m */; };
-		6F2DDD091E52A3DF0094C241 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE41E52A3DE0094C241 /* EEPluginManager.h */; };
-		6F2DDD0A1E52A3DF0094C241 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE41E52A3DE0094C241 /* EEPluginManager.h */; };
-		6F2DDD0B1E52A3DF0094C241 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE51E52A3DE0094C241 /* EEPluginManager.m */; };
-		6F2DDD0C1E52A3DF0094C241 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE51E52A3DE0094C241 /* EEPluginManager.m */; };
-		6F2DDD0D1E52A3DF0094C241 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE61E52A3DE0094C241 /* EEPluginProtocol.h */; };
-		6F2DDD0E1E52A3DF0094C241 /* EEPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE61E52A3DE0094C241 /* EEPluginProtocol.h */; };
-		6F2DDD0F1E52A3DF0094C241 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE71E52A3DE0094C241 /* EEPluginProtocol.mm */; };
-		6F2DDD101E52A3DF0094C241 /* EEPluginProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE71E52A3DE0094C241 /* EEPluginProtocol.mm */; };
-		6F2DDD111E52A3DF0094C241 /* ExperimentalOptional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE81E52A3DE0094C241 /* ExperimentalOptional.hpp */; };
-		6F2DDD121E52A3DF0094C241 /* ExperimentalOptional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE81E52A3DE0094C241 /* ExperimentalOptional.hpp */; };
-		6F2DDD131E52A3DF0094C241 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE91E52A3DE0094C241 /* PluginManager.cpp */; };
-		6F2DDD141E52A3DF0094C241 /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE91E52A3DE0094C241 /* PluginManager.cpp */; };
-		6F2DDD151E52A3DF0094C241 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCEA1E52A3DE0094C241 /* PluginManager.hpp */; };
-		6F2DDD161E52A3DF0094C241 /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCEA1E52A3DE0094C241 /* PluginManager.hpp */; };
-		6F2DDD171E52A3DF0094C241 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEB1E52A3DE0094C241 /* PluginProtocol-iOS.mm */; };
-		6F2DDD181E52A3DF0094C241 /* PluginProtocol-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEB1E52A3DE0094C241 /* PluginProtocol-iOS.mm */; };
-		6F2DDD191E52A3DF0094C241 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEC1E52A3DE0094C241 /* PluginProtocol.cpp */; };
-		6F2DDD1A1E52A3DF0094C241 /* PluginProtocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEC1E52A3DE0094C241 /* PluginProtocol.cpp */; };
-		6F2DDD1B1E52A3DF0094C241 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCED1E52A3DE0094C241 /* PluginProtocol.hpp */; };
-		6F2DDD1C1E52A3DF0094C241 /* PluginProtocol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCED1E52A3DE0094C241 /* PluginProtocol.hpp */; };
-		6F2DDD1D1E52A3DF0094C241 /* optional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCF31E52A3DE0094C241 /* optional.hpp */; };
-		6F2DDD1E1E52A3DF0094C241 /* optional.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCF31E52A3DE0094C241 /* optional.hpp */; };
-		6F2DDD1F1E52A3DF0094C241 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF41E52A3DE0094C241 /* README.md */; };
-		6F2DDD201E52A3DF0094C241 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF41E52A3DE0094C241 /* README.md */; };
-		6F2DDD211E52A3DF0094C241 /* test_optional.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF51E52A3DE0094C241 /* test_optional.cpp */; };
-		6F2DDD221E52A3DF0094C241 /* test_optional.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF51E52A3DE0094C241 /* test_optional.cpp */; };
-		6F2DDD231E52A3DF0094C241 /* test_type_traits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF61E52A3DE0094C241 /* test_type_traits.cpp */; };
-		6F2DDD241E52A3DF0094C241 /* test_type_traits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF61E52A3DE0094C241 /* test_type_traits.cpp */; };
+		6F2DDD091E52A3DF0094C241 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE41E52A3DE0094C241 /* EEMessageBridge.h */; };
+		6F2DDD0A1E52A3DF0094C241 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCE41E52A3DE0094C241 /* EEMessageBridge.h */; };
+		6F2DDD0B1E52A3DF0094C241 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE51E52A3DE0094C241 /* EEMessageBridge.m */; };
+		6F2DDD0C1E52A3DF0094C241 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCE51E52A3DE0094C241 /* EEMessageBridge.m */; };
+		6F2DDD171E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEB1E52A3DE0094C241 /* MessageBridge_iOS.mm */; };
+		6F2DDD181E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCEB1E52A3DE0094C241 /* MessageBridge_iOS.mm */; };
 		6F2DDD251E52A3DF0094C241 /* ChangeLog.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF81E52A3DF0094C241 /* ChangeLog.md */; };
 		6F2DDD261E52A3DF0094C241 /* ChangeLog.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCF81E52A3DF0094C241 /* ChangeLog.md */; };
 		6F2DDD271E52A3DF0094C241 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCF91E52A3DF0094C241 /* json.hpp */; };
 		6F2DDD281E52A3DF0094C241 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCF91E52A3DF0094C241 /* json.hpp */; };
 		6F2DDD291E52A3DF0094C241 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFB1E52A3DF0094C241 /* README.md */; };
 		6F2DDD2A1E52A3DF0094C241 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFB1E52A3DF0094C241 /* README.md */; };
-		6F2DDD2B1E52A3DF0094C241 /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFC1E52A3DF0094C241 /* Logger-iOS.mm */; };
-		6F2DDD2C1E52A3DF0094C241 /* Logger-iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFC1E52A3DF0094C241 /* Logger-iOS.mm */; };
+		6F2DDD2B1E52A3DF0094C241 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFC1E52A3DF0094C241 /* Logger_iOS.mm */; };
+		6F2DDD2C1E52A3DF0094C241 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFC1E52A3DF0094C241 /* Logger_iOS.mm */; };
 		6F2DDD2D1E52A3DF0094C241 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFD1E52A3DF0094C241 /* Logger.cpp */; };
 		6F2DDD2E1E52A3DF0094C241 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFD1E52A3DF0094C241 /* Logger.cpp */; };
 		6F2DDD2F1E52A3DF0094C241 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDCFE1E52A3DF0094C241 /* Logger.hpp */; };
@@ -59,6 +37,22 @@
 		6F2DDD321E52A3DF0094C241 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */; };
 		6F2DDD331E52A3DF0094C241 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */; };
 		6F2DDD341E52A3DF0094C241 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */; };
+		6FF1489C1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
+		6FF1489D1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
+		6FF1489E1E8A5E7700C7519A /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF1489B1E8A5E7700C7519A /* Notification.hpp */; };
+		6FF1489F1E8A5E7700C7519A /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF1489B1E8A5E7700C7519A /* Notification.hpp */; };
+		6FF148A81E8A61FF00C7519A /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */; };
+		6FF148A91E8A61FF00C7519A /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */; };
+		6FF148AA1E8A61FF00C7519A /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148A71E8A61FF00C7519A /* MessageBridge.hpp */; };
+		6FF148AB1E8A61FF00C7519A /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148A71E8A61FF00C7519A /* MessageBridge.hpp */; };
+		6FF148AE1E8A78BF00C7519A /* EEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148AC1E8A78BF00C7519A /* EEUtils.m */; };
+		6FF148AF1E8A78BF00C7519A /* EEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148AC1E8A78BF00C7519A /* EEUtils.m */; };
+		6FF148B01E8A78BF00C7519A /* EEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148AD1E8A78BF00C7519A /* EEUtils.h */; };
+		6FF148B11E8A78BF00C7519A /* EEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148AD1E8A78BF00C7519A /* EEUtils.h */; };
+		6FF148B41E8A7B1C00C7519A /* EENotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148B21E8A7B1C00C7519A /* EENotification.m */; };
+		6FF148B61E8A7B1C00C7519A /* EENotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148B31E8A7B1C00C7519A /* EENotification.h */; };
+		6FF148B71E8A7B1C00C7519A /* EENotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF148B31E8A7B1C00C7519A /* EENotification.h */; };
+		6FF148B81E8A862E00C7519A /* EENotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF148B21E8A7B1C00C7519A /* EENotification.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -80,28 +74,14 @@
 		6F2DDCE11E52A3DE0094C241 /* EEDictionaryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEDictionaryUtils.m; sourceTree = "<group>"; };
 		6F2DDCE21E52A3DE0094C241 /* EEJsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEJsonUtils.h; sourceTree = "<group>"; };
 		6F2DDCE31E52A3DE0094C241 /* EEJsonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEJsonUtils.m; sourceTree = "<group>"; };
-		6F2DDCE41E52A3DE0094C241 /* EEPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
-		6F2DDCE51E52A3DE0094C241 /* EEPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
-		6F2DDCE61E52A3DE0094C241 /* EEPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEPluginProtocol.h; sourceTree = "<group>"; };
-		6F2DDCE71E52A3DE0094C241 /* EEPluginProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EEPluginProtocol.mm; sourceTree = "<group>"; };
-		6F2DDCE81E52A3DE0094C241 /* ExperimentalOptional.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExperimentalOptional.hpp; sourceTree = "<group>"; };
-		6F2DDCE91E52A3DE0094C241 /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginManager.cpp; sourceTree = "<group>"; };
-		6F2DDCEA1E52A3DE0094C241 /* PluginManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PluginManager.hpp; sourceTree = "<group>"; };
-		6F2DDCEB1E52A3DE0094C241 /* PluginProtocol-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "PluginProtocol-iOS.mm"; sourceTree = "<group>"; };
-		6F2DDCEC1E52A3DE0094C241 /* PluginProtocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginProtocol.cpp; sourceTree = "<group>"; };
-		6F2DDCED1E52A3DE0094C241 /* PluginProtocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PluginProtocol.hpp; sourceTree = "<group>"; };
-		6F2DDCF01E52A3DE0094C241 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		6F2DDCF11E52A3DE0094C241 /* copyright.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyright.txt; sourceTree = "<group>"; };
-		6F2DDCF21E52A3DE0094C241 /* LICENSE_1_0.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE_1_0.txt; sourceTree = "<group>"; };
-		6F2DDCF31E52A3DE0094C241 /* optional.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
-		6F2DDCF41E52A3DE0094C241 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		6F2DDCF51E52A3DE0094C241 /* test_optional.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_optional.cpp; sourceTree = "<group>"; };
-		6F2DDCF61E52A3DE0094C241 /* test_type_traits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_type_traits.cpp; sourceTree = "<group>"; };
+		6F2DDCE41E52A3DE0094C241 /* EEMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
+		6F2DDCE51E52A3DE0094C241 /* EEMessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMessageBridge.m; sourceTree = "<group>"; };
+		6F2DDCEB1E52A3DE0094C241 /* MessageBridge_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageBridge_iOS.mm; sourceTree = "<group>"; };
 		6F2DDCF81E52A3DF0094C241 /* ChangeLog.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
 		6F2DDCF91E52A3DF0094C241 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
 		6F2DDCFA1E52A3DF0094C241 /* LICENSE.MIT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.MIT; sourceTree = "<group>"; };
 		6F2DDCFB1E52A3DF0094C241 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		6F2DDCFC1E52A3DF0094C241 /* Logger-iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "Logger-iOS.mm"; sourceTree = "<group>"; };
+		6F2DDCFC1E52A3DF0094C241 /* Logger_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Logger_iOS.mm; sourceTree = "<group>"; };
 		6F2DDCFD1E52A3DF0094C241 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		6F2DDCFE1E52A3DF0094C241 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
@@ -111,6 +91,14 @@
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee_core_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_mobile.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee_core_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_desktop.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FF1489A1E8A5E7700C7519A /* Notification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notification.cpp; sourceTree = "<group>"; };
+		6FF1489B1E8A5E7700C7519A /* Notification.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
+		6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
+		6FF148A71E8A61FF00C7519A /* MessageBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
+		6FF148AC1E8A78BF00C7519A /* EEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEUtils.m; sourceTree = "<group>"; };
+		6FF148AD1E8A78BF00C7519A /* EEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEUtils.h; sourceTree = "<group>"; };
+		6FF148B21E8A7B1C00C7519A /* EENotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EENotification.m; sourceTree = "<group>"; };
+		6FF148B31E8A7B1C00C7519A /* EENotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EENotification.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,11 +154,13 @@
 			children = (
 				6F2DDCDF1E52A3DE0094C241 /* internal */,
 				6F2DDCEE1E52A3DE0094C241 /* libs */,
-				6F2DDCFC1E52A3DF0094C241 /* Logger-iOS.mm */,
+				6F2DDCFC1E52A3DF0094C241 /* Logger_iOS.mm */,
 				6F2DDCFD1E52A3DF0094C241 /* Logger.cpp */,
 				6F2DDCFE1E52A3DF0094C241 /* Logger.hpp */,
 				6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */,
 				6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */,
+				6FF1489A1E8A5E7700C7519A /* Notification.cpp */,
+				6FF1489B1E8A5E7700C7519A /* Notification.hpp */,
 			);
 			path = ee;
 			sourceTree = "<group>";
@@ -182,16 +172,15 @@
 				6F2DDCE11E52A3DE0094C241 /* EEDictionaryUtils.m */,
 				6F2DDCE21E52A3DE0094C241 /* EEJsonUtils.h */,
 				6F2DDCE31E52A3DE0094C241 /* EEJsonUtils.m */,
-				6F2DDCE41E52A3DE0094C241 /* EEPluginManager.h */,
-				6F2DDCE51E52A3DE0094C241 /* EEPluginManager.m */,
-				6F2DDCE61E52A3DE0094C241 /* EEPluginProtocol.h */,
-				6F2DDCE71E52A3DE0094C241 /* EEPluginProtocol.mm */,
-				6F2DDCE81E52A3DE0094C241 /* ExperimentalOptional.hpp */,
-				6F2DDCE91E52A3DE0094C241 /* PluginManager.cpp */,
-				6F2DDCEA1E52A3DE0094C241 /* PluginManager.hpp */,
-				6F2DDCEB1E52A3DE0094C241 /* PluginProtocol-iOS.mm */,
-				6F2DDCEC1E52A3DE0094C241 /* PluginProtocol.cpp */,
-				6F2DDCED1E52A3DE0094C241 /* PluginProtocol.hpp */,
+				6FF148AC1E8A78BF00C7519A /* EEUtils.m */,
+				6FF148AD1E8A78BF00C7519A /* EEUtils.h */,
+				6F2DDCE41E52A3DE0094C241 /* EEMessageBridge.h */,
+				6F2DDCE51E52A3DE0094C241 /* EEMessageBridge.m */,
+				6FF148B21E8A7B1C00C7519A /* EENotification.m */,
+				6FF148B31E8A7B1C00C7519A /* EENotification.h */,
+				6F2DDCEB1E52A3DE0094C241 /* MessageBridge_iOS.mm */,
+				6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */,
+				6FF148A71E8A61FF00C7519A /* MessageBridge.hpp */,
 			);
 			path = internal;
 			sourceTree = "<group>";
@@ -199,24 +188,9 @@
 		6F2DDCEE1E52A3DE0094C241 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				6F2DDCEF1E52A3DE0094C241 /* akrzemi1 */,
 				6F2DDCF71E52A3DF0094C241 /* nlohmann */,
 			);
 			path = libs;
-			sourceTree = "<group>";
-		};
-		6F2DDCEF1E52A3DE0094C241 /* akrzemi1 */ = {
-			isa = PBXGroup;
-			children = (
-				6F2DDCF01E52A3DE0094C241 /* CMakeLists.txt */,
-				6F2DDCF11E52A3DE0094C241 /* copyright.txt */,
-				6F2DDCF21E52A3DE0094C241 /* LICENSE_1_0.txt */,
-				6F2DDCF31E52A3DE0094C241 /* optional.hpp */,
-				6F2DDCF41E52A3DE0094C241 /* README.md */,
-				6F2DDCF51E52A3DE0094C241 /* test_optional.cpp */,
-				6F2DDCF61E52A3DE0094C241 /* test_type_traits.cpp */,
-			);
-			path = akrzemi1;
 			sourceTree = "<group>";
 		};
 		6F2DDCF71E52A3DF0094C241 /* nlohmann */ = {
@@ -246,17 +220,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F2DDD1D1E52A3DF0094C241 /* optional.hpp in Headers */,
 				6F2DDD051E52A3DF0094C241 /* EEJsonUtils.h in Headers */,
-				6F2DDD091E52A3DF0094C241 /* EEPluginManager.h in Headers */,
+				6F2DDD091E52A3DF0094C241 /* EEMessageBridge.h in Headers */,
 				6F2DDD011E52A3DF0094C241 /* EEDictionaryUtils.h in Headers */,
-				6F2DDD0D1E52A3DF0094C241 /* EEPluginProtocol.h in Headers */,
-				6F2DDD1B1E52A3DF0094C241 /* PluginProtocol.hpp in Headers */,
+				6FF148B61E8A7B1C00C7519A /* EENotification.h in Headers */,
+				6FF148AA1E8A61FF00C7519A /* MessageBridge.hpp in Headers */,
 				6F2DDD2F1E52A3DF0094C241 /* Logger.hpp in Headers */,
 				6F2DDD331E52A3DF0094C241 /* LogLevel.hpp in Headers */,
+				6FF148B01E8A78BF00C7519A /* EEUtils.h in Headers */,
 				6F2DDD271E52A3DF0094C241 /* json.hpp in Headers */,
-				6F2DDD111E52A3DF0094C241 /* ExperimentalOptional.hpp in Headers */,
-				6F2DDD151E52A3DF0094C241 /* PluginManager.hpp in Headers */,
+				6FF1489E1E8A5E7700C7519A /* Notification.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,17 +237,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F2DDD1E1E52A3DF0094C241 /* optional.hpp in Headers */,
 				6F2DDD061E52A3DF0094C241 /* EEJsonUtils.h in Headers */,
-				6F2DDD0A1E52A3DF0094C241 /* EEPluginManager.h in Headers */,
+				6F2DDD0A1E52A3DF0094C241 /* EEMessageBridge.h in Headers */,
 				6F2DDD021E52A3DF0094C241 /* EEDictionaryUtils.h in Headers */,
-				6F2DDD0E1E52A3DF0094C241 /* EEPluginProtocol.h in Headers */,
-				6F2DDD1C1E52A3DF0094C241 /* PluginProtocol.hpp in Headers */,
+				6FF148B71E8A7B1C00C7519A /* EENotification.h in Headers */,
+				6FF148AB1E8A61FF00C7519A /* MessageBridge.hpp in Headers */,
 				6F2DDD301E52A3DF0094C241 /* Logger.hpp in Headers */,
 				6F2DDD341E52A3DF0094C241 /* LogLevel.hpp in Headers */,
+				6FF148B11E8A78BF00C7519A /* EEUtils.h in Headers */,
 				6F2DDD281E52A3DF0094C241 /* json.hpp in Headers */,
-				6F2DDD121E52A3DF0094C241 /* ExperimentalOptional.hpp in Headers */,
-				6F2DDD161E52A3DF0094C241 /* PluginManager.hpp in Headers */,
+				6FF1489F1E8A5E7700C7519A /* Notification.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,21 +330,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F2DDD231E52A3DF0094C241 /* test_type_traits.cpp in Sources */,
 				6F2DDD2D1E52A3DF0094C241 /* Logger.cpp in Sources */,
+				6FF1489C1E8A5E7700C7519A /* Notification.cpp in Sources */,
 				6F2DDD251E52A3DF0094C241 /* ChangeLog.md in Sources */,
 				6F2DDD031E52A3DF0094C241 /* EEDictionaryUtils.m in Sources */,
-				6F2DDD0B1E52A3DF0094C241 /* EEPluginManager.m in Sources */,
-				6F2DDD0F1E52A3DF0094C241 /* EEPluginProtocol.mm in Sources */,
+				6F2DDD0B1E52A3DF0094C241 /* EEMessageBridge.m in Sources */,
+				6FF148AE1E8A78BF00C7519A /* EEUtils.m in Sources */,
 				6F2DDD071E52A3DF0094C241 /* EEJsonUtils.m in Sources */,
 				6F2DDD291E52A3DF0094C241 /* README.md in Sources */,
+				6FF148A81E8A61FF00C7519A /* MessageBridge.cpp in Sources */,
 				6F2DDD311E52A3DF0094C241 /* LogLevel.cpp in Sources */,
-				6F2DDD171E52A3DF0094C241 /* PluginProtocol-iOS.mm in Sources */,
-				6F2DDD211E52A3DF0094C241 /* test_optional.cpp in Sources */,
-				6F2DDD2B1E52A3DF0094C241 /* Logger-iOS.mm in Sources */,
-				6F2DDD131E52A3DF0094C241 /* PluginManager.cpp in Sources */,
-				6F2DDD1F1E52A3DF0094C241 /* README.md in Sources */,
-				6F2DDD191E52A3DF0094C241 /* PluginProtocol.cpp in Sources */,
+				6F2DDD171E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */,
+				6FF148B41E8A7B1C00C7519A /* EENotification.m in Sources */,
+				6F2DDD2B1E52A3DF0094C241 /* Logger_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,21 +350,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F2DDD241E52A3DF0094C241 /* test_type_traits.cpp in Sources */,
 				6F2DDD2E1E52A3DF0094C241 /* Logger.cpp in Sources */,
+				6FF1489D1E8A5E7700C7519A /* Notification.cpp in Sources */,
 				6F2DDD261E52A3DF0094C241 /* ChangeLog.md in Sources */,
 				6F2DDD041E52A3DF0094C241 /* EEDictionaryUtils.m in Sources */,
-				6F2DDD0C1E52A3DF0094C241 /* EEPluginManager.m in Sources */,
-				6F2DDD101E52A3DF0094C241 /* EEPluginProtocol.mm in Sources */,
+				6FF148B81E8A862E00C7519A /* EENotification.m in Sources */,
+				6F2DDD0C1E52A3DF0094C241 /* EEMessageBridge.m in Sources */,
+				6FF148AF1E8A78BF00C7519A /* EEUtils.m in Sources */,
 				6F2DDD081E52A3DF0094C241 /* EEJsonUtils.m in Sources */,
 				6F2DDD2A1E52A3DF0094C241 /* README.md in Sources */,
+				6FF148A91E8A61FF00C7519A /* MessageBridge.cpp in Sources */,
 				6F2DDD321E52A3DF0094C241 /* LogLevel.cpp in Sources */,
-				6F2DDD181E52A3DF0094C241 /* PluginProtocol-iOS.mm in Sources */,
-				6F2DDD221E52A3DF0094C241 /* test_optional.cpp in Sources */,
-				6F2DDD2C1E52A3DF0094C241 /* Logger-iOS.mm in Sources */,
-				6F2DDD141E52A3DF0094C241 /* PluginManager.cpp in Sources */,
-				6F2DDD201E52A3DF0094C241 /* README.md in Sources */,
-				6F2DDD1A1E52A3DF0094C241 /* PluginProtocol.cpp in Sources */,
+				6F2DDD181E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */,
+				6F2DDD2C1E52A3DF0094C241 /* Logger_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

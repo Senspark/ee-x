@@ -10,19 +10,10 @@
 
 #include <ee/LogLevel.hpp>
 #include <ee/internal/MessageBridge.hpp>
-#include <ee/internal/PluginManager.hpp>
 #include <ee/libs/nlohmann/json.hpp>
 
 namespace ee {
 namespace crashlytics {
-Crashlytics::Crashlytics() {
-    core::PluginManager::getInstance().addPlugin(PluginName);
-}
-
-Crashlytics::~Crashlytics() {
-    core::PluginManager::getInstance().removePlugin(PluginName);
-}
-
 void Crashlytics::causeCrash() const {
     core::MessageBridge::getInstance().call("__crashlytics_cause_crash");
 }

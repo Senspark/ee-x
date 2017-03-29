@@ -28,7 +28,8 @@ Pod::Spec.new do |spec|
 
         core.public_header_files = "core/src/ee/Logger.hpp",
                                    "core/src/ee/LogLevel.hpp",
-                                   "core/src/ee/Notification.hpp"
+                                   "core/src/ee/Notification.hpp",
+                                   "core/src/ee/EEPluginManager.h"
 
         core.header_mappings_dir = "core/src"
     end                             

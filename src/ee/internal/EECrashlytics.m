@@ -34,8 +34,7 @@ NSString* const k__crashlytics_set_bool = @"__crashlytics_set_bool";
 NSString* const k__crashlytics_set_int = @"__crashlytics_set_int";
 NSString* const k__crashlytics_set_user_identifier =
     @"__crashlytics_set_user_identifier";
-NSString* const k__crashlytics_set_user_user_name =
-    @"__crashlytics_set_user_user_name";
+NSString* const k__crashlytics_set_user_name = @"__crashlytics_set_user_name";
 NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
 
 - (id)init {
@@ -43,7 +42,16 @@ NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
     if (self == nil) {
         return self;
     }
+    [self registerHandlers];
+    return self;
+}
 
+- (void)dealloc {
+    [self deregisterHandlers];
+    [super dealloc];
+}
+
+- (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:^(NSString* msg) {
@@ -131,30 +139,27 @@ NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
     [bridge registerHandler:^(NSString* msg) {
         [self setUserName:msg];
         return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_user_user_name];
+    } tag:k__crashlytics_set_user_name];
 
     [bridge registerHandler:^(NSString* msg) {
         [self setUserEmail:msg];
         return [EEDictionaryUtils emptyResult];
     } tag:k__crashlytics_set_user_email];
-
-    return self;
 }
 
-- (void)dealloc {
+- (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__crashlytics_cause_crash];
     [bridge deregisterHandler:k__crashlytics_cause_exception];
     [bridge deregisterHandler:k__crashlytics_log];
+    [bridge deregisterHandler:k__crashlytics_set_log_level];
     [bridge deregisterHandler:k__crashlytics_set_string];
     [bridge deregisterHandler:k__crashlytics_set_bool];
     [bridge deregisterHandler:k__crashlytics_set_int];
     [bridge deregisterHandler:k__crashlytics_set_user_identifier];
-    [bridge deregisterHandler:k__crashlytics_set_user_user_name];
+    [bridge deregisterHandler:k__crashlytics_set_user_name];
     [bridge deregisterHandler:k__crashlytics_set_user_email];
-
-    [super dealloc];
 }
 
 - (void)causeCrash {
@@ -167,9 +172,9 @@ NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
 
 - (void)log:(NSString* _Nonnull)desc
         tag:(NSString* _Nonnull)tag
-        msg:(NSString* _Nonnull)msg {
+    message:(NSString* _Nonnull)message {
     CLS_LOG(@"%s %s: %s", [desc UTF8String], [tag UTF8String],
-            [msg UTF8String]);
+            [message UTF8String]);
 }
 
 - (void)setString:(NSString* _Nonnull)key value:(NSString* _Nonnull)value {

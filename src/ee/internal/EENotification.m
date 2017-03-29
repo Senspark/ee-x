@@ -27,7 +27,16 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
     if (self == nil) {
         return nil;
     }
+    [self registerHandlers];
+    return self;
+}
 
+- (void)dealloc {
+    [self deregisterHandlers];
+    [super dealloc];
+}
+
+- (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:^(NSString* msg) {
@@ -49,18 +58,14 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
         [self unschedule:msg];
         return [EEDictionaryUtils emptyResult];
     } tag:k__notification_unschedule];
-
-    return self;
 }
 
-- (void)dealloc {
+- (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__notification_schedule];
     [bridge deregisterHandler:k__notification_unschedule_all];
     [bridge deregisterHandler:k__notification_unschedule];
-
-    [super dealloc];
 }
 
 #if TARGET_OS_IOS

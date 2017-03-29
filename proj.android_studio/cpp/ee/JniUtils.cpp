@@ -19,7 +19,7 @@ namespace core {
 namespace {
 /// Retrieves the logger for JNIUtils.
 const Logger& getLogger() {
-    static Logger logger{"ee-core"};
+    static Logger logger{"ee-x"};
     return logger;
 }
 

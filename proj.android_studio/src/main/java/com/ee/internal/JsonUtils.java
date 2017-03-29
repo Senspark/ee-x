@@ -1,4 +1,4 @@
-package com.ee.core.internal;
+package com.ee.internal;
 
 import android.support.annotation.Nullable;
 
@@ -34,8 +34,7 @@ public class JsonUtils {
     public static Map<String, Object> convertStringToDictionary(@Nullable String str) {
         Map<String, Object> result = null;
         try {
-            result = parser.readValue(str, new TypeReference<Map<String, Object>>() {
-            });
+            result = parser.readValue(str, new TypeReference<Map<String, Object>>() {});
         } catch (IOException e) {
             e.printStackTrace();
         }

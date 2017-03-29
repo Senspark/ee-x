@@ -31,9 +31,8 @@ std::string MessageBridge::call(const std::string& tag,
         methodInfo->getClass(), methodInfo->getMethodId(), tag_java->get(),
         msg_java->get());
 
-    jstring msg = static_cast<jstring>(response);
-
-    auto result = JniUtils::toString(msg);
+    jstring response_java = static_cast<jstring>(response);
+    auto result = JniUtils::toString(response_java);
 
     methodInfo->getEnv()->DeleteLocalRef(response);
 

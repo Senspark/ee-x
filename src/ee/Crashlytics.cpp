@@ -69,7 +69,7 @@ void Crashlytics::setUserIdentifier(const std::string& identifier) const {
 }
 
 void Crashlytics::setUserName(const std::string& name) const {
-    core::MessageBridge::getInstance().call("__crashlytics_set_user_user_name",
+    core::MessageBridge::getInstance().call("__crashlytics_set_user_name",
                                             name);
 }
 

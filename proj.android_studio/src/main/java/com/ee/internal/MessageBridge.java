@@ -1,4 +1,4 @@
-package com.ee.core.internal;
+package com.ee.internal;
 
 import android.support.annotation.NonNull;
 
@@ -26,11 +26,10 @@ public class MessageBridge {
 
     private MessageBridge() {
         _handlers = new HashMap<>();
-        _plugins = new HashMap<>();
     }
 
     @NonNull
-    public String call(@NonNull String tag, @NonNull String msg) {
+    private String call(@NonNull String tag, @NonNull String msg) {
         MessageHandler handler = _handlers.get(tag);
         if (handler == null) {
             _logger.error("call: " + tag + " doesn't exist!");

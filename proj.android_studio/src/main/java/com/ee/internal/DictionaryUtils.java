@@ -1,4 +1,4 @@
-package com.ee.core.internal;
+package com.ee.internal;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +31,7 @@ public class DictionaryUtils {
     }
 
     @Nullable
-    public static <T> List<T> convertToList(@Nullable List input) {
+    static <T> List<T> convertToList(@Nullable List input) {
         if (input == null) {
             return null;
         }
@@ -44,7 +44,7 @@ public class DictionaryUtils {
     }
 
     @Nullable
-    public static Map<String, Object> convertToMap(@Nullable Map input) {
+    static Map<String, Object> convertToMap(@Nullable Map input) {
         if (input == null) {
             return null;
         }

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
 public class PluginManager {
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
-    private Map<String, Object> _plugins;
+    private Map<String, PluginProtocol> _plugins;
 
     private static class Holder {
         private static final PluginManager Instance = new PluginManager();
@@ -23,6 +24,10 @@ public class PluginManager {
 
     public static PluginManager getInstance() {
         return Holder.Instance;
+    }
+
+    private PluginManager() {
+        _plugins = new HashMap<>();
     }
 
     public void addPlugin(@NonNull String pluginName) {
@@ -36,9 +41,9 @@ public class PluginManager {
             Class<?> clazz = Class.forName(pluginName);
             Constructor<?> constructor = clazz.getConstructor(Context.class);
 
-            Object object = constructor.newInstance(_context);
+            Object object = constructor.newInstance();
 
-            _plugins.put(pluginName, object);
+            _plugins.put(pluginName, (PluginProtocol) object);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -54,7 +59,11 @@ public class PluginManager {
 
     public void addPlugin(@NonNull PluginProtocol plugin) {
         _logger.info("addPlugin: " + plugin);
-        _plugins.put()
+        if (_plugins.containsKey(plugin.getPluginName())) {
+            _logger.error("addPlugin: " + plugin.getPluginName() + " already exists!");
+            return;
+        }
+        _plugins.put(plugin.getPluginName(), plugin);
     }
 
     public void removePlugin(@NonNull String pluginName) {

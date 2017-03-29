@@ -16,7 +16,7 @@
 
 - (void)log:(NSString* _Nonnull)desc
         tag:(NSString* _Nonnull)tag
-        msg:(NSString* _Nonnull)msg;
+    message:(NSString* _Nonnull)message;
 
 - (void)setString:(NSString* _Nonnull)key value:(NSString* _Nonnull)value;
 

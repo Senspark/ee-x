@@ -1,7 +1,0 @@
-abstract_target 'common' do
-    pod 'Crashlytics', '~> 3.7'
-    pod 'Fabric', '~> 1.6'
-
-    target 'ee_crashlytics_mobile'
-    target 'ee_crashlytics_desktop'
-end

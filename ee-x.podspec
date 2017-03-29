@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name           = "ee-x"
-    spec.version        = "0.0.1"
+    spec.version        = "0.0.2"
     spec.summary        = "ee-x"
     spec.description    = "ee-x"
   
@@ -21,28 +21,18 @@ Pod::Spec.new do |spec|
 
     spec.requires_arc = false
 
-    spec.subspec 'core' do |core|
-        core.source_files   = "core/src/ee/*.{h,hpp,m,mm,cpp}",
-                              "core/src/ee/**/*.{h,hpp,m,mm,cpp}",
-                              "core/src/ee/**/**/*.{h,hpp,m,mm,cpp}"
+    spec.source_files   = "src/ee/*.{h,hpp,m,mm,cpp}",
+                          "src/ee/**/*.{h,hpp,m,mm,cpp}",
+                          "src/ee/**/**/*.{h,hpp,m,mm,cpp}"
 
-        core.public_header_files = "core/src/ee/Logger.hpp",
-                                   "core/src/ee/LogLevel.hpp",
-                                   "core/src/ee/Notification.hpp",
-                                   "core/src/ee/EEPluginManager.h"
+    spec.public_header_files = "src/ee/Logger.hpp",
+                               "src/ee/LogLevel.hpp",
+                               "src/ee/Notification.hpp",
+                               "src/ee/Crashlytics.hpp",
+                               "src/ee/EEPluginManager.h"
 
-        core.header_mappings_dir = "core/src"
-    end                             
+    spec.header_mappings_dir = "src"
 
-    spec.subspec 'crash' do |crash|
-        crash.source_files  = "crashlytics/src/ee/*.{h,hpp,m,mm,cpp}",
-                              "crashlytics/src/ee/**/*.{h,hpp,m,mm,cpp}"
-
-        crash.public_header_files = "crashlytics/src/ee/Crashlytics.hpp"
-
-        crash.header_mappings_dir = "crashlytics/src"
-
-        crash.dependency 'Crashlytics', '~> 3.7'
-        crash.dependency 'Fabric', '~> 1.6'
-    end
+    spec.dependency 'Crashlytics', '~> 3.7'
+    spec.dependency 'Fabric', '~> 1.6'
 end

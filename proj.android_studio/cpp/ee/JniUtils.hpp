@@ -15,7 +15,6 @@
 #include <jni.h>
 
 namespace ee {
-namespace core {
 class JniMethodInfo;
 class JniString;
 
@@ -63,7 +62,6 @@ private:
     /// Assigned JavaVM pointer.
     static JavaVM* vm_;
 };
-} // namespace core
 } // namespace ee
 
 #endif /* EE_CORE_JNI_UTILS_HPP_ */

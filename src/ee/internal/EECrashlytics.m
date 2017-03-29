@@ -85,7 +85,7 @@ NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
         NSAssert(tag != nil, @"...");
         NSAssert(message != nil, @"...");
 
-        [self log:priorityDescription tag:tag msg:message];
+        [self log:priorityDescription tag:tag message:message];
         return [EEDictionaryUtils emptyResult];
     } tag:k__crashlytics_log];
 

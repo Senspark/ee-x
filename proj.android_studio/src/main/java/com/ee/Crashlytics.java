@@ -1,4 +1,4 @@
-package com.ee.plugin;
+package com.ee;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.crashlytics.android.core.CrashTest;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
-import com.ee.core.PluginProtocol;
 import com.ee.internal.DictionaryUtils;
 import com.ee.internal.JsonUtils;
 import com.ee.internal.MessageBridge;

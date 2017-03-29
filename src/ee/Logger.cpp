@@ -10,14 +10,18 @@
 #include "ee/LogLevel.hpp"
 
 namespace ee {
-namespace core {
 Logger::Logger(const std::string& tag)
     : tag_{tag}
-    , enabled_{true} {}
+    , enabled_{true} {
+}
 
-void Logger::setEnabled(bool enabled) noexcept { enabled_ = enabled; }
+void Logger::setEnabled(bool enabled) noexcept {
+    enabled_ = enabled;
+}
 
-bool Logger::isEnabled() const noexcept { return enabled_; }
+bool Logger::isEnabled() const noexcept {
+    return enabled_;
+}
 
 void Logger::log0(const LogLevel& level, const std::string& message) const {
     log0(level, tag_, message);
@@ -38,5 +42,4 @@ void Logger::warn0(const std::string& message) const {
 void Logger::error0(const std::string& message) const {
     log0(LogLevel::Error, message);
 }
-} // namespace core
 } // namespace ee

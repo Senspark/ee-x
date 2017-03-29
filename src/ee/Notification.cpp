@@ -11,7 +11,6 @@
 #include "ee/libs/nlohmann/json.hpp"
 
 namespace ee {
-namespace core {
 void Notification::schedule(const std::string& title, const std::string& body,
                             int delay, const std::string& tag) {
     schedule(title, body, delay, 0, tag);
@@ -35,5 +34,4 @@ void Notification::unscheduleAll() {
 void Notification::unschedule(const std::string& tag) {
     MessageBridge::getInstance().call("__notification_unschedule", tag);
 }
-} // namespace core
 } // namespace ee

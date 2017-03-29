@@ -12,7 +12,6 @@
 #include <string>
 
 namespace ee {
-namespace core {
 class Notification final {
 public:
     /// Schedules a notification.
@@ -40,7 +39,6 @@ public:
     /// Unschedules notifications whose the specified tag.
     void unschedule(const std::string& tag);
 };
-} // namespace core
 } // namespace ee
 
 #endif /* EE_X_NOTIFICATION_HPP_ */

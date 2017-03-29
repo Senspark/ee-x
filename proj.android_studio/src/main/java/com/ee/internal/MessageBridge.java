@@ -2,7 +2,7 @@ package com.ee.internal;
 
 import android.support.annotation.NonNull;
 
-import com.ee.core.Logger;
+import com.ee.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.ee.core;
+package com.ee;
 
 import android.content.Context;
 import android.content.Intent;

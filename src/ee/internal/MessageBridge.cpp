@@ -9,7 +9,6 @@
 #include "ee/internal/MessageBridge.hpp"
 
 namespace ee {
-namespace core {
 MessageBridge& MessageBridge::getInstance() {
     static MessageBridge sharedInstance;
     return sharedInstance;
@@ -24,5 +23,4 @@ MessageBridge::~MessageBridge() {
 std::string MessageBridge::call(const std::string& tag) {
     return call(tag, "");
 }
-} // namespace core
 } // namespace ee

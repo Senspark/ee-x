@@ -12,7 +12,6 @@
 #include <string>
 
 namespace ee {
-namespace core {
 struct LogLevel {
     static const LogLevel Verbose;
     static const LogLevel Debug;
@@ -28,7 +27,6 @@ struct LogLevel {
     int priority;
     std::string desc;
 };
-} // namespace core
 } // namespace ee
 
 #endif /* EE_X_LOG_LEVEL_HPP_ */

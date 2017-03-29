@@ -12,7 +12,6 @@
 #include <string>
 
 namespace ee {
-namespace core {
 class MessageBridge final {
 public:
     static MessageBridge& getInstance();
@@ -27,7 +26,6 @@ private:
     MessageBridge();
     ~MessageBridge();
 };
-} // namespace core
 } // namespace ee
 
 #endif /* EE_X_MESSAGE_BRIDGE_HPP_ */

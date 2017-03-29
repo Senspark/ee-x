@@ -13,11 +13,8 @@
 #include <string>
 
 namespace ee {
-namespace core {
 struct LogLevel;
-} // namespace core
 
-namespace crashlytics {
 class Crashlytics final {
 public:
     /// Causes a crash.
@@ -26,9 +23,9 @@ public:
     /// Causes an exception.
     void causeException() const;
 
-    void setLogLevel(const core::LogLevel& level) const;
+    void setLogLevel(const LogLevel& level) const;
 
-    void log(const core::LogLevel& level, const std::string& tag,
+    void log(const LogLevel& level, const std::string& tag,
              const std::string& message) const;
 
     void setString(const std::string& key, const std::string& value) const;
@@ -43,7 +40,6 @@ public:
 
     void setUserEmail(const std::string& email) const;
 };
-} // namespace crashlytics
 } // namespace ee
 
 #endif /* EE_X_CRASHLYTICS_HPP_ */

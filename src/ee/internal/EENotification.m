@@ -28,12 +28,32 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
         return nil;
     }
     [self registerHandlers];
+    [self registerForLocalNotifications];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
     [super dealloc];
+}
+
++ (NSCalendarUnit)parseInterval:(int)interval {
+    if (interval == 0) {
+        return 0;
+    }
+    if (interval <= 1) {
+        return NSCalendarUnitSecond;
+    }
+    if (interval <= 60) {
+        return NSCalendarUnitMinute;
+    }
+    if (interval <= 3600) {
+        return NSCalendarUnitHour;
+    }
+    if (interval <= 86400) {
+        return NSCalendarUnitDay;
+    }
+    return NSCalendarUnitEra;
 }
 
 - (void)registerHandlers {
@@ -46,6 +66,12 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
         NSNumber* delay = [dict objectForKey:@"delay"];
         NSNumber* interval = [dict objectForKey:@"interval"];
         NSString* tag = [dict objectForKey:@"tag"];
+
+        [self schedule:title
+                  body:body
+                 delay:(NSTimeInterval)[delay intValue]
+              interval:[EENotification parseInterval:[interval intValue]]
+                   tag:tag];
         return [EEDictionaryUtils emptyResult];
     } tag:k__notification_schedule];
 
@@ -66,6 +92,20 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
     [bridge deregisterHandler:k__notification_schedule];
     [bridge deregisterHandler:k__notification_unschedule_all];
     [bridge deregisterHandler:k__notification_unschedule];
+}
+
+- (void)registerForLocalNotifications {
+    UIApplication* application = [UIApplication sharedApplication];
+    if ([application
+            respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationType allNotificationTypes =
+            (UIUserNotificationTypeSound | UIUserNotificationTypeAlert |
+             UIUserNotificationTypeBadge);
+        UIUserNotificationSettings* settings =
+            [UIUserNotificationSettings settingsForTypes:allNotificationTypes
+                                              categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
 }
 
 #if TARGET_OS_IOS

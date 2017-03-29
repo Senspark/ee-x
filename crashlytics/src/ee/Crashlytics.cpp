@@ -31,6 +31,13 @@ void Crashlytics::causeException() const {
     core::MessageBridge::getInstance().call("__crashlytics_cause_exception");
 }
 
+void Crashlytics::setLogLevel(const core::LogLevel& level) const {
+    nlohmann::json json;
+    json["priority"] = level.priority;
+    core::MessageBridge::getInstance().call("__crashlytics_set_log_level",
+                                            json.dump());
+}
+
 void Crashlytics::log(const core::LogLevel& level, const std::string& tag,
                       const std::string& message) const {
     nlohmann::json json;

@@ -27,6 +27,7 @@
 NSString* const k__crashlytics_cause_crash = @"__crashlytics_cause_crash";
 NSString* const k__crashlytics_cause_exception =
     @"__crashlytics_cause_exception";
+NSString* const k__crashlytics_set_log_level = @"k__crashlytics_set_log_level";
 NSString* const k__crashlytics_log = @"__crashlytics_log";
 NSString* const k__crashlytics_set_string = @"__crashlytics_set_string";
 NSString* const k__crashlytics_set_bool = @"__crashlytics_set_bool";
@@ -54,6 +55,15 @@ NSString* const k__crashlytics_set_user_email = @"__crashlytics_set_user_email";
         [self causeException];
         return [EEDictionaryUtils emptyResult];
     } tag:k__crashlytics_cause_exception];
+
+    [bridge registerHandler:^(NSString* msg) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+        NSAssert([dict count] == 1, @"...");
+
+        // Ignored.
+
+        return [EEDictionaryUtils emptyResult];
+    } tag:k__crashlytics_set_log_level];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];

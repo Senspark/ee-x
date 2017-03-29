@@ -14,7 +14,7 @@
 
 namespace ee {
 namespace core {
-class LogLevel;
+struct LogLevel;
 } // namespace core
 
 namespace crashlytics {
@@ -31,6 +31,8 @@ public:
 
     /// Causes an exception.
     void causeException() const;
+
+    void setLogLevel(const core::LogLevel& level) const;
 
     void log(const core::LogLevel& level, const std::string& tag,
              const std::string& message) const;

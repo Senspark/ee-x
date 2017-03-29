@@ -13,8 +13,11 @@
 
 namespace ee {
 namespace core {
-class Notification {
+class Notification final {
 public:
+    Notification();
+    ~Notification();
+
     /// Schedules a notification.
     /// @param title The title of the notification.
     /// @param body The body of the notification.

@@ -12,6 +12,7 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
 
 @interface EEMessageBridge : NSObject {
     NSMutableDictionary* handlers;
+    NSMutableDictionary* plugins;
 }
 
 + (id _Nonnull)getInstance;
@@ -22,5 +23,9 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
                     tag:(NSString* _Nonnull)tag;
 
 - (void)deregisterHandler:(NSString* _Nonnull)tag;
+
+- (void)addPlugin:(NSString* _Nonnull)pluginName;
+
+- (void)removePlugin:(NSString* _Nonnull)pluginName;
 
 @end

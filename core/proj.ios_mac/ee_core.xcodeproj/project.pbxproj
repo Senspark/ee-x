@@ -37,6 +37,10 @@
 		6F2DDD321E52A3DF0094C241 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */; };
 		6F2DDD331E52A3DF0094C241 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */; };
 		6F2DDD341E52A3DF0094C241 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */; };
+		6F542A781E8B55FF0018C6EB /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F542A761E8B55FF0018C6EB /* PluginManager.cpp */; };
+		6F542A791E8B55FF0018C6EB /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F542A761E8B55FF0018C6EB /* PluginManager.cpp */; };
+		6F542A7A1E8B55FF0018C6EB /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F542A771E8B55FF0018C6EB /* PluginManager.hpp */; };
+		6F542A7B1E8B55FF0018C6EB /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F542A771E8B55FF0018C6EB /* PluginManager.hpp */; };
 		6FF1489C1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
 		6FF1489D1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
 		6FF1489E1E8A5E7700C7519A /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF1489B1E8A5E7700C7519A /* Notification.hpp */; };
@@ -86,8 +90,8 @@
 		6F2DDCFE1E52A3DF0094C241 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
 		6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LogLevel.hpp; sourceTree = "<group>"; };
-		6F68F5B61D2673E800F9D3F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		6F68F5B81D26740500F9D3F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6F542A761E8B55FF0018C6EB /* PluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginManager.cpp; sourceTree = "<group>"; };
+		6F542A771E8B55FF0018C6EB /* PluginManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PluginManager.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee_core_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_mobile.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee_core_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_desktop.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,8 +138,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6F68F5B81D26740500F9D3F2 /* Foundation.framework */,
-				6F68F5B61D2673E800F9D3F2 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -172,15 +174,17 @@
 				6F2DDCE11E52A3DE0094C241 /* EEDictionaryUtils.m */,
 				6F2DDCE21E52A3DE0094C241 /* EEJsonUtils.h */,
 				6F2DDCE31E52A3DE0094C241 /* EEJsonUtils.m */,
-				6FF148AC1E8A78BF00C7519A /* EEUtils.m */,
 				6FF148AD1E8A78BF00C7519A /* EEUtils.h */,
+				6FF148AC1E8A78BF00C7519A /* EEUtils.m */,
 				6F2DDCE41E52A3DE0094C241 /* EEMessageBridge.h */,
 				6F2DDCE51E52A3DE0094C241 /* EEMessageBridge.m */,
-				6FF148B21E8A7B1C00C7519A /* EENotification.m */,
 				6FF148B31E8A7B1C00C7519A /* EENotification.h */,
+				6FF148B21E8A7B1C00C7519A /* EENotification.m */,
 				6F2DDCEB1E52A3DE0094C241 /* MessageBridge_iOS.mm */,
 				6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */,
 				6FF148A71E8A61FF00C7519A /* MessageBridge.hpp */,
+				6F542A761E8B55FF0018C6EB /* PluginManager.cpp */,
+				6F542A771E8B55FF0018C6EB /* PluginManager.hpp */,
 			);
 			path = internal;
 			sourceTree = "<group>";
@@ -225,6 +229,7 @@
 				6F2DDD011E52A3DF0094C241 /* EEDictionaryUtils.h in Headers */,
 				6FF148B61E8A7B1C00C7519A /* EENotification.h in Headers */,
 				6FF148AA1E8A61FF00C7519A /* MessageBridge.hpp in Headers */,
+				6F542A7A1E8B55FF0018C6EB /* PluginManager.hpp in Headers */,
 				6F2DDD2F1E52A3DF0094C241 /* Logger.hpp in Headers */,
 				6F2DDD331E52A3DF0094C241 /* LogLevel.hpp in Headers */,
 				6FF148B01E8A78BF00C7519A /* EEUtils.h in Headers */,
@@ -242,6 +247,7 @@
 				6F2DDD021E52A3DF0094C241 /* EEDictionaryUtils.h in Headers */,
 				6FF148B71E8A7B1C00C7519A /* EENotification.h in Headers */,
 				6FF148AB1E8A61FF00C7519A /* MessageBridge.hpp in Headers */,
+				6F542A7B1E8B55FF0018C6EB /* PluginManager.hpp in Headers */,
 				6F2DDD301E52A3DF0094C241 /* Logger.hpp in Headers */,
 				6F2DDD341E52A3DF0094C241 /* LogLevel.hpp in Headers */,
 				6FF148B11E8A78BF00C7519A /* EEUtils.h in Headers */,
@@ -343,6 +349,7 @@
 				6F2DDD171E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */,
 				6FF148B41E8A7B1C00C7519A /* EENotification.m in Sources */,
 				6F2DDD2B1E52A3DF0094C241 /* Logger_iOS.mm in Sources */,
+				6F542A781E8B55FF0018C6EB /* PluginManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +370,7 @@
 				6F2DDD321E52A3DF0094C241 /* LogLevel.cpp in Sources */,
 				6F2DDD181E52A3DF0094C241 /* MessageBridge_iOS.mm in Sources */,
 				6F2DDD2C1E52A3DF0094C241 /* Logger_iOS.mm in Sources */,
+				6F542A791E8B55FF0018C6EB /* PluginManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

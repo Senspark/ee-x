@@ -15,17 +15,18 @@
 namespace ee {
 namespace core {
 class LogLevel;
-class PluginProtocol;
 } // namespace core
 
 namespace crashlytics {
-class CrashlyticsProtocol final {
+class Crashlytics final {
 public:
-    CrashlyticsProtocol();
-    ~CrashlyticsProtocol();
+    Crashlytics();
+    ~Crashlytics();
 
+    /// Causes a crash.
     void causeCrash() const;
 
+    /// Causes an exception.
     void causeException() const;
 
     void log(const core::LogLevel& level, const std::string& tag,
@@ -42,9 +43,6 @@ public:
     void setUserName(const std::string& name) const;
 
     void setUserEmail(const std::string& email) const;
-
-private:
-    std::unique_ptr<core::PluginProtocol> protocol_;
 };
 } // namespace crashlytics
 } // namespace ee

@@ -17,9 +17,10 @@
 
 @implementation EENotification
 
-NSString* const kSchedule = @"__notification_schedule";
-NSString* const kUnscheduleAll = @"__notification_unschedule_all";
-NSString* const kUnschedule = @"__notification_unschedule";
+NSString* const k__notification_schedule = @"__notification_schedule";
+NSString* const k__notification_unschedule_all =
+    @"__notification_unschedule_all";
+NSString* const k__notification_unschedule = @"__notification_unschedule";
 
 - (id)init {
     self = [super init];
@@ -27,7 +28,9 @@ NSString* const kUnschedule = @"__notification_unschedule";
         return nil;
     }
 
-    [[EEMessageBridge getInstance] registerHandler:^(NSString* msg) {
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSString* title = [dict objectForKey:@"title"];
         NSString* body = [dict objectForKey:@"body"];
@@ -35,25 +38,28 @@ NSString* const kUnschedule = @"__notification_unschedule";
         NSNumber* interval = [dict objectForKey:@"interval"];
         NSString* tag = [dict objectForKey:@"tag"];
         return [EEDictionaryUtils emptyResult];
-    } tag:kSchedule];
+    } tag:k__notification_schedule];
 
-    [[EEMessageBridge getInstance] registerHandler:^(NSString* msg) {
+    [bridge registerHandler:^(NSString* msg) {
         [self unscheduleAll];
         return [EEDictionaryUtils emptyResult];
-    } tag:kUnscheduleAll];
+    } tag:k__notification_unschedule_all];
 
-    [[EEMessageBridge getInstance] registerHandler:^(NSString* msg) {
+    [bridge registerHandler:^(NSString* msg) {
         [self unschedule:msg];
         return [EEDictionaryUtils emptyResult];
-    } tag:kUnschedule];
+    } tag:k__notification_unschedule];
 
     return self;
 }
 
 - (void)dealloc {
-    [[EEMessageBridge getInstance] deregisterHandler:kSchedule];
-    [[EEMessageBridge getInstance] deregisterHandler:kUnscheduleAll];
-    [[EEMessageBridge getInstance] deregisterHandler:kUnschedule];
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge deregisterHandler:k__notification_schedule];
+    [bridge deregisterHandler:k__notification_unschedule_all];
+    [bridge deregisterHandler:k__notification_unschedule];
+
     [super dealloc];
 }
 

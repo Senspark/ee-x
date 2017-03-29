@@ -8,10 +8,19 @@
 
 #include "ee/Notification.hpp"
 #include "ee/internal/MessageBridge.hpp"
+#include "ee/internal/PluginManager.hpp"
 #include "ee/libs/nlohmann/json.hpp"
 
 namespace ee {
 namespace core {
+Notification::Notification() {
+    PluginManager::getInstance().addPlugin("Notification");
+}
+
+Notification::~Notification() {
+    PluginManager::getInstance().removePlugin("Notification");
+}
+
 void Notification::schedule(const std::string& title, const std::string& body,
                             int delay, const std::string& tag) {
     schedule(title, body, delay, 0, tag);

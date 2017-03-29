@@ -27,7 +27,8 @@ Pod::Spec.new do |spec|
                               "core/src/ee/**/**/*.{h,hpp,m,mm,cpp}"
 
         core.public_header_files = "core/src/ee/Logger.hpp",
-                                   "core/src/ee/LogLevel.hpp"
+                                   "core/src/ee/LogLevel.hpp",
+                                   "core/src/ee/Notification.hpp"
 
         core.header_mappings_dir = "core/src"
     end                             
@@ -36,7 +37,7 @@ Pod::Spec.new do |spec|
         crash.source_files  = "crashlytics/src/ee/*.{h,hpp,m,mm,cpp}",
                               "crashlytics/src/ee/**/*.{h,hpp,m,mm,cpp}"
 
-        crash.public_header_files = "crashlytics/src/ee/CrashlyticsProtocol.hpp"
+        crash.public_header_files = "crashlytics/src/ee/Crashlytics.hpp"
 
         crash.header_mappings_dir = "crashlytics/src"
 

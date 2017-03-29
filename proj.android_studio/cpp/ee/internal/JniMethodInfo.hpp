@@ -14,7 +14,6 @@
 #include <jni.h>
 
 namespace ee {
-namespace core {
 /// RAII class for encapsulating jclass and jmethodID.
 class JniMethodInfo final {
 public:
@@ -44,7 +43,6 @@ private:
     /// The method id.
     jmethodID methodId_;
 };
-} // namespace core
 } // namespace ee
 
 #endif /* EE_CORE_JNI_METHOD_INFO_HPP_ */

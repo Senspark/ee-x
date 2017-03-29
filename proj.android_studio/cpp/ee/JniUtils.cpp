@@ -15,7 +15,6 @@
 #include "ee/Logger.hpp"
 
 namespace ee {
-namespace core {
 namespace {
 /// Retrieves the logger for JNIUtils.
 const Logger& getLogger() {
@@ -158,5 +157,4 @@ JniUtils::getStaticMethodInfo(const char* className, const char* methodName,
 
     return JniMethodInfo::create(env, clazz, methodId);
 }
-} // namespace core
 } // namespace ee

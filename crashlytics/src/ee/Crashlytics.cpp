@@ -16,11 +16,11 @@
 namespace ee {
 namespace crashlytics {
 Crashlytics::Crashlytics() {
-    core::PluginManager::getInstance().addPlugin("Crashlytics");
+    core::PluginManager::getInstance().addPlugin(PluginName);
 }
-    
+
 Crashlytics::~Crashlytics() {
-    core::PluginManager::getInstance().removePlugin("Crashlytics");
+    core::PluginManager::getInstance().removePlugin(PluginName);
 }
 
 void Crashlytics::causeCrash() const {

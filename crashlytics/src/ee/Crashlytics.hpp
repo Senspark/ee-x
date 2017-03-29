@@ -19,6 +19,9 @@ class LogLevel;
 
 namespace crashlytics {
 class Crashlytics final {
+private:
+    static const std::string PluginName;
+
 public:
     Crashlytics();
     ~Crashlytics();

@@ -41,6 +41,8 @@
 		6F542A791E8B55FF0018C6EB /* PluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F542A761E8B55FF0018C6EB /* PluginManager.cpp */; };
 		6F542A7A1E8B55FF0018C6EB /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F542A771E8B55FF0018C6EB /* PluginManager.hpp */; };
 		6F542A7B1E8B55FF0018C6EB /* PluginManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F542A771E8B55FF0018C6EB /* PluginManager.hpp */; };
+		6FDCA4631E8B660E00B141F9 /* Notification_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDCA4621E8B660E00B141F9 /* Notification_iOS.cpp */; };
+		6FDCA4641E8B660E00B141F9 /* Notification_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDCA4621E8B660E00B141F9 /* Notification_iOS.cpp */; };
 		6FF1489C1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
 		6FF1489D1E8A5E7700C7519A /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF1489A1E8A5E7700C7519A /* Notification.cpp */; };
 		6FF1489E1E8A5E7700C7519A /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FF1489B1E8A5E7700C7519A /* Notification.hpp */; };
@@ -95,6 +97,8 @@
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee_core_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_mobile.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee_core_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_core_desktop.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FDCA4621E8B660E00B141F9 /* Notification_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notification_iOS.cpp; sourceTree = "<group>"; };
+		6FDCA4681E8B66BA00B141F9 /* Notification_Android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notification_Android.cpp; sourceTree = "<group>"; };
 		6FF1489A1E8A5E7700C7519A /* Notification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notification.cpp; sourceTree = "<group>"; };
 		6FF1489B1E8A5E7700C7519A /* Notification.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
 		6FF148A61E8A61FF00C7519A /* MessageBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 				6F2DDCFE1E52A3DF0094C241 /* Logger.hpp */,
 				6F2DDCFF1E52A3DF0094C241 /* LogLevel.cpp */,
 				6F2DDD001E52A3DF0094C241 /* LogLevel.hpp */,
+				6FDCA4621E8B660E00B141F9 /* Notification_iOS.cpp */,
+				6FDCA4681E8B66BA00B141F9 /* Notification_Android.cpp */,
 				6FF1489A1E8A5E7700C7519A /* Notification.cpp */,
 				6FF1489B1E8A5E7700C7519A /* Notification.hpp */,
 			);
@@ -342,6 +348,7 @@
 				6F2DDD031E52A3DF0094C241 /* EEDictionaryUtils.m in Sources */,
 				6F2DDD0B1E52A3DF0094C241 /* EEMessageBridge.m in Sources */,
 				6FF148AE1E8A78BF00C7519A /* EEUtils.m in Sources */,
+				6FDCA4631E8B660E00B141F9 /* Notification_iOS.cpp in Sources */,
 				6F2DDD071E52A3DF0094C241 /* EEJsonUtils.m in Sources */,
 				6F2DDD291E52A3DF0094C241 /* README.md in Sources */,
 				6FF148A81E8A61FF00C7519A /* MessageBridge.cpp in Sources */,
@@ -363,6 +370,7 @@
 				6F2DDD041E52A3DF0094C241 /* EEDictionaryUtils.m in Sources */,
 				6FF148B81E8A862E00C7519A /* EENotification.m in Sources */,
 				6F2DDD0C1E52A3DF0094C241 /* EEMessageBridge.m in Sources */,
+				6FDCA4641E8B660E00B141F9 /* Notification_iOS.cpp in Sources */,
 				6FF148AF1E8A78BF00C7519A /* EEUtils.m in Sources */,
 				6F2DDD081E52A3DF0094C241 /* EEJsonUtils.m in Sources */,
 				6F2DDD2A1E52A3DF0094C241 /* README.md in Sources */,

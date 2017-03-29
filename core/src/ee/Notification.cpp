@@ -14,11 +14,11 @@
 namespace ee {
 namespace core {
 Notification::Notification() {
-    PluginManager::getInstance().addPlugin("Notification");
+    PluginManager::getInstance().addPlugin(PluginName);
 }
 
 Notification::~Notification() {
-    PluginManager::getInstance().removePlugin("Notification");
+    PluginManager::getInstance().removePlugin(PluginName);
 }
 
 void Notification::schedule(const std::string& title, const std::string& body,

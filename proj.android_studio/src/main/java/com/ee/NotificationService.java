@@ -22,16 +22,22 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         _logger.debug(
-            "onStartCommand: intent = " + intent + " flags = " + flags + " startId = " + startId);
+            "onStartCommand: intent = " + intent + " extras = " + intent.getExtras() + " flags = " +
+            flags + " startId = " + startId);
 
         String title = intent.getStringExtra("title");
         String body = intent.getStringExtra("body");
         Integer tag = intent.getIntExtra("tag", 0);
-        Class clazz = (Class) intent.getSerializableExtra("class");
-        PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz);
-        Notification notification =
-            NotificationUtils.buildNotification(this, title, body, clickIntent);
-        NotificationUtils.showNotification(this, notification, tag);
+        String className = intent.getStringExtra("className");
+        try {
+            Class clazz = Class.forName(className);
+            PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz);
+            Notification notification =
+                NotificationUtils.buildNotification(this, title, body, clickIntent);
+            NotificationUtils.showNotification(this, notification, tag);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return START_NOT_STICKY;
     }

@@ -30,6 +30,7 @@ public class Notification implements PluginProtocol {
     public Notification(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = new WeakReference<>(context);
+        registerHandlers();
         _logger.debug("constructor end.");
     }
 
@@ -139,7 +140,7 @@ public class Notification implements PluginProtocol {
         intent.putExtra("title", title);
         intent.putExtra("body", body);
         intent.putExtra("tag", tag);
-        intent.putExtra("class", _context.get().getClass());
+        intent.putExtra("className", _context.get().getClass().getName());
         NotificationUtils.scheduleAlarm(_context.get(), intent, tag,
             PendingIntent.FLAG_UPDATE_CURRENT, delay, interval);
     }

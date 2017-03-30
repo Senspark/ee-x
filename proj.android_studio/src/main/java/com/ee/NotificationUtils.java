@@ -12,6 +12,8 @@ import android.support.v7.app.NotificationCompat;
  */
 
 public class NotificationUtils {
+    private static final Logger _logger = new Logger(NotificationUtils.class.getName());
+
     /**
      * Shows the given notification with a generated id.
      *
@@ -66,9 +68,27 @@ public class NotificationUtils {
             .setContentText(body)
             .setContentTitle(title)
             .setDefaults(android.app.Notification.DEFAULT_ALL)
+            .setSmallIcon(getNotificationIcon(context))
             .setTicker(title);
 
         return builder.build();
+    }
+
+    /**
+     * http://stackoverflow.com/questions/28387602/notification-bar-icon-turns-white-in-android-5
+     * -lollipop
+     */
+    private static int getNotificationIcon(Context context) {
+        boolean useWhiteIcon =
+            (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        // https://lolsborn.com/2007/11/27/accessing-android-resources-by-name-at-runtime/
+        String resourceName = useWhiteIcon ? "icon_silhouette" : "ic_launcher";
+        int id =
+            context.getResources().getIdentifier(resourceName, "mipmap", context.getPackageName());
+        if (id == 0) {
+            _logger.error("Could not find resource id for icon name: " + resourceName);
+        }
+        return id;
     }
 
     /**

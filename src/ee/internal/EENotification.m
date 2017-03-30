@@ -175,8 +175,16 @@ NSString* const k__notification_unschedule_all =
     NSArray* notifications = [application scheduledLocalNotifications];
 
     for (UILocalNotification* notification in notifications) {
-        if ([[[notification userInfo] objectForKey:@"notification_tag"]
-                isEqualToNumber:tag]) {
+        id notificationTag =
+            [[notification userInfo] objectForKey:@"notification_tag"];
+        if (notificationTag == nil) {
+            continue;
+        }
+        if (![notificationTag isKindOfClass:[NSNumber class]]) {
+            [application cancelLocalNotification:notification];
+            continue;
+        }
+        if ([notificationTag isEqualToNumber:tag]) {
             [application cancelLocalNotification:notification];
         }
     }

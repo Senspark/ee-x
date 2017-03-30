@@ -16,8 +16,8 @@ namespace ee {
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     auto methodInfo = JniUtils::getStaticMethodInfo(
-        "com/ee/core/internal/MessageBridge", "staticCall",
-        "(Ljava/lang/String;Ljava/lang/String;");
+        "com/ee/internal/MessageBridge", "staticCall",
+        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
     if (methodInfo == nullptr) {
         throw std::runtime_error("Method not found!");

@@ -105,6 +105,7 @@ public class PluginManager {
         for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onDestroy();
         }
+        _plugins.clear();
     }
 
     public boolean onBackPressed() {

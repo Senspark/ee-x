@@ -65,7 +65,7 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
         NSString* body = [dict objectForKey:@"body"];
         NSNumber* delay = [dict objectForKey:@"delay"];
         NSNumber* interval = [dict objectForKey:@"interval"];
-        NSString* tag = [dict objectForKey:@"tag"];
+        NSNumber* tag = [dict objectForKey:@"tag"];
 
         [self schedule:title
                   body:body
@@ -134,7 +134,7 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
 - (void)schedule:(NSString*)title
             body:(NSString*)body
            delay:(NSTimeInterval)delay
-             tag:(NSString*)tag {
+             tag:(NSNumber*)tag {
     [self schedule:title
               body:body
              delay:delay
@@ -145,7 +145,7 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
             body:(NSString*)body
            delay:(NSTimeInterval)delay
         interval:(NSCalendarUnit)interval
-             tag:(NSString*)tag {
+             tag:(NSNumber*)tag {
 #if TARGET_OS_IOS
     UILocalNotification* notification =
         [self create:[NSDate dateWithTimeIntervalSinceNow:delay]
@@ -175,14 +175,14 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
 #endif // TARGET_OS_IOS
 }
 
-- (void)unschedule:(NSString*)tag {
+- (void)unschedule:(NSNumber*)tag {
 #if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
     NSArray* notifications = [application scheduledLocalNotifications];
 
     for (UILocalNotification* notification in notifications) {
         if ([[[notification userInfo] objectForKey:@"notification_tag"]
-                isEqualToString:tag]) {
+                isEqualToNumber:tag]) {
             [application cancelLocalNotification:notification];
         }
     }

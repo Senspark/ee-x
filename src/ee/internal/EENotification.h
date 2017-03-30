@@ -13,16 +13,16 @@
 - (void)schedule:(NSString*)title
             body:(NSString*)body
            delay:(NSTimeInterval)delay
-             tag:(NSString*)tag;
+             tag:(NSNumber*)tag;
 
 - (void)schedule:(NSString*)title
             body:(NSString*)body
            delay:(NSTimeInterval)delay
         interval:(NSCalendarUnit)interval
-             tag:(NSString*)tag;
+             tag:(NSNumber*)tag;
 
 - (void)unscheduleAll;
 
-- (void)unschedule:(NSString*)tag;
+- (void)unschedule:(NSNumber*)tag;
 
 @end

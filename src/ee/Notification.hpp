@@ -21,7 +21,7 @@ public:
     /// @param tag The tag of the notification to differentiate with other
     /// notifications.
     void schedule(const std::string& title, const std::string& body, int delay,
-                  const std::string& tag);
+                  int tag);
 
     /// Schedules a repeated notification.
     /// @param title The title of the notification.
@@ -31,13 +31,13 @@ public:
     /// @param tag The tag of the notification to differentiate with other
     /// notifications.
     void schedule(const std::string& title, const std::string& body, int delay,
-                  int interval, const std::string& tag);
+                  int interval, int tag);
 
     /// Unschedule all notifications.
     void unscheduleAll();
 
     /// Unschedules notifications whose the specified tag.
-    void unschedule(const std::string& tag);
+    void unschedule(int tag);
 };
 } // namespace ee
 

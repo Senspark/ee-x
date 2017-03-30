@@ -12,12 +12,12 @@
 
 namespace ee {
 void Notification::schedule(const std::string& title, const std::string& body,
-                            int delay, const std::string& tag) {
+                            int delay, int tag) {
     schedule(title, body, delay, 0, tag);
 }
 
 void Notification::schedule(const std::string& title, const std::string& body,
-                            int delay, int interval, const std::string& tag) {
+                            int delay, int interval, int tag) {
     nlohmann::json json;
     json["title"] = title;
     json["body"] = body;
@@ -31,7 +31,9 @@ void Notification::unscheduleAll() {
     MessageBridge::getInstance().call("__notification_unschedule_all");
 }
 
-void Notification::unschedule(const std::string& tag) {
-    MessageBridge::getInstance().call("__notification_unschedule", tag);
+void Notification::unschedule(int tag) {
+    nlohmann::json json;
+    json["tag"] = tag;
+    MessageBridge::getInstance().call("__notification_unschedule", json.dump());
 }
 } // namespace ee

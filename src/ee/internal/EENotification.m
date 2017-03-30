@@ -81,7 +81,10 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
     } tag:k__notification_unschedule_all];
 
     [bridge registerHandler:^(NSString* msg) {
-        [self unschedule:msg];
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+        NSNumber* tag = [dict objectForKey:@"tag"];
+
+        [self unschedule:tag];
         return [EEDictionaryUtils emptyResult];
     } tag:k__notification_unschedule];
 }

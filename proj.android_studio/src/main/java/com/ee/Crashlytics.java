@@ -73,6 +73,7 @@ public class Crashlytics implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        deregisterHandlers();
     }
 
     @Override
@@ -224,14 +225,17 @@ public class Crashlytics implements PluginProtocol {
         bridge.deregisterHandler(k__crashlytics_set_user_email);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void causeCrash() {
         com.crashlytics.android.Crashlytics.getInstance().crash();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void causeException() {
         (new CrashTest()).throwRuntimeException("This is a test exception!");
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setLogLevel(@NonNull Integer priority) {
         Fabric.getLogger().setLogLevel(priority);
     }
@@ -240,26 +244,32 @@ public class Crashlytics implements PluginProtocol {
         com.crashlytics.android.Crashlytics.log(priority, tag, message);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setString(@NonNull String key, @NonNull String value) {
         com.crashlytics.android.Crashlytics.setString(key, value);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setBool(@NonNull String key, @NonNull Boolean value) {
         com.crashlytics.android.Crashlytics.setBool(key, value);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setInt(@NonNull String key, @NonNull Integer value) {
         com.crashlytics.android.Crashlytics.setInt(key, value);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setUserIdentifier(@NonNull String identifier) {
         com.crashlytics.android.Crashlytics.setUserIdentifier(identifier);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setUserName(@NonNull String name) {
         com.crashlytics.android.Crashlytics.setUserName(name);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setUserEmail(@NonNull String email) {
         com.crashlytics.android.Crashlytics.setUserName(email);
     }

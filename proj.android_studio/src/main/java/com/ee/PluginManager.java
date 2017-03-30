@@ -30,6 +30,7 @@ public class PluginManager {
         _plugins = new HashMap<>();
     }
 
+    @SuppressWarnings({"unused", "TryWithIdenticalCatches"})
     public void addPlugin(@NonNull String pluginName) {
         _logger.info("addPlugin: " + pluginName);
         if (_plugins.containsKey(pluginName)) {
@@ -66,6 +67,7 @@ public class PluginManager {
         _plugins.put(plugin.getPluginName(), plugin);
     }
 
+    @SuppressWarnings("unused")
     public void removePlugin(@NonNull String pluginName) {
         _logger.info("removePlugin: " + pluginName);
         if (!_plugins.containsKey(pluginName)) {
@@ -75,70 +77,49 @@ public class PluginManager {
         _plugins.remove(pluginName);
     }
 
-    public static void onStart() {
-        /*
-        FIXME
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+    public void onStart() {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onStart();
         }
-        */
     }
 
-    public static void onStop() {
-        /*
-        FIXME
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+    public void onStop() {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onStop();
         }
-        */
     }
 
-    public static void onPause() {
-        /*
-        FIXME
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+    public void onPause() {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onPause();
         }
-        */
     }
 
-    public static void onResume() {
-        /*
-        FIXME
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+    public void onResume() {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onResume();
-        }*/
+        }
     }
 
-    public static void onDestroy() {
-        /*
-        FIXME
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+    public void onDestroy() {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             entry.getValue().onDestroy();
-        }*/
+        }
     }
 
-    public static boolean onBackPressed() {
-        /*
-        FIXME
+    public boolean onBackPressed() {
         boolean result = false;
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             result = result || entry.getValue().onBackPressed();
         }
         return result;
-        */
-        return false;
     }
 
-    public static boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        /*
-        FIXME
+    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         boolean result = false;
-        for (Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
+        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
             result = result || entry.getValue().onActivityResult(requestCode, responseCode, data);
         }
         return result;
-        */
-        return false;
     }
 }

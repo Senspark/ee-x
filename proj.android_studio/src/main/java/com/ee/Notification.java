@@ -58,6 +58,7 @@ public class Notification implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        deregisterHandlers();
     }
 
     @Override
@@ -123,6 +124,7 @@ public class Notification implements PluginProtocol {
         bridge.deregisterHandler(k__notification_unschedule);
     }
 
+    @SuppressWarnings("unused")
     public void schedule(@NonNull String title, @NonNull String body, @NonNull Integer delay,
                          @NonNull Integer tag) {
         _logger.debug(
@@ -131,6 +133,7 @@ public class Notification implements PluginProtocol {
         schedule(title, body, delay, 0, tag);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void schedule(@NonNull String title, @NonNull String body, @NonNull Integer delay,
                          @NonNull Integer interval, @NonNull Integer tag) {
         _logger.debug(String.format(Locale.getDefault(),
@@ -145,10 +148,12 @@ public class Notification implements PluginProtocol {
             PendingIntent.FLAG_UPDATE_CURRENT, delay, interval);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void unscheduleAll() {
-        _logger.debug("unscheduleAll.");
+        _logger.debug("unscheduleAll: not supported.");
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void unschedule(@NonNull Integer tag) {
         _logger.debug("unschedule: tag = " + tag);
         Intent intent = new Intent(_context.get(), NotificationService.class);

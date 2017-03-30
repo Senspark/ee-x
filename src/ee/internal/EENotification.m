@@ -18,9 +18,9 @@
 @implementation EENotification
 
 NSString* const k__notification_schedule = @"__notification_schedule";
+NSString* const k__notification_unschedule = @"__notification_unschedule";
 NSString* const k__notification_unschedule_all =
     @"__notification_unschedule_all";
-NSString* const k__notification_unschedule = @"__notification_unschedule";
 
 - (id)init {
     self = [super init];
@@ -98,6 +98,7 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
 }
 
 - (void)registerForLocalNotifications {
+#if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
     if ([application
             respondsToSelector:@selector(registerUserNotificationSettings:)]) {
@@ -109,6 +110,7 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
                                               categories:nil];
         [application registerUserNotificationSettings:settings];
     }
+#endif // TAGET_OS_IOS
 }
 
 #if TARGET_OS_IOS
@@ -167,17 +169,6 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
 #endif // TARGET_OS_IOS
 }
 
-- (void)unscheduleAll {
-#if TARGET_OS_IOS
-    UIApplication* application = [UIApplication sharedApplication];
-    NSArray* notifications = [application scheduledLocalNotifications];
-
-    if ([notifications count] > 0) {
-        [application cancelAllLocalNotifications];
-    }
-#endif // TARGET_OS_IOS
-}
-
 - (void)unschedule:(NSNumber*)tag {
 #if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
@@ -188,6 +179,17 @@ NSString* const k__notification_unschedule = @"__notification_unschedule";
                 isEqualToNumber:tag]) {
             [application cancelLocalNotification:notification];
         }
+    }
+#endif // TARGET_OS_IOS
+}
+
+- (void)unscheduleAll {
+#if TARGET_OS_IOS
+    UIApplication* application = [UIApplication sharedApplication];
+    NSArray* notifications = [application scheduledLocalNotifications];
+
+    if ([notifications count] > 0) {
+        [application cancelAllLocalNotifications];
     }
 #endif // TARGET_OS_IOS
 }

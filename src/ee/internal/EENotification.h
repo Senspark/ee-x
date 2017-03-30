@@ -21,8 +21,8 @@
         interval:(NSCalendarUnit)interval
              tag:(NSNumber*)tag;
 
-- (void)unscheduleAll;
-
 - (void)unschedule:(NSNumber*)tag;
+
+- (void)unscheduleAll;
 
 @end

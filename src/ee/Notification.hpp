@@ -33,11 +33,13 @@ public:
     void schedule(const std::string& title, const std::string& body, int delay,
                   int interval, int tag);
 
-    /// Unschedule all notifications.
-    void unscheduleAll();
-
     /// Unschedules notifications whose the specified tag.
     void unschedule(int tag);
+
+private:
+    /// Unschedule all notifications.
+    /// Only supported on iOS.
+    void unscheduleAll();
 };
 } // namespace ee
 

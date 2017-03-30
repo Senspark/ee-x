@@ -27,13 +27,13 @@ void Notification::schedule(const std::string& title, const std::string& body,
     MessageBridge::getInstance().call("__notification_schedule", json.dump());
 }
 
-void Notification::unscheduleAll() {
-    MessageBridge::getInstance().call("__notification_unschedule_all");
-}
-
 void Notification::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;
     MessageBridge::getInstance().call("__notification_unschedule", json.dump());
+}
+
+void Notification::unscheduleAll() {
+    MessageBridge::getInstance().call("__notification_unschedule_all");
 }
 } // namespace ee

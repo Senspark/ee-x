@@ -26,6 +26,16 @@ dependencies {
 }
 ```
 
+- Modify `Android.mk`:
+
+```
+$(call import-add-path, CLONE_PATH)
+
+LOCAL_STATIC_LIBRARIES += ee_x_static
+
+$(call import-module, ee-x/proj.android_studio/src/main/jni)
+```
+
 - Modify `AppActivity.java`:
 
 ```

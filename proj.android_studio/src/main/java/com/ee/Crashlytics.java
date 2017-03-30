@@ -20,17 +20,17 @@ import io.fabric.sdk.android.Fabric;
  * Created by Zinge on 7/4/16.
  */
 public class Crashlytics implements PluginProtocol {
-    private static final String k__crashlytics_cause_crash         = "k__crashlytics_cause_crash";
+    private static final String k__crashlytics_cause_crash         = "__crashlytics_cause_crash";
     private static final String k__crashlytics_cause_exception     =
         "__crashlytics_cause_exception";
-    private static final String k__crashlytics_set_log_level       = "k__crashlytics_set_log_level";
+    private static final String k__crashlytics_set_log_level       = "__crashlytics_set_log_level";
     private static final String k__crashlytics_log                 = "__crashlytics_log";
     private static final String k__crashlytics_set_string          = "__crashlytics_set_string";
     private static final String k__crashlytics_set_bool            = "__crashlytics_set_bool";
     private static final String k__crashlytics_set_int             = "__crashlytics_set_int";
     private static final String k__crashlytics_set_user_identifier =
         "__crashlytics_set_user_identifier";
-    private static final String k__crashlytics_set_user_name       = "k__crashlytics_set_user_name";
+    private static final String k__crashlytics_set_user_name       = "__crashlytics_set_user_name";
     private static final String k__crashlytics_set_user_email      = "__crashlytics_set_user_email";
 
     private static final Logger _logger = new Logger(Crashlytics.class.getName());

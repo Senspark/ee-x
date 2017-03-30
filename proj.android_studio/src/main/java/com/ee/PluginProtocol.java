@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
  * Created by Zinge on 6/1/16.
  */
 public interface PluginProtocol {
-    boolean onActivityResult(int requestCode, int responseCode, Intent data);
-
     @NonNull
     String getPluginName();
 
@@ -21,6 +19,8 @@ public interface PluginProtocol {
     void onPause();
 
     void onDestroy();
+
+    boolean onActivityResult(int requestCode, int responseCode, Intent data);
 
     boolean onBackPressed();
 }

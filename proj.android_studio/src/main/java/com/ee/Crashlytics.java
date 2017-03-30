@@ -33,25 +33,26 @@ public class Crashlytics implements PluginProtocol {
     private static final String k__crashlytics_set_user_name       = "k__crashlytics_set_user_name";
     private static final String k__crashlytics_set_user_email      = "__crashlytics_set_user_email";
 
+    private static final Logger _logger = new Logger(Crashlytics.class.getName());
+
     public Crashlytics(Context context) {
+        _logger.debug("constructor begin: context = " + context);
+
         Fabric.Builder builder = new Fabric.Builder(context)
             .logger(new CrashlyticsLogger(Log.DEBUG))
             .kits(new com.crashlytics.android.Crashlytics(), new CrashlyticsNdk());
 
         Fabric.with(builder.build());
 
+        registerHandlers();
 
+        _logger.debug("constructor end.");
     }
 
     @NonNull
     @Override
     public String getPluginName() {
         return "Crashlytics";
-    }
-
-    @Override
-    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        return false;
     }
 
     @Override
@@ -72,6 +73,11 @@ public class Crashlytics implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
+        return false;
     }
 
     @Override

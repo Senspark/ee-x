@@ -81,13 +81,14 @@ public class Notification implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
                 assert dict != null;
 
+                String ticker = (String) dict.get("ticker");
                 String title = (String) dict.get("title");
                 String body = (String) dict.get("body");
                 Integer delay = (Integer) dict.get("delay");
                 Integer interval = (Integer) dict.get("interval");
                 Integer tag = (Integer) dict.get("tag");
 
-                schedule(title, body, delay, interval, tag);
+                schedule(ticker, title, body, delay, interval, tag);
                 return DictionaryUtils.emptyResult();
             }
         }, k__notification_schedule);

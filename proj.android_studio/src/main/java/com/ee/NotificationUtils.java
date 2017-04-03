@@ -58,8 +58,8 @@ public class NotificationUtils {
      * @param body        The body of the notification.
      * @param clickIntent The intent will be fired when the user clicks on the notification.
      */
-    static android.app.Notification buildNotification(Context context, String title, String body,
-                                                      PendingIntent clickIntent) {
+    static android.app.Notification buildNotification(Context context, String ticker, String title,
+                                                      String body, PendingIntent clickIntent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder
@@ -69,7 +69,7 @@ public class NotificationUtils {
             .setContentTitle(title)
             .setDefaults(android.app.Notification.DEFAULT_ALL)
             .setSmallIcon(getNotificationIcon(context))
-            .setTicker(title);
+            .setTicker(ticker);
 
         return builder.build();
     }

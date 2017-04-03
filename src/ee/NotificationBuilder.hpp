@@ -18,6 +18,11 @@ class NotificationBuilder {
 public:
     NotificationBuilder();
 
+    /// Sets the text that is displayed in the status bar when the notification
+    /// first arrives.
+    /// @note Android only.
+    NotificationBuilder& setTicker(const std::string& ticker);
+
     /// Sets the title of the notification.
     /// Default is empty.
     NotificationBuilder& setTitle(const std::string& title);
@@ -41,6 +46,7 @@ public:
 private:
     friend Notification;
 
+    std::string ticker_;
     std::string title_;
     std::string body_;
     int delay_;

@@ -26,6 +26,7 @@ public class NotificationService extends Service {
             "onStartCommand: intent = " + intent + " extras = " + intent.getExtras() + " flags = " +
             flags + " startId = " + startId);
 
+        String ticker = intent.getStringExtra("ticker");
         String title = intent.getStringExtra("title");
         String body = intent.getStringExtra("body");
         Integer tag = intent.getIntExtra("tag", 0);
@@ -34,7 +35,7 @@ public class NotificationService extends Service {
             Class clazz = Class.forName(className);
             PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz);
             Notification notification =
-                NotificationUtils.buildNotification(this, title, body, clickIntent);
+                NotificationUtils.buildNotification(this, ticker, title, body, clickIntent);
             NotificationUtils.showNotification(this, notification, tag);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

@@ -124,22 +124,14 @@ public class Notification implements PluginProtocol {
         bridge.deregisterHandler(k__notification_unschedule);
     }
 
-    @SuppressWarnings("unused")
-    public void schedule(@NonNull String title, @NonNull String body, @NonNull Integer delay,
-                         @NonNull Integer tag) {
-        _logger.debug(
-            String.format(Locale.getDefault(), "schedule: title = %s body = %s delay = %d tag = %d",
-                title, body, delay, tag));
-        schedule(title, body, delay, 0, tag);
-    }
-
     @SuppressWarnings("WeakerAccess")
-    public void schedule(@NonNull String title, @NonNull String body, @NonNull Integer delay,
-                         @NonNull Integer interval, @NonNull Integer tag) {
+    public void schedule(@NonNull String ticker, @NonNull String title, @NonNull String body,
+                         @NonNull Integer delay, @NonNull Integer interval, @NonNull Integer tag) {
         _logger.debug(String.format(Locale.getDefault(),
             "schedule: title = %s body = %s delay = %d interval = %d tag = %d", title, body, delay,
             interval, tag));
         Intent intent = new Intent(_context.get(), NotificationService.class);
+        intent.putExtra("ticker", ticker);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
         intent.putExtra("tag", tag);

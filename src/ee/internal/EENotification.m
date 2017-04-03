@@ -139,16 +139,6 @@ NSString* const k__notification_unschedule_all =
 - (void)schedule:(NSString*)title
             body:(NSString*)body
            delay:(NSTimeInterval)delay
-             tag:(NSNumber*)tag {
-    [self schedule:title
-              body:body
-             delay:delay
-          interval:(NSCalendarUnit)0
-               tag:tag];
-}
-- (void)schedule:(NSString*)title
-            body:(NSString*)body
-           delay:(NSTimeInterval)delay
         interval:(NSCalendarUnit)interval
              tag:(NSNumber*)tag {
 #if TARGET_OS_IOS

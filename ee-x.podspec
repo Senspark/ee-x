@@ -28,6 +28,7 @@ Pod::Spec.new do |spec|
     spec.public_header_files = "src/ee/Logger.hpp",
                                "src/ee/LogLevel.hpp",
                                "src/ee/Notification.hpp",
+                               "src/ee/NotificationBuilder.hpp",
                                "src/ee/Crashlytics.hpp",
                                "src/ee/EEPluginManager.h"
 

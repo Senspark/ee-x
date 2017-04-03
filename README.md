@@ -233,7 +233,7 @@ public:
     void unscheduleAll();
     
 private:
-    std::unique_ptr<ee:: Notification> protocol_;
+    std::unique_ptr<ee::Notification> protocol_;
 };
 ```
 
@@ -243,6 +243,7 @@ private:
 #include "NotificationAgent.hpp"
 
 #include <ee/Notification.hpp>
+#include <ee/NotificationBuilder.hpp>
 
 namespace tag {
 constexpr int notification_0 = 0;
@@ -260,10 +261,19 @@ void NotificationAgent::initialize() {
 
 void NotificationAgent::scheduleAll() {
     // Delayed 5 minutes.
-    protocol_->schedule("Title 1", "Body 2", 300, tag::notification_0);
+    protocol_->schedule(ee::NotificationBuilder()
+                            .setTitle("Title 1")
+                            .setBody("Body 2")
+                            .setDelay(300)
+                            .setTag(tag::notification_0));
     
     // Delayed 10 minutes and repeat every 5 minutes.
-    protocol_->schedule("Title 2", "Body 2", 600, 300, tag::notification_1);    
+    protocol_->schedule(ee::NotificationBuilder()
+                            .setTitle("Title 2")
+                            .setBody("Body 2")
+                            .setDelay(600)
+                            .setInterval(300)
+                            .setTag(tag::notification_1));
 }
 
 void NotificationAgent::unscheduleAll() {

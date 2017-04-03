@@ -12,26 +12,12 @@
 #include <string>
 
 namespace ee {
+class NotificationBuilder;
+
 class Notification final {
 public:
     /// Schedules a notification.
-    /// @param title The title of the notification.
-    /// @param body The body of the notification.
-    /// @param delay In seconds.
-    /// @param tag The tag of the notification to differentiate with other
-    /// notifications.
-    void schedule(const std::string& title, const std::string& body, int delay,
-                  int tag);
-
-    /// Schedules a repeated notification.
-    /// @param title The title of the notification.
-    /// @param body The body of the notification.
-    /// @param delay In seconds.
-    /// @param interval In seconds.
-    /// @param tag The tag of the notification to differentiate with other
-    /// notifications.
-    void schedule(const std::string& title, const std::string& body, int delay,
-                  int interval, int tag);
+    void schedule(const NotificationBuilder& builder);
 
     /// Unschedules notifications whose the specified tag.
     void unschedule(int tag);

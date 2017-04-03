@@ -7,23 +7,18 @@
 //
 
 #include "ee/Notification.hpp"
+#include "ee/NotificationBuilder.hpp"
 #include "ee/internal/MessageBridge.hpp"
 #include "ee/libs/nlohmann/json.hpp"
 
 namespace ee {
-void Notification::schedule(const std::string& title, const std::string& body,
-                            int delay, int tag) {
-    schedule(title, body, delay, 0, tag);
-}
-
-void Notification::schedule(const std::string& title, const std::string& body,
-                            int delay, int interval, int tag) {
+void Notification::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
-    json["title"] = title;
-    json["body"] = body;
-    json["delay"] = delay;
-    json["interval"] = interval;
-    json["tag"] = tag;
+    json["title"] = builder.title_;
+    json["body"] = builder.body_;
+    json["delay"] = builder.delay_;
+    json["interval"] = builder.interval_;
+    json["tag"] = builder.tag_;
     MessageBridge::getInstance().call("__notification_schedule", json.dump());
 }
 

@@ -65,6 +65,10 @@
 		6FA0AA4F1E8BA9A300CF6A65 /* Notification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA161E8BA9A300CF6A65 /* Notification.cpp */; };
 		6FA0AA501E8BA9A300CF6A65 /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA0AA171E8BA9A300CF6A65 /* Notification.hpp */; };
 		6FA0AA511E8BA9A300CF6A65 /* Notification.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA0AA171E8BA9A300CF6A65 /* Notification.hpp */; };
+		6FD3FA881E920ACC00178FF4 /* NotificationBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD3FA861E920ACC00178FF4 /* NotificationBuilder.cpp */; };
+		6FD3FA891E920ACC00178FF4 /* NotificationBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD3FA861E920ACC00178FF4 /* NotificationBuilder.cpp */; };
+		6FD3FA8A1E920ACC00178FF4 /* NotificationBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD3FA871E920ACC00178FF4 /* NotificationBuilder.hpp */; };
+		6FD3FA8B1E920ACC00178FF4 /* NotificationBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD3FA871E920ACC00178FF4 /* NotificationBuilder.hpp */; };
 		9DA59A0CD11DF818087D3EC2 /* libPods-common-ee_x_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CACC1A0356901713D971BF0 /* libPods-common-ee_x_desktop.a */; };
 		CDCAD2C12F8A8BC5F5CA0BE7 /* libPods-common-ee_x_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 265B4FABB4EBF87D07C42D07 /* libPods-common-ee_x_mobile.a */; };
 /* End PBXBuildFile section */
@@ -119,6 +123,8 @@
 		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
 		6FC1CA8E1CEAB7D300DCDC8E /* ee_x_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC1CA8F1CEAB7D300DCDC8E /* ee_x_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD3FA861E920ACC00178FF4 /* NotificationBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotificationBuilder.cpp; sourceTree = "<group>"; };
+		6FD3FA871E920ACC00178FF4 /* NotificationBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotificationBuilder.hpp; sourceTree = "<group>"; };
 		9BF977E74B4C71E76BF8FA62 /* Pods-common-ee_x_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_desktop/Pods-common-ee_x_desktop.release.xcconfig"; sourceTree = "<group>"; };
 		CCD53128F51DC67B02DDC4E6 /* Pods-common-ee_x_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile/Pods-common-ee_x_mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		CD411974981870D502C27F7F /* Pods-common-ee_x_desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_desktop/Pods-common-ee_x_desktop.debug.xcconfig"; sourceTree = "<group>"; };
@@ -192,6 +198,8 @@
 				6FA0AA151E8BA9A300CF6A65 /* LogLevel.hpp */,
 				6FA0AA161E8BA9A300CF6A65 /* Notification.cpp */,
 				6FA0AA171E8BA9A300CF6A65 /* Notification.hpp */,
+				6FD3FA861E920ACC00178FF4 /* NotificationBuilder.cpp */,
+				6FD3FA871E920ACC00178FF4 /* NotificationBuilder.hpp */,
 			);
 			path = ee;
 			sourceTree = "<group>";
@@ -273,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FA0AA4C1E8BA9A300CF6A65 /* LogLevel.hpp in Headers */,
+				6FD3FA8A1E920ACC00178FF4 /* NotificationBuilder.hpp in Headers */,
 				6FA0AA281E8BA9A300CF6A65 /* EEJsonUtils.h in Headers */,
 				6FA0AA1A1E8BA9A300CF6A65 /* Crashlytics.hpp in Headers */,
 				6FA0AA341E8BA9A300CF6A65 /* EEUtils.h in Headers */,
@@ -293,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FA0AA4D1E8BA9A300CF6A65 /* LogLevel.hpp in Headers */,
+				6FD3FA8B1E920ACC00178FF4 /* NotificationBuilder.hpp in Headers */,
 				6FA0AA291E8BA9A300CF6A65 /* EEJsonUtils.h in Headers */,
 				6FA0AA1B1E8BA9A300CF6A65 /* Crashlytics.hpp in Headers */,
 				6FA0AA351E8BA9A300CF6A65 /* EEUtils.h in Headers */,
@@ -463,6 +473,7 @@
 				6FA0AA3C1E8BA9A300CF6A65 /* MessageBridge_iOS.mm in Sources */,
 				6FA0AA421E8BA9A300CF6A65 /* README.md in Sources */,
 				6FA0AA441E8BA9A300CF6A65 /* Logger.cpp in Sources */,
+				6FD3FA881E920ACC00178FF4 /* NotificationBuilder.cpp in Sources */,
 				6FA0AA4E1E8BA9A300CF6A65 /* Notification.cpp in Sources */,
 				6FA0AA4A1E8BA9A300CF6A65 /* LogLevel.cpp in Sources */,
 				6FA0AA181E8BA9A300CF6A65 /* Crashlytics.cpp in Sources */,
@@ -486,6 +497,7 @@
 				6FA0AA3D1E8BA9A300CF6A65 /* MessageBridge_iOS.mm in Sources */,
 				6FA0AA431E8BA9A300CF6A65 /* README.md in Sources */,
 				6FA0AA451E8BA9A300CF6A65 /* Logger.cpp in Sources */,
+				6FD3FA891E920ACC00178FF4 /* NotificationBuilder.cpp in Sources */,
 				6FA0AA4F1E8BA9A300CF6A65 /* Notification.cpp in Sources */,
 				6FA0AA4B1E8BA9A300CF6A65 /* LogLevel.cpp in Sources */,
 				6FA0AA191E8BA9A300CF6A65 /* Crashlytics.cpp in Sources */,

@@ -23,7 +23,7 @@ public class Notification implements PluginProtocol {
     private static final String k__notification_schedule       = "__notification_schedule";
     private static final String k__notification_unschedule_all = "__notification_unschedule_all";
     private static final String k__notification_unschedule     = "__notification_unschedule";
-    private static final String k__notification_clear_all      = "__notification_clear_all"
+    private static final String k__notification_clear_all      = "__notification_clear_all";
 
     private static final Logger _logger = new Logger(Notification.class.getName());
 

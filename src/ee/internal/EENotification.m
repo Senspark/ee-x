@@ -200,6 +200,8 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
 
 - (void)clearAll {
 #if TARGET_OS_IOS
+    // http://stackoverflow.com/questions/8682051/ios-application-how-to-clear-notifications
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 #endif // TARGET_OS_IOS

@@ -31,4 +31,8 @@ void Notification::unschedule(int tag) {
 void Notification::unscheduleAll() {
     MessageBridge::getInstance().call("__notification_unschedule_all");
 }
+
+void Notification::clearAll() {
+    MessageBridge::getInstance().call("__notification_clear_all");
+}
 } // namespace ee

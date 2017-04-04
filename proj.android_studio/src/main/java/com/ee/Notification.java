@@ -1,5 +1,6 @@
 package com.ee;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ public class Notification implements PluginProtocol {
     private static final String k__notification_schedule       = "__notification_schedule";
     private static final String k__notification_unschedule_all = "__notification_unschedule_all";
     private static final String k__notification_unschedule     = "__notification_unschedule";
+    private static final String k__notification_clear_all      = "__notification_clear_all"
 
     private static final Logger _logger = new Logger(Notification.class.getName());
 
@@ -115,6 +117,15 @@ public class Notification implements PluginProtocol {
                 return DictionaryUtils.emptyResult();
             }
         }, k__notification_unschedule);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String msg) {
+                clearAll();
+                return DictionaryUtils.emptyResult();
+            }
+        }, k__notification_clear_all);
     }
 
     private void deregisterHandlers() {
@@ -151,5 +162,12 @@ public class Notification implements PluginProtocol {
         _logger.debug("unschedule: tag = " + tag);
         Intent intent = new Intent(_context.get(), NotificationService.class);
         NotificationUtils.unscheduleAlarm(_context.get(), intent, tag);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void clearAll() {
+        NotificationManager manager =
+            (NotificationManager) _context.get().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
     }
 }

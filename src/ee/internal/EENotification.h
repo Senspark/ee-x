@@ -20,4 +20,6 @@
 
 - (void)unscheduleAll;
 
+- (void)clearAll;
+
 @end

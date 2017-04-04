@@ -22,6 +22,9 @@ public:
     /// Unschedules notifications whose the specified tag.
     void unschedule(int tag);
 
+    /// Clear all notifications.
+    void clearAll();
+
 private:
     /// Unschedule all notifications.
     /// Only supported on iOS.

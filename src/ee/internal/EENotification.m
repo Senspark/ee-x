@@ -21,6 +21,7 @@ NSString* const k__notification_schedule = @"__notification_schedule";
 NSString* const k__notification_unschedule = @"__notification_unschedule";
 NSString* const k__notification_unschedule_all =
     @"__notification_unschedule_all";
+NSString* const k__notification_clear_all = @"__notification_clear_all";
 
 - (id)init {
     self = [super init];
@@ -87,6 +88,11 @@ NSString* const k__notification_unschedule_all =
         [self unschedule:tag];
         return [EEDictionaryUtils emptyResult];
     } tag:k__notification_unschedule];
+
+    [bridge registerHandler:^(NSString* msg) {
+        [self clearAll];
+        return [EEDictionaryUtils emptyResult];
+    } tag:k__notification_clear_all];
 }
 
 - (void)deregisterHandlers {
@@ -189,6 +195,13 @@ NSString* const k__notification_unschedule_all =
     if ([notifications count] > 0) {
         [application cancelAllLocalNotifications];
     }
+#endif // TARGET_OS_IOS
+}
+
+- (void)clearAll {
+#if TARGET_OS_IOS
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 #endif // TARGET_OS_IOS
 }
 

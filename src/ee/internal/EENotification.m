@@ -129,7 +129,7 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
     if (notification == nil) {
         return nil;
     }
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) {
         [notification setAlertTitle:title];
     }
 

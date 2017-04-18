@@ -27,7 +27,7 @@
 NSString* const k__crashlytics_cause_crash = @"__crashlytics_cause_crash";
 NSString* const k__crashlytics_cause_exception =
     @"__crashlytics_cause_exception";
-NSString* const k__crashlytics_set_log_level = @"k__crashlytics_set_log_level";
+NSString* const k__crashlytics_set_log_level = @"__crashlytics_set_log_level";
 NSString* const k__crashlytics_log = @"__crashlytics_log";
 NSString* const k__crashlytics_set_string = @"__crashlytics_set_string";
 NSString* const k__crashlytics_set_bool = @"__crashlytics_set_bool";

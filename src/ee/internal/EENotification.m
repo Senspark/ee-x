@@ -135,7 +135,10 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
 
     [notification setFireDate:fireDate];
     [notification setRepeatInterval:interval];
-    [notification setTimeZone:[NSTimeZone defaultTimeZone]];
+
+    // http://stackoverflow.com/questions/5985468/iphone-differences-among-time-zone-convenience-methods?noredirect=1&lq=1
+    [notification setTimeZone:[NSTimeZone localTimeZone]];
+
     [notification setSoundName:UILocalNotificationDefaultSoundName];
     [notification setAlertBody:body];
     return notification;

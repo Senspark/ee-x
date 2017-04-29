@@ -198,6 +198,8 @@ void Crashlytics::logError(const std::string& message) {
 
 ## Local Notifications
 
+- Notes for Android: `mipmap/ic_launcher` (or `mipmap/icon_silhouette` for API 21 and above) will be used as icon for notifications.
+
 - Modify `AppActivity.java`:
 
 ```

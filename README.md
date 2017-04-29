@@ -241,9 +241,11 @@ public:
     void initialize();
     
     /// Should be called when entering background.
+    /// E.g. AppDelegate::applicationDidEnterBackground.
     void scheduleAll();
     
     /// Should be called when entering foreground.
+    /// E.g. AppDelegate::applicationWillEnterForeground.
     void unscheduleAll();
     
 private:
@@ -292,6 +294,9 @@ void NotificationAgent::scheduleAll() {
 
 void NotificationAgent::unscheduleAll() {
     protocol_->unschedule(tag::notification_0);
-    protocol_->unschedule(tag::notification_1);    
+    protocol_->unschedule(tag::notification_1);
+    
+    // Also clear all notifications.
+    protocol_->clearAll();
 }
 ```

@@ -46,7 +46,7 @@ void cocos_android_app_init(JNIEnv* env) {
     ...
     JavaVm* vm;
     env->GetJavaVm(&vm);
-    ee::JniUtils;:setVm(vm);
+    ee::JniUtils::setVm(vm);
 }
 ```
 

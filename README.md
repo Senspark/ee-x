@@ -36,6 +36,20 @@ LOCAL_STATIC_LIBRARIES += ee_x_static
 $(call import-module, ee-x/proj.android_studio/src/main/jni)
 ```
 
+- Modify `main.cpp`:
+
+```
+#include <jni.h>
+#include <ee/JniUtils.hpp>
+
+void cocos_android_app_init(JNIEnv* env) {
+    ...
+    JavaVm* vm;
+    env->GetJavaVm(&vm);
+    ee::JniUtils;:setVm(vm);
+}
+```
+
 - Modify `AppActivity.java`:
 
 ```

@@ -4,3 +4,4 @@ xcuserdata
 *.iml
 Pods
 Podfile.lock
+*.DS_Store

@@ -14,14 +14,14 @@ android {
 
 dependencies {
     compile 'com.android.support:support-annotations:+'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.7.4'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.4'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.4'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.8'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.8'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
-    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.2@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
         transitive = true
     }
     compile 'com.android.support:appcompat-v7:25.3.1'

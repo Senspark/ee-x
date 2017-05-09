@@ -14,7 +14,7 @@
 
 namespace ee {
 namespace core {
-class LogLevel;
+struct LogLevel;
 
 class Logger {
 public:

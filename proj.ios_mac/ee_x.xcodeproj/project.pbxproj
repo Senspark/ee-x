@@ -45,11 +45,9 @@
 		6FA0AA3B1E8BA9A300CF6A65 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA0AA081E8BA9A300CF6A65 /* MessageBridge.hpp */; };
 		6FA0AA3C1E8BA9A300CF6A65 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA091E8BA9A300CF6A65 /* MessageBridge_iOS.mm */; };
 		6FA0AA3D1E8BA9A300CF6A65 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA091E8BA9A300CF6A65 /* MessageBridge_iOS.mm */; };
-		6FA0AA3E1E8BA9A300CF6A65 /* ChangeLog.md in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA0D1E8BA9A300CF6A65 /* ChangeLog.md */; };
 		6FA0AA3F1E8BA9A300CF6A65 /* ChangeLog.md in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA0D1E8BA9A300CF6A65 /* ChangeLog.md */; };
 		6FA0AA401E8BA9A300CF6A65 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA0AA0E1E8BA9A300CF6A65 /* json.hpp */; };
 		6FA0AA411E8BA9A300CF6A65 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FA0AA0E1E8BA9A300CF6A65 /* json.hpp */; };
-		6FA0AA421E8BA9A300CF6A65 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA101E8BA9A300CF6A65 /* README.md */; };
 		6FA0AA431E8BA9A300CF6A65 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA101E8BA9A300CF6A65 /* README.md */; };
 		6FA0AA441E8BA9A300CF6A65 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA111E8BA9A300CF6A65 /* Logger.cpp */; };
 		6FA0AA451E8BA9A300CF6A65 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA0AA111E8BA9A300CF6A65 /* Logger.cpp */; };
@@ -466,12 +464,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FA0AA2A1E8BA9A300CF6A65 /* EEJsonUtils.m in Sources */,
-				6FA0AA3E1E8BA9A300CF6A65 /* ChangeLog.md in Sources */,
 				6FA0AA381E8BA9A300CF6A65 /* MessageBridge.cpp in Sources */,
 				6FA0AA1E1E8BA9A300CF6A65 /* EEPluginManager.m in Sources */,
 				6FA0AA2E1E8BA9A300CF6A65 /* EEMessageBridge.m in Sources */,
 				6FA0AA3C1E8BA9A300CF6A65 /* MessageBridge_iOS.mm in Sources */,
-				6FA0AA421E8BA9A300CF6A65 /* README.md in Sources */,
 				6FA0AA441E8BA9A300CF6A65 /* Logger.cpp in Sources */,
 				6FD3FA881E920ACC00178FF4 /* NotificationBuilder.cpp in Sources */,
 				6FA0AA4E1E8BA9A300CF6A65 /* Notification.cpp in Sources */,
@@ -517,7 +513,6 @@
 			baseConfigurationReference = CCD53128F51DC67B02DDC4E6 /* Pods-common-ee_x_mobile.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
@@ -530,7 +525,6 @@
 			baseConfigurationReference = FADBAF2AB8A7F799A3D04FE6 /* Pods-common-ee_x_mobile.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
@@ -542,7 +536,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CD411974981870D502C27F7F /* Pods-common-ee_x_desktop.debug.xcconfig */;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -552,7 +545,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9BF977E74B4C71E76BF8FA62 /* Pods-common-ee_x_desktop.release.xcconfig */;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -608,7 +600,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../src";
@@ -663,7 +654,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_LTO = YES;
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../src";

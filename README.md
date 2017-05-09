@@ -11,26 +11,13 @@
 
 - Clone the repository.
 
-- Modify `settings.gradle` (`CLONE_PATH` is where you cloned the repository to):
-
-```
-include ':ee-x'
-project(':ee-x').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio')
-```
-
-- Modify `build.gradle`:
-
-```
-dependencies {
-    compile project(':ee-x')
-}
-```
+- Let `CLONE_PATH` be where you cloned the repository to.
 
 - Modify `Android.mk`:
 
 ```
 $(call import-add-path, CLONE_PATH)
-$(call import-module, ee-x/proj.android_studio/src/main/jni)
+$(call import-module, ee-x/jni)
 ```
 
 - Modify `main.cpp`:
@@ -47,10 +34,17 @@ void cocos_android_app_init(JNIEnv* env) {
 }
 ```
 
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-core'
+project(':ee-x-core').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-core')
+```
+
 - Modify `AppActivity.java`:
 
 ```
-import com.ee.PluginManager;
+import com.ee.core.PluginManager;
 
 public class AppActivity extends Cocos2dxActivity {
     @Override
@@ -105,10 +99,25 @@ public class AppActivity extends Cocos2dxActivity {
 LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
 ```
 
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-crashlytics'
+project(':ee-x-crashlytics').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-crashlytics')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-crashlytics')
+}
+```
+
 - Modify `AppActivity.java`:
 
 ```
-import com.ee.Crashlytics;
+import com.ee.crashlytics.Crashlytics;
 
 public class AppActivity extends Cocos2dxActivity {
     @Override
@@ -143,6 +152,9 @@ pod 'ee-x/crashlytics', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
 ```
 // CrashlyticsAgent.hpp
 
+#include <memory> // std::unique_ptr.
+#include <string> // std::string.
+
 #include <ee/CrashlyticsFwd.hpp>
 
 class CrashlyticsAgent {
@@ -153,7 +165,7 @@ public:
     void causeCrash();
     void causeException();
     void logDebug(const std::string& message);
-    void logInfo(const td::string& message);
+    void logInfo(const std::string& message);
     void logError(const std::string& message);
     
 private:
@@ -190,7 +202,7 @@ void Crashlytics::logDebug(const std::string& message) {
     protocol_->log(ee::LogLevel::Debug, "your_log_tag", message);
 }
 
-void Crashlytics::logInfo(const td::string& message) {
+void Crashlytics::logInfo(const std::string& message) {
     protocol_->log(ee::LogLevel::Info, "your_log_tag", message);
 }
 
@@ -209,6 +221,21 @@ void Crashlytics::logError(const std::string& message) {
 
 ```
 LOCAL_STATIC_LIBRARIES += ee_x_notification_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-notification'
+project(':ee-x-notification').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-notification')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-notification')
+}
 ```
 
 - Modify `AppActivity.java`:
@@ -248,6 +275,8 @@ pod 'ee-x/notification', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
  
 ```
 // NotificationAgent.hpp
+
+#include <memory> // std::unique_ptr.
 
 #include <ee/NotificationFwd.hpp>
 

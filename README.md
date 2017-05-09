@@ -86,7 +86,6 @@ public class AppActivity extends Cocos2dxActivity {
         }
     }
 }
-
 ```
 
 ## Crashlytics
@@ -125,7 +124,6 @@ public class AppActivity extends Cocos2dxActivity {
         PluginManager.getInstance().addPlugin(new Crashlytics(this));
     }
 }
-
 ```
 
 - Modify `Podfile`:
@@ -249,7 +247,6 @@ public class AppActivity extends Cocos2dxActivity {
         PluginManager.getInstance().addPlugin(new Notification(this));
     }
 }
-
 ```
 
 - Modify `Podfile`:

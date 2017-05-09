@@ -23,6 +23,10 @@
 namespace ee {
 using core::Logger;
 using core::LogLevel;
+
+#if defined(__ANDROID__)
+using core::JniUtils;
+#endif // __ANDROID__
 } // namespace ee
 
 #endif /* EE_X_CORE_HEADER_HPP_ */

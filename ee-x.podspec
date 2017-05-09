@@ -1,20 +1,20 @@
 Pod::Spec.new do |spec|
-  spec.name           = "ee-x"
-  spec.version        = "0.0.3"
-  spec.summary        = "ee-x"
-  spec.description    = "ee-x"
+  spec.name           = 'ee-x'
+  spec.version        = '0.0.3'
+  spec.summary        = 'ee-x'
+  spec.description    = 'ee-x'
 
-  spec.homepage       = "https://github.com/enrevol/ee-x"
+  spec.homepage       = 'https://github.com/enrevol/ee-x'
 
-  # s.license         = { :type => "MIT", :file => "FILE_LICENSE" }
-  spec.author         = "Hoang Hai"
+  # s.license         = { :type => 'MIT', :file => 'FILE_LICENSE' }
+  spec.author         = 'Hai Hoang'
 
-  spec.ios.deployment_target = "7.0"
-  spec.osx.deployment_target = "10.7"
+  spec.ios.deployment_target = '7.0'
+  spec.osx.deployment_target = '10.7'
 
   spec.source = {
-      :git => "https://github.com/enrevol/ee-x.git",
-      :branch => "master"
+    :git => 'https://github.com/enrevol/ee-x.git',
+    :branch => 'master'
   }
 
   spec.ios.frameworks  = 'Foundation'

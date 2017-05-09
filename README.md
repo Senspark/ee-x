@@ -235,11 +235,6 @@ dependencies {
     compile project(':ee-x-notification')
 }
 ```
-- Modify `AndroidManifest.xml` by adding the following line to the inner of `<application>` tag:
-
-```
-<service android:name="com.ee.notification.NotificationService"/>
-```
 
 - Modify `AppActivity.java`:
 

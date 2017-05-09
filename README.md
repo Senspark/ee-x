@@ -40,7 +40,7 @@ $(call import-module, ee-x/proj.android_studio/src/main/jni)
 
 ```
 #include <jni.h>
-#include <ee/JniUtils.hpp>
+#include <ee/Core.hpp>
 
 void cocos_android_app_init(JNIEnv* env) {
     ...
@@ -98,12 +98,6 @@ public class AppActivity extends Cocos2dxActivity {
 
 ```
 
-- Modify `Podfile`:
-
-```
-pod 'ee-x', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
-```
-
 ## Crashlytics
 
 - Modify `AppActivity.java`:
@@ -120,10 +114,16 @@ public class AppActivity extends Cocos2dxActivity {
 
 ```
 
+- Modify `Podfile`:
+
+```
+pod 'ee-x/crashlytics', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
+```
+
 - Modify `AppController.mm`:
 
 ```
-#import <ee/EEPluginManager.h>
+#include <ee/Core.hpp>
 
 - (BOOL)application:(UIApplication*)application
     didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
@@ -138,9 +138,7 @@ public class AppActivity extends Cocos2dxActivity {
 ```
 // CrashlyticsAgent.hpp
 
-namespace ee {
-class Crashlytics;
-} // namespace ee
+#include <ee/CrashlyticsFwd.hpp>
 
 class CrashlyticsAgent {
 public:
@@ -164,7 +162,7 @@ private:
 #include "CrashlyticsAgent.hpp"
 
 #include <ee/Crashlytics.hpp>
-#include <ee/LogLevel.hpp>
+#include <ee/Core.hpp>
 
 CrashlyticsAgent* CrashlyticsAgent::getInstance() {
     static Crashlytics sharedInstance;
@@ -214,10 +212,16 @@ public class AppActivity extends Cocos2dxActivity {
 
 ```
 
+- Modify `Podfile`:
+
+```
+pod 'ee-x/notification', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
+```
+
 - Modify `AppController.mm`:
 
 ```
-#import <ee/EEPluginManager.h>
+#include <ee/Core.hpp>
 
 - (BOOL)application:(UIApplication*)application
     didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
@@ -232,9 +236,7 @@ public class AppActivity extends Cocos2dxActivity {
 ```
 // NotificationAgent.hpp
 
-namespace ee {
-class Notification;
-} // namespace ee
+#include <ee/NotificationFwd.hpp>
 
 class NotificationAgent {
 public:
@@ -261,7 +263,6 @@ private:
 #include "NotificationAgent.hpp"
 
 #include <ee/Notification.hpp>
-#include <ee/NotificationBuilder.hpp>
 
 namespace tag {
 constexpr int notification_0 = 0;

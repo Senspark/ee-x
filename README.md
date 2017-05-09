@@ -30,9 +30,6 @@ dependencies {
 
 ```
 $(call import-add-path, CLONE_PATH)
-
-LOCAL_STATIC_LIBRARIES += ee_x_static
-
 $(call import-module, ee-x/proj.android_studio/src/main/jni)
 ```
 
@@ -101,6 +98,12 @@ public class AppActivity extends Cocos2dxActivity {
 ## Crashlytics
 
 - Supported platforms: Android, iOS, Mac OSX.
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
+```
 
 - Modify `AppActivity.java`:
 
@@ -201,6 +204,12 @@ void Crashlytics::logError(const std::string& message) {
 - Supported platforms: Android, iOS.
 
 - Notes for Android: `mipmap/ic_launcher` (or `mipmap/icon_silhouette` for API 21 and above) will be used as icon for notifications.
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_notification_static
+```
 
 - Modify `AppActivity.java`:
 

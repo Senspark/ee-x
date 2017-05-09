@@ -1,6 +1,9 @@
 abstract_target 'common' do
-    target 'ee_x_mobile_crashlytics' do
-        pod 'Crashlytics'
+    abstract_target 'crashlytics' do
         pod 'Fabric'
+        pod 'Crashlytics'        
+        
+        target 'ee_x_mobile_crashlytics'
+        target 'ee_x_desktop_crashlytics'
     end
 end

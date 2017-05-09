@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -38,8 +39,36 @@
 		6F43A2DB1EC1A3A200C68152 /* NotificationBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29A1EC19F3100C68152 /* NotificationBridge.hpp */; };
 		6F43A2DC1EC1A3A200C68152 /* NotificationBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A29B1EC19F3100C68152 /* NotificationBuilder.cpp */; };
 		6F43A2DD1EC1A3A200C68152 /* NotificationBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29C1EC19F3100C68152 /* NotificationBuilder.hpp */; };
+		6F83DC8B1EC1C787004C5500 /* CrashlyticsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A23C1EC19F3100C68152 /* CrashlyticsBridge.cpp */; };
+		6F83DC8C1EC1C787004C5500 /* EECrashlytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A23F1EC19F3100C68152 /* EECrashlytics.m */; };
+		6F83DC901EC1C787004C5500 /* CrashlyticsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23D1EC19F3100C68152 /* CrashlyticsBridge.hpp */; };
+		6F83DC911EC1C787004C5500 /* Crashlytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */; };
+		6F83DC921EC1C787004C5500 /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
+		6F83DC931EC1C787004C5500 /* EECrashlytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23E1EC19F3100C68152 /* EECrashlytics.h */; };
+		6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
+		6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
+		6F83DC9D1EC1C800004C5500 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
+		6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */; };
+		6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22C1EC19F3100C68152 /* EEDictionaryUtils.m */; };
+		6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */; };
+		6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */; };
+		6F83DCA21EC1C800004C5500 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */; };
+		6F83DCA31EC1C800004C5500 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2301EC19F3100C68152 /* EEMessageBridge.m */; };
+		6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2311EC19F3100C68152 /* EEUtils.h */; };
+		6F83DCA51EC1C800004C5500 /* EEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2321EC19F3100C68152 /* EEUtils.m */; };
+		6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2331EC19F3100C68152 /* MessageBridge.cpp */; };
+		6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2341EC19F3100C68152 /* MessageBridge.hpp */; };
+		6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
+		6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2361EC19F3100C68152 /* Logger.cpp */; };
+		6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2371EC19F3100C68152 /* Logger.hpp */; };
+		6F83DCAB1EC1C800004C5500 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2381EC19F3100C68152 /* Logger_iOS.mm */; };
+		6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
+		6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
+		6F83DCAE1EC1C80F004C5500 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2931EC19F3100C68152 /* json.hpp */; };
+		6F83DCAF1EC1C810004C5500 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2931EC19F3100C68152 /* json.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
+		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +85,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
 			remoteInfo = ee_x_mobile_core;
+		};
+		6F83DC991EC1C7E4004C5500 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F79B6111CCA7AA00008EFAC;
+			remoteInfo = ee_x_desktop_core;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -90,11 +126,21 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F83DC8E1EC1C787004C5500 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2CACC1A0356901713D971BF0 /* libPods-common-ee_x_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		370EFFC9F8C5283B1C555CBB /* Pods-common-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_crashlytics/Pods-common-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
+		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -131,14 +177,18 @@
 		6F43A29D1EC19F3E00C68152 /* Core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Core.hpp; sourceTree = "<group>"; };
 		6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Crashlytics.hpp; sourceTree = "<group>"; };
 		6F43A2D61EC1A39900C68152 /* Notification.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
+		6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
-		6FD9340D1EC1AFF9001E5D1D /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FD9340E1EC1AFF9001E5D1D /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FD9340F1EC1AFF9001E5D1D /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FD934101EC1AFF9001E5D1D /* ee_x_desktop_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
-		A605A97317259C40AAF4F977 /* Pods-common-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_crashlytics/Pods-common-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
+		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +221,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F83DC8D1EC1C787004C5500 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -181,7 +240,7 @@
 				6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				A1B0638E9ACD63BB92819897 /* Pods */,
-				6FD934111EC1B002001E5D1D /* Products */,
+				6F83DCB91EC1C8D1004C5500 /* Products */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -189,7 +248,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2CACC1A0356901713D971BF0 /* libPods-common-ee_x_desktop.a */,
+				4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */,
+				BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -295,13 +355,14 @@
 			path = notification;
 			sourceTree = "<group>";
 		};
-		6FD934111EC1B002001E5D1D /* Products */ = {
+		6F83DCB91EC1C8D1004C5500 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6FD9340D1EC1AFF9001E5D1D /* ee_x_mobile_core.a */,
-				6FD9340E1EC1AFF9001E5D1D /* ee_x_mobile_crashlytics.a */,
-				6FD9340F1EC1AFF9001E5D1D /* ee_x_mobile_notification.a */,
-				6FD934101EC1AFF9001E5D1D /* ee_x_desktop_core.a */,
+				6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */,
+				6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */,
+				6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */,
+				6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */,
+				6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -309,8 +370,10 @@
 		A1B0638E9ACD63BB92819897 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				370EFFC9F8C5283B1C555CBB /* Pods-common-ee_x_mobile_crashlytics.debug.xcconfig */,
-				A605A97317259C40AAF4F977 /* Pods-common-ee_x_mobile_crashlytics.release.xcconfig */,
+				5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */,
+				C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */,
+				B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */,
+				82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -330,6 +393,7 @@
 				6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
+				6F83DCAF1EC1C810004C5500 /* json.hpp in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +425,27 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */,
+				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
+				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
+				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
+				6F83DCA21EC1C800004C5500 /* EEMessageBridge.h in Headers */,
+				6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */,
+				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
+				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
+				6F83DCAE1EC1C80F004C5500 /* json.hpp in Headers */,
+				6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F83DC8F1EC1C787004C5500 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F83DC901EC1C787004C5500 /* CrashlyticsBridge.hpp in Headers */,
+				6F83DC911EC1C787004C5500 /* Crashlytics.hpp in Headers */,
+				6F83DC921EC1C787004C5500 /* CrashlyticsFwd.hpp in Headers */,
+				6F83DC931EC1C787004C5500 /* EECrashlytics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +467,7 @@
 			);
 			name = ee_x_mobile_core;
 			productName = "ee-library";
-			productReference = 6FD9340D1EC1AFF9001E5D1D /* ee_x_mobile_core.a */;
+			productReference = 6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */ = {
@@ -403,7 +488,7 @@
 			);
 			name = ee_x_mobile_crashlytics;
 			productName = "ee-library";
-			productReference = 6FD9340E1EC1AFF9001E5D1D /* ee_x_mobile_crashlytics.a */;
+			productReference = 6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */ = {
@@ -422,7 +507,7 @@
 			);
 			name = ee_x_mobile_notification;
 			productName = "ee-library";
-			productReference = 6FD9340F1EC1AFF9001E5D1D /* ee_x_mobile_notification.a */;
+			productReference = 6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */ = {
@@ -439,7 +524,28 @@
 			);
 			name = ee_x_desktop_core;
 			productName = "ee-library-desktop";
-			productReference = 6FD934101EC1AFF9001E5D1D /* ee_x_desktop_core.a */;
+			productReference = 6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F83DC951EC1C787004C5500 /* Build configuration list for PBXNativeTarget "ee_x_desktop_crashlytics" */;
+			buildPhases = (
+				6F83DC891EC1C787004C5500 /* [CP] Check Pods Manifest.lock */,
+				6F83DC8A1EC1C787004C5500 /* Sources */,
+				6F83DC8D1EC1C787004C5500 /* Frameworks */,
+				6F83DC8E1EC1C787004C5500 /* Copy Files */,
+				6F83DC8F1EC1C787004C5500 /* Headers */,
+				6F83DC941EC1C787004C5500 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F83DC9A1EC1C7E4004C5500 /* PBXTargetDependency */,
+			);
+			name = ee_x_desktop_crashlytics;
+			productName = "ee-library";
+			productReference = 6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -477,6 +583,7 @@
 				6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */,
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
+				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
 			);
 		};
 /* End PBXProject section */
@@ -509,7 +616,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_crashlytics/Pods-common-ee_x_mobile_crashlytics-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F83DC891EC1C787004C5500 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6F83DC941EC1C787004C5500 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -555,6 +692,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F83DCA51EC1C800004C5500 /* EEUtils.m in Sources */,
+				6F83DCA31EC1C800004C5500 /* EEMessageBridge.m in Sources */,
+				6F83DC9D1EC1C800004C5500 /* EEPluginManager.m in Sources */,
+				6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */,
+				6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */,
+				6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */,
+				6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */,
+				6F83DCAB1EC1C800004C5500 /* Logger_iOS.mm in Sources */,
+				6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */,
+				6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F83DC8A1EC1C787004C5500 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F83DC8B1EC1C787004C5500 /* CrashlyticsBridge.cpp in Sources */,
+				6F83DC8C1EC1C787004C5500 /* EECrashlytics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -570,6 +726,11 @@
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6F43A34F1EC1A9EC00C68152 /* PBXContainerItemProxy */;
+		};
+		6F83DC9A1EC1C7E4004C5500 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */;
+			targetProxy = 6F83DC991EC1C7E4004C5500 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -600,7 +761,7 @@
 		};
 		6F43A2A71EC19F5700C68152 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 370EFFC9F8C5283B1C555CBB /* Pods-common-ee_x_mobile_crashlytics.debug.xcconfig */;
+			baseConfigurationReference = B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				OTHER_LDFLAGS = (
@@ -613,7 +774,7 @@
 		};
 		6F43A2A81EC19F5700C68152 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A605A97317259C40AAF4F977 /* Pods-common-ee_x_mobile_crashlytics.release.xcconfig */;
+			baseConfigurationReference = 82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				OTHER_LDFLAGS = (
@@ -651,7 +812,6 @@
 		6F79B6181CCA7AA00008EFAC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -659,7 +819,24 @@
 		6F79B6191CCA7AA00008EFAC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6F83DC961EC1C787004C5500 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6F83DC971EC1C787004C5500 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -715,6 +892,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../src/ee/libs/firebase_cpp_sdk/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -773,6 +951,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../src/ee/libs/firebase_cpp_sdk/include";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -816,6 +995,15 @@
 			buildConfigurations = (
 				6F79B6181CCA7AA00008EFAC /* Debug */,
 				6F79B6191CCA7AA00008EFAC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F83DC951EC1C787004C5500 /* Build configuration list for PBXNativeTarget "ee_x_desktop_crashlytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F83DC961EC1C787004C5500 /* Debug */,
+				6F83DC971EC1C787004C5500 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

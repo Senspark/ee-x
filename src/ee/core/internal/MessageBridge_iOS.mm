@@ -6,15 +6,17 @@
 //
 //
 
-#include "ee/internal/MessageBridge.hpp"
+#include "ee/core/internal/MessageBridge.hpp"
 
-#import "ee/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEMessageBridge.h"
 
 namespace ee {
+namespace core {
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     NSString* result =
         [[EEMessageBridge getInstance] call:@(tag.c_str()) msg:@(msg.c_str())];
     return [result UTF8String];
 }
+} // namespace core
 } // namespace ee

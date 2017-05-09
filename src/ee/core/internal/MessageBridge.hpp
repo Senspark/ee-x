@@ -6,12 +6,13 @@
 //
 //
 
-#ifndef EE_X_MESSAGE_BRIDGE_HPP_
-#define EE_X_MESSAGE_BRIDGE_HPP_
+#ifndef EE_X_CORE_MESSAGE_BRIDGE_HPP_
+#define EE_X_CORE_MESSAGE_BRIDGE_HPP_
 
 #include <string>
 
 namespace ee {
+namespace core {
 class MessageBridge final {
 public:
     static MessageBridge& getInstance();
@@ -26,6 +27,7 @@ private:
     MessageBridge();
     ~MessageBridge();
 };
+} // namespace core
 } // namespace ee
 
-#endif /* EE_X_MESSAGE_BRIDGE_HPP_ */
+#endif /* EE_X_CORE_MESSAGE_BRIDGE_HPP_ */

@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/internal/JniMethodInfo.hpp"
+#include "ee/core/internal/JniMethodInfo.hpp"
 
 namespace ee {
 std::unique_ptr<JniMethodInfo> JniMethodInfo::create(JNIEnv* env, jclass clazz,

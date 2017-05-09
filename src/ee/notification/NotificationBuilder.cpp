@@ -9,6 +9,7 @@
 #include "NotificationBuilder.hpp"
 
 namespace ee {
+namespace notification {
 NotificationBuilder::NotificationBuilder()
     : ticker_("")
     , title_("")
@@ -47,4 +48,5 @@ NotificationBuilder& NotificationBuilder::setTag(int tag) {
     tag_ = tag;
     return *this;
 }
+} // namespace notification
 } // namespace ee

@@ -6,11 +6,11 @@
 //
 //
 
-#include "ee/internal/MessageBridge.hpp"
-#include "ee/JniUtils.hpp"
-#include "ee/internal/JniMethodInfo.hpp"
-#include "ee/internal/JniString.hpp"
-#include "ee/Logger.hpp"
+#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/JniUtils.hpp"
+#include "ee/core/internal/JniMethodInfo.hpp"
+#include "ee/core/internal/JniString.hpp"
+#include "ee/core/Logger.hpp"
 
 namespace ee {
 std::string MessageBridge::call(const std::string& tag,

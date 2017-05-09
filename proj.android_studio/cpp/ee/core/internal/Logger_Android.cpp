@@ -8,8 +8,8 @@
 
 #include <android/log.h>
 
-#include "ee/Logger.hpp"
-#include "ee/LogLevel.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/LogLevel.hpp"
 
 namespace ee {
 void Logger::log0(const LogLevel& level, const std::string& tag,

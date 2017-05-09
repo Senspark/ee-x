@@ -6,12 +6,13 @@
 //
 //
 
-#ifndef EE_X_NOTIFICATION_BUIDLER_HPP_
-#define EE_X_NOTIFICATION_BUIDLER_HPP_
+#ifndef EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_
+#define EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_
 
 #include <string>
 
 namespace ee {
+namespace notification {
 class Notification;
 
 class NotificationBuilder {
@@ -53,6 +54,7 @@ private:
     int interval_;
     int tag_;
 };
+} // namespace notification
 } // namespace ee
 
-#endif /* EE_X_NOTIFICATION_BUIDLER_HPP_ */
+#endif /* EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_ */

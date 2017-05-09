@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/internal/JniString.hpp"
+#include "ee/core/internal/JniString.hpp"
 
 namespace ee {
 std::unique_ptr<JniString> JniString::create(JNIEnv* env, const char* str) {

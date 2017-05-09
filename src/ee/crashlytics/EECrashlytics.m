@@ -8,10 +8,10 @@
 
 #import <Crashlytics/Crashlytics.h>
 
-#import "ee/internal/EECrashlytics.h"
-#import "ee/internal/EEDictionaryUtils.h"
-#import "ee/internal/EEJsonUtils.h"
-#import "ee/internal/EEMessageBridge.h"
+#import "ee/crashlytics/EECrashlytics.h"
+#import "ee/core/internal/EEDictionaryUtils.h"
+#import "ee/core/internal/EEJsonUtils.h"
+#import "ee/core/internal/EEMessageBridge.h"
 
 #undef CLS_LOG
 #ifdef __OBJC__

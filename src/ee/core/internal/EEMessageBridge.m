@@ -6,8 +6,8 @@
 //
 //
 
-#import "ee/internal/EEMessageBridge.h"
-#import "ee/internal/EEDictionaryUtils.h"
+#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEDictionaryUtils.h"
 
 @implementation EEMessageBridge
 

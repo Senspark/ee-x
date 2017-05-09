@@ -1,35 +1,24 @@
 //
-//  NotificationProtocol.hpp
-//  ee_core
+//  Notification.hpp
+//  ee_x
 //
-//  Created by Zinge on 3/28/17.
+//  Created by Zinge on 5/9/17.
 //
 //
 
-#ifndef EE_X_NOTIFICATION_HPP_
-#define EE_X_NOTIFICATION_HPP_
+#ifndef EE_X_NOTIFICATION_HEADER_HPP_
+#define EE_X_NOTIFICATION_HEADER_HPP_
 
-#include <string>
+#include "ee/notification/Notification.hpp"
+#include "ee/notification/NotificationBuilder.hpp"
+
+#ifdef __OBJC__
+#import "ee/notification/EENotification.h"
+#endif // __OBJC__
 
 namespace ee {
-class NotificationBuilder;
-
-class Notification final {
-public:
-    /// Schedules a notification.
-    void schedule(const NotificationBuilder& builder);
-
-    /// Unschedules notifications whose the specified tag.
-    void unschedule(int tag);
-
-    /// Clear all notifications.
-    void clearAll();
-
-private:
-    /// Unschedule all notifications.
-    /// Only supported on iOS.
-    void unscheduleAll();
-};
+using notification::Notification;
+using notification::NotificationBuilder;
 } // namespace ee
 
-#endif /* EE_X_NOTIFICATION_HPP_ */
+#endif /* EE_X_NOTIFICATION_HEADER_HPP_ */

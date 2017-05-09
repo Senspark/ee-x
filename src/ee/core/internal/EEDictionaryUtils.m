@@ -6,8 +6,8 @@
 //
 //
 
-#import "ee/internal/EEDictionaryUtils.h"
-#import "ee/internal/EEJsonUtils.h"
+#import "ee/core/internal/EEDictionaryUtils.h"
+#import "ee/core/internal/EEJsonUtils.h"
 
 @implementation EEDictionaryUtils
 

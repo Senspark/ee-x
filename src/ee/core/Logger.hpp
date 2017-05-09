@@ -6,13 +6,14 @@
 //
 //
 
-#ifndef EE_X_LOGGER_HPP_
-#define EE_X_LOGGER_HPP_
+#ifndef EE_X_CORE_LOGGER_HPP_
+#define EE_X_CORE_LOGGER_HPP_
 
 #include <sstream>
 #include <string>
 
 namespace ee {
+namespace core {
 class LogLevel;
 
 class Logger {
@@ -86,6 +87,7 @@ private:
 
     std::string tag_;
 };
+} // namespace core
 } // namespace ee
 
-#endif /* EE_X_LOGGER_HPP_ */
+#endif /* EE_X_CORE_LOGGER_HPP_ */

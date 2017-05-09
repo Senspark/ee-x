@@ -6,10 +6,11 @@
 //
 //
 
-#include "ee/Logger.hpp"
-#include "ee/LogLevel.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/LogLevel.hpp"
 
 namespace ee {
+namespace core {
 Logger::Logger(const std::string& tag)
     : tag_{tag}
     , enabled_{true} {
@@ -42,4 +43,5 @@ void Logger::warn0(const std::string& message) const {
 void Logger::error0(const std::string& message) const {
     log0(LogLevel::Error, message);
 }
+} // namespace core
 } // namespace ee

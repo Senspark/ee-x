@@ -6,14 +6,12 @@
 //
 //
 
-#import "ee/internal/EENotification.h"
-#import "ee/internal/EEDictionaryUtils.h"
-#import "ee/internal/EEJsonUtils.h"
-#import "ee/internal/EEMessageBridge.h"
+#import "ee/notification/EENotification.h"
+#import "ee/core/internal/EEDictionaryUtils.h"
+#import "ee/core/internal/EEJsonUtils.h"
+#import "ee/core/internal/EEMessageBridge.h"
 
-#if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
-#endif // TARGET_OS_IOS
 
 @implementation EENotification
 
@@ -104,7 +102,6 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
 }
 
 - (void)registerForLocalNotifications {
-#if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
     if ([application
             respondsToSelector:@selector(registerUserNotificationSettings:)]) {
@@ -116,10 +113,8 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
                                               categories:nil];
         [application registerUserNotificationSettings:settings];
     }
-#endif // TAGET_OS_IOS
 }
 
-#if TARGET_OS_IOS
 - (UILocalNotification*)create:(NSDate*)fireDate
                       interval:(NSCalendarUnit)interval
                          title:(NSString*)title
@@ -143,14 +138,12 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
     [notification setAlertBody:body];
     return notification;
 }
-#endif // TARGET_OS_IOS
 
 - (void)schedule:(NSString*)title
             body:(NSString*)body
            delay:(NSTimeInterval)delay
         interval:(NSCalendarUnit)interval
              tag:(NSNumber*)tag {
-#if TARGET_OS_IOS
     UILocalNotification* notification =
         [self create:[NSDate dateWithTimeIntervalSinceNow:delay]
             interval:interval
@@ -165,11 +158,9 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
     [notification setUserInfo:dict];
 
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-#endif // TARGET_OS_IOS
 }
 
 - (void)unschedule:(NSNumber*)tag {
-#if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
     NSArray* notifications = [application scheduledLocalNotifications];
 
@@ -187,27 +178,22 @@ NSString* const k__notification_clear_all = @"__notification_clear_all";
             [application cancelLocalNotification:notification];
         }
     }
-#endif // TARGET_OS_IOS
 }
 
 - (void)unscheduleAll {
-#if TARGET_OS_IOS
     UIApplication* application = [UIApplication sharedApplication];
     NSArray* notifications = [application scheduledLocalNotifications];
 
     if ([notifications count] > 0) {
         [application cancelAllLocalNotifications];
     }
-#endif // TARGET_OS_IOS
 }
 
 - (void)clearAll {
-#if TARGET_OS_IOS
     // http://stackoverflow.com/questions/8682051/ios-application-how-to-clear-notifications
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-#endif // TARGET_OS_IOS
 }
 
 @end

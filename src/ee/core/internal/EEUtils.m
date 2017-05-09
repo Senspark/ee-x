@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/internal/EEUtils.h"
+#import "ee/core/internal/EEUtils.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>

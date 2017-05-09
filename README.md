@@ -100,6 +100,8 @@ public class AppActivity extends Cocos2dxActivity {
 
 ## Crashlytics
 
+- Supported platforms: Android, iOS, Mac OSX.
+
 - Modify `AppActivity.java`:
 
 ```
@@ -195,6 +197,8 @@ void Crashlytics::logError(const std::string& message) {
 ```
 
 ## Local Notifications
+
+- Supported platforms: Android, iOS.
 
 - Notes for Android: `mipmap/ic_launcher` (or `mipmap/icon_silhouette` for API 21 and above) will be used as icon for notifications.
 

@@ -95,7 +95,7 @@
 /* Begin PBXFileReference section */
 		2CACC1A0356901713D971BF0 /* libPods-common-ee_x_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		370EFFC9F8C5283B1C555CBB /* Pods-common-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_crashlytics/Pods-common-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
-		6F2DDC5F1E52A0E70094C241 /* cpp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cpp; path = ../proj.android_studio/cpp; sourceTree = "<group>"; };
+		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 		6F43A29D1EC19F3E00C68152 /* Core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Core.hpp; sourceTree = "<group>"; };
 		6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Crashlytics.hpp; sourceTree = "<group>"; };
 		6F43A2D61EC1A39900C68152 /* Notification.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
-		6FB2D0CF1D2C9FAC007D47B6 /* java */ = {isa = PBXFileReference; lastKnownFileType = folder; name = java; path = ../proj.android_studio/src/main/java; sourceTree = "<group>"; };
+		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FD9340D1EC1AFF9001E5D1D /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD9340E1EC1AFF9001E5D1D /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD9340F1EC1AFF9001E5D1D /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,8 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				6F2DDCDD1E52A3DE0094C241 /* src */,
-				6F2DDC5F1E52A0E70094C241 /* cpp */,
-				6FB2D0CF1D2C9FAC007D47B6 /* java */,
+				6F2DDC5F1E52A0E70094C241 /* jni */,
+				6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				A1B0638E9ACD63BB92819897 /* Pods */,
 				6FD934111EC1B002001E5D1D /* Products */,

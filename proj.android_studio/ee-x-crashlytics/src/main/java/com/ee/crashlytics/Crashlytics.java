@@ -1,4 +1,4 @@
-package com.ee;
+package com.ee.crashlytics;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,12 @@ import android.util.Log;
 
 import com.crashlytics.android.core.CrashTest;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
-import com.ee.internal.DictionaryUtils;
-import com.ee.internal.JsonUtils;
-import com.ee.internal.MessageBridge;
-import com.ee.internal.MessageHandler;
+import com.ee.core.Logger;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.DictionaryUtils;
+import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.MessageBridge;
+import com.ee.core.internal.MessageHandler;
 
 import java.util.Map;
 

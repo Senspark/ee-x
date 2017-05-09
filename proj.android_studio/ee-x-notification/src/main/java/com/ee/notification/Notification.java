@@ -1,4 +1,4 @@
-package com.ee;
+package com.ee.notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.ee.internal.DictionaryUtils;
-import com.ee.internal.JsonUtils;
-import com.ee.internal.MessageBridge;
-import com.ee.internal.MessageHandler;
+import com.ee.core.Logger;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.DictionaryUtils;
+import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.MessageBridge;
+import com.ee.core.internal.MessageHandler;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;

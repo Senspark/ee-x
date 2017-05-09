@@ -1,4 +1,4 @@
-package com.ee;
+package com.ee.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -6,6 +6,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.ee.core.Logger;
 
 /**
  * Created by Zinge on 3/29/17.

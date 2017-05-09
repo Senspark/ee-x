@@ -1,8 +1,8 @@
-package com.ee.internal;
+package com.ee.core.internal;
 
 import android.support.annotation.NonNull;
 
-import com.ee.Logger;
+import com.ee.core.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

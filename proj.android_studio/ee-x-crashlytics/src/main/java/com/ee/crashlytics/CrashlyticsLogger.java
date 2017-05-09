@@ -1,4 +1,4 @@
-package com.ee;
+package com.ee.crashlytics;
 
 import android.util.Log;
 

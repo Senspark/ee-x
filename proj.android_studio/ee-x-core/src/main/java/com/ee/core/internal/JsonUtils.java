@@ -1,4 +1,4 @@
-package com.ee.internal;
+package com.ee.core.internal;
 
 import android.support.annotation.Nullable;
 

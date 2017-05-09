@@ -1,4 +1,4 @@
-package com.ee;
+package com.ee.core;
 
 import android.util.Log;
 

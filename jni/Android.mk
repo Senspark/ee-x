@@ -12,13 +12,13 @@ LOCAL_CPP_FEATURES += exceptions
 LOCAL_MODULE := ee_x_core_static
 
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/core -name "*.cpp" -print}
-LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/proj.android_studio/cpp/ee/core -name "*.cpp" -print}
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/jni/cpp/ee/core -name "*.cpp" -print}
                    
 LOCAL_C_INCLUDES := $(EE_X_ROOT_DIR)/src
-LOCAL_C_INCLUDES += $(EE_X_ROOT_DIR)/proj.android_studio/cpp
+LOCAL_C_INCLUDES += $(EE_X_ROOT_DIR)/jni/cpp
 
 LOCAL_EXPORT_C_INCLUDES := $(EE_X_ROOT_DIR)/src
-LOCAL_EXPORT_C_INCLUDES += $(EE_X_ROOT_DIR)/proj.android_studio/cpp
+LOCAL_EXPORT_C_INCLUDES += $(EE_X_ROOT_DIR)/jni/cpp
 
 include $(BUILD_STATIC_LIBRARY)
 

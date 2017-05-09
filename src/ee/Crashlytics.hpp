@@ -9,14 +9,11 @@
 #ifndef EE_X_CRASHLYTICS_HEADER_HPP_
 #define EE_X_CRASHLYTICS_HEADER_HPP_
 
-#include "ee/crashlytics/Crashlytics.hpp"
+#include "ee/CrashlyticsFwd.hpp"
+#include "ee/crashlytics/CrashlyticsBridge.hpp"
 
 #ifdef __OBJC__
 #import "ee/crashlytics/EECrashlytics.h"
 #endif // __OBJC__
-
-namespace ee {
-using crashlytics::Crashlytics;
-} // namespace ee
 
 #endif /* EE_X_CRASHLYTICS_HEADER_HPP_ */

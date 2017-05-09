@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_CRASHLYTICS_CRASHLYTICS_HPP_
-#define EE_X_CRASHLYTICS_CRASHLYTICS_HPP_
+#ifndef EE_X_CRASHLYTICS_CRASHLYTICS_BRIDGE_HPP_
+#define EE_X_CRASHLYTICS_CRASHLYTICS_BRIDGE_HPP_
 
 #include <memory>
 #include <string>
@@ -46,4 +46,4 @@ public:
 } // namespace crashlytics
 } // namespace ee
 
-#endif /* EE_X_CRASHLYTICS_CRASHLYTICS_HPP_ */
+#endif /* EE_X_CRASHLYTICS_CRASHLYTICS_BRIDGE_HPP_ */

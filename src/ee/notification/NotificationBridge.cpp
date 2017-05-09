@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/notification/Notification.hpp"
+#include "ee/notification/NotificationBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/libs/nlohmann/json.hpp"

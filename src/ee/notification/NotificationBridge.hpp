@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_NOTIFICATION_NOTIFICATION_HPP_
-#define EE_X_NOTIFICATION_NOTIFICATION_HPP_
+#ifndef EE_X_NOTIFICATION_NOTIFICATION_BRIDGE_HPP_
+#define EE_X_NOTIFICATION_NOTIFICATION_BRIDGE_HPP_
 
 #include <string>
 
@@ -34,4 +34,4 @@ private:
 } // namespace notification
 } // namespace ee
 
-#endif /* EE_X_NOTIFICATION_NOTIFICATION_HPP_ */
+#endif /* EE_X_NOTIFICATION_NOTIFICATION_BRIDGE_HPP_ */

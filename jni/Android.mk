@@ -1,5 +1,5 @@
 LOCAL_PATH := $(call my-dir)
-EE_X_ROOT_DIR = $(LOCAL_PATH)/../../../..
+EE_X_ROOT_DIR = $(LOCAL_PATH)/..
 
 ########
 # CORE #

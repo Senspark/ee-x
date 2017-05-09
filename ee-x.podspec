@@ -49,8 +49,9 @@ Pod::Spec.new do |spec|
       s.public_header_files =
         'src/ee/Crashlytics.hpp'
 
-      s.dependency 'Crashlytics', '~> 3.7'
-      s.dependency 'Fabric', '~> 1.6'
+      s.dependency 'ee-x/core'
+      s.dependency 'Crashlytics'
+      s.dependency 'Fabric'
     end
 
     spec.subspec 'notification' do |s|
@@ -62,6 +63,8 @@ Pod::Spec.new do |spec|
       s.public_header_files = 
         'src/ee/Notification.hpp',
         'src/ee/NotificationBuilder.hpp'
+
+      s.dependency 'ee-x/core'
     end
 
     spec.header_mappings_dir = 'src'

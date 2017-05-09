@@ -52,6 +52,8 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'notification' do |s|
+    s.platform = :ios
+
     s.source_files =
       'src/ee/Notification.hpp',
       'src/ee/NotificationFwd.hpp',

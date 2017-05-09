@@ -9,6 +9,7 @@
 #include "ee/core/internal/JniString.hpp"
 
 namespace ee {
+namespace core {
 std::unique_ptr<JniString> JniString::create(JNIEnv* env, const char* str) {
     return std::unique_ptr<JniString>(new JniString(env, str));
 }
@@ -31,4 +32,5 @@ JniString::~JniString() {
 jstring JniString::get() const noexcept {
     return javaString_;
 }
+} // namespace core
 } // namespace ee

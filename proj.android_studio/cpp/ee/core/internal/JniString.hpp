@@ -14,6 +14,7 @@
 #include <jni.h>
 
 namespace ee {
+namespace core {
 /// RAII class for encapsulating jstring.
 class JniString {
 public:
@@ -32,6 +33,7 @@ private:
     /// Strong pointer the jstring.
     jstring javaString_;
 };
+} // namespace core
 } // namespace ee
 
 #endif /* EE_CORE_JNI_STRING_HPP_ */

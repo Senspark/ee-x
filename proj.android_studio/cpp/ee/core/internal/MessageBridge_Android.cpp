@@ -13,6 +13,7 @@
 #include "ee/core/Logger.hpp"
 
 namespace ee {
+namespace core {
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     auto methodInfo = JniUtils::getStaticMethodInfo(
@@ -37,4 +38,5 @@ std::string MessageBridge::call(const std::string& tag,
 
     return result;
 }
+} // namespace core
 } // namespace ee

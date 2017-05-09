@@ -9,6 +9,7 @@
 #include "ee/core/internal/JniMethodInfo.hpp"
 
 namespace ee {
+namespace core {
 std::unique_ptr<JniMethodInfo> JniMethodInfo::create(JNIEnv* env, jclass clazz,
                                                      jmethodID methodId) {
     return std::unique_ptr<JniMethodInfo>(
@@ -39,4 +40,5 @@ jmethodID JniMethodInfo::getMethodId() const noexcept {
 JNIEnv* JniMethodInfo::getEnv() const noexcept {
     return env_;
 }
+} // namespace core
 } // namespace ee

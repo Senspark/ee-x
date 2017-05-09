@@ -17,23 +17,52 @@ Pod::Spec.new do |spec|
         :branch => "master"
     }
 
-    spec.ios.frameworks  = "Foundation"
+    spec.ios.frameworks  = 'Foundation'
 
     spec.requires_arc = false
 
-    spec.source_files   = "src/ee/*.{h,hpp,m,mm,cpp}",
-                          "src/ee/**/*.{h,hpp,m,mm,cpp}",
-                          "src/ee/**/**/*.{h,hpp,m,mm,cpp}"
+    spec.subspec 'core' do |s|
+      s.source_files =
+        'src/ee/EEPluginManager.{h,m}',
+        'src/ee/internal/EEDictionaryUtils.{h,m}',
+        'src/ee/internal/EEJsonUtils.{h,m}',
+        'src/ee/internal/EEMessageBridge.{h,m}',
+        'src/ee/internal/EEUtils.{h,m}',
+        'src/ee/internal/MessageBridge_iOS.mm',
+        'src/ee/internal/MessageBridge.{cpp,hpp}',
+        'src/ee/libs/nlohmann/json.hpp',
+        'src/ee/Logger_iOS.mm',
+        'src/ee/Logger.{cpp,hpp}',
+        'src/ee/LogLevel.{cpp,hpp}'
 
-    spec.public_header_files = "src/ee/Logger.hpp",
-                               "src/ee/LogLevel.hpp",
-                               "src/ee/Notification.hpp",
-                               "src/ee/NotificationBuilder.hpp",
-                               "src/ee/Crashlytics.hpp",
-                               "src/ee/EEPluginManager.h"
+      s.public_header_files =
+        'src/ee/Logger.hpp',
+        'src/ee/LogLevel.hpp',
+        'src/ee/EEPluginManager.h'
+    end
 
-    spec.header_mappings_dir = "src"
+    spec.subspec 'crashlytics' do |s|
+      s.source_files =
+        'src/ee/Crashlytics.{cpp,hpp}',
+        'src/ee/Crashlytics.{h,m}'
 
-    spec.dependency 'Crashlytics', '~> 3.7'
-    spec.dependency 'Fabric', '~> 1.6'
+      s.public_header_files =
+        'src/ee/Crashlytics.hpp'
+
+      s.dependency 'Crashlytics', '~> 3.7'
+      s.dependency 'Fabric', '~> 1.6'
+    end
+
+    spec.subspec 'notification' do |s|
+      s.source_files =
+        'src/ee/Notification.{cpp,hpp}',
+        'src/ee/NotificationBuilder.{cpp,hpp}',
+        'src/ee/EENotification.{h,m}'
+
+      s.public_header_files = 
+        'src/ee/Notification.hpp',
+        'src/ee/NotificationBuilder.hpp'
+    end
+
+    spec.header_mappings_dir = 'src'
 end

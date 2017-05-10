@@ -68,7 +68,9 @@ Pod::Spec.new do |spec|
       'src/ee/core/LogLevel.hpp',
       'src/ee/core/EEPluginManager.h'
 
-    s.libraries = 'c++14'
+    s.xcconfig = {
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'
+    }
 
     s.dependency 'ee-x/nlohmann-json'
   end

@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
   spec.header_mappings_dir = 'src'
 
   spec.subspec 'nlohmann-json' do |s|
-    s.preserve_paths = 'third_party/nlohmann/json.hpp'
+    s.preserve_paths = 'third_party/nlohmann/include/**.*'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>

@@ -56,11 +56,13 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'core' do |s|
     s.source_files =
+      'src/ee/Macro.hpp',
       'src/ee/Core.hpp',
       'src/ee/core/*.{cpp,h,hpp,m,mm}',
       'src/ee/core/**/*.{cpp,h,hpp,m,mm}'
 
     s.public_header_files =
+      'src/ee/Macro.hpp',
       'src/ee/Core.hpp',
       'src/ee/core/Logger.hpp',
       'src/ee/core/LogLevel.hpp',

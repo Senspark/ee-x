@@ -13,7 +13,9 @@
 #include "ee/firebase/FirebaseScheduler.hpp"
 #include "ee/core/ScopeGuard.hpp"
 
+#ifndef __MACH__
 #include <firebase/storage.h>
+#endif // __MACH__
 
 namespace ee {
 namespace firebase {

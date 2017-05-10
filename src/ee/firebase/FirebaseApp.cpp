@@ -8,7 +8,9 @@
 
 #include "ee/firebase/FirebaseApp.hpp"
 
+#ifndef __MACH__
 #include <firebase/app.h>
+#endif // __MACH__
 
 #if defined(__ANDROID__)
 #include "ee/core/JniUtils.hpp"

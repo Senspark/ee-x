@@ -9,7 +9,8 @@
 #include "ee/notification/NotificationBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
-#include "ee/libs/nlohmann/json.hpp"
+
+#include <nlohmann/json.hpp>
 
 namespace ee {
 namespace notification {

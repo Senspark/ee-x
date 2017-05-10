@@ -28,7 +28,6 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '$(inherited)',
         '$(PODS_ROOT)/ee-x/third_party/nlohmann/include'
       ]
     }
@@ -43,7 +42,6 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '$(inherited)',
         '$(PODS_ROOT)/ee-x/third_party/firebase_cpp_sdk/include'
       ]
     }

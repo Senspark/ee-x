@@ -35,13 +35,18 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-cpp-sdk' do |s|
     s.platform = :ios
 
-    s.preserve_paths = 'third_party/firebase_cpp_sdk/include/**/*'
+    s.preserve_paths =
+      'third_party/firebase_cpp_sdk/include/**/*',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libanalytics.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libremote_config.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a'
 
     s.vendored_library = 
-      'third_party/firebase_cpp_sdk/libs/ios/libapp.a',
-      'third_party/firebase_cpp_sdk/libs/ios/libanalytics.a',
-      'third_party/firebase_cpp_sdk/libs/ios/libremote_config.a',
-      'third_party/firebase_cpp_sdk/libs/ios/libstorage.a'
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libanalytics.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libremote_config.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>

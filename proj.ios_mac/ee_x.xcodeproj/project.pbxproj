@@ -15,7 +15,7 @@
 		6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
 		6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */; };
 		6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
-		6F24C36E1EC2BA0800509B6C /* FirebaseScheduler.inl in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler.inl */; };
+		6F24C36E1EC2BA0800509B6C /* FirebaseScheduler_inl.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */; };
 		6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
 		6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
 		6F24C3711EC2BA0800509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
@@ -95,7 +95,7 @@
 		6F83DD0C1EC1CDC1004C5500 /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
 		6F83DD0D1EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */; };
 		6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
-		6F83DDA21EC1D529004C5500 /* FirebaseScheduler.inl in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler.inl */; };
+		6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */; };
 		6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
@@ -264,7 +264,7 @@
 		6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseApp.hpp; sourceTree = "<group>"; };
 		6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseRemoteConfig.cpp; sourceTree = "<group>"; };
 		6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseRemoteConfig.hpp; sourceTree = "<group>"; };
-		6F83DDA01EC1D529004C5500 /* FirebaseScheduler.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FirebaseScheduler.inl; sourceTree = "<group>"; };
+		6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler_inl.hpp; sourceTree = "<group>"; };
 		6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
@@ -472,7 +472,7 @@
 				6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */,
 				6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */,
 				6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */,
-				6F83DDA01EC1D529004C5500 /* FirebaseScheduler.inl */,
+				6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */,
 				6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */,
 				6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */,
 			);
@@ -891,7 +891,7 @@
 			files = (
 				6F24C3881EC2C17600509B6C /* FirebaseAnalytics.cpp in Sources */,
 				6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */,
-				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler.inl in Sources */,
+				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */,
 				6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
@@ -948,7 +948,7 @@
 			files = (
 				6F24C3871EC2C17600509B6C /* FirebaseAnalytics.cpp in Sources */,
 				6F83DD0D1EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp in Sources */,
-				6F83DDA21EC1D529004C5500 /* FirebaseScheduler.inl in Sources */,
+				6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */,
 				6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);

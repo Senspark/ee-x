@@ -37,7 +37,11 @@ Pod::Spec.new do |spec|
 
     s.preserve_paths = 'third_party/firebase_cpp_sdk/include/**/*'
 
-    s.vendored_library = 'src/ee/libs/firebase_cpp_sdk/libs/ios/*.a'
+    s.vendored_library = 
+      'third_party/firebase_cpp_sdk/libs/ios/libapp.a',
+      'third_party/firebase_cpp_sdk/libs/ios/libanalytics.a',
+      'third_party/firebase_cpp_sdk/libs/ios/libremote_config.a',
+      'third_party/firebase_cpp_sdk/libs/ios/libstorage.a'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>
@@ -49,7 +53,7 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Core.hpp',
       'src/ee/core/*.{cpp,h,hpp,m,mm}',
-      'src/ee/core/**/*.{cpp,h,hpp,m,mm}',
+      'src/ee/core/**/*.{cpp,h,hpp,m,mm}'
 
     s.public_header_files =
       'src/ee/Core.hpp',
@@ -100,6 +104,7 @@ Pod::Spec.new do |spec|
 
     s.public_header_files =
       'src/ee/Firebase.hpp',
+      'src/ee/FirebaseFwd.hpp',
       'src/ee/firebase/FirebaseAnalytics.hpp',
       'src/ee/firebase/FirebaseRemoteConfig.hpp',
       'src/ee/firebase/FirebaseStorage.hpp'

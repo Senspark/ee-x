@@ -105,6 +105,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase' do |s|
     s.source_files =
       'src/ee/Firebase.hpp',
+      'src/ee/FirebaseFwd.hpp',
       'src/ee/firebase/*.{cpp,hpp}'
 
     s.public_header_files =

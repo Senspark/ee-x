@@ -27,9 +27,10 @@ Pod::Spec.new do |spec|
     s.preserve_paths = 'third_party/nlohmann/include/**/*'
 
     s.xcconfig = {
-      'HEADER_SEARCH_PATHS' =>
+      'HEADER_SEARCH_PATHS' => [
         '$(inherited)',
         '$(PODS_ROOT)/ee-x/third_party/nlohmann/include'
+      ]
     }
   end
 
@@ -41,9 +42,10 @@ Pod::Spec.new do |spec|
     s.vendored_library = 'src/ee/libs/firebase_cpp_sdk/libs/ios/*.a'
 
     s.xcconfig = {
-      'HEADER_SEARCH_PATHS' =>
+      'HEADER_SEARCH_PATHS' => [
         '$(inherited)',
         '$(PODS_ROOT)/ee-x/third_party/firebase_cpp_sdk/include'
+      ]
     }
   end
 

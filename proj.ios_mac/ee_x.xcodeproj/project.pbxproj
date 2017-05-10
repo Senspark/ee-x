@@ -246,10 +246,6 @@
 		6F43A23D1EC19F3100C68152 /* CrashlyticsBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsBridge.hpp; sourceTree = "<group>"; };
 		6F43A23E1EC19F3100C68152 /* EECrashlytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EECrashlytics.h; sourceTree = "<group>"; };
 		6F43A23F1EC19F3100C68152 /* EECrashlytics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EECrashlytics.m; sourceTree = "<group>"; };
-		6F43A2921EC19F3100C68152 /* ChangeLog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
-		6F43A2931EC19F3100C68152 /* json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
-		6F43A2941EC19F3100C68152 /* LICENSE.MIT */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.MIT; sourceTree = "<group>"; };
-		6F43A2951EC19F3100C68152 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6F43A2971EC19F3100C68152 /* EENotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EENotification.h; sourceTree = "<group>"; };
 		6F43A2981EC19F3100C68152 /* EENotification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EENotification.m; sourceTree = "<group>"; };
 		6F43A2991EC19F3100C68152 /* NotificationBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NotificationBridge.cpp; sourceTree = "<group>"; };
@@ -263,49 +259,6 @@
 		6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseApp.hpp; sourceTree = "<group>"; };
 		6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseRemoteConfig.cpp; sourceTree = "<group>"; };
 		6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseRemoteConfig.hpp; sourceTree = "<group>"; };
-		6F83DD101EC1CDD4004C5500 /* Android.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
-		6F83DD141EC1CDD4004C5500 /* banner_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = banner_view.h; sourceTree = "<group>"; };
-		6F83DD151EC1CDD4004C5500 /* interstitial_ad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interstitial_ad.h; sourceTree = "<group>"; };
-		6F83DD161EC1CDD4004C5500 /* native_express_ad_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = native_express_ad_view.h; sourceTree = "<group>"; };
-		6F83DD171EC1CDD4004C5500 /* rewarded_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rewarded_video.h; sourceTree = "<group>"; };
-		6F83DD181EC1CDD4004C5500 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		6F83DD191EC1CDD4004C5500 /* admob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = admob.h; sourceTree = "<group>"; };
-		6F83DD1B1EC1CDD4004C5500 /* event_names.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = event_names.h; sourceTree = "<group>"; };
-		6F83DD1C1EC1CDD4004C5500 /* parameter_names.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parameter_names.h; sourceTree = "<group>"; };
-		6F83DD1D1EC1CDD4004C5500 /* user_property_names.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = user_property_names.h; sourceTree = "<group>"; };
-		6F83DD1E1EC1CDD4004C5500 /* analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = analytics.h; sourceTree = "<group>"; };
-		6F83DD1F1EC1CDD4004C5500 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
-		6F83DD211EC1CDD4004C5500 /* credential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
-		6F83DD221EC1CDD4004C5500 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		6F83DD231EC1CDD4004C5500 /* user.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = user.h; sourceTree = "<group>"; };
-		6F83DD241EC1CDD4004C5500 /* auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = auth.h; sourceTree = "<group>"; };
-		6F83DD261EC1CDD4004C5500 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		6F83DD271EC1CDD4004C5500 /* data_snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_snapshot.h; sourceTree = "<group>"; };
-		6F83DD281EC1CDD4004C5500 /* database_reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = database_reference.h; sourceTree = "<group>"; };
-		6F83DD291EC1CDD4004C5500 /* disconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = disconnection.h; sourceTree = "<group>"; };
-		6F83DD2A1EC1CDD4004C5500 /* listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listener.h; sourceTree = "<group>"; };
-		6F83DD2B1EC1CDD4004C5500 /* mutable_data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mutable_data.h; sourceTree = "<group>"; };
-		6F83DD2C1EC1CDD4004C5500 /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = query.h; sourceTree = "<group>"; };
-		6F83DD2D1EC1CDD4004C5500 /* transaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transaction.h; sourceTree = "<group>"; };
-		6F83DD2E1EC1CDD4004C5500 /* database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = database.h; sourceTree = "<group>"; };
-		6F83DD2F1EC1CDD4004C5500 /* future.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = future.h; sourceTree = "<group>"; };
-		6F83DD311EC1CDD4004C5500 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		6F83DD321EC1CDD4004C5500 /* future_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = future_impl.h; sourceTree = "<group>"; };
-		6F83DD331EC1CDD4004C5500 /* invites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = invites.h; sourceTree = "<group>"; };
-		6F83DD341EC1CDD4004C5500 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		6F83DD351EC1CDD4004C5500 /* messaging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messaging.h; sourceTree = "<group>"; };
-		6F83DD361EC1CDD4004C5500 /* remote_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = remote_config.h; sourceTree = "<group>"; };
-		6F83DD381EC1CDD4004C5500 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		6F83DD391EC1CDD4004C5500 /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controller.h; sourceTree = "<group>"; };
-		6F83DD3A1EC1CDD4004C5500 /* listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listener.h; sourceTree = "<group>"; };
-		6F83DD3B1EC1CDD4004C5500 /* metadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metadata.h; sourceTree = "<group>"; };
-		6F83DD3C1EC1CDD4004C5500 /* storage_reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = storage_reference.h; sourceTree = "<group>"; };
-		6F83DD3D1EC1CDD4004C5500 /* storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = storage.h; sourceTree = "<group>"; };
-		6F83DD3E1EC1CDD4004C5500 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
-		6F83DD3F1EC1CDD4004C5500 /* variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = variant.h; sourceTree = "<group>"; };
-		6F83DD401EC1CDD4004C5500 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		6F83DD421EC1CDD4004C5500 /* availability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = availability.h; sourceTree = "<group>"; };
-		6F83DD591EC1CDD4004C5500 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		6F83DDA01EC1D529004C5500 /* FirebaseScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseScheduler.cpp; sourceTree = "<group>"; };
 		6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
@@ -436,7 +389,6 @@
 				6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */,
 				6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */,
 				6F83DD061EC1CDC1004C5500 /* firebase */,
-				6F43A2451EC19F3100C68152 /* libs */,
 				6F43A2D61EC1A39900C68152 /* Notification.hpp */,
 				6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */,
 				6F43A2961EC19F3100C68152 /* notification */,
@@ -489,26 +441,6 @@
 			path = crashlytics;
 			sourceTree = "<group>";
 		};
-		6F43A2451EC19F3100C68152 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				6F43A2911EC19F3100C68152 /* nlohmann */,
-				6F83DD0F1EC1CDD4004C5500 /* firebase_cpp_sdk */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
-		6F43A2911EC19F3100C68152 /* nlohmann */ = {
-			isa = PBXGroup;
-			children = (
-				6F43A2921EC19F3100C68152 /* ChangeLog.md */,
-				6F43A2931EC19F3100C68152 /* json.hpp */,
-				6F43A2941EC19F3100C68152 /* LICENSE.MIT */,
-				6F43A2951EC19F3100C68152 /* README.md */,
-			);
-			path = nlohmann;
-			sourceTree = "<group>";
-		};
 		6F43A2961EC19F3100C68152 /* notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -537,128 +469,6 @@
 				6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */,
 			);
 			path = firebase;
-			sourceTree = "<group>";
-		};
-		6F83DD0F1EC1CDD4004C5500 /* firebase_cpp_sdk */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD101EC1CDD4004C5500 /* Android.mk */,
-				6F83DD111EC1CDD4004C5500 /* include */,
-				6F83DD591EC1CDD4004C5500 /* readme.md */,
-			);
-			path = firebase_cpp_sdk;
-			sourceTree = "<group>";
-		};
-		6F83DD111EC1CDD4004C5500 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD121EC1CDD4004C5500 /* firebase */,
-				6F83DD411EC1CDD4004C5500 /* google_play_services */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		6F83DD121EC1CDD4004C5500 /* firebase */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD131EC1CDD4004C5500 /* admob */,
-				6F83DD191EC1CDD4004C5500 /* admob.h */,
-				6F83DD1A1EC1CDD4004C5500 /* analytics */,
-				6F83DD1E1EC1CDD4004C5500 /* analytics.h */,
-				6F83DD1F1EC1CDD4004C5500 /* app.h */,
-				6F83DD201EC1CDD4004C5500 /* auth */,
-				6F83DD241EC1CDD4004C5500 /* auth.h */,
-				6F83DD251EC1CDD4004C5500 /* database */,
-				6F83DD2E1EC1CDD4004C5500 /* database.h */,
-				6F83DD2F1EC1CDD4004C5500 /* future.h */,
-				6F83DD301EC1CDD4004C5500 /* internal */,
-				6F83DD331EC1CDD4004C5500 /* invites.h */,
-				6F83DD341EC1CDD4004C5500 /* log.h */,
-				6F83DD351EC1CDD4004C5500 /* messaging.h */,
-				6F83DD361EC1CDD4004C5500 /* remote_config.h */,
-				6F83DD371EC1CDD4004C5500 /* storage */,
-				6F83DD3D1EC1CDD4004C5500 /* storage.h */,
-				6F83DD3E1EC1CDD4004C5500 /* util.h */,
-				6F83DD3F1EC1CDD4004C5500 /* variant.h */,
-				6F83DD401EC1CDD4004C5500 /* version.h */,
-			);
-			path = firebase;
-			sourceTree = "<group>";
-		};
-		6F83DD131EC1CDD4004C5500 /* admob */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD141EC1CDD4004C5500 /* banner_view.h */,
-				6F83DD151EC1CDD4004C5500 /* interstitial_ad.h */,
-				6F83DD161EC1CDD4004C5500 /* native_express_ad_view.h */,
-				6F83DD171EC1CDD4004C5500 /* rewarded_video.h */,
-				6F83DD181EC1CDD4004C5500 /* types.h */,
-			);
-			path = admob;
-			sourceTree = "<group>";
-		};
-		6F83DD1A1EC1CDD4004C5500 /* analytics */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD1B1EC1CDD4004C5500 /* event_names.h */,
-				6F83DD1C1EC1CDD4004C5500 /* parameter_names.h */,
-				6F83DD1D1EC1CDD4004C5500 /* user_property_names.h */,
-			);
-			path = analytics;
-			sourceTree = "<group>";
-		};
-		6F83DD201EC1CDD4004C5500 /* auth */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD211EC1CDD4004C5500 /* credential.h */,
-				6F83DD221EC1CDD4004C5500 /* types.h */,
-				6F83DD231EC1CDD4004C5500 /* user.h */,
-			);
-			path = auth;
-			sourceTree = "<group>";
-		};
-		6F83DD251EC1CDD4004C5500 /* database */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD261EC1CDD4004C5500 /* common.h */,
-				6F83DD271EC1CDD4004C5500 /* data_snapshot.h */,
-				6F83DD281EC1CDD4004C5500 /* database_reference.h */,
-				6F83DD291EC1CDD4004C5500 /* disconnection.h */,
-				6F83DD2A1EC1CDD4004C5500 /* listener.h */,
-				6F83DD2B1EC1CDD4004C5500 /* mutable_data.h */,
-				6F83DD2C1EC1CDD4004C5500 /* query.h */,
-				6F83DD2D1EC1CDD4004C5500 /* transaction.h */,
-			);
-			path = database;
-			sourceTree = "<group>";
-		};
-		6F83DD301EC1CDD4004C5500 /* internal */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD311EC1CDD4004C5500 /* common.h */,
-				6F83DD321EC1CDD4004C5500 /* future_impl.h */,
-			);
-			path = internal;
-			sourceTree = "<group>";
-		};
-		6F83DD371EC1CDD4004C5500 /* storage */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD381EC1CDD4004C5500 /* common.h */,
-				6F83DD391EC1CDD4004C5500 /* controller.h */,
-				6F83DD3A1EC1CDD4004C5500 /* listener.h */,
-				6F83DD3B1EC1CDD4004C5500 /* metadata.h */,
-				6F83DD3C1EC1CDD4004C5500 /* storage_reference.h */,
-			);
-			path = storage;
-			sourceTree = "<group>";
-		};
-		6F83DD411EC1CDD4004C5500 /* google_play_services */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DD421EC1CDD4004C5500 /* availability.h */,
-			);
-			path = google_play_services;
 			sourceTree = "<group>";
 		};
 		A1B0638E9ACD63BB92819897 /* Pods */ = {
@@ -1372,7 +1182,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../src/ee/libs/firebase_cpp_sdk/include";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../third_party/firebase_cpp_sdk/include",
+					"$(SRCROOT)/../third_party/nlohmann/include",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1430,7 +1243,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../src/ee/libs/firebase_cpp_sdk/include";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../third_party/firebase_cpp_sdk/include",
+					"$(SRCROOT)/../third_party/nlohmann/include",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

@@ -22,6 +22,9 @@ FirebaseStorage::FirebaseStorage() {
     fetching_ = false;
 }
 
+FirebaseStorage::~FirebaseStorage() {
+}
+
 bool FirebaseStorage::initialize() {
     if (initialized_) {
         return true;
@@ -50,9 +53,6 @@ bool FirebaseStorage::initialize() {
     initialized_ = true;
     fetching_ = false;
     return true;
-}
-
-FirebaseStorage::~FirebaseStorage() {
 }
 
 void FirebaseStorage::getHash(const std::string& filePath,

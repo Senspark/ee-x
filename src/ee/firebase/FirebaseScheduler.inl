@@ -6,7 +6,9 @@
 //
 //
 
-#include "ee/firebase/FirebaseScheduler.hpp"
+#ifndef EE_X_FIREBASE_SCHEDULER_HPP_
+#error "This file must be only included by FirebaseScheduler.hpp"
+#endif // EE_X_FIREBASE_SCHEDULER_HPP_
 
 #if defined(EE_X_MOBILE)
 #include <firebase/future.h>
@@ -62,8 +64,6 @@ void FirebaseScheduler<T>::onCompletion(const FutureType& future,
         }
     }
 }
-
-template class FirebaseScheduler<void>;
 } // namespace firebase
 } // namespace ee
 

@@ -112,7 +112,7 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Firebase.hpp',
       'src/ee/FirebaseFwd.hpp',
-      'src/ee/firebase/*.{cpp,hpp}'
+      'src/ee/firebase/*.{cpp,hpp,mm}'
 
     s.public_header_files =
       'src/ee/Firebase.hpp',
@@ -120,6 +120,9 @@ Pod::Spec.new do |spec|
       'src/ee/firebase/FirebaseAnalytics.hpp',
       'src/ee/firebase/FirebaseRemoteConfig.hpp',
       'src/ee/firebase/FirebaseStorage.hpp'
+
+    s.exclude_files =
+      'src/ee/firebase/FirebaseApp.cpp'
 
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-cpp-sdk'

@@ -45,4 +45,6 @@ private:
 
 #endif // EE_X_MOBILE
 
+#include "ee/firebase/FirebaseScheduler.inl"
+
 #endif /* EE_X_FIREBASE_SCHEDULER_HPP_ */

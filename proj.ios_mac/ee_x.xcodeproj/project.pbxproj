@@ -33,6 +33,8 @@
 		6F24C38D1EC2C3EF00509B6C /* Firebase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */; };
 		6F24C4DD1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */; };
 		6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */; };
+		6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
+		6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -224,6 +226,7 @@
 		6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Firebase.hpp; sourceTree = "<group>"; };
 		6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseFwd.hpp; sourceTree = "<group>"; };
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
+		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -383,6 +386,7 @@
 		6F43A2261EC19F3100C68152 /* ee */ = {
 			isa = PBXGroup;
 			children = (
+				6F24C6D61EC31DBE00509B6C /* Macro.hpp */,
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
 				6F43A2271EC19F3100C68152 /* core */,
 				6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */,
@@ -503,6 +507,7 @@
 				6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
+				6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +562,7 @@
 				6F24C3551EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
 				6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */,
+				6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

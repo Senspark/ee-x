@@ -9,19 +9,21 @@
 #ifndef EE_X_FIREBASE_APP_HPP_
 #define EE_X_FIREBASE_APP_HPP_
 
-#if defined(__ANDROID__)
+#include "ee/Macro.hpp"
+
+#if defined(EE_X_ANDROID)
 #include <jni.h>
-#elif defined(__APPLE__)
+#elif defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
 #include <objc/objc.h>
 } // extern "C"
-#endif // __ANDROID
+#endif // EE_X_ANDROID
 
-#if defined(__ANDROID__)
+#if defined(EE_X_ANDROID)
 typedef jobject WindowContext;
-#elif defined(__APPLE__)
+#elif defined(EE_X_IOS) || defined(EE_X_OSX)
 typedef id WindowContext;
-#endif // __ANDROID__
+#endif // EE_X_ANDROID
 
 namespace ee {
 namespace firebase {

@@ -6,10 +6,9 @@
 //
 //
 
-#ifndef __MACH__
-
 #include "ee/firebase/FirebaseScheduler.hpp"
 
+#if defined(EE_X_MOBILE)
 #include <firebase/future.h>
 
 namespace ee {
@@ -68,4 +67,4 @@ template class FirebaseScheduler<void>;
 } // namespace firebase
 } // namespace ee
 
-#endif // __MACH__
+#endif // EE_X_MOBILE

@@ -11,9 +11,9 @@
 #include "ee/firebase/FirebaseScheduler.hpp"
 #include "ee/core/ScopeGuard.hpp"
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
 #include <firebase/remote_config.h>
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
@@ -24,9 +24,9 @@ FirebaseRemoteConfig::FirebaseRemoteConfig() {
 
 FirebaseRemoteConfig::~FirebaseRemoteConfig() {
     if (initialized_) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
         ::firebase::remote_config::Terminate();
-#endif // __MACH__
+#endif // EE_X_MOBILE
     }
 }
 
@@ -37,7 +37,7 @@ bool FirebaseRemoteConfig::initialize() {
 
     FirebaseApp::initialize();
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {
         return false;
@@ -49,7 +49,7 @@ bool FirebaseRemoteConfig::initialize() {
     }
 
     fetchScheduler_ = std::make_unique<FirebaseScheduler<void>>();
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
     initialized_ = true;
     return true;
@@ -62,7 +62,7 @@ void FirebaseRemoteConfig::fetch(bool devModeEnabled,
         return;
     }
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     SetConfigSetting(
         ::firebase::remote_config::ConfigSetting::kConfigSettingDeveloperMode,
         devModeEnabled ? "1" : "0");
@@ -76,35 +76,35 @@ void FirebaseRemoteConfig::fetch(bool devModeEnabled,
             guard->dismiss();
             callback(true);
         });
-#endif // __MACH__
+#endif // EE_X_MOBILE
 }
 
 void FirebaseRemoteConfig::setDefaultBool(const std::string& key, bool value) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     defaults_[key] = value;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     defaults_[key] = (value ? "true" : "false");
-#endif // __MACH__
+#endif // EE_X_MOBILE
     defaultsDirty_ = true;
 }
 
 void FirebaseRemoteConfig::setDefaultLong(const std::string& key,
                                           std::int64_t value) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     defaults_[key] = value;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     defaults_[key] = std::to_string(value);
-#endif // __MACH__
+#endif // EE_X_MOBILE
     defaultsDirty_ = true;
 }
 
 void FirebaseRemoteConfig::setDefaultDouble(const std::string& key,
                                             double value) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     defaults_[key] = value;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     defaults_[key] = std::to_string(value);
-#endif // __MACH__
+#endif // EE_X_MOBILE
     defaultsDirty_ = true;
 }
 
@@ -121,65 +121,65 @@ void FirebaseRemoteConfig::flushDefaults() {
     if (not defaultsDirty_) {
         return;
     }
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     std::vector<::firebase::remote_config::ConfigKeyValueVariant> values;
     values.reserve(defaults_.size());
     std::copy(values.cbegin(), values.cend(), std::back_inserter(values));
     SetDefaults(std::addressof(values.at(0)), values.size());
-#endif // __MACH__
+#endif // EE_X_MOBILE
     defaultsDirty_ = false;
 }
 
 bool FirebaseRemoteConfig::getBool(const std::string& key) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].bool_value();
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetBoolean(key.c_str(), std::addressof(info));
     return result;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     return defaults_[key] == "true";
-#endif // __MACH__
+#endif // EE_X_MOBILE
 }
 
 std::int64_t FirebaseRemoteConfig::getLong(const std::string& key) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].bool_value();
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetLong(key.c_str(), std::addressof(info));
     return result;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     return std::stoll(defaults_[key]);
-#endif // __MACH__
+#endif // EE_X_MOBILE
 }
 
 double FirebaseRemoteConfig::getDouble(const std::string& key) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].double_value();
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetDouble(key.c_str(), std::addressof(info));
     return result;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     return std::stod(defaults_[key]);
-#endif // __MACH__
+#endif // EE_X_MOBILE
 }
 
 std::string FirebaseRemoteConfig::getString(const std::string& key) {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].string_value();
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetString(key.c_str(), std::addressof(info));
     return result;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     return defaults_[key];
-#endif // __MACH__
+#endif // EE_X_MOBILE
 }
 } // namespace firebase
 } // namespace ee

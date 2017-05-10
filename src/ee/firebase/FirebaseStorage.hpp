@@ -14,20 +14,22 @@
 #include <memory>
 #include <string>
 
-#ifndef __MACH__
+#include "ee/Macro.hpp"
+
+#if defined(EE_X_MOBILE)
 namespace firebase {
 namespace storage {
 class Storage;
 class Metadata;
 } // namespace storage
 } // namespace
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
 template <class T> class FirebaseScheduler;
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 class FirebaseStorage final {
 public:
@@ -50,7 +52,7 @@ private:
     bool initialized_;
     bool fetching_;
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     ::firebase::storage::Storage* storage_;
 
     std::unique_ptr<FirebaseScheduler<::firebase::storage::Metadata>>
@@ -58,7 +60,7 @@ private:
     std::unique_ptr<FirebaseScheduler<std::size_t>> bytesScheduler_;
 
     std::array<char, max_file_size_in_bytes> buffer_;
-#endif // __MACH__
+#endif // EE_X_MOBILE
 };
 } // namespace firebase
 } // namespace ee

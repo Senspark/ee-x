@@ -13,20 +13,21 @@
 #include <map>
 #include <memory>
 #include <string>
-
 #include <unordered_map>
 
-#ifndef __MACH__
+#include "ee/Macro.hpp"
+
+#if defined(EE_X_MOBILE)
 namespace firebase {
 class Variant;
 } // namespace firebase
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
 template <class T> class FirebaseScheduler;
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 class FirebaseRemoteConfig {
 public:
@@ -56,12 +57,12 @@ private:
 
     bool defaultsDirty_;
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     std::map<std::string, ::firebase::Variant> defaults_;
     std::unique_ptr<FirebaseScheduler<void>> fetchScheduler_;
-#else  // __MACH__
+#else  // EE_X_MOBILE
     std::map<std::string, std::string> defaults_;
-#endif // __MACH__
+#endif // EE_X_MOBILE
 };
 } // namespace firebase
 } // namespace ee

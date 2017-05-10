@@ -9,8 +9,9 @@
 #ifndef EE_X_FIREBASE_SCHEDULER_HPP_
 #define EE_X_FIREBASE_SCHEDULER_HPP_
 
-#ifndef __MACH__
+#include "ee/Macro.hpp"
 
+#if defined(EE_X_MOBILE)
 #include <cstddef>
 #include <functional>
 #include <map>
@@ -42,6 +43,6 @@ private:
 } // namespace firebase
 } // namespace ee
 
-#endif // __MACH__
+#endif // EE_X_MOBILE
 
 #endif /* EE_X_FIREBASE_SCHEDULER_HPP_ */

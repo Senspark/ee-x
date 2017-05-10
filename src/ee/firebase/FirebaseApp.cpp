@@ -8,32 +8,27 @@
 
 #include "ee/firebase/FirebaseApp.hpp"
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
 #include <firebase/app.h>
-#endif // __MACH__
-
-#if defined(__ANDROID__)
+#if defined(EE_X_ANDROID)
 #include "ee/core/JniUtils.hpp"
-#elif defined(__APPLE__)
-#ifndef __MACH__
+#else // EE_X_ANDROID
 #import <UIKit/UIKit.h>
-#endif // __MACH__
-#endif // __ANDROID__
+#endif // EE_X_ANDROID
+#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
-#if defined(__APPLE__)
-#ifdef __MACH__
+#if defined(EE_X_OSX)
 WindowContext FirebaseApp::getWindowContext() {
     return nil;
 }
-#else  // __MACH__
+#elif defined(EE_X_IOS)
 WindowContext FirebaseApp::getWindowContext() {
     return [[
         [[UIApplication sharedApplication] keyWindow] rootViewController] view];
 }
-#endif // __MACH__
-#endif // __APPLE__
+#endif // EE_X_OSX
 
 void FirebaseApp::initialize() {
     static bool initialized = false;
@@ -41,14 +36,15 @@ void FirebaseApp::initialize() {
         return;
     }
 
-#ifndef __MACH__
+#if defined(EE_X_MOBILE)
     auto options = ::firebase::AppOptions();
-#if defined(__ANDROID__)
+#if defined(EE_X_ANDROID)
     JNIEnv* env = core::JniUtils::getEnv();
-#elif defined(__APPLE__)
+// FIXME.
+#else  // EE_X_ANDROID
     auto app = ::firebase::App::Create(options);
-#endif // __ANDROID__
-#endif // __MACH__
+#endif // EE_X_ANDROID
+#endif // EE_X_MOBILE
 
     initialized = true;
 }

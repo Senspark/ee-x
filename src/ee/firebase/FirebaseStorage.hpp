@@ -14,16 +14,20 @@
 #include <memory>
 #include <string>
 
+#ifndef __MACH__
 namespace firebase {
 namespace storage {
 class Storage;
 class Metadata;
 } // namespace storage
 } // namespace
+#endif // __MACH__
 
 namespace ee {
 namespace firebase {
+#ifndef __MACH__
 template <class T> class FirebaseScheduler;
+#endif // __MACH__
 
 class FirebaseStorage final {
 public:
@@ -46,6 +50,7 @@ private:
     bool initialized_;
     bool fetching_;
 
+#ifndef __MACH__
     ::firebase::storage::Storage* storage_;
 
     std::unique_ptr<FirebaseScheduler<::firebase::storage::Metadata>>
@@ -53,6 +58,7 @@ private:
     std::unique_ptr<FirebaseScheduler<std::size_t>> bytesScheduler_;
 
     std::array<char, max_file_size_in_bytes> buffer_;
+#endif // __MACH__
 };
 } // namespace firebase
 } // namespace ee

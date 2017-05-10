@@ -6,4 +6,10 @@ abstract_target 'common' do
         target 'ee_x_mobile_crashlytics'
         target 'ee_x_desktop_crashlytics'
     end
+    
+    target 'ee_x_mobile_firebase' do
+        pod 'Firebase/Core'
+        pod 'Firebase/RemoteConfig'
+        pod 'Firebase/Storage'
+    end
 end

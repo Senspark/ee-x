@@ -28,6 +28,8 @@ bool FirebaseStorage::initialize() {
     }
 
     FirebaseApp::initialize();
+
+#ifndef __MACH__
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {
         return false;
@@ -43,6 +45,7 @@ bool FirebaseStorage::initialize() {
     metadataScheduler_ =
         std::make_unique<FirebaseScheduler<::firebase::storage::Metadata>>();
     bytesScheduler_ = std::make_unique<FirebaseScheduler<std::size_t>>();
+#endif // __MACH__
 
     initialized_ = true;
     fetching_ = false;
@@ -59,6 +62,7 @@ void FirebaseStorage::getHash(const std::string& filePath,
     if (not initialized_) {
         return;
     }
+#ifndef __MACH__
     auto file = storage_->GetReference(filePath.c_str());
     if (not file.is_valid()) {
         return;
@@ -78,6 +82,7 @@ void FirebaseStorage::getHash(const std::string& filePath,
             // MD5 is not supported yet, use updated_time.
             callback(true, std::to_string(metadata->updated_time()));
         });
+#endif // __MACH__
 }
 
 void FirebaseStorage::getData(const std::string& filePath,
@@ -87,6 +92,8 @@ void FirebaseStorage::getData(const std::string& filePath,
     if (not initialized_) {
         return;
     }
+
+#ifndef __MACH__
     auto file = storage_->GetReference(filePath.c_str());
     if (not file.is_valid()) {
         return;
@@ -107,6 +114,7 @@ void FirebaseStorage::getData(const std::string& filePath,
             assert(*bytes <= max_file_size_in_bytes);
             callback(true, std::string(std::addressof(buffer_.at(0)), *bytes));
         });
+#endif // __MACH__
 }
 } // namespace firebase
 } // namespace ee

@@ -6,6 +6,8 @@
 //
 //
 
+#ifndef __MACH__
+
 #include "ee/firebase/FirebaseScheduler.hpp"
 
 #include <firebase/future.h>
@@ -65,3 +67,5 @@ void FirebaseScheduler<T>::onCompletion(const FutureType& future,
 template class FirebaseScheduler<void>;
 } // namespace firebase
 } // namespace ee
+
+#endif // __MACH__

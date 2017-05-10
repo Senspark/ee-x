@@ -12,6 +12,19 @@
 		6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
 		6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
 		6F24C3551EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
+		6F24C36A1EC2BA0800509B6C /* FirebaseApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DD071EC1CDC1004C5500 /* FirebaseApp.cpp */; };
+		6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
+		6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */; };
+		6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
+		6F24C36E1EC2BA0800509B6C /* FirebaseScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler.cpp */; };
+		6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
+		6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
+		6F24C3711EC2BA0800509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
+		6F24C37E1EC2C0EE00509B6C /* libanalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F24C3791EC2C0EE00509B6C /* libanalytics.a */; };
+		6F24C37F1EC2C0EE00509B6C /* libapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F24C37A1EC2C0EE00509B6C /* libapp.a */; };
+		6F24C3801EC2C0EE00509B6C /* libmessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F24C37B1EC2C0EE00509B6C /* libmessaging.a */; };
+		6F24C3811EC2C0EE00509B6C /* libremote_config.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F24C37C1EC2C0EE00509B6C /* libremote_config.a */; };
+		6F24C3821EC2C0EE00509B6C /* libstorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F24C37D1EC2C0EE00509B6C /* libstorage.a */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -76,10 +89,18 @@
 		6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
+		A043BF91770363DAA8A60F68 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6F24C3581EC2B9A600509B6C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F79B6111CCA7AA00008EFAC;
+			remoteInfo = ee_x_desktop_core;
+		};
 		6F43A2D31EC1A26B00C68152 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -112,6 +133,16 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		6C43A8041BDDDF1800D0597F /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F24C35F1EC2B9A600509B6C /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -165,10 +196,21 @@
 
 /* Begin PBXFileReference section */
 		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
 		6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseStorage.hpp; sourceTree = "<group>"; };
 		6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
+		6F24C3721EC2C07F00509B6C /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3731EC2C07F00509B6C /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3741EC2C07F00509B6C /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3751EC2C07F00509B6C /* ee_x_mobile_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_firebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3761EC2C07F00509B6C /* ee_x_desktop_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3771EC2C07F00509B6C /* ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_firebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F24C3791EC2C0EE00509B6C /* libanalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libanalytics.a; path = libs/libanalytics.a; sourceTree = "<group>"; };
+		6F24C37A1EC2C0EE00509B6C /* libapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libapp.a; path = libs/libapp.a; sourceTree = "<group>"; };
+		6F24C37B1EC2C0EE00509B6C /* libmessaging.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmessaging.a; path = libs/libmessaging.a; sourceTree = "<group>"; };
+		6F24C37C1EC2C0EE00509B6C /* libremote_config.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libremote_config.a; path = libs/libremote_config.a; sourceTree = "<group>"; };
+		6F24C37D1EC2C0EE00509B6C /* libstorage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libstorage.a; path = libs/libstorage.a; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -205,12 +247,6 @@
 		6F43A29D1EC19F3E00C68152 /* Core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Core.hpp; sourceTree = "<group>"; };
 		6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Crashlytics.hpp; sourceTree = "<group>"; };
 		6F43A2D61EC1A39900C68152 /* Notification.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
-		6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F83DD051EC1CD9B004C5500 /* ee_x_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_firebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F83DD071EC1CDC1004C5500 /* FirebaseApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = FirebaseApp.cpp; sourceTree = "<group>"; };
 		6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseApp.hpp; sourceTree = "<group>"; };
 		6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseRemoteConfig.cpp; sourceTree = "<group>"; };
@@ -263,14 +299,25 @@
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
+		7D12948CA214B64196BFE8F4 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.release.xcconfig"; sourceTree = "<group>"; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		84B9700C683B144835A4C0F9 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
+		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
+		F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_firebase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6C43A8031BDDDF1800D0597F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F24C35D1EC2B9A600509B6C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -311,6 +358,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F24C37E1EC2C0EE00509B6C /* libanalytics.a in Frameworks */,
+				6F24C37F1EC2C0EE00509B6C /* libapp.a in Frameworks */,
+				6F24C3801EC2C0EE00509B6C /* libmessaging.a in Frameworks */,
+				6F24C3811EC2C0EE00509B6C /* libremote_config.a in Frameworks */,
+				6F24C3821EC2C0EE00509B6C /* libstorage.a in Frameworks */,
+				A043BF91770363DAA8A60F68 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,8 +378,13 @@
 				6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				A1B0638E9ACD63BB92819897 /* Pods */,
-				6F83DCB91EC1C8D1004C5500 /* Products */,
-				6F83DD051EC1CD9B004C5500 /* ee_x_firebase.a */,
+				6F24C3721EC2C07F00509B6C /* ee_x_mobile_core.a */,
+				6F24C3731EC2C07F00509B6C /* ee_x_mobile_crashlytics.a */,
+				6F24C3741EC2C07F00509B6C /* ee_x_mobile_notification.a */,
+				6F24C3751EC2C07F00509B6C /* ee_x_mobile_firebase.a */,
+				6F24C3761EC2C07F00509B6C /* ee_x_desktop_core.a */,
+				6F24C3771EC2C07F00509B6C /* ee_x_desktop_crashlytics.a */,
+				6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -334,8 +392,14 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6F24C3791EC2C0EE00509B6C /* libanalytics.a */,
+				6F24C37A1EC2C0EE00509B6C /* libapp.a */,
+				6F24C37B1EC2C0EE00509B6C /* libmessaging.a */,
+				6F24C37C1EC2C0EE00509B6C /* libremote_config.a */,
+				6F24C37D1EC2C0EE00509B6C /* libstorage.a */,
 				4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */,
 				BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */,
+				F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -442,18 +506,6 @@
 				6F43A29C1EC19F3100C68152 /* NotificationBuilder.hpp */,
 			);
 			path = notification;
-			sourceTree = "<group>";
-		};
-		6F83DCB91EC1C8D1004C5500 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */,
-				6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */,
-				6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */,
-				6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */,
-				6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6F83DD061EC1CDC1004C5500 /* firebase */ = {
@@ -596,10 +648,12 @@
 		A1B0638E9ACD63BB92819897 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */,
-				C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */,
 				B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */,
 				82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */,
+				C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */,
+				9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */,
+				84B9700C683B144835A4C0F9 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */,
+				7D12948CA214B64196BFE8F4 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -621,6 +675,17 @@
 				6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F24C3601EC2B9A600509B6C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */,
+				6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */,
+				6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */,
+				6F24C3711EC2BA0800509B6C /* FirebaseStorage.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +769,26 @@
 			);
 			name = ee_x_mobile_core;
 			productName = "ee-library";
-			productReference = 6F83DCB41EC1C8C9004C5500 /* ee_x_mobile_core.a */;
+			productReference = 6F24C3721EC2C07F00509B6C /* ee_x_mobile_core.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F24C3561EC2B9A600509B6C /* ee_x_desktop_firebase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F24C3661EC2B9A600509B6C /* Build configuration list for PBXNativeTarget "ee_x_desktop_firebase" */;
+			buildPhases = (
+				6F24C35A1EC2B9A600509B6C /* Sources */,
+				6F24C35D1EC2B9A600509B6C /* Frameworks */,
+				6F24C35F1EC2B9A600509B6C /* Copy Files */,
+				6F24C3601EC2B9A600509B6C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F24C3571EC2B9A600509B6C /* PBXTargetDependency */,
+			);
+			name = ee_x_desktop_firebase;
+			productName = "ee-library";
+			productReference = 6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */ = {
@@ -725,7 +809,7 @@
 			);
 			name = ee_x_mobile_crashlytics;
 			productName = "ee-library";
-			productReference = 6F83DCB51EC1C8C9004C5500 /* ee_x_mobile_crashlytics.a */;
+			productReference = 6F24C3731EC2C07F00509B6C /* ee_x_mobile_crashlytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */ = {
@@ -744,7 +828,7 @@
 			);
 			name = ee_x_mobile_notification;
 			productName = "ee-library";
-			productReference = 6F83DCB61EC1C8C9004C5500 /* ee_x_mobile_notification.a */;
+			productReference = 6F24C3741EC2C07F00509B6C /* ee_x_mobile_notification.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */ = {
@@ -761,7 +845,7 @@
 			);
 			name = ee_x_desktop_core;
 			productName = "ee-library-desktop";
-			productReference = 6F83DCB71EC1C8C9004C5500 /* ee_x_desktop_core.a */;
+			productReference = 6F24C3761EC2C07F00509B6C /* ee_x_desktop_core.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */ = {
@@ -782,26 +866,28 @@
 			);
 			name = ee_x_desktop_crashlytics;
 			productName = "ee-library";
-			productReference = 6F83DCB81EC1C8C9004C5500 /* ee_x_desktop_crashlytics.a */;
+			productReference = 6F24C3771EC2C07F00509B6C /* ee_x_desktop_crashlytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		6F83DCF31EC1CD9B004C5500 /* ee_x_firebase */ = {
+		6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6F83DD021EC1CD9B004C5500 /* Build configuration list for PBXNativeTarget "ee_x_firebase" */;
+			buildConfigurationList = 6F83DD021EC1CD9B004C5500 /* Build configuration list for PBXNativeTarget "ee_x_mobile_firebase" */;
 			buildPhases = (
+				8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */,
 				6F83DCF61EC1CD9B004C5500 /* Sources */,
 				6F83DCFA1EC1CD9B004C5500 /* Frameworks */,
 				6F83DCFB1EC1CD9B004C5500 /* Copy Files */,
 				6F83DCFC1EC1CD9B004C5500 /* Headers */,
+				FA0DE9B48647A9C2F5C880EF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				6F83DCF41EC1CD9B004C5500 /* PBXTargetDependency */,
 			);
-			name = ee_x_firebase;
+			name = ee_x_mobile_firebase;
 			productName = "ee-library";
-			productReference = 6F83DD051EC1CD9B004C5500 /* ee_x_firebase.a */;
+			productReference = 6F24C3751EC2C07F00509B6C /* ee_x_mobile_firebase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -838,9 +924,10 @@
 				6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */,
 				6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */,
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
-				6F83DCF31EC1CD9B004C5500 /* ee_x_firebase */,
+				6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
+				6F24C3561EC2B9A600509B6C /* ee_x_desktop_firebase */,
 			);
 		};
 /* End PBXProject section */
@@ -906,6 +993,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FA0DE9B48647A9C2F5C880EF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -923,6 +1040,17 @@
 				6F43A2CA1EC1A18900C68152 /* Logger_iOS.mm in Sources */,
 				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F24C35A1EC2B9A600509B6C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */,
+				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler.cpp in Sources */,
+				6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */,
+				6F24C36A1EC2BA0800509B6C /* FirebaseApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -985,6 +1113,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6F24C3571EC2B9A600509B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */;
+			targetProxy = 6F24C3581EC2B9A600509B6C /* PBXContainerItemProxy */;
+		};
 		6F43A2D41EC1A26B00C68152 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
@@ -1029,6 +1162,22 @@
 					"-ObjC",
 				);
 				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		6F24C3671EC2B9A600509B6C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6F24C3681EC2B9A600509B6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -1098,7 +1247,7 @@
 		};
 		6F83DC961EC1C787004C5500 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5326F4B9D201CC6BF5FA9BB6 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */;
+			baseConfigurationReference = C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = macosx;
@@ -1107,7 +1256,7 @@
 		};
 		6F83DC971EC1C787004C5500 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C9F296D2701BF9E7DB193550 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */;
+			baseConfigurationReference = 9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = macosx;
@@ -1116,8 +1265,13 @@
 		};
 		6F83DD031EC1CD9B004C5500 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84B9700C683B144835A4C0F9 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1129,8 +1283,13 @@
 		};
 		6F83DD041EC1CD9B004C5500 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D12948CA214B64196BFE8F4 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1271,6 +1430,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		6F24C3661EC2B9A600509B6C /* Build configuration list for PBXNativeTarget "ee_x_desktop_firebase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F24C3671EC2B9A600509B6C /* Debug */,
+				6F24C3681EC2B9A600509B6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		6F43A2A61EC19F5700C68152 /* Build configuration list for PBXNativeTarget "ee_x_mobile_crashlytics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1307,7 +1475,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		6F83DD021EC1CD9B004C5500 /* Build configuration list for PBXNativeTarget "ee_x_firebase" */ = {
+		6F83DD021EC1CD9B004C5500 /* Build configuration list for PBXNativeTarget "ee_x_mobile_firebase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F83DD031EC1CD9B004C5500 /* Debug */,

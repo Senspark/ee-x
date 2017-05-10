@@ -112,7 +112,7 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Firebase.hpp',
       'src/ee/FirebaseFwd.hpp',
-      'src/ee/firebase/*.{cpp,hpp,mm}'
+      'src/ee/firebase/*.{cpp,hpp,inl,mm}'
 
     s.public_header_files =
       'src/ee/Firebase.hpp',

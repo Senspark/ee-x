@@ -28,20 +28,20 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>
-        '$(PODS_ROOT)/ee-x/src/third_party/nlohmann/include'
+        '$(PODS_ROOT)/ee-x/third_party/nlohmann/include'
     }
   end
 
   spec.subspec 'firebase-cpp-sdk' do |s|
     s.platform = :ios
-    
+
     s.preserve_paths = 'third_party/firebase_cpp_sdk/include/**/*'
 
     s.vendored_library = 'src/ee/libs/firebase_cpp_sdk/libs/ios/*.a'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>
-        '$(PODS_ROOT)/ee-x/src/third_party/firebase_cpp_sdk/include'
+        '$(PODS_ROOT)/ee-x/third_party/firebase_cpp_sdk/include'
     }
 
     # s.header_mappings_dir = 'src/ee/libs/firebase_cpp-sdk'

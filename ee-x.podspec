@@ -28,7 +28,8 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>
-        '${PODS_ROOT}/ee-x/third_party/nlohmann/include'
+        '$(inherited)',
+        '$(PODS_ROOT)/ee-x/third_party/nlohmann/include'
     }
   end
 
@@ -41,10 +42,9 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' =>
-        '${PODS_ROOT}/ee-x/third_party/firebase_cpp_sdk/include'
+        '$(inherited)',
+        '$(PODS_ROOT)/ee-x/third_party/firebase_cpp_sdk/include'
     }
-
-    # s.header_mappings_dir = 'src/ee/libs/firebase_cpp-sdk'
   end
 
   spec.subspec 'core' do |s|

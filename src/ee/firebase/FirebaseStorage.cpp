@@ -22,6 +22,12 @@ namespace firebase {
 FirebaseStorage::FirebaseStorage() {
     initialized_ = false;
     fetching_ = false;
+
+#if defined(EE_X_MOBILE)
+    storage_ = nullptr;
+    metadataScheduler_ = nullptr;
+    bytesScheduler_ = nullptr;
+#endif // EE_X_MOBILE
 }
 
 FirebaseStorage::~FirebaseStorage() {

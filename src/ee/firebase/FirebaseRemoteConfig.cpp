@@ -20,6 +20,10 @@ namespace firebase {
 FirebaseRemoteConfig::FirebaseRemoteConfig() {
     initialized_ = false;
     defaultsDirty_ = false;
+
+#if defined(EE_X_MOBILE)
+    fetchScheduler_ = nullptr;
+#endif // EE_X_MOBILE
 }
 
 FirebaseRemoteConfig::~FirebaseRemoteConfig() {

@@ -54,7 +54,6 @@ public:
 
 private:
     bool initialized_;
-
     bool defaultsDirty_;
 
 #if defined(EE_X_MOBILE)

@@ -31,6 +31,9 @@ namespace firebase {
 template <class T> class FirebaseScheduler;
 #endif // EE_X_MOBILE
 
+/// Wrapper for Firebase Storage.
+/// Should have a single instance at a time.
+/// https://firebase.google.com/docs/storage/cpp/start
 class FirebaseStorage final {
 public:
     using HashCallback =
@@ -41,6 +44,8 @@ public:
     FirebaseStorage();
     ~FirebaseStorage();
 
+    /// Attempts to initialize the remote config.
+    /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
     void getHash(const std::string& filePath, const HashCallback& callback);

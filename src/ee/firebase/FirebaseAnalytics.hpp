@@ -13,13 +13,21 @@
 
 namespace ee {
 namespace firebase {
+/// Wrapper for Firebase Analytics.
+/// Should have a single instance at a time.
+/// https://firebase.google.com/docs/analytics/cpp/start
 class FirebaseAnalytics {
 public:
     FirebaseAnalytics();
     ~FirebaseAnalytics();
 
+    /// Initializes the firebase analytics.
+    /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
+    /// Set a user property to the given value.
+    /// @param[in] name Name of the user property to set.
+    /// @param[in] property Value to set the user property to.
     void setUserProperty(const std::string& name, const std::string& property);
 
 private:

@@ -29,6 +29,9 @@ namespace firebase {
 template <class T> class FirebaseScheduler;
 #endif // EE_X_MOBILE
 
+/// Wrapper for Firebase Remote Config.
+/// Should have a single instance at a time.
+/// https://firebase.google.com/docs/remote-config/use-config-cpp
 class FirebaseRemoteConfig {
 public:
     using FetchCallback = std::function<void(bool succeeded)>;
@@ -36,20 +39,38 @@ public:
     FirebaseRemoteConfig();
     ~FirebaseRemoteConfig();
 
+    /// Attempts to initialize the remote config.
+    /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
     void fetch(bool devModeEnabled, const FetchCallback& callback);
 
+    /// Sets a default bool value for the given key.
     void setDefaultBool(const std::string& key, bool value);
+
+    /// Sets a default long value for the given key.
     void setDefaultLong(const std::string& key, std::int64_t value);
+
+    /// Sets a default double value for the given key.
     void setDefaultDouble(const std::string& key, double value);
+
+    /// Sets a default string value for the given key.
     void setDefaultString(const std::string& key, const std::string& value);
 
+    /// Flushes the default values.
+    /// Call this after setting all default values.
     void flushDefaults();
 
+    /// Gets a bool value for the given key.
     bool getBool(const std::string& key);
+
+    /// Gets a long value for the given key.
     std::int64_t getLong(const std::string& key);
+
+    /// Gets a double value for the given key.
     double getDouble(const std::string& key);
+
+    /// Gets a string value for the given key.
     std::string getString(const std::string& key);
 
 private:

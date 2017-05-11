@@ -29,8 +29,12 @@ namespace ee {
 namespace firebase {
 class FirebaseApp {
 public:
+    /// Initializes the Firebase app.
     static void initialize();
 
+    /// Gets the window context:
+    /// - AppActivity (Android).
+    /// - RootViewController (iOS).
     static WindowContext getWindowContext();
 };
 } // namespace firebase

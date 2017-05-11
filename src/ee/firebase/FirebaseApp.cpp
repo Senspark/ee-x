@@ -38,7 +38,7 @@ void FirebaseApp::initialize() {
 
     auto options = ::firebase::AppOptions();
     JNIEnv* env = core::JniUtils::getEnv();
-    auto app = firebase::App::Create(options, env, getWindowContext());
+    auto app = ::firebase::App::Create(options, env, getWindowContext());
 
     initialized = true;
 }

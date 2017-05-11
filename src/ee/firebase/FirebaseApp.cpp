@@ -26,7 +26,7 @@ Java_com_ee_firebase_Firebase_setActivity(JNIEnv* env, jobject instance,
     if (global_activity != nullptr) {
         env->DeleteGlobalRef(global_activity);
     }
-    env->NewGlobalRef(global_activity);
+    global_activity = env->NewGlobalRef(activity);
 }
 } // extern "C"
 

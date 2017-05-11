@@ -132,7 +132,7 @@ public class AppActivity extends Cocos2dxActivity {
 - Modify `Podfile`:
 
 ```
-pod 'ee-x/crashlytics', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
+pod 'ee-x/crashlytics', :git => 'https://github.com/Senspark/ee-x'
 ```
 
 - Modify `AppController.mm`:
@@ -255,7 +255,7 @@ public class AppActivity extends Cocos2dxActivity {
 - Modify `Podfile`:
 
 ```
-pod 'ee-x/notification', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
+pod 'ee-x/notification', :git => 'https://github.com/Senspark/ee-x'
 ```
 
 - Modify `AppController.mm`:
@@ -387,5 +387,5 @@ public class AppActivity extends Cocos2dxActivity {
 - Modify `Podfile`:
 
 ```
-pod 'ee-x/firebase', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
+pod 'ee-x/firebase', :git => 'https://github.com/Senspark/ee-x'
 ```

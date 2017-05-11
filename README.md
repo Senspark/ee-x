@@ -5,7 +5,10 @@
 ## Modules
 
 - Crashlytics
+
 - Local notifications
+
+- Firebase
 
 ## Getting started
 
@@ -239,7 +242,7 @@ dependencies {
 - Modify `AppActivity.java`:
 
 ```
-import com.ee.Notification;
+import com.ee.notification.Notification;
 
 public class AppActivity extends Cocos2dxActivity {
     @Override
@@ -341,4 +344,48 @@ void NotificationAgent::unscheduleAll() {
     // Also clear all notifications.
     protocol_->clearAll();
 }
+```
+
+## Firebase
+
+- Supported platforms: Android, iOS, Mac OSX.
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-firebase'
+project(':ee-x-firebase').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-firebase')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-firebase')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.firebase.Firebase;
+
+public class AppActivity extends Cocos2dxActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new Firebase(this));
+    }
+}
+```
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/firebase', :path => 'CLONE_PATH/ee-x/ee-x.podspec'
 ```

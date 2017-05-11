@@ -17,7 +17,7 @@ namespace core {
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     auto methodInfo = JniUtils::getStaticMethodInfo(
-        "com/ee/internal/MessageBridge", "staticCall",
+        "com/ee/core/internal/MessageBridge", "staticCall",
         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
     if (methodInfo == nullptr) {

@@ -15,17 +15,6 @@
 
 namespace ee {
 namespace firebase {
-#if defined(EE_X_OSX)
-WindowContext FirebaseApp::getWindowContext() {
-    return nil;
-}
-#elif defined(EE_X_IOS)
-WindowContext FirebaseApp::getWindowContext() {
-    return [[
-        [[UIApplication sharedApplication] keyWindow] rootViewController] view];
-}
-#endif // EE_X_OSX
-
 void FirebaseApp::initialize() {
     static bool initialized = false;
     if (initialized) {
@@ -39,5 +28,16 @@ void FirebaseApp::initialize() {
 
     initialized = true;
 }
+
+#if defined(EE_X_OSX)
+WindowContext FirebaseApp::getWindowContext() {
+    return nil;
+}
+#elif defined(EE_X_IOS)
+WindowContext FirebaseApp::getWindowContext() {
+    return [[
+        [[UIApplication sharedApplication] keyWindow] rootViewController] view];
+}
+#endif // EE_X_OSX
 } // namespace firebase
 } // namespace ee

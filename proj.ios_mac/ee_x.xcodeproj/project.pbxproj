@@ -120,6 +120,10 @@
 		6FAFB60F1EC95ABE00450E67 /* NativeKeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */; };
 		6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6101EC95BDB00450E67 /* Store.cpp */; };
 		6FAFB6131EC95BDB00450E67 /* Store.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* Store.hpp */; };
+		6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6291EC9643100450E67 /* EEStore.m */; };
+		6FAFB62C1EC9643100450E67 /* EEStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB62A1EC9643100450E67 /* EEStore.h */; };
+		6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */; };
+		6FAFB64C1EC9874300450E67 /* EEKeyValueStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		A043BF91770363DAA8A60F68 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
@@ -329,6 +333,10 @@
 		6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeKeyValueStorage.hpp; path = store/NativeKeyValueStorage.hpp; sourceTree = "<group>"; };
 		6FAFB6101EC95BDB00450E67 /* Store.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Store.cpp; path = store/Store.cpp; sourceTree = "<group>"; };
 		6FAFB6111EC95BDB00450E67 /* Store.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Store.hpp; path = store/Store.hpp; sourceTree = "<group>"; };
+		6FAFB6291EC9643100450E67 /* EEStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEStore.m; path = store/internal/EEStore.m; sourceTree = "<group>"; };
+		6FAFB62A1EC9643100450E67 /* EEStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEStore.h; path = store/internal/EEStore.h; sourceTree = "<group>"; };
+		6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEKeyValueStorage.m; path = store/internal/EEKeyValueStorage.m; sourceTree = "<group>"; };
+		6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEKeyValueStorage.h; path = store/internal/EEKeyValueStorage.h; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
@@ -555,6 +563,7 @@
 		6FAFB5C41EC94DB300450E67 /* store */ = {
 			isa = PBXGroup;
 			children = (
+				6FAFB6271EC9616C00450E67 /* internal */,
 				6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */,
 				6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */,
 				6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */,
@@ -579,6 +588,17 @@
 				6FAFB6111EC95BDB00450E67 /* Store.hpp */,
 			);
 			name = store;
+			sourceTree = "<group>";
+		};
+		6FAFB6271EC9616C00450E67 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				6FAFB6291EC9643100450E67 /* EEStore.m */,
+				6FAFB62A1EC9643100450E67 /* EEStore.h */,
+				6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */,
+				6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */,
+			);
+			name = internal;
 			sourceTree = "<group>";
 		};
 		A1B0638E9ACD63BB92819897 /* Pods */ = {
@@ -701,12 +721,14 @@
 			files = (
 				6FAFB5E71EC94E3900450E67 /* PurchaseType.hpp in Headers */,
 				6FAFB5FF1EC9578900450E67 /* VirtualCurrency.hpp in Headers */,
+				6FAFB64C1EC9874300450E67 /* EEKeyValueStorage.h in Headers */,
 				6FAFB5FB1EC9568100450E67 /* PurchasableVirtualItem.hpp in Headers */,
 				6FAFB60B1EC9598700450E67 /* KeyValueStorage.hpp in Headers */,
 				6FAFB5F71EC9567600450E67 /* VirtualItem.hpp in Headers */,
 				6FAFB6071EC9584700450E67 /* VirtualItemStorage.hpp in Headers */,
 				6FAFB60F1EC95ABE00450E67 /* NativeKeyValueStorage.hpp in Headers */,
 				6FAFB6131EC95BDB00450E67 /* Store.hpp in Headers */,
+				6FAFB62C1EC9643100450E67 /* EEStore.h in Headers */,
 				6FAFB5EF1EC94FEA00450E67 /* PurchaseWithMarket.hpp in Headers */,
 				6FAFB5F31EC9519700450E67 /* MarketItem.hpp in Headers */,
 				6FAFB6031EC9583800450E67 /* VirtualCurrencyStorage.hpp in Headers */,
@@ -1137,10 +1159,12 @@
 				6FAFB5F61EC9567600450E67 /* VirtualItem.cpp in Sources */,
 				6FAFB5FE1EC9578900450E67 /* VirtualCurrency.cpp in Sources */,
 				6FAFB60E1EC95ABE00450E67 /* NativeKeyValueStorage.cpp in Sources */,
+				6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */,
 				6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */,
 				6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */,
 				6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */,
 				6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */,
+				6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

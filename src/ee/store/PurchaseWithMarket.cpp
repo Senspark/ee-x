@@ -11,11 +11,11 @@
 namespace ee {
 namespace store {
 
-void PurchaseWithMarket::buy(const std::string& payload, Error** error) {
+void PurchaseWithMarket::buy(const std::string& payload) {
     // FIXME.
 }
 
-bool PurchaseWithMarket::canAfford(Error** error) {
+bool PurchaseWithMarket::canAfford() {
     // For market purchases, always assume it can be afforded.
     return true;
 }

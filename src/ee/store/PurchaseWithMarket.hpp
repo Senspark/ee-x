@@ -27,10 +27,9 @@ public:
     static std::unique_ptr<PurchaseWithMarket>
     create(const std::string& productId);
 
-    virtual void buy(const std::string& payload,
-                     Error** error = nullptr) override;
+    virtual void buy(const std::string& payload) override;
 
-    virtual bool canAfford(Error** error = nullptr) override;
+    virtual bool canAfford() override;
 };
 } // namespace store
 } // namespace ee

@@ -13,8 +13,6 @@
 
 namespace ee {
 namespace store {
-class Error;
-
 class PurchaseType {
 public:
     PurchaseType();
@@ -23,9 +21,9 @@ public:
 
     virtual bool init();
 
-    virtual void buy(const std::string& payload, Error** error = nullptr) = 0;
+    virtual void buy(const std::string& payload) = 0;
 
-    virtual bool canAfford(Error** error = nullptr) = 0;
+    virtual bool canAfford() = 0;
 
     const std::string& getAssociatedItemId() const;
 

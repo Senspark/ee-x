@@ -97,6 +97,29 @@
 		6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
 		6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */; };
 		6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
+		6FAFB5D51EC94E0F00450E67 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
+		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
+		6FAFB5E71EC94E3900450E67 /* PurchaseType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */; };
+		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
+		6FAFB5EF1EC94FEA00450E67 /* PurchaseWithMarket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5ED1EC94FEA00450E67 /* PurchaseWithMarket.hpp */; };
+		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
+		6FAFB5F31EC9519700450E67 /* MarketItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F11EC9519700450E67 /* MarketItem.hpp */; };
+		6FAFB5F61EC9567600450E67 /* VirtualItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F41EC9567600450E67 /* VirtualItem.cpp */; };
+		6FAFB5F71EC9567600450E67 /* VirtualItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F51EC9567600450E67 /* VirtualItem.hpp */; };
+		6FAFB5FA1EC9568100450E67 /* PurchasableVirtualItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F81EC9568100450E67 /* PurchasableVirtualItem.cpp */; };
+		6FAFB5FB1EC9568100450E67 /* PurchasableVirtualItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F91EC9568100450E67 /* PurchasableVirtualItem.hpp */; };
+		6FAFB5FE1EC9578900450E67 /* VirtualCurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5FC1EC9578900450E67 /* VirtualCurrency.cpp */; };
+		6FAFB5FF1EC9578900450E67 /* VirtualCurrency.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5FD1EC9578900450E67 /* VirtualCurrency.hpp */; };
+		6FAFB6021EC9583800450E67 /* VirtualCurrencyStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6001EC9583800450E67 /* VirtualCurrencyStorage.cpp */; };
+		6FAFB6031EC9583800450E67 /* VirtualCurrencyStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6011EC9583800450E67 /* VirtualCurrencyStorage.hpp */; };
+		6FAFB6061EC9584700450E67 /* VirtualItemStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6041EC9584700450E67 /* VirtualItemStorage.cpp */; };
+		6FAFB6071EC9584700450E67 /* VirtualItemStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6051EC9584700450E67 /* VirtualItemStorage.hpp */; };
+		6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6081EC9598700450E67 /* KeyValueStorage.cpp */; };
+		6FAFB60B1EC9598700450E67 /* KeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */; };
+		6FAFB60E1EC95ABE00450E67 /* NativeKeyValueStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB60C1EC95ABE00450E67 /* NativeKeyValueStorage.cpp */; };
+		6FAFB60F1EC95ABE00450E67 /* NativeKeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */; };
+		6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6101EC95BDB00450E67 /* Store.cpp */; };
+		6FAFB6131EC95BDB00450E67 /* Store.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* Store.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		A043BF91770363DAA8A60F68 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
@@ -133,6 +156,13 @@
 			remoteInfo = ee_x_desktop_core;
 		};
 		6F83DCF51EC1CD9B004C5500 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		6FAFB5C71EC94E0F00450E67 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -193,6 +223,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6F83DCFB1EC1CD9B004C5500 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FAFB5D61EC94E0F00450E67 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -266,6 +306,29 @@
 		6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseRemoteConfig.hpp; sourceTree = "<group>"; };
 		6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler_inl.hpp; sourceTree = "<group>"; };
 		6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler.hpp; sourceTree = "<group>"; };
+		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
+		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
+		6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseWithMarket.cpp; path = store/PurchaseWithMarket.cpp; sourceTree = "<group>"; };
+		6FAFB5ED1EC94FEA00450E67 /* PurchaseWithMarket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseWithMarket.hpp; path = store/PurchaseWithMarket.hpp; sourceTree = "<group>"; };
+		6FAFB5F01EC9519700450E67 /* MarketItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarketItem.cpp; path = store/MarketItem.cpp; sourceTree = "<group>"; };
+		6FAFB5F11EC9519700450E67 /* MarketItem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarketItem.hpp; path = store/MarketItem.hpp; sourceTree = "<group>"; };
+		6FAFB5F41EC9567600450E67 /* VirtualItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualItem.cpp; path = store/VirtualItem.cpp; sourceTree = "<group>"; };
+		6FAFB5F51EC9567600450E67 /* VirtualItem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualItem.hpp; path = store/VirtualItem.hpp; sourceTree = "<group>"; };
+		6FAFB5F81EC9568100450E67 /* PurchasableVirtualItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchasableVirtualItem.cpp; path = store/PurchasableVirtualItem.cpp; sourceTree = "<group>"; };
+		6FAFB5F91EC9568100450E67 /* PurchasableVirtualItem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchasableVirtualItem.hpp; path = store/PurchasableVirtualItem.hpp; sourceTree = "<group>"; };
+		6FAFB5FC1EC9578900450E67 /* VirtualCurrency.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualCurrency.cpp; path = store/VirtualCurrency.cpp; sourceTree = "<group>"; };
+		6FAFB5FD1EC9578900450E67 /* VirtualCurrency.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualCurrency.hpp; path = store/VirtualCurrency.hpp; sourceTree = "<group>"; };
+		6FAFB6001EC9583800450E67 /* VirtualCurrencyStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualCurrencyStorage.cpp; path = store/VirtualCurrencyStorage.cpp; sourceTree = "<group>"; };
+		6FAFB6011EC9583800450E67 /* VirtualCurrencyStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualCurrencyStorage.hpp; path = store/VirtualCurrencyStorage.hpp; sourceTree = "<group>"; };
+		6FAFB6041EC9584700450E67 /* VirtualItemStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualItemStorage.cpp; path = store/VirtualItemStorage.cpp; sourceTree = "<group>"; };
+		6FAFB6051EC9584700450E67 /* VirtualItemStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualItemStorage.hpp; path = store/VirtualItemStorage.hpp; sourceTree = "<group>"; };
+		6FAFB6081EC9598700450E67 /* KeyValueStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyValueStorage.cpp; path = store/KeyValueStorage.cpp; sourceTree = "<group>"; };
+		6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyValueStorage.hpp; path = store/KeyValueStorage.hpp; sourceTree = "<group>"; };
+		6FAFB60C1EC95ABE00450E67 /* NativeKeyValueStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NativeKeyValueStorage.cpp; path = store/NativeKeyValueStorage.cpp; sourceTree = "<group>"; };
+		6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeKeyValueStorage.hpp; path = store/NativeKeyValueStorage.hpp; sourceTree = "<group>"; };
+		6FAFB6101EC95BDB00450E67 /* Store.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Store.cpp; path = store/Store.cpp; sourceTree = "<group>"; };
+		6FAFB6111EC95BDB00450E67 /* Store.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Store.hpp; path = store/Store.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
@@ -337,6 +400,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6FAFB5CF1EC94E0F00450E67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FAFB5D51EC94E0F00450E67 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -356,6 +427,7 @@
 				6F24C3761EC2C07F00509B6C /* ee_x_desktop_core.a */,
 				6F24C3771EC2C07F00509B6C /* ee_x_desktop_crashlytics.a */,
 				6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */,
+				6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -396,6 +468,7 @@
 				6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */,
 				6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */,
 				6F83DD061EC1CDC1004C5500 /* firebase */,
+				6FAFB5C41EC94DB300450E67 /* store */,
 				6F43A2D61EC1A39900C68152 /* Notification.hpp */,
 				6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */,
 				6F43A2961EC19F3100C68152 /* notification */,
@@ -477,6 +550,35 @@
 				6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */,
 			);
 			path = firebase;
+			sourceTree = "<group>";
+		};
+		6FAFB5C41EC94DB300450E67 /* store */ = {
+			isa = PBXGroup;
+			children = (
+				6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */,
+				6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */,
+				6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */,
+				6FAFB5ED1EC94FEA00450E67 /* PurchaseWithMarket.hpp */,
+				6FAFB5F01EC9519700450E67 /* MarketItem.cpp */,
+				6FAFB5F11EC9519700450E67 /* MarketItem.hpp */,
+				6FAFB5F41EC9567600450E67 /* VirtualItem.cpp */,
+				6FAFB5F51EC9567600450E67 /* VirtualItem.hpp */,
+				6FAFB5F81EC9568100450E67 /* PurchasableVirtualItem.cpp */,
+				6FAFB5F91EC9568100450E67 /* PurchasableVirtualItem.hpp */,
+				6FAFB5FC1EC9578900450E67 /* VirtualCurrency.cpp */,
+				6FAFB5FD1EC9578900450E67 /* VirtualCurrency.hpp */,
+				6FAFB6001EC9583800450E67 /* VirtualCurrencyStorage.cpp */,
+				6FAFB6011EC9583800450E67 /* VirtualCurrencyStorage.hpp */,
+				6FAFB6041EC9584700450E67 /* VirtualItemStorage.cpp */,
+				6FAFB6051EC9584700450E67 /* VirtualItemStorage.hpp */,
+				6FAFB6081EC9598700450E67 /* KeyValueStorage.cpp */,
+				6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */,
+				6FAFB60C1EC95ABE00450E67 /* NativeKeyValueStorage.cpp */,
+				6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */,
+				6FAFB6101EC95BDB00450E67 /* Store.cpp */,
+				6FAFB6111EC95BDB00450E67 /* Store.hpp */,
+			);
+			name = store;
 			sourceTree = "<group>";
 		};
 		A1B0638E9ACD63BB92819897 /* Pods */ = {
@@ -590,6 +692,24 @@
 				6F24C4DD1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
 				6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */,
 				6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6FAFB5D71EC94E0F00450E67 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FAFB5E71EC94E3900450E67 /* PurchaseType.hpp in Headers */,
+				6FAFB5FF1EC9578900450E67 /* VirtualCurrency.hpp in Headers */,
+				6FAFB5FB1EC9568100450E67 /* PurchasableVirtualItem.hpp in Headers */,
+				6FAFB60B1EC9598700450E67 /* KeyValueStorage.hpp in Headers */,
+				6FAFB5F71EC9567600450E67 /* VirtualItem.hpp in Headers */,
+				6FAFB6071EC9584700450E67 /* VirtualItemStorage.hpp in Headers */,
+				6FAFB60F1EC95ABE00450E67 /* NativeKeyValueStorage.hpp in Headers */,
+				6FAFB6131EC95BDB00450E67 /* Store.hpp in Headers */,
+				6FAFB5EF1EC94FEA00450E67 /* PurchaseWithMarket.hpp in Headers */,
+				6FAFB5F31EC9519700450E67 /* MarketItem.hpp in Headers */,
+				6FAFB6031EC9583800450E67 /* VirtualCurrencyStorage.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,6 +852,27 @@
 			productReference = 6F24C3751EC2C07F00509B6C /* ee_x_mobile_firebase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6FAFB5E01EC94E0F00450E67 /* Build configuration list for PBXNativeTarget "ee_x_mobile_store" */;
+			buildPhases = (
+				6FAFB5C81EC94E0F00450E67 /* [CP] Check Pods Manifest.lock */,
+				6FAFB5C91EC94E0F00450E67 /* Sources */,
+				6FAFB5CF1EC94E0F00450E67 /* Frameworks */,
+				6FAFB5D61EC94E0F00450E67 /* Copy Files */,
+				6FAFB5D71EC94E0F00450E67 /* Headers */,
+				6FAFB5DF1EC94E0F00450E67 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6FAFB5C61EC94E0F00450E67 /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_store;
+			productName = "ee-library";
+			productReference = 6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -767,6 +908,7 @@
 				6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */,
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
 				6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */,
+				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
 				6F24C3561EC2B9A600509B6C /* ee_x_desktop_firebase */,
@@ -833,6 +975,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6FAFB5C81EC94E0F00450E67 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6FAFB5DF1EC94E0F00450E67 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
@@ -954,6 +1126,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6FAFB5C91EC94E0F00450E67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FAFB5FA1EC9568100450E67 /* PurchasableVirtualItem.cpp in Sources */,
+				6FAFB6021EC9583800450E67 /* VirtualCurrencyStorage.cpp in Sources */,
+				6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */,
+				6FAFB6061EC9584700450E67 /* VirtualItemStorage.cpp in Sources */,
+				6FAFB5F61EC9567600450E67 /* VirtualItem.cpp in Sources */,
+				6FAFB5FE1EC9578900450E67 /* VirtualCurrency.cpp in Sources */,
+				6FAFB60E1EC95ABE00450E67 /* NativeKeyValueStorage.cpp in Sources */,
+				6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */,
+				6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */,
+				6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */,
+				6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -981,6 +1171,11 @@
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6F83DCF51EC1CD9B004C5500 /* PBXContainerItemProxy */;
+		};
+		6FAFB5C61EC94E0F00450E67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = 6FAFB5C71EC94E0F00450E67 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1139,6 +1334,40 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		6FAFB5E11EC94E0F00450E67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84B9700C683B144835A4C0F9 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6FAFB5E21EC94E0F00450E67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D12948CA214B64196BFE8F4 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -1330,6 +1559,15 @@
 			buildConfigurations = (
 				6F83DD031EC1CD9B004C5500 /* Debug */,
 				6F83DD041EC1CD9B004C5500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6FAFB5E01EC94E0F00450E67 /* Build configuration list for PBXNativeTarget "ee_x_mobile_store" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FAFB5E11EC94E0F00450E67 /* Debug */,
+				6FAFB5E21EC94E0F00450E67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

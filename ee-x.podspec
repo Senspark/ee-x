@@ -89,6 +89,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
+    s.dependency 'FBAudienceNetwork'
   end
 
   spec.subspec 'notification' do |s|
@@ -129,5 +130,19 @@ Pod::Spec.new do |spec|
     s.ios.dependency 'Firebase/Core'
     s.ios.dependency 'Firebase/RemoteConfig'
     s.ios.dependency 'Firebase/Storage'
+  end
+
+  spec.subspec 'facebook-ads' do |s|
+    s.source_files =
+      'src/ee/FacebookAds.hpp',
+      'src/ee/FacebookAdsFwd.hpp',
+      'src/ee/facebook/*.{cpp,hpp,mm,h,m}'
+
+    s.public_header_files =
+      'src/ee/FacebookAds.hpp',
+      'src/ee/FacebookAdsFwd.hpp',
+      'src/ee/facebook/FacebookAdsBridge.hpp'
+
+    s.dependency 'ee-x/core'
   end
 end

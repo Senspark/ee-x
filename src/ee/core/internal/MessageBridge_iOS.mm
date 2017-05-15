@@ -20,3 +20,14 @@ std::string MessageBridge::call(const std::string& tag,
 }
 } // namespace core
 } // namespace ee
+
+@implementation EEMessageBridge (Cpp)
+
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
+                          msg:(NSString* _Nonnull)msg {
+    auto result = ee::core::MessageBridge::getInstance().call([tag UTF8String],
+                                                              [msg UTF8String]);
+    return (NSString * _Nonnull)[NSString stringWithUTF8String:result.c_str()];
+}
+
+@end

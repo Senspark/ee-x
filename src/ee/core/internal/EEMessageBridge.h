@@ -24,3 +24,10 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
 - (void)deregisterHandler:(NSString* _Nonnull)tag;
 
 @end
+
+@interface EEMessageBridge (Cpp)
+
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
+                          msg:(NSString* _Nonnull)msg;
+
+@end

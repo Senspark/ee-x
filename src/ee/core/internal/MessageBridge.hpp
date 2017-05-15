@@ -13,6 +13,8 @@
 #include <map>
 #include <string>
 
+#include "ee/core/SpinLock.hpp"
+
 namespace ee {
 namespace core {
 using MessageHandler = std::function<std::string(const std::string& message)>;
@@ -57,6 +59,7 @@ private:
     MessageBridge(const MessageBridge&) = delete;
     MessageBridge& operator=(const MessageBridge&) = delete;
 
+    SpinLock handlerLock_;
     std::map<std::string, MessageHandler> handlers_;
 };
 } // namespace core

@@ -49,6 +49,10 @@
 		6F2580081ECB162D00B910F9 /* KeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */; };
 		6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */; };
 		6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* Store.hpp */; };
+		6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E151EC5651300ED9E4A /* FacebookAds.hpp */; };
+		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
+		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
+		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -690,6 +694,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */,
+				6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */,
+				6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */,
+				6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

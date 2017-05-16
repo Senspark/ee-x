@@ -10,12 +10,21 @@
 #define EE_X_FACEBOOK_ADS_BRIDGE_HPP_
 #include <memory>
 #include <string>
+#include <functional>
 
 namespace ee {
 namespace facebook {
 class FacebookAds final{
 public:
-    void initFBAds(const std::string& InterstitialID, const std::string& NativeID, const std::string& BannerID) const;
+    FacebookAds();
+    ~FacebookAds();
+    
+    typedef std::function<void(const std::string&)> AdsCallback;
+    
+    void initFBAdsInterstitial(const std::string& InterstitialID) const;
+    void initFBAdsNativeAds(const std::string& NativeID, const std::string& layout) const;
+    void initFBAdsBanner(const std::string& BannerID) const;
+    
     void cacheRewardedAd(const std::string& adsID) const;
     void cacheInterstitialAd(const std::string& adsID) const;
     
@@ -28,19 +37,15 @@ public:
     void showInterstitialAd() const;
     void showRewardedAd() const;
     
-    void showNativeExpressAd(const std::string& adsID, int width,
-                                     int height, int pos);
-    void showNativeExpressAdWithDeltaPosition(const std::string& adsId,
-                                              int width, int height, int deltaX,
-                                              int deltaY);
-    void hideNativeExpressAd();
-    
-    void showNativeAdvancedAd(const std::string& adsID, int width,
+    void hideNativeAd(const std::string& adsID);    
+    void showNativeAd(const std::string& adsID, int width,
                                       int height, int x, int y);
     
-    void hideNativeAdvancedAd();
-    
-    void onAdsCallback(int code, const std::string& msg) const;
+    inline void setCallback(const AdsCallback& cb) { _callback = cb; }
+    inline AdsCallback getCallback() { return _callback; }
+private:
+    AdsCallback _callback;
+    std::string onAdsCallback(const std::string& msg) const;
 };
 } // namespace facebook
 } // namespace ee

@@ -8,7 +8,11 @@
 
 @interface EEFacebookAds : NSObject
 
-- (void) initFBAds:(NSString*) InterstitialID nativeID:(NSString*) NativeID bannerID:(NSString*) BannerID;
+- (void) initFBAdsInterstitial:(NSString*) InterstitialID;
+- (void) initFBAdsNativeAds:(NSString*) NativeID layout:(NSString*) layout;
+- (void) initFBAdsBanner:(NSString*) BannerID;
+
+
 - (void)cacheRewardedAd:(NSString*)adsID;
 - (void)cacheInterstitialAd:(NSString*)adsID;
 
@@ -21,18 +25,9 @@
 - (void)showInterstitialAd;
 - (void)showRewardedAd;
 
-- (void)showNativeExpressAd:(NSString*)adsID
-                      width:(int)width
-                     height:(int)height
-                        pos:(int)pos;
-- (void)showNativeExpressAdWithDeltaPosition:(NSString*)adsId
-                                       width:(int)width
-                                      height:(int)height
-                                      deltaX:(int)deltaX
-                                      deltaY:(int)deltaY;
-- (void)hideNativeExpressAd;
+- (void)hideNativeAd:(NSString*)adsID;
 
-- (void)showNativeAdvancedAd:(NSString*)adsID
+- (void)showNativeAd:(NSString*)adsID
                        width:(int)width
                       height:(int)height
                            x:(int)x

@@ -14,6 +14,8 @@
 /// Creates an empty JSON formatted string.
 + (NSString* _Nonnull)emptyResult;
 
++ (NSDictionary* _Nonnull)createDictWithError:(NSError* _Nullable)error;
+
 /// Adds the specified error to the specified dictionary.
 + (void)setError:(NSError* _Nullable)error
          forDict:(NSMutableDictionary* _Nonnull)dict;

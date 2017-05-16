@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <mutex>
 
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -29,6 +30,7 @@ std::string MessageBridge::call(const std::string& tag) {
 
 std::string MessageBridge::callCpp(const std::string& tag,
                                    const std::string& msg) {
+    std::lock_guard<SpinLock> guard(handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
         assert(false);
@@ -39,6 +41,7 @@ std::string MessageBridge::callCpp(const std::string& tag,
 
 bool MessageBridge::registerHandler(const MessageHandler& handler,
                                     const std::string& tag) {
+    std::lock_guard<SpinLock> guard(handlerLock_);
     if (handlers_.count(tag) > 0) {
         assert(false);
         return false;
@@ -47,7 +50,8 @@ bool MessageBridge::registerHandler(const MessageHandler& handler,
     return true;
 }
 
-bool MessageBridge::deregisterHandlere(const std::string& tag) {
+bool MessageBridge::deregisterHandler(const std::string& tag) {
+    std::lock_guard<SpinLock> guard(handlerLock_);
     if (handlers_.count(tag) == 0) {
         assert(false);
         return false;

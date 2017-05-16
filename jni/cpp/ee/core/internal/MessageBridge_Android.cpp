@@ -14,6 +14,24 @@
 
 namespace ee {
 namespace core {
+namespace {
+extern "C" {
+JNIEXPORT jstring JNICALL
+Java_com_ee_core_internal_MessageBridge_callCpp(JNIEnv* env, jobject instance,
+                                                jstring tag_, jstring msg_) {
+    const char* tag = env->GetStringUTFChars(env, tag_, 0);
+    const char* msg = env->GetStringUTFChars(env, msg_, 0);
+
+    auto result = MessageBridge::getInstance().call(tag, msg);
+
+    env->ReleaseStringUTFChars(env, tag_, tag);
+    env->ReleaseStringUTFChars(env, msg_, msg);
+
+    return env->NewStringUTF(env, result.c_str());
+}
+} // extern "C"
+} // namespace
+
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     auto methodInfo = JniUtils::getStaticMethodInfo(

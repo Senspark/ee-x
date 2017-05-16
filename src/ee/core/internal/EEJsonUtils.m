@@ -10,10 +10,10 @@
 
 @implementation EEJsonUtils
 
-+ (NSString*)convertDictionaryToString:(NSDictionary*)dict {
++ (NSString*)convertObjectToString:(id)object {
     NSError* error;
     NSUInteger options = NSJSONWritingPrettyPrinted;
-    NSData* data = [NSJSONSerialization dataWithJSONObject:dict
+    NSData* data = [NSJSONSerialization dataWithJSONObject:object
                                                    options:options
                                                      error:&error];
     if (data == nil) {
@@ -23,6 +23,14 @@
     }
     return [[[NSString alloc] initWithData:data
                                   encoding:NSUTF8StringEncoding] autorelease];
+}
+
++ (NSString*)convertArrayToString:(NSArray*)arr {
+    return [self convertObjectToString:arr];
+}
+
++ (NSString*)convertDictionaryToString:(NSDictionary*)dict {
+    return [self convertObjectToString:dict];
 }
 
 + (NSMutableDictionary*)convertStringToDictionary:(NSString*)str {

@@ -43,6 +43,9 @@ public class MessageBridge {
         return getInstance().call(tag, msg);
     }
 
+    @NonNull
+    public native String callCpp(@NonNull String tag, @NonNull String msg);
+
     public void registerHandler(MessageHandler handler, @NonNull String tag) {
         if (_handlers.containsKey(tag)) {
             _logger.error("registerHandler: " + tag + " already exists!");

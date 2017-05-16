@@ -8,14 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <StoreKit/SKPaymentQueue.h>
+#import <StoreKit/SKProductsRequest.h>
 
 @class SKPaymentTransaction;
 
-typedef void (^EETransactionSuccess)(SKPaymentTransaction* transaction);
-typedef void (^EETransactionFailure)(SKPaymentTransaction* transaction,
-                                     NSError* error);
-
-@interface EEStore : NSObject <SKPaymentTransactionObserver> {
+@interface EEStore
+    : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver> {
 }
 
 + (instancetype)getInstance;
@@ -24,8 +22,6 @@ typedef void (^EETransactionFailure)(SKPaymentTransaction* transaction,
 
 - (void)addPayment:(NSString*)productIdentifier;
 
-- (void)addPayment:(NSString*)productIdentifier
-           success:(EETransactionSuccess)successBlock
-           failure:(EETransactionFailure)failureBlock;
+- (void)restoreTransactions;
 
 @end

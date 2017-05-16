@@ -14,6 +14,11 @@
 + (NSString* _Nonnull)emptyResult {
     return [EEJsonUtils convertDictionaryToString:@{}];
 }
++ (NSDictionary* _Nonnull)createDictWithError:(NSError* _Nullable)error {
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [self setError:error forDict:dict];
+    return dict;
+}
 
 + (void)setError:(NSError* _Nullable)error
          forDict:(NSMutableDictionary* _Nonnull)dict {

@@ -13,6 +13,8 @@
 #include <map>
 #include <string>
 
+#include "ee/core/SpinLock.hpp"
+
 namespace ee {
 namespace core {
 using MessageHandler = std::function<std::string(const std::string& message)>;
@@ -48,7 +50,7 @@ public:
     /// Deregisters a handler not to receive message from other platforms.
     /// @param tag The unique ID of the handler.
     /// @return Whether the deregistration was successful.
-    bool deregisterHandlere(const std::string& tag);
+    bool deregisterHandler(const std::string& tag);
 
 private:
     MessageBridge();
@@ -57,6 +59,7 @@ private:
     MessageBridge(const MessageBridge&) = delete;
     MessageBridge& operator=(const MessageBridge&) = delete;
 
+    SpinLock handlerLock_;
     std::map<std::string, MessageHandler> handlers_;
 };
 } // namespace core

@@ -21,7 +21,7 @@ FacebookAds::FacebookAds() {
 }
 
 FacebookAds::~FacebookAds() {
-    core::MessageBridge::getInstance().deregisterHandlere(
+    core::MessageBridge::getInstance().deregisterHandler(
         "__facebookads_callback");
 }
 

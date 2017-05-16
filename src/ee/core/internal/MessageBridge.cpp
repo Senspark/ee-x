@@ -50,7 +50,7 @@ bool MessageBridge::registerHandler(const MessageHandler& handler,
     return true;
 }
 
-bool MessageBridge::deregisterHandlere(const std::string& tag) {
+bool MessageBridge::deregisterHandler(const std::string& tag) {
     std::lock_guard<SpinLock> guard(handlerLock_);
     if (handlers_.count(tag) == 0) {
         assert(false);

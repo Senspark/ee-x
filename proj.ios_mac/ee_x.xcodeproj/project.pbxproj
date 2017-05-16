@@ -36,6 +36,19 @@
 		6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
 		6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
 		6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
+		6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB62A1EC9643100450E67 /* EEStore.h */; };
+		6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */; };
+		6F2580001ECB162D00B910F9 /* PurchaseType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */; };
+		6F2580011ECB162D00B910F9 /* PurchaseWithMarket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5ED1EC94FEA00450E67 /* PurchaseWithMarket.hpp */; };
+		6F2580021ECB162D00B910F9 /* MarketItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F11EC9519700450E67 /* MarketItem.hpp */; };
+		6F2580031ECB162D00B910F9 /* VirtualItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F51EC9567600450E67 /* VirtualItem.hpp */; };
+		6F2580041ECB162D00B910F9 /* PurchasableVirtualItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5F91EC9568100450E67 /* PurchasableVirtualItem.hpp */; };
+		6F2580051ECB162D00B910F9 /* VirtualCurrency.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5FD1EC9578900450E67 /* VirtualCurrency.hpp */; };
+		6F2580061ECB162D00B910F9 /* VirtualCurrencyStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6011EC9583800450E67 /* VirtualCurrencyStorage.hpp */; };
+		6F2580071ECB162D00B910F9 /* VirtualItemStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6051EC9584700450E67 /* VirtualItemStorage.hpp */; };
+		6F2580081ECB162D00B910F9 /* KeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */; };
+		6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */; };
+		6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* Store.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -680,6 +693,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F257FFD1ECB162800B910F9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F2580001ECB162D00B910F9 /* PurchaseType.hpp in Headers */,
+				6F2580081ECB162D00B910F9 /* KeyValueStorage.hpp in Headers */,
+				6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */,
+				6F2580021ECB162D00B910F9 /* MarketItem.hpp in Headers */,
+				6F2580051ECB162D00B910F9 /* VirtualCurrency.hpp in Headers */,
+				6F2580041ECB162D00B910F9 /* PurchasableVirtualItem.hpp in Headers */,
+				6F2580031ECB162D00B910F9 /* VirtualItem.hpp in Headers */,
+				6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */,
+				6F2580011ECB162D00B910F9 /* PurchaseWithMarket.hpp in Headers */,
+				6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */,
+				6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */,
+				6F2580061ECB162D00B910F9 /* VirtualCurrencyStorage.hpp in Headers */,
+				6F2580071ECB162D00B910F9 /* VirtualItemStorage.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6F43A2A41EC19F5700C68152 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -895,6 +928,7 @@
 				6FAFB5CF1EC94E0F00450E67 /* Frameworks */,
 				6FAFB5D61EC94E0F00450E67 /* Copy Files */,
 				6FAFB5DF1EC94E0F00450E67 /* [CP] Copy Pods Resources */,
+				6F257FFD1ECB162800B910F9 /* Headers */,
 			);
 			buildRules = (
 			);

@@ -319,7 +319,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 
 - (void)interstitialAdDidClose:(FBInterstitialAd*)interstitialAd {
     NSLog(@"FBAds ======== interstitialAdDidClose");
-
+    [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
+                                       msg:@"interstitialAdDidClose"];
     // reinit interstitial ads
     [self initFBAdsInterstitial:_interstitialID];
 }
@@ -340,9 +341,13 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
       didFailWithError:(NSError*)error {
     NSLog(@"FBAds ======== interstitialAd didFailWithError %s",
           error.description);
+    [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
+                                       msg:@"interstitialAd didFailWithError"];
 }
 - (void)interstitialAdWillLogImpression:(FBInterstitialAd*)interstitialAd {
     NSLog(@"FBAds ======== interstitialAdWillLogImpression");
+    [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
+                                       msg:@"interstitialAdWillLogImpression"];
 }
 
 #pragma mark ============FBNativeAdDelegate

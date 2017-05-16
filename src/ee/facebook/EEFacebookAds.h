@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/Foundation.h>
+
 @interface EEFacebookAds : NSObject
 
 - (void) initFBAdsInterstitial:(NSString*) InterstitialID;

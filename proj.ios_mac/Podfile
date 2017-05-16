@@ -1,7 +1,7 @@
 abstract_target 'common' do
     abstract_target 'crashlytics' do
         pod 'Fabric'
-        pod 'Crashlytics'        
+        pod 'Crashlytics'
         
         target 'ee_x_mobile_crashlytics'
         target 'ee_x_desktop_crashlytics'
@@ -11,5 +11,9 @@ abstract_target 'common' do
         pod 'Firebase/Core'
         pod 'Firebase/RemoteConfig'
         pod 'Firebase/Storage'
+    end
+
+    target 'ee_x_mobile_facebook_ads' do
+        pod 'FBAudienceNetwork'
     end
 end

@@ -50,7 +50,7 @@ public:
     /// Deregisters a handler not to receive message from other platforms.
     /// @param tag The unique ID of the handler.
     /// @return Whether the deregistration was successful.
-    bool deregisterHandlere(const std::string& tag);
+    bool deregisterHandler(const std::string& tag);
 
 private:
     MessageBridge();

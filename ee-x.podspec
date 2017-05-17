@@ -89,7 +89,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
-    s.dependency 'FBAudienceNetwork'
   end
 
   spec.subspec 'notification' do |s|
@@ -144,5 +143,6 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/FacebookAdsBridge.hpp'
 
     s.dependency 'ee-x/core'
+    s.dependency 'FBAudienceNetwork'
   end
 end

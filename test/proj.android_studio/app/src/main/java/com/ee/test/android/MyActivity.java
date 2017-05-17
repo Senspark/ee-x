@@ -21,6 +21,10 @@ public class MyActivity extends Activity {
 
     private native void applicationWillEnterForeground();
 
+    static {
+        System.loadLibrary("ee_x_test_android_shared");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         _logger.debug("onCreate: begin.");

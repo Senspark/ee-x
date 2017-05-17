@@ -183,31 +183,31 @@ private:
 #include <ee/Core.hpp>
 
 CrashlyticsAgent* CrashlyticsAgent::getInstance() {
-    static Crashlytics sharedInstance;
+    static CrashlyticsAgent sharedInstance;
     return &sharedInstance;
 }
 
-void Crashlytics::initialize() {
+void CrashlyticsAgent::initialize() {
     protocol_ = std::make_unique<ee::Crashlytics>();
 }
 
-void Crashlytics::causeCrash() {
+void CrashlyticsAgent::causeCrash() {
     protocol_->causeCrash();
 }
 
-void Crashlytics::causeException() {
+void CrashlyticsAgent::causeException() {
     protocol_->causeException();
 }
 
-void Crashlytics::logDebug(const std::string& message) {
+void CrashlyticsAgent::logDebug(const std::string& message) {
     protocol_->log(ee::LogLevel::Debug, "your_log_tag", message);
 }
 
-void Crashlytics::logInfo(const std::string& message) {
+void CrashlyticsAgent::logInfo(const std::string& message) {
     protocol_->log(ee::LogLevel::Info, "your_log_tag", message);
 }
 
-void Crashlytics::logError(const std::string& message) {
+void CrashlyticsAgent::logError(const std::string& message) {
     protocol_->log(ee::LogLevel::Error, "your_log_tag", message);
 }
 ```

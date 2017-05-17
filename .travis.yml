@@ -1,5 +1,13 @@
+# https://github.com/CocoaPods/pod-template/blob/master/.travis.yml
+
 language: objective-c
 osx_image: xcode8.2
 xcode_project: test/proj.ios_mac/ee_x_test.xcode_workspace
 xcode_scheme: ee_x_test_mobile
 xcode_sdk: iphonesimulate10.2
+podfile: test/proj.ios_mac/Podfile
+cache:
+  - cocoapods
+before_install:
+  - gem install cocoapods
+  - pod install --project-director=test/proj.ios_mac

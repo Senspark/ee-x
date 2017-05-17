@@ -1,0 +1,5 @@
+language: objective-c
+osx_image: xcode8.2
+xcode_project: test/proj.ios_mac/ee_x_test.xcode_workspace
+xcode_scheme: ee_x_test_mobile
+xcode_sdk: iphonesimulate10.2

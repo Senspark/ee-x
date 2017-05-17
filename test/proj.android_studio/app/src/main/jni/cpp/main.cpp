@@ -15,7 +15,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv* env = nullptr;
     jint val = vm->GetEnv((void**)&env, JNI_VERSION_1_4);
     cocos_android_app_init(env);
-    return  JNI_VERSION_1_4;
+    return JNI_VERSION_1_4;
 }
 
 JNIEXPORT void JNICALL

@@ -22,7 +22,7 @@ Java_com_ee_core_internal_MessageBridge_callCpp(JNIEnv* env, jobject instance,
     const char* tag = env->GetStringUTFChars(tag_, nullptr);
     const char* msg = env->GetStringUTFChars(msg_, nullptr);
 
-    auto result = MessageBridge::getInstance().call(tag, msg);
+    auto result = MessageBridge::getInstance().callCpp(tag, msg);
 
     env->ReleaseStringUTFChars(tag_, tag);
     env->ReleaseStringUTFChars(msg_, msg);

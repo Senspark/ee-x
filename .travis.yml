@@ -10,4 +10,4 @@ cache:
   - cocoapods
 before_install:
   - gem install cocoapods
-  - pod install --project-director=test/proj.ios_mac
+  - pod install --project-directory=test/proj.ios_mac

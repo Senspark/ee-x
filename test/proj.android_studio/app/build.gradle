@@ -73,11 +73,6 @@ android {
         }
     }
 
-    sourceSets.main {
-        jni.srcDirs = []
-        jniLibs.srcDirs 'src/main/libs', 'src/main/jniLibs'
-    }
-
     splits {
         abi {
             enable true

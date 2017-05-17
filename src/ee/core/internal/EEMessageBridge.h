@@ -11,22 +11,38 @@
 typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
 
 @interface EEMessageBridge : NSObject {
+    /// Registered handlers.
     NSMutableDictionary* handlers;
 }
 
-+ (id _Null_unspecified)getInstance;
+/// Gets a message bridge instance.
++ (instancetype _Nonnull)getInstance;
 
-- (NSString* _Nonnull)call:(NSString* _Nonnull)tag msg:(NSString* _Nonnull)msg;
-
-- (void)registerHandler:(EEMessageHandler _Nonnull)handler
+/// Registers a new handler to receive messages from C++.
+/// @param handler The handler.
+/// @param tag The unique tag of the handler.
+/// @return Whether the registration was successful.
+- (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag;
 
-- (void)deregisterHandler:(NSString* _Nonnull)tag;
+/// Deregisters an existing handler not to receive messages from C++.
+/// @param tag The unique tag of the handler.
+/// @return Whether the deregistration was successful.
+- (BOOL)deregisterHandler:(NSString* _Nonnull)tag;
 
 @end
 
 @interface EEMessageBridge (Cpp)
 
+/// Calls a handler from C++ without a message.
+/// @param tag The unique tag of the handler.
+/// @return Reply message from C++.
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag;
+
+/// Calls a handler from C++ with a message.
+/// @param tag The unique tag of the handler.
+/// @param msg The message.
+/// @return Reply message from C++.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
                           msg:(NSString* _Nonnull)msg;
 

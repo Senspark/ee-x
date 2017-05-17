@@ -78,7 +78,7 @@ public class AppActivity extends Cocos2dxActivity {
     }
     
     @Override
-    protected void onBackPressed() {
+    public void onBackPressed() {
         if (PluginManager.getInstance().onBackPressed()) {
             return;
         }

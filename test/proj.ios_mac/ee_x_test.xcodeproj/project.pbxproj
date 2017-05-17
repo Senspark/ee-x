@@ -14,6 +14,8 @@
 		6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802B1ECBFF8C00B910F9 /* AppController.mm */; };
 		6F25802F1ECBFFAE00B910F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802E1ECBFFAE00B910F9 /* main.m */; };
 		6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationAgent.cpp */; };
+		6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
+		6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +34,9 @@
 		6F25802E1ECBFFAE00B910F9 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6F2580301ECC019000B910F9 /* NotificationAgent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotificationAgent.cpp; sourceTree = "<group>"; };
 		6F2580311ECC019000B910F9 /* NotificationAgent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotificationAgent.hpp; sourceTree = "<group>"; };
+		6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
+		6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppDelegate.hpp; sourceTree = "<group>"; };
+		6F25804B1ECC4E7200B910F9 /* main */ = {isa = PBXFileReference; lastKnownFileType = folder; name = main; path = ../proj.android_studio/app/src/main; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,6 +87,7 @@
 			children = (
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
+				6F25804B1ECC4E7200B910F9 /* main */,
 				080E96DDFE201D6D7F000001 /* ios */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				503AE10617EB990700D1A890 /* mac */,
@@ -115,6 +121,8 @@
 				6F2580261ECBFE3E00B910F9 /* CrashlyticsAgent.hpp */,
 				6F2580301ECC019000B910F9 /* NotificationAgent.cpp */,
 				6F2580311ECC019000B910F9 /* NotificationAgent.hpp */,
+				6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */,
+				6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -405,6 +413,7 @@
 			files = (
 				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
+				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
 				6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */,
 			);
@@ -416,6 +425,7 @@
 			files = (
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
+				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

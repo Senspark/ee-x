@@ -10,7 +10,7 @@
 
 #import <ee/Core.hpp>
 
-#include "NotificationAgent.hpp"
+#include "AppDelegate.hpp"
 
 @implementation AppController
 
@@ -20,23 +20,24 @@
     [[EEPluginManager getInstance] addPlugin:@"Crashlytics"];
     [[EEPluginManager getInstance] addPlugin:@"Notification"];
 
+    // Simulate iOS.
+    AppDelegate::getInstance()->applicationDidFinishLaunching();
+
     return YES;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    // Invoke
+    // Simulate
     // cocos2d::Application::getInstance()->applicationDidEnterBackground();
-
-    NotificationAgent::getInstance()->scheduleAll();
+    AppDelegate::getInstance()->applicationDidEnterBackground();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    // Invoke
+    // Simulate
     // cocos2d::Application::getInstance()->applicationWillEnterForeground();
-
-    NotificationAgent::getInstance()->unscheduleAll();
+    AppDelegate::getInstance()->applicationWillEnterForeground();
 }
 
 @end

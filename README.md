@@ -2,6 +2,10 @@
 
 *Author: Hai Hoang*
 
+|iOS|
+|---|
+|[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)|
+
 ## Modules
 
 - Crashlytics

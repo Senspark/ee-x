@@ -58,7 +58,7 @@ matrix:
       install:
         - travis_retry wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O ndk.zip
         - chmod a+x ndk.zip
-        - ./ndk.zip 1>  /dev/null 2>&1
+        - './ndk.zip 1> /dev/null 2>&1'
         - chmod a+x ./android-ndk-r10e/ndk-build
 
       before_script:

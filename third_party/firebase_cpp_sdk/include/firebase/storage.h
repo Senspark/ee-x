@@ -115,6 +115,8 @@ class Storage {
 
  private:
   /// @cond FIREBASE_APP_INTERNAL
+  friend class Metadata;
+
   Storage(::firebase::App* app, const char* url);
   Storage(const Storage& src);
   Storage& operator=(const Storage& src);

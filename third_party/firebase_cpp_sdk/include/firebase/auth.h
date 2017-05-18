@@ -28,6 +28,8 @@ class AuthStateListener;
 
 /// @brief Firebase authentication object.
 ///
+/// @if cpp_examples
+///
 /// firebase::auth::Auth is the gateway to the Firebase authentication API.
 /// With it, you can reference @ref firebase::auth::User objects to manage user
 /// accounts and credentials.
@@ -37,7 +39,6 @@ class AuthStateListener;
 /// @ref firebase::auth::Auth::GetAuth.
 ///
 /// For example:
-/// @if cpp_examples
 /// @code{.cpp}
 ///  // Get the Auth class for your App.
 ///  firebase::auth::Auth* auth = firebase::auth::Auth::GetAuth(app);

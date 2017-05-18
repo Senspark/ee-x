@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "firebase/future.h"
+#include "firebase/internal/common.h"
 #include "firebase/storage/metadata.h"
 
 namespace firebase {
@@ -25,6 +26,11 @@ class StorageReferenceInternal;
 /// delete an object at a specified path.
 class StorageReference {
  public:
+  /// @brief Default constructor. This creates an invalid StorageReference.
+  /// Attempting to perform any operations on this reference will fail unless a
+  /// valid StorageReference has been assigned to it.
+  StorageReference() : internal_(nullptr) {}
+
   ~StorageReference();
 
   /// @brief Copy constructor. It's totally okay (and efficient) to copy
@@ -57,11 +63,12 @@ class StorageReference {
   StorageReference& operator=(StorageReference&& other);
 #endif  // defined(FIREBASE_USE_MOVE_OPERATORS) || defined(DOXYGEN)
 
-  /// @brief Gets the storage to which we refer.
+  /// @brief Gets the firebase::storage::Storage instance to which we refer.
   ///
   /// The pointer will remain valid indefinitely.
   ///
-  /// @returns Firebase Database instance that this StorageReference refers to.
+  /// @returns The firebase::storage::Storage instance that this
+  /// StorageReference refers to.
   Storage* storage();
 
   /// @brief Gets a reference to a location relative to this one.
@@ -192,7 +199,19 @@ class StorageReference {
   /// @returns A Future result, which will complete when the operation either
   /// succeeds or fails. When the Future is completed, if its Error is
   /// kErrorNone, the operation succeeded and the Metadata is returned.
-  Future<Metadata> UpdateMetadata(const Metadata* metadata);
+  Future<Metadata> UpdateMetadata(const Metadata& metadata);
+
+  /// @brief Updates the metadata associated with this StorageReference.
+  ///
+  /// @returns A Future result, which will complete when the operation either
+  /// succeeds or fails. When the Future is completed, if its Error is
+  /// kErrorNone, the operation succeeded and the Metadata is returned.
+  ///
+  /// @deprecated Deprecated in favor of UpdateMetadata(const Metadata&).
+  FIREBASE_DEPRECATED Future<Metadata> UpdateMetadata(
+      const Metadata* metadata) {
+    return UpdateMetadata(*metadata);
+  }
 
   /// @brief Returns the result of the most recent call to UpdateMetadata();
   ///
@@ -301,8 +320,9 @@ class StorageReference {
   Future<Metadata> PutFileLastResult();
 
   /// @brief Returns true if this StorageReference is valid, false if it is not
-  /// valid. An invalid StorageReference indicates that there was an error
-  /// retrieving the reference.
+  /// valid. An invalid StorageReference indicates that the reference is
+  /// uninitialized (created with the default constructor) or that there was an
+  /// error retrieving the reference.
   ///
   /// @returns true if this StorageReference is valid, false if this
   /// StorageReference is invalid.

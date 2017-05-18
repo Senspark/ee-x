@@ -50,6 +50,7 @@ class InvitesSenderInternal;
 /// @see firebase::invites::SendInvite()
 /// @endif
 struct Invite {
+  // LINT.IfChange
   /// @brief Maximum length for an invitation message.
   ///
   /// @if cpp_examples
@@ -84,6 +85,7 @@ struct Invite {
   /// @see Invite::description_text
   /// @endif
   static const unsigned int kMaxDescriptionTextLength = 1000;
+  // LINT.ThenChange(//depot/google3/firebase/invites/client/cpp/src/include/firebase/csharp/invites.SWIG)
 
   /// Initialize the invite.
   Invite() : android_minimum_version_code(0) {}

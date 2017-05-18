@@ -51,7 +51,7 @@ enum FetchFailureReason {
 /// @brief Describes the state of the most recent Fetch() call.
 /// Normally returned as a result of the GetInfo() function.
 struct ConfigInfo {
-  /// @brief The time (in seconds since the epoch) that the last fetch
+  /// @brief The time (in milliseconds since the epoch) that the last fetch
   /// operation completed.
   uint64_t fetch_time;
 
@@ -61,7 +61,7 @@ struct ConfigInfo {
   /// @brief The reason the most recent fetch failed.
   FetchFailureReason last_fetch_failure_reason;
 
-  /// @brief The time (in seconds since the epoch) when the refreshing of
+  /// @brief The time (in milliseconds since the epoch) when the refreshing of
   /// Remote Config data is throttled.
   uint64_t throttled_end_time;
 };

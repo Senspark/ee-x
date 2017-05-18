@@ -19,6 +19,11 @@ class DatabaseReference;
 /// will be triggered when the data changes.
 class Query {
  public:
+  /// Default constructor. This creates an invalid Query. Attempting to perform
+  /// any operations on this reference will fail unless a valid Query has been
+  /// assigned to it.
+  Query() : internal_(nullptr) {}
+
   /// Copy constructor. Queries can be copied. Copies exist independently of
   /// each other.
   Query(const Query& query);
@@ -278,7 +283,8 @@ class Query {
 
   /// @brief Returns true if this query is valid, false if it is not valid. An
   /// invalid query could be returned by, say, attempting to OrderBy two
-  /// different items, or calling OrderByChild() with an empty path. If a Query
+  /// different items, or calling OrderByChild() with an empty path, or by
+  /// constructing a Query with the default constructor. If a Query
   /// is invalid, attempting to add more constraints will also result in an
   /// invalid Query.
   ///

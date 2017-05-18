@@ -80,4 +80,6 @@ matrix:
         - chmod +x test/proj.android_studio/gradlew
 
       script:
-        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
+        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleReleasenotifications:
+  slack:
+    secure: WRBzgJxxvZ5oNOKydwPeEnin8xKsDgd9xCiC2vv2XI8fwFUbv0adAjZulpYgaUdbitKyRwLtuZzjH66fiYbAu9MrmBNCbaCuIqiTXQLGlggP5qYg73vtgg0rcfEk15ZsqXCW0FmQeif+hAL0W9ueFDQ3tSzHiRc9XlaoRPcxk1ZZ54axStEsf9tHux4HpTrxH/2qg7mLXri4zq0dEAcSJJfQCadRHCuADPo429j/EPnxwlapZ4tU+BdXS0RUfwnjSlLMcLxawA1fMDNdwcc9X09nQw26+rn6fHtGOZWqtuaVj2QAMs4uKijBLfN/tVfDY7NiwbxIqLAu4XhfB4lwR/YwHjAinShP83XptVhTcikpzfIrjBA/N3hXKQwK7EEz1f0m2sUvkH1CGszKqCs/+7jSH9SZobBoqJMlXItgw1fewMhETJ1WV99u8ABFsZOUyPqH5bhbXldaIC0AwiiaPS7k9IKipzITCA5mmFx+CBfTsUQIVg+MtZ2I+xT4ZYtj7Me4+v9US8KlnX92LnUe36eozmO1WKKkiTFH2beV0ekBz1QKq+eEechZ0BxLkltm5CPGXP7OzImc+I2FXGgntc+RNd5DguXltPfe+sSAhbH0FvsDtK6vnN8mtQrqvu3lkNKHQQOJnud+0U8tG/Id1S8mKiTIf/OpA72okVse49U=

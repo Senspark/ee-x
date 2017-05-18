@@ -21,9 +21,6 @@ matrix:
 
     - language: android
 
-      jdk:
-        - oraclejdk7
-
       os: osx
 
       android:

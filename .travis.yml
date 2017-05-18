@@ -15,6 +15,8 @@ matrix:
 
       before_install:
         - gem install cocoapods
+
+      install:
         - pod install --project-directory=test/proj.ios_mac
 
       script:
@@ -34,7 +36,6 @@ matrix:
           - android-25
           - extra-android-m2repository
           - extra-google-m2repository
-          - ndk
 
         # # https://github.com/travis-ci/travis-ci/issues/6555
         # http://stackoverflow.com/questions/43872206/travis-for-android-licence-issues
@@ -49,12 +50,10 @@ matrix:
 
       cache:
         directories:
-          - ${HOME}/android-ndk-root
           - ${HOME}/.gradle/caches
           - ${HOME}/.gradle/wrapper
           - ${HOME}/.android/build-cache
 
-      # https://github.com/Rajawali/Rajawali/blob/master/.travis.yml
       install:
         - travis_retry sudo apt-get install unzip
         - travis_retry wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O ndk.zip
@@ -63,6 +62,8 @@ matrix:
         - chmod a+x ./android-ndk-r10e/ndk-build
 
       before_script:
+        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') >> 'test/proj.android_studio/local.properties'
+        - cat test/proj.android_studio/local.properties
         - chmod +x test/proj.android_studio/gradlew
 
       script:

@@ -43,7 +43,6 @@ matrix:
           - ${HOME}/.gradle/caches
           - ${HOME}/.gradle/wrapper
           - ${HOME}/.android/build-cache
-          - ${HOME}/Library/Caches/Homebrew
 
       before_install:
         - export ANDROID_NDK_VERSION=r10e

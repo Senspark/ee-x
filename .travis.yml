@@ -27,7 +27,6 @@ matrix:
 
       env:
         - ANDROID_NDK_VERSION=r10e
-        - ANDROID_NDK_HOME=${HOME}/android-ndk-root
 
       android:
         components:
@@ -74,6 +73,7 @@ matrix:
             mv ./android-ndk-${ANDROID_NDK_VERSION} ${HOME}/android-ndk-root
           fi
 
+        - export ANDROID_NDK_HOME=${HOME}/android-ndk-root
         - echo 'ndk.dir=$ANDROID_NDK_HOME' >> test/proj.android_studio/local.properties
 
       before_script:

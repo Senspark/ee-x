@@ -1,14 +1,42 @@
 # https://github.com/CocoaPods/pod-template/blob/master/.travis.yml
+# https://github.com/googlesamples/android-ndk/blob/master/.travis.yml
 
-language: objective-c
-osx_image: xcode8.2
+matrix:
+  include:
+    - language: objective-c
+      os: osx
+      osx_image: xcode8.2
 
-cache:
-  - cocoapods
+      cache:
+        - cocoapods
 
-before_install:
-  - gem install cocoapods
-  - pod install --project-directory=test/proj.ios_mac
+      before_install:
+        - gem install cocoapods
+        - pod install --project-directory=test/proj.ios_mac
 
-script:
-  - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+      script:
+        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+
+    - language: android
+      os: osx
+
+      cache:
+        directories:
+          - $(HOME)/android-ndk-root
+
+      before_install:
+        - export ANDROID_NDK_VERSION=r10e
+        - |
+          if [! -d $(HOME)/android-ndk-root]; then
+            travis_retry wget https://dl.google.com/android/repository/android-ndk-$(NDK_VERSION)-darwin-x86_64.zip
+            chmod u+x android-ndk-$(NDK_VERSION)-darwin-x86_64.zip
+            ./android-ndk-$(NDK_VERSION)-darwin-x86_64.zip > /dev/null
+            rm android-ndk-$(NDK_VERSION)-darwin-x86_64.zip
+            mv ./android-ndk-$(NDK_VERSION) $(HOME)/android-ndk-root
+          fi
+
+        - export ANDROID_NDK_HOME=$(HOME)/android-ndk-root
+        - brew install gradle
+
+      script:
+        - gradle -p test/proj.android_studio assembleRelease

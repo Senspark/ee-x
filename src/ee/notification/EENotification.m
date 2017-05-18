@@ -15,11 +15,12 @@
 
 @implementation EENotification
 
-NSString* const k__notification_schedule = @"__notification_schedule";
-NSString* const k__notification_unschedule = @"__notification_unschedule";
-NSString* const k__notification_unschedule_all =
-    @"__notification_unschedule_all";
-NSString* const k__notification_clear_all = @"__notification_clear_all";
+// clang-format off
+NSString* const k__notification_schedule        = @"__notification_schedule";
+NSString* const k__notification_unschedule      = @"__notification_unschedule";
+NSString* const k__notification_unschedule_all  = @"__notification_unschedule_all";
+NSString* const k__notification_clear_all       = @"__notification_clear_all";
+// clang-format on
 
 - (id)init {
     self = [super init];

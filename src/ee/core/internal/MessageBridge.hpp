@@ -23,32 +23,32 @@ class MessageBridge final {
 public:
     static MessageBridge& getInstance();
 
-    /// Sends a call to handlers from other platforms with no parameters.
-    /// @param tag The handler's tag registered in other platforms.
-    /// @return Reply message from native.
+    /// Calls a handler from other platforms without a message.
+    /// @param tag The unique tag of the handler.
+    /// @return Reply message from other platforms.
     std::string call(const std::string& tag);
 
-    /// Sends a call to handlers from other platforms with the specified
-    /// message.
-    /// @param tag The handler's tag registered in other platforms.
-    /// @param msg Additional parameter.
-    /// @return Reply message from native.
+    /// Calls a handler from other platforms with a message.
+    /// @param tag The unique tag of the handler.
+    /// @param msg The message.
+    /// @return Reply message from other platforms.
     std::string call(const std::string& tag, const std::string& msg);
 
-    /// Sends a call to registered handlers.
-    /// @param tag The handler's tag registered.
-    /// @param msg Additional parameter.
-    /// @return Reply message.
+    /// Calls a handler from C++ with a message.
+    /// @warning This method should not be called manually.
+    /// @param tag The unique tag of the handler.
+    /// @param msg The message.
+    /// @return Reply message from C++.
     std::string callCpp(const std::string& tag, const std::string& msg);
 
-    /// Registers a handler to receive message from other platforms.
+    /// Registers a handler to receive messages from other platforms.
     /// @param handler The handler to handle the message.
-    /// @param tag The unique ID of the handler.
+    /// @param tag The unique tag of the handler.
     /// @return Whether the registration was successful.
     bool registerHandler(const MessageHandler& handler, const std::string& tag);
 
-    /// Deregisters a handler not to receive message from other platforms.
-    /// @param tag The unique ID of the handler.
+    /// Deregisters a handler not to receive messages from other platforms.
+    /// @param tag The unique tag of the handler.
     /// @return Whether the deregistration was successful.
     bool deregisterHandler(const std::string& tag);
 
@@ -60,6 +60,8 @@ private:
     MessageBridge& operator=(const MessageBridge&) = delete;
 
     SpinLock handlerLock_;
+
+    /// Registered handlers.
     std::map<std::string, MessageHandler> handlers_;
 };
 } // namespace core

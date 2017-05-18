@@ -1,0 +1,74 @@
+# https://github.com/CocoaPods/pod-template/blob/master/.travis.yml
+# https://github.com/googlesamples/android-ndk/blob/master/.travis.yml
+# https://github.com/Rajawali/Rajawali/blob/master/.travis.yml
+
+matrix:
+  include:
+    - language: objective-c
+
+      os: osx
+
+      osx_image: xcode8.2
+
+      cache:
+        - cocoapods
+
+      before_install:
+        - gem install cocoapods
+
+      install:
+        - pod install --project-directory=test/proj.ios_mac
+
+      script:
+        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+
+    - language: android
+
+      jdk: oraclejdk8
+
+      os: linux
+
+      android:
+        components:
+          - tools
+          - platform-tools
+          - build-tools-25.0.3
+          - android-25
+          - extra-android-m2repository
+          - extra-google-m2repository
+
+        # # https://github.com/travis-ci/travis-ci/issues/6555
+        # http://stackoverflow.com/questions/43872206/travis-for-android-licence-issues
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'
+
+      before_cache:
+        - rm -f  ${HOME}/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr ${HOME}/.gradle/caches/*/plugin-resolution/
+
+      cache:
+        directories:
+          - ${HOME}/.gradle/caches
+          - ${HOME}/.gradle/wrapper
+          - ${HOME}/.android/build-cache
+
+      install:
+        - travis_retry sudo apt-get install unzip
+        - travis_retry wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O ndk.zip
+        - chmod a+x ndk.zip
+        - unzip ./ndk.zip 2>&1 >/dev/null
+        - chmod a+x ./android-ndk-r10e/ndk-build
+
+      before_script:
+        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') >> 'test/proj.android_studio/local.properties'
+        - cat test/proj.android_studio/local.properties
+        - chmod +x test/proj.android_studio/gradlew
+
+      script:
+        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
+
+notifications:
+  slack:
+    secure: WRBzgJxxvZ5oNOKydwPeEnin8xKsDgd9xCiC2vv2XI8fwFUbv0adAjZulpYgaUdbitKyRwLtuZzjH66fiYbAu9MrmBNCbaCuIqiTXQLGlggP5qYg73vtgg0rcfEk15ZsqXCW0FmQeif+hAL0W9ueFDQ3tSzHiRc9XlaoRPcxk1ZZ54axStEsf9tHux4HpTrxH/2qg7mLXri4zq0dEAcSJJfQCadRHCuADPo429j/EPnxwlapZ4tU+BdXS0RUfwnjSlLMcLxawA1fMDNdwcc9X09nQw26+rn6fHtGOZWqtuaVj2QAMs4uKijBLfN/tVfDY7NiwbxIqLAu4XhfB4lwR/YwHjAinShP83XptVhTcikpzfIrjBA/N3hXKQwK7EEz1f0m2sUvkH1CGszKqCs/+7jSH9SZobBoqJMlXItgw1fewMhETJ1WV99u8ABFsZOUyPqH5bhbXldaIC0AwiiaPS7k9IKipzITCA5mmFx+CBfTsUQIVg+MtZ2I+xT4ZYtj7Me4+v9US8KlnX92LnUe36eozmO1WKKkiTFH2beV0ekBz1QKq+eEechZ0BxLkltm5CPGXP7OzImc+I2FXGgntc+RNd5DguXltPfe+sSAhbH0FvsDtK6vnN8mtQrqvu3lkNKHQQOJnud+0U8tG/Id1S8mKiTIf/OpA72okVse49U=

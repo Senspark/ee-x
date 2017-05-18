@@ -9,6 +9,7 @@
 #ifndef EE_X_FIREBASE_HPP_
 #define EE_X_FIREBASE_HPP_
 
+#include "ee/FirebaseFwd.hpp"
 #include "ee/firebase/FirebaseAnalytics.hpp"
 #include "ee/firebase/FirebaseRemoteConfig.hpp"
 #include "ee/firebase/FirebaseStorage.hpp"

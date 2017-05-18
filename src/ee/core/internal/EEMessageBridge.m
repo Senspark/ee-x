@@ -11,7 +11,7 @@
 
 @implementation EEMessageBridge
 
-+ (id)getInstance {
++ (instancetype)getInstance {
     static EEMessageBridge* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -35,30 +35,23 @@
     [super dealloc];
 }
 
-- (NSString* _Nonnull)call:(NSString* _Nonnull)tag msg:(NSString* _Nonnull)msg {
-    EEMessageHandler handler = [handlers objectForKey:tag];
-    if (handler == nil) {
-        NSAssert(NO, @"...");
-        return [EEDictionaryUtils emptyResult];
-    }
-    return handler(msg);
-}
-
-- (void)registerHandler:(EEMessageHandler _Nonnull)handler
+- (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag {
     if ([handlers objectForKey:tag] != nil) {
         NSAssert(NO, @"...");
-        return;
+        return NO;
     }
     [handlers setValue:[[handler copy] autorelease] forKey:tag];
+    return YES;
 }
 
-- (void)deregisterHandler:(NSString*)tag {
+- (BOOL)deregisterHandler:(NSString* _Nonnull)tag {
     if ([handlers objectForKey:tag] == nil) {
         NSAssert(NO, @"...");
-        return;
+        return NO;
     }
     [handlers removeObjectForKey:tag];
+    return YES;
 }
 
 @end

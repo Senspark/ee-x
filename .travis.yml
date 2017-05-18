@@ -21,14 +21,21 @@ matrix:
 
     - language: android
 
-      os: osx
+      jdk: oraclejdk7
+
+      os: linux
 
       android:
         components:
           - tools
+          - platform-tools
           - build-tools-25.0.3
           - android-21
           - extra-android-m2repository
+
+      before_cache:
+        - rm -f  ${HOME}/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr ${HOME}/.gradle/caches/*/plugin-resolution/
 
       cache:
         directories:

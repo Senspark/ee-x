@@ -74,6 +74,8 @@ matrix:
             mv ./android-ndk-${ANDROID_NDK_VERSION} ${HOME}/android-ndk-root
           fi
 
+        - echo 'ndk.dir=$ANDROID_NDK_HOME' >> test/proj.android_studio/local.properties
+
       before_script:
         - chmod +x test/proj.android_studio/gradlew
 

@@ -36,8 +36,6 @@ matrix:
           - android-25
           - extra-android-m2repository
           - extra-google-m2repository
-          - extra-android-support
-          - extra-google-google_play_services
 
         # http://stackoverflow.com/questions/43872206/travis-for-android-licence-issues
         licenses:

@@ -27,6 +27,7 @@ matrix:
 
       env:
         - ANDROID_NDK_VERSION=r10e
+        - ANDROID_NDK_HOME=${HOME}/android-ndk-root
 
       android:
         components:
@@ -72,9 +73,6 @@ matrix:
             rm android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
             mv ./android-ndk-${ANDROID_NDK_VERSION} ${HOME}/android-ndk-root
           fi
-
-        - export ANDROID_NDK_HOME=${HOME}/android-ndk-root
-        - export PATH=${ANDROID_NDK_HOME}:${PATH}
 
       before_script:
         - chmod +x test/proj.android_studio/gradlew

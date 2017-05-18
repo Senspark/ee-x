@@ -1,6 +1,7 @@
 # https://github.com/CocoaPods/pod-template/blob/master/.travis.yml
 # https://github.com/googlesamples/android-ndk/blob/master/.travis.yml
 # https://github.com/Rajawali/Rajawali/blob/master/.travis.yml
+# https://github.com/card-io/card.io-Android-source/blob/master/.travis.yml
 
 matrix:
   include:

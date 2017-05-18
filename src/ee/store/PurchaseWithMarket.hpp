@@ -17,8 +17,6 @@ namespace ee {
 namespace store {
 class PurchaseWithMarket : public PurchaseType {
 public:
-    PurchaseWithMarket();
-
     virtual ~PurchaseWithMarket();
 
     /// Creates a `PurchaseWithMarket`.
@@ -30,6 +28,9 @@ public:
     virtual void buy(const std::string& payload) override;
 
     virtual bool canAfford() override;
+
+protected:
+    PurchaseWithMarket();
 };
 } // namespace store
 } // namespace ee

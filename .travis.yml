@@ -1,5 +1,6 @@
 # https://github.com/CocoaPods/pod-template/blob/master/.travis.yml
 # https://github.com/googlesamples/android-ndk/blob/master/.travis.yml
+# https://github.com/Rajawali/Rajawali/blob/master/.travis.yml
 
 matrix:
   include:
@@ -25,9 +26,6 @@ matrix:
 
       os: linux
 
-      env:
-        - ANDROID_NDK_VERSION=r10e
-
       android:
         components:
           - tools
@@ -36,21 +34,14 @@ matrix:
           - android-25
           - extra-android-m2repository
           - extra-google-m2repository
+          - ndk
 
+        # # https://github.com/travis-ci/travis-ci/issues/6555
         # http://stackoverflow.com/questions/43872206/travis-for-android-licence-issues
         licenses:
           - 'android-sdk-preview-license-.+'
           - 'android-sdk-license-.+'
           - 'google-gdk-license-.+'
-
-      # https://github.com/travis-ci/travis-ci/issues/6555
-      # install:
-      #   - echo y | android update sdk -u -a -t tools
-      #   - echo y | android update sdk -u -a -t platform-tools
-      #   - echo y | android update sdk -u -a -t build-tools-25.0.3
-      #   - echo y | android update sdk -u -a -t android-25
-      #   - echo y | android update sdk -u -a -t extra-google-m2repository
-      #   - echo y | android update sdk -u -a -t extra-android-m2repository
 
       before_cache:
         - rm -f  ${HOME}/.gradle/caches/modules-2/modules-2.lock
@@ -63,23 +54,19 @@ matrix:
           - ${HOME}/.gradle/wrapper
           - ${HOME}/.android/build-cache
 
-      before_install:
-        - |
-          if [ ! -d ${HOME}/android-ndk-root ]; then
-            travis_retry wget https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
-            chmod u+x android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
-            ./android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip > /dev/null
-            rm android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
-            mv ./android-ndk-${ANDROID_NDK_VERSION} ${HOME}/android-ndk-root
-          fi
-
-        - export ANDROID_NDK_HOME=${HOME}/android-ndk-root
-        - echo 'ndk.dir=$ANDROID_NDK_HOME' >> test/proj.android_studio/local.properties
+      # https://github.com/Rajawali/Rajawali/blob/master/.travis.yml
+      install:
+        - travis_retry wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O ndk.zip
+        - chmod a+x ndk.zip
+        - ./ndk.zip 1>  /dev/null 2>&1
+        - chmod a+x ./android-ndk-r10e/ndk-build
 
       before_script:
         - chmod +x test/proj.android_studio/gradlew
 
       script:
-        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleReleasenotifications:
+        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
+
+notifications:
   slack:
     secure: WRBzgJxxvZ5oNOKydwPeEnin8xKsDgd9xCiC2vv2XI8fwFUbv0adAjZulpYgaUdbitKyRwLtuZzjH66fiYbAu9MrmBNCbaCuIqiTXQLGlggP5qYg73vtgg0rcfEk15ZsqXCW0FmQeif+hAL0W9ueFDQ3tSzHiRc9XlaoRPcxk1ZZ54axStEsf9tHux4HpTrxH/2qg7mLXri4zq0dEAcSJJfQCadRHCuADPo429j/EPnxwlapZ4tU+BdXS0RUfwnjSlLMcLxawA1fMDNdwcc9X09nQw26+rn6fHtGOZWqtuaVj2QAMs4uKijBLfN/tVfDY7NiwbxIqLAu4XhfB4lwR/YwHjAinShP83XptVhTcikpzfIrjBA/N3hXKQwK7EEz1f0m2sUvkH1CGszKqCs/+7jSH9SZobBoqJMlXItgw1fewMhETJ1WV99u8ABFsZOUyPqH5bhbXldaIC0AwiiaPS7k9IKipzITCA5mmFx+CBfTsUQIVg+MtZ2I+xT4ZYtj7Me4+v9US8KlnX92LnUe36eozmO1WKKkiTFH2beV0ekBz1QKq+eEechZ0BxLkltm5CPGXP7OzImc+I2FXGgntc+RNd5DguXltPfe+sSAhbH0FvsDtK6vnN8mtQrqvu3lkNKHQQOJnud+0U8tG/Id1S8mKiTIf/OpA72okVse49U=

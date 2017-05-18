@@ -58,7 +58,6 @@ matrix:
 
         - export ANDROID_NDK_HOME=${HOME}/android-ndk-root
         - export PATH=${ANDROID_NDK_HOME}:${PATH}
-        - brew install gradle
 
       script:
-        - gradle -p test/proj.android_studio assembleRelease
+        - sh test/proj.android_studio/gradlew -p test/proj.android_studio assembleRelease

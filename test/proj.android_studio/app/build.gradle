@@ -26,7 +26,10 @@ android {
                 arguments 'APP_PLATFORM=9'
                 arguments 'APP_LDFLAGS:=-latomic'
                 arguments 'APP_LDFLAGS+=-llog'
-                arguments '-j' + Runtime.runtime.availableProcessors()
+
+                // http://stackoverflow.com/questions/42579759/how-to-change-android-gradle-ndk-j-jobs-flag-value-for-clean-task
+                // arguments '-j' + Runtime.runtime.availableProcessors()
+                arguments '-j1'
 
                 cppFlags += '-std=c++1z'
                 cppFlags += '-fexceptions'

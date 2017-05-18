@@ -35,13 +35,11 @@
     NSMutableDictionary* _dictFBNativeAdView;
 }
 @property (nonatomic, strong) FBInterstitialAd* interstitialAd;
-//@property (strong, nonatomic) FBNativeAd* nativeAd;
 
 @end
 
 @implementation EEFacebookAds
 
-NSString* const k__facebookads_initFBAds = @"__facebookads_initFBAds";
 NSString* const k__facebookads_initFBAdsInterstitial =
     @"__facebookads_initFBAdsInterstitial";
 NSString* const k__facebookads_initFBAdsNativeAds =
@@ -68,8 +66,6 @@ NSString* const k__facebookads_showRewardedAd = @"__facebookads_showRewardedAd";
 NSString* const k__facebookads_hideNativeAd = @"__facebookads_hideNativeAd";
 
 NSString* const k__facebookads_showNativeAd = @"__facebookads_showNativeAd";
-
-NSString* const k__facebookads_onAdsCallback = @"__facebookads_onAdsCallback";
 
 NSString* const k__facebookads_callback = @"__facebookads_callback";
 

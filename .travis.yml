@@ -4,7 +4,9 @@
 matrix:
   include:
     - language: objective-c
+
       os: osx
+
       osx_image: xcode8.2
 
       cache:
@@ -18,24 +20,40 @@ matrix:
         - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
     - language: android
+
+      jdk:
+        - oraclejdk7
+
       os: osx
+
+      android:
+        components:
+          - tools
+          - build-tools-25.0.3
+          - android-21
+          - extra-android-m2repository
 
       cache:
         directories:
-          - $(TRAVIS_BUILD_DIR)/android-ndk-root
+          - ${HOME}/android-ndk-root
+          - ${HOME}/.gradle/caches
+          - ${HOME}/.gradle/wrapper
+          - ${HOME}/.android/build-cache
+          - ${HOME}/Library/Caches/Homebrew
 
       before_install:
         - export ANDROID_NDK_VERSION=r10e
         - |
-          if [ ! -d ${TRAVIS_BUILD_DIR}/android-ndk-root ]; then
+          if [ ! -d ${HOME}/android-ndk-root ]; then
             travis_retry wget https://dl.google.com/android/repository/android-ndk-$(ANDROID_NDK_VERSION)-darwin-x86_64.zip
             chmod u+x android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
             ./android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip > /dev/null
             rm android-ndk-${ANDROID_NDK_VERSION}-darwin-x86_64.zip
-            mv ./android-ndk-${ANDROID_NDK_VERSION} ${TRAVIS_BUILD_DIR}/android-ndk-root
+            mv ./android-ndk-${ANDROID_NDK_VERSION} ${HOME}/android-ndk-root
           fi
 
-        - export ANDROID_NDK_HOME=${TRAVIS_BUILD_DIR}/android-ndk-root
+        - export ANDROID_NDK_HOME=${HOME}/android-ndk-root
+        - export PATH=${ANDROID_NDK_HOME}:${PATH}
         - brew install gradle
 
       script:

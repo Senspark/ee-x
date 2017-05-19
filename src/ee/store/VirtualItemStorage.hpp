@@ -9,12 +9,15 @@
 #ifndef EE_X_STORE_VIRTUAL_ITEM_STORAGE_HPP_
 #define EE_X_STORE_VIRTUAL_ITEM_STORAGE_HPP_
 
+#include <string>
+
 namespace ee {
 namespace store {
 class VirtualItem;
 
 class VirtualItemStorage {
 public:
+    VirtualItemStorage() = default;
     virtual ~VirtualItemStorage() = default;
 
     /// Retrieves the balance of the given virtual item.
@@ -30,21 +33,19 @@ public:
     /// @return The balance of the required virtual item.
     virtual int setBalance(VirtualItem* item, int balance, bool notify);
 
-    /// Adds the given amount of items to the storage, and if notify is true
-    /// posts the change in the balance to the event bus.
+    /// Changes the amount of items by the specified amount the storage, and if
+    /// notify is true posts the change in the balance to the event bus.
     /// @param item The required virtual item.
     /// @param amount The amount of items to add.
     /// @param notify If notify is true posts balance change event.
     /// @return The balance of the required virtual item.
-    virtual int add(VirtualItem* item, int amount, bool notify);
+    virtual int addBalance(VirtualItem* item, int amount, bool notify);
 
-    /// Removes the given amount of items from the storage, and if notify is
-    /// true posts the change in the balance to the event bus.
-    /// @param item The required virtual item.
-    /// @param amount The amount of items to add.
-    /// @param notify If notify is true posts balance change event.
-    /// @return The balance of the required virtual item.
-    virtual int remove(VirtualItem* item, int amount, bool notify);
+protected:
+    virtual std::string keyBalance(const std::string& itemId) const = 0;
+
+    virtual void postBalanceChangeEvent(VirtualItem* item, int balance,
+                                        int amount) = 0;
 };
 } // namespace store
 } // namespace ee

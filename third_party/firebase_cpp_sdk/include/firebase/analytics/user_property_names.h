@@ -19,8 +19,8 @@ namespace analytics {
 /// choosing for each one. UserProperty names can be up to 24 characters
 /// long, may only contain alphanumeric characters and underscores ("_"),
 /// and must start with an alphabetic character. UserProperty values can
-/// be up to 36 characters long. The "firebase_" prefix is reserved and
-/// should not be used.
+/// be up to 36 characters long. The "firebase_", "google_", and "ga_"
+/// prefixes are reserved and should not be used.
 /// @{
 
 /// The method used to sign in. For example, "google", "facebook" or

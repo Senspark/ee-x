@@ -17,6 +17,7 @@ class MetadataInternal;
 class StorageReferenceInternal;
 }  // namespace internal
 
+class Storage;
 class StorageReference;
 
 /// @brief Metadata stores default attributes such as size and content type.
@@ -26,7 +27,7 @@ class StorageReference;
 /// declarative validation rules.
 class Metadata {
  public:
-  /// @brief Default constructor.
+  /// @brief Create a default Metadata that you can modify and use.
   Metadata();
 
   /// @brief Copy constructor.
@@ -211,11 +212,12 @@ class Metadata {
   /// @returns The path of the StorageReference object.
   const char* path() const;
 
-  /// @brief Return the associated StorageReference for which this metadata
-  /// belongs to.
+  /// @brief Return the associated StorageReference to which this Metadata
+  /// belongs.
   ///
-  /// @returns The associated StorageReference for which this metadata belongs.
-  /// to.
+  /// @returns The associated StorageReference to which this Metadata belongs.
+  /// If this Metadata is invalid or is not associated with any file, an invalid
+  /// StorageReference is returned.
   StorageReference GetReference() const;
 
   /// @brief Return the stored Size in bytes of the StorageReference object.
@@ -231,7 +233,8 @@ class Metadata {
   int64_t updated_time() const;
 
   /// @brief Returns true if this Metadata is valid, false if it is not
-  /// valid. An invalid Metadata is one that is not associated with any files.
+  /// valid. An invalid Metadata is returned when a method such as
+  /// StorageReference::GetMetadata() completes with an error.
   ///
   /// @returns true if this Metadata is valid, false if this Metadata is
   /// invalid.

@@ -317,6 +317,32 @@ Google Play services is unavailable AND you are using
 
 Release Notes
 -------------
+### 3.1.2
+  - Overview
+    - Bug fixes for Auth.
+  - Changes
+    - Auth: Fixed a crash caused by a stale memory reference when a
+      firebase::auth::Auth object is destroyed and then recreated for the same
+      App object.
+    - Auth: Fixed potential memory corruption when AuthStateListener is
+      destroyed.
+### 3.1.1
+  - Overview
+    - Bug fixes for Auth, Invites, Messaging, and Storage, plus a general fix.
+  - Changes
+    - General (Android): Fixed Google Play Services updater crash when clicking
+      outside of the dialog on Android 4.x devices.
+    - Auth: Fixed user being invalidated when linking a credential fails.
+    - Auth: Deprecated User::refresh_token().
+    - Messaging: Fixed incorrectly notifying the app of a message when a
+      notification is received while the app is in the background and the app
+      is then opened by via the app icon rather than the notification.
+    - Invites (iOS): Fixed an issue which resulted in the app delegate method
+      application:openURL:sourceApplication:annotation: not being called
+      when linking the invites library.
+    - Storage: Fixed a bug that prevented the construction of Metadata without
+      a storage reference.
+
 ### 3.1.0
   - Overview
     - Added support for multiple storage buckets in Cloud Storage for Firebase,

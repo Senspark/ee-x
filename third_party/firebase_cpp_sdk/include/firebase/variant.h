@@ -193,7 +193,8 @@ class Variant {
   template <typename K, typename V>
   Variant(const std::map<K, V>& value) : type_(kTypeNull) {
     Clear(kTypeMap);
-    for (auto i = value.begin(); i != value.end(); ++i) {
+    for (typename std::map<K, V>::const_iterator i = value.begin();
+         i != value.end(); ++i) {
       map().insert(std::make_pair(Variant(i->first), Variant(i->second)));
     }
   }
@@ -249,7 +250,7 @@ class Variant {
   ///   (note: this means that Variant(1) < Variant(0.0) - be careful!)
   /// * If both are int64: v1.int64_value() < v2.int64_value();
   /// * If both are double: v1.double_value() < v2.double_value()
-  /// * If both are bool: v1.bool_value() < v1.bool_value();
+  /// * If both are bool: v1.bool_value() < v2.bool_value();
   /// * If both are either static or mutable strings: strcmp(v1, v2) < 0
   /// * If both are vectors:
   ///   * If v1[0] < v2[0], that means v1 < v2 == true. Otherwise:

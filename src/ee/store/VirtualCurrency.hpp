@@ -17,15 +17,16 @@ namespace ee {
 namespace store {
 class VirtualCurrency : public VirtualItem {
 public:
+    /// Creates a virtual currency.
+    /// @param itemId The item ID.
+    /// @return The virtual currency.
     static std::unique_ptr<VirtualCurrency> create(const std::string& itemId);
 
-    virtual int give(int amount, bool notify) override;
-
-    virtual int take(int amount, bool notify) override;
-
-    virtual int resetBalance(int balance, bool notify) override;
-
     virtual int getBalance() override;
+
+    virtual int setBalance(int balance, bool notify) override;
+
+    virtual int addBalance(int amount, bool notify) override;
 };
 } // namespace store
 } // namespace ee

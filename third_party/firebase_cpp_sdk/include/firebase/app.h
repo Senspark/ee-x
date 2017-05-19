@@ -73,7 +73,7 @@ class AppOptions {
   /// Set the Firebase app ID used to uniquely identify an instance of an app.
   ///
   /// This is the mobilesdk_app_id in the Android google-services.json config
-  /// file or PROJECT_ID in the GoogleService-Info.plist.
+  /// file or GOOGLE_APP_ID in the GoogleService-Info.plist.
   ///
   /// This only needs to be specified if your application does not include
   /// google-services.json or GoogleService-Info.plist in its resources.
@@ -152,6 +152,15 @@ class AppOptions {
   /// @see set_storage_bucket().
   const char* storage_bucket() const { return storage_bucket_.c_str(); }
 
+  /// Set the Google Cloud project ID.
+  void set_project_id(const char* project) { project_id_ = project; }
+
+  /// Get the Google Cloud project ID.
+  ///
+  /// This is the project_id in the Android google-services.json config
+  /// file or PROJECT_ID in the GoogleService-Info.plist.
+  const char* project_id() const { return project_id_.c_str(); }
+
   /// @cond FIREBASE_APP_INTERNAL
  private:
   /// API key used to communicate with Google Servers.
@@ -166,15 +175,17 @@ class AppOptions {
   std::string fcm_sender_id_;
   /// Google Cloud Storage bucket name.
   std::string storage_bucket_;
+  /// Google Cloud project ID.
+  std::string project_id_;
   /// @endcond
 };
 
 /// @brief Firebase application object.
 ///
+/// @if cpp_examples
 /// firebase::App acts as a conduit for communication between all Firebase
 /// services used by an application.
 ///
-/// @if cpp_examples
 /// For example:
 /// @code
 /// #if defined(__ANDROID__)
@@ -183,6 +194,13 @@ class AppOptions {
 /// firebase::App::Create(firebase::AppOptions());
 /// #endif  // defined(__ANDROID__)
 /// @endcode
+/// @endif
+///
+/// @if swig_examples
+/// FirebaseApp acts as a conduit for communication between all Firebase
+/// services used by an application. A default instance is created
+/// automatically, based on settings in your Firebase configuration file,
+/// and all of the Firebase APIs connect with it automatically.
 /// @endif
 class App {
  public:

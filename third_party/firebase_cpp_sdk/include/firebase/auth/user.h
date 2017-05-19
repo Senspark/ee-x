@@ -23,11 +23,14 @@ class UserInfoInterface {
  public:
   virtual ~UserInfoInterface();
 
-  /// Gets the unique user ID for the user.
+  /// Gets the unique Firebase user ID for the user.
   ///
   /// @note The user's ID, unique to the Firebase project.
   /// Do NOT use this value to authenticate with your backend server, if you
-  /// have one. Use User::GetToken() instead.
+  /// have one.
+  /// @if cpp_examples
+  /// Use User::GetToken() instead.
+  /// @endif
   virtual std::string uid() const = 0;
 
   /// Gets email associated with the user, if any.
@@ -126,7 +129,9 @@ class User : public UserInfoInterface {
 
   /// Gets the raw refresh token (only for use in advanced scenarios where
   /// manually refresh of tokens is required).
-  std::string refresh_token() const;
+  ///
+  /// @deprecated This method is deprecated and should not be used.
+  FIREBASE_DEPRECATED std::string refresh_token() const;
 
   /// Gets the raw refresh token (only for use in advanced scenarios where
   /// manually refresh of tokens is required).
@@ -258,7 +263,7 @@ class User : public UserInfoInterface {
   /// @deprecated Renamed to is_anonymous().
   FIREBASE_DEPRECATED bool Anonymous() const { return is_anonymous(); }
 
-  /// Gets the unique user ID for the user.
+  /// Gets the unique Firebase user ID for the user.
   ///
   /// @note The user's ID, unique to the Firebase project.
   /// Do NOT use this value to authenticate with your backend server, if you

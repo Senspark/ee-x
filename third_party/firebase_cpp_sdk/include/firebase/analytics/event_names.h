@@ -20,7 +20,8 @@ namespace analytics {
 /// Each event type is identified by a unique name. Event names can be up
 /// to 40 characters long, may only contain alphanumeric characters and
 /// underscores ("_"), and must start with an alphabetic character. The
-/// "firebase_" prefix is reserved and should not be used.
+/// "firebase_", "google_", and "ga_" prefixes are reserved and should not
+/// be used.
 /// @{
 
 /// Add Payment Info event. This event signifies that a user has submitted

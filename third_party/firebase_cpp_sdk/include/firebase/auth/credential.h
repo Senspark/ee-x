@@ -50,6 +50,7 @@ class Credential {
   Credential& operator=(const Credential& rhs);
 
   /// Gets the name of the Identification Provider (IDP) for the credential.
+  ///
   std::string provider() const;
 
   /// Gets the name of the Identification Provider (IDP) for the credential.
@@ -88,7 +89,7 @@ class EmailAuthProvider {
   /// @param email E-mail to generate the credential from.
   /// @param password Password to use for the new credential.
   ///
-  /// @returns New auth::Credential.
+  /// @returns New Credential.
   static Credential GetCredential(const char* email, const char* password);
 };
 
@@ -99,7 +100,7 @@ class FacebookAuthProvider {
   ///
   /// @param access_token Facebook token to generate the credential from.
   ///
-  /// @returns New auth::Credential.
+  /// @returns New Credential.
   static Credential GetCredential(const char* access_token);
 };
 
@@ -110,7 +111,7 @@ class GitHubAuthProvider {
   ///
   /// @param token The GitHub OAuth access token.
   ///
-  /// @returns New auth::Credential.
+  /// @returns New Credential.
   static Credential GetCredential(const char* token);
 };
 
@@ -122,7 +123,7 @@ class GoogleAuthProvider {
   /// @param id_token Google Sign-In ID token.
   /// @param access_token Google Sign-In access token.
   ///
-  /// @returns New auth::Credential.
+  /// @returns New Credential.
   static Credential GetCredential(const char* id_token,
                                   const char* access_token);
 };
@@ -135,7 +136,7 @@ class TwitterAuthProvider {
   /// @param token The Twitter OAuth token.
   /// @param secret The Twitter OAuth secret.
   ///
-  /// @returns New auth::Credential.
+  /// @returns New Credential.
   static Credential GetCredential(const char* token, const char* secret);
 };
 

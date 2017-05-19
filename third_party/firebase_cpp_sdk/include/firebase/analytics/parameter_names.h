@@ -19,7 +19,8 @@ namespace analytics {
 /// Custom events. Param names can be up to 40 characters long, may only
 /// contain alphanumeric characters and underscores ("_"), and must start
 /// with an alphabetic character. Param values can be up to 100 characters
-/// long. The "firebase_" prefix is reserved and should not be used.
+/// long. The "firebase_", "google_", and "ga_" prefixes are reserved and
+/// should not be used.
 /// @{
 
 /// Game achievement ID (string).
@@ -269,6 +270,20 @@ static const char *const kParameterFlightNumber = "flight_number";
 ///
 /// @endif
 static const char *const kParameterGroupID = "group_id";
+
+/// Index of an item in a list (signed 64-bit integer).
+///
+/// @if cpp_examples
+/// @code{.cpp}
+/// using namespace firebase::analytics;
+/// Parameter parameters[] = {
+///    Parameter(kParameterIndex, 1),
+///    // ...
+///  };
+/// @endcode
+///
+/// @endif
+static const char *const kParameterIndex = "index";
 
 /// Item brand (string).
 ///
@@ -653,9 +668,13 @@ static const char *const kParameterTravelClass = "travel_class";
 /// Examples include revenue, distance, time and points. Value should be
 /// specified as signed 64-bit integer or double. Notes: Values for
 /// pre-defined currency-related events (such as @c kEventAddToCart)
-/// should be supplied using doubleand must be accompanied by a @c
+/// should be supplied using double and must be accompanied by a @c
 /// kParameterCurrency parameter. The valid range of accumulated values is
-/// [-9,223,372,036,854.77, 9,223,372,036,854.77].
+/// [-9,223,372,036,854.77, 9,223,372,036,854.77]. Supplying a non-numeric
+/// value, omitting the corresponding @c kParameterCurrency parameter, or
+/// supplying an invalid
+/// <a href="https://goo.gl/qqX3J2">currency code</a> for conversion events will cause that
+/// conversion to be omitted from reporting.
 ///
 /// @if cpp_examples
 /// @code{.cpp}

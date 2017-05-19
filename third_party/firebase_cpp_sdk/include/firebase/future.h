@@ -160,6 +160,14 @@ class FutureBase {
   /// callback.
   void OnCompletion(CompletionCallback callback, void* user_data) const;
 
+  /// Returns true if the two Futures reference the same result.
+  bool operator==(const FutureBase& rhs) const {
+    return api_ == rhs.api_ && handle_ == rhs.handle_;
+  }
+
+  /// Returns true if the two Futures reference different results.
+  bool operator!=(const FutureBase& rhs) const { return !operator==(rhs); }
+
  protected:
   /// @cond FIREBASE_APP_INTERNAL
 

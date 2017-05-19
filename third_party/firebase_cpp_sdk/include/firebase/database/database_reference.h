@@ -29,6 +29,11 @@ class DataSnapshot;
 /// create new DatabaseReference instances.
 class DatabaseReference : public Query {
  public:
+  /// @brief Default constructor. This creates an invalid DatabaseReference.
+  /// Attempting to perform any operations on this reference will fail unless a
+  /// valid DatabaseReference has been assigned to it.
+  DatabaseReference() : Query(), internal_(nullptr) {}
+
   /// @brief Required virtual destructor.
   virtual ~DatabaseReference();
 
@@ -123,9 +128,11 @@ class DatabaseReference : public Query {
   FIREBASE_DEPRECATED bool IsRoot() const { return is_root(); }
 
   /// @brief Returns true if this reference is valid, false if it is not
-  /// valid. An invalid reference could be returned by Database::GetReference()
-  /// or Database::GetReferenceFromUrl() if you specify an incorrect location,
-  /// or calling Query::GetReference() on an invalid query.
+  /// valid. DatabaseReferences constructed with the default constructor
+  /// are considered invalid. An invalid reference could be returned by
+  /// Database::GetReference() or Database::GetReferenceFromUrl() if you specify
+  /// an incorrect location, or calling Query::GetReference() on an invalid
+  /// query.
   ///
   /// @returns true if this reference is valid, false if this reference is
   /// invalid.

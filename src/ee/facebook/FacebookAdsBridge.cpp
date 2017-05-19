@@ -74,11 +74,10 @@ void FacebookAds::hideBannerAd() const {
 }
 
 bool FacebookAds::hasInterstitialAd() const {
-    //    auto result = core::MessageBridge::getInstance().call(
-    //        "__facebookads_hasInterstitialAd");
-    //    auto json = nlohmann::json::parse(result);
-    //    return json["result"].get<bool>();
-    return true;
+    
+    std::string result = (std::string) core::MessageBridge::getInstance().call("__facebookads_hasInterstitialAd");
+    
+    return result.compare("true") == 0;
 }
 
 bool FacebookAds::hasRewardedAd() const {

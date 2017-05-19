@@ -182,6 +182,10 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 
         return [EEDictionaryUtils emptyResult];
     } tag:k__facebookads_showNativeAd];
+
+    [bridge registerHandler:^(NSString* msg) {
+        return ([self hasInterstitialAd]) ? @"true" : @"false";
+    } tag:k__facebookads_hasInterstitialAd];
 }
 
 - (void)deregisterHandlers {
@@ -194,8 +198,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 #pragma mark ===================CODE HERE
 - (void)initTestDevice {
     // test device
-    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
-    //    [FBAdSettings clearTestDevice:[FBAdSettings testDeviceHash]];
+    //    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
+    [FBAdSettings clearTestDevice:[FBAdSettings testDeviceHash]];
 }
 
 - (void)initFBAdsInterstitial:(NSString*)InterstitialID {
@@ -243,9 +247,11 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 }
 
 - (void)cacheRewardedAd:(NSString*)adsID {
+    
 }
 
 - (void)cacheInterstitialAd:(NSString*)adsID {
+    [self initFBAdsInterstitial:adsID];
 }
 
 - (void)showBannerAd:(NSString*)adsID pos:(int)pos {
@@ -255,7 +261,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 }
 
 - (bool)hasInterstitialAd {
-    return true;
+    return _canShowInterstitialAd;
 }
 
 - (bool)hasRewardedAd {
@@ -318,7 +324,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
     [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
                                        msg:@"interstitialAdDidClose"];
     // reinit interstitial ads
-    [self initFBAdsInterstitial:_interstitialID];
+//    [self initFBAdsInterstitial:_interstitialID];
 }
 
 - (void)interstitialAdWillClose:(FBInterstitialAd*)interstitialAd {
@@ -335,7 +341,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 }
 - (void)interstitialAd:(FBInterstitialAd*)interstitialAd
       didFailWithError:(NSError*)error {
-    NSLog(@"FBAds ======== interstitialAd didFailWithError %s",
+    NSLog(@"FBAds ======== interstitialAd didFailWithError %@",
           error.description);
     [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
                                        msg:@"interstitialAd didFailWithError"];

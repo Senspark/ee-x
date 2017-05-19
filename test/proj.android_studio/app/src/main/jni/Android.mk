@@ -15,6 +15,7 @@ LOCAL_C_INCLUDES := ${shell find $(EE_X_PROJECT_DIR)/test/Classes -type d -print
 LOCAL_STATIC_LIBRARIES := ee_x_crashlytics_static
 LOCAL_STATIC_LIBRARIES += ee_x_notification_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_static
+LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
 
 include $(BUILD_SHARED_LIBRARY)
 

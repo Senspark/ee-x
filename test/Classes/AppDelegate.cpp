@@ -10,6 +10,8 @@
 #include "CrashlyticsAgent.hpp"
 #include "NotificationAgent.hpp"
 
+#include <ee/FacebookAds.hpp>
+
 AppDelegate* AppDelegate::getInstance() {
     static AppDelegate sharedInstance;
     return &sharedInstance;

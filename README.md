@@ -370,6 +370,7 @@ project(':ee-x-firebase').projectDir = new File('CLONE_PATH/ee-x/proj.android_st
 ```
 dependencies {
     compile project(':ee-x-firebase')
+    compile 'com.google.android.gms:play-services-base:10.2.4'
 }
 ```
 

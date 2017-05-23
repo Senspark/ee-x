@@ -11,6 +11,7 @@
 #include "NotificationAgent.hpp"
 
 #include <ee/FacebookAds.hpp>
+#include <ee/Macro.hpp>
 
 AppDelegate* AppDelegate::getInstance() {
     static AppDelegate sharedInstance;
@@ -28,9 +29,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 }
 
 void AppDelegate::applicationDidEnterBackground() {
+#ifndef EE_X_DESKTOP
     NotificationAgent::getInstance()->scheduleAll();
+#endif // EE_X_DESKTOP
 }
 
 void AppDelegate::applicationWillEnterForeground() {
+#ifndef EE_X_DESKTOP
     NotificationAgent::getInstance()->unscheduleAll();
+#endif // EE_X_DESKTOP
 }

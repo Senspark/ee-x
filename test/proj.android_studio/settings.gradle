@@ -13,5 +13,8 @@ project(':ee-x-notification').projectDir = new File(settingsDir, '../../proj.and
 include ':ee-x-firebase'
 project(':ee-x-firebase').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-firebase')
 
+include ':ee-x-facebook-ads'
+project(':ee-x-facebook-ads').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-facebook-ads')
+
 include ':ee-x-store'
 project(':ee-x-store').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-store')

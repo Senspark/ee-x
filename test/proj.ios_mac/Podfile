@@ -1,10 +1,15 @@
 target 'ee_x_test_mobile' do
-    pod 'ee-x/crashlytics', :git => 'https://github.com/enrevol/ee-x'
-    pod 'ee-x/notification', :git => 'https://github.com/enrevol/ee-x'
-    pod 'ee-x/firebase', :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/crashlytics',     :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/notification',    :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/firebase',        :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/facebook-ads',    :git => 'https://github.com/enrevol/ee-x'
+    
+    # Fix Invalid bitcode version (Producer: '802.0.42.0_0' Reader: '800.0.42.1_0').
+    # Use Xcode 8.3 to fix this.
+    pod 'FBAudienceNetwork', '4.20.2'
 end
 
 target 'ee_x_test_desktop' do
-    pod 'ee-x/crashlytics', :git => 'https://github.com/enrevol/ee-x'
-    pod 'ee-x/firebase', :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/crashlytics',     :git => 'https://github.com/enrevol/ee-x'
+    pod 'ee-x/firebase',        :git => 'https://github.com/enrevol/ee-x'
 end

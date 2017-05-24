@@ -2,7 +2,9 @@
 
 *Author: Hai Hoang*
 
-[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)
+|Travis|Jenkins-Android|Jenkins-iOS|Jenkins-MacOS|
+|:--:|:--:|:--:|:--:|
+|[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=android)](http://14.161.14.97:8080/job/ee_x/platform=android/)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=ios)](http://14.161.14.97:8080/job/ee_x/platform=ios)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=macos)](http://14.161.14.97:8080/job/ee_x/platform=macos)|
 
 ## Modules
 
@@ -370,6 +372,7 @@ project(':ee-x-firebase').projectDir = new File('CLONE_PATH/ee-x/proj.android_st
 ```
 dependencies {
     compile project(':ee-x-firebase')
+    compile 'com.google.android.gms:play-services-base:10.2.4'
 }
 ```
 

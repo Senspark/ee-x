@@ -33,6 +33,7 @@ public:
     
     bool hasInterstitialAd() const;
     bool hasRewardedAd() const;
+    bool hasNativeAd(const std::string& adsID) const;
     
     void showInterstitialAd() const;
     void showRewardedAd() const;

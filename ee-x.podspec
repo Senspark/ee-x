@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
   spec.header_mappings_dir = 'src'
 
   spec.subspec 'nlohmann-json' do |s|
-    s.preserve_path = 'third_part/nlohmann/include'
+    s.preserve_path = 'third_party/nlohmann/include'
     s.public_header_files = 'third_party/nlohmann/include/**/*'
     s.header_mappings_dir = 'third_party/nlohmann/include'
   end
@@ -32,7 +32,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-cpp-sdk' do |s|
     s.platform = :ios
 
-    s.preserve_path = 'third_part/firebase_cpp_sdk/include'
+    s.preserve_path = 'third_party/firebase_cpp_sdk/include'
     s.public_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
 
     s.vendored_library = 

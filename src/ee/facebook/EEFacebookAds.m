@@ -326,6 +326,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
         CGRectMake((float)x / scale, (float)y / scale, width, height);
     _nativeAdView.adchoicesView.corner = UIRectCornerTopRight;
 
+    //for custom view need call drawRect again
     [_nativeAdView.subviews[0] setNeedsDisplay];
     [_nativeAdView.subviews[1] setNeedsDisplay];
     [_nativeAdView.subviews[2] setNeedsDisplay];

@@ -25,7 +25,9 @@ import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.facebook.ads.*;
@@ -459,6 +461,11 @@ public class FacebookAds implements PluginProtocol {
                         LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(adchoiceId);
                         AdChoicesView adChoicesView = new AdChoicesView(_context, nativeAd, true);
                         adChoicesContainer.addView(adChoicesView);
+
+                        List<View> clickableViews = new ArrayList<>();
+                        clickableViews.add(nativeAdTitle);
+                        clickableViews.add(nativeAdCallToAction);
+                        nativeAd.registerViewForInteraction(adView, clickableViews);
                     }
 
                     @Override

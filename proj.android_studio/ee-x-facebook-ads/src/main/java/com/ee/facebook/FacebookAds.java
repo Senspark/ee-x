@@ -72,6 +72,13 @@ public class FacebookAds implements PluginProtocol {
 
     public FacebookAds(Context context) {
         _context = (Activity) context;
+
+
+        _dictFBNativeAd = new HashMap<String, NativeAd>();
+        _dictFBNativeAdView = new HashMap<String, View>();
+        _dictFBNativeAdReady = new HashMap<String, String>();
+
+
         registerHandlers();
     }
 
@@ -392,12 +399,6 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public void run() {
                 initTestDevice();
-
-                if (_dictFBNativeAd == null) {
-                    _dictFBNativeAd = new HashMap<String, NativeAd>();
-                    _dictFBNativeAdView = new HashMap<String, View>();
-                    _dictFBNativeAdReady = new HashMap<String, String>();
-                }
 
                 // Add the Ad view into the ad container.
                 FrameLayout layout = (FrameLayout)_context.findViewById(android.R.id.content).getRootView();

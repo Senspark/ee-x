@@ -67,6 +67,9 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ee_x_firebase_static
+
+LOCAL_CPPFLAGS := -std=c++14
+
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase -name "*.cpp" -print}
 LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/jni/cpp/ee/firebase -name "*.cpp" -print}
 

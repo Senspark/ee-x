@@ -13,6 +13,8 @@
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 
+#import <Fabric/Fabric.h>
+
 #undef CLS_LOG
 #ifdef __OBJC__
 #ifndef NDEBUG
@@ -42,6 +44,7 @@ NSString* const k__crashlytics_set_user_email       = @"__crashlytics_set_user_e
     if (self == nil) {
         return self;
     }
+    [Fabric with:@[[Crashlytics class], [Answers class]]];
     [self registerHandlers];
     return self;
 }

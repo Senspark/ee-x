@@ -15,7 +15,7 @@ android {
         versionName '1.0.0'
 
         // API key used for testing.
-        manifestPlaceholders = [fabric_api_key: 'e5208870d63af3a8614d3a13ca3d7f76a2104a27']
+        manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
 
         externalNativeBuild {
             ndkBuild {

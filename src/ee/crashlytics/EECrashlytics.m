@@ -231,6 +231,10 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
     [bridge deregisterHandler:k__crashlytics_set_user_name];
     [bridge deregisterHandler:k__crashlytics_set_user_email];
     [bridge deregisterHandler:k__crashlytics_track_level_start];
+    [bridge deregisterHandler:k__crashlytics_track_level_end];
+    [bridge deregisterHandler:k__crashlytics_track_purchase];
+    [bridge deregisterHandler:k__crashlytics_track_invite];
+    [bridge deregisterHandler:k__crashlytics_track_custom_event];
 }
 
 - (void)causeCrash {

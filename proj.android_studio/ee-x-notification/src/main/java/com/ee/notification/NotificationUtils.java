@@ -84,7 +84,7 @@ public class NotificationUtils {
         boolean useWhiteIcon =
             (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         // https://lolsborn.com/2007/11/27/accessing-android-resources-by-name-at-runtime/
-        String resourceName = useWhiteIcon ? "icon_silhouette" : "ic_launcher";
+        String resourceName = "ic_launcher";
         int id =
             context.getResources().getIdentifier(resourceName, "mipmap", context.getPackageName());
         if (id == 0) {

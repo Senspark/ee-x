@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '0.1.0'
+  spec.version        = '0.1.1'
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
 

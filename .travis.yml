@@ -16,6 +16,7 @@ matrix:
 
       before_install:
         - gem install cocoapods
+        - pod repo update
 
       install:
         - pod install --project-directory=test/proj.ios_mac

@@ -10,6 +10,7 @@
 #include "firebase/auth/types.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
+#include "firebase/variant.h"
 
 namespace firebase {
 namespace auth {
@@ -45,6 +46,9 @@ class UserInfoInterface {
   /// Gets the provider ID for the user (For example, "Facebook").
   virtual std::string provider_id() const = 0;
 
+  /// Gets the phone number for the user, in E.164 format.
+  virtual std::string phone_number() const = 0;
+
   /// Gets the unique user ID for the user.
   ///
   /// @deprecated Renamed to uid().
@@ -71,6 +75,33 @@ class UserInfoInterface {
   FIREBASE_DEPRECATED std::string ProviderId() const { return provider_id(); }
 };
 
+/// @brief Additional user data returned from an identity provider.
+struct AdditionalUserInfo {
+  /// The provider identifier.
+  std::string provider_id;
+
+  /// The name of the user.
+  std::string user_name;
+
+  /// Additional identity-provider specific information.
+  /// Most likely a hierarchical key-value mapping, like a parsed JSON file.
+  /// Note we use map instead of unordered_map to support older compilers.
+  std::map<Variant, Variant> profile;
+};
+
+/// @brief Result of operations that can affect authentication state.
+struct SignInResult {
+  SignInResult() : user(NULL) {}
+
+  /// The currently signed-in @ref User, or NULL if there isn't any (i.e. the
+  /// user is signed out).
+  User* user;
+
+  /// Identity-provider specific information for the user, if the provider is
+  /// one of Facebook, Github, Google, or Twitter.
+  AdditionalUserInfo info;
+};
+
 /// @brief Firebase user account object.
 ///
 /// This class allows you to manipulate the profile of a user, link to and
@@ -87,6 +118,7 @@ class User : public UserInfoInterface {
 
     /// User display name.
     const char* display_name;
+
     /// User photo URI.
     const char* photo_url;
   };
@@ -179,6 +211,13 @@ class User : public UserInfoInterface {
   /// Get results of the most recent call to @ref UpdatePassword.
   Future<void> UpdatePasswordLastResult() const;
 
+  /// Convenience function for @ref ReauthenticateAndRetrieveData that discards
+  /// the returned AdditionalUserInfo data.
+  Future<void> Reauthenticate(const Credential& credential);
+
+  /// Get results of the most recent call to @ref Reauthenticate.
+  Future<void> ReauthenticateLastResult() const;
+
   /// Reauthenticate using a credential.
   ///
   /// @if cpp_examples
@@ -189,15 +228,19 @@ class User : public UserInfoInterface {
   /// this method prior to calling @ref UpdatePassword() to ensure success.
   /// @endif
   ///
+  /// Data from the Identity Provider used to sign-in is returned in the
+  /// AdditionalUserInfo inside the returned SignInResult.
+  ///
   /// Returns an error if the existing credential is not for this user
   /// or if sign-in with that credential failed. The user should remain
   /// signed in even if this method failed. If the developer had held
   /// a reference to that user, the reference will continue to be valid
   /// after this operation.
-  Future<void> Reauthenticate(const Credential& credential);
+  Future<SignInResult> ReauthenticateAndRetrieveData(
+      const Credential& credential);
 
-  /// Get results of the most recent call to @ref UpdatePassword.
-  Future<void> ReauthenticateLastResult() const;
+  /// Get results of the most recent call to @ref ReauthenticateAndRetrieveData.
+  Future<SignInResult> ReauthenticateAndRetrieveDataLastResult() const;
 
   /// Initiates email verification for the user.
   Future<void> SendEmailVerification();
@@ -211,6 +254,13 @@ class User : public UserInfoInterface {
   /// Get results of the most recent call to @ref UpdateUserProfile.
   Future<void> UpdateUserProfileLastResult() const;
 
+  /// Convenience function for @ref ReauthenticateAndRetrieveData that discards
+  /// the returned @ref AdditionalUserInfo in @ref SignInResult.
+  Future<User*> LinkWithCredential(const Credential& credential);
+
+  /// Get results of the most recent call to @ref LinkWithCredential.
+  Future<User*> LinkWithCredentialLastResult() const;
+
   /// Links the user with the given 3rd party credentials.
   ///
   /// For example, a Facebook login access token, a Twitter token/token-secret
@@ -219,10 +269,15 @@ class User : public UserInfoInterface {
   /// not accepted by the server as well as if the given 3rd party
   /// user id is already linked with another user account or if the current user
   /// is already linked with another id from the same provider.
-  Future<User*> LinkWithCredential(const Credential& credential);
+  ///
+  /// Data from the Identity Provider used to sign-in is returned in the
+  /// @ref AdditionalUserInfo inside @ref SignInResult.
+  Future<SignInResult> LinkAndRetrieveDataWithCredential(
+      const Credential& credential);
 
-  /// Get results of the most recent call to @ref LinkWithCredential.
-  Future<User*> LinkWithCredentialLastResult() const;
+  /// Get results of the most recent call to
+  /// @ref LinkAndRetrieveDataWithCredential.
+  Future<SignInResult> LinkAndRetrieveDataWithCredentialLastResult() const;
 
   /// Unlinks the current user from the provider specified.
   /// Status will be an error if the user is not linked to the given provider.
@@ -230,6 +285,16 @@ class User : public UserInfoInterface {
 
   /// Get results of the most recent call to @ref Unlink.
   Future<User*> UnlinkLastResult() const;
+
+  /// Updates the currently linked phone number on the user.
+  /// This is useful when a user wants to change their phone number. It is a
+  /// shortcut to calling Unlink(phone_credential.provider().c_str()) and then
+  /// LinkWithCredential(phone_credential).
+  /// `credential` must have been created with @ref PhoneAuthProvider.
+  Future<User*> UpdatePhoneNumberCredential(const Credential& credential);
+
+  /// Get results of the most recent call to @ref UpdatePhoneNumberCredential.
+  Future<User*> UpdatePhoneNumberCredentialLastResult() const;
 
   /// Refreshes the data for this user.
   ///
@@ -284,6 +349,9 @@ class User : public UserInfoInterface {
 
   /// Gets the provider ID for the user (For example, "Facebook").
   virtual std::string provider_id() const;
+
+  /// Gets the phone number for the user, in E.164 format.
+  virtual std::string phone_number() const;
 
   /// Gets the unique user ID for the user.
   ///

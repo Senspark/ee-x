@@ -25,6 +25,8 @@ namespace auth {
 // Predeclarations.
 struct AuthData;
 class AuthStateListener;
+class IdTokenListener;
+class PhoneAuthProvider;
 
 /// @brief Firebase authentication object.
 ///
@@ -152,17 +154,30 @@ class Auth {
   /// Get results of the most recent call to @ref SignInWithCustomToken.
   Future<User*> SignInWithCustomTokenLastResult() const;
 
-  /// Asynchronously logs into Firebase with the given credentials.
-  ///
-  /// For example, a Facebook login access token, a Twitter
-  /// token/token-secret pair).
-  ///
-  /// An error is returned if the token is invalid, expired, or otherwise not
-  /// accepted by the server.
+  /// Convenience method for @ref SignInAndRetrieveDataWithCredential that
+  /// doesn't return additional identity provider data.
   Future<User*> SignInWithCredential(const Credential& credential);
 
   /// Get results of the most recent call to @ref SignInWithCredential.
   Future<User*> SignInWithCredentialLastResult() const;
+
+  /// Asynchronously logs into Firebase with the given credentials.
+  ///
+  /// For example, the credential could wrap a Facebook login access token,
+  /// a Twitter token/token-secret pair).
+  ///
+  /// The SignInResult contains both a reference to the User (which can be null
+  /// if the sign in failed), and AdditionalUserInfo, which holds details
+  /// specific to the Identity Provider used to sign in.
+  ///
+  /// An error is returned if the token is invalid, expired, or otherwise not
+  /// accepted by the server.
+  Future<SignInResult> SignInAndRetrieveDataWithCredential(
+      const Credential& credential);
+
+  /// Get results of the most recent call to
+  /// @ref SignInAndRetrieveDataWithCredential.
+  Future<SignInResult> SignInAndRetrieveDataWithCredentialLastResult() const;
 
   /// Asynchronously creates and becomes an anonymous user.
   /// If there is already an anonymous user signed in, that user will be
@@ -290,7 +305,6 @@ class Auth {
   ///   - When a user signs in
   ///   - When the current user signs out
   ///   - When the current user changes
-  ///   - When there is a change in the current user's token
   ///
   /// It is a recommended practice to always listen to sign-out events, as you
   /// may want to prompt the user to sign in again and maybe restrict the
@@ -303,7 +317,7 @@ class Auth {
   /// RemoveAuthStateListener is called automatically.
   void AddAuthStateListener(AuthStateListener* listener);
 
-  /// @brief Unregisters a listener to authentication changes.
+  /// @brief Unregisters a listener of authentication changes.
   ///
   /// Listener must previously been added with AddAuthStateListener.
   ///
@@ -312,6 +326,34 @@ class Auth {
   /// Auth class itself is destroyed, so this function does not normally need
   /// to be called explicitly.
   void RemoveAuthStateListener(AuthStateListener* listener);
+
+  /// @brief Registers a listener to changes in the ID token state.
+  ///
+  /// There can be more than one listener registered at the same time.
+  /// The listeners are called asynchronously, possibly on a different thread.
+  ///
+  /// Authentication state changes are:
+  ///   - When a user signs in
+  ///   - When the current user signs out
+  ///   - When the current user changes
+  ///   - When there is a change in the current user's token
+  ///
+  /// Use RemoveIdTokenListener to unregister a listener.
+  ///
+  /// @note The caller owns `listener` and is responsible for destroying it.
+  /// When `listener` is destroyed, or when @ref Auth is destroyed,
+  /// RemoveIdTokenListener is called automatically.
+  void AddIdTokenListener(IdTokenListener* listener);
+
+  /// @brief Unregisters a listener of ID token changes.
+  ///
+  /// Listener must previously been added with AddIdTokenListener.
+  ///
+  /// Note that listeners unregister themselves automatically when they
+  /// are destroyed, and the Auth class unregisters its listeners when the
+  /// Auth class itself is destroyed, so this function does not normally need
+  /// to be called explicitly.
+  void RemoveIdTokenListener(IdTokenListener* listener);
 
   /// Gets the App this auth object is connected to.
   App& app();
@@ -339,6 +381,7 @@ class Auth {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class ::firebase::App;
+  friend class ::firebase::auth::PhoneAuthProvider;
   /// @endcond
 
   // Call GetAuth() to create an Auth object.
@@ -366,12 +409,38 @@ class AuthStateListener {
   ///   - When a user is signed in
   ///   - When the current user is signed out
   ///   - When the current user changes
-  ///   - When there is a change in the current user's token
   ///
   /// @param[in] auth Disambiguates which @ref Auth instance the event
   /// corresponds to, in the case where you are using more than one at the same
   /// time.
   virtual void OnAuthStateChanged(Auth* auth) = 0;
+
+ private:
+  /// @cond FIREBASE_APP_INTERNAL
+  friend class Auth;
+  /// @endcond
+
+  /// The Auths with which this listener has been registered.
+  std::vector<Auth*> auths_;
+};
+
+/// @brief Listener called when there is a change in the ID token.
+///
+/// Override base class method to handle ID token changes.
+/// Methods are invoked asynchronously and may be invoked on other threads.
+class IdTokenListener {
+ public:
+  /// @note: Destruction of the listener automatically calls
+  /// RemoveIdTokenListener() from the Auths this listener is registered with,
+  /// if those Auths have not yet been destroyed.
+  virtual ~IdTokenListener();
+
+  /// Called when there is a change in the current user's token.
+  ///
+  /// @param[in] auth Disambiguates which @ref Auth instance the event
+  /// corresponds to, in the case where you are using more than one at the same
+  /// time.
+  virtual void OnIdTokenChanged(Auth* auth) = 0;
 
  private:
   /// @cond FIREBASE_APP_INTERNAL

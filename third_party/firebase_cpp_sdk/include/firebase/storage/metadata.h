@@ -180,7 +180,8 @@ class Metadata {
   /// This can be used to share the file with others, but can be revoked by a
   /// developer in the Firebase Console if desired.
   ///
-  /// @returns A long lived download URL with a revokable token.
+  /// @returns A long lived download URL with a revokable token, or nullptr
+  /// if there is none.
   const char* download_url() const;
 
   /// @brief Return all unguessable Urls that can be used to download the

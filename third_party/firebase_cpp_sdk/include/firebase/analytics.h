@@ -41,7 +41,8 @@ namespace analytics {
 ///
 /// Parameter names must be a combination of letters and digits
 /// (matching the regular expression [a-zA-Z0-9]) between 1 and 24 characters
-/// long starting with a letter [a-zA-Z] character.
+/// long starting with a letter [a-zA-Z] character.  The "firebase_",
+/// "google_" and "ga_" prefixes are reserved and should not be used.
 ///
 /// Parameter string values can be up to 36 characters long.
 ///
@@ -139,7 +140,8 @@ struct Parameter {
   ///
   /// Parameter names must be a combination of letters and digits
   /// (matching the regular expression [a-zA-Z0-9]) between 1 and 24 characters
-  /// long starting with a letter [a-zA-Z] character.
+  /// long starting with a letter [a-zA-Z] character.  The "firebase_",
+  /// "google_" and "ga_" prefixes are reserved and should not be used.
   const char* name;
   /// @brief Value of the parameter.
   ///

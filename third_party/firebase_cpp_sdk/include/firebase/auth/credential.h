@@ -15,8 +15,13 @@ namespace auth {
 
 // Predeclarations.
 class Auth;
-struct AuthData;
 class User;
+
+// Opaque internal types.
+struct AuthData;
+class ForceResendingTokenData;
+struct PhoneAuthProviderData;
+struct PhoneListenerData;
 
 /// @brief Authentication credentials for an authentication provider.
 ///
@@ -29,8 +34,11 @@ class Credential {
   friend class FacebookAuthProvider;
   friend class GitHubAuthProvider;
   friend class GoogleAuthProvider;
+  friend class JniAuthPhoneListener;
+  friend class OAuthProvider;
+  friend class PhoneAuthProvider;
   friend class TwitterAuthProvider;
-/// @endcond
+  /// @endcond
 
  private:
   /// Should only be created by `Provider` classes.
@@ -41,6 +49,7 @@ class Credential {
   explicit Credential(void* impl) : impl_(impl) {}
 
  public:
+  Credential() : impl_(NULL) {}
   ~Credential();
 
   /// Copy constructor.
@@ -138,6 +147,328 @@ class TwitterAuthProvider {
   ///
   /// @returns New Credential.
   static Credential GetCredential(const char* token, const char* secret);
+};
+
+/// @brief OAuth2.0+UserInfo auth provider (OIDC compliant and non-compliant).
+class OAuthProvider {
+ public:
+  /// Generate a credential for an OAuth2 provider.
+  ///
+  /// @param provider_id Name of the OAuth2 provider
+  ///    TODO(jsanmiya) add examples.
+  /// @param id_token The authentication token (OIDC only).
+  /// @param access_token TODO(jsanmiya) add explanation (currently missing
+  ///    from Android and iOS implementations).
+  static Credential GetCredential(const char* provider_id, const char* id_token,
+                                  const char* access_token);
+};
+
+/// @brief Use phone number text messages to authenticate.
+///
+/// Allows developers to use the phone number and SMS verification codes
+/// to authenticate a user.
+///
+/// The verification flow results in a Credential that can be used to,
+/// * Sign in to an existing phone number account/sign up with a new
+///   phone number
+/// * Link a phone number to a current user. This provider will be added to
+///   the user.
+/// * Update a phone number on an existing user.
+/// * Re-authenticate an existing user. This may be needed when a sensitive
+///   operation requires the user to be recently logged in.
+///
+/// Possible verification flows:
+/// (1) User manually enters verification code.
+///     - App calls @ref VerifyPhoneNumber.
+///     - Auth server sends the verification code via SMS to the provided
+///       phone number. App recieves verification id via Listener::OnCodeSent().
+///     - User receives SMS and enters verification code in app's GUI.
+///     - App uses user's verification code to call
+///       @ref PhoneAuthProvider::GetCredential.
+///
+/// (2) SMS is automatically retrieved (Android only).
+///     - App calls @ref VerifyPhoneNumber with `timeout_ms` > 0.
+///     - Auth server sends the verification code via SMS to the provided
+///       phone number.
+///     - SMS arrives and is automatically retrieved by the operating system.
+///       Credential is automatically created and passed to the app via
+///       Listener::OnVerificationCompleted().
+///
+/// (3) Phone number is instantly verified (Android only).
+///     - App calls @ref VerifyPhoneNumber.
+///     - The operating system validates the phone number without having to
+///       send an SMS. Credential is automatically created and passed to
+///       the app via Listener::OnVerificationCompleted().
+///
+/// All three flows can be handled with the example code below.
+/// The flow is complete when PhoneVerifier::credential() returns non-NULL.
+///
+/// @code{.cpp}
+/// class PhoneVerifier : public PhoneAuthProvider::Listener {
+///  public:
+///   PhoneVerifier(const char* phone_number,
+///                 PhoneAuthProvider* phone_auth_provider)
+///     : display_message_("Sending SMS with verification code"),
+///       display_verification_code_input_box_(false),
+///       display_resend_sms_button_(false),
+///       phone_auth_provider_(phone_auth_provider),
+///       phone_number_(phone_number) {
+///     SendSms();
+///   }
+///
+///   ~PhoneVerifier() override {}
+///
+///   void OnVerificationCompleted(Credential credential) override {
+///     // Grab `mutex_` for the scope of `lock`. Callbacks can be called on
+///     // other threads, so this mutex ensures data access is atomic.
+///     MutexLock lock(mutex_);
+///     credential_ = credential;
+///   }
+///
+///   void OnVerificationFailed(const std::string& error) override {
+///     MutexLock lock(mutex_);
+///     display_message_ = "Verification failed with error: " + error;
+///   }
+///
+///   void OnCodeSent(const std::string& verification_id,
+///                   const PhoneAuthProvider::ForceResendingToken&
+///                       force_resending_token) override {
+///     MutexLock lock(mutex_);
+///     verification_id_ = verification_id;
+///     force_resending_token_ = force_resending_token;
+///
+///     display_verification_code_input_box_ = true;
+///     display_message_ = "Waiting for SMS";
+///   }
+///
+///   void OnCodeAutoRetrievalTimeOut(
+///       const std::string& verification_id) override {
+///     MutexLock lock(mutex_);
+///     display_resend_sms_button_ = true;
+///   }
+///
+///   // Draw the verification GUI on screen and process input events.
+///   void Draw() {
+///     MutexLock lock(mutex_);
+///
+///     // Draw an informative message describing what's currently happening.
+///     ShowTextBox(display_message_.c_str());
+///
+///     // Once the time out expires, display a button to resend the SMS.
+///     // If the button is pressed, call VerifyPhoneNumber again using the
+///     // force_resending_token_.
+///     if (display_resend_sms_button_ && !verification_id_.empty()) {
+///       const bool resend_sms = ShowTextButton("Resend SMS");
+///       if (resend_sms) {
+///         SendSms();
+///       }
+///     }
+///
+///     // Once the SMS has been sent, allow the user to enter the SMS
+///     // verification code into a text box. When the user has completed
+///     // entering it, call GetCredential() to complete the flow.
+///     if (display_verification_code_input_box_) {
+///       const std::string verification_code =
+///         ShowInputBox("Verification code");
+///       if (!verification_code.empty()) {
+///         credential_ = phone_auth_provider_->GetCredential(
+///             verification_id_.c_str(), verification_code.c_str());
+///       }
+///     }
+///   }
+///
+///   // The phone number verification flow is complete when this returns
+///   // non-NULL.
+///   Credential* credential() {
+///     MutexLock lock(mutex_);
+///     return credential_.is_valid() ? &credential_ : nullptr;
+///   }
+///
+///  private:
+///   void SendSms() {
+///     static const uint32_t kAutoVerifyTimeOut = 2000;
+///     MutexLock lock(mutex_);
+///     phone_auth_provider_->VerifyPhoneNumber(
+///         phone_number_.c_str(), kAutoVerifyTimeOut, &force_resending_token_,
+///         this);
+///     display_resend_sms_button_ = false;
+///   }
+///
+///   // GUI-related variables.
+///   std::string display_message_;
+///   bool display_verification_code_input_box_;
+///   bool display_resend_sms_button_;
+///
+///   // Phone flow related variables.
+///   PhoneAuthProvider* phone_auth_provider_;
+///   std::string phone_number_;
+///   std::string verification_id_;
+///   PhoneAuthProvider::ForceResendingToken force_resending_token_;
+///   Credential credential_;
+///
+///   // Callbacks can be called on other threads, so guard them with a mutex.
+///   Mutex mutex_;
+/// };
+/// @endcode
+class PhoneAuthProvider {
+ public:
+  /// @brief Token to maintain current phone number verification session.
+  /// Acquired via @ref Listener::OnCodeSent. Used in @ref VerifyPhoneNumber.
+  class ForceResendingToken {
+   public:
+    /// This token will be invalid until it is assigned a value sent via
+    /// @ref Listener::OnCodeSent. It can still be passed into
+    /// @ref VerifyPhoneNumber, but it will be ignored.
+    ForceResendingToken();
+
+    /// Make `this` token refer to the same phone session as `rhs`.
+    ForceResendingToken(const ForceResendingToken& rhs);
+
+    /// Releases internal resources when destructing.
+    ~ForceResendingToken();
+
+    /// Make `this` token refer to the same phone session as `rhs`.
+    ForceResendingToken& operator=(const ForceResendingToken& rhs);
+
+    /// Return true if `rhs` is refers to the same phone number session as
+    /// `this`.
+    bool operator==(const ForceResendingToken& rhs) const;
+
+    /// Return true if `rhs` is refers to a different phone number session as
+    /// `this`.
+    bool operator!=(const ForceResendingToken& rhs) const;
+
+   private:
+    friend class JniAuthPhoneListener;
+    friend class PhoneAuthProvider;
+    ForceResendingTokenData* data_;
+  };
+
+  /// @brief Receive callbacks from @ref VerifyPhoneNumber events.
+  ///
+  /// Please see @ref PhoneAuthProvider for a sample implementation.
+  class Listener {
+   public:
+    Listener();
+    virtual ~Listener();
+
+    /// @brief Phone number auto-verification succeeded.
+    ///
+    /// Called when,
+    ///  - auto-sms-retrieval has succeeded--flow (2) in @ref PhoneAuthProvider
+    ///  - instant validation has succeeded--flow (3) in @ref PhoneAuthProvider
+    ///
+    /// @note This callback is never called on iOS, since iOS does not have
+    ///    auto-validation. It is always called immediately in the stub desktop
+    ///    implementation, however, since it fakes immediate success.
+    ///
+    /// @param[in] credential The completed credential from the phone number
+    ///    verification flow.
+    virtual void OnVerificationCompleted(Credential credential) = 0;
+
+    /// @brief Phone number verification failed with an error.
+    ///
+    /// Called when and error occurred doing phone number authentication.
+    /// For example,
+    ///  - quota exceeded
+    ///  - unknown phone number format
+    ///
+    /// @param[in] error A description of the failure.
+    virtual void OnVerificationFailed(const std::string& error) = 0;
+
+    /// @brief SMS message with verification code sent to phone number.
+    ///
+    /// Called immediately after Auth server sends a verification SMS.
+    /// Once receiving this, you can allow users to manually input the
+    /// verification code (even if you're also performing auto-verification).
+    /// For user manual input case, get the SMS verification code from the user
+    /// and then call @ref GetCredential with the user's code.
+    ///
+    /// @param[in] verification_id Pass to @ref GetCredential along with the
+    ///   user-input verification code to complete the phone number verification
+    ///   flow.
+    /// @param[in] force_resending_token If the user requests that another SMS
+    ///    message be sent, use this when you recall @ref VerifyPhoneNumber.
+    virtual void OnCodeSent(const std::string& verification_id,
+                            const ForceResendingToken& force_resending_token);
+
+    /// @brief The timeout specified in @ref VerifyPhoneNumber has expired.
+    ///
+    /// Called once `auto_verify_time_out_ms` has passed.
+    /// If using auto SMS retrieval, you can choose to block the UI (do not
+    /// allow manual input of the verification code) until timeout is hit.
+    ///
+    /// @note This callback is called immediately on iOS, since iOS does not
+    ///    have auto-validation.
+    ///
+    /// @param[in] verification_id Identify the transaction that has timed out.
+    virtual void OnCodeAutoRetrievalTimeOut(const std::string& verification_id);
+
+   private:
+    friend class PhoneAuthProvider;
+
+    /// Back-pointer to the data of the PhoneAuthProvider that
+    /// @ref VerifyPhoneNumber was called with. Used internally.
+    PhoneListenerData* data_;
+  };
+
+  /// Maximum value of `auto_verify_time_out_ms` in @ref VerifyPhoneNumber.
+  /// Larger values will be clamped.
+  static const uint32_t kMaxTimeoutMs;
+
+  /// Start the phone number authentication operation.
+  ///
+  /// @param[in] phone_number The phone number identifier supplied by the user.
+  ///    Its format is normalized on the server, so it can be in any format
+  ///    here.
+  /// @param[in] auto_verify_time_out_ms The time out for SMS auto retrieval, in
+  ///    miliseconds. Currently SMS auto retrieval is only supported on Android.
+  ///    If 0, do not do SMS auto retrieval.
+  ///    If positive, try to auto-retrieve the SMS verification code.
+  ///    If larger than kMaxTimeoutMs, clamped to kMaxTimeoutMs.
+  ///    When the time out is exceeded, listener->OnCodeAutoRetrievalTimeOut()
+  ///    is called.
+  /// @param[in] force_resending_token If NULL, assume this is a new phone
+  ///    number to verify. If not-NULL, bypass the verification session deduping
+  ///    and force resending a new SMS.
+  ///    This token is received in @ref Listener::OnCodeSent.
+  ///    This should only be used when the user presses a “Resend SMS” button.
+  /// @param[in,out] listener Class that receives notification whenever an SMS
+  ///    verification event occurs. See sample code at top of class.
+  void VerifyPhoneNumber(const char* phone_number,
+                         uint32_t auto_verify_time_out_ms,
+                         const ForceResendingToken* force_resending_token,
+                         Listener* listener);
+
+  /// Generate a credential for the given phone number.
+  ///
+  /// @param[in] verification_id The id returned when sending the verification
+  ///    code. Sent to the caller via @ref Listener::OnCodeSent.
+  /// @param[in] verification_code The verification code supplied by the user,
+  ///    most likely by a GUI where the user manually enters the code
+  ///    received in the SMS sent by @ref VerifyPhoneNumber.
+  ///
+  /// @returns New Credential.
+  Credential GetCredential(const char* verification_id,
+                           const char* verification_code);
+
+  /// Return the PhoneAuthProvider for the specified `auth`.
+  ///
+  /// @param[in] auth The Auth session for which we want to get a
+  ///    PhoneAuthProvider.
+  static PhoneAuthProvider& GetInstance(Auth* auth);
+
+ private:
+  friend struct AuthData;
+  friend class JniAuthPhoneListener;
+
+  // Use @ref GetInstance to access the PhoneAuthProvider.
+  PhoneAuthProvider();
+
+  // The PhoneAuthProvider is owned by the Auth class.
+  ~PhoneAuthProvider();
+
+  PhoneAuthProviderData* data_;
 };
 
 }  // namespace auth

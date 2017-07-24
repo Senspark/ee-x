@@ -67,42 +67,57 @@ double FirebaseStorage::getMaxDownloadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
+#if defined(EE_X_MOBILE)
     return storage_->max_download_retry_time();
+#endif // EE_X_MOBILE
+    return -1;
 }
 
 double FirebaseStorage::getMaxUploadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
+#if defined(EE_X_MOBILE)
     return storage_->max_upload_retry_time();
+#endif // EE_X_MOBILE
+    return -1;
 }
 
 double FirebaseStorage::getMaxOperationRetryTime() const {
     if (not initialized_) {
         return -1;
     }
+#if defined(EE_X_MOBILE)
     return storage_->max_operation_retry_time();
+#endif // EE_X_MOBILE
+    return -1;
 }
 
 void FirebaseStorage::setMaxDownloadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
+#if defined(EE_X_MOBILE)
     storage_->set_max_download_retry_time(seconds);
+#endif // EE_X_MOBILE
 }
 
 void FirebaseStorage::setMaxOperationRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
+#if defined(EE_X_MOBILE)
     storage_->set_max_operation_retry_time(seconds);
+#endif // EE_X_MOBILE
 }
 
 void FirebaseStorage::setMaxUploadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
+#if defined(EE_X_MOBILE)
     storage_->set_max_upload_retry_time(seconds);
+#endif // EE_X_MOBILE
 }
 
 void FirebaseStorage::getHash(const std::string& filePath,

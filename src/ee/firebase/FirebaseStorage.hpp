@@ -49,15 +49,17 @@ public:
     /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
-    /// Returns the maximum time in seconds to retry a download if a failure
-    /// occurs.
+    /// @return The maximum time in seconds to retry a download if a failure
+    /// occurs, -1 if not successfully initialized or not supported.
     double getMaxDownloadRetryTime() const;
 
-    /// Returns the maximum time to retry an upload if a failure occurs.
+    /// @return The maximum time to retry an upload if a failure occurs, -1 if
+    /// not successfully initialized or not supported.
     double getMaxUploadRetryTime() const;
 
-    /// Returns the maximum time to retry operations other than upload and
-    /// download if a failure occurs.
+    /// @return The maximum time to retry operations other than upload and
+    /// download if a failure occurs, -1 if not successfully initialized or not
+    /// supported.
     double getMaxOperationRetryTime() const;
 
     /// Sets the maximum time to retry a download if a failure occurs.

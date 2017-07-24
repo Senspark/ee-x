@@ -63,6 +63,48 @@ bool FirebaseStorage::initialize() {
     return true;
 }
 
+double FirebaseStorage::getMaxDownloadRetryTime() const {
+    if (not initialized_) {
+        return -1;
+    }
+    return storage_->max_download_retry_time();
+}
+
+double FirebaseStorage::getMaxUploadRetryTime() const {
+    if (not initialized_) {
+        return -1;
+    }
+    return storage_->max_upload_retry_time();
+}
+
+double FirebaseStorage::getMaxOperationRetryTime() const {
+    if (not initialized_) {
+        return -1;
+    }
+    return storage_->max_operation_retry_time();
+}
+
+void FirebaseStorage::setMaxDownloadRetryTime(double seconds) {
+    if (not initialized_) {
+        return;
+    }
+    storage_->set_max_download_retry_time(seconds);
+}
+
+void FirebaseStorage::setMaxOperationRetryTime(double seconds) {
+    if (not initialized_) {
+        return;
+    }
+    storage_->set_max_operation_retry_time(seconds);
+}
+
+void FirebaseStorage::setMaxUploadRetryTime(double seconds) {
+    if (not initialized_) {
+        return;
+    }
+    storage_->set_max_upload_retry_time(seconds);
+}
+
 void FirebaseStorage::getHash(const std::string& filePath,
                               const HashCallback& callback) {
     auto guard =

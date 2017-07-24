@@ -392,6 +392,87 @@ public class FacebookAds implements PluginProtocol {
         });
     }
 
+    void createNativeAd(final @NonNull String NativeID)
+    {
+        NativeAd nativeAd = new NativeAd(_context, NativeID);
+        nativeAd.setAdListener(new AdListener() {
+
+            @Override
+            public void onError(Ad ad, AdError error) {
+                // Ad error callback
+                Log.d("FBAds", "NativeAd onError  " + error.getErrorMessage());
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Ad loaded callback
+                Log.d("FBAds", "NativeAd onAdLoaded");
+                NativeAd nativeAd = _dictFBNativeAd.get(ad.getPlacementId());
+                nativeAd.unregisterView();
+
+                _dictFBNativeAdReady.put(ad.getPlacementId(), "true");
+                View adView = _dictFBNativeAdView.get(ad.getPlacementId());
+
+                // Create native UI using the ad metadata.
+                int iconId = _context.getResources().getIdentifier("native_ad_icon", "id", _context.getPackageName());
+                int titleId = _context.getResources().getIdentifier("native_ad_title", "id", _context.getPackageName());
+                int mediaId = _context.getResources().getIdentifier("native_ad_media", "id", _context.getPackageName());
+                int socialId = _context.getResources().getIdentifier("native_ad_social_context", "id", _context.getPackageName());
+                int adchoiceId = _context.getResources().getIdentifier("ad_choices_container", "id", _context.getPackageName());
+                int bodyId = _context.getResources().getIdentifier("native_ad_body", "id", _context.getPackageName());
+                int callToActionId = _context.getResources().getIdentifier("native_ad_call_to_action", "id", _context.getPackageName());
+
+                ImageView nativeAdIcon = (ImageView) adView.findViewById(iconId);
+                TextView nativeAdTitle = (TextView) adView.findViewById(titleId);
+                MediaView nativeAdMedia = (MediaView) adView.findViewById(mediaId);
+                TextView nativeAdSocialContext = (TextView) adView.findViewById(socialId);
+                TextView nativeAdBody = (TextView) adView.findViewById(bodyId);
+                Button nativeAdCallToAction = (Button) adView.findViewById(callToActionId);
+
+                // Set the Text.
+                nativeAdTitle.setText(nativeAd.getAdTitle());
+                nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
+                nativeAdBody.setText(nativeAd.getAdBody());
+                nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+
+                // Download and display the ad icon.
+                NativeAd.Image adIcon = nativeAd.getAdIcon();
+                NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
+                // Download and display the cover image.
+                nativeAdMedia.setNativeAd(nativeAd);
+
+                // Add the AdChoices icon
+                LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(adchoiceId);
+                if(adChoicesContainer.getChildCount() == 0) {
+                    AdChoicesView adChoicesView = new AdChoicesView(_context, nativeAd, true);
+                    adChoicesContainer.addView(adChoicesView);
+                }
+
+                List<View> clickableViews = new ArrayList<>();
+                clickableViews.add(nativeAdTitle);
+                clickableViews.add(nativeAdCallToAction);
+                nativeAd.registerViewForInteraction(adView, clickableViews);
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Ad clicked callback
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                // Ad impression logged callback
+            }
+        });
+
+        _dictFBNativeAd.put(NativeID, nativeAd);
+        _dictFBNativeAdReady.put(NativeID, "false");
+
+        Log.d("FBAds", "Init NativeAD id = " + NativeID);
+        nativeAd.loadAd();
+    }
+
     @SuppressWarnings("WeakerAccess")
     public void initFBAdsNativeAds(final @NonNull String NativeID, final @NonNull String layoutName) {
 
@@ -410,82 +491,8 @@ public class FacebookAds implements PluginProtocol {
 
                 layout.addView(adView);
 
-                NativeAd nativeAd = new NativeAd(_context, NativeID);
-                nativeAd.setAdListener(new AdListener() {
-
-                    @Override
-                    public void onError(Ad ad, AdError error) {
-                        // Ad error callback
-                        Log.d("FBAds", "NativeAd onError  " + error.getErrorMessage());
-                    }
-
-                    @Override
-                    public void onAdLoaded(Ad ad) {
-                        // Ad loaded callback
-                        Log.d("FBAds", "NativeAd onAdLoaded");
-                        NativeAd nativeAd = _dictFBNativeAd.get(ad.getPlacementId());
-                        nativeAd.unregisterView();
-
-                        _dictFBNativeAdReady.put(ad.getPlacementId(), "true");
-                        View adView = _dictFBNativeAdView.get(ad.getPlacementId());
-
-                        // Create native UI using the ad metadata.
-                        int iconId = _context.getResources().getIdentifier("native_ad_icon", "id", _context.getPackageName());
-                        int titleId = _context.getResources().getIdentifier("native_ad_title", "id", _context.getPackageName());
-                        int mediaId = _context.getResources().getIdentifier("native_ad_media", "id", _context.getPackageName());
-                        int socialId = _context.getResources().getIdentifier("native_ad_social_context", "id", _context.getPackageName());
-                        int adchoiceId = _context.getResources().getIdentifier("ad_choices_container", "id", _context.getPackageName());
-                        int bodyId = _context.getResources().getIdentifier("native_ad_body", "id", _context.getPackageName());
-                        int callToActionId = _context.getResources().getIdentifier("native_ad_call_to_action", "id", _context.getPackageName());
-
-                        ImageView nativeAdIcon = (ImageView) adView.findViewById(iconId);
-                        TextView nativeAdTitle = (TextView) adView.findViewById(titleId);
-                        MediaView nativeAdMedia = (MediaView) adView.findViewById(mediaId);
-                        TextView nativeAdSocialContext = (TextView) adView.findViewById(socialId);
-                        TextView nativeAdBody = (TextView) adView.findViewById(bodyId);
-                        Button nativeAdCallToAction = (Button) adView.findViewById(callToActionId);
-
-                        // Set the Text.
-                        nativeAdTitle.setText(nativeAd.getAdTitle());
-                        nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
-                        nativeAdBody.setText(nativeAd.getAdBody());
-                        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
-
-                        // Download and display the ad icon.
-                        NativeAd.Image adIcon = nativeAd.getAdIcon();
-                        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
-
-                        // Download and display the cover image.
-                        nativeAdMedia.setNativeAd(nativeAd);
-
-                        // Add the AdChoices icon
-                        LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(adchoiceId);
-                        AdChoicesView adChoicesView = new AdChoicesView(_context, nativeAd, true);
-                        adChoicesContainer.addView(adChoicesView);
-
-                        List<View> clickableViews = new ArrayList<>();
-                        clickableViews.add(nativeAdTitle);
-                        clickableViews.add(nativeAdCallToAction);
-                        nativeAd.registerViewForInteraction(adView, clickableViews);
-                    }
-
-                    @Override
-                    public void onAdClicked(Ad ad) {
-                        // Ad clicked callback
-                    }
-
-                    @Override
-                    public void onLoggingImpression(Ad ad) {
-                        // Ad impression logged callback
-                    }
-                });
-
-                _dictFBNativeAd.put(NativeID, nativeAd);
+                createNativeAd(NativeID);
                 _dictFBNativeAdView.put(NativeID, adView);
-                _dictFBNativeAdReady.put(NativeID, "false");
-
-                Log.d("FBAds", "Init NativeAD id = " + NativeID);
-                nativeAd.loadAd();
             }
         });
     }
@@ -549,6 +556,8 @@ public class FacebookAds implements PluginProtocol {
                 View adView = _dictFBNativeAdView.get(adsID);
                 if(adView != null) {
                     adView.setVisibility(View.INVISIBLE);
+
+                    createNativeAd(adsID);
                 }
             }
         });
@@ -590,7 +599,11 @@ public class FacebookAds implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public boolean hasNativeAd(final @NonNull String adsID)
     {
-        return _dictFBNativeAdReady.get(adsID).compareTo("true") == 0;
+        if(_dictFBNativeAdReady.get(adsID) != null)
+            return _dictFBNativeAdReady.get(adsID).compareTo("true") == 0;
+
+
+        return false;
     }
 
 }

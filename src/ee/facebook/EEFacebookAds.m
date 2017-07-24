@@ -212,8 +212,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 #pragma mark ===================CODE HERE
 - (void)initTestDevice {
     // test device
-    //    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
-    [FBAdSettings clearTestDevice:[FBAdSettings testDeviceHash]];
+//    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
+//    [FBAdSettings clearTestDevice:[FBAdSettings testDeviceHash]];
 }
 
 - (void)initFBAdsInterstitial:(NSString*)InterstitialID {
@@ -266,6 +266,11 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 }
 
 - (void)cacheInterstitialAd:(NSString*)adsID {
+    if (_canShowInterstitialAd)
+    {
+        return;
+    }
+    
     [self initFBAdsInterstitial:adsID];
 }
 
@@ -303,9 +308,22 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 - (void)hideNativeAd:(NSString*)adsID {
     AdsUIView* _nativeAdView = [_dictFBNativeAdView objectForKey:adsID];
     _nativeAdView.hidden = YES;
+    
+    //prefetch
+    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO] forKey:adsID];
+    FBNativeAd* nativeAd = [[FBNativeAd alloc] initWithPlacementID:adsID];
+    nativeAd.delegate = self;
+    nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyAll;
+    [nativeAd loadAd];
+    
+    [_dictFBNativeAd setObject:nativeAd forKey:adsID];
 }
 
 - (BOOL)hasNativeAd:(NSString*)adsID {
+    if ([_dictFBNativeAdReady valueForKey:adsID] == nil) {
+        return NO;
+    }
+    
     return [[_dictFBNativeAdReady valueForKey:adsID] boolValue];
 }
 
@@ -367,7 +385,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
     NSLog(@"FBAds ======== interstitialAd didFailWithError %@",
           error.description);
     [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
-                                       msg:@"interstitialAd didFailWithError"];
+                                       msg:[NSString stringWithFormat:@"Facebook | Interstitial | Error | %@", error.description]];
 }
 - (void)interstitialAdWillLogImpression:(FBInterstitialAd*)interstitialAd {
     NSLog(@"FBAds ======== interstitialAdWillLogImpression");
@@ -394,8 +412,10 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
     [_nativeAd unregisterView];
 
     // Wire up UIView with the native ad; the whole UIView will be clickable.
-    [_nativeAd registerViewForInteraction:_nativeAdView
-                       withViewController:root];
+//    [_nativeAd registerViewForInteraction:_nativeAdView
+//                       withViewController:root];
+    
+    [_nativeAd registerViewForInteraction:_nativeAdView withViewController:root withClickableViews:[NSArray arrayWithObjects:_nativeAdView.callToAction, nil]];
 
     // Create native UI using the ad metadata.
     //[_nativeAdView.mediaView setNativeAd:nativeAd];
@@ -420,10 +440,17 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
     NSLog(@"FBAds ======== nativeAd didFailWithError");
     [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO] forKey:nativeAd.placementID];
+    [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
+                                       msg:[NSString stringWithFormat:@"Facebook | NativeAd | Error | %@", error.description]];
 }
 
 #pragma mark ================FBMediaViewDelegate
 - (void)mediaViewDidLoad:(FBMediaView*)mediaView {
     NSLog(@"FBAds ======== mediaViewDidLoad");
+}
+
+-(void)nativeAdDidClick:(FBNativeAd *)nativeAd
+{
+    NSLog(@"Native ad was clicked.");
 }
 @end

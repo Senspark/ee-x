@@ -12,6 +12,7 @@
 
 namespace firebase {
 
+
 /// Variant data type used by Firebase libraries.
 class Variant {
  public:

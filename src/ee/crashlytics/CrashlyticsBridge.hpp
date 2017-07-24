@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 namespace ee {
 namespace core {
@@ -42,6 +43,16 @@ public:
     void setUserName(const std::string& name) const;
 
     void setUserEmail(const std::string& email) const;
+    
+    void trackLevelStart(const std::string& name, const std::unordered_map<std::string, std::string>& attrs);
+    
+    void trackLevelEnd(const std::string& name, int score, bool success, const std::unordered_map<std::string, std::string>& attrs);
+    
+    void trackPurchase(float price, const std::string& currency, bool success, const std::string& itemName, const std::string& itemType, const std::string& itemId, const std::unordered_map<std::string, std::string>& attrs);
+    
+    void trackCustomEvent(const std::string& name, const std::unordered_map<std::string, std::string>& attrs);
+    
+    void trackInvite(const std::string& method, const std::unordered_map<std::string, std::string>& attrs);
 };
 } // namespace crashlytics
 } // namespace ee

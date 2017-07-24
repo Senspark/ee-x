@@ -6,15 +6,15 @@
 /// @def FIREBASE_VERSION_MAJOR
 /// @brief Major version number of the Firebase C++ SDK.
 /// @see kFirebaseVersionString
-#define FIREBASE_VERSION_MAJOR 3
+#define FIREBASE_VERSION_MAJOR 4
 /// @def FIREBASE_VERSION_MINOR
 /// @brief Minor version number of the Firebase C++ SDK.
 /// @see kFirebaseVersionString
-#define FIREBASE_VERSION_MINOR 1
+#define FIREBASE_VERSION_MINOR 0
 /// @def FIREBASE_VERSION_REVISION
 /// @brief Revision number of the Firebase C++ SDK.
 /// @see kFirebaseVersionString
-#define FIREBASE_VERSION_REVISION 2
+#define FIREBASE_VERSION_REVISION 1
 
 /// @cond FIREBASE_APP_INTERNAL
 #define FIREBASE_STRING_EXPAND(X) #X

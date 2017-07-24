@@ -1,0 +1,12 @@
+version 0.1.1 20-June-2017
+. [NEW] Update crashlytics with answers tracking methods (android, ios, mac osx):
+        Added logLevelStart
+        Added logLevelEnd
+        Added logPurchase
+        Added logCustomEvent
+        Added logInvite
+
+version 0.1.0
+. [NEW] Added firebase (android, ios, mac osx)
+. [NEW] Added local notifications (android, ios)
+. [NEW] Added crashlytics (android, ios, mac osx)

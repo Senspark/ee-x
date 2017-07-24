@@ -15,7 +15,7 @@ android {
         versionName '1.0.0'
 
         // API key used for testing.
-        manifestPlaceholders = [fabric_api_key: 'e5208870d63af3a8614d3a13ca3d7f76a2104a27']
+        manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
 
         externalNativeBuild {
             ndkBuild {
@@ -105,7 +105,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.google.android.gms:play-services-base:10.2.4'
+    compile 'com.google.android.gms:play-services-base:11.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

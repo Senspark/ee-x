@@ -79,8 +79,12 @@ distributed as part of the core Firebase
 |                          | libapp.a<br> \                                   |
 |                          | com.google.android.gms:firebase-auth \           |
 |                          | (Maven package)                                  |
-| Firebase Invites and \   | libinvites.a<br> \                               |
-| Dynamic Links            | libapp.a<br> \                                   |
+| Firebase Dynamic Links   | libdynamic_links.a<br> \                         |
+|                          | libapp.a<br> \                                   |
+|                          | com.google.android.gms:firebase-invites \        |
+|                          | (Maven package)                                  |
+| Firebase Invites         | libinvites.a<br> \                               |
+|                          | libapp.a<br> \                                   |
 |                          | com.google.android.gms:firebase-invites \        |
 |                          | (Maven package)                                  |
 | Firebase Messaging       | libmessaging.a<br> \                             |
@@ -126,8 +130,11 @@ their preferred build environment.
 | Firebase Authentication      | firebase_auth.framework<br>  \               |
 |                              | firebase.framework<br> \                     |
 |                              | Firebase/Auth Cocoapod                       |
-| Firebase Invites and \       | firebase_invites.framework<br> \             |
-| Dynamic Links                | firebase.framework<br> \                     |
+| Firebase Dynamic Links       | firebase_dynamic_links.framework<br> \       |
+|                              | firebase.framework<br> \                     |
+|                              | Firebase/DynamicLinks Cocoapod               |
+| Firebase Invites             | firebase_invites.framework<br> \             |
+|                              | firebase.framework<br> \                     |
 |                              | Firebase/Invites Cocoapod                    |
 | Firebase Cloud Messaging     | firebase_messaging.framework<br> \           |
 |                              | firebase.framework<br> \                     |
@@ -165,9 +172,12 @@ required for each SDK feature.
 | Firebase Authentication      | libauth.a<br>  \                             |
 |                              | libapp.a<br> \                               |
 |                              | FirebaseAuth Cocoapod                        |
-| Firebase Invites and \       | libinvites.a<br> \                           |
-| Dynamic Links                | libapp.a<br> \                               |
-|                              | Firebase/AppInvites Cocoapod                 |
+| Firebase Dynamic Links       | libdynamic_links.a<br> \                     |
+|                              | libapp.a<br> \                               |
+|                              | Firebase/DynamicLinks Cocoapod               |
+| Firebase Invites             | libinvites.a<br> \                           |
+|                              | libapp.a<br> \                               |
+|                              | Firebase/Invites Cocoapod                    |
 | Firebase Cloud Messaging     | libmessaging.a<br> \                         |
 |                              | libapp.a<br> \                               |
 |                              | Firebase/CloudMessaging Cocoapod             |
@@ -196,8 +206,10 @@ required for each SDK feature.
 |                              | libapp.a<br>                                 |
 | Firebase Authentication      | libauth.a<br>  \                             |
 |                              | libapp.a<br>                                 |
-| Firebase Invites and \       | libinvites.a<br> \                           |
-| Dynamic Links                | libapp.a<br>                                 |
+| Firebase Dynamic Links       | libdynamic_links.a<br> \                     |
+|                              | libapp.a<br>                                 |
+| Firebase Invites             | libinvites.a<br> \                           |
+|                              | libapp.a<br>                                 |
 | Firebase Cloud Messaging     | libmessaging.a<br> \                         |
 |                              | libapp.a<br>                                 |
 | Firebase Realtime Database   | libdatabase.a<br> \                          |
@@ -297,7 +309,8 @@ library.
 | AdMob                   | Not required (usually; see below) |
 | Cloud Messaging         | Required                          |
 | Auth                    | Required                          |
-| Invites / Dynamic Links | Required                          |
+| Dynamic Links           | Required                          |
+| Invites                 | Required                          |
 | Realtime Database       | Required                          |
 | Remote Config           | Required                          |
 | Storage                 | Required                          |
@@ -317,6 +330,39 @@ Google Play services is unavailable AND you are using
 
 Release Notes
 -------------
+### 4.0.1
+  - Overview
+    - Bug fixes for Dynamic links and Invites on iOS and Cloud Messaging on
+      Android and iOS.
+  - Changes
+    - Cloud Messaging (Android): Fixed an issue where Terminate was not
+      correctly shutting down the Cloud Messaging library.
+    - Cloud Messaging (iOS): Fixed an issue where library would crash on start
+      up if there was no registration token.
+    - Dynamic Links & Invites (iOS): Fixed an issue that resulted in apps not
+      receiving a link when opening a link if the app is installed and not
+      running.
+
+### 4.0.0
+  - Overview
+    - Added support for phone number authentication, access to user metadata,
+      a standalone dynamic library and bug fixes.
+  - Changes
+    - Auth: Added support for phone number authentication.
+    - Auth: Added the ability to retrieve user metadata.
+    - Auth: Moved token notification to a separate listener object.
+    - Dynamic Links: Added a standalone library separate from Invites.
+    - Invites (iOS): Fixed an issue in the analytics SDK's method swizzling
+      which resulted in dynamic links / invites not being sent to the
+      application.
+    - Messaging (Android): Fixed a regression introduced in 3.0.3 which caused
+      a crash when opening up a notification when the app is running in the
+      background.
+    - Messaging (iOS): Fixed interoperation with other users of local
+      notifications.
+    - General (Android): Fixed crash in some circumstances after resolving
+      dependencies by updating Google Play services.
+
 ### 3.1.2
   - Overview
     - Bug fixes for Auth.

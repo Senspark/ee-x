@@ -78,5 +78,56 @@ void Crashlytics::setUserEmail(const std::string& email) const {
     core::MessageBridge::getInstance().call("__crashlytics_set_user_email",
                                             email);
 }
+
+void Crashlytics::trackLevelStart(const std::string& name, const std::unordered_map<std::string, std::string>& attrs) {
+    nlohmann::json json;
+    json["name"] = name;
+    json["attrs"] = attrs;
+    core::MessageBridge::getInstance().call("__crashlytics_track_level_start", json.dump());
+}
+
+void Crashlytics::trackLevelEnd(const std::string &name, int score, bool success, const std::unordered_map<std::string, std::string> &attrs) {
+    nlohmann::json json;
+    
+    json["name"] = name;
+    json["score"] = score;
+    json["success"] = success;
+    json["attrs"] = attrs;
+    
+    core::MessageBridge::getInstance().call("__crashlytics_track_level_end", json.dump());
+}
+
+void Crashlytics::trackPurchase(float price, const std::string &currency, bool success, const std::string &itemName, const std::string &itemType, const std::string &itemId, const std::unordered_map<std::string, std::string> &attrs) {
+    nlohmann::json json;
+    
+    json["price"] = price;
+    json["currency"] = currency;
+    json["success"] = success;
+    json["item_name"] = itemName;
+    json["item_type"] = itemType;
+    json["item_id"] = itemId;
+    json["attrs"] = attrs;
+    
+    core::MessageBridge::getInstance().call("__crashlytics_track_purchase", json.dump());
+}
+
+void Crashlytics::trackCustomEvent(const std::string &name, const std::unordered_map<std::string, std::string> &attrs) {
+    nlohmann::json json;
+    
+    json["name"] = name;
+    json["attrs"] = attrs;
+    
+    core::MessageBridge::getInstance().call("__crashlytics_track_custom_event", json.dump());
+}
+
+void Crashlytics::trackInvite(const std::string& method, const std::unordered_map<std::string, std::string>& attrs) {
+    nlohmann::json json;
+    
+    json["method"] = method;
+    json["attrs"] = attrs;
+    
+    core::MessageBridge::getInstance().call("__crashlytics_track_invite", json.dump());
+}
+
 } // namespace crashlytics
 } // namespace ee

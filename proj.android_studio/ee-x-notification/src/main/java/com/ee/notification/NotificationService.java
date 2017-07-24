@@ -41,6 +41,9 @@ public class NotificationService extends Service {
             NotificationUtils.showNotification(this, notification, tag);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            // Invalid notification (no valid small icon).
+            e.printStackTrace();
         }
 
         return START_NOT_STICKY;

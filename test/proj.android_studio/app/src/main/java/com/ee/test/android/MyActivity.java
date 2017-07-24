@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
+import com.ee.crashlytics.Crashlytics;
 import com.ee.notification.Notification;
 
 /**
@@ -30,7 +31,7 @@ public class MyActivity extends Activity {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
 
-        // PluginManager.getInstance().addPlugin(new Crashlytics(this));
+        PluginManager.getInstance().addPlugin(new Crashlytics(this));
         PluginManager.getInstance().addPlugin(new Notification(this));
 
         applicationDidFinishLaunching();

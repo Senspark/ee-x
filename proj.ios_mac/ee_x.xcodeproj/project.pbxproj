@@ -376,6 +376,7 @@
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95DC76171EF8F28D00CAA8F3 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -470,6 +471,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				95DC76171EF8F28D00CAA8F3 /* CHANGELOG */,
 				6F2DDCDD1E52A3DE0094C241 /* src */,
 				6F24C5ED1EC2FEBA00509B6C /* third_party */,
 				6F2DDC5F1E52A0E70094C241 /* jni */,

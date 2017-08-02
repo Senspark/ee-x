@@ -107,6 +107,7 @@ Pod::Spec.new do |spec|
     s.public_header_files =
       'src/ee/Firebase.hpp',
       'src/ee/FirebaseFwd.hpp',
+      'src/ee/firebase/FirebaseApp.hpp',
       'src/ee/firebase/FirebaseAnalytics.hpp',
       'src/ee/firebase/FirebaseRemoteConfig.hpp',
       'src/ee/firebase/FirebaseStorage.hpp'
@@ -134,5 +135,19 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'FBAudienceNetwork'
+  end
+
+  spec.subspec 'unity-ads' do |s|
+    s.source_files =
+      'src/ee/UnityLibs.hpp',
+      'src/ee/UnityAdsFwd.hpp',
+      'src/ee/unityads/*.{cpp,hpp,mm,h,m}'
+
+    s.public_header_files =
+      'src/ee/UnityLibs.hpp',
+      'src/ee/UnityAdsFwd.hpp',
+      'src/ee/unityads/UnityAdsBridge.hpp'
+
+    s.dependency 'ee-x/core'
   end
 end

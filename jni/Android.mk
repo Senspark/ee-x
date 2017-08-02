@@ -60,6 +60,18 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+#############
+# UNITY_ADS #
+#############
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := ee_x_unity_ads_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/unityads -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
 ############
 # FIREBASE #
 ############

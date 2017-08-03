@@ -72,6 +72,18 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+#############
+# IRONSRC_ADS #
+#############
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := ee_x_ironsrc_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/ironsrc -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
 ############
 # FIREBASE #
 ############

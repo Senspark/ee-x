@@ -150,4 +150,19 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
   end
+
+  spec.subspec 'ironsrc' do |s|
+    s.source_files =
+      'src/ee/IronSrc.hpp',
+      'src/ee/IronSrcFwd.hpp',
+      'src/ee/ironsrc/*.{cpp,hpp,mm,h,m}'
+
+    s.public_header_files =
+      'src/ee/IronSrc.hpp',
+      'src/ee/IronSrcFwd.hpp',
+      'src/ee/ironsrc/IronSrcBridge.hpp'
+
+    s.dependency 'ee-x/core'
+    s.dependency 'IronSourceSDK'
+  end
 end

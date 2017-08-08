@@ -15,12 +15,14 @@ class FirebaseApp;
 class FirebaseAnalytics;
 class FirebaseRemoteConfig;
 class FirebaseStorage;
+class FirebaseMessaging;
 } // namespace firebase
 
 using firebase::FirebaseApp;
 using firebase::FirebaseAnalytics;
 using firebase::FirebaseRemoteConfig;
 using firebase::FirebaseStorage;
+using firebase::FirebaseMessaging;
 } // namespace ee
 
 #endif /* EE_X_FIREBASE_FWD_HPP_ */

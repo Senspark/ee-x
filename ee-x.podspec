@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '0.1.1'
+  spec.version        = '0.1.3'
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
 
@@ -39,7 +39,8 @@ Pod::Spec.new do |spec|
       'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a',
       'third_party/firebase_cpp_sdk/libs/ios/universal/libanalytics.a',
       'third_party/firebase_cpp_sdk/libs/ios/universal/libremote_config.a',
-      'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a'
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a',
+      'third_party/firebase_cpp_sdk/libs/ios/universal/libmessaging.a'
 
     s.header_mappings_dir = 'third_party/firebase_cpp_sdk/include'
   end
@@ -110,7 +111,8 @@ Pod::Spec.new do |spec|
       'src/ee/firebase/FirebaseApp.hpp',
       'src/ee/firebase/FirebaseAnalytics.hpp',
       'src/ee/firebase/FirebaseRemoteConfig.hpp',
-      'src/ee/firebase/FirebaseStorage.hpp'
+      'src/ee/firebase/FirebaseStorage.hpp',
+      'src/ee/firebase/FirebaseMessaging.hpp'
 
     s.exclude_files =
       'src/ee/firebase/FirebaseApp.cpp'
@@ -120,6 +122,7 @@ Pod::Spec.new do |spec|
     s.ios.dependency 'Firebase/Core'
     s.ios.dependency 'Firebase/RemoteConfig'
     s.ios.dependency 'Firebase/Storage'
+    s.ios.dependency 'Firebase/Messaging'
   end
 
   spec.subspec 'facebook-ads' do |s|

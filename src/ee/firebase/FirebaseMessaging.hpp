@@ -113,8 +113,7 @@ public:
     void setTokenCallback(const TokenCallback& callback);
 
     /// Subscribe to receive all messages to the specified topic.
-    /// Subscribes an app instance to a topic, enabling it to receive
-    /// messages
+    /// Subscribes an app instance to a topic, enabling it to receive messages
     /// sent to that topic.
     /// Call this function from the main thread. FCM is not thread safe.
     /// @param[in] topic The topic to subscribe to. Should be of the form

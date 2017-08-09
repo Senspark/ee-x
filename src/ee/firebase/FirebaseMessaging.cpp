@@ -45,11 +45,14 @@ private:
     TokenCallback tokenCallback_;
 };
 } // namespace
+#endif // EE_X_MOBILE
 
+#if defined(EE_X_MOBILE)
 Notification::Notification(const ::firebase::messaging::Notification& other) {
     title = other.title;
     body = other.body;
 }
+#endif // EE_X_MOBILE
 
 Message::Message(const Message& other) {
     copy(other);
@@ -62,6 +65,7 @@ Message& Message::operator=(const Message& other) {
     return *this;
 }
 
+#if defined(EE_X_MOBILE)
 Message::Message(const ::firebase::messaging::Message& other) {
     from = other.from;
     data = other.data;
@@ -71,6 +75,7 @@ Message::Message(const ::firebase::messaging::Message& other) {
     }
     notificationOpened = other.notification_opened;
 }
+#endif // EE_X_MOBILE
 
 void Message::copy(const Message& other) {
     from = other.from;
@@ -82,7 +87,6 @@ void Message::copy(const Message& other) {
     }
     notificationOpened = other.notificationOpened;
 }
-#endif // EE_X_MOBILE
 
 FirebaseMessaging::FirebaseMessaging() {
     initialized_ = false;

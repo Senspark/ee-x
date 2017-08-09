@@ -14,5 +14,6 @@
 #include "ee/firebase/FirebaseAnalytics.hpp"
 #include "ee/firebase/FirebaseRemoteConfig.hpp"
 #include "ee/firebase/FirebaseStorage.hpp"
+#include "ee/firebase/FirebaseMessaging.hpp"
 
 #endif /* EE_X_FIREBASE_HPP_ */

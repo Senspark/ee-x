@@ -45,6 +45,43 @@ private:
     TokenCallback tokenCallback_;
 };
 } // namespace
+
+Notification::Notification(const ::firebase::messaging::Notification& other) {
+    title = other.title;
+    body = other.body;
+}
+
+Message::Message(const Message& other) {
+    copy(other);
+}
+
+Message& Message::operator=(const Message& other) {
+    if (this != std::addressof(other)) {
+        copy(other);
+    }
+    return *this;
+}
+
+Message::Message(const ::firebase::messaging::Message& other) {
+    from = other.from;
+    data = other.data;
+    messageId = other.message_id;
+    if (other.notification != nullptr) {
+        notification = std::make_unique<Notification>(*other.notification);
+    }
+    notificationOpened = other.notification_opened;
+}
+
+void Message::copy(const Message& other) {
+    from = other.from;
+    data = other.data;
+    messageId = other.messageId;
+    notification.reset();
+    if (other.notification) {
+        notification = std::make_unique<Notification>(*other.notification);
+    }
+    notificationOpened = other.notificationOpened;
+}
 #endif // EE_X_MOBILE
 
 FirebaseMessaging::FirebaseMessaging() {
@@ -58,6 +95,7 @@ FirebaseMessaging::~FirebaseMessaging() {
 #endif // EE_X_MOBILE
     }
 }
+
 bool FirebaseMessaging::initialize() {
     if (initialized_) {
         return true;
@@ -85,14 +123,31 @@ bool FirebaseMessaging::initialize() {
     return true;
 }
 
+bool FirebaseMessaging::initialize(const TokenCallback& callback) {
+    setTokenCallback(callback);
+    return initialize();
+}
+
+void FirebaseMessaging::setMessageCallback(const MessageCallback& callback) {
+    messageCallback_ = callback;
+}
+
+void FirebaseMessaging::setTokenCallback(const TokenCallback& callback) {
+    tokenCallback_ = callback;
+}
+
 #if defined(EE_X_MOBILE)
 void FirebaseMessaging::onMessage(
     const ::firebase::messaging::Message& message) {
-    int x = 1;
+    if (messageCallback_) {
+        messageCallback_(Message(message));
+    }
 }
 
 void FirebaseMessaging::onTokenReceived(const std::string& token) {
-    int x = 1;
+    if (tokenCallback_) {
+        tokenCallback_(token);
+    }
 }
 #endif // EE_X_MOBILE
 

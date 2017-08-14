@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		19A632B7E8A564A43BC5A1B9 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
+		6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
+		6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
+		6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
+		6F1AA9591F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
 		6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
 		6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
 		6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
@@ -35,8 +39,8 @@
 		6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */; };
 		6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
 		6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
-		6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
-		6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
+		6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
+		6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
 		6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB62A1EC9643100450E67 /* EEStore.h */; };
 		6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */; };
 		6F2580001ECB162D00B910F9 /* PurchaseType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */; };
@@ -276,6 +280,8 @@
 		245FE1458C94FA85030F6767 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.release.xcconfig"; sourceTree = "<group>"; };
 		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; sourceTree = "<group>"; };
+		6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseMessaging.cpp; sourceTree = "<group>"; };
+		6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseMessaging.hpp; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
 		6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseStorage.hpp; sourceTree = "<group>"; };
 		6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
@@ -297,7 +303,7 @@
 		6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseFwd.hpp; sourceTree = "<group>"; };
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
-		6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp_iOS.mm; sourceTree = "<group>"; };
+		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -651,7 +657,7 @@
 			isa = PBXGroup;
 			children = (
 				6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */,
-				6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */,
+				6F24C7011EC3255A00509B6C /* FirebaseApp.mm */,
 				6F24C3851EC2C17600509B6C /* FirebaseAnalytics.cpp */,
 				6F24C3861EC2C17600509B6C /* FirebaseAnalytics.hpp */,
 				6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */,
@@ -660,6 +666,8 @@
 				6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */,
 				6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */,
 				6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */,
+				6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */,
+				6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */,
 			);
 			path = firebase;
 			sourceTree = "<group>";
@@ -745,6 +753,7 @@
 				6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */,
 				6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */,
 				6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
+				6F1AA9591F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */,
 				6F24C3711EC2BA0800509B6C /* FirebaseStorage.hpp in Headers */,
 			);
@@ -847,6 +856,7 @@
 				6F83DD0C1EC1CDC1004C5500 /* FirebaseApp.hpp in Headers */,
 				6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */,
 				6F24C4DD1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
+				6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */,
 				6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */,
 			);
@@ -1223,7 +1233,8 @@
 				6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */,
 				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */,
-				6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
+				6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1280,7 +1291,8 @@
 				6F83DD0D1EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp in Sources */,
 				6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */,
-				6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
+				6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,8 +12,5 @@ android {
 
 dependencies {
     compile project(':ee-x-firebase-core')
-    compile project(':ee-x-firebase-analytics')
-    compile project(':ee-x-firebase-messaging')
-    compile project(':ee-x-firebase-remote-config')
-    compile project(':ee-x-firebase-storage')
+    compile 'com.google.firebase:firebase-storage:11.0.4'
 }

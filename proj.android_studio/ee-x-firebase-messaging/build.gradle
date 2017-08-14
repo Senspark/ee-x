@@ -11,11 +11,6 @@ android {
 }
 
 dependencies {
-    compile project(':ee-x-core')
-
-    compile 'com.google.android.gms:play-services-base:11.0.2'
-    compile 'com.google.firebase:firebase-analytics:11.0.2'
-    compile 'com.google.firebase:firebase-config:11.0.2'
-    compile 'com.google.firebase:firebase-storage:11.0.2'
-    compile 'com.google.firebase:firebase-messaging:11.0.2'
+    compile project(':ee-x-firebase-core')
+    compile 'com.google.firebase:firebase-messaging:11.0.4'
 }

@@ -1,20 +1,37 @@
+def ee_x_root = new File(settingsDir, '../../proj.android_studio')
+
 include ':ee_x_test'
 project(':ee_x_test').projectDir = new File(settingsDir, 'app')
 
 include ':ee-x-core'
-project(':ee-x-core').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-core')
+project(':ee-x-core').projectDir = new File(ee_x_root, 'ee-x-core')
 
 include ':ee-x-crashlytics'
-project(':ee-x-crashlytics').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-crashlytics')
+project(':ee-x-crashlytics').projectDir = new File(ee_x_root, 'ee-x-crashlytics')
 
 include ':ee-x-notification'
-project(':ee-x-notification').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-notification')
+project(':ee-x-notification').projectDir = new File(ee_x_root, 'ee-x-notification')
 
 include ':ee-x-firebase'
-project(':ee-x-firebase').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-firebase')
+project(':ee-x-firebase').projectDir = new File(ee_x_root, 'ee-x-firebase')
+
+include ':ee-x-firebase-core'
+project(':ee-x-firebase-core').projectDir = new File(ee_x_root, 'ee-x-firebase-core')
+
+include ':ee-x-firebase-analytics'
+project(':ee-x-firebase-analytics').projectDir = new File(ee_x_root, 'ee-x-firebase-analytics')
+
+include ':ee-x-firebase-messaging'
+project(':ee-x-firebase-messaging').projectDir = new File(ee_x_root, 'ee-x-firebase-messaging')
+
+include ':ee-x-firebase-remote-config'
+project(':ee-x-firebase-remote-config').projectDir = new File(ee_x_root, 'ee-x-firebase-remote-config')
+
+include ':ee-x-firebase-storage'
+project(':ee-x-firebase-storage').projectDir = new File(ee_x_root, 'ee-x-firebase-storage')
 
 include ':ee-x-facebook-ads'
-project(':ee-x-facebook-ads').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-facebook-ads')
+project(':ee-x-facebook-ads').projectDir = new File(ee_x_root, 'ee-x-facebook-ads')
 
 include ':ee-x-store'
-project(':ee-x-store').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-store')
+project(':ee-x-store').projectDir = new File(ee_x_root, 'ee-x-store')

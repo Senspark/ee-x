@@ -1,14 +1,15 @@
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+
+@class UIViewController;
 
 @interface EEIronSrc : NSObject
 
-- (void) initIronSrc:(NSString*) gameID;
+- (void)initIronSrc:(NSString*)gameId;
 
-- (BOOL) isAdsReady:(NSString*) placementID;
+- (BOOL)isAdsReady:(NSString*)placementId;
 
-- (void) showAds:(NSString*) placementID;
+- (void)showAds:(NSString*)placementId;
 
-@property(assign, nonatomic) UIViewController* rootController;
+@property (assign, nonatomic) UIViewController* rootController;
 
 @end

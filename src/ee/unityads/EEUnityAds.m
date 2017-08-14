@@ -14,19 +14,8 @@
 
 #import <UnityAds/UnityAds.h>
 
-
-#undef CLS_LOG
-#ifdef __OBJC__
-#ifndef NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSNSLog(__FORMAT__, ##__VA_ARGS__)
-#else // NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSLog(__FORMAT__, ##__VA_ARGS__)
-#endif // NDEBUG
-#endif // __OBJC__
-
 @interface EEUnityAds () <UnityAdsDelegate> {
 }
-
 
 @end
 
@@ -41,7 +30,7 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
     if (self == nil) {
         return self;
     }
-    
+
     [self registerHandlers];
     return self;
 }
@@ -66,19 +55,19 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        
+
         NSString* PlacementID = dict[@"PlacementID"];
-        
+
         return ([self isAdsReady:PlacementID]) ? @"true" : @"false";
     } tag:k__unityads_isAdsReady];
-    
+
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        
+
         NSString* PlacementID = dict[@"PlacementID"];
-        
+
         [self showAds:PlacementID];
-        
+
         return [EEDictionaryUtils emptyResult];
     } tag:k__unityads_showAds];
 }
@@ -91,50 +80,54 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
     [bridge deregisterHandler:k__unityads_showAds];
 }
 #pragma mark ===================CODE HERE
-- (void) initUnityAds:(NSString*) gameID
-{
+- (void)initUnityAds:(NSString*)gameID {
     [UnityAds initialize:gameID delegate:self];
-//    [UnityAds setDebugMode:YES];
-    
-    _rootController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    //    [UnityAds setDebugMode:YES];
+
+    _rootController =
+        [[[UIApplication sharedApplication] keyWindow] rootViewController];
 }
 
-- (BOOL) isAdsReady:(NSString*) placementID
-{
+- (BOOL)isAdsReady:(NSString*)placementID {
     return [UnityAds isReady:placementID];
 }
 
-- (void) showAds:(NSString*) placementID
-{
+- (void)showAds:(NSString*)placementID {
     if ([self isAdsReady:placementID]) {
         [UnityAds show:_rootController placementId:placementID];
     }
 }
 #pragma mark ===================UnityAdsDelegate
-- (void)unityAdsReady:(NSString *)placementId{
+- (void)unityAdsReady:(NSString*)placementId {
     NSLog(@"EEUNITY ADS   ready %@", placementId);
 }
 
-- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message{
+- (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {
     NSLog(@"EEUNITY ADS   error %@", message);
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
     [dict setValue:message forKey:@"placement"];
-    
-    NSLog(@"EEUNITY ADS   error dict %@", [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance] callCpp:@"__UnityAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
+
+    NSLog(@"EEUNITY ADS   error dict %@",
+          [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance]
+        callCpp:@"__UnityAds_callback"
+            msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
-- (void)unityAdsDidStart:(NSString *)placementId{
+- (void)unityAdsDidStart:(NSString*)placementId {
 }
 
-- (void)unityAdsDidFinish:(NSString *)placementId withFinishState:(UnityAdsFinishState)state
-{
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+- (void)unityAdsDidFinish:(NSString*)placementId
+          withFinishState:(UnityAdsFinishState)state {
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithInteger:state] forKey:@"code"];
     [dict setValue:placementId forKey:@"placement"];
-    
-    NSLog(@"EEUNITY ADS   finish dict %@", [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance] callCpp:@"__UnityAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
+
+    NSLog(@"EEUNITY ADS   finish dict %@",
+          [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance]
+        callCpp:@"__UnityAds_callback"
+            msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 @end

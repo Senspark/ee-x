@@ -6,27 +6,16 @@
 //
 //
 
+#import <UIKit/UIKit.h>
+#import <IronSource/IronSource.h>
+
 #import "ee/ironsrc/EEIronSrc.h"
 
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 
-#import "IronSource/IronSource.h"
-
-#undef CLS_LOG
-#ifdef __OBJC__
-#ifndef NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSNSLog(__FORMAT__, ##__VA_ARGS__)
-#else // NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSLog(__FORMAT__, ##__VA_ARGS__)
-#endif // NDEBUG
-#endif // __OBJC__
-
-@interface EEIronSrc ()<ISRewardedVideoDelegate> {
-    
-}
-
+@interface EEIronSrc () <ISRewardedVideoDelegate>
 
 @end
 
@@ -41,7 +30,7 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
     if (self == nil) {
         return self;
     }
-    
+
     [self registerHandlers];
     return self;
 }
@@ -66,19 +55,19 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        
+
         NSString* PlacementID = dict[@"PlacementID"];
-        
+
         return ([self isAdsReady:PlacementID]) ? @"true" : @"false";
     } tag:k__IronSrc_isAdsReady];
-    
+
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        
+
         NSString* PlacementID = dict[@"PlacementID"];
-        
+
         [self showAds:PlacementID];
-        
+
         return [EEDictionaryUtils emptyResult];
     } tag:k__IronSrc_showAds];
 }
@@ -90,51 +79,56 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
     [bridge deregisterHandler:k__IronSrc_isAdsReady];
     [bridge deregisterHandler:k__IronSrc_showAds];
 }
-#pragma mark ===================CODE HERE
-- (void) initIronSrc:(NSString*) gameID
-{
-    _rootController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    
+
+#pragma mark - CODE HERE
+
+- (void)initIronSrc:(NSString*)gameID {
+    _rootController =
+        [[[UIApplication sharedApplication] keyWindow] rootViewController];
+
     [IronSource initWithAppKey:gameID adUnits:@[IS_REWARDED_VIDEO]];
-    
-    [IronSource setRewardedVideoDelegate:self];    
+    [IronSource setRewardedVideoDelegate:self];
 }
 
-- (BOOL) isAdsReady:(NSString*) placementID
-{
+- (BOOL)isAdsReady:(NSString*)placementID {
     return [IronSource hasRewardedVideo];
 }
 
-- (void) showAds:(NSString*) placementID
-{
-    [IronSource showRewardedVideoWithViewController:_rootController placement:placementID];
+- (void)showAds:(NSString*)placementID {
+    [IronSource showRewardedVideoWithViewController:_rootController
+                                          placement:placementID];
 }
-#pragma mark ===================IronSrcSDKDelegate
-- (void)rewardedVideoDidFailToShowWithError:(NSError *)error
-{
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+#pragma mark - IronSrcSDKDelegate
+
+- (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
     [dict setValue:error.description forKey:@"placement"];
-    
-    NSLog(@"EEIronSrcADS   error dict %@", [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance] callCpp:@"__IronSrcAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
+
+    NSLog(@"EEIronSrcADS   error dict %@",
+          [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance]
+        callCpp:@"__IronSrcAds_callback"
+            msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
-- (void)rewardedVideoDidClose
-{
+- (void)rewardedVideoDidClose {
     NSLog(@"IronSrc rewardedVideoDidClose");
 }
 
-- (void)didReceiveRewardForPlacement:(ISPlacementInfo *)placementInfo
-{
-    NSLog(@"IronSrc didReceiveRewardForPlacement  %@", placementInfo.placementName);
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+- (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {
+    NSLog(@"IronSrc didReceiveRewardForPlacement  %@",
+          placementInfo.placementName);
+
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithInteger:2] forKey:@"code"];
     [dict setValue:placementInfo.placementName forKey:@"placement"];
-    
-    NSLog(@"EEIronSrcADS   finish dict %@", [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance] callCpp:@"__IronSrcAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
+
+    NSLog(@"EEIronSrcADS   finish dict %@",
+          [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance]
+        callCpp:@"__IronSrcAds_callback"
+            msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 @end

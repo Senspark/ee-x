@@ -10,11 +10,11 @@
 #define EE_X_UNITY_ADS_FWD_HPP_
 
 namespace ee {
-namespace unitylib {
+namespace unityads {
 class UnityAds;
 } // namespace unityads
 
-using unitylib::UnityAds;
+using unityads::UnityAds;
 } // namespace ee
 
 #endif /* EE_X_UNITY_ADS_FWD_HPP_ */

@@ -101,11 +101,13 @@ dependencies {
     compile project(':ee-x-crashlytics')
     compile project(':ee-x-firebase')
     compile project(':ee-x-facebook-ads')
+    compile project(':ee-x-unity-ads')
+    compile project(':ee-x-ironsrc')
 
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.google.android.gms:play-services-base:11.0.2'
+    compile 'com.google.android.gms:play-services-base:11.0.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

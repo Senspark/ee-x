@@ -7,23 +7,12 @@
 //
 
 #import "ee/facebook/EEFacebookAds.h"
-
+#import "ee/facebook/EEFacebookAdsUIView.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 
-#import "FBAudienceNetwork/FBAudienceNetwork.h"
-
-#import "AdsUIView.h"
-
-#undef CLS_LOG
-#ifdef __OBJC__
-#ifndef NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSNSLog(__FORMAT__, ##__VA_ARGS__)
-#else // NDEBUG
-#define CLS_LOG(__FORMAT__, ...) CLSLog(__FORMAT__, ##__VA_ARGS__)
-#endif // NDEBUG
-#endif // __OBJC__
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 @interface EEFacebookAds () <FBInterstitialAdDelegate, FBNativeAdDelegate,
                              FBMediaViewDelegate> {
@@ -35,41 +24,36 @@
     NSMutableDictionary* _dictFBNativeAdView;
     NSMutableDictionary* _dictFBNativeAdReady;
 }
+
 @property (nonatomic, strong) FBInterstitialAd* interstitialAd;
 
 @end
 
 @implementation EEFacebookAds
 
-NSString* const k__facebookads_initFBAdsInterstitial =
-    @"__facebookads_initFBAdsInterstitial";
-NSString* const k__facebookads_initFBAdsNativeAds =
-    @"__facebookads_initFBAdsNativeAds";
-NSString* const k__facebookads_initFBAdsBanner =
-    @"__facebookads_initFBAdsBanner";
+// clang-format off
+NSString* const k__facebookads_initFBAdsInterstitial =  @"__facebookads_initFBAdsInterstitial";
+NSString* const k__facebookads_initFBAdsNativeAds =     @"__facebookads_initFBAdsNativeAds";
+NSString* const k__facebookads_initFBAdsBanner =        @"__facebookads_initFBAdsBanner";
 
-NSString* const k__facebookads_cacheRewardedAd =
-    @"__facebookads_cacheRewardedAd";
-NSString* const k__facebookads_cacheInterstitialAd =
-    @"__facebookads_cacheInterstitialAd";
+NSString* const k__facebookads_cacheRewardedAd =        @"__facebookads_cacheRewardedAd";
+NSString* const k__facebookads_cacheInterstitialAd =    @"__facebookads_cacheInterstitialAd";
 
-NSString* const k__facebookads_showBannerAd = @"__facebookads_showBannerAd";
-NSString* const k__facebookads_hideBannerAd = @"__facebookads_hideBannerAd";
+NSString* const k__facebookads_showBannerAd =           @"__facebookads_showBannerAd";
+NSString* const k__facebookads_hideBannerAd =           @"__facebookads_hideBannerAd";
 
-NSString* const k__facebookads_hasNativeAd = @"__facebookads_hasNativeAd";
-NSString* const k__facebookads_hasInterstitialAd =
-    @"__facebookads_hasInterstitialAd";
-NSString* const k__facebookads_hasRewardedAd = @"__facebookads_hasRewardedAd";
+NSString* const k__facebookads_hasNativeAd =            @"__facebookads_hasNativeAd";
+NSString* const k__facebookads_hasInterstitialAd =      @"__facebookads_hasInterstitialAd";
+NSString* const k__facebookads_hasRewardedAd =          @"__facebookads_hasRewardedAd";
 
-NSString* const k__facebookads_showInterstitialAd =
-    @"__facebookads_showInterstitialAd";
-NSString* const k__facebookads_showRewardedAd = @"__facebookads_showRewardedAd";
+NSString* const k__facebookads_showInterstitialAd =     @"__facebookads_showInterstitialAd";
+NSString* const k__facebookads_showRewardedAd =         @"__facebookads_showRewardedAd";
 
-NSString* const k__facebookads_hideNativeAd = @"__facebookads_hideNativeAd";
+NSString* const k__facebookads_hideNativeAd =           @"__facebookads_hideNativeAd";
+NSString* const k__facebookads_showNativeAd =           @"__facebookads_showNativeAd";
 
-NSString* const k__facebookads_showNativeAd = @"__facebookads_showNativeAd";
-
-NSString* const k__facebookads_callback = @"__facebookads_callback";
+NSString* const k__facebookads_callback =               @"__facebookads_callback";
+// clang-format on
 
 - (id)init {
     self = [super init];
@@ -93,7 +77,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 
         NSString* BannerID = dict[@"BannerID"];
 
-        [self initFBAdsBannerID:BannerID];
+        [self initFBAdsBanner:BannerID];
 
         return [EEDictionaryUtils emptyResult];
     } tag:k__facebookads_initFBAdsBanner];
@@ -209,7 +193,9 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
     [bridge deregisterHandler:k__facebookads_initFBAdsNativeAds];
     [bridge deregisterHandler:k__facebookads_initFBAdsBanner];
 }
-#pragma mark ===================CODE HERE
+
+#pragma mark - CODE HERE
+
 - (void)initTestDevice {
     // test device
     //    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
@@ -247,7 +233,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 
     UIViewController* root =
         [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    AdsUIView* _nativeAdView =
+
+    EEFacebookAdsUIView* _nativeAdView =
         [[[NSBundle mainBundle] loadNibNamed:layout
                                        owner:nil
                                      options:nil] firstObject];
@@ -255,7 +242,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
     [root.view addSubview:_nativeAdView];
 
     [_dictFBNativeAdView setObject:_nativeAdView forKey:NativeID];
-    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO] forKey:NativeID];
+    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO]
+                            forKey:NativeID];
 }
 
 - (void)initFBAdsBanner:(NSString*)BannerID {
@@ -301,7 +289,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 }
 
 - (void)hideNativeAd:(NSString*)adsID {
-    AdsUIView* _nativeAdView = [_dictFBNativeAdView objectForKey:adsID];
+    EEFacebookAdsUIView* _nativeAdView =
+        [_dictFBNativeAdView objectForKey:adsID];
     _nativeAdView.hidden = YES;
 }
 
@@ -314,7 +303,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
               height:(int)height
                    x:(int)x
                    y:(int)y {
-    AdsUIView* _nativeAdView = [_dictFBNativeAdView objectForKey:adsID];
+    EEFacebookAdsUIView* _nativeAdView =
+        [_dictFBNativeAdView objectForKey:adsID];
 
     if ([[_dictFBNativeAdReady valueForKey:adsID] boolValue]) {
         _nativeAdView.hidden = NO;
@@ -326,7 +316,7 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
         CGRectMake((float)x / scale, (float)y / scale, width, height);
     _nativeAdView.adchoicesView.corner = UIRectCornerTopRight;
 
-    //for custom view need call drawRect again
+    // for custom view need call drawRect again
     [_nativeAdView.subviews[0] setNeedsDisplay];
     [_nativeAdView.subviews[1] setNeedsDisplay];
     [_nativeAdView.subviews[2] setNeedsDisplay];
@@ -335,7 +325,8 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 - (void)onAdsCallback:(int)code msg:(NSString*)msg {
 }
 
-#pragma mark ============FBInterstitialAdDelegate
+#pragma mark - FBInterstitialAdDelegate
+
 - (void)interstitialAdDidClick:(FBInterstitialAd*)interstitialAd {
     NSLog(@"FBAds ======== interstitialAdDidClick");
     [[EEMessageBridge getInstance] callCpp:k__facebookads_callback
@@ -375,21 +366,23 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
                                        msg:@"interstitialAdWillLogImpression"];
 }
 
-#pragma mark ============FBNativeAdDelegate
+#pragma mark - FBNativeAdDelegate
+
 - (void)nativeAdDidLoad:(FBNativeAd*)nativeAd {
     NSLog(@"FBAds ======== nativeAd nativeAdDidLoad");
     UIViewController* root =
         [[[UIApplication sharedApplication] keyWindow] rootViewController];
 
     FBNativeAd* _nativeAd = [_dictFBNativeAd objectForKey:nativeAd.placementID];
-    AdsUIView* _nativeAdView =
+    EEFacebookAdsUIView* _nativeAdView =
         [_dictFBNativeAdView objectForKey:nativeAd.placementID];
 
     if (_nativeAdView == nil) {
         return;
     }
 
-    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:YES] forKey:nativeAd.placementID];
+    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:YES]
+                            forKey:nativeAd.placementID];
 
     [_nativeAd unregisterView];
 
@@ -419,11 +412,14 @@ NSString* const k__facebookads_callback = @"__facebookads_callback";
 
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
     NSLog(@"FBAds ======== nativeAd didFailWithError");
-    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO] forKey:nativeAd.placementID];
+    [_dictFBNativeAdReady setValue:[NSNumber numberWithBool:NO]
+                            forKey:nativeAd.placementID];
 }
 
-#pragma mark ================FBMediaViewDelegate
+#pragma mark - FBMediaViewDelegate
+
 - (void)mediaViewDidLoad:(FBMediaView*)mediaView {
     NSLog(@"FBAds ======== mediaViewDidLoad");
 }
+
 @end

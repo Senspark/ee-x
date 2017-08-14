@@ -10,15 +10,14 @@
 
 @interface EEFacebookAds : NSObject
 
-- (void) initFBAdsInterstitial:(NSString*) InterstitialID;
-- (void) initFBAdsNativeAds:(NSString*) NativeID layout:(NSString*) layout;
-- (void) initFBAdsBanner:(NSString*) BannerID;
+- (void)initFBAdsInterstitial:(NSString*)interstitialAdId;
+- (void)initFBAdsNativeAds:(NSString*)nativeAdId layout:(NSString*)layout;
+- (void)initFBAdsBanner:(NSString*)bannerAdId;
 
+- (void)cacheRewardedAd:(NSString*)adId;
+- (void)cacheInterstitialAd:(NSString*)adId;
 
-- (void)cacheRewardedAd:(NSString*)adsID;
-- (void)cacheInterstitialAd:(NSString*)adsID;
-
-- (void)showBannerAd:(NSString*)adsID pos:(int)pos;
+- (void)showBannerAd:(NSString*)adsId pos:(int)pos;
 - (void)hideBannerAd;
 
 - (bool)hasInterstitialAd;
@@ -27,15 +26,13 @@
 - (void)showInterstitialAd;
 - (void)showRewardedAd;
 
-- (void)hideNativeAd:(NSString*)adsID;
+- (void)hideNativeAd:(NSString*)adId;
 
-- (void)showNativeAd:(NSString*)adsID
-                       width:(int)width
-                      height:(int)height
-                           x:(int)x
-                           y:(int)y;
-
-- (void)hideNativeAdvancedAd;
+- (void)showNativeAd:(NSString*)adId
+               width:(int)width
+              height:(int)height
+                   x:(int)x
+                   y:(int)y;
 
 - (void)onAdsCallback:(int)code msg:(NSString*)msg;
 

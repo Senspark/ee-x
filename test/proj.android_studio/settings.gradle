@@ -1,20 +1,21 @@
 include ':ee_x_test'
 project(':ee_x_test').projectDir = new File(settingsDir, 'app')
 
-include ':ee-x-core'
-project(':ee-x-core').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-core')
+def include_lib(name) {
+    include ':' + name
+    project(':' + name).projectDir = new File(settingsDir, '../../proj.android_studio/' + name)
+}
 
-include ':ee-x-crashlytics'
-project(':ee-x-crashlytics').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-crashlytics')
-
-include ':ee-x-notification'
-project(':ee-x-notification').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-notification')
-
-include ':ee-x-firebase'
-project(':ee-x-firebase').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-firebase')
-
-include ':ee-x-facebook-ads'
-project(':ee-x-facebook-ads').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-facebook-ads')
-
-include ':ee-x-store'
-project(':ee-x-store').projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-store')
+include_lib('ee-x-core')
+include_lib('ee-x-crashlytics')
+include_lib('ee-x-notification')
+include_lib('ee-x-firebase')
+include_lib('ee-x-firebase-core')
+include_lib('ee-x-firebase-analytics')
+include_lib('ee-x-firebase-messaging')
+include_lib('ee-x-firebase-remote-config')
+include_lib('ee-x-firebase-storage')
+include_lib('ee-x-facebook-ads')
+include_lib('ee-x-ironsrc')
+include_lib('ee-x-unity-ads')
+include_lib('ee-x-store')

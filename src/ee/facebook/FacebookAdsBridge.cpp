@@ -15,8 +15,9 @@
 namespace ee {
 namespace facebook {
 FacebookAds::FacebookAds() {
+    callback_ = nullptr;
     core::MessageBridge::getInstance().registerHandler(
-        std::bind(&FacebookAds::onAdsCallback, this, std::placeholders::_1),
+        std::bind(&FacebookAds::onAdCallback, this, std::placeholders::_1),
         "__facebookads_callback");
 }
 
@@ -26,47 +27,47 @@ FacebookAds::~FacebookAds() {
 }
 
 void FacebookAds::initFBAdsInterstitial(
-    const std::string& InterstitialID) const {
+    const std::string& interstitialAdId) const {
     nlohmann::json json;
-    json["InterstitialID"] = InterstitialID;
+    json["InterstitialID"] = interstitialAdId;
     core::MessageBridge::getInstance().call(
         "__facebookads_initFBAdsInterstitial", json.dump());
 }
 
-void FacebookAds::initFBAdsNativeAds(const std::string& NativeID,
+void FacebookAds::initFBAdsNativeAds(const std::string& nativeAdId,
                                      const std::string& layout) const {
     nlohmann::json json;
-    json["NativeID"] = NativeID;
+    json["NativeID"] = nativeAdId;
     json["layout"] = layout;
     core::MessageBridge::getInstance().call("__facebookads_initFBAdsNativeAds",
                                             json.dump());
 }
 
-void FacebookAds::initFBAdsBanner(const std::string& BannerID) const {
+void FacebookAds::initFBAdsBanner(const std::string& bannerAdId) const {
     nlohmann::json json;
-    json["BannerID"] = BannerID;
+    json["BannerID"] = bannerAdId;
     core::MessageBridge::getInstance().call("__facebookads_initFBAdsBanner",
                                             json.dump());
 }
 
-void FacebookAds::cacheRewardedAd(const std::string& adsID) const {
+void FacebookAds::cacheRewardedAd(const std::string& adId) const {
     nlohmann::json json;
-    json["adsID"] = adsID;
+    json["adsID"] = adId;
     core::MessageBridge::getInstance().call("__facebookads_cacheRewardedAd",
                                             json.dump());
 }
 
-void FacebookAds::cacheInterstitialAd(const std::string& adsID) const {
+void FacebookAds::cacheInterstitialAd(const std::string& adId) const {
     nlohmann::json json;
-    json["adsID"] = adsID;
+    json["adsID"] = adId;
     core::MessageBridge::getInstance().call("__facebookads_cacheInterstitialAd",
                                             json.dump());
 }
 
-void FacebookAds::showBannerAd(const std::string& adsID, int pos) const {
+void FacebookAds::showBannerAd(const std::string& adId, int position) const {
     nlohmann::json json;
-    json["adsID"] = adsID;
-    json["pos"] = pos;
+    json["adsID"] = adId;
+    json["pos"] = position;
     core::MessageBridge::getInstance().call("__facebookads_showBannerAd",
                                             json.dump());
 }
@@ -76,27 +77,23 @@ void FacebookAds::hideBannerAd() const {
 }
 
 bool FacebookAds::hasInterstitialAd() const {
-
-    std::string result = (std::string)core::MessageBridge::getInstance().call(
+    auto result = core::MessageBridge::getInstance().call(
         "__facebookads_hasInterstitialAd");
-
-    return result.compare("true") == 0;
+    return result == "true";
 }
 
 bool FacebookAds::hasRewardedAd() const {
-    std::string result = (std::string)core::MessageBridge::getInstance().call(
-        "__facebookads_hasRewardedAd");
-
-    return result.compare("true") == 0;
+    auto result =
+        core::MessageBridge::getInstance().call("__facebookads_hasRewardedAd");
+    return result == "true";
 }
 
-bool FacebookAds::hasNativeAd(const std::string& adsID) const {
+bool FacebookAds::hasNativeAd(const std::string& adId) const {
     nlohmann::json json;
-    json["adsID"] = adsID;
-    std::string result = (std::string)core::MessageBridge::getInstance().call(
+    json["adsID"] = adId;
+    auto result = core::MessageBridge::getInstance().call(
         "__facebookads_hasNativeAd", json.dump());
-
-    return result.compare("true") == 0;
+    return result == "true";
 }
 
 void FacebookAds::showInterstitialAd() const {
@@ -107,17 +104,17 @@ void FacebookAds::showRewardedAd() const {
     core::MessageBridge::getInstance().call("__facebookads_showRewardedAd");
 }
 
-void FacebookAds::hideNativeAd(const std::string& adsID) {
+void FacebookAds::hideNativeAd(const std::string& adId) {
     nlohmann::json json;
-    json["adsID"] = adsID;
+    json["adsID"] = adId;
     core::MessageBridge::getInstance().call("__facebookads_hideNativeAd",
                                             json.dump());
 }
 
-void FacebookAds::showNativeAd(const std::string& adsID, int width, int height,
+void FacebookAds::showNativeAd(const std::string& adId, int width, int height,
                                int x, int y) {
     nlohmann::json json;
-    json["adsID"] = adsID;
+    json["adsID"] = adId;
     json["width"] = width;
     json["height"] = height;
     json["x"] = x;
@@ -126,14 +123,11 @@ void FacebookAds::showNativeAd(const std::string& adsID, int width, int height,
                                             json.dump());
 }
 
-std::string FacebookAds::onAdsCallback(const std::string& msg) const {
-
-    if (_callback) {
-        _callback(msg);
+std::string FacebookAds::onAdCallback(const std::string& msg) const {
+    if (callback_) {
+        callback_(msg);
     }
-
     return "";
 }
-
 } // namespace crashlytics
 } // namespace ee

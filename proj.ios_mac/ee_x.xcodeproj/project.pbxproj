@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		19A632B7E8A564A43BC5A1B9 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
+		3AFCDE0675A6414E159A386F /* libPods-common-ee_x_mobile_unity_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */; };
+		3CFCFF8DC0C653552D02CB6E /* libPods-common-ee_x_mobile_iron_src.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */; };
+		5E33EA6CA96213FBED0551AF /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 		6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
 		6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
 		6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
@@ -39,8 +42,8 @@
 		6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */; };
 		6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
 		6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
-		6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
-		6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
+		6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
+		6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
 		6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB62A1EC9643100450E67 /* EEStore.h */; };
 		6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */; };
 		6F2580001ECB162D00B910F9 /* PurchaseType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */; };
@@ -139,6 +142,21 @@
 		6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
 		6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */; };
 		6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */; };
+		6F978CA41F41867C00247CA8 /* EEUnityAds.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA01F41867C00247CA8 /* EEUnityAds.h */; };
+		6F978CA51F41867C00247CA8 /* EEUnityAds.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CA11F41867C00247CA8 /* EEUnityAds.m */; };
+		6F978CA61F41867C00247CA8 /* UnityAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CA21F41867C00247CA8 /* UnityAdsBridge.cpp */; };
+		6F978CA71F41867C00247CA8 /* UnityAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */; };
+		6F978CAA1F41868200247CA8 /* UnityAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA81F41868200247CA8 /* UnityAdsFwd.hpp */; };
+		6F978CAB1F41868200247CA8 /* UnityAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA91F41868200247CA8 /* UnityAds.hpp */; };
+		6F978CB01F41868900247CA8 /* EEIronSrc.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CAC1F41868900247CA8 /* EEIronSrc.h */; };
+		6F978CB11F41868900247CA8 /* EEIronSrc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CAD1F41868900247CA8 /* EEIronSrc.m */; };
+		6F978CB21F41868900247CA8 /* IronSrcBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */; };
+		6F978CB31F41868900247CA8 /* IronSrcBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */; };
+		6F978CB61F41868E00247CA8 /* IronSrc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB41F41868E00247CA8 /* IronSrc.hpp */; };
+		6F978CB71F41868E00247CA8 /* IronSrcFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */; };
+		6F978CBA1F41882300247CA8 /* EEFacebookAdsUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */; };
+		6F978CBB1F41882300247CA8 /* EEFacebookAdsUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CB91F41882300247CA8 /* EEFacebookAdsUIView.m */; };
+		6F978CBC1F41882D00247CA8 /* EEFacebookAdsUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */; };
 		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
 		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
 		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
@@ -199,6 +217,20 @@
 			remoteInfo = ee_x_desktop_core;
 		};
 		6F83DCF51EC1CD9B004C5500 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		6F978C5E1F4184C500247CA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		6F978C7F1F4184CF00247CA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -275,6 +307,26 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F978C6E1F4184C500247CA8 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C8F1F4184CF00247CA8 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FAFB5D61EC94E0F00450E67 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,10 +340,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; sourceTree = "<group>"; };
-		245FE1458C94FA85030F6767 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.release.xcconfig"; sourceTree = "<group>"; };
 		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; sourceTree = "<group>"; };
+		6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; sourceTree = "<group>"; };
 		6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseMessaging.cpp; sourceTree = "<group>"; };
 		6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseMessaging.hpp; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
@@ -315,7 +368,7 @@
 		6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseFwd.hpp; sourceTree = "<group>"; };
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
-		6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp_iOS.mm; sourceTree = "<group>"; };
+		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -373,6 +426,22 @@
 		6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseRemoteConfig.hpp; sourceTree = "<group>"; };
 		6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler_inl.hpp; sourceTree = "<group>"; };
 		6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler.hpp; sourceTree = "<group>"; };
+		6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_unity_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_iron_src.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F978CA01F41867C00247CA8 /* EEUnityAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEUnityAds.h; path = unityads/EEUnityAds.h; sourceTree = "<group>"; };
+		6F978CA11F41867C00247CA8 /* EEUnityAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEUnityAds.m; path = unityads/EEUnityAds.m; sourceTree = "<group>"; };
+		6F978CA21F41867C00247CA8 /* UnityAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityAdsBridge.cpp; path = unityads/UnityAdsBridge.cpp; sourceTree = "<group>"; };
+		6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityAdsBridge.hpp; path = unityads/UnityAdsBridge.hpp; sourceTree = "<group>"; };
+		6F978CA81F41868200247CA8 /* UnityAdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAdsFwd.hpp; sourceTree = "<group>"; };
+		6F978CA91F41868200247CA8 /* UnityAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAds.hpp; sourceTree = "<group>"; };
+		6F978CAC1F41868900247CA8 /* EEIronSrc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIronSrc.h; path = ironsrc/EEIronSrc.h; sourceTree = "<group>"; };
+		6F978CAD1F41868900247CA8 /* EEIronSrc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSrc.m; path = ironsrc/EEIronSrc.m; sourceTree = "<group>"; };
+		6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSrcBridge.cpp; path = ironsrc/IronSrcBridge.cpp; sourceTree = "<group>"; };
+		6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSrcBridge.hpp; path = ironsrc/IronSrcBridge.hpp; sourceTree = "<group>"; };
+		6F978CB41F41868E00247CA8 /* IronSrc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSrc.hpp; sourceTree = "<group>"; };
+		6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSrcFwd.hpp; sourceTree = "<group>"; };
+		6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookAdsUIView.h; path = facebook/EEFacebookAdsUIView.h; sourceTree = "<group>"; };
+		6F978CB91F41882300247CA8 /* EEFacebookAdsUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookAdsUIView.m; path = facebook/EEFacebookAdsUIView.m; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -408,10 +477,13 @@
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95DC76171EF8F28D00CAA8F3 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_iron_src.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.release.xcconfig"; sourceTree = "<group>"; };
 		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_unity_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads.release.xcconfig"; sourceTree = "<group>"; };
 		C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
-		D7A092ADFCF807EDB079DE60 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
+		C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_unity_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB684E0A1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_facebook_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookAdsBridge.cpp; path = facebook/FacebookAdsBridge.cpp; sourceTree = "<group>"; };
 		EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookAdsBridge.hpp; path = facebook/FacebookAdsBridge.hpp; sourceTree = "<group>"; };
@@ -419,7 +491,9 @@
 		EB684E111EC5645200ED9E4A /* EEFacebookAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookAds.h; path = facebook/EEFacebookAds.h; sourceTree = "<group>"; };
 		EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAdsFwd.hpp; sourceTree = "<group>"; };
 		EB684E151EC5651300ED9E4A /* FacebookAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAds.hpp; sourceTree = "<group>"; };
+		F2FD00D51947FEC72B1ADBD2 /* Pods-common-ee_x_mobile_unity_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_unity_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads.debug.xcconfig"; sourceTree = "<group>"; };
 		F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_firebase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE9126B306DC1C9B81B062E5 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,6 +551,23 @@
 				6F24C3811EC2C0EE00509B6C /* libremote_config.a in Frameworks */,
 				6F24C3821EC2C0EE00509B6C /* libstorage.a in Frameworks */,
 				F8E14BB75FB4AA2DEEF491E0 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */,
+				5E33EA6CA96213FBED0551AF /* libPods-common-ee_x_mobile_firebase.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C671F4184C500247CA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3AFCDE0675A6414E159A386F /* libPods-common-ee_x_mobile_unity_ads.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C881F4184CF00247CA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CFCFF8DC0C653552D02CB6E /* libPods-common-ee_x_mobile_iron_src.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,7 +589,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				95DC76171EF8F28D00CAA8F3 /* CHANGELOG */,
@@ -517,6 +608,8 @@
 				6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */,
 				EB684E0A1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads.a */,
 				6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */,
+				6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */,
+				6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -533,6 +626,8 @@
 				BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */,
 				F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */,
 				93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */,
+				C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */,
+				A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -549,9 +644,6 @@
 		6F43A2261EC19F3100C68152 /* ee */ = {
 			isa = PBXGroup;
 			children = (
-				EB684E151EC5651300ED9E4A /* FacebookAds.hpp */,
-				EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */,
-				EB684DEB1EC5639000ED9E4A /* facebook */,
 				6F24C6D61EC31DBE00509B6C /* Macro.hpp */,
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
 				6F43A2271EC19F3100C68152 /* core */,
@@ -561,10 +653,19 @@
 				6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */,
 				6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */,
 				6F83DD061EC1CDC1004C5500 /* firebase */,
+				EB684E151EC5651300ED9E4A /* FacebookAds.hpp */,
+				EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */,
+				EB684DEB1EC5639000ED9E4A /* facebook */,
 				6FAFB5C41EC94DB300450E67 /* store */,
 				6F43A2D61EC1A39900C68152 /* Notification.hpp */,
 				6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */,
 				6F43A2961EC19F3100C68152 /* notification */,
+				6F978CA81F41868200247CA8 /* UnityAdsFwd.hpp */,
+				6F978CA91F41868200247CA8 /* UnityAds.hpp */,
+				6F978C9E1F41865700247CA8 /* unityads */,
+				6F978CB41F41868E00247CA8 /* IronSrc.hpp */,
+				6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */,
+				6F978C9F1F41866500247CA8 /* ironsrc */,
 			);
 			path = ee;
 			sourceTree = "<group>";
@@ -687,7 +788,7 @@
 			isa = PBXGroup;
 			children = (
 				6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */,
-				6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */,
+				6F24C7011EC3255A00509B6C /* FirebaseApp.mm */,
 				6F24C3851EC2C17600509B6C /* FirebaseAnalytics.cpp */,
 				6F24C3861EC2C17600509B6C /* FirebaseAnalytics.hpp */,
 				6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */,
@@ -700,6 +801,28 @@
 				6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */,
 			);
 			path = firebase;
+			sourceTree = "<group>";
+		};
+		6F978C9E1F41865700247CA8 /* unityads */ = {
+			isa = PBXGroup;
+			children = (
+				6F978CA01F41867C00247CA8 /* EEUnityAds.h */,
+				6F978CA11F41867C00247CA8 /* EEUnityAds.m */,
+				6F978CA21F41867C00247CA8 /* UnityAdsBridge.cpp */,
+				6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */,
+			);
+			name = unityads;
+			sourceTree = "<group>";
+		};
+		6F978C9F1F41866500247CA8 /* ironsrc */ = {
+			isa = PBXGroup;
+			children = (
+				6F978CAC1F41868900247CA8 /* EEIronSrc.h */,
+				6F978CAD1F41868900247CA8 /* EEIronSrc.m */,
+				6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */,
+				6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */,
+			);
+			name = ironsrc;
 			sourceTree = "<group>";
 		};
 		6FAFB5C41EC94DB300450E67 /* store */ = {
@@ -739,10 +862,14 @@
 				82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */,
 				C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */,
 				9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */,
-				D7A092ADFCF807EDB079DE60 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */,
-				245FE1458C94FA85030F6767 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */,
 				2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */,
 				64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */,
+				1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */,
+				FE9126B306DC1C9B81B062E5 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */,
+				F2FD00D51947FEC72B1ADBD2 /* Pods-common-ee_x_mobile_unity_ads.debug.xcconfig */,
+				C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */,
+				6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */,
+				B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -754,6 +881,8 @@
 				EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */,
 				EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */,
 				EB684E111EC5645200ED9E4A /* EEFacebookAds.h */,
+				6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */,
+				6F978CB91F41882300247CA8 /* EEFacebookAdsUIView.m */,
 			);
 			name = facebook;
 			sourceTree = "<group>";
@@ -788,6 +917,7 @@
 				6F24C38D1EC2C3EF00509B6C /* Firebase.hpp in Headers */,
 				6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */,
 				6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */,
+				6F978CBC1F41882D00247CA8 /* EEFacebookAdsUIView.h in Headers */,
 				6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
 				6F1AA9591F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */,
@@ -800,6 +930,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */,
+				6F978CBA1F41882300247CA8 /* EEFacebookAdsUIView.h in Headers */,
 				6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */,
 				6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */,
 				6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */,
@@ -901,6 +1032,28 @@
 				6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */,
 				6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C6F1F4184C500247CA8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F978CA41F41867C00247CA8 /* EEUnityAds.h in Headers */,
+				6F978CA71F41867C00247CA8 /* UnityAdsBridge.hpp in Headers */,
+				6F978CAA1F41868200247CA8 /* UnityAdsFwd.hpp in Headers */,
+				6F978CAB1F41868200247CA8 /* UnityAds.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C901F4184CF00247CA8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F978CB01F41868900247CA8 /* EEIronSrc.h in Headers */,
+				6F978CB61F41868E00247CA8 /* IronSrc.hpp in Headers */,
+				6F978CB31F41868900247CA8 /* IronSrcBridge.hpp in Headers */,
+				6F978CB71F41868E00247CA8 /* IronSrcFwd.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1043,6 +1196,48 @@
 			productReference = 6F24C3751EC2C07F00509B6C /* ee_x_mobile_firebase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		6F978C5C1F4184C500247CA8 /* ee_x_mobile_unity_ads */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F978C791F4184C500247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_unity_ads" */;
+			buildPhases = (
+				6F978C5F1F4184C500247CA8 /* [CP] Check Pods Manifest.lock */,
+				6F978C601F4184C500247CA8 /* Sources */,
+				6F978C671F4184C500247CA8 /* Frameworks */,
+				6F978C6E1F4184C500247CA8 /* Copy Files */,
+				6F978C6F1F4184C500247CA8 /* Headers */,
+				6F978C781F4184C500247CA8 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F978C5D1F4184C500247CA8 /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_unity_ads;
+			productName = "ee-library";
+			productReference = 6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_src" */;
+			buildPhases = (
+				3B3B26BAE4B5720CA835B225 /* [CP] Check Pods Manifest.lock */,
+				6F978C811F4184CF00247CA8 /* Sources */,
+				6F978C881F4184CF00247CA8 /* Frameworks */,
+				6F978C8F1F4184CF00247CA8 /* Copy Files */,
+				6F978C901F4184CF00247CA8 /* Headers */,
+				37790495BA56D9D9210C6C22 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F978C7E1F4184CF00247CA8 /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_iron_src;
+			productName = "ee-library";
+			productReference = 6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6FAFB5E01EC94E0F00450E67 /* Build configuration list for PBXNativeTarget "ee_x_mobile_store" */;
@@ -1108,8 +1303,8 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
-			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
+			productRefGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1118,6 +1313,8 @@
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
 				6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */,
 				EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */,
+				6F978C5C1F4184C500247CA8 /* ee_x_mobile_unity_ads */,
+				6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */,
 				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
@@ -1127,19 +1324,55 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		588DEC3051FD82551EE95ED9 /* [CP] Check Pods Manifest.lock */ = {
+		37790495BA56D9D9210C6C22 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B3B26BAE4B5720CA835B225 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_iron_src-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		588DEC3051FD82551EE95ED9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_facebook_ads-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F43A29F1EC19F5700C68152 /* [CP] Check Pods Manifest.lock */ = {
@@ -1148,13 +1381,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-crashlytics-ee_x_mobile_crashlytics-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F43A2A51EC19F5700C68152 /* [CP] Copy Pods Resources */ = {
@@ -1178,13 +1414,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-crashlytics-ee_x_desktop_crashlytics-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F83DC941EC1C787004C5500 /* [CP] Copy Pods Resources */ = {
@@ -1202,19 +1441,55 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
+		6F978C5F1F4184C500247CA8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_unity_ads-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F978C781F4184C500247CA8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_firebase-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CF8ED5822B5BF4B1E3ABE118 /* [CP] Copy Pods Resources */ = {
@@ -1276,7 +1551,7 @@
 				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */,
 				6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
-				6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1334,7 +1609,25 @@
 				6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */,
 				6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
-				6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C601F4184C500247CA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F978CA51F41867C00247CA8 /* EEUnityAds.m in Sources */,
+				6F978CA61F41867C00247CA8 /* UnityAdsBridge.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F978C811F4184CF00247CA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F978CB11F41868900247CA8 /* EEIronSrc.m in Sources */,
+				6F978CB21F41868900247CA8 /* IronSrcBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1373,6 +1666,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */,
+				6F978CBB1F41882300247CA8 /* EEFacebookAdsUIView.m in Sources */,
 				EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1404,6 +1698,16 @@
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6F83DCF51EC1CD9B004C5500 /* PBXContainerItemProxy */;
+		};
+		6F978C5D1F4184C500247CA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = 6F978C5E1F4184C500247CA8 /* PBXContainerItemProxy */;
+		};
+		6F978C7E1F4184CF00247CA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = 6F978C7F1F4184CF00247CA8 /* PBXContainerItemProxy */;
 		};
 		6FAFB5C61EC94E0F00450E67 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1463,10 +1767,6 @@
 			baseConfigurationReference = B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-				);
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1476,10 +1776,6 @@
 			baseConfigurationReference = 82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-				);
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -1542,7 +1838,7 @@
 		};
 		6F83DD031EC1CD9B004C5500 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7A092ADFCF807EDB079DE60 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */;
+			baseConfigurationReference = 1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				LIBRARY_SEARCH_PATHS = (
@@ -1560,13 +1856,61 @@
 		};
 		6F83DD041EC1CD9B004C5500 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 245FE1458C94FA85030F6767 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */;
+			baseConfigurationReference = FE9126B306DC1C9B81B062E5 /* Pods-common-ee_x_mobile_firebase.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		6F978C7A1F4184C500247CA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2FD00D51947FEC72B1ADBD2 /* Pods-common-ee_x_mobile_unity_ads.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6F978C7B1F4184C500247CA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		6F978C9B1F4184CF00247CA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6F978C9C1F4184CF00247CA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1737,10 +2081,6 @@
 			baseConfigurationReference = 2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs",
-				);
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1750,10 +2090,6 @@
 			baseConfigurationReference = 64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs",
-				);
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -1820,6 +2156,24 @@
 			buildConfigurations = (
 				6F83DD031EC1CD9B004C5500 /* Debug */,
 				6F83DD041EC1CD9B004C5500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F978C791F4184C500247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_unity_ads" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F978C7A1F4184C500247CA8 /* Debug */,
+				6F978C7B1F4184C500247CA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_src" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F978C9B1F4184CF00247CA8 /* Debug */,
+				6F978C9C1F4184CF00247CA8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

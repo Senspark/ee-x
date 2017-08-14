@@ -64,7 +64,9 @@ matrix:
         - chmod a+x ./android-ndk-r10e/ndk-build
 
       before_script:
-        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') >> 'test/proj.android_studio/local.properties'
+        # Overwrite.
+        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') > 'test/proj.android_studio/local.properties'
+        
         - cat test/proj.android_studio/local.properties
         - chmod +x test/proj.android_studio/gradlew
 

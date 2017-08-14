@@ -1,5 +1,5 @@
-#ifndef IronSrc_h
-#define IronSrc_h
+#ifndef EE_X_IRON_SRC_HPP
+#define EE_X_IRON_SRC_HPP
 
 #include "ee/IronSrcFwd.hpp"
 #include "ee/ironsrc/IronSrcBridge.hpp"
@@ -8,4 +8,4 @@
 #import "ee/ironsrc/EEIronSrc.h"
 #endif // __OBJC__
 
-#endif /* IronSrc_h */
+#endif /* EE_X_IRON_SRC_HPP */

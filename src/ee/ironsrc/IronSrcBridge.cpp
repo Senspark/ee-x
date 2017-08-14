@@ -1,5 +1,3 @@
-#include <thread>
-
 #include "ee/ironsrc/IronSrcBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -8,7 +6,7 @@
 namespace ee {
 namespace ironsrc {
 IronSrc::IronSrc() {
-    _callback = nullptr;
+    callback_ = nullptr;
     core::MessageBridge::getInstance().registerHandler(
         std::bind(&IronSrc::doCallBack, this, std::placeholders::_1),
         "__IronSrcAds_callback");
@@ -20,41 +18,37 @@ IronSrc::~IronSrc() {
 }
 
 std::string IronSrc::doCallBack(const std::string& msg) const {
-    if (_callback) {
-        
-        nlohmann::json json = nlohmann::json::parse(msg);
-        
+    if (callback_) {
+        auto json = nlohmann::json::parse(msg);
+
         auto code = static_cast<IronSrcAdsResultCode>(json["code"].get<int>());
         std::string message = json["placement"];
-        
-        _callback(code, message);
+
+        callback_(code, message);
     }
 
     return "";
-}    
-
-void IronSrc::initIronSrc(const std::string& gameID)
-{
-    nlohmann::json json;
-    json["GameID"] = gameID;
-    core::MessageBridge::getInstance().call("k__IronSrc_initIronSrc", json.dump());
 }
 
-bool IronSrc::isAdsReady(const std::string& placementID)
-{
+void IronSrc::initIronSrc(const std::string& gameId) {
     nlohmann::json json;
-    json["PlacementID"] = placementID;
-    std::string result = core::MessageBridge::getInstance().call("k__IronSrc_isAdsReady", json.dump());
-    
-    return result.compare("true") == 0;
+    json["GameID"] = gameId;
+    core::MessageBridge::getInstance().call("k__IronSrc_initIronSrc",
+                                            json.dump());
 }
 
-void IronSrc::showAds(const std::string& placementID)
-{
+bool IronSrc::isAdsReady(const std::string& placementId) {
     nlohmann::json json;
-    json["PlacementID"] = placementID;
+    json["PlacementID"] = placementId;
+    auto result = core::MessageBridge::getInstance().call(
+        "k__IronSrc_isAdsReady", json.dump());
+    return result == "true";
+}
+
+void IronSrc::showAds(const std::string& placementId) {
+    nlohmann::json json;
+    json["PlacementID"] = placementId;
     core::MessageBridge::getInstance().call("k__IronSrc_showAds", json.dump());
 }
-
-} // namespace IronSrc
+} // namespace ironsrc
 } // namespace ee

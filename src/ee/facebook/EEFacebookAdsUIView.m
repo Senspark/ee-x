@@ -6,9 +6,11 @@
 //
 //
 
-#import "AdsUIView.h"
+#import "EEFacebookAdsUIView.h"
 
-@implementation AdsUIView
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+
+@implementation EEFacebookAdsUIView
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -17,4 +19,5 @@
     // Drawing code
 }
 */
+
 @end

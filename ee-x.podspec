@@ -103,7 +103,7 @@ Pod::Spec.new do |spec|
       'src/ee/FirebaseFwd.hpp',
       'src/ee/firebase/FirebaseApp.hpp'
 
-    s.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a'
+    s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a'
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-headers'
     s.ios.dependency 'Firebase/Core'
@@ -112,14 +112,14 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-analytics' do |s|
     s.source_files = 'src/ee/firebase/FirebaseAnalytics.*'
     s.public_header_files = 'src/ee/firebase/FirebaseAnalytics.hpp'
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libanalytics.a'
+    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libanalytics.a'
     s.dependency 'ee-x/firebase-core'
   end
 
   spec.subspec 'firebase-messaging' do |s|
     s.source_files = 'src/ee/firebase/FirebaseMessaging.*'
     s.public_header_files = 'src/ee/firebase/FirebaseMessaging.hpp'
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libmessaging.a'
+    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libmessaging.a'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/Messaging'
   end
@@ -127,7 +127,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-remote-config' do |s|
     s.source_files = 'src/ee/firebase/FirebaseRemoteConfig.*'
     s.public_header_files = 'src/ee/firebase/FirebaseRemoteConfig.hpp'
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libremote_config.a'
+    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libremote_config.a'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/RemoteConfig'
   end
@@ -135,7 +135,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-storage' do |s|
     s.source_files = 'src/ee/firebase/FirebaseStorage.*'
     s.public_header_files = 'src/ee/firebase/FirebaseStorage.hpp'
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a'
+    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libstorage.a'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/Storage'
   end

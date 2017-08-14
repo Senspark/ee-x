@@ -34,7 +34,7 @@ template <class T> class FirebaseScheduler;
 /// Wrapper for Firebase Storage.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/storage/cpp/start
-/// https://firebase.google.com/docs/reference/cpp/class/firebase/storage/storage
+/// https://firebase.google.com/docs/reference/cpp/namespace/firebase/storage
 class FirebaseStorage final {
 public:
     using HashCallback =

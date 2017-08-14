@@ -39,8 +39,8 @@
 		6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */; };
 		6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
 		6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C6D61EC31DBE00509B6C /* Macro.hpp */; };
-		6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
-		6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */; };
+		6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
+		6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C7011EC3255A00509B6C /* FirebaseApp.mm */; };
 		6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB62A1EC9643100450E67 /* EEStore.h */; };
 		6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */; };
 		6F2580001ECB162D00B910F9 /* PurchaseType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */; };
@@ -303,7 +303,7 @@
 		6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseFwd.hpp; sourceTree = "<group>"; };
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
-		6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp_iOS.mm; sourceTree = "<group>"; };
+		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
@@ -657,7 +657,7 @@
 			isa = PBXGroup;
 			children = (
 				6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */,
-				6F24C7011EC3255A00509B6C /* FirebaseApp_iOS.mm */,
+				6F24C7011EC3255A00509B6C /* FirebaseApp.mm */,
 				6F24C3851EC2C17600509B6C /* FirebaseAnalytics.cpp */,
 				6F24C3861EC2C17600509B6C /* FirebaseAnalytics.hpp */,
 				6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */,
@@ -1234,7 +1234,7 @@
 				6F24C36E1EC2BA0800509B6C /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3701EC2BA0800509B6C /* FirebaseStorage.cpp in Sources */,
 				6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
-				6F24C7031EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F24C7031EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,7 +1292,7 @@
 				6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */,
 				6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
-				6F24C7021EC3255A00509B6C /* FirebaseApp_iOS.mm in Sources */,
+				6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

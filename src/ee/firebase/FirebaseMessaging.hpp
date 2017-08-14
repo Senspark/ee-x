@@ -90,6 +90,8 @@ private:
     void copy(const Message& other);
 };
 
+/// https://firebase.google.com/docs/cloud-messaging/cpp/client
+/// https://firebase.google.com/docs/reference/cpp/namespace/firebase/messaging
 class FirebaseMessaging final {
 private:
     using Self = FirebaseMessaging;

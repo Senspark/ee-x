@@ -105,7 +105,7 @@ Pod::Spec.new do |spec|
 
     s.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a'
     s.dependency 'ee-x/core'
-    s.dependency 'ee-x/firebase-headers'
+    s.ios.dependency 'ee-x/firebase-headers'
     s.ios.dependency 'Firebase/Core'
   end
 

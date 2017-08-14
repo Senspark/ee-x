@@ -367,7 +367,7 @@ dependencies {
 - Modify `AppActivity.java`:
 
 ```
-import com.ee.firebase.Firebase;
+import com.ee.firebase.core.Firebase;
 
 public class AppActivity extends Cocos2dxActivity {
     @Override

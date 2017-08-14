@@ -1,4 +1,4 @@
-package com.ee.firebase;
+package com.ee.firebase.core;
 
 import android.content.Context;
 import android.content.Intent;

@@ -354,25 +354,13 @@ void NotificationAgent::unscheduleAll() {
 
 - Supported platforms: Android, iOS, Mac OSX.
 
-- Modify `Android.mk`:
-
-```
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_static
-```
-
-- Modify `settings.gradle`:
-
-```
-include ':ee-x-firebase'
-project(':ee-x-firebase').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-firebase')
-```
+### Common modifications:
 
 - Modify `build.gradle`:
 
 ```
 dependencies {
-    compile project(':ee-x-firebase')
-    compile 'com.google.android.gms:play-services-base:10.2.4'
+    compile 'com.google.android.gms:play-services-base:11.0.4'
 }
 ```
 
@@ -389,8 +377,118 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
+### Analytics
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-firebase-analytics'
+project(':ee-x-firebase-analytics').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-analytics')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-firebase-analytics')
+}
+```
+
 - Modify `Podfile`:
 
 ```
-pod 'ee-x/firebase', :git => 'https://github.com/Senspark/ee-x'
+pod 'ee-x/firebase-analytics', :git => 'https://github.com/Senspark/ee-x'
+```
+
+### Messaging (incomplete)
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-firebase-messaging'
+project(':ee-x-firebase-messaging').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-messaging')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-firebase-messaging')
+}
+```
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/firebase-messaging', :git => 'https://github.com/Senspark/ee-x'
+```
+
+### Remote config
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-firebase-remote-config'
+project(':ee-x-firebase-remote-config').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-remote-config')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-firebase-remote-config')
+}
+```
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/firebase-remote-config', :git => 'https://github.com/Senspark/ee-x'
+```
+
+### Storage
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-firebase-storage'
+project(':ee-x-firebase-storage').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-storage')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-firebase-storage')
+}
+```
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/firebase-storage', :git => 'https://github.com/Senspark/ee-x'
 ```

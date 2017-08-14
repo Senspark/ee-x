@@ -20,8 +20,8 @@ jobject global_activity = nullptr;
 
 extern "C" {
 JNIEXPORT void JNICALL
-Java_com_ee_firebase_Firebase_setActivity(JNIEnv* env, jobject instance,
-                                          jobject activity) {
+Java_com_ee_firebase_core_Firebase_setActivity(JNIEnv* env, jobject instance,
+                                               jobject activity) {
     std::lock_guard<std::mutex> guard(global_activity_mutex);
     if (global_activity != nullptr) {
         env->DeleteGlobalRef(global_activity);

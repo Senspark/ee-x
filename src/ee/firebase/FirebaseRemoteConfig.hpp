@@ -32,6 +32,7 @@ template <class T> class FirebaseScheduler;
 /// Wrapper for Firebase Remote Config.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/remote-config/use-config-cpp
+/// https://firebase.google.com/docs/reference/cpp/namespace/firebase/remote-config
 class FirebaseRemoteConfig {
 public:
     using FetchCallback = std::function<void(bool succeeded)>;

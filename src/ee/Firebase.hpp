@@ -10,8 +10,10 @@
 #define EE_X_FIREBASE_HPP_
 
 #include "ee/FirebaseFwd.hpp"
+#include "ee/firebase/FirebaseApp.hpp"
 #include "ee/firebase/FirebaseAnalytics.hpp"
 #include "ee/firebase/FirebaseRemoteConfig.hpp"
 #include "ee/firebase/FirebaseStorage.hpp"
+#include "ee/firebase/FirebaseMessaging.hpp"
 
 #endif /* EE_X_FIREBASE_HPP_ */

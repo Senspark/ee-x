@@ -1,0 +1,16 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+    }
+}
+
+dependencies {
+    compile project(':ee-x-firebase-core')
+    compile 'com.google.firebase:firebase-storage:11.0.4'
+}

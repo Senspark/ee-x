@@ -16,6 +16,7 @@ namespace firebase {
 /// Wrapper for Firebase Analytics.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/analytics/cpp/start
+/// https://firebase.google.com/docs/reference/cpp/namespace/firebase/analytics
 class FirebaseAnalytics {
 public:
     FirebaseAnalytics();

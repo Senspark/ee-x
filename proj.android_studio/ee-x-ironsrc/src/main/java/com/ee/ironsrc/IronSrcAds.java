@@ -188,6 +188,11 @@ public class IronSrcAds implements PluginProtocol, RewardedVideoListener {
 
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-
+        Map<String, Object> dict = new HashMap<>();
+        dict.put("code", 0);
+        dict.put("placement", ironSourceError.getErrorMessage());
+        
+        Log.d("EEIronSrc", "ADS finished dict callback " + JsonUtils.convertDictionaryToString(dict));
+        MessageBridge.getInstance().callCpp("__IronSrcAds_callback", JsonUtils.convertDictionaryToString(dict));
     }
 }

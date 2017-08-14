@@ -110,6 +110,16 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
     [IronSource showRewardedVideoWithViewController:_rootController placement:placementID];
 }
 #pragma mark ===================IronSrcSDKDelegate
+- (void)rewardedVideoDidFailToShowWithError:(NSError *)error
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
+    [dict setValue:error.description forKey:@"placement"];
+    
+    NSLog(@"EEIronSrcADS   error dict %@", [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance] callCpp:@"__IronSrcAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
+}
+
 - (void)rewardedVideoDidClose
 {
     NSLog(@"IronSrc rewardedVideoDidClose");

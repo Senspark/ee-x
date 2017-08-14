@@ -187,5 +187,12 @@ public class SenUnityAds implements PluginProtocol, IUnityAdsListener {
     @Override
     public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
         Log.d("EEUNITY", "ADS   error " + s);
+        Map<String, Object> dict = new HashMap<>();
+
+        dict.put("code", 0);
+        dict.put("placement", s);
+
+        Log.d("EEUNITY", "ADS finished dic callback " + JsonUtils.convertDictionaryToString(dict));
+        MessageBridge.getInstance().callCpp("__UnityAds_callback", JsonUtils.convertDictionaryToString(dict));
     }
 }

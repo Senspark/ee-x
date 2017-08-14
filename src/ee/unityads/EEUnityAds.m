@@ -117,6 +117,12 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString *)message{
     NSLog(@"EEUNITY ADS   error %@", message);
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
+    [dict setValue:message forKey:@"placement"];
+    
+    NSLog(@"EEUNITY ADS   error dict %@", [EEJsonUtils convertDictionaryToString:dict]);
+    [[EEMessageBridge getInstance] callCpp:@"__UnityAds_callback" msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (void)unityAdsDidStart:(NSString *)placementId{

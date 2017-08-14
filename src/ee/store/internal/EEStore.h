@@ -22,6 +22,8 @@
 
 - (void)addPayment:(NSString*)productIdentifier;
 
+- (void)requestProducts:(NSSet*)identifiers;
+
 - (void)restoreTransactions;
 
 @end

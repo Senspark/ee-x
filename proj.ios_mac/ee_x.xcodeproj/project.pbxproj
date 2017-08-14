@@ -97,6 +97,18 @@
 		6F5E622A1ECDB11F0036D83B /* VirtualGood.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62281ECDB11F0036D83B /* VirtualGood.hpp */; };
 		6F5E622D1ECDB14D0036D83B /* VirtualGoodsStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E622B1ECDB14D0036D83B /* VirtualGoodsStorage.cpp */; };
 		6F5E622E1ECDB14D0036D83B /* VirtualGoodsStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E622C1ECDB14D0036D83B /* VirtualGoodsStorage.hpp */; };
+		6F5E62311ECE87180036D83B /* SingleUseVG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E622F1ECE87180036D83B /* SingleUseVG.cpp */; };
+		6F5E62321ECE87180036D83B /* SingleUseVG.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62301ECE87180036D83B /* SingleUseVG.hpp */; };
+		6F5E62351ECE88180036D83B /* LifetimeVG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E62331ECE88180036D83B /* LifetimeVG.cpp */; };
+		6F5E62361ECE88180036D83B /* LifetimeVG.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62341ECE88180036D83B /* LifetimeVG.hpp */; };
+		6F5E62391ECE98BD0036D83B /* SingleUsePackVG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E62371ECE98BD0036D83B /* SingleUsePackVG.cpp */; };
+		6F5E623A1ECE98BD0036D83B /* SingleUsePackVG.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62381ECE98BD0036D83B /* SingleUsePackVG.hpp */; };
+		6F5E623D1ECE9A260036D83B /* StoreInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E623B1ECE9A260036D83B /* StoreInfo.cpp */; };
+		6F5E623E1ECE9A260036D83B /* StoreInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E623C1ECE9A260036D83B /* StoreInfo.hpp */; };
+		6F5E62411ECE9F160036D83B /* StoreLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E623F1ECE9F160036D83B /* StoreLogger.cpp */; };
+		6F5E62421ECE9F160036D83B /* StoreLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62401ECE9F160036D83B /* StoreLogger.hpp */; };
+		6F5E62451ECEA4600036D83B /* StoreUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E62431ECEA4600036D83B /* StoreUtils.cpp */; };
+		6F5E62461ECEA4600036D83B /* StoreUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62441ECEA4600036D83B /* StoreUtils.hpp */; };
 		6F83DC8B1EC1C787004C5500 /* CrashlyticsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A23C1EC19F3100C68152 /* CrashlyticsBridge.cpp */; };
 		6F83DC8C1EC1C787004C5500 /* EECrashlytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A23F1EC19F3100C68152 /* EECrashlytics.m */; };
 		6F83DC901EC1C787004C5500 /* CrashlyticsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23D1EC19F3100C68152 /* CrashlyticsBridge.hpp */; };
@@ -344,6 +356,18 @@
 		6F5E62281ECDB11F0036D83B /* VirtualGood.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualGood.hpp; path = store/VirtualGood.hpp; sourceTree = "<group>"; };
 		6F5E622B1ECDB14D0036D83B /* VirtualGoodsStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VirtualGoodsStorage.cpp; path = store/VirtualGoodsStorage.cpp; sourceTree = "<group>"; };
 		6F5E622C1ECDB14D0036D83B /* VirtualGoodsStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VirtualGoodsStorage.hpp; path = store/VirtualGoodsStorage.hpp; sourceTree = "<group>"; };
+		6F5E622F1ECE87180036D83B /* SingleUseVG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleUseVG.cpp; path = store/SingleUseVG.cpp; sourceTree = "<group>"; };
+		6F5E62301ECE87180036D83B /* SingleUseVG.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleUseVG.hpp; path = store/SingleUseVG.hpp; sourceTree = "<group>"; };
+		6F5E62331ECE88180036D83B /* LifetimeVG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LifetimeVG.cpp; path = store/LifetimeVG.cpp; sourceTree = "<group>"; };
+		6F5E62341ECE88180036D83B /* LifetimeVG.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LifetimeVG.hpp; path = store/LifetimeVG.hpp; sourceTree = "<group>"; };
+		6F5E62371ECE98BD0036D83B /* SingleUsePackVG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleUsePackVG.cpp; path = store/SingleUsePackVG.cpp; sourceTree = "<group>"; };
+		6F5E62381ECE98BD0036D83B /* SingleUsePackVG.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleUsePackVG.hpp; path = store/SingleUsePackVG.hpp; sourceTree = "<group>"; };
+		6F5E623B1ECE9A260036D83B /* StoreInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StoreInfo.cpp; path = store/StoreInfo.cpp; sourceTree = "<group>"; };
+		6F5E623C1ECE9A260036D83B /* StoreInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StoreInfo.hpp; path = store/StoreInfo.hpp; sourceTree = "<group>"; };
+		6F5E623F1ECE9F160036D83B /* StoreLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StoreLogger.cpp; path = store/StoreLogger.cpp; sourceTree = "<group>"; };
+		6F5E62401ECE9F160036D83B /* StoreLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StoreLogger.hpp; path = store/StoreLogger.hpp; sourceTree = "<group>"; };
+		6F5E62431ECEA4600036D83B /* StoreUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StoreUtils.cpp; path = store/StoreUtils.cpp; sourceTree = "<group>"; };
+		6F5E62441ECEA4600036D83B /* StoreUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StoreUtils.hpp; path = store/StoreUtils.hpp; sourceTree = "<group>"; };
 		6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseApp.hpp; sourceTree = "<group>"; };
 		6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseRemoteConfig.cpp; sourceTree = "<group>"; };
 		6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseRemoteConfig.hpp; sourceTree = "<group>"; };
@@ -620,6 +644,8 @@
 		6F5E62171ECD99700036D83B /* item */ = {
 			isa = PBXGroup;
 			children = (
+				6FAFB5F01EC9519700450E67 /* MarketItem.cpp */,
+				6FAFB5F11EC9519700450E67 /* MarketItem.hpp */,
 				6FAFB5F41EC9567600450E67 /* VirtualItem.cpp */,
 				6FAFB5F51EC9567600450E67 /* VirtualItem.hpp */,
 				6FAFB5FC1EC9578900450E67 /* VirtualCurrency.cpp */,
@@ -628,10 +654,14 @@
 				6F5E621B1ECDA9210036D83B /* VirtualCurrencyPack.hpp */,
 				6FAFB5F81EC9568100450E67 /* PurchasableVirtualItem.cpp */,
 				6FAFB5F91EC9568100450E67 /* PurchasableVirtualItem.hpp */,
-				6FAFB5F01EC9519700450E67 /* MarketItem.cpp */,
-				6FAFB5F11EC9519700450E67 /* MarketItem.hpp */,
 				6F5E62271ECDB11F0036D83B /* VirtualGood.cpp */,
 				6F5E62281ECDB11F0036D83B /* VirtualGood.hpp */,
+				6F5E622F1ECE87180036D83B /* SingleUseVG.cpp */,
+				6F5E62301ECE87180036D83B /* SingleUseVG.hpp */,
+				6F5E62371ECE98BD0036D83B /* SingleUsePackVG.cpp */,
+				6F5E62381ECE98BD0036D83B /* SingleUsePackVG.hpp */,
+				6F5E62331ECE88180036D83B /* LifetimeVG.cpp */,
+				6F5E62341ECE88180036D83B /* LifetimeVG.hpp */,
 			);
 			name = item;
 			sourceTree = "<group>";
@@ -677,6 +707,12 @@
 			children = (
 				6FAFB6101EC95BDB00450E67 /* Store.cpp */,
 				6FAFB6111EC95BDB00450E67 /* Store.hpp */,
+				6F5E623B1ECE9A260036D83B /* StoreInfo.cpp */,
+				6F5E623C1ECE9A260036D83B /* StoreInfo.hpp */,
+				6F5E623F1ECE9F160036D83B /* StoreLogger.cpp */,
+				6F5E62401ECE9F160036D83B /* StoreLogger.hpp */,
+				6F5E62431ECEA4600036D83B /* StoreUtils.cpp */,
+				6F5E62441ECEA4600036D83B /* StoreUtils.hpp */,
 				6FAFB6271EC9616C00450E67 /* internal */,
 				6F5E62171ECD99700036D83B /* item */,
 				6F5E62161ECD979E0036D83B /* purchase */,
@@ -778,15 +814,21 @@
 				6F2580081ECB162D00B910F9 /* KeyValueStorage.hpp in Headers */,
 				6F257FFF1ECB162D00B910F9 /* EEKeyValueStorage.h in Headers */,
 				6F2580021ECB162D00B910F9 /* MarketItem.hpp in Headers */,
+				6F5E623A1ECE98BD0036D83B /* SingleUsePackVG.hpp in Headers */,
 				6F2580051ECB162D00B910F9 /* VirtualCurrency.hpp in Headers */,
 				6F5E622A1ECDB11F0036D83B /* VirtualGood.hpp in Headers */,
 				6F5E621D1ECDA9210036D83B /* VirtualCurrencyPack.hpp in Headers */,
 				6F2580041ECB162D00B910F9 /* PurchasableVirtualItem.hpp in Headers */,
 				6F2580031ECB162D00B910F9 /* VirtualItem.hpp in Headers */,
+				6F5E623E1ECE9A260036D83B /* StoreInfo.hpp in Headers */,
 				6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */,
 				6F2580011ECB162D00B910F9 /* PurchaseWithMarket.hpp in Headers */,
+				6F5E62321ECE87180036D83B /* SingleUseVG.hpp in Headers */,
 				6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */,
 				6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */,
+				6F5E62461ECEA4600036D83B /* StoreUtils.hpp in Headers */,
+				6F5E62421ECE9F160036D83B /* StoreLogger.hpp in Headers */,
+				6F5E62361ECE88180036D83B /* LifetimeVG.hpp in Headers */,
 				6F2580061ECB162D00B910F9 /* VirtualCurrencyStorage.hpp in Headers */,
 				6F5E62151ECD979A0036D83B /* PurchaseWithVirtualItem.hpp in Headers */,
 				6F2580071ECB162D00B910F9 /* VirtualItemStorage.hpp in Headers */,
@@ -1302,21 +1344,27 @@
 			files = (
 				6F5E62291ECDB11F0036D83B /* VirtualGood.cpp in Sources */,
 				6FAFB5FA1EC9568100450E67 /* PurchasableVirtualItem.cpp in Sources */,
+				6F5E62311ECE87180036D83B /* SingleUseVG.cpp in Sources */,
 				6FAFB6021EC9583800450E67 /* VirtualCurrencyStorage.cpp in Sources */,
 				6F5E622D1ECDB14D0036D83B /* VirtualGoodsStorage.cpp in Sources */,
+				6F5E62411ECE9F160036D83B /* StoreLogger.cpp in Sources */,
 				6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */,
 				6FAFB6061EC9584700450E67 /* VirtualItemStorage.cpp in Sources */,
 				6FAFB5F61EC9567600450E67 /* VirtualItem.cpp in Sources */,
+				6F5E62451ECEA4600036D83B /* StoreUtils.cpp in Sources */,
 				6F5E621C1ECDA9210036D83B /* VirtualCurrencyPack.cpp in Sources */,
 				6FAFB5FE1EC9578900450E67 /* VirtualCurrency.cpp in Sources */,
+				6F5E62351ECE88180036D83B /* LifetimeVG.cpp in Sources */,
 				6FAFB60E1EC95ABE00450E67 /* NativeKeyValueStorage.cpp in Sources */,
 				6F5E62141ECD979A0036D83B /* PurchaseWithVirtualItem.cpp in Sources */,
+				6F5E623D1ECE9A260036D83B /* StoreInfo.cpp in Sources */,
 				6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */,
 				6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */,
 				6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */,
 				6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */,
 				6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */,
 				6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */,
+				6F5E62391ECE98BD0036D83B /* SingleUsePackVG.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -174,7 +174,9 @@ Pod::Spec.new do |spec|
       'src/ee/unityads/UnityAdsBridge.hpp'
 
     s.dependency 'ee-x/core'
-    s.dependency 'UnityAds'
+
+    # UnityAds conflicts with GoogleMobileAdsMediationUnity
+    s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
   end
 
   spec.subspec 'ironsrc' do |s|

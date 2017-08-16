@@ -42,7 +42,9 @@ public:
     static std::string toString(jstring str);
 
     /// Converts C++ string to Java string.
-    static std::unique_ptr<JniString> toJavaString(const char* str);
+    static std::unique_ptr<JniString> toJavaString(const std::string& str);
+
+    static std::unique_ptr<JniString> toJavaString(const std::u16string& str);
 
     /// Retrieves the Java static method information.
     static std::unique_ptr<JniMethodInfo>

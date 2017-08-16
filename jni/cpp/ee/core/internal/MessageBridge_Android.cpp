@@ -42,8 +42,8 @@ std::string MessageBridge::call(const std::string& tag,
         throw std::runtime_error("Method not found!");
     }
 
-    auto tag_java = JniUtils::toJavaString(tag.c_str());
-    auto msg_java = JniUtils::toJavaString(msg.c_str());
+    auto tag_java = JniUtils::toJavaString(tag);
+    auto msg_java = JniUtils::toJavaString(msg);
 
     jobject response = methodInfo->getEnv()->CallStaticObjectMethod(
         methodInfo->getClass(), methodInfo->getMethodId(), tag_java->get(),

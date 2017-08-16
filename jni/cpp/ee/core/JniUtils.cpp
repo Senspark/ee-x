@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <codecvt>
 #include <pthread.h>
 
 #include "ee/core/JniUtils.hpp"
@@ -131,7 +132,13 @@ std::string JniUtils::toString(jstring str) {
     return result;
 }
 
-std::unique_ptr<JniString> JniUtils::toJavaString(const char* str) {
+std::unique_ptr<JniString> JniUtils::toJavaString(const std::string& str) {
+    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> converter;
+    auto u16str = converter.from_bytes(str);
+    return toJavaString(u16str);
+}
+
+std::unique_ptr<JniString> JniUtils::toJavaString(const std::u16string& str) {
     return JniString::create(getEnv(), str);
 }
 

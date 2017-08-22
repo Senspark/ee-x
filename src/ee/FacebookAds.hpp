@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef FacebookAds_h
-#define FacebookAds_h
+#ifndef EE_X_FACEBOOK_ADS_HPP
+#define EE_X_FACEBOOK_ADS_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
@@ -16,4 +16,4 @@
 #import "ee/facebook/EEFacebookAds.h"
 #endif // __OBJC__
 
-#endif /* FacebookAds_h */
+#endif /* EE_X_FACEBOOK_ADS_HPP */

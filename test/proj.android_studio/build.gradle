@@ -18,6 +18,8 @@ allprojects {
         jcenter()
         flatDir { dirs 'libs' }
         mavenLocal()
+        maven { url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.google.com" }
     }
 }

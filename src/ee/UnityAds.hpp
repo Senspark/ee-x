@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef UnityLibs_h
-#define UnityLibs_h
+#ifndef EE_X_UNITY_ADS_HPP
+#define EE_X_UNITY_ADS_HPP
 
 #include "ee/UnityAdsFwd.hpp"
 #include "ee/unityads/UnityAdsBridge.hpp"
@@ -16,4 +16,4 @@
 #import "ee/unityads/EEUnityAds.h"
 #endif // __OBJC__
 
-#endif /* UnityAds_h */
+#endif /* EE_X_UNITY_ADS_HPP */

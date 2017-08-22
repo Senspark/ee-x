@@ -101,6 +101,8 @@ dependencies {
     compile project(':ee-x-crashlytics')
     compile project(':ee-x-firebase')
     compile project(':ee-x-facebook-ads')
+    compile project(':ee-x-unity-ads')
+    compile project(':ee-x-ironsrc')
 
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:multidex:1.0.1'

@@ -41,7 +41,7 @@ public:
 protected:
     VirtualItem();
 };
-}
-}
+} // namespace store
+} // namespace ee
 
 #endif /* EE_X_STORE_VIRTUAL_ITEM_HPP_ */

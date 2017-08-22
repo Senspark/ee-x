@@ -164,16 +164,19 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'unity-ads' do |s|
     s.source_files =
-      'src/ee/UnityLibs.hpp',
+      'src/ee/UnityAds.hpp',
       'src/ee/UnityAdsFwd.hpp',
       'src/ee/unityads/*.{cpp,hpp,mm,h,m}'
 
     s.public_header_files =
-      'src/ee/UnityLibs.hpp',
+      'src/ee/UnityAds.hpp',
       'src/ee/UnityAdsFwd.hpp',
       'src/ee/unityads/UnityAdsBridge.hpp'
 
     s.dependency 'ee-x/core'
+
+    # UnityAds conflicts with GoogleMobileAdsMediationUnity
+    s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
   end
 
   spec.subspec 'ironsrc' do |s|

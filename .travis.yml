@@ -34,8 +34,8 @@ matrix:
         components:
           - tools
           - platform-tools
-          - build-tools-25.0.3
-          - android-25
+          - build-tools-26.0.0
+          - android-26
           - extra-android-m2repository
           - extra-google-m2repository
 
@@ -64,7 +64,9 @@ matrix:
         - chmod a+x ./android-ndk-r10e/ndk-build
 
       before_script:
-        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') >> 'test/proj.android_studio/local.properties'
+        # Overwrite.
+        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') > 'test/proj.android_studio/local.properties'
+        
         - cat test/proj.android_studio/local.properties
         - chmod +x test/proj.android_studio/gradlew
 

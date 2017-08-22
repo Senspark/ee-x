@@ -6,7 +6,7 @@
 //
 //
 
-#ifndef EE_X_STORE_NATIVE_KEY_VALUE_STORAGE_HPP -
+#ifndef EE_X_STORE_NATIVE_KEY_VALUE_STORAGE_HPP
 #define EE_X_STORE_NATIVE_KEY_VALUE_STORAGE_HPP
 
 #include "ee/store/KeyValueStorage.hpp"

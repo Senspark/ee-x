@@ -2,19 +2,35 @@
 
 *Author: Hai Hoang*
 
-|Travis|Jenkins-Android|Jenkins-iOS|Jenkins-MacOS|
+|Travis|Jenkins-Android|Jenkins-iOS|Jenkins-macOS|
 |:--:|:--:|:--:|:--:|
 |[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=android)](http://14.161.14.97:8080/job/ee_x/platform=android/)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=ios)](http://14.161.14.97:8080/job/ee_x/platform=ios)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=macos)](http://14.161.14.97:8080/job/ee_x/platform=macos)|
 
 ## Modules
 
-- Crashlytics
+- [Crashlytics + Answers](#crashlytics) [SDK](https://fabric.io/home)
 
-- Local notifications
+- [Local notifications](#local-notifications)
 
-- Firebase
+- [Firebase](#firebase) [SDK](firebase.google.com/docs/cpp/setup)
+
+  - [Analytics](#firebase-analytics)
+  
+  - [Messaging](#firebase-messaging-incomplete)
+  
+  - [Remote Config](#firebase-remote-config)
+   
+  - [Storage](#firebase-storage)
+
+- [Facebook Ads](#facebook-ads) [SDK](https://developers.facebook.com/docs/audience-network/getting-started)
+
+- [Unity Ads](#unity-ads) [SDK](https://github.com/Unity-Technologies)
+
+- [ironSource](#ironsource) [SDK](http://developers.ironsrc.com/ironsource-mobile/android/android-sdk)
 
 ## Getting started
+
+#### Android
 
 - Clone the repository.
 
@@ -95,9 +111,17 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
+#### iOS & macOS
+
+- Install pod.
+
 ## Crashlytics
 
-- Supported platforms: Android, iOS, Mac OSX.
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS, macOS.
+
+#### Android
 
 - Modify `Android.mk`:
 
@@ -133,6 +157,8 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
+#### iOS & macOS
+
 - Modify `Podfile`:
 
 ```
@@ -151,7 +177,7 @@ pod 'ee-x/crashlytics', :git => 'https://github.com/Senspark/ee-x'
 }
 ```
 
-- Sample C++ class:
+#### Sample C++ class:
 
  
 ```
@@ -218,9 +244,13 @@ void CrashlyticsAgent::logError(const std::string& message) {
 
 ## Local Notifications
 
+[Go to top](#modules)
+
 - Supported platforms: Android, iOS.
 
-- Notes for Android: `mipmap/ic_launcher` (or `mipmap/icon_silhouette` for API 21 and above) will be used as icon for notifications.
+#### Android
+
+- Notes: `mipmap/ic_launcher` (or `mipmap/icon_silhouette` for API 21 and above) will be used as icon for notifications.
 
 - Modify `Android.mk`:
 
@@ -256,6 +286,8 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
+#### iOS
+
 - Modify `Podfile`:
 
 ```
@@ -274,7 +306,7 @@ pod 'ee-x/notification', :git => 'https://github.com/Senspark/ee-x'
 }
 ```
 
-- Sample C++ class:
+#### Sample C++ class:
 
  
 ```
@@ -352,7 +384,9 @@ void NotificationAgent::unscheduleAll() {
 
 ## Firebase
 
-- Supported platforms: Android, iOS, Mac OSX.
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS, macOS.
 
 ### Common modifications:
 
@@ -377,7 +411,11 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
-### Analytics
+### Firebase Analytics
+
+[Go to top](#modules)
+
+#### Android
 
 - Modify `Android.mk`:
 
@@ -400,13 +438,19 @@ dependencies {
 }
 ```
 
+#### iOS & macOS
+
 - Modify `Podfile`:
 
 ```
 pod 'ee-x/firebase-analytics', :git => 'https://github.com/Senspark/ee-x'
 ```
 
-### Messaging (incomplete)
+### Firebase Messaging (incomplete)
+
+[Go to top](#modules)
+
+#### Android
 
 - Modify `Android.mk`:
 
@@ -429,13 +473,19 @@ dependencies {
 }
 ```
 
+#### iOS & macOS
+
 - Modify `Podfile`:
 
 ```
 pod 'ee-x/firebase-messaging', :git => 'https://github.com/Senspark/ee-x'
 ```
 
-### Remote config
+### Firebase Remote Config
+
+[Go to top](#modules)
+
+#### Android
 
 - Modify `Android.mk`:
 
@@ -458,13 +508,19 @@ dependencies {
 }
 ```
 
+#### iOS & macOS
+
 - Modify `Podfile`:
 
 ```
 pod 'ee-x/firebase-remote-config', :git => 'https://github.com/Senspark/ee-x'
 ```
 
-### Storage
+### Firebase Storage
+
+[Go to top](#modules)
+
+#### Android
 
 - Modify `Android.mk`:
 
@@ -487,8 +543,160 @@ dependencies {
 }
 ```
 
+#### iOS & macOS
+
 - Modify `Podfile`:
 
 ```
 pod 'ee-x/firebase-storage', :git => 'https://github.com/Senspark/ee-x'
+```
+
+## Facebook Ads
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-facebook-ads'
+project(':ee-x-facebook-ads').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-facebook-ads')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-facebook-ads')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.facebook.FacebookAds;
+
+public class AppActivity extends Cocos2dxActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new FacebookAds(this));
+    }
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/facebook-ads', :git => 'https://github.com/Senspark/ee-x'
+```
+
+## Unity Ads
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_unity_ads_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-unity-ads'
+project(':ee-x-unity-ads').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-unity-ads')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-unity-ads')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.unityads.UnityAds;
+
+public class AppActivity extends Cocos2dxActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new UnityAds(this));
+    }
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/unity-ads', :git => 'https://github.com/Senspark/ee-x'
+```
+
+## ironSource
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_ironsrc_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-ironsrc'
+project(':ee-x-ironsrc').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-ironsrc')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-ironsrc')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.ironsrc.IronSrc;
+
+public class AppActivity extends Cocos2dxActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new IronSrc(this));
+    }
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/ironsrc', :git => 'https://github.com/Senspark/ee-x'
 ```

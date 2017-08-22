@@ -135,7 +135,7 @@ LOCAL_CPPFLAGS := -std=c++14
 LOCAL_MODULE := ee_x_firebase_storage_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseStorage.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_static_prebuilt
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage_prebuilt
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)

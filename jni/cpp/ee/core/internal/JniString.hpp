@@ -10,6 +10,7 @@
 #define EE_CORE_JNI_STRING_HPP_
 
 #include <memory>
+#include <string>
 
 #include <jni.h>
 
@@ -18,14 +19,15 @@ namespace core {
 /// RAII class for encapsulating jstring.
 class JniString {
 public:
-    static std::unique_ptr<JniString> create(JNIEnv* env, const char* str);
+    static std::unique_ptr<JniString> create(JNIEnv* env,
+                                             const std::u16string& str);
 
     ~JniString();
 
     jstring get() const noexcept;
 
 private:
-    explicit JniString(JNIEnv* env, const char* str);
+    explicit JniString(JNIEnv* env, const std::u16string& str);
 
     /// Weak pointer to the JNIEnv.
     JNIEnv* env_;

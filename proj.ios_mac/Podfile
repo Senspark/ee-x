@@ -16,4 +16,12 @@ abstract_target 'common' do
     target 'ee_x_mobile_facebook_ads' do
         pod 'FBAudienceNetwork'
     end
+
+    target 'ee_x_mobile_unity_ads' do
+        pod 'UnityAds'
+    end
+    
+    target 'ee_x_mobile_iron_src' do
+        pod 'IronSourceSDK'
+    end
 end

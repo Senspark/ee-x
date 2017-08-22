@@ -2,7 +2,7 @@
 
 *Author: Hai Hoang*
 
-|Travis|Jenkins-Android|Jenkins-iOS|Jenkins-MacOS|
+|Travis|Jenkins-Android|Jenkins-iOS|Jenkins-macOS|
 |:--:|:--:|:--:|:--:|
 |[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=android)](http://14.161.14.97:8080/job/ee_x/platform=android/)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=ios)](http://14.161.14.97:8080/job/ee_x/platform=ios)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=macos)](http://14.161.14.97:8080/job/ee_x/platform=macos)|
 
@@ -111,7 +111,7 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Install pod.
 
@@ -119,7 +119,7 @@ public class AppActivity extends Cocos2dxActivity {
 
 [Go to top](#modules)
 
-- Supported platforms: Android, iOS, Mac OSX.
+- Supported platforms: Android, iOS, macOS.
 
 #### Android
 
@@ -157,7 +157,7 @@ public class AppActivity extends Cocos2dxActivity {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Modify `Podfile`:
 
@@ -386,7 +386,7 @@ void NotificationAgent::unscheduleAll() {
 
 [Go to top](#modules)
 
-- Supported platforms: Android, iOS, Mac OSX.
+- Supported platforms: Android, iOS, macOS.
 
 ### Common modifications:
 
@@ -438,7 +438,7 @@ dependencies {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Modify `Podfile`:
 
@@ -473,7 +473,7 @@ dependencies {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Modify `Podfile`:
 
@@ -508,7 +508,7 @@ dependencies {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Modify `Podfile`:
 
@@ -543,7 +543,7 @@ dependencies {
 }
 ```
 
-#### iOS & Mac
+#### iOS & macOS
 
 - Modify `Podfile`:
 

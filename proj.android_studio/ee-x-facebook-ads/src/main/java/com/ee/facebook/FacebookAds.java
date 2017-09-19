@@ -577,17 +577,17 @@ public class FacebookAds implements PluginProtocol {
                     DisplayMetrics metrics = new DisplayMetrics();
                     WindowManager wm = _context.getWindowManager();
 
-                    int scale = 1;
+                    float scale = 1;
                     if (wm != null) {
                         Display d = wm.getDefaultDisplay();
                         if (d != null) {
                             d.getMetrics(metrics);
 
-                            scale = (int) metrics.density;
+                            scale = metrics.density;
                         }
                     }
 
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width * scale, height * scale);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int)(width * scale), (int) (height * scale));
                     params.leftMargin = x;
                     params.topMargin = y;
                     adView.setLayoutParams(params);

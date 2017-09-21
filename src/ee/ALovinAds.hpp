@@ -10,10 +10,10 @@
 #define EE_X_ALOVIN_ADS_HPP
 
 #include "ee/ALovinAdsFwd.hpp"
-#include "ee/ALovinads/ALovinAdsBridge.hpp"
+#include "ee/alovin/ALovinAdsBridge.hpp"
 
 #ifdef __OBJC__
-#import "ee/ALovinads/EEALovinAds.h"
+#import "ee/alovin/EEALovinAds.h"
 #endif // __OBJC__
 
 #endif /* EE_X_ALovin_ADS_HPP */

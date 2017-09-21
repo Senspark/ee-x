@@ -11,11 +11,15 @@
 
 @interface EEALovinAds : NSObject
 
-- (void) initALovinAds:(NSString*) gameID;
+- (void) initALovinAds;
 
-- (BOOL) isAdsReady:(NSString*) placementID;
+- (BOOL) isInterstitialReady;
 
-- (void) showAds:(NSString*) placementID;
+- (void) showInterstitial;
+
+- (BOOL) isRewardVideoReady;
+
+- (void) showRewardVideo;
 
 
 @property(assign, nonatomic) UIViewController* rootController;

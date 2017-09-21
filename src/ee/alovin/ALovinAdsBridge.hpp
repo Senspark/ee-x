@@ -25,11 +25,15 @@ public:
     ALovinAds();
     ~ALovinAds();
 
-    void initALovinAds(const std::string& gameId);
+    void initALovinAds();
 
-    bool isAdsReady(const std::string& placementId);
+    bool isInterstitialReady();
 
-    void showAds(const std::string& placementId);
+    void showInterstitial();
+    
+    bool isRewardVideoReady();
+    
+    void showRewardVideo();
 
     void setCallback(const AdCallback& callback) { callback_ = callback; }
 

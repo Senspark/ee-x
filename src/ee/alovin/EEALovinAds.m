@@ -6,15 +6,15 @@
 //
 //
 
-#import "ee/ALovinads/EEALovinAds.h"
+#import "ee/alovin/EEALovinAds.h"
 
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 
-#import <ALovinAds/ALovinAds.h>
+#import <AppLovinSDK/AppLovinSDK.h>
 
-@interface EEALovinAds () <ALovinAdsDelegate> {
+@interface EEALovinAds () <ALAdRewardDelegate, ALAdDisplayDelegate, ALAdLoadDelegate>{
 }
 
 @end
@@ -22,8 +22,10 @@
 @implementation EEALovinAds
 
 NSString* const k__ALovinads_initALovinAds = @"k__ALovinads_initALovinAds";
-NSString* const k__ALovinads_isAdsReady = @"k__ALovinads_isAdsReady";
-NSString* const k__ALovinads_showAds = @"k__ALovinads_showAds";
+NSString* const k__ALovinads_isInterstitialReady = @"k__ALovinads_isInterstitialReady";
+NSString* const k__ALovinads_showInterstitial= @"k__ALovinads_showInterstitial";
+NSString* const k__ALovinads_isRewardVideoReady = @"k__ALovinads_isRewardVideoReady";
+NSString* const k__ALovinads_showRewardVideo = @"k__ALovinads_showRewardVideo";
 
 - (id)init {
     self = [super init];
@@ -44,90 +46,131 @@ NSString* const k__ALovinads_showAds = @"k__ALovinads_showAds";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* GameID = dict[@"GameID"];
-
-        [self initALovinAds:GameID];
+        
+        [self initALovinAds];
 
         return [EEDictionaryUtils emptyResult];
     } tag:k__ALovinads_initALovinAds];
 
     [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        return ([self isAdsReady:PlacementID]) ? @"true" : @"false";
-    } tag:k__ALovinads_isAdsReady];
+        return ([self isInterstitialReady]) ? @"true" : @"false";
+    } tag:k__ALovinads_isInterstitialReady];
 
     [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        [self showAds:PlacementID];
+        [self showInterstitial];
 
         return [EEDictionaryUtils emptyResult];
-    } tag:k__ALovinads_showAds];
+    } tag:k__ALovinads_showInterstitial];
+    
+    [bridge registerHandler:^(NSString* msg) {
+        return ([self isRewardVideoReady]) ? @"true" : @"false";
+    } tag:k__ALovinads_isRewardVideoReady];
+    
+    [bridge registerHandler:^(NSString* msg) {
+        [self showRewardVideo];
+        
+        return [EEDictionaryUtils emptyResult];
+    } tag:k__ALovinads_showRewardVideo];
 }
 
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__ALovinads_initALovinAds];
-    [bridge deregisterHandler:k__ALovinads_isAdsReady];
-    [bridge deregisterHandler:k__ALovinads_showAds];
+    [bridge deregisterHandler:k__ALovinads_isInterstitialReady];
+    [bridge deregisterHandler:k__ALovinads_showInterstitial];
+    [bridge deregisterHandler:k__ALovinads_isRewardVideoReady];
+    [bridge deregisterHandler:k__ALovinads_showRewardVideo];
 }
 #pragma mark ===================CODE HERE
-- (void)initALovinAds:(NSString*)gameID {
-    [ALovinAds initialize:gameID delegate:self];
-    //    [ALovinAds setDebugMode:YES];
-
+- (void)initALovinAds{
+    
+    [ALSdk initializeSdk];
+    
+    [ALIncentivizedInterstitialAd shared].adDisplayDelegate = self;
+    
+    [ALIncentivizedInterstitialAd preloadAndNotify: self];
+    
     _rootController =
         [[[UIApplication sharedApplication] keyWindow] rootViewController];
 }
 
-- (BOOL)isAdsReady:(NSString*)placementID {
-    return [ALovinAds isReady:placementID];
+- (BOOL) isInterstitialReady
+{
+    return [ALInterstitialAd isReadyForDisplay];
 }
 
-- (void)showAds:(NSString*)placementID {
-    if ([self isAdsReady:placementID]) {
-        [ALovinAds show:_rootController placementId:placementID];
+- (void) showInterstitial
+{
+    if ([ALInterstitialAd isReadyForDisplay]) {
+        [ALInterstitialAd show];
     }
 }
-#pragma mark ===================ALovinAdsDelegate
-- (void)ALovinAdsReady:(NSString*)placementId {
-    NSLog(@"EEALovin ADS   ready %@", placementId);
+
+- (BOOL) isRewardVideoReady
+{
+    return [ALIncentivizedInterstitialAd isReadyForDisplay];
 }
 
-- (void)ALovinAdsDidError:(ALovinAdsError)error withMessage:(NSString*)message {
-    NSLog(@"EEALovin ADS   error %@", message);
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-    [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
-    [dict setValue:message forKey:@"placement"];
+- (void) showRewardVideo
+{
+    [ALIncentivizedInterstitialAd showAndNotify: self];
+}
 
+#pragma mark ===================ALAdLoadDelegate <NSObject>
+- (void)adService:(ALAdService *)adService didLoadAd:(ALAd *)ad
+{
+    NSLog(@"EEALovin ADS didLoadAd");
+}
+
+- (void)adService:(ALAdService *)adService didFailToLoadAdWithError:(int)code
+{
+    NSLog(@"EEALovin ADS didFailToLoadAdWithError");
+}
+
+#pragma mark ===================ALAdDisplayDelegate
+- (void)ad:(ALAd *)ad wasClickedIn:(UIView *)view{}
+- (void)ad:(ALAd *)ad wasDisplayedIn:(UIView *)view{}
+- (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
+    // The user has closed the ad.  We must preload the next rewarded video.
+    [ALIncentivizedInterstitialAd preloadAndNotify:nil];
+}
+#pragma mark ===================ALAdRewardDelegate
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad didSucceedWithResponse:(NSDictionary *)response
+{
+//    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+//    [dict setValue:[NSNumber numberWithInteger:state] forKey:@"code"];
+//    [dict setValue:placementId forKey:@"placement"];
+    
+    NSLog(@"EEALovin ADS   finish dict %@",
+          [EEJsonUtils convertDictionaryToString:response]);
+    [[EEMessageBridge getInstance]
+     callCpp:@"__ALovinAds_callback"
+     msg:[EEJsonUtils convertDictionaryToString:response]];
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad didExceedQuotaWithResponse:(NSDictionary *)response
+{
+    
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad wasRejectedWithResponse:(NSDictionary *)response
+{
+    
+}
+
+- (void)rewardValidationRequestForAd:(ALAd *)ad didFailWithError:(NSInteger)responseCode
+{
+    NSLog(@"EEALovin ADS   error %d", responseCode);
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+    [dict setValue:responseCode forKey:@"code"];
+    [dict setValue:@"videoReward" forKey:@"placement"];
+    
     NSLog(@"EEALovin ADS   error dict %@",
           [EEJsonUtils convertDictionaryToString:dict]);
     [[EEMessageBridge getInstance]
-        callCpp:@"__ALovinAds_callback"
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
-}
-
-- (void)ALovinAdsDidStart:(NSString*)placementId {
-}
-
-- (void)ALovinAdsDidFinish:(NSString*)placementId
-          withFinishState:(ALovinAdsFinishState)state {
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-    [dict setValue:[NSNumber numberWithInteger:state] forKey:@"code"];
-    [dict setValue:placementId forKey:@"placement"];
-
-    NSLog(@"EEALovin ADS   finish dict %@",
-          [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance]
-        callCpp:@"__ALovinAds_callback"
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
+     callCpp:@"__ALovinAds_callback"
+     msg:[EEJsonUtils convertDictionaryToString:dict]];
 }
 @end

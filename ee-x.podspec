@@ -203,7 +203,7 @@ Pod::Spec.new do |spec|
     s.public_header_files =
       'src/ee/ALovinAds.hpp',
       'src/ee/ALovinAdsFwd.hpp',
-      'src/ee/alovin/IronSrcBridge.hpp'
+      'src/ee/alovin/ALovinAdsBridge.hpp'
 
     s.dependency 'ee-x/core'
     s.dependency 'AppLovinSDK'

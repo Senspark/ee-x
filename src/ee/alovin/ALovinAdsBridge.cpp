@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/alovinads/ALovinAdsBridge.hpp"
+#include "ee/alovin/ALovinAdsBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 #include <nlohmann/json.hpp>
@@ -21,7 +21,8 @@ ALovinAds::ALovinAds() {
 }
 
 ALovinAds::~ALovinAds() {
-    core::MessageBridge::getInstance().deregisterHandler("__ALovinAds_callback");
+    core::MessageBridge::getInstance().deregisterHandler(
+        "__ALovinAds_callback");
 }
 
 std::string ALovinAds::doCallBack(const std::string& msg) const {
@@ -37,25 +38,37 @@ std::string ALovinAds::doCallBack(const std::string& msg) const {
     return "";
 }
 
-void ALovinAds::initALovinAds(const std::string& gameId) {
+void ALovinAds::initALovinAds() {
     nlohmann::json json;
-    json["GameID"] = gameId;
     core::MessageBridge::getInstance().call("k__ALovinads_initALovinAds",
                                             json.dump());
 }
 
-bool ALovinAds::isAdsReady(const std::string& placementId) {
+bool ALovinAds::isInterstitialReady() {
     nlohmann::json json;
-    json["PlacementID"] = placementId;
     auto result = core::MessageBridge::getInstance().call(
-        "k__ALovinads_isAdsReady", json.dump());
+        "k__ALovinads_isInterstitialReady", json.dump());
     return result == "true";
 }
 
-void ALovinAds::showAds(const std::string& placementId) {
+void ALovinAds::showInterstitial() {
     nlohmann::json json;
-    json["PlacementID"] = placementId;
-    core::MessageBridge::getInstance().call("k__ALovinads_showAds", json.dump());
+    core::MessageBridge::getInstance().call("k__ALovinads_showInterstitial",
+                                            json.dump());
 }
+
+bool ALovinAds::isRewardVideoReady() {
+    nlohmann::json json;
+    auto result = core::MessageBridge::getInstance().call(
+        "k__ALovinads_isRewardVideoReady", json.dump());
+    return result == "true";
+}
+
+void ALovinAds::showRewardVideo() {
+    nlohmann::json json;
+    core::MessageBridge::getInstance().call("k__ALovinads_showRewardVideo",
+                                            json.dump());
+}
+
 } // namespace ALovinads
 } // namespace ee

@@ -133,21 +133,22 @@ NSString* const k__ALovinads_showRewardVideo = @"k__ALovinads_showRewardVideo";
 - (void)ad:(ALAd *)ad wasDisplayedIn:(UIView *)view{}
 - (void)ad:(ALAd *)ad wasHiddenIn:(UIView *)view {
     // The user has closed the ad.  We must preload the next rewarded video.
+        NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+        [dict setValue:@2 forKey:@"code"];
+        [dict setValue:@"videoReward" forKey:@"placement"];
+    
+        NSLog(@"EEALovin ADS   finish dict %@",
+              [EEJsonUtils convertDictionaryToString:dict]);
+        [[EEMessageBridge getInstance]
+         callCpp:@"__ALovinAds_callback"
+         msg:[EEJsonUtils convertDictionaryToString:dict]];
+    
     [ALIncentivizedInterstitialAd preloadAndNotify:nil];
 }
 #pragma mark ===================ALAdRewardDelegate
 
 - (void)rewardValidationRequestForAd:(ALAd *)ad didSucceedWithResponse:(NSDictionary *)response
 {
-//    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-//    [dict setValue:[NSNumber numberWithInteger:state] forKey:@"code"];
-//    [dict setValue:placementId forKey:@"placement"];
-    
-    NSLog(@"EEALovin ADS   finish dict %@",
-          [EEJsonUtils convertDictionaryToString:response]);
-    [[EEMessageBridge getInstance]
-     callCpp:@"__ALovinAds_callback"
-     msg:[EEJsonUtils convertDictionaryToString:response]];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd *)ad didExceedQuotaWithResponse:(NSDictionary *)response

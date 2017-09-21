@@ -193,4 +193,19 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'IronSourceSDK'
   end
+
+  spec.subspec 'alovin' do |s|
+    s.source_files =
+      'src/ee/ALovinAds.hpp',
+      'src/ee/ALovinAdsFwd.hpp',
+      'src/ee/alovin/*.{cpp,hpp,mm,h,m}'
+
+    s.public_header_files =
+      'src/ee/ALovinAds.hpp',
+      'src/ee/ALovinAdsFwd.hpp',
+      'src/ee/alovin/IronSrcBridge.hpp'
+
+    s.dependency 'ee-x/core'
+    s.dependency 'AppLovinSDK'
+  end
 end

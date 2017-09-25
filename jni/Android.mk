@@ -89,6 +89,18 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+#############
+# VUNGLE_ADS #
+#############
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_MODULE := ee_x_vungle_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/vungle -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
 
 #############
 # APPLOVIN_ADS #

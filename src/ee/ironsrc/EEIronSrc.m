@@ -100,6 +100,25 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
 }
 #pragma mark - IronSrcSDKDelegate
 
+- (void)rewardedVideoHasChangedAvailability:(BOOL)available
+{
+    NSLog(@"EEIronSrc rewardedVideoHasChangedAvailability %hhd" , available);
+}
+- (void)rewardedVideoDidOpen
+{
+    NSLog(@"EEIronSrc rewardedVideoDidOpen");
+}
+
+- (void)rewardedVideoDidStart
+{
+    NSLog(@"EEIronSrc rewardedVideoDidStart");
+}
+
+- (void)rewardedVideoDidEnd
+{
+    NSLog(@"EEIronSrc rewardedVideoDidEnd");
+}
+
 - (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
     NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
@@ -113,11 +132,11 @@ NSString* const k__IronSrc_showAds = @"k__IronSrc_showAds";
 }
 
 - (void)rewardedVideoDidClose {
-    NSLog(@"IronSrc rewardedVideoDidClose");
+    NSLog(@"EEIronSrc rewardedVideoDidClose");
 }
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {
-    NSLog(@"IronSrc didReceiveRewardForPlacement  %@",
+    NSLog(@"EEIronSrc didReceiveRewardForPlacement  %@",
           placementInfo.placementName);
 
     NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];

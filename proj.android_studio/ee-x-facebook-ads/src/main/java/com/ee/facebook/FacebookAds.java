@@ -440,7 +440,9 @@ public class FacebookAds implements PluginProtocol {
                 NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
 
                 // Download and display the cover image.
-                nativeAdMedia.setNativeAd(nativeAd);
+                if(nativeAdMedia != null) {
+                    nativeAdMedia.setNativeAd(nativeAd);
+                }
 
                 // Add the AdChoices icon
                 LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(adchoiceId);

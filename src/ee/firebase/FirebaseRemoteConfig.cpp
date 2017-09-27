@@ -6,10 +6,12 @@
 //
 //
 
-#include "ee/firebase/FirebaseRemoteConfig.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
-#include "ee/firebase/FirebaseScheduler.hpp"
+#include <cassert>
+
 #include "ee/core/ScopeGuard.hpp"
+#include "ee/firebase/FirebaseApp.hpp"
+#include "ee/firebase/FirebaseRemoteConfig.hpp"
+#include "ee/firebase/FirebaseScheduler.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <firebase/remote_config.h>
@@ -141,6 +143,10 @@ bool FirebaseRemoteConfig::getBool(const std::string& key) {
     if (not initialized_) {
         return defaults_[key].bool_value();
     }
+    if (defaultsDirty_) {
+        // Please call flushDefaults().
+        assert(false);
+    }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetBoolean(key.c_str(), std::addressof(info));
     return result;
@@ -153,6 +159,10 @@ std::int64_t FirebaseRemoteConfig::getLong(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].bool_value();
+    }
+    if (defaultsDirty_) {
+        // Please call flushDefaults().
+        assert(false);
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetLong(key.c_str(), std::addressof(info));
@@ -167,6 +177,10 @@ double FirebaseRemoteConfig::getDouble(const std::string& key) {
     if (not initialized_) {
         return defaults_[key].double_value();
     }
+    if (defaultsDirty_) {
+        // Please call flushDefaults().
+        assert(false);
+    }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetDouble(key.c_str(), std::addressof(info));
     return result;
@@ -179,6 +193,10 @@ std::string FirebaseRemoteConfig::getString(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].string_value();
+    }
+    if (defaultsDirty_) {
+        // Please call flushDefaults().
+        assert(false);
     }
     ::firebase::remote_config::ValueInfo info;
     auto result = GetString(key.c_str(), std::addressof(info));

@@ -128,7 +128,9 @@ void FirebaseRemoteConfig::flushDefaults() {
 #if defined(EE_X_MOBILE)
     std::vector<::firebase::remote_config::ConfigKeyValueVariant> values;
     values.reserve(defaults_.size());
-    std::copy(values.cbegin(), values.cend(), std::back_inserter(values));
+    for (auto&& elt : defaults_) {
+        values.push_back({elt.first.c_str(), elt.second});
+    }
     SetDefaults(std::addressof(values.at(0)), values.size());
 #endif // EE_X_MOBILE
     defaultsDirty_ = false;

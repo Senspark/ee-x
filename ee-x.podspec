@@ -211,14 +211,14 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'vungle' do |s|
     s.source_files =
-      'src/ee/VungleAds.hpp',
-      'src/ee/VungleAdsFwd.hpp',
+      'src/ee/Vungle.hpp',
+      'src/ee/VungleFwd.hpp',
       'src/ee/vungle/*.{cpp,hpp,mm,h,m}'
 
     s.public_header_files =
-      'src/ee/VungleAds.hpp',
-      'src/ee/VungleAdsFwd.hpp',
-      'src/ee/vungle/VungleAdsBridge.hpp'
+      'src/ee/Vungle.hpp',
+      'src/ee/VungleFwd.hpp',
+      'src/ee/vungle/VungleBridge.hpp'
 
     s.dependency 'ee-x/core'
     s.dependency 'VungleSDK-iOS', '4.1.0'

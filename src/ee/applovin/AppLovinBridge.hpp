@@ -10,7 +10,6 @@
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
 #include <functional>
-#include <memory>
 #include <string>
 
 namespace ee {

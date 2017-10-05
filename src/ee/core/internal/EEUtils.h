@@ -15,7 +15,7 @@
 @interface EEUtils : NSObject
 
 #if TARGET_OS_IOS
-- (UIViewController* _Nullable)getCurrentRootViewController;
++ (UIViewController* _Nullable)getCurrentRootViewController;
 #endif // TARGET_OS_IOS
 
 @end

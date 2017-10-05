@@ -1,15 +1,12 @@
 #import <Foundation/Foundation.h>
 
-@class UIViewController;
-
 @interface EEVungle : NSObject
 
-- (void)initVungle:(NSString*)gameID placementIds: (NSArray*) placementArr;
+- (void)initialize:(NSString* _Nonnull)gameId
+      placementIds:(NSArray* _Nonnull)placementIds;
 
-- (BOOL)isAdReady:(NSString*)placementId;
+- (BOOL)isAdReady:(NSString* _Nonnull)placementId;
 
-- (void)showAds:(NSString*)placementId;
-
-@property (assign, nonatomic) UIViewController* rootController;
+- (BOOL)showAds:(NSString* _Nonnull)placementId;
 
 @end

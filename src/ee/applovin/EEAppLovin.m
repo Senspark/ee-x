@@ -41,6 +41,7 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 
 - (void)dealloc {
     [self deregisterHandlers];
+    [[ALIncentivizedInterstitialAd shared] setAdDisplayDelegate:nil];
     [super dealloc];
 }
 

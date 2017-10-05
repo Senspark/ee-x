@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class VungleAds implements PluginProtocol {
+public class Vungle implements PluginProtocol {
     private static final String k__VungleAds_initVungleAds = "k__VungleAds_initVungleAds";
     private static final String k__VungleAds_isAdReady  = "k__VungleAds_isAdReady";
     private static final String k__VungleAds_showAds     = "k__VungleAds_showAds";

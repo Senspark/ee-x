@@ -1,23 +1,24 @@
-#ifndef EE_X_VUNGLE_SRC_BRIDGE_HPP
-#define EE_X_VUNGLE_SRC_BRIDGE_HPP
+#ifndef EE_X_VUNGLE_BRIDGE_HPP
+#define EE_X_VUNGLE_BRIDGE_HPP
 
-#include <memory>
-#include <string>
 #include <functional>
+#include <string>
+#include <vector>
 
 namespace ee {
 namespace vungle {
 enum class VungleAdsResultCode { ADS_ERROR, ADS_SKIPPED, ADS_DID_FINISH };
 
-class VungleAds final {
+class Vungle final {
 public:
     using AdCallback = std::function<void(VungleAdsResultCode code,
                                           const std::string& message)>;
 
-    VungleAds();
-    ~VungleAds();
+    Vungle();
+    ~Vungle();
 
-    void initVungleAds(const std::string& gameId, const std::string& placementIds);
+    void initialize(const std::string& gameId,
+                    const std::vector<std::string>& placementIds);
 
     bool isAdsReady(const std::string& placementId);
 
@@ -30,7 +31,7 @@ private:
 
     AdCallback callback_;
 };
-} // VungleAds
+} // namespace vungle
 } // namespace ee
 
-#endif /* EE_X_VUNGLE_SRC_BRIDGE_HPP */
+#endif /* EE_X_VUNGLE_BRIDGE_HPP */

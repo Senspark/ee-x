@@ -15,7 +15,7 @@
 @implementation EEUtils
 
 #if TARGET_OS_IOS
-- (UIViewController* _Nullable)getCurrentRootViewController {
++ (UIViewController* _Nullable)getCurrentRootViewController {
     // [[[[UIApplication sharedApplication] delegate] window]
     // rootViewController];
     return [[[UIApplication sharedApplication] keyWindow] rootViewController];

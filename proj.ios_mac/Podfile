@@ -28,4 +28,8 @@ abstract_target 'common' do
     target 'ee_x_mobile_app_lovin' do
         pod 'AppLovinSDK'
     end
+    
+    target 'ee_x_mobile_vungle' do
+        pod 'VungleSDK-iOS', '4.1.0'
+    end
 end

@@ -9,21 +9,25 @@
 #import <UIKit/UIKit.h>
 #import <VungleSDK/VungleSDK.h>
 
-#import "ee/vungle/EEVungle.h"
-
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEUtils.h"
+#import "ee/vungle/EEVungle.h"
+
+#define EE_VUNGLE_VERSION_4
 
 @interface EEVungle () <VungleSDKDelegate>
-
 @end
 
 @implementation EEVungle
 
-NSString* const k__VungleAds_initVungleAds = @"k__VungleAds_initVungleAds";
-NSString* const k__VungleAds_isAdReady = @"k__VungleAds_isAdReady";
-NSString* const k__VungleAds_showAds = @"k__VungleAds_showAds";
+// clang-format off
+NSString* const k__VungleAds_initVungleAds  = @"k__VungleAds_initVungleAds";
+NSString* const k__VungleAds_isAdReady      = @"k__VungleAds_isAdReady";
+NSString* const k__VungleAds_showAds        = @"k__VungleAds_showAds";
+NSString* const k__Vungle_cpp_callback      = @"__VungleAds_callback";
+// clang-format on
 
 - (id)init {
     self = [super init];
@@ -37,6 +41,8 @@ NSString* const k__VungleAds_showAds = @"k__VungleAds_showAds";
 
 - (void)dealloc {
     [self deregisterHandlers];
+    VungleSDK* sdk = [VungleSDK sharedSDK];
+    [sdk setDelegate:nil];
     [super dealloc];
 }
 
@@ -46,34 +52,25 @@ NSString* const k__VungleAds_showAds = @"k__VungleAds_showAds";
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
 
-        NSString* GameID = dict[@"GameID"];
-        
-        NSString* PlacementIDs = dict[@"PlacementIDs"];
-        
-        NSArray *listPlacements = [PlacementIDs componentsSeparatedByString:@"/"];
-
-        [self initVungle:GameID placementIds:listPlacements];
-
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__VungleAds_initVungleAds];
+        NSString* gameId = dict[@"GameID"];
+        NSArray* placementIds = dict[@"PlacementIDs"];
+        [self initialize:gameId placementIds:placementIds];
+        return @"";
+    }
+                        tag:k__VungleAds_initVungleAds];
 
     [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        return ([self isAdReady:PlacementID]) ? @"true" : @"false";
-    } tag:k__VungleAds_isAdReady];
+        NSString* placementId = msg;
+        return [self isAdReady:placementId] ? @"true" : @"false";
+    }
+                        tag:k__VungleAds_isAdReady];
 
     [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        [self showAds:PlacementID];
-
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__VungleAds_showAds];
+        NSString* placementId = msg;
+        [self showAds:placementId];
+        return @"";
+    }
+                        tag:k__VungleAds_showAds];
 }
 
 - (void)deregisterHandlers {
@@ -82,90 +79,75 @@ NSString* const k__VungleAds_showAds = @"k__VungleAds_showAds";
     [bridge deregisterHandler:k__VungleAds_initVungleAds];
     [bridge deregisterHandler:k__VungleAds_isAdReady];
     [bridge deregisterHandler:k__VungleAds_showAds];
-    
-    VungleSDK* sdk = [VungleSDK sharedSDK];
-    [sdk setDelegate:nil];
 }
 
-#pragma mark - CODE HERE
-
-- (void)initVungle:(NSString*)gameID placementIds: (NSArray*) placementArr {
-    _rootController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+- (void)initialize:(NSString*)gameId placementIds:(NSArray*)placementIds {
     VungleSDK* sdk = [VungleSDK sharedSDK];
 
-    [sdk startWithAppId:gameID];
+#ifdef EE_VUNGLE_VERSION_4
+    [sdk startWithAppId:gameId];
+#else  // EE_VUNGLE_VERSION_4
+    [sdk startWithAppId:gameId placements:placementIds error:nil];
+#endif // placementIds
+
     [sdk setLoggingEnabled:YES];
-    
     [sdk setDelegate:self];
-    
-//    [sdk startWithAppId:gameID placements:placementArr error:nil];
 }
 
-- (BOOL)isAdReady:(NSString*)placementID {
+- (BOOL)isAdReady:(NSString*)placementId {
     VungleSDK* sdk = [VungleSDK sharedSDK];
+#ifdef EE_VUNGLE_VERSION_4
     return [sdk isAdPlayable];
-//    return [sdk isAdCachedForPlacementID:placementID];
+#else  // EE_VUNGLE_VERSION_4
+    return [sdk isAdCachedForPlacementID:placementId];
+#endif // EE_VUNGLE_VERSION_4
 }
 
-- (void)showAds:(NSString*)placementID {
+- (BOOL)showAds:(NSString*)placementId {
+    UIViewController* view = [EEUtils getCurrentRootViewController];
     VungleSDK* sdk = [VungleSDK sharedSDK];
-    [sdk playAd:_rootController error:nil];
-//    [sdk playAd:_rootController options:nil placementID:placementID error:nil];
-}
-#pragma mark - VungleSDKDelegate
-//- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(nullable NSString *)placementID
-//{
-//    NSLog(@"EEVungle  placement %@ isAdPlayable %d", placementID, isAdPlayable);
-//}
-//
-//- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo *)info placementID:(nonnull NSString *)placementID
-//{
-//    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-//    [dict setValue:[NSNumber numberWithInteger:2] forKey:@"code"];
-//    [dict setValue:placementID forKey:@"placement"];
-//    
-//    NSLog(@"EEVungle   finish dict %@",
-//          [EEJsonUtils convertDictionaryToString:dict]);
-//    [[EEMessageBridge getInstance]
-//     callCpp:@"__VungleAds_callback"
-//     msg:[EEJsonUtils convertDictionaryToString:dict]];
-//}
-
-- (void)vungleSDKwillCloseAdWithViewInfo:(NSDictionary *)viewInfo
-                 willPresentProductSheet:(BOOL)willPresentProductSheet __attribute__((deprecated("Use vungleSDKWillCloseAdWithViewInfo: instead.")))
-{
-    NSLog(@"EEVungle  ");
+#ifdef EE_VUNGLE_VERSION_4
+    return [sdk playAd:view error:nil];
+#else  // EE_VUNGLE_VERSION_4
+    return [sdk playAd:view options:nil placementID:placementId error:nil];
+#endif // EE_VUNGLE_VERSION_4
 }
 
-/**
- * If implemented, this will get called when the product sheet is about to be closed.
- *
- * @note Because `vungleSDKWillCloseAdWithViewInfo:willPresentProductSheet:` is now called
- * after Product Sheet dismissal, this method should no longer be necessary. It will be
- * removed in a future version.
- */
-- (void)vungleSDKwillCloseProductSheet:(id)productSheet __attribute__((deprecated("Use vungleSDKWillCloseAdWithViewInfo: instead.")))
-{
-    NSLog(@"EEVungle  ");
-}
-
-- (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary *)viewInfo
-{
+#ifdef EE_VUNGLE_VERSION_4
+- (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary*)viewInfo {
+    NSLog(@"%s: info = %@", __PRETTY_FUNCTION__, viewInfo);
     if ([viewInfo[@"completedView"] boolValue]) {
-        NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-        [dict setValue:[NSNumber numberWithInteger:2] forKey:@"code"];
+        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+        [dict setValue:@(2) forKey:@"code"];
         [dict setValue:@"rewardVideo" forKey:@"placement"];
-    
-        NSLog(@"EEVungle   finish dict %@",
-              [EEJsonUtils convertDictionaryToString:dict]);
-        [[EEMessageBridge getInstance]
-         callCpp:@"__VungleAds_callback"
-         msg:[EEJsonUtils convertDictionaryToString:dict]];
+
+        EEMessageBridge* bridge = [EEMessageBridge getInstance];
+        [bridge callCpp:k__Vungle_cpp_callback
+                    msg:[EEJsonUtils convertDictionaryToString:dict]];
     }
 }
 
-- (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable
-{
-    NSLog(@"EEVungle  isAdPlayable %d", isAdPlayable);
+- (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {
+    NSLog(@"%s: %d", __PRETTY_FUNCTION__, (int)isAdPlayable);
 }
+#else  // EE_VUNGLE_VERSION_4
+- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo*)info
+                          placementID:(nonnull NSString*)placementId {
+    NSLog(@"%s: info = %@ id = %@", __PRETTY_FUNCTION__, viewInfo, placementId);
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [dict setValue:@(2) forKey:@"code"];
+    [dict setValue:placementId forKey:@"placement"];
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__Vungle_cpp_callback
+                msg:[EEJsonUtils convertDictionaryToString:dict]];
+}
+
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
+                      placementID:(nullable NSString*)placementId {
+    NSLog(@"%s: playable = %d id = %@", __PRETTY_FUNCTION__, (int)isAdPlayable,
+          placementId);
+}
+#endif // EE_VUNGLE_VERSION_4
+
 @end

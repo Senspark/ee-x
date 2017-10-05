@@ -45,6 +45,11 @@
     return YES;
 }
 
+- (BOOL)registerHandler:(NSString* _Nonnull)tag
+               callback:(EEMessageHandler _Nonnull)handler {
+    return [self registerHandler:handler tag:tag];
+}
+
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag {
     if ([handlers objectForKey:tag] == nil) {
         NSAssert(NO, @"...");

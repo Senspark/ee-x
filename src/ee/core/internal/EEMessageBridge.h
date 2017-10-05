@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
+typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 
 @interface EEMessageBridge : NSObject {
     /// Registered handlers.
@@ -24,6 +24,10 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
 /// @return Whether the registration was successful.
 - (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag;
+
+/// Convenience method to fix clang-format.
+- (BOOL)registerHandler:(NSString* _Nonnull)tag
+               callback:(EEMessageHandler _Nonnull)handler;
 
 /// Deregisters an existing handler not to receive messages from C++.
 /// @param tag The unique tag of the handler.
@@ -44,6 +48,6 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull msg);
 /// @param msg The message.
 /// @return Reply message from C++.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
-                          msg:(NSString* _Nonnull)msg;
+                      message:(NSString* _Nonnull)message;
 
 @end

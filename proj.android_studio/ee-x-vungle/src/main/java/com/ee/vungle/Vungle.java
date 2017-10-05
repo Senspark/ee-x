@@ -3,17 +3,13 @@ package com.ee.vungle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Debug;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
-
 import com.vungle.publisher.EventListener;
 import com.vungle.publisher.VunglePub;
 
@@ -24,71 +20,28 @@ import java.util.Map;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Vungle implements PluginProtocol {
-    private static final String k__VungleAds_initVungleAds = "k__VungleAds_initVungleAds";
-    private static final String k__VungleAds_isAdReady  = "k__VungleAds_isAdReady";
-    private static final String k__VungleAds_showAds     = "k__VungleAds_showAds";
+    private static final String k__initialize           = "Vungle_initialize";
+    private static final String k__isRewardedVideoReady = "Vungle_isRewardedVideoReady";
+    private static final String k__showRewardedVideo    = "Vungle_showRewardedVideo";
+    private static final String k__cppCallback          = "Vungle_cppCallback";
 
-    private static final Logger _logger = new Logger(VungleAds.class.getName());
+    private static final Logger _logger = new Logger(Vungle.class.getName());
 
-    private final VunglePub vunglePub = VunglePub.getInstance();
     private Activity _context;
+    private boolean  _playAdSuccessfully;
 
-    private final EventListener vungleListener = new EventListener()
-    {
-        @Override
-        public void onAdStart() {
-            // Called before playing an ad
-        }
-
-        @Override
-        public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
-            // Called when the user leaves the ad and control is returned to your application
-            // if wasSuccessfulView is true, the user watched the ad and should be rewarded
-            // (if this was a rewarded ad).
-            // if wasCallToActionClicked is true, the user clicked the call to action
-            // button in the ad.
-
-            Log.d("EEVungle", "EEVungle  onAdEnd success " + wasSuccessfulView + "click " + wasCallToActionClicked );
-            if (wasSuccessfulView)
-            {
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("code", 2);
-                dict.put("placement", "rewardVideo");
-
-                MessageBridge
-                        .getInstance()
-                        .callCpp("__VungleAds_callback", JsonUtils.convertDictionaryToString(dict));
-            }
-        }
-
-        @Override
-        public void onAdPlayableChanged(boolean isAdPlayable) {
-            // Called when the playability state changes. if isAdPlayable is true, you can now
-            // play an ad.
-            // If false, you cannot yet play an ad.
-            Log.d("EEVungle", "EEVungle  onAdPlayableChanged " + isAdPlayable);
-        }
-
-        @Override
-        public void onAdUnavailable(String reason) {
-            // Called when VunglePub.playAd() was called, but no ad was available to play
-            Log.d("EEVungle", "EEVungle  onAdUnavailable " + reason);
-        }
-
-    };
-
-    public VungleAds(Context context) {
+    public Vungle(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
         registerHandlers();
-
+        _playAdSuccessfully = false;
         _logger.debug("constructor end.");
     }
 
     @NonNull
     @Override
     public String getPluginName() {
-        return "VungleAds";
+        return "Vungle";
     }
 
     @Override
@@ -101,17 +54,17 @@ public class Vungle implements PluginProtocol {
 
     @Override
     public void onResume() {
-        vunglePub.onResume();
+        VunglePub.getInstance().onResume();
     }
 
     @Override
     public void onPause() {
-        vunglePub.onPause();
+        VunglePub.getInstance().onPause();
     }
 
     @Override
     public void onDestroy() {
-        vunglePub.clearEventListeners();
+        VunglePub.getInstance().clearEventListeners();
         deregisterHandlers();
     }
 
@@ -129,67 +82,99 @@ public class Vungle implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String GameID = (String) dict.get("GameID");
-
-                initVungleAds(GameID);
-                return DictionaryUtils.emptyResult();
+            public String handle(@NonNull String message) {
+                String gameId = message;
+                initialize(gameId);
+                return "";
             }
-        }, k__VungleAds_initVungleAds);
+        }, k__initialize);
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String PlacementID = (String) dict.get("PlacementID");
-
-                showAds(PlacementID);
-                return DictionaryUtils.emptyResult();
+            public String handle(@NonNull String message) {
+                return isAdsReady() ? "true" : "false";
             }
-        }, k__VungleAds_showAds);
+        }, k__isRewardedVideoReady);
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String PlacementID = (String) dict.get("PlacementID");
-                return (isAdsReady(PlacementID)) ? "true" : "false";
+            public String handle(@NonNull String message) {
+                return showAds() ? "true" : "false";
             }
-        }, k__VungleAds_isAdReady);
+        }, k__showRewardedVideo);
     }
 
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__VungleAds_initVungleAds);
-        bridge.deregisterHandler(k__VungleAds_showAds);
-        bridge.deregisterHandler(k__VungleAds_isAdReady);
+        bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__isRewardedVideoReady);
+        bridge.deregisterHandler(k__showRewardedVideo);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initVungleAds(final @NonNull String gameId) {
-        vunglePub.init(_context, gameId);
-        vunglePub.setEventListeners(vungleListener);
+    public void initialize(final @NonNull String gameId) {
+        VunglePub.getInstance().init(_context, gameId);
+        VunglePub.getInstance().setEventListeners(new EventListener() {
+            @Override
+            public void onAdStart() {
+                // Called before playing an ad
+                _logger.info("onAdStart");
+            }
+
+            @Override
+            public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
+                // Called when the user leaves the ad and control is returned to your application
+                // if wasSuccessfulView is true, the user watched the ad and should be rewarded
+                // (if this was a rewarded ad).
+                // if wasCallToActionClicked is true, the user clicked the call to action
+                // button in the ad.
+                _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
+                             wasCallToActionClicked);
+
+                Map<String, Object> dict = new HashMap<>();
+                if (wasSuccessfulView) {
+                    dict.put("code", 2);
+                } else {
+                    dict.put("code", 1);
+                }
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
+            }
+
+            @Override
+            public void onAdPlayableChanged(boolean isAdPlayable) {
+                // Called when the playability state changes. if isAdPlayable is true, you can now
+                // play an ad.
+                // If false, you cannot yet play an ad.
+                _logger.info("onAdPlayabledChanged: " + isAdPlayable);
+            }
+
+            @Override
+            public void onAdUnavailable(String reason) {
+                // Called when VunglePub.playAd() was called, but no ad was available to play
+                _logger.info("onAdUnavailable: " + reason);
+                _playAdSuccessfully = false;
+            }
+        });
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void showAds(final @NonNull String placementId) {
-        vunglePub.playAd();
+    public boolean showAds() {
+        _playAdSuccessfully = true;
+        VunglePub.getInstance().playAd();
+        return _playAdSuccessfully;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isAdsReady(final @NonNull String placementId) {
-        return vunglePub.isAdPlayable();
+    public boolean isAdsReady() {
+        return VunglePub.getInstance().isAdPlayable();
     }
 }

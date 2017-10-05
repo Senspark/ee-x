@@ -1,35 +1,27 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
-#include <functional>
-#include <string>
 #include <vector>
+
+#include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace vungle {
-enum class VungleAdsResultCode { ADS_ERROR, ADS_SKIPPED, ADS_DID_FINISH };
-
-class Vungle final {
+class Vungle final : public RewardedVideoInterface {
 public:
-    using AdCallback = std::function<void(VungleAdsResultCode code,
-                                          const std::string& message)>;
+    static const std::string DefaultPlacementId;
 
     Vungle();
-    ~Vungle();
+    virtual ~Vungle() override;
 
-    void initialize(const std::string& gameId,
-                    const std::vector<std::string>& placementIds);
+    void initialize(const std::string& gameId);
 
-    bool isAdsReady(const std::string& placementId);
+    /// @see Super.
+    virtual bool
+    isRewardedVideoReady(const std::string& placementId) const override;
 
-    void showAds(const std::string& placementId);
-
-    void setCallback(const AdCallback& callback) { callback_ = callback; }
-
-private:
-    std::string doCallBack(const std::string& msg) const;
-
-    AdCallback callback_;
+    /// @see Super.
+    virtual bool showRewardedVideo(const std::string& placementId) override;
 };
 } // namespace vungle
 } // namespace ee

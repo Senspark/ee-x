@@ -8,19 +8,19 @@
 
 #include "ee/core/internal/MessageBridge.hpp"
 
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
+#import "ee/core/internal/EEMessageBridge.h"
 
 @implementation EEMessageBridge (Cpp)
 
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag {
-    return [self callCpp:tag msg:@""];
+    return [self callCpp:tag message:@""];
 }
 
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
-                          msg:(NSString* _Nonnull)msg {
+                      message:(NSString* _Nonnull)message {
     auto result = ee::core::MessageBridge::getInstance().callCpp(
-        [tag UTF8String], [msg UTF8String]);
+        [tag UTF8String], [message UTF8String]);
     return (NSString * _Nonnull)[NSString stringWithUTF8String:result.c_str()];
 }
 
@@ -33,19 +33,21 @@
 /// @param tag The tag of the handler.
 /// @param msg The message.
 /// @return Reply message from Objective-C.
-- (NSString* _Nonnull)call:(NSString* _Nonnull)tag msg:(NSString* _Nonnull)msg;
+- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
+                   message:(NSString* _Nonnull)message;
 
 @end
 
 @implementation EEMessageBridge (PrivateCpp)
 
-- (NSString* _Nonnull)call:(NSString* _Nonnull)tag msg:(NSString* _Nonnull)msg {
+- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
+                   message:(NSString* _Nonnull)message {
     EEMessageHandler handler = [handlers objectForKey:tag];
     if (handler == nil) {
         NSAssert(NO, @"...");
-        return [EEDictionaryUtils emptyResult];
+        return @"";
     }
-    return handler(msg);
+    return handler(message);
 }
 
 @end

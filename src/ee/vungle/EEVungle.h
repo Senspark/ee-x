@@ -2,11 +2,10 @@
 
 @interface EEVungle : NSObject
 
-- (void)initialize:(NSString* _Nonnull)gameId
-      placementIds:(NSArray* _Nonnull)placementIds;
+- (void)initialize:(NSString* _Nonnull)gameId;
 
-- (BOOL)isAdReady:(NSString* _Nonnull)placementId;
+- (BOOL)isAdReady;
 
-- (BOOL)showAds:(NSString* _Nonnull)placementId;
+- (BOOL)showAds;
 
 @end

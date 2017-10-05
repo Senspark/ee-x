@@ -23,10 +23,10 @@
 @implementation EEVungle
 
 // clang-format off
-NSString* const k__VungleAds_initVungleAds  = @"k__VungleAds_initVungleAds";
-NSString* const k__VungleAds_isAdReady      = @"k__VungleAds_isAdReady";
-NSString* const k__VungleAds_showAds        = @"k__VungleAds_showAds";
-NSString* const k__Vungle_cpp_callback      = @"__VungleAds_callback";
+NSString* const k__initialize            = @"Vungle_initialize";
+NSString* const k__isRewardedVideoReady  = @"Vungle_isRewardedVideoReady";
+NSString* const k__showRewardedVideo     = @"Vungle_showRewardedVideo";
+NSString* const k__cppCallback           = @"Vungle_cppCallback";
 // clang-format on
 
 - (id)init {
@@ -49,39 +49,33 @@ NSString* const k__Vungle_cpp_callback      = @"__VungleAds_callback";
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+    [bridge registerHandler:k__initialize
+                   callback:^(NSString* message) {
+                       NSString* gameId = message;
+                       [self initialize:gameId];
+                       return @"";
+                   }];
 
-        NSString* gameId = dict[@"GameID"];
-        NSArray* placementIds = dict[@"PlacementIDs"];
-        [self initialize:gameId placementIds:placementIds];
-        return @"";
-    }
-                        tag:k__VungleAds_initVungleAds];
+    [bridge registerHandler:k__isRewardedVideoReady
+                   callback:^(NSString* message) {
+                       return [self isAdReady] ? @"true" : @"false";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        NSString* placementId = msg;
-        return [self isAdReady:placementId] ? @"true" : @"false";
-    }
-                        tag:k__VungleAds_isAdReady];
-
-    [bridge registerHandler:^(NSString* msg) {
-        NSString* placementId = msg;
-        [self showAds:placementId];
-        return @"";
-    }
-                        tag:k__VungleAds_showAds];
+    [bridge registerHandler:k__showRewardedVideo
+                   callback:^(NSString* message) {
+                       return [self showAds] ? @"true" : @"false";
+                   }];
 }
 
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge deregisterHandler:k__VungleAds_initVungleAds];
-    [bridge deregisterHandler:k__VungleAds_isAdReady];
-    [bridge deregisterHandler:k__VungleAds_showAds];
+    [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__isRewardedVideoReady];
+    [bridge deregisterHandler:k__showRewardedVideo];
 }
 
-- (void)initialize:(NSString*)gameId placementIds:(NSArray*)placementIds {
+- (void)initialize:(NSString*)gameId {
     VungleSDK* sdk = [VungleSDK sharedSDK];
 
 #ifdef EE_VUNGLE_VERSION_4
@@ -116,15 +110,16 @@ NSString* const k__Vungle_cpp_callback      = @"__VungleAds_callback";
 #ifdef EE_VUNGLE_VERSION_4
 - (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary*)viewInfo {
     NSLog(@"%s: info = %@", __PRETTY_FUNCTION__, viewInfo);
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     if ([viewInfo[@"completedView"] boolValue]) {
-        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
         [dict setValue:@(2) forKey:@"code"];
-        [dict setValue:@"rewardVideo" forKey:@"placement"];
-
-        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-        [bridge callCpp:k__Vungle_cpp_callback
-                    msg:[EEJsonUtils convertDictionaryToString:dict]];
+    } else {
+        [dict setValue:@(1) forKey:@"code"];
     }
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__cppCallback
+            message:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {
@@ -139,8 +134,8 @@ NSString* const k__Vungle_cpp_callback      = @"__VungleAds_callback";
     [dict setValue:placementId forKey:@"placement"];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__Vungle_cpp_callback
-                msg:[EEJsonUtils convertDictionaryToString:dict]];
+    [bridge callCpp:k__cppCallback
+            message:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable

@@ -21,12 +21,12 @@
 @implementation EEAppLovin
 
 // clang-format off
-NSString* const k__ALovinads_initALovinAds          = @"k__ALovinads_initALovinAds";
-NSString* const k__ALovinads_isInterstitialReady    = @"k__ALovinads_isInterstitialReady";
-NSString* const k__ALovinads_showInterstitial       = @"k__ALovinads_showInterstitial";
-NSString* const k__ALovinads_isRewardVideoReady     = @"k__ALovinads_isRewardVideoReady";
-NSString* const k__ALovinads_showRewardVideo        = @"k__ALovinads_showRewardVideo";
-NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
+NSString* const k__initialize               = @"AppLovin_initialize";
+NSString* const k__isInterstitialAdReady    = @"AppLovin_isInterstitialAdReady";
+NSString* const k__showInterstitialAd       = @"AppLovin_showInterstitialAd";
+NSString* const k__isRewardedVideoReady     = @"AppLovin_isRewardedVideoReady";
+NSString* const k__showRewardedVideo        = @"AppLovin_showRewardedVideo";
+NSString* const k__cppCallback              = @"AppLovin_cppCallback";
 // clang-format on
 
 - (id)init {
@@ -48,48 +48,47 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:^(NSString* msg) {
-        [self initialize];
-        return @"";
-    }
-                        tag:k__ALovinads_initALovinAds];
+    [bridge registerHandler:k__initialize
+                   callback:^(NSString* msg) {
+                       [self initialize];
+                       return @"";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        return [self isInterstitialReady] ? @"true" : @"false";
-    }
-                        tag:k__ALovinads_isInterstitialReady];
+    [bridge registerHandler:k__isInterstitialAdReady
+                   callback:^(NSString* message) {
+                       return [self isInterstitialReady] ? @"true" : @"false";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        return [self showInterstitial] ? @"true" : @"false";
-    }
-                        tag:k__ALovinads_showInterstitial];
+    [bridge registerHandler:k__showInterstitialAd
+                   callback:^(NSString* message) {
+                       return [self showInterstitial] ? @"true" : @"false";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        return [self isRewardVideoReady] ? @"true" : @"false";
-    }
-                        tag:k__ALovinads_isRewardVideoReady];
+    [bridge registerHandler:k__isRewardedVideoReady
+                   callback:^(NSString* message) {
+                       return [self isRewardVideoReady] ? @"true" : @"false";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        return [self showRewardVideo] ? @"true" : @"false";
-    }
-                        tag:k__ALovinads_showRewardVideo];
+    [bridge registerHandler:k__showRewardedVideo
+                   callback:^(NSString* message) {
+                       return [self showRewardVideo] ? @"true" : @"false";
+                   }];
 }
 
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge deregisterHandler:k__ALovinads_initALovinAds];
-    [bridge deregisterHandler:k__ALovinads_isInterstitialReady];
-    [bridge deregisterHandler:k__ALovinads_showInterstitial];
-    [bridge deregisterHandler:k__ALovinads_isRewardVideoReady];
-    [bridge deregisterHandler:k__ALovinads_showRewardVideo];
+    [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__isInterstitialAdReady];
+    [bridge deregisterHandler:k__showInterstitialAd];
+    [bridge deregisterHandler:k__isRewardedVideoReady];
+    [bridge deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize {
     [ALSdk initializeSdk];
-
     [[ALIncentivizedInterstitialAd shared] setAdDisplayDelegate:self];
-    [ALIncentivizedInterstitialAd preloadAndNotify:self];
+    [self loadRewardedVideo];
 }
 
 - (BOOL)isInterstitialReady {
@@ -97,11 +96,15 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 }
 
 - (BOOL)showInterstitial {
-    if ([self isInterstitialReady]) {
-        [ALInterstitialAd show];
-        return YES;
+    if (![self isInterstitialReady]) {
+        return NO;
     }
-    return NO;
+    [ALInterstitialAd show];
+    return YES;
+}
+
+- (void)loadRewardedVideo {
+    [ALIncentivizedInterstitialAd preloadAndNotify:self];
 }
 
 - (BOOL)isRewardVideoReady {
@@ -109,11 +112,21 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 }
 
 - (BOOL)showRewardVideo {
-    if ([self isRewardVideoReady]) {
-        [ALIncentivizedInterstitialAd showAndNotify:self];
-        return YES;
+    if (![self isRewardVideoReady]) {
+        [self loadRewardedVideo];
+        return NO;
     }
-    return NO;
+    [ALIncentivizedInterstitialAd showAndNotify:self];
+    return YES;
+}
+
+- (void)sendResultCode:(int)code {
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [dict setValue:@(code) forKey:@"code"];
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__cppCallback
+            message:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (void)adService:(ALAdService*)adService didLoadAd:(ALAd*)ad {
@@ -121,7 +134,8 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 }
 
 - (void)adService:(ALAdService*)adService didFailToLoadAdWithError:(int)code {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s: code = %d", __PRETTY_FUNCTION__, code);
+    [self sendResultCode:0];
 }
 
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
@@ -134,38 +148,37 @@ NSString* const k__AppLovin_cpp_callback            = @"__ALovinAds_callback";
 
 - (void)ad:(ALAd*)ad wasHiddenIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    // The user has closed the ad.  We must preload the next rewarded video.
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    [dict setValue:@2 forKey:@"code"];
-    [dict setValue:@"videoReward" forKey:@"placement"];
-    [[EEMessageBridge getInstance]
-        callCpp:k__AppLovin_cpp_callback
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
-
     // FIXME: have to preload manually.
-    [ALIncentivizedInterstitialAd preloadAndNotify:nil];
+    [self loadRewardedVideo];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
               didSucceedWithResponse:(NSDictionary*)response {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self sendResultCode:2];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
           didExceedQuotaWithResponse:(NSDictionary*)response {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self sendResultCode:1];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
              wasRejectedWithResponse:(NSDictionary*)response {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self sendResultCode:1];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
                     didFailWithError:(NSInteger)responseCode {
     NSLog(@"%s: code = %ld", __PRETTY_FUNCTION__, responseCode);
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    [dict setValue:@(responseCode) forKey:@"code"];
-    [dict setValue:@"videoReward" forKey:@"placement"];
-    [[EEMessageBridge getInstance]
-        callCpp:k__AppLovin_cpp_callback
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
+    [self sendResultCode:1];
 }
+
+- (void)userDeclinedToViewAd:(ALAd*)ad {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self sendResultCode:1];
+}
+
 @end

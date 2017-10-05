@@ -100,6 +100,7 @@ dependencies {
     compile project(':ee-x-notification')
     compile project(':ee-x-crashlytics')
     compile project(':ee-x-firebase')
+    compile project(':ee-x-applovin')
     compile project(':ee-x-facebook-ads')
     compile project(':ee-x-unity-ads')
     compile project(':ee-x-vungle')

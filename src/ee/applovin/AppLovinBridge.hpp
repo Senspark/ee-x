@@ -9,37 +9,29 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
-#include <functional>
-#include <string>
+#include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace applovin {
-enum class ALovinAdsResultCode { ADS_ERROR, ADS_SKIPPED, ADS_DID_FINISH };
-
-class AppLovin final {
+class AppLovin final : public RewardedVideoInterface {
 public:
-    using AdCallback = std::function<void(ALovinAdsResultCode code,
-                                          const std::string& message)>;
+    static const std::string DefaultPlacementId;
 
     AppLovin();
-    ~AppLovin();
+    virtual ~AppLovin() override;
 
     void initialize();
 
-    bool isInterstitialReady();
+    bool isInterstitialAdReady() const;
 
-    bool showInterstitial();
+    bool showInterstitialAd();
 
-    bool isRewardVideoReady();
+    /// @see Super.
+    virtual bool
+    isRewardedVideoReady(const std::string& placementId) const override;
 
-    bool showRewardVideo();
-
-    void setCallback(const AdCallback& callback) { callback_ = callback; }
-
-public:
-    std::string doCallBack(const std::string& msg) const;
-
-    AdCallback callback_;
+    /// @see Super.
+    virtual bool showRewardedVideo(const std::string& placementId) override;
 };
 } // namespace applovin
 } // namespace ee

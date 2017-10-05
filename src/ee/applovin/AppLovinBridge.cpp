@@ -17,67 +17,67 @@ using Self = AppLovin;
 
 namespace {
 // clang-format off
-constexpr auto k__ALovinads_initALovinAds       = "k__ALovinads_initALovinAds";
-constexpr auto k__ALovinads_isInterstitialReady = "k__ALovinads_isInterstitialReady";
-constexpr auto k__ALovinads_showInterstitial    = "k__ALovinads_showInterstitial";
-constexpr auto k__ALovinads_isRewardVideoReady  = "k__ALovinads_isRewardVideoReady";
-constexpr auto k__ALovinads_showRewardVideo     = "k__ALovinads_showRewardVideo";
-constexpr auto k__AppLovin_cpp_callback         = "__ALovinAds_callback";
+constexpr auto k__initialize            = "AppLovin_initialize";
+constexpr auto k__isInterstitialAdReady = "AppLovin_isInterstitialAdReady";
+constexpr auto k__showInterstitialAd    = "AppLovin_showInterstitialAd";
+constexpr auto k__isRewardedVideoReady  = "AppLovin_isRewardedVideoReady";
+constexpr auto k__showRewardedVideo     = "AppLovin_showRewardedVideo";
+constexpr auto k__cppCallback           = "AppLovin_cppCallback";
 // clang-format on
 } // namespace
 
+const std::string Self::DefaultPlacementId = "AppLovin_placementId";
+
 Self::AppLovin() {
-    callback_ = nullptr;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
-        std::bind(&Self::doCallBack, this, std::placeholders::_1),
-        k__AppLovin_cpp_callback);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            auto code =
+                static_cast<RewardedVideoResult>(json["code"].get<int>());
+            invokeRewardedVideoCallback(code, DefaultPlacementId);
+            return "";
+        },
+        k__initialize);
 }
 
 Self::~AppLovin() {
-    core::MessageBridge::getInstance().deregisterHandler(
-        k__AppLovin_cpp_callback);
-}
-
-std::string Self::doCallBack(const std::string& msg) const {
-    if (callback_) {
-        auto json = nlohmann::json::parse(msg);
-
-        auto code = static_cast<ALovinAdsResultCode>(json["code"].get<int>());
-        std::string message = json["placement"];
-
-        callback_(code, message);
-    }
-
-    return "";
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.deregisterHandler(k__cppCallback);
 }
 
 void Self::initialize() {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__ALovinads_initALovinAds);
+    bridge.call(k__initialize);
 }
 
-bool Self::isInterstitialReady() {
+bool Self::isInterstitialAdReady() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__ALovinads_isInterstitialReady);
+    auto result = bridge.call(k__isInterstitialAdReady);
     return result == "true";
 }
 
-bool Self::showInterstitial() {
+bool Self::showInterstitialAd() {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__ALovinads_showInterstitial);
+    auto result = bridge.call(k__showInterstitialAd);
     return result == "true";
 }
 
-bool Self::isRewardVideoReady() {
+bool Self::isRewardedVideoReady(const std::string& placementId) const {
+    if (placementId != DefaultPlacementId) {
+        return false;
+    }
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__ALovinads_isRewardVideoReady);
+    auto result = bridge.call(k__isRewardedVideoReady);
     return result == "true";
 }
 
-bool Self::showRewardVideo() {
+bool Self::showRewardedVideo(const std::string& placementId) {
+    if (placementId != DefaultPlacementId) {
+        return false;
+    }
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__ALovinads_showRewardVideo);
+    auto result = bridge.call(k__showRewardedVideo);
     return result == "true";
 }
 } // namespace applovin

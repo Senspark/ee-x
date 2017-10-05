@@ -3,19 +3,17 @@ package com.ee.applovin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Debug;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.applovin.adview.AppLovinIncentivizedInterstitial;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.sdk.AppLovinAdRewardListener;
 import com.applovin.sdk.AppLovinSdk;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
@@ -24,25 +22,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppLovin implements PluginProtocol {
-    private static final String k__ALovinads_initALovinAds       = "k__ALovinads_initALovinAds";
-    private static final String k__ALovinads_isInterstitialReady = "k__ALovinads_isInterstitialReady";
-    private static final String k__ALovinads_showInterstitial    = "k__ALovinads_showInterstitial";
-    private static final String k__ALovinads_isRewardVideoReady  = "k__ALovinads_isRewardVideoReady";
-    private static final String k__ALovinads_showRewardVideo     = "k__ALovinads_showRewardVideo";
-    private static final String k__AppLovin_cpp_callback         = "__ALovinAds_callback";
+    private static final String k__initialize            = "AppLovin_initialize";
+    private static final String k__isInterstitialAdReady = "AppLovin_isInterstitialAdReady";
+    private static final String k__showInterstitialAd    = "AppLovin_showInterstitialAd";
+    private static final String k__isRewardedVideoReady  = "AppLovin_isRewardedVideoReady";
+    private static final String k__showRewardedVideo     = "AppLovin_showRewardedVideo";
+    private static final String k__cppCallback           = "AppLovin_cppCallback";
 
     private static final Logger _logger = new Logger(AppLovin.class.getName());
 
     private Activity _context;
 
-    private AppLovinIncentivizedInterstitial _incentive;
+    private AppLovinIncentivizedInterstitial _incentivizedInterstitial;
+    private AppLovinAdLoadListener           _incentivizedInterstitialAdLoadListener;
+    private AppLovinAdRewardListener         _incentivizedInterstitialAdRewardListener;
+    private AppLovinAdDisplayListener        _incentivizedInterstitialAdDisplayListener;
 
     public AppLovin(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
-
         registerHandlers();
-
         _logger.debug("constructor end.");
     }
 
@@ -71,6 +70,10 @@ public class AppLovin implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
+        _incentivizedInterstitial = null;
+        _incentivizedInterstitialAdLoadListener = null;
+        _incentivizedInterstitialAdRewardListener = null;
+        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @Override
@@ -89,123 +92,163 @@ public class AppLovin implements PluginProtocol {
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
+            public String handle(@NonNull String message) {
                 initialize();
                 return "";
             }
-        }, k__ALovinads_initALovinAds);
-        
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                return isInterstitialReady() ? "true" : "false";
-            }
-        }, k__ALovinads_isInterstitialReady);
+        }, k__initialize);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                return showInterstitial() ? "true" : "false";
+            public String handle(@NonNull String message) {
+                return isInterstitialAdReady() ? "true" : "false";
             }
-        }, k__ALovinads_showInterstitial);
-        
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                return isRewardVideoReady() ? "true" : "false";
-            }
-        }, k__ALovinads_isRewardVideoReady);
+        }, k__isInterstitialAdReady);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                return showRewardVideo() ? "true" : "false";
+            public String handle(@NonNull String message) {
+                return showInterstitialAd() ? "true" : "false";
             }
-        }, k__ALovinads_showRewardVideo);
+        }, k__showInterstitialAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return isRewardedVideoReady() ? "true" : "false";
+            }
+        }, k__isRewardedVideoReady);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return showRewardedVideo() ? "true" : "false";
+            }
+        }, k__showRewardedVideo);
     }
 
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__ALovinads_initALovinAds);
-        bridge.deregisterHandler(k__ALovinads_isInterstitialReady);
-        bridge.deregisterHandler(k__ALovinads_showInterstitial);
-        bridge.deregisterHandler(k__ALovinads_isRewardVideoReady);
-        bridge.deregisterHandler(k__ALovinads_showRewardVideo);
+        bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__isInterstitialAdReady);
+        bridge.deregisterHandler(k__showInterstitialAd);
+        bridge.deregisterHandler(k__isRewardedVideoReady);
+        bridge.deregisterHandler(k__showRewardedVideo);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void initialize() {
         AppLovinSdk.initializeSdk(_context);
 
-        _incentive = AppLovinIncentivizedInterstitial.create(_context);
+        _incentivizedInterstitial = AppLovinIncentivizedInterstitial.create(_context);
 
-        // Preload call using a new load listener
-        _incentive.preload(new AppLovinAdLoadListener() {
+        _incentivizedInterstitialAdLoadListener = new AppLovinAdLoadListener() {
             @Override
-            public void adReceived(AppLovinAd appLovinAd) {
-                // A rewarded video was successfully received.
-                _logger.debug("adReceived");
+            public void adReceived(AppLovinAd ad) {
+                _logger.info("adReceived");
             }
+
             @Override
             public void failedToReceiveAd(int errorCode) {
-                // A rewarded video failed to load.
-                _logger.debug("failedToReceiveAd: code " + errorCode);
-
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("code", 0);
-                dict.put("placement", "videoReward");
-
-                MessageBridge.getInstance().callCpp(k__AppLovin_cpp_callback, JsonUtils.convertDictionaryToString(dict));
+                _logger.info("failedToReceiveAd: code " + errorCode);
+                sendResultCode(0);
             }
-        });
+        };
+
+        _incentivizedInterstitialAdRewardListener = new AppLovinAdRewardListener() {
+            @Override
+            public void userRewardVerified(AppLovinAd ad, Map<String, String> response) {
+                _logger.info("userRewardVerified");
+                sendResultCode(2);
+            }
+
+            @Override
+            public void userOverQuota(AppLovinAd ad, Map<String, String> response) {
+                _logger.info("userOverQuota");
+                sendResultCode(1);
+            }
+
+            @Override
+            public void userRewardRejected(AppLovinAd ad, Map<String, String> response) {
+                _logger.info("userRewardRejected");
+                sendResultCode(1);
+            }
+
+            @Override
+            public void validationRequestFailed(AppLovinAd ad, int responseCode) {
+                _logger.info("validationRequestFailed: code = " + responseCode);
+                sendResultCode(1);
+            }
+
+            @Override
+            public void userDeclinedToViewAd(AppLovinAd ad) {
+                _logger.info("userDeclinedToViewAd");
+                sendResultCode(1);
+            }
+        };
+
+        _incentivizedInterstitialAdDisplayListener = new AppLovinAdDisplayListener() {
+            @Override
+            public void adDisplayed(AppLovinAd ad) {
+                _logger.info("adDisplayed");
+            }
+
+            @Override
+            public void adHidden(AppLovinAd ad) {
+                _logger.info("adHidden");
+                // FIXME: should be called manually.
+                loadRewardedVideo();
+            }
+        };
+
+        // Preload call using a new load listener
+        loadRewardedVideo();
     }
-    
+
     @SuppressWarnings("WeakerAccess")
-    public boolean isInterstitialReady() {
+    public boolean isInterstitialAdReady() {
         return AppLovinInterstitialAd.isAdReadyToDisplay(_context);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showInterstitial() {
-        if (!isInterstitialReady()) {
+    public boolean showInterstitialAd() {
+        if (!isInterstitialAdReady()) {
             return false;
         }
         AppLovinInterstitialAd.show(_context);
         return true;
     }
-    
-    @SuppressWarnings("WeakerAccess")
-    public boolean isRewardVideoReady() {
-        return _incentive.isAdReadyToDisplay();
+
+    public void loadRewardedVideo() {
+        _incentivizedInterstitial.preload(_incentivizedInterstitialAdLoadListener);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showRewardVideo() {
-        if (!isRewardVideoReady()) {
+    public boolean isRewardedVideoReady() {
+        return _incentivizedInterstitial.isAdReadyToDisplay();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean showRewardedVideo() {
+        if (!isRewardedVideoReady()) {
+            loadRewardedVideo();
             return false;
         }
-        _incentive.show(_context, null, null, new AppLovinAdDisplayListener() {
-            @Override
-            public void adDisplayed(AppLovinAd appLovinAd) {
-                // A rewarded video is being displayed.
-            }
-            @Override
-            public void adHidden(AppLovinAd appLovinAd) {
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("code", 2);
-                dict.put("placement", "videoReward");
-
-                MessageBridge .getInstance().callCpp(k__AppLovin_cpp_callback, JsonUtils.convertDictionaryToString(dict));
-                // A rewarded video was closed.  Preload the next video now.  We won't use a load listener.
-                // FIXME: should be called manually.
-                _incentive.preload(null);
-            }
-        });
+        _incentivizedInterstitial.show(_context, _incentivizedInterstitialAdRewardListener, null,
+            _incentivizedInterstitialAdDisplayListener);
         return true;
+    }
+
+    private void sendResultCode(int code) {
+        Map<String, Object> dict = new HashMap<>();
+        dict.put("code", code);
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
     }
 }

@@ -12,12 +12,14 @@
 
 - (void)initialize;
 
-- (BOOL)isInterstitialReady;
+- (BOOL)isInterstitialAdReady;
 
-- (BOOL)showInterstitial;
+- (BOOL)showInterstitialAd;
 
-- (BOOL)isRewardVideoReady;
+- (void)loadRewardedVideo;
 
-- (BOOL)showRewardVideo;
+- (BOOL)isRewardedVideoReady;
+
+- (BOOL)showRewardedVideo;
 
 @end

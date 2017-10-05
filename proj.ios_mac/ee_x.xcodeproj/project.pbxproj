@@ -75,6 +75,9 @@
 		6F3688451F85F1EE00AE2D93 /* VungleBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36883F1F85F1EE00AE2D93 /* VungleBridge.hpp */; };
 		6F3688461F85F1EE00AE2D93 /* Vungle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688401F85F1EE00AE2D93 /* Vungle.hpp */; };
 		6F3688471F85F1EE00AE2D93 /* VungleFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688411F85F1EE00AE2D93 /* VungleFwd.hpp */; };
+		6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */; };
+		6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */; };
+		6F3688611F86161D00AE2D93 /* ee_x_mobile_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -223,6 +226,13 @@
 			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
 			remoteInfo = ee_x_mobile_core;
 		};
+		6F3688621F86162500AE2D93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F3688491F86137800AE2D93;
+			remoteInfo = ee_x_mobile_ads;
+		};
 		6F43A2D31EC1A26B00C68152 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -306,6 +316,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6F3688301F85F1B800AE2D93 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F3688521F86137800AE2D93 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -433,6 +453,9 @@
 		6F36883F1F85F1EE00AE2D93 /* VungleBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleBridge.hpp; sourceTree = "<group>"; };
 		6F3688401F85F1EE00AE2D93 /* Vungle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vungle.hpp; sourceTree = "<group>"; };
 		6F3688411F85F1EE00AE2D93 /* VungleFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleFwd.hpp; sourceTree = "<group>"; };
+		6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RewardedVideoInterface.cpp; path = ads/RewardedVideoInterface.cpp; sourceTree = "<group>"; };
+		6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RewardedVideoInterface.hpp; path = ads/RewardedVideoInterface.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -591,7 +614,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F3688611F86161D00AE2D93 /* ee_x_mobile_ads.a in Frameworks */,
 				5FDEC10535439E67358F88C8 /* libPods-common-ee_x_mobile_vungle.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F36884D1F86137800AE2D93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +727,7 @@
 				6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */,
 				6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */,
 				6F36883A1F85F1B800AE2D93 /* ee_x_mobile_vungle.a */,
+				6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -751,11 +783,21 @@
 			path = vungle;
 			sourceTree = "<group>";
 		};
+		6F3688481F86135600AE2D93 /* ads */ = {
+			isa = PBXGroup;
+			children = (
+				6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */,
+				6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */,
+			);
+			name = ads;
+			sourceTree = "<group>";
+		};
 		6F43A2261EC19F3100C68152 /* ee */ = {
 			isa = PBXGroup;
 			children = (
 				6F24C6D61EC31DBE00509B6C /* Macro.hpp */,
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
+				6F3688481F86135600AE2D93 /* ads */,
 				6F36881A1F85E38000AE2D93 /* applovin */,
 				6F36881F1F85E38000AE2D93 /* AppLovin.hpp */,
 				6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */,
@@ -1109,6 +1151,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F3688531F86137800AE2D93 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6F43A2A41EC19F5700C68152 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1274,11 +1324,32 @@
 			buildRules = (
 			);
 			dependencies = (
+				6F3688631F86162500AE2D93 /* PBXTargetDependency */,
 				6F3688281F85F1B800AE2D93 /* PBXTargetDependency */,
 			);
 			name = ee_x_mobile_vungle;
 			productName = "ee-library";
 			productReference = 6F36883A1F85F1B800AE2D93 /* ee_x_mobile_vungle.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F3688491F86137800AE2D93 /* ee_x_mobile_ads */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F3688591F86137800AE2D93 /* Build configuration list for PBXNativeTarget "ee_x_mobile_ads" */;
+			buildPhases = (
+				6F36884C1F86137800AE2D93 /* [CP] Check Pods Manifest.lock */,
+				6F36884D1F86137800AE2D93 /* Frameworks */,
+				6F36884F1F86137800AE2D93 /* Sources */,
+				6F3688521F86137800AE2D93 /* Copy Files */,
+				6F3688531F86137800AE2D93 /* Headers */,
+				6F3688581F86137800AE2D93 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ee_x_mobile_ads;
+			productName = "ee-library";
+			productReference = 6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */ = {
@@ -1496,6 +1567,7 @@
 				6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */,
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
 				6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */,
+				6F3688491F86137800AE2D93 /* ee_x_mobile_ads */,
 				EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */,
 				6F978C5C1F4184C500247CA8 /* ee_x_mobile_unity_ads */,
 				6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */,
@@ -1613,6 +1685,39 @@
 			showEnvVarsInLog = 0;
 		};
 		6F3688361F85F1B800AE2D93 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_vungle/Pods-common-ee_x_mobile_vungle-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F36884C1F86137800AE2D93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_vungle-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F3688581F86137800AE2D93 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1825,6 +1930,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F36884F1F86137800AE2D93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6F43A2A01EC19F5700C68152 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1959,6 +2072,11 @@
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6F3688291F85F1B800AE2D93 /* PBXContainerItemProxy */;
 		};
+		6F3688631F86162500AE2D93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F3688491F86137800AE2D93 /* ee_x_mobile_ads */;
+			targetProxy = 6F3688621F86162500AE2D93 /* PBXContainerItemProxy */;
+		};
 		6F43A2D41EC1A26B00C68152 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
@@ -2085,6 +2203,34 @@
 			name = Debug;
 		};
 		6F3688391F85F1B800AE2D93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A07E77455C1AE0E28B818299 /* Pods-common-ee_x_mobile_vungle.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		6F36885A1F86137800AE2D93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AED8D374AED4E0C9B897A3FD /* Pods-common-ee_x_mobile_vungle.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6F36885B1F86137800AE2D93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A07E77455C1AE0E28B818299 /* Pods-common-ee_x_mobile_vungle.release.xcconfig */;
 			buildSettings = {
@@ -2465,6 +2611,15 @@
 			buildConfigurations = (
 				6F3688381F85F1B800AE2D93 /* Debug */,
 				6F3688391F85F1B800AE2D93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F3688591F86137800AE2D93 /* Build configuration list for PBXNativeTarget "ee_x_mobile_ads" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F36885A1F86137800AE2D93 /* Debug */,
+				6F36885B1F86137800AE2D93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -24,4 +24,8 @@ abstract_target 'common' do
     target 'ee_x_mobile_iron_src' do
         pod 'IronSourceSDK'
     end
+    
+    target 'ee_x_mobile_app_lovin' do
+        pod 'AppLovinSDK'
+    end
 end

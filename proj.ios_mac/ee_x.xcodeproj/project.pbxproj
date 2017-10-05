@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15A194E1694B1D29C569336F /* libPods-common-ee_x_mobile_app_lovin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9CEA02B2FAAF6914287F328 /* libPods-common-ee_x_mobile_app_lovin.a */; };
 		19A632B7E8A564A43BC5A1B9 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
 		3AFCDE0675A6414E159A386F /* libPods-common-ee_x_mobile_unity_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */; };
@@ -61,6 +62,12 @@
 		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
 		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
 		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
+		6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */; };
+		6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */; };
+		6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881D1F85E38000AE2D93 /* EEAppLovin.h */; };
+		6F3688241F85E38000AE2D93 /* EEAppLovin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F36881E1F85E38000AE2D93 /* EEAppLovin.m */; };
+		6F3688251F85E38000AE2D93 /* AppLovin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881F1F85E38000AE2D93 /* AppLovin.hpp */; };
+		6F3688261F85E38000AE2D93 /* AppLovinFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -195,6 +202,13 @@
 			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
 			remoteInfo = ee_x_mobile_core;
 		};
+		6F3688081F85E32C00AE2D93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
 		6F43A2D31EC1A26B00C68152 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -258,6 +272,16 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6F24C35F1EC2B9A600509B6C /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F36880F1F85E32C00AE2D93 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -370,6 +394,13 @@
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
+		6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_app_lovin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinBridge.cpp; sourceTree = "<group>"; };
+		6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinBridge.hpp; sourceTree = "<group>"; };
+		6F36881D1F85E38000AE2D93 /* EEAppLovin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEAppLovin.h; sourceTree = "<group>"; };
+		6F36881E1F85E38000AE2D93 /* EEAppLovin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEAppLovin.m; sourceTree = "<group>"; };
+		6F36881F1F85E38000AE2D93 /* AppLovin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovin.hpp; sourceTree = "<group>"; };
+		6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinFwd.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -484,6 +515,9 @@
 		C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_unity_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads.release.xcconfig"; sourceTree = "<group>"; };
 		C252E12CF547D40AD3D17265 /* Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_unity_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9CEA02B2FAAF6914287F328 /* libPods-common-ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_app_lovin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D376B3617772D8EC8E24A7DF /* Pods-common-ee_x_mobile_app_lovin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_app_lovin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin.debug.xcconfig"; sourceTree = "<group>"; };
+		DB953297252D12BFD181E1E0 /* Pods-common-ee_x_mobile_app_lovin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_app_lovin.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin.release.xcconfig"; sourceTree = "<group>"; };
 		EB684E0A1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_facebook_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookAdsBridge.cpp; path = facebook/FacebookAdsBridge.cpp; sourceTree = "<group>"; };
 		EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookAdsBridge.hpp; path = facebook/FacebookAdsBridge.hpp; sourceTree = "<group>"; };
@@ -508,6 +542,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F36880D1F85E32C00AE2D93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				15A194E1694B1D29C569336F /* libPods-common-ee_x_mobile_app_lovin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +652,7 @@
 				6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */,
 				6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */,
 				6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */,
+				6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -628,6 +671,7 @@
 				93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */,
 				C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */,
 				A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */,
+				C9CEA02B2FAAF6914287F328 /* libPods-common-ee_x_mobile_app_lovin.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -641,11 +685,25 @@
 			path = ../src;
 			sourceTree = "<group>";
 		};
+		6F36881A1F85E38000AE2D93 /* applovin */ = {
+			isa = PBXGroup;
+			children = (
+				6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */,
+				6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */,
+				6F36881D1F85E38000AE2D93 /* EEAppLovin.h */,
+				6F36881E1F85E38000AE2D93 /* EEAppLovin.m */,
+			);
+			path = applovin;
+			sourceTree = "<group>";
+		};
 		6F43A2261EC19F3100C68152 /* ee */ = {
 			isa = PBXGroup;
 			children = (
 				6F24C6D61EC31DBE00509B6C /* Macro.hpp */,
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
+				6F36881A1F85E38000AE2D93 /* applovin */,
+				6F36881F1F85E38000AE2D93 /* AppLovin.hpp */,
+				6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */,
 				6F43A2271EC19F3100C68152 /* core */,
 				6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */,
 				6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */,
@@ -870,6 +928,8 @@
 				C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */,
 				6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */,
 				B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */,
+				D376B3617772D8EC8E24A7DF /* Pods-common-ee_x_mobile_app_lovin.debug.xcconfig */,
+				DB953297252D12BFD181E1E0 /* Pods-common-ee_x_mobile_app_lovin.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -964,6 +1024,17 @@
 				6F5E62151ECD979A0036D83B /* PurchaseWithVirtualItem.hpp in Headers */,
 				6F2580071ECB162D00B910F9 /* VirtualItemStorage.hpp in Headers */,
 				6F5E622E1ECDB14D0036D83B /* VirtualGoodsStorage.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F3688101F85E32C00AE2D93 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F3688251F85E38000AE2D93 /* AppLovin.hpp in Headers */,
+				6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */,
+				6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */,
+				6F3688261F85E38000AE2D93 /* AppLovinFwd.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,6 +1166,27 @@
 			name = ee_x_desktop_firebase;
 			productName = "ee-library";
 			productReference = 6F24C3781EC2C07F00509B6C /* ee_x_desktop_firebase.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6F3688061F85E32C00AE2D93 /* ee_x_mobile_app_lovin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F3688161F85E32C00AE2D93 /* Build configuration list for PBXNativeTarget "ee_x_mobile_app_lovin" */;
+			buildPhases = (
+				6F3688091F85E32C00AE2D93 /* [CP] Check Pods Manifest.lock */,
+				6F36880D1F85E32C00AE2D93 /* Frameworks */,
+				6F36880A1F85E32C00AE2D93 /* Sources */,
+				6F36880F1F85E32C00AE2D93 /* Copy Files */,
+				6F3688101F85E32C00AE2D93 /* Headers */,
+				6F3688151F85E32C00AE2D93 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F3688071F85E32C00AE2D93 /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_app_lovin;
+			productName = "ee-library";
+			productReference = 6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */ = {
@@ -1315,6 +1407,7 @@
 				EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */,
 				6F978C5C1F4184C500247CA8 /* ee_x_mobile_unity_ads */,
 				6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */,
+				6F3688061F85E32C00AE2D93 /* ee_x_mobile_app_lovin */,
 				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
@@ -1373,6 +1466,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F3688091F85E32C00AE2D93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_app_lovin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F3688151F85E32C00AE2D93 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F43A29F1EC19F5700C68152 /* [CP] Check Pods Manifest.lock */ = {
@@ -1555,6 +1681,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F36880A1F85E32C00AE2D93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */,
+				6F3688241F85E38000AE2D93 /* EEAppLovin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6F43A2A01EC19F5700C68152 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1679,6 +1814,11 @@
 			target = 6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */;
 			targetProxy = 6F24C3581EC2B9A600509B6C /* PBXContainerItemProxy */;
 		};
+		6F3688071F85E32C00AE2D93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = 6F3688081F85E32C00AE2D93 /* PBXContainerItemProxy */;
+		};
 		6F43A2D41EC1A26B00C68152 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
@@ -1759,6 +1899,34 @@
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6F3688171F85E32C00AE2D93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D376B3617772D8EC8E24A7DF /* Pods-common-ee_x_mobile_app_lovin.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6F3688181F85E32C00AE2D93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB953297252D12BFD181E1E0 /* Pods-common-ee_x_mobile_app_lovin.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
@@ -2111,6 +2279,15 @@
 			buildConfigurations = (
 				6F24C3671EC2B9A600509B6C /* Debug */,
 				6F24C3681EC2B9A600509B6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F3688161F85E32C00AE2D93 /* Build configuration list for PBXNativeTarget "ee_x_mobile_app_lovin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F3688171F85E32C00AE2D93 /* Debug */,
+				6F3688181F85E32C00AE2D93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

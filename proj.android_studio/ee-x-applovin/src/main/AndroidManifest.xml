@@ -1,6 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ee.alovinads">
+    package="com.ee.applovin">
     <!-- These permissions are mandatory to run AppLovin SDK -->
 	<uses-permission android:name="android.permission.INTERNET"/>
 

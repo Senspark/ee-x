@@ -6,34 +6,34 @@
 //
 //
 
-#ifndef EE_X_ALOVIN_ADS_BRIDGE_HPP_
-#define EE_X_ALOVIN_ADS_BRIDGE_HPP_
+#ifndef EE_X_APP_LOVIN_BRIDGE_HPP
+#define EE_X_APP_LOVIN_BRIDGE_HPP
 
 #include <functional>
 #include <memory>
 #include <string>
 
 namespace ee {
-namespace alovinads {
+namespace applovin {
 enum class ALovinAdsResultCode { ADS_ERROR, ADS_SKIPPED, ADS_DID_FINISH };
 
-class ALovinAds final {
+class AppLovin final {
 public:
     using AdCallback = std::function<void(ALovinAdsResultCode code,
                                           const std::string& message)>;
 
-    ALovinAds();
-    ~ALovinAds();
+    AppLovin();
+    ~AppLovin();
 
-    void initALovinAds();
+    void initialize();
 
     bool isInterstitialReady();
 
-    void showInterstitial();
-    
+    bool showInterstitial();
+
     bool isRewardVideoReady();
-    
-    void showRewardVideo();
+
+    bool showRewardVideo();
 
     void setCallback(const AdCallback& callback) { callback_ = callback; }
 
@@ -42,7 +42,7 @@ public:
 
     AdCallback callback_;
 };
-} // namespace alovinads
+} // namespace applovin
 } // namespace ee
 
-#endif /* EE_X_ALOVIN_ADS_BRIDGE_HPP_ */
+#endif /* EE_X_APP_LOVIN_BRIDGE_HPP */

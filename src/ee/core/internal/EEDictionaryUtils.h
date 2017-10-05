@@ -12,7 +12,7 @@
 @interface EEDictionaryUtils : NSObject
 
 /// Creates an empty JSON formatted string.
-+ (NSString* _Nonnull)emptyResult;
++ (NSString* _Nonnull)emptyResult __deprecated;
 
 + (NSDictionary* _Nonnull)createDictWithError:(NSError* _Nullable)error;
 

@@ -29,6 +29,8 @@ struct LogLevel {
     std::string desc;
 };
 } // namespace core
+
+using core::LogLevel;
 } // namespace ee
 
 #endif /* EE_X_CORE_LOG_LEVEL_HPP_ */

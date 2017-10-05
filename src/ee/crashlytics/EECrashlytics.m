@@ -8,10 +8,10 @@
 
 #import <Crashlytics/Crashlytics.h>
 
-#import "ee/crashlytics/EECrashlytics.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/crashlytics/EECrashlytics.h"
 
 #import <Fabric/Fabric.h>
 
@@ -64,13 +64,15 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
 
     [bridge registerHandler:^(NSString* msg) {
         [self causeCrash];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_cause_crash];
+        return @"";
+    }
+                        tag:k__crashlytics_cause_crash];
 
     [bridge registerHandler:^(NSString* msg) {
         [self causeException];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_cause_exception];
+        return @"";
+    }
+                        tag:k__crashlytics_cause_exception];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -78,8 +80,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
 
         // Ignored.
 
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_log_level];
+        return @"";
+    }
+                        tag:k__crashlytics_set_log_level];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -94,8 +97,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         NSAssert(message != nil, @"...");
 
         [self log:priorityDescription tag:tag message:message];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_log];
+        return @"";
+    }
+                        tag:k__crashlytics_log];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -108,8 +112,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         NSAssert(value != nil, @"...");
 
         [self setString:key value:value];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_string];
+        return @"";
+    }
+                        tag:k__crashlytics_set_string];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -122,8 +127,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         NSAssert(value != nil, @"...");
 
         [self setBool:key value:value];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_bool];
+        return @"";
+    }
+                        tag:k__crashlytics_set_bool];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -136,24 +142,28 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         NSAssert(value != nil, @"...");
 
         [self setInt:key value:value];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_int];
+        return @"";
+    }
+                        tag:k__crashlytics_set_int];
 
     [bridge registerHandler:^(NSString* msg) {
         [self setUserIdentifier:msg];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_user_identifier];
+        return @"";
+    }
+                        tag:k__crashlytics_set_user_identifier];
 
     [bridge registerHandler:^(NSString* msg) {
         [self setUserName:msg];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_user_name];
+        return @"";
+    }
+                        tag:k__crashlytics_set_user_name];
 
     [bridge registerHandler:^(NSString* msg) {
         [self setUserEmail:msg];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_set_user_email];
-    
+        return @"";
+    }
+                        tag:k__crashlytics_set_user_email];
+
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
@@ -162,59 +172,73 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         NSDictionary* attrs = dict[@"attrs"];
 
         [self trackLevelStart:name customAttributes:attrs];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_track_level_start];
-    
-    [bridge registerHandler:^(NSString *msg) {
+        return @"";
+    }
+                        tag:k__crashlytics_track_level_start];
+
+    [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 4, @"...");
-        
+
         NSString* name = dict[@"name"];
         NSNumber* score = dict[@"score"];
         NSNumber* success = dict[@"success"];
         NSDictionary* attrs = dict[@"attrs"];
-        
-        [self trackLevelEnd:name score:score success:success customAttributes:attrs];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_track_level_end];
-    
-    [bridge registerHandler:^(NSString *msg) {
+
+        [self trackLevelEnd:name
+                       score:score
+                     success:success
+            customAttributes:attrs];
+        return @"";
+    }
+                        tag:k__crashlytics_track_level_end];
+
+    [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 7, @"...");
-        
+
         NSNumber* price = dict[@"price"];
         NSString* currency = dict[@"currency"];
         NSNumber* success = dict[@"success"];
         NSString* itemName = dict[@"item_name"];
         NSString* itemType = dict[@"item_type"];
-        NSString* itemId   = dict[@"item_id"];
+        NSString* itemId = dict[@"item_id"];
         NSDictionary* attrs = dict[@"attrs"];
-        
-        [self trackPurchaseWithPrice:price currency:currency success:success itemName:itemName itemType:itemType itemId:itemId customAttributes:attrs];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_track_purchase];
-    
+
+        [self trackPurchaseWithPrice:price
+                            currency:currency
+                             success:success
+                            itemName:itemName
+                            itemType:itemType
+                              itemId:itemId
+                    customAttributes:attrs];
+        return @"";
+    }
+                        tag:k__crashlytics_track_purchase];
+
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
-        
+
         NSString* name = dict[@"name"];
         NSDictionary* attrs = dict[@"attrs"];
-        
+
         [self trackCustomEvent:name customAttributes:attrs];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_track_custom_event];
-    
+        return @"";
+    }
+                        tag:k__crashlytics_track_custom_event];
+
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
-        
+
         NSString* method = dict[@"method"];
         NSDictionary* attrs = dict[@"attrs"];
-        
+
         [self trackInviteWithMethod:method customAttributes:attrs];
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__crashlytics_track_invite];
+        return @"";
+    }
+                        tag:k__crashlytics_track_invite];
 }
 
 - (void)deregisterHandlers {
@@ -276,28 +300,46 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
     [[Crashlytics sharedInstance] setUserEmail:email];
 }
 
-- (void)trackLevelStart:(NSString* _Nonnull) name customAttributes: (NSDictionary* _Nonnull) attrs {
-    
+- (void)trackLevelStart:(NSString* _Nonnull)name
+       customAttributes:(NSDictionary* _Nonnull)attrs {
     [Answers logLevelStart:name customAttributes:attrs];
 }
 
-- (void)trackLevelEnd:(NSString* _Nonnull) name score: (NSNumber* _Nonnull) score success: (NSNumber* _Nonnull) success customAttributes: (NSDictionary* _Nonnull) attrs {
-    
-    [Answers logLevelEnd:name score:score success:success customAttributes:attrs];
+- (void)trackLevelEnd:(NSString* _Nonnull)name
+                score:(NSNumber* _Nonnull)score
+              success:(NSNumber* _Nonnull)success
+     customAttributes:(NSDictionary* _Nonnull)attrs {
+    [Answers logLevelEnd:name
+                   score:score
+                 success:success
+        customAttributes:attrs];
 }
 
-- (void)trackPurchaseWithPrice:(NSNumber* _Nonnull)price currency:(NSString* _Nonnull)currency success:(NSNumber* _Nonnull)success itemName: (NSString* _Nonnull) itemName itemType: (NSString* _Nonnull) itemType itemId: (NSString* _Nonnull) itemId customAttributes:(NSDictionary<NSString *,id> * _Nonnull) attrs {
-
-    [Answers logPurchaseWithPrice:[NSDecimalNumber decimalNumberWithDecimal:[price decimalValue]] currency:currency success:success itemName:itemName itemType:itemType itemId:itemId customAttributes:attrs];
+- (void)trackPurchaseWithPrice:(NSNumber* _Nonnull)price
+                      currency:(NSString* _Nonnull)currency
+                       success:(NSNumber* _Nonnull)success
+                      itemName:(NSString* _Nonnull)itemName
+                      itemType:(NSString* _Nonnull)itemType
+                        itemId:(NSString* _Nonnull)itemId
+              customAttributes:(NSDictionary<NSString*, id>* _Nonnull)attrs {
+    [Answers
+        logPurchaseWithPrice:[NSDecimalNumber
+                                 decimalNumberWithDecimal:[price decimalValue]]
+                    currency:currency
+                     success:success
+                    itemName:itemName
+                    itemType:itemType
+                      itemId:itemId
+            customAttributes:attrs];
 }
 
-- (void) trackCustomEvent:(NSString * _Nonnull)eventName customAttributes:(NSDictionary<NSString *,id> * _Nonnull)attrs {
-
+- (void)trackCustomEvent:(NSString* _Nonnull)eventName
+        customAttributes:(NSDictionary<NSString*, id>* _Nonnull)attrs {
     [Answers logCustomEventWithName:eventName customAttributes:attrs];
 }
 
-- (void) trackInviteWithMethod:(NSString *)method customAttributes:(NSDictionary<NSString *,id> *)attrs {
-    
+- (void)trackInviteWithMethod:(NSString*)method
+             customAttributes:(NSDictionary<NSString*, id>* _Nonnull)attrs {
     [Answers logInviteWithMethod:method customAttributes:attrs];
 }
 @end

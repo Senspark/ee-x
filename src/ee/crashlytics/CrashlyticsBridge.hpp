@@ -13,11 +13,9 @@
 #include <string>
 #include <unordered_map>
 
-namespace ee {
-namespace core {
-struct LogLevel;
-} // namespace core
+#include "ee/core/LogLevel.hpp"
 
+namespace ee {
 namespace crashlytics {
 class Crashlytics final {
 public:
@@ -27,32 +25,55 @@ public:
     /// Causes an exception.
     void causeException() const;
 
-    void setLogLevel(const core::LogLevel& level) const;
+    /// Sets the default log level.
+    /// @param[in] level The desired log level.
+    void setLogLevel(const LogLevel& level) const;
 
-    void log(const core::LogLevel& level, const std::string& tag,
+    /// Logs a message.
+    /// @param[in] level The message's log level.
+    /// @param[in] tag The message's tag.
+    /// @param[in] message The message's content.
+    void log(const LogLevel& level, const std::string& tag,
              const std::string& message) const;
 
+    /// Sets a string value for user properties.
     void setString(const std::string& key, const std::string& value) const;
 
+    /// Sets a bool value for user properties.
     void setBool(const std::string& key, bool value) const;
 
+    /// Sets an int value for user properties.
     void setInt(const std::string& key, int value) const;
 
+    /// Sets the user's identifier.
     void setUserIdentifier(const std::string& identifier) const;
 
+    /// Sets the user's name.
     void setUserName(const std::string& name) const;
 
+    /// Sets the user's email.
     void setUserEmail(const std::string& email) const;
-    
-    void trackLevelStart(const std::string& name, const std::unordered_map<std::string, std::string>& attrs);
-    
-    void trackLevelEnd(const std::string& name, int score, bool success, const std::unordered_map<std::string, std::string>& attrs);
-    
-    void trackPurchase(float price, const std::string& currency, bool success, const std::string& itemName, const std::string& itemType, const std::string& itemId, const std::unordered_map<std::string, std::string>& attrs);
-    
-    void trackCustomEvent(const std::string& name, const std::unordered_map<std::string, std::string>& attrs);
-    
-    void trackInvite(const std::string& method, const std::unordered_map<std::string, std::string>& attrs);
+
+    void
+    trackLevelStart(const std::string& name,
+                    const std::unordered_map<std::string, std::string>& attrs);
+
+    void
+    trackLevelEnd(const std::string& name, int score, bool success,
+                  const std::unordered_map<std::string, std::string>& attrs);
+
+    void
+    trackPurchase(float price, const std::string& currency, bool success,
+                  const std::string& itemName, const std::string& itemType,
+                  const std::string& itemId,
+                  const std::unordered_map<std::string, std::string>& attrs);
+
+    void
+    trackCustomEvent(const std::string& name,
+                     const std::unordered_map<std::string, std::string>& attrs);
+
+    void trackInvite(const std::string& method,
+                     const std::unordered_map<std::string, std::string>& attrs);
 };
 } // namespace crashlytics
 } // namespace ee

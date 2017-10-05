@@ -99,7 +99,7 @@ public class MessageBridge {
      * @param tag     The unique tag of the handler.
      * @return Whether the registration was successful.
      */
-    public boolean registerHandler(MessageHandler handler, @NonNull String message) {
+    public boolean registerHandler(MessageHandler handler, @NonNull String tag) {
         if (_handlers.containsKey(tag)) {
             _logger.error("registerHandler: " + tag + " already exists!");
             return false;

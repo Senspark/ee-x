@@ -7,6 +7,8 @@ import com.ee.core.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.R.attr.tag;
+
 /**
  * Created by Zinge on 3/29/17.
  */
@@ -48,13 +50,13 @@ public class MessageBridge {
      * @return Reply message from Java.
      */
     @NonNull
-    private String call(@NonNull String tag, @NonNull String msg) {
+    private String call(@NonNull String tag, @NonNull String message) {
         MessageHandler handler = _handlers.get(tag);
         if (handler == null) {
             _logger.error("call: " + tag + " doesn't exist!");
-            return DictionaryUtils.emptyResult();
+            return "";
         }
-        return handler.handle(msg);
+        return handler.handle(message);
     }
 
     /**
@@ -65,8 +67,8 @@ public class MessageBridge {
      * @return Reply message from Java.
      */
     @NonNull
-    private static String staticCall(@NonNull String tag, @NonNull String msg) {
-        return getInstance().call(tag, msg);
+    private static String staticCall(@NonNull String tag, @NonNull String message) {
+        return getInstance().call(tag, message);
     }
 
     /**
@@ -88,7 +90,7 @@ public class MessageBridge {
      * @return Reply message from C++.
      */
     @NonNull
-    public native String callCpp(@NonNull String tag, @NonNull String msg);
+    public native String callCpp(@NonNull String tag, @NonNull String message);
 
     /**
      * Registers a new handler to receive messages from C++.
@@ -97,7 +99,7 @@ public class MessageBridge {
      * @param tag     The unique tag of the handler.
      * @return Whether the registration was successful.
      */
-    public boolean registerHandler(MessageHandler handler, @NonNull String tag) {
+    public boolean registerHandler(MessageHandler handler, @NonNull String message) {
         if (_handlers.containsKey(tag)) {
             _logger.error("registerHandler: " + tag + " already exists!");
             return false;

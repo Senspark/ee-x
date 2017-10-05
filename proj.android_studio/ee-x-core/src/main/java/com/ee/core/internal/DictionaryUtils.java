@@ -25,6 +25,7 @@ public class DictionaryUtils {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @Deprecated
     @NonNull
     public static String emptyResult() {
         return JsonUtils.convertDictionaryToString(new HashMap<String, Object>());

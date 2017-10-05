@@ -7,5 +7,5 @@ import android.support.annotation.NonNull;
  */
 public interface MessageHandler {
     @NonNull
-    String handle(@NonNull String msg);
+    String handle(@NonNull String message);
 }

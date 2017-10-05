@@ -179,16 +179,16 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
   end
 
-  spec.subspec 'ironsrc' do |s|
+  spec.subspec 'ironsource' do |s|
     s.source_files =
-      'src/ee/IronSrc.hpp',
-      'src/ee/IronSrcFwd.hpp',
-      'src/ee/ironsrc/*.{cpp,hpp,mm,h,m}'
+      'src/ee/IronSource.hpp',
+      'src/ee/IronSourceFwd.hpp',
+      'src/ee/ironsource/*.{cpp,hpp,mm,h,m}'
 
     s.public_header_files =
-      'src/ee/IronSrc.hpp',
-      'src/ee/IronSrcFwd.hpp',
-      'src/ee/ironsrc/IronSrcBridge.hpp'
+      'src/ee/IronSource.hpp',
+      'src/ee/IronSourceFwd.hpp',
+      'src/ee/ironsource/IronSourceBridge.hpp'
 
     s.dependency 'ee-x/core'
     s.dependency 'IronSourceSDK'

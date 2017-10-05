@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ee.ironsrc">
+    package="com.ee.ironsource">
 
     <application>
         <activity

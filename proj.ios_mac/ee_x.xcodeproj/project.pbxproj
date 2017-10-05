@@ -78,6 +78,10 @@
 		6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */; };
 		6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */; };
 		6F3688611F86161D00AE2D93 /* ee_x_mobile_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */; };
+		6F3688681F863C7D00AE2D93 /* EEIronSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688641F863C7D00AE2D93 /* EEIronSource.h */; };
+		6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688651F863C7D00AE2D93 /* EEIronSource.m */; };
+		6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */; };
+		6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -165,12 +169,8 @@
 		6F978CA71F41867C00247CA8 /* UnityAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */; };
 		6F978CAA1F41868200247CA8 /* UnityAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA81F41868200247CA8 /* UnityAdsFwd.hpp */; };
 		6F978CAB1F41868200247CA8 /* UnityAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA91F41868200247CA8 /* UnityAds.hpp */; };
-		6F978CB01F41868900247CA8 /* EEIronSrc.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CAC1F41868900247CA8 /* EEIronSrc.h */; };
-		6F978CB11F41868900247CA8 /* EEIronSrc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CAD1F41868900247CA8 /* EEIronSrc.m */; };
-		6F978CB21F41868900247CA8 /* IronSrcBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */; };
-		6F978CB31F41868900247CA8 /* IronSrcBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */; };
-		6F978CB61F41868E00247CA8 /* IronSrc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB41F41868E00247CA8 /* IronSrc.hpp */; };
-		6F978CB71F41868E00247CA8 /* IronSrcFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */; };
+		6F978CB61F41868E00247CA8 /* IronSource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB41F41868E00247CA8 /* IronSource.hpp */; };
+		6F978CB71F41868E00247CA8 /* IronSourceFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */; };
 		6F978CBA1F41882300247CA8 /* EEFacebookAdsUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */; };
 		6F978CBB1F41882300247CA8 /* EEFacebookAdsUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CB91F41882300247CA8 /* EEFacebookAdsUIView.m */; };
 		6F978CBC1F41882D00247CA8 /* EEFacebookAdsUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */; };
@@ -456,6 +456,10 @@
 		6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RewardedVideoInterface.cpp; path = ads/RewardedVideoInterface.cpp; sourceTree = "<group>"; };
 		6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RewardedVideoInterface.hpp; path = ads/RewardedVideoInterface.hpp; sourceTree = "<group>"; };
+		6F3688641F863C7D00AE2D93 /* EEIronSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIronSource.h; path = ironsource/EEIronSource.h; sourceTree = "<group>"; };
+		6F3688651F863C7D00AE2D93 /* EEIronSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSource.m; path = ironsource/EEIronSource.m; sourceTree = "<group>"; };
+		6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceBridge.cpp; path = ironsource/IronSourceBridge.cpp; sourceTree = "<group>"; };
+		6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceBridge.hpp; path = ironsource/IronSourceBridge.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -513,19 +517,15 @@
 		6F83DDA01EC1D529004C5500 /* FirebaseScheduler_inl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler_inl.hpp; sourceTree = "<group>"; };
 		6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseScheduler.hpp; sourceTree = "<group>"; };
 		6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_unity_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_iron_src.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_source.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_iron_source.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F978CA01F41867C00247CA8 /* EEUnityAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEUnityAds.h; path = unityads/EEUnityAds.h; sourceTree = "<group>"; };
 		6F978CA11F41867C00247CA8 /* EEUnityAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEUnityAds.m; path = unityads/EEUnityAds.m; sourceTree = "<group>"; };
 		6F978CA21F41867C00247CA8 /* UnityAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityAdsBridge.cpp; path = unityads/UnityAdsBridge.cpp; sourceTree = "<group>"; };
 		6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityAdsBridge.hpp; path = unityads/UnityAdsBridge.hpp; sourceTree = "<group>"; };
 		6F978CA81F41868200247CA8 /* UnityAdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAdsFwd.hpp; sourceTree = "<group>"; };
 		6F978CA91F41868200247CA8 /* UnityAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAds.hpp; sourceTree = "<group>"; };
-		6F978CAC1F41868900247CA8 /* EEIronSrc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIronSrc.h; path = ironsrc/EEIronSrc.h; sourceTree = "<group>"; };
-		6F978CAD1F41868900247CA8 /* EEIronSrc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSrc.m; path = ironsrc/EEIronSrc.m; sourceTree = "<group>"; };
-		6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSrcBridge.cpp; path = ironsrc/IronSrcBridge.cpp; sourceTree = "<group>"; };
-		6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSrcBridge.hpp; path = ironsrc/IronSrcBridge.hpp; sourceTree = "<group>"; };
-		6F978CB41F41868E00247CA8 /* IronSrc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSrc.hpp; sourceTree = "<group>"; };
-		6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSrcFwd.hpp; sourceTree = "<group>"; };
+		6F978CB41F41868E00247CA8 /* IronSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSource.hpp; sourceTree = "<group>"; };
+		6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceFwd.hpp; sourceTree = "<group>"; };
 		6F978CB81F41882300247CA8 /* EEFacebookAdsUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookAdsUIView.h; path = facebook/EEFacebookAdsUIView.h; sourceTree = "<group>"; };
 		6F978CB91F41882300247CA8 /* EEFacebookAdsUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookAdsUIView.m; path = facebook/EEFacebookAdsUIView.m; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -724,7 +724,7 @@
 				EB684E0A1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads.a */,
 				6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */,
 				6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */,
-				6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */,
+				6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_source.a */,
 				6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */,
 				6F36883A1F85F1B800AE2D93 /* ee_x_mobile_vungle.a */,
 				6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */,
@@ -821,9 +821,9 @@
 				6F3688401F85F1EE00AE2D93 /* Vungle.hpp */,
 				6F3688411F85F1EE00AE2D93 /* VungleFwd.hpp */,
 				6F978C9E1F41865700247CA8 /* unityads */,
-				6F978CB41F41868E00247CA8 /* IronSrc.hpp */,
-				6F978CB51F41868E00247CA8 /* IronSrcFwd.hpp */,
-				6F978C9F1F41866500247CA8 /* ironsrc */,
+				6F978CB41F41868E00247CA8 /* IronSource.hpp */,
+				6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */,
+				6F978C9F1F41866500247CA8 /* ironsource */,
 			);
 			path = ee;
 			sourceTree = "<group>";
@@ -972,15 +972,15 @@
 			name = unityads;
 			sourceTree = "<group>";
 		};
-		6F978C9F1F41866500247CA8 /* ironsrc */ = {
+		6F978C9F1F41866500247CA8 /* ironsource */ = {
 			isa = PBXGroup;
 			children = (
-				6F978CAC1F41868900247CA8 /* EEIronSrc.h */,
-				6F978CAD1F41868900247CA8 /* EEIronSrc.m */,
-				6F978CAE1F41868900247CA8 /* IronSrcBridge.cpp */,
-				6F978CAF1F41868900247CA8 /* IronSrcBridge.hpp */,
+				6F3688641F863C7D00AE2D93 /* EEIronSource.h */,
+				6F3688651F863C7D00AE2D93 /* EEIronSource.m */,
+				6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */,
+				6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */,
 			);
-			name = ironsrc;
+			name = ironsource;
 			sourceTree = "<group>";
 		};
 		6FAFB5C41EC94DB300450E67 /* store */ = {
@@ -1242,10 +1242,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F978CB01F41868900247CA8 /* EEIronSrc.h in Headers */,
-				6F978CB61F41868E00247CA8 /* IronSrc.hpp in Headers */,
-				6F978CB31F41868900247CA8 /* IronSrcBridge.hpp in Headers */,
-				6F978CB71F41868E00247CA8 /* IronSrcFwd.hpp in Headers */,
+				6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */,
+				6F3688681F863C7D00AE2D93 /* EEIronSource.h in Headers */,
+				6F978CB61F41868E00247CA8 /* IronSource.hpp in Headers */,
+				6F978CB71F41868E00247CA8 /* IronSourceFwd.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1472,9 +1472,9 @@
 			productReference = 6F978C7C1F4184C500247CA8 /* ee_x_mobile_unity_ads.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */ = {
+		6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_source */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_src" */;
+			buildConfigurationList = 6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_source" */;
 			buildPhases = (
 				3B3B26BAE4B5720CA835B225 /* [CP] Check Pods Manifest.lock */,
 				6F978C811F4184CF00247CA8 /* Sources */,
@@ -1488,9 +1488,9 @@
 			dependencies = (
 				6F978C7E1F4184CF00247CA8 /* PBXTargetDependency */,
 			);
-			name = ee_x_mobile_iron_src;
+			name = ee_x_mobile_iron_source;
 			productName = "ee-library";
-			productReference = 6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_src.a */;
+			productReference = 6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_source.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */ = {
@@ -1570,7 +1570,7 @@
 				6F3688491F86137800AE2D93 /* ee_x_mobile_ads */,
 				EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */,
 				6F978C5C1F4184C500247CA8 /* ee_x_mobile_unity_ads */,
-				6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_src */,
+				6F978C7D1F4184CF00247CA8 /* ee_x_mobile_iron_source */,
 				6F3688061F85E32C00AE2D93 /* ee_x_mobile_app_lovin */,
 				6F3688271F85F1B800AE2D93 /* ee_x_mobile_vungle */,
 				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
@@ -2009,8 +2009,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F978CB11F41868900247CA8 /* EEIronSrc.m in Sources */,
-				6F978CB21F41868900247CA8 /* IronSrcBridge.cpp in Sources */,
+				6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */,
+				6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2678,7 +2678,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_src" */ = {
+		6F978C9A1F4184CF00247CA8 /* Build configuration list for PBXNativeTarget "ee_x_mobile_iron_source" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F978C9B1F4184CF00247CA8 /* Debug */,

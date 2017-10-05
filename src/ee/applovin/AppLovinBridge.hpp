@@ -27,10 +27,6 @@ public:
     bool showInterstitialAd();
 
     /// @see Super.
-    virtual bool
-    isRewardedVideoReady(const std::string& placementId) const override;
-
-    /// @see Super.
     virtual bool showRewardedVideo(const std::string& placementId) override;
 };
 } // namespace applovin

@@ -25,7 +25,6 @@ public class AppLovin implements PluginProtocol {
     private static final String k__initialize            = "AppLovin_initialize";
     private static final String k__isInterstitialAdReady = "AppLovin_isInterstitialAdReady";
     private static final String k__showInterstitialAd    = "AppLovin_showInterstitialAd";
-    private static final String k__isRewardedVideoReady  = "AppLovin_isRewardedVideoReady";
     private static final String k__showRewardedVideo     = "AppLovin_showRewardedVideo";
     private static final String k__cppCallback           = "AppLovin_cppCallback";
 
@@ -118,14 +117,6 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return isRewardedVideoReady() ? "true" : "false";
-            }
-        }, k__isRewardedVideoReady);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
                 return showRewardedVideo() ? "true" : "false";
             }
         }, k__showRewardedVideo);
@@ -137,7 +128,6 @@ public class AppLovin implements PluginProtocol {
         bridge.deregisterHandler(k__initialize);
         bridge.deregisterHandler(k__isInterstitialAdReady);
         bridge.deregisterHandler(k__showInterstitialAd);
-        bridge.deregisterHandler(k__isRewardedVideoReady);
         bridge.deregisterHandler(k__showRewardedVideo);
     }
 
@@ -156,7 +146,7 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void failedToReceiveAd(int errorCode) {
                 _logger.info("failedToReceiveAd: code " + errorCode);
-                sendResultCode(0);
+                sendResult(true);
             }
         };
 
@@ -164,31 +154,31 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void userRewardVerified(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userRewardVerified");
-                sendResultCode(2);
+                sendResult(false);
             }
 
             @Override
             public void userOverQuota(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userOverQuota");
-                sendResultCode(1);
+                sendResult(false);
             }
 
             @Override
             public void userRewardRejected(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userRewardRejected");
-                sendResultCode(1);
+                sendResult(false);
             }
 
             @Override
             public void validationRequestFailed(AppLovinAd ad, int responseCode) {
                 _logger.info("validationRequestFailed: code = " + responseCode);
-                sendResultCode(1);
+                sendResult(false);
             }
 
             @Override
             public void userDeclinedToViewAd(AppLovinAd ad) {
                 _logger.info("userDeclinedToViewAd");
-                sendResultCode(1);
+                sendResult(false);
             }
         };
 
@@ -201,7 +191,6 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void adHidden(AppLovinAd ad) {
                 _logger.info("adHidden");
-                // FIXME: should be called manually.
                 loadRewardedVideo();
             }
         };
@@ -244,9 +233,9 @@ public class AppLovin implements PluginProtocol {
         return true;
     }
 
-    private void sendResultCode(int code) {
+    private void sendResult(boolean result) {
         Map<String, Object> dict = new HashMap<>();
-        dict.put("code", code);
+        dict.put("result", result);
 
         MessageBridge bridge = MessageBridge.getInstance();
         bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));

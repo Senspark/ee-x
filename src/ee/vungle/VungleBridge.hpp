@@ -1,8 +1,6 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
-#include <vector>
-
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
@@ -15,10 +13,6 @@ public:
     virtual ~Vungle() override;
 
     void initialize(const std::string& gameId);
-
-    /// @see Super.
-    virtual bool
-    isRewardedVideoReady(const std::string& placementId) const override;
 
     /// @see Super.
     virtual bool showRewardedVideo(const std::string& placementId) override;

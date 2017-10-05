@@ -4,8 +4,8 @@
 
 - (void)initialize:(NSString* _Nonnull)gameId;
 
-- (BOOL)isAdReady;
+- (BOOL)isRewardedVideoReady;
 
-- (BOOL)showAds;
+- (BOOL)showRewardedVideo;
 
 @end

@@ -20,10 +20,9 @@ import java.util.Map;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Vungle implements PluginProtocol {
-    private static final String k__initialize           = "Vungle_initialize";
-    private static final String k__isRewardedVideoReady = "Vungle_isRewardedVideoReady";
-    private static final String k__showRewardedVideo    = "Vungle_showRewardedVideo";
-    private static final String k__cppCallback          = "Vungle_cppCallback";
+    private static final String k__initialize        = "Vungle_initialize";
+    private static final String k__showRewardedVideo = "Vungle_showRewardedVideo";
+    private static final String k__cppCallback       = "Vungle_cppCallback";
 
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
@@ -97,16 +96,7 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return isAdsReady() ? "true" : "false";
-            }
-        }, k__isRewardedVideoReady);
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return showAds() ? "true" : "false";
+                return showRewardedVideo() ? "true" : "false";
             }
         }, k__showRewardedVideo);
     }
@@ -115,7 +105,6 @@ public class Vungle implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__isRewardedVideoReady);
         bridge.deregisterHandler(k__showRewardedVideo);
     }
 
@@ -140,11 +129,8 @@ public class Vungle implements PluginProtocol {
                              wasCallToActionClicked);
 
                 Map<String, Object> dict = new HashMap<>();
-                if (wasSuccessfulView) {
-                    dict.put("code", 2);
-                } else {
-                    dict.put("code", 1);
-                }
+                dict.put("result", wasSuccessfulView);
+
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
             }
@@ -167,14 +153,17 @@ public class Vungle implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showAds() {
-        _playAdSuccessfully = true;
-        VunglePub.getInstance().playAd();
-        return _playAdSuccessfully;
+    public boolean isRewardedVideoReady() {
+        return VunglePub.getInstance().isAdPlayable();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isAdsReady() {
-        return VunglePub.getInstance().isAdPlayable();
+    public boolean showRewardedVideo() {
+        if (!isRewardedVideoReady()) {
+            return false;
+        }
+        _playAdSuccessfully = true;
+        VunglePub.getInstance().playAd();
+        return _playAdSuccessfully;
     }
 }

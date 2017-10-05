@@ -24,7 +24,6 @@
 
 // clang-format off
 NSString* const k__initialize            = @"Vungle_initialize";
-NSString* const k__isRewardedVideoReady  = @"Vungle_isRewardedVideoReady";
 NSString* const k__showRewardedVideo     = @"Vungle_showRewardedVideo";
 NSString* const k__cppCallback           = @"Vungle_cppCallback";
 // clang-format on
@@ -56,14 +55,9 @@ NSString* const k__cppCallback           = @"Vungle_cppCallback";
                        return @"";
                    }];
 
-    [bridge registerHandler:k__isRewardedVideoReady
-                   callback:^(NSString* message) {
-                       return [self isAdReady] ? @"true" : @"false";
-                   }];
-
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
-                       return [self showAds] ? @"true" : @"false";
+                       return [self showRewardedVideo] ? @"true" : @"false";
                    }];
 }
 
@@ -71,7 +65,6 @@ NSString* const k__cppCallback           = @"Vungle_cppCallback";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__initialize];
-    [bridge deregisterHandler:k__isRewardedVideoReady];
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
@@ -88,7 +81,7 @@ NSString* const k__cppCallback           = @"Vungle_cppCallback";
     [sdk setDelegate:self];
 }
 
-- (BOOL)isAdReady:(NSString*)placementId {
+- (BOOL)isRewardedVideoReady:(NSString*)placementId {
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
     return [sdk isAdPlayable];
@@ -97,7 +90,10 @@ NSString* const k__cppCallback           = @"Vungle_cppCallback";
 #endif // EE_VUNGLE_VERSION_4
 }
 
-- (BOOL)showAds:(NSString*)placementId {
+- (BOOL)showRewardedVideo:(NSString*)placementId {
+    if (![self isRewardedVideoReady:placementId]) {
+        return NO;
+    }
     UIViewController* view = [EEUtils getCurrentRootViewController];
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
@@ -111,11 +107,8 @@ NSString* const k__cppCallback           = @"Vungle_cppCallback";
 - (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary*)viewInfo {
     NSLog(@"%s: info = %@", __PRETTY_FUNCTION__, viewInfo);
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    if ([viewInfo[@"completedView"] boolValue]) {
-        [dict setValue:@(2) forKey:@"code"];
-    } else {
-        [dict setValue:@(1) forKey:@"code"];
-    }
+    BOOL result = [viewInfo[@"completedView"] boolValue];
+    [dict setValue:@(result) forKey:@"result"];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__cppCallback

@@ -24,7 +24,6 @@
 NSString* const k__initialize               = @"AppLovin_initialize";
 NSString* const k__isInterstitialAdReady    = @"AppLovin_isInterstitialAdReady";
 NSString* const k__showInterstitialAd       = @"AppLovin_showInterstitialAd";
-NSString* const k__isRewardedVideoReady     = @"AppLovin_isRewardedVideoReady";
 NSString* const k__showRewardedVideo        = @"AppLovin_showRewardedVideo";
 NSString* const k__cppCallback              = @"AppLovin_cppCallback";
 // clang-format on
@@ -64,11 +63,6 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
                        return [self showInterstitial] ? @"true" : @"false";
                    }];
 
-    [bridge registerHandler:k__isRewardedVideoReady
-                   callback:^(NSString* message) {
-                       return [self isRewardVideoReady] ? @"true" : @"false";
-                   }];
-
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
                        return [self showRewardVideo] ? @"true" : @"false";
@@ -81,7 +75,6 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
     [bridge deregisterHandler:k__initialize];
     [bridge deregisterHandler:k__isInterstitialAdReady];
     [bridge deregisterHandler:k__showInterstitialAd];
-    [bridge deregisterHandler:k__isRewardedVideoReady];
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
@@ -120,9 +113,9 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
     return YES;
 }
 
-- (void)sendResultCode:(int)code {
+- (void)sendResult:(BOOL)result {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    [dict setValue:@(code) forKey:@"code"];
+    [dict setValue:@(result) forKey:@"result"];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__cppCallback
@@ -135,7 +128,6 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
 
 - (void)adService:(ALAdService*)adService didFailToLoadAdWithError:(int)code {
     NSLog(@"%s: code = %d", __PRETTY_FUNCTION__, code);
-    [self sendResultCode:0];
 }
 
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
@@ -148,37 +140,36 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
 
 - (void)ad:(ALAd*)ad wasHiddenIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    // FIXME: have to preload manually.
     [self loadRewardedVideo];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
               didSucceedWithResponse:(NSDictionary*)response {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self sendResultCode:2];
+    [self sendResult:YES];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
           didExceedQuotaWithResponse:(NSDictionary*)response {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self sendResultCode:1];
+    [self sendResult:NO];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
              wasRejectedWithResponse:(NSDictionary*)response {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self sendResultCode:1];
+    [self sendResult:NO];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
                     didFailWithError:(NSInteger)responseCode {
     NSLog(@"%s: code = %ld", __PRETTY_FUNCTION__, responseCode);
-    [self sendResultCode:1];
+    [self sendResult:NO];
 }
 
 - (void)userDeclinedToViewAd:(ALAd*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self sendResultCode:1];
+    [self sendResult:NO];
 }
 
 @end

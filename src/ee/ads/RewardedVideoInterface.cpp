@@ -22,10 +22,10 @@ void Self::setRewardedVideoCallback(const RewardedVideoCallback& callback) {
     callback_ = callback;
 }
 
-void Self::invokeRewardedVideoCallback(RewardedVideoResult result,
+void Self::invokeRewardedVideoCallback(bool successful,
                                        const std::string& placementId) {
     if (callback_) {
-        callback_(result, placementId);
+        callback_(successful, placementId);
     }
 }
 } // namespace ads

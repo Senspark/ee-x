@@ -20,7 +20,6 @@ namespace {
 constexpr auto k__initialize            = "AppLovin_initialize";
 constexpr auto k__isInterstitialAdReady = "AppLovin_isInterstitialAdReady";
 constexpr auto k__showInterstitialAd    = "AppLovin_showInterstitialAd";
-constexpr auto k__isRewardedVideoReady  = "AppLovin_isRewardedVideoReady";
 constexpr auto k__showRewardedVideo     = "AppLovin_showRewardedVideo";
 constexpr auto k__cppCallback           = "AppLovin_cppCallback";
 // clang-format on
@@ -33,9 +32,8 @@ Self::AppLovin() {
     bridge.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
-            auto code =
-                static_cast<RewardedVideoResult>(json["code"].get<int>());
-            invokeRewardedVideoCallback(code, DefaultPlacementId);
+            auto result = json["result"].get<bool>();
+            invokeRewardedVideoCallback(result, DefaultPlacementId);
             return "";
         },
         k__initialize);
@@ -60,15 +58,6 @@ bool Self::isInterstitialAdReady() const {
 bool Self::showInterstitialAd() {
     auto&& bridge = core::MessageBridge::getInstance();
     auto result = bridge.call(k__showInterstitialAd);
-    return result == "true";
-}
-
-bool Self::isRewardedVideoReady(const std::string& placementId) const {
-    if (placementId != DefaultPlacementId) {
-        return false;
-    }
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__isRewardedVideoReady);
     return result == "true";
 }
 

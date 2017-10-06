@@ -5,8 +5,10 @@ target 'ee_x_test_mobile' do
     pod 'ee-x/notification',    :git => ee_x_path
     pod 'ee-x/firebase',        :git => ee_x_path
     pod 'ee-x/facebook-ads',    :git => ee_x_path
+    pod 'ee-x/applovin'         :git => ee_x_path
+    pod 'ee-x/ironsource',      :git => ee_x_path
     pod 'ee-x/unity-ads',       :git => ee_x_path
-    pod 'ee-x/ironsrc',         :git => ee_x_path
+    pod 'ee-x/vungle',          :git => ee_x_path
     
     # Fix Invalid bitcode version (Producer: '802.0.42.0_0' Reader: '800.0.42.1_0').
     # Use Xcode 8.3 to fix this.

@@ -31,7 +31,7 @@
 /// Calls a handler from Objective-C with a message.
 /// @warning This method should not be called manually.
 /// @param tag The tag of the handler.
-/// @param msg The message.
+/// @param message The message.
 /// @return Reply message from Objective-C.
 - (NSString* _Nonnull)call:(NSString* _Nonnull)tag
                    message:(NSString* _Nonnull)message;
@@ -55,9 +55,9 @@
 namespace ee {
 namespace core {
 std::string MessageBridge::call(const std::string& tag,
-                                const std::string& msg) {
-    NSString* result =
-        [[EEMessageBridge getInstance] call:@(tag.c_str()) msg:@(msg.c_str())];
+                                const std::string& message) {
+    NSString* result = [[EEMessageBridge getInstance] call:@(tag.c_str())
+                                                   message:@(message.c_str())];
     return [result UTF8String];
 }
 } // namespace core

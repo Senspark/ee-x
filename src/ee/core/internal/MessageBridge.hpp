@@ -30,16 +30,16 @@ public:
 
     /// Calls a handler from other platforms with a message.
     /// @param tag The unique tag of the handler.
-    /// @param msg The message.
+    /// @param message The message.
     /// @return Reply message from other platforms.
-    std::string call(const std::string& tag, const std::string& msg);
+    std::string call(const std::string& tag, const std::string& message);
 
     /// Calls a handler from C++ with a message.
     /// @warning This method should not be called manually.
     /// @param tag The unique tag of the handler.
-    /// @param msg The message.
+    /// @param message The message.
     /// @return Reply message from C++.
-    std::string callCpp(const std::string& tag, const std::string& msg);
+    std::string callCpp(const std::string& tag, const std::string& message);
 
     /// Registers a handler to receive messages from other platforms.
     /// @param handler The handler to handle the message.

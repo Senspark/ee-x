@@ -45,7 +45,7 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 
 /// Calls a handler from C++ with a message.
 /// @param tag The unique tag of the handler.
-/// @param msg The message.
+/// @param message The message.
 /// @return Reply message from C++.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
                       message:(NSString* _Nonnull)message;

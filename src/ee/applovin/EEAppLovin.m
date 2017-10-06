@@ -48,7 +48,7 @@ NSString* const k__cppCallback              = @"AppLovin_cppCallback";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:k__initialize
-                   callback:^(NSString* msg) {
+                   callback:^(NSString* message) {
                        [self initialize];
                        return @"";
                    }];

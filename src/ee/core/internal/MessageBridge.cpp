@@ -18,25 +18,23 @@ MessageBridge& MessageBridge::getInstance() {
     return sharedInstance;
 }
 
-MessageBridge::MessageBridge() {
-}
+MessageBridge::MessageBridge() {}
 
-MessageBridge::~MessageBridge() {
-}
+MessageBridge::~MessageBridge() {}
 
 std::string MessageBridge::call(const std::string& tag) {
     return call(tag, "");
 }
 
 std::string MessageBridge::callCpp(const std::string& tag,
-                                   const std::string& msg) {
+                                   const std::string& message) {
     std::lock_guard<SpinLock> guard(handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
         assert(false);
         return "";
     }
-    return iter->second(msg);
+    return iter->second(message);
 }
 
 bool MessageBridge::registerHandler(const MessageHandler& handler,

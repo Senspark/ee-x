@@ -82,6 +82,10 @@
 		6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688651F863C7D00AE2D93 /* EEIronSource.m */; };
 		6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */; };
 		6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */; };
+		6F426C991F872F84009E202A /* Metrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C971F872F84009E202A /* Metrics.cpp */; };
+		6F426C9A1F872F84009E202A /* Metrics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C981F872F84009E202A /* Metrics.hpp */; };
+		6F426C9D1F873568009E202A /* EEMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C9B1F873568009E202A /* EEMetrics.m */; };
+		6F426C9E1F873568009E202A /* EEMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C9C1F873568009E202A /* EEMetrics.h */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -460,6 +464,10 @@
 		6F3688651F863C7D00AE2D93 /* EEIronSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSource.m; path = ironsource/EEIronSource.m; sourceTree = "<group>"; };
 		6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceBridge.cpp; path = ironsource/IronSourceBridge.cpp; sourceTree = "<group>"; };
 		6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceBridge.hpp; path = ironsource/IronSourceBridge.hpp; sourceTree = "<group>"; };
+		6F426C971F872F84009E202A /* Metrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Metrics.cpp; sourceTree = "<group>"; };
+		6F426C981F872F84009E202A /* Metrics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Metrics.hpp; sourceTree = "<group>"; };
+		6F426C9B1F873568009E202A /* EEMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMetrics.m; sourceTree = "<group>"; };
+		6F426C9C1F873568009E202A /* EEMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMetrics.h; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -841,6 +849,10 @@
 				6F43A23A1EC19F3100C68152 /* LogLevel.hpp */,
 				6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */,
 				6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */,
+				6F426C971F872F84009E202A /* Metrics.cpp */,
+				6F426C981F872F84009E202A /* Metrics.hpp */,
+				6F426C9B1F873568009E202A /* EEMetrics.m */,
+				6F426C9C1F873568009E202A /* EEMetrics.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1060,8 +1072,10 @@
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
+				6F426C9E1F873568009E202A /* EEMetrics.h in Headers */,
 				6F43A2C11EC1A18900C68152 /* EEMessageBridge.h in Headers */,
 				6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */,
+				6F426C9A1F872F84009E202A /* Metrics.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
 				6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
@@ -1893,8 +1907,10 @@
 				6F43A2C81EC1A18900C68152 /* Logger.cpp in Sources */,
 				6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */,
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
+				6F426C9D1F873568009E202A /* EEMetrics.m in Sources */,
 				6F43A2CA1EC1A18900C68152 /* Logger_iOS.mm in Sources */,
 				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
+				6F426C991F872F84009E202A /* Metrics.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

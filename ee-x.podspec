@@ -41,7 +41,9 @@ Pod::Spec.new do |spec|
       'src/ee/Core.hpp',
       'src/ee/core/Logger.hpp',
       'src/ee/core/LogLevel.hpp',
-      'src/ee/core/EEPluginManager.h'
+      'src/ee/core/EEPluginManager.h',
+      'src/ee/core/Metrics.hpp'
+      'src/ee/core/EEMetrics.h'
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'

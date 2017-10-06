@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
@@ -18,22 +17,20 @@ import com.unity3d.ads.UnityAds.UnityAdsError;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UnityAds implements PluginProtocol, IUnityAdsListener {
-    private static final String k__unityads_initUnityAds = "k__unityads_initUnityAds";
-    private static final String k__unityads_isAdsReady   = "k__unityads_isAdsReady";
-    private static final String k__unityads_showAds      = "k__unityads_showAds";
+public class UnityAds implements PluginProtocol {
+    private static final String k__initialize        = "UnityAds_initialize";
+    private static final String k__cppCallback       = "UnityAds_cppCallback";
+    private static final String k__showRewardedVideo = "UnityAds_showRewardedVideo";
 
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
-    private Activity          _context;
-    private IUnityAdsListener _listener;
+    private Activity _context;
+    private boolean  _playAdSuccessfully;
 
     public UnityAds(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
-        _listener = this;
         registerHandlers();
-
         _logger.debug("constructor end.");
     }
 
@@ -78,108 +75,85 @@ public class UnityAds implements PluginProtocol, IUnityAdsListener {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String gameId = (String) dict.get("GameID");
-
-                initUnityAds(gameId);
-                return DictionaryUtils.emptyResult();
+            public String handle(@NonNull String message) {
+                String gameId = message;
+                initialize(gameId);
+                return "";
             }
-        }, k__unityads_initUnityAds);
+        }, k__initialize);
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String placementId = (String) dict.get("PlacementID");
-
-                showAds(placementId);
-                return DictionaryUtils.emptyResult();
+            public String handle(@NonNull String message) {
+                String placementId = message;
+                return (showRewardedVideo(placementId)) ? "true" : "false";
             }
-        }, k__unityads_showAds);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String placementId = (String) dict.get("PlacementID");
-                return (isAdsReady(placementId)) ? "true" : "false";
-            }
-        }, k__unityads_isAdsReady);
+        }, k__showRewardedVideo);
     }
 
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__unityads_initUnityAds);
-        bridge.deregisterHandler(k__unityads_showAds);
-        bridge.deregisterHandler(k__unityads_isAdsReady);
+        bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__showRewardedVideo);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initUnityAds(final @NonNull String gameId) {
-        com.unity3d.ads.UnityAds.initialize(_context, gameId, _listener);
+    public void initialize(final @NonNull String gameId) {
+        com.unity3d.ads.UnityAds.initialize(_context, gameId, new IUnityAdsListener() {
+            @Override
+            public void onUnityAdsReady(String placementId) {
+                _logger.info("onUnityAdsReady: " + placementId);
+            }
+
+            @Override
+            public void onUnityAdsStart(String placementId) {
+                _logger.info("onUnityAdsStart: " + placementId);
+            }
+
+            @Override
+            public void onUnityAdsFinish(String placementId, FinishState finishState) {
+                _logger.info("onUnityAdsFinish: " + placementId + " state = " + finishState);
+
+                Map<String, Object> dict = new HashMap<>();
+                if (finishState == FinishState.COMPLETED) {
+                    dict.put("result", true);
+                } else {
+                    dict.put("result", false);
+                }
+                dict.put("placementId", placementId);
+
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
+            }
+
+            @Override
+            public void onUnityAdsError(UnityAdsError unityAdsError, String s) {
+                _logger.info("onUnityAdsError: " + s + " error = " + unityAdsError);
+                _playAdSuccessfully = false;
+            }
+        });
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void showAds(final @NonNull String placementId) {
-        com.unity3d.ads.UnityAds.show(_context, placementId);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean isAdsReady(final @NonNull String placementId) {
+    public boolean isRewardedVideoReady(final @NonNull String placementId) {
         return com.unity3d.ads.UnityAds.isReady(placementId);
     }
 
-    @Override
-    public void onUnityAdsReady(String s) {
-        _logger.debug("onUnityAdsReady: " + s);
-    }
-
-    @Override
-    public void onUnityAdsStart(String s) {
-        _logger.debug("onUnityAdsStart: " + s);
-    }
-
-    @Override
-    public void onUnityAdsFinish(String s, FinishState finishState) {
-        _logger.debug("onUnityAdsFinish: " + s + " state = " + finishState);
-
-        Map<com.unity3d.ads.UnityAds.FinishState, Integer> states = new HashMap<>();
-        states.put(com.unity3d.ads.UnityAds.FinishState.ERROR, 0);
-        states.put(com.unity3d.ads.UnityAds.FinishState.SKIPPED, 1);
-        states.put(com.unity3d.ads.UnityAds.FinishState.COMPLETED, 2);
-        int code = states.get(finishState);
-
-        Map<String, Object> dict = new HashMap<>();
-        dict.put("code", code);
-        dict.put("placement", s);
-
-        MessageBridge
-            .getInstance()
-            .callCpp("__UnityAds_callback", JsonUtils.convertDictionaryToString(dict));
-    }
-
-    @Override
-    public void onUnityAdsError(UnityAdsError unityAdsError, String s) {
-        _logger.debug("onUnityAdsError: " + s + " error = " + unityAdsError);
-
-        Map<String, Object> dict = new HashMap<>();
-        dict.put("code", 0);
-        dict.put("placement", s);
-
-        MessageBridge
-            .getInstance()
-            .callCpp("__UnityAds_callback", JsonUtils.convertDictionaryToString(dict));
+    @SuppressWarnings("WeakerAccess")
+    public boolean showRewardedVideo(final @NonNull String placementId) {
+        _logger.info("showRewardedVideo: begin");
+        if (!isRewardedVideoReady(placementId)) {
+            return false;
+        }
+        _playAdSuccessfully = true;
+        com.unity3d.ads.UnityAds.show(_context, placementId);
+        _logger.info("showRewardedVideo: end");
+        return _playAdSuccessfully;
     }
 }

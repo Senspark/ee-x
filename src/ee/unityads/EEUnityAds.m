@@ -7,23 +7,26 @@
 //
 
 #import "ee/unityads/EEUnityAds.h"
-
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEUtils.h"
 
 #import <UnityAds/UnityAds.h>
 
 @interface EEUnityAds () <UnityAdsDelegate> {
+    BOOL playAdSuccessfully_;
 }
 
 @end
 
 @implementation EEUnityAds
 
-NSString* const k__unityads_initUnityAds = @"k__unityads_initUnityAds";
-NSString* const k__unityads_isAdsReady = @"k__unityads_isAdsReady";
-NSString* const k__unityads_showAds = @"k__unityads_showAds";
+// clang-format off
+NSString* const k__initialize           = @"UnityAds_initialize";
+NSString* const k__cppCallback          = @"UnityAds_cppCallback";
+NSString* const k__showRewardedVideo    = @"UnityAds_showRewardedVideo";
+// clang-format on
 
 - (id)init {
     self = [super init];
@@ -37,82 +40,61 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
 
 - (void)dealloc {
     [self deregisterHandlers];
+    [UnityAds setDelegate:nil];
     [super dealloc];
 }
 
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+    [bridge registerHandler:k__initialize
+                   callback:^(NSString* message) {
+                       NSString* gameId = message;
+                       [self initialize:gameId];
+                       return @"";
+                   }];
 
-        NSString* GameID = dict[@"GameID"];
-
-        [self initUnityAds:GameID];
-
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__unityads_initUnityAds];
-
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        return ([self isAdsReady:PlacementID]) ? @"true" : @"false";
-    } tag:k__unityads_isAdsReady];
-
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-
-        NSString* PlacementID = dict[@"PlacementID"];
-
-        [self showAds:PlacementID];
-
-        return [EEDictionaryUtils emptyResult];
-    } tag:k__unityads_showAds];
+    [bridge registerHandler:k__showRewardedVideo
+                   callback:^(NSString* message) {
+                       NSString* placementId = message;
+                       return [self showRewardedVideo:placementId] ? @"true"
+                                                                   : @"false";
+                   }];
 }
 
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge deregisterHandler:k__unityads_initUnityAds];
-    [bridge deregisterHandler:k__unityads_isAdsReady];
-    [bridge deregisterHandler:k__unityads_showAds];
-}
-#pragma mark ===================CODE HERE
-- (void)initUnityAds:(NSString*)gameID {
-    [UnityAds initialize:gameID delegate:self];
-    //    [UnityAds setDebugMode:YES];
-
-    _rootController =
-        [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__showRewardedVideo];
 }
 
-- (BOOL)isAdsReady:(NSString*)placementID {
-    return [UnityAds isReady:placementID];
+- (void)initialize:(NSString*)gameId {
+    [UnityAds initialize:gameId delegate:self];
+    // [UnityAds setDebugMode:YES];
 }
 
-- (void)showAds:(NSString*)placementID {
-    if ([self isAdsReady:placementID]) {
-        [UnityAds show:_rootController placementId:placementID];
+- (BOOL)isRewardedVideoReady:(NSString*)placementId {
+    return [UnityAds isReady:placementId];
+}
+
+- (BOOL)showRewardedVideo:(NSString*)placementId {
+    if (![self isRewardedVideoReady:placementId]) {
+        return NO;
     }
+    playAdSuccessfully_ = YES;
+    UIViewController* view = [EEUtils getCurrentRootViewController];
+    [UnityAds show:view placementId:placementId];
+    return playAdSuccessfully_;
 }
-#pragma mark ===================UnityAdsDelegate
+
 - (void)unityAdsReady:(NSString*)placementId {
-    NSLog(@"EEUNITY ADS   ready %@", placementId);
+    NSLog(@"%s: placementId = %@", __PRETTY_FUNCTION__, placementId);
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {
-    NSLog(@"EEUNITY ADS   error %@", message);
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-    [dict setValue:[NSNumber numberWithInteger:0] forKey:@"code"];
-    [dict setValue:message forKey:@"placement"];
-
-    NSLog(@"EEUNITY ADS   error dict %@",
-          [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance]
-        callCpp:@"__UnityAds_callback"
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
+    NSLog(@"%s: error %d message %@", __PRETTY_FUNCTION__, (int)error, message);
+    playAdSuccessfully_ = NO;
 }
 
 - (void)unityAdsDidStart:(NSString*)placementId {
@@ -120,14 +102,17 @@ NSString* const k__unityads_showAds = @"k__unityads_showAds";
 
 - (void)unityAdsDidFinish:(NSString*)placementId
           withFinishState:(UnityAdsFinishState)state {
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
-    [dict setValue:[NSNumber numberWithInteger:state] forKey:@"code"];
-    [dict setValue:placementId forKey:@"placement"];
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    if (state != kUnityAdsFinishStateCompleted) {
+        [dict setValue:@(NO) forKey:@"result"];
+    } else {
+        [dict setValue:@(YES) forKey:@"result"];
+    }
+    [dict setValue:placementId forKey:@"placementId"];
 
-    NSLog(@"EEUNITY ADS   finish dict %@",
-          [EEJsonUtils convertDictionaryToString:dict]);
-    [[EEMessageBridge getInstance]
-        callCpp:@"__UnityAds_callback"
-            msg:[EEJsonUtils convertDictionaryToString:dict]];
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__cppCallback
+            message:[EEJsonUtils convertDictionaryToString:dict]];
 }
+
 @end

@@ -13,49 +13,43 @@
 
 namespace ee {
 namespace unityads {
-UnityAds::UnityAds() {
-    callback_ = nullptr;
-    core::MessageBridge::getInstance().registerHandler(
-        std::bind(&UnityAds::doCallBack, this, std::placeholders::_1),
-        "__UnityAds_callback");
+using Self = UnityAds;
+
+namespace {
+// clang-format off
+constexpr auto k__initialize        = "UnityAds_initialize";
+constexpr auto k__cppCallback       = "UnityAds_cppCallback";
+constexpr auto k__showRewardedVideo = "UnityAds_showRewardedVideo";
+// clang-format on
+} // namespace
+
+Self::UnityAds() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            auto result = json["result"].get<bool>();
+            auto placementId = json["placementId"].get<std::string>();
+            invokeRewardedVideoCallback(result, placementId);
+            return "";
+        },
+        k__cppCallback);
 }
 
-UnityAds::~UnityAds() {
-    core::MessageBridge::getInstance().deregisterHandler("__UnityAds_callback");
+Self::~UnityAds() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.deregisterHandler(k__cppCallback);
 }
 
-std::string UnityAds::doCallBack(const std::string& msg) const {
-    if (callback_) {
-        auto json = nlohmann::json::parse(msg);
-
-        auto code = static_cast<UnityAdsResultCode>(json["code"].get<int>());
-        std::string message = json["placement"];
-
-        callback_(code, message);
-    }
-
-    return "";
+void Self::initialize(const std::string& gameId) {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.call(k__initialize, gameId);
 }
 
-void UnityAds::initUnityAds(const std::string& gameId) {
-    nlohmann::json json;
-    json["GameID"] = gameId;
-    core::MessageBridge::getInstance().call("k__unityads_initUnityAds",
-                                            json.dump());
-}
-
-bool UnityAds::isAdsReady(const std::string& placementId) {
-    nlohmann::json json;
-    json["PlacementID"] = placementId;
-    auto result = core::MessageBridge::getInstance().call(
-        "k__unityads_isAdsReady", json.dump());
+bool UnityAds::showRewardedVideo(const std::string& placementId) {
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto result = bridge.call(k__showRewardedVideo, placementId);
     return result == "true";
-}
-
-void UnityAds::showAds(const std::string& placementId) {
-    nlohmann::json json;
-    json["PlacementID"] = placementId;
-    core::MessageBridge::getInstance().call("k__unityads_showAds", json.dump());
 }
 } // namespace unityads
 } // namespace ee

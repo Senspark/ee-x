@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_UNITY_ADS_FWD_HPP_
-#define EE_X_UNITY_ADS_FWD_HPP_
+#ifndef EE_X_UNITY_ADS_FWD_HPP
+#define EE_X_UNITY_ADS_FWD_HPP
 
 namespace ee {
 namespace unityads {
@@ -17,4 +17,4 @@ class UnityAds;
 using unityads::UnityAds;
 } // namespace ee
 
-#endif /* EE_X_UNITY_ADS_FWD_HPP_ */
+#endif /* EE_X_UNITY_ADS_FWD_HPP */

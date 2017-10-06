@@ -6,37 +6,22 @@
 //
 //
 
-#ifndef EE_X_UNITY_ADS_BRIDGE_HPP_
-#define EE_X_UNITY_ADS_BRIDGE_HPP_
+#ifndef EE_X_UNITY_ADS_BRIDGE_HPP
+#define EE_X_UNITY_ADS_BRIDGE_HPP
 
-#include <functional>
-#include <memory>
-#include <string>
+#include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace unityads {
-enum class UnityAdsResultCode { ADS_ERROR, ADS_SKIPPED, ADS_DID_FINISH };
-
-class UnityAds final {
+class UnityAds final : public RewardedVideoInterface {
 public:
-    using AdCallback = std::function<void(UnityAdsResultCode code,
-                                          const std::string& message)>;
-
     UnityAds();
-    ~UnityAds();
+    virtual ~UnityAds() override;
 
-    void initUnityAds(const std::string& gameId);
+    void initialize(const std::string& gameId);
 
-    bool isAdsReady(const std::string& placementId);
-
-    void showAds(const std::string& placementId);
-
-    void setCallback(const AdCallback& callback) { callback_ = callback; }
-
-public:
-    std::string doCallBack(const std::string& msg) const;
-
-    AdCallback callback_;
+    /// @see Super.
+    virtual bool showRewardedVideo(const std::string& placementId) override;
 };
 } // namespace unityads
 } // namespace ee

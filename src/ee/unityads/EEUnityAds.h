@@ -7,17 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 @interface EEUnityAds : NSObject
 
-- (void) initUnityAds:(NSString*) gameID;
+- (void)initialize:(NSString* _Nonnull)gameId;
 
-- (BOOL) isAdsReady:(NSString*) placementID;
+- (BOOL)isRewardedVideoReady:(NSString* _Nonnull)placementId;
 
-- (void) showAds:(NSString*) placementID;
-
-
-@property(assign, nonatomic) UIViewController* rootController;
+- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId;
 
 @end

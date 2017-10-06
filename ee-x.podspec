@@ -42,7 +42,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/Logger.hpp',
       'src/ee/core/LogLevel.hpp',
       'src/ee/core/EEPluginManager.h',
-      'src/ee/core/Metrics.hpp'
+      'src/ee/core/Metrics.hpp',
       'src/ee/core/EEMetrics.h'
 
     s.xcconfig = {

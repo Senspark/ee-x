@@ -10,7 +10,7 @@
 
 @interface EEMetrics : NSObject
 
-+ (void)initialize;
++ (void)initializeMetrics;
 
 + (CGFloat)getDensity;
 

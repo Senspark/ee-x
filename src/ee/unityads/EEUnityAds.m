@@ -98,10 +98,13 @@ NSString* const k__showRewardedVideo    = @"UnityAds_showRewardedVideo";
 }
 
 - (void)unityAdsDidStart:(NSString*)placementId {
+    NSLog(@"%s: placementId = %@", __PRETTY_FUNCTION__, placementId);
 }
 
 - (void)unityAdsDidFinish:(NSString*)placementId
           withFinishState:(UnityAdsFinishState)state {
+    NSLog(@"%s: placementId = %@ state = %d", __PRETTY_FUNCTION__, placementId,
+          (int)state);
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     if (state != kUnityAdsFinishStateCompleted) {
         [dict setValue:@(NO) forKey:@"result"];

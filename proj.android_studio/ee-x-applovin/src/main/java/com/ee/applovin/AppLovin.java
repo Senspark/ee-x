@@ -224,12 +224,14 @@ public class AppLovin implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public boolean showRewardedVideo() {
+        _logger.info("showRewardedVideo: begin");
         if (!isRewardedVideoReady()) {
             loadRewardedVideo();
             return false;
         }
         _incentivizedInterstitial.show(_context, _incentivizedInterstitialAdRewardListener, null,
             _incentivizedInterstitialAdDisplayListener);
+        _logger.info("showRewardedVideo: end");
         return true;
     }
 

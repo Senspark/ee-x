@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class IronSource implements PluginProtocol, RewardedVideoListener {
+public class IronSource implements PluginProtocol {
     private static final String k__initialize        = "IronSource_initialize";
     private static final String k__cppCallback       = "IronSource_cppCallback";
     private static final String k__showRewardedVideo = "IronSource_showRewardedVideo";
@@ -110,7 +110,46 @@ public class IronSource implements PluginProtocol, RewardedVideoListener {
     public void initialize(@NonNull String gameId) {
         com.ironsource.mediationsdk.IronSource.init(_context, gameId,
             com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO);
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this);
+        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(
+            new RewardedVideoListener() {
+                @Override
+                public void onRewardedVideoAvailabilityChanged(boolean available) {
+                    _logger.info("onRewardedVideoAvailabilityChanged: " + available);
+                }
+
+                @Override
+                public void onRewardedVideoAdRewarded(Placement placement) {
+                    _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
+                    sendResult(true, placement.getPlacementName());
+                }
+
+                @Override
+                public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
+                    _logger.debug(
+                        "onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
+                    sendResult(false, _currentPlacementId);
+                }
+
+                @Override
+                public void onRewardedVideoAdOpened() {
+                    _logger.debug("onRewardedVideoAdOpened");
+                }
+
+                @Override
+                public void onRewardedVideoAdClosed() {
+                    _logger.debug("onRewardedVideoAdClosed");
+                }
+
+                @Override
+                public void onRewardedVideoAdStarted() {
+                    _logger.debug("onRewardedVideoAdStarted");
+                }
+
+                @Override
+                public void onRewardedVideoAdEnded() {
+                    _logger.debug("onRewardedVideoAdEnded");
+                }
+            });
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -120,11 +159,13 @@ public class IronSource implements PluginProtocol, RewardedVideoListener {
 
     @SuppressWarnings("WeakerAccess")
     public boolean showRewardedVideo(@NonNull String placementId) {
+        _logger.info("showRewardedVideo: begin");
         if (!isRewardedVideoReady()) {
             return false;
         }
         _currentPlacementId = placementId;
         com.ironsource.mediationsdk.IronSource.showRewardedVideo(placementId);
+        _logger.info("showRewardedVideo: end");
         return true;
     }
 
@@ -135,38 +176,5 @@ public class IronSource implements PluginProtocol, RewardedVideoListener {
 
         MessageBridge bridge = MessageBridge.getInstance();
         bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
-    }
-
-    @Override
-    public void onRewardedVideoAvailabilityChanged(boolean available) {
-        _logger.info("onRewardedVideoAvailabilityChanged: " + available);
-    }
-
-    @Override
-    public void onRewardedVideoAdRewarded(Placement placement) {
-        _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
-        sendResult(true, placement.getPlacementName());
-    }
-
-    @Override
-    public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-        _logger.debug("onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
-        sendResult(false, _currentPlacementId);
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-    }
-
-    @Override
-    public void onRewardedVideoAdStarted() {
-    }
-
-    @Override
-    public void onRewardedVideoAdEnded() {
     }
 }

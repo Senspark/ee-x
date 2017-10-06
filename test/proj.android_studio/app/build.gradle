@@ -104,7 +104,7 @@ dependencies {
     compile project(':ee-x-facebook-ads')
     compile project(':ee-x-unity-ads')
     compile project(':ee-x-vungle')
-    compile project(':ee-x-ironsrc')
+    compile project(':ee-x-ironsource')
 
     compile 'com.android.support:appcompat-v7:26.0.0'
     compile 'com.android.support:multidex:1.0.1'

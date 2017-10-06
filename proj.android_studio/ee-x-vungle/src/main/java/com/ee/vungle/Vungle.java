@@ -159,11 +159,13 @@ public class Vungle implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public boolean showRewardedVideo() {
+        _logger.info("showRewardedVideo: begin");
         if (!isRewardedVideoReady()) {
             return false;
         }
         _playAdSuccessfully = true;
         VunglePub.getInstance().playAd();
+        _logger.info("showRewardedVideo: end");
         return _playAdSuccessfully;
     }
 }

@@ -1,0 +1,3 @@
+[submodule "test/cocos2d"]
+	path = test/cocos2d
+	url = https://github.com/Senspark/cocos2d-x-3.15

@@ -7,9 +7,10 @@ EE_X_ROOT_DIR = $(LOCAL_PATH)/..
 
 include $(CLEAR_VARS)
 
-LOCAL_CPP_FEATURES := exceptions
-
 LOCAL_MODULE := ee_x_core_static
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPP_FLAGS := -std=c++1z
 
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/core -name "*.cpp" -print}
 LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/jni/cpp/ee/core -name "*.cpp" -print}
@@ -31,6 +32,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_crashlytics_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/crashlytics -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
@@ -44,9 +46,23 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_notification_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/notification -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
+#######
+# ADS #
+#######
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_ads_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/ads -name "*.cpp" -print}
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -57,9 +73,10 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_facebook_ads_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebook -name "*.cpp" -print}
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -70,22 +87,24 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_unity_ads_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/unityads -name "*.cpp" -print}
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-#############
-# IRONSRC_ADS #
-#############
+##################
+# IRONSOURCE_ADS #
+##################
 
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_MODULE := ee_x_ironsrc_static
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/ironsrc -name "*.cpp" -print}
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_ironsource_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/ironsource -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -96,9 +115,10 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_vungle_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/vungle -name "*.cpp" -print}
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -109,9 +129,10 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_applovin_static
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/alovin -name "*.cpp" -print}
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/applovin -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -121,7 +142,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPPFLAGS := -std=c++14
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_core_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/jni/cpp/ee/firebase/FirebaseApp.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
@@ -130,7 +151,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPPFLAGS := -std=c++14
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_analytics_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseAnalytics.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
@@ -139,7 +160,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPPFLAGS := -std=c++14
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_messaging_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseMessaging.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
@@ -148,7 +169,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPPFLAGS := -std=c++14
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_remote_config_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseRemoteConfig.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
@@ -157,7 +178,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPPFLAGS := -std=c++14
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_storage_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseStorage.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static

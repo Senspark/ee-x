@@ -10,30 +10,15 @@
 
 @interface EEFacebookAds : NSObject
 
-- (void)initFBAdsInterstitial:(NSString*)interstitialAdId;
-- (void)initFBAdsNativeAds:(NSString*)nativeAdId layout:(NSString*)layout;
-- (void)initFBAdsBanner:(NSString*)bannerAdId;
+- (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size;
+- (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 
-- (void)cacheRewardedAd:(NSString*)adId;
-- (void)cacheInterstitialAd:(NSString*)adId;
+- (BOOL)createNativeAd:(NSString* _Nonnull)adId
+                layout:(NSString* _Nonnull)layout;
+- (BOOL)destroyNativeAd:(NSString* _Nonnull)adId;
 
-- (void)showBannerAd:(NSString*)adsId pos:(int)pos;
-- (void)hideBannerAd;
-
-- (bool)hasInterstitialAd;
-- (bool)hasRewardedAd;
-
-- (void)showInterstitialAd;
-- (void)showRewardedAd;
-
-- (void)hideNativeAd:(NSString*)adId;
-
-- (void)showNativeAd:(NSString*)adId
-               width:(int)width
-              height:(int)height
-                   x:(int)x
-                   y:(int)y;
-
-- (void)onAdsCallback:(int)code msg:(NSString*)msg;
+- (void)cacheInterstitialAd:(NSString* _Nonnull)adId;
+- (BOOL)hasInterstitialAd;
+- (BOOL)showInterstitialAd;
 
 @end

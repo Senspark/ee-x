@@ -9,20 +9,27 @@
 #ifndef EE_X_TEST_APP_DELEGATE_HPP_
 #define EE_X_TEST_APP_DELEGATE_HPP_
 
-/// Simulates AppDelegate.
-/// Used for Travis.
-class AppDelegate {
+#include <platform/CCApplication.h>
+
+/// The cocos2d Application.
+/// Private inheritance here hides part of interface from Director.
+class AppDelegate : private cocos2d::Application {
 public:
-    static AppDelegate* getInstance();
+    AppDelegate();
+    virtual ~AppDelegate() override;
 
-    /// Simulates applicationDidFinishLaunching.
-    bool applicationDidFinishLaunching();
+    virtual void initGLContextAttrs() override;
 
-    /// Simluates applicationDidEnterBackground.
-    void applicationDidEnterBackground();
+    /// Implement Director and Scene init code here.
+    /// @return true    Initialize success, app continue.
+    /// @return false   Initialize failed, app terminate.
+    virtual bool applicationDidFinishLaunching() override;
 
-    /// Simulates applicationWillEnterForeground.
-    void applicationWillEnterForeground();
+    /// Called when the application moves to the background.
+    virtual void applicationDidEnterBackground() override;
+
+    /// Called when the application reenters the foreground.
+    virtual void applicationWillEnterForeground() override;
 };
 
 #endif /* EE_X_TEST_APP_DELEGATE_HPP_ */

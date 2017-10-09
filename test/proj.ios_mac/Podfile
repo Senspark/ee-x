@@ -9,10 +9,8 @@ target 'ee_x_test_mobile' do
     pod 'ee-x/ironsource',      :git => ee_x_path
     pod 'ee-x/unity-ads',       :git => ee_x_path
     pod 'ee-x/vungle',          :git => ee_x_path
-    
-    # Fix Invalid bitcode version (Producer: '802.0.42.0_0' Reader: '800.0.42.1_0').
-    # Use Xcode 8.3 to fix this.
-    pod 'FBAudienceNetwork', '4.20.2'
+
+    pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-3.15'
 end
 
 target 'ee_x_test_desktop' do

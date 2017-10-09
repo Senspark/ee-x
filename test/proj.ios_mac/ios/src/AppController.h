@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppController : UIResponder <UIApplicationDelegate>
+@class RootViewController;
+
+@interface AppController : NSObject <UIApplicationDelegate>
+
+@property (nonatomic, readonly) RootViewController* viewController;
 
 @end

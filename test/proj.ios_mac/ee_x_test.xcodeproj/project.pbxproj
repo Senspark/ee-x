@@ -16,6 +16,7 @@
 		6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationAgent.cpp */; };
 		6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
+		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,8 @@
 		6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppDelegate.hpp; sourceTree = "<group>"; };
 		6F25804B1ECC4E7200B910F9 /* main */ = {isa = PBXFileReference; lastKnownFileType = folder; name = main; path = ../proj.android_studio/app/src/main; sourceTree = "<group>"; };
+		6F426E1F1F8B56B2009E202A /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
+		6F426E201F8B56B2009E202A /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +85,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				46880B8319C43A87006E1F66 /* Classes */,
@@ -152,6 +155,8 @@
 				6F25802B1ECBFF8C00B910F9 /* AppController.mm */,
 				6F25802C1ECBFF8C00B910F9 /* AppController.h */,
 				6F25802E1ECBFFAE00B910F9 /* main.m */,
+				6F426E201F8B56B2009E202A /* RootViewController.h */,
+				6F426E1F1F8B56B2009E202A /* RootViewController.mm */,
 			);
 			name = src;
 			path = ios/src;
@@ -220,7 +225,8 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 3P4Y2KDTFU;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -285,7 +291,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -350,13 +356,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ee_x_test_desktop-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		87F46DAB172BF0BEB80321B9 /* [CP] Check Pods Manifest.lock */ = {
@@ -365,13 +374,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ee_x_test_mobile-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C016B096895296658D09BD50 /* [CP] Copy Pods Resources */ = {
@@ -415,6 +427,7 @@
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
+				6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */,
 				6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,11 +449,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D2ED7E810414428AC01BFBD /* Pods-ee_x_test_mobile.debug.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3P4Y2KDTFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.mobile;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -451,10 +466,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BC44458B9751F576980C8B9D /* Pods-ee_x_test_mobile.release.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEVELOPMENT_TEAM = 3P4Y2KDTFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.mobile;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 
 int main(int argc, char* argv[]) {
-    int val = 0;
     @autoreleasepool {
-        val = UIApplicationMain(argc, argv, nil, @"AppController");
+        return UIApplicationMain(argc, argv, nil, @"AppController");
     }
-    return val;
 }

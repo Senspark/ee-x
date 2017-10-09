@@ -1,7 +1,7 @@
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
-#include <nlohmann/json.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace ironsource {

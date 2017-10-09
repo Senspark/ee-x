@@ -9,7 +9,7 @@
 #include "ee/applovin/AppLovinBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
-#include <nlohmann/json.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace applovin {

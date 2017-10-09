@@ -1,30 +1,48 @@
 [![JSON for Modern C++](https://raw.githubusercontent.com/nlohmann/json/master/doc/json.gif)](https://github.com/nlohmann/json/releases)
 
 [![Build Status](https://travis-ci.org/nlohmann/json.svg?branch=master)](https://travis-ci.org/nlohmann/json)
-[![Build Status](https://ci.appveyor.com/api/projects/status/1acb366xfyg3qybk?svg=true)](https://ci.appveyor.com/project/nlohmann/json)
+[![Build Status](https://ci.appveyor.com/api/projects/status/1acb366xfyg3qybk/branch/develop?svg=true)](https://ci.appveyor.com/project/nlohmann/json)
+[![Build status](https://doozer.io/badge/nlohmann/json/buildstatus/develop)](https://doozer.io/user/nlohmann/json)
 [![Coverage Status](https://img.shields.io/coveralls/nlohmann/json.svg)](https://coveralls.io/r/nlohmann/json)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/5550/badge.svg)](https://scan.coverity.com/projects/nlohmann-json)
-[![Try online](https://img.shields.io/badge/try-online-blue.svg)](http://melpon.org/wandbox/permlink/wuiuqYiYqRTdI3rG)
+[![Try online](https://img.shields.io/badge/try-online-blue.svg)](http://melpon.org/wandbox/permlink/IoZNMHqubixQx2dN)
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://nlohmann.github.io/json)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/nlohmann/json/master/LICENSE.MIT)
 [![Github Releases](https://img.shields.io/github/release/nlohmann/json.svg)](https://github.com/nlohmann/json/releases)
 [![Github Issues](https://img.shields.io/github/issues/nlohmann/json.svg)](http://github.com/nlohmann/json/issues)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/289/badge)](https://bestpractices.coreinfrastructure.org/projects/289)
+
+- [Design goals](#design-goals)
+- [Integration](#integration)
+- [Examples](#examples)
+  - [JSON as first-class data type](#json-as-first-class-data-type)
+  - [Serialization / Deserialization](#serialization--deserialization)
+  - [STL-like access](#stl-like-access)
+  - [Conversion from STL containers](#conversion-from-stl-containers)
+  - [JSON Pointer and JSON Patch](#json-pointer-and-json-patch)
+  - [Implicit conversions](#implicit-conversions)
+  - [Binary formats (CBOR and MessagePack)](#binary-formats-cbor-and-messagepack)
+- [Supported compilers](#supported-compilers)
+- [License](#license)
+- [Thanks](#thanks)
+- [Notes](#notes)
+- [Execute unit tests](#execute-unit-tests)
 
 ## Design goals
 
 There are myriads of [JSON](http://json.org) libraries out there, and each may even have its reason to exist. Our class had these design goals:
 
-- **Intuitive syntax**. In languages such as Python, JSON feels like a first class data type. We used all the operator magic of modern C++ to achieve the same feeling in your code. Check out the [examples below](#examples) and you know, what I mean.
+- **Intuitive syntax**. In languages such as Python, JSON feels like a first class data type. We used all the operator magic of modern C++ to achieve the same feeling in your code. Check out the [examples below](#examples) and you'll know what I mean.
 
 - **Trivial integration**. Our whole code consists of a single header file [`json.hpp`](https://github.com/nlohmann/json/blob/develop/src/json.hpp). That's it. No library, no subproject, no dependencies, no complex build system. The class is written in vanilla C++11. All in all, everything should require no adjustment of your compiler flags or project settings.
 
-- **Serious testing**. Our class is heavily [unit-tested](https://github.com/nlohmann/json/blob/master/test/src/unit.cpp) and covers [100%](https://coveralls.io/r/nlohmann/json) of the code, including all exceptional behavior. Furthermore, we checked with [Valgrind](http://valgrind.org) that there are no memory leaks.
+- **Serious testing**. Our class is heavily [unit-tested](https://github.com/nlohmann/json/blob/master/test/src/unit.cpp) and covers [100%](https://coveralls.io/r/nlohmann/json) of the code, including all exceptional behavior. Furthermore, we checked with [Valgrind](http://valgrind.org) that there are no memory leaks. To maintain high quality, the project is following the [Core Infrastructure Initiative (CII) best practices](https://bestpractices.coreinfrastructure.org/projects/289).
 
 Other aspects were not so important to us:
 
 - **Memory efficiency**. Each JSON object has an overhead of one pointer (the maximal size of a union) and one enumeration element (1 byte). The default generalization uses the following C++ data types: `std::string` for strings, `int64_t`, `uint64_t` or `double` for numbers, `std::map` for objects, `std::vector` for arrays, and `bool` for Booleans. However, you can template the generalized class `basic_json` to your needs.
 
-- **Speed**. We currently implement the parser as naive [recursive descent parser](http://en.wikipedia.org/wiki/Recursive_descent_parser) with hand coded string handling. It is fast enough, but a [LALR-parser](http://en.wikipedia.org/wiki/LALR_parser) with a decent regular expression processor should be even faster (but would consist of more files which makes the integration harder).
+- **Speed**. There are certainly [faster JSON libraries](https://github.com/miloyip/nativejson-benchmark#parsing-time) out there. However, if your goal is to speed up your development by adding JSON support with a single header, then this library is the way to go. If you know how to use a `std::vector` or `std::map`, you are already set.
 
 See the [contribution guidelines](https://github.com/nlohmann/json/blob/master/.github/CONTRIBUTING.md#please-dont) for more information.
 
@@ -46,6 +64,10 @@ to the files you want to use JSON objects. That's it. Do not forget to set the n
 
 
 ## Examples
+
+Beside the examples below, you may want to check the [documentation](https://nlohmann.github.io/json/) where each function contains a separate code example (e.g., check out [`emplace()`](https://nlohmann.github.io/json/classnlohmann_1_1basic__json_a602f275f0359ab181221384989810604.html#a602f275f0359ab181221384989810604)). All [example files](https://github.com/nlohmann/json/tree/develop/doc/examples) can be compiled and executed on their own (e.g., file [emplace.cpp](https://github.com/nlohmann/json/blob/develop/doc/examples/emplace.cpp)).
+
+### JSON as first-class data type
 
 Here are some examples to give you an idea how to use the class.
 
@@ -129,6 +151,8 @@ json array_not_object = { json::array({"currency", "USD"}), json::array({"value"
 
 ### Serialization / Deserialization
 
+#### To/from strings
+
 You can create an object (deserialization) by appending `_json` to a string literal:
 
 ```cpp
@@ -162,6 +186,8 @@ std::cout << j.dump(4) << std::endl;
 // }
 ```
 
+#### To/from streams (e.g. files, string streams)
+
 You can also use streams to serialize and deserialize:
 
 ```cpp
@@ -176,9 +202,36 @@ std::cout << j;
 std::cout << std::setw(4) << j << std::endl;
 ```
 
-These operators work for any subclasses of `std::istream` or `std::ostream`.
+These operators work for any subclasses of `std::istream` or `std::ostream`. Here is the same example with files:
+
+```cpp
+// read a JSON file
+std::ifstream i("file.json");
+json j;
+i >> j;
+
+// write prettified JSON to another file
+std::ofstream o("pretty.json");
+o << std::setw(4) << j << std::endl;
+```
 
 Please note that setting the exception bit for `failbit` is inappropriate for this use case. It will result in program termination due to the `noexcept` specifier in use.
+
+#### Read from iterator range
+
+You can also read JSON from an iterator range; that is, from any container accessible by iterators whose content is stored as contiguous byte sequence, for instance a `std::vector<uint8_t>`:
+
+```cpp
+std::vector<uint8_t> v = {'t', 'r', 'u', 'e'};
+json j = json::parse(v.begin(), v.end());
+```
+
+You may leave the iterators for the range [begin, end):
+
+```cpp
+std::vector<uint8_t> v = {'t', 'r', 'u', 'e'};
+json j = json::parse(v);
+```
 
 
 ### STL-like access
@@ -191,6 +244,9 @@ json j;
 j.push_back("foo");
 j.push_back(1);
 j.push_back(true);
+
+// also use emplace_back
+j.emplace_back(1.78);
 
 // iterate the array
 for (json::iterator it = j.begin(); it != j.end(); ++it) {
@@ -229,6 +285,9 @@ json o;
 o["foo"] = 23;
 o["bar"] = false;
 o["baz"] = 3.141;
+
+// also use emplace
+o.emplace("weather", "sunny");
 
 // special iterator member functions for objects
 for (json::iterator it = o.begin(); it != o.end(); ++it) {
@@ -283,8 +342,8 @@ json j_uset(c_uset); // only one entry for "one" is used
 // maybe ["two", "three", "four", "one"]
 
 std::multiset<std::string> c_mset {"one", "two", "one", "four"};
-json j_mset(c_mset); // only one entry for "one" is used
-// maybe ["one", "two", "four"]
+json j_mset(c_mset); // both entries for "one" are used
+// maybe ["one", "two", "one", "four"]
 
 std::unordered_multiset<std::string> c_umset {"one", "two", "one", "four"};
 json j_umset(c_umset); // both entries for "one" are used
@@ -344,8 +403,8 @@ json j_result = j_original.patch(j_patch);
 json::diff(j_result, j_original);
 // [
 //   { "op":" replace", "path": "/baz", "value": ["one", "two", "three"] },
-//   { "op":"remove","path":"/hello" },
-//   { "op":"add","path":"/foo","value":"bar" }
+//   { "op": "remove","path": "/hello" },
+//   { "op": "add", "path": "/foo", "value": "bar" }
 // ]
 ```
 
@@ -383,6 +442,31 @@ int vi = jn.get<int>();
 // etc.
 ```
 
+### Binary formats (CBOR and MessagePack)
+
+Though JSON is a ubiquitous data format, it is not a very compact format suitable for data exchange, for instance over a network. Hence, the library supports [CBOR](http://cbor.io) (Concise Binary Object Representation) and [MessagePack](http://msgpack.org) to efficiently encode JSON values to byte vectors and to decode such vectors.
+
+```cpp
+// create a JSON value
+json j = R"({"compact": true, "schema": 0})"_json;
+
+// serialize to CBOR
+std::vector<uint8_t> v_cbor = json::to_cbor(j);
+
+// 0xa2, 0x67, 0x63, 0x6f, 0x6d, 0x70, 0x61, 0x63, 0x74, 0xf5, 0x66, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x00
+
+// roundtrip
+json j_from_cbor = json::from_cbor(v_cbor);
+
+// serialize to MessagePack
+std::vector<uint8_t> v_msgpack = json::to_msgpack(j);
+
+// 0x82, 0xa7, 0x63, 0x6f, 0x6d, 0x70, 0x61, 0x63, 0x74, 0xc3, 0xa6, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x00
+
+// roundtrip
+json j_from_msgpack = json::from_msgpack(v_msgpack);
+```
+
 
 ## Supported compilers
 
@@ -416,15 +500,18 @@ The following compilers are currently used in continuous integration at [Travis]
 | GCC 4.9.3       | Ubuntu 14.04.4 LTS           | g++-4.9 (Ubuntu 4.9.3-8ubuntu2~14.04) 4.9.3 |
 | GCC 5.3.0       | Ubuntu 14.04.4 LTS           | g++-5 (Ubuntu 5.3.0-3ubuntu1~14.04) 5.3.0 20151204 |
 | GCC 6.1.1       | Ubuntu 14.04.4 LTS           | g++-6 (Ubuntu 6.1.1-3ubuntu11~14.04.1) 6.1.1 20160511 |
+| Clang 3.6.0     | Ubuntu 14.04.4 LTS           | clang version 3.6.0 (tags/RELEASE_360/final) |
+| Clang 3.6.1     | Ubuntu 14.04.4 LTS           | clang version 3.6.1 (tags/RELEASE_361/final) |
+| Clang 3.6.2     | Ubuntu 14.04.4 LTS           | clang version 3.6.2 (tags/RELEASE_362/final) |
+| Clang 3.7.0     | Ubuntu 14.04.4 LTS           | clang version 3.7.0 (tags/RELEASE_370/final) |
+| Clang 3.7.1     | Ubuntu 14.04.4 LTS           | clang version 3.7.1 (tags/RELEASE_371/final) |
 | Clang 3.8.0     | Ubuntu 14.04.4 LTS           | clang version 3.8.0 (tags/RELEASE_380/final) |
-| Clang Xcode 6.1 | Darwin Kernel Version 13.4.0 (OSX 10.9.5) | Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn) |
-| Clang Xcode 6.2 | Darwin Kernel Version 13.4.0 (OSX 10.9.5) | Apple LLVM version 6.0 (clang-600.0.57) (based on LLVM 3.5svn) |
-| Clang Xcode 6.3 | Darwin Kernel Version 14.3.0 (OSX 10.10.3) | Apple LLVM version 6.1.0 (clang-602.0.49) (based on LLVM 3.6.0svn) |
+| Clang 3.8.1     | Ubuntu 14.04.4 LTS           | clang version 3.8.1 (tags/RELEASE_381/final) |
 | Clang Xcode 6.4 | Darwin Kernel Version 14.3.0 (OSX 10.10.3) | Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn) |
-| Clang Xcode 7.1 | Darwin Kernel Version 14.5.0 (OSX 10.10.5) | Apple LLVM version 7.0.0 (clang-700.1.76) |
-| Clang Xcode 7.2 | Darwin Kernel Version 15.0.0 (OSX 10.10.5) | Apple LLVM version 7.0.2 (clang-700.1.81) |
 | Clang Xcode 7.3 | Darwin Kernel Version 15.0.0 (OSX 10.10.5) | Apple LLVM version 7.3.0 (clang-703.0.29) |
-| Clang Xcode 8.0 | Darwin Kernel Version 15.5.0 (OSX 10.11.5) | Apple LLVM version 8.0.0 (clang-800.0.24.1) |
+| Clang Xcode 8.0 | Darwin Kernel Version 15.6.0 | Apple LLVM version 8.0.0 (clang-800.0.38) |
+| Clang Xcode 8.1 | Darwin Kernel Version 16.1.0 (macOS 10.12.1) | Apple LLVM version 8.0.0 (clang-800.0.42.1) |
+| Clang Xcode 8.2 | Darwin Kernel Version 16.1.0 (macOS 10.12.1) | Apple LLVM version 8.0.0 (clang-800.0.42.1) |
 | Visual Studio 14 2015 | Windows Server 2012 R2 (x64) | Microsoft (R) Build Engine version 14.0.25123.0 | 
 
 
@@ -485,14 +572,34 @@ I deeply appreciate the help of the following people.
 - [Tom Needham](https://github.com/06needhamt) fixed a subtle bug with MSVC 2015 which was also proposed by [Michael K.](https://github.com/Epidal).
 - [Mário Feroldi](https://github.com/thelostt) fixed a small typo.
 - [duncanwerner](https://github.com/duncanwerner) found a really embarrassing performance regression in the 2.0.0 release.
+- [Damien](https://github.com/dtoma) fixed one of the last conversion warnings.
+- [Thomas Braun](https://github.com/t-b) fixed a warning in a test case.
+- [Théo DELRIEU](https://github.com/theodelrieu) patiently and constructively oversaw the long way toward [iterator-range parsing](https://github.com/nlohmann/json/issues/290).
+- [Stefan](https://github.com/5tefan) fixed a minor issue in the documentation.
+- [Vasil Dimov](https://github.com/vasild) fixed the documentation regarding conversions from `std::multiset`.
+- [ChristophJud](https://github.com/ChristophJud) overworked the CMake files to ease project inclusion.
+- [Vladimir Petrigo](https://github.com/vpetrigo) made a SFINAE hack more readable.
+- [Denis Andrejew](https://github.com/seeekr) fixed a grammar issue in the README file.
+- [Pierre-Antoine Lacaze](https://github.com/palacaze) found a subtle bug in the `dump()` function.
+- [TurpentineDistillery](https://github.com/TurpentineDistillery) pointed to [`std::locale::classic()`](http://en.cppreference.com/w/cpp/locale/locale/classic) to avoid too much locale joggling, found some nice performance improvements in the parser and improved the benchmarking code.
+- [cgzones](https://github.com/cgzones) had an idea how to fix the Coverity scan.
+- [Jared Grubb](https://github.com/jaredgrubb) silenced a nasty documentation warning.
+- [Yixin Zhang](https://github.com/qwename) fixed an integer overflow check.
+- [Bosswestfalen](https://github.com/Bosswestfalen) merged two iterator classes into a smaller one.
+- [Daniel599](https://github.com/Daniel599) helped to get Travis execute the tests with Clang's sanitizers.
 
 Thanks a lot for helping out!
 
 
 ## Notes
 
-- The code contains numerous debug **assertions** which can be switched off by defining the preprocessor macro `NDEBUG`, see the [documentation of `assert`](http://en.cppreference.com/w/cpp/error/assert).
+- The code contains numerous debug **assertions** which can be switched off by defining the preprocessor macro `NDEBUG`, see the [documentation of `assert`](http://en.cppreference.com/w/cpp/error/assert). In particular, note [`operator[]`](https://nlohmann.github.io/json/classnlohmann_1_1basic__json_a2e26bd0b0168abb61f67ad5bcd5b9fa1.html#a2e26bd0b0168abb61f67ad5bcd5b9fa1) implements **unchecked access** for const objects: If the given key is not present, the behavior is undefined (think of a dereferenced null pointer) and yields an [assertion failure](https://github.com/nlohmann/json/issues/289) if assertions are switched on. If you are not sure whether an element in an object exists, use checked access with the [`at()` function](https://nlohmann.github.io/json/classnlohmann_1_1basic__json_a674de1ee73e6bf4843fc5dc1351fb726.html#a674de1ee73e6bf4843fc5dc1351fb726).
 - As the exact type of a number is not defined in the [JSON specification](http://rfc7159.net/rfc7159), this library tries to choose the best fitting C++ number type automatically. As a result, the type `double` may be used to store numbers which may yield [**floating-point exceptions**](https://github.com/nlohmann/json/issues/181) in certain rare situations if floating-point exceptions have been unmasked in the calling code. These exceptions are not caused by the library and need to be fixed in the calling code, such as by re-masking the exceptions prior to calling library functions.
+- The library supports **Unicode input** as follows:
+  - Only **UTF-8** encoded input is supported which is the default encoding for JSON according to [RFC 7159](http://rfc7159.net/rfc7159#rfc.section.8.1).
+  - Other encodings such as Latin-1, UTF-16, or UTF-32 are not supported and will yield parse errors.
+  - [Unicode noncharacters](http://www.unicode.org/faq/private_use.html#nonchar1) will not be replaced by the library.
+  - Invalid surrogates (e.g., incomplete pairs such as `\uDEAD`) will yield parse errors.
 
 
 ## Execute unit tests
@@ -500,11 +607,20 @@ Thanks a lot for helping out!
 To compile and run the tests, you need to execute
 
 ```sh
-$ make
-$ ./json_unit "*"
+$ make check
 
 ===============================================================================
-All tests passed (5568718 assertions in 32 test cases)
+All tests passed (11202040 assertions in 44 test cases)
+```
+
+Alternatively, you can use [CMake](https://cmake.org) and run
+
+```sh
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ ctest
 ```
 
 For more information, have a look at the file [.travis.yml](https://github.com/nlohmann/json/blob/master/.travis.yml).

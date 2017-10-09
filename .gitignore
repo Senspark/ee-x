@@ -8,3 +8,4 @@ Podfile.lock
 test/proj.android_studio/.idea
 test/proj.android_studio/app/.externalNativeBuild
 test/proj.android_studio/.gradle
+test/proj.android_studio/app/src/main/obj

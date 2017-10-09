@@ -22,9 +22,9 @@
 @implementation EEIronSource
 
 // clang-format off
-NSString* const k__initialize           = @"IronSource_initialize";
-NSString* const k__cppCallback          = @"IronSource_cppCallback";
-NSString* const k__showRewardedVideo    = @"IronSource_showRewardedVideo";
+static NSString* const k__initialize        = @"IronSource_initialize";
+static NSString* const k__cppCallback       = @"IronSource_cppCallback";
+static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
 // clang-format on
 
 - (id)init {

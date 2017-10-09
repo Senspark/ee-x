@@ -23,9 +23,9 @@
 @implementation EEUnityAds
 
 // clang-format off
-NSString* const k__initialize           = @"UnityAds_initialize";
-NSString* const k__cppCallback          = @"UnityAds_cppCallback";
-NSString* const k__showRewardedVideo    = @"UnityAds_showRewardedVideo";
+static NSString* const k__initialize        = @"UnityAds_initialize";
+static NSString* const k__cppCallback       = @"UnityAds_cppCallback";
+static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
 // clang-format on
 
 - (id)init {

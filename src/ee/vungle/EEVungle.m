@@ -23,9 +23,9 @@
 @implementation EEVungle
 
 // clang-format off
-NSString* const k__initialize            = @"Vungle_initialize";
-NSString* const k__showRewardedVideo     = @"Vungle_showRewardedVideo";
-NSString* const k__cppCallback           = @"Vungle_cppCallback";
+static NSString* const k__initialize        = @"Vungle_initialize";
+static NSString* const k__showRewardedVideo = @"Vungle_showRewardedVideo";
+static NSString* const k__cppCallback       = @"Vungle_cppCallback";
 // clang-format on
 
 - (id)init {

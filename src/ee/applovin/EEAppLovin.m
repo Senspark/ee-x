@@ -21,11 +21,11 @@
 @implementation EEAppLovin
 
 // clang-format off
-NSString* const k__initialize               = @"AppLovin_initialize";
-NSString* const k__isInterstitialAdReady    = @"AppLovin_isInterstitialAdReady";
-NSString* const k__showInterstitialAd       = @"AppLovin_showInterstitialAd";
-NSString* const k__showRewardedVideo        = @"AppLovin_showRewardedVideo";
-NSString* const k__cppCallback              = @"AppLovin_cppCallback";
+static NSString* const k__initialize            = @"AppLovin_initialize";
+static NSString* const k__isInterstitialAdReady = @"AppLovin_isInterstitialAdReady";
+static NSString* const k__showInterstitialAd    = @"AppLovin_showInterstitialAd";
+static NSString* const k__showRewardedVideo     = @"AppLovin_showRewardedVideo";
+static NSString* const k__cppCallback           = @"AppLovin_cppCallback";
 // clang-format on
 
 - (id)init {

@@ -9,9 +9,9 @@ using Self = IronSource;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize            = "IronSource_initialize";
-constexpr auto k__cppCallback           = "IronSource_cppCallback";
-constexpr auto k__showRewardedVideo     = "IronSource_showRewardedVideo";
+constexpr auto k__initialize        = "IronSource_initialize";
+constexpr auto k__cppCallback       = "IronSource_cppCallback";
+constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
 // clang-format on
 } // namespace
 

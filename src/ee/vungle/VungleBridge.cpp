@@ -9,9 +9,9 @@ using Self = Vungle;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize            = "Vungle_initialize";
-constexpr auto k__showRewardedVideo     = "Vungle_showRewardedVideo";
-constexpr auto k__cppCallback           = "Vungle_cppCallback";
+constexpr auto k__initialize        = "Vungle_initialize";
+constexpr auto k__showRewardedVideo = "Vungle_showRewardedVideo";
+constexpr auto k__cppCallback       = "Vungle_cppCallback";
 // clang-format on
 } // namespace
 

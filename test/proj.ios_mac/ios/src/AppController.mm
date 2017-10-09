@@ -52,6 +52,7 @@ static AppDelegate s_sharedApplication;
         (__bridge void*)[_viewController view]);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
 
+    [EEMetrics initialize];
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager addPlugin:@"Crashlytics"];
     [manager addPlugin:@"Notification"];

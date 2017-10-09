@@ -1,13 +1,16 @@
 package com.ee.test.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.ee.core.Logger;
+import com.ee.core.Metrics;
 import com.ee.core.PluginManager;
 import com.ee.crashlytics.Crashlytics;
+import com.ee.facebook.FacebookAds;
 import com.ee.notification.Notification;
+
+import org.cocos2dx.lib.Cocos2dxActivity;
 
 /**
  * Created by Zinge on 5/17/17.
@@ -20,9 +23,11 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
-
-        PluginManager.getInstance().addPlugin(new Crashlytics(this));
-        PluginManager.getInstance().addPlugin(new Notification(this));
+        Metrics.initialize();
+        PluginManager manager = PluginManager.getInstance();
+        manager.addPlugin(new Crashlytics(this));
+        manager.addPlugin(new Notification(this));
+        manager.addPlugin(new FacebookAds(this));
         _logger.debug("onCreate: end.");
     }
 

@@ -12,6 +12,7 @@
 
 #include <cocos2d.h>
 
+#include <ee/Core.hpp>
 #include <ee/FacebookAds.hpp>
 #include <ee/Macro.hpp>
 
@@ -36,18 +37,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
     cocos2d::log(__PRETTY_FUNCTION__);
 
     auto director = cocos2d::Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if (glview == nullptr) {
+    auto glView = director->getOpenGLView();
+    if (glView == nullptr) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) ||                               \
     (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) ||                                 \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = cocos2d::GLViewImpl::createWithRect(
+        glView = cocos2d::GLViewImpl::createWithRect(
             "HelloCpp", cocos2d::Rect(0, 0, DesignResolution.width,
                                       DesignResolution.height));
 #else
-        glview = cocos2d::GLViewImpl::create("HelloCpp");
+        glView = cocos2d::GLViewImpl::create("HelloCpp");
 #endif
-        director->setOpenGLView(glview);
+        director->setOpenGLView(glView);
     }
 
     director->setDisplayStats(true);
@@ -56,10 +57,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto resolutionPolicy = (DesignResolution.height > DesignResolution.width
                                  ? ResolutionPolicy::FIXED_WIDTH
                                  : ResolutionPolicy::FIXED_HEIGHT);
-    glview->setDesignResolutionSize(DesignResolution.width,
+    glView->setDesignResolutionSize(DesignResolution.width,
                                     DesignResolution.height, resolutionPolicy);
-    auto&& frameSize = glview->getFrameSize();
+    auto&& frameSize = glView->getFrameSize();
     cocos2d::log("frameSize = %f %f", frameSize.width, frameSize.height);
+
+    auto&& winSize = director->getWinSize();
+    cocos2d::log("winSize = %f %f", winSize.width, winSize.height);
+
+    ee::Metrics::initialize(frameSize.height / winSize.height);
+    constexpr float points = 200;
+    auto metrics = ee::Metrics::fromPoint(points);
+    auto dp = metrics.toDip();
+    auto pixels = metrics.toPixel();
+    cocos2d::log("%f pt = %f pixels = %f dp", points, pixels, dp);
 
     CrashlyticsAgent::getInstance()->initialize();
     CrashlyticsAgent::getInstance()->logDebug("debug_message");
@@ -76,9 +87,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->trackCustomEvent("PlaySong", attrs);
     CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
+    cocos2d::log("Create FacebookAds plugin");
     static auto plugin = ee::FacebookAds();
-    static auto native = plugin.createNativeAd(
-        "869337403086643_1444948412192203", "fb_native_spin");
+
+    cocos2d::log("Create Facebook native ad");
+    static auto native =
+        plugin.createNativeAd(ee::FacebookNativeAdBuilder()
+                                  .setAdId("869337403086643_1444948412192203")
+                                  .setLayoutName("fb_native_spin"));
     // native->setVisible(true);
     // native->setPosition(400, 100);
 
@@ -86,6 +102,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
                  native->getSize().second);
     cocos2d::log("Native ad position: %d %d", native->getPosition().first,
                  native->getPosition().second);
+
+    cocos2d::log("Create scene");
 
     auto scene = cocos2d::Scene::create();
     auto layer =

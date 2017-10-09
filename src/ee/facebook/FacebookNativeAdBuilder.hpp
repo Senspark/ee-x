@@ -65,6 +65,8 @@ private:
     std::string action_;
 };
 } // namespace facebook
+
+using facebook::FacebookNativeAdBuilder;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_NATIVE_AD_BUILDER_HPP */

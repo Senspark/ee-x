@@ -6,7 +6,8 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import <CoreGraphics/CGBase.h>
+#import <Foundation/NSObject.h>
 
 @interface EEMetrics : NSObject
 

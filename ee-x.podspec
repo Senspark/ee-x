@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '0.1.3'
+  spec.version        = '0.1.4'
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
 
@@ -149,18 +149,28 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/firebase-storage'
   end
 
+  spec.subspec 'ads' do |s|
+    s.source_files =
+      'src/ee/ads/*.{cpp,hpp,mm,h,m}'
+  end
+
   spec.subspec 'facebook-ads' do |s|
     s.source_files =
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/*.{cpp,hpp,mm,h,m}'
+      'src/ee/facebook/*.{cpp,hpp,mm,h,m}',
+      'src/ee/facebook/internal/*.{h,m}'
 
     s.public_header_files =
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/FacebookAdsBridge.hpp'
+      'src/ee/facebook/FacebookAdsBridge.hpp',
+      'src/ee/facebook/FacebookBannerAd.hpp',
+      'src/ee/facebook/FacebookNativeAd.hpp',
+      'src/ee/facebook/EEFacebookNativeAdView.h'
 
     s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
     s.dependency 'FBAudienceNetwork'
   end
 

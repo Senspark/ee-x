@@ -11,6 +11,8 @@
 
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
+#include "ee/facebook/FacebookBannerAd.hpp"
+#include "ee/facebook/FacebookNativeAd.hpp"
 
 #ifdef __OBJC__
 #import "ee/facebook/EEFacebookAds.h"

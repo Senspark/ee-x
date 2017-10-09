@@ -102,6 +102,8 @@
 		6F426D471F879963009E202A /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D451F879963009E202A /* FacebookNativeAd.hpp */; };
 		6F426D4A1F879A77009E202A /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D481F879A77009E202A /* EEFacebookNativeAd.m */; };
 		6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D491F879A77009E202A /* EEFacebookNativeAd.h */; };
+		6F426E311F8B828C009E202A /* FacebookNativeAdBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */; };
+		6F426E321F8B828C009E202A /* FacebookNativeAdBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -496,6 +498,8 @@
 		6F426D451F879963009E202A /* FacebookNativeAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAd.hpp; path = facebook/FacebookNativeAd.hpp; sourceTree = "<group>"; };
 		6F426D481F879A77009E202A /* EEFacebookNativeAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookNativeAd.m; path = facebook/internal/EEFacebookNativeAd.m; sourceTree = "<group>"; };
 		6F426D491F879A77009E202A /* EEFacebookNativeAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookNativeAd.h; path = facebook/internal/EEFacebookNativeAd.h; sourceTree = "<group>"; };
+		6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookNativeAdBuilder.cpp; path = facebook/FacebookNativeAdBuilder.cpp; sourceTree = "<group>"; };
+		6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAdBuilder.hpp; path = facebook/FacebookNativeAdBuilder.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -1100,6 +1104,8 @@
 				6F426D381F87837C009E202A /* FacebookBannerAd.hpp */,
 				6F426D441F879962009E202A /* FacebookNativeAd.cpp */,
 				6F426D451F879963009E202A /* FacebookNativeAd.hpp */,
+				6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */,
+				6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */,
 				EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */,
 				EB684E111EC5645200ED9E4A /* EEFacebookAds.h */,
 				6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */,
@@ -1155,6 +1161,7 @@
 			files = (
 				6F426D471F879963009E202A /* FacebookNativeAd.hpp in Headers */,
 				6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */,
+				6F426E321F8B828C009E202A /* FacebookNativeAdBuilder.hpp in Headers */,
 				6F978CBA1F41882300247CA8 /* EEFacebookNativeAdView.h in Headers */,
 				6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */,
 				6F426D3A1F87837C009E202A /* FacebookBannerAd.hpp in Headers */,
@@ -2125,6 +2132,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */,
+				6F426E311F8B828C009E202A /* FacebookNativeAdBuilder.cpp in Sources */,
 				6F426D4A1F879A77009E202A /* EEFacebookNativeAd.m in Sources */,
 				6F426D461F879963009E202A /* FacebookNativeAd.cpp in Sources */,
 				6F978CBB1F41882300247CA8 /* EEFacebookNativeAdView.m in Sources */,

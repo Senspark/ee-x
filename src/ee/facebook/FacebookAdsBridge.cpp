@@ -11,6 +11,7 @@
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookBannerAd.hpp"
 #include "ee/facebook/FacebookNativeAd.hpp"
+#include "ee/facebook/FacebookNativeAdBuilder.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -31,9 +32,7 @@ constexpr auto k__showInterstitialAd = "FacebookAds_showInterstitialAd";
 constexpr auto k__cppCallback = "FacebookAds_cppCallback";
 } // namespace
 
-FacebookAds::FacebookAds() {
-    //
-}
+FacebookAds::FacebookAds() {}
 
 FacebookAds::~FacebookAds() {}
 
@@ -58,17 +57,25 @@ bool Self::destroyBannerAd(const std::string& adId) {
 }
 
 std::shared_ptr<FacebookNativeAd>
-Self::createNativeAd(const std::string& adId, const std::string& layout) {
+Self::createNativeAd(const FacebookNativeAdBuilder& builder) {
     nlohmann::json json;
-    json["adId"] = adId;
-    json["layout"] = layout;
+    json["adId"] = builder.adId_;
+    json["layoutName"] = builder.layoutName_;
+    json["icon"] = builder.icon_;
+    json["title"] = builder.title_;
+    json["media"] = builder.media_;
+    json["socialContext"] = builder.socialContext_;
+    json["adChoices"] = builder.adChoices_;
+    json["body"] = builder.body_;
+    json["action"] = builder.action_;
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createNativeAd, json.dump());
     if (response == "false") {
         return nullptr;
     }
-    return std::shared_ptr<FacebookNativeAd>(new FacebookNativeAd(this, adId));
+    return std::shared_ptr<FacebookNativeAd>(
+        new FacebookNativeAd(this, builder.adId_));
 }
 
 bool Self::destroyNativead(const std::string& adId) {

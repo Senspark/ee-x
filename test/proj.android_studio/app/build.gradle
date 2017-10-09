@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+/// Modify this variable to build the desired architectures.
+String[] architectures = [
+        'armeabi',
+        'armeabi-v7a',
+        'x86'
+]
+
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '26.0.2'
     flavorDimensions 'screenSize'
 
     defaultConfig {
@@ -16,58 +23,35 @@ android {
 
         // API key used for testing.
         manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
+    }
 
-        externalNativeBuild {
-            ndkBuild {
-                targets 'ee_x_test_android_shared'
-
-                arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                arguments 'APP_STL=c++_static'
-                arguments 'APP_PLATFORM=9'
-                arguments 'APP_LDFLAGS:=-latomic'
-                arguments 'APP_LDFLAGS+=-llog'
-
-                // http://stackoverflow.com/questions/42579759/how-to-change-android-gradle-ndk-j-jobs-flag-value-for-clean-task
-                // arguments '-j' + Runtime.runtime.availableProcessors()
-                arguments '-j1'
-
-                cppFlags += '-std=c++1z'
-                cppFlags += '-fexceptions'
-                cppFlags += '-fsigned-char'
-
-                abiFilters 'armeabi', 'armeabi-v7a', 'x86'
-            }
+    splits {
+        abi {
+            enable true
+            reset()
+            include architectures
+            universalApk false
         }
     }
 
-    externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
+
+    sourceSets {
+        main {
+            assets.srcDir '../../Resources'
+            jni.srcDirs = []
+            jniLibs.srcDir 'src/main/libs'
         }
     }
 
     buildTypes {
+        release {
+            minifyEnabled false
+            debuggable false
+            jniDebuggable false
+        }
         debug {
             debuggable true
             jniDebuggable true
-            minifyEnabled false
-
-            externalNativeBuild {
-                ndkBuild {
-                    arguments 'NDK_DEBUG=0'
-                }
-            }
-        }
-        release {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled false
-
-            externalNativeBuild {
-                ndkBuild {
-                    arguments 'NDK_DEBUG=1'
-                }
-            }
         }
     }
 
@@ -94,6 +78,46 @@ crashlytics {
     androidNdkLibsOut 'src/main/libs'
 }
 
+/// External C++ build.
+tasks.whenTaskAdded { task ->
+    def name = task.name
+    def found = false
+    ['debug', 'release'].each { mode ->
+        if (!found) {
+            if (name == "prepare${mode.capitalize()}Dependencies") {
+                task.doFirst {
+                    def ndkDir = android.ndkDirectory
+                    def cppFlags = [
+                            '-frtti',
+                            '-fexceptions',
+                            '-fsigned-char',
+                            '-U__SSE__'
+                    ]
+                    if (mode == 'debug') {
+                        cppFlags.add('-DCOCOS2D_DEBUG=1')
+                    } else {
+                        cppFlags.add('-DNDEBUG')
+                    }
+                    exec {
+                        commandLine "$ndkDir/ndk-build",
+                                '-C', "$projectDir/src/main/jni",
+                                '-j', Runtime.runtime.availableProcessors(),
+                                'APP_STL=c++_static',
+                                'NDK_TOOLCHAIN_VERSION=clang',
+                                'APP_PLATFORM=android-9',
+                                'APP_LDFLAGS=-latomic',
+                                "APP_ABI=${architectures.join(' ')}",
+                                "APP_CPPFLAGS=${cppFlags.join(' ')}",
+                                "NDK_OUT=$projectDir/src/main/obj/$mode",
+                                "NDK_DEBUG=${(mode == 'debug') ? 1 : 0}"
+                    }
+                }
+                found = true;
+            }
+        }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -106,7 +130,7 @@ dependencies {
     compile project(':ee-x-vungle')
     compile project(':ee-x-ironsource')
 
-    compile 'com.android.support:appcompat-v7:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.google.android.gms:play-services-base:11.0.4'

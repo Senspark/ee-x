@@ -17,6 +17,7 @@ namespace ee {
 namespace facebook {
 class FacebookBannerAd;
 class FacebookNativeAd;
+class FacebookNativeAdBuilder;
 
 enum class FacebookBannerAdSize {
 
@@ -32,15 +33,18 @@ public:
     std::shared_ptr<FacebookBannerAd>
     createBannerAd(const std::string& adId, FacebookBannerAdSize adSize);
 
-    bool destroyBannerAd(const std::string& adId);
-
-    std::shared_ptr<FacebookNativeAd> createNativeAd(const std::string& adId,
-                                                     const std::string& layout);
-
-    bool destroyNativead(const std::string& adId);
+    std::shared_ptr<FacebookNativeAd>
+    createNativeAd(const FacebookNativeAdBuilder& builder);
 
     void cacheInterstitialAd(const std::string& adId) const;
     bool showInterstitialAd() const;
+
+private:
+    friend FacebookBannerAd;
+    friend FacebookNativeAd;
+
+    bool destroyBannerAd(const std::string& adId);
+    bool destroyNativead(const std::string& adId);
 };
 } // namespace facebook
 } // namespace ee

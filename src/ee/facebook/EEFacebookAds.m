@@ -175,30 +175,6 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     return YES;
 }
 
-- (void)showNativeAd:(NSString*)adId
-                size:(CGSize)size
-            position:(CGPoint)position {
-    /*
-     EEFacebookAdsUIView* _nativeAdView =
-     [_dictFBNativeAdView objectForKey:adsID];
-
-     if ([[_dictFBNativeAdReady valueForKey:adsID] boolValue]) {
-     _nativeAdView.hidden = NO;
-     }
-
-     CGFloat scale = [[UIScreen mainScreen] scale];
-
-     _nativeAdView.frame =
-     CGRectMake((float)x / scale, (float)y / scale, width, height);
-     _nativeAdView.adchoicesView.corner = UIRectCornerTopRight;
-
-     // for custom view need call drawRect again
-     [_nativeAdView.subviews[0] setNeedsDisplay];
-     [_nativeAdView.subviews[1] setNeedsDisplay];
-     [_nativeAdView.subviews[2] setNeedsDisplay];
-     */
-}
-
 - (FBInterstitialAd* _Nullable)createInterstitialAd:(NSString* _Nonnull)adId {
     FBInterstitialAd* ad =
         [[[FBInterstitialAd alloc] initWithPlacementID:adId] autorelease];

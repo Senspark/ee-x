@@ -13,18 +13,8 @@ import com.ee.notification.Notification;
  * Created by Zinge on 5/17/17.
  */
 
-public class MyActivity extends Activity {
+public class MyActivity extends Cocos2dxActivity {
     private static final Logger _logger = new Logger(MyActivity.class.getName());
-
-    private native void applicationDidFinishLaunching();
-
-    private native void applicationDidEnterBackground();
-
-    private native void applicationWillEnterForeground();
-
-    static {
-        System.loadLibrary("ee_x_test_android_shared");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +23,6 @@ public class MyActivity extends Activity {
 
         PluginManager.getInstance().addPlugin(new Crashlytics(this));
         PluginManager.getInstance().addPlugin(new Notification(this));
-
-        applicationDidFinishLaunching();
         _logger.debug("onCreate: end.");
     }
 
@@ -59,7 +47,6 @@ public class MyActivity extends Activity {
         _logger.debug("onResume: begin.");
         super.onResume();
         PluginManager.getInstance().onResume();
-        applicationWillEnterForeground();
         _logger.debug("onResume: end.");
     }
 
@@ -68,7 +55,6 @@ public class MyActivity extends Activity {
         _logger.debug("onPause: begin.");
         super.onPause();
         PluginManager.getInstance().onPause();
-        applicationDidEnterBackground();
         _logger.debug("onPause: end.");
     }
 

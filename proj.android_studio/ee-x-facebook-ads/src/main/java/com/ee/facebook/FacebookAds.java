@@ -5,79 +5,46 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdSettings;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import com.facebook.ads.*;
-import com.facebook.ads.NativeAd;
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class FacebookAds implements PluginProtocol {
+public class FacebookAds implements PluginProtocol, InterstitialAdListener {
+    private static final String k__createBannerAd      = "FacebookAds_createBannerAd";
+    private static final String k__destroyBannerAd     = "FacebookAds_destroyBannerAd";
+    private static final String k__createNativeAd      = "FacebookAds_createNativeAd";
+    private static final String k__destroyNativeAd     = "FacebookAds_destroyNativeAd";
+    private static final String k__cacheInterstitialAd = "FacebookAds_cacheInterstitialAd";
+    private static final String k__showInterstitialAd  = "FacebookAds_showInterstitialAd";
+    private static final String k__cppCallback         = "FacebookAds_cppCallback";
 
-    private static final String k__facebookads_initFBAdsInterstitial = "__facebookads_initFBAdsInterstitial";
-    private static final String k__facebookads_initFBAdsNativeAds = "__facebookads_initFBAdsNativeAds";
-    private static final String k__facebookads_initFBAdsBanner = "__facebookads_initFBAdsBanner";
+    private static final Logger _logger = new Logger(FacebookAds.class.getName());
 
-    private static final String k__facebookads_showBannerAd = "__facebookads_showBannerAd";
-    private static final String k__facebookads_showInterstitialAd = "__facebookads_showInterstitialAd";
-    private static final String k__facebookads_showNativeAd = "__facebookads_showNativeAd";
-    private static final String k__facebookads_showRewardedAd = "__facebookads_showRewardedAd";
-
-    private static final String k__facebookads_cacheRewardedAd = "__facebookads_cacheRewardedAd";
-    private static final String k__facebookads_cacheInterstitialAd = "__facebookads_cacheInterstitialAd";
-
-    private static final String k__facebookads_hideNativeAd = "__facebookads_hideNativeAd";
-    private static final String k__facebookads_hideBannerAd = "__facebookads_hideBannerAd";
-
-    private static final String k__facebookads_hasInterstitialAd = "__facebookads_hasInterstitialAd";
-    private static final String k__facebookads_hasRewardedAd = "__facebookads_hasRewardedAd";
-    private static final String k__facebookads_hasNativeAd = "__facebookads_hasNativeAd";
-
-
-    private static final String k__facebookads_callback = "__facebookads_callback";
-
-    private InterstitialAd _interstitialAd;
-    private String _interstitialID;
-    private boolean _canShowInterstitialAd;
-
-    private Activity _context;
-
-    private Map<String, NativeAd> _dictFBNativeAd;
-    private Map<String, View> _dictFBNativeAdView;
-    private Map<String, String> _dictFBNativeAdReady;
+    private Activity                      _context;
+    private InterstitialAd                _interstitialAd;
+    private Map<String, FacebookBannerAd> _bannerAds;
+    private Map<String, FacebookNativeAd> _nativeAds;
 
     public FacebookAds(Context context) {
         _context = (Activity) context;
 
-
-        _dictFBNativeAd = new HashMap<String, NativeAd>();
-        _dictFBNativeAdView = new HashMap<String, View>();
-        _dictFBNativeAdReady = new HashMap<String, String>();
-
+        _interstitialAd = null;
+        _bannerAds = new HashMap<>();
+        _nativeAds = new HashMap<>();
 
         registerHandlers();
     }
@@ -107,6 +74,21 @@ public class FacebookAds implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
+        if (_interstitialAd != null) {
+            _interstitialAd.destroy();
+            _interstitialAd = null;
+        }
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).destroy();
+        }
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).destroy();
+        }
+        _bannerAds.clear();
+        _bannerAds = null;
+        _nativeAds.clear();
+        _nativeAds = null;
+        _context = null;
     }
 
     @Override
@@ -122,490 +104,218 @@ public class FacebookAds implements PluginProtocol {
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                String InterstitialID = (String) dict.get("InterstitialID");
-
-                initFBAdsInterstitial(InterstitialID);
-                return DictionaryUtils.emptyResult();
+                String adId = (String) dict.get("adId");
+                Integer adSizeIndex = (Integer) dict.get("adSize");
+                AdSize adSize = FacebookBannerAd.adSizeFor(adSizeIndex);
+                return createBannerAd(adId, adSize) ? "true" : "false";
             }
-        }, k__facebookads_initFBAdsInterstitial);
+        }, k__createBannerAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String adId = message;
+                return destroyBannerAd(adId) ? "true" : "false";
+            }
+        }, k__destroyBannerAd);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                String BannerID = (String) dict.get("BannerID");
-
-                initFBAdsBanner(BannerID);
-
-                return DictionaryUtils.emptyResult();
-
+                FacebookNativeAdBuilder builder = new FacebookNativeAdBuilder()
+                    .setAdId((String) dict.get("adId"))
+                    .setLayoutName((String) dict.get("layoutName"))
+                    .setIcon((String) dict.get("icon"))
+                    .setTitle((String) dict.get("title"))
+                    .setMedia((String) dict.get("media"))
+                    .setSocialContext((String) dict.get("socialContext"))
+                    .setAdChoices((String) dict.get("adChoices"))
+                    .setBody((String) dict.get("body"))
+                    .setAction((String) dict.get("action"));
+                return createNativeAd(builder) ? "true" : "false";
             }
-        }, k__facebookads_initFBAdsBanner);
+        }, k__createNativeAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String adId = message;
+                return destroyNativeAd(adId) ? "true" : "false";
+            }
+        }, k__destroyNativeAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String adId = message;
+                cacheInterstitialAd(adId);
+                return "";
+            }
+        }, k__cacheInterstitialAd);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String NativeID = (String) dict.get("NativeID");
-                String layout = (String) dict.get("layout");
-                initFBAdsNativeAds(NativeID, layout);
-
-                return DictionaryUtils.emptyResult();
+            public String handle(@NonNull String message) {
+                return showInterstitialAd() ? "true" : "false";
             }
-        }, k__facebookads_initFBAdsNativeAds);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                cacheRewardedAd(adsID);
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_cacheRewardedAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                cacheInterstitialAd(adsID);
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_cacheInterstitialAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-
-                showInterstitialAd();
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_showInterstitialAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-
-                showRewardedAd();
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_showRewardedAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-
-                hideBannerAd();
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_hideBannerAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                int pos = (int) dict.get("pos");
-                showBannerAd(adsID, pos);
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_showBannerAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                hideNativeAd(adsID);
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_hideNativeAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                int width = (int) dict.get("width");
-                int height = (int) dict.get("height");
-                int x = (int) dict.get("x");
-                int y = (int) dict.get("y");
-                showNativeAd(adsID, width, height, x, y);
-
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__facebookads_showNativeAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                return (hasInterstitialAd()) ? "true" : "false";
-            }
-        }, k__facebookads_hasInterstitialAd);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String adsID = (String) dict.get("adsID");
-                return (hasNativeAd(adsID)) ? "true" : "false";
-            }
-        }, k__facebookads_hasNativeAd);
-
-
+        }, k__showInterstitialAd);
     }
 
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__facebookads_initFBAdsBanner);
-        bridge.deregisterHandler(k__facebookads_initFBAdsInterstitial);
-        bridge.deregisterHandler(k__facebookads_initFBAdsNativeAds);
-
-        bridge.deregisterHandler(k__facebookads_showNativeAd);
-        bridge.deregisterHandler(k__facebookads_showInterstitialAd);
-        bridge.deregisterHandler(k__facebookads_showBannerAd);
-        bridge.deregisterHandler(k__facebookads_showRewardedAd);
-
-        bridge.deregisterHandler(k__facebookads_hideNativeAd);
-        bridge.deregisterHandler(k__facebookads_hideBannerAd);
-
-        //bridge.deregisterHandler(k__facebookads_hasRewardedAd);
-        bridge.deregisterHandler(k__facebookads_hasInterstitialAd);
-
-        bridge.deregisterHandler(k__facebookads_cacheRewardedAd);
-        bridge.deregisterHandler(k__facebookads_cacheInterstitialAd);
+        bridge.deregisterHandler(k__createBannerAd);
+        bridge.deregisterHandler(k__destroyBannerAd);
+        bridge.deregisterHandler(k__createNativeAd);
+        bridge.deregisterHandler(k__destroyNativeAd);
+        bridge.deregisterHandler(k__cacheInterstitialAd);
+        bridge.deregisterHandler(k__showInterstitialAd);
     }
 
     public void initTestDevice() {
         // test device
         //find device hash in log debug AdSetting tag
         //AdSettings: Test mode device hash: 75b86cd356c31245209539b475ea5630
-//        AdSettings.addTestDevice("ea9b72adbe82f18603e900ae0a5d7618");//Bphone
-//        AdSettings.addTestDevice("75b86cd356c31245209539b475ea5630");//nexus5
+        //        AdSettings.addTestDevice("ea9b72adbe82f18603e900ae0a5d7618");//Bphone
+        //        AdSettings.addTestDevice("75b86cd356c31245209539b475ea5630");//nexus5
 
         AdSettings.clearTestDevices();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void initFBAdsInterstitial(final @NonNull String InterstitialID) {
-        this.initTestDevice();
-
-        _context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                _interstitialID = InterstitialID;
-                _canShowInterstitialAd = false;
-
-
-
-                // inter ad
-                _interstitialAd = new InterstitialAd(_context, InterstitialID);
-                _interstitialAd.setAdListener(new InterstitialAdListener() {
-                    @Override
-                    public void onInterstitialDisplayed(Ad ad) {
-                        // Interstitial displayed callback
-                    }
-
-                    @Override
-                    public void onInterstitialDismissed(Ad ad) {
-                        // Interstitial dismissed callback
-                        Log.d("FBAds", "interstitialAdDidClose");
-                        MessageBridge.getInstance().callCpp(k__facebookads_callback, "interstitialAdDidClose");
-                    }
-
-                    @Override
-                    public void onError(Ad ad, AdError adError) {
-                        // Ad error callback
-                        Log.d("FBAds", "interstitialAd didFailWithError  " + adError.getErrorMessage());
-                        MessageBridge.getInstance().callCpp(k__facebookads_callback, "interstitialAd didFailWithError");
-                    }
-
-                    @Override
-                    public void onAdLoaded(Ad ad) {
-                        // Show the ad when it's done loading.
-                        Log.d("FBAds", "interstitialAdDidLoad");
-                        _canShowInterstitialAd = true;
-                        MessageBridge.getInstance().callCpp(k__facebookads_callback, "interstitialAdDidLoad");
-                    }
-
-                    @Override
-                    public void onAdClicked(Ad ad) {
-                        // Ad clicked callback
-                    }
-
-                    @Override
-                    public void onLoggingImpression(Ad ad) {
-                        // Ad impression logged callback
-                    }
-                });
-
-                Log.d("FBAds", "Init Interstitial");
-
-
-                _interstitialAd.loadAd();
-            }
-        });
-    }
-
-    void createNativeAd(final @NonNull String NativeID)
-    {
-        NativeAd nativeAd = new NativeAd(_context, NativeID);
-        nativeAd.setAdListener(new AdListener() {
-
-            @Override
-            public void onError(Ad ad, AdError error) {
-                // Ad error callback
-                Log.d("FBAds", "NativeAd onError  " + error.getErrorMessage());
-            }
-
-            @Override
-            public void onAdLoaded(Ad ad) {
-                // Ad loaded callback
-                Log.d("FBAds", "NativeAd onAdLoaded");
-                NativeAd nativeAd = _dictFBNativeAd.get(ad.getPlacementId());
-                nativeAd.unregisterView();
-
-                _dictFBNativeAdReady.put(ad.getPlacementId(), "true");
-                View adView = _dictFBNativeAdView.get(ad.getPlacementId());
-
-                // Create native UI using the ad metadata.
-                int iconId = _context.getResources().getIdentifier("native_ad_icon", "id", _context.getPackageName());
-                int titleId = _context.getResources().getIdentifier("native_ad_title", "id", _context.getPackageName());
-                int mediaId = _context.getResources().getIdentifier("native_ad_media", "id", _context.getPackageName());
-                int socialId = _context.getResources().getIdentifier("native_ad_social_context", "id", _context.getPackageName());
-                int adchoiceId = _context.getResources().getIdentifier("ad_choices_container", "id", _context.getPackageName());
-                int bodyId = _context.getResources().getIdentifier("native_ad_body", "id", _context.getPackageName());
-                int callToActionId = _context.getResources().getIdentifier("native_ad_call_to_action", "id", _context.getPackageName());
-
-                ImageView nativeAdIcon = (ImageView) adView.findViewById(iconId);
-                TextView nativeAdTitle = (TextView) adView.findViewById(titleId);
-                MediaView nativeAdMedia = (MediaView) adView.findViewById(mediaId);
-                TextView nativeAdSocialContext = (TextView) adView.findViewById(socialId);
-                TextView nativeAdBody = (TextView) adView.findViewById(bodyId);
-                Button nativeAdCallToAction = (Button) adView.findViewById(callToActionId);
-
-                // Set the Text.
-                nativeAdTitle.setText(nativeAd.getAdTitle());
-                nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
-                nativeAdBody.setText(nativeAd.getAdBody());
-                nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
-
-                // Download and display the ad icon.
-                NativeAd.Image adIcon = nativeAd.getAdIcon();
-                NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
-
-                // Download and display the cover image.
-                if(nativeAdMedia != null) {
-                    nativeAdMedia.setNativeAd(nativeAd);
-                }
-
-                // Add the AdChoices icon
-                LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(adchoiceId);
-                if(adChoicesContainer.getChildCount() == 0) {
-                    AdChoicesView adChoicesView = new AdChoicesView(_context, nativeAd, true);
-                    adChoicesContainer.addView(adChoicesView);
-                }
-
-                List<View> clickableViews = new ArrayList<>();
-                clickableViews.add(nativeAdTitle);
-                clickableViews.add(nativeAdCallToAction);
-                nativeAd.registerViewForInteraction(adView, clickableViews);
-            }
-
-            @Override
-            public void onAdClicked(Ad ad) {
-                // Ad clicked callback
-            }
-
-            @Override
-            public void onLoggingImpression(Ad ad) {
-                // Ad impression logged callback
-            }
-        });
-
-        _dictFBNativeAd.put(NativeID, nativeAd);
-        _dictFBNativeAdReady.put(NativeID, "false");
-
-        Log.d("FBAds", "Init NativeAD id = " + NativeID);
-        nativeAd.loadAd();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void initFBAdsNativeAds(final @NonNull String NativeID, final @NonNull String layoutName) {
-
-        _context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                initTestDevice();
-
-                // Add the Ad view into the ad container.
-                FrameLayout layout = (FrameLayout)_context.findViewById(android.R.id.content).getRootView();
-
-                int layoutID = _context.getResources().getIdentifier(layoutName, "layout", _context.getPackageName());
-
-                View adView = (View) LayoutInflater.from(_context).inflate(layoutID, null);
-                adView.setVisibility(View.INVISIBLE);
-
-                layout.addView(adView);
-
-                createNativeAd(NativeID);
-                _dictFBNativeAdView.put(NativeID, adView);
-            }
-        });
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void initFBAdsBanner(@NonNull String BannerID) {
-        // not implement yet
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void cacheRewardedAd(@NonNull String adsID) {
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void cacheInterstitialAd(@NonNull String adsID) {
-        initFBAdsInterstitial(adsID);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void showBannerAd(@NonNull String adsID, int pos) {
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void hideBannerAd() {
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasInterstitialAd() {
-        return _canShowInterstitialAd;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasRewardedAd() {
+    public boolean createBannerAd(@NonNull String adId, @NonNull AdSize adSize) {
+        if (_bannerAds.containsKey(adId)) {
+            return false;
+        }
+        FacebookBannerAd ad = new FacebookBannerAd(_context, adId, adSize);
+        _bannerAds.put(adId, ad);
         return true;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void showInterstitialAd() {
-        if (_canShowInterstitialAd) {
-            _context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d("FBAds", "Show Interstitial");
-                    _interstitialAd.show();
-                }
-            });
-
-            _canShowInterstitialAd = false;
+    public boolean destroyBannerAd(@NonNull String adId) {
+        if (!_bannerAds.containsKey(adId)) {
+            return false;
         }
+        FacebookBannerAd ad = _bannerAds.get(adId);
+        ad.destroy();
+        _bannerAds.remove(adId);
+        return true;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void showRewardedAd() {
+    public boolean createNativeAd(@NonNull FacebookNativeAdBuilder builder) {
+        if (_nativeAds.containsKey(builder.adId)) {
+            return false;
+        }
+        FacebookNativeAd ad = new FacebookNativeAd(_context, builder);
+        _nativeAds.put(builder.adId, ad);
+        return true;
     }
 
+    public boolean destroyNativeAd(@NonNull String adId) {
+        if (!_nativeAds.containsKey(adId)) {
+            return false;
+        }
+        FacebookNativeAd ad = _nativeAds.get(adId);
+        ad.destroy();
+        _nativeAds.remove(adId);
+        return true;
+    }
+
+    private InterstitialAd createInterstitialAd(@NonNull String adId) {
+        InterstitialAd ad = new InterstitialAd(_context, adId);
+        ad.setAdListener(this);
+        ad.loadAd();
+        return ad;
+    }
+
+
     @SuppressWarnings("WeakerAccess")
-    public void hideNativeAd(final @NonNull String adsID) {
+    public void cacheInterstitialAd(@NonNull final String adId) {
+        initTestDevice();
         _context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View adView = _dictFBNativeAdView.get(adsID);
-                if(adView != null) {
-                    adView.setVisibility(View.INVISIBLE);
-
-                    createNativeAd(adsID);
+                if (_interstitialAd != null) {
+                    _interstitialAd = createInterstitialAd(adId);
+                    return;
+                }
+                // noinspection ConstantConditions
+                if (_interstitialAd.getPlacementId().equals(adId)) {
+                    _interstitialAd.loadAd();
+                } else {
+                    _interstitialAd = createInterstitialAd(adId);
                 }
             }
         });
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void showNativeAd(final @NonNull String adsID,final  int width,final  int height,final  int x,final  int y) {
+    @SuppressWarnings({"WeakerAccess", "SimplifiableIfStatement"})
+    public boolean hasInterstitialAd() {
+        if (_interstitialAd == null) {
+            return false;
+        }
+        return _interstitialAd.isAdLoaded();
+    }
 
+    @SuppressWarnings("WeakerAccess")
+    public boolean showInterstitialAd() {
+        if (!hasInterstitialAd()) {
+            return false;
+        }
         _context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View adView = _dictFBNativeAdView.get(adsID);
-                if(adView != null) {
-                    Log.d("FBAds", "Show NativeAds width  " + width + "  height " + height + "  x  " + x + "  y  " +y);
-                    adView.setVisibility(View.VISIBLE);
-
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    WindowManager wm = _context.getWindowManager();
-
-                    float scale = 1;
-                    if (wm != null) {
-                        Display d = wm.getDefaultDisplay();
-                        if (d != null) {
-                            d.getMetrics(metrics);
-
-                            scale = metrics.density;
-                        }
-                    }
-
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int)(width * scale), (int) (height * scale));
-                    params.leftMargin = x;
-                    params.topMargin = y;
-                    adView.setLayoutParams(params);
-                }
+                _interstitialAd.show();
             }
         });
+        return true;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasNativeAd(final @NonNull String adsID)
-    {
-        if(_dictFBNativeAdReady.get(adsID) != null)
-            return _dictFBNativeAdReady.get(adsID).compareTo("true") == 0;
-
-
-        return false;
+    @Override
+    public void onInterstitialDisplayed(Ad ad) {
+        _logger.info("onInterstitialDisplayed");
     }
 
+    @Override
+    public void onInterstitialDismissed(Ad ad) {
+        _logger.info("onInterstitialDismissed");
+        cacheInterstitialAd(ad.getPlacementId());
+    }
+
+    @Override
+    public void onError(Ad ad, AdError adError) {
+        _logger.info("onError: " + adError.getErrorMessage());
+    }
+
+    @Override
+    public void onAdLoaded(Ad ad) {
+        _logger.info("onAdLoaded");
+    }
+
+    @Override
+    public void onAdClicked(Ad ad) {
+        _logger.info("onAdCLicked");
+    }
+
+    @Override
+    public void onLoggingImpression(Ad ad) {
+        _logger.info("onLoggingImpression");
+    }
 }

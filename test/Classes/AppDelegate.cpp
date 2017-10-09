@@ -90,18 +90,21 @@ bool AppDelegate::applicationDidFinishLaunching() {
     cocos2d::log("Create FacebookAds plugin");
     static auto plugin = ee::FacebookAds();
 
-    cocos2d::log("Create Facebook native ad");
-    static auto native =
-        plugin.createNativeAd(ee::FacebookNativeAdBuilder()
-                                  .setAdId("869337403086643_1444948412192203")
-                                  .setLayoutName("fb_native_spin"));
-    // native->setVisible(true);
-    // native->setPosition(400, 100);
+    ee::runOnUiThread([] {
+        cocos2d::log("Create Facebook native ad begin");
+        static auto native = plugin.createNativeAd(
+            ee::FacebookNativeAdBuilder()
+                .setAdId("869337403086643_1444948412192203")
+                .setLayoutName("fb_native_spin"));
+        // native->setVisible(true);
+        // native->setPosition(400, 100);
+        cocos2d::log("Create Facebook native ad end");
 
-    cocos2d::log("Native ad size: %d %d", native->getSize().first,
-                 native->getSize().second);
-    cocos2d::log("Native ad position: %d %d", native->getPosition().first,
-                 native->getPosition().second);
+        cocos2d::log("Native ad size: %d %d", native->getSize().first,
+                     native->getSize().second);
+        cocos2d::log("Native ad position: %d %d", native->getPosition().first,
+                     native->getPosition().second);
+    });
 
     cocos2d::log("Create scene");
 

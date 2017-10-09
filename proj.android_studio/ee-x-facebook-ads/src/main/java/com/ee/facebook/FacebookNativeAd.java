@@ -47,6 +47,8 @@ public class FacebookNativeAd implements AdListener {
         _activity = activity;
         _builder = builder;
 
+        _nativeAd = null;
+        _nativeAdView = null;
         _isAdLoaded = false;
         NativeAd nativeAd = new NativeAd(activity, builder.adId);
         nativeAd.setAdListener(this);
@@ -70,6 +72,7 @@ public class FacebookNativeAd implements AdListener {
         registerHandlers();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void destroy() {
         deregisterHandlers();
         _nativeAd.unregisterView();
@@ -195,6 +198,7 @@ public class FacebookNativeAd implements AdListener {
         return _isAdLoaded;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public Point getPosition() {
         int p[] = new int[2];
@@ -202,6 +206,7 @@ public class FacebookNativeAd implements AdListener {
         return new Point(p[0], p[1]);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setPosition(@NonNull Point position) {
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
@@ -210,11 +215,13 @@ public class FacebookNativeAd implements AdListener {
         _nativeAdView.setLayoutParams(params);
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public Point getSize() {
         return new Point(_nativeAdView.getWidth(), _nativeAdView.getHeight());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setSize(@NonNull Point size) {
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
@@ -223,6 +230,7 @@ public class FacebookNativeAd implements AdListener {
         _nativeAdView.setLayoutParams(params);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setVisible(boolean visible) {
         if (visible) {
             _nativeAdView.setVisibility(View.VISIBLE);

@@ -66,6 +66,8 @@ private:
     static JavaVM* vm_;
 };
 } // namespace core
+
+using core::JniUtils;
 } // namespace ee
 
 #endif /* EE_CORE_JNI_UTILS_HPP_ */

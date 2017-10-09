@@ -104,6 +104,10 @@
 		6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D491F879A77009E202A /* EEFacebookNativeAd.h */; };
 		6F426E311F8B828C009E202A /* FacebookNativeAdBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */; };
 		6F426E321F8B828C009E202A /* FacebookNativeAdBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */; };
+		6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
+		6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
+		6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
+		6F426E381F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -500,6 +504,8 @@
 		6F426D491F879A77009E202A /* EEFacebookNativeAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookNativeAd.h; path = facebook/internal/EEFacebookNativeAd.h; sourceTree = "<group>"; };
 		6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookNativeAdBuilder.cpp; path = facebook/FacebookNativeAdBuilder.cpp; sourceTree = "<group>"; };
 		6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAdBuilder.hpp; path = facebook/FacebookNativeAdBuilder.hpp; sourceTree = "<group>"; };
+		6F426E331F8BAEB7009E202A /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		6F426E341F8BAEB7009E202A /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -900,6 +906,8 @@
 				6F426C981F872F84009E202A /* Metrics.hpp */,
 				6F426C9B1F873568009E202A /* EEMetrics.m */,
 				6F426C9C1F873568009E202A /* EEMetrics.h */,
+				6F426E331F8BAEB7009E202A /* Utils.cpp */,
+				6F426E341F8BAEB7009E202A /* Utils.hpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1135,6 +1143,7 @@
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAFB6511EC99A0100450E67 /* SpinLock.hpp in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
+				6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */,
 				6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1274,6 +1283,7 @@
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
 				6FAFB6521EC99A0100450E67 /* SpinLock.hpp in Headers */,
 				6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */,
+				6F426E381F8BAEB7009E202A /* Utils.hpp in Headers */,
 				6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1972,6 +1982,7 @@
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
 				6F426C9D1F873568009E202A /* EEMetrics.m in Sources */,
 				6F43A2CA1EC1A18900C68152 /* Logger_iOS.mm in Sources */,
+				6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */,
 				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
 				6F426C991F872F84009E202A /* Metrics.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
@@ -2051,6 +2062,7 @@
 				6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */,
 				6F83DCAB1EC1C800004C5500 /* Logger_iOS.mm in Sources */,
 				6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */,
+				6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */,
 				6F426D2F1F8766E8009E202A /* Metrics.cpp in Sources */,
 				6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */,
 				6F426D311F8766E8009E202A /* EEMetrics.m in Sources */,

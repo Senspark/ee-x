@@ -230,8 +230,8 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     if (![self hasInterstitialAd]) {
         return NO;
     }
-    UIViewController* view = [EEUtils getCurrentRootViewController];
-    return [[self interstitialAd] showAdFromRootViewController:view];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
+    return [[self interstitialAd] showAdFromRootViewController:rootView];
 }
 
 - (void)onAdsCallback:(int)code msg:(NSString*)msg {

@@ -24,7 +24,7 @@
 
 @implementation EEFacebookNativeAd
 
-- (id)initWithAdId:(NSString*)adId layout:(NSString*)layout {
+- (id)initWithAdId:(NSString*)adId layout:(NSString*)layoutName {
     self = [super init];
     if (self == nil) {
         return self;
@@ -39,13 +39,13 @@
     [nativeAd loadAd];
     nativeAd_ = [nativeAd retain];
 
-    UIViewController* view = [EEUtils getCurrentRootViewController];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     EEFacebookNativeAdView* adView =
-        [[[[NSBundle mainBundle] loadNibNamed:layout owner:nil options:nil]
+        [[[[NSBundle mainBundle] loadNibNamed:layoutName owner:nil options:nil]
             firstObject] autorelease];
     [adView setHidden:YES];
     [[adView adchoicesView] setCorner:UIRectCornerTopRight];
-    [[view view] addSubview:adView];
+    [[rootView view] addSubview:adView];
     nativeAdView_ = adView;
 
     [self registerHandlers];
@@ -203,10 +203,10 @@
 
     isAdLoaded_ = YES;
 
-    UIViewController* view = [EEUtils getCurrentRootViewController];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [nativeAd unregisterView];
     [nativeAd registerViewForInteraction:nativeAdView_
-                      withViewController:view
+                      withViewController:rootView
                       withClickableViews:@[[nativeAdView_ callToActionButton]]];
 
     [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {

@@ -11,7 +11,7 @@
 @interface EEFacebookNativeAd : NSObject
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                     layout:(NSString* _Nonnull)layout;
+                     layout:(NSString* _Nonnull)layoutName;
 
 - (BOOL)isAdLoaded;
 - (CGPoint)getPosition;

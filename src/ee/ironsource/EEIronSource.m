@@ -82,9 +82,10 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
     if (![self isRewardedVideoReady]) {
         return NO;
     }
-    UIViewController* view = [EEUtils getCurrentRootViewController];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [self setCurrentPlacementId:placementId];
-    [IronSource showRewardedVideoWithViewController:view placement:placementId];
+    [IronSource showRewardedVideoWithViewController:rootView
+                                          placement:placementId];
     return YES;
 }
 

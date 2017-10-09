@@ -49,14 +49,14 @@
     isAdLoaded_ = NO;
     adSize_ = adSize;
 
-    UIViewController* view = [EEUtils getCurrentRootViewController];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     FBAdView* adView =
         [[[FBAdView alloc] initWithPlacementID:adId
                                         adSize:adSize
-                            rootViewController:view] autorelease];
+                            rootViewController:rootView] autorelease];
     [adView setDelegate:self];
     [adView loadAd];
-    [[view view] addSubview:adView];
+    [[rootView view] addSubview:adView];
     adView_ = adView;
 
     [self registerHandlers];

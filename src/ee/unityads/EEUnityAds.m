@@ -83,8 +83,8 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
         return NO;
     }
     playAdSuccessfully_ = YES;
-    UIViewController* view = [EEUtils getCurrentRootViewController];
-    [UnityAds show:view placementId:placementId];
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
+    [UnityAds show:rootView placementId:placementId];
     return playAdSuccessfully_;
 }
 

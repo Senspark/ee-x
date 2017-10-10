@@ -52,7 +52,6 @@ public class FacebookNativeAd implements AdListener {
         _isAdLoaded = false;
         NativeAd nativeAd = new NativeAd(activity, builder.adId);
         nativeAd.setAdListener(this);
-        nativeAd.loadAd();
         _nativeAd = nativeAd;
 
         FrameLayout rootView = Utils.getRootView(activity);
@@ -206,6 +205,7 @@ public class FacebookNativeAd implements AdListener {
         bridge.deregisterHandler(k__setVisible());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void load() {
         _nativeAd.loadAd();
     }

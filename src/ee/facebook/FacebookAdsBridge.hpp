@@ -40,6 +40,17 @@ public:
     FacebookAds();
     ~FacebookAds();
 
+    /// Gets the current device's hash, iOS only, for Android search for
+    /// AdSettings tag.
+    std::string getTestDeviceHash() const;
+
+    /// Adds a test device.
+    /// @param[in] hash The device's hash.
+    void addTestDevice(const std::string& hash);
+
+    /// Clears all test devices.
+    void clearTestDevices();
+
     std::shared_ptr<FacebookBannerAd>
     createBannerAd(const std::string& adId, FacebookBannerAdSize adSize);
 

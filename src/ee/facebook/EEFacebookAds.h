@@ -10,6 +10,10 @@
 
 @interface EEFacebookAds : NSObject
 
+- (NSString* _Nonnull)getTestDeviceHash;
+- (void)addTestDevice:(NSString* _Nonnull)hash;
+- (void)clearTestDevices;
+
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size;
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 

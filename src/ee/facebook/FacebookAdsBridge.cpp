@@ -20,21 +20,42 @@ namespace facebook {
 using Self = FacebookAds;
 
 namespace {
-constexpr auto k__createBannerAd = "FacebookAds_createBannerAd";
-constexpr auto k__destroyBannerAd = "FacebookAds_destroyBannerAd";
+// clang-format off
+constexpr auto k__getTestDeviceHash   = "FacebookAds_getTestDeviceHash";
+constexpr auto k__addTestDevice       = "FacebookAds_addTestDevice";
+constexpr auto k__clearTestDevices    = "FacebookAds_clearTestDevices";
 
-constexpr auto k__createNativeAd = "FacebookAds_createNativeAd";
-constexpr auto k__destroyNativeAd = "FacebookAds_destroyNativeAd";
+constexpr auto k__createBannerAd      = "FacebookAds_createBannerAd";
+constexpr auto k__destroyBannerAd     = "FacebookAds_destroyBannerAd";
+
+constexpr auto k__createNativeAd      = "FacebookAds_createNativeAd";
+constexpr auto k__destroyNativeAd     = "FacebookAds_destroyNativeAd";
 
 constexpr auto k__cacheInterstitialAd = "FacebookAds_cacheInterstitialAd";
-constexpr auto k__showInterstitialAd = "FacebookAds_showInterstitialAd";
+constexpr auto k__showInterstitialAd  = "FacebookAds_showInterstitialAd";
 
-constexpr auto k__cppCallback = "FacebookAds_cppCallback";
+constexpr auto k__cppCallback         = "FacebookAds_cppCallback";
+// clang-format on
 } // namespace
 
-FacebookAds::FacebookAds() {}
+Self::FacebookAds() {}
 
-FacebookAds::~FacebookAds() {}
+Self::~FacebookAds() {}
+
+std::string Self::getTestDeviceHash() const {
+    auto&& bridge = core::MessageBridge::getInstance();
+    return bridge.call(k__getTestDeviceHash);
+}
+
+void Self::addTestDevice(const std::string& hash) {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.call(k__addTestDevice, hash);
+}
+
+void Self::clearTestDevices() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.call(k__clearTestDevices);
+}
 
 std::shared_ptr<FacebookBannerAd>
 Self::createBannerAd(const std::string& adId, FacebookBannerAdSize adSize) {

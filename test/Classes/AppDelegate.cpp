@@ -116,6 +116,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
         getLogger().info("Create FacebookAds plugin");
         static auto plugin = ee::FacebookAds();
         facebookAds_ = &plugin;
+        facebookAds_->addTestDevice(facebookAds_->getTestDeviceHash());
+        facebookAds_->addTestDevice(
+            "ad45c323f6a9b07f7a9c072549efb279"); // BlueStacks.
     });
 
     scheduleOnce(delay += 1.0f, [] {

@@ -29,6 +29,10 @@
 @implementation EEFacebookAds
 
 // clang-format off
+static NSString* const k__getTestDeviceHash    = @"FacebookAds_getTestDeviceHash";
+static NSString* const k__addTestDevice        = @"FacebookAds_addTestDevice";
+static NSString* const k__clearTestDevices     = @"FacebookAds_clearTestDevices";
+
 static NSString* const k__createBannerAd       = @"FacebookAds_createBannerAd";
 static NSString* const k__destroyBannerAd      = @"FacebookAds_destroyBannerAd";
 
@@ -49,6 +53,7 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     [self registerHandlers];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
+    [self initTestDevice];
     return self;
 }
 
@@ -64,6 +69,24 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
 
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:k__getTestDeviceHash
+                   callback:^(NSString* message) {
+                       return [self getTestDeviceHash];
+                   }];
+
+    [bridge registerHandler:k__addTestDevice
+                   callback:^(NSString* message) {
+                       NSString* hash = message;
+                       [self addTestDevice:hash];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__addTestDevice
+                   callback:^(NSString* message) {
+                       [self clearTestDevices];
+                       return @"";
+                   }];
 
     [bridge registerHandler:k__createBannerAd
                    callback:^(NSString* message) {
@@ -116,6 +139,10 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge deregisterHandler:k__getTestDeviceHash];
+    [bridge deregisterHandler:k__addTestDevice];
+    [bridge deregisterHandler:k__clearTestDevices];
+
     [bridge deregisterHandler:k__createBannerAd];
     [bridge deregisterHandler:k__destroyBannerAd];
 
@@ -126,12 +153,16 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     [bridge deregisterHandler:k__showInterstitialAd];
 }
 
-#pragma mark - CODE HERE
+- (NSString* _Nonnull)getTestDeviceHash {
+    return [FBAdSettings testDeviceHash];
+}
 
-- (void)initTestDevice {
-    // test device
-    //    [FBAdSettings addTestDevice:[FBAdSettings testDeviceHash]];
-    //    [FBAdSettings clearTestDevice:[FBAdSettings testDeviceHash]];
+- (void)addTestDevice:(NSString* _Nonnull)hash {
+    [FBAdSettings addTestDevice:hash];
+}
+
+- (void)clearTestDevices {
+    [FBAdSettings clearTestDevices];
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size {

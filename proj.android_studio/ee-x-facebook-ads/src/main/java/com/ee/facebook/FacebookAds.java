@@ -24,6 +24,9 @@ import java.util.Map;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class FacebookAds implements PluginProtocol, InterstitialAdListener {
+    private static final String k__getTestDeviceHash   = "FacebookAds_getTestDeviceHash";
+    private static final String k__addTestDevice       = "FacebookAds_addTestDevice";
+    private static final String k__clearTestDevices    = "FacebookAds_clearTestDevices";
     private static final String k__createBannerAd      = "FacebookAds_createBannerAd";
     private static final String k__destroyBannerAd     = "FacebookAds_destroyBannerAd";
     private static final String k__createNativeAd      = "FacebookAds_createNativeAd";
@@ -108,6 +111,34 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                return getTestDeviceHash();
+            }
+        }, k__getTestDeviceHash);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String hash = message;
+                addTestDevice(hash);
+                return "";
+            }
+        }, k__addTestDevice);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                clearTestDevices();
+                return "";
+            }
+        }, k__clearTestDevices);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
@@ -182,6 +213,9 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
+        bridge.deregisterHandler(k__getTestDeviceHash);
+        bridge.deregisterHandler(k__addTestDevice);
+        bridge.deregisterHandler(k__clearTestDevices);
         bridge.deregisterHandler(k__createBannerAd);
         bridge.deregisterHandler(k__destroyBannerAd);
         bridge.deregisterHandler(k__createNativeAd);
@@ -190,16 +224,20 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         bridge.deregisterHandler(k__showInterstitialAd);
     }
 
-    public void initTestDevice() {
-        // test device
-        //find device hash in log debug AdSetting tag
-        //AdSettings: Test mode device hash: 75b86cd356c31245209539b475ea5630
-        //        AdSettings.addTestDevice("ea9b72adbe82f18603e900ae0a5d7618");//Bphone
-        //        AdSettings.addTestDevice("75b86cd356c31245209539b475ea5630");//nexus5
+    @NonNull
+    public String getTestDeviceHash() {
+        return "";
+    }
 
+    public void addTestDevice(@NonNull String hash) {
+        AdSettings.addTestDevice(hash);
+    }
+
+    public void clearTestDevices() {
         AdSettings.clearTestDevices();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean createBannerAd(@NonNull String adId, @NonNull AdSize adSize) {
         if (_bannerAds.containsKey(adId)) {
             return false;
@@ -209,6 +247,7 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         return true;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean destroyBannerAd(@NonNull String adId) {
         if (!_bannerAds.containsKey(adId)) {
             return false;
@@ -219,6 +258,7 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         return true;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean createNativeAd(@NonNull FacebookNativeAdBuilder builder) {
         if (_nativeAds.containsKey(builder.adId)) {
             return false;
@@ -228,6 +268,7 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         return true;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean destroyNativeAd(@NonNull String adId) {
         if (!_nativeAds.containsKey(adId)) {
             return false;
@@ -245,10 +286,8 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         return ad;
     }
 
-
     @SuppressWarnings("WeakerAccess")
     public void cacheInterstitialAd(@NonNull final String adId) {
-        initTestDevice();
         _context.runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -20,6 +20,24 @@ namespace {
 const auto DesignResolution = cocos2d::Size(480, 320);
 } // namespace
 
+namespace {
+ee::Logger& getLogger() {
+    static ee::Logger logger("ee_x");
+    return logger;
+}
+
+void scheduleOnce(float delay, const std::function<void()>& f) {
+    static int target;
+    static int counter;
+    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
+    scheduler->schedule(std::bind(f), &target, 0, 0, delay, false,
+                        std::to_string(counter++));
+}
+
+ee::FacebookAds* facebookAds_;
+std::shared_ptr<ee::FacebookNativeAd> facebookNativeAd_;
+} // namespace
+
 AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {}
@@ -60,17 +78,23 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glView->setDesignResolutionSize(DesignResolution.width,
                                     DesignResolution.height, resolutionPolicy);
     auto&& frameSize = glView->getFrameSize();
-    cocos2d::log("frameSize = %f %f", frameSize.width, frameSize.height);
+    getLogger().info(cocos2d::StringUtils::format(
+        "frameSize = %f %f", frameSize.width, frameSize.height));
 
     auto&& winSize = director->getWinSize();
-    cocos2d::log("winSize = %f %f", winSize.width, winSize.height);
+    getLogger().info(cocos2d::StringUtils::format(
+        "winSize = %f %f", winSize.width, winSize.height));
+
+    int screenWidth = static_cast<int>(frameSize.width);
+    int screenHeight = static_cast<int>(frameSize.height);
 
     ee::Metrics::initialize(frameSize.height / winSize.height);
-    constexpr float points = 200;
+    constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);
     auto dp = metrics.toDip();
     auto pixels = metrics.toPixel();
-    cocos2d::log("%f pt = %f pixels = %f dp", points, pixels, dp);
+    getLogger().info(cocos2d::StringUtils::format("%f pt = %f pixels = %f dp",
+                                                  points, pixels, dp));
 
     CrashlyticsAgent::getInstance()->initialize();
     CrashlyticsAgent::getInstance()->logDebug("debug_message");
@@ -87,23 +111,99 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->trackCustomEvent("PlaySong", attrs);
     CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
-    cocos2d::log("Create FacebookAds plugin");
-    static auto plugin = ee::FacebookAds();
+    float delay = 0.0f;
+    scheduleOnce(delay += 1.0f, [] {
+        getLogger().info("Create FacebookAds plugin");
+        static auto plugin = ee::FacebookAds();
+        facebookAds_ = &plugin;
+    });
 
-    ee::runOnUiThread([] {
-        cocos2d::log("Create Facebook native ad begin");
-        static auto native = plugin.createNativeAd(
-            ee::FacebookNativeAdBuilder()
-                .setAdId("869337403086643_1444948412192203")
-                .setLayoutName("fb_native_spin"));
-        // native->setVisible(true);
-        // native->setPosition(400, 100);
-        cocos2d::log("Create Facebook native ad end");
+    scheduleOnce(delay += 1.0f, [] {
+        ee::runOnUiThread([] {
+            getLogger().info("Create Facebook native ad");
+            facebookNativeAd_ = facebookAds_->createNativeAd(
+                ee::FacebookNativeAdBuilder()
+                    .setAdId("869337403086643_1444948412192203")
+                    .setLayoutName("fb_native_spin")
+                    .setIcon("native_ad_icon")
+                    .setTitle("native_ad_title")
+                    .setMedia("native_ad_media")
+                    .setSocialContext("native_ad_social_context")
+                    .setAdChoices("ad_choices_container")
+                    .setBody("native_ad_body")
+                    .setAction("native_ad_call_to_action"));
+            facebookNativeAd_->setVisible(true);
+        });
+    });
 
-        cocos2d::log("Native ad size: %d %d", native->getSize().first,
-                     native->getSize().second);
-        cocos2d::log("Native ad position: %d %d", native->getPosition().first,
-                     native->getPosition().second);
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
+        ee::runOnUiThread([screenWidth, screenHeight] {
+            getLogger().info("Resize = screen size / 4");
+            facebookNativeAd_->setPosition(3 * screenWidth / 8,
+                                           3 * screenHeight / 8);
+            facebookNativeAd_->setSize(screenWidth / 4, screenHeight / 4);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [] {
+        ee::runOnUiThread([] {
+            getLogger().info("Move to top-left");
+            facebookNativeAd_->setPosition(0, 0);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth] {
+        ee::runOnUiThread([screenWidth] {
+            getLogger().info("Move to top-right");
+            int width, height;
+            std::tie(width, height) = facebookNativeAd_->getSize();
+            facebookNativeAd_->setPosition(screenWidth - width, 0);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
+        ee::runOnUiThread([screenWidth, screenHeight] {
+            getLogger().info("Move to bottom-right");
+            int width, height;
+            std::tie(width, height) = facebookNativeAd_->getSize();
+            facebookNativeAd_->setPosition(screenWidth - width,
+                                           screenHeight - height);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenHeight] {
+        ee::runOnUiThread([screenHeight] {
+            getLogger().info("Move to bottom-left");
+            int width, height;
+            std::tie(width, height) = facebookNativeAd_->getSize();
+            facebookNativeAd_->setPosition(0, screenHeight - height);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
+        ee::runOnUiThread([screenWidth, screenHeight] {
+            getLogger().info("Move to center");
+            int width, height;
+            std::tie(width, height) = facebookNativeAd_->getSize();
+            facebookNativeAd_->setPosition((screenWidth - width) / 2,
+                                           (screenHeight - height) / 2);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
+        ee::runOnUiThread([screenWidth, screenHeight] {
+            getLogger().info("Resize = screen size");
+            facebookNativeAd_->setPosition(0, 0);
+            facebookNativeAd_->setSize(screenWidth, screenHeight);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
+        ee::runOnUiThread([screenWidth, screenHeight] {
+            getLogger().info("Resize = screen size / 2");
+            facebookNativeAd_->setPosition(screenWidth / 4, screenHeight / 4);
+            facebookNativeAd_->setSize(screenWidth / 2, screenHeight / 2);
+        });
     });
 
     cocos2d::log("Create scene");

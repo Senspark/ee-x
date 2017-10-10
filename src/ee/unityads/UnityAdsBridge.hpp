@@ -48,6 +48,8 @@ private:
     void onSkipped(const std::string& placementId);
     void onFinished(const std::string& placementId);
 
+    bool errored_;
+
     std::map<std::string, UnityRewardedVideo*> rewardedVideos_;
     std::map<std::string, UnityInterstitialAd*> interstitialAds_;
 };

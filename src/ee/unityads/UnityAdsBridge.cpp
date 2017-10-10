@@ -30,6 +30,8 @@ constexpr auto k__onFinished           = "UnityAds_onFinished";
 } // namespace
 
 Self::UnityAds() {
+    errored_ = false;
+
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
@@ -115,12 +117,20 @@ bool Self::isRewardedVideoReady(const std::string& placementId) const {
 }
 
 bool Self::showRewardedVideo(const std::string& placementId) {
+    if (not isRewardedVideoReady(placementId)) {
+        return false;
+    }
+    errored_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__showRewardedVideo, placementId);
-    return result == "true";
+    bridge.call(k__showRewardedVideo, placementId);
+    return not errored_;
 }
 
 void Self::onError(const std::string& placementId) {
+    if (not errored_) {
+        errored_ = true;
+        return;
+    }
     onSkipped(placementId);
 }
 

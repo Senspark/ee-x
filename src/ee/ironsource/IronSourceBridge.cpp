@@ -23,6 +23,9 @@ constexpr auto k__onClosed          = "IronSource_onClosed";
 } // namespace
 
 Self::IronSource() {
+    errored_ = false;
+    rewarded_ = false;
+
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
@@ -91,12 +94,12 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     if (not hasRewardedVideo()) {
         return false;
     }
-    succesfullyDisplay_ = true;
+    errored_ = false;
     rewarded_ = false;
     placementId_ = placementId;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__showRewardedVideo, placementId);
-    return succesfullyDisplay_;
+    return not errored_;
 }
 
 void Self::onRewarded(const std::string& placementId) {
@@ -105,8 +108,8 @@ void Self::onRewarded(const std::string& placementId) {
 }
 
 void Self::onFailed() {
-    if (succesfullyDisplay_) {
-        succesfullyDisplay_ = false;
+    if (not errored_) {
+        errored_ = true;
     }
 }
 

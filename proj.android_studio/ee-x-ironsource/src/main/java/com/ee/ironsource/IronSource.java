@@ -61,6 +61,7 @@ public class IronSource implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
+        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
     }
 
     @Override

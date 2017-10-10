@@ -28,7 +28,6 @@ public class UnityAds implements PluginProtocol {
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
     private Activity _context;
-    private boolean  _playAdSuccessfully;
 
     @SuppressWarnings("unused")
     public UnityAds(Context context) {
@@ -118,7 +117,8 @@ public class UnityAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return (showRewardedVideo(placementId)) ? "true" : "false";
+                showRewardedVideo(placementId);
+                return "";
             }
         }, k__showRewardedVideo);
     }
@@ -151,10 +151,6 @@ public class UnityAds implements PluginProtocol {
 
                 MessageBridge bridge = MessageBridge.getInstance();
                 if (finishState == FinishState.SKIPPED) {
-                    if (_playAdSuccessfully) {
-                        _playAdSuccessfully = false;
-                        return;
-                    }
                     bridge.callCpp(k__onError, placementId);
                     return;
                 }
@@ -187,14 +183,7 @@ public class UnityAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showRewardedVideo(final @NonNull String placementId) {
-        _logger.info("showRewardedVideo: begin");
-        if (!isRewardedVideoReady(placementId)) {
-            return false;
-        }
-        _playAdSuccessfully = true;
+    public void showRewardedVideo(final @NonNull String placementId) {
         com.unity3d.ads.UnityAds.show(_context, placementId);
-        _logger.info("showRewardedVideo: end");
-        return _playAdSuccessfully;
     }
 }

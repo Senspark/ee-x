@@ -32,7 +32,7 @@ private:
     void onOpened();
     void onClosed();
 
-    bool succesfullyDisplay_;
+    bool errored_;
     bool rewarded_;
     std::string placementId_;
 

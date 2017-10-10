@@ -14,10 +14,7 @@
 
 #import <UnityAds/UnityAds.h>
 
-@interface EEUnityAds () <UnityAdsDelegate> {
-    BOOL playAdSuccessfully_;
-}
-
+@interface EEUnityAds () <UnityAdsDelegate>
 @end
 
 @implementation EEUnityAds
@@ -37,7 +34,6 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (self == nil) {
         return self;
     }
-    playAdSuccessfully_ = NO;
     [self registerHandlers];
     return self;
 }
@@ -80,8 +76,8 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
                        NSString* placementId = message;
-                       return [self showRewardedVideo:placementId] ? @"true"
-                                                                   : @"false";
+                       [self showRewardedVideo:placementId];
+                       return @"";
                    }];
 }
 
@@ -106,14 +102,9 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     return [UnityAds isReady:placementId];
 }
 
-- (BOOL)showRewardedVideo:(NSString*)placementId {
-    if (![self isRewardedVideoReady:placementId]) {
-        return NO;
-    }
-    playAdSuccessfully_ = YES;
+- (void)showRewardedVideo:(NSString*)placementId {
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [UnityAds show:rootView placementId:placementId];
-    return playAdSuccessfully_;
 }
 
 - (void)unityAdsReady:(NSString*)placementId {
@@ -135,10 +126,6 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     if (state == kUnityAdsFinishStateError) {
-        if (playAdSuccessfully_) {
-            playAdSuccessfully_ = NO;
-            return;
-        }
         [bridge callCpp:k__onError message:placementId];
         return;
     }

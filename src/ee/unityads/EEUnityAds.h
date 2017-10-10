@@ -14,6 +14,6 @@
 - (void)setDebugMode:(BOOL)enabled;
 
 - (BOOL)isRewardedVideoReady:(NSString* _Nonnull)placementId;
-- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId;
+- (void)showRewardedVideo:(NSString* _Nonnull)placementId;
 
 @end

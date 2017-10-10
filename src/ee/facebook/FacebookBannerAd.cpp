@@ -16,7 +16,7 @@
 
 namespace ee {
 namespace facebook {
-using Self = FacebookBannerAd;
+using Self = BannerAd;
 
 namespace {
 auto k__isLoaded(const std::string& id) {
@@ -48,11 +48,11 @@ auto k__setVisible(const std::string& id) {
 }
 } // namespace
 
-Self::FacebookBannerAd(FacebookAds* plugin, const std::string& adId)
+Self::BannerAd(FacebookAds* plugin, const std::string& adId)
     : Super(adId)
     , plugin_(plugin) {}
 
-Self::~FacebookBannerAd() {
+Self::~BannerAd() {
     bool succeeded = plugin_->destroyBannerAd(getAdId());
     assert(succeeded);
 }

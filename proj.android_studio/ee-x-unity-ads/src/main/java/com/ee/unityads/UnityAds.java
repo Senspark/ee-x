@@ -33,7 +33,6 @@ public class UnityAds implements PluginProtocol {
     public UnityAds(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
-        _playAdSuccessfully = false;
         registerHandlers();
         _logger.debug("constructor end.");
     }

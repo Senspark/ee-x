@@ -15,9 +15,9 @@ namespace ee {
 namespace unityads {
 class UnityAds;
 
-class UnityInterstitialAd : public InterstitialAdInterface {
+class InterstitialAd : public InterstitialAdInterface {
 public:
-    virtual ~UnityInterstitialAd() override;
+    virtual ~InterstitialAd() override;
 
     virtual bool isLoaded() const override;
 
@@ -26,8 +26,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit UnityInterstitialAd(UnityAds* plugin,
-                                 const std::string& placementId);
+    explicit InterstitialAd(UnityAds* plugin, const std::string& placementId);
 
 private:
     friend UnityAds;

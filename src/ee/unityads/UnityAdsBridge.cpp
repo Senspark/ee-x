@@ -79,7 +79,7 @@ Self::createRewardedVideo(const std::string& placementId) {
     if (rewardedVideos_.count(placementId) != 0) {
         return nullptr;
     }
-    auto result = new UnityRewardedVideo(this, placementId);
+    auto result = new RewardedVideo(this, placementId);
     rewardedVideos_[placementId] = result;
     return std::shared_ptr<RewardedVideoInterface>(result);
 }
@@ -97,7 +97,7 @@ Self::createInterstitialAd(const std::string& placementId) {
     if (interstitialAds_.count(placementId) != 0) {
         return nullptr;
     }
-    auto result = new UnityInterstitialAd(this, placementId);
+    auto result = new InterstitialAd(this, placementId);
     interstitialAds_[placementId] = result;
     return std::shared_ptr<InterstitialAdInterface>(result);
 }

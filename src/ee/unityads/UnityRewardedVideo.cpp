@@ -11,14 +11,14 @@
 
 namespace ee {
 namespace unityads {
-using Self = UnityRewardedVideo;
+using Self = RewardedVideo;
 
-Self::UnityRewardedVideo(UnityAds* plugin, const std::string& placementId) {
+Self::RewardedVideo(UnityAds* plugin, const std::string& placementId) {
     plugin_ = plugin;
     placementId_ = placementId;
 }
 
-Self::~UnityRewardedVideo() {
+Self::~RewardedVideo() {
     plugin_->destroyRewardedVideo(placementId_);
 }
 

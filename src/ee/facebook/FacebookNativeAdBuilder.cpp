@@ -10,11 +10,11 @@
 
 namespace ee {
 namespace facebook {
-using Self = FacebookNativeAdBuilder;
+using Self = NativeAdBuilder;
 
-Self::FacebookNativeAdBuilder() {}
+Self::NativeAdBuilder() {}
 
-Self::~FacebookNativeAdBuilder() {}
+Self::~NativeAdBuilder() {}
 
 Self& Self::setAdId(const std::string& adId) {
     adId_ = adId;

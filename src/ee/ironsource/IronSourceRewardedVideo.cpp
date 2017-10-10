@@ -19,7 +19,7 @@ Self::RewardedVideo(IronSource* plugin, const std::string& placementId) {
 }
 
 Self::~RewardedVideo() {
-    // plugin_
+    plugin_->destroyRewardedVideo(placementId_);
 }
 
 bool Self::isLoaded() const {

@@ -15,13 +15,13 @@ namespace ee {
 namespace facebook {
 class FacebookAds;
 
-class FacebookNativeAd : public AdViewInterface {
+class NativeAd : public AdViewInterface {
 private:
-    using Self = FacebookNativeAd;
+    using Self = NativeAd;
     using Super = AdViewInterface;
 
 public:
-    virtual ~FacebookNativeAd() override;
+    virtual ~NativeAd() override;
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -47,7 +47,7 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit FacebookNativeAd(FacebookAds* plugin, const std::string& adId);
+    explicit NativeAd(FacebookAds* plugin, const std::string& adId);
 
 private:
     FacebookAds* plugin_;

@@ -57,7 +57,7 @@ void Self::clearTestDevices() {
     bridge.call(k__clearTestDevices);
 }
 
-std::shared_ptr<FacebookBannerAd>
+std::shared_ptr<AdViewInterface>
 Self::createBannerAd(const std::string& adId, FacebookBannerAdSize adSize) {
     nlohmann::json json;
     json["adId"] = adId;
@@ -68,7 +68,7 @@ Self::createBannerAd(const std::string& adId, FacebookBannerAdSize adSize) {
     if (response == "false") {
         return nullptr;
     }
-    return std::shared_ptr<FacebookBannerAd>(new FacebookBannerAd(this, adId));
+    return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
@@ -77,8 +77,8 @@ bool Self::destroyBannerAd(const std::string& adId) {
     return response == "true";
 }
 
-std::shared_ptr<FacebookNativeAd>
-Self::createNativeAd(const FacebookNativeAdBuilder& builder) {
+std::shared_ptr<AdViewInterface>
+Self::createNativeAd(const NativeAdBuilder& builder) {
     nlohmann::json json;
     json["adId"] = builder.adId_;
     json["layoutName"] = builder.layoutName_;
@@ -95,11 +95,10 @@ Self::createNativeAd(const FacebookNativeAdBuilder& builder) {
     if (response == "false") {
         return nullptr;
     }
-    return std::shared_ptr<FacebookNativeAd>(
-        new FacebookNativeAd(this, builder.adId_));
+    return std::shared_ptr<AdViewInterface>(new NativeAd(this, builder.adId_));
 }
 
-bool Self::destroyNativead(const std::string& adId) {
+bool Self::destroyNativeAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyNativeAd, adId);
     return response == "true";

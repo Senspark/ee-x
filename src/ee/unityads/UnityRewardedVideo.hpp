@@ -15,9 +15,9 @@ namespace ee {
 namespace unityads {
 class UnityAds;
 
-class UnityRewardedVideo : public RewardedVideoInterface {
+class RewardedVideo : public RewardedVideoInterface {
 public:
-    virtual ~UnityRewardedVideo() override;
+    virtual ~RewardedVideo() override;
 
     virtual bool isLoaded() const override;
 
@@ -26,8 +26,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit UnityRewardedVideo(UnityAds* plugin,
-                                const std::string& placementId);
+    explicit RewardedVideo(UnityAds* plugin, const std::string& placementId);
 
 private:
     friend UnityAds;

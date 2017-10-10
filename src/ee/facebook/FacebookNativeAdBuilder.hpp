@@ -15,13 +15,13 @@ namespace ee {
 namespace facebook {
 class FacebookAds;
 
-class FacebookNativeAdBuilder final {
+class NativeAdBuilder final {
 private:
-    using Self = FacebookNativeAdBuilder;
+    using Self = NativeAdBuilder;
 
 public:
-    FacebookNativeAdBuilder();
-    ~FacebookNativeAdBuilder();
+    NativeAdBuilder();
+    ~NativeAdBuilder();
 
     /// Sets the native ad ID.
     Self& setAdId(const std::string& adId);
@@ -66,7 +66,7 @@ private:
 };
 } // namespace facebook
 
-using facebook::FacebookNativeAdBuilder;
+using FacebookNativeAdBuilder = facebook::NativeAdBuilder;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_NATIVE_AD_BUILDER_HPP */

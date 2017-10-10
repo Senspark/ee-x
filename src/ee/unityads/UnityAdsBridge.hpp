@@ -16,8 +16,8 @@
 
 namespace ee {
 namespace unityads {
-class UnityRewardedVideo;
-class UnityInterstitialAd;
+class RewardedVideo;
+class InterstitialAd;
 
 class UnityAds final {
 public:
@@ -35,8 +35,8 @@ public:
     createInterstitialAd(const std::string& placementId);
 
 private:
-    friend UnityRewardedVideo;
-    friend UnityInterstitialAd;
+    friend RewardedVideo;
+    friend InterstitialAd;
 
     bool destroyRewardedVideo(const std::string& placementId);
     bool destroyInterstitialAd(const std::string& placementId);
@@ -50,8 +50,8 @@ private:
 
     bool errored_;
 
-    std::map<std::string, UnityRewardedVideo*> rewardedVideos_;
-    std::map<std::string, UnityInterstitialAd*> interstitialAds_;
+    std::map<std::string, RewardedVideo*> rewardedVideos_;
+    std::map<std::string, InterstitialAd*> interstitialAds_;
 };
 } // namespace unityads
 } // namespace ee

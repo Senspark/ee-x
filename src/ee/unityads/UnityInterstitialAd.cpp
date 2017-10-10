@@ -11,14 +11,14 @@
 
 namespace ee {
 namespace unityads {
-using Self = UnityInterstitialAd;
+using Self = InterstitialAd;
 
-Self::UnityInterstitialAd(UnityAds* plugin, const std::string& placementId) {
+Self::InterstitialAd(UnityAds* plugin, const std::string& placementId) {
     plugin_ = plugin;
     placementId_ = placementId;
 }
 
-Self::~UnityInterstitialAd() {
+Self::~InterstitialAd() {
     plugin_->destroyInterstitialAd(placementId_);
 }
 

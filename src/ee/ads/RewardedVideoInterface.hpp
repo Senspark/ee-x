@@ -14,23 +14,23 @@
 
 namespace ee {
 namespace ads {
-using RewardedVideoCallback =
-    std::function<void(bool successful, const std::string& placementId)>;
+using RewardedVideoCallback = std::function<void(bool result)>;
 
 class RewardedVideoInterface {
 public:
     RewardedVideoInterface();
     virtual ~RewardedVideoInterface();
 
-    /// Attempts to show the rewarded video.
-    /// @param[in] placementId The placement ID.
-    virtual bool showRewardedVideo(const std::string& placementId) = 0;
+    virtual bool isLoaded() const = 0;
 
-    void setRewardedVideoCallback(const RewardedVideoCallback& callback);
+    virtual void load() = 0;
+
+    virtual bool show() = 0;
+
+    void setResultCallback(const RewardedVideoCallback& callback);
 
 protected:
-    void invokeRewardedVideoCallback(bool successful,
-                                     const std::string& placementId);
+    void setResult(bool result);
 
 private:
     RewardedVideoCallback callback_;

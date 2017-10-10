@@ -57,6 +57,8 @@ static AppDelegate s_sharedApplication;
     [manager addPlugin:@"Crashlytics"];
     [manager addPlugin:@"Notification"];
     [manager addPlugin:@"FacebookAds"];
+    [manager addPlugin:@"AppLovin"];
+    [manager addPlugin:@"UnityAds"];
 
     // run the cocos2d-x game scene
     app->run();

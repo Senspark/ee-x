@@ -9,6 +9,7 @@ import com.ee.core.PluginManager;
 import com.ee.crashlytics.Crashlytics;
 import com.ee.facebook.FacebookAds;
 import com.ee.notification.Notification;
+import com.ee.unityads.UnityAds;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -28,6 +29,7 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new Crashlytics(this));
         manager.addPlugin(new Notification(this));
         manager.addPlugin(new FacebookAds(this));
+        manager.addPlugin(new UnityAds(this));
         _logger.debug("onCreate: end.");
     }
 

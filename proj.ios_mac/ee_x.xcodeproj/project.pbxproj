@@ -108,6 +108,10 @@
 		6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
 		6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
 		6F426E381F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
+		6F426E3B1F8CAAFB009E202A /* UnityRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E391F8CAAFB009E202A /* UnityRewardedVideo.cpp */; };
+		6F426E3C1F8CAAFB009E202A /* UnityRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E3A1F8CAAFB009E202A /* UnityRewardedVideo.hpp */; };
+		6F426E3F1F8CAD16009E202A /* UnityInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E3D1F8CAD16009E202A /* UnityInterstitialAd.cpp */; };
+		6F426E401F8CAD16009E202A /* UnityInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -506,6 +510,10 @@
 		6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAdBuilder.hpp; path = facebook/FacebookNativeAdBuilder.hpp; sourceTree = "<group>"; };
 		6F426E331F8BAEB7009E202A /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6F426E341F8BAEB7009E202A /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
+		6F426E391F8CAAFB009E202A /* UnityRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityRewardedVideo.cpp; path = unityads/UnityRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F426E3A1F8CAAFB009E202A /* UnityRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityRewardedVideo.hpp; path = unityads/UnityRewardedVideo.hpp; sourceTree = "<group>"; };
+		6F426E3D1F8CAD16009E202A /* UnityInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityInterstitialAd.cpp; path = unityads/UnityInterstitialAd.cpp; sourceTree = "<group>"; };
+		6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityInterstitialAd.hpp; path = unityads/UnityInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -1035,6 +1043,10 @@
 				6F978CA11F41867C00247CA8 /* EEUnityAds.m */,
 				6F978CA21F41867C00247CA8 /* UnityAdsBridge.cpp */,
 				6F978CA31F41867C00247CA8 /* UnityAdsBridge.hpp */,
+				6F426E391F8CAAFB009E202A /* UnityRewardedVideo.cpp */,
+				6F426E3A1F8CAAFB009E202A /* UnityRewardedVideo.hpp */,
+				6F426E3D1F8CAD16009E202A /* UnityInterstitialAd.cpp */,
+				6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */,
 			);
 			name = unityads;
 			sourceTree = "<group>";
@@ -1318,6 +1330,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F426E3C1F8CAAFB009E202A /* UnityRewardedVideo.hpp in Headers */,
+				6F426E401F8CAD16009E202A /* UnityInterstitialAd.hpp in Headers */,
 				6F978CA41F41867C00247CA8 /* EEUnityAds.h in Headers */,
 				6F978CA71F41867C00247CA8 /* UnityAdsBridge.hpp in Headers */,
 				6F978CAA1F41868200247CA8 /* UnityAdsFwd.hpp in Headers */,
@@ -2095,7 +2109,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F426E3B1F8CAAFB009E202A /* UnityRewardedVideo.cpp in Sources */,
 				6F978CA51F41867C00247CA8 /* EEUnityAds.m in Sources */,
+				6F426E3F1F8CAD16009E202A /* UnityInterstitialAd.cpp in Sources */,
 				6F978CA61F41867C00247CA8 /* UnityAdsBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

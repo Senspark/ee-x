@@ -18,14 +18,13 @@ Self::RewardedVideoInterface() {
 
 Self::~RewardedVideoInterface() {}
 
-void Self::setRewardedVideoCallback(const RewardedVideoCallback& callback) {
+void Self::setResultCallback(const RewardedVideoCallback& callback) {
     callback_ = callback;
 }
 
-void Self::invokeRewardedVideoCallback(bool successful,
-                                       const std::string& placementId) {
+void Self::setResult(bool result) {
     if (callback_) {
-        callback_(successful, placementId);
+        callback_(result);
     }
 }
 } // namespace ads

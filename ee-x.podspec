@@ -185,9 +185,12 @@ Pod::Spec.new do |spec|
     s.public_header_files =
       'src/ee/UnityAds.hpp',
       'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/UnityAdsBridge.hpp'
+      'src/ee/unityads/UnityAdsBridge.hpp',
+      'src/ee/unityads/UnityRewardedVideo.hpp',
+      'src/ee/unityads/UnityInterstitialAd.hpp'
 
     s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
 
     # UnityAds conflicts with GoogleMobileAdsMediationUnity
     s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'

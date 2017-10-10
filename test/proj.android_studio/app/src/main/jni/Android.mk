@@ -22,6 +22,7 @@ LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
 LOCAL_STATIC_LIBRARIES += ee_x_notification_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_static
 LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
+LOCAL_STATIC_LIBRARIES += ee_x_unity_ads_static
 
 include $(BUILD_SHARED_LIBRARY)
 

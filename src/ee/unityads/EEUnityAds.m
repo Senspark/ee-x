@@ -23,9 +23,13 @@
 @implementation EEUnityAds
 
 // clang-format off
-static NSString* const k__initialize        = @"UnityAds_initialize";
-static NSString* const k__cppCallback       = @"UnityAds_cppCallback";
-static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
+static NSString* const k__initialize           = @"UnityAds_initialize";
+static NSString* const k__setDebugModeEnabled  = @"UnityAds_setDebugModeEnabled";
+static NSString* const k__isRewardedVideoReady = @"UnityAds_isRewardedVideoReady";
+static NSString* const k__showRewardedVideo    = @"UnityAds_showRewardedVideo";
+static NSString* const k__onError              = @"UnityAds_onError";
+static NSString* const k__onSkipped            = @"UnityAds_onSkipped";
+static NSString* const k__onFinished           = @"UnityAds_onFinished";
 // clang-format on
 
 - (id)init {
@@ -33,7 +37,7 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
     if (self == nil) {
         return self;
     }
-
+    playAdSuccessfully_ = NO;
     [self registerHandlers];
     return self;
 }
@@ -49,9 +53,28 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
 
     [bridge registerHandler:k__initialize
                    callback:^(NSString* message) {
-                       NSString* gameId = message;
-                       [self initialize:gameId];
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* gameId = dict[@"gameId"];
+                       BOOL testModeEnabled =
+                           [(NSString*)dict[@"testModeEnabled"]
+                               isEqualToString:@"true"];
+                       [self initialize:gameId testMode:testModeEnabled];
                        return @"";
+                   }];
+
+    [bridge registerHandler:k__setDebugModeEnabled
+                   callback:^(NSString* message) {
+                       [self setDebugMode:[message isEqualToString:@"true"]];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__isRewardedVideoReady
+                   callback:^(NSString* message) {
+                       NSString* placementId = message;
+                       return [self isRewardedVideoReady:placementId]
+                                  ? @"true"
+                                  : @"false";
                    }];
 
     [bridge registerHandler:k__showRewardedVideo
@@ -66,12 +89,17 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__setDebugModeEnabled];
+    [bridge deregisterHandler:k__isRewardedVideoReady];
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
-- (void)initialize:(NSString*)gameId {
-    [UnityAds initialize:gameId delegate:self];
-    // [UnityAds setDebugMode:YES];
+- (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled {
+    [UnityAds initialize:gameId delegate:self testMode:testModeEnabled];
+}
+
+- (void)setDebugMode:(BOOL)enabled {
+    [UnityAds setDebugMode:enabled];
 }
 
 - (BOOL)isRewardedVideoReady:(NSString*)placementId {
@@ -94,7 +122,6 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {
     NSLog(@"%s: error %d message %@", __PRETTY_FUNCTION__, (int)error, message);
-    playAdSuccessfully_ = NO;
 }
 
 - (void)unityAdsDidStart:(NSString*)placementId {
@@ -105,17 +132,25 @@ static NSString* const k__showRewardedVideo = @"UnityAds_showRewardedVideo";
           withFinishState:(UnityAdsFinishState)state {
     NSLog(@"%s: placementId = %@ state = %d", __PRETTY_FUNCTION__, placementId,
           (int)state);
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    if (state != kUnityAdsFinishStateCompleted) {
-        [dict setValue:@(NO) forKey:@"result"];
-    } else {
-        [dict setValue:@(YES) forKey:@"result"];
-    }
-    [dict setValue:placementId forKey:@"placementId"];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__cppCallback
-            message:[EEJsonUtils convertDictionaryToString:dict]];
+    if (state == kUnityAdsFinishStateError) {
+        if (playAdSuccessfully_) {
+            playAdSuccessfully_ = NO;
+            return;
+        }
+        [bridge callCpp:k__onError message:placementId];
+        return;
+    }
+    if (state == kUnityAdsFinishStateSkipped) {
+        [bridge callCpp:k__onSkipped message:placementId];
+        return;
+    }
+    if (state == kUnityAdsFinishStateCompleted) {
+        [bridge callCpp:k__onFinished message:placementId];
+        return;
+    }
+    NSAssert(NO, @"");
 }
 
 @end

@@ -10,10 +10,10 @@
 
 @interface EEUnityAds : NSObject
 
-- (void)initialize:(NSString* _Nonnull)gameId;
+- (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled;
+- (void)setDebugMode:(BOOL)enabled;
 
 - (BOOL)isRewardedVideoReady:(NSString* _Nonnull)placementId;
-
 - (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId;
 
 @end

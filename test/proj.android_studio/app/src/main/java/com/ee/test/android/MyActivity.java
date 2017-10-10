@@ -8,6 +8,7 @@ import com.ee.core.Metrics;
 import com.ee.core.PluginManager;
 import com.ee.crashlytics.Crashlytics;
 import com.ee.facebook.FacebookAds;
+import com.ee.ironsource.IronSource;
 import com.ee.notification.Notification;
 import com.ee.unityads.UnityAds;
 
@@ -30,6 +31,7 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new Notification(this));
         manager.addPlugin(new FacebookAds(this));
         manager.addPlugin(new UnityAds(this));
+        manager.addPlugin(new IronSource(this));
         _logger.debug("onCreate: end.");
     }
 

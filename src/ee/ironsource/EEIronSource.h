@@ -4,8 +4,7 @@
 
 - (void)initialize:(NSString* _Nonnull)gameId;
 
-- (BOOL)isRewardedVideoReady;
-
-- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId;
+- (BOOL)hasRewardedVideo;
+- (void)showRewardedVideo:(NSString* _Nonnull)placementId;
 
 @end

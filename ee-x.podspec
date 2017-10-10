@@ -206,8 +206,10 @@ Pod::Spec.new do |spec|
       'src/ee/IronSource.hpp',
       'src/ee/IronSourceFwd.hpp',
       'src/ee/ironsource/IronSourceBridge.hpp'
+      'src/ee/ironsource/IronSourceRewardedVideo.hpp'
 
     s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
     s.dependency 'IronSourceSDK'
   end
 

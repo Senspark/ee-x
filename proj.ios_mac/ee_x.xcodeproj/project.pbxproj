@@ -112,6 +112,8 @@
 		6F426E3C1F8CAAFB009E202A /* UnityRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E3A1F8CAAFB009E202A /* UnityRewardedVideo.hpp */; };
 		6F426E3F1F8CAD16009E202A /* UnityInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E3D1F8CAD16009E202A /* UnityInterstitialAd.cpp */; };
 		6F426E401F8CAD16009E202A /* UnityInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */; };
+		6F426E431F8CC0F8009E202A /* IronSourceRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E411F8CC0F8009E202A /* IronSourceRewardedVideo.cpp */; };
+		6F426E441F8CC0F8009E202A /* IronSourceRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E421F8CC0F8009E202A /* IronSourceRewardedVideo.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -514,6 +516,8 @@
 		6F426E3A1F8CAAFB009E202A /* UnityRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityRewardedVideo.hpp; path = unityads/UnityRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F426E3D1F8CAD16009E202A /* UnityInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityInterstitialAd.cpp; path = unityads/UnityInterstitialAd.cpp; sourceTree = "<group>"; };
 		6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityInterstitialAd.hpp; path = unityads/UnityInterstitialAd.hpp; sourceTree = "<group>"; };
+		6F426E411F8CC0F8009E202A /* IronSourceRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceRewardedVideo.cpp; path = ironsource/IronSourceRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F426E421F8CC0F8009E202A /* IronSourceRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceRewardedVideo.hpp; path = ironsource/IronSourceRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -1058,6 +1062,8 @@
 				6F3688651F863C7D00AE2D93 /* EEIronSource.m */,
 				6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */,
 				6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */,
+				6F426E411F8CC0F8009E202A /* IronSourceRewardedVideo.cpp */,
+				6F426E421F8CC0F8009E202A /* IronSourceRewardedVideo.hpp */,
 			);
 			name = ironsource;
 			sourceTree = "<group>";
@@ -1344,6 +1350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */,
+				6F426E441F8CC0F8009E202A /* IronSourceRewardedVideo.hpp in Headers */,
 				6F3688681F863C7D00AE2D93 /* EEIronSource.h in Headers */,
 				6F978CB61F41868E00247CA8 /* IronSource.hpp in Headers */,
 				6F978CB71F41868E00247CA8 /* IronSourceFwd.hpp in Headers */,
@@ -2121,6 +2128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */,
+				6F426E431F8CC0F8009E202A /* IronSourceRewardedVideo.cpp in Sources */,
 				6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

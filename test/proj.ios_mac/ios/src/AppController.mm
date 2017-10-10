@@ -59,6 +59,7 @@ static AppDelegate s_sharedApplication;
     [manager addPlugin:@"FacebookAds"];
     [manager addPlugin:@"AppLovin"];
     [manager addPlugin:@"UnityAds"];
+    [manager addPlugin:@"IronSource"];
 
     // run the cocos2d-x game scene
     app->run();

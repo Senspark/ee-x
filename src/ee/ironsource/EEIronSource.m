@@ -16,15 +16,18 @@
 #import "ee/ironsource/EEIronSource.h"
 
 @interface EEIronSource () <ISRewardedVideoDelegate>
-@property (nonatomic, retain) NSString* _Nullable currentPlacementId;
 @end
 
 @implementation EEIronSource
 
 // clang-format off
 static NSString* const k__initialize        = @"IronSource_initialize";
-static NSString* const k__cppCallback       = @"IronSource_cppCallback";
+static NSString* const k__hasRewardedVideo  = @"IronSource_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
+static NSString* const k__onRewarded        = @"IronSource_onRewarded";
+static NSString* const k__onFailed          = @"IronSource_onFailed";
+static NSString* const k__onOpened          = @"IronSource_onOpened";
+static NSString* const k__onClosed          = @"IronSource_onClosed";
 // clang-format on
 
 - (id)init {
@@ -39,7 +42,6 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
 
 - (void)dealloc {
     [self deregisterHandlers];
-    [self setCurrentPlacementId:nil];
     [IronSource setRewardedVideoDelegate:nil];
     [super dealloc];
 }
@@ -54,11 +56,16 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
                        return @"";
                    }];
 
+    [bridge registerHandler:k__hasRewardedVideo
+                   callback:^(NSString* message) {
+                       return [self hasRewardedVideo] ? @"true" : @"false";
+                   }];
+
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
                        NSString* placementId = message;
-                       return [self showRewardedVideo:placementId] ? @"true"
-                                                                   : @"false";
+                       [self showRewardedVideo:placementId];
+                       return @"";
                    }];
 }
 
@@ -66,6 +73,7 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__hasRewardedVideo];
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
@@ -74,29 +82,14 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
     [IronSource setRewardedVideoDelegate:self];
 }
 
-- (BOOL)isRewardedVideoReady {
+- (BOOL)hasRewardedVideo {
     return [IronSource hasRewardedVideo];
 }
 
-- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId {
-    if (![self isRewardedVideoReady]) {
-        return NO;
-    }
+- (void)showRewardedVideo:(NSString* _Nonnull)placementId {
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [self setCurrentPlacementId:placementId];
     [IronSource showRewardedVideoWithViewController:rootView
                                           placement:placementId];
-    return YES;
-}
-
-- (void)sendResult:(BOOL)result placementId:(NSString* _Nonnull)placementId {
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    [dict setValue:@(result) forKey:@"result"];
-    [dict setValue:placementId forKey:@"placementId"];
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__cppCallback
-            message:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available {
@@ -105,21 +98,26 @@ static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
-    [self sendResult:YES placementId:[placementInfo placementName]];
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onRewarded message:[placementInfo placementName]];
 }
 
 - (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self sendResult:NO placementId:[self currentPlacementId]];
-    [self setCurrentPlacementId:nil];
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onFailed];
 }
 
 - (void)rewardedVideoDidOpen {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onOpened];
 }
 
 - (void)rewardedVideoDidClose {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onClosed];
 }
 
 - (void)rewardedVideoDidStart {

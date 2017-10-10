@@ -7,28 +7,27 @@ import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class IronSource implements PluginProtocol {
     private static final String k__initialize        = "IronSource_initialize";
-    private static final String k__cppCallback       = "IronSource_cppCallback";
+    private static final String k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
     private static final String k__showRewardedVideo = "IronSource_showRewardedVideo";
+    private static final String k__onRewarded        = "IronSource_onRewarded";
+    private static final String k__onFailed          = "IronSource_onFailed";
+    private static final String k__onOpened          = "IronSource_onOpened";
+    private static final String k__onClosed          = "IronSource_onClosed";
 
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _context;
-    private String   _currentPlacementId;
 
     public IronSource(Context context) {
         _logger.debug("constructor begin: context = " + context);
@@ -93,8 +92,18 @@ public class IronSource implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                return hasRewardedVideo() ? "true" : "false";
+            }
+        }, k__hasRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
                 String placementId = message;
-                return showRewardedVideo(placementId) ? "true" : "false";
+                showRewardedVideo(placementId);
+                return "";
             }
         }, k__showRewardedVideo);
     }
@@ -103,6 +112,7 @@ public class IronSource implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
     }
 
@@ -120,24 +130,30 @@ public class IronSource implements PluginProtocol {
                 @Override
                 public void onRewardedVideoAdRewarded(Placement placement) {
                     _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
-                    sendResult(true, placement.getPlacementName());
+                    MessageBridge bridge = MessageBridge.getInstance();
+                    bridge.callCpp(k__onRewarded, placement.getPlacementName());
                 }
 
                 @Override
                 public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
                     _logger.debug(
                         "onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
-                    sendResult(false, _currentPlacementId);
+                    MessageBridge bridge = MessageBridge.getInstance();
+                    bridge.callCpp(k__onFailed);
                 }
 
                 @Override
                 public void onRewardedVideoAdOpened() {
                     _logger.debug("onRewardedVideoAdOpened");
+                    MessageBridge bridge = MessageBridge.getInstance();
+                    bridge.callCpp(k__onOpened);
                 }
 
                 @Override
                 public void onRewardedVideoAdClosed() {
                     _logger.debug("onRewardedVideoAdClosed");
+                    MessageBridge bridge = MessageBridge.getInstance();
+                    bridge.callCpp(k__onClosed);
                 }
 
                 @Override
@@ -153,28 +169,12 @@ public class IronSource implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isRewardedVideoReady() {
+    public boolean hasRewardedVideo() {
         return com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showRewardedVideo(@NonNull String placementId) {
-        _logger.info("showRewardedVideo: begin");
-        if (!isRewardedVideoReady()) {
-            return false;
-        }
-        _currentPlacementId = placementId;
+    public void showRewardedVideo(@NonNull String placementId) {
         com.ironsource.mediationsdk.IronSource.showRewardedVideo(placementId);
-        _logger.info("showRewardedVideo: end");
-        return true;
-    }
-
-    private void sendResult(boolean result, @NonNull String placementId) {
-        Map<String, Object> dict = new HashMap<>();
-        dict.put("result", result);
-        dict.put("placementId", placementId);
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
     }
 }

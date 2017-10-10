@@ -53,7 +53,6 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     [self registerHandlers];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
-    [self initTestDevice];
     return self;
 }
 
@@ -82,7 +81,7 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
                        return @"";
                    }];
 
-    [bridge registerHandler:k__addTestDevice
+    [bridge registerHandler:k__clearTestDevices
                    callback:^(NSString* message) {
                        [self clearTestDevices];
                        return @"";

@@ -20,7 +20,17 @@ class FacebookNativeAd;
 class FacebookNativeAdBuilder;
 
 enum class FacebookBannerAdSize {
+    /// kFBAdSizeHeight50Banner or AdSize.BANNER_HEIGHT_50.
+    BannerHeight50,
 
+    /// kFBAdSizeHeight90Banner or AdSize.BANNER_HEIGHT_90.
+    BannerHeight90,
+
+    /// kFBAdSizeInterstitial or AdSize.INTERSTITIAL.
+    Interstitial,
+
+    /// kFBAdSizeHeight250Rectangle or AdSize.RECTANGLE_HEIGHT_250.
+    RectangleHeight250,
 };
 
 class FacebookAds final {

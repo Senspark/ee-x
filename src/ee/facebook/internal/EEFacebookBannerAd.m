@@ -70,6 +70,11 @@
     [super dealloc];
 }
 
+- (NSString*)k__load {
+    return [@"FacebookBannerAd_load_"
+        stringByAppendingString:[adView_ placementID]];
+}
+
 - (NSString*)k__isLoaded {
     return [@"FacebookBannerAd_isLoaded_"
         stringByAppendingString:[adView_ placementID]];
@@ -103,9 +108,15 @@
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge registerHandler:[self k__load]
+                   callback:^(NSString* message) {
+                       [self load];
+                       return @"";
+                   }];
+
     [bridge registerHandler:[self k__isLoaded]
                    callback:^(NSString* message) {
-                       return [self adLoaded] ? @"true" : @"false";
+                       return [self isLoaded] ? @"true" : @"false";
                    }];
 
     [bridge registerHandler:[self k__getPosition]
@@ -158,6 +169,7 @@
 - (void)deregisterhandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge deregisterHandler:[self k__load]];
     [bridge deregisterHandler:[self k__isLoaded]];
     [bridge deregisterHandler:[self k__getPosition]];
     [bridge deregisterHandler:[self k__setPosition]];
@@ -166,7 +178,11 @@
     [bridge deregisterHandler:[self k__setVisible]];
 }
 
-- (BOOL)isAdLoaded {
+- (void)load {
+    [adView_ loadAd];
+}
+
+- (BOOL)isLoaded {
     return isAdLoaded_;
 }
 

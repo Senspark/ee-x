@@ -13,7 +13,8 @@
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
                      layout:(NSString* _Nonnull)layoutName;
 
-- (BOOL)isAdLoaded;
+- (void)load;
+- (BOOL)isLoaded;
 - (CGPoint)getPosition;
 - (void)setPosition:(CGPoint)position;
 - (CGSize)getSize;

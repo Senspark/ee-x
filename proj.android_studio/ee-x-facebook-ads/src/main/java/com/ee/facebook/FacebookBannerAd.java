@@ -71,6 +71,10 @@ public class FacebookBannerAd implements AdListener {
         _adView = null;
     }
 
+    private String k__load() {
+        return "FacebookBannerAd_load_" + _adView.getPlacementId();
+    }
+
     private String k__isLoaded() {
         return "FacebookBannerAd_isLoaded_" + _adView.getPlacementId();
     }
@@ -97,6 +101,15 @@ public class FacebookBannerAd implements AdListener {
 
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                load();
+                return "";
+            }
+        }, k__load());
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -180,10 +193,16 @@ public class FacebookBannerAd implements AdListener {
     }
 
     @SuppressWarnings("WeakerAccess")
+    public void load() {
+        _adView.loadAd();
+    }
+
+    @SuppressWarnings("WeakerAccess")
     public boolean isLoaded() {
         return _isAdLoaded;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public Point getPosition() {
         int p[] = new int[2];
@@ -191,6 +210,7 @@ public class FacebookBannerAd implements AdListener {
         return new Point(p[0], p[1]);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setPosition(@NonNull Point position) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
         params.leftMargin = position.x;
@@ -198,11 +218,13 @@ public class FacebookBannerAd implements AdListener {
         _adView.setLayoutParams(params);
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public Point getSize() {
         return new Point(_adView.getWidth(), _adView.getHeight());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setSize(@NonNull Point size) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
         params.width = size.x;
@@ -210,6 +232,7 @@ public class FacebookBannerAd implements AdListener {
         _adView.setLayoutParams(params);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setVisible(boolean visible) {
         if (visible) {
             _adView.setVisibility(View.VISIBLE);

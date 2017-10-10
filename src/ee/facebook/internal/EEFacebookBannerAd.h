@@ -14,7 +14,8 @@
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId size:(FBAdSize)adSize;
 
-- (BOOL)isAdLoaded;
+- (void)load;
+- (BOOL)isLoaded;
 - (CGPoint)getPosition;
 - (void)setPosition:(CGPoint)position;
 - (CGSize)getSize;

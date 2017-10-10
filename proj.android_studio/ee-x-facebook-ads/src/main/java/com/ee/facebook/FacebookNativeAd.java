@@ -85,6 +85,10 @@ public class FacebookNativeAd implements AdListener {
         _activity = null;
     }
 
+    private String k__load() {
+        return "FacebookNativeAd_load_" + _nativeAd.getPlacementId();
+    }
+
     private String k__isLoaded() {
         return "FacebookNativeAd_isLoaded_" + _nativeAd.getPlacementId();
     }
@@ -111,6 +115,15 @@ public class FacebookNativeAd implements AdListener {
 
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                load();
+                return "";
+            }
+        }, k__load());
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -191,6 +204,10 @@ public class FacebookNativeAd implements AdListener {
         bridge.deregisterHandler(k__getSize());
         bridge.deregisterHandler(k__setSize());
         bridge.deregisterHandler(k__setVisible());
+    }
+
+    public void load() {
+        _nativeAd.loadAd();
     }
 
     @SuppressWarnings("WeakerAccess")

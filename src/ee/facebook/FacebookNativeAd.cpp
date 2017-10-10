@@ -19,6 +19,10 @@ namespace facebook {
 using Self = FacebookNativeAd;
 
 namespace {
+auto k__load(const std::string& id) {
+    return "FacebookNativeAd_load_" + id;
+}
+
 auto k__isLoaded(const std::string& id) {
     return "FacebookNativeAd_isLoaded_" + id;
 }
@@ -51,6 +55,11 @@ Self::FacebookNativeAd(FacebookAds* plugin, const std::string& adId)
 Self::~FacebookNativeAd() {
     bool succeeded = plugin_->destroyNativead(getAdId());
     assert(succeeded);
+}
+
+void Self::load() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto response = bridge.call(k__load(getAdId()));
 }
 
 bool Self::isLoaded() const {

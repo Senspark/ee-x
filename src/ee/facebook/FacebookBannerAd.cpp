@@ -19,6 +19,10 @@ namespace facebook {
 using Self = FacebookBannerAd;
 
 namespace {
+auto k__load(const std::string& id) {
+    return "FacebookBannerAd_load_" + id;
+}
+
 auto k__isLoaded(const std::string& id) {
     return "FacebookBannerAd_isLoaded_" + id;
 }
@@ -51,6 +55,11 @@ Self::FacebookBannerAd(FacebookAds* plugin, const std::string& adId)
 Self::~FacebookBannerAd() {
     bool succeeded = plugin_->destroyBannerAd(getAdId());
     assert(succeeded);
+}
+
+void Self::load() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto response = bridge.call(k__load(getAdId()));
 }
 
 bool Self::isLoaded() const {

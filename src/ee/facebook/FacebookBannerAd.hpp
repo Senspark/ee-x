@@ -24,6 +24,9 @@ public:
     virtual ~FacebookBannerAd() override;
 
     /// @see Super.
+    virtual void load() override;
+
+    /// @see Super.
     virtual bool isLoaded() const override;
 
     /// @see Super.

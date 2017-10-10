@@ -237,7 +237,8 @@ Pod::Spec.new do |spec|
     s.public_header_files =
       'src/ee/Vungle.hpp',
       'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/VungleBridge.hpp'
+      'src/ee/vungle/VungleBridge.hpp',
+      'src/ee/vungle/VungleRewardedVideo.hpp'
 
     s.dependency 'ee-x/core'
     s.dependency 'VungleSDK-iOS', '4.1.0'

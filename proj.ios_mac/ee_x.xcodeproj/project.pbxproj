@@ -114,6 +114,8 @@
 		6F426E401F8CAD16009E202A /* UnityInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */; };
 		6F426E431F8CC0F8009E202A /* IronSourceRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E411F8CC0F8009E202A /* IronSourceRewardedVideo.cpp */; };
 		6F426E441F8CC0F8009E202A /* IronSourceRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E421F8CC0F8009E202A /* IronSourceRewardedVideo.hpp */; };
+		6F426E4F1F8CDF2F009E202A /* VungleRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E4D1F8CDF2F009E202A /* VungleRewardedVideo.cpp */; };
+		6F426E501F8CDF2F009E202A /* VungleRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E4E1F8CDF2F009E202A /* VungleRewardedVideo.hpp */; };
 		6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29D1EC19F3E00C68152 /* Core.hpp */; };
 		6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2291EC19F3100C68152 /* EEPluginManager.m */; };
 		6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2281EC19F3100C68152 /* EEPluginManager.h */; };
@@ -518,6 +520,8 @@
 		6F426E3E1F8CAD16009E202A /* UnityInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UnityInterstitialAd.hpp; path = unityads/UnityInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F426E411F8CC0F8009E202A /* IronSourceRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceRewardedVideo.cpp; path = ironsource/IronSourceRewardedVideo.cpp; sourceTree = "<group>"; };
 		6F426E421F8CC0F8009E202A /* IronSourceRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceRewardedVideo.hpp; path = ironsource/IronSourceRewardedVideo.hpp; sourceTree = "<group>"; };
+		6F426E4D1F8CDF2F009E202A /* VungleRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VungleRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F426E4E1F8CDF2F009E202A /* VungleRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
 		6F43A2291EC19F3100C68152 /* EEPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEPluginManager.m; sourceTree = "<group>"; };
 		6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEDictionaryUtils.h; sourceTree = "<group>"; };
@@ -837,6 +841,8 @@
 				6F36883D1F85F1EE00AE2D93 /* EEVungle.m */,
 				6F36883E1F85F1EE00AE2D93 /* VungleBridge.cpp */,
 				6F36883F1F85F1EE00AE2D93 /* VungleBridge.hpp */,
+				6F426E4D1F8CDF2F009E202A /* VungleRewardedVideo.cpp */,
+				6F426E4E1F8CDF2F009E202A /* VungleRewardedVideo.hpp */,
 			);
 			path = vungle;
 			sourceTree = "<group>";
@@ -1244,6 +1250,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F426E501F8CDF2F009E202A /* VungleRewardedVideo.hpp in Headers */,
 				6F3688471F85F1EE00AE2D93 /* VungleFwd.hpp in Headers */,
 				6F3688421F85F1EE00AE2D93 /* EEVungle.h in Headers */,
 				6F3688451F85F1EE00AE2D93 /* VungleBridge.hpp in Headers */,
@@ -2036,6 +2043,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F426E4F1F8CDF2F009E202A /* VungleRewardedVideo.cpp in Sources */,
 				6F3688441F85F1EE00AE2D93 /* VungleBridge.cpp in Sources */,
 				6F3688431F85F1EE00AE2D93 /* EEVungle.m in Sources */,
 			);

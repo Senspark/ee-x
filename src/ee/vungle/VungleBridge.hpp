@@ -5,17 +5,31 @@
 
 namespace ee {
 namespace vungle {
-class Vungle final : public RewardedVideoInterface {
-public:
-    static const std::string DefaultPlacementId;
+class RewardedVideo;
 
+class Vungle final {
+public:
     Vungle();
-    virtual ~Vungle() override;
+    ~Vungle();
 
     void initialize(const std::string& gameId);
 
-    /// @see Super.
-    virtual bool showRewardedVideo(const std::string& placementId) override;
+    std::shared_ptr<RewardedVideoInterface> createRewardedVideo();
+
+private:
+    friend RewardedVideo;
+
+    bool destroyRewardedVideo();
+
+    bool hasRewardedVideo() const;
+    bool showRewardedVideo();
+
+    void onStart();
+    void onEnd(bool wasSuccessfulView);
+    void onUnavailable();
+
+    bool errored_;
+    RewardedVideo* rewardedVideo_;
 };
 } // namespace vungle
 } // namespace ee

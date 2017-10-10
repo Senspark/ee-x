@@ -108,9 +108,9 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-#############
-# VUNGLE_ADS #
-#############
+##########
+# VUNGLE #
+##########
 
 include $(CLEAR_VARS)
 
@@ -122,9 +122,9 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-#############
-# APPLOVIN_ADS #
-#############
+############
+# APPLOVIN #
+############
 
 include $(CLEAR_VARS)
 

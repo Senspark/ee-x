@@ -11,6 +11,7 @@ import com.ee.facebook.FacebookAds;
 import com.ee.ironsource.IronSource;
 import com.ee.notification.Notification;
 import com.ee.unityads.UnityAds;
+import com.ee.vungle.Vungle;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -32,6 +33,8 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new FacebookAds(this));
         manager.addPlugin(new UnityAds(this));
         manager.addPlugin(new IronSource(this));
+        manager.addPlugin(new Vungle(this));
+
         _logger.debug("onCreate: end.");
     }
 

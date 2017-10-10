@@ -1,5 +1,6 @@
 #include "ee/vungle/VungleBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
+#include "ee/vungle/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -10,28 +11,44 @@ using Self = Vungle;
 namespace {
 // clang-format off
 constexpr auto k__initialize        = "Vungle_initialize";
+constexpr auto k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "Vungle_showRewardedVideo";
-constexpr auto k__cppCallback       = "Vungle_cppCallback";
+constexpr auto k__onStart           = "Vungle_onStart";
+constexpr auto k__onEnd             = "Vungle_onEnd";
+constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 // clang-format on
 } // namespace
 
-const std::string Self::DefaultPlacementId = "Vungle_placementId";
-
 Self::Vungle() {
+    errored_ = false;
+    rewardedVideo_ = nullptr;
+
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            auto result = json["result"].get<bool>();
-            invokeRewardedVideoCallback(result, DefaultPlacementId);
+            onStart();
             return "";
         },
-        k__cppCallback);
+        k__onStart);
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            onEnd(message == "true");
+            return "";
+        },
+        k__onEnd);
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            onUnavailable();
+            return "";
+        },
+        k__onUnavailable);
 }
 
 Self::~Vungle() {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.deregisterHandler(k__cppCallback);
+    bridge.deregisterHandler(k__onStart);
+    bridge.deregisterHandler(k__onEnd);
+    bridge.deregisterHandler(k__onUnavailable);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -39,13 +56,53 @@ void Self::initialize(const std::string& gameId) {
     bridge.call(k__initialize, gameId);
 }
 
-bool Self::showRewardedVideo(const std::string& placementId) {
-    if (placementId != DefaultPlacementId) {
+std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
+    if (rewardedVideo_ != nullptr) {
+        return nullptr;
+    }
+    auto result = new RewardedVideo(this);
+    rewardedVideo_ = result;
+    return std::shared_ptr<RewardedVideoInterface>(result);
+}
+
+bool Self::destroyRewardedVideo() {
+    if (rewardedVideo_ == nullptr) {
         return false;
     }
+    rewardedVideo_ = nullptr;
+    return true;
+}
+
+bool Self::hasRewardedVideo() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__showRewardedVideo);
+    auto result = bridge.call(k__hasRewardedVideo);
     return result == "true";
+}
+
+bool Self::showRewardedVideo() {
+    if (not hasRewardedVideo()) {
+        return false;
+    }
+    errored_ = false;
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto response = bridge.call(k__showRewardedVideo);
+    return not errored_ && response == "true";
+}
+
+void Self::onStart() {
+    //
+}
+
+void Self::onEnd(bool wasSuccessfulView) {
+    assert(not errored_);
+    assert(rewardedVideo_ != nullptr);
+    rewardedVideo_->setResult(wasSuccessfulView);
+}
+
+void Self::onUnavailable() {
+    if (not errored_) {
+        errored_ = true;
+    }
 }
 } // namespace vungle
 } // namespace ee

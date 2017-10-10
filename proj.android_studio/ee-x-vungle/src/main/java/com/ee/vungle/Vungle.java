@@ -7,33 +7,30 @@ import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 import com.vungle.publisher.EventListener;
 import com.vungle.publisher.VunglePub;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Vungle implements PluginProtocol {
     private static final String k__initialize        = "Vungle_initialize";
+    private static final String k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
     private static final String k__showRewardedVideo = "Vungle_showRewardedVideo";
-    private static final String k__cppCallback       = "Vungle_cppCallback";
+    private static final String k__onStart           = "Vungle_onStart";
+    private static final String k__onEnd             = "Vungle_onEnd";
+    private static final String k__onUnavailable     = "Vungle_onUnavailable";
 
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
     private Activity _context;
-    private boolean  _playAdSuccessfully;
 
     public Vungle(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
         registerHandlers();
-        _playAdSuccessfully = false;
         _logger.debug("constructor end.");
     }
 
@@ -92,11 +89,22 @@ public class Vungle implements PluginProtocol {
         }, k__initialize);
 
         bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return hasRewardedVideo() ? "true" : "false";
+            }
+        }, k__hasRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return showRewardedVideo() ? "true" : "false";
+                showRewardedVideo();
+
+                // Compliant with iOS.
+                return "true";
             }
         }, k__showRewardedVideo);
     }
@@ -105,6 +113,7 @@ public class Vungle implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
     }
 
@@ -116,6 +125,9 @@ public class Vungle implements PluginProtocol {
             public void onAdStart() {
                 // Called before playing an ad
                 _logger.info("onAdStart");
+
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onStart);
             }
 
             @Override
@@ -128,11 +140,8 @@ public class Vungle implements PluginProtocol {
                 _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
                              wasCallToActionClicked);
 
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("result", wasSuccessfulView);
-
                 MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
+                bridge.callCpp(k__onEnd, wasSuccessfulView ? "true" : "false");
             }
 
             @Override
@@ -147,25 +156,19 @@ public class Vungle implements PluginProtocol {
             public void onAdUnavailable(String reason) {
                 // Called when VunglePub.playAd() was called, but no ad was available to play
                 _logger.info("onAdUnavailable: " + reason);
-                _playAdSuccessfully = false;
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onUnavailable);
             }
         });
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isRewardedVideoReady() {
+    public boolean hasRewardedVideo() {
         return VunglePub.getInstance().isAdPlayable();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showRewardedVideo() {
-        _logger.info("showRewardedVideo: begin");
-        if (!isRewardedVideoReady()) {
-            return false;
-        }
-        _playAdSuccessfully = true;
+    public void showRewardedVideo() {
         VunglePub.getInstance().playAd();
-        _logger.info("showRewardedVideo: end");
-        return _playAdSuccessfully;
     }
 }

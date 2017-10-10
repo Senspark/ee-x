@@ -12,9 +12,13 @@
 
 #include <cocos2d.h>
 
+#include <ee/AppLovin.hpp>
 #include <ee/Core.hpp>
 #include <ee/FacebookAds.hpp>
+#include <ee/IronSource.hpp>
 #include <ee/Macro.hpp>
+#include <ee/UnityAds.hpp>
+#include <ee/Vungle.hpp>
 
 namespace {
 const auto DesignResolution = cocos2d::Size(480, 320);
@@ -26,6 +30,24 @@ ee::Logger& getLogger() {
     return logger;
 }
 
+std::string getCurrentThreadId() {
+    std::stringstream ss;
+    ss << std::this_thread::get_id();
+    return ss.str();
+}
+
+void logCurrentThread() {
+    getLogger().info("Current thread ID: ", getCurrentThreadId());
+}
+
+void schedule(float delay, float interval, const std::function<void()>& f) {
+    static int target;
+    static int counter;
+    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
+    scheduler->schedule(std::bind(f), &target, interval, CC_REPEAT_FOREVER,
+                        delay, false, std::to_string(counter++));
+}
+
 void scheduleOnce(float delay, const std::function<void()>& f) {
     static int target;
     static int counter;
@@ -35,7 +57,7 @@ void scheduleOnce(float delay, const std::function<void()>& f) {
 }
 
 ee::FacebookAds* facebookAds_;
-std::shared_ptr<ee::FacebookNativeAd> facebookNativeAd_;
+std::shared_ptr<ee::AdViewInterface> facebookNativeAd_;
 
 void testFacebookNativeAd() {
     auto&& frameSize =
@@ -143,6 +165,124 @@ void testFacebookNativeAd() {
         });
     });
 }
+
+ee::AppLovin* appLovin_;
+
+void testAppLovin() {
+    getLogger().info("Create AppLovin plugin");
+
+    static auto plugin = ee::AppLovin();
+    appLovin_ = &plugin;
+    appLovin_->initialize("S9_dC7VN_"
+                          "TzZ700tTmRpGQVgoXZyIbOmlOOyVvJVRH3TI4PmqrT5G3m2bJ_"
+                          "uwNefn2bHxwnMBqwTvKEi9ooPrX");
+    appLovin_->setTestAdsEnabled(true);
+    appLovin_->setVerboseLogging(true);
+
+    float delay = 0.0f;
+    scheduleOnce(delay += 1.0f, [] { appLovin_->loadRewardedVideo(); });
+    // appLovin_->showRewardedVideo();
+    //    appLovin_->setRewardedVideoCallback([](bool result, const std::string&
+    //    id) {
+    //        getLogger().info(cocos2d::StringUtils::format(
+    //            "result = %d id = %s", static_cast<int>(result), id.c_str()));
+    //    });
+}
+
+void testUnityAds() {
+    getLogger().info("Create UnityAds plugin");
+    static auto plugin = ee::UnityAds();
+    static auto unityAds_ = &plugin;
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "73406";
+    constexpr auto rewardedVideoId = "rewardedVideoZone";
+    constexpr auto interstitialAdId = "defaultZone";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "1423604";
+    constexpr auto interstitialAdId = "video";
+    constexpr auto rewardedVideoId = "rewardedVideo";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+
+    unityAds_->initialize(gameId, false);
+
+    static auto rewardedVideo = unityAds_->createRewardedVideo(rewardedVideoId);
+    rewardedVideo->setResultCallback([](bool result) {
+        logCurrentThread();
+        getLogger().info("Result = ", result ? "succeeded" : "failed");
+    });
+
+    static auto interstitialAd =
+        unityAds_->createInterstitialAd(interstitialAdId);
+    interstitialAd->setResultCallback([] {
+        logCurrentThread();
+        getLogger().info("Done");
+    });
+
+    float delay = 0.0f;
+    scheduleOnce(delay += 5.0f, [] {
+        getLogger().info("Show UnityAds rewarded video");
+        rewardedVideo->show();
+    });
+
+    scheduleOnce(delay += 2.0f, [] {
+        getLogger().info("Show UnityAds interstitial ad");
+        interstitialAd->show();
+    });
+}
+
+void testIronSource() {
+    getLogger().info("Create IronSource plugin");
+    static auto plugin = ee::IronSource();
+    static auto ironSource = &plugin;
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "67a6443d";
+    constexpr auto rewardedVideoId = "DefaultRewardedVideo";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "67a60ab5";
+    constexpr auto rewardedVideoId = "DefaultRewardedVideo";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+
+    ironSource->initialize(gameId);
+
+    static auto rewardedVideo =
+        ironSource->createRewardedVideo(rewardedVideoId);
+
+    float delay = 0.0f;
+    scheduleOnce(delay += 5.0f, [] {
+        getLogger().info("Show IronSource rewarded video");
+        rewardedVideo->show();
+    });
+}
+
+void testVungle() {
+    getLogger().info("Create Vungle plugin");
+    static auto plugin = ee::Vungle();
+    static auto vungle = &plugin;
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "com.senspark.goldminerclassic";
+    constexpr auto rewardedVideoId = "rewarded";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    constexpr auto gameId = "651916412";
+    constexpr auto rewardedVideoId = "rewarded";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+
+    vungle->initialize(gameId);
+
+    static auto rewardedVideo = vungle->createRewardedVideo();
+    rewardedVideo->setResultCallback([](bool result) {
+        logCurrentThread();
+        getLogger().info("Result = ", result ? "succeeded" : "failed");
+    });
+
+    float delay = 0.0f;
+    schedule(delay += 5.0f, 5.0f, [] {
+        getLogger().info("Show Vungle rewarded video");
+        rewardedVideo->show();
+    });
+}
 } // namespace
 
 AppDelegate::AppDelegate() {}
@@ -215,8 +355,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->trackCustomEvent("PlaySong", attrs);
     CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
-    cocos2d::log("Create scene");
+    getLogger().info("Cocos thread ID: ", getCurrentThreadId());
+    ee::runOnUiThread(
+        [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
+    // testAppLovin();
+    // testUnityAds();
+    // testIronSource();
+    testVungle();
+
+    cocos2d::log("Create scene");
     auto scene = cocos2d::Scene::create();
     auto layer =
         cocos2d::LayerColor::create(cocos2d::Color4B(150, 150, 150, 150));

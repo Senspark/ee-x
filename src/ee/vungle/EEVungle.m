@@ -24,8 +24,11 @@
 
 // clang-format off
 static NSString* const k__initialize        = @"Vungle_initialize";
+static NSString* const k__hasRewardedVideo  = @"Vungle_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"Vungle_showRewardedVideo";
-static NSString* const k__cppCallback       = @"Vungle_cppCallback";
+static NSString* const k__onStart           = @"Vungle_onStart";
+static NSString* const k__onEnd             = @"Vungle_onEnd";
+static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 // clang-format on
 
 - (id)init {
@@ -55,9 +58,15 @@ static NSString* const k__cppCallback       = @"Vungle_cppCallback";
                        return @"";
                    }];
 
+    [bridge registerHandler:k__hasRewardedVideo
+                   callback:^(NSString* message) {
+                       return [self hasRewardedVideo] ? @"true" : @"false";
+                   }];
+
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
-                       return [self showRewardedVideo] ? @"true" : @"false";
+                       [self showRewardedVideo];
+                       return @"";
                    }];
 }
 
@@ -65,6 +74,7 @@ static NSString* const k__cppCallback       = @"Vungle_cppCallback";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__hasRewardedVideo];
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
@@ -77,11 +87,10 @@ static NSString* const k__cppCallback       = @"Vungle_cppCallback";
     [sdk startWithAppId:gameId placements:placementIds error:nil];
 #endif // placementIds
 
-    [sdk setLoggingEnabled:YES];
     [sdk setDelegate:self];
 }
 
-- (BOOL)isRewardedVideoReady:(NSString*)placementId {
+- (BOOL)hasRewardedVideo {
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
     return [sdk isAdPlayable];
@@ -90,10 +99,7 @@ static NSString* const k__cppCallback       = @"Vungle_cppCallback";
 #endif // EE_VUNGLE_VERSION_4
 }
 
-- (BOOL)showRewardedVideo:(NSString*)placementId {
-    if (![self isRewardedVideoReady:placementId]) {
-        return NO;
-    }
+- (BOOL)showRewardedVideo {
     UIViewController* view = [EEUtils getCurrentRootViewController];
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
@@ -104,15 +110,19 @@ static NSString* const k__cppCallback       = @"Vungle_cppCallback";
 }
 
 #ifdef EE_VUNGLE_VERSION_4
+- (void)vungleSDKwillShowAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onStart];
+}
+
 - (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary*)viewInfo {
     NSLog(@"%s: info = %@", __PRETTY_FUNCTION__, viewInfo);
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     BOOL result = [viewInfo[@"completedView"] boolValue];
-    [dict setValue:@(result) forKey:@"result"];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__cppCallback
-            message:[EEJsonUtils convertDictionaryToString:dict]];
+    [bridge callCpp:k__onEnd message:result ? @"true" : @"false"];
 }
 
 - (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {

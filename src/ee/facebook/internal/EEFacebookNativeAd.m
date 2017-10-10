@@ -36,7 +36,6 @@
         [[[FBNativeAd alloc] initWithPlacementID:adId] autorelease];
     [nativeAd setDelegate:self];
     [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
-    [nativeAd loadAd];
     nativeAd_ = [nativeAd retain];
 
     UIViewController* rootView = [EEUtils getCurrentRootViewController];

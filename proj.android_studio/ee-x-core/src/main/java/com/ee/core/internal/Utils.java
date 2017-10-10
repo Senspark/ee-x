@@ -23,16 +23,13 @@ public class Utils {
 
     @SuppressWarnings("unused")
     public static void runOnUiThread() {
-        _logger.info("runOnUiThread");
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            _logger.info("runOnUiThread: immediately");
             signal();
         } else {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    _logger.info("runOnUiThread: delayed");
                     signal();
                 }
             });

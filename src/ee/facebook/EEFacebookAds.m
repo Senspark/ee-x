@@ -88,8 +88,8 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
                        NSDictionary* dict =
                            [EEJsonUtils convertStringToDictionary:message];
                        NSString* adId = dict[@"adId"];
-                       NSString* layout = dict[@"layout"];
-                       return [self createNativeAd:adId layout:layout]
+                       NSString* layoutName = dict[@"layoutName"];
+                       return [self createNativeAd:adId layout:layoutName]
                                   ? @"true"
                                   : @"false";
                    }];

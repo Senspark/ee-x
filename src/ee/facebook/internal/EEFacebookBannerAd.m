@@ -179,7 +179,7 @@
 - (void)setPosition:(CGPoint)position {
     CGFloat scale = [[UIScreen mainScreen] scale];
     CGRect frame = [adView_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y);
+    frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [adView_ setFrame:frame];
 }
 

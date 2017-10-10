@@ -177,7 +177,7 @@
 - (CGSize)getSize {
     CGFloat scale = [[UIScreen mainScreen] scale];
     CGSize size = [nativeAdView_ frame].size;
-    return CGSizeMake(size.width / scale, size.height / scale);
+    return CGSizeMake(size.width * scale, size.height * scale);
 }
 
 - (void)setSize:(CGSize)size {

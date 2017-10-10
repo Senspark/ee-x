@@ -183,8 +183,7 @@
 - (void)setSize:(CGSize)size {
     CGFloat scale = [[UIScreen mainScreen] scale];
     CGRect frame = [nativeAdView_ frame];
-    frame.size =
-        CGSizeMake(frame.size.width / scale, frame.size.height / scale);
+    frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [nativeAdView_ setFrame:frame];
 }
 

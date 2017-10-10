@@ -24,10 +24,10 @@ public:
     virtual ~FacebookBannerAd() override;
 
     /// @see Super.
-    virtual void load() override;
+    virtual bool isLoaded() const override;
 
     /// @see Super.
-    virtual bool isLoaded() const override;
+    virtual void load() override;
 
     /// @see Super.
     virtual std::pair<int, int> getPosition() const override;

@@ -19,12 +19,12 @@ namespace facebook {
 using Self = FacebookBannerAd;
 
 namespace {
-auto k__load(const std::string& id) {
-    return "FacebookBannerAd_load_" + id;
-}
-
 auto k__isLoaded(const std::string& id) {
     return "FacebookBannerAd_isLoaded_" + id;
+}
+
+auto k__load(const std::string& id) {
+    return "FacebookBannerAd_load_" + id;
 }
 
 auto k__getPosition(const std::string& id) {
@@ -57,15 +57,15 @@ Self::~FacebookBannerAd() {
     assert(succeeded);
 }
 
-void Self::load() {
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(k__load(getAdId()));
-}
-
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__isLoaded(getAdId()));
     return response == "true";
+}
+
+void Self::load() {
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto response = bridge.call(k__load(getAdId()));
 }
 
 std::pair<int, int> Self::getPosition() const {

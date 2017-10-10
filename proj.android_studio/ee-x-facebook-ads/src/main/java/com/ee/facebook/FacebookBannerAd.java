@@ -71,12 +71,12 @@ public class FacebookBannerAd implements AdListener {
         _adView = null;
     }
 
-    private String k__load() {
-        return "FacebookBannerAd_load_" + _adView.getPlacementId();
-    }
-
     private String k__isLoaded() {
         return "FacebookBannerAd_isLoaded_" + _adView.getPlacementId();
+    }
+
+    private String k__load() {
+        return "FacebookBannerAd_load_" + _adView.getPlacementId();
     }
 
     private String k__getPosition() {
@@ -106,18 +106,18 @@ public class FacebookBannerAd implements AdListener {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                load();
-                return "";
+                return isLoaded() ? "true" : "false";
             }
-        }, k__load());
+        }, k__isLoaded());
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return isLoaded() ? "true" : "false";
+                load();
+                return "";
             }
-        }, k__isLoaded());
+        }, k__load());
 
         bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("ConstantConditions")
@@ -185,6 +185,7 @@ public class FacebookBannerAd implements AdListener {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__isLoaded());
+        bridge.deregisterHandler(k__load());
         bridge.deregisterHandler(k__getPosition());
         bridge.deregisterHandler(k__setPosition());
         bridge.deregisterHandler(k__getSize());
@@ -193,13 +194,13 @@ public class FacebookBannerAd implements AdListener {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void load() {
-        _adView.loadAd();
+    public boolean isLoaded() {
+        return _isAdLoaded;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isLoaded() {
-        return _isAdLoaded;
+    public void load() {
+        _adView.loadAd();
     }
 
     @SuppressWarnings("WeakerAccess")

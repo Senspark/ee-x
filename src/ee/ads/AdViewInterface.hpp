@@ -22,10 +22,10 @@ public:
 
     const std::string& getAdId() const;
 
-    virtual void load() = 0;
-
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
+
+    virtual void load() = 0;
 
     virtual std::pair<int, int> getPosition() const = 0;
 

@@ -60,13 +60,13 @@
     [super dealloc];
 }
 
-- (NSString*)k__load {
-    return [@"FacebookNativeAd_load_"
+- (NSString*)k__isLoaded {
+    return [@"FacebookNativeAd_isLoaded_"
         stringByAppendingString:[nativeAd_ placementID]];
 }
 
-- (NSString*)k__isLoaded {
-    return [@"FacebookNativeAd_isLoaded_"
+- (NSString*)k__load {
+    return [@"FacebookNativeAd_load_"
         stringByAppendingString:[nativeAd_ placementID]];
 }
 
@@ -98,15 +98,15 @@
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge registerHandler:[self k__isLoaded]
+                   callback:^(NSString* message) {
+                       return [self isLoaded] ? @"true" : @"false";
+                   }];
+
     [bridge registerHandler:[self k__load]
                    callback:^(NSString* message) {
                        [self load];
                        return @"";
-                   }];
-
-    [bridge registerHandler:[self k__isLoaded]
-                   callback:^(NSString* message) {
-                       return [self isLoaded] ? @"true" : @"false";
                    }];
 
     [bridge registerHandler:[self k__getPosition]
@@ -159,8 +159,8 @@
 - (void)deregisterhandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge deregisterHandler:[self k__load]];
     [bridge deregisterHandler:[self k__isLoaded]];
+    [bridge deregisterHandler:[self k__load]];
     [bridge deregisterHandler:[self k__getPosition]];
     [bridge deregisterHandler:[self k__setPosition]];
     [bridge deregisterHandler:[self k__getSize]];
@@ -168,12 +168,12 @@
     [bridge deregisterHandler:[self k__setVisible]];
 }
 
-- (void)load {
-    [nativeAd_ loadAd];
-}
-
 - (BOOL)isLoaded {
     return isAdLoaded_;
+}
+
+- (void)load {
+    [nativeAd_ loadAd];
 }
 
 - (CGPoint)getPosition {

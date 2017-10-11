@@ -152,6 +152,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'ads' do |s|
     s.source_files =
+      'src/ee/Ads.hpp',
       'src/ee/ads/*.{cpp,hpp,mm,h,m}'
   end
 

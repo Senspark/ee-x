@@ -88,6 +88,8 @@ private:
     std::string tag_;
 };
 } // namespace core
+
+using core::Logger;
 } // namespace ee
 
 #endif /* EE_X_CORE_LOGGER_HPP_ */

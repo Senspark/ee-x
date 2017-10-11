@@ -25,6 +25,7 @@ LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_unity_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_vungle_static
 LOCAL_STATIC_LIBRARIES += ee_x_applovin_static
+LOCAL_STATIC_LIBRARIES += ee_x_ironsource_static
 
 include $(BUILD_SHARED_LIBRARY)
 

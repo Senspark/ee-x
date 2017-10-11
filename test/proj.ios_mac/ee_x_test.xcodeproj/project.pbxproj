@@ -17,6 +17,8 @@
 		6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
+		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
+		6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2C1F8B5978009E202A /* fb_native_spin.xib */; };
 		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,8 @@
 		6F25804B1ECC4E7200B910F9 /* main */ = {isa = PBXFileReference; lastKnownFileType = folder; name = main; path = ../proj.android_studio/app/src/main; sourceTree = "<group>"; };
 		6F426E1F1F8B56B2009E202A /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
 		6F426E201F8B56B2009E202A /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		6F426E2B1F8B5978009E202A /* fb_native_pause.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_pause.xib; sourceTree = "<group>"; };
+		6F426E2C1F8B5978009E202A /* fb_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_spin.xib; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
@@ -112,6 +116,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6F426E2A1F8B5978009E202A /* layouts */,
 			);
 			name = Resources;
 			path = ../Resources;
@@ -138,6 +143,15 @@
 				6F5B40C91E8E33E200137F30 /* src */,
 			);
 			name = mac;
+			sourceTree = "<group>";
+		};
+		6F426E2A1F8B5978009E202A /* layouts */ = {
+			isa = PBXGroup;
+			children = (
+				6F426E2B1F8B5978009E202A /* fb_native_pause.xib */,
+				6F426E2C1F8B5978009E202A /* fb_native_spin.xib */,
+			);
+			path = layouts;
 			sourceTree = "<group>";
 		};
 		6F5B40C91E8E33E200137F30 /* src */ = {
@@ -307,6 +321,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */,
+				6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

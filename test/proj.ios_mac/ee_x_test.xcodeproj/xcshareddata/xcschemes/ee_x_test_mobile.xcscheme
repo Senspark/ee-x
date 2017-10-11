@@ -54,10 +54,6 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "OS_ACTIVITY_MODE"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
             key = "ASAN_OPTIONS"
             value = "detect_odr_violation=0:debug=true:check_initialization_order=true: detect_stack_use_after_return=true"
             isEnabled = "YES">

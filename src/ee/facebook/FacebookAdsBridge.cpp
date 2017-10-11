@@ -10,6 +10,7 @@
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookBannerAd.hpp"
+#include "ee/facebook/FacebookInterstitialAd.hpp"
 #include "ee/facebook/FacebookNativeAd.hpp"
 #include "ee/facebook/FacebookNativeAdBuilder.hpp"
 
@@ -21,20 +22,18 @@ using Self = FacebookAds;
 
 namespace {
 // clang-format off
-constexpr auto k__getTestDeviceHash   = "FacebookAds_getTestDeviceHash";
-constexpr auto k__addTestDevice       = "FacebookAds_addTestDevice";
-constexpr auto k__clearTestDevices    = "FacebookAds_clearTestDevices";
+constexpr auto k__getTestDeviceHash     = "FacebookAds_getTestDeviceHash";
+constexpr auto k__addTestDevice         = "FacebookAds_addTestDevice";
+constexpr auto k__clearTestDevices      = "FacebookAds_clearTestDevices";
 
-constexpr auto k__createBannerAd      = "FacebookAds_createBannerAd";
-constexpr auto k__destroyBannerAd     = "FacebookAds_destroyBannerAd";
+constexpr auto k__createBannerAd        = "FacebookAds_createBannerAd";
+constexpr auto k__destroyBannerAd       = "FacebookAds_destroyBannerAd";
 
-constexpr auto k__createNativeAd      = "FacebookAds_createNativeAd";
-constexpr auto k__destroyNativeAd     = "FacebookAds_destroyNativeAd";
+constexpr auto k__createNativeAd        = "FacebookAds_createNativeAd";
+constexpr auto k__destroyNativeAd       = "FacebookAds_destroyNativeAd";
 
-constexpr auto k__cacheInterstitialAd = "FacebookAds_cacheInterstitialAd";
-constexpr auto k__showInterstitialAd  = "FacebookAds_showInterstitialAd";
-
-constexpr auto k__cppCallback         = "FacebookAds_cppCallback";
+constexpr auto k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
+constexpr auto k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
 // clang-format on
 } // namespace
 
@@ -104,14 +103,20 @@ bool Self::destroyNativeAd(const std::string& adId) {
     return response == "true";
 }
 
-void Self::cacheInterstitialAd(const std::string& adId) const {
+std::shared_ptr<InterstitialAdInterface>
+Self::createInterstitialAd(const std::string& placementId) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__cacheInterstitialAd, adId);
+    auto response = bridge.call(k__createInterstitialAd, placementId);
+    if (response == "false") {
+        return nullptr;
+    }
+    return std::shared_ptr<InterstitialAdInterface>(
+        new InterstitialAd(this, placementId));
 }
 
-bool Self::showInterstitialAd() const {
+bool Self::destroyInterstitialAd(const std::string& placementId) {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto&& response = bridge.call(k__showInterstitialAd);
+    auto&& response = bridge.call(k__destroyInterstitialAd, placementId);
     return response == "true";
 }
 } // namespace facebook

@@ -63,6 +63,7 @@ LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_ads_static
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/ads -name "*.cpp" -print}
+LOCAL_C_INCLUDES := $(EE_X_ROOT_DIR)/src
 
 include $(BUILD_STATIC_LIBRARY)
 

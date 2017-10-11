@@ -69,6 +69,14 @@ ee::FacebookAds* getFacebookAds() {
     return &plugin;
 }
 
+std::string getFacebookInterstitialAdId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "869337403086643_1447442535276124";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "869337403086643_1447441308609580";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
 void testFacebookNativeAd() {
     auto&& frameSize =
         cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
@@ -167,6 +175,25 @@ void testFacebookNativeAd() {
             getLogger().info("Resize = screen size / 2");
             nativeAd->setPosition(screenWidth / 4, screenHeight / 4);
             nativeAd->setSize(screenWidth / 2, screenHeight / 2);
+        });
+    });
+}
+
+void testFacebookInterstitialAd() {
+    static auto interstitialAd =
+        getFacebookAds()->createInterstitialAd(getFacebookInterstitialAdId());
+    schedule(1.0f, 3.0f, [] {
+        logCurrentThread();
+        ee::runOnUiThread([] {
+            logCurrentThread();
+            interstitialAd->load();
+        });
+    });
+    schedule(2.0f, 3.0f, [] {
+        logCurrentThread();
+        ee::runOnUiThread([] {
+            logCurrentThread();
+            interstitialAd->show();
         });
     });
 }
@@ -324,7 +351,7 @@ void testVungle() {
 }
 
 void testMultiAds() {
-    static auto ads = ee::RewardedVideoList();
+    static auto ads = ee::MultiRewardedVideo();
     ads.addItem(getAppLovin()->createRewardedVideo())
         .addItem(getIronSource()->createRewardedVideo(
             getIronSourceRewardedVideoId()))
@@ -420,7 +447,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testUnityAds();
     // testIronSource();
     // testVungle();
-    testMultiAds();
+    // testMultiAds();
+    testFacebookInterstitialAd();
 
     cocos2d::log("Create scene");
     auto scene = cocos2d::Scene::create();

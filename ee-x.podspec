@@ -167,9 +167,6 @@ Pod::Spec.new do |spec|
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
       'src/ee/facebook/FacebookAdsBridge.hpp',
-      'src/ee/facebook/FacebookBannerAd.hpp',
-      'src/ee/facebook/FacebookNativeAd.hpp',
-      'src/ee/facebook/FacebookNativeAdBuilder.hpp'
       'src/ee/facebook/EEFacebookNativeAdView.h'
 
     s.dependency 'ee-x/core'

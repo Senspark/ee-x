@@ -21,8 +21,7 @@
                 layout:(NSString* _Nonnull)layout;
 - (BOOL)destroyNativeAd:(NSString* _Nonnull)adId;
 
-- (void)cacheInterstitialAd:(NSString* _Nonnull)adId;
-- (BOOL)hasInterstitialAd;
-- (BOOL)showInterstitialAd;
+- (BOOL)createInterstitialAd:(NSString* _Nonnull)placementId;
+- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)placementId;
 
 @end

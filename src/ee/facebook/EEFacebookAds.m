@@ -14,35 +14,32 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebook/EEFacebookAds.h"
 #import "ee/facebook/internal/EEFacebookBannerAd.h"
+#import "ee/facebook/internal/EEFacebookInterstitialAd.h"
 #import "ee/facebook/internal/EEFacebookNativeAd.h"
 
-@interface EEFacebookAds () <FBAdViewDelegate, FBInterstitialAdDelegate,
-                             FBNativeAdDelegate, FBMediaViewDelegate> {
+@interface EEFacebookAds () {
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
+    NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
 }
-
-@property (nonatomic, retain) FBInterstitialAd* _Nullable interstitialAd;
 
 @end
 
 @implementation EEFacebookAds
 
 // clang-format off
-static NSString* const k__getTestDeviceHash    = @"FacebookAds_getTestDeviceHash";
-static NSString* const k__addTestDevice        = @"FacebookAds_addTestDevice";
-static NSString* const k__clearTestDevices     = @"FacebookAds_clearTestDevices";
+static NSString* const k__getTestDeviceHash     = @"FacebookAds_getTestDeviceHash";
+static NSString* const k__addTestDevice         = @"FacebookAds_addTestDevice";
+static NSString* const k__clearTestDevices      = @"FacebookAds_clearTestDevices";
 
-static NSString* const k__createBannerAd       = @"FacebookAds_createBannerAd";
-static NSString* const k__destroyBannerAd      = @"FacebookAds_destroyBannerAd";
+static NSString* const k__createBannerAd        = @"FacebookAds_createBannerAd";
+static NSString* const k__destroyBannerAd       = @"FacebookAds_destroyBannerAd";
 
-static NSString* const k__createNativeAd       = @"FacebookAds_createNativeAd";
-static NSString* const k__destroyNativeAd      = @"FacebookAds_destroyNativeAd";
+static NSString* const k__createNativeAd        = @"FacebookAds_createNativeAd";
+static NSString* const k__destroyNativeAd       = @"FacebookAds_destroyNativeAd";
 
-static NSString* const k__cacheInterstitialAd  = @"FacebookAds_cacheInterstitialAd";
-static NSString* const k__showInterstitialAd   = @"FacebookAds_showInterstitialAd";
-
-static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
+static NSString* const k__createInterstitialAd  = @"FacebookAds_createInterstitialAd";
+static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstitialAd";
 // clang-format on
 
 - (id)init {
@@ -53,16 +50,18 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     [self registerHandlers];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
+    interstitialAds_ = [[NSMutableDictionary alloc] init];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
-    [self setInterstitialAd:nil];
     [bannerAds_ release];
     bannerAds_ = nil;
     [nativeAds_ release];
     nativeAds_ = nil;
+    [interstitialAds_ release];
+    interstitialAds_ = nil;
     [super dealloc];
 }
 
@@ -122,16 +121,20 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
                        return [self destroyNativeAd:adId] ? @"true" : @"false";
                    }];
 
-    [bridge registerHandler:k__cacheInterstitialAd
+    [bridge registerHandler:k__createInterstitialAd
                    callback:^(NSString* message) {
-                       NSString* adId = message;
-                       [self cacheInterstitialAd:adId];
-                       return @"";
+                       NSString* placementId = message;
+                       return [self createInterstitialAd:placementId]
+                                  ? @"true"
+                                  : @"false";
                    }];
 
-    [bridge registerHandler:k__showInterstitialAd
+    [bridge registerHandler:k__destroyInterstitialAd
                    callback:^(NSString* message) {
-                       return [self showInterstitialAd] ? @"true" : @"false";
+                       NSString* placementId = message;
+                       return [self destroyInterstitialAd:placementId]
+                                  ? @"true"
+                                  : @"false";
                    }];
 }
 
@@ -148,8 +151,8 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     [bridge deregisterHandler:k__createNativeAd];
     [bridge deregisterHandler:k__destroyNativeAd];
 
-    [bridge deregisterHandler:k__cacheInterstitialAd];
-    [bridge deregisterHandler:k__showInterstitialAd];
+    [bridge deregisterHandler:k__createInterstitialAd];
+    [bridge deregisterHandler:k__destroyInterstitialAd];
 }
 
 - (NSString* _Nonnull)getTestDeviceHash {
@@ -205,80 +208,24 @@ static NSString* const k__cppCallback          = @"FacebookAds_cppCallback";
     return YES;
 }
 
-- (FBInterstitialAd* _Nullable)createInterstitialAd:(NSString* _Nonnull)adId {
-    FBInterstitialAd* ad =
-        [[[FBInterstitialAd alloc] initWithPlacementID:adId] autorelease];
-    [ad setDelegate:self];
-    [ad loadAd];
-    return ad;
-}
-
-- (void)cacheInterstitialAd:(NSString* _Nonnull)adId {
-    if ([self interstitialAd] == nil) {
-        [self setInterstitialAd:[self createInterstitialAd:adId]];
-        return;
-    }
-    if ([[[self interstitialAd] placementID] isEqualToString:adId]) {
-        [[self interstitialAd] loadAd];
-    } else {
-        [self setInterstitialAd:[self createInterstitialAd:adId]];
-    }
-}
-
-- (bool)hasInterstitialAd {
-    if ([self interstitialAd] == nil) {
+- (BOOL)createInterstitialAd:(NSString* _Nonnull)placementId {
+    if ([interstitialAds_ objectForKey:placementId] != nil) {
         return NO;
     }
-    return [[self interstitialAd] isAdValid];
+    EEFacebookInterstitialAd* ad = [[[EEFacebookInterstitialAd alloc]
+        initWithPlacementId:placementId] autorelease];
+    [interstitialAds_ setObject:ad forKey:placementId];
+    return YES;
 }
 
-- (BOOL)showInterstitialAd {
-    if (![self hasInterstitialAd]) {
+- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)placementId {
+    if ([interstitialAds_ objectForKey:placementId] == nil) {
         return NO;
     }
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    return [[self interstitialAd] showAdFromRootViewController:rootView];
-}
-
-- (void)onAdsCallback:(int)code msg:(NSString*)msg {
-}
-
-#pragma mark - FBInterstitialAdDelegate
-
-- (void)interstitialAdDidClick:(FBInterstitialAd*)interstitialAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialAdDidClose:(FBInterstitialAd*)interstitialAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self cacheInterstitialAd:[interstitialAd placementID]];
-}
-
-- (void)interstitialAdWillClose:(FBInterstitialAd*)interstitialAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialAdDidLoad:(FBInterstitialAd*)interstitialAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialAd:(FBInterstitialAd*)interstitialAd
-      didFailWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-}
-
-- (void)interstitialAdWillLogImpression:(FBInterstitialAd*)interstitialAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-#pragma mark - FBMediaViewDelegate
-
-- (void)mediaViewDidLoad:(FBMediaView*)mediaView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)mediaViewVideoDidComplete:(FBMediaView*)mediaView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEFacebookInterstitialAd* ad = [interstitialAds_ objectForKey:placementId];
+    [ad release];
+    [interstitialAds_ removeObjectForKey:placementId];
+    return YES;
 }
 
 @end

@@ -10,12 +10,8 @@ import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
-import com.facebook.ads.InterstitialAd;
-import com.facebook.ads.InterstitialAdListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,31 +19,30 @@ import java.util.Map;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class FacebookAds implements PluginProtocol, InterstitialAdListener {
-    private static final String k__getTestDeviceHash   = "FacebookAds_getTestDeviceHash";
-    private static final String k__addTestDevice       = "FacebookAds_addTestDevice";
-    private static final String k__clearTestDevices    = "FacebookAds_clearTestDevices";
-    private static final String k__createBannerAd      = "FacebookAds_createBannerAd";
-    private static final String k__destroyBannerAd     = "FacebookAds_destroyBannerAd";
-    private static final String k__createNativeAd      = "FacebookAds_createNativeAd";
-    private static final String k__destroyNativeAd     = "FacebookAds_destroyNativeAd";
-    private static final String k__cacheInterstitialAd = "FacebookAds_cacheInterstitialAd";
-    private static final String k__showInterstitialAd  = "FacebookAds_showInterstitialAd";
-    private static final String k__cppCallback         = "FacebookAds_cppCallback";
+public class FacebookAds implements PluginProtocol {
+    private static final String k__getTestDeviceHash     = "FacebookAds_getTestDeviceHash";
+    private static final String k__addTestDevice         = "FacebookAds_addTestDevice";
+    private static final String k__clearTestDevices      = "FacebookAds_clearTestDevices";
+    private static final String k__createBannerAd        = "FacebookAds_createBannerAd";
+    private static final String k__destroyBannerAd       = "FacebookAds_destroyBannerAd";
+    private static final String k__createNativeAd        = "FacebookAds_createNativeAd";
+    private static final String k__destroyNativeAd       = "FacebookAds_destroyNativeAd";
+    private static final String k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
+    private static final String k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
 
     private static final Logger _logger = new Logger(FacebookAds.class.getName());
 
-    private Activity                      _context;
-    private InterstitialAd                _interstitialAd;
-    private Map<String, FacebookBannerAd> _bannerAds;
-    private Map<String, FacebookNativeAd> _nativeAds;
+    private Activity                            _context;
+    private Map<String, FacebookBannerAd>       _bannerAds;
+    private Map<String, FacebookNativeAd>       _nativeAds;
+    private Map<String, FacebookInterstitialAd> _interstitialAds;
 
     public FacebookAds(Context context) {
         _context = (Activity) context;
 
-        _interstitialAd = null;
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
+        _interstitialAds = new HashMap<>();
 
         registerHandlers();
     }
@@ -77,20 +72,25 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
     @Override
     public void onDestroy() {
         deregisterHandlers();
-        if (_interstitialAd != null) {
-            _interstitialAd.destroy();
-            _interstitialAd = null;
-        }
+
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).destroy();
         }
+        _bannerAds.clear();
+        _bannerAds = null;
+
         for (String key : _nativeAds.keySet()) {
             _nativeAds.get(key).destroy();
         }
-        _bannerAds.clear();
-        _bannerAds = null;
         _nativeAds.clear();
         _nativeAds = null;
+
+        for (String key : _interstitialAds.keySet()) {
+            _interstitialAds.get(key).destroy();
+        }
+        _interstitialAds.clear();
+        _interstitialAds = null;
+
         _context = null;
     }
 
@@ -195,19 +195,20 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String adId = message;
-                cacheInterstitialAd(adId);
-                return "";
+                String placementId = message;
+                return createInterstitialAd(placementId) ? "true" : "false";
             }
-        }, k__cacheInterstitialAd);
+        }, k__createInterstitialAd);
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return showInterstitialAd() ? "true" : "false";
+                String placementId = message;
+                return destroyInterstitialAd(placementId) ? "true" : "false";
             }
-        }, k__showInterstitialAd);
+        }, k__destroyInterstitialAd);
     }
 
     private void deregisterHandlers() {
@@ -220,19 +221,22 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         bridge.deregisterHandler(k__destroyBannerAd);
         bridge.deregisterHandler(k__createNativeAd);
         bridge.deregisterHandler(k__destroyNativeAd);
-        bridge.deregisterHandler(k__cacheInterstitialAd);
-        bridge.deregisterHandler(k__showInterstitialAd);
+        bridge.deregisterHandler(k__createInterstitialAd);
+        bridge.deregisterHandler(k__destroyInterstitialAd);
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public String getTestDeviceHash() {
         return "";
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void addTestDevice(@NonNull String hash) {
         AdSettings.addTestDevice(hash);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void clearTestDevices() {
         AdSettings.clearTestDevices();
     }
@@ -279,82 +283,24 @@ public class FacebookAds implements PluginProtocol, InterstitialAdListener {
         return true;
     }
 
-    private InterstitialAd createInterstitialAd(@NonNull String adId) {
-        InterstitialAd ad = new InterstitialAd(_context, adId);
-        ad.setAdListener(this);
-        ad.loadAd();
-        return ad;
-    }
-
     @SuppressWarnings("WeakerAccess")
-    public void cacheInterstitialAd(@NonNull final String adId) {
-        _context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_interstitialAd != null) {
-                    _interstitialAd = createInterstitialAd(adId);
-                    return;
-                }
-                // noinspection ConstantConditions
-                if (_interstitialAd.getPlacementId().equals(adId)) {
-                    _interstitialAd.loadAd();
-                } else {
-                    _interstitialAd = createInterstitialAd(adId);
-                }
-            }
-        });
-    }
-
-    @SuppressWarnings({"WeakerAccess", "SimplifiableIfStatement"})
-    public boolean hasInterstitialAd() {
-        if (_interstitialAd == null) {
+    private boolean createInterstitialAd(@NonNull String placementId) {
+        if (_interstitialAds.containsKey(placementId)) {
             return false;
         }
-        return _interstitialAd.isAdLoaded();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean showInterstitialAd() {
-        if (!hasInterstitialAd()) {
-            return false;
-        }
-        _context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                _interstitialAd.show();
-            }
-        });
+        FacebookInterstitialAd ad = new FacebookInterstitialAd(_context, placementId);
+        _interstitialAds.put(placementId, ad);
         return true;
     }
 
-    @Override
-    public void onInterstitialDisplayed(Ad ad) {
-        _logger.info("onInterstitialDisplayed");
-    }
-
-    @Override
-    public void onInterstitialDismissed(Ad ad) {
-        _logger.info("onInterstitialDismissed");
-        cacheInterstitialAd(ad.getPlacementId());
-    }
-
-    @Override
-    public void onError(Ad ad, AdError adError) {
-        _logger.info("onError: " + adError.getErrorMessage());
-    }
-
-    @Override
-    public void onAdLoaded(Ad ad) {
-        _logger.info("onAdLoaded");
-    }
-
-    @Override
-    public void onAdClicked(Ad ad) {
-        _logger.info("onAdCLicked");
-    }
-
-    @Override
-    public void onLoggingImpression(Ad ad) {
-        _logger.info("onLoggingImpression");
+    @SuppressWarnings("WeakerAccess")
+    public boolean destroyInterstitialAd(@NonNull String placementId) {
+        if (!_interstitialAds.containsKey(placementId)) {
+            return false;
+        }
+        FacebookInterstitialAd ad = _interstitialAds.get(placementId);
+        ad.destroy();
+        _interstitialAds.remove(placementId);
+        return true;
     }
 }

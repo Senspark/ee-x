@@ -65,6 +65,7 @@ public class FacebookBannerAd implements AdListener {
         registerHandlers();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void destroy() {
         deregisterHandlers();
         _adView.destroy();

@@ -14,12 +14,14 @@
 #include <string>
 
 #include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/InterstitialAdInterface.hpp"
 
 namespace ee {
 namespace facebook {
 class BannerAd;
 class NativeAd;
 class NativeAdBuilder;
+class InterstitialAd;
 
 enum class FacebookBannerAdSize {
     /// kFBAdSizeHeight50Banner or AdSize.BANNER_HEIGHT_50.
@@ -59,15 +61,17 @@ public:
     std::shared_ptr<AdViewInterface>
     createNativeAd(const NativeAdBuilder& builder);
 
-    void cacheInterstitialAd(const std::string& adId) const;
-    bool showInterstitialAd() const;
+    std::shared_ptr<InterstitialAdInterface>
+    createInterstitialAd(const std::string& placementId);
 
 private:
     friend BannerAd;
     friend NativeAd;
+    friend InterstitialAd;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
+    bool destroyInterstitialAd(const std::string& placementId);
 };
 } // namespace facebook
 } // namespace ee

@@ -23,6 +23,10 @@
 		6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */; };
 		6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */; };
 		6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */; };
+		6F2479D51F8DFD18009E702C /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479D31F8DFD18009E702C /* FacebookInterstitialAd.cpp */; };
+		6F2479D61F8DFD18009E702C /* FacebookInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D41F8DFD18009E702C /* FacebookInterstitialAd.hpp */; };
+		6F2479D91F8DFE09009E702C /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */; };
+		6F2479DA1F8DFE09009E702C /* EEFacebookInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */; };
 		6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
 		6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
 		6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
@@ -462,6 +466,10 @@
 		6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiRewardedVideo.hpp; path = ads/MultiRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiInterstitialAd.cpp; path = ads/MultiInterstitialAd.cpp; sourceTree = "<group>"; };
 		6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiInterstitialAd.hpp; path = ads/MultiInterstitialAd.hpp; sourceTree = "<group>"; };
+		6F2479D31F8DFD18009E702C /* FacebookInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookInterstitialAd.cpp; path = facebook/FacebookInterstitialAd.cpp; sourceTree = "<group>"; };
+		6F2479D41F8DFD18009E702C /* FacebookInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookInterstitialAd.hpp; path = facebook/FacebookInterstitialAd.hpp; sourceTree = "<group>"; };
+		6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookInterstitialAd.m; path = facebook/internal/EEFacebookInterstitialAd.m; sourceTree = "<group>"; };
+		6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookInterstitialAd.h; path = facebook/internal/EEFacebookInterstitialAd.h; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
 		6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseStorage.hpp; sourceTree = "<group>"; };
 		6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
@@ -887,6 +895,8 @@
 				6F426D3C1F878A5B009E202A /* EEFacebookBannerAd.h */,
 				6F426D481F879A77009E202A /* EEFacebookNativeAd.m */,
 				6F426D491F879A77009E202A /* EEFacebookNativeAd.h */,
+				6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */,
+				6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */,
 			);
 			name = internal;
 			sourceTree = "<group>";
@@ -1159,6 +1169,8 @@
 				6F426D451F879963009E202A /* FacebookNativeAd.hpp */,
 				6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */,
 				6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */,
+				6F2479D31F8DFD18009E702C /* FacebookInterstitialAd.cpp */,
+				6F2479D41F8DFD18009E702C /* FacebookInterstitialAd.hpp */,
 				EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */,
 				EB684E111EC5645200ED9E4A /* EEFacebookAds.h */,
 				6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */,
@@ -1216,11 +1228,13 @@
 				6F426D471F879963009E202A /* FacebookNativeAd.hpp in Headers */,
 				6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */,
 				6F426E321F8B828C009E202A /* FacebookNativeAdBuilder.hpp in Headers */,
+				6F2479DA1F8DFE09009E702C /* EEFacebookInterstitialAd.h in Headers */,
 				6F978CBA1F41882300247CA8 /* EEFacebookNativeAdView.h in Headers */,
 				6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */,
 				6F426D3A1F87837C009E202A /* FacebookBannerAd.hpp in Headers */,
 				6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */,
 				6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */,
+				6F2479D61F8DFD18009E702C /* FacebookInterstitialAd.hpp in Headers */,
 				6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */,
 				6F426D3E1F878A5B009E202A /* EEFacebookBannerAd.h in Headers */,
 			);
@@ -2211,6 +2225,8 @@
 				6F426D391F87837C009E202A /* FacebookBannerAd.cpp in Sources */,
 				EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */,
 				6F426D3D1F878A5B009E202A /* EEFacebookBannerAd.m in Sources */,
+				6F2479D91F8DFE09009E702C /* EEFacebookInterstitialAd.m in Sources */,
+				6F2479D51F8DFD18009E702C /* FacebookInterstitialAd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

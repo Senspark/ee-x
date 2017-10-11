@@ -43,6 +43,8 @@
     // Enable or disable multiple touches.
     [eaglView setMultipleTouchEnabled:NO];
 
+    _active = NO;
+
     // Set EAGLView as view of RootViewController.
     [self setView:eaglView];
 }
@@ -62,11 +64,13 @@
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewDidAppear:animated];
     cocos2d::Application::getInstance()->applicationWillEnterForeground();
+    _active = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [super viewWillDisappear:animated];
+    _active = NO;
     cocos2d::Application::getInstance()->applicationDidEnterBackground();
 }
 

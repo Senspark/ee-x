@@ -63,6 +63,8 @@
 		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
 		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
 		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
+		6F2A62981F8DB3490048C0C6 /* AppLovinRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2A62961F8DB3490048C0C6 /* AppLovinRewardedVideo.cpp */; };
+		6F2A62991F8DB3490048C0C6 /* AppLovinRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2A62971F8DB3490048C0C6 /* AppLovinRewardedVideo.hpp */; };
 		6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */; };
 		6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */; };
 		6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881D1F85E38000AE2D93 /* EEAppLovin.h */; };
@@ -472,6 +474,8 @@
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
+		6F2A62961F8DB3490048C0C6 /* AppLovinRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F2A62971F8DB3490048C0C6 /* AppLovinRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_app_lovin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinBridge.cpp; sourceTree = "<group>"; };
@@ -828,6 +832,8 @@
 			children = (
 				6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */,
 				6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */,
+				6F2A62961F8DB3490048C0C6 /* AppLovinRewardedVideo.cpp */,
+				6F2A62971F8DB3490048C0C6 /* AppLovinRewardedVideo.hpp */,
 				6F36881D1F85E38000AE2D93 /* EEAppLovin.h */,
 				6F36881E1F85E38000AE2D93 /* EEAppLovin.m */,
 			);
@@ -1243,6 +1249,7 @@
 				6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */,
 				6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */,
 				6F3688261F85E38000AE2D93 /* AppLovinFwd.hpp in Headers */,
+				6F2A62991F8DB3490048C0C6 /* AppLovinRewardedVideo.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2036,6 +2043,7 @@
 			files = (
 				6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */,
 				6F3688241F85E38000AE2D93 /* EEAppLovin.m in Sources */,
+				6F2A62981F8DB3490048C0C6 /* AppLovinRewardedVideo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

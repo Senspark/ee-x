@@ -13,21 +13,46 @@
 
 namespace ee {
 namespace applovin {
-class AppLovin final : public RewardedVideoInterface {
+class RewardedVideo;
+
+class AppLovin final {
 public:
-    static const std::string DefaultPlacementId;
-
     AppLovin();
-    virtual ~AppLovin() override;
+    ~AppLovin();
 
-    void initialize();
+    void initialize(const std::string& key);
 
-    bool isInterstitialAdReady() const;
+    /// Disabled by default.
+    void setTestAdsEnabled(bool enabled);
 
+    /// Disabled by default.
+    void setVerboseLogging(bool enabled);
+
+    /// Disabled by default.
+    void setMuted(bool enabled);
+
+    std::shared_ptr<RewardedVideoInterface> createRewardedVideo();
+
+private:
+    friend RewardedVideo;
+
+    bool hasInterstitialAd() const;
     bool showInterstitialAd();
 
-    /// @see Super.
-    virtual bool showRewardedVideo(const std::string& placementId) override;
+    bool destroyRewardedVideo();
+    void loadRewardedVideo();
+    bool hasRewardedVideo() const;
+    bool showRewardedVideo();
+
+    void onInterstitialAdHidden();
+    void onRewardedVideoFailed(int errorCode);
+    void onRewardedVideoDisplayed();
+    void onRewardedVideoHidden();
+    void onUserRewardVerified();
+
+    bool verified_;
+    bool errored_;
+    RewardedVideo* rewardedVideo_;
 };
 } // namespace applovin
 } // namespace ee

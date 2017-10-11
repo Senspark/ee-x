@@ -15,10 +15,14 @@
 @implementation EEUtils
 
 #if TARGET_OS_IOS
++ (UIWindow* _Nullable)getKeyWindow {
+    return [[UIApplication sharedApplication] keyWindow];
+}
+
 + (UIViewController* _Nullable)getCurrentRootViewController {
     // [[[[UIApplication sharedApplication] delegate] window]
     // rootViewController];
-    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    return [[self getKeyWindow] rootViewController];
 }
 #endif // TARGET_OS_IOS
 

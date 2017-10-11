@@ -166,27 +166,34 @@ void testFacebookNativeAd() {
     });
 }
 
-ee::AppLovin* appLovin_;
-
 void testAppLovin() {
     getLogger().info("Create AppLovin plugin");
 
     static auto plugin = ee::AppLovin();
-    appLovin_ = &plugin;
-    appLovin_->initialize("S9_dC7VN_"
-                          "TzZ700tTmRpGQVgoXZyIbOmlOOyVvJVRH3TI4PmqrT5G3m2bJ_"
-                          "uwNefn2bHxwnMBqwTvKEi9ooPrX");
-    appLovin_->setTestAdsEnabled(true);
-    appLovin_->setVerboseLogging(true);
+    static auto appLovin = &plugin;
+    appLovin = &plugin;
+     appLovin->initialize(
+         R"(gG8pkErh1_fQo-4cNDXGnxGyb9H4qz6VDEJyS8eU8IvxH-XeB4wy0BubKAg97neL0yIT4xyDEs8WqfA0l4zlGr)");
+    // appLovin->initialize(
+    //     R"(S9_dC7VN_TzZ700tTmRpGQVgoXZyIbOmlOOyVvJVRH3TI4PmqrT5G3m2bJ_uwNefn2bHxwnMBqwTvKEi9ooPrX)");
+    appLovin->setTestAdsEnabled(true);
+    appLovin->setVerboseLogging(true);
+
+    static auto rewardedVideo = appLovin->createRewardedVideo();
+    rewardedVideo->setResultCallback([](bool result) {
+        logCurrentThread();
+        getLogger().info("Result = ", result ? "succeeded" : "failed");
+    });
 
     float delay = 0.0f;
-    scheduleOnce(delay += 1.0f, [] { appLovin_->loadRewardedVideo(); });
-    // appLovin_->showRewardedVideo();
-    //    appLovin_->setRewardedVideoCallback([](bool result, const std::string&
-    //    id) {
-    //        getLogger().info(cocos2d::StringUtils::format(
-    //            "result = %d id = %s", static_cast<int>(result), id.c_str()));
-    //    });
+    schedule(delay += 1.0f, 3.0f, [] {
+        getLogger().info("Load AppLovin rewarded video");
+        rewardedVideo->load();
+    });
+    schedule(delay += 1.0f, 3.0f, [] {
+        getLogger().info("Show AppLovin rewarded video");
+        rewardedVideo->show();
+    });
 }
 
 void testUnityAds() {
@@ -359,10 +366,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     ee::runOnUiThread(
         [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
-    // testAppLovin();
+    testAppLovin();
     // testUnityAds();
     // testIronSource();
-    testVungle();
+    // testVungle();
 
     cocos2d::log("Create scene");
     auto scene = cocos2d::Scene::create();

@@ -11,28 +11,39 @@ import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdRewardListener;
+import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkSettings;
+import com.applovin.sdk.AppLovinSdkUtils;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class AppLovin implements PluginProtocol {
-    private static final String k__initialize            = "AppLovin_initialize";
-    private static final String k__isInterstitialAdReady = "AppLovin_isInterstitialAdReady";
-    private static final String k__showInterstitialAd    = "AppLovin_showInterstitialAd";
-    private static final String k__showRewardedVideo     = "AppLovin_showRewardedVideo";
-    private static final String k__cppCallback           = "AppLovin_cppCallback";
+    private static final String k__initialize               = "AppLovin_initialize";
+    private static final String k__setTestAdsEnabled        = "AppLovin_setTestAdsEnabled";
+    private static final String k__setVerboseLogging        = "AppLovin_setVerboseLogging";
+    private static final String k__setMuted                 = "AppLovin_setMuted";
+    private static final String k__hasInterstitialAd        = "AppLovin_hasInterstitialAd";
+    private static final String k__showInterstitialAd       = "AppLovin_showInterstitialAd";
+    private static final String k__loadRewardedVideo        = "AppLovin_loadRewardedVideo";
+    private static final String k__hasRewardedVideo         = "AppLovin_hasRewardedVideo";
+    private static final String k__showRewardedVideo        = "AppLovin_showRewardedVideo";
+    private static final String k__onInterstitialAdHidden   = "AppLovin_onInterstitialAdHidden";
+    private static final String k__onRewardedVideoFailed    = "AppLovin_onRewardedVideoFailed";
+    private static final String k__onRewardedVideoDisplayed = "AppLovin_onRewardedVideoDisplayed";
+    private static final String k__onRewardedVideoHidden    = "AppLovin_onRewardedVideoHidden";
+    private static final String k__onUserRewardVerified     = "AppLovin_onUserRewardVerified";
 
     private static final Logger _logger = new Logger(AppLovin.class.getName());
 
     private Activity _context;
 
-    private AppLovinIncentivizedInterstitial _incentivizedInterstitial;
+    private AppLovinSdk                      _sdk;
+    private AppLovinIncentivizedInterstitial _incentivizedInterstitialAd;
     private AppLovinAdLoadListener           _incentivizedInterstitialAdLoadListener;
     private AppLovinAdRewardListener         _incentivizedInterstitialAdRewardListener;
     private AppLovinAdDisplayListener        _incentivizedInterstitialAdDisplayListener;
@@ -69,7 +80,8 @@ public class AppLovin implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
-        _incentivizedInterstitial = null;
+        _sdk = null;
+        _incentivizedInterstitialAd = null;
         _incentivizedInterstitialAdLoadListener = null;
         _incentivizedInterstitialAdRewardListener = null;
         _incentivizedInterstitialAdDisplayListener = null;
@@ -89,10 +101,12 @@ public class AppLovin implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                initialize();
+                String key = message;
+                initialize(key);
                 return "";
             }
         }, k__initialize);
@@ -101,15 +115,43 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return isInterstitialAdReady() ? "true" : "false";
+                setTestAdEnabled(message.equals("true"));
+                return "";
             }
-        }, k__isInterstitialAdReady);
+        }, k__setTestAdsEnabled);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return showInterstitialAd() ? "true" : "false";
+                setVerboseLoggin(message.equals("true"));
+                return "";
+            }
+        }, k__setVerboseLogging);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                setMuted(message.equals("true"));
+                return "";
+            }
+        }, k__setMuted);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return hasInterstitialAd() ? "true" : "false";
+            }
+        }, k__hasInterstitialAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                showInterstitialAd();
+                return "";
             }
         }, k__showInterstitialAd);
 
@@ -117,7 +159,25 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return showRewardedVideo() ? "true" : "false";
+                loadRewardedVideo();
+                return "";
+            }
+        }, k__loadRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return hasRewardedVideo() ? "true" : "false";
+            }
+        }, k__hasRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                showRewardedVideo();
+                return "";
             }
         }, k__showRewardedVideo);
     }
@@ -126,16 +186,23 @@ public class AppLovin implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__isInterstitialAdReady);
+        bridge.deregisterHandler(k__setTestAdsEnabled);
+        bridge.deregisterHandler(k__setVerboseLogging);
+        bridge.deregisterHandler(k__setMuted);
+        bridge.deregisterHandler(k__hasInterstitialAd);
         bridge.deregisterHandler(k__showInterstitialAd);
+        bridge.deregisterHandler(k__loadRewardedVideo);
+        bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize() {
-        AppLovinSdk.initializeSdk(_context);
+    public void initialize(@NonNull String key) {
+        AppLovinSdkSettings settings = AppLovinSdkUtils.retrieveUserSettings(_context);
+        _sdk = AppLovinSdk.getInstance(key, settings, _context);
+        _sdk.initializeSdk();
 
-        _incentivizedInterstitial = AppLovinIncentivizedInterstitial.create(_context);
+        _incentivizedInterstitialAd = AppLovinIncentivizedInterstitial.create(_sdk);
 
         _incentivizedInterstitialAdLoadListener = new AppLovinAdLoadListener() {
             @Override
@@ -146,7 +213,8 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void failedToReceiveAd(int errorCode) {
                 _logger.info("failedToReceiveAd: code " + errorCode);
-                sendResult(true);
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onRewardedVideoFailed, String.valueOf(errorCode));
             }
         };
 
@@ -154,31 +222,28 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void userRewardVerified(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userRewardVerified");
-                sendResult(false);
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onUserRewardVerified);
             }
 
             @Override
             public void userOverQuota(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userOverQuota");
-                sendResult(false);
             }
 
             @Override
             public void userRewardRejected(AppLovinAd ad, Map<String, String> response) {
                 _logger.info("userRewardRejected");
-                sendResult(false);
             }
 
             @Override
             public void validationRequestFailed(AppLovinAd ad, int responseCode) {
                 _logger.info("validationRequestFailed: code = " + responseCode);
-                sendResult(false);
             }
 
             @Override
             public void userDeclinedToViewAd(AppLovinAd ad) {
                 _logger.info("userDeclinedToViewAd");
-                sendResult(false);
             }
         };
 
@@ -186,60 +251,57 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void adDisplayed(AppLovinAd ad) {
                 _logger.info("adDisplayed");
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onRewardedVideoDisplayed);
             }
 
             @Override
             public void adHidden(AppLovinAd ad) {
                 _logger.info("adHidden");
-                loadRewardedVideo();
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onRewardedVideoHidden);
             }
         };
-
-        // Preload call using a new load listener
-        loadRewardedVideo();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isInterstitialAdReady() {
-        return AppLovinInterstitialAd.isAdReadyToDisplay(_context);
+    public void setTestAdEnabled(boolean enabled) {
+        _sdk.getSettings().setTestAdsEnabled(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showInterstitialAd() {
-        if (!isInterstitialAdReady()) {
-            return false;
-        }
-        AppLovinInterstitialAd.show(_context);
-        return true;
+    public void setVerboseLoggin(boolean enabled) {
+        _sdk.getSettings().setVerboseLogging(enabled);
     }
 
+    @SuppressWarnings("WeakerAccess")
+    public void setMuted(boolean enabled) {
+        _sdk.getSettings().setMuted(enabled);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean hasInterstitialAd() {
+        return _sdk.getAdService().hasPreloadedAd(AppLovinAdSize.INTERSTITIAL);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void showInterstitialAd() {
+        AppLovinInterstitialAd.show(_sdk, _context, null);
+    }
+
+    @SuppressWarnings("WeakerAccess")
     public void loadRewardedVideo() {
-        _incentivizedInterstitial.preload(_incentivizedInterstitialAdLoadListener);
+        _incentivizedInterstitialAd.preload(_incentivizedInterstitialAdLoadListener);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isRewardedVideoReady() {
-        return _incentivizedInterstitial.isAdReadyToDisplay();
+    public boolean hasRewardedVideo() {
+        return _incentivizedInterstitialAd.isAdReadyToDisplay();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showRewardedVideo() {
-        _logger.info("showRewardedVideo: begin");
-        if (!isRewardedVideoReady()) {
-            loadRewardedVideo();
-            return false;
-        }
-        _incentivizedInterstitial.show(_context, _incentivizedInterstitialAdRewardListener, null,
+    public void showRewardedVideo() {
+        _incentivizedInterstitialAd.show(_context, _incentivizedInterstitialAdRewardListener, null,
             _incentivizedInterstitialAdDisplayListener);
-        _logger.info("showRewardedVideo: end");
-        return true;
-    }
-
-    private void sendResult(boolean result) {
-        Map<String, Object> dict = new HashMap<>();
-        dict.put("result", result);
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__cppCallback, JsonUtils.convertDictionaryToString(dict));
     }
 }

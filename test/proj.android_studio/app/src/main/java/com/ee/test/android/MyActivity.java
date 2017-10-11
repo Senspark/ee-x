@@ -3,6 +3,7 @@ package com.ee.test.android;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.ee.applovin.AppLovin;
 import com.ee.core.Logger;
 import com.ee.core.Metrics;
 import com.ee.core.PluginManager;
@@ -34,6 +35,7 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new UnityAds(this));
         manager.addPlugin(new IronSource(this));
         manager.addPlugin(new Vungle(this));
+        manager.addPlugin(new AppLovin(this));
 
         _logger.debug("onCreate: end.");
     }

@@ -10,16 +10,17 @@
 
 @interface EEAppLovin : NSObject
 
-- (void)initialize;
+- (void)initialize:(NSString* _Nonnull)key;
 
-- (BOOL)isInterstitialAdReady;
+- (void)setTestAdsEnabled:(BOOL)enabled;
+- (void)setVerboseLogging:(BOOL)enabled;
+- (void)setMuted:(BOOL)enabled;
 
-- (BOOL)showInterstitialAd;
+- (BOOL)hasInterstitialAd;
+- (void)showInterstitialAd;
 
 - (void)loadRewardedVideo;
-
-- (BOOL)isRewardedVideoReady;
-
-- (BOOL)showRewardedVideo;
+- (BOOL)hasRewardedVideo;
+- (void)showRewardedVideo;
 
 @end

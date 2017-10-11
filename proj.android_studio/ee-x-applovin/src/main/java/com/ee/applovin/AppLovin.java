@@ -124,7 +124,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setVerboseLoggin(message.equals("true"));
+                setVerboseLogging(message.equals("true"));
                 return "";
             }
         }, k__setVerboseLogging);
@@ -270,7 +270,7 @@ public class AppLovin implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setVerboseLoggin(boolean enabled) {
+    public void setVerboseLogging(boolean enabled) {
         _sdk.getSettings().setVerboseLogging(enabled);
     }
 

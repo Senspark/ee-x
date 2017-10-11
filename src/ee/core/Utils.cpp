@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <mutex>
 #include <queue>
 
 #include "ee/Macro.hpp"
@@ -48,6 +49,25 @@ void runOnUiThread(const Runnable& runnable) {
     }
     methodInfo->getEnv()->CallStaticVoidMethod(methodInfo->getClass(),
                                                methodInfo->getMethodId());
+#else  // EE_X_ANDROID
+    runnable();
+#endif // EE_X_ANDROID
+}
+
+void runOnUiThreadAndWait(const Runnable& runnable) {
+#ifdef EE_X_ANDROID
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool processed = false;
+    runOnUiThread([runnable, &mtx, &cv, &processed] {
+        std::unique_lock<std::mutex> lock(mtx);
+        runnable();
+        processed = true;
+        lock.unlock();
+        cv.notify_one();
+    });
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, [&processed] { return processed; });
 #else  // EE_X_ANDROID
     runnable();
 #endif // EE_X_ANDROID

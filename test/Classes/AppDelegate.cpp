@@ -297,7 +297,12 @@ ee::IronSource* getIronSource() {
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
         constexpr auto gameId = "67a60ab5";
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        plugin.initialize(gameId);
+        ee::runOnUiThreadAndWait([] {
+            getLogger().info("Initialize ironSource begin");
+            logCurrentThread();
+            plugin.initialize(gameId);
+            getLogger().info("Initialize ironSource end");
+        });
     }
     return &plugin;
 }
@@ -307,13 +312,16 @@ std::string getIronSourceRewardedVideoId() {
 }
 
 void testIronSource() {
+    getLogger().info("Create ironSource rewarded video begin");
     static auto rewardedVideo =
         getIronSource()->createRewardedVideo(getIronSourceRewardedVideoId());
+    getLogger().info("Create ironSource rewarded video end");
 
     float delay = 0.0f;
     scheduleOnce(delay += 5.0f, [] {
-        getLogger().info("Show IronSource rewarded video");
+        getLogger().info("Show ironSource rewarded video begin");
         rewardedVideo->show();
+        getLogger().info("Show ironSource rewarded video end");
     });
 }
 
@@ -351,20 +359,29 @@ void testVungle() {
 }
 
 void testMultiAds() {
-    static auto ads = ee::MultiRewardedVideo();
-    ads.addItem(getAppLovin()->createRewardedVideo())
-        .addItem(getIronSource()->createRewardedVideo(
-            getIronSourceRewardedVideoId()))
-        .addItem(getUnityAds()->createRewardedVideo(getUnityRewardedVideoId()))
-        .addItem(getVungle()->createRewardedVideo());
+    static ee::MultiRewardedVideo* ads;
+    ee::runOnUiThread([] {
+        static auto temp = ee::MultiRewardedVideo();
+        ads = &temp;
 
-    ads.setResultCallback([](bool result) {
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
+        // ads.addItem(getAppLovin()->createRewardedVideo());
+        ads->addItem(getIronSource()->createRewardedVideo(
+            getIronSourceRewardedVideoId()));
+        // ads.addItem(getUnityAds()->createRewardedVideo(getUnityRewardedVideoId()));
+        // ads.addItem(getVungle()->createRewardedVideo());
+
+        ads->setResultCallback([](bool result) {
+            logCurrentThread();
+            getLogger().info("Result = ", result ? "succeeded" : "failed");
+        });
     });
+
     schedule(2.0f, 3.0f, [] {
         logCurrentThread();
-        ads.show();
+        ee::runOnUiThread([] {
+            logCurrentThread();
+            ads->show();
+        });
     });
 }
 } // namespace
@@ -440,15 +457,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
     getLogger().info("Cocos thread ID: ", getCurrentThreadId());
-    ee::runOnUiThread(
+    ee::runOnUiThreadAndWait(
         [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
     // testAppLovin();
     // testUnityAds();
-    // testIronSource();
+    testIronSource();
     // testVungle();
     // testMultiAds();
-    testFacebookInterstitialAd();
+    // testFacebookInterstitialAd();
 
     cocos2d::log("Create scene");
     auto scene = cocos2d::Scene::create();

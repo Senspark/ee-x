@@ -6,9 +6,42 @@
 //
 //
 
-#ifndef MultiInterstitialAd_hpp
-#define MultiInterstitialAd_hpp
+#ifndef EE_X_MULTI_INTERSTITIAL_AD_HPP
+#define EE_X_MULTI_INTERSTITIAL_AD_HPP
 
-#include <stdio.h>
+#include <memory>
+#include <vector>
 
-#endif /* MultiInterstitialAd_hpp */
+#include "ee/ads/InterstitialAdInterface.hpp"
+
+namespace ee {
+namespace ads {
+class MultiInterstitialAd : public InterstitialAdInterface {
+private:
+    using Self = MultiInterstitialAd;
+    using Super = InterstitialAdInterface;
+
+public:
+    MultiInterstitialAd();
+    virtual ~MultiInterstitialAd() override;
+
+    Self& addItem(const std::shared_ptr<InterstitialAdInterface>& item);
+
+    /// @see Super.
+    virtual bool isLoaded() const override;
+
+    /// @see Super.
+    virtual void load() override;
+
+    /// @see Super.
+    virtual bool show() override;
+
+private:
+    std::vector<std::shared_ptr<InterstitialAdInterface>> items_;
+};
+} // namespace ads
+
+using ads::MultiInterstitialAd;
+} // namespace ee
+
+#endif /* EE_X_MULTI_INTERSTITIAL_AD_HPP */

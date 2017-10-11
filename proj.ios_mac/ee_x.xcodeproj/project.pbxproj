@@ -18,9 +18,11 @@
 		6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
 		6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
 		6F1AA9591F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
-		6F2479C51F8DDCE1009E702C /* RewardedVideoList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479C31F8DDCE1009E702C /* RewardedVideoList.cpp */; };
-		6F2479C61F8DDCE1009E702C /* RewardedVideoList.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479C41F8DDCE1009E702C /* RewardedVideoList.hpp */; };
 		6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479C81F8DF482009E702C /* Ads.hpp */; };
+		6F2479CD1F8DFBB0009E702C /* MultiRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */; };
+		6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */; };
+		6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */; };
+		6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */; };
 		6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
 		6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
 		6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
@@ -455,9 +457,11 @@
 		6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; sourceTree = "<group>"; };
 		6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseMessaging.cpp; sourceTree = "<group>"; };
 		6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseMessaging.hpp; sourceTree = "<group>"; };
-		6F2479C31F8DDCE1009E702C /* RewardedVideoList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RewardedVideoList.cpp; path = ads/RewardedVideoList.cpp; sourceTree = "<group>"; };
-		6F2479C41F8DDCE1009E702C /* RewardedVideoList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RewardedVideoList.hpp; path = ads/RewardedVideoList.hpp; sourceTree = "<group>"; };
 		6F2479C81F8DF482009E702C /* Ads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ads.hpp; sourceTree = "<group>"; };
+		6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiRewardedVideo.cpp; path = ads/MultiRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiRewardedVideo.hpp; path = ads/MultiRewardedVideo.hpp; sourceTree = "<group>"; };
+		6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiInterstitialAd.cpp; path = ads/MultiInterstitialAd.cpp; sourceTree = "<group>"; };
+		6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiInterstitialAd.hpp; path = ads/MultiInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
 		6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseStorage.hpp; sourceTree = "<group>"; };
 		6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
@@ -868,8 +872,10 @@
 				6F426D341F87822A009E202A /* AdViewInterface.hpp */,
 				6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */,
 				6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */,
-				6F2479C31F8DDCE1009E702C /* RewardedVideoList.cpp */,
-				6F2479C41F8DDCE1009E702C /* RewardedVideoList.hpp */,
+				6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */,
+				6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */,
+				6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */,
+				6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */,
 			);
 			name = ads;
 			sourceTree = "<group>";
@@ -1279,8 +1285,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
-				6F2479C61F8DDCE1009E702C /* RewardedVideoList.hpp in Headers */,
+				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
 				6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */,
+				6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */,
 				6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */,
 				6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */,
 			);
@@ -2072,10 +2079,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
 				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
 				6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */,
 				6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */,
-				6F2479C51F8DDCE1009E702C /* RewardedVideoList.cpp in Sources */,
+				6F2479CD1F8DFBB0009E702C /* MultiRewardedVideo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,19 +6,11 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/ads/internal/EEAdViewInterface.h"
 
-@interface EEFacebookNativeAd : NSObject
+@interface EEFacebookNativeAd : NSObject <EEAdViewInterface>
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
                      layout:(NSString* _Nonnull)layoutName;
-
-- (BOOL)isLoaded;
-- (void)load;
-- (CGPoint)getPosition;
-- (void)setPosition:(CGPoint)position;
-- (CGSize)getSize;
-- (void)setSize:(CGSize)size;
-- (void)setVisible:(BOOL)visible;
 
 @end

@@ -21,7 +21,7 @@ abstract_target 'common' do
         pod 'UnityAds'
     end
     
-    target 'ee_x_mobile_iron_src' do
+    target 'ee_x_mobile_iron_source' do
         pod 'IronSourceSDK'
     end
     

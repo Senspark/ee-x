@@ -15,7 +15,7 @@ import com.facebook.ads.InterstitialAdListener;
  * Created by Zinge on 10/11/17.
  */
 
-public class FacebookInterstitialAd implements InterstitialAdListener {
+class FacebookInterstitialAd implements InterstitialAdListener {
     private static final Logger _logger = new Logger(FacebookInterstitialAd.class.getName());
 
     private Activity       _activity;

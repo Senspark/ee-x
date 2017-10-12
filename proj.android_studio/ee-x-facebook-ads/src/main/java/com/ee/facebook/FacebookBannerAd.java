@@ -7,10 +7,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.ee.ads.AdViewHelper;
+import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
-import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -18,14 +17,11 @@ import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Zinge on 10/9/17.
  */
 
-public class FacebookBannerAd implements AdListener {
+class FacebookBannerAd implements AdListener, AdViewInterface {
     private static final Logger _logger = new Logger(FacebookBannerAd.class.getName());
 
     public static AdSize adSizeFor(int index) {
@@ -44,167 +40,83 @@ public class FacebookBannerAd implements AdListener {
         return AdSize.BANNER_320_50;
     }
 
-    private AdView  _adView;
-    private boolean _isAdLoaded;
+    private Activity _activity;
+    private AdView   _adView;
+    private boolean  _isAdLoaded;
+    private String   _adId;
+    private AdSize   _adSize;
 
     public FacebookBannerAd(@NonNull Activity activity, @NonNull String adId,
                             @NonNull AdSize adSize) {
         _isAdLoaded = false;
-
-        _adView = new AdView(activity, adId, adSize);
-        _adView.setAdListener(this);
-        _adView.loadAd();
-
-        FrameLayout rootView = Utils.getRootView(activity);
-        FrameLayout.LayoutParams params =
-            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.START | Gravity.TOP;
-        rootView.addView(_adView, params);
-
+        _adId = adId;
+        _adSize = adSize;
+        _adView = null;
+        _activity = activity;
+        createInternalAd();
         registerHandlers();
     }
 
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
         deregisterHandlers();
-        _adView.destroy();
-        _adView = null;
-    }
-
-    private String k__isLoaded() {
-        return "FacebookBannerAd_isLoaded_" + _adView.getPlacementId();
-    }
-
-    private String k__load() {
-        return "FacebookBannerAd_load_" + _adView.getPlacementId();
-    }
-
-    private String k__getPosition() {
-        return "FacebookBannerAd_getPosition_" + _adView.getPlacementId();
-    }
-
-    private String k__setPosition() {
-        return "FacebookBannerAd_setPosition_" + _adView.getPlacementId();
-    }
-
-    private String k__getSize() {
-        return "FacebookBannerAd_getSize_" + _adView.getPlacementId();
-    }
-
-    private String k__setSize() {
-        return "FacebookBannerAd_setSize_" + _adView.getPlacementId();
-    }
-
-    private String k__setVisible() {
-        return "FacebookBannerAd_setVisible_" + _adView.getPlacementId();
+        destroyInternalAd();
+        _activity = null;
+        _adId = null;
+        _adSize = null;
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return isLoaded() ? "true" : "false";
-            }
-        }, k__isLoaded());
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                load();
-                return "";
-            }
-        }, k__load());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point position = getPosition();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("x", position.x);
-                dict.put("y", position.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
-        }, k__getPosition());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("x");
-                int y = (Integer) dict.get("y");
-                setPosition(new Point(x, y));
-                return "";
-            }
-        }, k__setPosition());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point size = getSize();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("width", size.x);
-                dict.put("height", size.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
-        }, k__getSize());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("width");
-                int y = (Integer) dict.get("height");
-                setSize(new Point(x, y));
-                return "";
-            }
-        }, k__setSize());
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setVisible(message.equals("true"));
-                return "";
-            }
-        }, k__setVisible());
+        AdViewHelper helper = new AdViewHelper("FacebookBannerAd", _adId);
+        helper.registerHandlers(this);
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__isLoaded());
-        bridge.deregisterHandler(k__load());
-        bridge.deregisterHandler(k__getPosition());
-        bridge.deregisterHandler(k__setPosition());
-        bridge.deregisterHandler(k__getSize());
-        bridge.deregisterHandler(k__setSize());
-        bridge.deregisterHandler(k__setVisible());
+        AdViewHelper helper = new AdViewHelper("FacebookBannerAd", _adId);
+        helper.deregisterHandlers();
     }
 
-    @SuppressWarnings("WeakerAccess")
+    private boolean createInternalAd() {
+        if (_adView != null) {
+            return false;
+        }
+        _isAdLoaded = false;
+        AdView adView = new AdView(_activity, _adId, _adSize);
+        adView.setAdListener(this);
+        _adView = adView;
+
+        FrameLayout rootView = Utils.getRootView(_activity);
+        FrameLayout.LayoutParams params =
+            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.START | Gravity.TOP;
+        rootView.addView(_adView, params);
+        return true;
+    }
+
+    private boolean destroyInternalAd() {
+        if (_adView == null) {
+            return false;
+        }
+        _adView.destroy();
+        _adView = null;
+        return true;
+    }
+
+    @Override
     public boolean isLoaded() {
-        return _isAdLoaded;
+        return _adView != null && _isAdLoaded;
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void load() {
+        if (_adView == null) {
+            return;
+        }
         _adView.loadAd();
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     @NonNull
     public Point getPosition() {
         int p[] = new int[2];
@@ -212,7 +124,7 @@ public class FacebookBannerAd implements AdListener {
         return new Point(p[0], p[1]);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setPosition(@NonNull Point position) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
         params.leftMargin = position.x;
@@ -220,13 +132,13 @@ public class FacebookBannerAd implements AdListener {
         _adView.setLayoutParams(params);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     @NonNull
     public Point getSize() {
         return new Point(_adView.getWidth(), _adView.getHeight());
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setSize(@NonNull Point size) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
         params.width = size.x;
@@ -234,7 +146,7 @@ public class FacebookBannerAd implements AdListener {
         _adView.setLayoutParams(params);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setVisible(boolean visible) {
         if (visible) {
             _adView.setVisibility(View.VISIBLE);

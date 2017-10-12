@@ -8,6 +8,7 @@
 
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
+#import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
@@ -17,6 +18,8 @@
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
     FBNativeAd* nativeAd_;
     EEFacebookNativeAdView* nativeAdView_;
+    NSString* adId_;
+    NSString* layoutName_;
     BOOL isAdLoaded_;
 }
 
@@ -31,144 +34,88 @@
     }
 
     isAdLoaded_ = NO;
+    adId_ = [adId copy];
+    layoutName_ = [layoutName copy];
+    nativeAd_ = nil;
+    nativeAdView_ = nil;
 
-    FBNativeAd* nativeAd =
-        [[[FBNativeAd alloc] initWithPlacementID:adId] autorelease];
-    [nativeAd setDelegate:self];
-    [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
-    nativeAd_ = [nativeAd retain];
-
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    EEFacebookNativeAdView* adView =
-        [[[[NSBundle mainBundle] loadNibNamed:layoutName owner:nil options:nil]
-            firstObject] autorelease];
-    [adView setHidden:YES];
-    [[adView adchoicesView] setCorner:UIRectCornerTopRight];
-    [[rootView view] addSubview:adView];
-    nativeAdView_ = adView;
-
+    [self createInternalAd];
+    [self createView];
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterhandlers];
-    [nativeAd_ unregisterView];
-    [nativeAd_ release];
-    nativeAd_ = nil;
-    [nativeAdView_ removeFromSuperview];
+    [self destroyInternalAd];
+    [self destroyView];
+    [adId_ release];
+    adId_ = nil;
+    [layoutName_ release];
+    layoutName_ = nil;
     [super dealloc];
 }
 
-- (NSString*)k__isLoaded {
-    return [@"FacebookNativeAd_isLoaded_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__load {
-    return [@"FacebookNativeAd_load_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__getPosition {
-    return [@"FacebookNativeAd_getPosition_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__setPosition {
-    return [@"FacebookNativeAd_setPosition_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__getSize {
-    return [@"FacebookNativeAd_getSize_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__setSize {
-    return [@"FacebookNativeAd_setSize_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
-- (NSString*)k__setVisible {
-    return [@"FacebookNativeAd_setVisible_"
-        stringByAppendingString:[nativeAd_ placementID]];
-}
-
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:[self k__isLoaded]
-                   callback:^(NSString* message) {
-                       return [self isLoaded] ? @"true" : @"false";
-                   }];
-
-    [bridge registerHandler:[self k__load]
-                   callback:^(NSString* message) {
-                       [self load];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__getPosition]
-                   callback:^(NSString* message) {
-                       CGPoint position = [self getPosition];
-                       NSMutableDictionary* dict =
-                           [NSMutableDictionary dictionary];
-                       [dict setValue:@(position.x) forKey:@"x"];
-                       [dict setValue:@(position.y) forKey:@"y"];
-                       return [EEJsonUtils convertDictionaryToString:dict];
-                   }];
-
-    [bridge registerHandler:[self k__setPosition]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int x = [dict[@"x"] intValue];
-                       int y = [dict[@"y"] intValue];
-                       [self setPosition:CGPointMake(x, y)];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__getSize]
-                   callback:^(NSString* message) {
-                       CGSize size = [self getSize];
-                       NSMutableDictionary* dict =
-                           [NSMutableDictionary dictionary];
-                       [dict setValue:@(size.width) forKey:@"width"];
-                       [dict setValue:@(size.height) forKey:@"height"];
-                       return [EEJsonUtils convertDictionaryToString:dict];
-                   }];
-
-    [bridge registerHandler:[self k__setSize]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int width = [dict[@"width"] intValue];
-                       int height = [dict[@"height"] intValue];
-                       [self setSize:CGSizeMake(width, height)];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__setVisible]
-                   callback:^(NSString* message) {
-                       [self setVisible:[message isEqualToString:@"true"]];
-                       return @"";
-                   }];
+    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
+        initWithPrefix:@"FacebookNativeAd"
+                  adId:[nativeAd_ placementID]] autorelease];
+    [helper registerHandlers:self];
 }
 
 - (void)deregisterhandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
+        initWithPrefix:@"FacebookNativeAd"
+                  adId:[nativeAd_ placementID]] autorelease];
+    [helper deregisterHandlers];
+}
 
-    [bridge deregisterHandler:[self k__isLoaded]];
-    [bridge deregisterHandler:[self k__load]];
-    [bridge deregisterHandler:[self k__getPosition]];
-    [bridge deregisterHandler:[self k__setPosition]];
-    [bridge deregisterHandler:[self k__getSize]];
-    [bridge deregisterHandler:[self k__setSize]];
-    [bridge deregisterHandler:[self k__setVisible]];
+- (BOOL)createInternalAd {
+    if (nativeAd_ != nil) {
+        return NO;
+    }
+    isAdLoaded_ = NO;
+    FBNativeAd* nativeAd =
+        [[[FBNativeAd alloc] initWithPlacementID:adId_] autorelease];
+    [nativeAd setDelegate:self];
+    [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
+    nativeAd_ = [nativeAd retain];
+    return YES;
+}
+
+- (BOOL)destroyInternalAd {
+    if (nativeAd_ == nil) {
+        return NO;
+    }
+    [nativeAd_ unregisterView];
+    [nativeAd_ release];
+    nativeAd_ = nil;
+    return YES;
+}
+
+- (void)createView {
+    NSAssert(nativeAdView_ == nil, @"");
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
+    EEFacebookNativeAdView* adView =
+        [[[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
+            firstObject] autorelease];
+    [adView setHidden:YES];
+    [[adView adchoicesView] setCorner:UIRectCornerTopRight];
+    [[rootView view] addSubview:adView];
+    nativeAdView_ = adView;
+}
+
+- (void)destroyView {
+    NSAssert(nativeAdView_ != nil, @"");
+    [nativeAdView_ removeFromSuperview];
+    [nativeAdView_ release];
+    nativeAdView_ = nil;
 }
 
 - (BOOL)isLoaded {
+    if (nativeAd_ == nil) {
+        return NO;
+    }
     return isAdLoaded_;
 }
 

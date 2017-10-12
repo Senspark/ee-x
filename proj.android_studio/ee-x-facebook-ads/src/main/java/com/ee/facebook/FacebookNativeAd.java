@@ -13,10 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ee.ads.AdViewHelper;
+import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
-import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
@@ -26,15 +25,13 @@ import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Zinge on 10/9/17.
  */
 
-public class FacebookNativeAd implements AdListener {
+class FacebookNativeAd implements AdListener, AdViewInterface {
     private static final Logger _logger = new Logger(FacebookNativeAd.class.getName());
 
     private NativeAd                _nativeAd;
@@ -50,15 +47,58 @@ public class FacebookNativeAd implements AdListener {
         _nativeAd = null;
         _nativeAdView = null;
         _isAdLoaded = false;
-        NativeAd nativeAd = new NativeAd(activity, builder.adId);
+
+        createInternalAd();
+        createView();
+        registerHandlers();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void destroy() {
+        deregisterHandlers();
+        destroyInternalAd();
+        destroyView();
+        _builder = null;
+        _activity = null;
+    }
+
+    private void registerHandlers() {
+        AdViewHelper helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
+        helper.registerHandlers(this);
+    }
+
+    private void deregisterHandlers() {
+        AdViewHelper helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
+        helper.deregisterHandlers();
+    }
+
+    private boolean createInternalAd() {
+        if (_nativeAd != null) {
+            return false;
+        }
+        _isAdLoaded = false;
+        NativeAd nativeAd = new NativeAd(_activity, _builder.adId);
         nativeAd.setAdListener(this);
         _nativeAd = nativeAd;
+        return true;
+    }
 
-        FrameLayout rootView = Utils.getRootView(activity);
+    private boolean destroyInternalAd() {
+        if (_nativeAd == null) {
+            return false;
+        }
+        _nativeAd.unregisterView();
+        _nativeAd.destroy();
+        _nativeAd = null;
+        return true;
+    }
+
+    private void createView() {
+        FrameLayout rootView = Utils.getRootView(_activity);
         int layoutId = rootView
             .getResources()
-            .getIdentifier(builder.layoutName, "layout", activity.getPackageName());
-        View nativeAdView = LayoutInflater.from(activity).inflate(layoutId, null);
+            .getIdentifier(_builder.layoutName, "layout", _activity.getPackageName());
+        View nativeAdView = LayoutInflater.from(_activity).inflate(layoutId, null);
         nativeAdView.setVisibility(View.INVISIBLE);
 
         FrameLayout.LayoutParams params =
@@ -67,156 +107,31 @@ public class FacebookNativeAd implements AdListener {
         params.gravity = Gravity.START | Gravity.TOP;
         rootView.addView(nativeAdView);
         _nativeAdView = nativeAdView;
-
-        registerHandlers();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void destroy() {
-        deregisterHandlers();
-        _nativeAd.unregisterView();
-        _nativeAd.destroy();
-        _nativeAd = null;
+    private void destroyView() {
         FrameLayout rootView = Utils.getRootView(_activity);
         rootView.removeView(_nativeAdView);
         _nativeAdView = null;
-        _builder = null;
-        _activity = null;
     }
 
-    private String k__isLoaded() {
-        return "FacebookNativeAd_isLoaded_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__load() {
-        return "FacebookNativeAd_load_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__getPosition() {
-        return "FacebookNativeAd_getPosition_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__setPosition() {
-        return "FacebookNativeAd_setPosition_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__getSize() {
-        return "FacebookNativeAd_getSize_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__setSize() {
-        return "FacebookNativeAd_setSize_" + _nativeAd.getPlacementId();
-    }
-
-    private String k__setVisible() {
-        return "FacebookNativeAd_setVisible_" + _nativeAd.getPlacementId();
-    }
-
-    private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return isLoaded() ? "true" : "false";
-            }
-        }, k__isLoaded());
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                load();
-                return "";
-            }
-        }, k__load());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point position = getPosition();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("x", position.x);
-                dict.put("y", position.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
-        }, k__getPosition());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("x");
-                int y = (Integer) dict.get("y");
-                setPosition(new Point(x, y));
-                return "";
-            }
-        }, k__setPosition());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point size = getSize();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("width", size.x);
-                dict.put("height", size.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
-        }, k__getSize());
-
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("width");
-                int y = (Integer) dict.get("height");
-                setSize(new Point(x, y));
-                return "";
-            }
-        }, k__setSize());
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setVisible(message.equals("true"));
-                return "";
-            }
-        }, k__setVisible());
-    }
-
-    private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__isLoaded());
-        bridge.deregisterHandler(k__load());
-        bridge.deregisterHandler(k__getPosition());
-        bridge.deregisterHandler(k__setPosition());
-        bridge.deregisterHandler(k__getSize());
-        bridge.deregisterHandler(k__setSize());
-        bridge.deregisterHandler(k__setVisible());
-    }
-
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public boolean isLoaded() {
+        if (_nativeAd == null) {
+            return false;
+        }
         return _isAdLoaded;
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void load() {
+        if (_nativeAd == null) {
+            return;
+        }
         _nativeAd.loadAd();
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     @NonNull
     public Point getPosition() {
         int p[] = new int[2];
@@ -224,7 +139,7 @@ public class FacebookNativeAd implements AdListener {
         return new Point(p[0], p[1]);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setPosition(@NonNull Point position) {
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
@@ -233,13 +148,13 @@ public class FacebookNativeAd implements AdListener {
         _nativeAdView.setLayoutParams(params);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     @NonNull
     public Point getSize() {
         return new Point(_nativeAdView.getWidth(), _nativeAdView.getHeight());
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setSize(@NonNull Point size) {
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
@@ -248,7 +163,7 @@ public class FacebookNativeAd implements AdListener {
         _nativeAdView.setLayoutParams(params);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public void setVisible(boolean visible) {
         if (visible) {
             _nativeAdView.setVisibility(View.VISIBLE);

@@ -1,25 +1,25 @@
 //
-//  UnityRewardedVideo.cpp
+//  UnityInterstitialAd.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/10/17.
 //
 //
 
-#include "ee/unityads/UnityRewardedVideo.hpp"
+#include "ee/unityads/internal/UnityInterstitialAd.hpp"
 #include "ee/unityads/UnityAdsBridge.hpp"
 
 namespace ee {
 namespace unityads {
-using Self = RewardedVideo;
+using Self = InterstitialAd;
 
-Self::RewardedVideo(UnityAds* plugin, const std::string& placementId) {
+Self::InterstitialAd(UnityAds* plugin, const std::string& placementId) {
     plugin_ = plugin;
     placementId_ = placementId;
 }
 
-Self::~RewardedVideo() {
-    plugin_->destroyRewardedVideo(placementId_);
+Self::~InterstitialAd() {
+    plugin_->destroyInterstitialAd(placementId_);
 }
 
 bool Self::isLoaded() const {

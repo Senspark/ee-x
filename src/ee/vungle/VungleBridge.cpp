@@ -1,6 +1,6 @@
 #include "ee/vungle/VungleBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
-#include "ee/vungle/VungleRewardedVideo.hpp"
+#include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

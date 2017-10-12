@@ -2,7 +2,7 @@
 
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
-#include "ee/ironsource/IronSourceRewardedVideo.hpp"
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

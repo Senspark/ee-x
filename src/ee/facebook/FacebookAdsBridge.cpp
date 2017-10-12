@@ -9,10 +9,10 @@
 #include "ee/facebook/FacebookAdsBridge.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
-#include "ee/facebook/FacebookBannerAd.hpp"
-#include "ee/facebook/FacebookInterstitialAd.hpp"
-#include "ee/facebook/FacebookNativeAd.hpp"
 #include "ee/facebook/FacebookNativeAdBuilder.hpp"
+#include "ee/facebook/internal/FacebookBannerAd.hpp"
+#include "ee/facebook/internal/FacebookInterstitialAd.hpp"
+#include "ee/facebook/internal/FacebookNativeAd.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

@@ -8,6 +8,7 @@
 
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
+#import "ee/ads/internal/EEInterstitialAdHelper.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
@@ -50,21 +51,6 @@
         stringByAppendingString:placementId_];
 }
 
-- (NSString*)k__isLoaded {
-    return [@"FacebookInterstitialAd_isLoaded_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__load {
-    return
-        [@"FacebookInterstitialAd_load_" stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__show {
-    return
-        [@"FacebookInterstitialAd_show_" stringByAppendingString:placementId_];
-}
-
 - (NSString*)k__onLoaded {
     return [@"FacebookInterstitialAd_onLoaded_"
         stringByAppendingString:placementId_];
@@ -81,6 +67,11 @@
 }
 
 - (void)registerHandlers {
+    EEInterstitialAdHelper* helper = [[[EEInterstitialAdHelper alloc]
+        initWithPrefix:@"FacebookInterstitialAd"
+                  adId:placementId_] autorelease];
+    [helper registerHandlers:self];
+
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:[self k__createInternalAd]
@@ -92,33 +83,18 @@
                    callback:^(NSString* message) {
                        return [self destroyInternalAd] ? @"true" : @"false";
                    }];
-
-    [bridge registerHandler:[self k__isLoaded]
-                   callback:^(NSString* message) {
-                       return [self isLoaded] ? @"true" : @"false";
-                   }];
-
-    [bridge registerHandler:[self k__load]
-                   callback:^(NSString* message) {
-                       [self load];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__show]
-                   callback:^(NSString* message) {
-                       [self show];
-                       return @"";
-                   }];
 }
 
 - (void)deregisterHandlers {
+    EEInterstitialAdHelper* helper = [[[EEInterstitialAdHelper alloc]
+        initWithPrefix:@"FacebookInterstitialAd"
+                  adId:placementId_] autorelease];
+    [helper deregisterHandlers];
+
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:[self k__createInternalAd]];
     [bridge deregisterHandler:[self k__destroyInternalAd]];
-    [bridge deregisterHandler:[self k__isLoaded]];
-    [bridge deregisterHandler:[self k__load]];
-    [bridge deregisterHandler:[self k__show]];
 }
 
 - (BOOL)createInternalAd {

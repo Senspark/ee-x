@@ -6,14 +6,10 @@
 //
 //
 
-#import <Foundation/NSObject.h>
+#import "ee/ads/internal/EEInterstitialAdInterface.h"
 
-@interface EEFacebookInterstitialAd : NSObject
+@interface EEFacebookInterstitialAd : NSObject <EEInterstitialAdInterface>
 
 - (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId;
-
-- (BOOL)isLoaded;
-- (void)load;
-- (void)show;
 
 @end

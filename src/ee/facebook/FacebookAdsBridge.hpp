@@ -39,8 +39,6 @@ enum class FacebookBannerAdSize {
 
 class FacebookAds final {
 public:
-    using AdCallback = std::function<void(const std::string& message)>;
-
     FacebookAds();
     ~FacebookAds();
 

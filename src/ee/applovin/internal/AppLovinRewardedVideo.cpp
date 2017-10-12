@@ -1,19 +1,19 @@
 //
-//  VungleRewardedVideo.cpp
+//  AppLovinRewardedVideo.cpp
 //  ee_x
 //
-//  Created by Zinge on 10/10/17.
+//  Created by Zinge on 10/11/17.
 //
 //
 
-#include "ee/vungle/VungleRewardedVideo.hpp"
-#include "ee/vungle/VungleBridge.hpp"
+#include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
+#include "ee/applovin/AppLovinBridge.hpp"
 
 namespace ee {
-namespace vungle {
+namespace applovin {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Vungle* plugin) {
+Self::RewardedVideo(AppLovin* plugin) {
     plugin_ = plugin;
 }
 
@@ -26,11 +26,11 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    // No op.
+    plugin_->loadRewardedVideo();
 }
 
 bool Self::show() {
     return plugin_->showRewardedVideo();
 }
-} // namespace vungle
+} // namespace applovin
 } // namespace ee

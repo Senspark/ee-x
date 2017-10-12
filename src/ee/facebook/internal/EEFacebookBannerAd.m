@@ -18,7 +18,7 @@
     FBAdView* adView_;
     NSString* adId_;
     FBAdSize adSize_;
-    BOOL isAdLoaded_;
+    BOOL isLoaded_;
 }
 
 @end
@@ -48,7 +48,7 @@
         return self;
     }
 
-    isAdLoaded_ = NO;
+    isLoaded_ = NO;
     adId_ = [adId copy];
     adSize_ = adSize;
     adView_ = nil;
@@ -84,6 +84,7 @@
     if (adView_ != nil) {
         return NO;
     }
+    isLoaded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     FBAdView* adView =
         [[[FBAdView alloc] initWithPlacementID:adId_
@@ -99,14 +100,16 @@
     if (adView_ == nil) {
         return NO;
     }
-    isAdLoaded_ = NO;
     [adView_ removeFromSuperview];
     adView_ = nil;
     return YES;
 }
 
 - (BOOL)isLoaded {
-    return isAdLoaded_;
+    if (adView_ == nil) {
+        return NO;
+    }
+    return isLoaded_;
 }
 
 - (void)load {
@@ -153,7 +156,7 @@
 
 - (void)adViewDidLoad:(FBAdView*)adView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    isAdLoaded_ = YES;
+    isLoaded_ = YES;
 }
 
 - (void)adView:(FBAdView*)adView didFailWithError:(NSError*)error {

@@ -10,6 +10,7 @@
 #define EE_X_FACEBOOK_NATIVE_AD_HPP
 
 #include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace facebook {
@@ -51,6 +52,7 @@ protected:
 
 private:
     FacebookAds* plugin_;
+    ads::AdViewHelper helper_;
 };
 } // namespace facebook
 } // namespace ee

@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/ironsource/IronSourceRewardedVideo.hpp"
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 
 namespace ee {

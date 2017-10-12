@@ -1,5 +1,5 @@
 //
-//  FacebookNativeAd.cpp
+//  FacebookBannerAd.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
@@ -10,67 +10,38 @@
 
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
-#include "ee/facebook/FacebookNativeAd.hpp"
+#include "ee/facebook/internal/FacebookBannerAd.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace facebook {
-using Self = NativeAd;
+using Self = BannerAd;
 
-namespace {
-auto k__isLoaded(const std::string& id) {
-    return "FacebookNativeAd_isLoaded_" + id;
-}
-
-auto k__load(const std::string& id) {
-    return "FacebookNativeAd_load_" + id;
-}
-
-auto k__getPosition(const std::string& id) {
-    return "FacebookNativeAd_getPosition_" + id;
-}
-
-auto k__setPosition(const std::string& id) {
-    return "FacebookNativeAd_setPosition_" + id;
-}
-
-auto k__getSize(const std::string& id) {
-    return "FacebookNativeAd_getSize_" + id;
-}
-
-auto k__setSize(const std::string& id) {
-    return "FacebookNativeAd_setSize_" + id;
-}
-
-auto k__setVisible(const std::string& id) {
-    return "FacebookNativeAd_setVisible_" + id;
-}
-} // namespace
-
-Self::NativeAd(FacebookAds* plugin, const std::string& adId)
+Self::BannerAd(FacebookAds* plugin, const std::string& adId)
     : Super(adId)
-    , plugin_(plugin) {}
+    , plugin_(plugin)
+    , helper_("FacebookBannerAd", adId) {}
 
-Self::~NativeAd() {
-    bool succeeded = plugin_->destroyNativeAd(getAdId());
+Self::~BannerAd() {
+    bool succeeded = plugin_->destroyBannerAd(getAdId());
     assert(succeeded);
 }
 
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(k__isLoaded(getAdId()));
+    auto response = bridge.call(helper_.k__isLoaded());
     return response == "true";
 }
 
 void Self::load() {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(k__load(getAdId()));
+    auto response = bridge.call(helper_.k__load());
 }
 
 std::pair<int, int> Self::getPosition() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(k__getPosition(getAdId()));
+    auto response = bridge.call(helper_.k__getPosition());
     auto json = nlohmann::json::parse(response);
     auto x = json["x"].get<int>();
     auto y = json["y"].get<int>();
@@ -83,12 +54,12 @@ void Self::setPosition(int x, int y) {
     json["y"] = y;
 
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setPosition(getAdId()), json.dump());
+    bridge.call(helper_.k__setPosition(), json.dump());
 }
 
 std::pair<int, int> Self::getSize() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(k__getSize(getAdId()));
+    auto response = bridge.call(helper_.k__getSize());
     auto json = nlohmann::json::parse(response);
     auto width = json["width"].get<int>();
     auto height = json["height"].get<int>();
@@ -101,12 +72,12 @@ void Self::setSize(int width, int height) {
     json["height"] = height;
 
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setSize(getAdId()), json.dump());
+    bridge.call(helper_.k__setSize(), json.dump());
 }
 
 void Self::setVisible(bool visible) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setVisible(getAdId()), visible ? "true" : "false");
+    bridge.call(helper_.k__setVisible(), visible ? "true" : "false");
 }
 } // namespace facebook
 } // namespace ee

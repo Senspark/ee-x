@@ -9,7 +9,7 @@
 #include <cassert>
 
 #include "ee/applovin/AppLovinBridge.hpp"
-#include "ee/applovin/AppLovinRewardedVideo.hpp"
+#include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>

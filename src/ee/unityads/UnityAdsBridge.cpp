@@ -8,8 +8,8 @@
 
 #include "ee/unityads/UnityAdsBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
-#include "ee/unityads/UnityInterstitialAd.hpp"
-#include "ee/unityads/UnityRewardedVideo.hpp"
+#include "ee/unityads/internal/UnityInterstitialAd.hpp"
+#include "ee/unityads/internal/UnityRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

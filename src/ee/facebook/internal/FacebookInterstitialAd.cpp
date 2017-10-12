@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/facebook/FacebookInterstitialAd.hpp"
+#include "ee/facebook/internal/FacebookInterstitialAd.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
 

@@ -58,14 +58,14 @@ public class AdViewHelper {
         return _prefix + "_setVisible_" + _adId;
     }
 
-    public void registerHandlers(AdViewInterface adView) {
+    public void registerHandlers(final AdViewInterface adView) {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return isLoaded() ? "true" : "false";
+                return adView.isLoaded() ? "true" : "false";
             }
         }, k__isLoaded());
 
@@ -73,7 +73,7 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                load();
+                adView.load();
                 return "";
             }
         }, k__load());
@@ -83,7 +83,7 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                Point position = getPosition();
+                Point position = adView.getPosition();
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("x", position.x);
                 dict.put("y", position.y);
@@ -99,7 +99,7 @@ public class AdViewHelper {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 int x = (Integer) dict.get("x");
                 int y = (Integer) dict.get("y");
-                setPosition(new Point(x, y));
+                adView.setPosition(new Point(x, y));
                 return "";
             }
         }, k__setPosition());
@@ -109,7 +109,7 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                Point size = getSize();
+                Point size = adView.getSize();
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("width", size.x);
                 dict.put("height", size.y);
@@ -125,7 +125,7 @@ public class AdViewHelper {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 int x = (Integer) dict.get("width");
                 int y = (Integer) dict.get("height");
-                setSize(new Point(x, y));
+                adView.setSize(new Point(x, y));
                 return "";
             }
         }, k__setSize());
@@ -134,7 +134,7 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setVisible(message.equals("true"));
+                adView.setVisible(message.equals("true"));
                 return "";
             }
         }, k__setVisible());

@@ -17,7 +17,10 @@
 
 #define EE_VUNGLE_VERSION_4
 
-@interface EEVungle () <VungleSDKDelegate>
+@interface EEVungle () <VungleSDKDelegate> {
+    BOOL initialized_;
+}
+
 @end
 
 @implementation EEVungle
@@ -36,15 +39,14 @@ static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
     if (self == nil) {
         return self;
     }
-
+    initialized_ = NO;
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
-    VungleSDK* sdk = [VungleSDK sharedSDK];
-    [sdk setDelegate:nil];
+    [self destroy];
     [super dealloc];
 }
 
@@ -79,6 +81,9 @@ static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 }
 
 - (void)initialize:(NSString*)gameId {
+    if (initialized_) {
+        return;
+    }
     VungleSDK* sdk = [VungleSDK sharedSDK];
 
 #ifdef EE_VUNGLE_VERSION_4
@@ -88,6 +93,12 @@ static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 #endif // placementIds
 
     [sdk setDelegate:self];
+    initialized_ = YES;
+}
+
+- (void)destroy {
+    VungleSDK* sdk = [VungleSDK sharedSDK];
+    [sdk setDelegate:nil];
 }
 
 - (BOOL)hasRewardedVideo {

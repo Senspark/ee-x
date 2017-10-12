@@ -26,10 +26,12 @@ public class Vungle implements PluginProtocol {
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
     private Activity _context;
+    private boolean  _initialized;
 
     public Vungle(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
+        _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -60,8 +62,8 @@ public class Vungle implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        VunglePub.getInstance().clearEventListeners();
         deregisterHandlers();
+        destroy();
     }
 
     @Override
@@ -119,6 +121,9 @@ public class Vungle implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(final @NonNull String gameId) {
+        if (_initialized) {
+            return;
+        }
         VunglePub.getInstance().init(_context, gameId);
         VunglePub.getInstance().setEventListeners(new EventListener() {
             @Override
@@ -160,6 +165,14 @@ public class Vungle implements PluginProtocol {
                 bridge.callCpp(k__onUnavailable);
             }
         });
+        _initialized = true;
+    }
+
+    private void destroy() {
+        if (!_initialized) {
+            return;
+        }
+        VunglePub.getInstance().clearEventListeners();
     }
 
     @SuppressWarnings("WeakerAccess")

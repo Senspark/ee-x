@@ -28,11 +28,13 @@ public class UnityAds implements PluginProtocol {
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
     private Activity _context;
+    private boolean  _initialized;
 
     @SuppressWarnings("unused")
     public UnityAds(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
+        _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -62,7 +64,7 @@ public class UnityAds implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
-        com.unity3d.ads.UnityAds.setListener(null);
+        destroy();
     }
 
     @Override
@@ -133,6 +135,9 @@ public class UnityAds implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String gameId, boolean testModeEnabled) {
+        if (_initialized) {
+            return;
+        }
         com.unity3d.ads.UnityAds.initialize(_context, gameId, new IUnityAdsListener() {
             @Override
             public void onUnityAdsReady(String placementId) {
@@ -169,6 +174,14 @@ public class UnityAds implements PluginProtocol {
                 _logger.info("onUnityAdsError: " + s + " error = " + unityAdsError);
             }
         }, testModeEnabled);
+        _initialized = true;
+    }
+
+    private void destroy() {
+        if (!_initialized) {
+            return;
+        }
+        com.unity3d.ads.UnityAds.setListener(null);
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})

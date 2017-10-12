@@ -28,10 +28,12 @@ public class IronSource implements PluginProtocol {
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _context;
+    private boolean  _initialized;
 
     public IronSource(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
+        _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -61,7 +63,7 @@ public class IronSource implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
+        destroy();
     }
 
     @Override
@@ -119,6 +121,9 @@ public class IronSource implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String gameId) {
+        if (_initialized) {
+            return;
+        }
         com.ironsource.mediationsdk.IronSource.init(_context, gameId,
             com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO);
         com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(
@@ -167,6 +172,14 @@ public class IronSource implements PluginProtocol {
                     _logger.debug("onRewardedVideoAdEnded");
                 }
             });
+        _initialized = true;
+    }
+
+    private void destroy() {
+        if (!_initialized) {
+            return;
+        }
+        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
     }
 
     @SuppressWarnings("WeakerAccess")

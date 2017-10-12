@@ -40,8 +40,8 @@ public class AppLovin implements PluginProtocol {
 
     private static final Logger _logger = new Logger(AppLovin.class.getName());
 
-    private Activity _context;
-
+    private Activity                         _context;
+    private boolean                          _initialized;
     private AppLovinSdk                      _sdk;
     private AppLovinIncentivizedInterstitial _incentivizedInterstitialAd;
     private AppLovinAdLoadListener           _incentivizedInterstitialAdLoadListener;
@@ -51,6 +51,12 @@ public class AppLovin implements PluginProtocol {
     public AppLovin(Context context) {
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
+        _initialized = false;
+        _sdk = null;
+        _incentivizedInterstitialAd = null;
+        _incentivizedInterstitialAdLoadListener = null;
+        _incentivizedInterstitialAdRewardListener = null;
+        _incentivizedInterstitialAdDisplayListener = null;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -80,11 +86,7 @@ public class AppLovin implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
-        _sdk = null;
-        _incentivizedInterstitialAd = null;
-        _incentivizedInterstitialAdLoadListener = null;
-        _incentivizedInterstitialAdRewardListener = null;
-        _incentivizedInterstitialAdDisplayListener = null;
+        destroy();
     }
 
     @Override
@@ -198,6 +200,9 @@ public class AppLovin implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String key) {
+        if (_initialized) {
+            return;
+        }
         AppLovinSdkSettings settings = AppLovinSdkUtils.retrieveUserSettings(_context);
         _sdk = AppLovinSdk.getInstance(key, settings, _context);
         _sdk.initializeSdk();
@@ -262,6 +267,18 @@ public class AppLovin implements PluginProtocol {
                 bridge.callCpp(k__onRewardedVideoHidden);
             }
         };
+        _initialized = true;
+    }
+
+    private void destroy() {
+        if (!_initialized) {
+            return;
+        }
+        _sdk = null;
+        _incentivizedInterstitialAd = null;
+        _incentivizedInterstitialAdLoadListener = null;
+        _incentivizedInterstitialAdRewardListener = null;
+        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -14,7 +14,10 @@
 
 #import <UnityAds/UnityAds.h>
 
-@interface EEUnityAds () <UnityAdsDelegate>
+@interface EEUnityAds () <UnityAdsDelegate> {
+    BOOL initialized_;
+}
+
 @end
 
 @implementation EEUnityAds
@@ -34,13 +37,14 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (self == nil) {
         return self;
     }
+    initialized_ = NO;
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
-    [UnityAds setDelegate:nil];
+    [self destroy];
     [super dealloc];
 }
 
@@ -91,7 +95,18 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
 }
 
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled {
+    if (initialized_) {
+        return;
+    }
     [UnityAds initialize:gameId delegate:self testMode:testModeEnabled];
+    initialized_ = YES;
+}
+
+- (void)destroy {
+    if (!initialized_) {
+        return;
+    }
+    [UnityAds setDelegate:nil];
 }
 
 - (void)setDebugMode:(BOOL)enabled {

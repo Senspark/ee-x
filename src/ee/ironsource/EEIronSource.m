@@ -15,7 +15,10 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/ironsource/EEIronSource.h"
 
-@interface EEIronSource () <ISRewardedVideoDelegate>
+@interface EEIronSource () <ISRewardedVideoDelegate> {
+    BOOL initialized_;
+}
+
 @end
 
 @implementation EEIronSource
@@ -35,14 +38,14 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
     if (self == nil) {
         return self;
     }
-
+    initialized_ = NO;
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
-    [IronSource setRewardedVideoDelegate:nil];
+    [self destroy];
     [super dealloc];
 }
 
@@ -78,8 +81,19 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 }
 
 - (void)initialize:(NSString*)gameId {
+    if (initialized_) {
+        return;
+    }
     [IronSource initWithAppKey:gameId adUnits:@[IS_REWARDED_VIDEO]];
     [IronSource setRewardedVideoDelegate:self];
+    initialized_ = YES;
+}
+
+- (void)destroy {
+    if (!initialized_) {
+        return;
+    }
+    [IronSource setRewardedVideoDelegate:nil];
 }
 
 - (BOOL)hasRewardedVideo {

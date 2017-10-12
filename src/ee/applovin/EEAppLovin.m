@@ -79,6 +79,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 @end
 
 @interface EEAppLovin () <ALAdRewardDelegate, ALAdLoadDelegate> {
+    BOOL initialized_;
     ALSdk* sdk_;
     ALInterstitialAd* interstitialAd_;
     EEAppLovinInterstitialAdDisplayDelegate* interstitialAdDisplayDelegate_;
@@ -96,21 +97,14 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
     if (self == nil) {
         return self;
     }
-
+    initialized_ = NO;
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
-    [interstitialAd_ setAdDisplayDelegate:nil];
-    [interstitialAd_ release];
-    interstitialAd_ = nil;
-    [incentivizedInterstitialAd_ setAdDisplayDelegate:nil];
-    [incentivizedInterstitialAd_ release];
-    incentivizedInterstitialAd_ = nil;
-    [incentivizedInterstitialAdDisplayDelegate_ release];
-    incentivizedInterstitialAdDisplayDelegate_ = nil;
+    [self destroy];
     [super dealloc];
 }
 
@@ -188,6 +182,9 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 }
 
 - (void)initialize:(NSString* _Nonnull)key {
+    if (initialized_) {
+        return;
+    }
     sdk_ = [ALSdk sharedWithKey:key];
     [sdk_ initializeSdk];
 
@@ -203,6 +200,23 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
     interstitialAdDisplayDelegate_ =
         [[EEAppLovinInterstitialAdDisplayDelegate alloc] init];
     [interstitialAd_ setAdDisplayDelegate:interstitialAdDisplayDelegate_];
+
+    initialized_ = YES;
+}
+
+- (void)destroy {
+    if (!initialized_) {
+        return;
+    }
+    [interstitialAd_ setAdDisplayDelegate:nil];
+    [interstitialAd_ release];
+    interstitialAd_ = nil;
+    [incentivizedInterstitialAd_ setAdDisplayDelegate:nil];
+    [incentivizedInterstitialAd_ release];
+    incentivizedInterstitialAd_ = nil;
+    [incentivizedInterstitialAdDisplayDelegate_ release];
+    incentivizedInterstitialAdDisplayDelegate_ = nil;
+    sdk_ = nil;
 }
 
 - (void)setTestAdsEnabled:(BOOL)enabled {

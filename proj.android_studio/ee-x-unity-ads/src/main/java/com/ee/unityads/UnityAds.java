@@ -10,6 +10,7 @@ import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.ee.core.internal.Utils;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
@@ -32,6 +33,7 @@ public class UnityAds implements PluginProtocol {
 
     @SuppressWarnings("unused")
     public UnityAds(Context context) {
+        Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
         _initialized = false;
@@ -63,6 +65,7 @@ public class UnityAds implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        Utils.checkMainThread();
         deregisterHandlers();
         destroy();
     }
@@ -78,6 +81,7 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void registerHandlers() {
+        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
@@ -87,7 +91,7 @@ public class UnityAds implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
                 String gameId = (String) dict.get("gameId");
-                boolean testModeEnabled = dict.get("testModeEnabled").equals("true");
+                boolean testModeEnabled = Utils.toBoolean((String) dict.get("testModeEnabled"));
                 initialize(gameId, testModeEnabled);
                 return "";
             }
@@ -97,7 +101,7 @@ public class UnityAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setDebugModeEnabled(message.equals("true"));
+                setDebugModeEnabled(Utils.toBoolean(message));
                 return "";
             }
         }, k__setDebugModeEnabled);
@@ -108,7 +112,7 @@ public class UnityAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return isRewardedVideoReady(placementId) ? "true" : "false";
+                return Utils.toString(isRewardedVideoReady(placementId));
             }
         }, k__isRewardedVideoReady);
 
@@ -125,6 +129,7 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
+        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
@@ -135,6 +140,7 @@ public class UnityAds implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String gameId, boolean testModeEnabled) {
+        Utils.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -142,16 +148,19 @@ public class UnityAds implements PluginProtocol {
             @Override
             public void onUnityAdsReady(String placementId) {
                 _logger.info("onUnityAdsReady: " + placementId);
+                Utils.checkMainThread();
             }
 
             @Override
             public void onUnityAdsStart(String placementId) {
                 _logger.info("onUnityAdsStart: " + placementId);
+                Utils.checkMainThread();
             }
 
             @Override
             public void onUnityAdsFinish(String placementId, FinishState finishState) {
                 _logger.info("onUnityAdsFinish: " + placementId + " state = " + finishState);
+                Utils.checkMainThread();
 
                 MessageBridge bridge = MessageBridge.getInstance();
                 if (finishState == FinishState.SKIPPED) {
@@ -172,12 +181,14 @@ public class UnityAds implements PluginProtocol {
             @Override
             public void onUnityAdsError(UnityAdsError unityAdsError, String s) {
                 _logger.info("onUnityAdsError: " + s + " error = " + unityAdsError);
+                Utils.checkMainThread();
             }
         }, testModeEnabled);
         _initialized = true;
     }
 
     private void destroy() {
+        Utils.checkMainThread();
         if (!_initialized) {
             return;
         }
@@ -186,16 +197,19 @@ public class UnityAds implements PluginProtocol {
 
     @SuppressWarnings({"unused", "WeakerAccess"})
     public void setDebugModeEnabled(boolean enabled) {
+        Utils.checkMainThread();
         com.unity3d.ads.UnityAds.setDebugMode(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean isRewardedVideoReady(final @NonNull String placementId) {
+        Utils.checkMainThread();
         return com.unity3d.ads.UnityAds.isReady(placementId);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedVideo(final @NonNull String placementId) {
+        Utils.checkMainThread();
         com.unity3d.ads.UnityAds.show(_context, placementId);
     }
 }

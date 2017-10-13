@@ -7,6 +7,7 @@
 //
 
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -21,7 +22,7 @@ Self::AdViewBridgeHelper(const AdViewHelper& helper)
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(helper_.k__isLoaded());
-    return response == "true";
+    return core::toBool(response);
 }
 
 void Self::load() {
@@ -67,7 +68,7 @@ void Self::setSize(int width, int height) {
 
 void Self::setVisible(bool visible) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(helper_.k__setVisible(), visible ? "true" : "false");
+    bridge.call(helper_.k__setVisible(), core::toString(visible));
 }
 } // namespace ads
 } // namespace ee

@@ -10,6 +10,7 @@
 
 #include "ee/applovin/AppLovinBridge.hpp"
 #include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -127,6 +128,24 @@ Self::AppLovin() {
             return "";
         },
         k__onRewardedVideoFailed);
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            onRewardedVideoDisplayed();
+            return "";
+        },
+        k__onRewardedVideoDisplayed);
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            onRewardedVideoHidden();
+            return "";
+        },
+        k__onRewardedVideoHidden);
+    bridge.registerHandler(
+        [this](const std::string& message) {
+            onUserRewardVerified();
+            return "";
+        },
+        k__onUserRewardVerified);
 }
 
 Self::~AppLovin() {
@@ -142,23 +161,23 @@ void Self::initialize(const std::string& key) {
 
 void Self::setTestAdsEnabled(bool enabled) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setTestAdsEnabled, enabled ? "true" : "false");
+    bridge.call(k__setTestAdsEnabled, core::toString(enabled));
 }
 
 void Self::setVerboseLogging(bool enabled) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setVerboseLogging, enabled ? "true" : "false");
+    bridge.call(k__setVerboseLogging, core::toString(enabled));
 }
 
 void Self::setMuted(bool enabled) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setMuted, enabled ? "true" : "false");
+    bridge.call(k__setMuted, core::toString(enabled));
 }
 
 bool Self::hasInterstitialAd() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto result = bridge.call(k__hasInterstitialAd);
-    return result == "true";
+    return core::toBool(result);
 }
 
 bool Self::showInterstitialAd() {
@@ -195,7 +214,7 @@ void Self::loadRewardedVideo() {
 bool Self::hasRewardedVideo() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto result = bridge.call(k__hasRewardedVideo);
-    return result == "true";
+    return core::toBool(result);
 }
 
 bool Self::showRewardedVideo() {

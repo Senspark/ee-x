@@ -7,6 +7,7 @@
 //
 
 #include "ee/unityads/UnityAdsBridge.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/unityads/internal/UnityInterstitialAd.hpp"
 #include "ee/unityads/internal/UnityRewardedVideo.hpp"
@@ -63,7 +64,7 @@ Self::~UnityAds() {
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     nlohmann::json json;
     json["gameId"] = gameId;
-    json["testModeEnabled"] = testModeEnabled ? "true" : "false";
+    json["testModeEnabled"] = core::toString(testModeEnabled);
 
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__initialize, json.dump());
@@ -71,7 +72,7 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
 
 void Self::setDebugModeEnabled(bool enabled) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setDebugModeEnabled, enabled ? "true" : "false");
+    bridge.call(k__setDebugModeEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<RewardedVideoInterface>
@@ -113,7 +114,7 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 bool Self::isRewardedVideoReady(const std::string& placementId) const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__isRewardedVideoReady, placementId);
-    return response == "true";
+    return core::toBool(response);
 }
 
 bool Self::showRewardedVideo(const std::string& placementId) {

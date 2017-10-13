@@ -3,7 +3,7 @@ package com.ee.core.internal;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.support.annotation.NonNull;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
@@ -34,5 +34,23 @@ public class Utils {
                 }
             });
         }
+    }
+
+    public static void checkMainThread() {
+        if (Looper.getMainLooper() != Looper.myLooper()) {
+            _logger.error("Current thread is not the main thread");
+            assert false;
+        }
+    }
+
+    @NonNull
+    public static String toString(boolean value) {
+        return value ? "true" : "false";
+    }
+
+    @NonNull
+    public static Boolean toBoolean(@NonNull String value) {
+        assert value.equals("true") || value.equals("false");
+        return value.equals("true");
     }
 }

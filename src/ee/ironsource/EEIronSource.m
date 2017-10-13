@@ -61,7 +61,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 
     [bridge registerHandler:k__hasRewardedVideo
                    callback:^(NSString* message) {
-                       return [self hasRewardedVideo] ? @"true" : @"false";
+                       return [EEUtils toString:[self hasRewardedVideo]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo

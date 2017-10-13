@@ -7,6 +7,7 @@
 //
 
 #include "ee/facebook/internal/FacebookInterstitialAd.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
 
@@ -89,19 +90,19 @@ Self::~InterstitialAd() {
 bool Self::createInternalAd() {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(placementId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(placementId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__isLoaded(placementId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 void Self::load() {

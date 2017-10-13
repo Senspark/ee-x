@@ -118,29 +118,27 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
                        return @"";
                    }];
 
-    [bridge
-        registerHandler:k__setTestAdsEnabled
-               callback:^(NSString* message) {
-                   [self setTestAdsEnabled:[message isEqualToString:@"true"]];
-                   return @"";
-               }];
+    [bridge registerHandler:k__setTestAdsEnabled
+                   callback:^(NSString* message) {
+                       [self setTestAdsEnabled:[EEUtils toBool:message]];
+                       return @"";
+                   }];
 
-    [bridge
-        registerHandler:k__setVerboseLogging
-               callback:^(NSString* message) {
-                   [self setVerboseLogging:[message isEqualToString:@"true"]];
-                   return @"";
-               }];
+    [bridge registerHandler:k__setVerboseLogging
+                   callback:^(NSString* message) {
+                       [self setVerboseLogging:[EEUtils toBool:message]];
+                       return @"";
+                   }];
 
     [bridge registerHandler:k__setMuted
                    callback:^(NSString* message) {
-                       [self setMuted:[message isEqualToString:@"true"]];
+                       [self setMuted:[EEUtils toBool:message]];
                        return @"";
                    }];
 
     [bridge registerHandler:k__hasInterstitialAd
                    callback:^(NSString* message) {
-                       return [self hasInterstitialAd] ? @"true" : @"false";
+                       return [EEUtils toString:[self hasInterstitialAd]];
                    }];
 
     [bridge registerHandler:k__showInterstitialAd
@@ -157,7 +155,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
     [bridge registerHandler:k__hasRewardedVideo
                    callback:^(NSString* message) {
-                       return [self hasRewardedVideo] ? @"true" : @"false";
+                       return [EEUtils toString:[self hasRewardedVideo]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo

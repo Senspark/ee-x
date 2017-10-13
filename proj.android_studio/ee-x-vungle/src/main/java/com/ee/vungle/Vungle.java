@@ -9,6 +9,7 @@ import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.ee.core.internal.Utils;
 import com.vungle.publisher.EventListener;
 import com.vungle.publisher.VunglePub;
 
@@ -29,6 +30,7 @@ public class Vungle implements PluginProtocol {
     private boolean  _initialized;
 
     public Vungle(Context context) {
+        Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = (Activity) context;
         _initialized = false;
@@ -52,16 +54,19 @@ public class Vungle implements PluginProtocol {
 
     @Override
     public void onResume() {
+        Utils.checkMainThread();
         VunglePub.getInstance().onResume();
     }
 
     @Override
     public void onPause() {
+        Utils.checkMainThread();
         VunglePub.getInstance().onPause();
     }
 
     @Override
     public void onDestroy() {
+        Utils.checkMainThread();
         deregisterHandlers();
         destroy();
     }
@@ -77,6 +82,7 @@ public class Vungle implements PluginProtocol {
     }
 
     private void registerHandlers() {
+        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
@@ -94,7 +100,7 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return hasRewardedVideo() ? "true" : "false";
+                return Utils.toString(hasRewardedVideo());
             }
         }, k__hasRewardedVideo);
 
@@ -112,6 +118,7 @@ public class Vungle implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
+        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
@@ -121,6 +128,7 @@ public class Vungle implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(final @NonNull String gameId) {
+        Utils.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -128,8 +136,8 @@ public class Vungle implements PluginProtocol {
         VunglePub.getInstance().setEventListeners(new EventListener() {
             @Override
             public void onAdStart() {
-                // Called before playing an ad
                 _logger.info("onAdStart");
+                Utils.checkMainThread();
 
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onStart);
@@ -137,30 +145,24 @@ public class Vungle implements PluginProtocol {
 
             @Override
             public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
-                // Called when the user leaves the ad and control is returned to your application
-                // if wasSuccessfulView is true, the user watched the ad and should be rewarded
-                // (if this was a rewarded ad).
-                // if wasCallToActionClicked is true, the user clicked the call to action
-                // button in the ad.
                 _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
                              wasCallToActionClicked);
+                Utils.checkMainThread();
 
                 MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onEnd, wasSuccessfulView ? "true" : "false");
+                bridge.callCpp(k__onEnd, Utils.toString(wasSuccessfulView));
             }
 
             @Override
             public void onAdPlayableChanged(boolean isAdPlayable) {
-                // Called when the playability state changes. if isAdPlayable is true, you can now
-                // play an ad.
-                // If false, you cannot yet play an ad.
                 _logger.info("onAdPlayabledChanged: " + isAdPlayable);
+                Utils.checkMainThread();
             }
 
             @Override
             public void onAdUnavailable(String reason) {
-                // Called when VunglePub.playAd() was called, but no ad was available to play
                 _logger.info("onAdUnavailable: " + reason);
+                Utils.checkMainThread();
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUnavailable);
             }
@@ -169,19 +171,20 @@ public class Vungle implements PluginProtocol {
     }
 
     private void destroy() {
+        Utils.checkMainThread();
         if (!_initialized) {
             return;
         }
         VunglePub.getInstance().clearEventListeners();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasRewardedVideo() {
+    private boolean hasRewardedVideo() {
+        Utils.checkMainThread();
         return VunglePub.getInstance().isAdPlayable();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void showRewardedVideo() {
+    private void showRewardedVideo() {
+        Utils.checkMainThread();
         VunglePub.getInstance().playAd();
     }
 }

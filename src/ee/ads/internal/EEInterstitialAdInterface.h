@@ -12,6 +12,6 @@
 
 - (BOOL)isLoaded;
 - (void)load;
-- (void)show;
+- (BOOL)show;
 
 @end

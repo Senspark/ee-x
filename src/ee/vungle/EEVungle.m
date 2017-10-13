@@ -31,7 +31,6 @@ static NSString* const k__hasRewardedVideo  = @"Vungle_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"Vungle_showRewardedVideo";
 static NSString* const k__onStart           = @"Vungle_onStart";
 static NSString* const k__onEnd             = @"Vungle_onEnd";
-static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 // clang-format on
 
 - (id)init {
@@ -62,7 +61,7 @@ static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 
     [bridge registerHandler:k__hasRewardedVideo
                    callback:^(NSString* message) {
-                       return [self hasRewardedVideo] ? @"true" : @"false";
+                       return [EEUtils toString:[self hasRewardedVideo]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo
@@ -129,11 +128,9 @@ static NSString* const k__onUnavailable     = @"Vungle_onUnavailable";
 
 - (void)vungleSDKWillCloseAdWithViewInfo:(NSDictionary*)viewInfo {
     NSLog(@"%s: info = %@", __PRETTY_FUNCTION__, viewInfo);
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     BOOL result = [viewInfo[@"completedView"] boolValue];
-
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onEnd message:result ? @"true" : @"false"];
+    [bridge callCpp:k__onEnd message:[EEUtils toString:result]];
 }
 
 - (void)vungleSDKAdPlayableChanged:(BOOL)isAdPlayable {

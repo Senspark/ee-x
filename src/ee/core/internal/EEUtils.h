@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSString.h>
 
 #if TARGET_OS_IOS
 @class UIViewController;
@@ -18,6 +19,10 @@
 #if TARGET_OS_IOS
 + (UIWindow* _Nullable)getKeyWindow;
 + (UIViewController* _Nullable)getCurrentRootViewController;
++ (BOOL)isLandscape;
 #endif // TARGET_OS_IOS
+
++ (NSString* _Nonnull)toString:(BOOL)value;
++ (BOOL)toBool:(NSString* _Nonnull)value;
 
 @end

@@ -10,6 +10,7 @@
 #define EE_X_UTILS_HPP
 
 #include <functional>
+#include <string>
 
 namespace ee {
 namespace core {
@@ -20,6 +21,9 @@ void runOnUiThread(const Runnable& runnable);
 
 /// Runs the specified runnable on the main thread and wait for it to finish.
 void runOnUiThreadAndWait(const Runnable& runnable);
+
+std::string toString(bool value);
+bool toBool(const std::string& value);
 } // namespace core
 
 using core::runOnUiThread;

@@ -21,6 +21,7 @@
     NSString* adId_;
     NSString* layoutName_;
     BOOL isAdLoaded_;
+    EEAdViewHelper* helper_;
 }
 
 @end
@@ -38,6 +39,8 @@
     layoutName_ = [layoutName copy];
     nativeAd_ = nil;
     nativeAdView_ = nil;
+    helper_ =
+        [[EEAdViewHelper alloc] initWithPrefix:@"FacebookNativeAd" adId:adId_];
 
     [self createInternalAd];
     [self createView];
@@ -49,6 +52,8 @@
     [self deregisterhandlers];
     [self destroyInternalAd];
     [self destroyView];
+    [helper_ release];
+    helper_ = nil;
     [adId_ release];
     adId_ = nil;
     [layoutName_ release];
@@ -57,17 +62,11 @@
 }
 
 - (void)registerHandlers {
-    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
-        initWithPrefix:@"FacebookNativeAd"
-                  adId:[nativeAd_ placementID]] autorelease];
-    [helper registerHandlers:self];
+    [helper_ registerHandlers:self];
 }
 
 - (void)deregisterhandlers {
-    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
-        initWithPrefix:@"FacebookNativeAd"
-                  adId:[nativeAd_ placementID]] autorelease];
-    [helper deregisterHandlers];
+    [helper_ deregisterHandlers];
 }
 
 - (BOOL)createInternalAd {
@@ -87,6 +86,7 @@
     if (nativeAd_ == nil) {
         return NO;
     }
+    isAdLoaded_ = NO;
     [nativeAd_ unregisterView];
     [nativeAd_ release];
     nativeAd_ = nil;

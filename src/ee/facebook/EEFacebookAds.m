@@ -47,10 +47,10 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
     if (self == nil) {
         return self;
     }
-    [self registerHandlers];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
+    [self registerHandlers];
     return self;
 }
 
@@ -181,8 +181,6 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
     if ([bannerAds_ objectForKey:adId] == nil) {
         return NO;
     }
-    EEFacebookBannerAd* ad = [bannerAds_ objectForKey:adId];
-    [ad release];
     [bannerAds_ removeObjectForKey:adId];
     return YES;
 }
@@ -202,8 +200,6 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
     if ([nativeAds_ objectForKey:adId] == nil) {
         return NO;
     }
-    EEFacebookNativeAd* ad = [nativeAds_ objectForKey:adId];
-    [ad release];
     [nativeAds_ removeObjectForKey:adId];
     return YES;
 }
@@ -222,8 +218,6 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
     if ([interstitialAds_ objectForKey:placementId] == nil) {
         return NO;
     }
-    EEFacebookInterstitialAd* ad = [interstitialAds_ objectForKey:placementId];
-    [ad release];
     [interstitialAds_ removeObjectForKey:placementId];
     return YES;
 }

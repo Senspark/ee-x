@@ -6,6 +6,6 @@
 
 - (BOOL)hasRewardedVideo;
 
-- (void)showRewardedVideo;
+- (BOOL)showRewardedVideo;
 
 @end

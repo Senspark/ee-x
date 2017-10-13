@@ -10,6 +10,7 @@
 #import "ee/ads/internal/EEAdViewInterface.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEUtils.h"
 
 @interface EEAdViewHelper () {
     NSString* prefix_;
@@ -72,7 +73,7 @@
 
     [bridge registerHandler:[self k__isLoaded]
                    callback:^(NSString* message) {
-                       return [adView isLoaded] ? @"true" : @"false";
+                       return [EEUtils toString:[adView isLoaded]];
                    }];
 
     [bridge registerHandler:[self k__load]
@@ -123,7 +124,7 @@
 
     [bridge registerHandler:[self k__setVisible]
                    callback:^(NSString* message) {
-                       [adView setVisible:[message isEqualToString:@"true"]];
+                       [adView setVisible:[EEUtils toBool:message]];
                        return @"";
                    }];
 }

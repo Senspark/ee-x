@@ -57,24 +57,22 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
                            [EEJsonUtils convertStringToDictionary:message];
                        NSString* gameId = dict[@"gameId"];
                        BOOL testModeEnabled =
-                           [(NSString*)dict[@"testModeEnabled"]
-                               isEqualToString:@"true"];
+                           [EEUtils toBool:(NSString*)dict[@"testModeEnabled"]];
                        [self initialize:gameId testMode:testModeEnabled];
                        return @"";
                    }];
 
     [bridge registerHandler:k__setDebugModeEnabled
                    callback:^(NSString* message) {
-                       [self setDebugMode:[message isEqualToString:@"true"]];
+                       [self setDebugMode:[EEUtils toBool:message]];
                        return @"";
                    }];
 
     [bridge registerHandler:k__isRewardedVideoReady
                    callback:^(NSString* message) {
                        NSString* placementId = message;
-                       return [self isRewardedVideoReady:placementId]
-                                  ? @"true"
-                                  : @"false";
+                       return [EEUtils
+                           toString:[self isRewardedVideoReady:placementId]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo

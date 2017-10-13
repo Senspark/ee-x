@@ -17,6 +17,7 @@
 @interface EEFacebookInterstitialAd () <FBInterstitialAdDelegate> {
     NSString* placementId_;
     FBInterstitialAd* interstitialAd_;
+    EEInterstitialAdHelper* helper_;
 }
 
 @end
@@ -30,6 +31,9 @@
     }
     placementId_ = [placementId copy];
     interstitialAd_ = nil;
+    helper_ =
+        [[EEInterstitialAdHelper alloc] initWithPrefix:@"FacebookInterstitialAd"
+                                                  adId:placementId];
     [self registerHandlers];
     return self;
 }
@@ -67,29 +71,23 @@
 }
 
 - (void)registerHandlers {
-    EEInterstitialAdHelper* helper = [[[EEInterstitialAdHelper alloc]
-        initWithPrefix:@"FacebookInterstitialAd"
-                  adId:placementId_] autorelease];
-    [helper registerHandlers:self];
+    [helper_ registerHandlers:self];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:[self k__createInternalAd]
                    callback:^(NSString* message) {
-                       return [self createInternalAd] ? @"true" : @"false";
+                       return [EEUtils toString:[self createInternalAd]];
                    }];
 
     [bridge registerHandler:[self k__destroyInternalAd]
                    callback:^(NSString* message) {
-                       return [self destroyInternalAd] ? @"true" : @"false";
+                       return [EEUtils toString:[self destroyInternalAd]];
                    }];
 }
 
 - (void)deregisterHandlers {
-    EEInterstitialAdHelper* helper = [[[EEInterstitialAdHelper alloc]
-        initWithPrefix:@"FacebookInterstitialAd"
-                  adId:placementId_] autorelease];
-    [helper deregisterHandlers];
+    [helper_ deregisterHandlers];
 
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
@@ -132,12 +130,12 @@
     [interstitialAd_ loadAd];
 }
 
-- (void)show {
+- (BOOL)show {
     if (interstitialAd_ == nil) {
-        return;
+        return NO;
     }
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [interstitialAd_ showAdFromRootViewController:rootView];
+    return [interstitialAd_ showAdFromRootViewController:rootView];
 }
 
 - (void)interstitialAdDidClick:(FBInterstitialAd*)interstitialAd {

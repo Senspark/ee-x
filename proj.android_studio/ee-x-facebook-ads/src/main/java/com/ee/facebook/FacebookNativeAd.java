@@ -39,14 +39,17 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     private boolean                 _isAdLoaded;
     private Activity                _activity;
     private FacebookNativeAdBuilder _builder;
+    private AdViewHelper            _helper;
 
     public FacebookNativeAd(@NonNull Activity activity, @NonNull FacebookNativeAdBuilder builder) {
+        Utils.checkMainThread();
         _activity = activity;
         _builder = builder;
 
         _nativeAd = null;
         _nativeAdView = null;
         _isAdLoaded = false;
+        _helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
 
         createInternalAd();
         createView();
@@ -55,6 +58,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
+        Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         destroyView();
@@ -63,16 +67,17 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     }
 
     private void registerHandlers() {
-        AdViewHelper helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
-        helper.registerHandlers(this);
+        Utils.checkMainThread();
+        _helper.registerHandlers(this);
     }
 
     private void deregisterHandlers() {
-        AdViewHelper helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
-        helper.deregisterHandlers();
+        Utils.checkMainThread();
+        _helper.deregisterHandlers();
     }
 
     private boolean createInternalAd() {
+        Utils.checkMainThread();
         if (_nativeAd != null) {
             return false;
         }
@@ -84,9 +89,11 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     }
 
     private boolean destroyInternalAd() {
+        Utils.checkMainThread();
         if (_nativeAd == null) {
             return false;
         }
+        _isAdLoaded = false;
         _nativeAd.unregisterView();
         _nativeAd.destroy();
         _nativeAd = null;
@@ -94,6 +101,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     }
 
     private void createView() {
+        Utils.checkMainThread();
         FrameLayout rootView = Utils.getRootView(_activity);
         int layoutId = rootView
             .getResources()
@@ -110,6 +118,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     }
 
     private void destroyView() {
+        Utils.checkMainThread();
         FrameLayout rootView = Utils.getRootView(_activity);
         rootView.removeView(_nativeAdView);
         _nativeAdView = null;
@@ -117,14 +126,13 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     @Override
     public boolean isLoaded() {
-        if (_nativeAd == null) {
-            return false;
-        }
-        return _isAdLoaded;
+        Utils.checkMainThread();
+        return _nativeAd != null && _isAdLoaded;
     }
 
     @Override
     public void load() {
+        Utils.checkMainThread();
         if (_nativeAd == null) {
             return;
         }
@@ -134,6 +142,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     @Override
     @NonNull
     public Point getPosition() {
+        Utils.checkMainThread();
         int p[] = new int[2];
         _nativeAdView.getLocationInWindow(p);
         return new Point(p[0], p[1]);
@@ -141,6 +150,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     @Override
     public void setPosition(@NonNull Point position) {
+        Utils.checkMainThread();
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
         params.leftMargin = position.x;
@@ -151,11 +161,13 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     @Override
     @NonNull
     public Point getSize() {
+        Utils.checkMainThread();
         return new Point(_nativeAdView.getWidth(), _nativeAdView.getHeight());
     }
 
     @Override
     public void setSize(@NonNull Point size) {
+        Utils.checkMainThread();
         FrameLayout.LayoutParams params =
             (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
         params.width = size.x;
@@ -165,6 +177,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     @Override
     public void setVisible(boolean visible) {
+        Utils.checkMainThread();
         if (visible) {
             _nativeAdView.setVisibility(View.VISIBLE);
         } else {
@@ -175,11 +188,14 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onAdLoaded: " + adError.getErrorMessage());
+        Utils.checkMainThread();
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
+        Utils.checkMainThread();
+
         _isAdLoaded = true;
 
         _nativeAd.unregisterView();
@@ -225,10 +241,12 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
+        Utils.checkMainThread();
     }
 
     @Override
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
+        Utils.checkMainThread();
     }
 }

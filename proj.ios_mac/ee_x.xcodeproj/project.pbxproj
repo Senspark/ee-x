@@ -239,6 +239,7 @@
 		6F978CBA1F41882300247CA8 /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */; };
 		6F978CBB1F41882300247CA8 /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CB91F41882300247CA8 /* EEFacebookNativeAdView.m */; };
 		6F978CBC1F41882D00247CA8 /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */; };
+		6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */; };
 		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
 		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
 		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
@@ -681,6 +682,7 @@
 		6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceFwd.hpp; sourceTree = "<group>"; };
 		6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookNativeAdView.h; path = facebook/EEFacebookNativeAdView.h; sourceTree = "<group>"; };
 		6F978CB91F41882300247CA8 /* EEFacebookNativeAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookNativeAdView.m; path = facebook/EEFacebookNativeAdView.m; sourceTree = "<group>"; };
+		6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookBannerAdSize.hpp; path = facebook/FacebookBannerAdSize.hpp; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -1348,6 +1350,7 @@
 				EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */,
 				6F426E2F1F8B828C009E202A /* FacebookNativeAdBuilder.cpp */,
 				6F426E301F8B828C009E202A /* FacebookNativeAdBuilder.hpp */,
+				6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */,
 				EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */,
 				EB684E111EC5645200ED9E4A /* EEFacebookAds.h */,
 				6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */,
@@ -1423,6 +1426,7 @@
 				6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */,
 				6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */,
 				6F04C5AD1F8F6E1E007BC7A3 /* FacebookBannerAd.hpp in Headers */,
+				6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */,
 				6F04C5B11F8F6E1E007BC7A3 /* FacebookNativeAd.hpp in Headers */,
 				6F04C5AF1F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp in Headers */,
 				6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */,

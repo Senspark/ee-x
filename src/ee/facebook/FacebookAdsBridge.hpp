@@ -15,6 +15,7 @@
 
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/facebook/FacebookBannerAdSize.hpp"
 
 namespace ee {
 namespace facebook {
@@ -22,20 +23,6 @@ class BannerAd;
 class NativeAd;
 class NativeAdBuilder;
 class InterstitialAd;
-
-enum class FacebookBannerAdSize {
-    /// kFBAdSizeHeight50Banner or AdSize.BANNER_HEIGHT_50.
-    BannerHeight50,
-
-    /// kFBAdSizeHeight90Banner or AdSize.BANNER_HEIGHT_90.
-    BannerHeight90,
-
-    /// kFBAdSizeInterstitial or AdSize.INTERSTITIAL.
-    Interstitial,
-
-    /// kFBAdSizeHeight250Rectangle or AdSize.RECTANGLE_HEIGHT_250.
-    RectangleHeight250,
-};
 
 class FacebookAds final {
 public:
@@ -53,8 +40,8 @@ public:
     /// Clears all test devices.
     void clearTestDevices();
 
-    std::shared_ptr<AdViewInterface>
-    createBannerAd(const std::string& adId, FacebookBannerAdSize adSize);
+    std::shared_ptr<AdViewInterface> createBannerAd(const std::string& adId,
+                                                    BannerAdSize adSize);
 
     std::shared_ptr<AdViewInterface>
     createNativeAd(const NativeAdBuilder& builder);

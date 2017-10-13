@@ -72,5 +72,14 @@ void runOnUiThreadAndWait(const Runnable& runnable) {
     runnable();
 #endif // EE_X_ANDROID
 }
+
+std::string toString(bool value) {
+    return value ? "true" : "false";
+}
+
+bool toBool(const std::string& value) {
+    assert(value == "true" || value == "false");
+    return value == "true";
+}
 } // namespace core
 } // namespace ee

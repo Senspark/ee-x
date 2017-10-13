@@ -9,6 +9,7 @@
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
 #import "ee/ads/internal/EEInterstitialAdInterface.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEUtils.h"
 
 @interface EEInterstitialAdHelper () {
     NSString* prefix_;
@@ -55,7 +56,7 @@
 
     [bridge registerHandler:[self k__isLoaded]
                    callback:^(NSString* message) {
-                       return [ad isLoaded] ? @"true" : @"false";
+                       return [EEUtils toString:[ad isLoaded]];
                    }];
 
     [bridge registerHandler:[self k__load]

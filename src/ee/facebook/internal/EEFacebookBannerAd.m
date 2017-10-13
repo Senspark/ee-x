@@ -19,6 +19,7 @@
     NSString* adId_;
     FBAdSize adSize_;
     BOOL isLoaded_;
+    EEAdViewHelper* helper_;
 }
 
 @end
@@ -52,6 +53,8 @@
     adId_ = [adId copy];
     adSize_ = adSize;
     adView_ = nil;
+    helper_ =
+        [[EEAdViewHelper alloc] initWithPrefix:@"FacebookBannerAd" adId:adId_];
 
     [self createInternalAd];
     [self registerHandlers];
@@ -61,30 +64,25 @@
 - (void)dealloc {
     [self deregisterhandlers];
     [self destroyInternalAd];
+    [helper_ release];
+    helper_ = nil;
     [adId_ release];
     adId_ = nil;
     [super dealloc];
 }
 
 - (void)registerHandlers {
-    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
-        initWithPrefix:@"FacebookBannerAd"
-                  adId:[adView_ placementID]] autorelease];
-    [helper registerHandlers:self];
+    [helper_ registerHandlers:self];
 }
 
 - (void)deregisterhandlers {
-    EEAdViewHelper* helper = [[[EEAdViewHelper alloc]
-        initWithPrefix:@"FacebookBannerAd"
-                  adId:[adView_ placementID]] autorelease];
-    [helper deregisterHandlers];
+    [helper_ deregisterHandlers];
 }
 
 - (BOOL)createInternalAd {
     if (adView_ != nil) {
         return NO;
     }
-    isLoaded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     FBAdView* adView =
         [[[FBAdView alloc] initWithPlacementID:adId_
@@ -100,6 +98,7 @@
     if (adView_ == nil) {
         return NO;
     }
+    isLoaded_ = NO;
     [adView_ removeFromSuperview];
     adView_ = nil;
     return YES;

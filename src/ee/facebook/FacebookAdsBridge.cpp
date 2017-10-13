@@ -56,8 +56,8 @@ void Self::clearTestDevices() {
     bridge.call(k__clearTestDevices);
 }
 
-std::shared_ptr<AdViewInterface>
-Self::createBannerAd(const std::string& adId, FacebookBannerAdSize adSize) {
+std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
+                                                      BannerAdSize adSize) {
     nlohmann::json json;
     json["adId"] = adId;
     json["adSize"] = static_cast<int>(adSize);

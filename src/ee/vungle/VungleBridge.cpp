@@ -1,4 +1,5 @@
 #include "ee/vungle/VungleBridge.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
@@ -22,7 +23,6 @@ constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 Self::Vungle() {
     errored_ = false;
     rewardedVideo_ = nullptr;
-
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
@@ -32,7 +32,7 @@ Self::Vungle() {
         k__onStart);
     bridge.registerHandler(
         [this](const std::string& message) {
-            onEnd(message == "true");
+            onEnd(core::toBool(message));
             return "";
         },
         k__onEnd);
@@ -76,7 +76,7 @@ bool Self::destroyRewardedVideo() {
 bool Self::hasRewardedVideo() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto result = bridge.call(k__hasRewardedVideo);
-    return result == "true";
+    return core::toBool(result);
 }
 
 bool Self::showRewardedVideo() {
@@ -86,7 +86,7 @@ bool Self::showRewardedVideo() {
     errored_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo);
-    return not errored_ && response == "true";
+    return not errored_ && core::toBool(response);
 }
 
 void Self::onStart() {

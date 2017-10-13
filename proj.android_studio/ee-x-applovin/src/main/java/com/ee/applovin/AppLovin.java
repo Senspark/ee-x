@@ -19,6 +19,7 @@ import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.ee.core.internal.Utils;
 
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public class AppLovin implements PluginProtocol {
 
     public AppLovin(Context context) {
         _logger.debug("constructor begin: context = " + context);
+        Utils.checkMainThread();
         _context = (Activity) context;
         _initialized = false;
         _sdk = null;
@@ -85,6 +87,7 @@ public class AppLovin implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        Utils.checkMainThread();
         deregisterHandlers();
         destroy();
     }
@@ -117,7 +120,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setTestAdEnabled(message.equals("true"));
+                setTestAdEnabled(Utils.toBoolean(message));
                 return "";
             }
         }, k__setTestAdsEnabled);
@@ -126,7 +129,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setVerboseLogging(message.equals("true"));
+                setVerboseLogging(Utils.toBoolean(message));
                 return "";
             }
         }, k__setVerboseLogging);
@@ -135,7 +138,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                setMuted(message.equals("true"));
+                setMuted(Utils.toBoolean(message));
                 return "";
             }
         }, k__setMuted);
@@ -144,7 +147,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return hasInterstitialAd() ? "true" : "false";
+                return Utils.toString(hasInterstitialAd());
             }
         }, k__hasInterstitialAd);
 
@@ -170,7 +173,7 @@ public class AppLovin implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return hasRewardedVideo() ? "true" : "false";
+                return Utils.toString(hasRewardedVideo());
             }
         }, k__hasRewardedVideo);
 
@@ -185,6 +188,7 @@ public class AppLovin implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
+        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
@@ -200,6 +204,7 @@ public class AppLovin implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String key) {
+        Utils.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -226,29 +231,35 @@ public class AppLovin implements PluginProtocol {
         _incentivizedInterstitialAdRewardListener = new AppLovinAdRewardListener() {
             @Override
             public void userRewardVerified(AppLovinAd ad, Map<String, String> response) {
-                _logger.info("userRewardVerified");
+                _logger.info("userRewardVerified: " + response);
+                Utils.checkMainThread();
+
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUserRewardVerified);
             }
 
             @Override
             public void userOverQuota(AppLovinAd ad, Map<String, String> response) {
-                _logger.info("userOverQuota");
+                _logger.info("userOverQuota: " + response);
+                Utils.checkMainThread();
             }
 
             @Override
             public void userRewardRejected(AppLovinAd ad, Map<String, String> response) {
-                _logger.info("userRewardRejected");
+                _logger.info("userRewardRejected: " + response);
+                Utils.checkMainThread();
             }
 
             @Override
             public void validationRequestFailed(AppLovinAd ad, int responseCode) {
                 _logger.info("validationRequestFailed: code = " + responseCode);
+                Utils.checkMainThread();
             }
 
             @Override
             public void userDeclinedToViewAd(AppLovinAd ad) {
                 _logger.info("userDeclinedToViewAd");
+                Utils.checkMainThread();
             }
         };
 
@@ -256,6 +267,8 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void adDisplayed(AppLovinAd ad) {
                 _logger.info("adDisplayed");
+                Utils.checkMainThread();
+
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onRewardedVideoDisplayed);
             }
@@ -263,6 +276,8 @@ public class AppLovin implements PluginProtocol {
             @Override
             public void adHidden(AppLovinAd ad) {
                 _logger.info("adHidden");
+                Utils.checkMainThread();
+
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onRewardedVideoHidden);
             }
@@ -271,6 +286,7 @@ public class AppLovin implements PluginProtocol {
     }
 
     private void destroy() {
+        Utils.checkMainThread();
         if (!_initialized) {
             return;
         }
@@ -283,41 +299,49 @@ public class AppLovin implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void setTestAdEnabled(boolean enabled) {
+        Utils.checkMainThread();
         _sdk.getSettings().setTestAdsEnabled(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setVerboseLogging(boolean enabled) {
+        Utils.checkMainThread();
         _sdk.getSettings().setVerboseLogging(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setMuted(boolean enabled) {
+        Utils.checkMainThread();
         _sdk.getSettings().setMuted(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasInterstitialAd() {
+        Utils.checkMainThread();
         return _sdk.getAdService().hasPreloadedAd(AppLovinAdSize.INTERSTITIAL);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void showInterstitialAd() {
+        Utils.checkMainThread();
         AppLovinInterstitialAd.show(_sdk, _context, null);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void loadRewardedVideo() {
+        Utils.checkMainThread();
         _incentivizedInterstitialAd.preload(_incentivizedInterstitialAdLoadListener);
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasRewardedVideo() {
+        Utils.checkMainThread();
         return _incentivizedInterstitialAd.isAdReadyToDisplay();
     }
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedVideo() {
+        Utils.checkMainThread();
         _incentivizedInterstitialAd.show(_context, _incentivizedInterstitialAdRewardListener, null,
             _incentivizedInterstitialAdDisplayListener);
     }

@@ -10,6 +10,7 @@ import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.ee.core.internal.Utils;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
 
@@ -145,7 +146,7 @@ public class FacebookAds implements PluginProtocol {
                 String adId = (String) dict.get("adId");
                 Integer adSizeIndex = (Integer) dict.get("adSize");
                 AdSize adSize = FacebookBannerAd.adSizeFor(adSizeIndex);
-                return createBannerAd(adId, adSize) ? "true" : "false";
+                return Utils.toString(createBannerAd(adId, adSize));
             }
         }, k__createBannerAd);
 
@@ -155,7 +156,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String adId = message;
-                return destroyBannerAd(adId) ? "true" : "false";
+                return Utils.toString(destroyBannerAd(adId));
             }
         }, k__destroyBannerAd);
 
@@ -176,7 +177,7 @@ public class FacebookAds implements PluginProtocol {
                     .setAdChoices((String) dict.get("adChoices"))
                     .setBody((String) dict.get("body"))
                     .setAction((String) dict.get("action"));
-                return createNativeAd(builder) ? "true" : "false";
+                return Utils.toString(createNativeAd(builder));
             }
         }, k__createNativeAd);
 
@@ -186,7 +187,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String adId = message;
-                return destroyNativeAd(adId) ? "true" : "false";
+                return Utils.toString(destroyNativeAd(adId));
             }
         }, k__destroyNativeAd);
 
@@ -196,7 +197,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return createInterstitialAd(placementId) ? "true" : "false";
+                return Utils.toString(createInterstitialAd(placementId));
             }
         }, k__createInterstitialAd);
 
@@ -206,7 +207,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return destroyInterstitialAd(placementId) ? "true" : "false";
+                return Utils.toString(destroyInterstitialAd(placementId));
             }
         }, k__destroyInterstitialAd);
     }

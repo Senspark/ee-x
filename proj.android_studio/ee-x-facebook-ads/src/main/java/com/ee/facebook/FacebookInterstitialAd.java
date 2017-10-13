@@ -35,8 +35,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdIn
         registerHandlers();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void destroy() {
+    void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
         _helper = null;

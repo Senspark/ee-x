@@ -38,6 +38,8 @@
 		6F04C5C41F8F73E7007BC7A3 /* IronSourceRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5C21F8F73E7007BC7A3 /* IronSourceRewardedVideo.hpp */; };
 		6F04C5C81F8F73F4007BC7A3 /* AppLovinRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5C61F8F73F4007BC7A3 /* AppLovinRewardedVideo.cpp */; };
 		6F04C5C91F8F73F4007BC7A3 /* AppLovinRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5C71F8F73F4007BC7A3 /* AppLovinRewardedVideo.hpp */; };
+		6F04C5CC1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5CA1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp */; };
+		6F04C5CD1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5CB1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp */; };
 		6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
 		6F1AA9571F387E340061C40B /* FirebaseMessaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */; };
 		6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */; };
@@ -530,6 +532,8 @@
 		6F04C5C21F8F73E7007BC7A3 /* IronSourceRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F04C5C61F8F73F4007BC7A3 /* AppLovinRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinRewardedVideo.cpp; sourceTree = "<group>"; };
 		6F04C5C71F8F73F4007BC7A3 /* AppLovinRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinRewardedVideo.hpp; sourceTree = "<group>"; };
+		6F04C5CA1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewBridgeHelper.cpp; path = ads/internal/AdViewBridgeHelper.cpp; sourceTree = "<group>"; };
+		6F04C5CB1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewBridgeHelper.hpp; path = ads/internal/AdViewBridgeHelper.hpp; sourceTree = "<group>"; };
 		6F1AA9541F387E340061C40B /* FirebaseMessaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseMessaging.cpp; sourceTree = "<group>"; };
 		6F1AA9551F387E340061C40B /* FirebaseMessaging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseMessaging.hpp; sourceTree = "<group>"; };
 		6F2479C81F8DF482009E702C /* Ads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ads.hpp; sourceTree = "<group>"; };
@@ -1304,6 +1308,8 @@
 				6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */,
 				6F04C5A21F8F6C6A007BC7A3 /* AdViewHelper.cpp */,
 				6F04C5A31F8F6C6A007BC7A3 /* AdViewHelper.hpp */,
+				6F04C5CA1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp */,
+				6F04C5CB1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp */,
 			);
 			name = internal;
 			sourceTree = "<group>";
@@ -1482,6 +1488,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F04C5CD1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp in Headers */,
 				6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */,
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
 				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
@@ -2319,6 +2326,7 @@
 				6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */,
 				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
 				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
+				6F04C5CC1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp in Sources */,
 				6FF6B57A1F8F492900A27634 /* EEAdViewHelper.m in Sources */,
 				6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */,
 				6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */,

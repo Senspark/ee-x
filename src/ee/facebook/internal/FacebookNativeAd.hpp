@@ -10,6 +10,7 @@
 #define EE_X_FACEBOOK_NATIVE_AD_HPP
 
 #include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
@@ -51,8 +52,10 @@ protected:
     explicit NativeAd(FacebookAds* plugin, const std::string& adId);
 
 private:
+    std::string adId_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;
+    ads::AdViewBridgeHelper bridgeHelper_;
 };
 } // namespace facebook
 } // namespace ee

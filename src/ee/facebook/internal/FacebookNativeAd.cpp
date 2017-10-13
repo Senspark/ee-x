@@ -19,65 +19,43 @@ namespace facebook {
 using Self = NativeAd;
 
 Self::NativeAd(FacebookAds* plugin, const std::string& adId)
-    : Super(adId)
+    : Super()
+    , adId_(adId)
     , plugin_(plugin)
-    , helper_("FacebookNativeAd", adId) {}
+    , helper_("FacebookNativeAd", adId)
+    , bridgeHelper_(helper_) {}
 
 Self::~NativeAd() {
-    bool succeeded = plugin_->destroyNativeAd(getAdId());
+    bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__isLoaded());
-    return response == "true";
+    return bridgeHelper_.isLoaded();
 }
 
 void Self::load() {
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__load());
+    bridgeHelper_.load();
 }
 
 std::pair<int, int> Self::getPosition() const {
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__getPosition());
-    auto json = nlohmann::json::parse(response);
-    auto x = json["x"].get<int>();
-    auto y = json["y"].get<int>();
-    return std::make_pair(x, y);
+    return bridgeHelper_.getPosition();
 }
 
 void Self::setPosition(int x, int y) {
-    nlohmann::json json;
-    json["x"] = x;
-    json["y"] = y;
-
-    auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(helper_.k__setPosition(), json.dump());
+    bridgeHelper_.setPosition(x, y);
 }
 
 std::pair<int, int> Self::getSize() const {
-    auto&& bridge = core::MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__getSize());
-    auto json = nlohmann::json::parse(response);
-    auto width = json["width"].get<int>();
-    auto height = json["height"].get<int>();
-    return std::make_pair(width, height);
+    return bridgeHelper_.getSize();
 }
 
 void Self::setSize(int width, int height) {
-    nlohmann::json json;
-    json["width"] = width;
-    json["height"] = height;
-
-    auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(helper_.k__setSize(), json.dump());
+    bridgeHelper_.setSize(width, height);
 }
 
 void Self::setVisible(bool visible) {
-    auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(helper_.k__setVisible(), visible ? "true" : "false");
+    bridgeHelper_.setVisible(visible);
 }
 } // namespace facebook
 } // namespace ee

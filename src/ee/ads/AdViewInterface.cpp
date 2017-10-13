@@ -12,13 +12,8 @@ namespace ee {
 namespace ads {
 using Self = AdViewInterface;
 
-Self::AdViewInterface(const std::string& adId)
-    : adId_(adId) {}
+Self::AdViewInterface() {}
 
 Self::~AdViewInterface() {}
-
-const std::string& Self::getAdId() const {
-    return adId_;
-}
 } // namespace ads
 } // namespace ee

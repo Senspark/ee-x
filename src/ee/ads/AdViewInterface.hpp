@@ -16,11 +16,9 @@ namespace ee {
 namespace ads {
 class AdViewInterface {
 public:
-    explicit AdViewInterface(const std::string& adId);
+    explicit AdViewInterface();
 
     virtual ~AdViewInterface();
-
-    const std::string& getAdId() const;
 
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
@@ -43,9 +41,6 @@ public:
     /// Sets this ad view's visibility.
     /// @param[in] visible Whether this ad view is visible.
     virtual void setVisible(bool visible) = 0;
-
-private:
-    std::string adId_;
 };
 } // namespace ads
 

@@ -1,29 +1,24 @@
 //
-//  FacebookBannerAd.hpp
+//  AdViewBridgeHelper.hpp
 //  ee_x
 //
-//  Created by Zinge on 10/6/17.
+//  Created by Zinge on 10/12/17.
 //
 //
 
-#ifndef EE_X_FACEBOOK_BANNER_AD_HPP
-#define EE_X_FACEBOOK_BANNER_AD_HPP
+#ifndef EE_X_AD_VIEW_BRIDGE_HELPER_HPP
+#define EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 
 #include "ee/ads/AdViewInterface.hpp"
-#include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
-namespace facebook {
-class FacebookAds;
+namespace ads {
+class AdViewHelper;
 
-class BannerAd : public AdViewInterface {
-private:
-    using Self = BannerAd;
-    using Super = AdViewInterface;
-
+class AdViewBridgeHelper : public AdViewInterface {
 public:
-    virtual ~BannerAd() override;
+    explicit AdViewBridgeHelper(const AdViewHelper& helper);
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -46,18 +41,10 @@ public:
     /// @see Super.
     virtual void setVisible(bool visible) override;
 
-protected:
-    friend FacebookAds;
-
-    explicit BannerAd(FacebookAds* plugin, const std::string& adId);
-
 private:
-    std::string adId_;
-    FacebookAds* plugin_;
-    ads::AdViewHelper helper_;
-    ads::AdViewBridgeHelper bridgeHelper_;
+    AdViewHelper helper_;
 };
-} // namespace facebook
+} // namespace ads
 } // namespace ee
 
-#endif /* EE_X_FACEBOOK_BANNER_AD_HPP */
+#endif /* EE_X_AD_VIEW_BRIDGE_HELPER_HPP */

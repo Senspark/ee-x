@@ -126,6 +126,7 @@ dependencies {
     compile project(':ee-x-crashlytics')
     compile project(':ee-x-firebase')
     compile project(':ee-x-ads')
+    compile project(':ee-x-admob')
     compile project(':ee-x-applovin')
     compile project(':ee-x-facebook-ads')
     compile project(':ee-x-unity-ads')

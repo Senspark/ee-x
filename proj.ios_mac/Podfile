@@ -32,4 +32,8 @@ abstract_target 'common' do
     target 'ee_x_mobile_vungle' do
         pod 'VungleSDK-iOS', '4.1.0'
     end
+    
+    target 'ee_x_mobile_admob' do
+        pod 'Google-Mobile-Ads-SDK'
+    end
 end

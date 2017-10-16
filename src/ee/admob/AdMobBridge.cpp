@@ -23,6 +23,8 @@ using Self = AdMob;
 
 namespace {
 // clang-format off
+constexpr auto k__initialize            = "AdMob_initialize";
+    
 constexpr auto k__createBannerAd        = "AdMob_createBannerAd";
 constexpr auto k__destroyBannerAd       = "AdMob_destroyBannerAd";
 
@@ -87,6 +89,11 @@ Self::~AdMob() {
     bridge.deregisterHandler(k__onFailedToLoad);
     bridge.deregisterHandler(k__onLoaded);
     bridge.deregisterHandler(k__onClosed);
+}
+
+void Self::initialize(const std::string& applicationId) {
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.call(k__initialize, applicationId);
 }
 
 std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,

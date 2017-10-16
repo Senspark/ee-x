@@ -26,6 +26,12 @@ public:
     AdMob();
     ~AdMob();
 
+    /// Optional.
+    /// Calls this method for faster ads loading.
+    /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/N5okpElFHZs
+    /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/kayQ3VZJqkU
+    void initialize(const std::string& applicationId);
+
     /// Creates a banner ad.
     /// @param[in] adId The banner ad unit ID.
     /// @param[in] adSize The banner ad size.

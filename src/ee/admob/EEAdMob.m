@@ -27,6 +27,8 @@
 @implementation EEAdMob
 
 // clang-format off
+static NSString* const k__initialize            = @"AdMob_initialize";
+
 static NSString* const k__createBannerAd        = @"AdMob_createBannerAd";
 static NSString* const k__destroyBannerAd       = @"AdMob_destroyBannerAd";
 
@@ -75,6 +77,13 @@ static NSString* const k__layout_name           = @"layout_name";
 
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:k__initialize
+                   callback:^(NSString* message) {
+                       NSString* applicationId = message;
+                       [self initialize:applicationId];
+                       return @"";
+                   }];
 
     [bridge registerHandler:k__createBannerAd
                    callback:^(NSString* message) {
@@ -145,6 +154,7 @@ static NSString* const k__layout_name           = @"layout_name";
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge deregisterHandler:k__initialize];
     [bridge deregisterHandler:k__createBannerAd];
     [bridge deregisterHandler:k__destroyBannerAd];
     [bridge deregisterHandler:k__createInterstitialAd];
@@ -152,6 +162,10 @@ static NSString* const k__layout_name           = @"layout_name";
     [bridge deregisterHandler:k__hasRewardedVideo];
     [bridge deregisterHandler:k__loadRewardedVideo];
     [bridge deregisterHandler:k__showRewardedVideo];
+}
+
+- (void)initialize:(NSString* _Nonnull)applicationId {
+    [GADMobileAds configureWithApplicationID:applicationId];
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size {

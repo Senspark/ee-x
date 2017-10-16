@@ -26,6 +26,7 @@ import java.util.Map;
  */
 
 public class AdMob implements PluginProtocol, RewardedVideoAdListener {
+    private static final String k__initialize            = "AdMob_initialize";
     private static final String k__createBannerAd        = "AdMob_createBannerAd";
     private static final String k__destroyBannerAd       = "AdMob_destroyBannerAd";
     private static final String k__createNativeAd        = "AdMob_createNativeAd";
@@ -121,6 +122,17 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String applicationId = message;
+                initialize(applicationId);
+                return "";
+            }
+        }, k__initialize);
+
+        bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -198,6 +210,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
+        bridge.deregisterHandler(k__initialize);
         bridge.deregisterHandler(k__createBannerAd);
         bridge.deregisterHandler(k__destroyBannerAd);
         bridge.deregisterHandler(k__createInterstitialAd);
@@ -205,6 +218,11 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__loadRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void initialize(@NonNull String applicationId) {
+        MobileAds.initialize(_context, applicationId);
     }
 
     @SuppressWarnings("WeakerAccess")

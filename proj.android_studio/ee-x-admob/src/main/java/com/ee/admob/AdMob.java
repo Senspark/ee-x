@@ -183,10 +183,9 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                ;
                 return Utils.toString(hasRewardedVideo());
             }
-        }, k__destroyInterstitialAd);
+        }, k__hasRewardedVideo);
 
         bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
@@ -197,7 +196,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
                 loadRewardedVideo(adId);
                 return "";
             }
-        }, k__destroyInterstitialAd);
+        }, k__loadRewardedVideo);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -206,7 +205,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
                 showRewardedVideo();
                 return "";
             }
-        }, k__destroyInterstitialAd);
+        }, k__showRewardedVideo);
     }
 
     private void deregisterHandlers() {

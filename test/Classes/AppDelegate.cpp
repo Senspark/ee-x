@@ -7,357 +7,27 @@
 //
 
 #include "AppDelegate.hpp"
+#include "AppLovin.hpp"
 #include "CrashlyticsAgent.hpp"
+#include "FacebookAds.hpp"
+#include "IronSource.hpp"
 #include "NotificationAgent.hpp"
+#include "UnityAds.hpp"
+#include "Utils.hpp"
+#include "Vungle.hpp"
+
+#include <ee/Ads.hpp>
+#include <ee/Core.hpp>
+#include <ee/Macro.hpp>
 
 #include <cocos2d.h>
 
-#include <ee/Ads.hpp>
-#include <ee/AppLovin.hpp>
-#include <ee/Core.hpp>
-#include <ee/FacebookAds.hpp>
-#include <ee/IronSource.hpp>
-#include <ee/Macro.hpp>
-#include <ee/UnityAds.hpp>
-#include <ee/Vungle.hpp>
-
+namespace eetest {
 namespace {
 const auto DesignResolution = cocos2d::Size(480, 320);
 } // namespace
 
 namespace {
-ee::Logger& getLogger() {
-    static ee::Logger logger("ee_x");
-    return logger;
-}
-
-std::string getCurrentThreadId() {
-    std::stringstream ss;
-    ss << std::this_thread::get_id();
-    return ss.str();
-}
-
-void logCurrentThread() {
-    getLogger().info("Current thread ID: ", getCurrentThreadId());
-}
-
-void schedule(float delay, float interval, const std::function<void()>& f) {
-    static int target;
-    static int counter;
-    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
-    scheduler->schedule(std::bind(f), &target, interval, CC_REPEAT_FOREVER,
-                        delay, false, std::to_string(counter++));
-}
-
-void scheduleOnce(float delay, const std::function<void()>& f) {
-    static int target;
-    static int counter;
-    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
-    scheduler->schedule(std::bind(f), &target, 0, 0, delay, false,
-                        std::to_string(counter++));
-}
-
-ee::FacebookAds* getFacebookAds() {
-    static auto plugin = ee::FacebookAds();
-    static bool initialized = false;
-    if (not initialized) {
-        initialized = true;
-        plugin.clearTestDevices();
-        plugin.addTestDevice(plugin.getTestDeviceHash());
-        plugin.addTestDevice("ad45c323f6a9b07f7a9c072549efb279"); // BlueStacks.
-    }
-    return &plugin;
-}
-
-std::string getFacebookInterstitialAdId() {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "869337403086643_1447442535276124";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "869337403086643_1447441308609580";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-}
-
-void testFacebookNativeAd() {
-    auto&& frameSize =
-        cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
-    int screenWidth = static_cast<int>(frameSize.width);
-    int screenHeight = static_cast<int>(frameSize.height);
-
-    static std::shared_ptr<ee::AdViewInterface> nativeAd;
-
-    float delay = 0.0f;
-    scheduleOnce(delay += 1.0f, [] {
-        getLogger().info("Create FacebookAds plugin");
-        getFacebookAds();
-    });
-
-    scheduleOnce(delay += 1.0f, [] {
-        ee::runOnUiThread([] {
-            getLogger().info("Create Facebook native ad");
-            nativeAd = getFacebookAds()->createNativeAd(
-                ee::FacebookNativeAdBuilder()
-                    .setAdId("869337403086643_1444948412192203")
-                    .setLayoutName("fb_native_spin")
-                    .setIcon("native_ad_icon")
-                    .setTitle("native_ad_title")
-                    .setMedia("native_ad_media")
-                    .setSocialContext("native_ad_social_context")
-                    .setAdChoices("ad_choices_container")
-                    .setBody("native_ad_body")
-                    .setAction("native_ad_call_to_action"));
-            nativeAd->setVisible(true);
-            nativeAd->load();
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
-        ee::runOnUiThread([screenWidth, screenHeight] {
-            getLogger().info("Resize = screen size / 4");
-            nativeAd->setPosition(3 * screenWidth / 8, 3 * screenHeight / 8);
-            nativeAd->setSize(screenWidth / 4, screenHeight / 4);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [] {
-        ee::runOnUiThread([] {
-            getLogger().info("Move to top-left");
-            nativeAd->setPosition(0, 0);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth] {
-        ee::runOnUiThread([screenWidth] {
-            getLogger().info("Move to top-right");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(screenWidth - width, 0);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
-        ee::runOnUiThread([screenWidth, screenHeight] {
-            getLogger().info("Move to bottom-right");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(screenWidth - width, screenHeight - height);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenHeight] {
-        ee::runOnUiThread([screenHeight] {
-            getLogger().info("Move to bottom-left");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(0, screenHeight - height);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
-        ee::runOnUiThread([screenWidth, screenHeight] {
-            getLogger().info("Move to center");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition((screenWidth - width) / 2,
-                                  (screenHeight - height) / 2);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
-        ee::runOnUiThread([screenWidth, screenHeight] {
-            getLogger().info("Resize = screen size");
-            nativeAd->setPosition(0, 0);
-            nativeAd->setSize(screenWidth, screenHeight);
-        });
-    });
-
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight] {
-        ee::runOnUiThread([screenWidth, screenHeight] {
-            getLogger().info("Resize = screen size / 2");
-            nativeAd->setPosition(screenWidth / 4, screenHeight / 4);
-            nativeAd->setSize(screenWidth / 2, screenHeight / 2);
-        });
-    });
-}
-
-void testFacebookInterstitialAd() {
-    static auto interstitialAd =
-        getFacebookAds()->createInterstitialAd(getFacebookInterstitialAdId());
-    schedule(1.0f, 3.0f, [] {
-        logCurrentThread();
-        ee::runOnUiThread([] {
-            logCurrentThread();
-            interstitialAd->load();
-        });
-    });
-    schedule(2.0f, 3.0f, [] {
-        logCurrentThread();
-        ee::runOnUiThread([] {
-            logCurrentThread();
-            interstitialAd->show();
-        });
-    });
-}
-
-ee::AppLovin* getAppLovin() {
-    static auto plugin = ee::AppLovin();
-    static bool initialized;
-    if (not initialized) {
-        initialized = true;
-        plugin.initialize(
-            R"(gG8pkErh1_fQo-4cNDXGnxGyb9H4qz6VDEJyS8eU8IvxH-XeB4wy0BubKAg97neL0yIT4xyDEs8WqfA0l4zlGr)");
-        plugin.setTestAdsEnabled(true);
-        plugin.setVerboseLogging(true);
-    }
-    return &plugin;
-}
-
-void testAppLovin() {
-    static auto rewardedVideo = getAppLovin()->createRewardedVideo();
-    rewardedVideo->setResultCallback([](bool result) {
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
-
-    float delay = 0.0f;
-    schedule(delay += 1.0f, 3.0f, [] {
-        getLogger().info("Load AppLovin rewarded video");
-        rewardedVideo->load();
-    });
-    schedule(delay += 1.0f, 3.0f, [] {
-        getLogger().info("Show AppLovin rewarded video");
-        rewardedVideo->show();
-    });
-}
-
-ee::UnityAds* getUnityAds() {
-    static auto plugin = ee::UnityAds();
-    static bool initialized;
-    if (not initialized) {
-        initialized = true;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "73406";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "1423604";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        plugin.initialize(gameId, false);
-    }
-    return &plugin;
-}
-
-std::string getUnityRewardedVideoId() {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "rewardedVideoZone";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "rewardedVideo";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-}
-
-std::string getUnityInterstitialAdId() {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "defaultZone";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "video";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-}
-
-void testUnityAds() {
-    static auto rewardedVideo =
-        getUnityAds()->createRewardedVideo(getUnityRewardedVideoId());
-    rewardedVideo->setResultCallback([](bool result) {
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
-
-    static auto interstitialAd =
-        getUnityAds()->createInterstitialAd(getUnityInterstitialAdId());
-    interstitialAd->setResultCallback([] {
-        logCurrentThread();
-        getLogger().info("Done");
-    });
-
-    float delay = 0.0f;
-    scheduleOnce(delay += 5.0f, [] {
-        getLogger().info("Show UnityAds rewarded video");
-        rewardedVideo->show();
-    });
-
-    scheduleOnce(delay += 2.0f, [] {
-        getLogger().info("Show UnityAds interstitial ad");
-        interstitialAd->show();
-    });
-}
-
-ee::IronSource* getIronSource() {
-    static auto plugin = ee::IronSource();
-    static bool initialized;
-    if (not initialized) {
-        initialized = true;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "67a6443d";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "67a60ab5";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        ee::runOnUiThreadAndWait([] {
-            getLogger().info("Initialize ironSource begin");
-            logCurrentThread();
-            plugin.initialize(gameId);
-            getLogger().info("Initialize ironSource end");
-        });
-    }
-    return &plugin;
-}
-
-std::string getIronSourceRewardedVideoId() {
-    return "DefaultRewardedVideo";
-}
-
-void testIronSource() {
-    getLogger().info("Create ironSource rewarded video begin");
-    static auto rewardedVideo =
-        getIronSource()->createRewardedVideo(getIronSourceRewardedVideoId());
-    getLogger().info("Create ironSource rewarded video end");
-
-    float delay = 0.0f;
-    scheduleOnce(delay += 5.0f, [] {
-        getLogger().info("Show ironSource rewarded video begin");
-        rewardedVideo->show();
-        getLogger().info("Show ironSource rewarded video end");
-    });
-}
-
-ee::Vungle* getVungle() {
-    static auto plugin = ee::Vungle();
-    static bool initialized;
-    if (not initialized) {
-        initialized = true;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "com.senspark.goldminerclassic";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "651916412";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        plugin.initialize(gameId);
-    }
-    return &plugin;
-}
-
-std::string getVungleRewardedVideoId() {
-    return "rewarded";
-}
-
-void testVungle() {
-    static auto rewardedVideo = getVungle()->createRewardedVideo();
-    rewardedVideo->setResultCallback([](bool result) {
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
-
-    float delay = 0.0f;
-    schedule(delay += 5.0f, 5.0f, [] {
-        getLogger().info("Show Vungle rewarded video");
-        rewardedVideo->show();
-    });
-}
-
 void testMultiAds() {
     static ee::MultiRewardedVideo* ads;
     ee::runOnUiThread([] {
@@ -376,7 +46,7 @@ void testMultiAds() {
         });
     });
 
-    schedule(2.0f, 3.0f, [] {
+    scheduleForever(2.0f, 3.0f, [] {
         logCurrentThread();
         ee::runOnUiThread([] {
             logCurrentThread();
@@ -462,7 +132,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // testAppLovin();
     // testUnityAds();
-    testIronSource();
+    testIronSourceRewardedVideo();
     // testVungle();
     // testMultiAds();
     // testFacebookInterstitialAd();
@@ -492,3 +162,4 @@ void AppDelegate::applicationWillEnterForeground() {
     NotificationAgent::getInstance()->unscheduleAll();
 #endif // EE_X_DESKTOP
 }
+} // namespace eetest

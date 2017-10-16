@@ -10,6 +10,7 @@
 #define EE_X_UTILS_HPP
 
 #include <functional>
+#include <memory>
 #include <string>
 
 namespace ee {
@@ -21,6 +22,14 @@ void runOnUiThread(const Runnable& runnable);
 
 /// Runs the specified runnable on the main thread and wait for it to finish.
 void runOnUiThreadAndWait(const Runnable& runnable);
+
+template <class T>
+T runOnUiThreadAndWaitResult(const std::function<T()>& runnable) {
+    std::unique_ptr<T> result;
+    runOnUiThreadAndWait(
+        [runnable, result] { result.reset(new T(runnable())); });
+    return *result;
+}
 
 std::string toString(bool value);
 bool toBool(const std::string& value);

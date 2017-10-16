@@ -11,6 +11,7 @@
 
 #include <platform/CCApplication.h>
 
+namespace eetest {
 /// The cocos2d Application.
 /// Private inheritance here hides part of interface from Director.
 class AppDelegate : private cocos2d::Application {
@@ -31,5 +32,6 @@ public:
     /// Called when the application reenters the foreground.
     virtual void applicationWillEnterForeground() override;
 };
+} // namespace eetest
 
 #endif /* EE_X_TEST_APP_DELEGATE_HPP_ */

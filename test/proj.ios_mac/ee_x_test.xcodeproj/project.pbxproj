@@ -19,6 +19,18 @@
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
 		6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2C1F8B5978009E202A /* fb_native_spin.xib */; };
+		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
+		6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
+		6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
+		6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
+		6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */; };
+		6FDD65AA1F94A7DF00BAEA66 /* AppLovin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */; };
+		6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */; };
+		6FDD65AE1F94A86B00BAEA66 /* UnityAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */; };
+		6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
+		6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
+		6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
+		6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
 		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +57,18 @@
 		6F426E2B1F8B5978009E202A /* fb_native_pause.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_pause.xib; sourceTree = "<group>"; };
 		6F426E2C1F8B5978009E202A /* fb_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_spin.xib; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
+		6FDD659F1F94A3B400BAEA66 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		6FDD65A01F94A3B400BAEA66 /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
+		6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAds.cpp; sourceTree = "<group>"; };
+		6FDD65A41F94A4DB00BAEA66 /* FacebookAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAds.hpp; sourceTree = "<group>"; };
+		6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovin.cpp; sourceTree = "<group>"; };
+		6FDD65A81F94A7DF00BAEA66 /* AppLovin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovin.hpp; sourceTree = "<group>"; };
+		6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityAds.cpp; sourceTree = "<group>"; };
+		6FDD65AC1F94A86B00BAEA66 /* UnityAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAds.hpp; sourceTree = "<group>"; };
+		6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IronSource.cpp; sourceTree = "<group>"; };
+		6FDD65B01F94A93D00BAEA66 /* IronSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSource.hpp; sourceTree = "<group>"; };
+		6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vungle.cpp; sourceTree = "<group>"; };
+		6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vungle.hpp; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
 		BC44458B9751F576980C8B9D /* Pods-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,6 +155,18 @@
 				6F2580311ECC019000B910F9 /* NotificationAgent.hpp */,
 				6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */,
 				6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */,
+				6FDD659F1F94A3B400BAEA66 /* Utils.cpp */,
+				6FDD65A01F94A3B400BAEA66 /* Utils.hpp */,
+				6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */,
+				6FDD65A81F94A7DF00BAEA66 /* AppLovin.hpp */,
+				6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */,
+				6FDD65A41F94A4DB00BAEA66 /* FacebookAds.hpp */,
+				6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */,
+				6FDD65B01F94A93D00BAEA66 /* IronSource.hpp */,
+				6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */,
+				6FDD65AC1F94A86B00BAEA66 /* UnityAds.hpp */,
+				6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */,
+				6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -441,7 +477,13 @@
 			files = (
 				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
+				6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */,
+				6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
+				6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
+				6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
+				6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
+				6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
 				6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */,
 				6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */,
@@ -452,9 +494,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
+				6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */,
+				6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
+				6FDD65AE1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
+				6FDD65AA1F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
 				6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
+				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

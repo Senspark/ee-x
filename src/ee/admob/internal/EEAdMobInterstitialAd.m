@@ -34,6 +34,7 @@
     helper_ =
         [[EEInterstitialAdHelper alloc] initWithPrefix:@"AdMobInterstitialAd"
                                                   adId:adId_];
+    [self registerHandlers];
     return self;
 }
 

@@ -183,7 +183,7 @@ void Self::loadRewardedVideo(const std::string& adId) {
     loading_ = true;
     currentId_ = adId;
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__loadRewardedVideo);
+    bridge.call(k__loadRewardedVideo, adId);
 }
 
 bool Self::showRewardedVideo() {

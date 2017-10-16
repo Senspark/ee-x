@@ -9,6 +9,7 @@
 #include <cassert>
 #include <mutex>
 #include <queue>
+#include <thread>
 
 #include "ee/Macro.hpp"
 #include "ee/core/Utils.hpp"
@@ -25,11 +26,13 @@ namespace core {
 namespace {
 std::queue<Runnable> q_;
 SpinLock lock_;
+std::thread::id uiThreadId_;
 } // namespace
 
 extern "C" {
 JNIEXPORT void JNICALL Java_com_ee_core_internal_Utils_signal(JNIEnv* env,
                                                               jclass clazz) {
+    uiThreadId_ = std::this_thread::get_id();
     std::lock_guard<SpinLock> guard(lock_);
     assert(not q_.empty());
     q_.front()();
@@ -40,6 +43,10 @@ JNIEXPORT void JNICALL Java_com_ee_core_internal_Utils_signal(JNIEnv* env,
 
 void runOnUiThread(const Runnable& runnable) {
 #ifdef EE_X_ANDROID
+    if (std::this_thread::get_id() == uiThreadId_) {
+        runnable();
+        return;
+    }
     std::lock_guard<SpinLock> guard(lock_);
     q_.push(runnable);
     auto methodInfo = JniUtils::getStaticMethodInfo(
@@ -56,6 +63,10 @@ void runOnUiThread(const Runnable& runnable) {
 
 void runOnUiThreadAndWait(const Runnable& runnable) {
 #ifdef EE_X_ANDROID
+    if (std::this_thread::get_id() == uiThreadId_) {
+        runnable();
+        return;
+    }
     std::mutex mtx;
     std::condition_variable cv;
     bool processed = false;

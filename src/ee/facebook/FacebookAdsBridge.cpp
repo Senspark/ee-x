@@ -8,6 +8,7 @@
 
 #include "ee/facebook/FacebookAdsBridge.hpp"
 #include "ee/core/LogLevel.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookNativeAdBuilder.hpp"
 #include "ee/facebook/internal/FacebookBannerAd.hpp"
@@ -64,7 +65,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
-    if (response == "false") {
+    if (not core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
@@ -73,7 +74,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 bool Self::destroyBannerAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyBannerAd, adId);
-    return response == "true";
+    return core::toBool(response);
 }
 
 std::shared_ptr<AdViewInterface>
@@ -91,7 +92,7 @@ Self::createNativeAd(const NativeAdBuilder& builder) {
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createNativeAd, json.dump());
-    if (response == "false") {
+    if (not core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<AdViewInterface>(new NativeAd(this, builder.adId_));
@@ -100,14 +101,14 @@ Self::createNativeAd(const NativeAdBuilder& builder) {
 bool Self::destroyNativeAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyNativeAd, adId);
-    return response == "true";
+    return core::toBool(response);
 }
 
 std::shared_ptr<InterstitialAdInterface>
 Self::createInterstitialAd(const std::string& placementId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, placementId);
-    if (response == "false") {
+    if (not core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<InterstitialAdInterface>(
@@ -117,7 +118,7 @@ Self::createInterstitialAd(const std::string& placementId) {
 bool Self::destroyInterstitialAd(const std::string& placementId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__destroyInterstitialAd, placementId);
-    return response == "true";
+    return core::toBool(response);
 }
 } // namespace facebook
 } // namespace ee

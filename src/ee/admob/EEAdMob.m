@@ -135,7 +135,8 @@ static NSString* const k__onClosed              = @"AdMob_onClosed";
     if ([bannerAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEAdMobBannerAd* ad = [[EEAdMobBannerAd alloc] initWithAdId:adId size:size];
+    EEAdMobBannerAd* ad =
+        [[[EEAdMobBannerAd alloc] initWithAdId:adId size:size] autorelease];
     [bannerAds_ setObject:ad forKey:adId];
     return YES;
 }

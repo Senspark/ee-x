@@ -88,7 +88,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
-    if (response == "false") {
+    if (not core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
@@ -97,14 +97,14 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 bool Self::destroyBannerAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyBannerAd, adId);
-    return response == "true";
+    return core::toBool(response);
 }
 
 std::shared_ptr<InterstitialAdInterface>
 Self::createInterstitialAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, adId);
-    if (response == "false") {
+    if (not core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<InterstitialAdInterface>(
@@ -114,7 +114,7 @@ Self::createInterstitialAd(const std::string& adId) {
 bool Self::destroyInterstitialAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__destroyInterstitialAd, adId);
-    return response == "true";
+    return core::toBool(response);
 }
 
 std::shared_ptr<RewardedVideoInterface>

@@ -94,47 +94,45 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
                        int adSizeIndex = [dict[@"adSize"] intValue];
                        FBAdSize adSize =
                            [EEFacebookBannerAd adSizeFor:adSizeIndex];
-                       return [self createBannerAd:adId size:adSize] ? @"true"
-                                                                     : @"false";
+                       return [EEUtils
+                           toString:[self createBannerAd:adId size:adSize]];
                    }];
 
     [bridge registerHandler:k__destroyBannerAd
                    callback:^(NSString* message) {
                        NSString* adId = message;
-                       return [self destroyBannerAd:adId] ? @"true" : @"false";
+                       return [EEUtils toString:[self destroyBannerAd:adId]];
                    }];
 
-    [bridge registerHandler:k__createNativeAd
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* adId = dict[@"adId"];
-                       NSString* layoutName = dict[@"layoutName"];
-                       return [self createNativeAd:adId layout:layoutName]
-                                  ? @"true"
-                                  : @"false";
-                   }];
+    [bridge
+        registerHandler:k__createNativeAd
+               callback:^(NSString* message) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:message];
+                   NSString* adId = dict[@"adId"];
+                   NSString* layoutName = dict[@"layoutName"];
+                   return [EEUtils
+                       toString:[self createNativeAd:adId layout:layoutName]];
+               }];
 
     [bridge registerHandler:k__destroyNativeAd
                    callback:^(NSString* message) {
                        NSString* adId = message;
-                       return [self destroyNativeAd:adId] ? @"true" : @"false";
+                       return [EEUtils toString:[self destroyNativeAd:adId]];
                    }];
 
     [bridge registerHandler:k__createInterstitialAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
-                       return [self createInterstitialAd:placementId]
-                                  ? @"true"
-                                  : @"false";
+                       return [EEUtils
+                           toString:[self createInterstitialAd:placementId]];
                    }];
 
     [bridge registerHandler:k__destroyInterstitialAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
-                       return [self destroyInterstitialAd:placementId]
-                                  ? @"true"
-                                  : @"false";
+                       return [EEUtils
+                           toString:[self destroyInterstitialAd:placementId]];
                    }];
 }
 

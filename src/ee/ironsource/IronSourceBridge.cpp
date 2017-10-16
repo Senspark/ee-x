@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
@@ -87,7 +88,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 bool Self::hasRewardedVideo() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto result = bridge.call(k__hasRewardedVideo);
-    return result == "true";
+    return core::toBool(response);
 }
 
 bool Self::showRewardedVideo(const std::string& placementId) {

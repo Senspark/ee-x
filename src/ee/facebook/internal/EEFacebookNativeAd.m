@@ -95,14 +95,16 @@
 
 - (void)createView {
     NSAssert(nativeAdView_ == nil, @"");
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     EEFacebookNativeAdView* adView =
         [[[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
             firstObject] autorelease];
     [adView setHidden:YES];
     [[adView adchoicesView] setCorner:UIRectCornerTopRight];
+
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [[rootView view] addSubview:adView];
-    nativeAdView_ = adView;
+
+    nativeAdView_ = [adView retain];
 }
 
 - (void)destroyView {
@@ -120,6 +122,9 @@
 }
 
 - (void)load {
+    if (nativeAd_ == nil) {
+        return NO;
+    }
     [nativeAd_ loadAd];
 }
 

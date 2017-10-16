@@ -8,6 +8,7 @@
 
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/admob/AdMobBridge.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
@@ -101,19 +102,19 @@ Self::~InterstitialAd() {
 bool Self::createInternalAd() {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(adId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(adId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__isLoaded(adId_));
-    return response == "true";
+    return core::toBool(response);
 }
 
 void Self::load() {

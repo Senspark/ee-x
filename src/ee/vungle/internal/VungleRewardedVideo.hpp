@@ -9,12 +9,11 @@
 #ifndef EE_X_VUNGLE_REWARDED_VIDEO_HPP
 #define EE_X_VUNGLE_REWARDED_VIDEO_HPP
 
+#include "ee/VungleFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace vungle {
-class Vungle;
-
 class RewardedVideo : public RewardedVideoInterface {
 public:
     virtual ~RewardedVideo() override;

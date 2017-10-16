@@ -12,7 +12,10 @@
 namespace ee {
 namespace facebook {
 class FacebookAds;
+class BannerAd;
+class NativeAd;
 class NativeAdBuilder;
+class InterstitialAd;
 } // namespace facebook
 
 using facebook::FacebookAds;

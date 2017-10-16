@@ -9,12 +9,11 @@
 #ifndef EE_X_APP_LOVIN_REWARDED_VIDEO_HPP
 #define EE_X_APP_LOVIN_REWARDED_VIDEO_HPP
 
+#include "ee/AppLovinFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace applovin {
-class AppLovin;
-
 class RewardedVideo : public RewardedVideoInterface {
 public:
     virtual ~RewardedVideo() override;

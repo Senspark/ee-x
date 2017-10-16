@@ -13,17 +13,13 @@
 #include <memory>
 #include <string>
 
+#include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
 #include "ee/facebook/FacebookBannerAdSize.hpp"
 
 namespace ee {
 namespace facebook {
-class BannerAd;
-class NativeAd;
-class NativeAdBuilder;
-class InterstitialAd;
-
 class FacebookAds final {
 public:
     FacebookAds();

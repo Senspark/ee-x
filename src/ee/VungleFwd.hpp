@@ -4,6 +4,7 @@
 namespace ee {
 namespace vungle {
 class Vungle;
+class RewardedVideo;
 } // namespace vungle
 
 using vungle::Vungle;

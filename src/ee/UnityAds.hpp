@@ -9,8 +9,10 @@
 #ifndef EE_X_UNITY_ADS_HPP
 #define EE_X_UNITY_ADS_HPP
 
+#ifdef __cplusplus
 #include "ee/UnityAdsFwd.hpp"
 #include "ee/unityads/UnityAdsBridge.hpp"
+#endif // __cplusplus
 
 #ifdef __OBJC__
 #import "ee/unityads/EEUnityAds.h"

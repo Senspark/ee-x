@@ -1,12 +1,11 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
+#include "ee/VungleFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace vungle {
-class RewardedVideo;
-
 class Vungle final {
 public:
     Vungle();

@@ -9,12 +9,11 @@
 #ifndef EE_X_IRON_SOURCE_REWARDED_VIDEO_HPP
 #define EE_X_IRON_SOURCE_REWARDED_VIDEO_HPP
 
+#include "ee/IronSourceFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace ironsource {
-class IronSource;
-
 class RewardedVideo : public RewardedVideoInterface {
 public:
     virtual ~RewardedVideo() override;

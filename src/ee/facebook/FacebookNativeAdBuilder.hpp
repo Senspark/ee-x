@@ -11,10 +11,10 @@
 
 #include <string>
 
+#include "ee/FacebookAdsFwd.hpp"
+
 namespace ee {
 namespace facebook {
-class FacebookAds;
-
 class NativeAdBuilder final {
 private:
     using Self = NativeAdBuilder;
@@ -65,8 +65,6 @@ private:
     std::string action_;
 };
 } // namespace facebook
-
-using FacebookNativeAdBuilder = facebook::NativeAdBuilder;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_NATIVE_AD_BUILDER_HPP */

@@ -3,12 +3,11 @@
 
 #include <map>
 
+#include "ee/IronSourceFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace ironsource {
-class RewardedVideo;
-
 class IronSource final {
 public:
     IronSource();

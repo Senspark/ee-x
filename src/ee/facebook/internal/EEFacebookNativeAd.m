@@ -123,7 +123,7 @@
 
 - (void)load {
     if (nativeAd_ == nil) {
-        return NO;
+        return;
     }
     [nativeAd_ loadAd];
 }

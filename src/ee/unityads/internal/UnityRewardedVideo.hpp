@@ -9,12 +9,11 @@
 #ifndef EE_X_UNITY_REWARDED_VIDEO_HPP
 #define EE_X_UNITY_REWARDED_VIDEO_HPP
 
+#include "ee/UnityAdsFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace unityads {
-class UnityAds;
-
 class RewardedVideo : public RewardedVideoInterface {
 public:
     virtual ~RewardedVideo() override;

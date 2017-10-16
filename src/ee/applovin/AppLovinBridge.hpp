@@ -9,12 +9,11 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
+#include "ee/AppLovinFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace applovin {
-class RewardedVideo;
-
 class AppLovin final {
 public:
     AppLovin();

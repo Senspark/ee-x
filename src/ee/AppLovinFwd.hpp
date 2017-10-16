@@ -12,6 +12,7 @@
 namespace ee {
 namespace applovin {
 class AppLovin;
+class RewardedVideo;
 } // namespace applovin
 
 using applovin::AppLovin;

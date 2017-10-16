@@ -4,6 +4,7 @@
 namespace ee {
 namespace ironsource {
 class IronSource;
+class RewardedVideo;
 } // namespace ironsource
 
 using ironsource::IronSource;

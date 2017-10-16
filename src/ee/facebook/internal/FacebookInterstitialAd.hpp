@@ -9,12 +9,11 @@
 #ifndef EE_X_FACEBOOK_INTERSTITIAL_AD_HPP
 #define EE_X_FACEBOOK_INTERSTITIAL_AD_HPP
 
+#include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
 
 namespace ee {
 namespace facebook {
-class FacebookAds;
-
 class InterstitialAd : public InterstitialAdInterface {
 public:
     virtual ~InterstitialAd() override;

@@ -87,7 +87,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 
 bool Self::hasRewardedVideo() const {
     auto&& bridge = core::MessageBridge::getInstance();
-    auto result = bridge.call(k__hasRewardedVideo);
+    auto response = bridge.call(k__hasRewardedVideo);
     return core::toBool(response);
 }
 

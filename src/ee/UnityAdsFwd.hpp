@@ -12,6 +12,8 @@
 namespace ee {
 namespace unityads {
 class UnityAds;
+class InterstitialAd;
+class RewardedVideo;
 } // namespace unityads
 
 using unityads::UnityAds;

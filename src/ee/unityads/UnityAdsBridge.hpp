@@ -11,14 +11,12 @@
 
 #include <map>
 
+#include "ee/UnityAdsFwd.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace unityads {
-class RewardedVideo;
-class InterstitialAd;
-
 class UnityAds final {
 public:
     UnityAds();

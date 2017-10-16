@@ -27,7 +27,7 @@ void scheduleForever(float delay, float interval, const detail::Tick& f) {
 }
 
 void scheduleOnce(float delay, const detail::Tick& f) {
-    schedule(delay, 0, 1, f);
+    schedule(delay, 0, 0, f);
 }
 
 ee::Logger& getLogger() {

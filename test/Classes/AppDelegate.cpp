@@ -7,6 +7,7 @@
 //
 
 #include "AppDelegate.hpp"
+#include "AdMob.hpp"
 #include "AppLovin.hpp"
 #include "CrashlyticsAgent.hpp"
 #include "FacebookAds.hpp"
@@ -130,9 +131,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     ee::runOnUiThreadAndWait(
         [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
+    testAdMobBannerAd();
     // testAppLovin();
     // testUnityAds();
-    testIronSourceRewardedVideo();
+    // testIronSourceRewardedVideo();
     // testVungle();
     // testMultiAds();
     // testFacebookInterstitialAd();

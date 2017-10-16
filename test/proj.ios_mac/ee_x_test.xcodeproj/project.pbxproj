@@ -31,6 +31,8 @@
 		6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
 		6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
 		6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
+		6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
+		6FDD65BA1F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
 		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +71,8 @@
 		6FDD65B01F94A93D00BAEA66 /* IronSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSource.hpp; sourceTree = "<group>"; };
 		6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vungle.cpp; sourceTree = "<group>"; };
 		6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vungle.hpp; sourceTree = "<group>"; };
+		6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMob.cpp; sourceTree = "<group>"; };
+		6FDD65B81F94AB4700BAEA66 /* AdMob.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMob.hpp; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
 		BC44458B9751F576980C8B9D /* Pods-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */,
 				6FDD659F1F94A3B400BAEA66 /* Utils.cpp */,
 				6FDD65A01F94A3B400BAEA66 /* Utils.hpp */,
+				6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */,
+				6FDD65B81F94AB4700BAEA66 /* AdMob.hpp */,
 				6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */,
 				6FDD65A81F94A7DF00BAEA66 /* AppLovin.hpp */,
 				6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */,
@@ -483,6 +489,7 @@
 				6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
 				6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
+				6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */,
 				6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
 				6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */,
@@ -495,6 +502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */,
+				6FDD65BA1F94AB4700BAEA66 /* AdMob.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */,
 				6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,

@@ -56,10 +56,11 @@ static eetest::AppDelegate s_sharedApplication;
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager addPlugin:@"Crashlytics"];
     [manager addPlugin:@"Notification"];
-    [manager addPlugin:@"FacebookAds"];
+    [manager addPlugin:@"AdMob"];
     [manager addPlugin:@"AppLovin"];
-    [manager addPlugin:@"UnityAds"];
+    [manager addPlugin:@"FacebookAds"];
     [manager addPlugin:@"IronSource"];
+    [manager addPlugin:@"UnityAds"];
     [manager addPlugin:@"Vungle"];
 
     // run the cocos2d-x game scene

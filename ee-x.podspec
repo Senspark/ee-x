@@ -153,94 +153,110 @@ Pod::Spec.new do |spec|
   spec.subspec 'ads' do |s|
     s.source_files =
       'src/ee/Ads.hpp',
-      'src/ee/ads/*.{cpp,hpp,mm,h,m}'
-  end
-
-  spec.subspec 'facebook-ads' do |s|
-    s.source_files =
-      'src/ee/FacebookAds.hpp',
-      'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/*.{cpp,hpp,mm,h,m}',
-      'src/ee/facebook/internal/*.{h,m}'
+      'src/ee/ads/*',
+      'src/ee/ads/internal/*'
 
     s.public_header_files =
-      'src/ee/FacebookAds.hpp',
-      'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/FacebookAdsBridge.hpp',
-      'src/ee/facebook/EEFacebookNativeAdView.h'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'ee-x/ads'
-    s.dependency 'FBAudienceNetwork'
+      'src/ee/Ads.hpp',
+      'src/ee/ads/*'
   end
 
-  spec.subspec 'unity-ads' do |s|
+  spec.subspec 'admob' do |s|
     s.source_files =
-      'src/ee/UnityAds.hpp',
-      'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/*.{cpp,hpp,mm,h,m}'
+      'src/ee/AdMob.hpp',
+      'src/ee/AdMobFwd.hpp',
+      'src/ee/admob/*',
+      'src/ee/admob/internal/*'
 
     s.public_header_files =
-      'src/ee/UnityAds.hpp',
-      'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/UnityAdsBridge.hpp',
-      'src/ee/unityads/UnityRewardedVideo.hpp',
-      'src/ee/unityads/UnityInterstitialAd.hpp'
+      'src/ee/AdMob.hpp',
+      'src/ee/AdMobFwd.hpp',
+      'src/ee/admob/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'
     s.dependency 'ee-x/ads'
-
-    # UnityAds conflicts with GoogleMobileAdsMediationUnity
-    s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
-  end
-
-  spec.subspec 'ironsource' do |s|
-    s.source_files =
-      'src/ee/IronSource.hpp',
-      'src/ee/IronSourceFwd.hpp',
-      'src/ee/ironsource/*.{cpp,hpp,mm,h,m}'
-
-    s.public_header_files =
-      'src/ee/IronSource.hpp',
-      'src/ee/IronSourceFwd.hpp',
-      'src/ee/ironsource/IronSourceBridge.hpp'
-      'src/ee/ironsource/IronSourceRewardedVideo.hpp'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK'
+    s.dependency 'Google-Mobile-Ads-SDK'
   end
 
   spec.subspec 'applovin' do |s|
     s.source_files =
       'src/ee/AppLovin.hpp',
       'src/ee/AppLovinFwd.hpp',
-      'src/ee/applovin/*.{cpp,hpp,mm,h,m}'
+      'src/ee/applovin/*',
+      'src/ee/applovin/internal/*'
 
     s.public_header_files =
       'src/ee/AppLovin.hpp',
       'src/ee/AppLovinFwd.hpp',
-      'src/ee/applovin/AppLovinBridge.hpp'
+      'src/ee/applovin/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
     s.dependency 'AppLovinSDK'
+  end
+
+  spec.subspec 'facebook-ads' do |s|
+    s.source_files =
+      'src/ee/FacebookAds.hpp',
+      'src/ee/FacebookAdsFwd.hpp',
+      'src/ee/facebook/*',
+      'src/ee/facebook/internal/*'
+
+    s.public_header_files =
+      'src/ee/FacebookAds.hpp',
+      'src/ee/FacebookAdsFwd.hpp',
+      'src/ee/facebook/*.{h,hpp}'
+
+    s.dependency 'ee-x/ads'
+    s.dependency 'FBAudienceNetwork'
+  end
+
+  spec.subspec 'ironsource' do |s|
+    s.source_files =
+      'src/ee/IronSource.hpp',
+      'src/ee/IronSourceFwd.hpp',
+      'src/ee/ironsource/*',
+      'src/ee/ironsource/internal/*'
+
+    s.public_header_files =
+      'src/ee/IronSource.hpp',
+      'src/ee/IronSourceFwd.hpp',
+      'src/ee/ironsource/*.{h,hpp}'
+
+    s.dependency 'ee-x/ads'
+    s.dependency 'IronSourceSDK'
+  end
+
+  spec.subspec 'unity-ads' do |s|
+    s.source_files =
+      'src/ee/UnityAds.hpp',
+      'src/ee/UnityAdsFwd.hpp',
+      'src/ee/unityads/*',
+      'src/ee/unityads/internal/*'
+
+    s.public_header_files =
+      'src/ee/UnityAds.hpp',
+      'src/ee/UnityAdsFwd.hpp',
+      'src/ee/unityads/*.{h,hpp}'
+
+    s.dependency 'ee-x/ads'
+
+    # UnityAds conflicts with GoogleMobileAdsMediationUnity
+    s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
   end
 
   spec.subspec 'vungle' do |s|
     s.source_files =
       'src/ee/Vungle.hpp',
       'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/*.{cpp,hpp,mm,h,m}'
+      'src/ee/vungle/*',
+      'src/ee/vungle/internal/*'
 
     s.public_header_files =
       'src/ee/Vungle.hpp',
       'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/VungleBridge.hpp',
-      'src/ee/vungle/VungleRewardedVideo.hpp'
+      'src/ee/vungle/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
     s.dependency 'VungleSDK-iOS', '4.1.0'
   end
-  
 
 end

@@ -13,6 +13,11 @@
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size;
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 
+- (BOOL)createNativeAd:(NSString* _Nonnull)adId
+                  type:(GADAdLoaderAdType _Nonnull)type
+                layout:(NSString* _Nonnull)layoutName;
+- (BOOL)destroyNativeAd:(NSString* _Nonnull)adId;
+
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)adId;
 - (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId;
 

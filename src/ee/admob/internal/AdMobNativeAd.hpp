@@ -9,14 +9,13 @@
 #ifndef EE_X_ADMOB_NATIVE_AD_HPP
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
+#include "ee/AdMobFwd.hpp"
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace admob {
-class AdMob;
-
 class NativeAd : public AdViewInterface {
 private:
     using Self = NativeAd;

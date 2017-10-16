@@ -31,6 +31,9 @@
         return kGADAdSizeBanner;
     }
     if (index == 1) {
+        return kGADAdSizeLargeBanner;
+    }
+    if (index == 2) {
         if ([EEUtils isLandscape]) {
             return kGADAdSizeSmartBannerLandscape;
         }

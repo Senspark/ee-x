@@ -11,7 +11,9 @@
 
 #include <map>
 #include <memory>
+#include <unordered_map>
 
+#include "ee/AdMobFwd.hpp"
 #include "ee/admob/AdMobBannerAdSize.hpp"
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
@@ -19,20 +21,21 @@
 
 namespace ee {
 namespace admob {
-class BannerAd;
-class NativeAd;
-class InterstitialAd;
-class RewardedVideo;
-
 class AdMob final {
 public:
     AdMob();
     ~AdMob();
 
+    /// Creates a banner ad.
+    /// @param[in] adId The banner ad unit ID.
+    /// @param[in] adSize The banner ad size.
+    /// @return A reference to the banner ad if it created successfully, null
+    /// otherwise.
     std::shared_ptr<AdViewInterface> createBannerAd(const std::string& adId,
                                                     BannerAdSize adSize);
 
-    std::shared_ptr<AdViewInterface> createNativeAd(const std::string& adId);
+    std::shared_ptr<AdViewInterface>
+    createNativeAd(const std::string& adId, const NativeAdLayout& layout);
 
     std::shared_ptr<InterstitialAdInterface>
     createInterstitialAd(const std::string& adId);

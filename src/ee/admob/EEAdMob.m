@@ -11,12 +11,14 @@
 #import "ee/admob/EEAdMob.h"
 #import "ee/admob/internal/EEAdMobBannerAd.h"
 #import "ee/admob/internal/EEAdMobInterstitialAd.h"
+#import "ee/admob/internal/EEAdMobNativeAd.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMob () <GADRewardBasedVideoAdDelegate> {
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
+    NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
 }
 
@@ -42,6 +44,12 @@ static NSString* const k__onRewarded            = @"AdMob_onRewarded";
 static NSString* const k__onFailedToLoad        = @"AdMob_onFailedToLoad";
 static NSString* const k__onLoaded              = @"AdMob_onLoaded";
 static NSString* const k__onClosed              = @"AdMob_onClosed";
+// clang-format on
+
+// clang-format off
+static NSString* const k__ad_id                 = @"ad_id";
+static NSString* const k__ad_size               = @"ad_size";
+static NSString* const k__layout_name           = @"layout_name";
 // clang-format on
 
 - (id)init {
@@ -72,8 +80,8 @@ static NSString* const k__onClosed              = @"AdMob_onClosed";
                    callback:^(NSString* message) {
                        NSDictionary* dict =
                            [EEJsonUtils convertStringToDictionary:message];
-                       NSString* adId = dict[@"adId"];
-                       int adSizeIndex = [dict[@"adSize"] intValue];
+                       NSString* adId = dict[k__ad_id];
+                       int adSizeIndex = [dict[k__ad_size] intValue];
                        GADAdSize adSize =
                            [EEAdMobBannerAd adSizeFor:adSizeIndex];
                        return [EEUtils
@@ -85,6 +93,21 @@ static NSString* const k__onClosed              = @"AdMob_onClosed";
                        NSString* adId = message;
                        return [EEUtils toString:[self destroyBannerAd:adId]];
                    }];
+
+    [bridge
+        registerHandler:k__createNativeAd
+               callback:^(NSString* message) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:message];
+                   NSString* adId = dict[k__ad_id];
+                   NSString* layoutName = dict[k__layout_name];
+                   return [EEUtils
+                       toString:
+                           [self
+                               createNativeAd:adId
+                                         type:kGADAdLoaderAdTypeNativeAppInstall
+                                       layout:layoutName]];
+               }];
 
     [bridge registerHandler:k__createInterstitialAd
                    callback:^(NSString* message) {
@@ -146,6 +169,28 @@ static NSString* const k__onClosed              = @"AdMob_onClosed";
         return NO;
     }
     [bannerAds_ removeObjectForKey:adId];
+    return YES;
+}
+
+- (BOOL)createNativeAd:(NSString* _Nonnull)adId
+                  type:(GADAdLoaderAdType _Nonnull)type
+                layout:(NSString* _Nonnull)layoutName {
+    if ([nativeAds_ objectForKey:adId] != nil) {
+        return NO;
+    }
+    EEAdMobNativeAd* ad =
+        [[[EEAdMobNativeAd alloc] initWithId:adId
+                                       types:@[type]
+                                      layout:layoutName] autorelease];
+    [nativeAds_ setObject:ad forKey:adId];
+    return YES;
+}
+
+- (BOOL)destroyNativeAd:(NSString* _Nonnull)adId {
+    if ([nativeAds_ objectForKey:adId] == nil) {
+        return NO;
+    }
+    [nativeAds_ removeObjectForKey:adId];
     return YES;
 }
 

@@ -9,12 +9,11 @@
 #ifndef EE_X_ADMOB_INTERSTITIAL_AD_HPP
 #define EE_X_ADMOB_INTERSTITIAL_AD_HPP
 
+#include "ee/AdMobFwd.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
 
 namespace ee {
 namespace admob {
-class AdMob;
-
 class InterstitialAd : public InterstitialAdInterface {
 public:
     virtual ~InterstitialAd() override;

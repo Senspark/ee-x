@@ -9,12 +9,11 @@
 #ifndef EE_X_ADMOB_REWARDED_VIDEO_HPP
 #define EE_X_ADMOB_REWARDED_VIDEO_HPP
 
+#include "ee/AdMobFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 namespace ee {
 namespace admob {
-class AdMob;
-
 class RewardedVideo : public RewardedVideoInterface {
 public:
     virtual ~RewardedVideo() override;

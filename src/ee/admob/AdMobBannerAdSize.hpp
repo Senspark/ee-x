@@ -12,7 +12,17 @@
 namespace ee {
 namespace admob {
 enum class BannerAdSize {
-    //
+    /// kGADAdSizeBanner
+    /// Typically 320x50.
+    Normal,
+
+    /// kGADAdSizeLargeBanner
+    /// Typically 320x100.
+    Large,
+
+    /// kGADAdSizeSmartBannerPortrait or kGADAdSizeSmartBannerLandscape
+    /// Spans the full width of the application.
+    Smart,
 };
 } // namespace admob
 } // namespace ee

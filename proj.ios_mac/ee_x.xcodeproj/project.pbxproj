@@ -262,6 +262,12 @@
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		6FDD658B1F90C2ED00BAEA66 /* AdMobNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */; };
 		6FDD658C1F90C2ED00BAEA66 /* AdMobNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD658A1F90C2ED00BAEA66 /* AdMobNativeAd.hpp */; };
+		6FDD658E1F9451B900BAEA66 /* EEAdMobNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD658D1F9451B900BAEA66 /* EEAdMobNativeAd.h */; };
+		6FDD65901F9451D300BAEA66 /* EEAdMobNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD658F1F9451D300BAEA66 /* EEAdMobNativeAd.m */; };
+		6FDD65931F94557600BAEA66 /* AdMobNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65911F94557600BAEA66 /* AdMobNativeAdLayout.cpp */; };
+		6FDD65941F94557600BAEA66 /* AdMobNativeAdLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD65921F94557600BAEA66 /* AdMobNativeAdLayout.hpp */; };
+		6FDD659C1F94975000BAEA66 /* AdMob.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD659B1F94975000BAEA66 /* AdMob.hpp */; };
+		6FDD659E1F94989100BAEA66 /* AdMobFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */; };
 		6FF6B5731F8F273800A27634 /* EEAdMobBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5721F8F273800A27634 /* EEAdMobBannerAd.m */; };
 		6FF6B5751F8F276300A27634 /* EEAdMobBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B5741F8F276300A27634 /* EEAdMobBannerAd.h */; };
 		6FF6B5781F8F2C8E00A27634 /* EEAdViewInterface.h in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */; };
@@ -724,6 +730,12 @@
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
 		6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobNativeAd.cpp; path = admob/internal/AdMobNativeAd.cpp; sourceTree = "<group>"; };
 		6FDD658A1F90C2ED00BAEA66 /* AdMobNativeAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobNativeAd.hpp; path = admob/internal/AdMobNativeAd.hpp; sourceTree = "<group>"; };
+		6FDD658D1F9451B900BAEA66 /* EEAdMobNativeAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdMobNativeAd.h; path = admob/internal/EEAdMobNativeAd.h; sourceTree = "<group>"; };
+		6FDD658F1F9451D300BAEA66 /* EEAdMobNativeAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdMobNativeAd.m; path = admob/internal/EEAdMobNativeAd.m; sourceTree = "<group>"; };
+		6FDD65911F94557600BAEA66 /* AdMobNativeAdLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobNativeAdLayout.cpp; path = admob/AdMobNativeAdLayout.cpp; sourceTree = "<group>"; };
+		6FDD65921F94557600BAEA66 /* AdMobNativeAdLayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobNativeAdLayout.hpp; path = admob/AdMobNativeAdLayout.hpp; sourceTree = "<group>"; };
+		6FDD659B1F94975000BAEA66 /* AdMob.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMob.hpp; sourceTree = "<group>"; };
+		6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMobFwd.hpp; sourceTree = "<group>"; };
 		6FF6B5721F8F273800A27634 /* EEAdMobBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdMobBannerAd.m; path = admob/internal/EEAdMobBannerAd.m; sourceTree = "<group>"; };
 		6FF6B5741F8F276300A27634 /* EEAdMobBannerAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdMobBannerAd.h; path = admob/internal/EEAdMobBannerAd.h; sourceTree = "<group>"; };
 		6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewInterface.h; path = ads/internal/EEAdViewInterface.h; sourceTree = "<group>"; };
@@ -987,6 +999,8 @@
 				6F2479F51F8E3677009E702C /* AdMobBridge.cpp */,
 				6F2479F61F8E3677009E702C /* AdMobBridge.hpp */,
 				6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */,
+				6FDD65911F94557600BAEA66 /* AdMobNativeAdLayout.cpp */,
+				6FDD65921F94557600BAEA66 /* AdMobNativeAdLayout.hpp */,
 				6F2479F91F8E36AB009E702C /* EEAdMob.m */,
 				6F2479FA1F8E36AB009E702C /* EEAdMob.h */,
 				6FF6B5711F8F268900A27634 /* internal */,
@@ -1071,6 +1085,8 @@
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
 				6F2479C81F8DF482009E702C /* Ads.hpp */,
 				6F3688481F86135600AE2D93 /* ads */,
+				6FDD659B1F94975000BAEA66 /* AdMob.hpp */,
+				6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */,
 				6F2479DB1F8E3541009E702C /* admob */,
 				6F36881A1F85E38000AE2D93 /* applovin */,
 				6F36881F1F85E38000AE2D93 /* AppLovin.hpp */,
@@ -1300,6 +1316,8 @@
 			children = (
 				6FF6B5721F8F273800A27634 /* EEAdMobBannerAd.m */,
 				6FF6B5741F8F276300A27634 /* EEAdMobBannerAd.h */,
+				6FDD658F1F9451D300BAEA66 /* EEAdMobNativeAd.m */,
+				6FDD658D1F9451B900BAEA66 /* EEAdMobNativeAd.h */,
 				6F5360D41F8F5ECE00E1E9A6 /* EEAdMobInterstitialAd.m */,
 				6F5360D61F8F5EF700E1E9A6 /* EEAdMobInterstitialAd.h */,
 				6F04C59A1F8F6AEE007BC7A3 /* AdMobBannerAd.cpp */,
@@ -1404,13 +1422,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FDD658E1F9451B900BAEA66 /* EEAdMobNativeAd.h in Headers */,
+				6FDD65941F94557600BAEA66 /* AdMobNativeAdLayout.hpp in Headers */,
 				6F04C59D1F8F6AEE007BC7A3 /* AdMobBannerAd.hpp in Headers */,
 				6F2479FC1F8E36AB009E702C /* EEAdMob.h in Headers */,
 				6F2479F81F8E3677009E702C /* AdMobBridge.hpp in Headers */,
 				6FF6B5751F8F276300A27634 /* EEAdMobBannerAd.h in Headers */,
+				6FDD659C1F94975000BAEA66 /* AdMob.hpp in Headers */,
 				6FDD658C1F90C2ED00BAEA66 /* AdMobNativeAd.hpp in Headers */,
 				6F98F3E41F906376003C2A04 /* AdMobBannerAdSize.hpp in Headers */,
 				6F5360D71F8F5EF700E1E9A6 /* EEAdMobInterstitialAd.h in Headers */,
+				6FDD659E1F94989100BAEA66 /* AdMobFwd.hpp in Headers */,
 				6F04C5A11F8F6AFA007BC7A3 /* AdMobInterstitialAd.hpp in Headers */,
 				6F98F3E01F905ADD003C2A04 /* AdMobRewardedVideo.hpp in Headers */,
 			);
@@ -2300,8 +2322,10 @@
 			files = (
 				6F04C59C1F8F6AEE007BC7A3 /* AdMobBannerAd.cpp in Sources */,
 				6FDD658B1F90C2ED00BAEA66 /* AdMobNativeAd.cpp in Sources */,
+				6FDD65901F9451D300BAEA66 /* EEAdMobNativeAd.m in Sources */,
 				6F5360D51F8F5ECE00E1E9A6 /* EEAdMobInterstitialAd.m in Sources */,
 				6F98F3DF1F905ADD003C2A04 /* AdMobRewardedVideo.cpp in Sources */,
+				6FDD65931F94557600BAEA66 /* AdMobNativeAdLayout.cpp in Sources */,
 				6F04C5A01F8F6AFA007BC7A3 /* AdMobInterstitialAd.cpp in Sources */,
 				6F2479F71F8E3677009E702C /* AdMobBridge.cpp in Sources */,
 				6F2479FB1F8E36AB009E702C /* EEAdMob.m in Sources */,

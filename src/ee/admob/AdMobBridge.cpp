@@ -7,8 +7,10 @@
 //
 
 #include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/AdMobNativeAdLayout.hpp"
 #include "ee/admob/internal/AdMobBannerAd.hpp"
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
+#include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/internal/AdMobRewardedVideo.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -38,6 +40,13 @@ constexpr auto k__onRewarded            = "AdMob_onRewarded";
 constexpr auto k__onFailedToLoad        = "AdMob_onFailedToLoad";
 constexpr auto k__onLoaded              = "AdMob_onLoaded";
 constexpr auto k__onClosed              = "AdMob_onClosed";
+// clang-format on
+} // namespace
+
+namespace {
+// clang-format off
+constexpr auto k__ad_id                 = "ad_id";
+constexpr auto k__ad_size               = "ad_size";
 // clang-format on
 } // namespace
 
@@ -83,8 +92,8 @@ Self::~AdMob() {
 std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
                                                       BannerAdSize adSize) {
     nlohmann::json json;
-    json["adId"] = adId;
-    json["adSize"] = static_cast<int>(adSize);
+    json[k__ad_id] = adId;
+    json[k__ad_size] = static_cast<int>(adSize);
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
@@ -97,6 +106,25 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 bool Self::destroyBannerAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyBannerAd, adId);
+    return core::toBool(response);
+}
+
+std::shared_ptr<AdViewInterface>
+Self::createNativeAd(const std::string& adId, const NativeAdLayout& layout) {
+    nlohmann::json json = layout.params_;
+    json[k__ad_id] = adId;
+
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& response = bridge.call(k__createNativeAd, json.dump());
+    if (not core::toBool(response)) {
+        return nullptr;
+    }
+    return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
+}
+
+bool Self::destroyNativeAd(const std::string& adId) {
+    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& response = bridge.call(k__destroyNativeAd, adId);
     return core::toBool(response);
 }
 

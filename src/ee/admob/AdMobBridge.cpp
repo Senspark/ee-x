@@ -49,6 +49,8 @@ namespace {
 // clang-format off
 constexpr auto k__ad_id                 = "ad_id";
 constexpr auto k__ad_size               = "ad_size";
+constexpr auto k__layout_name           = "layout_name";
+constexpr auto k__identifiers           = "identifiers";
 // clang-format on
 } // namespace
 
@@ -117,9 +119,12 @@ bool Self::destroyBannerAd(const std::string& adId) {
 }
 
 std::shared_ptr<AdViewInterface>
-Self::createNativeAd(const std::string& adId, const NativeAdLayout& layout) {
-    nlohmann::json json = layout.params_;
+Self::createNativeAd(const std::string& adId, const std::string& layoutName,
+                     const NativeAdLayout& identifiers) {
+    nlohmann::json json;
     json[k__ad_id] = adId;
+    json[k__layout_name] = layoutName;
+    json[k__identifiers] = identifiers.params_;
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__createNativeAd, json.dump());

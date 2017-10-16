@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_ADMOB_NATIVE_AD_BUILDER_HPP
-#define EE_X_ADMOB_NATIVE_AD_BUILDER_HPP
+#ifndef EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP
+#define EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP
 
 #include <string>
 #include <unordered_map>
@@ -24,7 +24,14 @@ public:
     NativeAdLayout();
     ~NativeAdLayout();
 
-    Self& setLayoutName(const std::string& layoutName);
+    Self& setHeadline(const std::string& id);
+    Self& setBody(const std::string& id);
+    Self& setCallToAction(const std::string& id);
+    Self& setIcon(const std::string& id);
+    Self& setPrice(const std::string& id);
+    Self& setStarRating(const std::string& id);
+    Self& setMedia(const std::string& id);
+    Self& setMainImage(const std::string& id);
 
 protected:
     friend AdMob;
@@ -34,4 +41,4 @@ protected:
 } // namespace admob
 } // namespace ee
 
-#endif /* AdMobNativeAdBuilder_hpp */
+#endif /* EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP */

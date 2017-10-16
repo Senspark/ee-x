@@ -9,6 +9,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import "ee/admob/internal/EEAdMobNativeAd.h"
+#import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
@@ -21,6 +22,7 @@
     UIView* nativeAdView_;
     NSString* layoutName_;
     BOOL isAdLoaded_;
+    EEAdViewHelper* helper_;
 }
 
 @end
@@ -38,6 +40,8 @@
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
+    helper_ =
+        [[EEAdViewHelper alloc] initWithPrefix:@"AdMobNativeAd" adId:adId];
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -48,6 +52,8 @@
     [self deregisterHandlers];
     [self destroyInternalAd];
     [self destroyView];
+    [helper_ release];
+    helper_ = nil;
     [adId_ release];
     adId_ = nil;
     [adTypes_ release];
@@ -58,11 +64,11 @@
 }
 
 - (void)registerHandlers {
-    //
+    [helper_ registerHandlers:self];
 }
 
 - (void)deregisterHandlers {
-    //
+    [helper_ deregisterHandlers];
 }
 
 - (BOOL)createInternalAd {

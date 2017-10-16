@@ -41,14 +41,17 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     private static final String k__onLoaded              = "AdMob_onLoaded";
     private static final String k__onClosed              = "AdMob_onClosed";
 
-    private static final String k__ad_id   = "ad_id";
-    private static final String k__ad_size = "ad_size";
+    private static final String k__ad_id       = "ad_id";
+    private static final String k__ad_size     = "ad_size";
+    private static final String k__layout_name = "layout_name";
+    private static final String k__identifiers = "identifiers";
 
     private static final Logger _logger = new Logger(AdMob.class.getName());
 
     private Activity                         _context;
     private RewardedVideoAd                  _rewardedVideoAd;
     private Map<String, AdMobBannerAd>       _bannerAds;
+    private Map<String, AdMobNativeAd>       _nativeAds;
     private Map<String, AdMobInterstitialAd> _interstitialAds;
 
     public AdMob(Context context) {
@@ -56,6 +59,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         _context = (Activity) context;
 
         _bannerAds = new HashMap<>();
+        _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
 
         _rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(_context);
@@ -100,6 +104,12 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         }
         _bannerAds.clear();
         _bannerAds = null;
+
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).destroy();
+        }
+        _nativeAds.clear();
+        _nativeAds = null;
 
         for (String key : _interstitialAds.keySet()) {
             _interstitialAds.get(key).destroy();
@@ -158,6 +168,35 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
                 return Utils.toString(destroyBannerAd(adId));
             }
         }, k__destroyBannerAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+
+                String adId = (String) dict.get(k__ad_id);
+                String layoutName = (String) dict.get(k__layout_name);
+                @SuppressWarnings("unchecked") Map<String, Object> identifiers_raw =
+                    (Map<String, Object>) dict.get(k__identifiers);
+                Map<String, String> identifiers = new HashMap<>();
+                for (String key : identifiers_raw.keySet()) {
+                    identifiers.put(key, (String) identifiers_raw.get(key));
+                }
+                return Utils.toString(createNativeAd(adId, layoutName, identifiers));
+            }
+        }, k__createNativeAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String adId = message;
+                return Utils.toString(destroyNativeAd(adId));
+            }
+        }, k__destroyNativeAd);
 
         bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
@@ -247,6 +286,28 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         AdMobBannerAd ad = _bannerAds.get(adId);
         ad.destroy();
         _bannerAds.remove(adId);
+        return true;
+    }
+
+    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
+                                  @NonNull Map<String, String> identifiers) {
+        Utils.checkMainThread();
+        if (_nativeAds.containsKey(adId)) {
+            return false;
+        }
+        AdMobNativeAd ad = new AdMobNativeAd(_context, adId, layoutName, identifiers);
+        _nativeAds.put(adId, ad);
+        return true;
+    }
+
+    public boolean destroyNativeAd(@NonNull String adId) {
+        Utils.checkMainThread();
+        if (!_nativeAds.containsKey(adId)) {
+            return false;
+        }
+        AdMobNativeAd ad = _nativeAds.get(adId);
+        ad.destroy();
+        _nativeAds.remove(adId);
         return true;
     }
 

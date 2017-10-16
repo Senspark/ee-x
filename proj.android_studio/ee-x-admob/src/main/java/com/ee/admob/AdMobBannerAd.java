@@ -28,6 +28,9 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
             return AdSize.BANNER;
         }
         if (index == 1) {
+            return AdSize.LARGE_BANNER;
+        }
+        if (index == 2) {
             return AdSize.SMART_BANNER;
         }
         return AdSize.BANNER;
@@ -82,6 +85,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         adView.setAdSize(_adSize);
         adView.setAdListener(this);
         adView.setAdUnitId(_adId);
+        _adView = adView;
 
         FrameLayout rootView = Utils.getRootView(_activity);
         FrameLayout.LayoutParams params =

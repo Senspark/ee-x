@@ -41,6 +41,9 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     private static final String k__onLoaded              = "AdMob_onLoaded";
     private static final String k__onClosed              = "AdMob_onClosed";
 
+    private static final String k__ad_id   = "ad_id";
+    private static final String k__ad_size = "ad_size";
+
     private static final Logger _logger = new Logger(AdMob.class.getName());
 
     private Activity                         _context;
@@ -139,8 +142,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                String adId = (String) dict.get("adId");
-                Integer adSizeIndex = (Integer) dict.get("adSize");
+                String adId = (String) dict.get(k__ad_id);
+                Integer adSizeIndex = (Integer) dict.get(k__ad_size);
                 AdSize adSize = AdMobBannerAd.adSizeFor(adSizeIndex);
                 return Utils.toString(createBannerAd(adId, adSize));
             }

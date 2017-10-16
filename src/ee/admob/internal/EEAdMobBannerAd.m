@@ -49,6 +49,7 @@
     }
     isLoaded_ = NO;
     bannerView_ = nil;
+    adId_ = [adId copy];
     adSize_ = adSize;
     helper_ =
         [[EEAdViewHelper alloc] initWithPrefix:@"AdMobBannerAd" adId:adId];

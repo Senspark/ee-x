@@ -98,7 +98,7 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_interstitialAd == null) {
+        if (_interstitialAd != null) {
             return false;
         }
         InterstitialAd interstitialAd = new InterstitialAd(_activity);
@@ -110,7 +110,7 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
 
     private boolean destroyInternalAd() {
         Utils.checkMainThread();
-        if (_interstitialAd != null) {
+        if (_interstitialAd == null) {
             return false;
         }
         _interstitialAd.setAdListener(null);

@@ -131,7 +131,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     ee::runOnUiThreadAndWait(
         [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
-    testAdMobBannerAd();
+    // testAdMobBannerAd();
+    // testAdMobInterstitial();
+    testAdMobRewardedVideo();
     // testAppLovin();
     // testUnityAds();
     // testIronSourceRewardedVideo();

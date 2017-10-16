@@ -13,6 +13,7 @@
 
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
+#include <platform/CCPlatformConfig.h>
 
 namespace eetest {
 ee::AdMob* getAdMob() {
@@ -25,6 +26,14 @@ ee::AdMob* getAdMob() {
         initialized = true;
     }
     return &plugin;
+}
+
+std::string getAdMobRewardedVideoId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/5224354917";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/1712485313";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
 void testAdMobBannerAd() {
@@ -113,6 +122,31 @@ void testAdMobInterstitial() {
         ee::runOnUiThread([interstitialAd] {
             getLogger().info("Show AdMob interstitial ad");
             interstitialAd->show();
+        });
+    });
+}
+
+void testAdMobRewardedVideo() {
+    std::shared_ptr<ee::RewardedVideoInterface> rewardedVideo;
+
+    ee::runOnUiThreadAndWait([&rewardedVideo] {
+        getLogger().info("Create AdMob rewarded video begin");
+        rewardedVideo =
+            getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
+        getLogger().info("Create AdMob rewarded video end");
+    });
+
+    scheduleForever(1.0f, 3.0f, [rewardedVideo] {
+        ee::runOnUiThread([rewardedVideo] {
+            getLogger().info("Load AdMob rewarded video");
+            rewardedVideo->load();
+        });
+    });
+
+    scheduleForever(2.0f, 3.0f, [rewardedVideo] {
+        ee::runOnUiThread([rewardedVideo] {
+            getLogger().info("Show AdMob rewarded video");
+            rewardedVideo->show();
         });
     });
 }

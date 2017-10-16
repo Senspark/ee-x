@@ -14,8 +14,11 @@
 namespace eetest {
 ee::AdMob* getAdMob();
 
+std::string getAdMobRewardedVideoId();
+
 void testAdMobBannerAd();
 void testAdMobInterstitial();
+void testAdMobRewardedVideo();
 } // namespace eetest
 
 #endif /* EE_X_TEST_ADMOB_HPP */

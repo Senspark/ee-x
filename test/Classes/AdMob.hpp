@@ -15,6 +15,7 @@ namespace eetest {
 ee::AdMob* getAdMob();
 
 void testAdMobBannerAd();
+void testAdMobInterstitial();
 } // namespace eetest
 
 #endif /* EE_X_TEST_ADMOB_HPP */

@@ -92,4 +92,28 @@ void testAdMobBannerAd() {
         });
     });
 }
+
+void testAdMobInterstitial() {
+    std::shared_ptr<ee::InterstitialAdInterface> interstitialAd;
+
+    ee::runOnUiThreadAndWait([&interstitialAd] {
+        getLogger().info("Create AdMob interstitial ad begin");
+        interstitialAd = getAdMob()->createInterstitialAd(
+            "ca-app-pub-3940256099942544/1033173712");
+        getLogger().info("Create AdMob interstitial ad end");
+    });
+
+    scheduleForever(1.0f, 3.0f, [interstitialAd] {
+        ee::runOnUiThread([interstitialAd] {
+            getLogger().info("Load AdMob interstitial ad");
+            interstitialAd->load();
+        });
+    });
+    scheduleForever(2.0f, 3.0f, [interstitialAd] {
+        ee::runOnUiThread([interstitialAd] {
+            getLogger().info("Show AdMob interstitial ad");
+            interstitialAd->show();
+        });
+    });
+}
 } // namespace eetest

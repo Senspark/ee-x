@@ -14,4 +14,6 @@
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId size:(FBAdSize)adSize;
 
+- (void)destroy;
+
 @end

@@ -38,8 +38,11 @@
     return self;
 }
 
-- (void)dealloc {
+- (void)destroy {
     [self deregisterHandlers];
+}
+
+- (void)dealloc {
     [placementId_ release];
     placementId_ = nil;
     [super dealloc];

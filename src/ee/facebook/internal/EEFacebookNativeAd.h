@@ -13,4 +13,6 @@
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
                      layout:(NSString* _Nonnull)layoutName;
 
+- (void)destroy;
+
 @end

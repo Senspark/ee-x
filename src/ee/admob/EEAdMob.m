@@ -182,6 +182,8 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([bannerAds_ objectForKey:adId] == nil) {
         return NO;
     }
+    EEAdMobBannerAd* ad = [bannerAds_ objectForKey:adId];
+    [ad destroy];
     [bannerAds_ removeObjectForKey:adId];
     return YES;
 }
@@ -204,6 +206,8 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([nativeAds_ objectForKey:adId] == nil) {
         return NO;
     }
+    EEAdMobNativeAd* ad = [nativeAds_ objectForKey:adId];
+    [ad destroy];
     [nativeAds_ removeObjectForKey:adId];
     return YES;
 }
@@ -222,6 +226,8 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([interstitialAds_ objectForKey:adId] == nil) {
         return NO;
     }
+    EEAdMobInterstitialAd* ad = [interstitialAds_ objectForKey:adId];
+    [ad destroy];
     [interstitialAds_ removeObjectForKey:adId];
     return YES;
 }

@@ -12,4 +12,6 @@
 
 - (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId;
 
+- (void)destroy;
+
 @end

@@ -12,4 +12,6 @@
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId;
 
+- (void)destroy;
+
 @end

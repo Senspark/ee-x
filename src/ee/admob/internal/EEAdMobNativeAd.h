@@ -14,4 +14,6 @@
                      types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                     layout:(NSString* _Nonnull)layoutName;
 
+- (void)destroy;
+
 @end

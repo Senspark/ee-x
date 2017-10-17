@@ -59,9 +59,12 @@
     return self;
 }
 
-- (void)dealloc {
+- (void)destroy {
     [self deregisterhandlers];
     [self destroyInternalAd];
+}
+
+- (void)dealloc {
     [helper_ release];
     helper_ = nil;
     [adId_ release];

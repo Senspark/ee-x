@@ -21,7 +21,9 @@ ee::AdMob* getAdMob() {
     static bool initialized = false;
     if (not initialized) {
         ee::runOnUiThreadAndWait([] {
-            //
+            plugin.addTestDevice(plugin.getEmulatorTestDeviceHash());
+            plugin.addTestDevice(
+                "930A5959F4325BAA45E24449B03CB221"); // BlueStacks
         });
         initialized = true;
     }
@@ -98,6 +100,109 @@ void testAdMobBannerAd() {
             int width, height;
             std::tie(width, height) = bannerAd->getSize();
             bannerAd->setPosition(0, screenHeight - height);
+        });
+    });
+}
+
+void testAdMobNativeAd() {
+    auto&& frameSize =
+        cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
+    int screenWidth = static_cast<int>(frameSize.width);
+    int screenHeight = static_cast<int>(frameSize.height);
+
+    std::shared_ptr<ee::AdViewInterface> nativeAd;
+
+    ee::runOnUiThreadAndWait([&nativeAd] {
+        getLogger().info("Create AdMob native ad begin");
+        nativeAd = getAdMob()->createNativeAd(
+            "ca-app-pub-3940256099942544/2247696110", "admob_native_spin",
+            ee::AdMobNativeAdLayout()
+                .setBody("ad_body")
+                .setCallToAction("ad_call_to_action")
+                .setHeadline("ad_headline")
+                .setIcon("ad_icon")
+                .setImage("ad_image")
+                .setMedia("ad_media")
+                .setPrice("ad_price")
+                .setStarRating("ad_star_rating")
+                .setStore("ad_store"));
+        nativeAd->setVisible(true);
+        getLogger().info("Create AdMob native ad end");
+    });
+
+    float delay = 0.0f;
+    scheduleForever(delay + 1.0f, 4.0f, [nativeAd] {
+        ee::runOnUiThread([nativeAd] {
+            getLogger().info("Load AdMob native ad");
+            nativeAd->load();
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+            getLogger().info("Resize = screen size / 4");
+            nativeAd->setPosition(3 * screenWidth / 8, 3 * screenHeight / 8);
+            nativeAd->setSize(screenWidth / 4, screenHeight / 4);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [nativeAd] {
+        ee::runOnUiThread([nativeAd] {
+            getLogger().info("Move to top-left");
+            nativeAd->setPosition(0, 0);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, nativeAd] {
+        ee::runOnUiThread([screenWidth, nativeAd] {
+            getLogger().info("Move to top-right");
+            int width, height;
+            std::tie(width, height) = nativeAd->getSize();
+            nativeAd->setPosition(screenWidth - width, 0);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+            getLogger().info("Move to bottom-right");
+            int width, height;
+            std::tie(width, height) = nativeAd->getSize();
+            nativeAd->setPosition(screenWidth - width, screenHeight - height);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenHeight, nativeAd] {
+        ee::runOnUiThread([screenHeight, nativeAd] {
+            getLogger().info("Move to bottom-left");
+            int width, height;
+            std::tie(width, height) = nativeAd->getSize();
+            nativeAd->setPosition(0, screenHeight - height);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+            getLogger().info("Move to center");
+            int width, height;
+            std::tie(width, height) = nativeAd->getSize();
+            nativeAd->setPosition((screenWidth - width) / 2,
+                                  (screenHeight - height) / 2);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+            getLogger().info("Resize = screen size");
+            nativeAd->setPosition(0, 0);
+            nativeAd->setSize(screenWidth, screenHeight);
+        });
+    });
+
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+            getLogger().info("Resize = screen size / 2");
+            nativeAd->setPosition(screenWidth / 4, screenHeight / 4);
+            nativeAd->setSize(screenWidth / 2, screenHeight / 2);
         });
     });
 }

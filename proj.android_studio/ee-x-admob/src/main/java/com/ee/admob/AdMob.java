@@ -18,6 +18,7 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,21 +28,22 @@ import java.util.Map;
  */
 
 public class AdMob implements PluginProtocol, RewardedVideoAdListener {
-    private static final String k__initialize            = "AdMob_initialize";
-    private static final String k__addTestDevice         = "AdMob_addTestDevice";
-    private static final String k__createBannerAd        = "AdMob_createBannerAd";
-    private static final String k__destroyBannerAd       = "AdMob_destroyBannerAd";
-    private static final String k__createNativeAd        = "AdMob_createNativeAd";
-    private static final String k__destroyNativeAd       = "AdMob_destroyNativeAd";
-    private static final String k__createInterstitialAd  = "AdMob_createInterstitialAd";
-    private static final String k__destroyInterstitialAd = "AdMob_destroyInterstitialAd";
-    private static final String k__hasRewardedVideo      = "AdMob_hasRewardedVideo";
-    private static final String k__loadRewardedVideo     = "AdMob_loadRewardedVideo";
-    private static final String k__showRewardedVideo     = "AdMob_showRewardedVideo";
-    private static final String k__onRewarded            = "AdMob_onRewarded";
-    private static final String k__onFailedToLoad        = "AdMob_onFailedToLoad";
-    private static final String k__onLoaded              = "AdMob_onLoaded";
-    private static final String k__onClosed              = "AdMob_onClosed";
+    private static final String k__initialize                = "AdMob_initialize";
+    private static final String k__getEmulatorTestDeviceHash = "AdMob_getEmulatorTestDeviceHash";
+    private static final String k__addTestDevice             = "AdMob_addTestDevice";
+    private static final String k__createBannerAd            = "AdMob_createBannerAd";
+    private static final String k__destroyBannerAd           = "AdMob_destroyBannerAd";
+    private static final String k__createNativeAd            = "AdMob_createNativeAd";
+    private static final String k__destroyNativeAd           = "AdMob_destroyNativeAd";
+    private static final String k__createInterstitialAd      = "AdMob_createInterstitialAd";
+    private static final String k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
+    private static final String k__hasRewardedVideo          = "AdMob_hasRewardedVideo";
+    private static final String k__loadRewardedVideo         = "AdMob_loadRewardedVideo";
+    private static final String k__showRewardedVideo         = "AdMob_showRewardedVideo";
+    private static final String k__onRewarded                = "AdMob_onRewarded";
+    private static final String k__onFailedToLoad            = "AdMob_onFailedToLoad";
+    private static final String k__onLoaded                  = "AdMob_onLoaded";
+    private static final String k__onClosed                  = "AdMob_onClosed";
 
     private static final String k__ad_id       = "ad_id";
     private static final String k__ad_size     = "ad_size";
@@ -61,6 +63,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         Utils.checkMainThread();
         _context = (Activity) context;
 
+        _testDevices = new ArrayList<>();
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
@@ -147,6 +150,14 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
                 return "";
             }
         }, k__initialize);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return getEmulatorTestDeviceHash();
+            }
+        }, k__getEmulatorTestDeviceHash);
 
         bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
@@ -279,6 +290,11 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String applicationId) {
         MobileAds.initialize(_context, applicationId);
+    }
+
+    @NonNull
+    public String getEmulatorTestDeviceHash() {
+        return AdRequest.DEVICE_ID_EMULATOR;
     }
 
     public void addTestDevice(@NonNull String hash) {

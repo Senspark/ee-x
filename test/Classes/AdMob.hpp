@@ -17,6 +17,7 @@ ee::AdMob* getAdMob();
 std::string getAdMobRewardedVideoId();
 
 void testAdMobBannerAd();
+void testAdMobNativeAd();
 void testAdMobInterstitial();
 void testAdMobRewardedVideo();
 } // namespace eetest

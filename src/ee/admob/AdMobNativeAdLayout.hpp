@@ -24,14 +24,15 @@ public:
     NativeAdLayout();
     ~NativeAdLayout();
 
-    Self& setHeadline(const std::string& id);
     Self& setBody(const std::string& id);
     Self& setCallToAction(const std::string& id);
+    Self& setHeadline(const std::string& id);
     Self& setIcon(const std::string& id);
+    Self& setImage(const std::string& id);
+    Self& setMedia(const std::string& id);
     Self& setPrice(const std::string& id);
     Self& setStarRating(const std::string& id);
-    Self& setMedia(const std::string& id);
-    Self& setMainImage(const std::string& id);
+    Self& setStore(const std::string& id);
 
 protected:
     friend AdMob;

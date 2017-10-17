@@ -181,6 +181,9 @@
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(adLoader_ == adLoader, @"");
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adLoaderDidFinishLoading:(GADAdLoader*)adLoader {
@@ -204,16 +207,16 @@
 
     // Populate the app install ad view with the app install ad assets.
     // Some assets are guaranteed to be present in every app install ad.
-    UILabel* headLineView = (UILabel*)[adView headlineView];
-    UIImageView* iconView = (UIImageView*)[adView iconView];
     UILabel* bodyView = (UILabel*)[adView bodyView];
     UIButton* callToActionView = (UIButton*)[adView callToActionView];
+    UILabel* headLineView = (UILabel*)[adView headlineView];
+    UIImageView* iconView = (UIImageView*)[adView iconView];
 
-    [headLineView setText:[nativeAppInstallAd headline]];
-    [iconView setImage:[[nativeAppInstallAd icon] image]];
     [bodyView setText:[nativeAppInstallAd body]];
     [callToActionView setTitle:[nativeAppInstallAd callToAction]
                       forState:UIControlStateNormal];
+    [headLineView setText:[nativeAppInstallAd headline]];
+    [iconView setImage:[[nativeAppInstallAd icon] image]];
 
     // Some app install ads will include a video asset, while others do not.
     // Apps can use the GADVideoController's hasVideoContent property to
@@ -222,8 +225,10 @@
     // The UI for this controller constrains the image view's height to match
     // the media view's height, so by changing the one here, the height of both
     // views are being adjusted.
+    UIImageView* imageView = (UIImageView*)[adView imageView];
     if ([[nativeAppInstallAd videoController] hasVideoContent]) {
         [[adView mediaView] setHidden:NO];
+        [imageView setHidden:YES];
 
         // This app uses a fixed width for the GADMediaView and changes its
         // height to match the aspect ratio of the video it displays.
@@ -239,10 +244,24 @@
         [constraint setActive:YES];
     } else {
         [[adView mediaView] setHidden:YES];
+        [imageView setHidden:NO];
+
+        GADNativeAdImage* firstImage =
+            [[nativeAppInstallAd images] firstObject];
+        [imageView setImage:[firstImage image]];
     }
 
     // These assets are not guaranteed to be present, and should be checked
     // first.
+    NSString* price = [nativeAppInstallAd price];
+    UILabel* priceView = (UILabel*)[adView priceView];
+    if (price != nil) {
+        [priceView setText:price];
+        [priceView setHidden:NO];
+    } else {
+        [priceView setHidden:YES];
+    }
+
     NSDecimalNumber* starRating = [nativeAppInstallAd starRating];
     UIImageView* starRatingView = (UIImageView*)[adView starRatingView];
     if (starRating != nil) {
@@ -261,18 +280,13 @@
         [storeView setHidden:YES];
     }
 
-    NSString* price = [nativeAppInstallAd price];
-    UILabel* priceView = (UILabel*)[adView priceView];
-    if (price != nil) {
-        [priceView setText:price];
-        [priceView setHidden:NO];
-    } else {
-        [priceView setHidden:YES];
-    }
-
     // In order for the SDK to process touch events properly, user interaction
     // should be disabled.
     [[adView callToActionView] setUserInteractionEnabled:NO];
+
+    isAdLoaded_ = YES;
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onLoaded]];
 }
 
 /// Gets an image representing the number of stars. Returns nil if rating is
@@ -304,16 +318,15 @@
 
     [view setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     NSDictionary* viewDictionary =
         NSDictionaryOfVariableBindings(nativeAdView_);
-    [[rootView view]
+    [nativeAdPlaceholder_
         addConstraints:[NSLayoutConstraint
                            constraintsWithVisualFormat:@"H:|[nativeAdView_]|"
                                                options:0
                                                metrics:nil
                                                  views:viewDictionary]];
-    [[rootView view]
+    [nativeAdPlaceholder_
         addConstraints:[NSLayoutConstraint
                            constraintsWithVisualFormat:@"V:|[nativeAdView_]|"
                                                options:0

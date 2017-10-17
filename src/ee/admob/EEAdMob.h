@@ -11,6 +11,8 @@
 @interface EEAdMob : NSObject
 
 - (void)initialize:(NSString* _Nonnull)applicationId;
+
+- (NSString* _Nonnull)getEmulatorTestDeviceHash;
 - (void)addTestDevice:(NSString* _Nonnull)hash;
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size;

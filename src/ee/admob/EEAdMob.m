@@ -28,26 +28,28 @@
 @implementation EEAdMob
 
 // clang-format off
-static NSString* const k__initialize            = @"AdMob_initialize";
-static NSString* const k__addTestDevice         = @"AdMob_addTestDevice";
+static NSString* const k__initialize                = @"AdMob_initialize";
 
-static NSString* const k__createBannerAd        = @"AdMob_createBannerAd";
-static NSString* const k__destroyBannerAd       = @"AdMob_destroyBannerAd";
+static NSString* const k__getEmulatorTestDeviceHash = @"AdMob_getEmulatorTestDeviceHash";
+static NSString* const k__addTestDevice             = @"AdMob_addTestDevice";
 
-static NSString* const k__createNativeAd        = @"AdMob_createNativeAd";
-static NSString* const k__destroyNativeAd       = @"AdMob_destroyNativeAd";
+static NSString* const k__createBannerAd            = @"AdMob_createBannerAd";
+static NSString* const k__destroyBannerAd           = @"AdMob_destroyBannerAd";
 
-static NSString* const k__createInterstitialAd  = @"AdMob_createInterstitialAd";
-static NSString* const k__destroyInterstitialAd = @"AdMob_destroyInterstitialAd";
+static NSString* const k__createNativeAd            = @"AdMob_createNativeAd";
+static NSString* const k__destroyNativeAd           = @"AdMob_destroyNativeAd";
 
-static NSString* const k__hasRewardedVideo      = @"AdMob_hasRewardedVideo";
-static NSString* const k__loadRewardedVideo     = @"AdMob_loadRewardedVideo";
-static NSString* const k__showRewardedVideo     = @"AdMob_showRewardedVideo";
+static NSString* const k__createInterstitialAd      = @"AdMob_createInterstitialAd";
+static NSString* const k__destroyInterstitialAd     = @"AdMob_destroyInterstitialAd";
 
-static NSString* const k__onRewarded            = @"AdMob_onRewarded";
-static NSString* const k__onFailedToLoad        = @"AdMob_onFailedToLoad";
-static NSString* const k__onLoaded              = @"AdMob_onLoaded";
-static NSString* const k__onClosed              = @"AdMob_onClosed";
+static NSString* const k__hasRewardedVideo          = @"AdMob_hasRewardedVideo";
+static NSString* const k__loadRewardedVideo         = @"AdMob_loadRewardedVideo";
+static NSString* const k__showRewardedVideo         = @"AdMob_showRewardedVideo";
+
+static NSString* const k__onRewarded                = @"AdMob_onRewarded";
+static NSString* const k__onFailedToLoad            = @"AdMob_onFailedToLoad";
+static NSString* const k__onLoaded                  = @"AdMob_onLoaded";
+static NSString* const k__onClosed                  = @"AdMob_onClosed";
 // clang-format on
 
 // clang-format off
@@ -66,7 +68,6 @@ static NSString* const k__layout_name           = @"layout_name";
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
     [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
-    [self addTestDevice:kGADSimulatorID];
     [self registerHandlers];
     return self;
 }
@@ -92,6 +93,11 @@ static NSString* const k__layout_name           = @"layout_name";
                        NSString* applicationId = message;
                        [self initialize:applicationId];
                        return @"";
+                   }];
+
+    [bridge registerHandler:k__getEmulatorTestDeviceHash
+                   callback:^(NSString* message) {
+                       return [self getEmulatorTestDeviceHash];
                    }];
 
     [bridge registerHandler:k__addTestDevice
@@ -189,6 +195,10 @@ static NSString* const k__layout_name           = @"layout_name";
 
 - (void)initialize:(NSString* _Nonnull)applicationId {
     [GADMobileAds configureWithApplicationID:applicationId];
+}
+
+- (NSString* _Nonnull)getEmulatorTestDeviceHash {
+    return kGADSimulatorID;
 }
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {

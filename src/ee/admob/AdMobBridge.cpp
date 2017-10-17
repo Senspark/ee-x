@@ -23,26 +23,28 @@ using Self = AdMob;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize            = "AdMob_initialize";
-constexpr auto k__addTestDevice         = "AdMob_addTestDevice";
+constexpr auto k__initialize                = "AdMob_initialize";
     
-constexpr auto k__createBannerAd        = "AdMob_createBannerAd";
-constexpr auto k__destroyBannerAd       = "AdMob_destroyBannerAd";
+constexpr auto k__getEmulatorTestDeviceHash = "AdMob_getEmulatorTestDeviceHash";
+constexpr auto k__addTestDevice             = "AdMob_addTestDevice";
+    
+constexpr auto k__createBannerAd            = "AdMob_createBannerAd";
+constexpr auto k__destroyBannerAd           = "AdMob_destroyBannerAd";
 
-constexpr auto k__createNativeAd        = "AdMob_createNativeAd";
-constexpr auto k__destroyNativeAd       = "AdMob_destroyNativeAd";
+constexpr auto k__createNativeAd            = "AdMob_createNativeAd";
+constexpr auto k__destroyNativeAd           = "AdMob_destroyNativeAd";
 
-constexpr auto k__createInterstitialAd  = "AdMob_createInterstitialAd";
-constexpr auto k__destroyInterstitialAd = "AdMob_destroyInterstitialAd";
+constexpr auto k__createInterstitialAd      = "AdMob_createInterstitialAd";
+constexpr auto k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
 
-constexpr auto k__hasRewardedVideo      = "AdMob_hasRewardedVideo";
-constexpr auto k__loadRewardedVideo     = "AdMob_loadRewardedVideo";
-constexpr auto k__showRewardedVideo     = "AdMob_showRewardedVideo";
+constexpr auto k__hasRewardedVideo          = "AdMob_hasRewardedVideo";
+constexpr auto k__loadRewardedVideo         = "AdMob_loadRewardedVideo";
+constexpr auto k__showRewardedVideo         = "AdMob_showRewardedVideo";
 
-constexpr auto k__onRewarded            = "AdMob_onRewarded";
-constexpr auto k__onFailedToLoad        = "AdMob_onFailedToLoad";
-constexpr auto k__onLoaded              = "AdMob_onLoaded";
-constexpr auto k__onClosed              = "AdMob_onClosed";
+constexpr auto k__onRewarded                = "AdMob_onRewarded";
+constexpr auto k__onFailedToLoad            = "AdMob_onFailedToLoad";
+constexpr auto k__onLoaded                  = "AdMob_onLoaded";
+constexpr auto k__onClosed                  = "AdMob_onClosed";
 // clang-format on
 } // namespace
 
@@ -97,6 +99,11 @@ Self::~AdMob() {
 void Self::initialize(const std::string& applicationId) {
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__initialize, applicationId);
+}
+
+std::string Self::getEmulatorTestDeviceHash() const {
+    auto&& bridge = core::MessageBridge::getInstance();
+    return bridge.call(k__getEmulatorTestDeviceHash);
 }
 
 void Self::addTestDevice(const std::string& hash) {

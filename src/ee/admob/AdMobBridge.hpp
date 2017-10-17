@@ -32,6 +32,9 @@ public:
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/kayQ3VZJqkU
     void initialize(const std::string& applicationId);
 
+    /// kGADSimulatorID or AdRequest.DEVICE_ID_EMULATOR.
+    std::string getEmulatorTestDeviceHash() const;
+
     void addTestDevice(const std::string& hash);
 
     /// Creates a banner ad.

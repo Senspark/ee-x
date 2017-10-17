@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
+import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -36,14 +38,15 @@ import java.util.Map;
 class AdMobNativeAd extends AdListener implements AdViewInterface {
     private static final Logger _logger = new Logger(AdMobNativeAd.class.getName());
 
-    private static final String k__headline       = "headline";
     private static final String k__body           = "body";
     private static final String k__call_to_action = "call_to_action";
+    private static final String k__headline       = "headline";
     private static final String k__icon           = "icon";
+    private static final String k__image          = "image";
+    private static final String k__media          = "media";
     private static final String k__price          = "price";
     private static final String k__star_rating    = "star_rating";
-    private static final String k__media          = "media";
-    private static final String k__main_image     = "main_image";
+    private static final String k__store          = "store";
 
     private Activity            _activity;
     private String              _adId;
@@ -85,6 +88,14 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         _helper = null;
     }
 
+    private String k__onLoaded() {
+        return "AdMobNativeAd_onLoaded_" + _adId;
+    }
+
+    private String k__onFailedToLoad() {
+        return "AdMobNativeAd_onFailedToLoad_" + _adId;
+    }
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
@@ -105,6 +116,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             .forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
                 @Override
                 public void onAppInstallAdLoaded(NativeAppInstallAd nativeAppInstallAd) {
+                    _logger.info("onAppInstallAdLoaded");
                     FrameLayout rootView = Utils.getRootView(_activity);
                     int layoutId = rootView
                         .getResources()
@@ -115,8 +127,13 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
                     populateAppInstallAdView(nativeAppInstallAd, adView);
                     _nativeAdPlaceholder.removeAllViews();
                     _nativeAdPlaceholder.addView(adView);
+
+                    _isAdLoaded = true;
+                    MessageBridge bridge = MessageBridge.getInstance();
+                    bridge.callCpp(k__onLoaded());
                 }
             })
+            .withAdListener(this)
             .build();
         return true;
     }
@@ -133,7 +150,15 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
 
     private void createView() {
         assert _nativeAdPlaceholder == null;
-        _nativeAdPlaceholder = new FrameLayout(_activity);
+        FrameLayout layout = new FrameLayout(_activity);
+
+        FrameLayout.LayoutParams params =
+            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.START | Gravity.TOP;
+        layout.setLayoutParams(params);
+
+        _nativeAdPlaceholder = layout;
     }
 
     private void destroyView() {
@@ -155,6 +180,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         for (String hash : _testDevices) {
             builder.addTestDevice(hash);
         }
+        _logger.info("load");
         _adLoader.loadAd(builder.build());
     }
 
@@ -204,6 +230,9 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     }
 
     private int getIdentifier(@NonNull String identifier) {
+        if (!_identifiers.containsKey(identifier)) {
+            return 0;
+        }
         Resources resources = _activity.getResources();
         return resources.getIdentifier(_identifiers.get(identifier), "id",
             _activity.getPackageName());
@@ -226,60 +255,69 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             }
         });
 
-        adView.setHeadlineView(adView.findViewById(getIdentifier(k__headline)));
         adView.setBodyView(adView.findViewById(getIdentifier(k__body)));
         adView.setCallToActionView(adView.findViewById(getIdentifier(k__call_to_action)));
+        adView.setHeadlineView(adView.findViewById(getIdentifier(k__headline)));
         adView.setIconView(adView.findViewById(getIdentifier(k__icon)));
         adView.setPriceView(adView.findViewById(getIdentifier(k__price)));
         adView.setStarRatingView(adView.findViewById(getIdentifier(k__star_rating)));
-        adView.setStoreView(adView.findViewById(getIdentifier(k__star_rating)));
+        adView.setStoreView(adView.findViewById(getIdentifier(k__store)));
 
         // Some assets are guaranteed to be in every NativeAppInstallAd.
-        ((TextView) adView.getHeadlineView()).setText(nativeAppInstallAd.getHeadline());
-        ((TextView) adView.getBodyView()).setText(nativeAppInstallAd.getBody());
-        ((Button) adView.getCallToActionView()).setText(nativeAppInstallAd.getCallToAction());
-        ((ImageView) adView.getIconView()).setImageDrawable(
-            nativeAppInstallAd.getIcon().getDrawable());
+        TextView bodyView = (TextView) adView.getBodyView();
+        Button callToActionView = (Button) adView.getCallToActionView();
+        TextView headlineView = (TextView) adView.getHeadlineView();
+        ImageView iconView = (ImageView) adView.getIconView();
 
+        bodyView.setText(nativeAppInstallAd.getBody());
+        callToActionView.setText(nativeAppInstallAd.getCallToAction());
+        headlineView.setText(nativeAppInstallAd.getHeadline());
+        iconView.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
+
+        ImageView imageView = adView.findViewById(getIdentifier(k__image));
         MediaView mediaView = adView.findViewById(getIdentifier(k__media));
-        ImageView mainImageView = adView.findViewById(getIdentifier(k__main_image));
 
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
             adView.setMediaView(mediaView);
-            mainImageView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
         } else {
-            adView.setImageView(mainImageView);
+            adView.setImageView(imageView);
             mediaView.setVisibility(View.GONE);
 
             // At least one image is guaranteed.
             List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-            mainImageView.setImageDrawable(images.get(0).getDrawable());
+            imageView.setImageDrawable(images.get(0).getDrawable());
         }
 
         // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
         // check before trying to display them.
-        if (nativeAppInstallAd.getPrice() == null) {
-            adView.getPriceView().setVisibility(View.INVISIBLE);
+        CharSequence price = nativeAppInstallAd.getPrice();
+        TextView priceView = (TextView) adView.getPriceView();
+        if (price != null) {
+            priceView.setVisibility(View.VISIBLE);
+            priceView.setText(price);
         } else {
-            adView.getPriceView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getPriceView()).setText(nativeAppInstallAd.getPrice());
+            priceView.setVisibility(View.INVISIBLE);
         }
 
-        if (nativeAppInstallAd.getStore() == null) {
-            adView.getStoreView().setVisibility(View.INVISIBLE);
+        Double starRating = nativeAppInstallAd.getStarRating();
+        RatingBar starRatingView = (RatingBar) adView.getStarRatingView();
+        if (starRating != null) {
+            starRatingView.setRating(starRating.floatValue());
+            starRatingView.setVisibility(View.VISIBLE);
         } else {
-            adView.getStoreView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getStoreView()).setText(nativeAppInstallAd.getStore());
+            starRatingView.setVisibility(View.INVISIBLE);
         }
 
-        if (nativeAppInstallAd.getStarRating() == null) {
-            adView.getStarRatingView().setVisibility(View.INVISIBLE);
+        CharSequence store = nativeAppInstallAd.getStore();
+        TextView storeView = (TextView) adView.getStoreView();
+        if (store != null) {
+            storeView.setVisibility(View.VISIBLE);
+            storeView.setText(store);
         } else {
-            ((RatingBar) adView.getStarRatingView()).setRating(
-                nativeAppInstallAd.getStarRating().floatValue());
-            adView.getStarRatingView().setVisibility(View.VISIBLE);
+            storeView.setVisibility(View.INVISIBLE);
         }
 
         // Assign native ad object to the native view.
@@ -296,6 +334,8 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override

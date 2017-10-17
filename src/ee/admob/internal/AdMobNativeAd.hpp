@@ -51,6 +51,10 @@ protected:
     explicit NativeAd(AdMob* plugin, const std::string& adId);
 
 private:
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+
+    bool loading_;
     std::string adId_;
     AdMob* plugin_;
     ads::AdViewHelper helper_;

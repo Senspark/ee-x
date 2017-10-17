@@ -16,6 +16,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
+import java.util.List;
+
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -41,15 +43,18 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     private boolean      _isAdLoaded;
     private String       _adId;
     private AdSize       _adSize;
+    private List<String> _testDevices;
     private AdViewHelper _helper;
 
-    AdMobBannerAd(@NonNull Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
+    AdMobBannerAd(@NonNull Activity activity, @NonNull String adId, @NonNull AdSize adSize,
+                  @NonNull List<String> testDevices) {
         Utils.checkMainThread();
         _isAdLoaded = false;
         _activity = activity;
         _adId = adId;
         _adSize = adSize;
         _adView = null;
+        _testDevices = testDevices;
         _helper = new AdViewHelper("AdMobBannerAd", _adId);
         createInternalAd();
         registerHandlers();
@@ -62,6 +67,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         _activity = null;
         _adId = null;
         _adSize = null;
+        _testDevices = null;
         _helper = null;
     }
 
@@ -119,8 +125,11 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         if (_adView == null) {
             return;
         }
-        AdRequest request = new AdRequest.Builder().build();
-        _adView.loadAd(request);
+        AdRequest.Builder builder = new AdRequest.Builder();
+        for (String hash : _testDevices) {
+            builder.addTestDevice(hash);
+        }
+        _adView.loadAd(builder.build());
     }
 
     @NonNull

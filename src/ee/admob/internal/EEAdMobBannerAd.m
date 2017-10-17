@@ -19,6 +19,7 @@
     GADBannerView* bannerView_;
     GADAdSize adSize_;
     NSString* adId_;
+    NSArray<NSString*>* testDevices_;
     EEAdViewHelper* helper_;
 }
 
@@ -42,7 +43,9 @@
     return kGADAdSizeInvalid;
 }
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId size:(GADAdSize)adSize {
+- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
+                       size:(GADAdSize)adSize
+                testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
@@ -51,6 +54,7 @@
     bannerView_ = nil;
     adId_ = [adId copy];
     adSize_ = adSize;
+    testDevices_ = [testDevices retain];
     helper_ =
         [[EEAdViewHelper alloc] initWithPrefix:@"AdMobBannerAd" adId:adId];
 
@@ -69,6 +73,8 @@
     helper_ = nil;
     [adId_ release];
     adId_ = nil;
+    [testDevices_ release];
+    testDevices_ = nil;
     [super dealloc];
 }
 
@@ -123,6 +129,7 @@
         return;
     }
     GADRequest* request = [GADRequest request];
+    [request setTestDevices:testDevices_];
     [bannerView_ loadRequest:request];
 }
 

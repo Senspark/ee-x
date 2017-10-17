@@ -17,6 +17,7 @@
 @interface EEAdMobInterstitialAd () <GADInterstitialDelegate> {
     NSString* adId_;
     GADInterstitial* interstitialAd_;
+    NSArray<NSString*>* testDevices_;
     EEInterstitialAdHelper* helper_;
 }
 
@@ -24,13 +25,15 @@
 
 @implementation EEAdMobInterstitialAd
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId {
+- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
+                testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
     }
     adId_ = [adId copy];
     interstitialAd_ = nil;
+    testDevices_ = [testDevices retain];
     helper_ =
         [[EEInterstitialAdHelper alloc] initWithPrefix:@"AdMobInterstitialAd"
                                                   adId:adId_];
@@ -47,6 +50,8 @@
     helper_ = nil;
     [adId_ release];
     adId_ = nil;
+    [testDevices_ release];
+    testDevices_ = nil;
     [super dealloc];
 }
 
@@ -136,6 +141,7 @@
         return;
     }
     GADRequest* request = [GADRequest request];
+    [request setTestDevices:testDevices_];
     [interstitialAd_ loadRequest:request];
 }
 

@@ -52,16 +52,19 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     private boolean             _isAdLoaded;
     private AdLoader            _adLoader;
     private FrameLayout         _nativeAdPlaceholder;
+    private List<String>        _testDevices;
     private AdViewHelper        _helper;
 
     public AdMobNativeAd(@NonNull Activity activity, @NonNull String adId,
-                         @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+                         @NonNull String layoutName, @NonNull Map<String, String> identifiers,
+                         @NonNull List<String> testDevices) {
         Utils.checkMainThread();
         _activity = activity;
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
         _isAdLoaded = false;
+        _testDevices = testDevices;
         _helper = new AdViewHelper("AdMobNativeAd", adId);
         createInternalAd();
         createView();
@@ -78,6 +81,8 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         _identifiers = null;
         _adId = null;
         _activity = null;
+        _testDevices = null;
+        _helper = null;
     }
 
     private void registerHandlers() {
@@ -146,8 +151,11 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         if (_adLoader == null) {
             return;
         }
-        AdRequest request = new AdRequest.Builder().build();
-        _adLoader.loadAd(request);
+        AdRequest.Builder builder = new AdRequest.Builder();
+        for (String hash : _testDevices) {
+            builder.addTestDevice(hash);
+        }
+        _adLoader.loadAd(builder.build());
     }
 
     @NonNull

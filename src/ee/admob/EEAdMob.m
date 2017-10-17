@@ -17,6 +17,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMob () <GADRewardBasedVideoAdDelegate> {
+    NSMutableArray<NSString*>* testDevices_;
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
@@ -28,6 +29,7 @@
 
 // clang-format off
 static NSString* const k__initialize            = @"AdMob_initialize";
+static NSString* const k__addTestDevice         = @"AdMob_addTestDevice";
 
 static NSString* const k__createBannerAd        = @"AdMob_createBannerAd";
 static NSString* const k__destroyBannerAd       = @"AdMob_destroyBannerAd";
@@ -59,17 +61,24 @@ static NSString* const k__layout_name           = @"layout_name";
     if (self == nil) {
         return self;
     }
+    testDevices_ = [[NSMutableArray alloc] init];
     bannerAds_ = [[NSMutableDictionary alloc] init];
+    nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
     [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
+    [self addTestDevice:kGADSimulatorID];
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
     [self deregisterHandlers];
+    [testDevices_ release];
+    testDevices_ = nil;
     [bannerAds_ release];
     bannerAds_ = nil;
+    [nativeAds_ release];
+    nativeAds_ = nil;
     [interstitialAds_ release];
     interstitialAds_ = nil;
     [super dealloc];
@@ -82,6 +91,13 @@ static NSString* const k__layout_name           = @"layout_name";
                    callback:^(NSString* message) {
                        NSString* applicationId = message;
                        [self initialize:applicationId];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__addTestDevice
+                   callback:^(NSString* message) {
+                       NSString* hash = message;
+                       [self addTestDevice:hash];
                        return @"";
                    }];
 
@@ -117,6 +133,12 @@ static NSString* const k__layout_name           = @"layout_name";
                                          type:kGADAdLoaderAdTypeNativeAppInstall
                                        layout:layoutName]];
                }];
+
+    [bridge registerHandler:k__destroyNativeAd
+                   callback:^(NSString* message) {
+                       NSString* adId = message;
+                       return [EEUtils toString:[self destroyNativeAd:adId]];
+                   }];
 
     [bridge registerHandler:k__createInterstitialAd
                    callback:^(NSString* message) {
@@ -155,6 +177,7 @@ static NSString* const k__layout_name           = @"layout_name";
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__initialize];
+    [bridge deregisterHandler:k__addTestDevice];
     [bridge deregisterHandler:k__createBannerAd];
     [bridge deregisterHandler:k__destroyBannerAd];
     [bridge deregisterHandler:k__createInterstitialAd];
@@ -168,12 +191,18 @@ static NSString* const k__layout_name           = @"layout_name";
     [GADMobileAds configureWithApplicationID:applicationId];
 }
 
+- (void)addTestDevice:(NSString* _Nonnull)hash {
+    [testDevices_ addObject:hash];
+}
+
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size {
     if ([bannerAds_ objectForKey:adId] != nil) {
         return NO;
     }
     EEAdMobBannerAd* ad =
-        [[[EEAdMobBannerAd alloc] initWithAdId:adId size:size] autorelease];
+        [[[EEAdMobBannerAd alloc] initWithAdId:adId
+                                          size:size
+                                   testDevices:testDevices_] autorelease];
     [bannerAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -197,7 +226,8 @@ static NSString* const k__layout_name           = @"layout_name";
     EEAdMobNativeAd* ad =
         [[[EEAdMobNativeAd alloc] initWithId:adId
                                        types:@[type]
-                                      layout:layoutName] autorelease];
+                                      layout:layoutName
+                                 testDevices:testDevices_] autorelease];
     [nativeAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -217,7 +247,8 @@ static NSString* const k__layout_name           = @"layout_name";
         return NO;
     }
     EEAdMobInterstitialAd* ad =
-        [[[EEAdMobInterstitialAd alloc] initWithAdId:adId] autorelease];
+        [[[EEAdMobInterstitialAd alloc] initWithAdId:adId
+                                         testDevices:testDevices_] autorelease];
     [interstitialAds_ setObject:ad forKey:adId];
     return YES;
 }

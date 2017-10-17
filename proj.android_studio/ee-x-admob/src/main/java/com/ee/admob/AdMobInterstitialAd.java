@@ -13,6 +13,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
+import java.util.List;
+
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -23,13 +25,16 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
     private Activity             _activity;
     private InterstitialAd       _interstitialAd;
     private String               _adId;
+    private List<String>         _testDevices;
     private InterstitialAdHelper _helper;
 
-    AdMobInterstitialAd(@NonNull Activity activity, @NonNull String adId) {
+    AdMobInterstitialAd(@NonNull Activity activity, @NonNull String adId,
+                        @NonNull List<String> testDevices) {
         Utils.checkMainThread();
         _activity = activity;
         _adId = adId;
         _interstitialAd = null;
+        _testDevices = testDevices;
         _helper = new InterstitialAdHelper("AdMobInterstitialAd", adId);
         registerHandlers();
     }
@@ -41,6 +46,8 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
         _activity = null;
         _adId = null;
         _interstitialAd = null;
+        _testDevices = null;
+        _helper = null;
     }
 
     private String k__createInternalAd() {
@@ -130,8 +137,11 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
         if (_interstitialAd == null) {
             return;
         }
-        AdRequest request = new AdRequest.Builder().build();
-        _interstitialAd.loadAd(request);
+        AdRequest.Builder builder = new AdRequest.Builder();
+        for (String hash : _testDevices) {
+            builder.addTestDevice(hash);
+        }
+        _interstitialAd.loadAd(builder.build());
     }
 
     @Override

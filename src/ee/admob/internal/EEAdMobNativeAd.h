@@ -12,7 +12,8 @@
 
 - (id _Nullable)initWithId:(NSString* _Nonnull)adId
                      types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                    layout:(NSString* _Nonnull)layoutName;
+                    layout:(NSString* _Nonnull)layoutName
+               testDevices:(NSArray<NSString*>* _Nullable)testDevices;
 
 - (void)destroy;
 

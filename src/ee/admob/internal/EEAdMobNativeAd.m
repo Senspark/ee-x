@@ -22,6 +22,7 @@
     UIView* nativeAdView_;
     NSString* layoutName_;
     BOOL isAdLoaded_;
+    NSArray<NSString*>* testDevices_;
     EEAdViewHelper* helper_;
 }
 
@@ -31,7 +32,8 @@
 
 - (id _Nullable)initWithId:(NSString* _Nonnull)adId
                      types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                    layout:(NSString* _Nonnull)layoutName {
+                    layout:(NSString* _Nonnull)layoutName
+               testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
@@ -40,6 +42,7 @@
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
+    testDevices_ = [testDevices retain];
     helper_ =
         [[EEAdViewHelper alloc] initWithPrefix:@"AdMobNativeAd" adId:adId];
     [self createInternalAd];
@@ -63,7 +66,17 @@
     adTypes_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
+    [testDevices_ release];
+    testDevices_ = nil;
     [super dealloc];
+}
+
+- (NSString*)k__onLoaded {
+    return [@"AdMobNativeAd_onLoaded_" stringByAppendingString:adId_];
+}
+
+- (NSString*)k__onFailedToLoad {
+    return [@"AdMobNativeAd_onFailedToLoad_" stringByAppendingString:adId_];
 }
 
 - (void)registerHandlers {
@@ -130,6 +143,7 @@
         return;
     }
     GADRequest* request = [GADRequest request];
+    [request setTestDevices:testDevices_];
     [adLoader_ loadRequest:request];
 }
 

@@ -12,7 +12,9 @@
 
 + (GADAdSize)adSizeFor:(int)index;
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId size:(GADAdSize)adSize;
+- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
+                       size:(GADAdSize)adSize
+                testDevices:(NSArray<NSString*>* _Nullable)testDevices;
 
 - (void)destroy;
 

@@ -32,6 +32,8 @@ public:
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/kayQ3VZJqkU
     void initialize(const std::string& applicationId);
 
+    void addTestDevice(const std::string& hash);
+
     /// Creates a banner ad.
     /// @param[in] adId The banner ad unit ID.
     /// @param[in] adSize The banner ad size.

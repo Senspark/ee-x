@@ -26,30 +26,43 @@ import com.facebook.ads.NativeAd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Zinge on 10/9/17.
  */
 
 class FacebookNativeAd implements AdListener, AdViewInterface {
+    private static final String k__ad_choices     = "ad_choices";
+    private static final String k__body           = "body";
+    private static final String k__call_to_action = "call_to_action";
+    private static final String k__icon           = "icon";
+    private static final String k__media          = "media";
+    private static final String k__social_context = "social_context";
+    private static final String k__title          = "title";
+
     private static final Logger _logger = new Logger(FacebookNativeAd.class.getName());
 
-    private NativeAd                _nativeAd;
-    private View                    _nativeAdView;
-    private boolean                 _isAdLoaded;
-    private Activity                _activity;
-    private FacebookNativeAdBuilder _builder;
-    private AdViewHelper            _helper;
+    private NativeAd            _nativeAd;
+    private View                _nativeAdView;
+    private boolean             _isAdLoaded;
+    private Activity            _activity;
+    private String              _adId;
+    private String              _layoutName;
+    private Map<String, String> _identifiers;
+    private AdViewHelper        _helper;
 
-    public FacebookNativeAd(@NonNull Activity activity, @NonNull FacebookNativeAdBuilder builder) {
+    public FacebookNativeAd(@NonNull Activity activity, @NonNull String adId,
+                            @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         _activity = activity;
-        _builder = builder;
-
+        _adId = adId;
+        _layoutName = layoutName;
+        _identifiers = identifiers;
         _nativeAd = null;
         _nativeAdView = null;
         _isAdLoaded = false;
-        _helper = new AdViewHelper("FacebookNativeAd", _builder.adId);
+        _helper = new AdViewHelper("FacebookNativeAd", adId);
 
         createInternalAd();
         createView();
@@ -62,7 +75,10 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         deregisterHandlers();
         destroyInternalAd();
         destroyView();
-        _builder = null;
+        _adId = null;
+        _layoutName = null;
+        _identifiers = null;
+        _helper = null;
         _activity = null;
     }
 
@@ -82,7 +98,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
             return false;
         }
         _isAdLoaded = false;
-        NativeAd nativeAd = new NativeAd(_activity, _builder.adId);
+        NativeAd nativeAd = new NativeAd(_activity, _adId);
         nativeAd.setAdListener(this);
         _nativeAd = nativeAd;
         return true;
@@ -105,7 +121,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         FrameLayout rootView = Utils.getRootView(_activity);
         int layoutId = rootView
             .getResources()
-            .getIdentifier(_builder.layoutName, "layout", _activity.getPackageName());
+            .getIdentifier(_layoutName, "layout", _activity.getPackageName());
         View nativeAdView = LayoutInflater.from(_activity).inflate(layoutId, null);
         nativeAdView.setVisibility(View.INVISIBLE);
 
@@ -185,6 +201,15 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         }
     }
 
+    private int getIdentifier(@NonNull String identifier) {
+        if (!_identifiers.containsKey(identifier)) {
+            return 0;
+        }
+        Resources resources = _activity.getResources();
+        return resources.getIdentifier(_identifiers.get(identifier), "id",
+            _activity.getPackageName());
+    }
+
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onAdLoaded: " + adError.getErrorMessage());
@@ -197,26 +222,14 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         Utils.checkMainThread();
 
         _isAdLoaded = true;
-
         _nativeAd.unregisterView();
 
-        Resources resources = _activity.getResources();
-        int iconId = resources.getIdentifier(_builder.icon, "id", _activity.getPackageName());
-        int titleId = resources.getIdentifier(_builder.title, "id", _activity.getPackageName());
-        int mediaId = resources.getIdentifier(_builder.media, "id", _activity.getPackageName());
-        int socialContextId =
-            resources.getIdentifier(_builder.socialContext, "id", _activity.getPackageName());
-        int adChoicesId =
-            resources.getIdentifier(_builder.adChoices, "id", _activity.getPackageName());
-        int bodyId = resources.getIdentifier(_builder.body, "id", _activity.getPackageName());
-        int actionId = resources.getIdentifier(_builder.action, "id", _activity.getPackageName());
-
-        ImageView iconImage = _nativeAdView.findViewById(iconId);
-        TextView titleLabel = _nativeAdView.findViewById(titleId);
-        MediaView mediaView = _nativeAdView.findViewById(mediaId);
-        TextView socialContextLabel = _nativeAdView.findViewById(socialContextId);
-        TextView bodyLabel = _nativeAdView.findViewById(bodyId);
-        Button callToActionButton = _nativeAdView.findViewById(actionId);
+        ImageView iconImage = _nativeAdView.findViewById(getIdentifier(k__icon));
+        TextView titleLabel = _nativeAdView.findViewById(getIdentifier(k__title));
+        MediaView mediaView = _nativeAdView.findViewById(getIdentifier(k__media));
+        TextView socialContextLabel = _nativeAdView.findViewById(getIdentifier(k__social_context));
+        TextView bodyLabel = _nativeAdView.findViewById(getIdentifier(k__body));
+        Button callToActionButton = _nativeAdView.findViewById(getIdentifier(k__call_to_action));
 
         NativeAd.downloadAndDisplayImage(_nativeAd.getAdIcon(), iconImage);
         titleLabel.setText(_nativeAd.getAdTitle());
@@ -228,9 +241,8 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
             mediaView.setNativeAd(_nativeAd);
         }
 
-        LinearLayout adChoicesViews = _nativeAdView.findViewById(adChoicesId);
+        LinearLayout adChoicesViews = _nativeAdView.findViewById(getIdentifier(k__ad_choices));
         adChoicesViews.addView(new AdChoicesView(_activity, _nativeAd, true));
-
 
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(titleLabel);

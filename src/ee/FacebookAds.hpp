@@ -12,7 +12,7 @@
 #ifdef __cplusplus
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
-#include "ee/facebook/FacebookNativeAdBuilder.hpp"
+#include "ee/facebook/FacebookNativeAdLayout.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__

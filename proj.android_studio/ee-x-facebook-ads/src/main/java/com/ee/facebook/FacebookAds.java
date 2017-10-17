@@ -31,6 +31,11 @@ public class FacebookAds implements PluginProtocol {
     private static final String k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
     private static final String k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
 
+    private static final String k__ad_id       = "ad_id";
+    private static final String k__ad_size     = "ad_size";
+    private static final String k__layout_name = "layout_name";
+    private static final String k__identifiers = "identifiers";
+
     private static final Logger _logger = new Logger(FacebookAds.class.getName());
 
     private Activity                            _context;
@@ -143,8 +148,8 @@ public class FacebookAds implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                String adId = (String) dict.get("adId");
-                Integer adSizeIndex = (Integer) dict.get("adSize");
+                String adId = (String) dict.get(k__ad_id);
+                Integer adSizeIndex = (Integer) dict.get(k__ad_size);
                 AdSize adSize = FacebookBannerAd.adSizeFor(adSizeIndex);
                 return Utils.toString(createBannerAd(adId, adSize));
             }
@@ -167,17 +172,15 @@ public class FacebookAds implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                FacebookNativeAdBuilder builder = new FacebookNativeAdBuilder()
-                    .setAdId((String) dict.get("adId"))
-                    .setLayoutName((String) dict.get("layoutName"))
-                    .setIcon((String) dict.get("icon"))
-                    .setTitle((String) dict.get("title"))
-                    .setMedia((String) dict.get("media"))
-                    .setSocialContext((String) dict.get("socialContext"))
-                    .setAdChoices((String) dict.get("adChoices"))
-                    .setBody((String) dict.get("body"))
-                    .setAction((String) dict.get("action"));
-                return Utils.toString(createNativeAd(builder));
+                String adId = (String) dict.get(k__ad_id);
+                String layoutName = (String) dict.get(k__layout_name);
+                @SuppressWarnings("unchecked") Map<String, Object> identifiers_raw =
+                    (Map<String, Object>) dict.get(k__identifiers);
+                Map<String, String> identifiers = new HashMap<>();
+                for (String key : identifiers_raw.keySet()) {
+                    identifiers.put(key, (String) identifiers_raw.get(key));
+                }
+                return Utils.toString(createNativeAd(adId, layoutName, identifiers));
             }
         }, k__createNativeAd);
 
@@ -264,12 +267,13 @@ public class FacebookAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean createNativeAd(@NonNull FacebookNativeAdBuilder builder) {
-        if (_nativeAds.containsKey(builder.adId)) {
+    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
+                                  @NonNull Map<String, String> identifiers) {
+        if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        FacebookNativeAd ad = new FacebookNativeAd(_context, builder);
-        _nativeAds.put(builder.adId, ad);
+        FacebookNativeAd ad = new FacebookNativeAd(_context, adId, layoutName, identifiers);
+        _nativeAds.put(adId, ad);
         return true;
     }
 

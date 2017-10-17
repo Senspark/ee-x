@@ -40,7 +40,8 @@ public:
                                                     BannerAdSize adSize);
 
     std::shared_ptr<AdViewInterface>
-    createNativeAd(const NativeAdBuilder& builder);
+    createNativeAd(const std::string& adId, const std::string& layoutName,
+                   const NativeAdLayout& identifiers);
 
     std::shared_ptr<InterstitialAdInterface>
     createInterstitialAd(const std::string& placementId);

@@ -14,12 +14,12 @@ namespace facebook {
 class FacebookAds;
 class BannerAd;
 class NativeAd;
-class NativeAdBuilder;
+class NativeAdLayout;
 class InterstitialAd;
 } // namespace facebook
 
 using facebook::FacebookAds;
-using FacebookNativeAdBuilder = facebook::NativeAdBuilder;
+using FacebookNativeAdLayout = facebook::NativeAdLayout;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_ADS_FWD_HPP_ */

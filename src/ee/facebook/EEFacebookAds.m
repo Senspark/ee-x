@@ -42,6 +42,12 @@ static NSString* const k__createInterstitialAd  = @"FacebookAds_createInterstiti
 static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstitialAd";
 // clang-format on
 
+// clang-format off
+static NSString* const k__ad_id                 = @"ad_id";
+static NSString* const k__ad_size               = @"ad_size";
+static NSString* const k__layout_name           = @"layout_name";
+// clang-format on
+
 - (id)init {
     self = [super init];
     if (self == nil) {
@@ -90,8 +96,8 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
                    callback:^(NSString* message) {
                        NSDictionary* dict =
                            [EEJsonUtils convertStringToDictionary:message];
-                       NSString* adId = dict[@"adId"];
-                       int adSizeIndex = [dict[@"adSize"] intValue];
+                       NSString* adId = dict[k__ad_id];
+                       int adSizeIndex = [dict[k__ad_size] intValue];
                        FBAdSize adSize =
                            [EEFacebookBannerAd adSizeFor:adSizeIndex];
                        return [EEUtils
@@ -109,8 +115,8 @@ static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstit
                callback:^(NSString* message) {
                    NSDictionary* dict =
                        [EEJsonUtils convertStringToDictionary:message];
-                   NSString* adId = dict[@"adId"];
-                   NSString* layoutName = dict[@"layoutName"];
+                   NSString* adId = dict[k__ad_id];
+                   NSString* layoutName = dict[k__layout_name];
                    return [EEUtils
                        toString:[self createNativeAd:adId layout:layoutName]];
                }];

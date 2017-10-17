@@ -10,7 +10,7 @@
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
-#include "ee/facebook/FacebookNativeAdBuilder.hpp"
+#include "ee/facebook/FacebookNativeAdLayout.hpp"
 #include "ee/facebook/internal/FacebookBannerAd.hpp"
 #include "ee/facebook/internal/FacebookInterstitialAd.hpp"
 #include "ee/facebook/internal/FacebookNativeAd.hpp"
@@ -38,6 +38,15 @@ constexpr auto k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
 // clang-format on
 } // namespace
 
+namespace {
+// clang-format off
+constexpr auto k__ad_id       = "ad_id";
+constexpr auto k__ad_size     = "ad_size";
+constexpr auto k__layout_name = "layout_name";
+constexpr auto k__identifiers = "identifiers";
+// clang-format on
+} // namespace
+
 Self::FacebookAds() {}
 
 Self::~FacebookAds() {}
@@ -60,8 +69,8 @@ void Self::clearTestDevices() {
 std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
                                                       BannerAdSize adSize) {
     nlohmann::json json;
-    json["adId"] = adId;
-    json["adSize"] = static_cast<int>(adSize);
+    json[k__ad_id] = adId;
+    json[k__ad_size] = static_cast<int>(adSize);
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
@@ -78,24 +87,19 @@ bool Self::destroyBannerAd(const std::string& adId) {
 }
 
 std::shared_ptr<AdViewInterface>
-Self::createNativeAd(const NativeAdBuilder& builder) {
+Self::createNativeAd(const std::string& adId, const std::string& layoutName,
+                     const NativeAdLayout& identifiers) {
     nlohmann::json json;
-    json["adId"] = builder.adId_;
-    json["layoutName"] = builder.layoutName_;
-    json["icon"] = builder.icon_;
-    json["title"] = builder.title_;
-    json["media"] = builder.media_;
-    json["socialContext"] = builder.socialContext_;
-    json["adChoices"] = builder.adChoices_;
-    json["body"] = builder.body_;
-    json["action"] = builder.action_;
+    json[k__ad_id] = adId;
+    json[k__layout_name] = layoutName;
+    json[k__identifiers] = identifiers.params_;
 
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<AdViewInterface>(new NativeAd(this, builder.adId_));
+    return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {

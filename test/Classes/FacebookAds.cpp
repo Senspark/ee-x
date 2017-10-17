@@ -40,16 +40,15 @@ std::string getFacebookInterstitialAdId() {
 
 std::shared_ptr<ee::AdViewInterface> createFacebookNativeAd() {
     return getFacebookAds()->createNativeAd(
-        ee::FacebookNativeAdBuilder()
-            .setAdId("869337403086643_1444948412192203")
-            .setLayoutName("fb_native_spin")
-            .setIcon("native_ad_icon")
-            .setTitle("native_ad_title")
-            .setMedia("native_ad_media")
-            .setSocialContext("native_ad_social_context")
+        "869337403086643_1444948412192203", "fb_native_spin",
+        ee::FacebookNativeAdLayout()
             .setAdChoices("ad_choices_container")
             .setBody("native_ad_body")
-            .setAction("native_ad_call_to_action"));
+            .setCallToAction("native_ad_call_to_action")
+            .setIcon("native_ad_icon")
+            .setMedia("native_ad_media")
+            .setSocialContext("native_ad_social_context")
+            .setTitle("native_ad_title"));
 }
 
 std::shared_ptr<ee::InterstitialAdInterface> createFacebookInterstitialAd() {

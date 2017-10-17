@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
+import com.ee.core.internal.MessageBridge;
+import com.ee.core.internal.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
@@ -82,14 +84,57 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         _activity = null;
     }
 
+    @NonNull
+    private String k__createInternalAd() {
+        return "FacebookNativeAd_createInternalAd_" + _adId;
+    }
+
+    @NonNull
+    private String k__destroyInternalAd() {
+        return "FacebookNativeAd_destroyInternalAd_" + _adId;
+    }
+
+    @NonNull
+    private String k__onLoaded() {
+        return "FacebookNativeAd_onLoaded_" + _adId;
+    }
+
+    @NonNull
+    private String k__onFailedToLoad() {
+        return "FacebookNativeAd_onFailedToLoad_" + _adId;
+    }
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
+
+        MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return Utils.toString(createInternalAd());
+            }
+        }, k__createInternalAd());
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return Utils.toString(destroyInternalAd());
+            }
+        }, k__destroyInternalAd());
     }
 
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _helper.deregisterHandlers();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.deregisterHandler(k__createInternalAd());
+        bridge.deregisterHandler(k__destroyInternalAd());
     }
 
     private boolean createInternalAd() {
@@ -214,6 +259,9 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onAdLoaded: " + adError.getErrorMessage());
         Utils.checkMainThread();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
@@ -221,21 +269,20 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
 
-        _isAdLoaded = true;
         _nativeAd.unregisterView();
 
-        ImageView iconImage = _nativeAdView.findViewById(getIdentifier(k__icon));
-        TextView titleLabel = _nativeAdView.findViewById(getIdentifier(k__title));
-        MediaView mediaView = _nativeAdView.findViewById(getIdentifier(k__media));
-        TextView socialContextLabel = _nativeAdView.findViewById(getIdentifier(k__social_context));
         TextView bodyLabel = _nativeAdView.findViewById(getIdentifier(k__body));
         Button callToActionButton = _nativeAdView.findViewById(getIdentifier(k__call_to_action));
+        ImageView iconImage = _nativeAdView.findViewById(getIdentifier(k__icon));
+        MediaView mediaView = _nativeAdView.findViewById(getIdentifier(k__media));
+        TextView socialContextLabel = _nativeAdView.findViewById(getIdentifier(k__social_context));
+        TextView titleLabel = _nativeAdView.findViewById(getIdentifier(k__title));
 
         NativeAd.downloadAndDisplayImage(_nativeAd.getAdIcon(), iconImage);
-        titleLabel.setText(_nativeAd.getAdTitle());
-        socialContextLabel.setText(_nativeAd.getAdSocialContext());
         bodyLabel.setText(_nativeAd.getAdBody());
         callToActionButton.setText(_nativeAd.getAdCallToAction());
+        socialContextLabel.setText(_nativeAd.getAdSocialContext());
+        titleLabel.setText(_nativeAd.getAdTitle());
 
         if (mediaView != null) {
             mediaView.setNativeAd(_nativeAd);
@@ -248,6 +295,10 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         clickableViews.add(titleLabel);
         clickableViews.add(callToActionButton);
         _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
+
+        _isAdLoaded = true;
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onLoaded());
     }
 
     @Override

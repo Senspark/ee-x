@@ -64,12 +64,44 @@
     [super dealloc];
 }
 
+- (NSString* _Nonnull)k__createInternalAd {
+    return
+        [@"FacebookNativeAd_createInternalAd_" stringByAppendingString:adId_];
+}
+
+- (NSString* _Nonnull)k__destroyInternalAd {
+    return
+        [@"FacebookNativeAd_destroyInternalAd_" stringByAppendingString:adId_];
+}
+
+- (NSString* _Nonnull)k__onLoaded {
+    return [@"FacebookNativeAd_onLoaded_" stringByAppendingString:adId_];
+}
+
+- (NSString* _Nonnull)k__onFailedToLoad {
+    return [@"FacebookNativeAd_onFailedToLoad_" stringByAppendingString:adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge registerHandler:[self k__createInternalAd]
+                   callback:^(NSString* message) {
+                       return [EEUtils toString:[self createInternalAd]];
+                   }];
+    [bridge registerHandler:[self k__destroyInternalAd]
+                   callback:^(NSString* message) {
+                       return [EEUtils toString:[self destroyInternalAd]];
+                   }];
 }
 
 - (void)deregisterhandlers {
     [helper_ deregisterHandlers];
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge deregisterHandler:[self k__createInternalAd]];
+    [bridge deregisterHandler:[self k__destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
@@ -170,8 +202,6 @@
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(nativeAd == nativeAd_, @"");
 
-    isAdLoaded_ = YES;
-
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [nativeAd unregisterView];
     [nativeAd registerViewForInteraction:nativeAdView_
@@ -186,13 +216,17 @@
         [[nativeAdView_ iconImage] setImage:image];
     }];
 
-    [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+    [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
     [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
-    [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
-    [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
                                         forState:UIControlStateNormal];
-    [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
+    [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
+    [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
+    [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+
+    isAdLoaded_ = YES;
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onLoaded]];
 }
 
 - (void)nativeAdWillLogImpression:(FBNativeAd*)nativeAd {
@@ -200,7 +234,9 @@
 }
 
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)nativeAdDidClick:(FBNativeAd*)nativeAd {

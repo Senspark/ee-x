@@ -50,7 +50,16 @@ protected:
 
     explicit NativeAd(FacebookAds* plugin, const std::string& adId);
 
+    bool createInternalAd();
+    bool destroyInternalAd();
+
 private:
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+
+    bool attempted_;
+    bool loading_;
+
     std::string adId_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;

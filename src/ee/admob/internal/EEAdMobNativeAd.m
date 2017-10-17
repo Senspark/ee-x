@@ -194,8 +194,8 @@
     NSAssert(adLoader_ == adLoader, @"");
 
     GADNativeAppInstallAdView* adView =
-        [[[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
-            firstObject] autorelease];
+        [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
+            firstObject];
     [self setAdView:adView];
 
     // Associate the app install ad view with the app install ad object. This is

@@ -99,8 +99,8 @@
 - (void)createView {
     NSAssert(nativeAdView_ == nil, @"");
     EEFacebookNativeAdView* adView =
-        [[[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
-            firstObject] autorelease];
+        [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
+            firstObject];
     [adView setHidden:YES];
     [[adView adchoicesView] setCorner:UIRectCornerTopRight];
 

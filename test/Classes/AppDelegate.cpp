@@ -140,6 +140,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testVungle();
     // testMultiAds();
     // testFacebookInterstitialAd();
+    testFacebookNativeAd();
 
     cocos2d::log("Create scene");
     auto scene = cocos2d::Scene::create();

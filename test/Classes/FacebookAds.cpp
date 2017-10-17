@@ -68,11 +68,14 @@ void testFacebookNativeAd() {
         getLogger().info("Create Facebook native ad");
         nativeAd = createFacebookNativeAd();
         nativeAd->setVisible(true);
-        nativeAd->load();
     });
 
     float delay = 0.0f;
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 5.0f, [nativeAd] {
+        ee::runOnUiThread([nativeAd] { nativeAd->load(); });
+    });
+
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
         ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
             getLogger().info("Resize = screen size / 4");
             nativeAd->setPosition(3 * screenWidth / 8, 3 * screenHeight / 8);
@@ -80,14 +83,14 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [nativeAd] {
         ee::runOnUiThread([nativeAd] {
             getLogger().info("Move to top-left");
             nativeAd->setPosition(0, 0);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, nativeAd] {
         ee::runOnUiThread([screenWidth, nativeAd] {
             getLogger().info("Move to top-right");
             int width, height;
@@ -96,7 +99,7 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
         ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
             getLogger().info("Move to bottom-right");
             int width, height;
@@ -105,7 +108,7 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenHeight, nativeAd] {
         ee::runOnUiThread([screenHeight, nativeAd] {
             getLogger().info("Move to bottom-left");
             int width, height;
@@ -114,7 +117,7 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
         ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
             getLogger().info("Move to center");
             int width, height;
@@ -124,7 +127,7 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
         ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
             getLogger().info("Resize = screen size");
             nativeAd->setPosition(0, 0);
@@ -132,7 +135,7 @@ void testFacebookNativeAd() {
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
         ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
             getLogger().info("Resize = screen size / 2");
             nativeAd->setPosition(screenWidth / 4, screenHeight / 4);

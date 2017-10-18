@@ -159,6 +159,8 @@ Pod::Spec.new do |spec|
     s.public_header_files =
       'src/ee/Ads.hpp',
       'src/ee/ads/*'
+
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'admob' do |s|

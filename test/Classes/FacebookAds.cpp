@@ -62,12 +62,14 @@ void testFacebookNativeAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    std::shared_ptr<ee::AdViewInterface> nativeAd;
-    ee::runOnUiThreadAndWait([&nativeAd] {
-        getLogger().info("Create Facebook native ad");
-        nativeAd = createFacebookNativeAd();
-        nativeAd->setVisible(true);
-    });
+    auto nativeAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
+            [] {
+                getLogger().info("Create Facebook native ad");
+                auto ad = createFacebookNativeAd();
+                ad->setVisible(true);
+                return ad;
+            });
 
     float delay = 0.0f;
     scheduleForever(delay += 1.0f, 5.0f, [nativeAd] {

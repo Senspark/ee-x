@@ -10,25 +10,27 @@
 #define EE_X_UTILS_HPP
 
 #include <functional>
+#include <future>
 #include <memory>
 #include <string>
 
 namespace ee {
 namespace core {
-using Runnable = std::function<void()>;
+template <class T>
+using Runnable = std::function<T()>;
 
 /// Runs the specified runnable on the main thread.
-void runOnUiThread(const Runnable& runnable);
+void runOnUiThread(const Runnable<void>& runnable);
 
-/// Runs the specified runnable on the main thread and wait for it to finish.
-void runOnUiThreadAndWait(const Runnable& runnable);
+void runOnUiThreadAndWait(const Runnable<void>& runnable);
 
 template <class T>
-T runOnUiThreadAndWaitResult(const std::function<T()>& runnable) {
-    std::unique_ptr<T> result;
-    runOnUiThreadAndWait(
-        [runnable, result] { result.reset(new T(runnable())); });
-    return *result;
+T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
+    std::promise<T> promise;
+    runOnUiThread([runnable, &promise] { // Fix clang-format.
+        promise.set_value(runnable());
+    });
+    return promise.get_future().get();
 }
 
 std::string toString(bool value);
@@ -37,6 +39,7 @@ bool toBool(const std::string& value);
 
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
+using core::runOnUiThreadAndWaitResult;
 } // namespace ee
 
 #endif /* EE_X_UTILS_HPP */

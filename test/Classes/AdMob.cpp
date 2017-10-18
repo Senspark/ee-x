@@ -24,6 +24,8 @@ ee::AdMob* getAdMob() {
             plugin.addTestDevice(plugin.getEmulatorTestDeviceHash());
             plugin.addTestDevice(
                 "930A5959F4325BAA45E24449B03CB221"); // BlueStacks
+            plugin.addTestDevice(
+                "137E2FB99476DB666A99FC3C9F585D65"); // Nexus 5.
         });
         initialized = true;
     }
@@ -38,23 +40,32 @@ std::string getAdMobRewardedVideoId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
+std::string getAdMobNativeAdId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-2101587572072038/1175956700";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2247696110";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
 void testAdMobBannerAd() {
     auto&& frameSize =
         cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    std::shared_ptr<ee::AdViewInterface> bannerAd;
-
-    ee::runOnUiThreadAndWait([&bannerAd] {
-        getLogger().info("Create AdMob banner ad begin");
-        bannerAd =
-            getAdMob()->createBannerAd("ca-app-pub-3940256099942544/6300978111",
-                                       ee::AdMobBannerAdSize::Normal);
-        bannerAd->load();
-        bannerAd->setVisible(false);
-        getLogger().info("Create AdMob banner ad end");
-    });
+    auto bannerAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
+            [] {
+                getLogger().info("Create AdMob banner ad begin");
+                auto ad = getAdMob()->createBannerAd(
+                    "ca-app-pub-3940256099942544/6300978111",
+                    ee::AdMobBannerAdSize::Normal);
+                ad->load();
+                ad->setVisible(false);
+                getLogger().info("Create AdMob banner ad end");
+                return ad;
+            });
 
     float delay = 0.0f;
     scheduleOnce(delay += 2.0f, [screenWidth, screenHeight, bannerAd] {
@@ -110,25 +121,27 @@ void testAdMobNativeAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    std::shared_ptr<ee::AdViewInterface> nativeAd;
-
-    ee::runOnUiThreadAndWait([&nativeAd] {
-        getLogger().info("Create AdMob native ad begin");
-        nativeAd = getAdMob()->createNativeAd(
-            "ca-app-pub-3940256099942544/2247696110", "admob_native_spin",
-            ee::AdMobNativeAdLayout()
-                .setBody("ad_body")
-                .setCallToAction("ad_call_to_action")
-                .setHeadline("ad_headline")
-                .setIcon("ad_icon")
-                .setImage("ad_image")
-                .setMedia("ad_media")
-                .setPrice("ad_price")
-                .setStarRating("ad_star_rating")
-                .setStore("ad_store"));
-        nativeAd->setVisible(true);
-        getLogger().info("Create AdMob native ad end");
-    });
+    auto nativeAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
+            [] {
+                getLogger().info("Create AdMob native ad begin");
+                auto ad = getAdMob()->createNativeAd(
+                    getAdMobNativeAdId(), "admob_native_spin",
+                    ee::AdMobNativeAdLayout()
+                        .setBody("ad_body")
+                        .setCallToAction("ad_call_to_action")
+                        .setHeadline("ad_headline")
+                        .setIcon("ad_icon")
+                        .setImage("ad_image")
+                        .setMedia("ad_media")
+                        .setPrice("ad_price")
+                        .setStarRating("ad_star_rating")
+                        .setStore("ad_store"));
+                ad->setVisible(true);
+                ad->setSize(600, 100);
+                getLogger().info("Create AdMob native ad end");
+                return ad;
+            });
 
     float delay = 0.0f;
     scheduleForever(delay + 1.0f, 4.0f, [nativeAd] {
@@ -208,13 +221,13 @@ void testAdMobNativeAd() {
 }
 
 void testAdMobInterstitial() {
-    std::shared_ptr<ee::InterstitialAdInterface> interstitialAd;
-
-    ee::runOnUiThreadAndWait([&interstitialAd] {
+    auto interstitialAd = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::InterstitialAdInterface>>([] {
         getLogger().info("Create AdMob interstitial ad begin");
-        interstitialAd = getAdMob()->createInterstitialAd(
+        auto ad = getAdMob()->createInterstitialAd(
             "ca-app-pub-3940256099942544/1033173712");
         getLogger().info("Create AdMob interstitial ad end");
+        return ad;
     });
 
     scheduleForever(1.0f, 3.0f, [interstitialAd] {
@@ -232,13 +245,12 @@ void testAdMobInterstitial() {
 }
 
 void testAdMobRewardedVideo() {
-    std::shared_ptr<ee::RewardedVideoInterface> rewardedVideo;
-
-    ee::runOnUiThreadAndWait([&rewardedVideo] {
+    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::RewardedVideoInterface>>([] {
         getLogger().info("Create AdMob rewarded video begin");
-        rewardedVideo =
-            getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
+        auto ad = getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
         getLogger().info("Create AdMob rewarded video end");
+        return ad;
     });
 
     scheduleForever(1.0f, 3.0f, [rewardedVideo] {

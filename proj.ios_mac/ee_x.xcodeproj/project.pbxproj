@@ -243,6 +243,7 @@
 		6F98F3E01F905ADD003C2A04 /* AdMobRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3DE1F905ADD003C2A04 /* AdMobRewardedVideo.hpp */; };
 		6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */; };
 		6F98F3E41F906376003C2A04 /* AdMobBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */; };
+		6F9E730B1F972FAC00EE467B /* Utils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */; };
 		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
 		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
 		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
@@ -697,6 +698,7 @@
 		6F98F3DE1F905ADD003C2A04 /* AdMobRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobRewardedVideo.hpp; path = admob/internal/AdMobRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookBannerAdSize.hpp; path = facebook/FacebookBannerAdSize.hpp; sourceTree = "<group>"; };
 		6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobBannerAdSize.hpp; path = admob/AdMobBannerAdSize.hpp; sourceTree = "<group>"; };
+		6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Utils_iOS.mm; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -1155,6 +1157,7 @@
 				6F43A2331EC19F3100C68152 /* MessageBridge.cpp */,
 				6F43A2341EC19F3100C68152 /* MessageBridge.hpp */,
 				6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */,
+				6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */,
 			);
 			path = internal;
 			sourceTree = "<group>";
@@ -2313,6 +2316,7 @@
 				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
 				6F426C991F872F84009E202A /* Metrics.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
+				6F9E730B1F972FAC00EE467B /* Utils_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

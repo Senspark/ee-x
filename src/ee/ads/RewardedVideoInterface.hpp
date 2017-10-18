@@ -12,6 +12,8 @@
 #include <functional>
 #include <string>
 
+#include "ee/AdsFwd.hpp"
+
 namespace ee {
 namespace ads {
 using RewardedVideoCallback = std::function<void(bool result)>;
@@ -36,8 +38,6 @@ private:
     RewardedVideoCallback callback_;
 };
 } // namespace ads
-
-using ads::RewardedVideoInterface;
 } // namespace ee
 
 #endif /* EE_X_REWARDED_VIDEO_INTERFACE_HPP */

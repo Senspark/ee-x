@@ -12,6 +12,8 @@
 #include <functional>
 #include <string>
 
+#include "ee/AdsFwd.hpp"
+
 namespace ee {
 namespace ads {
 using InterstitialAdCallback = std::function<void()>;
@@ -36,8 +38,6 @@ private:
     InterstitialAdCallback callback_;
 };
 } // namespace ads
-
-using ads::InterstitialAdInterface;
 } // namespace ee
 
 #endif /* EE_X_INTERSTITIAL_AD_INTERFACE_HPP */

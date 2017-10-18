@@ -244,6 +244,9 @@
 		6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */; };
 		6F98F3E41F906376003C2A04 /* AdMobBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */; };
 		6F9E730B1F972FAC00EE467B /* Utils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */; };
+		6F9E73201F97422A00EE467B /* AdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E731F1F97422A00EE467B /* AdsFwd.hpp */; };
+		6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E73211F97430B00EE467B /* MultiAdView.cpp */; };
+		6F9E73241F97430B00EE467B /* MultiAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E73221F97430B00EE467B /* MultiAdView.hpp */; };
 		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
 		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
 		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
@@ -699,6 +702,9 @@
 		6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookBannerAdSize.hpp; path = facebook/FacebookBannerAdSize.hpp; sourceTree = "<group>"; };
 		6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobBannerAdSize.hpp; path = admob/AdMobBannerAdSize.hpp; sourceTree = "<group>"; };
 		6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Utils_iOS.mm; sourceTree = "<group>"; };
+		6F9E731F1F97422A00EE467B /* AdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdsFwd.hpp; sourceTree = "<group>"; };
+		6F9E73211F97430B00EE467B /* MultiAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiAdView.cpp; path = ads/MultiAdView.cpp; sourceTree = "<group>"; };
+		6F9E73221F97430B00EE467B /* MultiAdView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiAdView.hpp; path = ads/MultiAdView.hpp; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -1046,12 +1052,14 @@
 		6F3688481F86135600AE2D93 /* ads */ = {
 			isa = PBXGroup;
 			children = (
-				6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */,
-				6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */,
 				6F426D331F87822A009E202A /* AdViewInterface.cpp */,
 				6F426D341F87822A009E202A /* AdViewInterface.hpp */,
 				6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */,
 				6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */,
+				6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */,
+				6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */,
+				6F9E73211F97430B00EE467B /* MultiAdView.cpp */,
+				6F9E73221F97430B00EE467B /* MultiAdView.hpp */,
 				6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */,
 				6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */,
 				6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */,
@@ -1097,6 +1105,7 @@
 				6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */,
 				6F43A2961EC19F3100C68152 /* notification */,
 				6F2479C81F8DF482009E702C /* Ads.hpp */,
+				6F9E731F1F97422A00EE467B /* AdsFwd.hpp */,
 				6F3688481F86135600AE2D93 /* ads */,
 				6FDD659B1F94975000BAEA66 /* AdMob.hpp */,
 				6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */,
@@ -1535,7 +1544,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F9E73241F97430B00EE467B /* MultiAdView.hpp in Headers */,
 				6F04C5CD1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp in Headers */,
+				6F9E73201F97422A00EE467B /* AdsFwd.hpp in Headers */,
 				6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */,
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
 				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
@@ -2378,6 +2389,7 @@
 				6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */,
 				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
 				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
+				6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */,
 				6F04C5CC1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp in Sources */,
 				6FF6B57A1F8F492900A27634 /* EEAdViewHelper.m in Sources */,
 				6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */,

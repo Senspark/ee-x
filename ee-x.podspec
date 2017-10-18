@@ -153,11 +153,13 @@ Pod::Spec.new do |spec|
   spec.subspec 'ads' do |s|
     s.source_files =
       'src/ee/Ads.hpp',
+      'src/ee/AdsFwd.hpp',
       'src/ee/ads/*',
       'src/ee/ads/internal/*'
 
     s.public_header_files =
       'src/ee/Ads.hpp',
+      'src/ee/AdsFwd.hpp',
       'src/ee/ads/*'
 
     s.dependency 'ee-x/core'

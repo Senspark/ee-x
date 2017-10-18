@@ -6,17 +6,19 @@
 //
 //
 
-#ifndef EE_X_ADS_VIEW_INTERFACE_HPP
-#define EE_X_ADS_VIEW_INTERFACE_HPP
+#ifndef EE_X_AD_VIEW_INTERFACE_HPP
+#define EE_X_AD_VIEW_INTERFACE_HPP
 
 #include <string>
 #include <utility>
+
+#include "ee/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {
 class AdViewInterface {
 public:
-    explicit AdViewInterface();
+    AdViewInterface();
 
     virtual ~AdViewInterface();
 
@@ -43,8 +45,6 @@ public:
     virtual void setVisible(bool visible) = 0;
 };
 } // namespace ads
-
-using ads::AdViewInterface;
 } // namespace ee
 
-#endif /* EE_X_ADS_VIEW_INTERFACE_HPP */
+#endif /* EE_X_AD_VIEW_INTERFACE_HPP */

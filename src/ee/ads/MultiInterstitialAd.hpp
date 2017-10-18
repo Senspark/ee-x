@@ -40,8 +40,6 @@ private:
     std::vector<std::shared_ptr<InterstitialAdInterface>> items_;
 };
 } // namespace ads
-
-using ads::MultiInterstitialAd;
 } // namespace ee
 
 #endif /* EE_X_MULTI_INTERSTITIAL_AD_HPP */

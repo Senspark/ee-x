@@ -22,11 +22,17 @@
    
   - [Storage](#firebase-storage)
 
+- [AdMob](#admob) [SDK](https://developers.google.com/admob/)
+
+- [AppLovin](#applovin)
+
 - [Facebook Ads](#facebook-ads) [SDK](https://developers.facebook.com/docs/audience-network/getting-started)
+
+- [ironSource](#ironsource) [SDK](http://developers.ironsrc.com/ironsource-mobile/android/android-sdk)
 
 - [Unity Ads](#unity-ads) [SDK](https://github.com/Unity-Technologies)
 
-- [ironSource](#ironsource) [SDK](http://developers.ironsrc.com/ironsource-mobile/android/android-sdk)
+- [Vungle](#vungle)
 
 ## Getting started
 
@@ -551,6 +557,114 @@ dependencies {
 pod 'ee-x/firebase-storage', :git => 'https://github.com/Senspark/ee-x'
 ```
 
+## AppLovin
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_applovin_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-applovin'
+project(`:ee-x-applovin').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-applovin')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+	compile project(':ee-x-applovin')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.applovin.AppLovin;
+
+public class AppActivity extends Cocos2dxActivity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		PluginManager.getInstance().addPlugin(new AppLovin(this));
+	}
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/applovin', :git => 'https://github.com/Senspark/ee-x'
+```
+
+#### Sample
+
+- See `AppLovin.cpp` and `AppLovin.hpp` in test project.
+
+## AdMob
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_admob_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-admob'
+project(`:ee-x-admob').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-admob')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+	compile project(':ee-x-admob')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.admob.AdMob;
+
+public class AppActivity extends Cocos2dxActivity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		PluginManager.getInstance().addPlugin(new AdMob(this));
+	}
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/admob', :git => 'https://github.com/Senspark/ee-x'
+```
+
+#### Sample
+
+- See `AdMob.cpp` and `AdMob.hpp` in test project.
+
 ## Facebook Ads
 
 [Go to top](#modules)
@@ -600,6 +714,64 @@ public class AppActivity extends Cocos2dxActivity {
 ```
 pod 'ee-x/facebook-ads', :git => 'https://github.com/Senspark/ee-x'
 ```
+
+#### Sample
+
+- See `FacebookAds.cpp` and `FacebookAds.hpp` in test project.
+
+## ironSource
+
+[Go to top](#modules)
+
+- Supported platforms: Android, iOS.
+
+#### Android
+
+- Modify `Android.mk`:
+
+```
+LOCAL_STATIC_LIBRARIES += ee_x_ironsource_static
+```
+
+- Modify `settings.gradle`:
+
+```
+include ':ee-x-ironsource'
+project(':ee-x-ironsource').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-ironsource')
+```
+
+- Modify `build.gradle`:
+
+```
+dependencies {
+    compile project(':ee-x-ironsource')
+}
+```
+
+- Modify `AppActivity.java`:
+
+```
+import com.ee.ironsource.IronSource;
+
+public class AppActivity extends Cocos2dxActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new IronSource(this));
+    }
+}
+```
+
+#### iOS
+
+- Modify `Podfile`:
+
+```
+pod 'ee-x/ironsource', :git => 'https://github.com/Senspark/ee-x'
+```
+
+#### Sample
+
+- See `IronSource.cpp` and `IronSource.hpp` in test project.
 
 ## Unity Ads
 
@@ -651,7 +823,11 @@ public class AppActivity extends Cocos2dxActivity {
 pod 'ee-x/unity-ads', :git => 'https://github.com/Senspark/ee-x'
 ```
 
-## ironSource
+#### Sample
+
+- See `UnityAds.cpp` and `UnityAds.hpp` in test project.
+
+## Vungle
 
 [Go to top](#modules)
 
@@ -662,33 +838,33 @@ pod 'ee-x/unity-ads', :git => 'https://github.com/Senspark/ee-x'
 - Modify `Android.mk`:
 
 ```
-LOCAL_STATIC_LIBRARIES += ee_x_ironsrc_static
+LOCAL_STATIC_LIBRARIES += ee_x_vungle_ads_static
 ```
 
 - Modify `settings.gradle`:
 
 ```
-include ':ee-x-ironsrc'
-project(':ee-x-ironsrc').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-ironsrc')
+include ':ee-x-vungle'
+project(':ee-x-vungle').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-vungle')
 ```
 
 - Modify `build.gradle`:
 
 ```
 dependencies {
-    compile project(':ee-x-ironsrc')
+    compile project(':ee-x-vungle')
 }
 ```
 
 - Modify `AppActivity.java`:
 
 ```
-import com.ee.ironsrc.IronSrc;
+import com.ee.vungle.Vungle;
 
 public class AppActivity extends Cocos2dxActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PluginManager.getInstance().addPlugin(new IronSrc(this));
+        PluginManager.getInstance().addPlugin(new Vungle(this));
     }
 }
 ```
@@ -698,5 +874,9 @@ public class AppActivity extends Cocos2dxActivity {
 - Modify `Podfile`:
 
 ```
-pod 'ee-x/ironsrc', :git => 'https://github.com/Senspark/ee-x'
+pod 'ee-x/vungle', :git => 'https://github.com/Senspark/ee-x'
 ```
+
+#### Sample
+
+- See `Vungle.cpp` and `Vungle.hpp` in test project.

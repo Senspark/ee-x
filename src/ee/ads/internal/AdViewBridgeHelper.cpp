@@ -42,8 +42,8 @@ void Self::setAnchor(float x, float y) {
     std::tie(width, height) = getSize();
     int positionX, positionY;
     std::tie(positionX, positionY) = getPositionTopLeft();
-    setPositionTopLeft(positionX + (x - anchorX_) * width,
-                       positionY + (y - anchorY_) * height);
+    setPositionTopLeft(positionX - (x - anchorX_) * width,
+                       positionY - (y - anchorY_) * height);
     anchorX_ = x;
     anchorY_ = y;
 }

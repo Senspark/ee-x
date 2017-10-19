@@ -17,8 +17,12 @@ void runOnUiThread(const Runnable<void>& runnable) {
     if ([NSThread isMainThread]) {
         runnable();
     } else {
+        // Capture lambda into Objective-C block.
+        struct {
+            Runnable<void> runnable;
+        } lambda{runnable};
         dispatch_async(dispatch_get_main_queue(), ^{
-            runnable();
+            lambda.runnable();
         });
     }
 }

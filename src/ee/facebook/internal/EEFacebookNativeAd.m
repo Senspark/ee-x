@@ -122,6 +122,7 @@
         return NO;
     }
     isAdLoaded_ = NO;
+    [nativeAd_ setDelegate:nil];
     [nativeAd_ unregisterView];
     [nativeAd_ release];
     nativeAd_ = nil;

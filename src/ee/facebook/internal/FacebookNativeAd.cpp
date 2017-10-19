@@ -94,6 +94,7 @@ void Self::load() {
         destroyInternalAd();
         createInternalAd();
     }
+    loading_ = true;
     attempted_ = true;
     bridgeHelper_.load();
 }

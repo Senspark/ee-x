@@ -23,7 +23,7 @@ public class Utils {
 
     @SuppressWarnings("unused")
     public static void runOnUiThread() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
+        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
             signal();
         } else {
             Handler handler = new Handler(Looper.getMainLooper());
@@ -37,7 +37,7 @@ public class Utils {
     }
 
     public static void checkMainThread() {
-        if (Looper.getMainLooper() != Looper.myLooper()) {
+        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
             _logger.error("Current thread is not the main thread");
             assert false;
         }

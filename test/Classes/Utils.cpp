@@ -42,6 +42,6 @@ std::string getCurrentThreadId() {
 }
 
 void logCurrentThread() {
-    getLogger().info("Current thread ID: ", getCurrentThreadId());
+    getLogger().info("Current thread ID: ", getCurrentThreadId());
 }
 } // namespace eetest

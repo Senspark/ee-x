@@ -164,33 +164,23 @@
 }
 
 - (CGPoint)getPosition {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGPoint position = [nativeAdView_ frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
+    return [EEAdViewHelper getPosition:nativeAdView_];
 }
 
 - (void)setPosition:(CGPoint)position {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [nativeAdView_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
-    [nativeAdView_ setFrame:frame];
+    [EEAdViewHelper setPosition:position for:nativeAdView_];
 }
 
 - (CGSize)getSize {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGSize size = [nativeAdView_ frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
+    return [EEAdViewHelper getSize:nativeAdView_];
 }
 
 - (void)setSize:(CGSize)size {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [nativeAdView_ frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
-    [nativeAdView_ setFrame:frame];
+    [EEAdViewHelper setSize:size for:nativeAdView_];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [nativeAdView_ setHidden:!visible];
+    [EEAdViewHelper setVisible:visible for:nativeAdView_];
     if (visible) {
         for (UIView* subView in [nativeAdView_ subviews]) {
             [subView setNeedsDisplay];

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.ee.ads.AdViewHelper;
@@ -135,45 +134,28 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     @NonNull
     @Override
     public Point getPosition() {
-        Utils.checkMainThread();
-        int p[] = new int[2];
-        _adView.getLocationInWindow(p);
-        return new Point(p[0], p[1]);
+        return AdViewHelper.getPosition(_adView);
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
-        params.leftMargin = position.x;
-        params.topMargin = position.y;
-        _adView.setLayoutParams(params);
+        AdViewHelper.setPosition(position, _adView);
     }
 
     @NonNull
     @Override
     public Point getSize() {
-        Utils.checkMainThread();
-        return new Point(_adView.getWidth(), _adView.getHeight());
+        return AdViewHelper.getSize(_adView);
     }
 
     @Override
     public void setSize(@NonNull Point size) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _adView.getLayoutParams();
-        params.width = size.x;
-        params.height = size.y;
-        _adView.setLayoutParams(params);
+        AdViewHelper.setSize(size, _adView);
     }
 
     @Override
     public void setVisible(boolean visible) {
-        Utils.checkMainThread();
-        if (visible) {
-            _adView.setVisibility(View.VISIBLE);
-        } else {
-            _adView.setVisibility(View.INVISIBLE);
-        }
+        AdViewHelper.setVisible(visible, _adView);
     }
 
     @Override

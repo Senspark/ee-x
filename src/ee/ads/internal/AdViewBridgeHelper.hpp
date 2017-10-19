@@ -27,6 +27,12 @@ public:
     virtual void load() override;
 
     /// @see Super.
+    virtual std::pair<float, float> getAnchor() const override;
+
+    /// @see Super.
+    virtual void setAnchor(float x, float y) override;
+
+    /// @see Super.
     virtual std::pair<int, int> getPosition() const override;
 
     /// @see Super.
@@ -42,6 +48,12 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
+    std::pair<int, int> getPositionTopLeft() const;
+
+    void setPositionTopLeft(int x, int y);
+
+    float anchorX_;
+    float anchorY_;
     AdViewHelper helper_;
 };
 } // namespace ads

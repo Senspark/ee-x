@@ -70,6 +70,14 @@ void Self::load() {
     bridgeHelper_.load();
 }
 
+std::pair<float, float> Self::getAnchor() const {
+    return bridgeHelper_.getAnchor();
+}
+
+void Self::setAnchor(float x, float y) {
+    bridgeHelper_.setAnchor(x, y);
+}
+
 std::pair<int, int> Self::getPosition() const {
     return bridgeHelper_.getPosition();
 }

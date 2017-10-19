@@ -187,46 +187,28 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     @NonNull
     @Override
     public Point getPosition() {
-        Utils.checkMainThread();
-        int p[] = new int[2];
-        _nativeAdPlaceholder.getLocationInWindow(p);
-        return new Point(p[0], p[1]);
+        return AdViewHelper.getPosition(_nativeAdPlaceholder);
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params =
-            (FrameLayout.LayoutParams) _nativeAdPlaceholder.getLayoutParams();
-        params.leftMargin = position.x;
-        params.topMargin = position.y;
-        _nativeAdPlaceholder.setLayoutParams(params);
+        AdViewHelper.setPosition(position, _nativeAdPlaceholder);
     }
 
     @NonNull
     @Override
     public Point getSize() {
-        Utils.checkMainThread();
-        return new Point(_nativeAdPlaceholder.getWidth(), _nativeAdPlaceholder.getHeight());
+        return AdViewHelper.getSize(_nativeAdPlaceholder);
     }
 
     @Override
     public void setSize(@NonNull Point size) {
-        Utils.checkMainThread();
-        ViewGroup.LayoutParams params = _nativeAdPlaceholder.getLayoutParams();
-        params.width = size.x;
-        params.height = size.y;
-        _nativeAdPlaceholder.setLayoutParams(params);
+        AdViewHelper.setSize(size, _nativeAdPlaceholder);
     }
 
     @Override
     public void setVisible(boolean visible) {
-        Utils.checkMainThread();
-        if (visible) {
-            _nativeAdPlaceholder.setVisibility(View.VISIBLE);
-        } else {
-            _nativeAdPlaceholder.setVisibility(View.INVISIBLE);
-        }
+        AdViewHelper.setVisible(visible, _nativeAdPlaceholder);
     }
 
     private int getIdentifier(@NonNull String identifier) {

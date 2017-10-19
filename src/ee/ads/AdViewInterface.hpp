@@ -27,6 +27,10 @@ public:
 
     virtual void load() = 0;
 
+    virtual std::pair<float, float> getAnchor() const = 0;
+
+    virtual void setAnchor(float x, float y) = 0;
+
     virtual std::pair<int, int> getPosition() const = 0;
 
     /// Moves this ad view to the specified position.

@@ -2,10 +2,13 @@ package com.ee.ads;
 
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
+import com.ee.core.internal.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -150,5 +153,50 @@ public class AdViewHelper {
         bridge.deregisterHandler(k__getSize());
         bridge.deregisterHandler(k__setSize());
         bridge.deregisterHandler(k__setVisible());
+    }
+
+    @NonNull
+    public static Point getPosition(@NonNull View view) {
+        Utils.checkMainThread();
+        /*
+        int p[] = new int[2];
+        view.getLocationInWindow(p);
+        return new Point(p[0], p[1]);
+        */
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+        return new Point(params.leftMargin, params.topMargin);
+    }
+
+    public static void setPosition(@NonNull Point position, @NonNull View view) {
+        Utils.checkMainThread();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+        params.leftMargin = position.x;
+        params.topMargin = position.y;
+        view.setLayoutParams(params);
+    }
+
+    @NonNull
+    public static Point getSize(@NonNull View view) {
+        Utils.checkMainThread();
+        // return new Point(view.getWidth(), view.getHeight());
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+        return new Point(params.width, params.height);
+    }
+
+    public static void setSize(@NonNull Point size, @NonNull View view) {
+        Utils.checkMainThread();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+        params.width = size.x;
+        params.height = size.y;
+        view.setLayoutParams(params);
+    }
+
+    public static void setVisible(boolean visible, @NonNull View view) {
+        Utils.checkMainThread();
+        if (visible) {
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 }

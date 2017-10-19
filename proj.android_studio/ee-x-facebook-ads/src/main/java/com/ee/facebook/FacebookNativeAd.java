@@ -200,50 +200,31 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         _nativeAd.loadAd();
     }
 
-    @Override
     @NonNull
+    @Override
     public Point getPosition() {
-        Utils.checkMainThread();
-        int p[] = new int[2];
-        _nativeAdView.getLocationInWindow(p);
-        return new Point(p[0], p[1]);
+        return AdViewHelper.getPosition(_nativeAdView);
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params =
-            (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
-        params.leftMargin = position.x;
-        params.topMargin = position.y;
-        _nativeAdView.setLayoutParams(params);
+        AdViewHelper.setPosition(position, _nativeAdView);
     }
 
-    @Override
     @NonNull
+    @Override
     public Point getSize() {
-        Utils.checkMainThread();
-        return new Point(_nativeAdView.getWidth(), _nativeAdView.getHeight());
+        return AdViewHelper.getSize(_nativeAdView);
     }
 
     @Override
     public void setSize(@NonNull Point size) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params =
-            (FrameLayout.LayoutParams) _nativeAdView.getLayoutParams();
-        params.width = size.x;
-        params.height = size.y;
-        _nativeAdView.setLayoutParams(params);
+        AdViewHelper.setSize(size, _nativeAdView);
     }
 
     @Override
     public void setVisible(boolean visible) {
-        Utils.checkMainThread();
-        if (visible) {
-            _nativeAdView.setVisibility(View.VISIBLE);
-        } else {
-            _nativeAdView.setVisibility(View.INVISIBLE);
-        }
+        AdViewHelper.setVisible(visible, _nativeAdView);
     }
 
     private int getIdentifier(@NonNull String identifier) {

@@ -19,4 +19,10 @@
 - (void)registerHandlers:(id<EEAdViewInterface> _Nonnull)adView;
 - (void)deregisterHandlers;
 
++ (CGPoint)getPosition:(UIView* _Nonnull)view;
++ (void)setPosition:(CGPoint)position for:(UIView* _Nonnull)view;
++ (CGSize)getSize:(UIView* _Nonnull)view;
++ (void)setSize:(CGSize)size for:(UIView* _Nonnull)view;
++ (void)setVisible:(BOOL)visible for:(UIView* _Nonnull)view;
+
 @end

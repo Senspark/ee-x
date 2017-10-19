@@ -40,31 +40,31 @@
     [super dealloc];
 }
 
-- (NSString*)k__isLoaded {
+- (NSString* _Nonnull)k__isLoaded {
     return [NSString stringWithFormat:@"%@_isLoaded_%@", prefix_, adId_];
 }
 
-- (NSString*)k__load {
+- (NSString* _Nonnull)k__load {
     return [NSString stringWithFormat:@"%@_load_%@", prefix_, adId_];
 }
 
-- (NSString*)k__getPosition {
+- (NSString* _Nonnull)k__getPosition {
     return [NSString stringWithFormat:@"%@_getPosition_%@", prefix_, adId_];
 }
 
-- (NSString*)k__setPosition {
+- (NSString* _Nonnull)k__setPosition {
     return [NSString stringWithFormat:@"%@_setPosition_%@", prefix_, adId_];
 }
 
-- (NSString*)k__getSize {
+- (NSString* _Nonnull)k__getSize {
     return [NSString stringWithFormat:@"%@_getSize_%@", prefix_, adId_];
 }
 
-- (NSString*)k__setSize {
+- (NSString* _Nonnull)k__setSize {
     return [NSString stringWithFormat:@"%@_setSize_%@", prefix_, adId_];
 }
 
-- (NSString*)k__setVisible {
+- (NSString* _Nonnull)k__setVisible {
     return [NSString stringWithFormat:@"%@_setVisible_%@", prefix_, adId_];
 }
 
@@ -139,6 +139,36 @@
     [bridge deregisterHandler:[self k__getSize]];
     [bridge deregisterHandler:[self k__setSize]];
     [bridge deregisterHandler:[self k__setVisible]];
+}
+
++ (CGPoint)getPosition:(UIView* _Nonnull)view {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGPoint position = [view frame].origin;
+    return CGPointMake(position.x * scale, position.y * scale);
+}
+
++ (void)setPosition:(CGPoint)position for:(UIView* _Nonnull)view {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGRect frame = [view frame];
+    frame.origin = CGPointMake(position.x / scale, position.y / scale);
+    [view setFrame:frame];
+}
+
++ (CGSize)getSize:(UIView* _Nonnull)view {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGSize size = [view frame].size;
+    return CGSizeMake(size.width * scale, size.height * scale);
+}
+
++ (void)setSize:(CGSize)size for:(UIView* _Nonnull)view {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGRect frame = [view frame];
+    frame.size = CGSizeMake(size.width / scale, size.height / scale);
+    [view setFrame:frame];
+}
+
++ (void)setVisible:(BOOL)visible for:(UIView* _Nonnull)view {
+    [view setHidden:!visible];
 }
 
 @end

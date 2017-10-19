@@ -31,6 +31,12 @@ public:
     virtual void load() override;
 
     /// @see Super.
+    virtual std::pair<float, float> getAnchor() const override;
+
+    /// @see Super.
+    virtual void setAnchor(float x, float y) override;
+
+    /// @see Super.
     virtual std::pair<int, int> getPosition() const override;
 
     /// @see Super.

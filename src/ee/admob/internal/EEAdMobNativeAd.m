@@ -148,33 +148,23 @@
 }
 
 - (CGPoint)getPosition {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGPoint position = [nativeAdPlaceholder_ frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
+    return [EEAdViewHelper getPosition:nativeAdPlaceholder_];
 }
 
 - (void)setPosition:(CGPoint)position {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [nativeAdPlaceholder_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
-    [nativeAdPlaceholder_ setFrame:frame];
+    [EEAdViewHelper setPosition:position for:nativeAdPlaceholder_];
 }
 
 - (CGSize)getSize {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGSize size = [nativeAdPlaceholder_ frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
+    return [EEAdViewHelper getSize:nativeAdPlaceholder_];
 }
 
 - (void)setSize:(CGSize)size {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [nativeAdPlaceholder_ frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
-    [nativeAdPlaceholder_ setFrame:frame];
+    [EEAdViewHelper setSize:size for:nativeAdPlaceholder_];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [nativeAdPlaceholder_ setHidden:!visible];
+    [EEAdViewHelper setVisible:visible for:nativeAdPlaceholder_];
 }
 
 - (void)adLoader:(GADAdLoader*)adLoader

@@ -134,33 +134,23 @@
 }
 
 - (CGPoint)getPosition {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGPoint position = [bannerView_ frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
+    return [EEAdViewHelper getPosition:bannerView_];
 }
 
 - (void)setPosition:(CGPoint)position {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [bannerView_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
-    [bannerView_ setFrame:frame];
+    [EEAdViewHelper setPosition:position for:bannerView_];
 }
 
 - (CGSize)getSize {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGSize size = [bannerView_ frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
+    return [EEAdViewHelper getSize:bannerView_];
 }
 
 - (void)setSize:(CGSize)size {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [bannerView_ frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
-    [bannerView_ setFrame:frame];
+    [EEAdViewHelper setSize:size for:bannerView_];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [bannerView_ setHidden:!visible];
+    [EEAdViewHelper setVisible:visible for:bannerView_];
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView*)bannerView {

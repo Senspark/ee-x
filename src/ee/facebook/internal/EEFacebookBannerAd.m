@@ -119,33 +119,23 @@
 }
 
 - (CGPoint)getPosition {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGPoint position = [adView_ frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
+    return [EEAdViewHelper getPosition:adView_];
 }
 
 - (void)setPosition:(CGPoint)position {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [adView_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
-    [adView_ setFrame:frame];
+    [EEAdViewHelper setPosition:position for:adView_];
 }
 
 - (CGSize)getSize {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGSize size = [adView_ frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
+    return [EEAdViewHelper getSize:adView_];
 }
 
 - (void)setSize:(CGSize)size {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGRect frame = [adView_ frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
-    [adView_ setFrame:frame];
+    [EEAdViewHelper setSize:size for:adView_];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [adView_ setHidden:!visible];
+    [EEAdViewHelper setVisible:visible for:adView_];
 }
 
 - (void)adViewDidClick:(FBAdView*)adView {

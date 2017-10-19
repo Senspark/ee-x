@@ -17,7 +17,10 @@ namespace ads {
 using Self = AdViewBridgeHelper;
 
 Self::AdViewBridgeHelper(const AdViewHelper& helper)
-    : helper_(helper) {}
+    : helper_(helper) {
+    anchorX_ = 0.0f;
+    anchorY_ = 0.0f;
+}
 
 bool Self::isLoaded() const {
     auto&& bridge = core::MessageBridge::getInstance();
@@ -30,7 +33,40 @@ void Self::load() {
     auto response = bridge.call(helper_.k__load());
 }
 
+std::pair<float, float> Self::getAnchor() const {
+    return std::tie(anchorX_, anchorY_);
+}
+
+void Self::setAnchor(float x, float y) {
+    int width, height;
+    std::tie(width, height) = getSize();
+    int positionX, positionY;
+    std::tie(positionX, positionY) = getPositionTopLeft();
+    setPositionTopLeft(positionX + (x - anchorX_) * width,
+                       positionY + (y - anchorY_) * height);
+    anchorX_ = x;
+    anchorY_ = y;
+}
+
 std::pair<int, int> Self::getPosition() const {
+    int width, height;
+    std::tie(width, height) = getSize();
+    float anchorX, anchorY;
+    std::tie(anchorX, anchorY) = getAnchor();
+    int x, y;
+    std::tie(x, y) = getPositionTopLeft();
+    return std::make_pair(x + anchorX * width, y + anchorY * height);
+}
+
+void Self::setPosition(int x, int y) {
+    int width, height;
+    std::tie(width, height) = getSize();
+    float anchorX, anchorY;
+    std::tie(anchorX, anchorY) = getAnchor();
+    setPositionTopLeft(x - anchorX * width, y - anchorY * height);
+}
+
+std::pair<int, int> Self::getPositionTopLeft() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(helper_.k__getPosition());
     auto json = nlohmann::json::parse(response);
@@ -39,7 +75,7 @@ std::pair<int, int> Self::getPosition() const {
     return std::make_pair(x, y);
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPositionTopLeft(int x, int y) {
     nlohmann::json json;
     json["x"] = x;
     json["y"] = y;
@@ -58,6 +94,15 @@ std::pair<int, int> Self::getSize() const {
 }
 
 void Self::setSize(int width, int height) {
+    int currentWidth, currentHeight;
+    std::tie(currentWidth, currentHeight) = getSize();
+    float anchorX, anchorY;
+    std::tie(anchorX, anchorY) = getAnchor();
+    int x, y;
+    std::tie(x, y) = getPositionTopLeft();
+    setPositionTopLeft(x - (width - currentWidth) * anchorX,
+                       y - (height - currentHeight) * anchorY);
+
     nlohmann::json json;
     json["width"] = width;
     json["height"] = height;

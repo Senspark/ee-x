@@ -74,6 +74,14 @@
     [super dealloc];
 }
 
+- (NSString* _Nonnull)k__onLoaded {
+    return [@"FacebookBannerAd_onLoaded_" stringByAppendingString:adId_];
+}
+
+- (NSString* _Nonnull)k__onFailedToLoad {
+    return [@"FacebookBannerAd_onFailedToLoad_" stringByAppendingString:adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
 }
@@ -149,10 +157,16 @@
 - (void)adViewDidLoad:(FBAdView*)adView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     isLoaded_ = YES;
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onLoaded]];
 }
 
 - (void)adView:(FBAdView*)adView didFailWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adViewWillLogImpression:(FBAdView*)adView {

@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
+import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -66,6 +67,16 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
         _activity = null;
         _adId = null;
         _adSize = null;
+    }
+
+    @NonNull
+    private String k__onLoaded() {
+        return "FacebookBannerAd_onLoaded_" + _adId;
+    }
+
+    @NonNull
+    private String k__onFailedToLoad() {
+        return "FacebookBannerAd_onFailedToLoad_" + _adId;
     }
 
     private void registerHandlers() {
@@ -154,6 +165,9 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onAdLoaded: " + adError.getErrorMessage());
         Utils.checkMainThread();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
@@ -161,6 +175,9 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
         _isAdLoaded = true;
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onLoaded());
     }
 
     @Override

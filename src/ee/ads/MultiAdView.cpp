@@ -12,12 +12,27 @@ namespace ee {
 namespace ads {
 using Self = MultiAdView;
 
-Self::MultiAdView() {}
+Self::MultiAdView() {
+    anchor_ = std::make_pair(0, 0);
+    position_ = std::make_pair(0, 0);
+    size_ = std::make_pair(0, 0);
+    visible_ = false;
+}
 
 Self::~MultiAdView() {}
 
 Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
     items_.push_back(item);
+    item->setLoadCallback([this, item](bool result) {
+        if (result) {
+            if (activeItem_ == nullptr) {
+                activeItem_ = item;
+                if (visible_) {
+                    activeItem_->setVisible(visible_);
+                }
+            }
+        }
+    });
     return *this;
 }
 
@@ -38,15 +53,23 @@ void Self::load() {
     }
 }
 
-std::pair<int, int> Self::getPosition() const {
-    findActiveItem();
-    if (activeItem_) {
-        return activeItem_->getPosition();
+std::pair<float, float> Self::getAnchor() const {
+    return anchor_;
+}
+
+void Self::setAnchor(float x, float y) {
+    anchor_ = std::make_pair(x, y);
+    for (auto&& item : items_) {
+        item->setAnchor(x, y);
     }
-    return std::make_pair(0, 0);
+}
+
+std::pair<int, int> Self::getPosition() const {
+    return position_;
 }
 
 void Self::setPosition(int x, int y) {
+    position_ = std::make_pair(x, y);
     for (auto&& item : items_) {
         item->setPosition(x, y);
     }
@@ -57,10 +80,11 @@ std::pair<int, int> Self::getSize() const {
     if (activeItem_) {
         return activeItem_->getSize();
     }
-    return std::make_pair(0, 0);
+    return size_;
 }
 
 void Self::setSize(int width, int height) {
+    size_ = std::make_pair(width, height);
     for (auto&& item : items_) {
         item->setSize(width, height);
     }
@@ -84,7 +108,8 @@ void Self::findActiveItem() const {
     }
     for (auto&& item : items_) {
         if (item->isLoaded()) {
-            item->load();
+            activeItem_ = item;
+            break;
         }
     }
 }

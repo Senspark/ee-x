@@ -34,6 +34,12 @@ public:
     virtual void load() override;
 
     /// @see Super.
+    virtual std::pair<float, float> getAnchor() const override;
+
+    /// @see Super.
+    virtual void setAnchor(float x, float y) override;
+
+    /// @see Super.
     virtual std::pair<int, int> getPosition() const override;
 
     /// @see Super.
@@ -52,6 +58,11 @@ private:
     void findActiveItem() const;
 
     mutable std::shared_ptr<AdViewInterface> activeItem_;
+
+    std::pair<float, float> anchor_;
+    std::pair<int, int> position_;
+    std::pair<int, int> size_;
+    bool visible_;
     std::vector<std::shared_ptr<AdViewInterface>> items_;
 };
 } // namespace ads

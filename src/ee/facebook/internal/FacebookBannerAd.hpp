@@ -57,6 +57,10 @@ protected:
     explicit BannerAd(FacebookAds* plugin, const std::string& adId);
 
 private:
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+
+    bool loading_;
     std::string adId_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;

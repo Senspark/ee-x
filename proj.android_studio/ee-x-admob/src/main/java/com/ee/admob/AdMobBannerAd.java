@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
+import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -68,6 +69,16 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         _adSize = null;
         _testDevices = null;
         _helper = null;
+    }
+
+    @NonNull
+    private String k__onLoaded() {
+        return "AdMobBannerAd_onLoaded_" + _adId;
+    }
+
+    @NonNull
+    private String k__onFailedToLoad() {
+        return "AdMobBannerAd_onFailedToLoad_" + _adId;
     }
 
     private void registerHandlers() {
@@ -168,6 +179,9 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
@@ -187,6 +201,9 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
         _isAdLoaded = true;
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onLoaded());
     }
 
     @Override

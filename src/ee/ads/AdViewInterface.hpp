@@ -9,6 +9,7 @@
 #ifndef EE_X_AD_VIEW_INTERFACE_HPP
 #define EE_X_AD_VIEW_INTERFACE_HPP
 
+#include <functional>
 #include <string>
 #include <utility>
 
@@ -16,6 +17,8 @@
 
 namespace ee {
 namespace ads {
+using AdViewCallback = std::function<void(bool result)>;
+
 class AdViewInterface {
 public:
     AdViewInterface();
@@ -47,6 +50,14 @@ public:
     /// Sets this ad view's visibility.
     /// @param[in] visible Whether this ad view is visible.
     virtual void setVisible(bool visible) = 0;
+
+    void setLoadCallback(const AdViewCallback& callback);
+
+protected:
+    void setLoadResult(bool result);
+
+private:
+    AdViewCallback callback_;
 };
 } // namespace ads
 } // namespace ee

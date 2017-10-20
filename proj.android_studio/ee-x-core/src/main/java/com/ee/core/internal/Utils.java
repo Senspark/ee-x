@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
@@ -23,24 +24,31 @@ public class Utils {
 
     @SuppressWarnings("unused")
     public static void runOnUiThread() {
-        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
+        if (isMainThread()) {
             signal();
         } else {
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
+            boolean result = handler.post(new Runnable() {
                 @Override
                 public void run() {
                     signal();
                 }
             });
+            if (!result) {
+                _logger.error("runOnUiThread: failed to post the runnable");
+            }
         }
     }
 
     public static void checkMainThread() {
-        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
+        if (!isMainThread()) {
             _logger.error("Current thread is not the main thread");
             assert false;
         }
+    }
+
+    public static boolean isMainThread() {
+        return Thread.currentThread() == Looper.getMainLooper().getThread();
     }
 
     @NonNull
@@ -52,5 +60,11 @@ public class Utils {
     public static Boolean toBoolean(@NonNull String value) {
         assert value.equals("true") || value.equals("false");
         return value.equals("true");
+    }
+
+    /// https://stackoverflow.com/questions/1069066/get-current-stack-trace-in-java
+    @NonNull
+    public static StackTraceElement[] getCurrentStackTrace() {
+        return Thread.currentThread().getStackTrace();
     }
 }

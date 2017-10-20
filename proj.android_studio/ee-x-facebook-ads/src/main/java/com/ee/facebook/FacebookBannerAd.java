@@ -163,7 +163,7 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
 
     @Override
     public void onError(Ad ad, AdError adError) {
-        _logger.info("onAdLoaded: " + adError.getErrorMessage());
+        _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
 
         MessageBridge bridge = MessageBridge.getInstance();

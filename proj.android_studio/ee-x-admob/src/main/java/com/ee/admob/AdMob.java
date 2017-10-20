@@ -91,11 +91,17 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     @Override
     public void onResume() {
         _rewardedVideoAd.resume(_context);
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).resume();
+        }
     }
 
     @Override
     public void onPause() {
         _rewardedVideoAd.pause(_context);
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).pause();
+        }
     }
 
     @Override

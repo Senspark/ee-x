@@ -1,6 +1,7 @@
 package com.ee.admob;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -45,6 +46,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     private AdSize       _adSize;
     private List<String> _testDevices;
     private AdViewHelper _helper;
+    private boolean      _customSize;
 
     AdMobBannerAd(@NonNull Activity activity, @NonNull String adId, @NonNull AdSize adSize,
                   @NonNull List<String> testDevices) {
@@ -55,9 +57,20 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         _adSize = adSize;
         _adView = null;
         _testDevices = testDevices;
+        _customSize = false;
         _helper = new AdViewHelper("AdMobBannerAd", _adId);
         createInternalAd();
         registerHandlers();
+    }
+
+    void resume() {
+        Utils.checkMainThread();
+        _adView.resume();
+    }
+
+    void pause() {
+        Utils.checkMainThread();
+        _adView.pause();
     }
 
     void destroy() {
@@ -96,6 +109,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         if (_adView != null) {
             return false;
         }
+        _customSize = false;
         _isAdLoaded = false;
         AdView adView = new AdView(_activity);
         adView.setAdSize(_adSize);
@@ -117,6 +131,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         if (_adView == null) {
             return false;
         }
+        _customSize = false;
         _isAdLoaded = false;
         _adView.destroy();
         _adView = null;
@@ -156,17 +171,28 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     @NonNull
     @Override
     public Point getSize() {
-        return AdViewHelper.getSize(_adView);
+        if (_customSize) {
+            return AdViewHelper.getSize(_adView);
+        }
+        int width = _adSize.getWidthInPixels(_activity);
+        int height = _adSize.getHeightInPixels(_activity);
+        return new Point(width, height);
     }
 
     @Override
     public void setSize(@NonNull Point size) {
         AdViewHelper.setSize(size, _adView);
+        _customSize = true;
     }
 
     @Override
     public void setVisible(boolean visible) {
         AdViewHelper.setVisible(visible, _adView);
+        if (visible) {
+            // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
+            // -refresh-or-sign-in-to-google-plus
+            _adView.setBackgroundColor(Color.BLACK);
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ Self::MultiAdView() {
     position_ = std::make_pair(0, 0);
     size_ = std::make_pair(0, 0);
     visible_ = false;
+    customSize_ = false;
 }
 
 Self::~MultiAdView() {}
@@ -80,11 +81,23 @@ std::pair<int, int> Self::getSize() const {
     if (activeItem_) {
         return activeItem_->getSize();
     }
-    return size_;
+    if (customSize_) {
+        return size_;
+    }
+    int width = 0;
+    int height = 0;
+    for (auto&& item : items_) {
+        int itemWidth, itemHeight;
+        std::tie(itemWidth, itemHeight) = item->getSize();
+        width = std::max(width, itemWidth);
+        height = std::max(height, itemHeight);
+    }
+    return std::tie(width, height);
 }
 
 void Self::setSize(int width, int height) {
     size_ = std::make_pair(width, height);
+    customSize_ = true;
     for (auto&& item : items_) {
         item->setSize(width, height);
     }

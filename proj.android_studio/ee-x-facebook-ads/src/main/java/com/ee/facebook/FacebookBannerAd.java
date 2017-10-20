@@ -1,6 +1,8 @@
 package com.ee.facebook;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -9,6 +11,7 @@ import android.widget.FrameLayout;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
+import com.ee.core.Metrics;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
@@ -46,6 +49,7 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
     private String       _adId;
     private AdSize       _adSize;
     private AdViewHelper _helper;
+    private boolean      _customSize;
 
     FacebookBannerAd(@NonNull Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         Utils.checkMainThread();
@@ -54,6 +58,7 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
         _adSize = adSize;
         _adView = null;
         _activity = activity;
+        _customSize = false;
         _helper = new AdViewHelper("FacebookBannerAd", _adId);
         createInternalAd();
         registerHandlers();
@@ -94,6 +99,7 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
         if (_adView != null) {
             return false;
         }
+        _customSize = false;
         _isAdLoaded = false;
         AdView adView = new AdView(_activity, _adId, _adSize);
         adView.setAdListener(this);
@@ -113,6 +119,7 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
         if (_adView == null) {
             return false;
         }
+        _customSize = false;
         _isAdLoaded = false;
         _adView.destroy();
         _adView = null;
@@ -148,17 +155,26 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
     @NonNull
     @Override
     public Point getSize() {
-        return AdViewHelper.getSize(_adView);
+        if (_customSize) {
+            return AdViewHelper.getSize(_adView);
+        }
+        int width = getWidthInPixels(_adSize);
+        int height = getHeightInPixels(_adSize);
+        return new Point(width, height);
     }
 
     @Override
     public void setSize(@NonNull Point size) {
         AdViewHelper.setSize(size, _adView);
+        _customSize = true;
     }
 
     @Override
     public void setVisible(boolean visible) {
         AdViewHelper.setVisible(visible, _adView);
+        if (visible) {
+            _adView.setBackgroundColor(Color.BLACK);
+        }
     }
 
     @Override
@@ -190,5 +206,24 @@ class FacebookBannerAd implements AdListener, AdViewInterface {
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
         Utils.checkMainThread();
+    }
+
+    private static int getWidthInPixels(AdSize size) {
+        switch (size.getWidth()) {
+        case 0: // Interstitial.
+        case -1: // Normal ads.
+            return Resources.getSystem().getDisplayMetrics().widthPixels;
+        default: // Deprecated ads.
+            return (int) Metrics.convertDpToPixel((double) size.getWidth());
+        }
+    }
+
+    private static int getHeightInPixels(AdSize size) {
+        switch (size.getHeight()) {
+        case 0: // Interstitial.
+            return Resources.getSystem().getDisplayMetrics().heightPixels;
+        default: // Normal ads.
+            return (int) Metrics.convertDpToPixel((double) size.getHeight());
+        }
     }
 }

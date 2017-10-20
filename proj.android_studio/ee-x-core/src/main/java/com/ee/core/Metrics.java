@@ -31,4 +31,9 @@ public class Metrics {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         return metrics.density;
     }
+
+    /// https://stackoverflow.com/questions/4605527/converting-pixels-to-dp
+    public static double convertDpToPixel(double dp) {
+        return dp * getDensity();
+    }
 }

@@ -63,6 +63,7 @@ private:
     std::pair<int, int> position_;
     std::pair<int, int> size_;
     bool visible_;
+    bool customSize_;
     std::vector<std::shared_ptr<AdViewInterface>> items_;
 };
 } // namespace ads

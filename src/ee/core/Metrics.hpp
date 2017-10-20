@@ -11,7 +11,7 @@
 
 namespace ee {
 namespace core {
-class Metrics {
+class Metrics final {
 private:
     using Self = Metrics;
 

@@ -11,7 +11,6 @@
 
 #include <functional>
 #include <future>
-#include <memory>
 #include <string>
 
 namespace ee {

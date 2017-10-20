@@ -6,8 +6,7 @@
 //
 //
 
-#import <Foundation/NSThread.h>
-#import <dispatch/dispatch.h>
+#import <Foundation/Foundation.h>
 
 #import "ee/core/Utils.hpp"
 

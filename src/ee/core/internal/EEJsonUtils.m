@@ -21,8 +21,8 @@
         NSCAssert(NO, @"...");
         return nil;
     }
-    return [[[NSString alloc] initWithData:data
-                                  encoding:NSUTF8StringEncoding] autorelease];
+    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
+        autorelease];
 }
 
 + (NSString*)convertArrayToString:(NSArray*)arr {

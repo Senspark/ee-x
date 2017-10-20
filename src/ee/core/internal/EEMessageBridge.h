@@ -10,10 +10,7 @@
 
 typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 
-@interface EEMessageBridge : NSObject {
-    /// Registered handlers.
-    NSMutableDictionary* handlers;
-}
+@interface EEMessageBridge : NSObject
 
 /// Gets a message bridge instance.
 + (instancetype _Nonnull)getInstance;
@@ -33,6 +30,14 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 /// @param tag The unique tag of the handler.
 /// @return Whether the deregistration was successful.
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag;
+
+/// Calls a handler from Objective-C with a message.
+/// @warning This method should not be called manually.
+/// @param tag The tag of the handler.
+/// @param message The message.
+/// @return Reply message from Objective-C.
+- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
+                   message:(NSString* _Nonnull)message;
 
 @end
 

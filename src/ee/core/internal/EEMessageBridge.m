@@ -7,11 +7,17 @@
 //
 
 #import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
+
+@interface EEMessageBridge () {
+    /// Registered handlers.
+    NSMutableDictionary* handlers_;
+}
+
+@end
 
 @implementation EEMessageBridge
 
-+ (instancetype)getInstance {
++ (instancetype _Nonnull)getInstance {
     static EEMessageBridge* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -25,23 +31,25 @@
     if (self == nil) {
         return nil;
     }
-    handlers = [[NSMutableDictionary alloc] init];
+    handlers_ = [[NSMutableDictionary alloc] init];
     return self;
 }
 
 - (void)dealloc {
-    [handlers release];
-    handlers = nil;
+    [handlers_ release];
+    handlers_ = nil;
     [super dealloc];
 }
 
 - (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag {
-    if ([handlers objectForKey:tag] != nil) {
-        NSAssert(NO, @"...");
+    if ([handlers_ objectForKey:tag] != nil) {
+        NSString* message = [NSString
+            stringWithFormat:@"A handler with tag %@ already exists", tag];
+        NSAssert(NO, message);
         return NO;
     }
-    [handlers setValue:[[handler copy] autorelease] forKey:tag];
+    [handlers_ setValue:[[handler copy] autorelease] forKey:tag];
     return YES;
 }
 
@@ -51,12 +59,26 @@
 }
 
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag {
-    if ([handlers objectForKey:tag] == nil) {
-        NSAssert(NO, @"...");
+    if ([handlers_ objectForKey:tag] == nil) {
+        NSString* message = [NSString
+            stringWithFormat:@"A handler with tag %@ doesn't exist", tag];
+        NSAssert(NO, message);
         return NO;
     }
-    [handlers removeObjectForKey:tag];
+    [handlers_ removeObjectForKey:tag];
     return YES;
+}
+
+- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
+                   message:(NSString* _Nonnull)message {
+    EEMessageHandler handler = [handlers_ objectForKey:tag];
+    if (handler == nil) {
+        NSString* errorMessage = [NSString
+            stringWithFormat:@"A handler with tag %@ doesn't exist", tag];
+        NSAssert(NO, errorMessage);
+        return @"";
+    }
+    return handler(message);
 }
 
 @end

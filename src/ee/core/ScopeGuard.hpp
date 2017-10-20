@@ -14,7 +14,7 @@
 namespace ee {
 namespace core {
 /// http://stackoverflow.com/questions/10270328/the-simplest-and-neatest-c11-scopeguard
-class ScopeGuard {
+class ScopeGuard final {
 public:
     template <class Callable>
     ScopeGuard(Callable&& undoFunction)

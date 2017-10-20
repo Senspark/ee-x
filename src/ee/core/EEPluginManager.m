@@ -6,11 +6,17 @@
 //
 //
 
-#import "EEPluginManager.h"
+#import "ee/core/EEPluginManager.h"
+
+@interface EEPluginManager () {
+    NSMutableDictionary* plugins_;
+}
+
+@end
 
 @implementation EEPluginManager
 
-+ (id)getInstance {
++ (instancetype _Nonnull)getInstance {
     static EEPluginManager* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -24,33 +30,33 @@
     if (self == nil) {
         return nil;
     }
-    plugins = [[NSMutableDictionary alloc] init];
+    plugins_ = [[NSMutableDictionary alloc] init];
     return self;
 }
 
 - (void)dealloc {
-    [plugins release];
-    plugins = nil;
+    [plugins_ release];
+    plugins_ = nil;
     [super dealloc];
 }
 
 - (void)addPlugin:(NSString* _Nonnull)pluginName {
-    if ([plugins objectForKey:pluginName] != nil) {
+    if ([plugins_ objectForKey:pluginName] != nil) {
         NSAssert(NO, @"...");
         return;
     }
 
     Class clazz =
         NSClassFromString([NSString stringWithFormat:@"EE%@", pluginName]);
-    [plugins setObject:[[[clazz alloc] init] autorelease] forKey:pluginName];
+    [plugins_ setObject:[[[clazz alloc] init] autorelease] forKey:pluginName];
 }
 
 - (void)removePlugin:(NSString* _Nonnull)pluginName {
-    if ([plugins objectForKey:pluginName] == nil) {
+    if ([plugins_ objectForKey:pluginName] == nil) {
         NSAssert(NO, @"...");
         return;
     }
-    [plugins removeObjectForKey:pluginName];
+    [plugins_ removeObjectForKey:pluginName];
 }
 
 @end

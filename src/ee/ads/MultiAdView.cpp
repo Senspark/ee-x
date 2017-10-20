@@ -104,6 +104,7 @@ void Self::setSize(int width, int height) {
 }
 
 void Self::setVisible(bool visible) {
+    visible_ = visible;
     for (auto&& item : items_) {
         item->setVisible(false);
     }

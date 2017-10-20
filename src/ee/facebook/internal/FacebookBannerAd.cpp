@@ -109,7 +109,7 @@ void Self::onLoaded() {
 void Self::onFailedToLoad(const std::string& message) {
     assert(loading_);
     loading_ = false;
-    setLoadResult(true);
+    setLoadResult(false);
 }
 } // namespace facebook
 } // namespace ee

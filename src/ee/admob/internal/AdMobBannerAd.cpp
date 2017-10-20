@@ -109,7 +109,7 @@ void Self::onFailedToLoad(const std::string& message) {
     // AdMob banner is auto-loading.
     // assert(loading_);
     loading_ = false;
-    setLoadResult(true);
+    setLoadResult(false);
 }
 } // namespace admob
 } // namespace ee

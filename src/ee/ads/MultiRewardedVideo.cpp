@@ -40,12 +40,12 @@ void Self::load() {
 
 bool Self::show() {
     bool displayed = false;
+
+    // Fix AdMob consumes other ads' callbacks.
+    assignCallbacks();
+
     for (auto&& item : items_) {
         if (not displayed) {
-            item->setResultCallback([this, item](bool result) {
-                setResult(result);
-                item->setResultCallback(nullptr);
-            });
             if (item->show()) {
                 displayed = true;
                 continue;
@@ -55,7 +55,27 @@ bool Self::show() {
             item->load();
         }
     }
+
+    if (not displayed) {
+        clearCallbacks();
+    }
+
     return displayed;
+}
+
+void Self::assignCallbacks() {
+    for (auto&& item : items_) {
+        item->setResultCallback([this](bool result) {
+            setResult(result);
+            clearCallbacks();
+        });
+    }
+}
+
+void Self::clearCallbacks() {
+    for (auto&& item : items_) {
+        item->setResultCallback(nullptr);
+    }
 }
 } // namespace ads
 } // namespace ee

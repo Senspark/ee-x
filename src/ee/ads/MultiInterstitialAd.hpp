@@ -37,6 +37,9 @@ public:
     virtual bool show() override;
 
 private:
+    void assignCallbacks();
+    void clearCallbacks();
+
     std::vector<std::shared_ptr<InterstitialAdInterface>> items_;
 };
 } // namespace ads

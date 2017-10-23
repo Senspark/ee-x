@@ -6,8 +6,11 @@
 //
 //
 
-#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
+#import <Foundation/Foundation.h>
 #import <Foundation/NSString.h>
+
+@class UIView;
 
 @protocol EEAdViewInterface;
 

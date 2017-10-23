@@ -6,6 +6,8 @@
 //
 //
 
+#import <UIKit/UIScreen.h>
+
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/ads/internal/EEAdViewInterface.h"
 #import "ee/core/internal/EEJsonUtils.h"

@@ -14,16 +14,10 @@ using Self = MultiRewardedVideo;
 
 Self::MultiRewardedVideo() {}
 
-Self::~MultiRewardedVideo() {
-    for (auto&& item : items_) {
-        item->setResultCallback(nullptr);
-    }
-}
+Self::~MultiRewardedVideo() {}
 
 Self& Self::addItem(const std::shared_ptr<RewardedVideoInterface>& item) {
     items_.push_back(item);
-    item->setResultCallback(
-        std::bind(&Self::setResult, this, std::placeholders::_1));
     return *this;
 }
 
@@ -45,12 +39,23 @@ void Self::load() {
 }
 
 bool Self::show() {
+    bool displayed = false;
     for (auto&& item : items_) {
-        if (item->show()) {
-            return true;
+        if (not displayed) {
+            item->setResultCallback([this, item](bool result) {
+                setResult(result);
+                item->setResultCallback(nullptr);
+            });
+            if (item->show()) {
+                displayed = true;
+                continue;
+            }
+        }
+        if (not item->isLoaded()) {
+            item->load();
         }
     }
-    return false;
+    return displayed;
 }
 } // namespace ads
 } // namespace ee

@@ -14,15 +14,10 @@ using Self = MultiInterstitialAd;
 
 Self::MultiInterstitialAd() {}
 
-Self::~MultiInterstitialAd() {
-    for (auto&& item : items_) {
-        item->setResultCallback(nullptr);
-    }
-}
+Self::~MultiInterstitialAd() {}
 
 Self& Self::addItem(const std::shared_ptr<InterstitialAdInterface>& item) {
     items_.push_back(item);
-    item->setResultCallback(std::bind(&Self::setDone, this));
     return *this;
 }
 
@@ -44,12 +39,23 @@ void Self::load() {
 }
 
 bool Self::show() {
+    bool displayed = false;
     for (auto&& item : items_) {
-        if (item->show()) {
-            return true;
+        if (not displayed) {
+            item->setResultCallback([this, item] {
+                setDone();
+                item->setResultCallback(nullptr);
+            });
+            if (item->show()) {
+                displayed = true;
+                continue;
+            }
+        }
+        if (not item->isLoaded()) {
+            item->load();
         }
     }
-    return false;
+    return displayed;
 }
 } // namespace ads
 } // namespace ee

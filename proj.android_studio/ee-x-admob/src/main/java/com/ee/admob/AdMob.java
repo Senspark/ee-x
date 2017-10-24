@@ -396,7 +396,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onRewardedVideoAdLoaded() {
-        _logger.info("onRewardedVideoAdLeftApplication");
+        _logger.info("onRewardedVideoAdLoaded");
         Utils.checkMainThread();
 
         MessageBridge bridge = MessageBridge.getInstance();
@@ -405,13 +405,13 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onRewardedVideoAdOpened() {
-        _logger.info("onRewardedVideoAdLeftApplication");
+        _logger.info("onRewardedVideoAdOpened");
         Utils.checkMainThread();
     }
 
     @Override
     public void onRewardedVideoStarted() {
-        _logger.info("onRewardedVideoAdLeftApplication");
+        _logger.info("onRewardedVideoStarted");
         Utils.checkMainThread();
     }
 

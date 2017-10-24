@@ -15,18 +15,20 @@
 
 namespace ee {
 namespace firebase {
-template <class T> FirebaseScheduler<T>::FirebaseScheduler() {
+template <class T>
+Scheduler<T>::Scheduler() {
     counter_ = 0;
     getSchedulers().insert(this);
 }
 
-template <class T> FirebaseScheduler<T>::~FirebaseScheduler() {
+template <class T>
+Scheduler<T>::~Scheduler() {
     getSchedulers().erase(this);
 }
 
 template <class T>
-void FirebaseScheduler<T>::push(const FutureType& future,
-                                const CallbackType& callback) {
+void Scheduler<T>::push(const FutureType& future,
+                        const CallbackType& callback) {
     futures_.emplace(std::piecewise_construct,
                      std::forward_as_tuple(counter_++),
                      std::forward_as_tuple(future, callback));
@@ -34,15 +36,14 @@ void FirebaseScheduler<T>::push(const FutureType& future,
 }
 
 template <class T>
-std::set<FirebaseScheduler<T>*>& FirebaseScheduler<T>::getSchedulers() {
-    static std::set<FirebaseScheduler*> schedulers;
+std::set<Scheduler<T>*>& Scheduler<T>::getSchedulers() {
+    static std::set<Scheduler*> schedulers;
     return schedulers;
 }
 
 template <class T>
-void FirebaseScheduler<T>::onCompletion(const FutureType& future,
-                                        void* userData) {
-    auto scheduler = static_cast<FirebaseScheduler*>(userData);
+void Scheduler<T>::onCompletion(const FutureType& future, void* userData) {
+    auto scheduler = static_cast<Scheduler*>(userData);
     if (getSchedulers().count(scheduler) == 0) {
         return;
     }

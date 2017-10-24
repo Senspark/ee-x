@@ -18,10 +18,10 @@ namespace firebase {
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/analytics/cpp/start
 /// https://firebase.google.com/docs/reference/cpp/namespace/firebase/analytics
-class FirebaseAnalytics {
+class Analytics {
 public:
-    FirebaseAnalytics();
-    ~FirebaseAnalytics();
+    Analytics();
+    ~Analytics();
 
     /// Initializes the firebase analytics.
     /// @return True if successfully initialized, false otherwise.

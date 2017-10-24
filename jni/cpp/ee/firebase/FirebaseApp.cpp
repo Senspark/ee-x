@@ -8,8 +8,8 @@
 
 #include <mutex>
 
-#include "ee/firebase/FirebaseApp.hpp"
 #include "ee/core/JniUtils.hpp"
+#include "ee/firebase/FirebaseApp.hpp"
 
 #include <firebase/app.h>
 
@@ -19,9 +19,8 @@ std::mutex global_activity_mutex;
 jobject global_activity = nullptr;
 
 extern "C" {
-JNIEXPORT void JNICALL
-Java_com_ee_firebase_core_Firebase_setActivity(JNIEnv* env, jobject instance,
-                                               jobject activity) {
+JNIEXPORT void JNICALL Java_com_ee_firebase_core_Firebase_setActivity(
+    JNIEnv* env, jobject instance, jobject activity) {
     std::lock_guard<std::mutex> guard(global_activity_mutex);
     if (global_activity != nullptr) {
         env->DeleteGlobalRef(global_activity);
@@ -30,7 +29,9 @@ Java_com_ee_firebase_core_Firebase_setActivity(JNIEnv* env, jobject instance,
 }
 } // extern "C"
 
-void FirebaseApp::initialize() {
+using Self = App;
+
+void Self::initialize() {
     static bool initialized = false;
     if (initialized) {
         return;
@@ -43,7 +44,7 @@ void FirebaseApp::initialize() {
     initialized = true;
 }
 
-WindowContext FirebaseApp::getWindowContext() {
+WindowContext Self::getWindowContext() {
     std::lock_guard<std::mutex> guard(global_activity_mutex);
     return global_activity;
 }

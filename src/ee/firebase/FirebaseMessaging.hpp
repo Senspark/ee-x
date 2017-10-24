@@ -92,16 +92,16 @@ private:
 
 /// https://firebase.google.com/docs/cloud-messaging/cpp/client
 /// https://firebase.google.com/docs/reference/cpp/namespace/firebase/messaging
-class FirebaseMessaging final {
+class Messaging final {
 private:
-    using Self = FirebaseMessaging;
+    using Self = Messaging;
 
 public:
     using MessageCallback = std::function<void(const Message& message)>;
     using TokenCallback = std::function<void(const std::string& token)>;
 
-    FirebaseMessaging();
-    ~FirebaseMessaging();
+    Messaging();
+    ~Messaging();
 
     bool initialize();
 
@@ -143,6 +143,6 @@ private:
 #endif // EE_X_MOBILE
 };
 } // namespace firebase
-} // namespac eee
+} // namespace ee
 
 #endif /* EE_X_FIREBASE_MESSAGING_HPP */

@@ -18,23 +18,25 @@
 #include <set>
 
 namespace firebase {
-template <class ResultType> class Future;
+template <class ResultType>
+class Future;
 } // namespace firebase
 
 namespace ee {
 namespace firebase {
-template <class ResultType> class FirebaseScheduler {
+template <class ResultType>
+class Scheduler {
 public:
     using FutureType = ::firebase::Future<ResultType>;
     using CallbackType = std::function<void(const FutureType& future)>;
 
-    FirebaseScheduler();
-    ~FirebaseScheduler();
+    Scheduler();
+    ~Scheduler();
 
     void push(const FutureType& future, const CallbackType& callback);
 
 private:
-    static std::set<FirebaseScheduler*>& getSchedulers();
+    static std::set<Scheduler*>& getSchedulers();
     static void onCompletion(const FutureType& future, void* userData);
 
     std::size_t counter_;

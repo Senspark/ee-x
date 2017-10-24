@@ -88,11 +88,13 @@ void Message::copy(const Message& other) {
     notificationOpened = other.notificationOpened;
 }
 
-FirebaseMessaging::FirebaseMessaging() {
+using Self = Messaging;
+
+Self::Messaging() {
     initialized_ = false;
 }
 
-FirebaseMessaging::~FirebaseMessaging() {
+Self::~Messaging() {
     if (initialized_) {
 #if defined(EE_X_MOBILE)
         ::firebase::messaging::Terminate();
@@ -100,12 +102,12 @@ FirebaseMessaging::~FirebaseMessaging() {
     }
 }
 
-bool FirebaseMessaging::initialize() {
+bool Self::initialize() {
     if (initialized_) {
         return true;
     }
 
-    FirebaseApp::initialize();
+    App::initialize();
 
 #if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
@@ -127,35 +129,34 @@ bool FirebaseMessaging::initialize() {
     return true;
 }
 
-bool FirebaseMessaging::initialize(const TokenCallback& callback) {
+bool Self::initialize(const TokenCallback& callback) {
     setTokenCallback(callback);
     return initialize();
 }
 
-void FirebaseMessaging::setMessageCallback(const MessageCallback& callback) {
+void Self::setMessageCallback(const MessageCallback& callback) {
     messageCallback_ = callback;
 }
 
-void FirebaseMessaging::setTokenCallback(const TokenCallback& callback) {
+void Self::setTokenCallback(const TokenCallback& callback) {
     tokenCallback_ = callback;
 }
 
 #if defined(EE_X_MOBILE)
-void FirebaseMessaging::onMessage(
-    const ::firebase::messaging::Message& message) {
+void Self::onMessage(const ::firebase::messaging::Message& message) {
     if (messageCallback_) {
         messageCallback_(Message(message));
     }
 }
 
-void FirebaseMessaging::onTokenReceived(const std::string& token) {
+void Self::onTokenReceived(const std::string& token) {
     if (tokenCallback_) {
         tokenCallback_(token);
     }
 }
 #endif // EE_X_MOBILE
 
-void FirebaseMessaging::subscribe(const std::string& topic) {
+void Self::subscribe(const std::string& topic) {
     if (initialized_) {
 #if defined(EE_X_MOBILE)
         ::firebase::messaging::Subscribe(topic.c_str());
@@ -163,7 +164,7 @@ void FirebaseMessaging::subscribe(const std::string& topic) {
     }
 }
 
-void FirebaseMessaging::unsubscribe(const std::string& topic) {
+void Self::unsubscribe(const std::string& topic) {
     if (initialized_) {
 #if defined(EE_X_MOBILE)
         ::firebase::messaging::Unsubscribe(topic.c_str());

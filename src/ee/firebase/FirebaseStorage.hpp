@@ -22,28 +22,29 @@ namespace storage {
 class Storage;
 class Metadata;
 } // namespace storage
-} // namespace
+} // namespace firebase
 #endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
 #if defined(EE_X_MOBILE)
-template <class T> class FirebaseScheduler;
+template <class T>
+class Scheduler;
 #endif // EE_X_MOBILE
 
 /// Wrapper for Firebase Storage.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/storage/cpp/start
 /// https://firebase.google.com/docs/reference/cpp/namespace/firebase/storage
-class FirebaseStorage final {
+class Storage final {
 public:
     using HashCallback =
         std::function<void(bool succeeded, const std::string& hash)>;
     using DataCallback =
         std::function<void(bool succeeded, const std::string& data)>;
 
-    FirebaseStorage();
-    ~FirebaseStorage();
+    Storage();
+    ~Storage();
 
     /// Attempts to initialize the remote config.
     /// @return True if successfully initialized, false otherwise.
@@ -87,9 +88,9 @@ private:
 #if defined(EE_X_MOBILE)
     ::firebase::storage::Storage* storage_;
 
-    std::unique_ptr<FirebaseScheduler<::firebase::storage::Metadata>>
+    std::unique_ptr<Scheduler<::firebase::storage::Metadata>>
         metadataScheduler_;
-    std::unique_ptr<FirebaseScheduler<std::size_t>> bytesScheduler_;
+    std::unique_ptr<Scheduler<std::size_t>> bytesScheduler_;
 
     std::array<char, max_file_size_in_bytes> buffer_;
 #endif // EE_X_MOBILE

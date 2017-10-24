@@ -19,7 +19,9 @@
 
 namespace ee {
 namespace firebase {
-FirebaseRemoteConfig::FirebaseRemoteConfig() {
+using Self = RemoteConfig;
+
+Self::RemoteConfig() {
     initialized_ = false;
     defaultsDirty_ = false;
 
@@ -28,7 +30,7 @@ FirebaseRemoteConfig::FirebaseRemoteConfig() {
 #endif // EE_X_MOBILE
 }
 
-FirebaseRemoteConfig::~FirebaseRemoteConfig() {
+Self::~RemoteConfig() {
     if (initialized_) {
 #if defined(EE_X_MOBILE)
         ::firebase::remote_config::Terminate();
@@ -36,12 +38,12 @@ FirebaseRemoteConfig::~FirebaseRemoteConfig() {
     }
 }
 
-bool FirebaseRemoteConfig::initialize() {
+bool Self::initialize() {
     if (initialized_) {
         return true;
     }
 
-    FirebaseApp::initialize();
+    App::initialize();
 
 #if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
@@ -54,15 +56,14 @@ bool FirebaseRemoteConfig::initialize() {
         return false;
     }
 
-    fetchScheduler_ = std::make_unique<FirebaseScheduler<void>>();
+    fetchScheduler_ = std::make_unique<Scheduler<void>>();
 #endif // EE_X_MOBILE
 
     initialized_ = true;
     return true;
 }
 
-void FirebaseRemoteConfig::fetch(bool devModeEnabled,
-                                 const FetchCallback& callback) {
+void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
     auto guard = std::make_shared<core::ScopeGuard>(std::bind(callback, false));
     if (not initialized_) {
         return;
@@ -85,7 +86,7 @@ void FirebaseRemoteConfig::fetch(bool devModeEnabled,
 #endif // EE_X_MOBILE
 }
 
-void FirebaseRemoteConfig::setDefaultBool(const std::string& key, bool value) {
+void Self::setDefaultBool(const std::string& key, bool value) {
 #if defined(EE_X_MOBILE)
     defaults_[key] = value;
 #else  // EE_X_MOBILE
@@ -94,8 +95,7 @@ void FirebaseRemoteConfig::setDefaultBool(const std::string& key, bool value) {
     defaultsDirty_ = true;
 }
 
-void FirebaseRemoteConfig::setDefaultLong(const std::string& key,
-                                          std::int64_t value) {
+void Self::setDefaultLong(const std::string& key, std::int64_t value) {
 #if defined(EE_X_MOBILE)
     defaults_[key] = value;
 #else  // EE_X_MOBILE
@@ -104,8 +104,7 @@ void FirebaseRemoteConfig::setDefaultLong(const std::string& key,
     defaultsDirty_ = true;
 }
 
-void FirebaseRemoteConfig::setDefaultDouble(const std::string& key,
-                                            double value) {
+void Self::setDefaultDouble(const std::string& key, double value) {
 #if defined(EE_X_MOBILE)
     defaults_[key] = value;
 #else  // EE_X_MOBILE
@@ -114,13 +113,12 @@ void FirebaseRemoteConfig::setDefaultDouble(const std::string& key,
     defaultsDirty_ = true;
 }
 
-void FirebaseRemoteConfig::setDefaultString(const std::string& key,
-                                            const std::string& value) {
+void Self::setDefaultString(const std::string& key, const std::string& value) {
     defaults_[key] = value;
     defaultsDirty_ = true;
 }
 
-void FirebaseRemoteConfig::flushDefaults() {
+void Self::flushDefaults() {
     if (not initialized_) {
         return;
     }
@@ -138,7 +136,7 @@ void FirebaseRemoteConfig::flushDefaults() {
     defaultsDirty_ = false;
 }
 
-bool FirebaseRemoteConfig::getBool(const std::string& key) {
+bool Self::getBool(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].bool_value();
@@ -155,7 +153,7 @@ bool FirebaseRemoteConfig::getBool(const std::string& key) {
 #endif // EE_X_MOBILE
 }
 
-std::int64_t FirebaseRemoteConfig::getLong(const std::string& key) {
+std::int64_t Self::getLong(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].bool_value();
@@ -172,7 +170,7 @@ std::int64_t FirebaseRemoteConfig::getLong(const std::string& key) {
 #endif // EE_X_MOBILE
 }
 
-double FirebaseRemoteConfig::getDouble(const std::string& key) {
+double Self::getDouble(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].double_value();
@@ -189,7 +187,7 @@ double FirebaseRemoteConfig::getDouble(const std::string& key) {
 #endif // EE_X_MOBILE
 }
 
-std::string FirebaseRemoteConfig::getString(const std::string& key) {
+std::string Self::getString(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
         return defaults_[key].string_value();

@@ -26,19 +26,20 @@ class Variant;
 namespace ee {
 namespace firebase {
 #if defined(EE_X_MOBILE)
-template <class T> class FirebaseScheduler;
+template <class T>
+class Scheduler;
 #endif // EE_X_MOBILE
 
 /// Wrapper for Firebase Remote Config.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/remote-config/use-config-cpp
 /// https://firebase.google.com/docs/reference/cpp/namespace/firebase/remote-config
-class FirebaseRemoteConfig {
+class RemoteConfig {
 public:
     using FetchCallback = std::function<void(bool succeeded)>;
 
-    FirebaseRemoteConfig();
-    ~FirebaseRemoteConfig();
+    RemoteConfig();
+    ~RemoteConfig();
 
     /// Attempts to initialize the remote config.
     /// @return True if successfully initialized, false otherwise.
@@ -80,7 +81,7 @@ private:
 
 #if defined(EE_X_MOBILE)
     std::map<std::string, ::firebase::Variant> defaults_;
-    std::unique_ptr<FirebaseScheduler<void>> fetchScheduler_;
+    std::unique_ptr<Scheduler<void>> fetchScheduler_;
 #else  // EE_X_MOBILE
     std::map<std::string, std::string> defaults_;
 #endif // EE_X_MOBILE

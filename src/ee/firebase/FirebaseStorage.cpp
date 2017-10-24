@@ -8,10 +8,10 @@
 
 #include <cassert>
 
-#include "ee/firebase/FirebaseStorage.hpp"
+#include "ee/core/ScopeGuard.hpp"
 #include "ee/firebase/FirebaseApp.hpp"
 #include "ee/firebase/FirebaseScheduler.hpp"
-#include "ee/core/ScopeGuard.hpp"
+#include "ee/firebase/FirebaseStorage.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <firebase/storage.h>
@@ -19,7 +19,9 @@
 
 namespace ee {
 namespace firebase {
-FirebaseStorage::FirebaseStorage() {
+using Self = Storage;
+
+Self::Storage() {
     initialized_ = false;
     fetching_ = false;
 
@@ -30,15 +32,14 @@ FirebaseStorage::FirebaseStorage() {
 #endif // EE_X_MOBILE
 }
 
-FirebaseStorage::~FirebaseStorage() {
-}
+Self::~Storage() {}
 
-bool FirebaseStorage::initialize() {
+bool Self::initialize() {
     if (initialized_) {
         return true;
     }
 
-    FirebaseApp::initialize();
+    App::initialize();
 
 #if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
@@ -54,8 +55,8 @@ bool FirebaseStorage::initialize() {
     }
 
     metadataScheduler_ =
-        std::make_unique<FirebaseScheduler<::firebase::storage::Metadata>>();
-    bytesScheduler_ = std::make_unique<FirebaseScheduler<std::size_t>>();
+        std::make_unique<Scheduler<::firebase::storage::Metadata>>();
+    bytesScheduler_ = std::make_unique<Scheduler<std::size_t>>();
 #endif // EE_X_MOBILE
 
     initialized_ = true;
@@ -63,37 +64,40 @@ bool FirebaseStorage::initialize() {
     return true;
 }
 
-double FirebaseStorage::getMaxDownloadRetryTime() const {
+double Self::getMaxDownloadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
 #if defined(EE_X_MOBILE)
     return storage_->max_download_retry_time();
-#endif // EE_X_MOBILE
+#else  // EE_X_MOBILE
     return -1;
+#endif // EE_X_MOBILE
 }
 
-double FirebaseStorage::getMaxUploadRetryTime() const {
+double Self::getMaxUploadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
 #if defined(EE_X_MOBILE)
     return storage_->max_upload_retry_time();
-#endif // EE_X_MOBILE
+#else  // EE_X_MOBILE
     return -1;
+#endif // EE_X_MOBILE
 }
 
-double FirebaseStorage::getMaxOperationRetryTime() const {
+double Self::getMaxOperationRetryTime() const {
     if (not initialized_) {
         return -1;
     }
 #if defined(EE_X_MOBILE)
     return storage_->max_operation_retry_time();
-#endif // EE_X_MOBILE
+#else  // EE_X_MOBILE
     return -1;
+#endif // EE_X_MOBILE
 }
 
-void FirebaseStorage::setMaxDownloadRetryTime(double seconds) {
+void Self::setMaxDownloadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
@@ -102,7 +106,7 @@ void FirebaseStorage::setMaxDownloadRetryTime(double seconds) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseStorage::setMaxOperationRetryTime(double seconds) {
+void Self::setMaxOperationRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
@@ -111,7 +115,7 @@ void FirebaseStorage::setMaxOperationRetryTime(double seconds) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseStorage::setMaxUploadRetryTime(double seconds) {
+void Self::setMaxUploadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
@@ -120,8 +124,7 @@ void FirebaseStorage::setMaxUploadRetryTime(double seconds) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseStorage::getHash(const std::string& filePath,
-                              const HashCallback& callback) {
+void Self::getHash(const std::string& filePath, const HashCallback& callback) {
     auto guard =
         std::make_shared<core::ScopeGuard>(std::bind(callback, false, ""));
     if (not initialized_) {
@@ -134,8 +137,8 @@ void FirebaseStorage::getHash(const std::string& filePath,
     }
     metadataScheduler_->push(
         file.GetMetadata(),
-        [callback, guard](
-            const ::firebase::Future<::firebase::storage::Metadata>& fut) {
+        [callback,
+         guard](const ::firebase::Future<::firebase::storage::Metadata>& fut) {
             if (fut.error() != ::firebase::storage::kErrorNone) {
                 return;
             }
@@ -150,8 +153,7 @@ void FirebaseStorage::getHash(const std::string& filePath,
 #endif // EE_X_MOBILE
 }
 
-void FirebaseStorage::getData(const std::string& filePath,
-                              const DataCallback& callback) {
+void Self::getData(const std::string& filePath, const DataCallback& callback) {
     auto guard =
         std::make_shared<core::ScopeGuard>(std::bind(callback, false, ""));
     if (not initialized_) {

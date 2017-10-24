@@ -9,13 +9,16 @@
 #include "ee/firebase/FirebaseApp.hpp"
 
 #if defined(EE_X_IOS)
+#import "ee/core/internal/EEUtils.h"
+#import <UIKit/UIViewController.h>
 #include <firebase/app.h>
-#import <UIKit/UIKit.h>
 #endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
-void FirebaseApp::initialize() {
+using Self = App;
+
+void Self::initialize() {
     static bool initialized = false;
     if (initialized) {
         return;
@@ -24,19 +27,19 @@ void FirebaseApp::initialize() {
 #if defined(EE_X_IOS)
     auto options = ::firebase::AppOptions();
     auto app = ::firebase::App::Create(options);
+    static_cast<void>(app);
 #endif // EE_X_IOS
 
     initialized = true;
 }
 
 #if defined(EE_X_OSX)
-WindowContext FirebaseApp::getWindowContext() {
+WindowContext Self::getWindowContext() {
     return nil;
 }
 #elif defined(EE_X_IOS)
-WindowContext FirebaseApp::getWindowContext() {
-    return [[
-        [[UIApplication sharedApplication] keyWindow] rootViewController] view];
+WindowContext Self::getWindowContext() {
+    return [[EEUtils getCurrentRootViewController] view];
 }
 #endif // EE_X_OSX
 } // namespace firebase

@@ -27,7 +27,7 @@ typedef id WindowContext;
 
 namespace ee {
 namespace firebase {
-class FirebaseApp {
+class App {
 public:
     /// Initializes the Firebase app.
     static void initialize();

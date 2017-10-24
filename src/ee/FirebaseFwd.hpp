@@ -11,19 +11,19 @@
 
 namespace ee {
 namespace firebase {
-class FirebaseApp;
-class FirebaseAnalytics;
-class FirebaseRemoteConfig;
-class FirebaseStorage;
-class FirebaseMessaging;
+class App;
+class Analytics;
+class RemoteConfig;
+class Storage;
+class Messaging;
 class Message;
 } // namespace firebase
 
-using firebase::FirebaseApp;
-using firebase::FirebaseAnalytics;
-using firebase::FirebaseRemoteConfig;
-using firebase::FirebaseStorage;
-using firebase::FirebaseMessaging;
+using FirebaseApp = firebase::App;
+using FirebaseAnalytics = firebase::Analytics;
+using FirebaseRemoteConfig = firebase::RemoteConfig;
+using FirebaseStorage = firebase::Storage;
+using FirebaseMessaging = firebase::Messaging;
 using firebase::Message;
 } // namespace ee
 

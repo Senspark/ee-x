@@ -15,11 +15,13 @@
 
 namespace ee {
 namespace firebase {
-FirebaseAnalytics::FirebaseAnalytics() {
+using Self = Analytics;
+
+Self::Analytics() {
     initialized_ = false;
 }
 
-FirebaseAnalytics::~FirebaseAnalytics() {
+Self::~Analytics() {
     if (initialized_) {
 #if defined(EE_X_MOBILE)
         ::firebase::analytics::Terminate();
@@ -27,12 +29,12 @@ FirebaseAnalytics::~FirebaseAnalytics() {
     }
 }
 
-bool FirebaseAnalytics::initialize() {
+bool Self::initialize() {
     if (initialized_) {
         return true;
     }
 
-    FirebaseApp::initialize();
+    App::initialize();
 
 #if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
@@ -50,7 +52,7 @@ bool FirebaseAnalytics::initialize() {
     return true;
 }
 
-void FirebaseAnalytics::analyticsCollectionEnabled(bool enabled) {
+void Self::analyticsCollectionEnabled(bool enabled) {
     if (not initialized_) {
         return;
     }
@@ -59,7 +61,7 @@ void FirebaseAnalytics::analyticsCollectionEnabled(bool enabled) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseAnalytics::setMinimumSessionDuration(std::int64_t milliseconds) {
+void Self::setMinimumSessionDuration(std::int64_t milliseconds) {
     if (not initialized_) {
         return;
     }
@@ -68,7 +70,7 @@ void FirebaseAnalytics::setMinimumSessionDuration(std::int64_t milliseconds) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseAnalytics::setSessionTimeoutDuration(std::int64_t milliseconds) {
+void Self::setSessionTimeoutDuration(std::int64_t milliseconds) {
     if (not initialized_) {
         return;
     }
@@ -77,7 +79,7 @@ void FirebaseAnalytics::setSessionTimeoutDuration(std::int64_t milliseconds) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseAnalytics::setUserId(const std::string& userId) {
+void Self::setUserId(const std::string& userId) {
     if (not initialized_) {
         return;
     }
@@ -86,8 +88,8 @@ void FirebaseAnalytics::setUserId(const std::string& userId) {
 #endif // EE_X_MOBILE
 }
 
-void FirebaseAnalytics::setUserProperty(const std::string& name,
-                                        const std::string& property) {
+void Self::setUserProperty(const std::string& name,
+                           const std::string& property) {
     if (not initialized_) {
         return;
     }
@@ -96,7 +98,7 @@ void FirebaseAnalytics::setUserProperty(const std::string& name,
 #endif // EE_X_MOBILE
 }
 
-void FirebaseAnalytics::logEvent(const std::string& name) {
+void Self::logEvent(const std::string& name) {
 #ifdef EE_X_MOBILE
     ::firebase::analytics::LogEvent(name.c_str());
 #endif // EE_X_MOBILE

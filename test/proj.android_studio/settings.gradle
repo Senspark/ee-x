@@ -12,6 +12,7 @@ def include_lib(name) {
 include_lib('ee-x-core')
 include_lib('ee-x-crashlytics')
 include_lib('ee-x-notification')
+include_lib('ee-x-google-analytics')
 include_lib('ee-x-firebase')
 include_lib('ee-x-firebase-core')
 include_lib('ee-x-firebase-analytics')

@@ -124,6 +124,7 @@ dependencies {
     compile project(':libcocos2dx')
     compile project(':ee-x-notification')
     compile project(':ee-x-crashlytics')
+    compile project(':ee-x-google-analytics')
     compile project(':ee-x-firebase')
     compile project(':ee-x-ads')
     compile project(':ee-x-admob')

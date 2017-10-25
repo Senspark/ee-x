@@ -66,8 +66,8 @@ static NSString* const k__testTrackEcommerceImpression = @"GoogleAnalytics_testT
 
     [bridge registerHandler:k__setDispatchInterval
                    callback:^(NSString* message) {
-                       NSTimeInterval interval = [message doubleValue];
-                       [self setDispatchInterval:interval];
+                       NSTimeInterval seconds = [message intValue];
+                       [self setDispatchInterval:seconds];
                        return @"";
                    }];
 

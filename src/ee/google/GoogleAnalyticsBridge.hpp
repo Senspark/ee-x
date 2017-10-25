@@ -20,7 +20,7 @@ public:
     Analytics();
     ~Analytics();
 
-    void setDispatchInterval(float interval);
+    void setDispatchInterval(int seconds);
     void setDryRun(bool enabled);
     void setOptOut(bool enabled);
     void setTrackUncaughtException(bool enabled);

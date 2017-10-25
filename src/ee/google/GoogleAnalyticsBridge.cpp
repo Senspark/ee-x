@@ -49,9 +49,9 @@ Self::Analytics() {}
 
 Self::~Analytics() {}
 
-void Self::setDispatchInterval(float interval) {
+void Self::setDispatchInterval(int seconds) {
     auto&& bridge = core::MessageBridge::getInstance();
-    bridge.call(k__setDispatchInterval, std::to_string(interval));
+    bridge.call(k__setDispatchInterval, std::to_string(seconds));
 }
 
 void Self::setDryRun(bool enabled) {

@@ -38,6 +38,7 @@
 
 - (void)dealloc {
     [self deregisterHandlers];
+    [[GAI sharedInstance] removeTrackerByName:trackingId_];
     [trackingId_ release];
     trackingId_ = nil;
     [tracker_ release];

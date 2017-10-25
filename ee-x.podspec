@@ -86,6 +86,22 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
+    spec.subspec 'google-analytics' do |s|
+    s.source_files =
+      'src/ee/GoogleAnalytics.hpp',
+      'src/ee/GoogleAnalyticsFwd.hpp',
+      'src/ee/google/*',
+      'src/ee/google/internal/*'
+
+    s.public_header_files =
+      'src/ee/GoogleAnalytics.hpp',
+      'src/ee/GoogleAnalyticsFwd.hpp',
+      'src/ee/google/*.{h,hpp}'
+
+    s.dependency 'ee-x/core'
+    s.ios.dependency 'GoogleAnalytics'
+  end
+
   spec.subspec 'firebase-headers' do |s|
     s.platform = :ios
     s.preserve_path = 'third_party/firebase_cpp_sdk/include'

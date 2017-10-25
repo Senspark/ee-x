@@ -289,6 +289,7 @@
 		6FB7D63C1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63A1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp */; };
 		6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */; };
 		6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */; };
+		6FB7D6491FA0796B00EFE441 /* GoogleAnalytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		6FDD658B1F90C2ED00BAEA66 /* AdMobNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */; };
@@ -808,6 +809,7 @@
 		6FB7D63A1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsTimingBuilder.hpp; sourceTree = "<group>"; };
 		6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsSocialBuilder.cpp; sourceTree = "<group>"; };
 		6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsSocialBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalytics.hpp; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
 		6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobNativeAd.cpp; path = admob/internal/AdMobNativeAd.cpp; sourceTree = "<group>"; };
@@ -1183,6 +1185,7 @@
 				6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */,
 				6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */,
 				6F43A23B1EC19F3100C68152 /* crashlytics */,
+				6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */,
 				6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */,
 				6FB7D6071FA0436B00EFE441 /* google */,
 				6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */,
@@ -1791,6 +1794,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FB7D6491FA0796B00EFE441 /* GoogleAnalytics.hpp in Headers */,
 				6FB7D61A1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp in Headers */,
 				6FB7D6381FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp in Headers */,
 				6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */,

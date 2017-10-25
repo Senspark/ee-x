@@ -14,6 +14,7 @@
 
 #include "ee/Macro.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
 namespace core {
@@ -64,6 +65,36 @@ std::string toString(bool value) {
 bool toBool(const std::string& value) {
     assert(value == "true" || value == "false");
     return value == "true";
+}
+
+namespace {
+// clang-format off
+constexpr auto k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFingerprint";
+constexpr auto k__getVersionName                = "Utils_getVersionName";
+constexpr auto k__getVersionCode                = "Utils_getVersionCode";
+constexpr auto k__testConnection                = "Utils_testConnection";
+// clang-format on
+} // namespace
+
+std::string getSHA1CertificateFingerprint() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getSHA1CertificateFingerprint);
+}
+
+std::string getVersionName() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getVersionName);
+}
+
+std::string getVersionCode() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getVersionCode);
+}
+
+bool testConnection(const std::string& hostName) {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__testConnection);
+    return toBool(response);
 }
 } // namespace core
 } // namespace ee

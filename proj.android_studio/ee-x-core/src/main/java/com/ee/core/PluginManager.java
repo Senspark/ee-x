@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.ee.core.internal.Metrics;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class PluginManager {
 
     private PluginManager() {
         _plugins = new HashMap<>();
+        Metrics.initializeHandlers();
     }
 
     @SuppressWarnings({"unused", "TryWithIdenticalCatches"})

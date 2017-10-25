@@ -7,6 +7,8 @@
 //
 
 #import "ee/core/internal/EEUtils.h"
+#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEReachability.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -49,6 +51,54 @@ static NSString* const k__false = @"false";
         NSAssert(NO, message);
     }
     return [value isEqualToString:k__true];
+}
+
+// clang-format off
+static NSString* const k__getSHA1CertificateFingerprint = @"Utils_getSHA1CertificateFingerprint";
+static NSString* const k__getVersionName                = @"Utils_getVersionName";
+static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
+static NSString* const k__testConnection                = @"Utils_testConnection";
+// clang-format on
+
++ (void)initializeHandlers {
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge registerHandler:k__getSHA1CertificateFingerprint
+                   callback:^(NSString* message) {
+                       // Not supported.
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__getVersionName
+                   callback:^(NSString* message) {
+                       return [self getVersionName];
+                   }];
+
+    [bridge registerHandler:k__getVersionCode
+                   callback:^(NSString* message) {
+                       return [self getVersionCode];
+                   }];
+
+    [bridge registerHandler:k__testConnection
+                   callback:^(NSString* message) {
+                       NSString* hostName = message;
+                       return [self toString:[self testConnection:hostName]];
+                   }];
+}
+
++ (NSString* _Nonnull)getVersionName {
+    NSString* versionName = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    return versionName;
+}
+
++ (NSString* _Nonnull)getVersionCode {
+    NSString* versionString = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
+    return versionString;
+}
+
++ (BOOL)testConnection:(NSString* _Nonnull)hostName {
+    return [[EEReachability reachabilityWithHostname:hostName] isReachable];
 }
 
 @end

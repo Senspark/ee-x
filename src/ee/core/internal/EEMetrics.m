@@ -14,14 +14,14 @@
 #import <AppKit/NSScreen.h>
 #endif // TARGET_OS_IOS
 
-#import "ee/core/EEMetrics.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEMetrics.h"
 
 @implementation EEMetrics
 
 NSString* const k__getDensity = @"Metrics_getDensity";
 
-+ (void)initializeMetrics {
++ (void)initializeHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge registerHandler:k__getDensity
                    callback:^(NSString* message) {

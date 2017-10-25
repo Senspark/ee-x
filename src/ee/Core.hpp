@@ -12,7 +12,6 @@
 #include "ee/Macro.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/Metrics.hpp"
 #include "ee/core/Utils.hpp"
 
 #if defined(EE_X_ANDROID)

@@ -1,11 +1,8 @@
-package com.ee.core;
+package com.ee.core.internal;
 
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
-
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
 
 /**
  * Created by Zinge on 10/6/17.
@@ -14,7 +11,7 @@ import com.ee.core.internal.MessageHandler;
 public class Metrics {
     private static final String k__getDensity = "Metrics_getDensity";
 
-    public static void initialize() {
+    public static void initializeHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
         bridge.registerHandler(new MessageHandler() {
             @NonNull

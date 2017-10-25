@@ -37,11 +37,27 @@ std::string toString(float value);
 
 std::string toString(bool value);
 bool toBool(const std::string& value);
+
+/// Android only.
+/// iOS returns an empty string.
+std::string getSHA1CertificateFingerprint();
+
+/// Gets the version name of the application.
+std::string getVersionName();
+
+/// Gets the version code of the application.
+std::string getVersionCode();
+
+bool testConnection(const std::string& hostName);
 } // namespace core
 
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
+using core::getSHA1CertificateFingerprint;
+using core::getVersionName;
+using core::getVersionCode;
+using core::testConnection;
 } // namespace ee
 
 #endif /* EE_X_UTILS_HPP */

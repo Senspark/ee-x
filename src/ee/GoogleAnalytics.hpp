@@ -23,7 +23,7 @@
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/google/GoogleAnalytics.h"
+#import "ee/google/EEGoogleAnalytics.h"
 #endif // __OBJC__
 
 #endif /* EE_X_GOOGLE_ANALYTICS_HPP */

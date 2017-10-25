@@ -7,6 +7,8 @@
 //
 
 #import "ee/core/EEPluginManager.h"
+#import "ee/core/internal/EEMetrics.h"
+#import "ee/core/internal/EEUtils.h"
 
 @interface EEPluginManager () {
     NSMutableDictionary* plugins_;
@@ -31,6 +33,8 @@
         return nil;
     }
     plugins_ = [[NSMutableDictionary alloc] init];
+    [EEMetrics initializeHandlers];
+    [EEUtils initializeHandlers];
     return self;
 }
 

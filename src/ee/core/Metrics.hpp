@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_METRICS_HPP
 #define EE_X_CORE_METRICS_HPP
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 class Metrics final {
@@ -44,8 +46,6 @@ private:
     float pixelToPoint_;
 };
 } // namespace core
-
-using core::Metrics;
 } // namespace ee
 
 #endif /* EE_X_CORE_METRICS_HPP */

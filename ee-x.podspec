@@ -33,18 +33,15 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Macro.hpp',
       'src/ee/Core.hpp',
+      'src/ee/CoreFwd.hpp',
       'src/ee/core/*.{cpp,h,hpp,m,mm}',
       'src/ee/core/**/*.{cpp,h,hpp,m,mm}'
 
     s.public_header_files =
       'src/ee/Macro.hpp',
       'src/ee/Core.hpp',
-      'src/ee/core/Logger.hpp',
-      'src/ee/core/LogLevel.hpp',
-      'src/ee/core/EEPluginManager.h',
-      'src/ee/core/Metrics.hpp',
-      'src/ee/core/EEMetrics.h',
-      'src/ee/core/Utils.hpp'
+      'src/ee/CoreFwd.hpp',
+      'src/ee/core/*.{h,hpp}'
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'

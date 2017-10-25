@@ -15,6 +15,8 @@
 
 @interface EEUtils : NSObject
 
++ (void)initializeHandlers;
+
 #if TARGET_OS_IOS
 + (UIWindow* _Nullable)getKeyWindow;
 + (UIViewController* _Nullable)getCurrentRootViewController;
@@ -28,5 +30,10 @@
 
 /// Converts a string value to bool.
 + (BOOL)toBool:(NSString* _Nonnull)value;
+
++ (NSString* _Nonnull)getVersionName;
++ (NSString* _Nonnull)getVersionCode;
+
++ (BOOL)testConnection:(NSString* _Nonnull)hostName;
 
 @end

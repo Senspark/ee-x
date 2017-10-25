@@ -59,8 +59,6 @@
 		6F2479FC1F8E36AB009E702C /* EEAdMob.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479FA1F8E36AB009E702C /* EEAdMob.h */; };
 		6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */; };
 		6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */; };
-		6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
-		6F24C3551EC2B72C00509B6C /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */; };
 		6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
 		6F24C36C1EC2BA0800509B6C /* FirebaseRemoteConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */; };
 		6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */; };
@@ -121,14 +119,6 @@
 		6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688651F863C7D00AE2D93 /* EEIronSource.m */; };
 		6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */; };
 		6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */; };
-		6F426C991F872F84009E202A /* Metrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C971F872F84009E202A /* Metrics.cpp */; };
-		6F426C9A1F872F84009E202A /* Metrics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C981F872F84009E202A /* Metrics.hpp */; };
-		6F426C9D1F873568009E202A /* EEMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C9B1F873568009E202A /* EEMetrics.m */; };
-		6F426C9E1F873568009E202A /* EEMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C9C1F873568009E202A /* EEMetrics.h */; };
-		6F426D2F1F8766E8009E202A /* Metrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C971F872F84009E202A /* Metrics.cpp */; };
-		6F426D301F8766E8009E202A /* Metrics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C981F872F84009E202A /* Metrics.hpp */; };
-		6F426D311F8766E8009E202A /* EEMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426C9B1F873568009E202A /* EEMetrics.m */; };
-		6F426D321F8766E8009E202A /* EEMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426C9C1F873568009E202A /* EEMetrics.h */; };
 		6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* AdViewInterface.cpp */; };
 		6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* AdViewInterface.hpp */; };
 		6F426D3D1F878A5B009E202A /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */; };
@@ -159,7 +149,6 @@
 		6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
 		6F43A2C81EC1A18900C68152 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2361EC19F3100C68152 /* Logger.cpp */; };
 		6F43A2C91EC1A18900C68152 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2371EC19F3100C68152 /* Logger.hpp */; };
-		6F43A2CA1EC1A18900C68152 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2381EC19F3100C68152 /* Logger_iOS.mm */; };
 		6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
 		6F43A2CE1EC1A22500C68152 /* Crashlytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */; };
@@ -220,7 +209,6 @@
 		6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
 		6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2361EC19F3100C68152 /* Logger.cpp */; };
 		6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2371EC19F3100C68152 /* Logger.hpp */; };
-		6F83DCAB1EC1C800004C5500 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2381EC19F3100C68152 /* Logger_iOS.mm */; };
 		6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
 		6F83DD0C1EC1CDC1004C5500 /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
@@ -247,6 +235,15 @@
 		6F9E73201F97422A00EE467B /* AdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E731F1F97422A00EE467B /* AdsFwd.hpp */; };
 		6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E73211F97430B00EE467B /* MultiAdView.cpp */; };
 		6F9E73241F97430B00EE467B /* MultiAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E73221F97430B00EE467B /* MultiAdView.hpp */; };
+		6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FAF79041FA0A41E00405AF8 /* EEMetrics.h */; };
+		6FAF790C1FA0A41E00405AF8 /* EEMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAF79051FA0A41E00405AF8 /* EEMetrics.m */; };
+		6FAF790D1FA0A41E00405AF8 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FAF79061FA0A41E00405AF8 /* Logger_iOS.mm */; };
+		6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAF79091FA0A41E00405AF8 /* ScopeGuard.hpp */; };
+		6FAF79111FA0A41E00405AF8 /* SpinLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAF790A1FA0A41E00405AF8 /* SpinLock.hpp */; };
+		6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAF79121FA0A4A500405AF8 /* CoreFwd.hpp */; };
+		6FAF79161FA0A53100405AF8 /* Metrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAF79141FA0A53100405AF8 /* Metrics.cpp */; };
+		6FAF79171FA0A53100405AF8 /* Metrics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAF79151FA0A53100405AF8 /* Metrics.hpp */; };
+		6FAF79191FA0A94C00405AF8 /* EEReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAF79181FA0A94C00405AF8 /* EEReachability.m */; };
 		6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */; };
 		6FAFB5EE1EC94FEA00450E67 /* PurchaseWithMarket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5EC1EC94FEA00450E67 /* PurchaseWithMarket.cpp */; };
 		6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB5F01EC9519700450E67 /* MarketItem.cpp */; };
@@ -260,8 +257,6 @@
 		6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6101EC95BDB00450E67 /* Store.cpp */; };
 		6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6291EC9643100450E67 /* EEStore.m */; };
 		6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */; };
-		6FAFB6511EC99A0100450E67 /* SpinLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */; };
-		6FAFB6521EC99A0100450E67 /* SpinLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */; };
 		6FB7D5EC1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */; };
 		6FB7D6151FA0436B00EFE441 /* EEGoogleAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6081FA0436B00EFE441 /* EEGoogleAnalytics.h */; };
 		6FB7D6161FA0436B00EFE441 /* EEGoogleAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6091FA0436B00EFE441 /* EEGoogleAnalytics.m */; };
@@ -613,7 +608,6 @@
 		6F2479FA1F8E36AB009E702C /* EEAdMob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdMob.h; path = admob/EEAdMob.h; sourceTree = "<group>"; };
 		6F24C34F1EC2B1C300509B6C /* FirebaseStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseStorage.cpp; sourceTree = "<group>"; };
 		6F24C3501EC2B1C300509B6C /* FirebaseStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebaseStorage.hpp; sourceTree = "<group>"; };
-		6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
 		6F24C3721EC2C07F00509B6C /* ee_x_mobile_core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_core.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F24C3731EC2C07F00509B6C /* ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_crashlytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F24C3741EC2C07F00509B6C /* ee_x_mobile_notification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_notification.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -655,10 +649,6 @@
 		6F3688651F863C7D00AE2D93 /* EEIronSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSource.m; path = ironsource/EEIronSource.m; sourceTree = "<group>"; };
 		6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceBridge.cpp; path = ironsource/IronSourceBridge.cpp; sourceTree = "<group>"; };
 		6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceBridge.hpp; path = ironsource/IronSourceBridge.hpp; sourceTree = "<group>"; };
-		6F426C971F872F84009E202A /* Metrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Metrics.cpp; sourceTree = "<group>"; };
-		6F426C981F872F84009E202A /* Metrics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Metrics.hpp; sourceTree = "<group>"; };
-		6F426C9B1F873568009E202A /* EEMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMetrics.m; sourceTree = "<group>"; };
-		6F426C9C1F873568009E202A /* EEMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMetrics.h; sourceTree = "<group>"; };
 		6F426D331F87822A009E202A /* AdViewInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewInterface.cpp; path = ads/AdViewInterface.cpp; sourceTree = "<group>"; };
 		6F426D341F87822A009E202A /* AdViewInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewInterface.hpp; path = ads/AdViewInterface.hpp; sourceTree = "<group>"; };
 		6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookBannerAd.m; path = facebook/internal/EEFacebookBannerAd.m; sourceTree = "<group>"; };
@@ -686,7 +676,6 @@
 		6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageBridge_iOS.mm; sourceTree = "<group>"; };
 		6F43A2361EC19F3100C68152 /* Logger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		6F43A2371EC19F3100C68152 /* Logger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
-		6F43A2381EC19F3100C68152 /* Logger_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Logger_iOS.mm; sourceTree = "<group>"; };
 		6F43A2391EC19F3100C68152 /* LogLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
 		6F43A23A1EC19F3100C68152 /* LogLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogLevel.hpp; sourceTree = "<group>"; };
 		6F43A23C1EC19F3100C68152 /* CrashlyticsBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CrashlyticsBridge.cpp; sourceTree = "<group>"; };
@@ -753,6 +742,16 @@
 		6F9E73211F97430B00EE467B /* MultiAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiAdView.cpp; path = ads/MultiAdView.cpp; sourceTree = "<group>"; };
 		6F9E73221F97430B00EE467B /* MultiAdView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiAdView.hpp; path = ads/MultiAdView.hpp; sourceTree = "<group>"; };
 		6F9EFA9E1F9EFA1A00C931D7 /* ee_x_mobile_google.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_google.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FAF79041FA0A41E00405AF8 /* EEMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMetrics.h; sourceTree = "<group>"; };
+		6FAF79051FA0A41E00405AF8 /* EEMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMetrics.m; sourceTree = "<group>"; };
+		6FAF79061FA0A41E00405AF8 /* Logger_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Logger_iOS.mm; sourceTree = "<group>"; };
+		6FAF79091FA0A41E00405AF8 /* ScopeGuard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScopeGuard.hpp; sourceTree = "<group>"; };
+		6FAF790A1FA0A41E00405AF8 /* SpinLock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SpinLock.hpp; sourceTree = "<group>"; };
+		6FAF79121FA0A4A500405AF8 /* CoreFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CoreFwd.hpp; sourceTree = "<group>"; };
+		6FAF79141FA0A53100405AF8 /* Metrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Metrics.cpp; sourceTree = "<group>"; };
+		6FAF79151FA0A53100405AF8 /* Metrics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Metrics.hpp; sourceTree = "<group>"; };
+		6FAF79181FA0A94C00405AF8 /* EEReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEReachability.m; sourceTree = "<group>"; };
+		6FAF791A1FA0A95A00405AF8 /* EEReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEReachability.h; sourceTree = "<group>"; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -780,7 +779,6 @@
 		6FAFB62A1EC9643100450E67 /* EEStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEStore.h; path = store/internal/EEStore.h; sourceTree = "<group>"; };
 		6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEKeyValueStorage.m; path = store/internal/EEKeyValueStorage.m; sourceTree = "<group>"; };
 		6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEKeyValueStorage.h; path = store/internal/EEKeyValueStorage.h; sourceTree = "<group>"; };
-		6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SpinLock.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
 		6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsFwd.hpp; sourceTree = "<group>"; };
 		6FB7D6081FA0436B00EFE441 /* EEGoogleAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEGoogleAnalytics.h; sourceTree = "<group>"; };
@@ -1181,6 +1179,7 @@
 			children = (
 				6F24C6D61EC31DBE00509B6C /* Macro.hpp */,
 				6F43A29D1EC19F3E00C68152 /* Core.hpp */,
+				6FAF79121FA0A4A500405AF8 /* CoreFwd.hpp */,
 				6F43A2271EC19F3100C68152 /* core */,
 				6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */,
 				6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */,
@@ -1228,15 +1227,10 @@
 				6F43A22A1EC19F3100C68152 /* internal */,
 				6F43A2361EC19F3100C68152 /* Logger.cpp */,
 				6F43A2371EC19F3100C68152 /* Logger.hpp */,
-				6F43A2381EC19F3100C68152 /* Logger_iOS.mm */,
 				6F43A2391EC19F3100C68152 /* LogLevel.cpp */,
 				6F43A23A1EC19F3100C68152 /* LogLevel.hpp */,
-				6F24C3531EC2B72C00509B6C /* ScopeGuard.hpp */,
-				6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */,
-				6F426C971F872F84009E202A /* Metrics.cpp */,
-				6F426C981F872F84009E202A /* Metrics.hpp */,
-				6F426C9B1F873568009E202A /* EEMetrics.m */,
-				6F426C9C1F873568009E202A /* EEMetrics.h */,
+				6FAF79141FA0A53100405AF8 /* Metrics.cpp */,
+				6FAF79151FA0A53100405AF8 /* Metrics.hpp */,
 				6F426E331F8BAEB7009E202A /* Utils.cpp */,
 				6F426E341F8BAEB7009E202A /* Utils.hpp */,
 			);
@@ -1248,15 +1242,22 @@
 			children = (
 				6F43A22B1EC19F3100C68152 /* EEDictionaryUtils.h */,
 				6F43A22C1EC19F3100C68152 /* EEDictionaryUtils.m */,
+				6FAF791A1FA0A95A00405AF8 /* EEReachability.h */,
+				6FAF79181FA0A94C00405AF8 /* EEReachability.m */,
 				6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */,
 				6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */,
 				6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */,
 				6F43A2301EC19F3100C68152 /* EEMessageBridge.m */,
+				6FAF79041FA0A41E00405AF8 /* EEMetrics.h */,
+				6FAF79051FA0A41E00405AF8 /* EEMetrics.m */,
 				6F43A2311EC19F3100C68152 /* EEUtils.h */,
 				6F43A2321EC19F3100C68152 /* EEUtils.m */,
+				6FAF79061FA0A41E00405AF8 /* Logger_iOS.mm */,
 				6F43A2331EC19F3100C68152 /* MessageBridge.cpp */,
 				6F43A2341EC19F3100C68152 /* MessageBridge.hpp */,
 				6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */,
+				6FAF79091FA0A41E00405AF8 /* ScopeGuard.hpp */,
+				6FAF790A1FA0A41E00405AF8 /* SpinLock.hpp */,
 				6F9E730A1F972FAC00EE467B /* Utils_iOS.mm */,
 			);
 			path = internal;
@@ -1548,17 +1549,18 @@
 			files = (
 				6F43A2C91EC1A18900C68152 /* Logger.hpp in Headers */,
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
+				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
+				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
-				6F426C9E1F873568009E202A /* EEMetrics.h in Headers */,
 				6F43A2C11EC1A18900C68152 /* EEMessageBridge.h in Headers */,
 				6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */,
-				6F426C9A1F872F84009E202A /* Metrics.hpp in Headers */,
+				6FAF79171FA0A53100405AF8 /* Metrics.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
-				6F24C3541EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
-				6FAFB6511EC99A0100450E67 /* SpinLock.hpp in Headers */,
+				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
+				6FAF79111FA0A41E00405AF8 /* SpinLock.hpp in Headers */,
 				6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */,
 				6F24C6D71EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
@@ -1721,18 +1723,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F426D321F8766E8009E202A /* EEMetrics.h in Headers */,
 				6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */,
 				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
 				6F83DCA21EC1C800004C5500 /* EEMessageBridge.h in Headers */,
 				6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */,
-				6F426D301F8766E8009E202A /* Metrics.hpp in Headers */,
 				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
-				6F24C3551EC2B72C00509B6C /* ScopeGuard.hpp in Headers */,
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
-				6FAFB6521EC99A0100450E67 /* SpinLock.hpp in Headers */,
 				6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */,
 				6F426E381F8BAEB7009E202A /* Utils.hpp in Headers */,
 				6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */,
@@ -2531,14 +2529,15 @@
 				6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */,
 				6F43A2C81EC1A18900C68152 /* Logger.cpp in Sources */,
 				6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */,
+				6FAF79191FA0A94C00405AF8 /* EEReachability.m in Sources */,
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
-				6F426C9D1F873568009E202A /* EEMetrics.m in Sources */,
-				6F43A2CA1EC1A18900C68152 /* Logger_iOS.mm in Sources */,
 				6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */,
+				6FAF790D1FA0A41E00405AF8 /* Logger_iOS.mm in Sources */,
 				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
-				6F426C991F872F84009E202A /* Metrics.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
+				6FAF79161FA0A53100405AF8 /* Metrics.cpp in Sources */,
 				6F9E730B1F972FAC00EE467B /* Utils_iOS.mm in Sources */,
+				6FAF790C1FA0A41E00405AF8 /* EEMetrics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2640,12 +2639,9 @@
 				6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */,
 				6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */,
 				6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */,
-				6F83DCAB1EC1C800004C5500 /* Logger_iOS.mm in Sources */,
 				6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */,
 				6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */,
-				6F426D2F1F8766E8009E202A /* Metrics.cpp in Sources */,
 				6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */,
-				6F426D311F8766E8009E202A /* EEMetrics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

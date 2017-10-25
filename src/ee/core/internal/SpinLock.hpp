@@ -34,8 +34,6 @@ private:
     std::atomic_flag locked_ = ATOMIC_FLAG_INIT;
 };
 } // namespace core
-
-using core::SpinLock;
 } // namespace ee
 
 #endif /* EE_X_CORE_SPIN_LOCK_HPP_ */

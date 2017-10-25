@@ -12,6 +12,8 @@
 #include <sstream>
 #include <string>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 struct LogLevel;
@@ -88,8 +90,6 @@ private:
     std::string tag_;
 };
 } // namespace core
-
-using core::Logger;
 } // namespace ee
 
 #endif /* EE_X_CORE_LOGGER_HPP_ */

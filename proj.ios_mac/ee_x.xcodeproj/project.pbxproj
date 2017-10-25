@@ -262,6 +262,33 @@
 		6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */; };
 		6FAFB6511EC99A0100450E67 /* SpinLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */; };
 		6FAFB6521EC99A0100450E67 /* SpinLock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */; };
+		6FB7D5EC1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */; };
+		6FB7D6151FA0436B00EFE441 /* EEGoogleAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6081FA0436B00EFE441 /* EEGoogleAnalytics.h */; };
+		6FB7D6161FA0436B00EFE441 /* EEGoogleAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6091FA0436B00EFE441 /* EEGoogleAnalytics.m */; };
+		6FB7D6171FA0436B00EFE441 /* GoogleAnalyticsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D60A1FA0436B00EFE441 /* GoogleAnalyticsBridge.cpp */; };
+		6FB7D6181FA0436B00EFE441 /* GoogleAnalyticsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D60B1FA0436B00EFE441 /* GoogleAnalyticsBridge.hpp */; };
+		6FB7D6191FA0436B00EFE441 /* GoogleAnalyticsBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D60C1FA0436B00EFE441 /* GoogleAnalyticsBuilder.cpp */; };
+		6FB7D61A1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D60D1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp */; };
+		6FB7D61B1FA0436B00EFE441 /* GoogleAnalyticsProduct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D60E1FA0436B00EFE441 /* GoogleAnalyticsProduct.cpp */; };
+		6FB7D61C1FA0436B00EFE441 /* GoogleAnalyticsProduct.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D60F1FA0436B00EFE441 /* GoogleAnalyticsProduct.hpp */; };
+		6FB7D61D1FA0436B00EFE441 /* GoogleAnalyticsTracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6101FA0436B00EFE441 /* GoogleAnalyticsTracker.cpp */; };
+		6FB7D61E1FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6111FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp */; };
+		6FB7D61F1FA0436B00EFE441 /* EEGoogleAnalyticsTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6131FA0436B00EFE441 /* EEGoogleAnalyticsTracker.h */; };
+		6FB7D6201FA0436B00EFE441 /* EEGoogleAnalyticsTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6141FA0436B00EFE441 /* EEGoogleAnalyticsTracker.m */; };
+		6FB7D6231FA0443C00EFE441 /* GoogleAnalyticsProductAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6211FA0443C00EFE441 /* GoogleAnalyticsProductAction.cpp */; };
+		6FB7D6241FA0443C00EFE441 /* GoogleAnalyticsProductAction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6221FA0443C00EFE441 /* GoogleAnalyticsProductAction.hpp */; };
+		6FB7D62B1FA045EA00EFE441 /* GoogleAnalyticsParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6291FA045EA00EFE441 /* GoogleAnalyticsParameter.cpp */; };
+		6FB7D62C1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D62A1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp */; };
+		6FB7D62F1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D62D1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.cpp */; };
+		6FB7D6301FA047F700EFE441 /* GoogleAnalyticsEventBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D62E1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.hpp */; };
+		6FB7D6331FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6311FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.cpp */; };
+		6FB7D6341FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6321FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.hpp */; };
+		6FB7D6371FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6351FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.cpp */; };
+		6FB7D6381FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6361FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp */; };
+		6FB7D63B1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D6391FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.cpp */; };
+		6FB7D63C1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63A1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp */; };
+		6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */; };
+		6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		6FDD658B1F90C2ED00BAEA66 /* AdMobNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */; };
@@ -278,6 +305,7 @@
 		6FF6B57A1F8F492900A27634 /* EEAdViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */; };
 		6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */; };
 		71316B903291F64DBF053615 /* libPods-common-ee_x_mobile_admob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */; };
+		7D1A8116DA161224BD173A89 /* libPods-common-ee_x_mobile_google.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
 		EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */; };
 		EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */; };
@@ -370,6 +398,13 @@
 			remoteInfo = ee_x_mobile_core;
 		};
 		6F978C7F1F4184CF00247CA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		6F9EFA7F1F9EFA1A00C931D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -506,6 +541,16 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F9EFA901F9EFA1A00C931D7 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FAFB5D61EC94E0F00450E67 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,6 +564,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.release.xcconfig"; sourceTree = "<group>"; };
 		0FE9CB62FB4F6C8CB2535774 /* Pods-common-ee_x_mobile_iron_source.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_source.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_source/Pods-common-ee_x_mobile_iron_source.release.xcconfig"; sourceTree = "<group>"; };
 		1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; sourceTree = "<group>"; };
@@ -705,6 +751,7 @@
 		6F9E731F1F97422A00EE467B /* AdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdsFwd.hpp; sourceTree = "<group>"; };
 		6F9E73211F97430B00EE467B /* MultiAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiAdView.cpp; path = ads/MultiAdView.cpp; sourceTree = "<group>"; };
 		6F9E73221F97430B00EE467B /* MultiAdView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiAdView.hpp; path = ads/MultiAdView.hpp; sourceTree = "<group>"; };
+		6F9EFA9E1F9EFA1A00C931D7 /* ee_x_mobile_google.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_google.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_store.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FAFB5E41EC94E3900450E67 /* PurchaseType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PurchaseType.cpp; path = store/PurchaseType.cpp; sourceTree = "<group>"; };
 		6FAFB5E51EC94E3900450E67 /* PurchaseType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PurchaseType.hpp; path = store/PurchaseType.hpp; sourceTree = "<group>"; };
@@ -734,6 +781,33 @@
 		6FAFB64A1EC9874300450E67 /* EEKeyValueStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEKeyValueStorage.h; path = store/internal/EEKeyValueStorage.h; sourceTree = "<group>"; };
 		6FAFB64E1EC99A0100450E67 /* SpinLock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SpinLock.hpp; sourceTree = "<group>"; };
 		6FB2D0CF1D2C9FAC007D47B6 /* proj.android_studio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = proj.android_studio; path = ../proj.android_studio; sourceTree = "<group>"; };
+		6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsFwd.hpp; sourceTree = "<group>"; };
+		6FB7D6081FA0436B00EFE441 /* EEGoogleAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEGoogleAnalytics.h; sourceTree = "<group>"; };
+		6FB7D6091FA0436B00EFE441 /* EEGoogleAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEGoogleAnalytics.m; sourceTree = "<group>"; };
+		6FB7D60A1FA0436B00EFE441 /* GoogleAnalyticsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsBridge.cpp; sourceTree = "<group>"; };
+		6FB7D60B1FA0436B00EFE441 /* GoogleAnalyticsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsBridge.hpp; sourceTree = "<group>"; };
+		6FB7D60C1FA0436B00EFE441 /* GoogleAnalyticsBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D60D1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D60E1FA0436B00EFE441 /* GoogleAnalyticsProduct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsProduct.cpp; sourceTree = "<group>"; };
+		6FB7D60F1FA0436B00EFE441 /* GoogleAnalyticsProduct.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsProduct.hpp; sourceTree = "<group>"; };
+		6FB7D6101FA0436B00EFE441 /* GoogleAnalyticsTracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsTracker.cpp; sourceTree = "<group>"; };
+		6FB7D6111FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsTracker.hpp; sourceTree = "<group>"; };
+		6FB7D6131FA0436B00EFE441 /* EEGoogleAnalyticsTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEGoogleAnalyticsTracker.h; sourceTree = "<group>"; };
+		6FB7D6141FA0436B00EFE441 /* EEGoogleAnalyticsTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEGoogleAnalyticsTracker.m; sourceTree = "<group>"; };
+		6FB7D6211FA0443C00EFE441 /* GoogleAnalyticsProductAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsProductAction.cpp; sourceTree = "<group>"; };
+		6FB7D6221FA0443C00EFE441 /* GoogleAnalyticsProductAction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsProductAction.hpp; sourceTree = "<group>"; };
+		6FB7D6291FA045EA00EFE441 /* GoogleAnalyticsParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsParameter.cpp; sourceTree = "<group>"; };
+		6FB7D62A1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsParameter.hpp; sourceTree = "<group>"; };
+		6FB7D62D1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsEventBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D62E1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsEventBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D6311FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsExceptionBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D6321FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsExceptionBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D6351FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsScreenViewBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D6361FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsScreenViewBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D6391FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsTimingBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D63A1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsTimingBuilder.hpp; sourceTree = "<group>"; };
+		6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsSocialBuilder.cpp; sourceTree = "<group>"; };
+		6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsSocialBuilder.hpp; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
 		6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobNativeAd.cpp; path = admob/internal/AdMobNativeAd.cpp; sourceTree = "<group>"; };
@@ -752,6 +826,7 @@
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95DC76171EF8F28D00CAA8F3 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
+		986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.debug.xcconfig"; sourceTree = "<group>"; };
 		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_iron_src.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.release.xcconfig"; sourceTree = "<group>"; };
@@ -763,6 +838,7 @@
 		C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_iron_source.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C67A01E8CD5527E8A064DB36 /* Pods-common-ee_x_mobile_admob.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_admob.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_admob/Pods-common-ee_x_mobile_admob.release.xcconfig"; sourceTree = "<group>"; };
 		C9CEA02B2FAAF6914287F328 /* libPods-common-ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_app_lovin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_google.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D376B3617772D8EC8E24A7DF /* Pods-common-ee_x_mobile_app_lovin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_app_lovin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin.debug.xcconfig"; sourceTree = "<group>"; };
 		D93D556ED4B4923A6216553E /* Pods-common-ee_x_mobile_iron_source.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_source.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_source/Pods-common-ee_x_mobile_iron_source.debug.xcconfig"; sourceTree = "<group>"; };
 		DB953297252D12BFD181E1E0 /* Pods-common-ee_x_mobile_app_lovin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_app_lovin.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin.release.xcconfig"; sourceTree = "<group>"; };
@@ -892,6 +968,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F9EFA881F9EFA1A00C931D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D1A8116DA161224BD173A89 /* libPods-common-ee_x_mobile_google.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FAFB5CF1EC94E0F00450E67 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -935,6 +1019,7 @@
 				6F36883A1F85F1B800AE2D93 /* ee_x_mobile_vungle.a */,
 				6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */,
 				6F2479F41F8E3569009E702C /* ee_x_mobile_admob.a */,
+				6F9EFA9E1F9EFA1A00C931D7 /* ee_x_mobile_google.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -957,6 +1042,7 @@
 				30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */,
 				E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */,
 				C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */,
+				CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1097,6 +1183,8 @@
 				6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */,
 				6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */,
 				6F43A23B1EC19F3100C68152 /* crashlytics */,
+				6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */,
+				6FB7D6071FA0436B00EFE441 /* google */,
 				6F24C38B1EC2C3EF00509B6C /* Firebase.hpp */,
 				6F24C4DC1EC2EF0A00509B6C /* FirebaseFwd.hpp */,
 				6F83DD061EC1CDC1004C5500 /* firebase */,
@@ -1323,6 +1411,47 @@
 			name = internal;
 			sourceTree = "<group>";
 		};
+		6FB7D6071FA0436B00EFE441 /* google */ = {
+			isa = PBXGroup;
+			children = (
+				6FB7D6081FA0436B00EFE441 /* EEGoogleAnalytics.h */,
+				6FB7D6091FA0436B00EFE441 /* EEGoogleAnalytics.m */,
+				6FB7D60A1FA0436B00EFE441 /* GoogleAnalyticsBridge.cpp */,
+				6FB7D60B1FA0436B00EFE441 /* GoogleAnalyticsBridge.hpp */,
+				6FB7D60C1FA0436B00EFE441 /* GoogleAnalyticsBuilder.cpp */,
+				6FB7D60D1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp */,
+				6FB7D62D1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.cpp */,
+				6FB7D62E1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.hpp */,
+				6FB7D6311FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.cpp */,
+				6FB7D6321FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.hpp */,
+				6FB7D6351FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.cpp */,
+				6FB7D6361FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp */,
+				6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */,
+				6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */,
+				6FB7D6391FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.cpp */,
+				6FB7D63A1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp */,
+				6FB7D60E1FA0436B00EFE441 /* GoogleAnalyticsProduct.cpp */,
+				6FB7D60F1FA0436B00EFE441 /* GoogleAnalyticsProduct.hpp */,
+				6FB7D6211FA0443C00EFE441 /* GoogleAnalyticsProductAction.cpp */,
+				6FB7D6221FA0443C00EFE441 /* GoogleAnalyticsProductAction.hpp */,
+				6FB7D6101FA0436B00EFE441 /* GoogleAnalyticsTracker.cpp */,
+				6FB7D6111FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp */,
+				6FB7D6121FA0436B00EFE441 /* internal */,
+			);
+			path = google;
+			sourceTree = "<group>";
+		};
+		6FB7D6121FA0436B00EFE441 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				6FB7D6131FA0436B00EFE441 /* EEGoogleAnalyticsTracker.h */,
+				6FB7D6141FA0436B00EFE441 /* EEGoogleAnalyticsTracker.m */,
+				6FB7D6291FA045EA00EFE441 /* GoogleAnalyticsParameter.cpp */,
+				6FB7D62A1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
 		6FF6B5711F8F268900A27634 /* internal */ = {
 			isa = PBXGroup;
 			children = (
@@ -1384,6 +1513,8 @@
 				0FE9CB62FB4F6C8CB2535774 /* Pods-common-ee_x_mobile_iron_source.release.xcconfig */,
 				FE11F6699A806319F3C824BB /* Pods-common-ee_x_mobile_vungle.debug.xcconfig */,
 				DC87DCD918D2FC3512B2426E /* Pods-common-ee_x_mobile_vungle.release.xcconfig */,
+				986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */,
+				0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1656,6 +1787,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F9EFA911F9EFA1A00C931D7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FB7D61A1FA0436B00EFE441 /* GoogleAnalyticsBuilder.hpp in Headers */,
+				6FB7D6381FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.hpp in Headers */,
+				6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */,
+				6FB7D61F1FA0436B00EFE441 /* EEGoogleAnalyticsTracker.h in Headers */,
+				6FB7D6151FA0436B00EFE441 /* EEGoogleAnalytics.h in Headers */,
+				6FB7D6301FA047F700EFE441 /* GoogleAnalyticsEventBuilder.hpp in Headers */,
+				6FB7D61C1FA0436B00EFE441 /* GoogleAnalyticsProduct.hpp in Headers */,
+				6FB7D6341FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.hpp in Headers */,
+				6FB7D6241FA0443C00EFE441 /* GoogleAnalyticsProductAction.hpp in Headers */,
+				6FB7D5EC1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp in Headers */,
+				6FB7D6181FA0436B00EFE441 /* GoogleAnalyticsBridge.hpp in Headers */,
+				6FB7D61E1FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp in Headers */,
+				6FB7D62C1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp in Headers */,
+				6FB7D63C1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1920,6 +2072,27 @@
 			productReference = 6F978C9D1F4184CF00247CA8 /* ee_x_mobile_iron_source.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		6F9EFA7D1F9EFA1A00C931D7 /* ee_x_mobile_google */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F9EFA9B1F9EFA1A00C931D7 /* Build configuration list for PBXNativeTarget "ee_x_mobile_google" */;
+			buildPhases = (
+				6F9EFA801F9EFA1A00C931D7 /* [CP] Check Pods Manifest.lock */,
+				6F9EFA811F9EFA1A00C931D7 /* Sources */,
+				6F9EFA881F9EFA1A00C931D7 /* Frameworks */,
+				6F9EFA901F9EFA1A00C931D7 /* Copy Files */,
+				6F9EFA911F9EFA1A00C931D7 /* Headers */,
+				6F9EFA9A1F9EFA1A00C931D7 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F9EFA7E1F9EFA1A00C931D7 /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_google;
+			productName = "ee-library";
+			productReference = 6F9EFA9E1F9EFA1A00C931D7 /* ee_x_mobile_google.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6FAFB5E01EC94E0F00450E67 /* Build configuration list for PBXNativeTarget "ee_x_mobile_store" */;
@@ -1993,6 +2166,7 @@
 				6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */,
 				6F43A29E1EC19F5700C68152 /* ee_x_mobile_crashlytics */,
 				6F43A2AA1EC19F8700C68152 /* ee_x_mobile_notification */,
+				6F9EFA7D1F9EFA1A00C931D7 /* ee_x_mobile_google */,
 				6F83DCF31EC1CD9B004C5500 /* ee_x_mobile_firebase */,
 				6F3688491F86137800AE2D93 /* ee_x_mobile_ads */,
 				EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */,
@@ -2259,6 +2433,39 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6F9EFA801F9EFA1A00C931D7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_google-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F9EFA9A1F9EFA1A00C931D7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2481,6 +2688,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6F9EFA811F9EFA1A00C931D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FB7D6191FA0436B00EFE441 /* GoogleAnalyticsBuilder.cpp in Sources */,
+				6FB7D61B1FA0436B00EFE441 /* GoogleAnalyticsProduct.cpp in Sources */,
+				6FB7D63B1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.cpp in Sources */,
+				6FB7D6231FA0443C00EFE441 /* GoogleAnalyticsProductAction.cpp in Sources */,
+				6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */,
+				6FB7D6201FA0436B00EFE441 /* EEGoogleAnalyticsTracker.m in Sources */,
+				6FB7D6171FA0436B00EFE441 /* GoogleAnalyticsBridge.cpp in Sources */,
+				6FB7D6371FA0485900EFE441 /* GoogleAnalyticsScreenViewBuilder.cpp in Sources */,
+				6FB7D6161FA0436B00EFE441 /* EEGoogleAnalytics.m in Sources */,
+				6FB7D61D1FA0436B00EFE441 /* GoogleAnalyticsTracker.cpp in Sources */,
+				6FB7D62B1FA045EA00EFE441 /* GoogleAnalyticsParameter.cpp in Sources */,
+				6FB7D62F1FA047F700EFE441 /* GoogleAnalyticsEventBuilder.cpp in Sources */,
+				6FB7D6331FA0483400EFE441 /* GoogleAnalyticsExceptionBuilder.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FAFB5C91EC94E0F00450E67 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2590,6 +2817,11 @@
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6F978C7F1F4184CF00247CA8 /* PBXContainerItemProxy */;
+		};
+		6F9EFA7E1F9EFA1A00C931D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = 6F9EFA7F1F9EFA1A00C931D7 /* PBXContainerItemProxy */;
 		};
 		6FAFB5C61EC94E0F00450E67 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2912,6 +3144,42 @@
 			};
 			name = Release;
 		};
+		6F9EFA9C1F9EFA1A00C931D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6F9EFA9D1F9EFA1A00C931D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 		6FAFB5E11EC94E0F00450E67 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3202,6 +3470,15 @@
 			buildConfigurations = (
 				6F978C9B1F4184CF00247CA8 /* Debug */,
 				6F978C9C1F4184CF00247CA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F9EFA9B1F9EFA1A00C931D7 /* Build configuration list for PBXNativeTarget "ee_x_mobile_google" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F9EFA9C1F9EFA1A00C931D7 /* Debug */,
+				6F9EFA9D1F9EFA1A00C931D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

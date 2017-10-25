@@ -9,6 +9,7 @@
 #include <cassert>
 #include <mutex>
 #include <queue>
+#include <sstream>
 #include <thread>
 
 #include "ee/Macro.hpp"
@@ -49,6 +50,12 @@ void runOnUiThreadAndWait(const Runnable<void>& runnable) {
 #endif // EE_X_ANDROID
 }
 */
+
+std::string toString(float value) {
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
+}
 
 std::string toString(bool value) {
     return value ? "true" : "false";

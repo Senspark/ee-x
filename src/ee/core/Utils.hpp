@@ -32,6 +32,9 @@ T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
     return promise.get_future().get();
 }
 
+/// Converts float to string without trailing zeroes.
+std::string toString(float value);
+
 std::string toString(bool value);
 bool toBool(const std::string& value);
 } // namespace core

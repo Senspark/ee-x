@@ -66,8 +66,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* message) {
-                       [self showRewardedVideo];
-                       return @"";
+                       return [EEUtils toString:[self showRewardedVideo]];
                    }];
 }
 

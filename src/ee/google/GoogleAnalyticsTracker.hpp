@@ -9,8 +9,7 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_TRACKER_HPP
 #define EE_X_GOOGLE_ANALYTICS_TRACKER_HPP
 
-#include <string>
-#include <unordered_map>
+#include "ee/GoogleAnalyticsFwd.hpp"
 
 namespace ee {
 namespace google {
@@ -22,7 +21,7 @@ public:
 
     void setAllowIDFACollection(bool enabled);
 
-    void send(const std::unordered_map<std::string, std::string>& dict);
+    void send(const TrackingDict& dict);
 
 protected:
     friend Analytics;

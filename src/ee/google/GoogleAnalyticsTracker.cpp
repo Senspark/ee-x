@@ -42,7 +42,7 @@ void Self::setAllowIDFACollection(bool enabled) {
                 core::toString(enabled));
 }
 
-void Self::send(const std::unordered_map<std::string, std::string>& dict) {
+void Self::send(const TrackingDict& dict) {
     nlohmann::json json = dict;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__send(trackingId_), json.dump());

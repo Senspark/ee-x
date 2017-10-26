@@ -76,6 +76,11 @@ project(':ee-x-core').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio
 import com.ee.core.PluginManager;
 
 public class AppActivity extends Cocos2dxActivity {
+    Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().initializePlugins(this);
+    }
+
     @Override
     protected void onStart() {
         PluginManager.getInstance().onStart();
@@ -120,6 +125,17 @@ public class AppActivity extends Cocos2dxActivity {
 #### iOS & macOS
 
 - Install pod.
+
+- Modify `AppController.mm`:
+
+```
+#include <ee/Core.hpp>
+
+- (BOOL)application:(UIApplication*)application
+    didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
+    [[EEPluginManager getInstance] initializePlugins];
+}
+```
 
 ## Crashlytics
 
@@ -582,7 +598,7 @@ project(`:ee-x-applovin').projectDir = new File('CLONE_PATH/ee-x/proj.android_st
 
 ```
 dependencies {
-	compile project(':ee-x-applovin')
+    compile project(':ee-x-applovin')
 }
 ```
 
@@ -592,10 +608,10 @@ dependencies {
 import com.ee.applovin.AppLovin;
 
 public class AppActivity extends Cocos2dxActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		PluginManager.getInstance().addPlugin(new AppLovin(this));
-	}
+    Override
+    protected void onCreate(Bundle savedInstanceState) {
+    PluginManager.getInstance().addPlugin(new AppLovin(this));
+    }
 }
 ```
 
@@ -636,7 +652,7 @@ project(`:ee-x-admob').projectDir = new File('CLONE_PATH/ee-x/proj.android_studi
 
 ```
 dependencies {
-	compile project(':ee-x-admob')
+    compile project(':ee-x-admob')
 }
 ```
 
@@ -646,10 +662,10 @@ dependencies {
 import com.ee.admob.AdMob;
 
 public class AppActivity extends Cocos2dxActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		PluginManager.getInstance().addPlugin(new AdMob(this));
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PluginManager.getInstance().addPlugin(new AdMob(this));
+    }
 }
 ```
 

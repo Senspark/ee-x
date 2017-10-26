@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.author         = 'Hai Hoang'
 
   spec.ios.deployment_target = '7.0'
-  spec.osx.deployment_target = '10.7'
+  spec.osx.deployment_target = '10.8'
 
   spec.source = {
     :git => 'https://github.com/enrevol/ee-x.git',

@@ -21,6 +21,8 @@ public class MessageBridge {
      */
     private Map<String, MessageHandler> _handlers;
 
+    private final Object _handlerLock;
+
     /**
      * Thread-safe singleton pattern.
      */
@@ -39,6 +41,7 @@ public class MessageBridge {
 
     private MessageBridge() {
         _handlers = new HashMap<>();
+        _handlerLock = new Object();
     }
 
 
@@ -51,7 +54,7 @@ public class MessageBridge {
      */
     @NonNull
     private String call(@NonNull String tag, @NonNull String message) {
-        MessageHandler handler = _handlers.get(tag);
+        MessageHandler handler = findHandler(tag);
         if (handler == null) {
             _logger.error("call: " + tag + " doesn't exist!");
             return "";
@@ -100,12 +103,14 @@ public class MessageBridge {
      * @return Whether the registration was successful.
      */
     public boolean registerHandler(MessageHandler handler, @NonNull String tag) {
-        if (_handlers.containsKey(tag)) {
-            _logger.error("registerHandler: " + tag + " already exists!");
-            return false;
+        synchronized (_handlerLock) {
+            if (_handlers.containsKey(tag)) {
+                _logger.error("registerHandler: " + tag + " already exists!");
+                return false;
+            }
+            _handlers.put(tag, handler);
+            return true;
         }
-        _handlers.put(tag, handler);
-        return true;
     }
 
     /**
@@ -115,11 +120,22 @@ public class MessageBridge {
      * @return Whether the deregistration was successful.
      */
     public boolean deregisterHandler(@NonNull String tag) {
-        if (!_handlers.containsKey(tag)) {
-            _logger.error("deregisterHandler: " + tag + " doesn't exist!");
-            return false;
+        synchronized (_handlerLock) {
+            if (!_handlers.containsKey(tag)) {
+                _logger.error("deregisterHandler: " + tag + " doesn't exist!");
+                return false;
+            }
+            _handlers.remove(tag);
+            return true;
         }
-        _handlers.remove(tag);
-        return true;
+    }
+
+    private MessageHandler findHandler(@NonNull String tag) {
+        synchronized (_handlerLock) {
+            if (!_handlers.containsKey(tag)) {
+                return null;
+            }
+            return _handlers.get(tag);
+        }
     }
 }

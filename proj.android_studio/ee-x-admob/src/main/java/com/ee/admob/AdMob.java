@@ -43,6 +43,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     private static final String k__onRewarded                = "AdMob_onRewarded";
     private static final String k__onFailedToLoad            = "AdMob_onFailedToLoad";
     private static final String k__onLoaded                  = "AdMob_onLoaded";
+    private static final String k__onOpened                  = "AdMob_onOpened";
     private static final String k__onClosed                  = "AdMob_onClosed";
 
     private static final String k__ad_id       = "ad_id";
@@ -407,6 +408,9 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onRewardedVideoAdOpened() {
         _logger.info("onRewardedVideoAdOpened");
         Utils.checkMainThread();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onOpened);
     }
 
     @Override

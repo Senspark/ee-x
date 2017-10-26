@@ -3,9 +3,7 @@
 #include "AppDelegate.hpp"
 
 int main(int argc, char* argv[]) {
+    eetest::AppDelegate app;
     [[EEPluginManager getInstance] addPlugin:@"Crashlytics"];
-
-    // Simulate OSX.
-    AppDelegate::getInstance()->applicationDidFinishLaunching();
-    return 0;
+    return cocos2d::Application::getInstance()->run();
 }

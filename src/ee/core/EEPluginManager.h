@@ -12,6 +12,8 @@
 
 + (instancetype _Nonnull)getInstance;
 
+- (void)initializePlugins;
+
 /// Adds and initialize a plugin.
 /// @param[in] pluginName The plugin's name, e.g. AdMob, Vungle.
 - (void)addPlugin:(NSString* _Nonnull)pluginName;

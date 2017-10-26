@@ -21,7 +21,7 @@
 
 NSString* const k__getDensity = @"Metrics_getDensity";
 
-+ (void)initializeHandlers {
++ (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge registerHandler:k__getDensity
                    callback:^(NSString* message) {

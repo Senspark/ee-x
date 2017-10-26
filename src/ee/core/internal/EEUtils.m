@@ -54,14 +54,29 @@ static NSString* const k__false = @"false";
 }
 
 // clang-format off
+static NSString* const k__isMainThread                  = @"Utils_isMainThread";
+static NSString* const k__runOnUiThread                 = @"Utils_runOnUiThread";
+static NSString* const k__runOnUiThreadCallback         = @"Utils_runOnUiThreadCallback";
 static NSString* const k__getSHA1CertificateFingerprint = @"Utils_getSHA1CertificateFingerprint";
 static NSString* const k__getVersionName                = @"Utils_getVersionName";
 static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
 static NSString* const k__testConnection                = @"Utils_testConnection";
+static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationInstalled";
+static NSString* const k__isTablet                      = @"Utils_isTablet";
 // clang-format on
 
-+ (void)initializeHandlers {
++ (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:k__isMainThread
+                   callback:^(NSString* message) {
+                       return [self toString:[self isMainThread]];
+                   }];
+    [bridge registerHandler:k__runOnUiThread
+                   callback:^(NSString* message) {
+                       return [self toString:[self runOnMainThread]];
+                   }];
+
     [bridge registerHandler:k__getSHA1CertificateFingerprint
                    callback:^(NSString* message) {
                        // Not supported.
@@ -78,11 +93,44 @@ static NSString* const k__testConnection                = @"Utils_testConnection
                        return [self getVersionCode];
                    }];
 
+    [bridge
+        registerHandler:k__isApplicationInstalled
+               callback:^(NSString* message) {
+                   NSString* applicationId = message;
+                   return [self
+                       toString:[self isApplicationInstalled:applicationId]];
+               }];
+
+    [bridge registerHandler:k__isTablet
+                   callback:^(NSString* message) {
+                       return [self toString:[self isTablet]];
+                   }];
+
     [bridge registerHandler:k__testConnection
                    callback:^(NSString* message) {
-                       NSString* hostName = message;
-                       return [self toString:[self testConnection:hostName]];
+                       return [self
+                           toString:[self testConnection:@"www.google.com"]];
                    }];
+}
+
++ (BOOL)isMainThread {
+    return [NSThread isMainThread];
+}
+
++ (void)signalMainThread {
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__runOnUiThreadCallback];
+}
+
++ (BOOL)runOnMainThread {
+    if ([self isMainThread]) {
+        [self signalMainThread];
+        return YES;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self signalMainThread];
+    });
+    return NO;
 }
 
 + (NSString* _Nonnull)getVersionName {
@@ -95,6 +143,16 @@ static NSString* const k__testConnection                = @"Utils_testConnection
     NSString* versionString = [[NSBundle mainBundle]
         objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
     return versionString;
+}
+
++ (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId {
+    NSString* appName = [applicationId stringByAppendingString:@"://"];
+    NSURL* url = [NSURL URLWithString:appName];
+    return [[UIApplication sharedApplication] canOpenURL:url];
+}
+
++ (BOOL)isTablet {
+    return [[[UIDevice currentDevice] model] hasPrefix:@"iPad"];
 }
 
 + (BOOL)testConnection:(NSString* _Nonnull)hostName {

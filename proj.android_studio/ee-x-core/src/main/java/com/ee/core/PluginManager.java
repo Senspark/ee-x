@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.ee.core.internal.Metrics;
+import com.ee.core.internal.Utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class PluginManager {
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
+    private Context                     _context;
     private Map<String, PluginProtocol> _plugins;
 
     private static class Holder {
@@ -30,7 +32,16 @@ public class PluginManager {
 
     private PluginManager() {
         _plugins = new HashMap<>();
-        Metrics.initializeHandlers();
+    }
+
+    public void initializePlugins(@NonNull Context context) {
+        _context = context;
+        Utils.registerHandlers();
+        Metrics.registerHandlers();
+    }
+
+    public Context getContext() {
+        return _context;
     }
 
     @SuppressWarnings({"unused", "TryWithIdenticalCatches"})

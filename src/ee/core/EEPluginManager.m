@@ -33,8 +33,6 @@
         return nil;
     }
     plugins_ = [[NSMutableDictionary alloc] init];
-    [EEMetrics initializeHandlers];
-    [EEUtils initializeHandlers];
     return self;
 }
 
@@ -42,6 +40,11 @@
     [plugins_ release];
     plugins_ = nil;
     [super dealloc];
+}
+
+- (void)initializePlugins {
+    [EEUtils registerHandlers];
+    [EEMetrics registerHandlers];
 }
 
 - (void)addPlugin:(NSString* _Nonnull)pluginName {

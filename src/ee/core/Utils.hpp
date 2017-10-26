@@ -15,11 +15,19 @@
 
 namespace ee {
 namespace core {
+/// Converts float to string without trailing zeroes.
+std::string toString(float value);
+
+std::string toString(bool value);
+bool toBool(const std::string& value);
+
+bool isMainThread();
+
 template <class T>
 using Runnable = std::function<T()>;
 
 /// Runs the specified runnable on the main thread.
-void runOnUiThread(const Runnable<void>& runnable);
+bool runOnUiThread(const Runnable<void>& runnable);
 
 void runOnUiThreadAndWait(const Runnable<void>& runnable);
 
@@ -32,12 +40,6 @@ T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
     return promise.get_future().get();
 }
 
-/// Converts float to string without trailing zeroes.
-std::string toString(float value);
-
-std::string toString(bool value);
-bool toBool(const std::string& value);
-
 /// Android only.
 /// iOS returns an empty string.
 std::string getSHA1CertificateFingerprint();
@@ -48,15 +50,22 @@ std::string getVersionName();
 /// Gets the version code of the application.
 std::string getVersionCode();
 
-bool testConnection(const std::string& hostName);
+bool isApplicationInstalled(const std::string& applicationId);
+
+bool isTablet();
+
+bool testConnection();
 } // namespace core
 
+using core::isMainThread;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionName;
 using core::getVersionCode;
+using core::isApplicationInstalled;
+using core::isTablet;
 using core::testConnection;
 } // namespace ee
 

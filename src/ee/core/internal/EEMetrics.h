@@ -11,7 +11,7 @@
 
 @interface EEMetrics : NSObject
 
-+ (void)initializeHandlers;
++ (void)registerHandlers;
 
 + (CGFloat)getDensity;
 

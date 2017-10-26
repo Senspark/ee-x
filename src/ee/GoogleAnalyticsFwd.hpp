@@ -25,7 +25,9 @@ class Product;
 class ProductAction;
 using TrackingDict = std::map<std::string, std::string>;
 } // namespace google
+
 using GoogleAnalytics = google::Analytics;
+using GoogleAnalyticsTracker = google::AnalyticsTracker;
 } // namespace ee
 
 #endif /* EE_X_GOOGLE_ANALYTICS_FWD_HPP */

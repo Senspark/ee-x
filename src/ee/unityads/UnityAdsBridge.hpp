@@ -45,6 +45,7 @@ private:
     void onError(const std::string& placementId);
     void onSkipped(const std::string& placementId);
     void onFinished(const std::string& placementId);
+    void finish(const std::string& placementId, bool result);
 
     bool errored_;
 

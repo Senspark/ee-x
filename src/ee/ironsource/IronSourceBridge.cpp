@@ -122,6 +122,7 @@ void Self::onOpened() {
 }
 
 void Self::onClosed() {
+    auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideos_.count(placementId_)) {
         auto ad = rewardedVideos_.at(placementId_);
         if (rewarded_) {
@@ -129,11 +130,12 @@ void Self::onClosed() {
         } else {
             ad->setResult(false);
         }
+        auto successful = mediation.deregisterRewardedVideo(ad);
+        assert(successful);
         return;
     }
 
     // Other mediation network.
-    auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.setRewardedVideoResult(true);
     assert(successful);
 }

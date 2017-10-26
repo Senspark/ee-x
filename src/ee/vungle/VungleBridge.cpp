@@ -95,14 +95,16 @@ void Self::onStart() {
 }
 
 void Self::onEnd(bool wasSuccessfulView) {
+    auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideo_ == nullptr) {
         // Other mediation network.
-        auto&& mediation = ads::MediationManager::getInstance();
         auto successful = mediation.setRewardedVideoResult(wasSuccessfulView);
         assert(successful);
     } else {
         assert(not errored_);
         rewardedVideo_->setResult(wasSuccessfulView);
+        auto successful = mediation.deregisterRewardedVideo(rewardedVideo_);
+        assert(successful);
     }
 }
 

@@ -139,45 +139,34 @@ void Self::onError(const std::string& placementId) {
 }
 
 void Self::onSkipped(const std::string& placementId) {
-    if (rewardedVideos_.count(placementId)) {
-        auto ad = rewardedVideos_.at(placementId);
-        ad->setResult(false);
-        return;
-    }
-    if (interstitialAds_.count(placementId)) {
-        auto ad = interstitialAds_.at(placementId);
-        ad->setDone();
-        return;
-    }
-
-    // Other mediation network.
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Not sure interstitial ad or rewarded video so check both.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.setRewardedVideoResult(false);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    finish(placementId, false);
 }
 
 void Self::onFinished(const std::string& placementId) {
+    finish(placementId, true);
+}
+
+void Self::finish(const std::string& placementId, bool result) {
+    auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideos_.count(placementId)) {
         auto ad = rewardedVideos_.at(placementId);
-        ad->setResult(true);
+        ad->setResult(result);
+        auto successful = mediation.deregisterRewardedVideo(ad);
+        assert(successful);
         return;
     }
     if (interstitialAds_.count(placementId)) {
         auto ad = interstitialAds_.at(placementId);
         ad->setDone();
+        auto successful = mediation.deregisterInterstitialAd(ad);
+        assert(successful);
         return;
     }
 
     // Other mediation network.
-    auto&& mediation = ads::MediationManager::getInstance();
-
     // Not sure interstitial ad or rewarded video so check both.
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.setRewardedVideoResult(true);
+    auto wasRewardedVideo = mediation.setRewardedVideoResult(result);
 
     assert(wasInterstitialAd || wasRewardedVideo);
 }

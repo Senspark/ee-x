@@ -20,14 +20,14 @@ class AnalyticsTracker {
 public:
     ~AnalyticsTracker();
 
+    void setAllowIDFACollection(bool enabled);
+
+    void send(const std::unordered_map<std::string, std::string>& dict);
+
 protected:
     friend Analytics;
 
     explicit AnalyticsTracker(Analytics* plugin, const std::string& trackingId);
-
-    void setAllowIDFACollection(bool enabled);
-
-    void send(const std::unordered_map<std::string, std::string>& dict);
 
 private:
     Analytics* plugin_;

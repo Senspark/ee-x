@@ -28,6 +28,13 @@ using TrackingDict = std::map<std::string, std::string>;
 
 using GoogleAnalytics = google::Analytics;
 using GoogleAnalyticsTracker = google::AnalyticsTracker;
+using GoogleEventBuilder = google::EventBuilder;
+using GoogleExceptionBuilder = google::ExceptionBuilder;
+using GoogleScreenViewBuilder = google::ScreenViewBuilder;
+using GoogleSocialBuilder = google::SocialBuilder;
+using GoogleTimingBuilder = google::TimingBuilder;
+using GoogleProduct = google::Product;
+using GoogleProductAction = google::ProductAction;
 } // namespace ee
 
 #endif /* EE_X_GOOGLE_ANALYTICS_FWD_HPP */

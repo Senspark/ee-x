@@ -67,6 +67,7 @@ constexpr auto k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFinge
 constexpr auto k__getVersionName                = "Utils_getVersionName";
 constexpr auto k__getVersionCode                = "Utils_getVersionCode";
 constexpr auto k__isApplicationInstalled        = "Utils_isApplicationInstalled";
+constexpr auto k__openApplication               = "Utils_openApplication";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
 // clang-format on
@@ -153,6 +154,11 @@ bool isApplicationInstalled(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isApplicationInstalled);
     return toBool(response);
+}
+
+void openApplication(const std::string& applicationId) {
+    auto&& bridge = MessageBridge::getInstance();
+    bridge.call(k__openApplication);
 }
 
 bool isTablet() {

@@ -52,6 +52,8 @@ std::string getVersionCode();
 
 bool isApplicationInstalled(const std::string& applicationId);
 
+void openApplication(const std::string& applicationId);
+
 bool isTablet();
 
 bool testConnection();

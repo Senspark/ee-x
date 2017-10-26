@@ -60,9 +60,10 @@ static NSString* const k__runOnUiThreadCallback         = @"Utils_runOnUiThreadC
 static NSString* const k__getSHA1CertificateFingerprint = @"Utils_getSHA1CertificateFingerprint";
 static NSString* const k__getVersionName                = @"Utils_getVersionName";
 static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
-static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationInstalled";
+static NSString* const k__openApplication               = @"Utils_openApplication";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
+static NSString* const k__testConnection                = @"Utils_testConnection";
 // clang-format on
 
 + (void)registerHandlers {
@@ -100,6 +101,13 @@ static NSString* const k__isTablet                      = @"Utils_isTablet";
                    return [self
                        toString:[self isApplicationInstalled:applicationId]];
                }];
+
+    [bridge registerHandler:k__openApplication
+                   callback:^(NSString* message) {
+                       NSString* applicationId = message;
+                       return
+                           [self toString:[self openApplication:applicationId]];
+                   }];
 
     [bridge registerHandler:k__isTablet
                    callback:^(NSString* message) {
@@ -146,13 +154,32 @@ static NSString* const k__isTablet                      = @"Utils_isTablet";
 }
 
 + (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId {
-    NSString* appName = [applicationId stringByAppendingString:@"://"];
-    NSURL* url = [NSURL URLWithString:appName];
+#if TARGET_OS_IOS
+    NSURL* url =
+        [NSURL URLWithString:[applicationId stringByAppendingString:@"://"]];
     return [[UIApplication sharedApplication] canOpenURL:url];
+#else  // TARGET_OS_IOS
+    // macOS
+    return NO;
+#endif // TARGET_OS_IOS
+}
+
++ (BOOL)openApplication:(NSString* _Nonnull)applicationId {
+#if TARGET_OS_IOS
+    NSURL* url =
+        [NSURL URLWithString:[applicationId stringByAppendingString:@"://"]];
+    return [[UIApplication sharedApplication] openURL:url];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
 }
 
 + (BOOL)isTablet {
+#if TARGET_OS_IOS
     return [[[UIDevice currentDevice] model] hasPrefix:@"iPad"];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
 }
 
 + (BOOL)testConnection:(NSString* _Nonnull)hostName {

@@ -38,6 +38,8 @@
 + (NSString* _Nonnull)getVersionCode;
 
 + (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId;
++ (BOOL)openApplication:(NSString* _Nonnull)applicationId;
+
 + (BOOL)isTablet;
 + (BOOL)testConnection:(NSString* _Nonnull)hostName;
 

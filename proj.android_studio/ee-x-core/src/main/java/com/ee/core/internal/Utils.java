@@ -2,6 +2,7 @@ package com.ee.core.internal;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -63,6 +64,7 @@ public class Utils {
     private static final String k__getVersionName                = "Utils_getVersionName";
     private static final String k__getVersionCode                = "Utils_getVersionCode";
     private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
+    private static final String k__openApplication               = "Utils_openApplication";
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
 
@@ -124,6 +126,17 @@ public class Utils {
         }, k__isApplicationInstalled);
 
         bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                String applicationId = message;
+                return Utils.toString(openApplication(context, applicationId));
+            }
+        }, k__openApplication);
+
+        bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -173,7 +186,7 @@ public class Utils {
 
     @SuppressWarnings("WeakerAccess")
     @NonNull
-    public static String getSHA1CertificateFingerprint(Context context) {
+    public static String getSHA1CertificateFingerprint(@NonNull Context context) {
         String hash = "";
         try {
             PackageManager packetManager = context.getPackageManager();
@@ -199,7 +212,7 @@ public class Utils {
 
     @SuppressWarnings("WeakerAccess")
     @NonNull
-    public static String getVersionName(Context context) {
+    public static String getVersionName(@NonNull Context context) {
         PackageManager packetManager = context.getPackageManager();
         String versionName = "";
         try {
@@ -213,7 +226,7 @@ public class Utils {
 
     @SuppressWarnings("WeakerAccess")
     @NonNull
-    public static int getVersionCode(Context context) {
+    public static int getVersionCode(@NonNull Context context) {
         PackageManager packetManager = context.getPackageManager();
         int versionCode = -1;
         try {
@@ -226,7 +239,8 @@ public class Utils {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean isApplicationInstalled(Context context, @NonNull String applicationId) {
+    public static boolean isApplicationInstalled(@NonNull Context context,
+                                                 @NonNull String applicationId) {
         PackageManager packetManager = context.getPackageManager();
         boolean installed = false;
         try {
@@ -235,6 +249,17 @@ public class Utils {
         } catch (PackageManager.NameNotFoundException ignored) {
         }
         return installed;
+    }
+
+    public static boolean openApplication(@NonNull Context context, @NonNull String applicationId) {
+        PackageManager packetManager = context.getPackageManager();
+        Intent launchIntent = packetManager.getLaunchIntentForPackage(applicationId);
+        if (launchIntent != null) {
+            // Null pointer check in case package name was not found.
+            context.startActivity(launchIntent);
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -267,7 +292,7 @@ public class Utils {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean testConnection(Context context) {
+    public static boolean testConnection(@NonNull Context context) {
         ConnectivityManager connectivityManager =
             (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();

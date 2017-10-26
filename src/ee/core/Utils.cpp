@@ -82,11 +82,21 @@ namespace {
 std::queue<Runnable<void>> q_;
 SpinLock lock_;
 
-void runOnUiThreadCallback() {
+void pushRunnable(const Runnable<void>& runnable) {
+    std::lock_guard<SpinLock> guard(lock_);
+    q_.push(runnable);
+}
+
+Runnable<void> popRunnable() {
     std::lock_guard<SpinLock> guard(lock_);
     assert(not q_.empty());
-    q_.front()();
+    auto runnable = q_.front();
     q_.pop();
+    return runnable;
+}
+
+void runOnUiThreadCallback() {
+    popRunnable()();
 }
 
 void registerHandler() {
@@ -101,13 +111,15 @@ void registerHandler() {
             k__runOnUiThreadCallback);
     });
 }
-
 } // namespace
 
 bool runOnUiThread(const Runnable<void>& runnable) {
+    if (isMainThread()) {
+        runnable();
+        return true;
+    }
     registerHandler();
-    std::lock_guard<SpinLock> guard(lock_);
-    q_.push(runnable);
+    pushRunnable(runnable);
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__runOnUiThread);
     return toBool(response);

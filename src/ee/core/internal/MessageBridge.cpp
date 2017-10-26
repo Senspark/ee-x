@@ -13,32 +13,32 @@
 
 namespace ee {
 namespace core {
-MessageBridge& MessageBridge::getInstance() {
-    static MessageBridge sharedInstance;
+using Self = MessageBridge;
+
+Self& Self::getInstance() {
+    static Self sharedInstance;
     return sharedInstance;
 }
 
-MessageBridge::MessageBridge() {}
+Self::MessageBridge() {}
 
-MessageBridge::~MessageBridge() {}
+Self::~MessageBridge() {}
 
-std::string MessageBridge::call(const std::string& tag) {
+std::string Self::call(const std::string& tag) {
     return call(tag, "");
 }
 
-std::string MessageBridge::callCpp(const std::string& tag,
-                                   const std::string& message) {
-    std::lock_guard<SpinLock> guard(handlerLock_);
-    auto iter = handlers_.find(tag);
-    if (iter == handlers_.cend()) {
+std::string Self::callCpp(const std::string& tag, const std::string& message) {
+    auto handler = findHandler(tag);
+    if (not handler) {
         assert(false);
         return "";
     }
-    return iter->second(message);
+    return handler(message);
 }
 
-bool MessageBridge::registerHandler(const MessageHandler& handler,
-                                    const std::string& tag) {
+bool Self::registerHandler(const MessageHandler& handler,
+                           const std::string& tag) {
     std::lock_guard<SpinLock> guard(handlerLock_);
     if (handlers_.count(tag) > 0) {
         assert(false);
@@ -48,7 +48,7 @@ bool MessageBridge::registerHandler(const MessageHandler& handler,
     return true;
 }
 
-bool MessageBridge::deregisterHandler(const std::string& tag) {
+bool Self::deregisterHandler(const std::string& tag) {
     std::lock_guard<SpinLock> guard(handlerLock_);
     if (handlers_.count(tag) == 0) {
         assert(false);
@@ -56,6 +56,15 @@ bool MessageBridge::deregisterHandler(const std::string& tag) {
     }
     handlers_.erase(tag);
     return true;
+}
+
+MessageHandler Self::findHandler(const std::string& tag) {
+    std::lock_guard<SpinLock> guard(handlerLock_);
+    auto iter = handlers_.find(tag);
+    if (iter == handlers_.cend()) {
+        return nullptr;
+    }
+    return iter->second;
 }
 } // namespace core
 } // namespace ee

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.ee.admob.AdMob;
 import com.ee.applovin.AppLovin;
 import com.ee.core.Logger;
-import com.ee.core.Metrics;
 import com.ee.core.PluginManager;
 import com.ee.crashlytics.Crashlytics;
 import com.ee.facebook.FacebookAds;
@@ -28,8 +27,8 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
-        Metrics.initialize();
         PluginManager manager = PluginManager.getInstance();
+        manager.initializePlugins(this);
         manager.addPlugin(new Crashlytics(this));
         manager.addPlugin(new Notification(this));
         manager.addPlugin(new AdMob(this));
@@ -38,7 +37,6 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new IronSource(this));
         manager.addPlugin(new UnityAds(this));
         manager.addPlugin(new Vungle(this));
-
         _logger.debug("onCreate: end.");
     }
 

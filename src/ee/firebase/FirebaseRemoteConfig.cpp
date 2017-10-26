@@ -8,7 +8,7 @@
 
 #include <cassert>
 
-#include "ee/core/ScopeGuard.hpp"
+#include "ee/core/internal/ScopeGuard.hpp"
 #include "ee/firebase/FirebaseApp.hpp"
 #include "ee/firebase/FirebaseRemoteConfig.hpp"
 #include "ee/firebase/FirebaseScheduler.hpp"

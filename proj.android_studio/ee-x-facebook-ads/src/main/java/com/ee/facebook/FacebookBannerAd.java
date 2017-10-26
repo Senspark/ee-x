@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
-import com.ee.core.Metrics;
+import com.ee.core.internal.Metrics;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;

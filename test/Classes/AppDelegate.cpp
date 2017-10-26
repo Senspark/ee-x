@@ -131,6 +131,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     ee::runOnUiThreadAndWait(
         [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
 
+    getLogger().info("SHA1: ", ee::getSHA1CertificateFingerprint());
+    getLogger().info("Version name: ", ee::getVersionName());
+    getLogger().info("Version code: ", ee::getVersionCode());
+    getLogger().info("isTablet: ", ee::isTablet() ? "true" : "false");
+    getLogger().info("isConnected: ", ee::testConnection() ? "true" : "false");
     // testAdMobBannerAd();
     // testAdMobInterstitial();
     testAdMobRewardedVideo();

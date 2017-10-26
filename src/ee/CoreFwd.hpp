@@ -13,16 +13,18 @@
 
 namespace ee {
 namespace core {
-class Logger;
 struct LogLevel;
+class Logger;
+class Metrics;
 
 #if defined(EE_X_ANDROID)
 class JniUtils;
 #endif // EE_X_ANDROID
 } // namespace core
 
-using core::Logger;
 using core::LogLevel;
+using core::Logger;
+using core::Metrics;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

@@ -20,6 +20,9 @@ namespace core {
 using MessageHandler = std::function<std::string(const std::string& message)>;
 
 class MessageBridge final {
+private:
+    using Self = MessageBridge;
+
 public:
     static MessageBridge& getInstance();
 
@@ -56,8 +59,10 @@ private:
     MessageBridge();
     ~MessageBridge();
 
-    MessageBridge(const MessageBridge&) = delete;
-    MessageBridge& operator=(const MessageBridge&) = delete;
+    MessageBridge(const Self&) = delete;
+    Self& operator=(const Self&) = delete;
+
+    MessageHandler findHandler(const std::string& tag);
 
     SpinLock handlerLock_;
 

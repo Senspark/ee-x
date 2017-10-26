@@ -6,8 +6,11 @@
 //
 //
 
-#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
+#include <cassert>
+
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {
@@ -31,7 +34,13 @@ void Self::load() {
 }
 
 bool Self::show() {
-    return plugin_->showRewardedVideo(placementId_);
+    if (not plugin_->showRewardedVideo(placementId_)) {
+        return false;
+    }
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.registerRewardedVideo(this);
+    assert(successful);
+    return true;
 }
 } // namespace ironsource
 } // namespace ee

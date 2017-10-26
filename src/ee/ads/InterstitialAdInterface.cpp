@@ -6,7 +6,8 @@
 //
 //
 
-#include "InterstitialAdInterface.hpp"
+#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
 namespace ads {
@@ -16,7 +17,10 @@ Self::InterstitialAdInterface() {
     callback_ = nullptr;
 }
 
-Self::~InterstitialAdInterface() {}
+Self::~InterstitialAdInterface() {
+    auto&& mediation = MediationManager::getInstance();
+    mediation.deregisterInterstitialAd(this);
+}
 
 void Self::setResultCallback(const InterstitialAdCallback& callback) {
     callback_ = callback;

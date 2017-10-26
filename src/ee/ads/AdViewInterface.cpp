@@ -6,7 +6,7 @@
 //
 //
 
-#include "AdViewInterface.hpp"
+#include "ee/ads/AdViewInterface.hpp"
 
 namespace ee {
 namespace ads {

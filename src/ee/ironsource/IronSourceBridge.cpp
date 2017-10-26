@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
@@ -105,7 +106,9 @@ bool Self::showRewardedVideo(const std::string& placementId) {
 
 void Self::onRewarded(const std::string& placementId) {
     rewarded_ = true;
-    assert(placementId_ == placementId);
+    if (placementId_ != placementId) {
+        // come from other mediation network.
+    }
 }
 
 void Self::onFailed() {
@@ -115,16 +118,24 @@ void Self::onFailed() {
 }
 
 void Self::onOpened() {
-    //
+    rewarded_ = false;
 }
 
 void Self::onClosed() {
-    auto ad = rewardedVideos_.at(placementId_);
-    if (rewarded_) {
-        ad->setResult(true);
-    } else {
-        ad->setResult(false);
+    if (rewardedVideos_.count(placementId_)) {
+        auto ad = rewardedVideos_.at(placementId_);
+        if (rewarded_) {
+            ad->setResult(true);
+        } else {
+            ad->setResult(false);
+        }
+        return;
     }
+
+    // Other mediation network.
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.setRewardedVideoResult(true);
+    assert(successful);
 }
 } // namespace ironsource
 } // namespace ee

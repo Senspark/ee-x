@@ -6,9 +6,12 @@
 //
 //
 
-#include "ee/unityads/UnityAdsBridge.hpp"
+#include <cassert>
+
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
+#include "ee/unityads/UnityAdsBridge.hpp"
 #include "ee/unityads/internal/UnityInterstitialAd.hpp"
 #include "ee/unityads/internal/UnityRewardedVideo.hpp"
 
@@ -146,7 +149,15 @@ void Self::onSkipped(const std::string& placementId) {
         ad->setDone();
         return;
     }
-    assert(false);
+
+    // Other mediation network.
+    auto&& mediation = ads::MediationManager::getInstance();
+
+    // Not sure interstitial ad or rewarded video so check both.
+    auto wasInterstitialAd = mediation.setInterstitialAdDone();
+    auto wasRewardedVideo = mediation.setRewardedVideoResult(false);
+
+    assert(wasInterstitialAd || wasRewardedVideo);
 }
 
 void Self::onFinished(const std::string& placementId) {
@@ -160,7 +171,15 @@ void Self::onFinished(const std::string& placementId) {
         ad->setDone();
         return;
     }
-    assert(false);
+
+    // Other mediation network.
+    auto&& mediation = ads::MediationManager::getInstance();
+
+    // Not sure interstitial ad or rewarded video so check both.
+    auto wasInterstitialAd = mediation.setInterstitialAdDone();
+    auto wasRewardedVideo = mediation.setRewardedVideoResult(true);
+
+    assert(wasInterstitialAd || wasRewardedVideo);
 }
 } // namespace unityads
 } // namespace ee

@@ -32,6 +32,8 @@ public:
     void setResultCallback(const RewardedVideoCallback& callback);
 
 protected:
+    friend MediationManager;
+
     void setResult(bool result);
 
 private:

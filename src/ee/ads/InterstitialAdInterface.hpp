@@ -32,6 +32,8 @@ public:
     void setResultCallback(const InterstitialAdCallback& callback);
 
 protected:
+    friend MediationManager;
+
     void setDone();
 
 private:

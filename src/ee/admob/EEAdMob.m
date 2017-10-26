@@ -49,6 +49,7 @@ static NSString* const k__showRewardedVideo         = @"AdMob_showRewardedVideo"
 static NSString* const k__onRewarded                = @"AdMob_onRewarded";
 static NSString* const k__onFailedToLoad            = @"AdMob_onFailedToLoad";
 static NSString* const k__onLoaded                  = @"AdMob_onLoaded";
+static NSString* const k__onOpened                  = @"AdMob_onOpened";
 static NSString* const k__onClosed                  = @"AdMob_onClosed";
 // clang-format on
 
@@ -312,6 +313,8 @@ static NSString* const k__layout_name           = @"layout_name";
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onOpened];
 }
 
 - (void)rewardBasedVideoAdDidStartPlaying:

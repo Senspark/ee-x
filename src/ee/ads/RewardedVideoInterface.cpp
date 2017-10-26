@@ -6,7 +6,8 @@
 //
 //
 
-#include "RewardedVideoInterface.hpp"
+#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
 namespace ads {
@@ -16,7 +17,10 @@ Self::RewardedVideoInterface() {
     callback_ = nullptr;
 }
 
-Self::~RewardedVideoInterface() {}
+Self::~RewardedVideoInterface() {
+    auto&& mediation = MediationManager::getInstance();
+    mediation.deregisterRewardedVideo(this);
+}
 
 void Self::setResultCallback(const RewardedVideoCallback& callback) {
     callback_ = callback;

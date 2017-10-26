@@ -12,6 +12,7 @@
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/internal/AdMobRewardedVideo.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -44,6 +45,7 @@ constexpr auto k__showRewardedVideo         = "AdMob_showRewardedVideo";
 constexpr auto k__onRewarded                = "AdMob_onRewarded";
 constexpr auto k__onFailedToLoad            = "AdMob_onFailedToLoad";
 constexpr auto k__onLoaded                  = "AdMob_onLoaded";
+constexpr auto k__onOpened                  = "AdMob_onOpened";
 constexpr auto k__onClosed                  = "AdMob_onClosed";
 // clang-format on
 } // namespace
@@ -82,6 +84,12 @@ Self::AdMob() {
         k__onLoaded);
     bridge.registerHandler(
         [this](const std::string& message) {
+            onOpened();
+            return "";
+        },
+        k__onOpened);
+    bridge.registerHandler(
+        [this](const std::string& message) {
             onClosed();
             return "";
         },
@@ -93,6 +101,7 @@ Self::~AdMob() {
     bridge.deregisterHandler(k__onRewarded);
     bridge.deregisterHandler(k__onFailedToLoad);
     bridge.deregisterHandler(k__onLoaded);
+    bridge.deregisterHandler(k__onOpened);
     bridge.deregisterHandler(k__onClosed);
 }
 
@@ -226,9 +235,22 @@ void Self::onReward() {
     rewarded_ = true;
 }
 
+void Self::onOpened() {
+    rewarded_ = false;
+}
+
 void Self::onClosed() {
-    auto ad = rewardedVideos_.at(currentId_);
-    ad->setResult(rewarded_);
+    if (rewardedVideos_.count(currentId_)) {
+        auto ad = rewardedVideos_.at(currentId_);
+        ad->setResult(rewarded_);
+        currentId_.clear();
+        return;
+    }
+
+    // Other network mediation.
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.setRewardedVideoResult(rewarded_);
+    assert(successful);
 }
 } // namespace admob
 } // namespace ee

@@ -1,4 +1,5 @@
 #include "ee/vungle/VungleBridge.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
@@ -94,9 +95,15 @@ void Self::onStart() {
 }
 
 void Self::onEnd(bool wasSuccessfulView) {
-    assert(not errored_);
-    assert(rewardedVideo_ != nullptr);
-    rewardedVideo_->setResult(wasSuccessfulView);
+    if (rewardedVideo_ == nullptr) {
+        // Other mediation network.
+        auto&& mediation = ads::MediationManager::getInstance();
+        auto successful = mediation.setRewardedVideoResult(wasSuccessfulView);
+        assert(successful);
+    } else {
+        assert(not errored_);
+        rewardedVideo_->setResult(wasSuccessfulView);
+    }
 }
 
 void Self::onUnavailable() {

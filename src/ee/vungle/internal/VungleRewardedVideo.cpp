@@ -7,7 +7,9 @@
 //
 
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/vungle/VungleBridge.hpp"
+#include <cassert>
 
 namespace ee {
 namespace vungle {
@@ -30,7 +32,13 @@ void Self::load() {
 }
 
 bool Self::show() {
-    return plugin_->showRewardedVideo();
+    if (not plugin_->showRewardedVideo()) {
+        return false;
+    }
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.registerRewardedVideo(this);
+    assert(successful);
+    return true;
 }
 } // namespace vungle
 } // namespace ee

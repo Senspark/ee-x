@@ -74,6 +74,7 @@ private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onReward();
+    void onOpened();
     void onClosed();
 
     bool loading_;

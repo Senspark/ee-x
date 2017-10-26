@@ -100,6 +100,8 @@
 		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
 		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
 		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
+		6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F29349F1FA1D52E008B6246 /* MediationManager.cpp */; };
+		6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A01FA1D52E008B6246 /* MediationManager.hpp */; };
 		6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */; };
 		6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */; };
 		6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881D1F85E38000AE2D93 /* EEAppLovin.h */; };
@@ -626,6 +628,8 @@
 		6F24C5ED1EC2FEBA00509B6C /* third_party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = third_party; path = ../third_party; sourceTree = "<group>"; };
 		6F24C6D61EC31DBE00509B6C /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
+		6F29349F1FA1D52E008B6246 /* MediationManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MediationManager.cpp; path = ads/internal/MediationManager.cpp; sourceTree = "<group>"; };
+		6F2934A01FA1D52E008B6246 /* MediationManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MediationManager.hpp; path = ads/internal/MediationManager.hpp; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_app_lovin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinBridge.cpp; sourceTree = "<group>"; };
@@ -1487,6 +1491,8 @@
 				6F04C5A31F8F6C6A007BC7A3 /* AdViewHelper.hpp */,
 				6F04C5CA1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp */,
 				6F04C5CB1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp */,
+				6F29349F1FA1D52E008B6246 /* MediationManager.cpp */,
+				6F2934A01FA1D52E008B6246 /* MediationManager.hpp */,
 			);
 			name = internal;
 			sourceTree = "<group>";
@@ -1684,6 +1690,7 @@
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
 				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
 				6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */,
+				6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */,
 				6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */,
 				6F5360D91F8F603300E1E9A6 /* EEInterstitialAdInterface.h in Headers */,
 				6F5360DD1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h in Headers */,
@@ -2593,6 +2600,7 @@
 			files = (
 				6FF6B5781F8F2C8E00A27634 /* EEAdViewInterface.h in Sources */,
 				6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */,
+				6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */,
 				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
 				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
 				6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */,

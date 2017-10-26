@@ -18,6 +18,8 @@ class RewardedVideoInterface;
 class MultiAdView;
 class MultiInterstitialAd;
 class MultiRewardedVideo;
+
+class MediationManager;
 } // namespace ads
 
 using ads::AdViewInterface;

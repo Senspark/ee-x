@@ -52,7 +52,7 @@ std::string getVersionCode();
 
 bool isApplicationInstalled(const std::string& applicationId);
 
-void openApplication(const std::string& applicationId);
+bool openApplication(const std::string& applicationId);
 
 bool isTablet();
 
@@ -67,6 +67,7 @@ using core::getSHA1CertificateFingerprint;
 using core::getVersionName;
 using core::getVersionCode;
 using core::isApplicationInstalled;
+using core::openApplication;
 using core::isTablet;
 using core::testConnection;
 } // namespace ee

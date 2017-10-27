@@ -156,9 +156,10 @@ bool isApplicationInstalled(const std::string& applicationId) {
     return toBool(response);
 }
 
-void openApplication(const std::string& applicationId) {
+bool openApplication(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__openApplication);
+    auto response = bridge.call(k__openApplication);
+    return toBool(response);
 }
 
 bool isTablet() {

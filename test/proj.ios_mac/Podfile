@@ -1,21 +1,27 @@
-ee_x_path = 'https://github.com/Senspark/ee-x'
-
-target 'ee_x_test_mobile' do
-    pod 'ee-x/crashlytics',     :git => ee_x_path
-    pod 'ee-x/notification',    :git => ee_x_path
-    pod 'ee-x/firebase',        :git => ee_x_path
-    pod 'ee-x/facebook-ads',    :git => ee_x_path
-    pod 'ee-x/applovin'         :git => ee_x_path
-    pod 'ee-x/ironsource',      :git => ee_x_path
-    pod 'ee-x/unity-ads',       :git => ee_x_path
-    pod 'ee-x/vungle',          :git => ee_x_path
-
-    pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-3.15'
+def pod_ee_x(name)
+    full_name = 'ee-x/' + name
+    # pod full_name, :path => '../../'
+    pod full_name, :git => 'https://github.com/Senspark/ee-x'
 end
 
-target 'ee_x_test_desktop' do
-    pod 'ee-x/crashlytics',     :git => ee_x_path
-    pod 'ee-x/firebase',        :git => ee_x_path
+abstract_target 'common' do
+    pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-lite'
+    
+    target 'ee_x_test_mobile' do
+        pod_ee_x('crashlytics')
+        pod_ee_x('notification')
+        pod_ee_x('firebase')
+        pod_ee_x('facebook-ads')
+        pod_ee_x('applovin')
+        pod_ee_x('admob')
+        pod_ee_x('ironsource')
+        pod_ee_x('unity-ads')
+        pod_ee_x('vungle')
+        pod_ee_x('google-analytics')
+    end
 
-    pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-3.15'
+    target 'ee_x_test_desktop' do
+        pod_ee_x('crashlytics')
+        pod_ee_x('firebase')
+    end
 end

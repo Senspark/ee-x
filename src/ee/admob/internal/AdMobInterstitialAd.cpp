@@ -6,8 +6,11 @@
 //
 //
 
-#include "ee/admob/internal/AdMobInterstitialAd.hpp"
+#include <cassert>
+
 #include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/internal/AdMobInterstitialAd.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -56,6 +59,7 @@ auto k__onClosed(const std::string& id) {
 Self::InterstitialAd(AdMob* plugin, const std::string& adId) {
     loading_ = false;
     errored_ = false;
+    displaying_ = false;
     plugin_ = plugin;
     adId_ = adId;
 
@@ -136,7 +140,14 @@ bool Self::show() {
     errored_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__show(adId_));
-    return not errored_;
+    if (errored_) {
+        return false;
+    }
+    displaying_ = true;
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.registerInterstitialAd(this);
+    assert(successful);
+    return true;
 }
 
 void Self::onLoaded() {
@@ -154,9 +165,18 @@ void Self::onFailedToShow() {
 }
 
 void Self::onClosed() {
-    destroyInternalAd();
-    createInternalAd();
-    setDone();
+    auto&& mediation = ads::MediationManager::getInstance();
+    if (displaying_) {
+        displaying_ = false;
+        destroyInternalAd();
+        createInternalAd();
+        setDone();
+        auto successful = mediation.deregisterInterstitialAd(this);
+        assert(successful);
+    } else {
+        auto successful = mediation.setInterstitialAdDone();
+        assert(successful);
+    }
 }
 } // namespace admob
 } // namespace ee

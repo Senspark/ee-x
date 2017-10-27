@@ -152,13 +152,13 @@ std::string getVersionCode() {
 
 bool isApplicationInstalled(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isApplicationInstalled);
+    auto response = bridge.call(k__isApplicationInstalled, applicationId);
     return toBool(response);
 }
 
 bool openApplication(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__openApplication);
+    auto response = bridge.call(k__openApplication, applicationId);
     return toBool(response);
 }
 

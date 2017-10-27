@@ -42,8 +42,8 @@ void Self::setAnchor(float x, float y) {
     std::tie(width, height) = getSize();
     int positionX, positionY;
     std::tie(positionX, positionY) = getPositionTopLeft();
-    setPositionTopLeft(positionX - (x - anchorX_) * width,
-                       positionY - (y - anchorY_) * height);
+    setPositionTopLeft(positionX - static_cast<int>((x - anchorX_) * width),
+                       positionY - static_cast<int>((y - anchorY_) * height));
     anchorX_ = x;
     anchorY_ = y;
 }
@@ -63,7 +63,8 @@ void Self::setPosition(int x, int y) {
     std::tie(width, height) = getSize();
     float anchorX, anchorY;
     std::tie(anchorX, anchorY) = getAnchor();
-    setPositionTopLeft(x - anchorX * width, y - anchorY * height);
+    setPositionTopLeft(x - static_cast<int>(anchorX * width),
+                       y - static_cast<int>(anchorY * height));
 }
 
 std::pair<int, int> Self::getPositionTopLeft() const {
@@ -100,8 +101,9 @@ void Self::setSize(int width, int height) {
     std::tie(anchorX, anchorY) = getAnchor();
     int x, y;
     std::tie(x, y) = getPositionTopLeft();
-    setPositionTopLeft(x - (width - currentWidth) * anchorX,
-                       y - (height - currentHeight) * anchorY);
+    setPositionTopLeft(
+        x - static_cast<int>((width - currentWidth) * anchorX),
+        y - static_cast<int>((height - currentHeight) * anchorY));
 
     nlohmann::json json;
     json["width"] = width;

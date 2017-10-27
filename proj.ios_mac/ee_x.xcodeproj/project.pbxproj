@@ -102,6 +102,12 @@
 		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
 		6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F29349F1FA1D52E008B6246 /* MediationManager.cpp */; };
 		6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A01FA1D52E008B6246 /* MediationManager.hpp */; };
+		6F2934A51FA2DA25008B6246 /* NullAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934A31FA2DA25008B6246 /* NullAdView.cpp */; };
+		6F2934A61FA2DA25008B6246 /* NullAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A41FA2DA25008B6246 /* NullAdView.hpp */; };
+		6F2934A91FA2DA38008B6246 /* NullInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934A71FA2DA38008B6246 /* NullInterstitialAd.cpp */; };
+		6F2934AA1FA2DA38008B6246 /* NullInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A81FA2DA38008B6246 /* NullInterstitialAd.hpp */; };
+		6F2934AD1FA2DA4A008B6246 /* NullRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934AB1FA2DA4A008B6246 /* NullRewardedVideo.cpp */; };
+		6F2934AE1FA2DA4A008B6246 /* NullRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934AC1FA2DA4A008B6246 /* NullRewardedVideo.hpp */; };
 		6F3688211F85E38000AE2D93 /* AppLovinBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */; };
 		6F3688221F85E38000AE2D93 /* AppLovinBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881C1F85E38000AE2D93 /* AppLovinBridge.hpp */; };
 		6F3688231F85E38000AE2D93 /* EEAppLovin.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F36881D1F85E38000AE2D93 /* EEAppLovin.h */; };
@@ -630,6 +636,12 @@
 		6F24C7011EC3255A00509B6C /* FirebaseApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseApp.mm; sourceTree = "<group>"; };
 		6F29349F1FA1D52E008B6246 /* MediationManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MediationManager.cpp; path = ads/internal/MediationManager.cpp; sourceTree = "<group>"; };
 		6F2934A01FA1D52E008B6246 /* MediationManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MediationManager.hpp; path = ads/internal/MediationManager.hpp; sourceTree = "<group>"; };
+		6F2934A31FA2DA25008B6246 /* NullAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NullAdView.cpp; path = ads/NullAdView.cpp; sourceTree = "<group>"; };
+		6F2934A41FA2DA25008B6246 /* NullAdView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullAdView.hpp; path = ads/NullAdView.hpp; sourceTree = "<group>"; };
+		6F2934A71FA2DA38008B6246 /* NullInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NullInterstitialAd.cpp; path = ads/NullInterstitialAd.cpp; sourceTree = "<group>"; };
+		6F2934A81FA2DA38008B6246 /* NullInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullInterstitialAd.hpp; path = ads/NullInterstitialAd.hpp; sourceTree = "<group>"; };
+		6F2934AB1FA2DA4A008B6246 /* NullRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NullRewardedVideo.cpp; path = ads/NullRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F2934AC1FA2DA4A008B6246 /* NullRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullRewardedVideo.hpp; path = ads/NullRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F2DDC5F1E52A0E70094C241 /* jni */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jni; path = ../jni; sourceTree = "<group>"; };
 		6F3688191F85E32C00AE2D93 /* ee_x_mobile_app_lovin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_app_lovin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F36881B1F85E38000AE2D93 /* AppLovinBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinBridge.cpp; sourceTree = "<group>"; };
@@ -1152,6 +1164,12 @@
 				6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */,
 				6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */,
 				6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */,
+				6F2934A31FA2DA25008B6246 /* NullAdView.cpp */,
+				6F2934A41FA2DA25008B6246 /* NullAdView.hpp */,
+				6F2934A71FA2DA38008B6246 /* NullInterstitialAd.cpp */,
+				6F2934A81FA2DA38008B6246 /* NullInterstitialAd.hpp */,
+				6F2934AB1FA2DA4A008B6246 /* NullRewardedVideo.cpp */,
+				6F2934AC1FA2DA4A008B6246 /* NullRewardedVideo.hpp */,
 				6FF6B5761F8F2C5900A27634 /* internal */,
 			);
 			name = ads;
@@ -1684,18 +1702,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F9E73241F97430B00EE467B /* MultiAdView.hpp in Headers */,
+				6F2934A61FA2DA25008B6246 /* NullAdView.hpp in Headers */,
 				6F04C5CD1F8F8214007BC7A3 /* AdViewBridgeHelper.hpp in Headers */,
 				6F9E73201F97422A00EE467B /* AdsFwd.hpp in Headers */,
 				6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */,
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
 				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
 				6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */,
+				6F2934AA1FA2DA38008B6246 /* NullInterstitialAd.hpp in Headers */,
 				6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */,
 				6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */,
 				6F5360D91F8F603300E1E9A6 /* EEInterstitialAdInterface.h in Headers */,
 				6F5360DD1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h in Headers */,
 				6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */,
 				6F04C5A51F8F6C6A007BC7A3 /* AdViewHelper.hpp in Headers */,
+				6F2934AE1FA2DA4A008B6246 /* NullRewardedVideo.hpp in Headers */,
 				6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2602,6 +2623,9 @@
 				6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */,
 				6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */,
 				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
+				6F2934A51FA2DA25008B6246 /* NullAdView.cpp in Sources */,
+				6F2934A91FA2DA38008B6246 /* NullInterstitialAd.cpp in Sources */,
+				6F2934AD1FA2DA4A008B6246 /* NullRewardedVideo.cpp in Sources */,
 				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
 				6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */,
 				6F04C5CC1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp in Sources */,

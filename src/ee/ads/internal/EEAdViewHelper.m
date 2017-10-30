@@ -6,13 +6,22 @@
 //
 //
 
-#import <UIKit/UIScreen.h>
-
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/ads/internal/EEAdViewInterface.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
+
+#import <TargetConditionals.h>
+
+#if TARGET_OS_IOS
+#import <UIKit/UIView.h>
+#define EE_AD_VIEW UIView
+#else // TARGET_OS_IOS
+#import <AppKit/NSView.h>
+#define EE_AD_VIEW NSView
+#endif // TARGET_OS_IOS
 
 @interface EEAdViewHelper () {
     NSString* prefix_;
@@ -143,34 +152,36 @@
     [bridge deregisterHandler:[self k__setVisible]];
 }
 
-+ (CGPoint)getPosition:(UIView* _Nonnull)view {
-    CGFloat scale = [[UIScreen mainScreen] scale];
++ (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view {
+    CGFloat scale = [EEMetrics getDensity];
     CGPoint position = [view frame].origin;
     return CGPointMake(position.x * scale, position.y * scale);
 }
 
-+ (void)setPosition:(CGPoint)position for:(UIView* _Nonnull)view {
-    CGFloat scale = [[UIScreen mainScreen] scale];
++ (void)setPosition:(CGPoint)position for:(EE_AD_VIEW* _Nonnull)view {
+    CGFloat scale = [EEMetrics getDensity];
     CGRect frame = [view frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [view setFrame:frame];
 }
 
-+ (CGSize)getSize:(UIView* _Nonnull)view {
-    CGFloat scale = [[UIScreen mainScreen] scale];
++ (CGSize)getSize:(EE_AD_VIEW* _Nonnull)view {
+    CGFloat scale = [EEMetrics getDensity];
     CGSize size = [view frame].size;
     return CGSizeMake(size.width * scale, size.height * scale);
 }
 
-+ (void)setSize:(CGSize)size for:(UIView* _Nonnull)view {
-    CGFloat scale = [[UIScreen mainScreen] scale];
++ (void)setSize:(CGSize)size for:(EE_AD_VIEW* _Nonnull)view {
+    CGFloat scale = [EEMetrics getDensity];
     CGRect frame = [view frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [view setFrame:frame];
 }
 
-+ (void)setVisible:(BOOL)visible for:(UIView* _Nonnull)view {
++ (void)setVisible:(BOOL)visible for:(EE_AD_VIEW* _Nonnull)view {
     [view setHidden:!visible];
 }
 
 @end
+
+#undef EE_AD_VIEW

@@ -16,6 +16,9 @@ import java.util.Map;
  */
 
 class GoogleAnalyticsTracker {
+    private static final String k__key   = "key";
+    private static final String k__value = "value";
+
     private String  _trackingId;
     private Tracker _tracker;
 
@@ -33,6 +36,11 @@ class GoogleAnalyticsTracker {
     }
 
     @NonNull
+    private String k__setParameter() {
+        return "GoogleAnalytics_setParameter_" + _trackingId;
+    }
+
+    @NonNull
     private String k__setAllowIDFACollection() {
         return "GoogleAnalytics_setAllowIDFACollection_" + _trackingId;
     }
@@ -44,6 +52,19 @@ class GoogleAnalyticsTracker {
 
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+                String key = (String) dict.get(k__key);
+                String value = (String) dict.get(k__value);
+                setParameter(key, value);
+                return "";
+            }
+        }, k__setParameter());
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -76,6 +97,10 @@ class GoogleAnalyticsTracker {
 
         bridge.deregisterHandler(k__setAllowIDFACollection());
         bridge.deregisterHandler(k__send());
+    }
+
+    void setParameter(@NonNull String key, @NonNull String value) {
+        _tracker.set(key, value);
     }
 
     void setAdvertisingIdCollectionEnabled(boolean enabled) {

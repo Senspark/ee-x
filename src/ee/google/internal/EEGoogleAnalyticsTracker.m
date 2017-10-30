@@ -22,6 +22,11 @@
 
 @implementation EEGoogleAnalyticsTracker
 
+// clang-format off
+static NSString* const k__key   = @"key";
+static NSString* const k__value = @"value";
+// clang-format on
+
 - (id _Nullable)initWithTrackingId:(NSString* _Nonnull)trackingId {
     self = [super init];
     if (self == nil) {
@@ -45,6 +50,11 @@
     [super dealloc];
 }
 
+- (NSString* _Nonnull)k__setParameter {
+    return
+        [@"GoogleAnalytics_setParameter_" stringByAppendingString:trackingId_];
+}
+
 - (NSString* _Nonnull)k__setAllowIDFACollection {
     return [@"GoogleAnalytics_setAllowIDFACollection_"
         stringByAppendingString:trackingId_];
@@ -56,6 +66,16 @@
 
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:[self k__setParameter]
+                   callback:^(NSString* message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* key = [dict objectForKey:k__key];
+                       NSString* value = [dict objectForKey:k__value];
+                       [self setParameter:key value:value];
+                       return @"";
+                   }];
 
     [bridge registerHandler:[self k__setAllowIDFACollection]
                    callback:^(NSString* message) {
@@ -75,8 +95,13 @@
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge deregisterHandler:[self k__setParameter]];
     [bridge deregisterHandler:[self k__setAllowIDFACollection]];
     [bridge deregisterHandler:[self k__send]];
+}
+
+- (void)setParameter:(NSString* _Nonnull)key value:(NSString* _Nonnull)value {
+    [tracker_ set:key value:value];
 }
 
 - (void)setAllowIDFACollection:(BOOL)enabled {

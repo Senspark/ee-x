@@ -14,6 +14,7 @@
 namespace eetest {
 ee::Vungle* getVungle();
 
+std::string getVungleGameId();
 std::string getVungleRewardedVideoId();
 
 void testVungleRewardedVideo();

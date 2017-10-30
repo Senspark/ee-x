@@ -7,6 +7,7 @@
 //
 
 #include "UnityAds.hpp"
+#include "FunctionLogger.hpp"
 #include "Utils.hpp"
 
 #include <ee/Core.hpp>
@@ -18,15 +19,22 @@ ee::UnityAds* getUnityAds() {
     static auto plugin = ee::UnityAds();
     static bool initialized;
     if (not initialized) {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "73406";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "1423604";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        ee::runOnUiThreadAndWait([] { plugin.initialize(gameId, false); });
+        // Initialize Unity Ads on the main thread.
+        ee::runOnUiThreadAndWait([] {
+            FunctionLogger logger("Initialize Unity Ads");
+            plugin.initialize(getUnityGameId(), false);
+        });
         initialized = true;
     }
     return &plugin;
+}
+
+std::string getUnityGameId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "73406";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "1423604";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
 std::string getUnityInterstitialAdId() {
@@ -46,28 +54,37 @@ std::string getUnityRewardedVideoId() {
 }
 
 void testUnityAdsRewardedVideo() {
-    auto rewardedVideo =
-        getUnityAds()->createRewardedVideo(getUnityRewardedVideoId());
+    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::RewardedVideoInterface>>([] {
+        FunctionLogger logger("Create Unity Ads rewarded video");
+        return getUnityAds()->createRewardedVideo(getUnityRewardedVideoId());
+    });
+
     rewardedVideo->setResultCallback([](bool result) {
+        FunctionLogger logger("Unity Ads rewarded video callback");
         logCurrentThread();
         getLogger().info("Result = ", result ? "succeeded" : "failed");
     });
 
-    auto interstitialAd =
-        getUnityAds()->createInterstitialAd(getUnityInterstitialAdId());
+    auto interstitialAd = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::InterstitialAdInterface>>([] {
+        FunctionLogger logger("Create Unity Ads interstitial ad");
+        return getUnityAds()->createInterstitialAd(getUnityInterstitialAdId());
+    });
+
     interstitialAd->setResultCallback([] {
+        FunctionLogger logger("Unity Ads interstitial ad callback");
         logCurrentThread();
-        getLogger().info("Done");
     });
 
     float delay = 0.0f;
     scheduleOnce(delay += 5.0f, [rewardedVideo] {
-        getLogger().info("Show UnityAds rewarded video");
+        FunctionLogger logger("Show UnityAds rewarded video");
         rewardedVideo->show();
     });
 
     scheduleOnce(delay += 2.0f, [interstitialAd] {
-        getLogger().info("Show UnityAds interstitial ad");
+        FunctionLogger logger("Show UnityAds interstitial ad");
         interstitialAd->show();
     });
 }

@@ -20,6 +20,8 @@
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
 		6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2C1F8B5978009E202A /* fb_native_spin.xib */; };
+		6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
+		6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
@@ -63,6 +65,8 @@
 		6F426E201F8B56B2009E202A /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		6F426E2B1F8B5978009E202A /* fb_native_pause.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_pause.xib; sourceTree = "<group>"; };
 		6F426E2C1F8B5978009E202A /* fb_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_spin.xib; sourceTree = "<group>"; };
+		6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionLogger.cpp; sourceTree = "<group>"; };
+		6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionLogger.hpp; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		6FDD659F1F94A3B400BAEA66 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6FDD65A01F94A3B400BAEA66 /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
@@ -129,7 +133,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				46880B8319C43A87006E1F66 /* Classes */,
@@ -187,6 +191,8 @@
 				6FDD65AC1F94A86B00BAEA66 /* UnityAds.hpp */,
 				6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */,
 				6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */,
+				6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */,
+				6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -366,7 +372,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -502,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
+				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */,
 				6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
@@ -525,6 +532,7 @@
 				6FDD65BA1F94AB4700BAEA66 /* AdMob.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */,
+				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
 				6FDD65AE1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
 				6FDD65AA1F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,

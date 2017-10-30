@@ -14,8 +14,8 @@
 namespace eetest {
 ee::UnityAds* getUnityAds();
 
+std::string getUnityGameId();
 std::string getUnityInterstitialAdId();
-
 std::string getUnityRewardedVideoId();
 
 void testUnityAdsRewardedVideo();

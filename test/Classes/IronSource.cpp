@@ -7,6 +7,7 @@
 //
 
 #include "IronSource.hpp"
+#include "FunctionLogger.hpp"
 #include "Utils.hpp"
 
 #include <ee/Core.hpp>
@@ -18,20 +19,21 @@ ee::IronSource* getIronSource() {
     static auto plugin = ee::IronSource();
     static bool initialized;
     if (not initialized) {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "67a6443d";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "67a60ab5";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
         ee::runOnUiThreadAndWait([] {
-            getLogger().info("Initialize ironSource begin");
-            logCurrentThread();
-            plugin.initialize(gameId);
-            getLogger().info("Initialize ironSource end");
+            FunctionLogger logger("Initialize ironSource");
+            plugin.initialize(getIronSourceGameId());
         });
         initialized = true;
     }
     return &plugin;
+}
+
+std::string getIronSourceGameId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "67a6443d";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "67a60ab5";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
 std::string getIronSourceRewardedVideoId() {
@@ -39,16 +41,17 @@ std::string getIronSourceRewardedVideoId() {
 }
 
 void testIronSourceRewardedVideo() {
-    getLogger().info("Create ironSource rewarded video begin");
-    auto rewardedVideo =
-        getIronSource()->createRewardedVideo(getIronSourceRewardedVideoId());
-    getLogger().info("Create ironSource rewarded video end");
+    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::RewardedVideoInterface>>([] {
+        FunctionLogger logger("Create ironSource rewarded video");
+        return getIronSource()->createRewardedVideo(
+            getIronSourceRewardedVideoId());
+    });
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {
-        getLogger().info("Show ironSource rewarded video begin");
+        FunctionLogger logger("Show ironSource rewarded video");
         rewardedVideo->show();
-        getLogger().info("Show ironSource rewarded video end");
     });
 }
 } // namespace eetest

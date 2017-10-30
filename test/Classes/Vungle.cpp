@@ -7,6 +7,7 @@
 //
 
 #include "Vungle.hpp"
+#include "FunctionLogger.hpp"
 #include "Utils.hpp"
 
 #include <ee/Core.hpp>
@@ -18,15 +19,22 @@ ee::Vungle* getVungle() {
     static auto plugin = ee::Vungle();
     static bool initialized;
     if (not initialized) {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "com.senspark.goldminerclassic";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        constexpr auto gameId = "651916412";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        ee::runOnUiThreadAndWait([] { plugin.initialize(gameId); });
+        // Initialize Vungle on the main thread.
+        ee::runOnUiThreadAndWait([] {
+            FunctionLogger logger("Initialize Vungle");
+            plugin.initialize(getVungleGameId());
+        });
         initialized = true;
     }
     return &plugin;
+}
+
+std::string getVungleGameId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "com.senspark.goldminerclassic";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "651916412";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
 std::string getVungleRewardedVideoId() {
@@ -34,15 +42,23 @@ std::string getVungleRewardedVideoId() {
 }
 
 void testVungleRewardedVideo() {
-    auto rewardedVideo = getVungle()->createRewardedVideo();
+    // Create a Vungle rewarded video on the main thread.
+    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
+        std::shared_ptr<ee::RewardedVideoInterface>>([] {
+        FunctionLogger logger("Create Vungle rewarded video");
+        return getVungle()->createRewardedVideo();
+    });
+
+    // Set the result callback.
     rewardedVideo->setResultCallback([](bool result) {
+        FunctionLogger logger("Vungle rewarded video callback");
         logCurrentThread();
         getLogger().info("Result = ", result ? "succeeded" : "failed");
     });
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {
-        getLogger().info("Show Vungle rewarded video");
+        FunctionLogger logger("Show Vungle rewarded video");
         rewardedVideo->show();
     });
 }

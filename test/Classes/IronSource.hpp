@@ -14,6 +14,7 @@
 namespace eetest {
 ee::IronSource* getIronSource();
 
+std::string getIronSourceGameId();
 std::string getIronSourceRewardedVideoId();
 
 void testIronSourceRewardedVideo();

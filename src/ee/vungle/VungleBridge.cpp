@@ -104,7 +104,7 @@ void Self::onEnd(bool wasSuccessfulView) {
     } else {
         assert(not errored_);
         rewardedVideo_->setResult(wasSuccessfulView);
-        auto successful = mediation.deregisterRewardedVideo(rewardedVideo_);
+        auto successful = mediation.finishRewardedVideo(rewardedVideo_);
         assert(successful);
     }
 }

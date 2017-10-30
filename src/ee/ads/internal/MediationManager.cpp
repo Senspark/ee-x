@@ -23,12 +23,26 @@ Self& Self::getInstance() {
 
 Self::MediationManager() {
     interstitialAd_ = nullptr;
+    interstitialAdDestroyed_ = false;
     rewardedVideo_ = nullptr;
+    rewardedVideoDestroyed_ = false;
 }
 
 Self::~MediationManager() {
     interstitialAd_ = nullptr;
     rewardedVideo_ = nullptr;
+}
+
+bool Self::startInterstitialAd(InterstitialAdInterface* ad) {
+    return registerInterstitialAd(ad);
+}
+
+bool Self::finishInterstitialAd(InterstitialAdInterface* ad) {
+    return deregisterInterstitialAd(ad, false);
+}
+
+bool Self::destroyInterstitialAd(InterstitialAdInterface* ad) {
+    return deregisterInterstitialAd(ad, true);
 }
 
 bool Self::registerInterstitialAd(InterstitialAdInterface* ad) {
@@ -37,29 +51,50 @@ bool Self::registerInterstitialAd(InterstitialAdInterface* ad) {
         return false;
     }
     interstitialAd_ = ad;
+    interstitialAdDestroyed_ = false;
     return true;
 }
 
-bool Self::deregisterInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::deregisterInterstitialAd(InterstitialAdInterface* ad,
+                                    bool destroyed) {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (interstitialAd_ == nullptr) {
+        if (interstitialAdDestroyed_) {
+            return true;
+        }
         return false;
     }
     if (interstitialAd_ != ad) {
         return false;
     }
     interstitialAd_ = nullptr;
+    interstitialAdDestroyed_ = destroyed;
     return true;
 }
 
 bool Self::setInterstitialAdDone() {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (interstitialAd_ == nullptr) {
+        if (interstitialAdDestroyed_) {
+            return true;
+        }
         return false;
     }
     interstitialAd_->setDone();
     interstitialAd_ = nullptr;
     return true;
+}
+
+bool Self::startRewardedVideo(RewardedVideoInterface* ad) {
+    return registerRewardedVideo(ad);
+}
+
+bool Self::finishRewardedVideo(RewardedVideoInterface* ad) {
+    return deregisterRewardedVideo(ad, false);
+}
+
+bool Self::destroyRewardedVideo(RewardedVideoInterface* ad) {
+    return deregisterRewardedVideo(ad, true);
 }
 
 bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
@@ -68,24 +103,32 @@ bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
         return false;
     }
     rewardedVideo_ = ad;
+    rewardedVideoDestroyed_ = false;
     return true;
 }
 
-bool Self::deregisterRewardedVideo(RewardedVideoInterface* ad) {
+bool Self::deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed) {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (rewardedVideo_ == nullptr) {
+        if (rewardedVideoDestroyed_) {
+            return true;
+        }
         return false;
     }
     if (rewardedVideo_ != ad) {
         return false;
     }
     rewardedVideo_ = nullptr;
+    rewardedVideoDestroyed_ = destroyed;
     return true;
 }
 
 bool Self::setRewardedVideoResult(bool result) {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (rewardedVideo_ == nullptr) {
+        if (rewardedVideoDestroyed_) {
+            return true;
+        }
         return false;
     }
     rewardedVideo_->setResult(result);

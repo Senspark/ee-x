@@ -153,14 +153,14 @@ void Self::finish(const std::string& placementId, bool result) {
     if (rewardedVideos_.count(placementId)) {
         auto ad = rewardedVideos_.at(placementId);
         ad->setResult(result);
-        auto successful = mediation.deregisterRewardedVideo(ad);
+        auto successful = mediation.finishRewardedVideo(ad);
         assert(successful);
         return;
     }
     if (interstitialAds_.count(placementId)) {
         auto ad = interstitialAds_.at(placementId);
         ad->setDone();
-        auto successful = mediation.deregisterInterstitialAd(ad);
+        auto successful = mediation.finishInterstitialAd(ad);
         assert(successful);
         return;
     }

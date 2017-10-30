@@ -22,12 +22,14 @@ private:
 public:
     static Self& getInstance();
 
-    bool registerInterstitialAd(InterstitialAdInterface* ad);
-    bool deregisterInterstitialAd(InterstitialAdInterface* ad);
+    bool startInterstitialAd(InterstitialAdInterface* ad);
+    bool finishInterstitialAd(InterstitialAdInterface* ad);
+    bool destroyInterstitialAd(InterstitialAdInterface* ad);
     bool setInterstitialAdDone();
 
-    bool registerRewardedVideo(RewardedVideoInterface* ad);
-    bool deregisterRewardedVideo(RewardedVideoInterface* ad);
+    bool startRewardedVideo(RewardedVideoInterface* ad);
+    bool finishRewardedVideo(RewardedVideoInterface* ad);
+    bool destroyRewardedVideo(RewardedVideoInterface* ad);
     bool setRewardedVideoResult(bool result);
 
 protected:
@@ -37,9 +39,17 @@ protected:
     MediationManager(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
+    bool registerInterstitialAd(InterstitialAdInterface* ad);
+    bool deregisterInterstitialAd(InterstitialAdInterface* ad, bool destroyed);
+
+    bool registerRewardedVideo(RewardedVideoInterface* ad);
+    bool deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed);
+
 private:
     InterstitialAdInterface* interstitialAd_;
+    bool interstitialAdDestroyed_;
     RewardedVideoInterface* rewardedVideo_;
+    bool rewardedVideoDestroyed_;
     core::SpinLock locker_;
 };
 } // namespace ads

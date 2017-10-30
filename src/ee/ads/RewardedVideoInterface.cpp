@@ -19,7 +19,7 @@ Self::RewardedVideoInterface() {
 
 Self::~RewardedVideoInterface() {
     auto&& mediation = MediationManager::getInstance();
-    mediation.deregisterRewardedVideo(this);
+    mediation.destroyRewardedVideo(this);
 }
 
 void Self::setResultCallback(const RewardedVideoCallback& callback) {

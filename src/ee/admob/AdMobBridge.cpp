@@ -248,7 +248,7 @@ void Self::onClosed() {
         auto ad = rewardedVideos_.at(currentId_);
         ad->setResult(rewarded_);
         currentId_.clear();
-        auto successful = mediation.deregisterRewardedVideo(ad);
+        auto successful = mediation.finishRewardedVideo(ad);
         assert(successful);
         return;
     }

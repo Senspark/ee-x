@@ -129,7 +129,7 @@ bool Self::show() {
     bridge.call(k__show(placementId_));
     displaying_ = true;
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.registerInterstitialAd(this);
+    auto successful = mediation.startInterstitialAd(this);
     assert(successful);
     return true;
 }
@@ -149,7 +149,7 @@ void Self::onClosed() {
         destroyInternalAd();
         createInternalAd();
         setDone();
-        auto successful = mediation.deregisterInterstitialAd(this);
+        auto successful = mediation.finishInterstitialAd(this);
         assert(successful);
     } else {
         auto successful = mediation.setInterstitialAdDone();

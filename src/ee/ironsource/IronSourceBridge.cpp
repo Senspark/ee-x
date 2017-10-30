@@ -131,7 +131,7 @@ void Self::onClosed() {
         } else {
             ad->setResult(false);
         }
-        auto successful = mediation.deregisterRewardedVideo(ad);
+        auto successful = mediation.finishRewardedVideo(ad);
         assert(successful);
         return;
     }

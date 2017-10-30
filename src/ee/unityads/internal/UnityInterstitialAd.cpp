@@ -38,7 +38,7 @@ bool Self::show() {
         return false;
     }
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.registerInterstitialAd(this);
+    auto successful = mediation.startInterstitialAd(this);
     assert(successful);
     return true;
 }

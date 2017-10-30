@@ -19,7 +19,7 @@ Self::InterstitialAdInterface() {
 
 Self::~InterstitialAdInterface() {
     auto&& mediation = MediationManager::getInstance();
-    mediation.deregisterInterstitialAd(this);
+    mediation.destroyInterstitialAd(this);
 }
 
 void Self::setResultCallback(const InterstitialAdCallback& callback) {

@@ -180,6 +180,8 @@ class OAuthProvider {
 /// Possible verification flows:
 /// (1) User manually enters verification code.
 ///     - App calls @ref VerifyPhoneNumber.
+///     - Web verification page is displayed to user where they may need to
+///       solve a CAPTCHA. [iOS only].
 ///     - Auth server sends the verification code via SMS to the provided
 ///       phone number. App recieves verification id via Listener::OnCodeSent().
 ///     - User receives SMS and enters verification code in app's GUI.
@@ -432,7 +434,7 @@ class PhoneAuthProvider {
   ///    number to verify. If not-NULL, bypass the verification session deduping
   ///    and force resending a new SMS.
   ///    This token is received in @ref Listener::OnCodeSent.
-  ///    This should only be used when the user presses a “Resend SMS” button.
+  ///    This should only be used when the user presses a "Resend SMS" button.
   /// @param[in,out] listener Class that receives notification whenever an SMS
   ///    verification event occurs. See sample code at top of class.
   void VerifyPhoneNumber(const char* phone_number,

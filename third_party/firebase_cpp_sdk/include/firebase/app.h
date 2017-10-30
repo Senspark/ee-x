@@ -161,6 +161,7 @@ class AppOptions {
   /// file or PROJECT_ID in the GoogleService-Info.plist.
   const char* project_id() const { return project_id_.c_str(); }
 
+
   /// @cond FIREBASE_APP_INTERNAL
  private:
   /// API key used to communicate with Google Servers.

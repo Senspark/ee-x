@@ -9,6 +9,10 @@
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
 
+#if defined(FIREBASE_USE_STD_FUNCTION)
+#include <functional>
+#endif  // defined(FIREBASE_USE_STD_FUNCTION)
+
 namespace firebase {
 namespace database {
 
@@ -24,6 +28,19 @@ enum TransactionResult {
 /// Your own transaction handler, which the Firebase Realtime Database library
 /// may call multiple times to apply changes to the data, and should return
 /// success or failure depending on whether it succeeds.
+
+/// @note This version of the callback is no longer supported (unless you are
+/// building for Android with stlport). You should use either one of
+/// DoTransactionWithContext (a simple function pointer that accepts context
+/// data) or DoTransactionFunction (based on std::function).
+///
+/// @see DoTransactionWithContext for more information.
+typedef TransactionResult (*DoTransaction)(MutableData* data);
+
+/// Your own transaction handler, which the Firebase Realtime Database library
+/// may call multiple times to apply changes to the data, and should return
+/// success or failure depending on whether it succeeds. The context you
+/// specified to RunTransaction will be passed into this call.
 ///
 /// This function will be called, _possibly multiple times_, with the current
 /// data at this location. The function is responsible for inspecting that data
@@ -51,7 +68,20 @@ enum TransactionResult {
 /// finished, you can use the Future<DataSnapshot> value returned by the method
 /// running the transaction, and call Future::OnCompletion() to register a
 /// callback to be called when the transaction either succeeds or fails.
-typedef TransactionResult(DoTransaction)(MutableData* data);
+///
+/// @see DoTransaction for more information.
+typedef TransactionResult (*DoTransactionWithContext)(MutableData* data,
+                                                      void* context);
+
+#if defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
+/// Your own transaction handler function or lambda, which the Firebase Realtime
+/// Database library may call multiple times to apply changes to the data, and
+/// should return success or failure depending on whether it succeeds.
+///
+/// @see DoTransactionWithContext for more information.
+typedef std::function<TransactionResult(MutableData* data)>
+    DoTransactionFunction;
+#endif  // defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
 
 }  // namespace database
 }  // namespace firebase

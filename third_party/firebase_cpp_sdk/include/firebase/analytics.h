@@ -40,11 +40,11 @@ namespace analytics {
 /// @endif
 ///
 /// Parameter names must be a combination of letters and digits
-/// (matching the regular expression [a-zA-Z0-9]) between 1 and 24 characters
+/// (matching the regular expression [a-zA-Z0-9]) between 1 and 40 characters
 /// long starting with a letter [a-zA-Z] character.  The "firebase_",
 /// "google_" and "ga_" prefixes are reserved and should not be used.
 ///
-/// Parameter string values can be up to 36 characters long.
+/// Parameter string values can be up to 100 characters long.
 ///
 /// @if cpp_examples
 /// An array of this structure is passed to LogEvent in order to associate
@@ -128,7 +128,7 @@ struct Parameter {
   /// @if cpp_examples
   /// (see Parameter::name).
   /// @endif
-  /// @param parameter_value String value for the parameter, can be up to 36
+  /// @param parameter_value String value for the parameter, can be up to 100
   /// characters long.
   Parameter(const char* parameter_name, const char* parameter_value)
       : name(parameter_name) {
@@ -139,14 +139,14 @@ struct Parameter {
   /// @brief Name of the parameter.
   ///
   /// Parameter names must be a combination of letters and digits
-  /// (matching the regular expression [a-zA-Z0-9]) between 1 and 24 characters
+  /// (matching the regular expression [a-zA-Z0-9]) between 1 and 40 characters
   /// long starting with a letter [a-zA-Z] character.  The "firebase_",
   /// "google_" and "ga_" prefixes are reserved and should not be used.
   const char* name;
   /// @brief Value of the parameter.
   ///
   /// See firebase::Variant for usage information.
-  /// @note String values can be up to 36 characters long.
+  /// @note String values can be up to 100 characters long.
   Variant value;
 };
 
@@ -175,7 +175,7 @@ void SetAnalyticsCollectionEnabled(bool enabled);
 
 /// @brief Log an event with one string parameter.
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved.
 /// @if cpp_examples
@@ -196,7 +196,7 @@ void LogEvent(const char* name, const char* parameter_name,
 
 /// @brief Log an event with one float parameter.
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved.
 /// @if cpp_examples
@@ -217,7 +217,7 @@ void LogEvent(const char* name, const char* parameter_name,
 
 /// @brief Log an event with one 64-bit integer parameter.
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved.
 /// @if cpp_examples
@@ -239,7 +239,7 @@ void LogEvent(const char* name, const char* parameter_name,
 /// @brief Log an event with one integer parameter
 /// (stored as a 64-bit integer).
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved.
 /// @if cpp_examples
@@ -260,7 +260,7 @@ void LogEvent(const char* name, const char* parameter_name,
 
 /// @brief Log an event with no parameters.
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved.
 /// @if cpp_examples
@@ -287,7 +287,7 @@ void LogEvent(const char* name);
 /// but you may also choose to specify custom event types that are associated
 /// with your specific app.
 ///
-/// @param[in] name Name of the event to log. Should contain 1 to 32
+/// @param[in] name Name of the event to log. Should contain 1 to 40
 /// alphanumeric characters or underscores. The name must start with an
 /// alphabetic character. Some event names are reserved. See @ref event_names
 /// (%event_names.h) for the list of reserved event names. The "firebase_"
@@ -314,11 +314,11 @@ void LogEvent(const char* name, const Parameter* parameters,
 ///
 /// @param[in] name Name of the user property to set.  This must be a
 /// combination of letters and digits (matching the regular expression
-/// [a-zA-Z0-9] between 1 and 24 characters long starting with a letter
+/// [a-zA-Z0-9] between 1 and 40 characters long starting with a letter
 /// [a-zA-Z] character.
 /// @param[in] property Value to set the user property to.  Set this
 /// argument to NULL or nullptr to remove the user property.  The value can be
-/// between 1 to 36 characters long.
+/// between 1 to 100 characters long.
 void SetUserProperty(const char* name, const char* property);
 
 /// @brief Sets the user ID property.
@@ -328,7 +328,7 @@ void SetUserProperty(const char* name, const char* property);
 /// Policy</a>
 ///
 /// @param[in] user_id The user ID associated with the user of this app on this
-/// device.  The user ID must be non-empty and no more than 36 characters long.
+/// device.  The user ID must be non-empty and no more than 100 characters long.
 /// Setting user_id to NULL or nullptr removes the user ID.
 void SetUserId(const char* user_id);
 

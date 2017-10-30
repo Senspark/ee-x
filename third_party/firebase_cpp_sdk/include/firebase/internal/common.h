@@ -14,6 +14,11 @@
 #define FIREBASE_USE_MOVE_OPERATORS
 #endif  // __cplusplus >= 201103L && !defined(_STLPORT_VERSION)
 
+// stlport doesn't implement std::function.
+#if !defined(_STLPORT_VERSION)
+#define FIREBASE_USE_STD_FUNCTION
+#endif  // !defined(_STLPORT_VERSION)
+
 #if !defined(DOXYGEN) && !defined(SWIG)
 #if !defined(_WIN32) && !defined(__CYGWIN__)
 // Prevent GCC & Clang from stripping a symbol.

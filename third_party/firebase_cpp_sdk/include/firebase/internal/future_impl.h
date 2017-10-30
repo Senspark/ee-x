@@ -1,7 +1,7 @@
 // Copyright 2016 Google Inc. All Rights Reserved.
 
-#ifndef FIREBASE_APP_CLIENT_CPP_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_
-#define FIREBASE_APP_CLIENT_CPP_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_
+#ifndef FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_
+#define FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_
 
 /// @cond FIREBASE_APP_INTERNAL
 
@@ -60,7 +60,33 @@ class FutureApiInterface {
   virtual void SetCompletionCallback(FutureHandle handle,
                                      FutureBase::CompletionCallback callback,
                                      void* user_data) = 0;
+
+#ifdef FIREBASE_USE_STD_FUNCTION
+  /// Register a callback that will be called when this future's status is set
+  /// to Complete. The result data will be passed back when the callback is
+  /// called.
+  virtual void SetCompletionCallbackLambda(
+      FutureHandle handle, std::function<void(const FutureBase&)> callback) = 0;
+#endif  // FIREBASE_USE_STD_FUNCTION
+
+  /// Register this Future instance to be cleaned up.
+  virtual void RegisterFutureForCleanup(FutureBase* future) = 0;
+
+  /// Unregister this Future instance from the cleanup list.
+  virtual void UnregisterFutureForCleanup(FutureBase* future) = 0;
 };
+
+inline void RegisterForCleanup(FutureApiInterface* api, FutureBase* future) {
+  if (api != NULL) {  // NOLINT
+    api->RegisterFutureForCleanup(future);
+  }
+}
+
+inline void UnregisterForCleanup(FutureApiInterface* api, FutureBase* future) {
+  if (api != NULL) {  // NOLINT
+    api->UnregisterFutureForCleanup(future);
+  }
+}
 
 }  // namespace detail
 
@@ -70,6 +96,7 @@ inline FutureBase::FutureBase(detail::FutureApiInterface* api,
                               FutureHandle handle)
     : api_(api), handle_(handle) {
   api_->ReferenceFuture(handle_);
+  detail::RegisterForCleanup(api_, this);
 }
 
 inline FutureBase::~FutureBase() { Release(); }
@@ -78,6 +105,7 @@ inline FutureBase::FutureBase(const FutureBase& rhs)
     : api_(NULL)  // NOLINT
 {                 // NOLINT
   *this = rhs;
+  detail::RegisterForCleanup(api_, this);
 }
 
 inline FutureBase& FutureBase::operator=(const FutureBase& rhs) {
@@ -87,27 +115,33 @@ inline FutureBase& FutureBase::operator=(const FutureBase& rhs) {
   if (api_ != NULL) {  // NOLINT
     api_->ReferenceFuture(handle_);
   }
+  detail::RegisterForCleanup(api_, this);
   return *this;
 }
 
 #if defined(FIREBASE_USE_MOVE_OPERATORS)
 inline FutureBase::FutureBase(FutureBase&& rhs)
     : api_(NULL)  // NOLINT
-{                 // NOLINT
+{
+  detail::UnregisterForCleanup(rhs.api_, &rhs);
   *this = std::move(rhs);
+  detail::RegisterForCleanup(api_, this);
 }
 
 inline FutureBase& FutureBase::operator=(FutureBase&& rhs) {
   Release();
+  detail::UnregisterForCleanup(rhs.api_, &rhs);
   api_ = rhs.api_;
   handle_ = rhs.handle_;
   rhs.api_ = NULL;  // NOLINT
+  detail::RegisterForCleanup(api_, this);
   return *this;
 }
 #endif  // defined(FIREBASE_USE_MOVE_OPERATORS)
 
 inline void FutureBase::Release() {
   if (api_ != NULL) {  // NOLINT
+    detail::UnregisterForCleanup(api_, this);
     api_->ReleaseFuture(handle_);
     api_ = NULL;  // NOLINT
   }
@@ -138,8 +172,17 @@ inline void FutureBase::OnCompletion(CompletionCallback callback,
   }
 }
 
+#ifdef FIREBASE_USE_STD_FUNCTION
+inline void FutureBase::OnCompletion(
+    std::function<void(const FutureBase&)> callback) const {
+  if (api_ != NULL) {  // NOLINT
+    api_->SetCompletionCallbackLambda(handle_, callback);
+  }
+}
+#endif  // FIREBASE_USE_STD_FUNCTION
+
 }  // namespace firebase
 
 /// @endcond
 
-#endif  // FIREBASE_APP_CLIENT_CPP_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_
+#endif  // FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_FUTURE_IMPL_H_

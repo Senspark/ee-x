@@ -9,6 +9,10 @@
 
 #include "firebase/internal/common.h"
 
+#ifdef FIREBASE_USE_STD_FUNCTION
+#include <functional>
+#endif
+
 namespace firebase {
 
 // Predeclarations.
@@ -149,8 +153,8 @@ class FutureBase {
   /// Register a callback that will be called at most once, when the future is
   /// completed.
   ///
-  /// If you call OnCompletion() itself more than once, only the most
-  /// recent callback you registered be called.
+  /// If you call any OnCompletion() method more than once, only the most recent
+  /// callback you registered will be called.
   ///
   /// When your callback is called, the user_data that you supplied here will be
   /// passed back as the second parameter.
@@ -159,6 +163,20 @@ class FutureBase {
   /// @param[in] user_data Optional user data. We will pass this back to your
   /// callback.
   void OnCompletion(CompletionCallback callback, void* user_data) const;
+
+#if defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
+  /// Register a callback that will be called at most once, when the future is
+  /// completed.
+  ///
+  /// If you call any OnCompletion() method more than once, only the most recent
+  /// callback you registered will be called.
+  ///
+  /// @param[in] callback Function or lambda to call.
+  ///
+  /// @note This method is not available when using STLPort on Android, as
+  /// std::function is not supported on STLPort.
+  void OnCompletion(std::function<void(const FutureBase&)> callback) const;
+#endif  // defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
 
   /// Returns true if the two Futures reference the same result.
   bool operator==(const FutureBase& rhs) const {
@@ -280,7 +298,7 @@ class Future : public FutureBase {
   /// Register a callback that will be called at most once, when the future is
   /// completed.
   ///
-  /// If you call OnCompletion() itself more than once, only the most recent
+  /// If you call any OnCompletion() method more than once, only the most recent
   /// callback you registered will be called.
   ///
   /// When your callback is called, the user_data that you supplied here will be
@@ -297,6 +315,28 @@ class Future : public FutureBase {
     FutureBase::OnCompletion(reinterpret_cast<CompletionCallback>(callback),
                              user_data);
   }
+
+#if defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
+  /// Register a callback that will be called at most once, when the future is
+  /// completed.
+  ///
+  /// If you call any OnCompletion() method more than once, only the most recent
+  /// callback you registered will be called.
+  ///
+  /// @param[in] callback Function or lambda to call.
+  ///
+  /// @note This method is not available when using STLPort on Android, as
+  /// std::function is not supported on STLPort.
+  ///
+  /// @note This is the same callback as FutureBase::OnCompletion(), so you
+  /// can't expect to set both and have both run; again, only the most recently
+  /// registered one will run.
+  void OnCompletion(
+      std::function<void(const Future<ResultType>&)> callback) const {
+    FutureBase::OnCompletion(
+        *reinterpret_cast<std::function<void(const FutureBase&)>*>(&callback));
+  }
+#endif  // defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
 };
 
 }  // namespace firebase

@@ -244,6 +244,7 @@ class Metadata {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class StorageReference;
+  friend class internal::MetadataInternal;
   friend class internal::StorageReferenceInternal;
 
   Metadata(internal::MetadataInternal* internal);

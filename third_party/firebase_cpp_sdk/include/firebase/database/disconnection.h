@@ -127,6 +127,7 @@ class DisconnectionHandler {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::DatabaseReferenceInternal;
+  friend class internal::DisconnectionHandlerInternal;
   /// @endcond
 
   /// Call DatabaseReference::OnDisconnect() to get an instance of this class.

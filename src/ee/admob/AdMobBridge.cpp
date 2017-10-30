@@ -12,6 +12,9 @@
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/internal/AdMobRewardedVideo.hpp"
+#include "ee/ads/NullAdView.hpp"
+#include "ee/ads/NullInterstitialAd.hpp"
+#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -151,7 +154,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
-        return nullptr;
+        return std::make_shared<NullAdView>();
     }
     return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
 }
@@ -167,7 +170,7 @@ Self::createInterstitialAd(const std::string& adId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
-        return nullptr;
+        return std::make_shared<NullInterstitialAd>();
     }
     return std::shared_ptr<InterstitialAdInterface>(
         new InterstitialAd(this, adId));
@@ -182,7 +185,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
 std::shared_ptr<RewardedVideoInterface>
 Self::createRewardedVideo(const std::string& adId) {
     if (rewardedVideos_.count(adId) != 0) {
-        return nullptr;
+        return std::make_shared<NullRewardedVideo>();
     }
     auto result = new RewardedVideo(this, adId);
     rewardedVideos_[adId] = result;

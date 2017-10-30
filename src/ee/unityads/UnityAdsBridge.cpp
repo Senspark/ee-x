@@ -8,6 +8,8 @@
 
 #include <cassert>
 
+#include "ee/ads/NullInterstitialAd.hpp"
+#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -81,7 +83,7 @@ void Self::setDebugModeEnabled(bool enabled) {
 std::shared_ptr<RewardedVideoInterface>
 Self::createRewardedVideo(const std::string& placementId) {
     if (rewardedVideos_.count(placementId) != 0) {
-        return nullptr;
+        return std::make_shared<NullRewardedVideo>();
     }
     auto result = new RewardedVideo(this, placementId);
     rewardedVideos_[placementId] = result;
@@ -99,7 +101,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 std::shared_ptr<InterstitialAdInterface>
 Self::createInterstitialAd(const std::string& placementId) {
     if (interstitialAds_.count(placementId) != 0) {
-        return nullptr;
+        return std::make_shared<NullInterstitialAd>();
     }
     auto result = new InterstitialAd(this, placementId);
     interstitialAds_[placementId] = result;

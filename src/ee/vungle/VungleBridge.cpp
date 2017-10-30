@@ -1,4 +1,5 @@
 #include "ee/vungle/VungleBridge.hpp"
+#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -59,7 +60,7 @@ void Self::initialize(const std::string& gameId) {
 
 std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
     if (rewardedVideo_ != nullptr) {
-        return nullptr;
+        return std::make_shared<NullRewardedVideo>();
     }
     auto result = new RewardedVideo(this);
     rewardedVideo_ = result;

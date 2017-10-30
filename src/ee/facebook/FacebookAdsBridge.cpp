@@ -7,6 +7,8 @@
 //
 
 #include "ee/facebook/FacebookAdsBridge.hpp"
+#include "ee/ads/NullAdView.hpp"
+#include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -75,7 +77,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
     if (not core::toBool(response)) {
-        return nullptr;
+        return std::make_shared<NullAdView>();
     }
     return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
 }
@@ -97,7 +99,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
-        return nullptr;
+        return std::make_shared<NullAdView>();
     }
     return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
 }
@@ -113,7 +115,7 @@ Self::createInterstitialAd(const std::string& placementId) {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, placementId);
     if (not core::toBool(response)) {
-        return nullptr;
+        return std::make_shared<NullInterstitialAd>();
     }
     return std::shared_ptr<InterstitialAdInterface>(
         new InterstitialAd(this, placementId));

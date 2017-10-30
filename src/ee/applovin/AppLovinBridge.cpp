@@ -8,6 +8,7 @@
 
 #include <cassert>
 
+#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/applovin/AppLovinBridge.hpp"
 #include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
 #include "ee/core/Utils.hpp"
@@ -191,7 +192,7 @@ bool Self::showInterstitialAd() {
 
 std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
     if (rewardedVideo_ != nullptr) {
-        return nullptr;
+        return std::make_shared<NullRewardedVideo>();
     }
     auto result = new RewardedVideo(this);
     rewardedVideo_ = result;

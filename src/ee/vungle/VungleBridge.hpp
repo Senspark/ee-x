@@ -11,8 +11,10 @@ public:
     Vungle();
     ~Vungle();
 
+    /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);
 
+    /// Creates a rewarded video.
     std::shared_ptr<RewardedVideoInterface> createRewardedVideo();
 
 private:

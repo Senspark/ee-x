@@ -18,9 +18,13 @@ namespace core {
 /// Converts float to string without trailing zeroes.
 std::string toString(float value);
 
+/// Converts bool to string, used internally.
 std::string toString(bool value);
+
+/// Convert string to bool, used internally.
 bool toBool(const std::string& value);
 
+/// Checks whether the current thread is the main thread (UI thread on Android).
 bool isMainThread();
 
 template <class T>
@@ -29,6 +33,8 @@ using Runnable = std::function<T()>;
 /// Runs the specified runnable on the main thread.
 bool runOnUiThread(const Runnable<void>& runnable);
 
+/// Runs the specified runnable on the main thread and block the current thread.
+/// If the current thread is the main thread, it will be executed immediately.
 void runOnUiThreadAndWait(const Runnable<void>& runnable);
 
 template <class T>
@@ -50,8 +56,12 @@ std::string getVersionName();
 /// Gets the version code of the application.
 std::string getVersionCode();
 
+/// Checks whether an application with the specified package name (Android) or
+/// scheme (iOS) is installed.
 bool isApplicationInstalled(const std::string& applicationId);
 
+/// Opens an application with the specified package name (Android) or scheme
+/// (iOS).
 bool openApplication(const std::string& applicationId);
 
 bool isTablet();

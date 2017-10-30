@@ -22,13 +22,19 @@ public:
     UnityAds();
     ~UnityAds();
 
+    /// Initializes Unity Ads.
+    /// @param[in] gameId Unity Ads game ID.
+    /// @param[in] testModeEnabled Whether test mode is enabled.
     void initialize(const std::string& gameId, bool testModeEnabled);
 
+    /// Sets debug mode enabled.
     void setDebugModeEnabled(bool enabled);
 
+    /// Creates a rewarded video with the specified placement ID.
     std::shared_ptr<RewardedVideoInterface>
     createRewardedVideo(const std::string& placementId);
 
+    /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<InterstitialAdInterface>
     createInterstitialAd(const std::string& placementId);
 

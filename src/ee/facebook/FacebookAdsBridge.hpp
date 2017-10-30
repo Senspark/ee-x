@@ -36,13 +36,22 @@ public:
     /// Clears all test devices.
     void clearTestDevices();
 
+    /// Creates a banner ad.
+    /// @param[in] adId The banner ad ID.
+    /// @param[in] adSize The banner ad predefined size.
     std::shared_ptr<AdViewInterface> createBannerAd(const std::string& adId,
                                                     BannerAdSize adSize);
 
+    /// Creates a native ad.
+    /// @param[in] adId The native ad ID.
+    /// @param[in] layoutName The layout name (.xml for Android, .xib for iOS).
+    /// @param[in] identifiers Android only.
     std::shared_ptr<AdViewInterface>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers);
 
+    /// Creates an interstitial ad.
+    /// @param[in] placementId The ad placement ID>
     std::shared_ptr<InterstitialAdInterface>
     createInterstitialAd(const std::string& placementId);
 

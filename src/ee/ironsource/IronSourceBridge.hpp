@@ -13,8 +13,10 @@ public:
     IronSource();
     ~IronSource();
 
+    /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);
 
+    /// Creates a rewarded vided with the specifie placement ID.
     std::shared_ptr<RewardedVideoInterface>
     createRewardedVideo(const std::string& placementId);
 

@@ -42,7 +42,7 @@ public class GoogleAnalytics implements PluginProtocol {
     private static final String k__testTrackScreenView          =
         "GoogleAnalytics_testTrackScreenView";
     private static final String k__testTrackSocial              =
-        "GoogleAnalytics_testTrackScreenView";
+        "GoogleAnalytics_testTrackSocial";
     private static final String k__testTrackTiming              = "GoogleAnalytics_testTrackTiming";
     private static final String k__testCustomDimensionAndMetric =
         "GoogleAnalytics_testCustomDimensionAndMetric";

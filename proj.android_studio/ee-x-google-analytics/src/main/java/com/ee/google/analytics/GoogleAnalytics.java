@@ -290,7 +290,7 @@ public class GoogleAnalytics implements PluginProtocol {
         bridge.deregisterHandler(k__testTrackSocial);
         bridge.deregisterHandler(k__testTrackTiming);
         bridge.deregisterHandler(k__testTrackEcommerceAction);
-        bridge.deregisterHandler(k__testTrackEcommerceAction);
+        bridge.deregisterHandler(k__testTrackEcommerceImpression);
     }
 
     @SuppressWarnings("WeakerAccess")

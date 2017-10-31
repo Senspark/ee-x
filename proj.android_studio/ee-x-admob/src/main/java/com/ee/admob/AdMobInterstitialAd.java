@@ -42,10 +42,10 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
     void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        destroyInternalAd();
         _helper = null;
         _activity = null;
         _adId = null;
-        _interstitialAd = null;
         _testDevices = null;
         _helper = null;
     }

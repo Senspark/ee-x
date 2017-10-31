@@ -38,10 +38,10 @@ class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdIn
     void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        destroyInternalAd();
         _helper = null;
         _activity = null;
         _placementId = null;
-        _interstitialAd = null;
     }
 
     private String k__createInternalAd() {

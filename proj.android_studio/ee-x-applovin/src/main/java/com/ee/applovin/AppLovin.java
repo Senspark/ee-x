@@ -70,6 +70,10 @@ public class AppLovin implements PluginProtocol {
     }
 
     @Override
+    public void onCreate(@NonNull Activity activity) {
+    }
+
+    @Override
     public void onStart() {
     }
 
@@ -87,9 +91,20 @@ public class AppLovin implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroy();
+        if (!_initialized) {
+            return;
+        }
+        _sdk = null;
+        _incentivizedInterstitialAd = null;
+        _incentivizedInterstitialAdLoadListener = null;
+        _incentivizedInterstitialAdRewardListener = null;
+        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @Override
@@ -283,18 +298,6 @@ public class AppLovin implements PluginProtocol {
             }
         };
         _initialized = true;
-    }
-
-    private void destroy() {
-        Utils.checkMainThread();
-        if (!_initialized) {
-            return;
-        }
-        _sdk = null;
-        _incentivizedInterstitialAd = null;
-        _incentivizedInterstitialAdLoadListener = null;
-        _incentivizedInterstitialAdRewardListener = null;
-        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @SuppressWarnings("WeakerAccess")

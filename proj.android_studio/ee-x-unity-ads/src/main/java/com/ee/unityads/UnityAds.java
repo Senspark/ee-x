@@ -1,7 +1,6 @@
 package com.ee.unityads;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
@@ -28,14 +27,14 @@ public class UnityAds implements PluginProtocol {
 
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
-    private Activity _context;
+    private Activity _activity;
     private boolean  _initialized;
 
     @SuppressWarnings("unused")
-    public UnityAds(Context context) {
+    public UnityAds() {
         Utils.checkMainThread();
-        _logger.debug("constructor begin: context = " + context);
-        _context = (Activity) context;
+        _logger.debug("constructor begin.");
+        _activity = null;
         _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
@@ -45,6 +44,11 @@ public class UnityAds implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "UnityAds";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
+        _activity = activity;
     }
 
     @Override
@@ -65,9 +69,17 @@ public class UnityAds implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        _activity = null;
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroy();
+        if (!_initialized) {
+            return;
+        }
+        com.unity3d.ads.UnityAds.setListener(null);
     }
 
     @Override
@@ -90,9 +102,11 @@ public class UnityAds implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
+
                 String gameId = (String) dict.get("gameId");
                 boolean testModeEnabled = Utils.toBoolean((String) dict.get("testModeEnabled"));
-                initialize(gameId, testModeEnabled);
+                assert _activity != null;
+                initialize(_activity, gameId, testModeEnabled);
                 return "";
             }
         }, k__initialize);
@@ -121,8 +135,9 @@ public class UnityAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                assert _activity != null;
                 String placementId = message;
-                showRewardedVideo(placementId);
+                showRewardedVideo(_activity, placementId);
                 return "";
             }
         }, k__showRewardedVideo);
@@ -139,13 +154,13 @@ public class UnityAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(@NonNull String gameId, boolean testModeEnabled) {
+    public void initialize(@NonNull Activity activity, @NonNull String gameId,
+                           boolean testModeEnabled) {
         Utils.checkMainThread();
         if (_initialized) {
             return;
         }
-        com.unity3d.ads.UnityAds.initialize(_context, gameId, new IUnityAdsListener() {
-            @Override
+        com.unity3d.ads.UnityAds.initialize(activity, gameId, new IUnityAdsListener() {
             public void onUnityAdsReady(String placementId) {
                 _logger.info("onUnityAdsReady: " + placementId);
                 Utils.checkMainThread();
@@ -187,14 +202,6 @@ public class UnityAds implements PluginProtocol {
         _initialized = true;
     }
 
-    private void destroy() {
-        Utils.checkMainThread();
-        if (!_initialized) {
-            return;
-        }
-        com.unity3d.ads.UnityAds.setListener(null);
-    }
-
     @SuppressWarnings({"unused", "WeakerAccess"})
     public void setDebugModeEnabled(boolean enabled) {
         Utils.checkMainThread();
@@ -202,14 +209,14 @@ public class UnityAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isRewardedVideoReady(final @NonNull String placementId) {
+    public boolean isRewardedVideoReady(@NonNull String placementId) {
         Utils.checkMainThread();
         return com.unity3d.ads.UnityAds.isReady(placementId);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void showRewardedVideo(final @NonNull String placementId) {
+    public void showRewardedVideo(@NonNull Activity activity, @NonNull String placementId) {
         Utils.checkMainThread();
-        com.unity3d.ads.UnityAds.show(_context, placementId);
+        com.unity3d.ads.UnityAds.show(activity, placementId);
     }
 }

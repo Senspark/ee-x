@@ -53,7 +53,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     private static final Logger _logger = new Logger(AdMob.class.getName());
 
-    private Activity                         _context;
+    private Context                          _context;
+    private Activity                         _activity;
     private RewardedVideoAd                  _rewardedVideoAd;
     private List<String>                     _testDevices;
     private Map<String, AdMobBannerAd>       _bannerAds;
@@ -62,7 +63,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     public AdMob(Context context) {
         Utils.checkMainThread();
-        _context = (Activity) context;
+        _context = context;
+        _bannerAds = null;
 
         _testDevices = new ArrayList<>();
         _bannerAds = new HashMap<>();
@@ -82,6 +84,17 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     }
 
     @Override
+    public void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).onCreate(activity);
+        }
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).onCreate(activity);
+        }
+    }
+
+    @Override
     public void onStart() {
     }
 
@@ -93,7 +106,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onResume() {
         _rewardedVideoAd.resume(_context);
         for (String key : _bannerAds.keySet()) {
-            _bannerAds.get(key).resume();
+            _bannerAds.get(key).onResume();
         }
     }
 
@@ -101,12 +114,23 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onPause() {
         _rewardedVideoAd.pause(_context);
         for (String key : _bannerAds.keySet()) {
-            _bannerAds.get(key).pause();
+            _bannerAds.get(key).onPause();
         }
     }
 
     @Override
     public void onDestroy() {
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).onDestroy(_activity);
+        }
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).onDestroy(_activity);
+        }
+        _activity = null;
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
 
@@ -317,7 +341,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
-        AdMobBannerAd ad = new AdMobBannerAd(_context, adId, size, _testDevices);
+        AdMobBannerAd ad = new AdMobBannerAd(_context, _activity, adId, size, _testDevices);
         _bannerAds.put(adId, ad);
         return true;
     }
@@ -340,7 +364,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        AdMobNativeAd ad = new AdMobNativeAd(_context, adId, layoutName, identifiers, _testDevices);
+        AdMobNativeAd ad =
+            new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers, _testDevices);
         _nativeAds.put(adId, ad);
         return true;
     }

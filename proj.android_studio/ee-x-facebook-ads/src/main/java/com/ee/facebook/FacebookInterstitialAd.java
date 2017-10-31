@@ -1,6 +1,6 @@
 package com.ee.facebook;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
@@ -21,14 +21,14 @@ import com.facebook.ads.InterstitialAdListener;
 class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdInterface {
     private static final Logger _logger = new Logger(FacebookInterstitialAd.class.getName());
 
-    private Activity             _activity;
+    private Context              _context;
     private InterstitialAd       _interstitialAd;
     private String               _placementId;
     private InterstitialAdHelper _helper;
 
-    public FacebookInterstitialAd(@NonNull Activity activity, @NonNull String placementId) {
+    public FacebookInterstitialAd(@NonNull Context context, @NonNull String placementId) {
         Utils.checkMainThread();
-        _activity = activity;
+        _context = context;
         _placementId = placementId;
         _interstitialAd = null;
         _helper = new InterstitialAdHelper("FacebookInterstitialAd", placementId);
@@ -40,7 +40,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdIn
         deregisterHandlers();
         destroyInternalAd();
         _helper = null;
-        _activity = null;
+        _context = null;
         _placementId = null;
     }
 
@@ -102,7 +102,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdIn
         if (_interstitialAd != null) {
             return false;
         }
-        InterstitialAd interstitialAd = new InterstitialAd(_activity, _placementId);
+        InterstitialAd interstitialAd = new InterstitialAd(_context, _placementId);
         interstitialAd.setAdListener(this);
         _interstitialAd = interstitialAd;
         return true;
@@ -131,6 +131,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdIn
         if (_interstitialAd == null) {
             return;
         }
+        _logger.info("load");
         _interstitialAd.loadAd();
     }
 

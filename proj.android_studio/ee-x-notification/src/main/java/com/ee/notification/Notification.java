@@ -1,5 +1,6 @@
 package com.ee.notification;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,7 +14,6 @@ import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,11 +29,11 @@ public class Notification implements PluginProtocol {
 
     private static final Logger _logger = new Logger(Notification.class.getName());
 
-    private WeakReference<Context> _context;
+    private Context _context;
 
     public Notification(Context context) {
         _logger.debug("constructor begin: context = " + context);
-        _context = new WeakReference<>(context);
+        _context = context;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -42,6 +42,10 @@ public class Notification implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "Notification";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
     }
 
     @Override
@@ -62,6 +66,10 @@ public class Notification implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         deregisterHandlers();
     }
 
@@ -144,14 +152,14 @@ public class Notification implements PluginProtocol {
         _logger.debug(String.format(Locale.getDefault(),
             "schedule: title = %s body = %s delay = %d interval = %d tag = %d", title, body, delay,
             interval, tag));
-        Intent intent = new Intent(_context.get(), NotificationService.class);
+        Intent intent = new Intent(_context, NotificationService.class);
         intent.putExtra("ticker", ticker);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
         intent.putExtra("tag", tag);
-        intent.putExtra("className", _context.get().getClass().getName());
-        NotificationUtils.scheduleAlarm(_context.get(), intent, tag,
-            PendingIntent.FLAG_UPDATE_CURRENT, delay, interval);
+        intent.putExtra("className", _context.getClass().getName());
+        NotificationUtils.scheduleAlarm(_context, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
+            delay, interval);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -162,14 +170,14 @@ public class Notification implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void unschedule(@NonNull Integer tag) {
         _logger.debug("unschedule: tag = " + tag);
-        Intent intent = new Intent(_context.get(), NotificationService.class);
-        NotificationUtils.unscheduleAlarm(_context.get(), intent, tag);
+        Intent intent = new Intent(_context, NotificationService.class);
+        NotificationUtils.unscheduleAlarm(_context, intent, tag);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void clearAll() {
         NotificationManager manager =
-            (NotificationManager) _context.get().getSystemService(Context.NOTIFICATION_SERVICE);
+            (NotificationManager) _context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
     }
 }

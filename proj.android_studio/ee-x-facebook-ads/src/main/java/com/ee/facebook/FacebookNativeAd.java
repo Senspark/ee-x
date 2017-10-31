@@ -1,9 +1,11 @@
 package com.ee.facebook;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,15 +50,18 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     private NativeAd            _nativeAd;
     private View                _nativeAdView;
     private boolean             _isAdLoaded;
+    private Context             _context;
     private Activity            _activity;
     private String              _adId;
     private String              _layoutName;
     private Map<String, String> _identifiers;
     private AdViewHelper        _helper;
 
-    public FacebookNativeAd(@NonNull Activity activity, @NonNull String adId,
-                            @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
+                            @NonNull String adId, @NonNull String layoutName,
+                            @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
+        _context = context;
         _activity = activity;
         _adId = adId;
         _layoutName = layoutName;
@@ -71,6 +76,17 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         registerHandlers();
     }
 
+    void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+        addToActivity(activity);
+    }
+
+    void onDestroy(@NonNull Activity activity) {
+        assert _activity == activity;
+        removeFromActivity(activity);
+        _activity = null;
+    }
+
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
         Utils.checkMainThread();
@@ -81,7 +97,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         _layoutName = null;
         _identifiers = null;
         _helper = null;
-        _activity = null;
+        _context = null;
     }
 
     @NonNull
@@ -143,7 +159,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
             return false;
         }
         _isAdLoaded = false;
-        NativeAd nativeAd = new NativeAd(_activity, _adId);
+        NativeAd nativeAd = new NativeAd(_context, _adId);
         nativeAd.setAdListener(this);
         _nativeAd = nativeAd;
         return true;
@@ -163,26 +179,37 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     private void createView() {
         Utils.checkMainThread();
-        FrameLayout rootView = Utils.getRootView(_activity);
-        int layoutId = rootView
-            .getResources()
-            .getIdentifier(_layoutName, "layout", _activity.getPackageName());
-        View nativeAdView = LayoutInflater.from(_activity).inflate(layoutId, null);
+        int layoutId =
+            _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
+        View nativeAdView = LayoutInflater.from(_context).inflate(layoutId, null);
         nativeAdView.setVisibility(View.INVISIBLE);
 
         FrameLayout.LayoutParams params =
             new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
-        rootView.addView(nativeAdView);
+        nativeAdView.setLayoutParams(params);
+
         _nativeAdView = nativeAdView;
+        if (_activity != null) {
+            addToActivity(_activity);
+        }
     }
 
     private void destroyView() {
         Utils.checkMainThread();
-        FrameLayout rootView = Utils.getRootView(_activity);
-        rootView.removeView(_nativeAdView);
+        removeFromActivity(_activity);
         _nativeAdView = null;
+    }
+
+    private void addToActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.addView(_nativeAdView);
+    }
+
+    private void removeFromActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.removeView(_nativeAdView);
     }
 
     @Override
@@ -197,6 +224,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         if (_nativeAd == null) {
             return;
         }
+        _logger.info("load");
         _nativeAd.loadAd();
     }
 
@@ -231,9 +259,9 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         if (!_identifiers.containsKey(identifier)) {
             return 0;
         }
-        Resources resources = _activity.getResources();
+        Resources resources = _context.getResources();
         return resources.getIdentifier(_identifiers.get(identifier), "id",
-            _activity.getPackageName());
+            _context.getPackageName());
     }
 
     @Override
@@ -270,7 +298,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         }
 
         LinearLayout adChoicesViews = _nativeAdView.findViewById(getIdentifier(k__ad_choices));
-        adChoicesViews.addView(new AdChoicesView(_activity, _nativeAd, true));
+        adChoicesViews.addView(new AdChoicesView(_context, _nativeAd, true));
 
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(titleLabel);

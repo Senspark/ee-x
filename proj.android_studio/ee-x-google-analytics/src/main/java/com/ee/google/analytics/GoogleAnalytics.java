@@ -41,8 +41,7 @@ public class GoogleAnalytics implements PluginProtocol {
         "GoogleAnalytics_testTrackException";
     private static final String k__testTrackScreenView          =
         "GoogleAnalytics_testTrackScreenView";
-    private static final String k__testTrackSocial              =
-        "GoogleAnalytics_testTrackSocial";
+    private static final String k__testTrackSocial              = "GoogleAnalytics_testTrackSocial";
     private static final String k__testTrackTiming              = "GoogleAnalytics_testTrackTiming";
     private static final String k__testCustomDimensionAndMetric =
         "GoogleAnalytics_testCustomDimensionAndMetric";
@@ -53,14 +52,14 @@ public class GoogleAnalytics implements PluginProtocol {
 
     private static final Logger _logger = new Logger(GoogleAnalytics.class.getName());
 
-    private Activity                                         _context;
+    private Context                                          _context;
     private com.google.android.gms.analytics.GoogleAnalytics _analytics;
     private Map<String, GoogleAnalyticsTracker>              _trackers;
     private boolean                                          _exceptionReportingEnabled;
 
     public GoogleAnalytics(Context context) {
         Utils.checkMainThread();
-        _context = (Activity) context;
+        _context = context;
         _analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(_context);
         _trackers = new HashMap<>();
         _exceptionReportingEnabled = false;
@@ -71,6 +70,10 @@ public class GoogleAnalytics implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "GoogleAnalytics";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
     }
 
     @Override
@@ -91,6 +94,10 @@ public class GoogleAnalytics implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
         for (String key : _trackers.keySet()) {

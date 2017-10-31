@@ -26,13 +26,13 @@ public class Vungle implements PluginProtocol {
 
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
-    private Activity _context;
-    private boolean  _initialized;
+    private Context _context;
+    private boolean _initialized;
 
     public Vungle(Context context) {
         Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
-        _context = (Activity) context;
+        _context = context;
         _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
@@ -42,6 +42,10 @@ public class Vungle implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "Vungle";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
     }
 
     @Override
@@ -66,9 +70,16 @@ public class Vungle implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroy();
+        if (!_initialized) {
+            return;
+        }
+        VunglePub.getInstance().clearEventListeners();
     }
 
     @Override
@@ -170,13 +181,6 @@ public class Vungle implements PluginProtocol {
         _initialized = true;
     }
 
-    private void destroy() {
-        Utils.checkMainThread();
-        if (!_initialized) {
-            return;
-        }
-        VunglePub.getInstance().clearEventListeners();
-    }
 
     private boolean hasRewardedVideo() {
         Utils.checkMainThread();

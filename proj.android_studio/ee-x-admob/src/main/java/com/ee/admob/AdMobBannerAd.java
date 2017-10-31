@@ -1,9 +1,11 @@
 package com.ee.admob;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
@@ -39,6 +41,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         return AdSize.BANNER;
     }
 
+    private Context      _context;
     private Activity     _activity;
     private AdView       _adView;
     private boolean      _isAdLoaded;
@@ -48,10 +51,11 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
     private AdViewHelper _helper;
     private boolean      _customSize;
 
-    AdMobBannerAd(@NonNull Activity activity, @NonNull String adId, @NonNull AdSize adSize,
-                  @NonNull List<String> testDevices) {
+    AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId,
+                  @NonNull AdSize adSize, @NonNull List<String> testDevices) {
         Utils.checkMainThread();
         _isAdLoaded = false;
+        _context = context;
         _activity = activity;
         _adId = adId;
         _adSize = adSize;
@@ -63,21 +67,32 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         registerHandlers();
     }
 
-    void resume() {
+    void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+        addToActivity(activity);
+    }
+
+    void onResume() {
         Utils.checkMainThread();
         _adView.resume();
     }
 
-    void pause() {
+    void onPause() {
         Utils.checkMainThread();
         _adView.pause();
+    }
+
+    void onDestroy(@NonNull Activity activity) {
+        assert _activity == activity;
+        removeFromActivity(activity);
+        _activity = null;
     }
 
     void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
-        _activity = null;
+        _context = null;
         _adId = null;
         _adSize = null;
         _testDevices = null;
@@ -111,18 +126,21 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         }
         _customSize = false;
         _isAdLoaded = false;
-        AdView adView = new AdView(_activity);
+        AdView adView = new AdView(_context);
         adView.setAdSize(_adSize);
         adView.setAdListener(this);
         adView.setAdUnitId(_adId);
         _adView = adView;
 
-        FrameLayout rootView = Utils.getRootView(_activity);
         FrameLayout.LayoutParams params =
             new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
-        rootView.addView(_adView, params);
+        _adView.setLayoutParams(params);
+
+        if (_activity != null) {
+            addToActivity(_activity);
+        }
         return true;
     }
 
@@ -133,9 +151,22 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         }
         _customSize = false;
         _isAdLoaded = false;
+        if (_activity != null) {
+            removeFromActivity(_activity);
+        }
         _adView.destroy();
         _adView = null;
         return true;
+    }
+
+    private void addToActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.addView(_adView);
+    }
+
+    private void removeFromActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.removeView(_adView);
     }
 
     @Override
@@ -150,6 +181,7 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         if (_adView == null) {
             return;
         }
+        _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
         for (String hash : _testDevices) {
             builder.addTestDevice(hash);
@@ -174,8 +206,8 @@ class AdMobBannerAd extends AdListener implements AdViewInterface {
         if (_customSize) {
             return AdViewHelper.getSize(_adView);
         }
-        int width = _adSize.getWidthInPixels(_activity);
-        int height = _adSize.getHeightInPixels(_activity);
+        int width = _adSize.getWidthInPixels(_context);
+        int height = _adSize.getHeightInPixels(_context);
         return new Point(width, height);
     }
 

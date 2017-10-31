@@ -38,13 +38,16 @@ public class FacebookAds implements PluginProtocol {
 
     private static final Logger _logger = new Logger(FacebookAds.class.getName());
 
-    private Activity                            _context;
+    private Context                             _context;
+    private Activity                            _activity;
     private Map<String, FacebookBannerAd>       _bannerAds;
     private Map<String, FacebookNativeAd>       _nativeAds;
     private Map<String, FacebookInterstitialAd> _interstitialAds;
 
     public FacebookAds(Context context) {
-        _context = (Activity) context;
+        Utils.checkMainThread();
+        _context = context;
+        _activity = null;
 
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
@@ -57,6 +60,17 @@ public class FacebookAds implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "FacebookAds";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).onCreate(activity);
+        }
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).onCreate(activity);
+        }
     }
 
     @Override
@@ -77,6 +91,18 @@ public class FacebookAds implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+        for (String key : _bannerAds.keySet()) {
+            _bannerAds.get(key).onDestroy(_activity);
+        }
+        for (String key : _nativeAds.keySet()) {
+            _nativeAds.get(key).onDestroy(_activity);
+        }
+        _activity = null;
+    }
+
+    @Override
+    public void destroy() {
+        Utils.checkMainThread();
         deregisterHandlers();
 
         for (String key : _bannerAds.keySet()) {
@@ -250,7 +276,7 @@ public class FacebookAds implements PluginProtocol {
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
-        FacebookBannerAd ad = new FacebookBannerAd(_context, adId, adSize);
+        FacebookBannerAd ad = new FacebookBannerAd(_context, _activity, adId, adSize);
         _bannerAds.put(adId, ad);
         return true;
     }
@@ -272,7 +298,8 @@ public class FacebookAds implements PluginProtocol {
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        FacebookNativeAd ad = new FacebookNativeAd(_context, adId, layoutName, identifiers);
+        FacebookNativeAd ad =
+            new FacebookNativeAd(_context, _activity, adId, layoutName, identifiers);
         _nativeAds.put(adId, ad);
         return true;
     }

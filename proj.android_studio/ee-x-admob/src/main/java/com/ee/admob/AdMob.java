@@ -284,9 +284,12 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
         bridge.deregisterHandler(k__addTestDevice);
         bridge.deregisterHandler(k__createBannerAd);
         bridge.deregisterHandler(k__destroyBannerAd);
+        bridge.deregisterHandler(k__createNativeAd);
+        bridge.deregisterHandler(k__destroyNativeAd);
         bridge.deregisterHandler(k__createInterstitialAd);
         bridge.deregisterHandler(k__destroyInterstitialAd);
         bridge.deregisterHandler(k__hasRewardedVideo);

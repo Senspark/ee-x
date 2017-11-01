@@ -6,21 +6,26 @@
 //
 //
 
-#include "ee/vungle/internal/VungleRewardedVideo.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/vungle/VungleBridge.hpp"
 #include <cassert>
+
+#include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/vungle/VungleBridge.hpp"
+#include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {
 using Self = RewardedVideo;
 
 Self::RewardedVideo(Vungle* plugin) {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     plugin_ = plugin;
 }
 
 Self::~RewardedVideo() {
+    Logger::getSystemLogger().debug("%s: begin", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedVideo();
+    Logger::getSystemLogger().debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {

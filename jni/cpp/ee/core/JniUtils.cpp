@@ -8,22 +8,17 @@
 
 #include <cassert>
 #include <codecvt>
+#include <locale>
 #include <pthread.h>
 
 #include "ee/core/JniUtils.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
-#include "ee/core/Logger.hpp"
 
 namespace ee {
 namespace core {
 namespace {
-/// Retrieves the logger for JNIUtils.
-const Logger& getLogger() {
-    static Logger logger{"ee-x"};
-    return logger;
-}
-
 pthread_key_t key_value;
 } // namespace
 
@@ -53,8 +48,8 @@ JNIEnv* JniUtils::getEnv() {
 
     // Check Cocos thread.
     if (isCocosThreadMarked_ && cocosThreadId_ != std::this_thread::get_id()) {
-        getLogger().error(__PRETTY_FUNCTION__,
-                          ": current thread is not cocos2d-x thread!");
+        Logger::getSystemLogger().error(
+            "%s: current thread is not cocos2d-x thread!", __PRETTY_FUNCTION__);
     }
 
     return env;
@@ -82,9 +77,10 @@ JNIEnv* JniUtils::cacheEnv() {
         // Attempt to reattach.
         auto status = vm_->AttachCurrentThread(&env, nullptr);
         if (status < 0) {
-            getLogger().error(
-                __PRETTY_FUNCTION__,
-                ": failed to get the environment using AttachCurrentThread!");
+            Logger::getSystemLogger().error(
+                "%s: failed to get the environment using "
+                "AttachCurrentThread!",
+                __PRETTY_FUNCTION__);
             return nullptr;
         }
 
@@ -93,14 +89,16 @@ JNIEnv* JniUtils::cacheEnv() {
     }
 
     case JNI_EVERSION: {
-        getLogger().error(__PRETTY_FUNCTION__,
-                          ": JNI interface version 1.4 not supported!");
+        Logger::getSystemLogger().error(
+            "%s: JNI interface version 1.4 not supported!",
+            __PRETTY_FUNCTION__);
         return nullptr;
     }
 
     default: {
-        getLogger().error(__PRETTY_FUNCTION__,
-                          ": failed to get the environment using GetEnv!");
+        Logger::getSystemLogger().error(
+            "%s: failed to get the environment using GetEnv!",
+            __PRETTY_FUNCTION__);
         return nullptr;
     }
     }
@@ -151,8 +149,8 @@ JniUtils::getStaticMethodInfo(const char* className, const char* methodName,
     checkException();
 
     if (clazz == nullptr) {
-        getLogger().error(__PRETTY_FUNCTION__, ": can not find class ",
-                          className);
+        Logger::getSystemLogger().error("%s: can not find class %s",
+                                        __PRETTY_FUNCTION__, className);
         return nullptr;
     }
 
@@ -160,8 +158,9 @@ JniUtils::getStaticMethodInfo(const char* className, const char* methodName,
     checkException();
 
     if (methodId == nullptr) {
-        getLogger().error(__PRETTY_FUNCTION__, ": can not find static method ",
-                          methodId, " with signature ", signature);
+        Logger::getSystemLogger().error(
+            "%s: can not find static method %s in %s with signature %s",
+            __PRETTY_FUNCTION__, methodName, className, signature);
         return nullptr;
     }
 

@@ -41,7 +41,6 @@ private:
     /// Whether the ad is in loading progress.
     bool loading_;
 
-    bool displaying_;
     bool errored_;
 
     AdMob* plugin_;

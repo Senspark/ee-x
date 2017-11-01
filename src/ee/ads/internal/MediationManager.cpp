@@ -8,6 +8,7 @@
 
 #include <mutex>
 
+#include "ee/Core.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
@@ -98,6 +99,9 @@ bool Self::destroyRewardedVideo(RewardedVideoInterface* ad) {
 }
 
 bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
+    Logger::getSystemLogger().debug(
+        "%s: ad = %p current_ad = %p destroyed = %s", __PRETTY_FUNCTION__, ad,
+        rewardedVideo_, core::toString(rewardedVideoDestroyed_).c_str());
     std::lock_guard<core::SpinLock> guard(locker_);
     if (rewardedVideo_ != nullptr) {
         return false;
@@ -108,6 +112,10 @@ bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
 }
 
 bool Self::deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed) {
+    Logger::getSystemLogger().debug(
+        "%s: ad = %p destroyed = %s current_ad = %p destroyed = %s",
+        __PRETTY_FUNCTION__, ad, core::toString(destroyed).c_str(),
+        rewardedVideo_, core::toString(rewardedVideoDestroyed_).c_str());
     std::lock_guard<core::SpinLock> guard(locker_);
     if (rewardedVideo_ == nullptr) {
         if (rewardedVideoDestroyed_) {
@@ -124,6 +132,10 @@ bool Self::deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed) {
 }
 
 bool Self::setRewardedVideoResult(bool result) {
+    Logger::getSystemLogger().debug(
+        "%s: result = %s current_ad = %p destroyed = %s", __PRETTY_FUNCTION__,
+        core::toString(result).c_str(), rewardedVideo_,
+        core::toString(rewardedVideoDestroyed_).c_str());
     std::lock_guard<core::SpinLock> guard(locker_);
     if (rewardedVideo_ == nullptr) {
         if (rewardedVideoDestroyed_) {

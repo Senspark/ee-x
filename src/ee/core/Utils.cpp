@@ -7,6 +7,8 @@
 //
 
 #include <cassert>
+#include <cstdarg>
+#include <cstdlib>
 #include <mutex>
 #include <queue>
 #include <sstream>
@@ -56,6 +58,35 @@ std::string toString(bool value) {
 bool toBool(const std::string& value) {
     assert(value == "true" || value == "false");
     return value == "true";
+}
+
+std::string format(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    auto result = format(formatString, args);
+    va_end(args);
+    return result;
+}
+
+std::string format(std::string formatString, std::va_list args) {
+    int final_n;
+    auto n =
+        2 * formatString.size(); /* Reserve two times as much as the length of
+                                  the fmt_str */
+    std::string str;
+    std::unique_ptr<char[]> formatted;
+    while (1) {
+        formatted.reset(
+            new char[n]); /* Wrap the plain char array into the unique_ptr */
+        std::strcpy(&formatted[0], formatString.c_str());
+        final_n = std::vsnprintf(&formatted[0], n, formatString.c_str(), args);
+        if (final_n < 0 || final_n >= static_cast<int>(n))
+            n += static_cast<std::size_t>(
+                std::abs(final_n - static_cast<int>(n) + 1));
+        else
+            break;
+    }
+    return std::string(formatted.get());
 }
 
 namespace {

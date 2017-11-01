@@ -1,95 +1,65 @@
 //
-//  PluginUtils.hpp
-//  ee-core
+//  LoggerInterface.hpp
+//  ee_x
 //
-//  Created by Zinge on 7/6/16.
+//  Created by Zinge on 11/1/17.
 //
 //
 
-#ifndef EE_X_CORE_LOGGER_HPP_
-#define EE_X_CORE_LOGGER_HPP_
+#ifndef EE_X_LOGGER_HPP
+#define EE_X_LOGGER_HPP
 
-#include <sstream>
+#include <cstdarg>
+#include <functional>
 #include <string>
 
 #include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
-struct LogLevel;
+class Logger final {
+private:
+    using Self = Logger;
 
-class Logger {
 public:
-    template <class... Args>
+    using LogCallback =
+        std::function<void(const LogLevel& level, const std::string& tag,
+                           const std::string& message)>;
+
+    /// Gets the logger used by the library.
+    static Self& getSystemLogger();
+
+    /// Sets the logger used by the library.
+    static void setSystemLogger(const Self& logger);
+
+    /// Logs a message to logcat (Android) or to console (iOS and macOS).
     static void log(const LogLevel& level, const std::string& tag,
-                    Args&&... args) {
-        log0(level, tag, toString(std::forward<Args>(args)...));
-    }
+                    const std::string& message);
 
-    explicit Logger(const std::string& tag);
+    explicit Logger(const std::string& tag, const LogCallback& callback);
 
-    void setEnabled(bool enabled) noexcept;
+    ~Logger() = default;
 
-    bool isEnabled() const noexcept;
+    void setEnabled(bool enabled);
 
-    template <class... Args>
-    void log(const LogLevel& level, Args&&... args) const {
-        if (isEnabled()) {
-            log0(level, toString(std::forward<Args>(args)...));
-        }
-    }
+    void log(const LogLevel& level, std::string formatString, ...);
+    void verbose(std::string formatString, ...);
+    void debug(std::string formatString, ...);
+    void info(std::string formatString, ...);
+    void warn(std::string formatString, ...);
+    void error(std::string formatString, ...);
+    void wtf(std::string formatString, ...);
 
-    template <class... Args> void debug(Args&&... args) const {
-        if (isEnabled()) {
-            debug0(toString(std::forward<Args>(args)...));
-        }
-    }
-
-    template <class... Args> void info(Args&&... args) const {
-        if (isEnabled()) {
-            info0(toString(std::forward<Args>(args)...));
-        }
-    }
-
-    template <class... Args> void warn(Args&&... args) const {
-        if (isEnabled()) {
-            warn0(toString(std::forward<Args>(args)...));
-        }
-    }
-
-    template <class... Args> void error(Args&&... args) const {
-        if (isEnabled()) {
-            error0(toString(std::forward<Args>(args)...));
-        }
-    }
+protected:
+    void log(const LogLevel& level, std::string formatString,
+             std::va_list args);
 
 private:
-    static void log0(const LogLevel& level, const std::string& tag,
-                     const std::string& message);
-
-    void log0(const LogLevel& level, const std::string& message) const;
-
-    void debug0(const std::string& message) const;
-
-    void info0(const std::string& message) const;
-
-    void warn0(const std::string& message) const;
-
-    void error0(const std::string& message) const;
-
-    template <class... Args> static std::string toString(Args&&... args) {
-        static std::stringstream ss;
-        ss.clear();
-        ss.str(std::string{});
-        (ss << ... << std::forward<Args>(args));
-        return ss.str();
-    }
-
     bool enabled_;
-
     std::string tag_;
+    LogCallback callback_;
 };
 } // namespace core
 } // namespace ee
 
-#endif /* EE_X_CORE_LOGGER_HPP_ */
+#endif /* EE_X_LOGGER_HPP */

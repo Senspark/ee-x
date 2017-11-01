@@ -11,6 +11,7 @@
 #include "ee/admob/AdMobBridge.hpp"
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -57,9 +58,9 @@ auto k__onClosed(const std::string& id) {
 } // namespace
 
 Self::InterstitialAd(AdMob* plugin, const std::string& adId) {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     errored_ = false;
-    displaying_ = false;
     plugin_ = plugin;
     adId_ = adId;
 
@@ -93,6 +94,7 @@ Self::InterstitialAd(AdMob* plugin, const std::string& adId) {
 }
 
 Self::~InterstitialAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     destroyInternalAd();
 
     auto&& bridge = core::MessageBridge::getInstance();
@@ -104,12 +106,14 @@ Self::~InterstitialAd() {
 }
 
 bool Self::createInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
@@ -143,7 +147,6 @@ bool Self::show() {
     if (errored_) {
         return false;
     }
-    displaying_ = true;
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startInterstitialAd(this);
     assert(successful);
@@ -151,32 +154,31 @@ bool Self::show() {
 }
 
 void Self::onLoaded() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
+    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
+                                    message.c_str());
     loading_ = false;
 }
 
 void Self::onFailedToShow() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     if (not errored_) {
         errored_ = true;
     }
 }
 
 void Self::onClosed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    if (displaying_) {
-        displaying_ = false;
-        destroyInternalAd();
-        createInternalAd();
-        setDone();
-        auto successful = mediation.finishInterstitialAd(this);
-        assert(successful);
-    } else {
-        auto successful = mediation.setInterstitialAdDone();
-        assert(successful);
-    }
+    destroyInternalAd();
+    createInternalAd();
+    setDone();
+    auto successful = mediation.finishInterstitialAd(this);
+    assert(successful);
 }
 } // namespace admob
 } // namespace ee

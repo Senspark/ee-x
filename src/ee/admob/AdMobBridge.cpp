@@ -16,6 +16,7 @@
 #include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -63,6 +64,7 @@ constexpr auto k__identifiers           = "identifiers";
 } // namespace
 
 Self::AdMob() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     rewarded_ = false;
 
@@ -100,6 +102,7 @@ Self::AdMob() {
 }
 
 Self::~AdMob() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.deregisterHandler(k__onRewarded);
     bridge.deregisterHandler(k__onFailedToLoad);
@@ -125,6 +128,8 @@ void Self::addTestDevice(const std::string& hash) {
 
 std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
                                                       BannerAdSize adSize) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
@@ -138,6 +143,8 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyBannerAd, adId);
     return core::toBool(response);
@@ -146,6 +153,8 @@ bool Self::destroyBannerAd(const std::string& adId) {
 std::shared_ptr<AdViewInterface>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__layout_name] = layoutName;
@@ -160,6 +169,8 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__destroyNativeAd, adId);
     return core::toBool(response);
@@ -167,6 +178,8 @@ bool Self::destroyNativeAd(const std::string& adId) {
 
 std::shared_ptr<InterstitialAdInterface>
 Self::createInterstitialAd(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
@@ -177,6 +190,8 @@ Self::createInterstitialAd(const std::string& adId) {
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     auto&& response = bridge.call(k__destroyInterstitialAd, adId);
     return core::toBool(response);
@@ -184,6 +199,8 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
 
 std::shared_ptr<RewardedVideoInterface>
 Self::createRewardedVideo(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     if (rewardedVideos_.count(adId) != 0) {
         return std::make_shared<NullRewardedVideo>();
     }
@@ -193,6 +210,8 @@ Self::createRewardedVideo(const std::string& adId) {
 }
 
 bool Self::destroyRewardedVideo(const std::string& adId) {
+    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
+                                    adId.c_str());
     if (rewardedVideos_.count(adId) == 0) {
         return false;
     }
@@ -227,28 +246,37 @@ bool Self::showRewardedVideo() {
 }
 
 void Self::onLoaded() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
+    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
+                                    message.c_str());
     loading_ = false;
 }
 
 void Self::onReward() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = true;
 }
 
 void Self::onOpened() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onClosed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideos_.count(currentId_)) {
         auto ad = rewardedVideos_.at(currentId_);
         ad->setResult(rewarded_);
         currentId_.clear();
         auto successful = mediation.finishRewardedVideo(ad);
+        if (successful) {
+            // AdMob ad.
+        }
         assert(successful);
         return;
     }

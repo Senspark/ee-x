@@ -35,7 +35,6 @@ private:
 
     bool errored_;
     bool rewarded_;
-    std::string placementId_;
 
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };

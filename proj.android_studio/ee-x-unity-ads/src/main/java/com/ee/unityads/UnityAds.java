@@ -25,6 +25,9 @@ public class UnityAds implements PluginProtocol {
     private static final String k__onSkipped            = "UnityAds_onSkipped";
     private static final String k__onFinished           = "UnityAds_onFinished";
 
+    private static final String k__gameId          = "gameId";
+    private static final String k__testModeEnabled = "testModeEnabled";
+
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
     private Activity _activity;
@@ -103,8 +106,8 @@ public class UnityAds implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
-                String gameId = (String) dict.get("gameId");
-                boolean testModeEnabled = Utils.toBoolean((String) dict.get("testModeEnabled"));
+                String gameId = (String) dict.get(k__gameId);
+                boolean testModeEnabled = Utils.toBoolean((String) dict.get(k__testModeEnabled));
                 assert _activity != null;
                 initialize(_activity, gameId, testModeEnabled);
                 return "";

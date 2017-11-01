@@ -95,14 +95,17 @@ class GoogleAnalyticsTracker {
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
+        bridge.deregisterHandler(k__setParameter());
         bridge.deregisterHandler(k__setAllowIDFACollection());
         bridge.deregisterHandler(k__send());
     }
 
+    @SuppressWarnings("WeakerAccess")
     void setParameter(@NonNull String key, @NonNull String value) {
         _tracker.set(key, value);
     }
 
+    @SuppressWarnings("WeakerAccess")
     void setAdvertisingIdCollectionEnabled(boolean enabled) {
         _tracker.enableAdvertisingIdCollection(enabled);
     }
@@ -111,6 +114,7 @@ class GoogleAnalyticsTracker {
         _tracker.enableExceptionReporting(enabled);
     }
 
+    @SuppressWarnings("WeakerAccess")
     void send(@NonNull Map<String, String> dict) {
         _tracker.send(dict);
     }

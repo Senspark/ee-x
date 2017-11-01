@@ -35,6 +35,13 @@ constexpr auto k__onFinished           = "UnityAds_onFinished";
 // clang-format on
 } // namespace
 
+namespace {
+// clang-format off
+constexpr auto k__gameId          = "gameId";
+constexpr auto k__testModeEnabled = "testModeEnabled";
+// clang-format on
+} // namespace
+
 Self::UnityAds() {
     errored_ = false;
 
@@ -68,8 +75,8 @@ Self::~UnityAds() {
 
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     nlohmann::json json;
-    json["gameId"] = gameId;
-    json["testModeEnabled"] = core::toString(testModeEnabled);
+    json[k__gameId] = gameId;
+    json[k__testModeEnabled] = core::toString(testModeEnabled);
 
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__initialize, json.dump());

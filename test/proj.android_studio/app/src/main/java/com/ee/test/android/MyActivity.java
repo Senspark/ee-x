@@ -34,8 +34,8 @@ public class MyActivity extends Cocos2dxActivity {
         manager.addPlugin(new AdMob(this));
         manager.addPlugin(new AppLovin(this));
         manager.addPlugin(new FacebookAds(this));
-        manager.addPlugin(new IronSource(this));
-        manager.addPlugin(new UnityAds(this));
+        manager.addPlugin(new IronSource());
+        manager.addPlugin(new UnityAds());
         manager.addPlugin(new Vungle(this));
         _logger.debug("onCreate: end.");
     }

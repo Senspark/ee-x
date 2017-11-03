@@ -165,6 +165,11 @@
 
 - (void)setVisible:(BOOL)visible {
     [EEAdViewHelper setVisible:visible for:nativeAdPlaceholder_];
+    if (visible) {
+        for (UIView* subView in [nativeAdView_ subviews]) {
+            [subView setNeedsDisplay];
+        }
+    }
 }
 
 - (void)adLoader:(GADAdLoader*)adLoader

@@ -11,7 +11,7 @@
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
-
+#include "ee/Core.hpp"
 namespace ee {
 namespace ironsource {
 using Self = RewardedVideo;

@@ -48,6 +48,20 @@ std::string getAdMobNativeAdId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
+std::shared_ptr<ee::AdViewInterface> createAdMobNativeAd() {
+    return getAdMob()->createNativeAd(getAdMobNativeAdId(), "admob_native_spin",
+                                      ee::AdMobNativeAdLayout()
+                                          .setBody("ad_body")
+                                          .setCallToAction("ad_call_to_action")
+                                          .setHeadline("ad_headline")
+                                          .setIcon("ad_icon")
+                                          .setImage("ad_image")
+                                          .setMedia("ad_media")
+                                          .setPrice("ad_price")
+                                          .setStarRating("ad_star_rating")
+                                          .setStore("ad_store"));
+}
+
 void testAdMobBannerAd() {
     auto&& frameSize =
         cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
@@ -125,18 +139,7 @@ void testAdMobNativeAd() {
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
             [] {
                 getLogger().info("Create AdMob native ad begin");
-                auto ad = getAdMob()->createNativeAd(
-                    getAdMobNativeAdId(), "admob_native_spin",
-                    ee::AdMobNativeAdLayout()
-                        .setBody("ad_body")
-                        .setCallToAction("ad_call_to_action")
-                        .setHeadline("ad_headline")
-                        .setIcon("ad_icon")
-                        .setImage("ad_image")
-                        .setMedia("ad_media")
-                        .setPrice("ad_price")
-                        .setStarRating("ad_star_rating")
-                        .setStore("ad_store"));
+                auto ad = createAdMobNativeAd();
                 ad->setVisible(true);
                 ad->setSize(600, 100);
                 getLogger().info("Create AdMob native ad end");

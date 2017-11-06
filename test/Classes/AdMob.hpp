@@ -17,6 +17,8 @@ ee::AdMob* getAdMob();
 std::string getAdMobRewardedVideoId();
 std::string getAdMobNativeAdId();
 
+std::shared_ptr<ee::AdViewInterface> createAdMobNativeAd();
+
 void testAdMobBannerAd();
 void testAdMobNativeAd();
 void testAdMobInterstitial();

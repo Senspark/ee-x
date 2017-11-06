@@ -20,6 +20,10 @@
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
 		6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2C1F8B5978009E202A /* fb_native_spin.xib */; };
+		6F54B3C01FB0153800D821F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 6F54B3BF1FB0153800D821F1 /* images */; };
+		6F54B3C11FB0153800D821F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 6F54B3BF1FB0153800D821F1 /* images */; };
+		6F54B3C41FB0207C00D821F1 /* NativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */; };
+		6F54B3C71FB0215F00D821F1 /* MultiNativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */; };
 		6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
@@ -65,6 +69,11 @@
 		6F426E201F8B56B2009E202A /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		6F426E2B1F8B5978009E202A /* fb_native_pause.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_pause.xib; sourceTree = "<group>"; };
 		6F426E2C1F8B5978009E202A /* fb_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = fb_native_spin.xib; sourceTree = "<group>"; };
+		6F54B3BF1FB0153800D821F1 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeAdTestScene.cpp; sourceTree = "<group>"; };
+		6F54B3C31FB0207C00D821F1 /* NativeAdTestScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NativeAdTestScene.hpp; sourceTree = "<group>"; };
+		6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiNativeAdTestScene.cpp; sourceTree = "<group>"; };
+		6F54B3C61FB0215F00D821F1 /* MultiNativeAdTestScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MultiNativeAdTestScene.hpp; sourceTree = "<group>"; };
 		6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionLogger.cpp; sourceTree = "<group>"; };
 		6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionLogger.hpp; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
@@ -162,6 +171,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6F54B3BF1FB0153800D821F1 /* images */,
 				6F426E2A1F8B5978009E202A /* layouts */,
 			);
 			name = Resources;
@@ -193,6 +203,10 @@
 				6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */,
 				6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */,
 				6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */,
+				6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */,
+				6F54B3C31FB0207C00D821F1 /* NativeAdTestScene.hpp */,
+				6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */,
+				6F54B3C61FB0215F00D821F1 /* MultiNativeAdTestScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -388,6 +402,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F54B3C01FB0153800D821F1 /* images in Resources */,
 				6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */,
 				6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */,
 				6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */,
@@ -398,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F54B3C11FB0153800D821F1 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +523,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F54B3C71FB0215F00D821F1 /* MultiNativeAdTestScene.cpp in Sources */,
+				6F54B3C41FB0207C00D821F1 /* NativeAdTestScene.cpp in Sources */,
 				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
 				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,

@@ -12,6 +12,7 @@
 #include "CrashlyticsAgent.hpp"
 #include "FacebookAds.hpp"
 #include "IronSource.hpp"
+#include "MultiNativeAdTestScene.hpp"
 #include "NotificationAgent.hpp"
 #include "UnityAds.hpp"
 #include "Utils.hpp"
@@ -127,32 +128,32 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->trackCustomEvent("PlaySong", attrs);
     CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
-    getLogger().info("Cocos thread ID: ", getCurrentThreadId());
-    ee::runOnUiThreadAndWait(
-        [] { getLogger().info("UI thread ID: ", getCurrentThreadId()); });
+    getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
+    ee::runOnUiThreadAndWait([] {
+        getLogger().info("UI thread ID: %s", getCurrentThreadId().c_str());
+    });
 
-    getLogger().info("SHA1: ", ee::getSHA1CertificateFingerprint());
-    getLogger().info("Version name: ", ee::getVersionName());
-    getLogger().info("Version code: ", ee::getVersionCode());
-    getLogger().info("isTablet: ", ee::isTablet() ? "true" : "false");
-    getLogger().info("isConnected: ", ee::testConnection() ? "true" : "false");
+    getLogger().info("SHA1: %s", ee::getSHA1CertificateFingerprint().c_str());
+    getLogger().info("Version name: %s", ee::getVersionName().c_str());
+    getLogger().info("Version code: %s", ee::getVersionCode().c_str());
+    getLogger().info("isTablet: %s", ee::isTablet() ? "true" : "false");
+    getLogger().info("isConnected: %s",
+                     ee::testConnection() ? "true" : "false");
+
     // testAdMobBannerAd();
+    // testAdMobNativeAd();
     // testAdMobInterstitial();
-    testAdMobRewardedVideo();
+    // testAdMobRewardedVideo();
     // testAppLovin();
-    // testUnityAds();
+    // testUnityAdsRewardedVideo();
     // testIronSourceRewardedVideo();
     // testVungle();
     // testMultiAds();
     // testFacebookInterstitialAd();
-    testFacebookNativeAd();
+    // testFacebookNativeAd();
 
     cocos2d::log("Create scene");
-    auto scene = cocos2d::Scene::create();
-    auto layer =
-        cocos2d::LayerColor::create(cocos2d::Color4B(150, 150, 150, 150));
-    scene->addChild(layer);
-    director->runWithScene(scene);
+    director->runWithScene(createMultiNativeAdTestScene());
 
     return true;
 }

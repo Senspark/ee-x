@@ -11,7 +11,7 @@
 #include "ee/store/StoreLogger.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/SpinLock.hpp"
+#include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {
 namespace store {

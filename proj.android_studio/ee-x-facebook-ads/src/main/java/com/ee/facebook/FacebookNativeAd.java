@@ -355,6 +355,9 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         processView(_nativeAdView, k__ad_choices, new ViewProcessor<LinearLayout>() {
             @Override
             public void process(LinearLayout view) {
+                // Remove old icons.
+                view.removeAllViews();
+
                 // Add the AdChoices icon.
                 AdChoicesView adChoicesView = new AdChoicesView(_context, _nativeAd, true);
                 view.addView(adChoicesView);

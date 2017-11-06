@@ -207,11 +207,11 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             return;
         }
         _logger.info("load");
+        _isAdLoaded = false;
         AdRequest.Builder builder = new AdRequest.Builder();
         for (String hash : _testDevices) {
             builder.addTestDevice(hash);
         }
-        _logger.info("load");
         _adLoader.loadAd(builder.build());
     }
 

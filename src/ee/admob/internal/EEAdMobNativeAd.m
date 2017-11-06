@@ -142,6 +142,7 @@
     if (adLoader_ == nil) {
         return;
     }
+    isAdLoaded_ = NO;
     GADRequest* request = [GADRequest request];
     [request setTestDevices:testDevices_];
     [adLoader_ loadRequest:request];

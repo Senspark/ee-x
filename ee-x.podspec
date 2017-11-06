@@ -190,6 +190,7 @@ Pod::Spec.new do |spec|
       'src/ee/AdMobFwd.hpp',
       'src/ee/admob/*.{h,hpp}'
 
+    s.resources = 'res/*'
     s.dependency 'ee-x/ads'
     s.dependency 'Google-Mobile-Ads-SDK'
   end

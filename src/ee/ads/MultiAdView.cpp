@@ -30,6 +30,10 @@ Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
             bool displayed = false;
             if (visible_) {
                 if (not new_) {
+                    // Hide old item.
+                    if (activeItem_) {
+                        activeItem_->setVisible(false);
+                    }
                     // Display new item.
                     activeItem_ = item;
                     activeItem_->setVisible(true);

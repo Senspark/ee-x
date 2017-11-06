@@ -141,7 +141,11 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
                         .inflate(layoutId, null);
                     populateAppInstallAdView(nativeAppInstallAd, adView);
                     _nativeAdPlaceholder.removeAllViews();
-                    _nativeAdPlaceholder.addView(adView);
+
+                    ViewGroup.LayoutParams params =
+                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT);
+                    _nativeAdPlaceholder.addView(adView, params);
 
                     _isAdLoaded = true;
                     MessageBridge bridge = MessageBridge.getInstance();
@@ -388,20 +392,19 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends View> void processView(@NonNull NativeAppInstallAdView adView,
-                                              @NonNull String key,
+    private <T extends View> void processView(@NonNull View view, @NonNull String key,
                                               @NonNull ViewProcessor<T> processor) {
         int id = getIdentifier(key);
         if (id == 0) {
             _logger.error("Can not find identifier for key: " + key);
             return;
         }
-        View view = adView.findViewById(id);
-        if (view == null) {
+        View subView = view.findViewById(id);
+        if (subView == null) {
             _logger.error("Can not find view for key: " + key);
             return;
         }
-        processor.process((T) view);
+        processor.process((T) subView);
     }
 
     @Override

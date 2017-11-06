@@ -71,7 +71,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         _nativeAd = null;
         _nativeAdView = null;
         _isAdLoaded = false;
-        _helper = new AdViewHelper("FacebookNativeAd", adId);
+        _helper = new AdViewHelper(k__tag, adId);
 
         createInternalAd();
         createView();
@@ -266,6 +266,26 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
             _context.getPackageName());
     }
 
+    private interface ViewProcessor<T extends View> {
+        void process(T view);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends View> void processView(@NonNull View view, @NonNull String key,
+                                              @NonNull ViewProcessor<T> processor) {
+        int id = getIdentifier(key);
+        if (id == 0) {
+            _logger.error("Can not find identifier for key: " + key);
+            return;
+        }
+        View subView = view.findViewById(id);
+        if (subView == null) {
+            _logger.error("Can not find view for key: " + key);
+            return;
+        }
+        processor.process((T) subView);
+    }
+
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onAdLoaded: " + adError.getErrorMessage());
@@ -282,29 +302,65 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
         _nativeAd.unregisterView();
 
-        TextView bodyLabel = _nativeAdView.findViewById(getIdentifier(k__body));
-        Button callToActionButton = _nativeAdView.findViewById(getIdentifier(k__call_to_action));
-        ImageView iconImage = _nativeAdView.findViewById(getIdentifier(k__icon));
-        MediaView mediaView = _nativeAdView.findViewById(getIdentifier(k__media));
-        TextView socialContextLabel = _nativeAdView.findViewById(getIdentifier(k__social_context));
-        TextView titleLabel = _nativeAdView.findViewById(getIdentifier(k__title));
+        // Register the Title and CTA button to listen for clicks.
+        final List<View> clickableViews = new ArrayList<>();
 
-        NativeAd.downloadAndDisplayImage(_nativeAd.getAdIcon(), iconImage);
-        bodyLabel.setText(_nativeAd.getAdBody());
-        callToActionButton.setText(_nativeAd.getAdCallToAction());
-        socialContextLabel.setText(_nativeAd.getAdSocialContext());
-        titleLabel.setText(_nativeAd.getAdTitle());
+        processView(_nativeAdView, k__body, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                view.setText(_nativeAd.getAdBody());
+            }
+        });
 
-        if (mediaView != null) {
-            mediaView.setNativeAd(_nativeAd);
-        }
+        processView(_nativeAdView, k__call_to_action, new ViewProcessor<Button>() {
+            @Override
+            public void process(Button view) {
+                view.setText(_nativeAd.getAdCallToAction());
+                clickableViews.add(view);
+            }
+        });
 
-        LinearLayout adChoicesViews = _nativeAdView.findViewById(getIdentifier(k__ad_choices));
-        adChoicesViews.addView(new AdChoicesView(_context, _nativeAd, true));
+        processView(_nativeAdView, k__icon, new ViewProcessor<ImageView>() {
+            @Override
+            public void process(ImageView view) {
+                // Download and display the ad icon.
+                NativeAd.Image adIcon = _nativeAd.getAdIcon();
+                NativeAd.downloadAndDisplayImage(adIcon, view);
+            }
+        });
 
-        List<View> clickableViews = new ArrayList<>();
-        clickableViews.add(titleLabel);
-        clickableViews.add(callToActionButton);
+        processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
+            @Override
+            public void process(MediaView view) {
+                // Download and display the cover image.
+                view.setNativeAd(_nativeAd);
+            }
+        });
+
+        processView(_nativeAdView, k__social_context, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                view.setText(_nativeAd.getAdSocialContext());
+            }
+        });
+
+        processView(_nativeAdView, k__title, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                view.setText(_nativeAd.getAdTitle());
+                clickableViews.add(view);
+            }
+        });
+
+        processView(_nativeAdView, k__ad_choices, new ViewProcessor<LinearLayout>() {
+            @Override
+            public void process(LinearLayout view) {
+                // Add the AdChoices icon.
+                AdChoicesView adChoicesView = new AdChoicesView(_context, _nativeAd, true);
+                view.addView(adChoicesView);
+            }
+        });
+
         _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
 
         _isAdLoaded = true;

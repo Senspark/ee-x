@@ -10,6 +10,7 @@
 #define EE_X_MULTI_AD_VIEW_HPP
 
 #include <memory>
+#include <set>
 #include <vector>
 
 #include "ee/ads/AdViewInterface.hpp"
@@ -55,16 +56,29 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    void findActiveItem() const;
+    std::shared_ptr<AdViewInterface> activeItem_;
 
-    mutable std::shared_ptr<AdViewInterface> activeItem_;
-
+    /// Custom anchor.
     std::pair<float, float> anchor_;
+
+    /// Custom position.
     std::pair<int, int> position_;
+
+    /// Custom size.
     std::pair<int, int> size_;
+
+    /// Whether to use custom size.
+    bool useCustomSize_;
+
+    /// Whether visible.
     bool visible_;
-    bool customSize_;
+
+    /// Whether the active item is new.
+    bool new_;
+
     std::vector<std::shared_ptr<AdViewInterface>> items_;
+
+    std::set<std::shared_ptr<AdViewInterface>> loadedItems_;
 };
 } // namespace ads
 } // namespace ee

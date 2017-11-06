@@ -17,7 +17,8 @@ Self::MultiAdView() {
     position_ = std::make_pair(0, 0);
     size_ = std::make_pair(0, 0);
     visible_ = false;
-    customSize_ = false;
+    useCustomSize_ = false;
+    new_ = false;
 }
 
 Self::~MultiAdView() {}
@@ -26,11 +27,18 @@ Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
     items_.push_back(item);
     item->setLoadCallback([this, item](bool result) {
         if (result) {
-            if (activeItem_ == nullptr) {
-                activeItem_ = item;
-                if (visible_) {
-                    activeItem_->setVisible(visible_);
+            bool displayed = false;
+            if (visible_) {
+                if (not new_) {
+                    // Display new item.
+                    activeItem_ = item;
+                    activeItem_->setVisible(true);
+                    displayed = true;
+                    new_ = true;
                 }
+            }
+            if (not displayed) {
+                loadedItems_.insert(item);
             }
         }
     });
@@ -38,17 +46,17 @@ Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
 }
 
 bool Self::isLoaded() const {
-    for (auto&& item : items_) {
-        if (item->isLoaded()) {
-            return true;
-        }
-    }
-    return false;
+    return not loadedItems_.empty();
 }
 
 void Self::load() {
     for (auto&& item : items_) {
-        if (not item->isLoaded()) {
+        if (item == activeItem_ && visible_) {
+            // Ignore displaying item.
+            continue;
+        }
+        if (loadedItems_.count(item) == 0) {
+            // Force old views to load.
             item->load();
         }
     }
@@ -77,13 +85,10 @@ void Self::setPosition(int x, int y) {
 }
 
 std::pair<int, int> Self::getSize() const {
-    findActiveItem();
-    if (activeItem_) {
-        return activeItem_->getSize();
-    }
-    if (customSize_) {
+    if (useCustomSize_) {
         return size_;
     }
+    // Combined size of all ad views.
     int width = 0;
     int height = 0;
     for (auto&& item : items_) {
@@ -97,33 +102,35 @@ std::pair<int, int> Self::getSize() const {
 
 void Self::setSize(int width, int height) {
     size_ = std::make_pair(width, height);
-    customSize_ = true;
+    useCustomSize_ = true;
     for (auto&& item : items_) {
         item->setSize(width, height);
     }
 }
 
 void Self::setVisible(bool visible) {
+    if (visible == visible_) {
+        return;
+    }
     visible_ = visible;
     for (auto&& item : items_) {
         item->setVisible(false);
     }
     if (visible) {
-        findActiveItem();
+        new_ = false;
+        if (not loadedItems_.empty()) {
+            // Swap new item.
+            for (auto&& item : items_) {
+                if (loadedItems_.count(item) != 0) {
+                    activeItem_ = item;
+                    break;
+                }
+            }
+            loadedItems_.erase(activeItem_);
+            new_ = true;
+        }
         if (activeItem_) {
             activeItem_->setVisible(true);
-        }
-    }
-}
-
-void Self::findActiveItem() const {
-    if (activeItem_) {
-        return;
-    }
-    for (auto&& item : items_) {
-        if (item->isLoaded()) {
-            activeItem_ = item;
-            break;
         }
     }
 }

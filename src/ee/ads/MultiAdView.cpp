@@ -29,6 +29,8 @@ Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
         if (result) {
             bool displayed = false;
             if (visible_) {
+                /*
+                 Uncomment to display loaded item immediately.
                 if (not new_) {
                     // Hide old item.
                     if (activeItem_) {
@@ -40,6 +42,7 @@ Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
                     displayed = true;
                     new_ = true;
                 }
+                 */
             }
             if (not displayed) {
                 loadedItems_.insert(item);

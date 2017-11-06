@@ -7,6 +7,7 @@
 //
 
 #include <stack>
+#include <mutex>
 
 #include "ee/store/StoreLogger.hpp"
 #include "ee/core/Logger.hpp"

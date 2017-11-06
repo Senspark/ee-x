@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -251,8 +252,8 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             _context.getPackageName());
     }
 
-    private void populateAppInstallAdView(NativeAppInstallAd nativeAppInstallAd,
-                                          NativeAppInstallAdView adView) {
+    private void populateAppInstallAdView(final NativeAppInstallAd nativeAppInstallAd,
+                                          final NativeAppInstallAdView adView) {
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
         // have a video asset.
         VideoController vc = nativeAppInstallAd.getVideoController();
@@ -268,73 +269,139 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             }
         });
 
-        adView.setBodyView(adView.findViewById(getIdentifier(k__body)));
-        adView.setCallToActionView(adView.findViewById(getIdentifier(k__call_to_action)));
-        adView.setHeadlineView(adView.findViewById(getIdentifier(k__headline)));
-        adView.setIconView(adView.findViewById(getIdentifier(k__icon)));
-        adView.setPriceView(adView.findViewById(getIdentifier(k__price)));
-        adView.setStarRatingView(adView.findViewById(getIdentifier(k__star_rating)));
-        adView.setStoreView(adView.findViewById(getIdentifier(k__store)));
-
         // Some assets are guaranteed to be in every NativeAppInstallAd.
-        TextView bodyView = (TextView) adView.getBodyView();
-        Button callToActionView = (Button) adView.getCallToActionView();
-        TextView headlineView = (TextView) adView.getHeadlineView();
-        ImageView iconView = (ImageView) adView.getIconView();
+        processView(adView, k__body, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                adView.setBodyView(view);
+                view.setText(nativeAppInstallAd.getBody());
+            }
+        });
 
-        bodyView.setText(nativeAppInstallAd.getBody());
-        callToActionView.setText(nativeAppInstallAd.getCallToAction());
-        headlineView.setText(nativeAppInstallAd.getHeadline());
-        iconView.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
+        processView(adView, k__call_to_action, new ViewProcessor<Button>() {
+            @Override
+            public void process(Button view) {
+                adView.setCallToActionView(view);
+                view.setText(nativeAppInstallAd.getCallToAction());
+            }
+        });
 
-        ImageView imageView = adView.findViewById(getIdentifier(k__image));
-        MediaView mediaView = adView.findViewById(getIdentifier(k__media));
+        processView(adView, k__headline, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                adView.setHeadlineView(view);
+                view.setText(nativeAppInstallAd.getHeadline());
+            }
+        });
+
+        processView(adView, k__icon, new ViewProcessor<ImageView>() {
+            @Override
+            public void process(ImageView view) {
+                adView.setIconView(view);
+                view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
+            }
+        });
 
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
-            adView.setMediaView(mediaView);
-            imageView.setVisibility(View.GONE);
+            processView(adView, k__image, new ViewProcessor<ImageView>() {
+                @Override
+                public void process(ImageView view) {
+                    view.setVisibility(View.GONE);
+                }
+            });
+            processView(adView, k__media, new ViewProcessor<MediaView>() {
+                @Override
+                public void process(MediaView view) {
+                    adView.setMediaView(view);
+                }
+            });
         } else {
-            adView.setImageView(imageView);
-            mediaView.setVisibility(View.GONE);
-
-            // At least one image is guaranteed.
-            List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-            imageView.setImageDrawable(images.get(0).getDrawable());
+            processView(adView, k__image, new ViewProcessor<ImageView>() {
+                @Override
+                public void process(ImageView view) {
+                    // At least one image is guaranteed.
+                    adView.setImageView(view);
+                    List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+                    view.setImageDrawable(images.get(0).getDrawable());
+                }
+            });
+            processView(adView, k__media, new ViewProcessor<MediaView>() {
+                @Override
+                public void process(MediaView view) {
+                    view.setVisibility(View.GONE);
+                }
+            });
         }
 
         // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
         // check before trying to display them.
-        CharSequence price = nativeAppInstallAd.getPrice();
-        TextView priceView = (TextView) adView.getPriceView();
-        if (price != null) {
-            priceView.setVisibility(View.VISIBLE);
-            priceView.setText(price);
-        } else {
-            priceView.setVisibility(View.INVISIBLE);
-        }
+        processView(adView, k__price, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                adView.setPriceView(view);
+                CharSequence price = nativeAppInstallAd.getPrice();
+                if (price != null) {
+                    view.setVisibility(View.VISIBLE);
+                    view.setText(price);
+                } else {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
-        Double starRating = nativeAppInstallAd.getStarRating();
-        RatingBar starRatingView = (RatingBar) adView.getStarRatingView();
-        if (starRating != null) {
-            starRatingView.setRating(starRating.floatValue());
-            starRatingView.setVisibility(View.VISIBLE);
-        } else {
-            starRatingView.setVisibility(View.INVISIBLE);
-        }
+        processView(adView, k__star_rating, new ViewProcessor<RatingBar>() {
+            @Override
+            public void process(RatingBar view) {
+                adView.setStarRatingView(view);
+                Double starRating = nativeAppInstallAd.getStarRating();
+                if (starRating != null) {
+                    view.setRating(starRating.floatValue());
+                    view.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
-        CharSequence store = nativeAppInstallAd.getStore();
-        TextView storeView = (TextView) adView.getStoreView();
-        if (store != null) {
-            storeView.setVisibility(View.VISIBLE);
-            storeView.setText(store);
-        } else {
-            storeView.setVisibility(View.INVISIBLE);
-        }
+        processView(adView, k__store, new ViewProcessor<TextView>() {
+            @Override
+            public void process(TextView view) {
+                adView.setStoreView(view);
+                CharSequence store = nativeAppInstallAd.getStore();
+                if (store != null) {
+                    view.setVisibility(View.VISIBLE);
+                    view.setText(store);
+                } else {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         // Assign native ad object to the native view.
         adView.setNativeAd(nativeAppInstallAd);
+    }
+
+    private interface ViewProcessor<T extends View> {
+        void process(T view);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends View> void processView(@NonNull NativeAppInstallAdView adView,
+                                              @NonNull String key,
+                                              @NonNull ViewProcessor<T> processor) {
+        int id = getIdentifier(key);
+        if (id == 0) {
+            _logger.error("Can not find identifier for key: " + key);
+            return;
+        }
+        View view = adView.findViewById(id);
+        if (view == null) {
+            _logger.error("Can not find view for key: " + key);
+            return;
+        }
+        processor.process((T) view);
     }
 
     @Override

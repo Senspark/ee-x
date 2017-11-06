@@ -223,21 +223,23 @@
     // views are being adjusted.
     UIImageView* imageView = (UIImageView*)[adView imageView];
     if ([[nativeAppInstallAd videoController] hasVideoContent]) {
-        [[adView mediaView] setHidden:NO];
         [imageView setHidden:YES];
 
-        // This app uses a fixed width for the GADMediaView and changes its
-        // height to match the aspect ratio of the video it displays.
-        NSLayoutConstraint* constraint = [NSLayoutConstraint
-            constraintWithItem:[adView mediaView]
-                     attribute:NSLayoutAttributeHeight
-                     relatedBy:NSLayoutRelationEqual
-                        toItem:[adView mediaView]
-                     attribute:NSLayoutAttributeWidth
-                    multiplier:(1 / [[nativeAppInstallAd videoController]
-                                        aspectRatio])
-                      constant:0];
-        [constraint setActive:YES];
+        if ([adView mediaView] != nil) {
+            [[adView mediaView] setHidden:NO];
+            // This app uses a fixed width for the GADMediaView and changes its
+            // height to match the aspect ratio of the video it displays.
+            NSLayoutConstraint* constraint = [NSLayoutConstraint
+                constraintWithItem:[adView mediaView]
+                         attribute:NSLayoutAttributeHeight
+                         relatedBy:NSLayoutRelationEqual
+                            toItem:[adView mediaView]
+                         attribute:NSLayoutAttributeWidth
+                        multiplier:(1 / [[nativeAppInstallAd videoController]
+                                            aspectRatio])
+                          constant:0];
+            [constraint setActive:YES];
+        }
     } else {
         [[adView mediaView] setHidden:YES];
         [imageView setHidden:NO];

@@ -196,7 +196,9 @@ public class AdViewHelper {
         if (visible) {
             view.setVisibility(View.VISIBLE);
         } else {
-            view.setVisibility(View.INVISIBLE);
+            // View.INVISIBLE doesn't trigger a view redraw.
+            // Production: load and then call setVisible(true) doesn't show the native ad.
+            view.setVisibility(View.GONE);
         }
     }
 }

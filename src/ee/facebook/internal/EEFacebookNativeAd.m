@@ -16,17 +16,30 @@
 #import "ee/facebook/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
+    /// Internal Facebook ad.
     FBNativeAd* nativeAd_;
+
+    /// Loaded from xib.
     EEFacebookNativeAdView* nativeAdView_;
+
+    /// Ad ID Unit.
     NSString* adId_;
+
+    /// Layout name (xib).
     NSString* layoutName_;
+
+    /// Whether the ad is loaded.
     BOOL isAdLoaded_;
+
+    /// Common helper.
     EEAdViewHelper* helper_;
 }
 
 @end
 
 @implementation EEFacebookNativeAd
+
+static NSString* const k__tag = @"FacebookNativeAd";
 
 - (id)initWithAdId:(NSString*)adId layout:(NSString*)layoutName {
     self = [super init];
@@ -39,8 +52,7 @@
     layoutName_ = [layoutName copy];
     nativeAd_ = nil;
     nativeAdView_ = nil;
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"FacebookNativeAd" adId:adId_];
+    helper_ = [[EEAdViewHelper alloc] initWithPrefix:k__tag adId:adId_];
 
     [self createInternalAd];
     [self createView];
@@ -65,21 +77,20 @@
 }
 
 - (NSString* _Nonnull)k__createInternalAd {
-    return
-        [@"FacebookNativeAd_createInternalAd_" stringByAppendingString:adId_];
+    return [NSString stringWithFormat:@"%@_createInternalAd_%@", k__tag, adId_];
 }
 
 - (NSString* _Nonnull)k__destroyInternalAd {
     return
-        [@"FacebookNativeAd_destroyInternalAd_" stringByAppendingString:adId_];
+        [NSString stringWithFormat:@"%@_destroyInternalAd_%@", k__tag, adId_];
 }
 
 - (NSString* _Nonnull)k__onLoaded {
-    return [@"FacebookNativeAd_onLoaded_" stringByAppendingString:adId_];
+    return [NSString stringWithFormat:@"%@_onLoaded_%@", k__tag, adId_];
 }
 
 - (NSString* _Nonnull)k__onFailedToLoad {
-    return [@"FacebookNativeAd_onFailedToLoad_" stringByAppendingString:adId_];
+    return [NSString stringWithFormat:@"%@_onFailedToLoad_%@", k__tag, adId_];
 }
 
 - (void)registerHandlers {

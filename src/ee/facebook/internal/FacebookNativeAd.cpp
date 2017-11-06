@@ -20,20 +20,22 @@ namespace facebook {
 using Self = NativeAd;
 
 namespace {
+const std::string k__tag = "FacebookNativeAd";
+
 auto k__createInternalAd(const std::string& id) {
-    return "FacebookNativeAd_createInternalAd_" + id;
+    return k__tag + "_createInternalAd_" + id;
 }
 
 auto k__destroyInternalAd(const std::string& id) {
-    return "FacebookNativeAd_destroyInternalAd_" + id;
+    return k__tag + "_destroyInternalAd_" + id;
 }
 
 auto k__onLoaded(const std::string& id) {
-    return "FacebookNativeAd_onLoaded_" + id;
+    return k__tag + "_onLoaded_" + id;
 }
 
 auto k__onFailedToLoad(const std::string& id) {
-    return "FacebookNativeAd_onFailedToLoad_" + id;
+    return k__tag + "_onFailedToLoad_" + id;
 }
 } // namespace
 

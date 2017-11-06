@@ -63,7 +63,11 @@ private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
 
+    /// Whether the current internal ad is loaded.
+    /// Facebook native ads can not be loaded twice.
     bool attempted_;
+
+    /// Whether the ad is loading.
     bool loading_;
 
     std::string adId_;

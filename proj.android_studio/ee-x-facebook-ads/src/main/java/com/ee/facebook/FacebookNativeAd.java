@@ -45,6 +45,8 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     private static final String k__social_context = "social_context";
     private static final String k__title          = "title";
 
+    private static final String k__tag = "FacebookNativeAd";
+
     private static final Logger _logger = new Logger(FacebookNativeAd.class.getName());
 
     private NativeAd            _nativeAd;
@@ -102,22 +104,22 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     @NonNull
     private String k__createInternalAd() {
-        return "FacebookNativeAd_createInternalAd_" + _adId;
+        return k__tag + "_createInternalAd_" + _adId;
     }
 
     @NonNull
     private String k__destroyInternalAd() {
-        return "FacebookNativeAd_destroyInternalAd_" + _adId;
+        return k__tag + "_destroyInternalAd_" + _adId;
     }
 
     @NonNull
     private String k__onLoaded() {
-        return "FacebookNativeAd_onLoaded_" + _adId;
+        return k__tag + "_onLoaded_" + _adId;
     }
 
     @NonNull
     private String k__onFailedToLoad() {
-        return "FacebookNativeAd_onFailedToLoad_" + _adId;
+        return k__tag + "_onFailedToLoad_" + _adId;
     }
 
     private void registerHandlers() {

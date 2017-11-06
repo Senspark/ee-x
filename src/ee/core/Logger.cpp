@@ -1,47 +1,94 @@
 //
-//  PluginUtils.cpp
-//  ee-core
+//  LoggerInterface.cpp
+//  ee_x
 //
-//  Created by Zinge on 7/6/16.
+//  Created by Zinge on 11/1/17.
 //
 //
 
 #include "ee/core/Logger.hpp"
 #include "ee/core/LogLevel.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {
-Logger::Logger(const std::string& tag)
-    : tag_{tag}
-    , enabled_{true} {
+using Self = Logger;
+
+Self& Self::getSystemLogger() {
+    static Self logger(
+        "ee_x", [](const LogLevel& level, const std::string& tag,
+                   const std::string& message) { log(level, tag, message); });
+    return logger;
 }
 
-void Logger::setEnabled(bool enabled) noexcept {
+void Self::setSystemLogger(const Self& logger) {
+    getSystemLogger() = logger;
+}
+
+Self::Logger(const std::string& tag, const LogCallback& callback)
+    : enabled_(true)
+    , tag_(tag)
+    , callback_(callback) {}
+
+void Self::setEnabled(bool enabled) {
     enabled_ = enabled;
 }
 
-bool Logger::isEnabled() const noexcept {
-    return enabled_;
+void Self::log(const LogLevel& level, std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(level, formatString, args);
+    va_end(args);
 }
 
-void Logger::log0(const LogLevel& level, const std::string& message) const {
-    log0(level, tag_, message);
+void Self::log(const LogLevel& level, std::string formatString,
+               std::va_list args) {
+    if (enabled_ && callback_) {
+        auto message = format(formatString, args);
+        callback_(level, tag_, message);
+    }
 }
 
-void Logger::debug0(const std::string& message) const {
-    log0(LogLevel::Debug, message);
+void Self::verbose(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Verbose, formatString, args);
+    va_end(args);
 }
 
-void Logger::info0(const std::string& message) const {
-    log0(LogLevel::Info, message);
+void Self::debug(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Debug, formatString, args);
+    va_end(args);
 }
 
-void Logger::warn0(const std::string& message) const {
-    log0(LogLevel::Warn, message);
+void Self::info(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Info, formatString, args);
+    va_end(args);
 }
 
-void Logger::error0(const std::string& message) const {
-    log0(LogLevel::Error, message);
+void Self::warn(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Warn, formatString, args);
+    va_end(args);
+}
+
+void Self::error(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Error, formatString, args);
+    va_end(args);
+}
+
+void Self::wtf(std::string formatString, ...) {
+    std::va_list args;
+    va_start(args, formatString);
+    log(LogLevel::Assert, formatString, args);
+    va_end(args);
 }
 } // namespace core
 } // namespace ee

@@ -1,13 +1,14 @@
 package com.ee.admob;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     private static final String k__star_rating    = "star_rating";
     private static final String k__store          = "store";
 
+    private Context             _context;
     private Activity            _activity;
     private String              _adId;
     private String              _layoutName;
@@ -58,10 +60,12 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     private List<String>        _testDevices;
     private AdViewHelper        _helper;
 
-    public AdMobNativeAd(@NonNull Activity activity, @NonNull String adId,
-                         @NonNull String layoutName, @NonNull Map<String, String> identifiers,
+    public AdMobNativeAd(@NonNull Context context, @Nullable Activity activity,
+                         @NonNull String adId, @NonNull String layoutName,
+                         @NonNull Map<String, String> identifiers,
                          @NonNull List<String> testDevices) {
         Utils.checkMainThread();
+        _context = context;
         _activity = activity;
         _adId = adId;
         _layoutName = layoutName;
@@ -74,6 +78,17 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         registerHandlers();
     }
 
+    void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+        addToActivity(activity);
+    }
+
+    void onDestroy(@NonNull Activity activity) {
+        assert _activity == activity;
+        removeFromActivity(activity);
+        _activity = null;
+    }
+
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
         Utils.checkMainThread();
@@ -83,7 +98,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         _layoutName = null;
         _identifiers = null;
         _adId = null;
-        _activity = null;
+        _context = null;
         _testDevices = null;
         _helper = null;
     }
@@ -112,17 +127,16 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
             return false;
         }
         _isAdLoaded = false;
-        _adLoader = new AdLoader.Builder(_activity, _adId)
+        _adLoader = new AdLoader.Builder(_context, _adId)
             .forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
                 @Override
                 public void onAppInstallAdLoaded(NativeAppInstallAd nativeAppInstallAd) {
                     _logger.info("onAppInstallAdLoaded");
-                    FrameLayout rootView = Utils.getRootView(_activity);
-                    int layoutId = rootView
+                    int layoutId = _context
                         .getResources()
-                        .getIdentifier(_layoutName, "layout", _activity.getPackageName());
+                        .getIdentifier(_layoutName, "layout", _context.getPackageName());
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) LayoutInflater
-                        .from(_activity)
+                        .from(_context)
                         .inflate(layoutId, null);
                     populateAppInstallAdView(nativeAppInstallAd, adView);
                     _nativeAdPlaceholder.removeAllViews();
@@ -150,7 +164,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
 
     private void createView() {
         assert _nativeAdPlaceholder == null;
-        FrameLayout layout = new FrameLayout(_activity);
+        FrameLayout layout = new FrameLayout(_context);
 
         FrameLayout.LayoutParams params =
             new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -159,10 +173,26 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         layout.setLayoutParams(params);
 
         _nativeAdPlaceholder = layout;
+        if (_activity != null) {
+            addToActivity(_activity);
+        }
     }
 
     private void destroyView() {
+        Utils.checkMainThread();
         assert _nativeAdPlaceholder != null;
+        removeFromActivity(_activity);
+        _nativeAdPlaceholder = null;
+    }
+
+    private void addToActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.addView(_nativeAdPlaceholder);
+    }
+
+    private void removeFromActivity(@NonNull Activity activity) {
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.removeView(_nativeAdPlaceholder);
     }
 
     @Override
@@ -176,6 +206,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         if (_adLoader == null) {
             return;
         }
+        _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
         for (String hash : _testDevices) {
             builder.addTestDevice(hash);
@@ -215,9 +246,9 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
         if (!_identifiers.containsKey(identifier)) {
             return 0;
         }
-        Resources resources = _activity.getResources();
+        Resources resources = _context.getResources();
         return resources.getIdentifier(_identifiers.get(identifier), "id",
-            _activity.getPackageName());
+            _context.getPackageName());
     }
 
     private void populateAppInstallAdView(NativeAppInstallAd nativeAppInstallAd,

@@ -1,5 +1,6 @@
 package com.ee.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -34,7 +35,7 @@ public class PluginManager {
         _plugins = new HashMap<>();
     }
 
-    public void initializePlugins(@NonNull Context context) {
+    public void initializePlugins(Context context) {
         _context = context;
         Utils.registerHandlers();
         Metrics.registerHandlers();
@@ -91,49 +92,60 @@ public class PluginManager {
         _plugins.remove(pluginName);
     }
 
+    public void onCreate(Activity activity) {
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onCreate(activity);
+        }
+    }
+
     public void onStart() {
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            entry.getValue().onStart();
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onStart();
         }
     }
 
     public void onStop() {
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            entry.getValue().onStop();
-        }
-    }
-
-    public void onPause() {
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            entry.getValue().onPause();
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onStop();
         }
     }
 
     public void onResume() {
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            entry.getValue().onResume();
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onResume();
+        }
+    }
+
+    public void onPause() {
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onPause();
         }
     }
 
     public void onDestroy() {
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            entry.getValue().onDestroy();
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).onDestroy();
         }
-        _plugins.clear();
+    }
+
+    public void destroy() {
+        for (String key : _plugins.keySet()) {
+            _plugins.get(key).destroy();
+        }
     }
 
     public boolean onBackPressed() {
         boolean result = false;
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            result = result || entry.getValue().onBackPressed();
+        for (String key : _plugins.keySet()) {
+            result = result || _plugins.get(key).onBackPressed();
         }
         return result;
     }
 
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         boolean result = false;
-        for (Map.Entry<String, PluginProtocol> entry : _plugins.entrySet()) {
-            result = result || entry.getValue().onActivityResult(requestCode, responseCode, data);
+        for (String key : _plugins.keySet()) {
+            result = result || _plugins.get(key).onActivityResult(requestCode, responseCode, data);
         }
         return result;
     }

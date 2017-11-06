@@ -54,7 +54,6 @@ auto k__onClosed(const std::string& id) {
 
 Self::InterstitialAd(FacebookAds* plugin, const std::string& placementId) {
     loading_ = false;
-    displaying_ = false;
     plugin_ = plugin;
     placementId_ = placementId;
 
@@ -127,7 +126,6 @@ bool Self::show() {
     }
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__show(placementId_));
-    displaying_ = true;
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startInterstitialAd(this);
     assert(successful);
@@ -144,17 +142,11 @@ void Self::onFailedToLoad(const std::string& message) {
 
 void Self::onClosed() {
     auto&& mediation = ads::MediationManager::getInstance();
-    if (displaying_) {
-        displaying_ = false;
-        destroyInternalAd();
-        createInternalAd();
-        setDone();
-        auto successful = mediation.finishInterstitialAd(this);
-        assert(successful);
-    } else {
-        auto successful = mediation.setInterstitialAdDone();
-        assert(successful);
-    }
+    destroyInternalAd();
+    createInternalAd();
+    setDone();
+    auto successful = mediation.finishInterstitialAd(this);
+    assert(successful);
 }
 } // namespace facebook
 } // namespace ee

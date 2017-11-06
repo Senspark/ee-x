@@ -1,6 +1,7 @@
 #include "ee/vungle/VungleBridge.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
@@ -23,6 +24,7 @@ constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 } // namespace
 
 Self::Vungle() {
+    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
     errored_ = false;
     rewardedVideo_ = nullptr;
     auto&& bridge = core::MessageBridge::getInstance();
@@ -47,6 +49,7 @@ Self::Vungle() {
 }
 
 Self::~Vungle() {
+    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.deregisterHandler(k__onStart);
     bridge.deregisterHandler(k__onEnd);
@@ -54,11 +57,14 @@ Self::~Vungle() {
 }
 
 void Self::initialize(const std::string& gameId) {
+    Logger::getSystemLogger().debug("%s: gameId = %s", __PRETTY_FUNCTION__,
+                                    gameId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__initialize, gameId);
 }
 
 std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     if (rewardedVideo_ != nullptr) {
         return std::make_shared<NullRewardedVideo>();
     }
@@ -68,6 +74,8 @@ std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
 }
 
 bool Self::destroyRewardedVideo() {
+    Logger::getSystemLogger().debug("%s: %p", __PRETTY_FUNCTION__,
+                                    rewardedVideo_);
     if (rewardedVideo_ == nullptr) {
         return false;
     }
@@ -85,6 +93,7 @@ bool Self::showRewardedVideo() {
     if (not hasRewardedVideo()) {
         return false;
     }
+    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
     errored_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo);
@@ -92,24 +101,32 @@ bool Self::showRewardedVideo() {
 }
 
 void Self::onStart() {
-    //
+    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
 }
 
 void Self::onEnd(bool wasSuccessfulView) {
+    Logger::getSystemLogger().debug("%s: %s", __PRETTY_FUNCTION__,
+                                    core::toString(wasSuccessfulView).c_str());
     auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.setRewardedVideoResult(wasSuccessfulView);
+    assert(successful);
+
+    /*
+     Don't care which ad is displaying.
     if (rewardedVideo_ == nullptr) {
         // Other mediation network.
-        auto successful = mediation.setRewardedVideoResult(wasSuccessfulView);
-        assert(successful);
+
     } else {
         assert(not errored_);
         rewardedVideo_->setResult(wasSuccessfulView);
         auto successful = mediation.finishRewardedVideo(rewardedVideo_);
         assert(successful);
     }
+     */
 }
 
 void Self::onUnavailable() {
+    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
     if (not errored_) {
         errored_ = true;
     }

@@ -1,6 +1,6 @@
 package com.ee.admob;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
@@ -22,16 +22,16 @@ import java.util.List;
 class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface {
     private static final Logger _logger = new Logger(AdMobInterstitialAd.class.getName());
 
-    private Activity             _activity;
+    private Context              _context;
     private InterstitialAd       _interstitialAd;
     private String               _adId;
     private List<String>         _testDevices;
     private InterstitialAdHelper _helper;
 
-    AdMobInterstitialAd(@NonNull Activity activity, @NonNull String adId,
+    AdMobInterstitialAd(@NonNull Context context, @NonNull String adId,
                         @NonNull List<String> testDevices) {
         Utils.checkMainThread();
-        _activity = activity;
+        _context = context;
         _adId = adId;
         _interstitialAd = null;
         _testDevices = testDevices;
@@ -40,12 +40,13 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
     }
 
     void destroy() {
+        _logger.info("destroy: id = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
+        destroyInternalAd();
         _helper = null;
-        _activity = null;
+        _context = null;
         _adId = null;
-        _interstitialAd = null;
         _testDevices = null;
         _helper = null;
     }
@@ -108,7 +109,7 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
         if (_interstitialAd != null) {
             return false;
         }
-        InterstitialAd interstitialAd = new InterstitialAd(_activity);
+        InterstitialAd interstitialAd = new InterstitialAd(_context);
         interstitialAd.setAdUnitId(_adId);
         interstitialAd.setAdListener(this);
         _interstitialAd = interstitialAd;
@@ -137,6 +138,7 @@ class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface 
         if (_interstitialAd == null) {
             return;
         }
+        _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
         for (String hash : _testDevices) {
             builder.addTestDevice(hash);

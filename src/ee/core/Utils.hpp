@@ -9,6 +9,7 @@
 #ifndef EE_X_UTILS_HPP
 #define EE_X_UTILS_HPP
 
+#include <cstdarg>
 #include <functional>
 #include <future>
 #include <string>
@@ -23,6 +24,10 @@ std::string toString(bool value);
 
 /// Convert string to bool, used internally.
 bool toBool(const std::string& value);
+
+/// http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
+std::string format(std::string formatString, ...);
+std::string format(std::string formatString, std::va_list args);
 
 /// Checks whether the current thread is the main thread (UI thread on Android).
 bool isMainThread();
@@ -69,6 +74,7 @@ bool isTablet();
 bool testConnection();
 } // namespace core
 
+using core::format;
 using core::isMainThread;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;

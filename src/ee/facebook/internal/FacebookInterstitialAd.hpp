@@ -41,8 +41,6 @@ private:
     /// Whether the ad is in loading progress.
     bool loading_;
 
-    bool displaying_;
-
     FacebookAds* plugin_;
     std::string placementId_;
 };

@@ -1,5 +1,6 @@
 package com.ee.firebase.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,9 +16,8 @@ public class Firebase implements PluginProtocol {
 
     private native void setActivity(Object activity);
 
-    public Firebase(Context context) {
-        _logger.debug("constructor begin: context = " + context);
-        setActivity(context);
+    public Firebase() {
+        _logger.debug("constructor begin.");
         _logger.debug("constructor end.");
     }
 
@@ -25,6 +25,11 @@ public class Firebase implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "Firebase";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
+        setActivity(activity);
     }
 
     @Override
@@ -45,6 +50,10 @@ public class Firebase implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
     }
 
     @Override

@@ -12,7 +12,6 @@
 		1E0EFDAB77E17F2D94725D18 /* libPods-common-ee_x_mobile_iron_source.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */; };
 		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
 		3AFCDE0675A6414E159A386F /* libPods-common-ee_x_mobile_unity_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */; };
-		3CFCFF8DC0C653552D02CB6E /* libPods-common-ee_x_mobile_iron_src.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */; };
 		5E33EA6CA96213FBED0551AF /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 		5FDEC10535439E67358F88C8 /* libPods-common-ee_x_mobile_vungle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */; };
 		6F04C5991F8F61BF007BC7A3 /* EEInterstitialAdHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */; };
@@ -127,6 +126,8 @@
 		6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688651F863C7D00AE2D93 /* EEIronSource.m */; };
 		6F36886A1F863C7D00AE2D93 /* IronSourceBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */; };
 		6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */; };
+		6F3B3E2C1FA9B3660089E322 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B3E2A1FA9B3660089E322 /* Logger.cpp */; };
+		6F3B3E2D1FA9B3660089E322 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3B3E2B1FA9B3660089E322 /* Logger.hpp */; };
 		6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* AdViewInterface.cpp */; };
 		6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* AdViewInterface.hpp */; };
 		6F426D3D1F878A5B009E202A /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */; };
@@ -155,8 +156,6 @@
 		6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2331EC19F3100C68152 /* MessageBridge.cpp */; };
 		6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2341EC19F3100C68152 /* MessageBridge.hpp */; };
 		6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
-		6F43A2C81EC1A18900C68152 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2361EC19F3100C68152 /* Logger.cpp */; };
-		6F43A2C91EC1A18900C68152 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2371EC19F3100C68152 /* Logger.hpp */; };
 		6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
 		6F43A2CE1EC1A22500C68152 /* Crashlytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2CD1EC1A22500C68152 /* Crashlytics.hpp */; };
@@ -247,8 +246,6 @@
 		6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2331EC19F3100C68152 /* MessageBridge.cpp */; };
 		6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2341EC19F3100C68152 /* MessageBridge.hpp */; };
 		6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
-		6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2361EC19F3100C68152 /* Logger.cpp */; };
-		6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2371EC19F3100C68152 /* Logger.hpp */; };
 		6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
 		6F83DD0C1EC1CDC1004C5500 /* FirebaseApp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F83DD081EC1CDC1004C5500 /* FirebaseApp.hpp */; };
@@ -706,6 +703,8 @@
 		6F3688651F863C7D00AE2D93 /* EEIronSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSource.m; path = ironsource/EEIronSource.m; sourceTree = "<group>"; };
 		6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceBridge.cpp; path = ironsource/IronSourceBridge.cpp; sourceTree = "<group>"; };
 		6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceBridge.hpp; path = ironsource/IronSourceBridge.hpp; sourceTree = "<group>"; };
+		6F3B3E2A1FA9B3660089E322 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		6F3B3E2B1FA9B3660089E322 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		6F426D331F87822A009E202A /* AdViewInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewInterface.cpp; path = ads/AdViewInterface.cpp; sourceTree = "<group>"; };
 		6F426D341F87822A009E202A /* AdViewInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewInterface.hpp; path = ads/AdViewInterface.hpp; sourceTree = "<group>"; };
 		6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookBannerAd.m; path = facebook/internal/EEFacebookBannerAd.m; sourceTree = "<group>"; };
@@ -731,8 +730,6 @@
 		6F43A2331EC19F3100C68152 /* MessageBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
 		6F43A2341EC19F3100C68152 /* MessageBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
 		6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageBridge_iOS.mm; sourceTree = "<group>"; };
-		6F43A2361EC19F3100C68152 /* Logger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
-		6F43A2371EC19F3100C68152 /* Logger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		6F43A2391EC19F3100C68152 /* LogLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
 		6F43A23A1EC19F3100C68152 /* LogLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogLevel.hpp; sourceTree = "<group>"; };
 		6F43A23C1EC19F3100C68152 /* CrashlyticsBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CrashlyticsBridge.cpp; sourceTree = "<group>"; };
@@ -1027,7 +1024,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3CFCFF8DC0C653552D02CB6E /* libPods-common-ee_x_mobile_iron_src.a in Frameworks */,
 				1E0EFDAB77E17F2D94725D18 /* libPods-common-ee_x_mobile_iron_source.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1296,8 +1292,8 @@
 				6F43A2281EC19F3100C68152 /* EEPluginManager.h */,
 				6F43A2291EC19F3100C68152 /* EEPluginManager.m */,
 				6F43A22A1EC19F3100C68152 /* internal */,
-				6F43A2361EC19F3100C68152 /* Logger.cpp */,
-				6F43A2371EC19F3100C68152 /* Logger.hpp */,
+				6F3B3E2A1FA9B3660089E322 /* Logger.cpp */,
+				6F3B3E2B1FA9B3660089E322 /* Logger.hpp */,
 				6F43A2391EC19F3100C68152 /* LogLevel.cpp */,
 				6F43A23A1EC19F3100C68152 /* LogLevel.hpp */,
 				6FAF79141FA0A53100405AF8 /* Metrics.cpp */,
@@ -1619,13 +1615,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F43A2C91EC1A18900C68152 /* Logger.hpp in Headers */,
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
 				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
 				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
 				6F43A2C11EC1A18900C68152 /* EEMessageBridge.h in Headers */,
+				6F3B3E2D1FA9B3660089E322 /* Logger.hpp in Headers */,
 				6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */,
 				6FAF79171FA0A53100405AF8 /* Metrics.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
@@ -1823,7 +1819,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F83DCAA1EC1C800004C5500 /* Logger.hpp in Headers */,
 				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
@@ -2642,11 +2637,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F3B3E2C1FA9B3660089E322 /* Logger.cpp in Sources */,
 				6F43A2C41EC1A18900C68152 /* EEUtils.m in Sources */,
 				6F43A2C21EC1A18900C68152 /* EEMessageBridge.m in Sources */,
 				6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */,
 				6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */,
-				6F43A2C81EC1A18900C68152 /* Logger.cpp in Sources */,
 				6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */,
 				6FAF79191FA0A94C00405AF8 /* EEReachability.m in Sources */,
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
@@ -2780,7 +2775,6 @@
 				6F83DCA31EC1C800004C5500 /* EEMessageBridge.m in Sources */,
 				6F83DC9D1EC1C800004C5500 /* EEPluginManager.m in Sources */,
 				6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */,
-				6F83DCA91EC1C800004C5500 /* Logger.cpp in Sources */,
 				6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */,
 				6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */,
 				6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */,

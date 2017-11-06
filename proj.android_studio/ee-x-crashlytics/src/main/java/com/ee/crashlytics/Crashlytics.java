@@ -1,5 +1,6 @@
 package com.ee.crashlytics;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -43,10 +44,13 @@ public class Crashlytics implements PluginProtocol {
         "__crashlytics_set_user_identifier";
     private static final String k__crashlytics_set_user_name       = "__crashlytics_set_user_name";
     private static final String k__crashlytics_set_user_email      = "__crashlytics_set_user_email";
-    private static final String k__crashlytics_track_level_start   = "__crashlytics_track_level_start";
-    private static final String k__crashlytics_track_level_end     = "__crashlytics_track_level_end";
+    private static final String k__crashlytics_track_level_start   =
+        "__crashlytics_track_level_start";
+    private static final String k__crashlytics_track_level_end     =
+        "__crashlytics_track_level_end";
     private static final String k__crashlytics_track_purchase      = "__crashlytics_track_purchase";
-    private static final String k__crashlytics_track_custom_event  = "__crashlytics_track_custom_event";
+    private static final String k__crashlytics_track_custom_event  =
+        "__crashlytics_track_custom_event";
     private static final String k__crashlytics_track_invite        = "__crashlytics_track_invite";
 
     private static final Logger _logger = new Logger(Crashlytics.class.getName());
@@ -72,6 +76,10 @@ public class Crashlytics implements PluginProtocol {
     }
 
     @Override
+    public void onCreate(@NonNull Activity activity) {
+    }
+
+    @Override
     public void onStart() {
     }
 
@@ -89,6 +97,10 @@ public class Crashlytics implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         deregisterHandlers();
     }
 
@@ -250,16 +262,15 @@ public class Crashlytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert  dict != null;
+                assert dict != null;
 
                 String name = (String) dict.get("name");
                 Number score = (Number) dict.get("score");
                 Boolean success = (Boolean) dict.get("success");
                 Map<String, Object> attrs = (Map<String, Object>) dict.get("attrs");
 
-                LevelEndEvent event = new LevelEndEvent().putLevelName(name)
-                        .putScore(score)
-                        .putSuccess(success);
+                LevelEndEvent event =
+                    new LevelEndEvent().putLevelName(name).putScore(score).putSuccess(success);
                 setupCustomAttribute(event, attrs);
 
                 Answers.getInstance().logLevelEnd(event);
@@ -284,12 +295,12 @@ public class Crashlytics implements PluginProtocol {
                 Map<String, Object> attrs = (Map<String, Object>) dict.get("attrs");
 
                 PurchaseEvent event = new PurchaseEvent()
-                        .putItemPrice(new BigDecimal(price.toString()))
-                        .putCurrency(Currency.getInstance(currency))
-                        .putSuccess(success)
-                        .putItemName(itemName)
-                        .putItemType(itemType)
-                        .putItemId(itemId);
+                    .putItemPrice(new BigDecimal(price.toString()))
+                    .putCurrency(Currency.getInstance(currency))
+                    .putSuccess(success)
+                    .putItemName(itemName)
+                    .putItemType(itemType)
+                    .putItemId(itemId);
                 setupCustomAttribute(event, attrs);
 
                 Answers.getInstance().logPurchase(event);
@@ -322,7 +333,7 @@ public class Crashlytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert  dict != null;
+                assert dict != null;
 
                 String method = (String) dict.get("method");
                 Map<String, Object> attrs = (Map<String, Object>) dict.get("attrs");
@@ -412,7 +423,7 @@ public class Crashlytics implements PluginProtocol {
         for (String attr : attrs.keySet()) {
             if (attrs.get(attr) instanceof String) {
                 event.putCustomAttribute(attr, (String) attrs.get(attr));
-            } else if (attrs.get(attr) instanceof Number){
+            } else if (attrs.get(attr) instanceof Number) {
                 event.putCustomAttribute(attr, (Number) attrs.get(attr));
             } else {
                 _logger.debug("Answers: Type unsupported for custom attribute: " + attr);

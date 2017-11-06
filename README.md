@@ -70,15 +70,28 @@ include ':ee-x-core'
 project(':ee-x-core').projectDir = new File('CLONE_PATH/ee-x/proj.android_studio/ee-x-core')
 ```
 
+- Add or modify `MyApplication.java`:
+
+```
+import com.ee.core.PluginManager;
+
+public MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        PluginManager.getInstance().initializePlugins(this);
+    }
+}
+```
+
 - Modify `AppActivity.java`:
 
 ```
 import com.ee.core.PluginManager;
 
 public class AppActivity extends Cocos2dxActivity {
-    Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PluginManager.getInstance().initializePlugins(this);
+        PluginManager.getInstance().onCreate(this);
     }
 
     @Override
@@ -166,14 +179,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.crashlytics.Crashlytics;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new Crashlytics(this));
     }
 }
@@ -295,14 +308,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.notification.Notification;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new Notification(this));
     }
 }
@@ -602,15 +615,15 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.applovin.AppLovin;
 
-public class AppActivity extends Cocos2dxActivity {
-    Override
-    protected void onCreate(Bundle savedInstanceState) {
-    PluginManager.getInstance().addPlugin(new AppLovin(this));
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        PluginManager.getInstance().addPlugin(new AppLovin(this));
     }
 }
 ```
@@ -656,14 +669,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.admob.AdMob;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new AdMob(this));
     }
 }
@@ -710,14 +723,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.facebook.FacebookAds;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new FacebookAds(this));
     }
 }
@@ -764,14 +777,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.ironsource.IronSource;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new IronSource(this));
     }
 }
@@ -818,15 +831,15 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.unityads.UnityAds;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        PluginManager.getInstance().addPlugin(new UnityAds(this));
+    public void onCreate() {
+        PluginManager.getInstance().addPlugin(new UnityAds());
     }
 }
 ```
@@ -872,14 +885,14 @@ dependencies {
 }
 ```
 
-- Modify `AppActivity.java`:
+- Add or modify `MyApplication.java`:
 
 ```
 import com.ee.vungle.Vungle;
 
-public class AppActivity extends Cocos2dxActivity {
+public class MyApplication extends Application {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate() {
         PluginManager.getInstance().addPlugin(new Vungle(this));
     }
 }

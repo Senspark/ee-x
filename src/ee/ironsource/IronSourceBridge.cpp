@@ -2,6 +2,7 @@
 
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
@@ -26,6 +27,7 @@ constexpr auto k__onClosed          = "IronSource_onClosed";
 } // namespace
 
 Self::IronSource() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
     rewarded_ = false;
 
@@ -57,6 +59,7 @@ Self::IronSource() {
 }
 
 Self::~IronSource() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.deregisterHandler(k__onRewarded);
     bridge.deregisterHandler(k__onFailed);
@@ -65,12 +68,16 @@ Self::~IronSource() {
 }
 
 void Self::initialize(const std::string& gameId) {
+    Logger::getSystemLogger().debug("%s: gameId = %s", __PRETTY_FUNCTION__,
+                                    gameId.c_str());
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__initialize, gameId);
 }
 
 std::shared_ptr<RewardedVideoInterface>
 Self::createRewardedVideo(const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
     if (rewardedVideos_.count(placementId) != 0) {
         return std::make_shared<NullRewardedVideo>();
     }
@@ -80,6 +87,8 @@ Self::createRewardedVideo(const std::string& placementId) {
 }
 
 bool Self::destroyRewardedVideo(const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
     if (rewardedVideos_.count(placementId) == 0) {
         return false;
     }
@@ -99,31 +108,35 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     }
     errored_ = false;
     rewarded_ = false;
-    placementId_ = placementId;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__showRewardedVideo, placementId);
     return not errored_;
 }
 
 void Self::onRewarded(const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
     rewarded_ = true;
-    if (placementId_ != placementId) {
-        // come from other mediation network.
-    }
 }
 
 void Self::onFailed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     if (not errored_) {
         errored_ = true;
     }
 }
 
 void Self::onOpened() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onClosed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
+
+    /*
+     Don't care which ad is displaying.
     if (rewardedVideos_.count(placementId_)) {
         auto ad = rewardedVideos_.at(placementId_);
         if (rewarded_) {
@@ -135,9 +148,10 @@ void Self::onClosed() {
         assert(successful);
         return;
     }
+     */
 
     // Other mediation network.
-    auto successful = mediation.setRewardedVideoResult(true);
+    auto successful = mediation.setRewardedVideoResult(rewarded_);
     assert(successful);
 }
 } // namespace ironsource

@@ -57,6 +57,10 @@ public class Store implements PluginProtocol {
     }
 
     @Override
+    public void onCreate(@NonNull Activity activity) {
+    }
+
+    @Override
     public void onStart() {
     }
 
@@ -75,6 +79,10 @@ public class Store implements PluginProtocol {
     @Override
     public void onDestroy() {
         deregisterHandlers();
+    }
+
+    @Override
+    public void destroy() {
     }
 
     @Override

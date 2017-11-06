@@ -9,6 +9,7 @@
 #include <cassert>
 
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/unityads/UnityAdsBridge.hpp"
 #include "ee/unityads/internal/UnityRewardedVideo.hpp"
 
@@ -17,12 +18,16 @@ namespace unityads {
 using Self = RewardedVideo;
 
 Self::RewardedVideo(UnityAds* plugin, const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
     plugin_ = plugin;
     placementId_ = placementId;
 }
 
 Self::~RewardedVideo() {
+    Logger::getSystemLogger().debug("%s: begin", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedVideo(placementId_);
+    Logger::getSystemLogger().debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {

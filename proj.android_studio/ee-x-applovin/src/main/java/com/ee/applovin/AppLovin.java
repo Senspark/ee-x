@@ -41,7 +41,7 @@ public class AppLovin implements PluginProtocol {
 
     private static final Logger _logger = new Logger(AppLovin.class.getName());
 
-    private Activity                         _context;
+    private Context                          _context;
     private boolean                          _initialized;
     private AppLovinSdk                      _sdk;
     private AppLovinIncentivizedInterstitial _incentivizedInterstitialAd;
@@ -52,7 +52,7 @@ public class AppLovin implements PluginProtocol {
     public AppLovin(Context context) {
         _logger.debug("constructor begin: context = " + context);
         Utils.checkMainThread();
-        _context = (Activity) context;
+        _context = context;
         _initialized = false;
         _sdk = null;
         _incentivizedInterstitialAd = null;
@@ -67,6 +67,10 @@ public class AppLovin implements PluginProtocol {
     @Override
     public String getPluginName() {
         return "AppLovin";
+    }
+
+    @Override
+    public void onCreate(@NonNull Activity activity) {
     }
 
     @Override
@@ -87,9 +91,20 @@ public class AppLovin implements PluginProtocol {
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroy();
+        if (!_initialized) {
+            return;
+        }
+        _sdk = null;
+        _incentivizedInterstitialAd = null;
+        _incentivizedInterstitialAdLoadListener = null;
+        _incentivizedInterstitialAdRewardListener = null;
+        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @Override
@@ -283,18 +298,6 @@ public class AppLovin implements PluginProtocol {
             }
         };
         _initialized = true;
-    }
-
-    private void destroy() {
-        Utils.checkMainThread();
-        if (!_initialized) {
-            return;
-        }
-        _sdk = null;
-        _incentivizedInterstitialAd = null;
-        _incentivizedInterstitialAdLoadListener = null;
-        _incentivizedInterstitialAdRewardListener = null;
-        _incentivizedInterstitialAdDisplayListener = null;
     }
 
     @SuppressWarnings("WeakerAccess")

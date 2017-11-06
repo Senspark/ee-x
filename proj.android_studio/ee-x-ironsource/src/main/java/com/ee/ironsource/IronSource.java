@@ -1,7 +1,6 @@
 package com.ee.ironsource;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
@@ -28,13 +27,13 @@ public class IronSource implements PluginProtocol {
 
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
-    private Activity _context;
+    private Activity _activity;
     private boolean  _initialized;
 
-    public IronSource(Context context) {
+    public IronSource() {
         Utils.checkMainThread();
-        _logger.debug("constructor begin: context = " + context);
-        _context = (Activity) context;
+        _logger.debug("constructor begin.");
+        _activity = null;
         _initialized = false;
         registerHandlers();
         _logger.debug("constructor end.");
@@ -47,6 +46,11 @@ public class IronSource implements PluginProtocol {
     }
 
     @Override
+    public void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+    }
+
+    @Override
     public void onStart() {
     }
 
@@ -56,17 +60,29 @@ public class IronSource implements PluginProtocol {
 
     @Override
     public void onResume() {
+        Utils.checkMainThread();
+        com.ironsource.mediationsdk.IronSource.onResume(_activity);
     }
 
     @Override
     public void onPause() {
+        Utils.checkMainThread();
+        com.ironsource.mediationsdk.IronSource.onPause(_activity);
+        Utils.checkMainThread();
     }
 
     @Override
     public void onDestroy() {
+    }
+
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroy();
+        if (!_initialized) {
+            return;
+        }
+        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
     }
 
     @Override
@@ -87,8 +103,9 @@ public class IronSource implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                assert _activity != null;
                 String gameId = message;
-                initialize(gameId);
+                initialize(_activity, gameId);
                 return "";
             }
         }, k__initialize);
@@ -123,12 +140,12 @@ public class IronSource implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(@NonNull String gameId) {
+    public void initialize(@NonNull Activity activity, @NonNull String gameId) {
         Utils.checkMainThread();
         if (_initialized) {
             return;
         }
-        com.ironsource.mediationsdk.IronSource.init(_context, gameId,
+        com.ironsource.mediationsdk.IronSource.init(activity, gameId,
             com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO);
         com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(
             new RewardedVideoListener() {
@@ -188,14 +205,6 @@ public class IronSource implements PluginProtocol {
                 }
             });
         _initialized = true;
-    }
-
-    private void destroy() {
-        Utils.checkMainThread();
-        if (!_initialized) {
-            return;
-        }
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
     }
 
     @SuppressWarnings("WeakerAccess")

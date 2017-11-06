@@ -3,16 +3,8 @@ package com.ee.test.android;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ee.admob.AdMob;
-import com.ee.applovin.AppLovin;
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
-import com.ee.crashlytics.Crashlytics;
-import com.ee.facebook.FacebookAds;
-import com.ee.ironsource.IronSource;
-import com.ee.notification.Notification;
-import com.ee.unityads.UnityAds;
-import com.ee.vungle.Vungle;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -28,15 +20,7 @@ public class MyActivity extends Cocos2dxActivity {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
         PluginManager manager = PluginManager.getInstance();
-        manager.initializePlugins(this);
-        manager.addPlugin(new Crashlytics(this));
-        manager.addPlugin(new Notification(this));
-        manager.addPlugin(new AdMob(this));
-        manager.addPlugin(new AppLovin(this));
-        manager.addPlugin(new FacebookAds(this));
-        manager.addPlugin(new IronSource(this));
-        manager.addPlugin(new UnityAds(this));
-        manager.addPlugin(new Vungle(this));
+        manager.onCreate(this);
         _logger.debug("onCreate: end.");
     }
 

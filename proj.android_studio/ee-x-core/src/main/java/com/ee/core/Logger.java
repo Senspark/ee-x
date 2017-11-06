@@ -7,7 +7,7 @@ import android.util.Log;
  */
 public class Logger {
     private String _tag;
-    private int _logLevel;
+    private int    _logLevel;
 
     public Logger(String tag) {
         _tag = tag;
@@ -41,6 +41,12 @@ public class Logger {
     public void error(String msg, Throwable th) {
         if (_logLevel <= Log.ERROR) {
             Log.e(_tag, msg, th);
+        }
+    }
+
+    public void warn(String msg) {
+        if (_logLevel <= Log.WARN) {
+            Log.w(_tag, msg);
         }
     }
 

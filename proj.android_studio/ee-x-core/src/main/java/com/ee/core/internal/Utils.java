@@ -33,6 +33,9 @@ public class Utils {
     public static void checkMainThread() {
         if (!isMainThread()) {
             _logger.error("Current thread is not the main thread");
+            for (StackTraceElement e : getCurrentStackTrace()) {
+                _logger.warn(e.toString());
+            }
             assert false;
         }
     }

@@ -36,6 +36,7 @@ public:
     static void log(const LogLevel& level, const std::string& tag,
                     const std::string& message);
 
+    explicit Logger(const std::string& tag);
     explicit Logger(const std::string& tag, const LogCallback& callback);
 
     ~Logger() = default;

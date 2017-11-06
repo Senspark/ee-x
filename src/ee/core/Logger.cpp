@@ -25,6 +25,11 @@ void Self::setSystemLogger(const Self& logger) {
     getSystemLogger() = logger;
 }
 
+Self::Logger(const std::string& tag)
+    : Logger(tag,
+             [](const LogLevel& level, const std::string& tag,
+                const std::string& message) { log(level, tag, message); }) {}
+
 Self::Logger(const std::string& tag, const LogCallback& callback)
     : enabled_(true)
     , tag_(tag)

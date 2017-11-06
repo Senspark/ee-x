@@ -32,11 +32,18 @@ public:
     /// Sets the logger used by the library.
     static void setSystemLogger(const Self& logger);
 
+    /// Constructs an empty logger (doesn't log anything).
+    static Self nullLogger();
+
     /// Logs a message to logcat (Android) or to console (iOS and macOS).
     static void log(const LogLevel& level, const std::string& tag,
                     const std::string& message);
 
+    /// Constructs a logger with the specified tag and a default callback
+    /// (Android Logcat or iOS/macOS console).
     explicit Logger(const std::string& tag);
+
+    /// Constructs a logger with the specified tag and callback.
     explicit Logger(const std::string& tag, const LogCallback& callback);
 
     ~Logger() = default;

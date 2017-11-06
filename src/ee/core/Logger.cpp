@@ -25,6 +25,10 @@ void Self::setSystemLogger(const Self& logger) {
     getSystemLogger() = logger;
 }
 
+Self Self::nullLogger() {
+    return Self("", nullptr);
+}
+
 Self::Logger(const std::string& tag)
     : Logger(tag,
              [](const LogLevel& level, const std::string& tag,

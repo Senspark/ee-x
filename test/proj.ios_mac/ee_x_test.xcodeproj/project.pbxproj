@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */; };
-		6584936257F8879163F69A5B /* libPods-ee_x_test_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D25545ECF195B5DA0EB9CB5 /* libPods-ee_x_test_desktop.a */; };
 		6F2580241ECBFC9A00B910F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580231ECBFC9A00B910F9 /* main.mm */; };
 		6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
 		6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
@@ -17,6 +16,8 @@
 		6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationAgent.cpp */; };
 		6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
+		6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */; };
+		6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */; };
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
 		6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2C1F8B5978009E202A /* fb_native_spin.xib */; };
@@ -29,19 +30,12 @@
 		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
-		6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
 		6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */; };
-		6FDD65AA1F94A7DF00BAEA66 /* AppLovin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */; };
 		6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */; };
-		6FDD65AE1F94A86B00BAEA66 /* UnityAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */; };
 		6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
-		6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
 		6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
-		6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
 		6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
-		6FDD65BA1F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
-		BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */; };
 		F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCD0BC0E50813F7A5FF53CA8 /* libPods-ee_x_test_mobile.a in Frameworks */,
 				F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,7 +108,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6584936257F8879163F69A5B /* libPods-ee_x_test_desktop.a in Frameworks */,
 				1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,9 +484,15 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
+				"${PODS_ROOT}/../../../res/stars_3_5.png",
+				"${PODS_ROOT}/../../../res/stars_4.png",
+				"${PODS_ROOT}/../../../res/stars_4_5.png",
+				"${PODS_ROOT}/../../../res/stars_5.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -546,14 +544,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FDD65B21F94A93D00BAEA66 /* IronSource.cpp in Sources */,
-				6FDD65BA1F94AB4700BAEA66 /* AdMob.cpp in Sources */,
+				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
+				6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
-				6FDD65B61F94A9C800BAEA66 /* Vungle.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
-				6FDD65A61F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
-				6FDD65AE1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
-				6FDD65AA1F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
 				6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,

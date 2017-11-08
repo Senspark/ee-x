@@ -14,10 +14,10 @@ using Self = FunctionLogger;
 
 Self::FunctionLogger(const std::string& function) {
     function_ = function;
-    getLogger().info(function_, ": begin");
+    getLogger().info("%s: begin", function_.c_str());
 }
 
 Self::~FunctionLogger() {
-    getLogger().info(function_, ": end");
+    getLogger().info("%s: end", function_.c_str());
 }
 } // namespace eetest

@@ -26,8 +26,11 @@ NativeAdTestScene* createMultiNativeAdTestScene() {
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
             [screenWidth, screenHeight] {
                 auto ad = std::make_shared<ee::MultiAdView>();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS ||                                   \
+    CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
                 ad->addItem(createAdMobNativeAd());
                 ad->addItem(createFacebookNativeAd());
+#endif
                 ad->setSize(screenWidth / 4, screenHeight / 4);
                 return ad;
             });

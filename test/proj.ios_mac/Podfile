@@ -1,7 +1,7 @@
 def pod_ee_x(name)
     full_name = 'ee-x/' + name
-    # pod full_name, :path => '../../'
-    pod full_name, :git => 'https://github.com/Senspark/ee-x'
+    pod full_name, :path => '../../'
+    # pod full_name, :git => 'https://github.com/Senspark/ee-x'
 end
 
 abstract_target 'common' do
@@ -23,5 +23,6 @@ abstract_target 'common' do
     target 'ee_x_test_desktop' do
         pod_ee_x('crashlytics')
         pod_ee_x('firebase')
+        pod_ee_x('ads')
     end
 end

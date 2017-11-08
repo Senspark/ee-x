@@ -50,8 +50,10 @@ void testIronSourceRewardedVideo() {
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {
-        FunctionLogger logger("Show ironSource rewarded video");
-        rewardedVideo->show();
+        ee::runOnUiThread([rewardedVideo] {
+            FunctionLogger logger("Show ironSource rewarded video");
+            rewardedVideo->show();
+        });
     });
 }
 } // namespace eetest

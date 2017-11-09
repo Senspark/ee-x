@@ -38,5 +38,3 @@ set(GAME_HEADERS_INCLUDE
    ${CMAKE_CURRENT_LIST_DIR}/src/ee/CrashlyticsFwd.hpp
    ${CMAKE_CURRENT_LIST_DIR}/src/ee/crashlytics/CrashlyticsBridge.hpp
 )
-
-add_library(ee-x STATIC ${GAME_SRC} ${GAME_HEADERS_INCLUDE})

@@ -25,12 +25,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Vungle* plugin);
+    explicit RewardedVideo(Vungle* plugin, const std::string& placementId);
 
 private:
     friend Vungle;
 
     Vungle* plugin_;
+    std::string placementId_;
 };
 } // namespace vungle
 } // namespace ee

@@ -7,11 +7,16 @@ import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.MessageBridge;
 import com.ee.core.internal.MessageHandler;
 import com.ee.core.internal.Utils;
-import com.vungle.publisher.EventListener;
+import com.vungle.publisher.AdConfig;
+import com.vungle.publisher.VungleAdEventListener;
+import com.vungle.publisher.VungleInitListener;
 import com.vungle.publisher.VunglePub;
+
+import java.util.Map;
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -28,6 +33,9 @@ public class Vungle implements PluginProtocol {
 
     private Context _context;
     private boolean _initialized;
+
+    final VunglePub vunglePub = VunglePub.getInstance();
+    private static AdConfig globalAdConfig;
 
     public Vungle(Context context) {
         Utils.checkMainThread();
@@ -59,13 +67,13 @@ public class Vungle implements PluginProtocol {
     @Override
     public void onResume() {
         Utils.checkMainThread();
-        VunglePub.getInstance().onResume();
+        vunglePub.onResume();
     }
 
     @Override
     public void onPause() {
         Utils.checkMainThread();
-        VunglePub.getInstance().onPause();
+        vunglePub.onPause();
     }
 
     @Override
@@ -79,7 +87,7 @@ public class Vungle implements PluginProtocol {
         if (!_initialized) {
             return;
         }
-        VunglePub.getInstance().clearEventListeners();
+        vunglePub.clearEventListeners();
     }
 
     @Override
@@ -101,8 +109,15 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String gameId = message;
-                initialize(gameId);
+
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+
+                String gameId = (String) dict.get("gameId");
+                String placementId = (String) dict.get("placementId");
+
+                initialize(gameId, placementId);
+
                 return "";
             }
         }, k__initialize);
@@ -111,7 +126,7 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedVideo());
+                return Utils.toString(hasRewardedVideo(message));
             }
         }, k__hasRewardedVideo);
 
@@ -120,7 +135,7 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                showRewardedVideo();
+                showRewardedVideo(message);
 
                 // Compliant with iOS.
                 return "true";
@@ -138,24 +153,27 @@ public class Vungle implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(final @NonNull String gameId) {
+    public void initialize(final @NonNull String gameId, final @NonNull String placementId) {
         Utils.checkMainThread();
         if (_initialized) {
             return;
         }
-        VunglePub.getInstance().init(_context, gameId);
-        VunglePub.getInstance().setEventListeners(new EventListener() {
-            @Override
-            public void onAdStart() {
-                _logger.info("onAdStart");
-                Utils.checkMainThread();
 
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onStart);
+        vunglePub.init(_context, gameId, new String[] { placementId }, new VungleInitListener()
+        {
+            @Override
+            public void onSuccess() {
+                _logger.info("vunglePub.init onSuccess");
+                globalAdConfig = vunglePub.getGlobalAdConfig();
             }
-
             @Override
-            public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
+            public void onFailure(Throwable e){
+                _logger.info("vunglePub.init onFailure");
+            }
+        });
+        vunglePub.addEventListeners(new VungleAdEventListener() {
+            @Override
+            public void onAdEnd(@NonNull String s, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
                 _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
                              wasCallToActionClicked);
                 Utils.checkMainThread();
@@ -165,30 +183,43 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onAdPlayableChanged(boolean isAdPlayable) {
-                _logger.info("onAdPlayabledChanged: " + isAdPlayable);
+            public void onAdStart(@NonNull String s) {
+                _logger.info("onAdStart");
                 Utils.checkMainThread();
+
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onStart);
             }
 
             @Override
-            public void onAdUnavailable(String reason) {
-                _logger.info("onAdUnavailable: " + reason);
+            public void onUnableToPlayAd(@NonNull String s, String reason) {
+                _logger.info("onUnableToPlayAd: " + reason);
                 Utils.checkMainThread();
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUnavailable);
             }
+
+            @Override
+            public void onAdAvailabilityUpdate(@NonNull String s, boolean isAdPlayable) {
+                _logger.info("onAdAvailabilityUpdate: " + isAdPlayable);
+                Utils.checkMainThread();
+            }
         });
+
+        vunglePub.loadAd(placementId);
+
         _initialized = true;
     }
 
 
-    private boolean hasRewardedVideo() {
+    private boolean hasRewardedVideo(String placementId) {
         Utils.checkMainThread();
-        return VunglePub.getInstance().isAdPlayable();
+        return vunglePub.isAdPlayable(placementId);
     }
 
-    private void showRewardedVideo() {
+    private void showRewardedVideo(String placementId) {
         Utils.checkMainThread();
-        VunglePub.getInstance().playAd();
+
+        vunglePub.playAd(placementId, globalAdConfig);
     }
 }

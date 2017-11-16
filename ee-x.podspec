@@ -274,7 +274,7 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'VungleSDK-iOS', '4.1.0'
+    s.dependency 'VungleSDK-iOS', '5.3.0'
   end
 
 end

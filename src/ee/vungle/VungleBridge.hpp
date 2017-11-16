@@ -4,6 +4,8 @@
 #include "ee/VungleFwd.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
+#include <map>
+
 namespace ee {
 namespace vungle {
 class Vungle final {
@@ -12,25 +14,26 @@ public:
     ~Vungle();
 
     /// Initializes Vungle with the specified game ID.
-    void initialize(const std::string& gameId);
+    void initialize(const std::string& gameId, const std::string& placementId);
 
     /// Creates a rewarded video.
-    std::shared_ptr<RewardedVideoInterface> createRewardedVideo();
+    std::shared_ptr<RewardedVideoInterface> createRewardedVideo(const std::string& placementId);
 
 private:
     friend RewardedVideo;
 
-    bool destroyRewardedVideo();
+    bool destroyRewardedVideo(const std::string& placementId);
 
-    bool hasRewardedVideo() const;
-    bool showRewardedVideo();
+    bool hasRewardedVideo(const std::string& placementId) const;
+    bool showRewardedVideo(const std::string& placementId);
 
     void onStart();
     void onEnd(bool wasSuccessfulView);
     void onUnavailable();
 
     bool errored_;
-    RewardedVideo* rewardedVideo_;
+//    RewardedVideo* rewardedVideo_;
+    std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace vungle
 } // namespace ee

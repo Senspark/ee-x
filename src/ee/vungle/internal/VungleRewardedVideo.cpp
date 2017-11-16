@@ -17,19 +17,20 @@ namespace ee {
 namespace vungle {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Vungle* plugin) {
+Self::RewardedVideo(Vungle* plugin, const std::string& placementId) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     plugin_ = plugin;
+    placementId_ = placementId;
 }
 
 Self::~RewardedVideo() {
     Logger::getSystemLogger().debug("%s: begin", __PRETTY_FUNCTION__);
-    plugin_->destroyRewardedVideo();
+    plugin_->destroyRewardedVideo(placementId_);
     Logger::getSystemLogger().debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {
-    return plugin_->hasRewardedVideo();
+    return plugin_->hasRewardedVideo(placementId_);
 }
 
 void Self::load() {
@@ -37,7 +38,7 @@ void Self::load() {
 }
 
 bool Self::show() {
-    if (not plugin_->showRewardedVideo()) {
+    if (not plugin_->showRewardedVideo(placementId_)) {
         return false;
     }
     auto&& mediation = ads::MediationManager::getInstance();

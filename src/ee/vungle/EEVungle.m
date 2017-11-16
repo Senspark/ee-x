@@ -15,7 +15,7 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/vungle/EEVungle.h"
 
-#define EE_VUNGLE_VERSION_4
+//#define EE_VUNGLE_VERSION_4
 
 @interface EEVungle () <VungleSDKDelegate> {
     BOOL initialized_;
@@ -54,19 +54,21 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 
     [bridge registerHandler:k__initialize
                    callback:^(NSString* message) {
-                       NSString* gameId = message;
-                       [self initialize:gameId];
+                       NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+                       NSString* gameId = dict[@"gameId"];
+                       NSString* placementId = dict[@"placementId"];
+                       [self initialize:gameId placementId:placementId];
                        return @"";
                    }];
 
     [bridge registerHandler:k__hasRewardedVideo
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasRewardedVideo]];
+                   callback:^(NSString* placementId) {
+                       return [EEUtils toString:[self hasRewardedVideo: placementId]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self showRewardedVideo]];
+                   callback:^(NSString* placementId) {
+                       return [EEUtils toString:[self showRewardedVideo: placementId]];
                    }];
 }
 
@@ -78,7 +80,8 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
-- (void)initialize:(NSString*)gameId {
+- (void)initialize:(NSString*)gameId placementId:(NSString*)placementId
+{
     if (initialized_) {
         return;
     }
@@ -87,7 +90,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 #ifdef EE_VUNGLE_VERSION_4
     [sdk startWithAppId:gameId];
 #else  // EE_VUNGLE_VERSION_4
-    [sdk startWithAppId:gameId placements:placementIds error:nil];
+    [sdk startWithAppId:gameId placements:[NSArray arrayWithObjects:placementId, nil] error:nil];
 #endif // placementIds
 
     [sdk setDelegate:self];
@@ -99,7 +102,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     [sdk setDelegate:nil];
 }
 
-- (BOOL)hasRewardedVideo {
+- (BOOL)hasRewardedVideo:(NSString* _Nonnull)placementId {
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
     return [sdk isAdPlayable];
@@ -108,7 +111,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 #endif // EE_VUNGLE_VERSION_4
 }
 
-- (BOOL)showRewardedVideo {
+- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId {
     UIViewController* view = [EEUtils getCurrentRootViewController];
     VungleSDK* sdk = [VungleSDK sharedSDK];
 #ifdef EE_VUNGLE_VERSION_4
@@ -136,22 +139,24 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     NSLog(@"%s: %d", __PRETTY_FUNCTION__, (int)isAdPlayable);
 }
 #else  // EE_VUNGLE_VERSION_4
-- (void)vungleWillCloseAdWithViewInfo:(nonnull VungleViewInfo*)info
-                          placementID:(nonnull NSString*)placementId {
-    NSLog(@"%s: info = %@ id = %@", __PRETTY_FUNCTION__, viewInfo, placementId);
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    [dict setValue:@(2) forKey:@"code"];
-    [dict setValue:placementId forKey:@"placement"];
-
+- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID
+{
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, placementID);
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__cppCallback
-            message:[EEJsonUtils convertDictionaryToString:dict]];
+    [bridge callCpp:k__onStart];
 }
 
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
-                      placementID:(nullable NSString*)placementId {
+- (void)vungleWillCloseAdWithViewInfo:(VungleViewInfo *)info placementID:(NSString *)placementID
+{
+    BOOL result = [info.completedView boolValue];
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__onEnd message:[EEUtils toString:result]];
+}
+
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(NSString *)placementID
+{
     NSLog(@"%s: playable = %d id = %@", __PRETTY_FUNCTION__, (int)isAdPlayable,
-          placementId);
+          placementID);
 }
 #endif // EE_VUNGLE_VERSION_4
 

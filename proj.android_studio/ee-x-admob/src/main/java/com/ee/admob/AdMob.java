@@ -64,6 +64,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public AdMob(Context context) {
         Utils.checkMainThread();
         _context = context;
+        _activity = null;
         _bannerAds = null;
 
         _testDevices = new ArrayList<>();

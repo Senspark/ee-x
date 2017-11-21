@@ -152,13 +152,11 @@ public class IronSource implements PluginProtocol {
                 @Override
                 public void onRewardedVideoAvailabilityChanged(boolean available) {
                     _logger.info("onRewardedVideoAvailabilityChanged: " + available);
-                    Utils.checkMainThread();
                 }
 
                 @Override
                 public void onRewardedVideoAdRewarded(Placement placement) {
                     _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
-                    Utils.checkMainThread();
 
                     MessageBridge bridge = MessageBridge.getInstance();
                     bridge.callCpp(k__onRewarded, placement.getPlacementName());
@@ -168,7 +166,6 @@ public class IronSource implements PluginProtocol {
                 public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
                     _logger.debug(
                         "onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
-                    Utils.checkMainThread();
 
                     MessageBridge bridge = MessageBridge.getInstance();
                     bridge.callCpp(k__onFailed);
@@ -177,7 +174,6 @@ public class IronSource implements PluginProtocol {
                 @Override
                 public void onRewardedVideoAdOpened() {
                     _logger.debug("onRewardedVideoAdOpened");
-                    Utils.checkMainThread();
 
                     MessageBridge bridge = MessageBridge.getInstance();
                     bridge.callCpp(k__onOpened);
@@ -186,7 +182,6 @@ public class IronSource implements PluginProtocol {
                 @Override
                 public void onRewardedVideoAdClosed() {
                     _logger.debug("onRewardedVideoAdClosed");
-                    Utils.checkMainThread();
 
                     MessageBridge bridge = MessageBridge.getInstance();
                     bridge.callCpp(k__onClosed);

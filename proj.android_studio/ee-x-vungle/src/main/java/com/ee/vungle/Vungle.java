@@ -176,8 +176,6 @@ public class Vungle implements PluginProtocol {
             public void onAdEnd(@NonNull String s, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
                 _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
                              wasCallToActionClicked);
-                Utils.checkMainThread();
-
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onEnd, Utils.toString(wasSuccessfulView));
             }
@@ -185,8 +183,6 @@ public class Vungle implements PluginProtocol {
             @Override
             public void onAdStart(@NonNull String s) {
                 _logger.info("onAdStart");
-                Utils.checkMainThread();
-
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onStart);
             }
@@ -194,7 +190,6 @@ public class Vungle implements PluginProtocol {
             @Override
             public void onUnableToPlayAd(@NonNull String s, String reason) {
                 _logger.info("onUnableToPlayAd: " + reason);
-                Utils.checkMainThread();
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUnavailable);
             }
@@ -202,7 +197,6 @@ public class Vungle implements PluginProtocol {
             @Override
             public void onAdAvailabilityUpdate(@NonNull String s, boolean isAdPlayable) {
                 _logger.info("onAdAvailabilityUpdate: " + isAdPlayable);
-                Utils.checkMainThread();
             }
         });
 

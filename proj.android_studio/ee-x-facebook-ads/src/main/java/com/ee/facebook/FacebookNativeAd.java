@@ -206,6 +206,12 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
+        // FIXME: 11/23/17 quickfix bug onCreate again
+        if(_nativeAdView.getParent() != null)
+        {
+            ((FrameLayout)_nativeAdView.getParent()).removeView(_nativeAdView);
+        }
+        // end quickfix bug onCreate again
         rootView.addView(_nativeAdView);
     }
 

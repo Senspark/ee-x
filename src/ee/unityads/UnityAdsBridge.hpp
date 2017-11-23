@@ -54,6 +54,7 @@ private:
     void finish(const std::string& placementId, bool result);
 
     bool errored_;
+    bool displayed_;
 
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;

@@ -14,6 +14,9 @@
 #include "ee/ads/MultiAdView.hpp"
 #include "ee/ads/MultiInterstitialAd.hpp"
 #include "ee/ads/MultiRewardedVideo.hpp"
+#include "ee/ads/NullAdView.hpp"
+#include "ee/ads/NullInterstitialAd.hpp"
+#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/RewardedVideoInterface.hpp"
 
 #endif /* EE_X_ADS_HPP */

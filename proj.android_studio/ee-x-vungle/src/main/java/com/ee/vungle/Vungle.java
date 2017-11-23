@@ -32,16 +32,17 @@ public class Vungle implements PluginProtocol {
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
     private Context _context;
-    private boolean _initialized;
+    private boolean _initializing;
 
-    final VunglePub vunglePub = VunglePub.getInstance();
-    private static AdConfig globalAdConfig;
+    private final VunglePub _vunglePub = VunglePub.getInstance();
+    private AdConfig _globalAdConfig;
 
     public Vungle(Context context) {
         Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = context;
-        _initialized = false;
+        _initializing = false;
+        _globalAdConfig = null;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -67,13 +68,13 @@ public class Vungle implements PluginProtocol {
     @Override
     public void onResume() {
         Utils.checkMainThread();
-        vunglePub.onResume();
+        _vunglePub.onResume();
     }
 
     @Override
     public void onPause() {
         Utils.checkMainThread();
-        vunglePub.onPause();
+        _vunglePub.onPause();
     }
 
     @Override
@@ -84,10 +85,7 @@ public class Vungle implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        if (!_initialized) {
-            return;
-        }
-        vunglePub.clearEventListeners();
+        _vunglePub.clearEventListeners();
     }
 
     @Override
@@ -155,23 +153,26 @@ public class Vungle implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void initialize(final @NonNull String gameId, final @NonNull String placementId) {
         Utils.checkMainThread();
-        if (_initialized) {
+        if (_initializing) {
             return;
         }
 
-        vunglePub.init(_context, gameId, new String[] { placementId }, new VungleInitListener()
-        {
+        _initializing = true;
+        _vunglePub.init(_context, gameId, new String[] { placementId }, new VungleInitListener() {
             @Override
             public void onSuccess() {
                 _logger.info("vunglePub.init onSuccess");
-                globalAdConfig = vunglePub.getGlobalAdConfig();
+                _globalAdConfig = _vunglePub.getGlobalAdConfig();
+                _vunglePub.loadAd(placementId);
+                _initializing = false;
             }
             @Override
-            public void onFailure(Throwable e){
+            public void onFailure(Throwable e) {
                 _logger.info("vunglePub.init onFailure");
+                _initializing = false;
             }
         });
-        vunglePub.addEventListeners(new VungleAdEventListener() {
+        _vunglePub.addEventListeners(new VungleAdEventListener() {
             @Override
             public void onAdEnd(@NonNull String s, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
                 _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
@@ -199,21 +200,21 @@ public class Vungle implements PluginProtocol {
                 _logger.info("onAdAvailabilityUpdate: " + isAdPlayable);
             }
         });
-
-        vunglePub.loadAd(placementId);
-
-        _initialized = true;
     }
 
-
     private boolean hasRewardedVideo(String placementId) {
+        if (!_vunglePub.isInitialized()) {
+            return false;
+        }
         Utils.checkMainThread();
-        return vunglePub.isAdPlayable(placementId);
+        return _vunglePub.isAdPlayable(placementId);
     }
 
     private void showRewardedVideo(String placementId) {
         Utils.checkMainThread();
-
-        vunglePub.playAd(placementId, globalAdConfig);
+        if (!_vunglePub.isInitialized()) {
+            return;
+        }
+        _vunglePub.playAd(placementId, _globalAdConfig);
     }
 }

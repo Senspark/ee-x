@@ -156,7 +156,7 @@ bool Self::getBool(const std::string& key) {
 std::int64_t Self::getLong(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
-        return defaults_[key].bool_value();
+        return defaults_[key].int64_value();
     }
     if (defaultsDirty_) {
         // Please call flushDefaults().

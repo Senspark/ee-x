@@ -175,11 +175,9 @@ public class Utils {
             return true;
         }
         Handler handler = new Handler(Looper.getMainLooper());
-        _logger.info("runOnUiThread");
         boolean result = handler.post(new Runnable() {
             @Override
             public void run() {
-                _logger.info("runOnUiThread: main thread");
                 signalMainThread();
             }
         });

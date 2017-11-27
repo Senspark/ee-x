@@ -8,9 +8,9 @@
 
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebook/EEFacebookAds.h"
 #import "ee/facebook/internal/EEFacebookBannerAd.h"

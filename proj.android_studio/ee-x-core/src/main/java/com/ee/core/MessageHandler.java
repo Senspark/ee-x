@@ -1,4 +1,4 @@
-package com.ee.core.internal;
+package com.ee.core;
 
 import android.support.annotation.NonNull;
 

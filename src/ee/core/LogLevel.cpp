@@ -12,8 +12,7 @@ namespace ee {
 namespace core {
 LogLevel::LogLevel(int priority_, const std::string& desc_)
     : priority{priority_}
-    , desc{desc_} {
-}
+    , desc{desc_} {}
 
 const LogLevel LogLevel::Verbose(2, "[VERBOSE]");
 const LogLevel LogLevel::Debug(3, "[DEBUG]");

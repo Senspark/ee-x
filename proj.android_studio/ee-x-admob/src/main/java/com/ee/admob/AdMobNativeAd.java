@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.AdViewInterface;
 import com.ee.core.Logger;
-import com.ee.core.internal.MessageBridge;
+import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;

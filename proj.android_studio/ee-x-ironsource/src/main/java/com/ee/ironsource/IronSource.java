@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;

@@ -14,7 +14,7 @@
 #import <AppKit/NSScreen.h>
 #endif // TARGET_OS_IOS
 
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEMetrics.h"
 
 @implementation EEMetrics

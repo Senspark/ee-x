@@ -6,19 +6,18 @@
 //
 //
 
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/core/JniUtils.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
-#include "ee/core/Logger.hpp"
 
 namespace ee {
 namespace core {
 namespace {
 extern "C" {
-JNIEXPORT jstring JNICALL
-Java_com_ee_core_internal_MessageBridge_callCpp(JNIEnv* env, jobject instance,
-                                                jstring tag_, jstring msg_) {
+JNIEXPORT jstring JNICALL Java_com_ee_core_internal_MessageBridge_callCpp(
+    JNIEnv* env, jobject instance, jstring tag_, jstring msg_) {
     const char* tag = env->GetStringUTFChars(tag_, nullptr);
     const char* msg = env->GetStringUTFChars(msg_, nullptr);
 
@@ -35,7 +34,7 @@ Java_com_ee_core_internal_MessageBridge_callCpp(JNIEnv* env, jobject instance,
 std::string MessageBridge::call(const std::string& tag,
                                 const std::string& msg) {
     auto methodInfo = JniUtils::getStaticMethodInfo(
-        "com/ee/core/internal/MessageBridge", "staticCall",
+        "com/ee/core/MessageBridge", "staticCall",
         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
     if (methodInfo == nullptr) {

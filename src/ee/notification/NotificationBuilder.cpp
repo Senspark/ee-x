@@ -16,8 +16,7 @@ NotificationBuilder::NotificationBuilder()
     , body_("")
     , delay_(0)
     , interval_(0)
-    , tag_(0) {
-}
+    , tag_(0) {}
 
 NotificationBuilder& NotificationBuilder::setTicker(const std::string& ticker) {
     ticker_ = ticker;

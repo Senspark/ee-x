@@ -16,6 +16,8 @@ import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
 import com.ee.core.PluginManager;
 
 import java.security.MessageDigest;

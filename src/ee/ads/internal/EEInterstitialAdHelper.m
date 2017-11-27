@@ -8,7 +8,7 @@
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
 #import "ee/ads/internal/EEInterstitialAdInterface.h"
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEInterstitialAdHelper () {

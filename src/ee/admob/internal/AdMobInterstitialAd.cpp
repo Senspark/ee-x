@@ -12,8 +12,8 @@
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
 namespace admob {
@@ -64,7 +64,7 @@ Self::InterstitialAd(AdMob* plugin, const std::string& adId) {
     plugin_ = plugin;
     adId_ = adId;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onLoaded();
@@ -97,7 +97,7 @@ Self::~InterstitialAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     destroyInternalAd();
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onLoaded(adId_));
     bridge.deregisterHandler(k__onFailedToLoad(adId_));
     bridge.deregisterHandler(k__onFailedToShow(adId_));
@@ -107,20 +107,20 @@ Self::~InterstitialAd() {
 
 bool Self::createInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isLoaded(adId_));
     return core::toBool(response);
 }
@@ -135,7 +135,7 @@ void Self::load() {
         return;
     }
     loading_ = true;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__load(adId_));
 }
 
@@ -145,7 +145,7 @@ bool Self::show() {
     }
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__show(adId_));
     if (errored_) {
         return false;

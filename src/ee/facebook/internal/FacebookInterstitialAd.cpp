@@ -10,8 +10,8 @@
 
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
 #include "ee/facebook/internal/FacebookInterstitialAd.hpp"
 
@@ -59,7 +59,7 @@ Self::InterstitialAd(FacebookAds* plugin, const std::string& placementId) {
     plugin_ = plugin;
     placementId_ = placementId;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onLoaded();
@@ -86,7 +86,7 @@ Self::~InterstitialAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     destroyInternalAd();
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onLoaded(placementId_));
     bridge.deregisterHandler(k__onFailedToLoad(placementId_));
     bridge.deregisterHandler(k__onClosed(placementId_));
@@ -95,20 +95,20 @@ Self::~InterstitialAd() {
 
 bool Self::createInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(placementId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(placementId_));
     return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isLoaded(placementId_));
     return core::toBool(response);
 }
@@ -123,7 +123,7 @@ void Self::load() {
         return;
     }
     loading_ = true;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__load(placementId_));
 }
 
@@ -132,7 +132,7 @@ bool Self::show() {
         return false;
     }
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__show(placementId_));
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startInterstitialAd(this);

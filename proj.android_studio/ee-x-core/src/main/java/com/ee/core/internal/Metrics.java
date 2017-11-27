@@ -4,6 +4,9 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
+
 /**
  * Created by Zinge on 10/6/17.
  */

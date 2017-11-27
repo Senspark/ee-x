@@ -12,8 +12,8 @@
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/unityads/UnityAdsBridge.hpp"
 #include "ee/unityads/internal/UnityInterstitialAd.hpp"
 #include "ee/unityads/internal/UnityRewardedVideo.hpp"
@@ -48,7 +48,7 @@ Self::UnityAds() {
     errored_ = false;
     displayed_ = false;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onError(message);
@@ -71,7 +71,7 @@ Self::UnityAds() {
 
 Self::~UnityAds() {
     Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onError);
     bridge.deregisterHandler(k__onSkipped);
     bridge.deregisterHandler(k__onFinished);
@@ -85,12 +85,12 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     json[k__gameId] = gameId;
     json[k__testModeEnabled] = core::toString(testModeEnabled);
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__initialize, json.dump());
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setDebugModeEnabled, core::toString(enabled));
 }
 
@@ -139,7 +139,7 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 }
 
 bool Self::isRewardedVideoReady(const std::string& placementId) const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isRewardedVideoReady, placementId);
     return core::toBool(response);
 }
@@ -152,7 +152,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
                                     placementId.c_str());
     errored_ = false;
     displayed_ = false;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showRewardedVideo, placementId);
     if (not errored_) {
         displayed_ = true;

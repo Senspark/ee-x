@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <VungleSDK/VungleSDK.h>
 
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/vungle/EEVungle.h"
 
@@ -54,7 +54,8 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 
     [bridge registerHandler:k__initialize
                    callback:^(NSString* message) {
-                       NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
                        NSString* gameId = dict[@"gameId"];
                        NSString* placementId = dict[@"placementId"];
                        [self initialize:gameId placementId:placementId];
@@ -63,12 +64,14 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 
     [bridge registerHandler:k__hasRewardedVideo
                    callback:^(NSString* placementId) {
-                       return [EEUtils toString:[self hasRewardedVideo: placementId]];
+                       return [EEUtils
+                           toString:[self hasRewardedVideo:placementId]];
                    }];
 
     [bridge registerHandler:k__showRewardedVideo
                    callback:^(NSString* placementId) {
-                       return [EEUtils toString:[self showRewardedVideo: placementId]];
+                       return [EEUtils
+                           toString:[self showRewardedVideo:placementId]];
                    }];
 }
 
@@ -80,8 +83,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     [bridge deregisterHandler:k__showRewardedVideo];
 }
 
-- (void)initialize:(NSString*)gameId placementId:(NSString*)placementId
-{
+- (void)initialize:(NSString*)gameId placementId:(NSString*)placementId {
     if (initialized_) {
         return;
     }
@@ -90,7 +92,9 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 #ifdef EE_VUNGLE_VERSION_4
     [sdk startWithAppId:gameId];
 #else  // EE_VUNGLE_VERSION_4
-    [sdk startWithAppId:gameId placements:[NSArray arrayWithObjects:placementId, nil] error:nil];
+    [sdk startWithAppId:gameId
+             placements:[NSArray arrayWithObjects:placementId, nil]
+                  error:nil];
 #endif // placementIds
 
     [sdk setDelegate:self];
@@ -139,22 +143,21 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     NSLog(@"%s: %d", __PRETTY_FUNCTION__, (int)isAdPlayable);
 }
 #else  // EE_VUNGLE_VERSION_4
-- (void)vungleWillShowAdForPlacementID:(nullable NSString *)placementID
-{
+- (void)vungleWillShowAdForPlacementID:(nullable NSString*)placementID {
     NSLog(@"%s %@", __PRETTY_FUNCTION__, placementID);
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__onStart];
 }
 
-- (void)vungleWillCloseAdWithViewInfo:(VungleViewInfo *)info placementID:(NSString *)placementID
-{
+- (void)vungleWillCloseAdWithViewInfo:(VungleViewInfo*)info
+                          placementID:(NSString*)placementID {
     BOOL result = [info.completedView boolValue];
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__onEnd message:[EEUtils toString:result]];
 }
 
-- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable placementID:(NSString *)placementID
-{
+- (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
+                      placementID:(NSString*)placementID {
     NSLog(@"%s: playable = %d id = %@", __PRETTY_FUNCTION__, (int)isAdPlayable,
           placementID);
 }

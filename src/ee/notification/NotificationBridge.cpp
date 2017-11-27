@@ -7,8 +7,8 @@
 //
 
 #include "ee/notification/NotificationBridge.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -21,23 +21,21 @@ void Notification::schedule(const NotificationBuilder& builder) {
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;
     json["tag"] = builder.tag_;
-    core::MessageBridge::getInstance().call("__notification_schedule",
-                                            json.dump());
+    MessageBridge::getInstance().call("__notification_schedule", json.dump());
 }
 
 void Notification::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;
-    core::MessageBridge::getInstance().call("__notification_unschedule",
-                                            json.dump());
+    MessageBridge::getInstance().call("__notification_unschedule", json.dump());
 }
 
 void Notification::unscheduleAll() {
-    core::MessageBridge::getInstance().call("__notification_unschedule_all");
+    MessageBridge::getInstance().call("__notification_unschedule_all");
 }
 
 void Notification::clearAll() {
-    core::MessageBridge::getInstance().call("__notification_clear_all");
+    MessageBridge::getInstance().call("__notification_clear_all");
 }
 } // namespace notification
 } // namespace ee

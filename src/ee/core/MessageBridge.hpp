@@ -13,7 +13,7 @@
 #include <map>
 #include <string>
 
-#include "ee/core/internal/SpinLock.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
@@ -64,7 +64,7 @@ private:
 
     MessageHandler findHandler(const std::string& tag);
 
-    SpinLock handlerLock_;
+    std::unique_ptr<SpinLock> handlerLock_;
 
     /// Registered handlers.
     std::map<std::string, MessageHandler> handlers_;

@@ -10,7 +10,7 @@
 
 #import "ee/admob/internal/EEAdMobNativeAd.h"
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobNativeAd () <GADAdLoaderDelegate,

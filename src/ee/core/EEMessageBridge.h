@@ -12,7 +12,7 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 
 @interface EEMessageBridge : NSObject
 
-/// Gets a message bridge instance.
+/// Gets the message bridge instance.
 + (instancetype _Nonnull)getInstance;
 
 /// Registers a new handler to receive messages from C++.

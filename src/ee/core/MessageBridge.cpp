@@ -7,9 +7,11 @@
 //
 
 #include <cassert>
+#include <map>
 #include <mutex>
 
-#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/MessageBridge.hpp"
+#include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {
 namespace core {
@@ -20,7 +22,9 @@ Self& Self::getInstance() {
     return sharedInstance;
 }
 
-Self::MessageBridge() {}
+Self::MessageBridge() {
+    handlerLock_ = std::make_unique<SpinLock>();
+}
 
 Self::~MessageBridge() {}
 
@@ -39,7 +43,7 @@ std::string Self::callCpp(const std::string& tag, const std::string& message) {
 
 bool Self::registerHandler(const MessageHandler& handler,
                            const std::string& tag) {
-    std::lock_guard<SpinLock> guard(handlerLock_);
+    std::lock_guard<SpinLock> guard(*handlerLock_);
     if (handlers_.count(tag) > 0) {
         assert(false);
         return false;
@@ -49,7 +53,7 @@ bool Self::registerHandler(const MessageHandler& handler,
 }
 
 bool Self::deregisterHandler(const std::string& tag) {
-    std::lock_guard<SpinLock> guard(handlerLock_);
+    std::lock_guard<SpinLock> guard(*handlerLock_);
     if (handlers_.count(tag) == 0) {
         assert(false);
         return false;
@@ -59,7 +63,7 @@ bool Self::deregisterHandler(const std::string& tag) {
 }
 
 MessageHandler Self::findHandler(const std::string& tag) {
-    std::lock_guard<SpinLock> guard(handlerLock_);
+    std::lock_guard<SpinLock> guard(*handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
         return nullptr;

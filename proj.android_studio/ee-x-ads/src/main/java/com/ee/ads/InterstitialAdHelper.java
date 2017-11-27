@@ -2,8 +2,8 @@ package com.ee.ads;
 
 import android.support.annotation.NonNull;
 
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 
 /**

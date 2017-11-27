@@ -9,8 +9,8 @@
 #include <cassert>
 
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
 #include "ee/facebook/internal/FacebookNativeAd.hpp"
 
@@ -50,7 +50,7 @@ Self::NativeAd(FacebookAds* plugin, const std::string& adId)
     attempted_ = false;
     loading_ = false;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onLoaded();
@@ -67,7 +67,7 @@ Self::NativeAd(FacebookAds* plugin, const std::string& adId)
 
 Self::~NativeAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onLoaded(adId_));
     bridge.deregisterHandler(k__onFailedToLoad(adId_));
 
@@ -77,14 +77,14 @@ Self::~NativeAd() {
 
 bool Self::createInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
 }

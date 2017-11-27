@@ -149,12 +149,8 @@
 		6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22C1EC19F3100C68152 /* EEDictionaryUtils.m */; };
 		6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */; };
 		6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */; };
-		6F43A2C11EC1A18900C68152 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */; };
-		6F43A2C21EC1A18900C68152 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2301EC19F3100C68152 /* EEMessageBridge.m */; };
 		6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2311EC19F3100C68152 /* EEUtils.h */; };
 		6F43A2C41EC1A18900C68152 /* EEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2321EC19F3100C68152 /* EEUtils.m */; };
-		6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2331EC19F3100C68152 /* MessageBridge.cpp */; };
-		6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2341EC19F3100C68152 /* MessageBridge.hpp */; };
 		6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
 		6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
@@ -235,12 +231,8 @@
 		6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22C1EC19F3100C68152 /* EEDictionaryUtils.m */; };
 		6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */; };
 		6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */; };
-		6F83DCA21EC1C800004C5500 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */; };
-		6F83DCA31EC1C800004C5500 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2301EC19F3100C68152 /* EEMessageBridge.m */; };
 		6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2311EC19F3100C68152 /* EEUtils.h */; };
 		6F83DCA51EC1C800004C5500 /* EEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2321EC19F3100C68152 /* EEUtils.m */; };
-		6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2331EC19F3100C68152 /* MessageBridge.cpp */; };
-		6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A2341EC19F3100C68152 /* MessageBridge.hpp */; };
 		6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */; };
 		6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F43A2391EC19F3100C68152 /* LogLevel.cpp */; };
 		6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A23A1EC19F3100C68152 /* LogLevel.hpp */; };
@@ -317,6 +309,14 @@
 		6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */; };
 		6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */; };
 		6FB7D6491FA0796B00EFE441 /* GoogleAnalytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */; };
+		6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
+		6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
+		6FBD03E21FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
+		6FBD03E31FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
+		6FBD03E41FCC207A0050C980 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */; };
+		6FBD03E51FCC207A0050C980 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */; };
+		6FBD03E61FCC207A0050C980 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */; };
+		6FBD03E71FCC207A0050C980 /* MessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */; };
 		6FD934131EC1B02A001E5D1D /* CrashlyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */; };
 		6FD934151EC1B073001E5D1D /* NotificationFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */; };
 		6FDD658B1F90C2ED00BAEA66 /* AdMobNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */; };
@@ -719,12 +719,8 @@
 		6F43A22C1EC19F3100C68152 /* EEDictionaryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEDictionaryUtils.m; sourceTree = "<group>"; };
 		6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEJsonUtils.h; sourceTree = "<group>"; };
 		6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEJsonUtils.m; sourceTree = "<group>"; };
-		6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
-		6F43A2301EC19F3100C68152 /* EEMessageBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEMessageBridge.m; sourceTree = "<group>"; };
 		6F43A2311EC19F3100C68152 /* EEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEUtils.h; sourceTree = "<group>"; };
 		6F43A2321EC19F3100C68152 /* EEUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEUtils.m; sourceTree = "<group>"; };
-		6F43A2331EC19F3100C68152 /* MessageBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
-		6F43A2341EC19F3100C68152 /* MessageBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
 		6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageBridge_iOS.mm; sourceTree = "<group>"; };
 		6F43A2391EC19F3100C68152 /* LogLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogLevel.cpp; sourceTree = "<group>"; };
 		6F43A23A1EC19F3100C68152 /* LogLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogLevel.hpp; sourceTree = "<group>"; };
@@ -854,6 +850,10 @@
 		6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsSocialBuilder.cpp; sourceTree = "<group>"; };
 		6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsSocialBuilder.hpp; sourceTree = "<group>"; };
 		6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalytics.hpp; sourceTree = "<group>"; };
+		6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
+		6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMessageBridge.m; sourceTree = "<group>"; };
+		6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
+		6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
 		6FD934121EC1B02A001E5D1D /* CrashlyticsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsFwd.hpp; sourceTree = "<group>"; };
 		6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NotificationFwd.hpp; sourceTree = "<group>"; };
 		6FDD65891F90C2ED00BAEA66 /* AdMobNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobNativeAd.cpp; path = admob/internal/AdMobNativeAd.cpp; sourceTree = "<group>"; };
@@ -1283,6 +1283,10 @@
 			children = (
 				6F43A2281EC19F3100C68152 /* EEPluginManager.h */,
 				6F43A2291EC19F3100C68152 /* EEPluginManager.m */,
+				6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */,
+				6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */,
+				6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */,
+				6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */,
 				6F43A22A1EC19F3100C68152 /* internal */,
 				6F3B3E2A1FA9B3660089E322 /* Logger.cpp */,
 				6F3B3E2B1FA9B3660089E322 /* Logger.hpp */,
@@ -1305,15 +1309,11 @@
 				6FAF79181FA0A94C00405AF8 /* EEReachability.m */,
 				6F43A22D1EC19F3100C68152 /* EEJsonUtils.h */,
 				6F43A22E1EC19F3100C68152 /* EEJsonUtils.m */,
-				6F43A22F1EC19F3100C68152 /* EEMessageBridge.h */,
-				6F43A2301EC19F3100C68152 /* EEMessageBridge.m */,
 				6FAF79041FA0A41E00405AF8 /* EEMetrics.h */,
 				6FAF79051FA0A41E00405AF8 /* EEMetrics.m */,
 				6F43A2311EC19F3100C68152 /* EEUtils.h */,
 				6F43A2321EC19F3100C68152 /* EEUtils.m */,
 				6FAF79061FA0A41E00405AF8 /* Logger_iOS.mm */,
-				6F43A2331EC19F3100C68152 /* MessageBridge.cpp */,
-				6F43A2341EC19F3100C68152 /* MessageBridge.hpp */,
 				6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */,
 				6FAF79091FA0A41E00405AF8 /* ScopeGuard.hpp */,
 				6FAF790A1FA0A41E00405AF8 /* SpinLock.hpp */,
@@ -1605,14 +1605,14 @@
 			files = (
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
 				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
+				6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */,
 				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
-				6F43A2C11EC1A18900C68152 /* EEMessageBridge.h in Headers */,
 				6F3B3E2D1FA9B3660089E322 /* Logger.hpp in Headers */,
-				6F43A2C61EC1A18900C68152 /* MessageBridge.hpp in Headers */,
 				6FAF79171FA0A53100405AF8 /* Metrics.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
+				6FBD03E61FCC207A0050C980 /* MessageBridge.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
@@ -1807,12 +1807,12 @@
 			files = (
 				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
+				6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
-				6F83DCA21EC1C800004C5500 /* EEMessageBridge.h in Headers */,
-				6F83DCA71EC1C800004C5500 /* MessageBridge.hpp in Headers */,
 				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
 				6F83DC9E1EC1C800004C5500 /* EEDictionaryUtils.h in Headers */,
+				6FBD03E71FCC207A0050C980 /* MessageBridge.hpp in Headers */,
 				6F426E381F8BAEB7009E202A /* Utils.hpp in Headers */,
 				6F24C6D81EC31DBE00509B6C /* Macro.hpp in Headers */,
 			);
@@ -2624,16 +2624,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F3B3E2C1FA9B3660089E322 /* Logger.cpp in Sources */,
+				6FBD03E21FCC207A0050C980 /* EEMessageBridge.m in Sources */,
 				6F43A2C41EC1A18900C68152 /* EEUtils.m in Sources */,
-				6F43A2C21EC1A18900C68152 /* EEMessageBridge.m in Sources */,
 				6F43A2BB1EC1A18000C68152 /* EEPluginManager.m in Sources */,
 				6F43A2CB1EC1A18900C68152 /* LogLevel.cpp in Sources */,
 				6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */,
 				6FAF79191FA0A94C00405AF8 /* EEReachability.m in Sources */,
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
+				6FBD03E41FCC207A0050C980 /* MessageBridge.cpp in Sources */,
 				6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */,
 				6FAF790D1FA0A41E00405AF8 /* Logger_iOS.mm in Sources */,
-				6F43A2C51EC1A18900C68152 /* MessageBridge.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
 				6FAF79161FA0A53100405AF8 /* Metrics.cpp in Sources */,
 				6FAF790C1FA0A41E00405AF8 /* EEMetrics.m in Sources */,
@@ -2757,13 +2757,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FBD03E31FCC207A0050C980 /* EEMessageBridge.m in Sources */,
+				6FBD03E51FCC207A0050C980 /* MessageBridge.cpp in Sources */,
 				6F83DCA51EC1C800004C5500 /* EEUtils.m in Sources */,
-				6F83DCA31EC1C800004C5500 /* EEMessageBridge.m in Sources */,
 				6F83DC9D1EC1C800004C5500 /* EEPluginManager.m in Sources */,
 				6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */,
 				6F83DCA81EC1C800004C5500 /* MessageBridge_iOS.mm in Sources */,
 				6F83DC9F1EC1C800004C5500 /* EEDictionaryUtils.m in Sources */,
-				6F83DCA61EC1C800004C5500 /* MessageBridge.cpp in Sources */,
 				6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */,
 				6F83DCA11EC1C800004C5500 /* EEJsonUtils.m in Sources */,
 			);

@@ -8,8 +8,8 @@
 
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/AdMobBridge.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -37,7 +37,7 @@ Self::NativeAd(AdMob* plugin, const std::string& adId)
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onLoaded();
@@ -57,7 +57,7 @@ Self::~NativeAd() {
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onLoaded(adId_));
     bridge.deregisterHandler(k__onFailedToLoad(adId_));
 }

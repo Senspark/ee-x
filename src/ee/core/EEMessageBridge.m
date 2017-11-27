@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 
 @interface EEMessageBridge () {
     /// Registered handlers.

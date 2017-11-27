@@ -3,8 +3,8 @@ package com.ee.google.analytics;
 import android.support.annotation.NonNull;
 
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.analytics.*;
 

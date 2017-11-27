@@ -7,8 +7,8 @@
 //
 
 #include "ee/google/GoogleAnalyticsBridge.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/google/GoogleAnalyticsEventBuilder.hpp"
 #include "ee/google/GoogleAnalyticsExceptionBuilder.hpp"
 #include "ee/google/GoogleAnalyticsProduct.hpp"
@@ -50,33 +50,33 @@ Self::Analytics() {}
 Self::~Analytics() {}
 
 void Self::setDispatchInterval(int seconds) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setDispatchInterval, std::to_string(seconds));
 }
 
 void Self::setDryRun(bool enabled) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setDryRun, core::toString(enabled));
 }
 
 void Self::setOptOut(bool enabled) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setOptOut, core::toString(enabled));
 }
 
 void Self::setTrackUncaughtException(bool enabled) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setTrackUncaughtException, core::toString(enabled));
 }
 
 void Self::dispatch() {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__dispatch);
 }
 
 std::shared_ptr<AnalyticsTracker>
 Self::createTracker(const std::string& trackingId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createTracker, trackingId);
     if (not core::toBool(response)) {
         return nullptr;
@@ -86,7 +86,7 @@ Self::createTracker(const std::string& trackingId) {
 }
 
 bool Self::destroyTracker(const std::string& trackingId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyTracker, trackingId);
     return core::toBool(response);
 }
@@ -114,7 +114,7 @@ bool Self::testTrackEvent() {
                     .setValue(1)
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackEvent, json.dump());
     return core::toBool(response);
 }
@@ -123,7 +123,7 @@ bool Self::testTrackException() {
     auto dict =
         ExceptionBuilder().setDescription("description").setFatal(true).build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackException, json.dump());
     return core::toBool(response);
 }
@@ -131,7 +131,7 @@ bool Self::testTrackException() {
 bool Self::testTrackScreenView() {
     auto dict = ScreenViewBuilder().build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackScreenView, json.dump());
     return core::toBool(response);
 }
@@ -143,7 +143,7 @@ bool Self::testTrackSocial() {
                     .setTarget("target")
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackSocial, json.dump());
     return core::toBool(response);
 }
@@ -156,7 +156,7 @@ bool Self::testTrackTiming() {
                     .setValue(1)
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackTiming, json.dump());
     return core::toBool(response);
 }
@@ -170,7 +170,7 @@ bool Self::testCustomDimensionAndMetric() {
                     .setCustomDimension(2, "dimension_2")
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testCustomDimensionAndMetric, json.dump());
     return core::toBool(response);
 }
@@ -197,7 +197,7 @@ bool Self::testEcommerceAction() {
                     .setProductAction(action)
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackEcommerceAction, json.dump());
     return core::toBool(response);
 }
@@ -230,7 +230,7 @@ bool Self::testEcommerceImpression() {
                     .addImpression(product3, "impressionList1")
                     .build();
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testTrackEcommerceImpression, json.dump());
     return core::toBool(response);
 }

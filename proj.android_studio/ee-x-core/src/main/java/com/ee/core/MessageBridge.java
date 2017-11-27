@@ -1,13 +1,9 @@
-package com.ee.core.internal;
+package com.ee.core;
 
 import android.support.annotation.NonNull;
 
-import com.ee.core.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.R.attr.tag;
 
 /**
  * Created by Zinge on 3/29/17.

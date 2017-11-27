@@ -7,8 +7,8 @@
 //
 
 #include "ee/google/GoogleAnalyticsTracker.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/google/GoogleAnalyticsBridge.hpp"
 #include "ee/google/internal/GoogleAnalyticsParameter.hpp"
 
@@ -53,12 +53,12 @@ void Self::setParameter(const std::string& key, const std::string& value) {
     json[k__key] = key;
     json[k__value] = value;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setParameter(trackingId_), json.dump());
 }
 
 void Self::setAllowIDFACollection(bool enabled) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__setAllowIDFACollection(trackingId_),
                 core::toString(enabled));
 }
@@ -69,7 +69,7 @@ void Self::setScreenName(const std::string& screenName) {
 
 void Self::send(const TrackingDict& dict) {
     nlohmann::json json = dict;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__send(trackingId_), json.dump());
 }
 } // namespace google

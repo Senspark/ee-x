@@ -2,8 +2,8 @@
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -26,8 +26,8 @@ constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 Self::Vungle() {
     Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
     errored_ = false;
-    
-    auto&& bridge = core::MessageBridge::getInstance();
+
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onStart();
@@ -50,25 +50,28 @@ Self::Vungle() {
 
 Self::~Vungle() {
     Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onStart);
     bridge.deregisterHandler(k__onEnd);
     bridge.deregisterHandler(k__onUnavailable);
 }
 
-void Self::initialize(const std::string& gameId, const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: gameId = %s placementId = %s", __PRETTY_FUNCTION__,
-                                    gameId.c_str(), placementId.c_str());
-    
+void Self::initialize(const std::string& gameId,
+                      const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: gameId = %s placementId = %s",
+                                    __PRETTY_FUNCTION__, gameId.c_str(),
+                                    placementId.c_str());
+
     nlohmann::json json;
     json["gameId"] = gameId;
     json["placementId"] = placementId;
-    
-    auto&& bridge = core::MessageBridge::getInstance();
+
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__initialize, json.dump());
 }
 
-std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo(const std::string& placementId) {    
+std::shared_ptr<RewardedVideoInterface>
+Self::createRewardedVideo(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
     if (rewardedVideos_.count(placementId) != 0) {
@@ -90,7 +93,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 }
 
 bool Self::hasRewardedVideo(const std::string& placementId) const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto result = bridge.call(k__hasRewardedVideo, placementId);
     return core::toBool(result);
 }
@@ -102,7 +105,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
     errored_ = false;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo, placementId);
     return not errored_ && core::toBool(response);
 }

@@ -10,8 +10,8 @@
 #include "ee/ads/NullAdView.hpp"
 #include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/core/LogLevel.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookNativeAdLayout.hpp"
 #include "ee/facebook/internal/FacebookBannerAd.hpp"
 #include "ee/facebook/internal/FacebookInterstitialAd.hpp"
@@ -54,17 +54,17 @@ Self::FacebookAds() {}
 Self::~FacebookAds() {}
 
 std::string Self::getTestDeviceHash() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     return bridge.call(k__getTestDeviceHash);
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__addTestDevice, hash);
 }
 
 void Self::clearTestDevices() {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__clearTestDevices);
 }
 
@@ -74,7 +74,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createBannerAd, json.dump());
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
@@ -83,7 +83,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyBannerAd, adId);
     return core::toBool(response);
 }
@@ -96,7 +96,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     json[k__layout_name] = layoutName;
     json[k__identifiers] = identifiers.params_;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
@@ -105,14 +105,14 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__destroyNativeAd, adId);
     return core::toBool(response);
 }
 
 std::shared_ptr<InterstitialAdInterface>
 Self::createInterstitialAd(const std::string& placementId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, placementId);
     if (not core::toBool(response)) {
         return std::make_shared<NullInterstitialAd>();
@@ -122,7 +122,7 @@ Self::createInterstitialAd(const std::string& placementId) {
 }
 
 bool Self::destroyInterstitialAd(const std::string& placementId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto&& response = bridge.call(k__destroyInterstitialAd, placementId);
     return core::toBool(response);
 }

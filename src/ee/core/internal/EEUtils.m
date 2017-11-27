@@ -7,7 +7,7 @@
 //
 
 #import "ee/core/internal/EEUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEReachability.h"
 
 #if TARGET_OS_IOS

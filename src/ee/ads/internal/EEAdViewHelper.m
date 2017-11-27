@@ -9,7 +9,7 @@
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/ads/internal/EEAdViewInterface.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
 

@@ -6,8 +6,8 @@
 //
 //
 
-#import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/MessageBridge.hpp"
+#import "ee/core/EEMessageBridge.h"
+#import "ee/core/MessageBridge.hpp"
 
 @implementation EEMessageBridge (Cpp)
 
@@ -17,7 +17,7 @@
 
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
                       message:(NSString* _Nonnull)message {
-    auto&& bridge = ee::core::MessageBridge::getInstance();
+    auto&& bridge = ee::MessageBridge::getInstance();
     auto result = bridge.callCpp([tag UTF8String], [message UTF8String]);
     return (NSString * _Nonnull)[NSString stringWithUTF8String:result.c_str()];
 }

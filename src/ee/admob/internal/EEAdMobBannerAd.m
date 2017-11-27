@@ -10,8 +10,8 @@
 
 #import "ee/admob/internal/EEAdMobBannerAd.h"
 #import "ee/ads/internal/EEAdViewHelper.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobBannerAd () <GADBannerViewDelegate> {

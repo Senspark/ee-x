@@ -7,9 +7,9 @@
 //
 
 #import "ee/notification/EENotification.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
 
 #import <UIKit/UIKit.h>
 
@@ -73,12 +73,14 @@ NSString* const k__notification_clear_all       = @"__notification_clear_all";
               interval:[EENotification parseInterval:[interval intValue]]
                    tag:tag];
         return [EEDictionaryUtils emptyResult];
-    } tag:k__notification_schedule];
+    }
+                        tag:k__notification_schedule];
 
     [bridge registerHandler:^(NSString* msg) {
         [self unscheduleAll];
         return [EEDictionaryUtils emptyResult];
-    } tag:k__notification_unschedule_all];
+    }
+                        tag:k__notification_unschedule_all];
 
     [bridge registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
@@ -86,12 +88,14 @@ NSString* const k__notification_clear_all       = @"__notification_clear_all";
 
         [self unschedule:tag];
         return [EEDictionaryUtils emptyResult];
-    } tag:k__notification_unschedule];
+    }
+                        tag:k__notification_unschedule];
 
     [bridge registerHandler:^(NSString* msg) {
         [self clearAll];
         return [EEDictionaryUtils emptyResult];
-    } tag:k__notification_clear_all];
+    }
+                        tag:k__notification_clear_all];
 }
 
 - (void)deregisterHandlers {

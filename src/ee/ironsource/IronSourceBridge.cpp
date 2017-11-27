@@ -3,8 +3,8 @@
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
@@ -31,7 +31,7 @@ Self::IronSource() {
     errored_ = false;
     rewarded_ = false;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             onRewarded(message);
@@ -60,7 +60,7 @@ Self::IronSource() {
 
 Self::~IronSource() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onRewarded);
     bridge.deregisterHandler(k__onFailed);
     bridge.deregisterHandler(k__onOpened);
@@ -70,7 +70,7 @@ Self::~IronSource() {
 void Self::initialize(const std::string& gameId) {
     Logger::getSystemLogger().debug("%s: gameId = %s", __PRETTY_FUNCTION__,
                                     gameId.c_str());
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__initialize, gameId);
 }
 
@@ -97,7 +97,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 }
 
 bool Self::hasRewardedVideo() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__hasRewardedVideo);
     return core::toBool(response);
 }
@@ -108,7 +108,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     }
     errored_ = false;
     rewarded_ = false;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showRewardedVideo, placementId);
     return not errored_;
 }

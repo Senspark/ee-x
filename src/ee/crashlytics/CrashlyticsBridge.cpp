@@ -8,7 +8,7 @@
 
 #include "ee/crashlytics/CrashlyticsBridge.hpp"
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -35,12 +35,12 @@ constexpr auto k__crashlytics_track_invite         = "__crashlytics_track_invite
 } // namespace
 
 void Crashlytics::causeCrash() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_cause_crash);
 }
 
 void Crashlytics::causeException() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_cause_exception);
 }
 
@@ -48,7 +48,7 @@ void Crashlytics::setLogLevel(const core::LogLevel& level) const {
     nlohmann::json json;
     json["priority"] = level.priority;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_log_level, json.dump());
 }
 
@@ -61,7 +61,7 @@ void Crashlytics::log(const core::LogLevel& level, const std::string& tag,
     json["tag"] = tag;
     json["message"] = message;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_log, json.dump());
 }
 
@@ -72,7 +72,7 @@ void Crashlytics::setString(const std::string& key,
     json["key"] = key;
     json["value"] = value;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_string, json.dump());
 }
 
@@ -82,7 +82,7 @@ void Crashlytics::setBool(const std::string& key, bool value) const {
     json["key"] = key;
     json["value"] = value;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_bool, json.dump());
 }
 
@@ -92,22 +92,22 @@ void Crashlytics::setInt(const std::string& key, int value) const {
     json["key"] = key;
     json["value"] = value;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_int, json.dump());
 }
 
 void Crashlytics::setUserIdentifier(const std::string& identifier) const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_user_identifier, identifier);
 }
 
 void Crashlytics::setUserName(const std::string& name) const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_user_name, name);
 }
 
 void Crashlytics::setUserEmail(const std::string& email) const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_set_user_email, email);
 }
 
@@ -119,7 +119,7 @@ void Crashlytics::trackLevelStart(
     json["name"] = name;
     json["attrs"] = attrs;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_track_level_start, json.dump());
 }
 
@@ -133,7 +133,7 @@ void Crashlytics::trackLevelEnd(
     json["success"] = success;
     json["attrs"] = attrs;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_track_level_end, json.dump());
 }
 
@@ -152,7 +152,7 @@ void Crashlytics::trackPurchase(
     json["item_id"] = itemId;
     json["attrs"] = attrs;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_track_purchase, json.dump());
 }
 
@@ -164,7 +164,7 @@ void Crashlytics::trackCustomEvent(
     json["name"] = name;
     json["attrs"] = attrs;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_track_custom_event, json.dump());
 }
 
@@ -176,7 +176,7 @@ void Crashlytics::trackInvite(
     json["method"] = method;
     json["attrs"] = attrs;
 
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__crashlytics_track_invite, json.dump());
 }
 } // namespace crashlytics

@@ -15,8 +15,9 @@
 #include <thread>
 
 #include "ee/Macro.hpp"
+#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {
 namespace core {
@@ -134,7 +135,7 @@ void runOnUiThreadCallback() {
 void registerHandler() {
     static std::once_flag flag;
     std::call_once(flag, [] {
-        auto&& bridge = core::MessageBridge::getInstance();
+        auto&& bridge = MessageBridge::getInstance();
         bridge.registerHandler(
             [](const std::string& message) {
                 runOnUiThreadCallback();
@@ -152,7 +153,7 @@ bool runOnUiThread(const Runnable<void>& runnable) {
     }
     registerHandler();
     pushRunnable(runnable);
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__runOnUiThread);
     return toBool(response);
 }

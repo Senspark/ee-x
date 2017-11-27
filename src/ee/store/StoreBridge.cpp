@@ -9,7 +9,7 @@
 #include "ee/store/StoreBridge.hpp"
 #include "ee/Macro.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -46,7 +46,7 @@ constexpr auto k__error_code        = "error_code";
 using Self = Store;
 
 Self::Store() {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
@@ -103,7 +103,7 @@ Self::Store() {
 }
 
 Self::~Store() {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__request_products_succeeded);
     bridge.deregisterHandler(k__request_products_failed);
     bridge.deregisterHandler(k__restore_purchases_succeeded);
@@ -115,30 +115,30 @@ Self::~Store() {
 
 void Self::initialize(const std::string& publicKey) {
 #ifdef EE_X_ANDROID
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__initialize, publicKey);
 #endif // EE_X_ANDROID
 }
 
 bool Self::canPurchase() const {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__can_purchase);
     return core::toBool(response);
 }
 
 void Self::purchase(const std::string& productId) {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__purchase, productId);
 }
 
 void Self::restoreTransactions() {
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__restore_transactions);
 }
 
 void Self::requestProducts(const std::vector<std::string>& productIds) {
     nlohmann::json json = productIds;
-    auto&& bridge = core::MessageBridge::getInstance();
+    auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__request_products, json.dump());
 }
 } // namespace store

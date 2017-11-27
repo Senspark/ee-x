@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.MessageBridge;
-import com.ee.core.internal.MessageHandler;
+import com.ee.core.MessageBridge;
+import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 
 import java.util.HashMap;

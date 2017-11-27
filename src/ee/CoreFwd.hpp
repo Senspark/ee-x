@@ -16,6 +16,8 @@ namespace core {
 struct LogLevel;
 class Logger;
 class Metrics;
+class MessageBridge;
+class SpinLock;
 
 #if defined(EE_X_ANDROID)
 class JniUtils;
@@ -25,6 +27,7 @@ class JniUtils;
 using core::LogLevel;
 using core::Logger;
 using core::Metrics;
+using core::MessageBridge;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

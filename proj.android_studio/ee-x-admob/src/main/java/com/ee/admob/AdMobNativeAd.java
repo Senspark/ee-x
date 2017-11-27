@@ -192,12 +192,15 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
+        /*
+          Cocos2d-x issue.
         // FIXME: 11/23/17 quickfix bug onCreate again
         if(_nativeAdPlaceholder.getParent() != null)
         {
             ((FrameLayout)_nativeAdPlaceholder.getParent()).removeView(_nativeAdPlaceholder);
         }
         // end quickfix bug onCreate again
+        */
         rootView.addView(_nativeAdPlaceholder);
     }
 

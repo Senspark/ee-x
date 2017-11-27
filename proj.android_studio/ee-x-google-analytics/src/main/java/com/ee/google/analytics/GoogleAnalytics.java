@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
@@ -350,6 +351,14 @@ public class GoogleAnalytics implements PluginProtocol {
         tracker.destroy();
         _trackers.remove(trackingId);
         return true;
+    }
+
+    @Nullable
+    public GoogleAnalyticsTracker getTracker(@NonNull String trackingId) {
+        if (!_trackers.containsKey(trackingId)) {
+            return null;
+        }
+        return _trackers.get(trackingId);
     }
 
     private boolean checkDictionary(@NonNull Map<String, Object> builtDict,

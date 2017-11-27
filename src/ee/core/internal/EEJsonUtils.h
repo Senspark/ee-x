@@ -12,12 +12,15 @@
 @interface EEJsonUtils : NSObject
 
 /// Converts the specified array to a JSON formatted string.
-+ (NSString*)convertArrayToString:(NSArray*)arr;
++ (NSString* _Nonnull)convertArrayToString:(NSArray* _Nonnull)arr;
 
 /// Converts the specified dictionary to a JSON formatted string.
-+ (NSString*)convertDictionaryToString:(NSDictionary*)dict;
++ (NSString* _Nonnull)convertDictionaryToString:(NSDictionary* _Nonnull)dict;
+
++ (NSMutableArray* _Nonnull)convertStringToArray:(NSString* _Nonnull)str;
 
 /// Converts a JSON formatted string to a dictionary.
-+ (NSMutableDictionary*)convertStringToDictionary:(NSString*)str;
++ (NSMutableDictionary* _Nonnull)convertStringToDictionary:
+    (NSString* _Nonnull)str;
 
 @end

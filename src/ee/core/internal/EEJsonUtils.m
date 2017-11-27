@@ -18,7 +18,6 @@
                                                      error:&error];
     if (data == nil) {
         NSLog(@"%@", error);
-        NSAssert(NO, @"Unexpected error when converting an object to NSString");
         return nil;
     }
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
@@ -35,29 +34,38 @@
                                                   error:&error];
     if (object == nil) {
         NSLog(@"%@", error);
-        NSAssert(NO, @"Unexpected error when convert NSString to an object");
         return nil;
     }
     return object;
 }
 
-+ (NSString* _Nullable)convertArrayToString:(NSArray* _Nonnull)arr {
-    return [self convertObjectToString:arr];
++ (NSString* _Nonnull)convertArrayToString:(NSArray* _Nonnull)arr {
+    NSString* str = [self convertObjectToString:arr];
+    NSAssert(str != nil,
+             @"Unexpected error when converting NSArray to NSString");
+    return str;
 }
 
-+ (NSString* _Nullable)convertDictionaryToString:(NSDictionary* _Nonnull)dict {
-    return [self convertObjectToString:dict];
++ (NSString* _Nonnull)convertDictionaryToString:(NSDictionary* _Nonnull)dict {
+    NSString* str = [self convertObjectToString:dict];
+    NSAssert(str != nil,
+             @"Unexpected error when converting NSDictionary to NSString");
+    return str;
 }
 
-+ (NSMutableArray* _Nullable)convertStringToArray:(NSString* _Nonnull)str {
++ (NSMutableArray* _Nonnull)convertStringToArray:(NSString* _Nonnull)str {
     id object = [self convertStringToObject:str];
+    NSAssert(object != nil,
+             @"Unexpected error when convert NSString to NSArray");
     NSAssert([object isKindOfClass:[NSMutableArray class]],
              @"Converted object is not NSArray");
     return object;
 }
 
-+ (NSMutableDictionary* _Nullable)convertStringToDictionary:(NSString*)str {
++ (NSMutableDictionary* _Nonnull)convertStringToDictionary:(NSString*)str {
     id object = [self convertStringToObject:str];
+    NSAssert(object != nil,
+             @"Unexpected error when convert NSString to NSDictionary");
     NSAssert([object isKindOfClass:[NSMutableDictionary class]],
              @"Converted object is not NSDictionary");
     return object;

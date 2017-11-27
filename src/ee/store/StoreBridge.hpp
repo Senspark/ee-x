@@ -14,15 +14,15 @@
 
 namespace ee {
 namespace store {
-class StoreAssets;
-
 class Store {
 public:
+    /// Intializes the store with the specified public key (Android only).
+    /// iOS doesn't need to call this method.
+    void initialize(const std::string& publicKey);
+
     bool canPurchase() const;
 
     void purchase(const std::string& productId);
-
-    void initialize(const StoreAssets& assets);
 
     void buyMarketItem(const std::string& productId,
                        const std::string& payload);

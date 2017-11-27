@@ -7,6 +7,7 @@
 //
 
 #include "ee/store/StoreBridge.hpp"
+#include "ee/Macro.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -16,6 +17,7 @@ namespace ee {
 namespace store {
 namespace {
 // clang-format off
+constexpr auto k__initialize                  = "Store_initialize";
 constexpr auto k__can_purchase                = "Store_canPurchase";
 constexpr auto k__purchase                    = "Store_purchase";
 constexpr auto k__restore_transactions        = "Store_restoreTransactions";
@@ -111,6 +113,13 @@ Self::~Store() {
     bridge.deregisterHandler(k__transaction_restored);
 }
 
+void Self::initialize(const std::string& publicKey) {
+#ifdef EE_X_ANDROID
+    auto&& bridge = core::MessageBridge::getInstance();
+    bridge.call(k__initialize, publicKey);
+#endif // EE_X_ANDROID
+}
+
 bool Self::canPurchase() const {
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__can_purchase);
@@ -131,10 +140,6 @@ void Self::requestProducts(const std::vector<std::string>& productIds) {
     nlohmann::json json = productIds;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__request_products, json.dump());
-}
-
-void Store::initialize(const StoreAssets& assets) {
-    //
 }
 } // namespace store
 } // namespace ee

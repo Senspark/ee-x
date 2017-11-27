@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by Zinge on 10/25/17.
  */
 
-class GoogleAnalyticsTracker {
+public class GoogleAnalyticsTracker {
     private static final String k__key   = "key";
     private static final String k__value = "value";
 
@@ -101,21 +101,21 @@ class GoogleAnalyticsTracker {
     }
 
     @SuppressWarnings("WeakerAccess")
-    void setParameter(@NonNull String key, @NonNull String value) {
+    public void setParameter(@NonNull String key, @NonNull String value) {
         _tracker.set(key, value);
     }
 
     @SuppressWarnings("WeakerAccess")
-    void setAdvertisingIdCollectionEnabled(boolean enabled) {
+    public void setAdvertisingIdCollectionEnabled(boolean enabled) {
         _tracker.enableAdvertisingIdCollection(enabled);
     }
 
-    void setExceptionReportingEnabled(boolean enabled) {
+    public void setExceptionReportingEnabled(boolean enabled) {
         _tracker.enableExceptionReporting(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
-    void send(@NonNull Map<String, String> dict) {
+    public void send(@NonNull Map<String, String> dict) {
         _tracker.send(dict);
     }
 }

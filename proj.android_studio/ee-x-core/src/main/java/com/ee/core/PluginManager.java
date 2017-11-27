@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.ee.core.internal.Metrics;
 import com.ee.core.internal.Utils;
@@ -90,6 +91,14 @@ public class PluginManager {
             return;
         }
         _plugins.remove(pluginName);
+    }
+
+    @Nullable
+    public PluginProtocol getPlugin(@NonNull String pluginName) {
+        if (!_plugins.containsKey(pluginName)) {
+            return null;
+        }
+        return _plugins.get(pluginName);
     }
 
     public void onCreate(Activity activity) {

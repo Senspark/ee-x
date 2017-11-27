@@ -129,6 +129,8 @@ void Self::load() {
     if (isLoaded()) {
         return;
     }
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -141,6 +143,7 @@ bool Self::show() {
     if (not isLoaded()) {
         return false;
     }
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__show(adId_));
@@ -154,13 +157,15 @@ bool Self::show() {
 }
 
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
-                                    message.c_str());
+    Logger::getSystemLogger().debug("%s: message = %s loading = %s",
+                                    __PRETTY_FUNCTION__, message.c_str(),
+                                    core::toString(loading_).c_str());
     loading_ = false;
 }
 

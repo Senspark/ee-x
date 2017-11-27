@@ -46,6 +46,7 @@ constexpr auto k__testModeEnabled = "testModeEnabled";
 Self::UnityAds() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
+    displayed_ = false;
 
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.registerHandler(
@@ -150,15 +151,20 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
     errored_ = false;
+    displayed_ = false;
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__showRewardedVideo, placementId);
-    return not errored_;
+    if (not errored_) {
+        displayed_ = true;
+        return true;
+    }
+    return false;
 }
 
 void Self::onError(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
-    if (not errored_) {
+    if (not errored_ && not displayed_) {
         errored_ = true;
         return;
     }

@@ -41,6 +41,7 @@ bool Self::show() {
     if (not plugin_->showRewardedVideo(placementId_)) {
         return false;
     }
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startInterstitialAd(this);
     assert(successful);

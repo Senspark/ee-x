@@ -9,6 +9,8 @@
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/AdMobBridge.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/Utils.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -32,6 +34,7 @@ Self::NativeAd(AdMob* plugin, const std::string& adId)
     , plugin_(plugin)
     , helper_("AdMobNativeAd", adId)
     , bridgeHelper_(helper_) {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 
     auto&& bridge = core::MessageBridge::getInstance();
@@ -50,6 +53,7 @@ Self::NativeAd(AdMob* plugin, const std::string& adId)
 }
 
 Self::~NativeAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
 
@@ -63,6 +67,8 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -99,13 +105,20 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    assert(loading_);
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
+    // Auto refresh customized in server.
+    // assert(loading_);
     loading_ = false;
     setLoadResult(true);
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    assert(loading_);
+    Logger::getSystemLogger().debug("%s: message = %s loading = %s",
+                                    __PRETTY_FUNCTION__, message.c_str(),
+                                    core::toString(loading_).c_str());
+    // Auto refresh customized in server.
+    // assert(loading_);
     loading_ = false;
     setLoadResult(false);
 }

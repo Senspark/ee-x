@@ -9,6 +9,7 @@
 #include <cassert>
 
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 #include "ee/facebook/FacebookAdsBridge.hpp"
@@ -53,6 +54,7 @@ auto k__onClosed(const std::string& id) {
 } // namespace
 
 Self::InterstitialAd(FacebookAds* plugin, const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     plugin_ = plugin;
     placementId_ = placementId;
@@ -81,6 +83,7 @@ Self::InterstitialAd(FacebookAds* plugin, const std::string& placementId) {
 }
 
 Self::~InterstitialAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     destroyInternalAd();
 
     auto&& bridge = core::MessageBridge::getInstance();
@@ -91,12 +94,14 @@ Self::~InterstitialAd() {
 }
 
 bool Self::createInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__createInternalAd(placementId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     auto response = bridge.call(k__destroyInternalAd(placementId_));
     return core::toBool(response);
@@ -112,6 +117,8 @@ void Self::load() {
     if (isLoaded()) {
         return;
     }
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -124,6 +131,7 @@ bool Self::show() {
     if (not isLoaded()) {
         return false;
     }
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = core::MessageBridge::getInstance();
     bridge.call(k__show(placementId_));
     auto&& mediation = ads::MediationManager::getInstance();
@@ -133,14 +141,20 @@ bool Self::show() {
 }
 
 void Self::onLoaded() {
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
+    Logger::getSystemLogger().debug("%s: message = %s loading = %s",
+                                    __PRETTY_FUNCTION__, message.c_str(),
+                                    core::toString(loading_).c_str());
     loading_ = false;
 }
 
 void Self::onClosed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     destroyInternalAd();
     createInternalAd();

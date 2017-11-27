@@ -7,22 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <StoreKit/SKPaymentQueue.h>
-#import <StoreKit/SKProductsRequest.h>
 
 @class SKPaymentTransaction;
 
-@interface EEStore
-    : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver> {
-}
+@interface EEStore : NSObject
 
-+ (instancetype)getInstance;
++ (instancetype _Nullable)getInstance;
 
 + (BOOL)canMakePayments;
 
-- (void)addPayment:(NSString*)productIdentifier;
+- (void)addPayment:(NSString* _Nonnull)productIdentifier;
 
-- (void)requestProducts:(NSSet*)identifiers;
+- (void)requestProducts:(NSSet* _Nonnull)identifiers;
 
 - (void)restoreTransactions;
 

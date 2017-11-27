@@ -94,7 +94,7 @@
 		6F2580071ECB162D00B910F9 /* VirtualItemStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6051EC9584700450E67 /* VirtualItemStorage.hpp */; };
 		6F2580081ECB162D00B910F9 /* KeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */; };
 		6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */; };
-		6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* Store.hpp */; };
+		6F25800A1ECB162D00B910F9 /* StoreBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* StoreBridge.hpp */; };
 		6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E151EC5651300ED9E4A /* FacebookAds.hpp */; };
 		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
 		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
@@ -286,7 +286,7 @@
 		6FAFB6061EC9584700450E67 /* VirtualItemStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6041EC9584700450E67 /* VirtualItemStorage.cpp */; };
 		6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6081EC9598700450E67 /* KeyValueStorage.cpp */; };
 		6FAFB60E1EC95ABE00450E67 /* NativeKeyValueStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB60C1EC95ABE00450E67 /* NativeKeyValueStorage.cpp */; };
-		6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6101EC95BDB00450E67 /* Store.cpp */; };
+		6FAFB6121EC95BDB00450E67 /* StoreBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6101EC95BDB00450E67 /* StoreBridge.cpp */; };
 		6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6291EC9643100450E67 /* EEStore.m */; };
 		6FAFB64B1EC9874300450E67 /* EEKeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */; };
 		6FB7D5EC1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D5EB1FA0426C00EFE441 /* GoogleAnalyticsFwd.hpp */; };
@@ -819,8 +819,8 @@
 		6FAFB6091EC9598700450E67 /* KeyValueStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyValueStorage.hpp; path = store/KeyValueStorage.hpp; sourceTree = "<group>"; };
 		6FAFB60C1EC95ABE00450E67 /* NativeKeyValueStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NativeKeyValueStorage.cpp; path = store/NativeKeyValueStorage.cpp; sourceTree = "<group>"; };
 		6FAFB60D1EC95ABE00450E67 /* NativeKeyValueStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeKeyValueStorage.hpp; path = store/NativeKeyValueStorage.hpp; sourceTree = "<group>"; };
-		6FAFB6101EC95BDB00450E67 /* Store.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Store.cpp; path = store/Store.cpp; sourceTree = "<group>"; };
-		6FAFB6111EC95BDB00450E67 /* Store.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Store.hpp; path = store/Store.hpp; sourceTree = "<group>"; };
+		6FAFB6101EC95BDB00450E67 /* StoreBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StoreBridge.cpp; path = store/StoreBridge.cpp; sourceTree = "<group>"; };
+		6FAFB6111EC95BDB00450E67 /* StoreBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StoreBridge.hpp; path = store/StoreBridge.hpp; sourceTree = "<group>"; };
 		6FAFB6291EC9643100450E67 /* EEStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEStore.m; path = store/internal/EEStore.m; sourceTree = "<group>"; };
 		6FAFB62A1EC9643100450E67 /* EEStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEStore.h; path = store/internal/EEStore.h; sourceTree = "<group>"; };
 		6FAFB6491EC9874300450E67 /* EEKeyValueStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEKeyValueStorage.m; path = store/internal/EEKeyValueStorage.m; sourceTree = "<group>"; };
@@ -1446,8 +1446,8 @@
 		6FAFB5C41EC94DB300450E67 /* store */ = {
 			isa = PBXGroup;
 			children = (
-				6FAFB6101EC95BDB00450E67 /* Store.cpp */,
-				6FAFB6111EC95BDB00450E67 /* Store.hpp */,
+				6FAFB6101EC95BDB00450E67 /* StoreBridge.cpp */,
+				6FAFB6111EC95BDB00450E67 /* StoreBridge.hpp */,
 				6F5E623B1ECE9A260036D83B /* StoreInfo.cpp */,
 				6F5E623C1ECE9A260036D83B /* StoreInfo.hpp */,
 				6FAFB6271EC9616C00450E67 /* internal */,
@@ -1696,7 +1696,7 @@
 				6F257FFE1ECB162D00B910F9 /* EEStore.h in Headers */,
 				6F2580011ECB162D00B910F9 /* PurchaseWithMarket.hpp in Headers */,
 				6F5E62321ECE87180036D83B /* SingleUseVG.hpp in Headers */,
-				6F25800A1ECB162D00B910F9 /* Store.hpp in Headers */,
+				6F25800A1ECB162D00B910F9 /* StoreBridge.hpp in Headers */,
 				6F2580091ECB162D00B910F9 /* NativeKeyValueStorage.hpp in Headers */,
 				6F5E62361ECE88180036D83B /* LifetimeVG.hpp in Headers */,
 				6F2580061ECB162D00B910F9 /* VirtualCurrencyStorage.hpp in Headers */,
@@ -2854,7 +2854,7 @@
 				6FAFB5F21EC9519700450E67 /* MarketItem.cpp in Sources */,
 				6FAFB5E61EC94E3900450E67 /* PurchaseType.cpp in Sources */,
 				6FAFB60A1EC9598700450E67 /* KeyValueStorage.cpp in Sources */,
-				6FAFB6121EC95BDB00450E67 /* Store.cpp in Sources */,
+				6FAFB6121EC95BDB00450E67 /* StoreBridge.cpp in Sources */,
 				6FAFB62B1EC9643100450E67 /* EEStore.m in Sources */,
 				6F5E62391ECE98BD0036D83B /* SingleUsePackVG.cpp in Sources */,
 			);

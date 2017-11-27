@@ -11,6 +11,7 @@
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/EEUtils.h"
 #import "ee/store/internal/EEStore.h"
 
 @interface EEStore () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
@@ -20,6 +21,10 @@
 @implementation EEStore
 
 // clang-format off
+static NSString* const k__can_purchase                = @"Store_canPurchase";
+static NSString* const k__purchase                    = @"Store_purchase";
+static NSString* const k__restore_transactions        = @"Store_restoreTransactions";
+static NSString* const k__request_products            = @"Store_requestProducts";
 static NSString* const k__request_products_succeeded  = @"Store_requestProductSucceeded";
 static NSString* const k__request_products_failed     = @"Store_requestProductFailed";
 static NSString* const k__restore_purchases_succeeded = @"Store_restorePurchasesSucceeded";
@@ -75,10 +80,39 @@ static NSString* const k__error_code        = @"error_code";
 
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:k__can_purchase
+                   callback:^(NSString* message) {
+                       return [EEUtils toString:[EEStore canMakePayments]];
+                   }];
+
+    [bridge registerHandler:k__purchase
+                   callback:^(NSString* message) {
+                       NSString* productId = message;
+                       [self addPayment:productId];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__restore_transactions
+                   callback:^(NSString* message) {
+                       [self restoreTransactions];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__request_products
+                   callback:^(NSString* message) {
+                       NSArray* productIds =
+                           [EEJsonUtils convertStringToArray:message];
+                       [self requestProducts:[NSSet setWithArray:productIds]];
+                       return @"";
+                   }];
 }
 
 - (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge deregisterHandler:k__can_purchase];
+    [bridge deregisterHandler:k__purchase];
 }
 
 - (void)retryUnfinishedTransactions {
@@ -176,7 +210,7 @@ static NSString* const k__error_code        = @"error_code";
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__restore_purchases_failed
-            message:[error localizedDescription]];
+            message:[@([error code]) stringValue]];
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:

@@ -4,8 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
 
 import com.ee.core.Logger;
 
@@ -62,7 +62,7 @@ public class NotificationUtils {
      */
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, null);
 
         builder
             .setAutoCancel(true)

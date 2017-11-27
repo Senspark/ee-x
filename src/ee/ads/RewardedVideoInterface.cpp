@@ -8,6 +8,8 @@
 
 #include "ee/ads/RewardedVideoInterface.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace ads {
@@ -27,6 +29,10 @@ void Self::setResultCallback(const RewardedVideoCallback& callback) {
 }
 
 void Self::setResult(bool result) {
+    Logger::getSystemLogger().debug(
+        "%s: this = %p result = %s has callback = %s", __PRETTY_FUNCTION__,
+        this, core::toString(result).c_str(),
+        core::toString(!!callback_).c_str());
     if (callback_) {
         callback_(result);
     }

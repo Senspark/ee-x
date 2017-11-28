@@ -197,8 +197,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackEvent(dict);
-                return "";
+                return Utils.toString(testTrackEvent(dict));
             }
         }, k__testTrackEvent);
 
@@ -208,8 +207,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackException(dict);
-                return "";
+                return Utils.toString(testTrackException(dict));
             }
         }, k__testTrackException);
 
@@ -219,8 +217,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackScreenView(dict);
-                return "";
+                return Utils.toString(testTrackScreenView(dict));
             }
         }, k__testTrackScreenView);
 
@@ -230,8 +227,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackSocial(dict);
-                return "";
+                return Utils.toString(testTrackSocial(dict));
             }
         }, k__testTrackSocial);
 
@@ -241,8 +237,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackTiming(dict);
-                return "";
+                return Utils.toString(testTrackTiming(dict));
             }
         }, k__testTrackTiming);
 
@@ -252,8 +247,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testCustomDimensionAndMetric(dict);
-                return "";
+                return Utils.toString(testCustomDimensionAndMetric(dict));
             }
         }, k__testCustomDimensionAndMetric);
 
@@ -263,8 +257,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackEcommerceAction(dict);
-                return "";
+                return Utils.toString(testTrackEcommerceAction(dict));
             }
         }, k__testTrackEcommerceAction);
 
@@ -274,8 +267,7 @@ public class GoogleAnalytics implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
-                testTrackEcommerceImpression(dict);
-                return "";
+                return Utils.toString(testTrackEcommerceImpression(dict));
             }
         }, k__testTrackEcommerceImpression);
     }

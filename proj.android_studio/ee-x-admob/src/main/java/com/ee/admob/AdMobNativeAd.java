@@ -205,8 +205,10 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
-        FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_nativeAdPlaceholder);
+        if(activity != null) {
+            FrameLayout rootView = Utils.getRootView(activity);
+            rootView.removeView(_nativeAdPlaceholder);
+        }
     }
 
     @Override

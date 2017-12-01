@@ -10,7 +10,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ee_x_core_static
 
 LOCAL_CPP_FEATURES := exceptions
-LOCAL_CPP_FLAGS := -std=c++1z
+LOCAL_CPPFLAGS := -std=c++1z
 
 LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/core -name "*.cpp" -print}
 LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/jni/cpp/ee/core -name "*.cpp" -print}

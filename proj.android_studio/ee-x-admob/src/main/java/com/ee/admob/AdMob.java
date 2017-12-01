@@ -121,13 +121,15 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onDestroy() {
-        for (String key : _bannerAds.keySet()) {
-            _bannerAds.get(key).onDestroy(_activity);
+        if(_activity != null) {
+            for (String key : _bannerAds.keySet()) {
+                _bannerAds.get(key).onDestroy(_activity);
+            }
+            for (String key : _nativeAds.keySet()) {
+                _nativeAds.get(key).onDestroy(_activity);
+            }
+            _activity = null;
         }
-        for (String key : _nativeAds.keySet()) {
-            _nativeAds.get(key).onDestroy(_activity);
-        }
-        _activity = null;
     }
 
     @Override

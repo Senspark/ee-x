@@ -138,7 +138,7 @@ class AdMobNativeAd extends AdListener implements AdViewInterface {
                         .getIdentifier(_layoutName, "layout", _context.getPackageName());
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) LayoutInflater
                         .from(_context)
-                        .inflate(layoutId, null);
+                        .inflate(layoutId, null, false);
                     populateAppInstallAdView(nativeAppInstallAd, adView);
                     _nativeAdPlaceholder.removeAllViews();
 

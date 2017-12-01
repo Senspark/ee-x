@@ -183,7 +183,7 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
         Utils.checkMainThread();
         int layoutId =
             _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
-        View nativeAdView = LayoutInflater.from(_context).inflate(layoutId, null);
+        View nativeAdView = LayoutInflater.from(_context).inflate(layoutId, null, false);
         nativeAdView.setVisibility(View.INVISIBLE);
 
         FrameLayout.LayoutParams params =
@@ -219,8 +219,10 @@ class FacebookNativeAd implements AdListener, AdViewInterface {
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
-        FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_nativeAdView);
+        if(activity != null) {
+            FrameLayout rootView = Utils.getRootView(activity);
+            rootView.removeView(_nativeAdView);
+        }
     }
 
     @Override

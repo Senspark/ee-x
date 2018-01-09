@@ -66,6 +66,21 @@ Pod::Spec.new do |spec|
     s.dependency 'Fabric'
   end
 
+  spec.subspec 'facebook' do |s|
+    s.source_files =
+      'src/ee/Facebook.hpp',
+      'src/ee/FacebookFwd.hpp',
+      'src/ee/facebooksocial/*.{cpp,h,hpp,m}'
+
+    s.public_header_files =
+      'src/ee/Facebook.hpp',
+      'src/ee/FacebookFwd.hpp',
+      'src/ee/facebooksocial/FacebookBridge.hpp'
+
+    s.dependency 'ee-x/core'
+    s.dependency 'FBSDKShareKit'
+  end
+
   spec.subspec 'notification' do |s|
     s.platform = :ios
 

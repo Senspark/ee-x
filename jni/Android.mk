@@ -165,6 +165,20 @@ LOCAL_STATIC_LIBRARIES := ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+#############
+# FACEBOOK #
+#############
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_facebook_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebooksocial -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
 ############
 # FIREBASE #
 ############

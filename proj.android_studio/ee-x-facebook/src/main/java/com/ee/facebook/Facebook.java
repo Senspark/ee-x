@@ -3,6 +3,8 @@ package com.ee.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -17,6 +19,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.util.HashMap;
@@ -37,6 +41,30 @@ public class Facebook implements PluginProtocol {
     private Activity                            _activity;
 
     private static CallbackManager callbackManager;
+    private static ShareDialog _shareDialog;
+    private static FacebookCallback _callback = new FacebookCallback<Sharer.Result>(){
+        @Override
+        public void onSuccess(Sharer.Result result) {
+            Utils.checkMainThread();
+
+            MessageBridge bridge = MessageBridge.getInstance();
+            bridge.callCpp(k__onResult, "true");
+        }
+
+        @Override
+        public void onCancel() {
+            Utils.checkMainThread();
+            MessageBridge bridge = MessageBridge.getInstance();
+            bridge.callCpp(k__onResult, "false");
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            Utils.checkMainThread();
+            MessageBridge bridge = MessageBridge.getInstance();
+            bridge.callCpp(k__onResult, "false");
+        }
+    };
 
     public Facebook(Context context) {
         Utils.checkMainThread();
@@ -56,6 +84,9 @@ public class Facebook implements PluginProtocol {
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
+        _shareDialog = new ShareDialog(_activity);
+
+        _shareDialog.registerCallback(callbackManager, _callback);
     }
 
     @Override
@@ -133,38 +164,18 @@ public class Facebook implements PluginProtocol {
                 .setContentUrl(Uri.parse(url))
                 .build();
 
-        ShareDialog shareDialog = new ShareDialog(_activity);
-        shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-
-        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>(){
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                if(result.getPostId() != null) {
-
-                    Utils.checkMainThread();
-
-                    MessageBridge bridge = MessageBridge.getInstance();
-                    bridge.callCpp(k__onResult, "true");
-                }
-            }
-
-            @Override
-            public void onCancel() {
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onResult, "false");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onResult, "false");
-            }
-        });
+        _shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void sharePhotoContent(@NonNull String photo) {
-
-
+    public void sharePhotoContent(@NonNull String photoPath) {
+        Bitmap image = BitmapFactory.decodeFile(photoPath);
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .build();
+        SharePhotoContent shareContent = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+        _shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
     }
 }

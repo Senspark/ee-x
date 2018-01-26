@@ -24,6 +24,14 @@ public:
     
     void shareLinkContent(const std::string &url) const ;
     void sharePhotoContent(const std::string &name) const ;
+    void shareVideoContent(const std::string &name) const ;
+    std::string getVideoRecordUrl() const;
+    
+    void recordScreen() const ;
+    void stopRecordScreen() const ;
+    void cancelRecordScreen() const ;
+    bool checkPermissionRecord() const;
+    
     
     void setResultCallback(const ShareResultCallback& callback) { callback_ = callback; }
 private:

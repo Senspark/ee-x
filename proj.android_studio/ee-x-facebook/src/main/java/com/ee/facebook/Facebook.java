@@ -353,7 +353,7 @@ public class Facebook implements PluginProtocol {
     private final int DISPLAY_HEIGHT = 640;
     private MediaRecorder mMediaRecorder;
 
-    private String _recordedFilePath;
+    private String _recordedFilePath = "";
     private int mScreenDensity;
     private MediaProjectionManager mProjectionManager;
     private MediaProjection mMediaProjection;
@@ -383,6 +383,10 @@ public class Facebook implements PluginProtocol {
 
     private boolean requestPermissionForRecord()
     {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP)
+        {
+            return false;
+        }
         if(_hasPermissionForRecord)
         {
             return true;
@@ -393,7 +397,7 @@ public class Facebook implements PluginProtocol {
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(_activity,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Toast.makeText(_activity, "Gold Miner need this permisson for record screen feature", Toast.LENGTH_SHORT);
+                Toast.makeText(_activity, "Gold Miner need this permission for record screen feature", Toast.LENGTH_SHORT);
             }
 //            else
             {
@@ -407,7 +411,7 @@ public class Facebook implements PluginProtocol {
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(_activity,
                     Manifest.permission.RECORD_AUDIO)) {
-                Toast.makeText(_activity, "Gold Miner need this permisson for record screen feature", Toast.LENGTH_SHORT);
+                Toast.makeText(_activity, "Gold Miner need this permission for record screen feature", Toast.LENGTH_SHORT);
             }
 //            else
             {
@@ -424,6 +428,10 @@ public class Facebook implements PluginProtocol {
         return _hasPermissionForRecord;
     }
     private void cancelRecordScreen() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP)
+        {
+            return;
+        }
         if (!_hasPermissionForRecord) {
             return;
         }
@@ -434,6 +442,10 @@ public class Facebook implements PluginProtocol {
 
     private void stopRecordScreen()
     {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP)
+        {
+            return;
+        }
         if(!_hasPermissionForRecord)
         {
             return;
@@ -447,7 +459,10 @@ public class Facebook implements PluginProtocol {
     }
 
     private void recordScreen() throws IOException {
-
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP)
+        {
+            return;
+        }
         if(!_hasPermissionForRecord)
         {
             return;

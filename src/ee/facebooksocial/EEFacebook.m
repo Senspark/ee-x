@@ -85,7 +85,6 @@ NSString* const k__facebook_check_permission_record         = @"__facebook_check
     } tag:k__facebook_get_video_record_url];
     
     [bridge registerHandler:^(NSString* msg) {
-        [self stopRecordScreen];
         [self cancelRecordScreen];
         return @"";
     } tag:k__facebook_cancel_record_screen];
@@ -164,7 +163,12 @@ NSString* const k__facebook_check_permission_record         = @"__facebook_check
 
 -(void) cancelRecordScreen
 {
-    
+    RPScreenRecorder *sharedRecorder = RPScreenRecorder.sharedRecorder;
+    [sharedRecorder stopRecordingWithHandler:^(RPPreviewViewController *previewViewController, NSError *error) {
+        if (error) {
+            NSLog(@"cancelRecordScreen: %@", error.localizedDescription);
+        }        
+    }];
 }
 
 - (BOOL) checkPermissionRecord

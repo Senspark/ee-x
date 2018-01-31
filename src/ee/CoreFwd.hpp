@@ -18,6 +18,8 @@ class Logger;
 class Metrics;
 class MessageBridge;
 class SpinLock;
+class VideoPlayer;
+class VideoPlayerManager;
 
 #if defined(EE_X_ANDROID)
 class JniUtils;
@@ -28,6 +30,8 @@ using core::LogLevel;
 using core::Logger;
 using core::Metrics;
 using core::MessageBridge;
+using core::VideoPlayer;
+using core::VideoPlayerManager;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

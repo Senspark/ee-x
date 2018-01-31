@@ -36,6 +36,10 @@
 		6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
 		6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
+		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
+		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
+		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
+		AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
 		F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -90,6 +94,9 @@
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B94EDA7D814D9176338E5D0 /* Pods-common-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_desktop/Pods-common-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
+		AD56EF792021647A00DC9B56 /* videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = videos; sourceTree = "<group>"; };
+		AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerTestScene.cpp; sourceTree = "<group>"; };
+		AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerTestScene.hpp; sourceTree = "<group>"; };
 		BC44458B9751F576980C8B9D /* Pods-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
 		EF08DE0B7A9A2F319B653225 /* Pods-common-ee_x_test_desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_desktop/Pods-common-ee_x_test_desktop.debug.xcconfig"; sourceTree = "<group>"; };
 		FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +170,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AD56EF792021647A00DC9B56 /* videos */,
 				6F54B3BF1FB0153800D821F1 /* images */,
 				6F426E2A1F8B5978009E202A /* layouts */,
 			);
@@ -199,6 +207,8 @@
 				6F54B3C31FB0207C00D821F1 /* NativeAdTestScene.hpp */,
 				6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */,
 				6F54B3C61FB0215F00D821F1 /* MultiNativeAdTestScene.hpp */,
+				AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */,
+				AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -394,6 +404,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD56EF7A2021647A00DC9B56 /* videos in Resources */,
 				6F54B3C01FB0153800D821F1 /* images in Resources */,
 				6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */,
 				6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */,
@@ -405,6 +416,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD56EF7B2021647A00DC9B56 /* videos in Resources */,
 				6F54B3C11FB0153800D821F1 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,7 +504,10 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_5.png",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -527,6 +542,7 @@
 				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */,
+				AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
 				6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
 				6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
 				6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
@@ -547,6 +563,7 @@
 				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
 				6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
+				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,

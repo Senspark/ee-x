@@ -16,6 +16,8 @@
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Metrics.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/VideoPlayer.hpp"
+#include "ee/core/VideoPlayerManager.hpp"
 #endif // __cplusplus
 
 #if defined(EE_X_ANDROID)

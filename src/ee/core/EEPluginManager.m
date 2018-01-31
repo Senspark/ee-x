@@ -9,6 +9,7 @@
 #import "ee/core/EEPluginManager.h"
 #import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
+#import "ee/core/internal/EEVideoPlayerManager.h"
 
 @interface EEPluginManager () {
     NSMutableDictionary* plugins_;
@@ -45,6 +46,7 @@
 - (void)initializePlugins {
     [EEUtils registerHandlers];
     [EEMetrics registerHandlers];
+    [EEVideoPlayerManager registerHandlers];
 }
 
 - (void)addPlugin:(NSString* _Nonnull)pluginName {

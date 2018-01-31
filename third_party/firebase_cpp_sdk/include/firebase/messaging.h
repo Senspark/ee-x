@@ -88,7 +88,8 @@ struct Notification {
   /// On Android, these are the format arguments for the string resource. For
   /// more information, see [Formatting strings][1].
   ///
-  /// [1]: https://developer.android.com/guide/topics/resources/string-resource.html#FormattingAndStyling
+  /// [1]:
+  /// https://developer.android.com/guide/topics/resources/string-resource.html#FormattingAndStyling
   std::vector<std::string> body_loc_args;
 
   /// Indicates the key to the title string for localization.
@@ -107,7 +108,8 @@ struct Notification {
   /// On Android, these are the format arguments for the string resource. For
   /// more information, see [Formatting strings][1].
   ///
-  /// [1]: https://developer.android.com/guide/topics/resources/string-resource.html#FormattingAndStyling
+  /// [1]:
+  /// https://developer.android.com/guide/topics/resources/string-resource.html#FormattingAndStyling
   std::vector<std::string> title_loc_args;
 };
 
@@ -116,9 +118,7 @@ struct Notification {
 struct Message {
   /// Initialize the message.
   Message()
-      : time_to_live(0),
-        notification(nullptr),
-        notification_opened(false) {}
+      : time_to_live(0), notification(nullptr), notification_opened(false) {}
 
   /// Destructor.
   ~Message() { delete notification; }
@@ -247,7 +247,8 @@ struct Message {
   /// This field is only used for downstream messages received through
   /// Listener::OnMessage().
   ///
-  /// [1]: https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
+  /// [1]:
+  /// https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
   std::string priority;
 
   /// This parameter specifies how long (in seconds) the message should be kept
@@ -466,9 +467,18 @@ class PollableListener : public Listener {
   /// been recieved. If there were no new token, the string is left unmodified.
   ///
   /// @return Returns `true` if there was a new token, `false` otherwise.
-  bool PollRegistrationToken(std::string* token);
+  bool PollRegistrationToken(std::string* token) {
+    bool got_token;
+    std::string token_received = PollRegistrationToken(&got_token);
+    if (got_token) {
+      *token = token_received;
+    }
+    return got_token;
+  }
 
  private:
+  std::string PollRegistrationToken(bool* got_token);
+
   // The implementation of the `PollableListener`.
   PollableListenerImpl* impl_;
 };

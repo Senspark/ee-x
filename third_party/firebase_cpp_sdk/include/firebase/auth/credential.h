@@ -3,6 +3,7 @@
 #ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
 #define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
 
+#include <stdint.h>
 #include <string>
 #include "firebase/internal/common.h"
 
@@ -67,7 +68,7 @@ class Credential {
   /// @deprecated Renamed to provider().
   FIREBASE_DEPRECATED std::string Provider() const { return provider(); }
 
-  /// Get whether this credential iss valid. A credential can be
+  /// Get whether this credential is valid. A credential can be
   /// invalid in an error condition, e.g. empty username/password.
   ///
   /// @returns True if the credential is valid, false otherwise.
@@ -136,6 +137,7 @@ class GoogleAuthProvider {
   static Credential GetCredential(const char* id_token,
                                   const char* access_token);
 };
+
 
 /// @brief Use a token and secret provided by Twitter to authenticate.
 class TwitterAuthProvider {

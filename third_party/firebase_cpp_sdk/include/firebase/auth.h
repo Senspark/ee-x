@@ -384,6 +384,14 @@ class Auth {
   friend class ::firebase::auth::PhoneAuthProvider;
   /// @endcond
 
+  // Provides access to the auth token for the current user.  Returns the
+  // current user's auth token, or an empty string, if there isn't one.
+  static bool GetAuthTokenForRegistry(App* app, void* /*unused*/, void* out);
+
+  // Init and Destroy the platform specific auth data.
+  void InitPlatformAuth(AuthData* const auth_data);
+  void DestroyPlatformAuth(AuthData* const auth_data);
+
   // Call GetAuth() to create an Auth object.
   // Constructors and destructors don't make any external calls.
   // They just initialize and deinitialize internal variables.

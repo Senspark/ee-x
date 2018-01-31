@@ -89,6 +89,18 @@ struct AdditionalUserInfo {
   std::map<Variant, Variant> profile;
 };
 
+/// @brief Metadata corresponding to a Firebase user.
+struct UserMetadata {
+  UserMetadata() : last_sign_in_timestamp(0), creation_timestamp(0) {}
+
+  /// The last sign in UTC timestamp in milliseconds.
+  /// See https://en.wikipedia.org/wiki/Unix_time for details of UTC.
+  uint64_t last_sign_in_timestamp;
+
+  /// The Firebase user creation UTC timestamp in milliseconds.
+  uint64_t creation_timestamp;
+};
+
 /// @brief Result of operations that can affect authentication state.
 struct SignInResult {
   SignInResult() : user(NULL) {}
@@ -100,6 +112,9 @@ struct SignInResult {
   /// Identity-provider specific information for the user, if the provider is
   /// one of Facebook, Github, Google, or Twitter.
   AdditionalUserInfo info;
+
+  /// Metadata associated with the Firebase user.
+  UserMetadata meta;
 };
 
 /// @brief Firebase user account object.
@@ -133,6 +148,16 @@ class User : public UserInfoInterface {
   /// may use this when they have discovered that the token is invalid for some
   /// other reason.
   Future<std::string> GetToken(bool force_refresh);
+
+#if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
+  /// A "thread safer" version of GetToken.
+  /// If called by two threads simultaneously, GetToken can return the same
+  /// pending Future twice. This creates problems if both threads try to set
+  /// the OnCompletion callback, unaware that there's another copy.
+  /// GetTokenThreadSafe returns a proxy to the Future if it's still pending,
+  /// allowing each proxy to have their own callback.
+  Future<std::string> GetTokenThreadSafe(bool force_refresh);
+#endif  // defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
 
   /// Get results of the most recent call to @ref Token.
   Future<std::string> GetTokenLastResult() const;
@@ -309,6 +334,9 @@ class User : public UserInfoInterface {
 
   /// Get results of the most recent call to @ref Delete.
   Future<void> DeleteLastResult() const;
+
+  /// Gets the metadata for this user account.
+  UserMetadata metadata() const;
 
   /// Returns true if the email address associated with this user has been
   /// verified.

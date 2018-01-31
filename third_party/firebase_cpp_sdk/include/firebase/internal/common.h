@@ -60,7 +60,12 @@
   }     /* namespace firebase */
 #endif  //  !defined(DOXYGEN) && !defined(SWIG)
 
+#if defined(SWIG) || defined(DOXYGEN)
+// SWIG needs to ignore the FIREBASE_DEPRECATED tag.
+#define FIREBASE_DEPRECATED
+#endif  // defined(SWIG) || defined(DOXYGEN)
 
+#ifndef FIREBASE_DEPRECATED
 #ifdef __GNUC__
 #define FIREBASE_DEPRECATED __attribute__((deprecated))
 #elif defined(_MSC_VER)
@@ -69,5 +74,6 @@
 // We don't know how to mark functions as "deprecated" with this compiler.
 #define FIREBASE_DEPRECATED
 #endif
+#endif  // FIREBASE_DEPRECATED
 
 #endif  // FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_COMMON_H_

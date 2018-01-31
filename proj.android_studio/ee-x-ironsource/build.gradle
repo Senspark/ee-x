@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 26
+        minSdkVersion 14
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile project(':ee-x-core')
-    compile 'com.ironsource.sdk:mediationsdk:6.6.4.1@jar'
+    api project(':ee-x-core')
+    implementation 'com.ironsource.sdk:mediationsdk:6.7.5@jar'
 }

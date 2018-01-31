@@ -1,22 +1,22 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 26
+        minSdkVersion 14
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile project(':ee-x-core')
+    api project(':ee-x-core')
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
-    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics-ndk:2.0.1@aar') {
         transitive = true
     }
 }

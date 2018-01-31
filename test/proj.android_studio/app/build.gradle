@@ -3,19 +3,18 @@ apply plugin: 'io.fabric'
 
 /// Modify this variable to build the desired architectures.
 String[] architectures = [
-        'armeabi',
         'armeabi-v7a',
         'x86'
 ]
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     flavorDimensions 'screenSize'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
 
         applicationId 'com.ee.test.android'
         versionCode 1
@@ -24,6 +23,28 @@ android {
 
         // API key used for testing.
         manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
+
+        externalNativeBuild {
+            ndkBuild {
+                targets 'ee_x_test_android_shared'
+                arguments 'APP_STL=c++_static'
+                arguments 'NDK_TOOLCHAIN_VERSION=clang'
+                arguments 'APP_PLATFORM=android-14'
+                arguments 'APP_LDFLAGS=-latomic'
+                arguments '-j' + Runtime.runtime.availableProcessors()
+                cppFlags '-frtti'
+                cppFlags '-fexceptions'
+                cppFlags '-fsigned-char'
+                cppFlags '-U__SSE__'
+                cppFlags '-Wno-extern-c-compat'
+            }
+        }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
     }
 
     splits {
@@ -48,18 +69,24 @@ android {
             minifyEnabled false
             debuggable false
             jniDebuggable false
+
+            externalNativeBuild {
+                ndkBuild {
+                    arguments "NDK_OUT=$projectDir/src/main/obj/release"
+                    cppFlags '-DNDEBUG'
+                }
+            }
         }
         debug {
             debuggable true
             jniDebuggable true
-        }
-    }
 
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'armeabi', 'armeabi-v7a', 'x86'
+            externalNativeBuild {
+                ndkBuild {
+                    arguments "NDK_OUT=$projectDir/src/main/obj/debug"
+                    cppFlags '-DCOCOS2D_DEBUG=1'
+                }
+            }
         }
     }
 
@@ -78,66 +105,27 @@ crashlytics {
     androidNdkLibsOut 'src/main/libs'
 }
 
-/// External C++ build.
-tasks.whenTaskAdded { task ->
-    def name = task.name
-    def found = false
-    ['debug', 'release'].each { mode ->
-        if (!found) {
-            if (name == "prepare${mode.capitalize()}Dependencies") {
-                task.doFirst {
-                    def ndkDir = android.ndkDirectory
-                    def cppFlags = [
-                            '-frtti',
-                            '-fexceptions',
-                            '-fsigned-char',
-                            '-U__SSE__'
-                    ]
-                    if (mode == 'debug') {
-                        cppFlags.add('-DCOCOS2D_DEBUG=1')
-                    } else {
-                        cppFlags.add('-DNDEBUG')
-                    }
-                    exec {
-                        commandLine "$ndkDir/ndk-build",
-                                '-C', "$projectDir/src/main/jni",
-                                '-j', Runtime.runtime.availableProcessors(),
-                                'APP_STL=c++_static',
-                                'NDK_TOOLCHAIN_VERSION=clang',
-                                'APP_PLATFORM=android-9',
-                                'APP_LDFLAGS=-latomic',
-                                "APP_ABI=${architectures.join(' ')}",
-                                "APP_CPPFLAGS=${cppFlags.join(' ')}",
-                                "NDK_OUT=$projectDir/src/main/obj/$mode",
-                                "NDK_DEBUG=${(mode == 'debug') ? 1 : 0}"
-                    }
-                }
-                found = true;
-            }
-        }
-    }
-}
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile project(':libcocos2dx')
-    compile project(':ee-x-notification')
-    compile project(':ee-x-crashlytics')
-    compile project(':ee-x-google-analytics')
-    compile project(':ee-x-firebase')
-    compile project(':ee-x-ads')
-    compile project(':ee-x-admob')
-    compile project(':ee-x-applovin')
-    compile project(':ee-x-facebook-ads')
-    compile project(':ee-x-unity-ads')
-    compile project(':ee-x-vungle')
-    compile project(':ee-x-ironsource')
+    implementation project(':libcocos2dx')
+    implementation project(':ee-x-notification')
+    implementation project(':ee-x-crashlytics')
+    implementation project(':ee-x-google-analytics')
+    implementation project(':ee-x-firebase')
+    implementation project(':ee-x-ads')
+    implementation project(':ee-x-admob')
+    implementation project(':ee-x-applovin')
+    implementation project(':ee-x-facebook-ads')
+    implementation project(':ee-x-unity-ads')
+    implementation project(':ee-x-vungle')
+    implementation project(':ee-x-ironsource')
 
-    compile 'com.android.support:appcompat-v7:26.0.2'
-    compile 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:multidex:1.0.2'
 
-    compile 'com.google.android.gms:play-services-base:11.4.0'
+    implementation 'com.google.android.gms:play-services-base:11.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

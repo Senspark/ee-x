@@ -1,19 +1,19 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile project(':ee-x-firebase-core')
-    compile project(':ee-x-firebase-analytics')
-    compile project(':ee-x-firebase-messaging')
-    compile project(':ee-x-firebase-remote-config')
-    compile project(':ee-x-firebase-storage')
+    api project(':ee-x-firebase-core')
+    api project(':ee-x-firebase-analytics')
+    api project(':ee-x-firebase-messaging')
+    api project(':ee-x-firebase-remote-config')
+    api project(':ee-x-firebase-storage')
 }

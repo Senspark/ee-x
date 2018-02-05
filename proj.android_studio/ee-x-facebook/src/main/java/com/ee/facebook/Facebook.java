@@ -124,14 +124,16 @@ public class Facebook implements PluginProtocol {
 
         _shareDialog.registerCallback(callbackManager, _callback);
 
-        mMediaRecorder = new MediaRecorder();
-        DisplayMetrics metrics = new DisplayMetrics();
-        _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mScreenDensity = metrics.densityDpi;
-        mProjectionManager = (MediaProjectionManager) _activity.getSystemService
-                (Context.MEDIA_PROJECTION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mMediaRecorder = new MediaRecorder();
+            DisplayMetrics metrics = new DisplayMetrics();
+            _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            mScreenDensity = metrics.densityDpi;
+            mProjectionManager = (MediaProjectionManager) _activity.getSystemService
+                    (Context.MEDIA_PROJECTION_SERVICE);
 
-        mMediaProjectionCallback = new MediaProjectionCallback();
+            mMediaProjectionCallback = new MediaProjectionCallback();
+        }
     }
 
     @Override

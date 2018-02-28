@@ -124,14 +124,16 @@ public class Facebook implements PluginProtocol {
 
         _shareDialog.registerCallback(callbackManager, _callback);
 
-        mMediaRecorder = new MediaRecorder();
-        DisplayMetrics metrics = new DisplayMetrics();
-        _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mScreenDensity = metrics.densityDpi;
-        mProjectionManager = (MediaProjectionManager) _activity.getSystemService
-                (Context.MEDIA_PROJECTION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mMediaRecorder = new MediaRecorder();
+            DisplayMetrics metrics = new DisplayMetrics();
+            _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            mScreenDensity = metrics.densityDpi;
+            mProjectionManager = (MediaProjectionManager) _activity.getSystemService
+                    (Context.MEDIA_PROJECTION_SERVICE);
 
-        mMediaProjectionCallback = new MediaProjectionCallback();
+            mMediaProjectionCallback = new MediaProjectionCallback();
+        }
     }
 
     @Override
@@ -346,8 +348,7 @@ public class Facebook implements PluginProtocol {
         return _recordedFilePath;
     }
 
-    private int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
-    private int PERMISSIONS_REQUEST_RECORD_AUDIO = 2;
+    private int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_RECORD_AUDIO = 1;
     private int PERMISSION_CODE = 1;
     private final int DISPLAY_WIDTH = 480;
     private final int DISPLAY_HEIGHT = 640;
@@ -393,32 +394,13 @@ public class Facebook implements PluginProtocol {
         }
 
         if (ContextCompat.checkSelfPermission(_activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-        {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(_activity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Toast.makeText(_activity, "Gold Miner need this permission for record screen feature", Toast.LENGTH_SHORT);
-            }
-//            else
-            {
-                ActivityCompat.requestPermissions(_activity,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
-        }
-        else if(ContextCompat.checkSelfPermission(_activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(_activity,
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
         {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(_activity,
-                    Manifest.permission.RECORD_AUDIO)) {
-                Toast.makeText(_activity, "Gold Miner need this permission for record screen feature", Toast.LENGTH_SHORT);
-            }
-//            else
-            {
-                ActivityCompat.requestPermissions(_activity,
-                        new String[]{Manifest.permission.RECORD_AUDIO},
-                        PERMISSIONS_REQUEST_RECORD_AUDIO);
-            }
+            ActivityCompat.requestPermissions(_activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_RECORD_AUDIO);
         }
         else
         {

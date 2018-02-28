@@ -14,14 +14,18 @@
 #import "ee/core/EEMessageBridge.h"
 
 @interface EEVideoPlayer ()
+#if TARGET_OS_IOS
 @property (nonatomic, strong, nonnull) MPMoviePlayerController* moviePlayer;
+#endif // TARGET_OS_IOS
 @end
 
 @implementation EEVideoPlayer {
     NSString* tag_;
 }
 
+#if TARGET_OS_IOS
 @synthesize moviePlayer = moviePlayer_;
+#endif // TARGET_OS_IOS
 
 - (id)initWithTag:(NSString* _Nonnull)tag {
     self = [super init];
@@ -30,6 +34,7 @@
     }
     tag_ = [tag copy];
 
+#if TARGET_OS_IOS
     MPMoviePlayerController* player =
         [[[MPMoviePlayerController alloc] init] autorelease];
 
@@ -55,6 +60,8 @@
 
     [[[EEUtils getCurrentRootViewController] view] addSubview:[player view]];
     [self setMoviePlayer:player];
+#endif // TARGET_OS_IOS
+
     [self registerHandlers];
     return self;
 }
@@ -65,6 +72,8 @@
 
 - (void)destroy {
     [self deregisterHandlers];
+    
+#if TARGET_OS_IOS
     [[NSNotificationCenter defaultCenter]
         removeObserver:self
                   name:MPMoviePlayerPlaybackDidFinishNotification
@@ -76,6 +85,7 @@
     [[self moviePlayer] stop];
     [[[self moviePlayer] view] removeFromSuperview];
     [self setMoviePlayer:nil];
+#endif // TARGET_OS_IOS
 }
 
 - (NSString* _Nonnull)k__loadFile {
@@ -196,83 +206,122 @@
 }
 
 - (void)loadFile:(NSString* _Nonnull)path {
+    #if TARGET_OS_IOS
     NSURL* url = [NSURL fileURLWithPath:path];
     [[self moviePlayer] setMovieSourceType:MPMovieSourceTypeFile];
     [[self moviePlayer] setContentURL:url];
+    #endif // TARGET_OS_IOS
 }
 
 - (void)setPosition:(CGPoint)position {
+    #if TARGET_OS_IOS
     CGFloat scale = [EEMetrics getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [[[self moviePlayer] view] setFrame:frame];
+    #endif // TARGET_OS_IOS
 }
 
 - (void)setSize:(CGSize)size {
+    #if TARGET_OS_IOS
     CGFloat scale = [EEMetrics getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [[[self moviePlayer] view] setFrame:frame];
+    #endif // TARGET_OS_IOS
 }
 
 - (void)play {
+#if TARGET_OS_IOS
     [[self moviePlayer] play];
+#endif // TARGET_OS_IOS
 }
 
 - (void)pause {
+#if TARGET_OS_IOS
     [[self moviePlayer] pause];
+#endif // TARGET_OS_IOS
 }
 
-- (void)resume{
+- (void)resume {
     // [[self moviePlayer] play];
 }
 
-    - (void)stop {
+- (void)stop {
+#if TARGET_OS_IOS
     [[self moviePlayer] stop];
+#endif // TARGET_OS_IOS
 }
 
 - (NSTimeInterval)getCurrentPlaybackTime {
+#if TARGET_OS_IOS
     return [[self moviePlayer] currentPlaybackTime];
+#else  // TARGET_OS_IOS
+    return 0;
+#endif // TARGET_OS_IOS
 }
 
 - (void)setCurrentPlaybackTime:(NSTimeInterval)second {
+    #if TARGET_OS_IOS
     [[self moviePlayer] setCurrentPlaybackTime:second];
+    #endif // TARGET_OS_IOS
 }
 
 - (BOOL)isVisible {
+#if TARGET_OS_IOS
     return ![[[self moviePlayer] view] isHidden];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
 }
 
 - (void)setVisible:(BOOL)visible {
+#if TARGET_OS_IOS
     [[[self moviePlayer] view] setHidden:!visible];
+#endif // TARGET_OS_IOS
 }
 
 - (BOOL)isKeepAspectRatioEnabled {
+#if TARGET_OS_IOS
     return [[self moviePlayer] scalingMode] == MPMovieScalingModeAspectFit;
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
 }
 
 - (void)setKeepAspectRatioEnabled:(BOOL)enabled {
+#if TARGET_OS_IOS
     if (enabled) {
         [[self moviePlayer] setScalingMode:MPMovieScalingModeAspectFit];
     } else {
         [[self moviePlayer] setScalingMode:MPMovieScalingModeFill];
     }
+#endif // TARGET_OS_IOS
 }
 
 - (BOOL)isFullScreenEnabled {
+#if TARGET_OS_IOS
     return [[self moviePlayer] isFullscreen];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
 }
 
 - (void)setFullScreenEnabled:(BOOL)enabled {
+#if TARGET_OS_IOS
     [[self moviePlayer] setFullscreen:[self isFullScreenEnabled]];
+#endif // TARGET_OS_IOS
 }
 
 - (void)moviePlayerDidFinish:(NSNotification*)notification {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+#if TARGET_OS_IOS
     NSAssert([self moviePlayer] != nil, @"");
+#endif // TARGET_OS_IOS
 }
 
 - (void)moviePlayerStateDidChange {
+#if TARGET_OS_IOS
     NSAssert([self moviePlayer] != nil, @"");
     NSDictionary* dict = @{
         @(MPMoviePlaybackStateStopped): @"Stopped",
@@ -284,6 +333,7 @@
     };
     MPMoviePlaybackState state = [[self moviePlayer] playbackState];
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [dict objectForKey:@(state)]);
+#endif // TARGET_OS_IOS
 }
 
 @end

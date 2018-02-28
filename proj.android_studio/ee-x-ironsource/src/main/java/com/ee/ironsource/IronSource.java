@@ -172,6 +172,11 @@ public class IronSource implements PluginProtocol {
                 }
 
                 @Override
+                public void onRewardedVideoAdClicked(Placement placement) {
+
+                }
+
+                @Override
                 public void onRewardedVideoAdOpened() {
                     _logger.debug("onRewardedVideoAdOpened");
 

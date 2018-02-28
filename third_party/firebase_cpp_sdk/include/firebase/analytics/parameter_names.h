@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2018 Google Inc. All Rights Reserved.
 
 #ifndef FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_PARAMETER_NAMES_H_
 #define FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_PARAMETER_NAMES_H_
@@ -703,6 +703,35 @@ static const char *const kParameterValue = "value";
 /// @endif
 static const char *const kParameterVirtualCurrencyName =
     "virtual_currency_name";
+
+/// The name of a level in a game (string).
+///
+/// @if cpp_examples
+/// @code{.cpp}
+/// using namespace firebase::analytics;
+/// Parameter parameters[] = {
+///    Parameter(kParameterLevelName, "room_1"),
+///    // ...
+///  };
+/// @endcode
+///
+/// @endif
+static const char *const kParameterLevelName = "level_name";
+
+/// The result of an operation. Specify 1 to indicate success and 0 to
+/// indicate failure (unsigned integer).
+///
+/// @if cpp_examples
+/// @code{.cpp}
+/// using namespace firebase::analytics;
+/// Parameter parameters[] = {
+///    Parameter(kParameterSuccess, 1),
+///    // ...
+///  };
+/// @endcode
+///
+/// @endif
+static const char *const kParameterSuccess = "success";
 /// @}
 
 } // namespace analytics

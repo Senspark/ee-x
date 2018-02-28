@@ -186,6 +186,11 @@ class FutureBase {
   /// Returns true if the two Futures reference different results.
   bool operator!=(const FutureBase& rhs) const { return !operator==(rhs); }
 
+#if defined(INTERNAL_EXPERIMENTAL)
+  /// Returns the API-specific handle. Should only be called by the API.
+  FutureHandle GetHandle() const { return handle_; }
+#endif  // defined(INTERNAL_EXPERIMENTAL)
+
  protected:
   /// @cond FIREBASE_APP_INTERNAL
 

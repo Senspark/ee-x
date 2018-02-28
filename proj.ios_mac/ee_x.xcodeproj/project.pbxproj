@@ -334,6 +334,13 @@
 		6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */; };
 		71316B903291F64DBF053615 /* libPods-common-ee_x_mobile_admob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */; };
 		7D1A8116DA161224BD173A89 /* libPods-common-ee_x_mobile_google.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */; };
+		AD56EF73202026A300DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
+		AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */; };
+		AD56EF75202026A700DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
+		AD56EF77202027CE00DC9B56 /* EEVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */; };
+		AD56EF8220216DE100DC9B56 /* VideoPlayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF8020216DE100DC9B56 /* VideoPlayerManager.cpp */; };
+		AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF8120216DE100DC9B56 /* VideoPlayerManager.hpp */; };
+		AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
 		EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */; };
 		EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */; };
@@ -875,6 +882,14 @@
 		986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.debug.xcconfig"; sourceTree = "<group>"; };
 		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_iron_src.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayer.cpp; sourceTree = "<group>"; };
+		AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayer.hpp; sourceTree = "<group>"; };
+		AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEVideoPlayer.m; sourceTree = "<group>"; };
+		AD56EF78202027F600DC9B56 /* EEVideoPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEVideoPlayer.h; sourceTree = "<group>"; };
+		AD56EF8020216DE100DC9B56 /* VideoPlayerManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerManager.cpp; sourceTree = "<group>"; };
+		AD56EF8120216DE100DC9B56 /* VideoPlayerManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerManager.hpp; sourceTree = "<group>"; };
+		AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEVideoPlayerManager.m; sourceTree = "<group>"; };
+		AD56EF862021730B00DC9B56 /* EEVideoPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEVideoPlayerManager.h; sourceTree = "<group>"; };
 		B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.release.xcconfig"; sourceTree = "<group>"; };
 		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1296,6 +1311,10 @@
 				6FAF79151FA0A53100405AF8 /* Metrics.hpp */,
 				6F426E331F8BAEB7009E202A /* Utils.cpp */,
 				6F426E341F8BAEB7009E202A /* Utils.hpp */,
+				AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */,
+				AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */,
+				AD56EF8020216DE100DC9B56 /* VideoPlayerManager.cpp */,
+				AD56EF8120216DE100DC9B56 /* VideoPlayerManager.hpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1313,6 +1332,10 @@
 				6FAF79051FA0A41E00405AF8 /* EEMetrics.m */,
 				6F43A2311EC19F3100C68152 /* EEUtils.h */,
 				6F43A2321EC19F3100C68152 /* EEUtils.m */,
+				AD56EF78202027F600DC9B56 /* EEVideoPlayer.h */,
+				AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */,
+				AD56EF862021730B00DC9B56 /* EEVideoPlayerManager.h */,
+				AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */,
 				6FAF79061FA0A41E00405AF8 /* Logger_iOS.mm */,
 				6F43A2351EC19F3100C68152 /* MessageBridge_iOS.mm */,
 				6FAF79091FA0A41E00405AF8 /* ScopeGuard.hpp */,
@@ -1604,6 +1627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
+				AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */,
 				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
 				6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */,
 				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
@@ -1615,6 +1639,7 @@
 				6FBD03E61FCC207A0050C980 /* MessageBridge.hpp in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
+				AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
 				6FAF79111FA0A41E00405AF8 /* SpinLock.hpp in Headers */,
 				6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */,
@@ -2631,10 +2656,14 @@
 				6F43A2C71EC1A18900C68152 /* MessageBridge_iOS.mm in Sources */,
 				6FAF79191FA0A94C00405AF8 /* EEReachability.m in Sources */,
 				6F43A2BE1EC1A18900C68152 /* EEDictionaryUtils.m in Sources */,
+				AD56EF77202027CE00DC9B56 /* EEVideoPlayer.m in Sources */,
 				6FBD03E41FCC207A0050C980 /* MessageBridge.cpp in Sources */,
 				6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */,
 				6FAF790D1FA0A41E00405AF8 /* Logger_iOS.mm in Sources */,
+				AD56EF8220216DE100DC9B56 /* VideoPlayerManager.cpp in Sources */,
 				6F43A2C01EC1A18900C68152 /* EEJsonUtils.m in Sources */,
+				AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */,
+				AD56EF73202026A300DC9B56 /* VideoPlayer.cpp in Sources */,
 				6FAF79161FA0A53100405AF8 /* Metrics.cpp in Sources */,
 				6FAF790C1FA0A41E00405AF8 /* EEMetrics.m in Sources */,
 			);
@@ -2759,6 +2788,7 @@
 			files = (
 				6FBD03E31FCC207A0050C980 /* EEMessageBridge.m in Sources */,
 				6FBD03E51FCC207A0050C980 /* MessageBridge.cpp in Sources */,
+				AD56EF75202026A700DC9B56 /* VideoPlayer.cpp in Sources */,
 				6F83DCA51EC1C800004C5500 /* EEUtils.m in Sources */,
 				6F83DC9D1EC1C800004C5500 /* EEPluginManager.m in Sources */,
 				6F83DCAC1EC1C800004C5500 /* LogLevel.cpp in Sources */,

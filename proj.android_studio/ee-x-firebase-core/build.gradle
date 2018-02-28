@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile project(':ee-x-core')
-    compile 'com.google.android.gms:play-services-base:11.4.0'
+    api project(':ee-x-core')
+    api 'com.google.android.gms:play-services-base:11.8.0'
 }

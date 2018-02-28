@@ -129,7 +129,10 @@ class Metadata {
 
   /// @brief Set the content language for the StorageReference.
   ///
-  /// @see https://tools.ietf.org/html/rfc2616#section-14.12
+  /// This must be an ISO 639-1 two-letter language code.
+  /// E.g. "zh", "es", "en".
+  ///
+  /// @see https://www.loc.gov/standards/iso639-2/php/code_list.php
   void set_content_language(const std::string& language) {
     set_content_language(language.c_str());
   }
@@ -194,13 +197,13 @@ class Metadata {
   /// @brief Return a version String indicating what version of the
   /// StorageReference.
   ///
-  /// @returns A version String indicating what version of the StorageReference.
+  /// @returns A value indicating the version of the StorageReference.
   int64_t generation() const;
 
   /// @brief Return a version String indicating the version of this
   /// StorageMetadata.
   ///
-  /// @returns A version String indicating the version of this StorageMetadata.
+  /// @returns A value indicating the version of this StorageMetadata.
   int64_t metadata_generation() const;
 
   /// @brief Return a simple name of the StorageReference object.

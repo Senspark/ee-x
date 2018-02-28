@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2018 Google Inc. All Rights Reserved.
 
 #ifndef FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_EVENT_NAMES_H_
 #define FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_EVENT_NAMES_H_
@@ -69,11 +69,11 @@ static const char *const kEventAddToCart = "add_to_cart";
 /// </ul>
 static const char *const kEventAddToWishlist = "add_to_wishlist";
 
-/// App Open event. By logging this event when an App is moved to the
-/// foreground, developers can understand how often users leave and return
-/// during the course of a Session. Although Sessions are automatically
-/// reported, this event can provide further clarification around the
-/// continuous engagement of app-users.
+/// App Open event. By logging this event when an App becomes active,
+/// developers can understand how often users leave and return during the
+/// course of a Session. Although Sessions are automatically reported,
+/// this event can provide further clarification around the continuous
+/// engagement of app-users.
 static const char *const kEventAppOpen = "app_open";
 
 /// E-Commerce Begin Checkout event. This event signifies that a user has
@@ -402,6 +402,23 @@ static const char *const kEventViewItemList = "view_item_list";
 ///  <li>@c kParameterSearchTerm (string)</li>
 /// </ul>
 static const char *const kEventViewSearchResults = "view_search_results";
+
+/// Level Start event. Log this event when the user starts a new level.
+/// Params:
+///
+/// <ul>
+///  <li>@c kParameterLevelName (string)</li>
+/// </ul>
+static const char *const kEventLevelStart = "level_start";
+
+/// Level End event. Log this event when the user finishes a level.
+/// Params:
+///
+/// <ul>
+///  <li>@c kParameterLevelName (string)</li>
+///  <li>@c kParameterSuccess (string)</li>
+/// </ul>
+static const char *const kEventLevelEnd = "level_end";
 /// @}
 
 } // namespace analytics

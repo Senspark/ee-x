@@ -59,43 +59,46 @@ NSString* const k__notification_clear_all       = @"__notification_clear_all";
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        NSString* title = [dict objectForKey:@"title"];
-        NSString* body = [dict objectForKey:@"body"];
-        NSNumber* delay = [dict objectForKey:@"delay"];
-        NSNumber* interval = [dict objectForKey:@"interval"];
-        NSNumber* tag = [dict objectForKey:@"tag"];
+    [bridge registerHandler:k__notification_schedule
+                   callback:^(NSString* msg) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:msg];
+                       NSString* title = [dict objectForKey:@"title"];
+                       NSString* body = [dict objectForKey:@"body"];
+                       NSNumber* delay = [dict objectForKey:@"delay"];
+                       NSNumber* interval = [dict objectForKey:@"interval"];
+                       NSNumber* tag = [dict objectForKey:@"tag"];
 
-        [self schedule:title
-                  body:body
-                 delay:(NSTimeInterval)[delay intValue]
-              interval:[EENotification parseInterval:[interval intValue]]
-                   tag:tag];
-        return [EEDictionaryUtils emptyResult];
-    }
-                        tag:k__notification_schedule];
+                       [self schedule:title
+                                 body:body
+                                delay:(NSTimeInterval)[delay intValue]
+                             interval:[EENotification
+                                          parseInterval:[interval intValue]]
+                                  tag:tag];
+                       return @"";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        [self unscheduleAll];
-        return [EEDictionaryUtils emptyResult];
-    }
-                        tag:k__notification_unschedule_all];
+    [bridge registerHandler:k__notification_unschedule_all
+                   callback:^(NSString* msg) {
+                       [self unscheduleAll];
+                       return @"";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
-        NSNumber* tag = [dict objectForKey:@"tag"];
+    [bridge registerHandler:k__notification_unschedule
+                   callback:^(NSString* msg) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:msg];
+                       NSNumber* tag = [dict objectForKey:@"tag"];
 
-        [self unschedule:tag];
-        return [EEDictionaryUtils emptyResult];
-    }
-                        tag:k__notification_unschedule];
+                       [self unschedule:tag];
+                       return @"";
+                   }];
 
-    [bridge registerHandler:^(NSString* msg) {
-        [self clearAll];
-        return [EEDictionaryUtils emptyResult];
-    }
-                        tag:k__notification_clear_all];
+    [bridge registerHandler:k__notification_clear_all
+                   callback:^(NSString* msg) {
+                       [self clearAll];
+                       return @"";
+                   }];
 }
 
 - (void)deregisterHandlers {
@@ -108,8 +111,7 @@ NSString* const k__notification_clear_all       = @"__notification_clear_all";
 
 - (void)registerForLocalNotifications {
     UIApplication* application = [UIApplication sharedApplication];
-    if ([application
-            respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+    if (@available(iOS 8.0, *)) {
         UIUserNotificationType allNotificationTypes =
             (UIUserNotificationTypeSound | UIUserNotificationTypeAlert |
              UIUserNotificationTypeBadge);
@@ -129,7 +131,7 @@ NSString* const k__notification_clear_all       = @"__notification_clear_all";
     if (notification == nil) {
         return nil;
     }
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) {
+    if (@available(iOS 8.2, *)) {
         [notification setAlertTitle:title];
     }
 

@@ -13,6 +13,7 @@
 namespace firebase {
 
 // Predeclarations.
+
 namespace auth {
 class Auth;
 }  // namespace auth
@@ -21,6 +22,12 @@ namespace internal {
 class DatabaseInternal;
 }  // namespace internal
 }  // namespace database
+namespace internal {
+class InstanceId;
+}  // namespace internal
+namespace instance_id {
+class InstanceId;
+}  // namespace instance_id
 namespace storage {
 namespace internal {
 class StorageInternal;
@@ -350,6 +357,8 @@ class App {
   /// @cond FIREBASE_APP_INTERNAL
   friend class auth::Auth;
   friend class database::internal::DatabaseInternal;
+  friend class instance_id::InstanceId;
+  friend class internal::InstanceId;
   friend class storage::internal::StorageInternal;
 
   /// Construct the object.

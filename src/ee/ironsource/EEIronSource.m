@@ -142,4 +142,8 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
+- (void)didClickRewardedVideo:(ISPlacementInfo*)placementInfo {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
+}
+
 @end

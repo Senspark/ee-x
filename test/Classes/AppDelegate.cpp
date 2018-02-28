@@ -17,6 +17,7 @@
 #include "UnityAds.hpp"
 #include "Utils.hpp"
 #include "Vungle.hpp"
+#include "VideoPlayerTestScene.hpp"
 
 #include <ee/Ads.hpp>
 #include <ee/Core.hpp>
@@ -153,7 +154,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testFacebookNativeAd();
 
     cocos2d::log("Create scene");
-    director->runWithScene(createMultiNativeAdTestScene());
+    director->runWithScene(VideoPlayerTestScene::create());
+    // director->runWithScene(createMultiNativeAdTestScene());
 
     return true;
 }

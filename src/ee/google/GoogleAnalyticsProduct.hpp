@@ -41,7 +41,7 @@ public:
     Self& setName(const std::string& value);
 
     /// Sets the price of the product.
-    /// @param value The product's price. Example: 3.14
+    /// @param price The product's price. Example: 3.14
     /// @return Returns the same object to enable chaining of methods.
     Self& setPrice(float price);
 

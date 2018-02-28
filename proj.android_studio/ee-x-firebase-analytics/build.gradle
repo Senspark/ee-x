@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
 }
 
 dependencies {
-    compile project(':ee-x-firebase-core')
-    compile 'com.google.firebase:firebase-analytics:11.4.0'
+    api project(':ee-x-firebase-core')
+    api 'com.google.firebase:firebase-analytics:11.8.0'
 }

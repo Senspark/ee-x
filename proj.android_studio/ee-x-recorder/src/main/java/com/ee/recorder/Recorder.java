@@ -10,8 +10,10 @@ import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -79,12 +81,16 @@ public class Recorder implements PluginProtocol {
         _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         _screenDensity = metrics.densityDpi;
 
-        _projectionManager = (MediaProjectionManager) _activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        _mediaProjectionCallback = new MediaProjection.Callback() {
-            public void onStop() {
-                //
-            }
-        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            _projectionManager = (MediaProjectionManager) _activity.getSystemService(Context
+                    .MEDIA_PROJECTION_SERVICE);
+
+            _mediaProjectionCallback = new MediaProjection.Callback() {
+                public void onStop() {
+                    //
+                }
+            };
+        }
     }
 
     @Override
@@ -185,6 +191,9 @@ public class Recorder implements PluginProtocol {
         if (!_hasRecordingPermission) {
             return false;
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return false;
+        }
         if (requestCode != PERMISSION_CODE || responseCode != RESULT_OK) {
             return false;
         }
@@ -202,6 +211,9 @@ public class Recorder implements PluginProtocol {
         if (_virtualDisplay == null) {
             return;
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
         _virtualDisplay.release();
     }
 
@@ -209,8 +221,12 @@ public class Recorder implements PluginProtocol {
         if (!_hasRecordingPermission) {
             return;
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
         if (_mediaProjection == null) {
-            _activity.startActivityForResult(_projectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
+            _activity.startActivityForResult(_projectionManager.createScreenCaptureIntent(),
+                    PERMISSION_CODE);
             return;
         }
 
@@ -254,11 +270,12 @@ public class Recorder implements PluginProtocol {
         if (_hasRecordingPermission) {
             return true;
         }
-        if (ContextCompat.checkSelfPermission(_activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(_activity, Manifest.permission
-                .RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(_activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.RECORD_AUDIO}, PERMISSION_CODE);
+        if (ContextCompat.checkSelfPermission(_activity, Manifest.permission
+                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat
+                .checkSelfPermission(_activity, Manifest.permission.RECORD_AUDIO) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(_activity, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, PERMISSION_CODE);
         } else {
             _hasRecordingPermission = true;
         }
@@ -277,7 +294,8 @@ public class Recorder implements PluginProtocol {
     }
 
     private String getFilePath() {
-        final String directory = Environment.getExternalStorageDirectory() + File.separator + "Recordings";
+        final String directory = Environment.getExternalStorageDirectory() + File.separator +
+                "Recordings";
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return null;
         }
@@ -300,6 +318,7 @@ public class Recorder implements PluginProtocol {
         return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initRecorder() {
         _logger.debug("initRecorder");
 
@@ -317,8 +336,10 @@ public class Recorder implements PluginProtocol {
         _mediaRecorder.setOutputFile(_recordedFilePath);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private VirtualDisplay createVirtualDisplay() {
-        return _mediaProjection.createVirtualDisplay("AppActivity", DISPLAY_WIDTH, DISPLAY_HEIGHT, _screenDensity,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, _mediaRecorder.getSurface(), null, null);
+        return _mediaProjection.createVirtualDisplay("AppActivity", DISPLAY_WIDTH,
+                DISPLAY_HEIGHT, _screenDensity, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                _mediaRecorder.getSurface(), null, null);
     }
 }

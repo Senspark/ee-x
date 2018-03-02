@@ -304,7 +304,6 @@ Pod::Spec.new do |spec|
       'src/ee/recorder/*.{h,hpp}'
 
     s.dependency 'ee-x/core'
-    s.dependency 'ReplayKit'
   end
 
 end

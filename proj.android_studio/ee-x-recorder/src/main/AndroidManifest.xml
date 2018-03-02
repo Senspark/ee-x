@@ -1,0 +1,5 @@
+<manifest
+	package="com.ee.recorder"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+</manifest>

@@ -6,16 +6,16 @@
 //
 //
 
-#include "ee/facebook/FacebookAdsBridge.hpp"
+#include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/ads/NullAdView.hpp"
 #include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/facebook/FacebookNativeAdLayout.hpp"
-#include "ee/facebook/internal/FacebookBannerAd.hpp"
-#include "ee/facebook/internal/FacebookInterstitialAd.hpp"
-#include "ee/facebook/internal/FacebookNativeAd.hpp"
+#include "ee/facebookads/FacebookNativeAdLayout.hpp"
+#include "ee/facebookads/internal/FacebookBannerAd.hpp"
+#include "ee/facebookads/internal/FacebookInterstitialAd.hpp"
+#include "ee/facebookads/internal/FacebookNativeAd.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

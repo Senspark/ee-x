@@ -3,10 +3,11 @@
 //
 //
 
-#include "ee/facebooksocial/FacebookBridge.hpp"
+#include "ee/recorder/RecorderBridge.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {

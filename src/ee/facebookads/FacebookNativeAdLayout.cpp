@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/facebook/FacebookNativeAdLayout.hpp"
+#include "ee/facebookads/FacebookNativeAdLayout.hpp"
 
 namespace ee {
 namespace facebook {

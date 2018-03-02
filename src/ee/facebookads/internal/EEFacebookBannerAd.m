@@ -12,7 +12,7 @@
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/facebook/internal/EEFacebookBannerAd.h"
+#import "ee/facebookads/internal/EEFacebookBannerAd.h"
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
     FBAdView* adView_;

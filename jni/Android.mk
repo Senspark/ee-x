@@ -118,7 +118,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_facebook_ads_static
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebook -name "*.cpp" -print}
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebookads -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
@@ -165,16 +165,30 @@ LOCAL_STATIC_LIBRARIES := ee_x_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-#############
+############
 # FACEBOOK #
-#############
+############
 
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_facebook_static
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebooksocial -name "*.cpp" -print}
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/facebook -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
+############
+# RECORDER #
+############
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_recorder_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/recorder -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)

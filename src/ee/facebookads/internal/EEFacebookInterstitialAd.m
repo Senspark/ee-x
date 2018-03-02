@@ -12,7 +12,7 @@
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/facebook/internal/EEFacebookInterstitialAd.h"
+#import "ee/facebookads/internal/EEFacebookInterstitialAd.h"
 
 @interface EEFacebookInterstitialAd () <FBInterstitialAdDelegate> {
     NSString* placementId_;

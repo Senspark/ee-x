@@ -17,6 +17,10 @@ abstract_target 'common' do
         pod 'Firebase/Storage'
     end
 
+    target 'ee_x_mobile_facebook' do
+        pod 'FBSDKShareKit'
+    end
+
     target 'ee_x_mobile_facebook_ads' do
         pod 'FBAudienceNetwork'
     end

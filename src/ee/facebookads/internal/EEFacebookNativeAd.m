@@ -12,8 +12,8 @@
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/facebook/EEFacebookNativeAdView.h"
-#import "ee/facebook/internal/EEFacebookNativeAd.h"
+#import "ee/facebookads/EEFacebookNativeAdView.h"
+#import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
     /// Internal Facebook ad.

@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_
-#define EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_
+#ifndef EE_X_RECORDER_BRIDGE_HPP
+#define EE_X_RECORDER_BRIDGE_HPP
 
 #include <memory>
 #include <string>
@@ -40,4 +40,4 @@ private:
 } // namespace facebook
 } // namespace ee
 
-#endif /* EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_ */
+#endif /* EE_X_RECORDER_BRIDGE_HPP */

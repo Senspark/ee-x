@@ -378,8 +378,6 @@
 		AD10C2EB2049345600C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
 		AD10C2EC2049345600C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
 		AD10C2ED2049345600C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
-		AD10C2EF2049345600C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
-		AD10C2F02049345600C92CFE /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		AD10C2F22049345600C92CFE /* FacebookFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */; };
 		AD10C2F32049345600C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
 		AD10C2F42049345600C92CFE /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28120492A8A00C92CFE /* EEFacebookAds.h */; };
@@ -410,6 +408,8 @@
 		AD56EF8220216DE100DC9B56 /* VideoPlayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF8020216DE100DC9B56 /* VideoPlayerManager.cpp */; };
 		AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF8120216DE100DC9B56 /* VideoPlayerManager.hpp */; };
 		AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */; };
+		BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
+		C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
 		F8E14BB75FB4AA2DEEF491E0 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 /* End PBXBuildFile section */
@@ -690,14 +690,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.debug.xcconfig"; sourceTree = "<group>"; };
 		0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.release.xcconfig"; sourceTree = "<group>"; };
 		0FE9CB62FB4F6C8CB2535774 /* Pods-common-ee_x_mobile_iron_source.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_source.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_source/Pods-common-ee_x_mobile_iron_source.release.xcconfig"; sourceTree = "<group>"; };
-		1692D6FD99B6863F0BFE8954 /* Pods-common-ee_x_mobile_facebook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.release.xcconfig"; sourceTree = "<group>"; };
 		1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; sourceTree = "<group>"; };
 		30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_vungle.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		58ED6342358815ED41882DC0 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.debug.xcconfig"; sourceTree = "<group>"; };
 		64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; sourceTree = "<group>"; };
 		6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; sourceTree = "<group>"; };
 		6F04C59A1F8F6AEE007BC7A3 /* AdMobBannerAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobBannerAd.cpp; path = admob/internal/AdMobBannerAd.cpp; sourceTree = "<group>"; };
@@ -943,6 +942,7 @@
 		6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdViewHelper.m; path = ads/internal/EEAdViewHelper.m; sourceTree = "<group>"; };
 		6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewHelper.h; path = ads/internal/EEAdViewHelper.h; sourceTree = "<group>"; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.release.xcconfig"; sourceTree = "<group>"; };
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95DC76171EF8F28D00CAA8F3 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1154,6 +1154,7 @@
 			files = (
 				AD10C2BC20492A9D00C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
 				47ABA6CB6E25D8B47F88B0AB /* libPods-common-ee_x_mobile_facebook.a in Frameworks */,
+				C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,8 +1162,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD10C2EF2049345600C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
-				AD10C2F02049345600C92CFE /* libPods-common-ee_x_mobile_facebook.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1171,13 +1170,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				19A632B7E8A564A43BC5A1B9 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
+				BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				95DC76171EF8F28D00CAA8F3 /* CHANGELOG */,
@@ -1704,8 +1704,8 @@
 				DC87DCD918D2FC3512B2426E /* Pods-common-ee_x_mobile_vungle.release.xcconfig */,
 				986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */,
 				0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */,
-				58ED6342358815ED41882DC0 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */,
-				1692D6FD99B6863F0BFE8954 /* Pods-common-ee_x_mobile_facebook.release.xcconfig */,
+				00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */,
+				8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2462,11 +2462,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AD10C3042049345600C92CFE /* Build configuration list for PBXNativeTarget "ee_x_mobile_recorder" */;
 			buildPhases = (
-				AD10C2E02049345600C92CFE /* [CP] Check Pods Manifest.lock */,
 				AD10C2E12049345600C92CFE /* Sources */,
 				AD10C2EE2049345600C92CFE /* Frameworks */,
 				AD10C2F12049345600C92CFE /* Headers */,
-				AD10C3032049345600C92CFE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2524,8 +2522,8 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
-			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
+			productRefGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -2872,42 +2870,6 @@
 			showEnvVarsInLog = 0;
 		};
 		AD10C2CB20492A9D00C92CFE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook-resources.sh",
-				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AD10C2E02049345600C92CFE /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_facebook-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AD10C3032049345600C92CFE /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3738,7 +3700,7 @@
 		};
 		AD10C2CD20492A9D00C92CFE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58ED6342358815ED41882DC0 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */;
+			baseConfigurationReference = 00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = iphoneos;
@@ -3747,7 +3709,7 @@
 		};
 		AD10C2CE20492A9D00C92CFE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1692D6FD99B6863F0BFE8954 /* Pods-common-ee_x_mobile_facebook.release.xcconfig */;
+			baseConfigurationReference = 8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = iphoneos;
@@ -3756,7 +3718,6 @@
 		};
 		AD10C3052049345600C92CFE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58ED6342358815ED41882DC0 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = iphoneos;
@@ -3765,7 +3726,6 @@
 		};
 		AD10C3062049345600C92CFE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1692D6FD99B6863F0BFE8954 /* Pods-common-ee_x_mobile_facebook.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
 				SDKROOT = iphoneos;

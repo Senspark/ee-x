@@ -78,7 +78,8 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/*.{h,hpp}'
 
     s.dependency 'ee-x/core'
-    s.dependency 'FBSDKShareKit'
+    s.dependency 'FBSDKLoginKit'
+    s.dependency 'FBSDKShareKit'    
   end
 
   spec.subspec 'notification' do |s|

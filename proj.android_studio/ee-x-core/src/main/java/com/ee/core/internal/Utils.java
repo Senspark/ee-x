@@ -1,5 +1,6 @@
 package com.ee.core.internal;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
@@ -72,6 +74,7 @@ public class Utils {
     private static final String k__openApplication               = "Utils_openApplication";
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
+    private static final String k__getDeviceId                   = "Utils_getDeviceId";
 
     public static void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
@@ -158,6 +161,15 @@ public class Utils {
                 return Utils.toString(testConnection(context));
             }
         }, k__testConnection);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                return Utils.getDeviceId(context);
+            }
+        }, k__getDeviceId);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -303,5 +315,12 @@ public class Utils {
         assert connectivityManager != null;
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         return info != null && info.isConnectedOrConnecting();
+    }
+
+    @SuppressLint("HardwareIds")
+    @NonNull
+    public static String getDeviceId(@NonNull Context context) {
+        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 }

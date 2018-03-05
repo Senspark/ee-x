@@ -102,6 +102,7 @@ constexpr auto k__isApplicationInstalled        = "Utils_isApplicationInstalled"
 constexpr auto k__openApplication               = "Utils_openApplication";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
+constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 // clang-format on
 } // namespace
 
@@ -204,6 +205,11 @@ bool testConnection() {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__testConnection);
     return toBool(response);
+}
+
+std::string getDeviceId() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getDeviceId);
 }
 } // namespace core
 } // namespace ee

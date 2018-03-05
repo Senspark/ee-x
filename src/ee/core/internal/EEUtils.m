@@ -186,4 +186,30 @@ static NSString* const k__testConnection                = @"Utils_testConnection
     return [[EEReachability reachabilityWithHostname:hostName] isReachable];
 }
 
++ (NSString* _Nonnull)getDeviceId {
+#if TARGET_OS_IOS
+    // https://stackoverflow.com/questions/24760150/how-to-get-a-hashed-device-id-for-testing-admob-on-ios
+    NSString* deviceId =
+        [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    return deviceId == nil ? @"" : deviceId;
+#else  // TARGET_OS_IOS
+    // https://stackoverflow.com/questions/933460/unique-hardware-id-in-mac-os-x
+    io_registry_entry_t ioRegistryRoot =
+        IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/");
+    CFStringRef uuidCf = (CFStringRef)IORegistryEntryCreateCFProperty(
+        ioRegistryRoot, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0);
+    IOObjectRelease(ioRegistryRoot);
+    const auto CFIndex bufSize = 100;
+    static char buf[bufSize];
+    Boolean successful =
+        CFStringGetCString(uuidCf, buf, bufSize, kCFStringEncodingMacRoman);
+    CFRelease(uuidCf);
+    if (successful) {
+        NSString* deviceId = [NSString stringWithUTF8String:buf];
+        return deviceId == nil ? @"" : deviceId;
+    }
+    return @"";
+#endif // TARGET_OS_IOS
+}
+
 @end

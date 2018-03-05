@@ -72,6 +72,9 @@ bool openApplication(const std::string& applicationId);
 bool isTablet();
 
 bool testConnection();
+    
+/// Gets device's unique ID.
+std::string getDeviceId();
 } // namespace core
 
 using core::format;
@@ -86,6 +89,7 @@ using core::isApplicationInstalled;
 using core::openApplication;
 using core::isTablet;
 using core::testConnection;
+using core::getDeviceId;
 } // namespace ee
 
 #endif /* EE_X_UTILS_HPP */

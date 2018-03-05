@@ -14,7 +14,6 @@
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
 @interface EEFacebook () <FBSDKSharingDelegate>
-
 @end
 
 @implementation EEFacebook
@@ -144,12 +143,13 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
     if (profile != nil) {
         [dict setObject:[profile userID] forKey:@"userId"];
         [dict setObject:[profile firstName] forKey:@"firstName"];
-        [dict setObject:[profile middleName] forKey:@"middleName"];
+        [dict setObject:[profile middleName] ?: @"" forKey:@"middleName"];
         [dict setObject:[profile lastName] forKey:@"lastName"];
         [dict setObject:[profile name] forKey:@"name"];
-        [dict setObject:[profile
+        [dict setObject:[[profile
                             imageURLForPictureMode:FBSDKProfilePictureModeSquare
                                               size:CGSizeMake(128, 128)]
+                            absoluteString]
                  forKey:@"picture"];
     }
 

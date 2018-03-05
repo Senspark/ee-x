@@ -21,6 +21,7 @@ import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
@@ -56,7 +57,8 @@ public class Facebook implements PluginProtocol {
     private Activity                        _activity;
     private ShareDialog                     _shareDialog;
     private CallbackManager                 _callbackManager;
-    private FacebookCallback<Sharer.Result> _callback;
+    private FacebookCallback<Sharer.Result> _shareCallback;
+    private FacebookCallback<LoginResult>   _loginCallback;
     private AccessTokenTracker              _accessTokenTracker;
     private ProfileTracker                  _profileTracker;
 
@@ -65,7 +67,7 @@ public class Facebook implements PluginProtocol {
         _activity = null;
         _shareDialog = null;
         _callbackManager = CallbackManager.Factory.create();
-        _callback = new FacebookCallback<Sharer.Result>() {
+        _shareCallback = new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
                 Utils.checkMainThread();
@@ -87,6 +89,28 @@ public class Facebook implements PluginProtocol {
                 bridge.callCpp(k__onShareResult, Utils.toString(false));
             }
         };
+        _loginCallback = new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Utils.checkMainThread();
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onLoginResult, Utils.toString(true));
+            }
+
+            @Override
+            public void onCancel() {
+                Utils.checkMainThread();
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onLoginResult, Utils.toString(false));
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Utils.checkMainThread();
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onLoginResult, Utils.toString(false));
+            }
+        };
         _accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken
@@ -102,14 +126,17 @@ public class Facebook implements PluginProtocol {
                 if (currentProfile != null) {
                     dict.put("userId", currentProfile.getId());
                     dict.put("firstName", currentProfile.getFirstName());
-                    dict.put("middleName", currentProfile.getMiddleName());
+                    dict.put("middleName", currentProfile.getMiddleName() == null ? "" :
+                            currentProfile.getMiddleName());
                     dict.put("lastName", currentProfile.getLastName());
                     dict.put("name", currentProfile.getName());
+                    dict.put("picture", currentProfile.getProfilePictureUri(128, 128).toString());
                 }
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
             }
         };
+        LoginManager.getInstance().registerCallback(_callbackManager, _loginCallback);
         registerHandlers();
     }
 
@@ -123,7 +150,7 @@ public class Facebook implements PluginProtocol {
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
         _shareDialog = new ShareDialog(activity);
-        _shareDialog.registerCallback(_callbackManager, _callback);
+        _shareDialog.registerCallback(_callbackManager, _shareCallback);
     }
 
     @Override

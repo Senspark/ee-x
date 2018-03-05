@@ -15,6 +15,8 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 /// Gets the message bridge instance.
 + (instancetype _Nonnull)getInstance;
 
+- (BOOL)isHandlerRegistered:(NSString* _Nonnull)tag;
+
 /// Registers a new handler to receive messages from C++.
 /// @param handler The handler.
 /// @param tag The unique tag of the handler.

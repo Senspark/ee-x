@@ -70,24 +70,21 @@ std::string format(std::string formatString, ...) {
 }
 
 std::string format(std::string formatString, std::va_list args) {
-    int final_n;
-    auto n =
-        2 * formatString.size(); /* Reserve two times as much as the length of
-                                  the fmt_str */
-    std::string str;
-    std::unique_ptr<char[]> formatted;
-    while (1) {
-        formatted.reset(
-            new char[n]); /* Wrap the plain char array into the unique_ptr */
-        std::strcpy(&formatted[0], formatString.c_str());
-        final_n = std::vsnprintf(&formatted[0], n, formatString.c_str(), args);
-        if (final_n < 0 || final_n >= static_cast<int>(n))
+    std::size_t n = formatString.size() * 2;
+    while (true) {
+        auto formatted = std::make_unique<char[]>(n);
+        std::va_list temp_args;
+        va_copy(temp_args, args);
+        auto final_n =
+            std::vsnprintf(&formatted[0], n, formatString.c_str(), temp_args);
+        va_end(temp_args);
+        if (final_n < 0 || final_n >= static_cast<int>(n)) {
             n += static_cast<std::size_t>(
                 std::abs(final_n - static_cast<int>(n) + 1));
-        else
-            break;
+        } else {
+            return std::string(formatted.get());
+        }
     }
-    return std::string(formatted.get());
 }
 
 namespace {
@@ -213,3 +210,4 @@ std::string getDeviceId() {
 }
 } // namespace core
 } // namespace ee
+

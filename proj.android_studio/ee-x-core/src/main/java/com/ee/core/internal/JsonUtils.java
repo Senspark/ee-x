@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,10 +32,23 @@ public class JsonUtils {
     }
 
     @Nullable
+    public static List<Object> convertStringToArray(@Nullable String str) {
+        List<Object> result = null;
+        try {
+            result = parser.readValue(str, new TypeReference<List<Object>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Nullable
     public static Map<String, Object> convertStringToDictionary(@Nullable String str) {
         Map<String, Object> result = null;
         try {
-            result = parser.readValue(str, new TypeReference<Map<String, Object>>() {});
+            result = parser.readValue(str, new TypeReference<Map<String, Object>>() {
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

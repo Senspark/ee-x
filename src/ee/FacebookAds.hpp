@@ -11,12 +11,12 @@
 
 #ifdef __cplusplus
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/facebook/FacebookAdsBridge.hpp"
-#include "ee/facebook/FacebookNativeAdLayout.hpp"
+#include "ee/facebookads/FacebookAdsBridge.hpp"
+#include "ee/facebookads/FacebookNativeAdLayout.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/facebook/EEFacebookAds.h"
+#import "ee/facebookads/EEFacebookAds.h"
 #endif // __OBJC__
 
 #endif /* EE_X_FACEBOOK_ADS_HPP */

@@ -5,13 +5,12 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 27
     }
 }
 
 dependencies {
     api project(':ee-x-core')
-    api 'com.facebook.android:facebook-share:4.30.0'
-    api 'com.facebook.android:facebook-login:4.30.0'
+    implementation 'com.android.support:support-compat:27.0.2'
 }

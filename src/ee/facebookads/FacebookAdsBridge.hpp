@@ -16,7 +16,7 @@
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
-#include "ee/facebook/FacebookBannerAdSize.hpp"
+#include "ee/facebookads/FacebookBannerAdSize.hpp"
 
 namespace ee {
 namespace facebook {

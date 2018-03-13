@@ -26,7 +26,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                targets 'ee_x_test_android_shared'
+                targets '_ee_x_test'
                 arguments 'APP_STL=c++_static'
                 arguments 'NDK_TOOLCHAIN_VERSION=clang'
                 arguments 'APP_PLATFORM=android-14'

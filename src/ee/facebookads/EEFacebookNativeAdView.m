@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/facebook/EEFacebookNativeAdView.h"
+#import "ee/facebookads/EEFacebookNativeAdView.h"
 
 @implementation EEFacebookNativeAdView
 

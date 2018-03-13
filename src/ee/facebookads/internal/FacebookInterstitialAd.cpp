@@ -12,8 +12,8 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/facebook/FacebookAdsBridge.hpp"
-#include "ee/facebook/internal/FacebookInterstitialAd.hpp"
+#include "ee/facebookads/FacebookAdsBridge.hpp"
+#include "ee/facebookads/internal/FacebookInterstitialAd.hpp"
 
 namespace ee {
 namespace facebook {

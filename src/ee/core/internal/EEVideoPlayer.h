@@ -8,7 +8,9 @@
 #import <CoreGraphics/CGGeometry.h>
 #import <Foundation/Foundation.h>
 
+#if TARGET_OS_IOS
 @class MPMoviePlayerController;
+#endif // TARGET_OS_IOS
 
 @interface EEVideoPlayer : NSObject
 

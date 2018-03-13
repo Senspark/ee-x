@@ -1,5 +1,5 @@
 //
-//  FacebookBannerAd.cpp
+//  FacebookNativeAd.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
@@ -8,32 +8,46 @@
 
 #include <cassert>
 
+#include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
-#include "ee/facebook/FacebookAdsBridge.hpp"
-#include "ee/facebook/internal/FacebookBannerAd.hpp"
+#include "ee/core/Utils.hpp"
+#include "ee/facebookads/FacebookAdsBridge.hpp"
+#include "ee/facebookads/internal/FacebookNativeAd.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace facebook {
-using Self = BannerAd;
+using Self = NativeAd;
 
 namespace {
+const std::string k__tag = "FacebookNativeAd";
+
+auto k__createInternalAd(const std::string& id) {
+    return k__tag + "_createInternalAd_" + id;
+}
+
+auto k__destroyInternalAd(const std::string& id) {
+    return k__tag + "_destroyInternalAd_" + id;
+}
+
 auto k__onLoaded(const std::string& id) {
-    return "FacebookBannerAd_onLoaded_" + id;
+    return k__tag + "_onLoaded_" + id;
 }
 
 auto k__onFailedToLoad(const std::string& id) {
-    return "FacebookBannerAd_onFailedToLoad_" + id;
+    return k__tag + "_onFailedToLoad_" + id;
 }
 } // namespace
 
-Self::BannerAd(FacebookAds* plugin, const std::string& adId)
+Self::NativeAd(FacebookAds* plugin, const std::string& adId)
     : Super()
     , adId_(adId)
     , plugin_(plugin)
-    , helper_("FacebookBannerAd", adId)
+    , helper_("FacebookNativeAd", adId)
     , bridgeHelper_(helper_) {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    attempted_ = false;
     loading_ = false;
 
     auto&& bridge = MessageBridge::getInstance();
@@ -51,13 +65,28 @@ Self::BannerAd(FacebookAds* plugin, const std::string& adId)
         k__onFailedToLoad(adId_));
 }
 
-Self::~BannerAd() {
-    bool succeeded = plugin_->destroyBannerAd(adId_);
-    assert(succeeded);
-
+Self::~NativeAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = MessageBridge::getInstance();
     bridge.deregisterHandler(k__onLoaded(adId_));
     bridge.deregisterHandler(k__onFailedToLoad(adId_));
+
+    bool succeeded = plugin_->destroyNativeAd(adId_);
+    assert(succeeded);
+}
+
+bool Self::createInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__createInternalAd(adId_));
+    return core::toBool(response);
+}
+
+bool Self::destroyInternalAd() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__destroyInternalAd(adId_));
+    return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
@@ -65,10 +94,17 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
+    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                                    core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
+    if (attempted_) {
+        destroyInternalAd();
+        createInternalAd();
+    }
     loading_ = true;
+    attempted_ = true;
     bridgeHelper_.load();
 }
 
@@ -101,15 +137,16 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    // Facebook banner is auto-loading.
-    // assert(loading_);
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    assert(loading_);
     loading_ = false;
     setLoadResult(true);
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    // Facebook banner is auto-loading.
-    // assert(loading_);
+    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
+                                    message.c_str());
+    assert(loading_);
     loading_ = false;
     setLoadResult(false);
 }

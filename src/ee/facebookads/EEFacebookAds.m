@@ -12,10 +12,10 @@
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/facebook/EEFacebookAds.h"
-#import "ee/facebook/internal/EEFacebookBannerAd.h"
-#import "ee/facebook/internal/EEFacebookInterstitialAd.h"
-#import "ee/facebook/internal/EEFacebookNativeAd.h"
+#import "ee/facebookads/EEFacebookAds.h"
+#import "ee/facebookads/internal/EEFacebookBannerAd.h"
+#import "ee/facebookads/internal/EEFacebookInterstitialAd.h"
+#import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookAds () {
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;

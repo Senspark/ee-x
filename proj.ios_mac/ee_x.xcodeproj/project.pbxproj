@@ -12,6 +12,7 @@
 		1E0EFDAB77E17F2D94725D18 /* libPods-common-ee_x_mobile_iron_source.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */; };
 		1F72F3552DE59AB911BA06E0 /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */; };
 		3AFCDE0675A6414E159A386F /* libPods-common-ee_x_mobile_unity_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C28F822AD070D022C1C26B51 /* libPods-common-ee_x_mobile_unity_ads.a */; };
+		47ABA6CB6E25D8B47F88B0AB /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		5E33EA6CA96213FBED0551AF /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 		5FDEC10535439E67358F88C8 /* libPods-common-ee_x_mobile_vungle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */; };
 		6F04C5991F8F61BF007BC7A3 /* EEInterstitialAdHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */; };
@@ -21,12 +22,6 @@
 		6F04C5A11F8F6AFA007BC7A3 /* AdMobInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C59F1F8F6AFA007BC7A3 /* AdMobInterstitialAd.hpp */; };
 		6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5A21F8F6C6A007BC7A3 /* AdViewHelper.cpp */; };
 		6F04C5A51F8F6C6A007BC7A3 /* AdViewHelper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5A31F8F6C6A007BC7A3 /* AdViewHelper.hpp */; };
-		6F04C5AC1F8F6E1E007BC7A3 /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5A61F8F6E1E007BC7A3 /* FacebookBannerAd.cpp */; };
-		6F04C5AD1F8F6E1E007BC7A3 /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5A71F8F6E1E007BC7A3 /* FacebookBannerAd.hpp */; };
-		6F04C5AE1F8F6E1E007BC7A3 /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5A81F8F6E1E007BC7A3 /* FacebookInterstitialAd.cpp */; };
-		6F04C5AF1F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5A91F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp */; };
-		6F04C5B01F8F6E1E007BC7A3 /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5AA1F8F6E1E007BC7A3 /* FacebookNativeAd.cpp */; };
-		6F04C5B11F8F6E1E007BC7A3 /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5AB1F8F6E1E007BC7A3 /* FacebookNativeAd.hpp */; };
 		6F04C5B71F8F73C1007BC7A3 /* UnityInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5B31F8F73C1007BC7A3 /* UnityInterstitialAd.cpp */; };
 		6F04C5B81F8F73C1007BC7A3 /* UnityInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5B41F8F73C1007BC7A3 /* UnityInterstitialAd.hpp */; };
 		6F04C5B91F8F73C1007BC7A3 /* UnityRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5B51F8F73C1007BC7A3 /* UnityRewardedVideo.cpp */; };
@@ -48,8 +43,6 @@
 		6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */; };
 		6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */; };
 		6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */; };
-		6F2479D91F8DFE09009E702C /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */; };
-		6F2479DA1F8DFE09009E702C /* EEFacebookInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */; };
 		6F2479E31F8E3569009E702C /* ee_x_mobile_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */; };
 		6F2479E41F8E3569009E702C /* libPods-common-ee_x_mobile_vungle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */; };
 		6F2479F71F8E3677009E702C /* AdMobBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479F51F8E3677009E702C /* AdMobBridge.cpp */; };
@@ -97,8 +90,6 @@
 		6F25800A1ECB162D00B910F9 /* StoreBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FAFB6111EC95BDB00450E67 /* StoreBridge.hpp */; };
 		6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E151EC5651300ED9E4A /* FacebookAds.hpp */; };
 		6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
-		6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */; };
-		6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = EB684E111EC5645200ED9E4A /* EEFacebookAds.h */; };
 		6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F29349F1FA1D52E008B6246 /* MediationManager.cpp */; };
 		6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A01FA1D52E008B6246 /* MediationManager.hpp */; };
 		6F2934A51FA2DA25008B6246 /* NullAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934A31FA2DA25008B6246 /* NullAdView.cpp */; };
@@ -130,14 +121,8 @@
 		6F3B3E2D1FA9B3660089E322 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3B3E2B1FA9B3660089E322 /* Logger.hpp */; };
 		6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* AdViewInterface.cpp */; };
 		6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* AdViewInterface.hpp */; };
-		6F426D3D1F878A5B009E202A /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */; };
-		6F426D3E1F878A5B009E202A /* EEFacebookBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D3C1F878A5B009E202A /* EEFacebookBannerAd.h */; };
 		6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */; };
 		6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */; };
-		6F426D4A1F879A77009E202A /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D481F879A77009E202A /* EEFacebookNativeAd.m */; };
-		6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D491F879A77009E202A /* EEFacebookNativeAd.h */; };
-		6F426E311F8B828C009E202A /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E2F1F8B828C009E202A /* FacebookNativeAdLayout.cpp */; };
-		6F426E321F8B828C009E202A /* FacebookNativeAdLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E301F8B828C009E202A /* FacebookNativeAdLayout.hpp */; };
 		6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
 		6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
 		6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
@@ -249,12 +234,8 @@
 		6F978CAB1F41868200247CA8 /* UnityAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CA91F41868200247CA8 /* UnityAds.hpp */; };
 		6F978CB61F41868E00247CA8 /* IronSource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB41F41868E00247CA8 /* IronSource.hpp */; };
 		6F978CB71F41868E00247CA8 /* IronSourceFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */; };
-		6F978CBA1F41882300247CA8 /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */; };
-		6F978CBB1F41882300247CA8 /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F978CB91F41882300247CA8 /* EEFacebookNativeAdView.m */; };
-		6F978CBC1F41882D00247CA8 /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */; };
 		6F98F3DF1F905ADD003C2A04 /* AdMobRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F98F3DD1F905ADD003C2A04 /* AdMobRewardedVideo.cpp */; };
 		6F98F3E01F905ADD003C2A04 /* AdMobRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3DE1F905ADD003C2A04 /* AdMobRewardedVideo.hpp */; };
-		6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */; };
 		6F98F3E41F906376003C2A04 /* AdMobBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */; };
 		6F9E73201F97422A00EE467B /* AdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E731F1F97422A00EE467B /* AdsFwd.hpp */; };
 		6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E73211F97430B00EE467B /* MultiAdView.cpp */; };
@@ -334,6 +315,92 @@
 		6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */; };
 		71316B903291F64DBF053615 /* libPods-common-ee_x_mobile_admob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */; };
 		7D1A8116DA161224BD173A89 /* libPods-common-ee_x_mobile_google.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */; };
+		AD10C29720492A8A00C92CFE /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28120492A8A00C92CFE /* EEFacebookAds.h */; };
+		AD10C29820492A8A00C92CFE /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28220492A8A00C92CFE /* EEFacebookAds.m */; };
+		AD10C29920492A8A00C92CFE /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28320492A8A00C92CFE /* EEFacebookNativeAdView.h */; };
+		AD10C29A20492A8A00C92CFE /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */; };
+		AD10C29B20492A8A00C92CFE /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */; };
+		AD10C29C20492A8A00C92CFE /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28620492A8A00C92CFE /* FacebookAdsBridge.hpp */; };
+		AD10C29D20492A8A00C92CFE /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28720492A8A00C92CFE /* FacebookBannerAdSize.hpp */; };
+		AD10C29E20492A8A00C92CFE /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */; };
+		AD10C29F20492A8A00C92CFE /* FacebookNativeAdLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28920492A8A00C92CFE /* FacebookNativeAdLayout.hpp */; };
+		AD10C2A020492A8A00C92CFE /* EEFacebookBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28B20492A8A00C92CFE /* EEFacebookBannerAd.h */; };
+		AD10C2A120492A8A00C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
+		AD10C2A220492A8A00C92CFE /* EEFacebookInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28D20492A8A00C92CFE /* EEFacebookInterstitialAd.h */; };
+		AD10C2A320492A8A00C92CFE /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */; };
+		AD10C2A420492A8A00C92CFE /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28F20492A8A00C92CFE /* EEFacebookNativeAd.h */; };
+		AD10C2A520492A8A00C92CFE /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */; };
+		AD10C2A620492A8A00C92CFE /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */; };
+		AD10C2A720492A8A00C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
+		AD10C2A820492A8A00C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
+		AD10C2A920492A8A00C92CFE /* FacebookInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29420492A8A00C92CFE /* FacebookInterstitialAd.hpp */; };
+		AD10C2AA20492A8A00C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
+		AD10C2AB20492A8A00C92CFE /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */; };
+		AD10C2B120492A9D00C92CFE /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */; };
+		AD10C2B220492A9D00C92CFE /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28220492A8A00C92CFE /* EEFacebookAds.m */; };
+		AD10C2B320492A9D00C92CFE /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */; };
+		AD10C2B420492A9D00C92CFE /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */; };
+		AD10C2B520492A9D00C92CFE /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */; };
+		AD10C2B620492A9D00C92CFE /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */; };
+		AD10C2B720492A9D00C92CFE /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */; };
+		AD10C2B820492A9D00C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
+		AD10C2B920492A9D00C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
+		AD10C2BA20492A9D00C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
+		AD10C2BC20492A9D00C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
+		AD10C2BE20492A9D00C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
+		AD10C2BF20492A9D00C92CFE /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28120492A8A00C92CFE /* EEFacebookAds.h */; };
+		AD10C2C020492A9D00C92CFE /* EEFacebookBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28B20492A8A00C92CFE /* EEFacebookBannerAd.h */; };
+		AD10C2C120492A9D00C92CFE /* FacebookInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29420492A8A00C92CFE /* FacebookInterstitialAd.hpp */; };
+		AD10C2C220492A9D00C92CFE /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28320492A8A00C92CFE /* EEFacebookNativeAdView.h */; };
+		AD10C2C320492A9D00C92CFE /* EEFacebookInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28D20492A8A00C92CFE /* EEFacebookInterstitialAd.h */; };
+		AD10C2C420492A9D00C92CFE /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28720492A8A00C92CFE /* FacebookBannerAdSize.hpp */; };
+		AD10C2C520492A9D00C92CFE /* FacebookAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E151EC5651300ED9E4A /* FacebookAds.hpp */; };
+		AD10C2C620492A9D00C92CFE /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28F20492A8A00C92CFE /* EEFacebookNativeAd.h */; };
+		AD10C2C720492A9D00C92CFE /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28620492A8A00C92CFE /* FacebookAdsBridge.hpp */; };
+		AD10C2C820492A9D00C92CFE /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */; };
+		AD10C2C920492A9D00C92CFE /* FacebookNativeAdLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28920492A8A00C92CFE /* FacebookNativeAdLayout.hpp */; };
+		AD10C2CA20492A9D00C92CFE /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
+		AD10C2D720492B2300C92CFE /* EEFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D120492B2200C92CFE /* EEFacebook.h */; };
+		AD10C2D820492B2300C92CFE /* EEFacebook.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D220492B2200C92CFE /* EEFacebook.m */; };
+		AD10C2D920492B2300C92CFE /* FacebookBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */; };
+		AD10C2DA20492B2300C92CFE /* FacebookBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D420492B2200C92CFE /* FacebookBridge.hpp */; };
+		AD10C2DB20492B2300C92CFE /* FacebookFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */; };
+		AD10C2DC20492B2300C92CFE /* Facebook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D620492B2300C92CFE /* Facebook.hpp */; };
+		AD10C2E22049345600C92CFE /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */; };
+		AD10C2E32049345600C92CFE /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28220492A8A00C92CFE /* EEFacebookAds.m */; };
+		AD10C2E42049345600C92CFE /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */; };
+		AD10C2E52049345600C92CFE /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */; };
+		AD10C2E62049345600C92CFE /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */; };
+		AD10C2E72049345600C92CFE /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */; };
+		AD10C2E82049345600C92CFE /* FacebookBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */; };
+		AD10C2E92049345600C92CFE /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */; };
+		AD10C2EA2049345600C92CFE /* EEFacebook.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D220492B2200C92CFE /* EEFacebook.m */; };
+		AD10C2EB2049345600C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
+		AD10C2EC2049345600C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
+		AD10C2ED2049345600C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
+		AD10C2F22049345600C92CFE /* FacebookFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */; };
+		AD10C2F32049345600C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
+		AD10C2F42049345600C92CFE /* EEFacebookAds.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28120492A8A00C92CFE /* EEFacebookAds.h */; };
+		AD10C2F52049345600C92CFE /* EEFacebookBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28B20492A8A00C92CFE /* EEFacebookBannerAd.h */; };
+		AD10C2F62049345600C92CFE /* FacebookInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29420492A8A00C92CFE /* FacebookInterstitialAd.hpp */; };
+		AD10C2F72049345600C92CFE /* EEFacebookNativeAdView.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28320492A8A00C92CFE /* EEFacebookNativeAdView.h */; };
+		AD10C2F82049345600C92CFE /* EEFacebookInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28D20492A8A00C92CFE /* EEFacebookInterstitialAd.h */; };
+		AD10C2F92049345600C92CFE /* Facebook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D620492B2300C92CFE /* Facebook.hpp */; };
+		AD10C2FA2049345600C92CFE /* FacebookBannerAdSize.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28720492A8A00C92CFE /* FacebookBannerAdSize.hpp */; };
+		AD10C2FB2049345600C92CFE /* FacebookBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D420492B2200C92CFE /* FacebookBridge.hpp */; };
+		AD10C2FC2049345600C92CFE /* FacebookAds.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E151EC5651300ED9E4A /* FacebookAds.hpp */; };
+		AD10C2FD2049345600C92CFE /* EEFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D120492B2200C92CFE /* EEFacebook.h */; };
+		AD10C2FE2049345600C92CFE /* EEFacebookNativeAd.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28F20492A8A00C92CFE /* EEFacebookNativeAd.h */; };
+		AD10C2FF2049345600C92CFE /* FacebookAdsBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28620492A8A00C92CFE /* FacebookAdsBridge.hpp */; };
+		AD10C3002049345600C92CFE /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */; };
+		AD10C3012049345600C92CFE /* FacebookNativeAdLayout.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C28920492A8A00C92CFE /* FacebookNativeAdLayout.hpp */; };
+		AD10C3022049345600C92CFE /* FacebookAdsFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */; };
+		AD10C30F204934A500C92CFE /* EERecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = AD10C309204934A400C92CFE /* EERecorder.h */; };
+		AD10C310204934A500C92CFE /* EERecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C30A204934A400C92CFE /* EERecorder.m */; };
+		AD10C311204934A500C92CFE /* RecorderBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C30B204934A400C92CFE /* RecorderBridge.cpp */; };
+		AD10C312204934A500C92CFE /* RecorderBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30C204934A400C92CFE /* RecorderBridge.hpp */; };
+		AD10C313204934A500C92CFE /* RecorderFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30D204934A400C92CFE /* RecorderFwd.hpp */; };
+		AD10C314204934A500C92CFE /* Recorder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30E204934A500C92CFE /* Recorder.hpp */; };
 		AD56EF73202026A300DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
 		AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */; };
 		AD56EF75202026A700DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
@@ -341,9 +408,9 @@
 		AD56EF8220216DE100DC9B56 /* VideoPlayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF8020216DE100DC9B56 /* VideoPlayerManager.cpp */; };
 		AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF8120216DE100DC9B56 /* VideoPlayerManager.hpp */; };
 		AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */; };
+		BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
+		C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
-		EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */; };
-		EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */; };
 		F8E14BB75FB4AA2DEEF491E0 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 /* End PBXBuildFile section */
 
@@ -447,6 +514,20 @@
 			remoteInfo = ee_x_mobile_core;
 		};
 		6FAFB5C71EC94E0F00450E67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		AD10C2AE20492A9D00C92CFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		AD10C2DF2049345600C92CFE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -609,6 +690,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.debug.xcconfig"; sourceTree = "<group>"; };
 		0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.release.xcconfig"; sourceTree = "<group>"; };
 		0FE9CB62FB4F6C8CB2535774 /* Pods-common-ee_x_mobile_iron_source.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_source.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_source/Pods-common-ee_x_mobile_iron_source.release.xcconfig"; sourceTree = "<group>"; };
 		1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
@@ -623,12 +705,6 @@
 		6F04C59F1F8F6AFA007BC7A3 /* AdMobInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobInterstitialAd.hpp; path = admob/internal/AdMobInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F04C5A21F8F6C6A007BC7A3 /* AdViewHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewHelper.cpp; path = ads/internal/AdViewHelper.cpp; sourceTree = "<group>"; };
 		6F04C5A31F8F6C6A007BC7A3 /* AdViewHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewHelper.hpp; path = ads/internal/AdViewHelper.hpp; sourceTree = "<group>"; };
-		6F04C5A61F8F6E1E007BC7A3 /* FacebookBannerAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookBannerAd.cpp; path = facebook/internal/FacebookBannerAd.cpp; sourceTree = "<group>"; };
-		6F04C5A71F8F6E1E007BC7A3 /* FacebookBannerAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookBannerAd.hpp; path = facebook/internal/FacebookBannerAd.hpp; sourceTree = "<group>"; };
-		6F04C5A81F8F6E1E007BC7A3 /* FacebookInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookInterstitialAd.cpp; path = facebook/internal/FacebookInterstitialAd.cpp; sourceTree = "<group>"; };
-		6F04C5A91F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookInterstitialAd.hpp; path = facebook/internal/FacebookInterstitialAd.hpp; sourceTree = "<group>"; };
-		6F04C5AA1F8F6E1E007BC7A3 /* FacebookNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookNativeAd.cpp; path = facebook/internal/FacebookNativeAd.cpp; sourceTree = "<group>"; };
-		6F04C5AB1F8F6E1E007BC7A3 /* FacebookNativeAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAd.hpp; path = facebook/internal/FacebookNativeAd.hpp; sourceTree = "<group>"; };
 		6F04C5B31F8F73C1007BC7A3 /* UnityInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityInterstitialAd.cpp; sourceTree = "<group>"; };
 		6F04C5B41F8F73C1007BC7A3 /* UnityInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F04C5B51F8F73C1007BC7A3 /* UnityRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityRewardedVideo.cpp; sourceTree = "<group>"; };
@@ -648,8 +724,6 @@
 		6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiRewardedVideo.hpp; path = ads/MultiRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiInterstitialAd.cpp; path = ads/MultiInterstitialAd.cpp; sourceTree = "<group>"; };
 		6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiInterstitialAd.hpp; path = ads/MultiInterstitialAd.hpp; sourceTree = "<group>"; };
-		6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookInterstitialAd.m; path = facebook/internal/EEFacebookInterstitialAd.m; sourceTree = "<group>"; };
-		6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookInterstitialAd.h; path = facebook/internal/EEFacebookInterstitialAd.h; sourceTree = "<group>"; };
 		6F2479F41F8E3569009E702C /* ee_x_mobile_admob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_admob.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F2479F51F8E3677009E702C /* AdMobBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobBridge.cpp; path = admob/AdMobBridge.cpp; sourceTree = "<group>"; };
 		6F2479F61F8E3677009E702C /* AdMobBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobBridge.hpp; path = admob/AdMobBridge.hpp; sourceTree = "<group>"; };
@@ -710,14 +784,8 @@
 		6F3B3E2B1FA9B3660089E322 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		6F426D331F87822A009E202A /* AdViewInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewInterface.cpp; path = ads/AdViewInterface.cpp; sourceTree = "<group>"; };
 		6F426D341F87822A009E202A /* AdViewInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewInterface.hpp; path = ads/AdViewInterface.hpp; sourceTree = "<group>"; };
-		6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookBannerAd.m; path = facebook/internal/EEFacebookBannerAd.m; sourceTree = "<group>"; };
-		6F426D3C1F878A5B009E202A /* EEFacebookBannerAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookBannerAd.h; path = facebook/internal/EEFacebookBannerAd.h; sourceTree = "<group>"; };
 		6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterstitialAdInterface.cpp; path = ads/InterstitialAdInterface.cpp; sourceTree = "<group>"; };
 		6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterstitialAdInterface.hpp; path = ads/InterstitialAdInterface.hpp; sourceTree = "<group>"; };
-		6F426D481F879A77009E202A /* EEFacebookNativeAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookNativeAd.m; path = facebook/internal/EEFacebookNativeAd.m; sourceTree = "<group>"; };
-		6F426D491F879A77009E202A /* EEFacebookNativeAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookNativeAd.h; path = facebook/internal/EEFacebookNativeAd.h; sourceTree = "<group>"; };
-		6F426E2F1F8B828C009E202A /* FacebookNativeAdLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookNativeAdLayout.cpp; path = facebook/FacebookNativeAdLayout.cpp; sourceTree = "<group>"; };
-		6F426E301F8B828C009E202A /* FacebookNativeAdLayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookNativeAdLayout.hpp; path = facebook/FacebookNativeAdLayout.hpp; sourceTree = "<group>"; };
 		6F426E331F8BAEB7009E202A /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6F426E341F8BAEB7009E202A /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
@@ -781,11 +849,8 @@
 		6F978CA91F41868200247CA8 /* UnityAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAds.hpp; sourceTree = "<group>"; };
 		6F978CB41F41868E00247CA8 /* IronSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSource.hpp; sourceTree = "<group>"; };
 		6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceFwd.hpp; sourceTree = "<group>"; };
-		6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookNativeAdView.h; path = facebook/EEFacebookNativeAdView.h; sourceTree = "<group>"; };
-		6F978CB91F41882300247CA8 /* EEFacebookNativeAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookNativeAdView.m; path = facebook/EEFacebookNativeAdView.m; sourceTree = "<group>"; };
 		6F98F3DD1F905ADD003C2A04 /* AdMobRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobRewardedVideo.cpp; path = admob/internal/AdMobRewardedVideo.cpp; sourceTree = "<group>"; };
 		6F98F3DE1F905ADD003C2A04 /* AdMobRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobRewardedVideo.hpp; path = admob/internal/AdMobRewardedVideo.hpp; sourceTree = "<group>"; };
-		6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookBannerAdSize.hpp; path = facebook/FacebookBannerAdSize.hpp; sourceTree = "<group>"; };
 		6F98F3E31F906376003C2A04 /* AdMobBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdMobBannerAdSize.hpp; path = admob/AdMobBannerAdSize.hpp; sourceTree = "<group>"; };
 		6F9E731F1F97422A00EE467B /* AdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdsFwd.hpp; sourceTree = "<group>"; };
 		6F9E73211F97430B00EE467B /* MultiAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiAdView.cpp; path = ads/MultiAdView.cpp; sourceTree = "<group>"; };
@@ -877,11 +942,47 @@
 		6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdViewHelper.m; path = ads/internal/EEAdViewHelper.m; sourceTree = "<group>"; };
 		6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewHelper.h; path = ads/internal/EEAdViewHelper.h; sourceTree = "<group>"; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
+		8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.release.xcconfig"; sourceTree = "<group>"; };
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95DC76171EF8F28D00CAA8F3 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_google.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google.debug.xcconfig"; sourceTree = "<group>"; };
 		9CA7146F056735939572600B /* Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		A71F593CAD2BAC09CFB1FFF6 /* libPods-common-ee_x_mobile_iron_src.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_iron_src.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD10C28120492A8A00C92CFE /* EEFacebookAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebookAds.h; sourceTree = "<group>"; };
+		AD10C28220492A8A00C92CFE /* EEFacebookAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebookAds.m; sourceTree = "<group>"; };
+		AD10C28320492A8A00C92CFE /* EEFacebookNativeAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebookNativeAdView.h; sourceTree = "<group>"; };
+		AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebookNativeAdView.m; sourceTree = "<group>"; };
+		AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAdsBridge.cpp; sourceTree = "<group>"; };
+		AD10C28620492A8A00C92CFE /* FacebookAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAdsBridge.hpp; sourceTree = "<group>"; };
+		AD10C28720492A8A00C92CFE /* FacebookBannerAdSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookBannerAdSize.hpp; sourceTree = "<group>"; };
+		AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookNativeAdLayout.cpp; sourceTree = "<group>"; };
+		AD10C28920492A8A00C92CFE /* FacebookNativeAdLayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookNativeAdLayout.hpp; sourceTree = "<group>"; };
+		AD10C28B20492A8A00C92CFE /* EEFacebookBannerAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebookBannerAd.h; sourceTree = "<group>"; };
+		AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebookBannerAd.m; sourceTree = "<group>"; };
+		AD10C28D20492A8A00C92CFE /* EEFacebookInterstitialAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebookInterstitialAd.h; sourceTree = "<group>"; };
+		AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebookInterstitialAd.m; sourceTree = "<group>"; };
+		AD10C28F20492A8A00C92CFE /* EEFacebookNativeAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebookNativeAd.h; sourceTree = "<group>"; };
+		AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebookNativeAd.m; sourceTree = "<group>"; };
+		AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookBannerAd.cpp; sourceTree = "<group>"; };
+		AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookBannerAd.hpp; sourceTree = "<group>"; };
+		AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookInterstitialAd.cpp; sourceTree = "<group>"; };
+		AD10C29420492A8A00C92CFE /* FacebookInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookInterstitialAd.hpp; sourceTree = "<group>"; };
+		AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookNativeAd.cpp; sourceTree = "<group>"; };
+		AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookNativeAd.hpp; sourceTree = "<group>"; };
+		AD10C2CF20492A9D00C92CFE /* ee_x_mobile_facebook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_facebook.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD10C2D120492B2200C92CFE /* EEFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEFacebook.h; sourceTree = "<group>"; };
+		AD10C2D220492B2200C92CFE /* EEFacebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEFacebook.m; sourceTree = "<group>"; };
+		AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookBridge.cpp; sourceTree = "<group>"; };
+		AD10C2D420492B2200C92CFE /* FacebookBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookBridge.hpp; sourceTree = "<group>"; };
+		AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookFwd.hpp; sourceTree = "<group>"; };
+		AD10C2D620492B2300C92CFE /* Facebook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Facebook.hpp; sourceTree = "<group>"; };
+		AD10C3072049345600C92CFE /* ee_x_mobile_recorder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_recorder.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD10C309204934A400C92CFE /* EERecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EERecorder.h; sourceTree = "<group>"; };
+		AD10C30A204934A400C92CFE /* EERecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EERecorder.m; sourceTree = "<group>"; };
+		AD10C30B204934A400C92CFE /* RecorderBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RecorderBridge.cpp; sourceTree = "<group>"; };
+		AD10C30C204934A400C92CFE /* RecorderBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderBridge.hpp; sourceTree = "<group>"; };
+		AD10C30D204934A400C92CFE /* RecorderFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderFwd.hpp; sourceTree = "<group>"; };
+		AD10C30E204934A500C92CFE /* Recorder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recorder.hpp; sourceTree = "<group>"; };
 		AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayer.cpp; sourceTree = "<group>"; };
 		AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayer.hpp; sourceTree = "<group>"; };
 		AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEVideoPlayer.m; sourceTree = "<group>"; };
@@ -906,12 +1007,9 @@
 		DC87DCD918D2FC3512B2426E /* Pods-common-ee_x_mobile_vungle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_vungle.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_vungle/Pods-common-ee_x_mobile_vungle.release.xcconfig"; sourceTree = "<group>"; };
 		E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_admob.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB684E0A1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_facebook_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FacebookAdsBridge.cpp; path = facebook/FacebookAdsBridge.cpp; sourceTree = "<group>"; };
-		EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FacebookAdsBridge.hpp; path = facebook/FacebookAdsBridge.hpp; sourceTree = "<group>"; };
-		EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEFacebookAds.m; path = facebook/EEFacebookAds.m; sourceTree = "<group>"; };
-		EB684E111EC5645200ED9E4A /* EEFacebookAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEFacebookAds.h; path = facebook/EEFacebookAds.h; sourceTree = "<group>"; };
 		EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAdsFwd.hpp; sourceTree = "<group>"; };
 		EB684E151EC5651300ED9E4A /* FacebookAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAds.hpp; sourceTree = "<group>"; };
+		ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F29222E686BB24745B88361B /* Pods-common-ee_x_mobile_admob.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_admob.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_admob/Pods-common-ee_x_mobile_admob.debug.xcconfig"; sourceTree = "<group>"; };
 		F2FD00D51947FEC72B1ADBD2 /* Pods-common-ee_x_mobile_unity_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_unity_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads.debug.xcconfig"; sourceTree = "<group>"; };
 		F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_firebase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1050,18 +1148,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AD10C2BB20492A9D00C92CFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD10C2BC20492A9D00C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
+				47ABA6CB6E25D8B47F88B0AB /* libPods-common-ee_x_mobile_facebook.a in Frameworks */,
+				C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD10C2EE2049345600C92CFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB684DF61EC5639F00ED9E4A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				19A632B7E8A564A43BC5A1B9 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
+				BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				95DC76171EF8F28D00CAA8F3 /* CHANGELOG */,
@@ -1088,6 +1204,8 @@
 				6F2479F41F8E3569009E702C /* ee_x_mobile_admob.a */,
 				6F9EFA9E1F9EFA1A00C931D7 /* ee_x_mobile_google.a */,
 				6F59E7431FA70B3A007D3070 /* ee_x_desktop_ads.a */,
+				AD10C2CF20492A9D00C92CFE /* ee_x_mobile_facebook.a */,
+				AD10C3072049345600C92CFE /* ee_x_mobile_recorder.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -1111,6 +1229,7 @@
 				E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */,
 				C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */,
 				CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */,
+				ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1229,25 +1348,6 @@
 			name = ads;
 			sourceTree = "<group>";
 		};
-		6F426D3F1F878A5E009E202A /* internal */ = {
-			isa = PBXGroup;
-			children = (
-				6F426D3C1F878A5B009E202A /* EEFacebookBannerAd.h */,
-				6F426D3B1F878A5B009E202A /* EEFacebookBannerAd.m */,
-				6F426D491F879A77009E202A /* EEFacebookNativeAd.h */,
-				6F426D481F879A77009E202A /* EEFacebookNativeAd.m */,
-				6F2479D71F8DFE09009E702C /* EEFacebookInterstitialAd.m */,
-				6F2479D81F8DFE09009E702C /* EEFacebookInterstitialAd.h */,
-				6F04C5A61F8F6E1E007BC7A3 /* FacebookBannerAd.cpp */,
-				6F04C5A71F8F6E1E007BC7A3 /* FacebookBannerAd.hpp */,
-				6F04C5A81F8F6E1E007BC7A3 /* FacebookInterstitialAd.cpp */,
-				6F04C5A91F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp */,
-				6F04C5AA1F8F6E1E007BC7A3 /* FacebookNativeAd.cpp */,
-				6F04C5AB1F8F6E1E007BC7A3 /* FacebookNativeAd.hpp */,
-			);
-			name = internal;
-			sourceTree = "<group>";
-		};
 		6F43A2261EC19F3100C68152 /* ee */ = {
 			isa = PBXGroup;
 			children = (
@@ -1268,6 +1368,9 @@
 				6F43A2D61EC1A39900C68152 /* Notification.hpp */,
 				6FD934141EC1B070001E5D1D /* NotificationFwd.hpp */,
 				6F43A2961EC19F3100C68152 /* notification */,
+				AD10C308204934A400C92CFE /* recorder */,
+				AD10C30E204934A500C92CFE /* Recorder.hpp */,
+				AD10C30D204934A400C92CFE /* RecorderFwd.hpp */,
 				6F2479C81F8DF482009E702C /* Ads.hpp */,
 				6F9E731F1F97422A00EE467B /* AdsFwd.hpp */,
 				6F3688481F86135600AE2D93 /* ads */,
@@ -1277,9 +1380,12 @@
 				6F36881F1F85E38000AE2D93 /* AppLovin.hpp */,
 				6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */,
 				6F36881A1F85E38000AE2D93 /* applovin */,
+				AD10C2D020492B2200C92CFE /* facebook */,
+				AD10C2D620492B2300C92CFE /* Facebook.hpp */,
+				AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */,
+				AD10C27F20492A8A00C92CFE /* facebookads */,
 				EB684E151EC5651300ED9E4A /* FacebookAds.hpp */,
 				EB684E131EC564F700ED9E4A /* FacebookAdsFwd.hpp */,
-				EB684DEB1EC5639000ED9E4A /* facebook */,
 				6F978CB41F41868E00247CA8 /* IronSource.hpp */,
 				6F978CB51F41868E00247CA8 /* IronSourceFwd.hpp */,
 				6F978C9F1F41866500247CA8 /* ironsource */,
@@ -1598,25 +1704,68 @@
 				DC87DCD918D2FC3512B2426E /* Pods-common-ee_x_mobile_vungle.release.xcconfig */,
 				986083E44D992B732313923C /* Pods-common-ee_x_mobile_google.debug.xcconfig */,
 				0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */,
+				00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */,
+				8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		EB684DEB1EC5639000ED9E4A /* facebook */ = {
+		AD10C27F20492A8A00C92CFE /* facebookads */ = {
 			isa = PBXGroup;
 			children = (
-				EB684E0B1EC563CF00ED9E4A /* FacebookAdsBridge.cpp */,
-				EB684E0C1EC563CF00ED9E4A /* FacebookAdsBridge.hpp */,
-				6F426E2F1F8B828C009E202A /* FacebookNativeAdLayout.cpp */,
-				6F426E301F8B828C009E202A /* FacebookNativeAdLayout.hpp */,
-				6F98F3E11F9062D3003C2A04 /* FacebookBannerAdSize.hpp */,
-				EB684E111EC5645200ED9E4A /* EEFacebookAds.h */,
-				EB684E0F1EC5644500ED9E4A /* EEFacebookAds.m */,
-				6F978CB81F41882300247CA8 /* EEFacebookNativeAdView.h */,
-				6F978CB91F41882300247CA8 /* EEFacebookNativeAdView.m */,
-				6F426D3F1F878A5E009E202A /* internal */,
+				AD10C28120492A8A00C92CFE /* EEFacebookAds.h */,
+				AD10C28220492A8A00C92CFE /* EEFacebookAds.m */,
+				AD10C28320492A8A00C92CFE /* EEFacebookNativeAdView.h */,
+				AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */,
+				AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */,
+				AD10C28620492A8A00C92CFE /* FacebookAdsBridge.hpp */,
+				AD10C28720492A8A00C92CFE /* FacebookBannerAdSize.hpp */,
+				AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */,
+				AD10C28920492A8A00C92CFE /* FacebookNativeAdLayout.hpp */,
+				AD10C28A20492A8A00C92CFE /* internal */,
 			);
-			name = facebook;
+			path = facebookads;
+			sourceTree = "<group>";
+		};
+		AD10C28A20492A8A00C92CFE /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				AD10C28B20492A8A00C92CFE /* EEFacebookBannerAd.h */,
+				AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */,
+				AD10C28D20492A8A00C92CFE /* EEFacebookInterstitialAd.h */,
+				AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */,
+				AD10C28F20492A8A00C92CFE /* EEFacebookNativeAd.h */,
+				AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */,
+				AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */,
+				AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */,
+				AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */,
+				AD10C29420492A8A00C92CFE /* FacebookInterstitialAd.hpp */,
+				AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */,
+				AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
+		AD10C2D020492B2200C92CFE /* facebook */ = {
+			isa = PBXGroup;
+			children = (
+				AD10C2D120492B2200C92CFE /* EEFacebook.h */,
+				AD10C2D220492B2200C92CFE /* EEFacebook.m */,
+				AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */,
+				AD10C2D420492B2200C92CFE /* FacebookBridge.hpp */,
+			);
+			path = facebook;
+			sourceTree = "<group>";
+		};
+		AD10C308204934A400C92CFE /* recorder */ = {
+			isa = PBXGroup;
+			children = (
+				AD10C309204934A400C92CFE /* EERecorder.h */,
+				AD10C30A204934A400C92CFE /* EERecorder.m */,
+				AD10C30B204934A400C92CFE /* RecorderBridge.cpp */,
+				AD10C30C204934A400C92CFE /* RecorderBridge.hpp */,
+			);
+			path = recorder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1675,7 +1824,6 @@
 				6F24C38D1EC2C3EF00509B6C /* Firebase.hpp in Headers */,
 				6F24C36B1EC2BA0800509B6C /* FirebaseApp.hpp in Headers */,
 				6F24C36F1EC2BA0800509B6C /* FirebaseScheduler.hpp in Headers */,
-				6F978CBC1F41882D00247CA8 /* EEFacebookNativeAdView.h in Headers */,
 				6F24C4DE1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
 				6F1AA9591F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F24C36D1EC2BA0800509B6C /* FirebaseRemoteConfig.hpp in Headers */,
@@ -1687,19 +1835,19 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD10C2A720492A8A00C92CFE /* FacebookBannerAd.hpp in Headers */,
+				AD10C29720492A8A00C92CFE /* EEFacebookAds.h in Headers */,
+				AD10C2A020492A8A00C92CFE /* EEFacebookBannerAd.h in Headers */,
+				AD10C2A920492A8A00C92CFE /* FacebookInterstitialAd.hpp in Headers */,
+				AD10C29920492A8A00C92CFE /* EEFacebookNativeAdView.h in Headers */,
+				AD10C2A220492A8A00C92CFE /* EEFacebookInterstitialAd.h in Headers */,
+				AD10C29D20492A8A00C92CFE /* FacebookBannerAdSize.hpp in Headers */,
 				6F25800B1ECB165B00B910F9 /* FacebookAds.hpp in Headers */,
-				6F426E321F8B828C009E202A /* FacebookNativeAdLayout.hpp in Headers */,
-				6F2479DA1F8DFE09009E702C /* EEFacebookInterstitialAd.h in Headers */,
-				6F978CBA1F41882300247CA8 /* EEFacebookNativeAdView.h in Headers */,
-				6F25800E1ECB165B00B910F9 /* EEFacebookAds.h in Headers */,
-				6F426D4B1F879A77009E202A /* EEFacebookNativeAd.h in Headers */,
+				AD10C2A420492A8A00C92CFE /* EEFacebookNativeAd.h in Headers */,
+				AD10C29C20492A8A00C92CFE /* FacebookAdsBridge.hpp in Headers */,
+				AD10C2AB20492A8A00C92CFE /* FacebookNativeAd.hpp in Headers */,
+				AD10C29F20492A8A00C92CFE /* FacebookNativeAdLayout.hpp in Headers */,
 				6F25800C1ECB165B00B910F9 /* FacebookAdsFwd.hpp in Headers */,
-				6F04C5AD1F8F6E1E007BC7A3 /* FacebookBannerAd.hpp in Headers */,
-				6F98F3E21F9062D3003C2A04 /* FacebookBannerAdSize.hpp in Headers */,
-				6F04C5B11F8F6E1E007BC7A3 /* FacebookNativeAd.hpp in Headers */,
-				6F04C5AF1F8F6E1E007BC7A3 /* FacebookInterstitialAd.hpp in Headers */,
-				6F25800D1ECB165B00B910F9 /* FacebookAdsBridge.hpp in Headers */,
-				6F426D3E1F878A5B009E202A /* EEFacebookBannerAd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1913,6 +2061,58 @@
 				6FB7D61E1FA0436B00EFE441 /* GoogleAnalyticsTracker.hpp in Headers */,
 				6FB7D62C1FA045EA00EFE441 /* GoogleAnalyticsParameter.hpp in Headers */,
 				6FB7D63C1FA0487000EFE441 /* GoogleAnalyticsTimingBuilder.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD10C2BD20492A9D00C92CFE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD10C2DB20492B2300C92CFE /* FacebookFwd.hpp in Headers */,
+				AD10C2BE20492A9D00C92CFE /* FacebookBannerAd.hpp in Headers */,
+				AD10C2BF20492A9D00C92CFE /* EEFacebookAds.h in Headers */,
+				AD10C2C020492A9D00C92CFE /* EEFacebookBannerAd.h in Headers */,
+				AD10C2C120492A9D00C92CFE /* FacebookInterstitialAd.hpp in Headers */,
+				AD10C2C220492A9D00C92CFE /* EEFacebookNativeAdView.h in Headers */,
+				AD10C2C320492A9D00C92CFE /* EEFacebookInterstitialAd.h in Headers */,
+				AD10C2DC20492B2300C92CFE /* Facebook.hpp in Headers */,
+				AD10C2C420492A9D00C92CFE /* FacebookBannerAdSize.hpp in Headers */,
+				AD10C2DA20492B2300C92CFE /* FacebookBridge.hpp in Headers */,
+				AD10C2C520492A9D00C92CFE /* FacebookAds.hpp in Headers */,
+				AD10C2D720492B2300C92CFE /* EEFacebook.h in Headers */,
+				AD10C2C620492A9D00C92CFE /* EEFacebookNativeAd.h in Headers */,
+				AD10C2C720492A9D00C92CFE /* FacebookAdsBridge.hpp in Headers */,
+				AD10C2C820492A9D00C92CFE /* FacebookNativeAd.hpp in Headers */,
+				AD10C2C920492A9D00C92CFE /* FacebookNativeAdLayout.hpp in Headers */,
+				AD10C2CA20492A9D00C92CFE /* FacebookAdsFwd.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD10C2F12049345600C92CFE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD10C30F204934A500C92CFE /* EERecorder.h in Headers */,
+				AD10C2F22049345600C92CFE /* FacebookFwd.hpp in Headers */,
+				AD10C2F32049345600C92CFE /* FacebookBannerAd.hpp in Headers */,
+				AD10C2F42049345600C92CFE /* EEFacebookAds.h in Headers */,
+				AD10C2F52049345600C92CFE /* EEFacebookBannerAd.h in Headers */,
+				AD10C312204934A500C92CFE /* RecorderBridge.hpp in Headers */,
+				AD10C2F62049345600C92CFE /* FacebookInterstitialAd.hpp in Headers */,
+				AD10C2F72049345600C92CFE /* EEFacebookNativeAdView.h in Headers */,
+				AD10C313204934A500C92CFE /* RecorderFwd.hpp in Headers */,
+				AD10C2F82049345600C92CFE /* EEFacebookInterstitialAd.h in Headers */,
+				AD10C2F92049345600C92CFE /* Facebook.hpp in Headers */,
+				AD10C2FA2049345600C92CFE /* FacebookBannerAdSize.hpp in Headers */,
+				AD10C2FB2049345600C92CFE /* FacebookBridge.hpp in Headers */,
+				AD10C314204934A500C92CFE /* Recorder.hpp in Headers */,
+				AD10C2FC2049345600C92CFE /* FacebookAds.hpp in Headers */,
+				AD10C2FD2049345600C92CFE /* EEFacebook.h in Headers */,
+				AD10C2FE2049345600C92CFE /* EEFacebookNativeAd.h in Headers */,
+				AD10C2FF2049345600C92CFE /* FacebookAdsBridge.hpp in Headers */,
+				AD10C3002049345600C92CFE /* FacebookNativeAd.hpp in Headers */,
+				AD10C3012049345600C92CFE /* FacebookNativeAdLayout.hpp in Headers */,
+				AD10C3022049345600C92CFE /* FacebookAdsFwd.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2238,6 +2438,44 @@
 			productReference = 6FAFB5E31EC94E0F00450E67 /* ee_x_mobile_store.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		AD10C2AC20492A9D00C92CFE /* ee_x_mobile_facebook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD10C2CC20492A9D00C92CFE /* Build configuration list for PBXNativeTarget "ee_x_mobile_facebook" */;
+			buildPhases = (
+				AD10C2AF20492A9D00C92CFE /* [CP] Check Pods Manifest.lock */,
+				AD10C2B020492A9D00C92CFE /* Sources */,
+				AD10C2BB20492A9D00C92CFE /* Frameworks */,
+				AD10C2BD20492A9D00C92CFE /* Headers */,
+				AD10C2CB20492A9D00C92CFE /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD10C2AD20492A9D00C92CFE /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_facebook;
+			productName = "ee-library";
+			productReference = AD10C2CF20492A9D00C92CFE /* ee_x_mobile_facebook.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		AD10C2DD2049345600C92CFE /* ee_x_mobile_recorder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD10C3042049345600C92CFE /* Build configuration list for PBXNativeTarget "ee_x_mobile_recorder" */;
+			buildPhases = (
+				AD10C2E12049345600C92CFE /* Sources */,
+				AD10C2EE2049345600C92CFE /* Frameworks */,
+				AD10C2F12049345600C92CFE /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD10C2DE2049345600C92CFE /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_recorder;
+			productName = "ee-library";
+			productReference = AD10C3072049345600C92CFE /* ee_x_mobile_recorder.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB684E071EC5639F00ED9E4A /* Build configuration list for PBXNativeTarget "ee_x_mobile_facebook_ads" */;
@@ -2284,8 +2522,8 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
-			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
+			productRefGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -2301,7 +2539,9 @@
 				6F3688061F85E32C00AE2D93 /* ee_x_mobile_app_lovin */,
 				6F3688271F85F1B800AE2D93 /* ee_x_mobile_vungle */,
 				6F2479DC1F8E3569009E702C /* ee_x_mobile_admob */,
+				AD10C2AC20492A9D00C92CFE /* ee_x_mobile_facebook */,
 				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
+				AD10C2DD2049345600C92CFE /* ee_x_mobile_recorder */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
 				6F24C3561EC2B9A600509B6C /* ee_x_desktop_firebase */,
@@ -2611,6 +2851,42 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		AD10C2AF20492A9D00C92CFE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_facebook-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD10C2CB20492A9D00C92CFE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CF8ED5822B5BF4B1E3ABE118 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2890,20 +3166,60 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AD10C2B020492A9D00C92CFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD10C2B120492A9D00C92CFE /* EEFacebookNativeAdView.m in Sources */,
+				AD10C2B220492A9D00C92CFE /* EEFacebookAds.m in Sources */,
+				AD10C2B320492A9D00C92CFE /* FacebookBannerAd.cpp in Sources */,
+				AD10C2B420492A9D00C92CFE /* EEFacebookNativeAd.m in Sources */,
+				AD10C2B520492A9D00C92CFE /* FacebookAdsBridge.cpp in Sources */,
+				AD10C2B620492A9D00C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
+				AD10C2D920492B2300C92CFE /* FacebookBridge.cpp in Sources */,
+				AD10C2B720492A9D00C92CFE /* EEFacebookInterstitialAd.m in Sources */,
+				AD10C2D820492B2300C92CFE /* EEFacebook.m in Sources */,
+				AD10C2B820492A9D00C92CFE /* FacebookNativeAd.cpp in Sources */,
+				AD10C2B920492A9D00C92CFE /* EEFacebookBannerAd.m in Sources */,
+				AD10C2BA20492A9D00C92CFE /* FacebookInterstitialAd.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD10C2E12049345600C92CFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD10C2E22049345600C92CFE /* EEFacebookNativeAdView.m in Sources */,
+				AD10C2E32049345600C92CFE /* EEFacebookAds.m in Sources */,
+				AD10C2E42049345600C92CFE /* FacebookBannerAd.cpp in Sources */,
+				AD10C2E52049345600C92CFE /* EEFacebookNativeAd.m in Sources */,
+				AD10C2E62049345600C92CFE /* FacebookAdsBridge.cpp in Sources */,
+				AD10C2E72049345600C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
+				AD10C2E82049345600C92CFE /* FacebookBridge.cpp in Sources */,
+				AD10C310204934A500C92CFE /* EERecorder.m in Sources */,
+				AD10C2E92049345600C92CFE /* EEFacebookInterstitialAd.m in Sources */,
+				AD10C2EA2049345600C92CFE /* EEFacebook.m in Sources */,
+				AD10C311204934A500C92CFE /* RecorderBridge.cpp in Sources */,
+				AD10C2EB2049345600C92CFE /* FacebookNativeAd.cpp in Sources */,
+				AD10C2EC2049345600C92CFE /* EEFacebookBannerAd.m in Sources */,
+				AD10C2ED2049345600C92CFE /* FacebookInterstitialAd.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB684DF01EC5639F00ED9E4A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB684E0D1EC563CF00ED9E4A /* FacebookAdsBridge.cpp in Sources */,
-				6F426E311F8B828C009E202A /* FacebookNativeAdLayout.cpp in Sources */,
-				6F04C5AC1F8F6E1E007BC7A3 /* FacebookBannerAd.cpp in Sources */,
-				6F426D4A1F879A77009E202A /* EEFacebookNativeAd.m in Sources */,
-				6F978CBB1F41882300247CA8 /* EEFacebookNativeAdView.m in Sources */,
-				EB684E101EC5644500ED9E4A /* EEFacebookAds.m in Sources */,
-				6F426D3D1F878A5B009E202A /* EEFacebookBannerAd.m in Sources */,
-				6F04C5B01F8F6E1E007BC7A3 /* FacebookNativeAd.cpp in Sources */,
-				6F2479D91F8DFE09009E702C /* EEFacebookInterstitialAd.m in Sources */,
-				6F04C5AE1F8F6E1E007BC7A3 /* FacebookInterstitialAd.cpp in Sources */,
+				AD10C29A20492A8A00C92CFE /* EEFacebookNativeAdView.m in Sources */,
+				AD10C29820492A8A00C92CFE /* EEFacebookAds.m in Sources */,
+				AD10C2A620492A8A00C92CFE /* FacebookBannerAd.cpp in Sources */,
+				AD10C2A520492A8A00C92CFE /* EEFacebookNativeAd.m in Sources */,
+				AD10C29B20492A8A00C92CFE /* FacebookAdsBridge.cpp in Sources */,
+				AD10C29E20492A8A00C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
+				AD10C2A320492A8A00C92CFE /* EEFacebookInterstitialAd.m in Sources */,
+				AD10C2AA20492A8A00C92CFE /* FacebookNativeAd.cpp in Sources */,
+				AD10C2A120492A8A00C92CFE /* EEFacebookBannerAd.m in Sources */,
+				AD10C2A820492A8A00C92CFE /* FacebookInterstitialAd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2980,6 +3296,16 @@
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = 6FAFB5C71EC94E0F00450E67 /* PBXContainerItemProxy */;
 		};
+		AD10C2AD20492A9D00C92CFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = AD10C2AE20492A9D00C92CFE /* PBXContainerItemProxy */;
+		};
+		AD10C2DE2049345600C92CFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = AD10C2DF2049345600C92CFE /* PBXContainerItemProxy */;
+		};
 		EB684DED1EC5639F00ED9E4A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
@@ -3021,7 +3347,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3035,7 +3360,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3065,7 +3389,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3079,7 +3402,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3093,7 +3415,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3107,7 +3428,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3120,7 +3440,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3133,7 +3452,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3188,7 +3506,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -3201,7 +3518,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -3251,7 +3567,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3269,7 +3584,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3279,7 +3593,6 @@
 			baseConfigurationReference = F2FD00D51947FEC72B1ADBD2 /* Pods-common-ee_x_mobile_unity_ads.debug.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3289,7 +3602,6 @@
 			baseConfigurationReference = C06F6849CF119138B78BFB1A /* Pods-common-ee_x_mobile_unity_ads.release.xcconfig */;
 			buildSettings = {
 				ENABLE_BITCODE = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3303,7 +3615,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3317,7 +3628,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3335,7 +3645,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3353,7 +3662,6 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3386,6 +3694,40 @@
 					"$(inherited)",
 					"-ObjC",
 				);
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		AD10C2CD20492A9D00C92CFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AD10C2CE20492A9D00C92CFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		AD10C3052049345600C92CFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AD10C3062049345600C92CFE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -3675,6 +4017,24 @@
 			buildConfigurations = (
 				6FAFB5E11EC94E0F00450E67 /* Debug */,
 				6FAFB5E21EC94E0F00450E67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AD10C2CC20492A9D00C92CFE /* Build configuration list for PBXNativeTarget "ee_x_mobile_facebook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD10C2CD20492A9D00C92CFE /* Debug */,
+				AD10C2CE20492A9D00C92CFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AD10C3042049345600C92CFE /* Build configuration list for PBXNativeTarget "ee_x_mobile_recorder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD10C3052049345600C92CFE /* Debug */,
+				AD10C3062049345600C92CFE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -10,7 +10,7 @@
 #define EE_X_FACEBOOK_REWARDED_VIDEO_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace facebook {

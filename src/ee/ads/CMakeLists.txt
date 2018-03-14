@@ -1,59 +1,41 @@
-#/****************************************************************************
-# Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-#
-# http://www.cocos2d-x.org
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-# ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+project(ee_x_ads)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal
+  ../../
+  ../../../third_party/nlohmann/include
+  internal
 )
 
-set(GAME_SRC
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/AdViewInterface.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/InterstitialAdInterface.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiAdView.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiInterstitialAd.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiRewardedVideo.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/RewardedVideoInterface.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal/AdViewBridgeHelper.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal/AdViewHelper.cpp
+set(LIB_SRC
+  AdViewInterface.cpp
+  InterstitialAdInterface.cpp
+  MultiAdView.cpp
+  MultiInterstitialAd.cpp
+  MultiRewardedVideo.cpp
+  RewardedVideoInterface.cpp
+  internal/AdViewBridgeHelper.cpp
+  internal/AdViewHelper.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/Ads.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/AdsFwd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/AdViewInterface.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/InterstitialAdInterface.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiAdView.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiInterstitialAd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/MultiRewardedVideo.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/NullAdView.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/NullInterstitialAd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/NullRewardedVideo.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/RewardedVideoInterface.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal/AdViewBridgeHelper.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal/AdViewHelper.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/internal/MediationManager.hpp
+set(LIB_HEADERS
+  AdViewInterface.hpp
+  InterstitialAdInterface.hpp
+  MultiAdView.hpp
+  MultiInterstitialAd.hpp
+  MultiRewardedVideo.hpp
+  NullAdView.hpp
+  NullInterstitialAd.hpp
+  NullRewardedVideo.hpp
+  RewardedVideoInterface.hpp
+  internal/AdViewBridgeHelper.hpp
+  internal/AdViewHelper.hpp
+  internal/MediationManager.hpp
+)
+
+add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+  ../../
 )

@@ -7,8 +7,6 @@
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 namespace ee {
 namespace recorder {
 namespace {
@@ -23,7 +21,8 @@ constexpr auto k__checkRecordingPermission = "Recorder_checkRecordingPermission"
 
 using Self = Recorder;
 
-Self::Recorder() {
+Self::Recorder()
+    : bridge_(MessageBridge::getInstance()) {
     //
 }
 
@@ -32,28 +31,23 @@ Self::~Recorder() {
 }
 
 void Self::startScreenRecording() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__startScreenRecording);
+    bridge_.call(k__startScreenRecording);
 }
 
 void Self::stopScreenRecording() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__stopScreenRecording);
+    bridge_.call(k__stopScreenRecording);
 }
 
 void Self::cancelScreenRecording() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__cancelScreenRecording);
+    bridge_.call(k__cancelScreenRecording);
 }
 
 std::string Self::getScreenRecordingUrl() const {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getScreenRecordingUrl);
+    return bridge_.call(k__getScreenRecordingUrl);
 }
 
 bool Self::checkRecordingPermission() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__checkRecordingPermission);
+    auto response = bridge_.call(k__checkRecordingPermission);
     return core::toBool(response);
 }
 } // namespace recorder

@@ -24,20 +24,22 @@
 # ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+project(ee_x_vungle)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/vungle
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/vungle/internal
+  ../../
+  ../../../third_party/nlohmann/include
+  internal
 )
 
-set(GAME_SRC
-  ${CMAKE_CURRENT_LIST_DIR}/ee/vungle/internal/VungleRewardedVideo.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/vungle/VungleBridge.cpp
+set(LIB_SRC
+  internal/VungleRewardedVideo.cpp
+  VungleBridge.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-  ${CMAKE_CURRENT_LIST_DIR}/ee/vungle/internal/VungleRewardedVideo.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/vungle/VungleBridge.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/Vungle.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/VungleFwd.hpp
+set(LIB_HEADERS
+  internal/VungleRewardedVideo.hpp
+  VungleBridge.hpp
 )
+
+add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})

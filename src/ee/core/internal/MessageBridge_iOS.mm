@@ -11,12 +11,8 @@
 
 @implementation EEMessageBridge (Cpp)
 
-- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag {
-    return [self callCpp:tag message:@""];
-}
-
-- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
-                      message:(NSString* _Nonnull)message {
+- (NSString* _Nonnull)callCppInternal:(NSString* _Nonnull)tag
+                              message:(NSString* _Nonnull)message {
     auto&& bridge = ee::MessageBridge::getInstance();
     auto result = bridge.callCpp([tag UTF8String], [message UTF8String]);
     return (NSString * _Nonnull)[NSString stringWithUTF8String:result.c_str()];

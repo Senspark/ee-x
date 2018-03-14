@@ -16,6 +16,7 @@ namespace core {
 struct LogLevel;
 class Logger;
 class Metrics;
+class IMessageBridge;
 class MessageBridge;
 class SpinLock;
 class VideoPlayer;
@@ -29,6 +30,7 @@ class JniUtils;
 using core::LogLevel;
 using core::Logger;
 using core::Metrics;
+using core::IMessageBridge;
 using core::MessageBridge;
 using core::VideoPlayer;
 using core::VideoPlayerManager;

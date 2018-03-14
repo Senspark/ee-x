@@ -24,20 +24,25 @@
 # ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+project(ee_x_ironsource)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/ironsource
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/ironsource/internal
+  ../../../third_party/nlohmann/include
+  internal
 )
 
-set(GAME_SRC
-  ${CMAKE_CURRENT_LIST_DIR}/ee/ironsource/internal/IronSourceRewardedVideo.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/ironsource/IronSourceBridge.cpp
+set(LIB_SRC
+  internal/IronSourceRewardedVideo.cpp
+  IronSourceBridge.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-  ${CMAKE_CURRENT_LIST_DIR}/ee/ironsource/internal/IronSourceRewardedVideo.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/ironsource/IronSourceBridge.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/IronSource.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/IronSourceFwd.hpp
+set(LIB_HEADERS
+  internal/IronSourceRewardedVideo.hpp
+  IronSourceBridge.hpp
+)
+
+add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+
+target_link_libraries(${PROJECT_NAME}
+  ee_x_ads
 )

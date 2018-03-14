@@ -10,11 +10,11 @@
 #define EE_X_FACEBOOK_INTERSTITIAL_AD_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace facebook {
-class InterstitialAd : public InterstitialAdInterface {
+class InterstitialAd : public IInterstitialAd {
 public:
     virtual ~InterstitialAd() override;
 
@@ -25,7 +25,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(FacebookAds* plugin,
+    explicit InterstitialAd(IMessageBridge& bridge, FacebookAds* plugin,
                             const std::string& placementId);
 
     bool createInternalAd();
@@ -41,6 +41,7 @@ private:
     /// Whether the ad is in loading progress.
     bool loading_;
 
+    IMessageBridge& bridge_;
     FacebookAds* plugin_;
     std::string placementId_;
 };

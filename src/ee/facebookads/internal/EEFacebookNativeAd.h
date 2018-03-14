@@ -6,12 +6,15 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEFacebookNativeAd : NSObject <EEAdViewInterface>
+@class EEMessageBridge;
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                     layout:(NSString* _Nonnull)layoutName;
+@interface EEFacebookNativeAd : NSObject <EEIAdView>
+
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                       layout:(NSString* _Nonnull)layoutName;
 
 - (void)destroy;
 

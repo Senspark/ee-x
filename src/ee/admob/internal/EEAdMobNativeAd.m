@@ -15,6 +15,7 @@
 
 @interface EEAdMobNativeAd () <GADAdLoaderDelegate,
                                GADNativeAppInstallAdLoaderDelegate> {
+    EEMessageBridge* bridge_;
     GADAdLoader* adLoader_;
     NSString* adId_;
     NSArray<GADAdLoaderAdType>* adTypes_;
@@ -30,14 +31,16 @@
 
 @implementation EEAdMobNativeAd
 
-- (id _Nullable)initWithId:(NSString* _Nonnull)adId
-                     types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                    layout:(NSString* _Nonnull)layoutName
-               testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+- (id _Nullable)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                          adId:(NSString* _Nonnull)adId
+                         types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
+                        layout:(NSString* _Nonnull)layoutName
+                   testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     isAdLoaded_ = NO;
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
@@ -177,9 +180,7 @@
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(adLoader_ == adLoader, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adLoaderDidFinishLoading:(GADAdLoader*)adLoader {
@@ -283,8 +284,7 @@
     [[adView callToActionView] setUserInteractionEnabled:NO];
 
     isAdLoaded_ = YES;
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 /// Gets an image representing the number of stars. Returns nil if rating is

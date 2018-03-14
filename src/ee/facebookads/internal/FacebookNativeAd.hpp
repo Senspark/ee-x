@@ -10,16 +10,16 @@
 #define EE_X_FACEBOOK_NATIVE_AD_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace facebook {
-class NativeAd : public AdViewInterface {
+class NativeAd : public IAdView {
 private:
     using Self = NativeAd;
-    using Super = AdViewInterface;
+    using Super = IAdView;
 
 public:
     virtual ~NativeAd() override;
@@ -54,7 +54,8 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit NativeAd(FacebookAds* plugin, const std::string& adId);
+    explicit NativeAd(IMessageBridge& bridge, FacebookAds* plugin,
+                      const std::string& adId);
 
     bool createInternalAd();
     bool destroyInternalAd();
@@ -71,6 +72,7 @@ private:
     bool loading_;
 
     std::string adId_;
+    IMessageBridge& bridge_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

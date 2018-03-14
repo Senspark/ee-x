@@ -10,16 +10,16 @@
 #define EE_X_FACEBOOK_BANNER_AD_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace facebook {
-class BannerAd : public AdViewInterface {
+class BannerAd : public IAdView {
 private:
     using Self = BannerAd;
-    using Super = AdViewInterface;
+    using Super = IAdView;
 
 public:
     virtual ~BannerAd() override;
@@ -54,7 +54,8 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit BannerAd(FacebookAds* plugin, const std::string& adId);
+    explicit BannerAd(IMessageBridge& bridge, FacebookAds* plugin,
+                      const std::string& adId);
 
 private:
     void onLoaded();
@@ -62,6 +63,7 @@ private:
 
     bool loading_;
     std::string adId_;
+    IMessageBridge& bridge_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

@@ -6,15 +6,18 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEAdMobBannerAd : NSObject <EEAdViewInterface>
+@class EEMessageBridge;
+
+@interface EEAdMobBannerAd : NSObject <EEIAdView>
 
 + (GADAdSize)adSizeFor:(int)index;
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                       size:(GADAdSize)adSize
-                testDevices:(NSArray<NSString*>* _Nullable)testDevices;
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                         size:(GADAdSize)adSize
+                  testDevices:(NSArray<NSString*>* _Nullable)testDevices;
 
 - (void)destroy;
 

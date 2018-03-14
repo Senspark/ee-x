@@ -1,20 +1,20 @@
 //
-//  AdViewInterface.cpp
+//  IAdView.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
 //
 //
 
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-using Self = AdViewInterface;
+using Self = IAdView;
 
-Self::AdViewInterface() {}
+Self::IAdView() {}
 
-Self::~AdViewInterface() {}
+Self::~IAdView() {}
 
 void Self::setLoadCallback(const AdViewCallback& callback) {
     callback_ = callback;

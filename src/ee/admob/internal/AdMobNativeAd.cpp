@@ -9,7 +9,7 @@
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/AdMobBridge.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -28,23 +28,23 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(AdMob* plugin, const std::string& adId)
+Self::NativeAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
     : Super()
     , adId_(adId)
+    , bridge_(bridge)
     , plugin_(plugin)
     , helper_("AdMobNativeAd", adId)
-    , bridgeHelper_(helper_) {
+    , bridgeHelper_(bridge, helper_) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
@@ -57,9 +57,8 @@ Self::~NativeAd() {
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onLoaded(adId_));
-    bridge.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onLoaded(adId_));
+    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
 }
 
 bool Self::isLoaded() const {

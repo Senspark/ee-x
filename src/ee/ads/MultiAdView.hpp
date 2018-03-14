@@ -13,11 +13,11 @@
 #include <set>
 #include <vector>
 
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public AdViewInterface {
+class MultiAdView : public IAdView {
 private:
     using Self = MultiAdView;
 
@@ -26,7 +26,7 @@ public:
 
     virtual ~MultiAdView() override;
 
-    Self& addItem(const std::shared_ptr<AdViewInterface>& item);
+    Self& addItem(const std::shared_ptr<IAdView>& item);
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -56,7 +56,7 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    std::shared_ptr<AdViewInterface> activeItem_;
+    std::shared_ptr<IAdView> activeItem_;
 
     /// Custom anchor.
     std::pair<float, float> anchor_;
@@ -76,9 +76,9 @@ private:
     /// Whether the active item is new.
     bool new_;
 
-    std::vector<std::shared_ptr<AdViewInterface>> items_;
+    std::vector<std::shared_ptr<IAdView>> items_;
 
-    std::set<std::shared_ptr<AdViewInterface>> loadedItems_;
+    std::set<std::shared_ptr<IAdView>> loadedItems_;
 };
 } // namespace ads
 } // namespace ee

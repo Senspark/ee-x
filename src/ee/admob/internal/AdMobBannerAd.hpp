@@ -10,16 +10,16 @@
 #define EE_X_ADMOB_BANNER_AD_HPP
 
 #include "ee/AdMobFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace admob {
-class BannerAd : public AdViewInterface {
+class BannerAd : public IAdView {
 private:
     using Self = BannerAd;
-    using Super = AdViewInterface;
+    using Super = IAdView;
 
 public:
     virtual ~BannerAd() override;

@@ -34,7 +34,7 @@ public class InterstitialAdHelper {
         return _prefix + "_show_" + _adId;
     }
 
-    public void registerHandlers(final InterstitialAdInterface ad) {
+    public void registerHandlers(final IInterstitialAd ad) {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {

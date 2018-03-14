@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEAdMobNativeAd : NSObject <EEAdViewInterface>
+@interface EEAdMobNativeAd : NSObject <EEIAdView>
 
 - (id _Nullable)initWithId:(NSString* _Nonnull)adId
                      types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes

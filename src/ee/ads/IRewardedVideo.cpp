@@ -1,25 +1,25 @@
 //
-//  RewardedVideoInterface.cpp
+//  IRewardedVideo.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/5/17.
 //
 //
 
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace ads {
-using Self = RewardedVideoInterface;
+using Self = IRewardedVideo;
 
-Self::RewardedVideoInterface() {
+Self::IRewardedVideo() {
     callback_ = nullptr;
 }
 
-Self::~RewardedVideoInterface() {
+Self::~IRewardedVideo() {
     auto&& mediation = MediationManager::getInstance();
     mediation.destroyRewardedVideo(this);
 }

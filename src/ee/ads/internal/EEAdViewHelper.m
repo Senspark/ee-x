@@ -7,7 +7,7 @@
 //
 
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEMetrics.h"
@@ -79,7 +79,7 @@
     return [NSString stringWithFormat:@"%@_setVisible_%@", prefix_, adId_];
 }
 
-- (void)registerHandlers:(id<EEAdViewInterface> _Nonnull)adView {
+- (void)registerHandlers:(id<EEIAdView> _Nonnull)adView {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:[self k__isLoaded]

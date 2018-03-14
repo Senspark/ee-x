@@ -16,7 +16,7 @@ Self::MultiInterstitialAd() {}
 
 Self::~MultiInterstitialAd() {}
 
-Self& Self::addItem(const std::shared_ptr<InterstitialAdInterface>& item) {
+Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
     items_.push_back(item);
     return *this;
 }

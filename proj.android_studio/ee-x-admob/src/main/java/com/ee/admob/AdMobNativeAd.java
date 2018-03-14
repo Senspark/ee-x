@@ -17,7 +17,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.ee.ads.AdViewHelper;
-import com.ee.ads.AdViewInterface;
+import com.ee.ads.IAdView;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
@@ -37,7 +37,7 @@ import java.util.Map;
  * Created by Zinge on 10/16/17.
  */
 
-class AdMobNativeAd extends AdListener implements AdViewInterface {
+class AdMobNativeAd extends AdListener implements IAdView {
     private static final Logger _logger = new Logger(AdMobNativeAd.class.getName());
 
     private static final String k__body           = "body";

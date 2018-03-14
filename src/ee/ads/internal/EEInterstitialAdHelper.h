@@ -9,14 +9,14 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSString.h>
 
-@protocol EEInterstitialAdInterface;
+@protocol EEIInterstitialAd;
 
 @interface EEInterstitialAdHelper : NSObject
 
 - (id _Nonnull)initWithPrefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId;
 
-- (void)registerHandlers:(id<EEInterstitialAdInterface> _Nonnull)ad;
+- (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad;
 - (void)deregisterHandlers;
 
 @end

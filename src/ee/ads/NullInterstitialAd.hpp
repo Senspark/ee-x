@@ -9,11 +9,11 @@
 #ifndef EE_X_NULL_INTERSTITIAL_AD_HPP
 #define EE_X_NULL_INTERSTITIAL_AD_HPP
 
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {
-class NullInterstitialAd : public InterstitialAdInterface {
+class NullInterstitialAd : public IInterstitialAd {
 public:
     virtual bool isLoaded() const override;
 

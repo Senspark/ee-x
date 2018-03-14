@@ -68,7 +68,7 @@ void Self::clearTestDevices() {
     bridge.call(k__clearTestDevices);
 }
 
-std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
+std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                                       BannerAdSize adSize) {
     nlohmann::json json;
     json[k__ad_id] = adId;
@@ -79,7 +79,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
+    return std::shared_ptr<IAdView>(new BannerAd(this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
@@ -88,7 +88,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<AdViewInterface>
+std::shared_ptr<IAdView>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
     nlohmann::json json;
@@ -101,7 +101,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
+    return std::shared_ptr<IAdView>(new NativeAd(this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
@@ -110,14 +110,14 @@ bool Self::destroyNativeAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<InterstitialAdInterface>
+std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& placementId) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createInterstitialAd, placementId);
     if (not core::toBool(response)) {
         return std::make_shared<NullInterstitialAd>();
     }
-    return std::shared_ptr<InterstitialAdInterface>(
+    return std::shared_ptr<IInterstitialAd>(
         new InterstitialAd(this, placementId));
 }
 

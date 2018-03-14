@@ -94,7 +94,7 @@ void Self::setDebugModeEnabled(bool enabled) {
     bridge.call(k__setDebugModeEnabled, core::toString(enabled));
 }
 
-std::shared_ptr<RewardedVideoInterface>
+std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
@@ -103,7 +103,7 @@ Self::createRewardedVideo(const std::string& placementId) {
     }
     auto result = new RewardedVideo(this, placementId);
     rewardedVideos_[placementId] = result;
-    return std::shared_ptr<RewardedVideoInterface>(result);
+    return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& placementId) {
@@ -116,7 +116,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
     return true;
 }
 
-std::shared_ptr<InterstitialAdInterface>
+std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
@@ -125,7 +125,7 @@ Self::createInterstitialAd(const std::string& placementId) {
     }
     auto result = new InterstitialAd(this, placementId);
     interstitialAds_[placementId] = result;
-    return std::shared_ptr<InterstitialAdInterface>(result);
+    return std::shared_ptr<IInterstitialAd>(result);
 }
 
 bool Self::destroyInterstitialAd(const std::string& placementId) {

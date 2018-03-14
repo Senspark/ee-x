@@ -74,7 +74,7 @@ void Self::initialize(const std::string& gameId) {
     bridge.call(k__initialize, gameId);
 }
 
-std::shared_ptr<RewardedVideoInterface>
+std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
@@ -83,7 +83,7 @@ Self::createRewardedVideo(const std::string& placementId) {
     }
     auto result = new RewardedVideo(this, placementId);
     rewardedVideos_[placementId] = result;
-    return std::shared_ptr<RewardedVideoInterface>(result);
+    return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& placementId) {

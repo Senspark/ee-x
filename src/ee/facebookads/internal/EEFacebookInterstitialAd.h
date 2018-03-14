@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEInterstitialAdInterface.h"
+#import "ee/ads/internal/EEIInterstitialAd.h"
 
-@interface EEFacebookInterstitialAd : NSObject <EEInterstitialAdInterface>
+@interface EEFacebookInterstitialAd : NSObject <EEIInterstitialAd>
 
 - (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId;
 

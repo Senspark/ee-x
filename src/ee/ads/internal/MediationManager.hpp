@@ -22,14 +22,14 @@ private:
 public:
     static Self& getInstance();
 
-    bool startInterstitialAd(InterstitialAdInterface* ad);
-    bool finishInterstitialAd(InterstitialAdInterface* ad);
-    bool destroyInterstitialAd(InterstitialAdInterface* ad);
+    bool startInterstitialAd(IInterstitialAd* ad);
+    bool finishInterstitialAd(IInterstitialAd* ad);
+    bool destroyInterstitialAd(IInterstitialAd* ad);
     bool setInterstitialAdDone();
 
-    bool startRewardedVideo(RewardedVideoInterface* ad);
-    bool finishRewardedVideo(RewardedVideoInterface* ad);
-    bool destroyRewardedVideo(RewardedVideoInterface* ad);
+    bool startRewardedVideo(IRewardedVideo* ad);
+    bool finishRewardedVideo(IRewardedVideo* ad);
+    bool destroyRewardedVideo(IRewardedVideo* ad);
     bool setRewardedVideoResult(bool result);
 
 protected:
@@ -39,16 +39,16 @@ protected:
     MediationManager(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    bool registerInterstitialAd(InterstitialAdInterface* ad);
-    bool deregisterInterstitialAd(InterstitialAdInterface* ad, bool destroyed);
+    bool registerInterstitialAd(IInterstitialAd* ad);
+    bool deregisterInterstitialAd(IInterstitialAd* ad, bool destroyed);
 
-    bool registerRewardedVideo(RewardedVideoInterface* ad);
-    bool deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed);
+    bool registerRewardedVideo(IRewardedVideo* ad);
+    bool deregisterRewardedVideo(IRewardedVideo* ad, bool destroyed);
 
 private:
-    InterstitialAdInterface* interstitialAd_;
+    IInterstitialAd* interstitialAd_;
     bool interstitialAdDestroyed_;
-    RewardedVideoInterface* rewardedVideo_;
+    IRewardedVideo* rewardedVideo_;
     bool rewardedVideoDestroyed_;
     core::SpinLock locker_;
 };

@@ -15,9 +15,9 @@
 
 #include "ee/AdMobFwd.hpp"
 #include "ee/admob/AdMobBannerAdSize.hpp"
-#include "ee/ads/AdViewInterface.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IAdView.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace admob {
@@ -43,17 +43,17 @@ public:
     /// @param[in] adSize The banner ad size.
     /// @return A reference to the banner ad if it created successfully, null
     /// otherwise.
-    std::shared_ptr<AdViewInterface> createBannerAd(const std::string& adId,
-                                                    BannerAdSize adSize);
+    std::shared_ptr<IAdView> createBannerAd(const std::string& adId,
+                                            BannerAdSize adSize);
 
-    std::shared_ptr<AdViewInterface>
-    createNativeAd(const std::string& adId, const std::string& layoutName,
-                   const NativeAdLayout& identifiers);
+    std::shared_ptr<IAdView> createNativeAd(const std::string& adId,
+                                            const std::string& layoutName,
+                                            const NativeAdLayout& identifiers);
 
-    std::shared_ptr<InterstitialAdInterface>
+    std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId);
 
-    std::shared_ptr<RewardedVideoInterface>
+    std::shared_ptr<IRewardedVideo>
     createRewardedVideo(const std::string& adId);
 
 private:

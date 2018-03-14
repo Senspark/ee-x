@@ -10,7 +10,7 @@
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
 #include "ee/AppLovinFwd.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace applovin {
@@ -30,7 +30,7 @@ public:
     /// Disabled by default.
     void setMuted(bool enabled);
 
-    std::shared_ptr<RewardedVideoInterface> createRewardedVideo();
+    std::shared_ptr<IRewardedVideo> createRewardedVideo();
 
 private:
     friend RewardedVideo;

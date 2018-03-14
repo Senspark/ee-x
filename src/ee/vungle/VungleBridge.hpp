@@ -2,7 +2,7 @@
 #define EE_X_VUNGLE_BRIDGE_HPP
 
 #include "ee/VungleFwd.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 #include <map>
 
@@ -17,7 +17,7 @@ public:
     void initialize(const std::string& gameId, const std::string& placementId);
 
     /// Creates a rewarded video.
-    std::shared_ptr<RewardedVideoInterface> createRewardedVideo(const std::string& placementId);
+    std::shared_ptr<IRewardedVideo> createRewardedVideo(const std::string& placementId);
 
 private:
     friend RewardedVideo;

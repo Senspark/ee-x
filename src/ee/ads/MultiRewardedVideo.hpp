@@ -12,20 +12,20 @@
 #include <memory>
 #include <vector>
 
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ads {
-class MultiRewardedVideo : public RewardedVideoInterface {
+class MultiRewardedVideo : public IRewardedVideo {
 private:
     using Self = MultiRewardedVideo;
-    using Super = RewardedVideoInterface;
+    using Super = IRewardedVideo;
 
 public:
     MultiRewardedVideo();
     virtual ~MultiRewardedVideo() override;
 
-    Self& addItem(const std::shared_ptr<RewardedVideoInterface>& item);
+    Self& addItem(const std::shared_ptr<IRewardedVideo>& item);
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -40,7 +40,7 @@ private:
     void assignCallbacks();
     void clearCallbacks();
 
-    std::vector<std::shared_ptr<RewardedVideoInterface>> items_;
+    std::vector<std::shared_ptr<IRewardedVideo>> items_;
 };
 } // namespace ads
 

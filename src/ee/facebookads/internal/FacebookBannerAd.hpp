@@ -10,16 +10,16 @@
 #define EE_X_FACEBOOK_BANNER_AD_HPP
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace facebook {
-class BannerAd : public AdViewInterface {
+class BannerAd : public IAdView {
 private:
     using Self = BannerAd;
-    using Super = AdViewInterface;
+    using Super = IAdView;
 
 public:
     virtual ~BannerAd() override;

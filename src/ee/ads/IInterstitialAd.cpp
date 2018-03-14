@@ -1,23 +1,23 @@
 //
-//  InterstitialAdInterface.cpp
+//  IInterstitialAd.cpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
 //
 //
 
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
 namespace ads {
-using Self = InterstitialAdInterface;
+using Self = IInterstitialAd;
 
-Self::InterstitialAdInterface() {
+Self::IInterstitialAd() {
     callback_ = nullptr;
 }
 
-Self::~InterstitialAdInterface() {
+Self::~IInterstitialAd() {
     auto&& mediation = MediationManager::getInstance();
     mediation.destroyInterstitialAd(this);
 }

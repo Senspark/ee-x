@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEAdMobBannerAd : NSObject <EEAdViewInterface>
+@interface EEAdMobBannerAd : NSObject <EEIAdView>
 
 + (GADAdSize)adSizeFor:(int)index;
 

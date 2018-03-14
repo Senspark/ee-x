@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEFacebookNativeAd : NSObject <EEAdViewInterface>
+@interface EEFacebookNativeAd : NSObject <EEIAdView>
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
                      layout:(NSString* _Nonnull)layoutName;

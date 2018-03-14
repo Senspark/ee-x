@@ -10,16 +10,16 @@
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
 #include "ee/AdMobFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace admob {
-class NativeAd : public AdViewInterface {
+class NativeAd : public IAdView {
 private:
     using Self = NativeAd;
-    using Super = AdViewInterface;
+    using Super = IAdView;
 
 public:
     virtual ~NativeAd() override;

@@ -19,14 +19,14 @@
 #define EE_AD_VIEW NSView
 #endif // TARGET_OS_IOS
 
-@protocol EEAdViewInterface;
+@protocol EEIAdView;
 
 @interface EEAdViewHelper : NSObject
 
 - (id _Nonnull)initWithPrefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId;
 
-- (void)registerHandlers:(id<EEAdViewInterface> _Nonnull)adView;
+- (void)registerHandlers:(id<EEIAdView> _Nonnull)adView;
 - (void)deregisterHandlers;
 
 + (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view;

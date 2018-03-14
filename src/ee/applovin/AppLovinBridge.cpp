@@ -195,14 +195,14 @@ bool Self::showInterstitialAd() {
     return true;
 }
 
-std::shared_ptr<RewardedVideoInterface> Self::createRewardedVideo() {
+std::shared_ptr<IRewardedVideo> Self::createRewardedVideo() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     if (rewardedVideo_ != nullptr) {
         return std::make_shared<NullRewardedVideo>();
     }
     auto result = new RewardedVideo(this);
     rewardedVideo_ = result;
-    return std::shared_ptr<RewardedVideoInterface>(result);
+    return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo() {

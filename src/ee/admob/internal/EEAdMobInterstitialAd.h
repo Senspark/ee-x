@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEInterstitialAdInterface.h"
+#import "ee/ads/internal/EEIInterstitialAd.h"
 
-@interface EEAdMobInterstitialAd : NSObject <EEInterstitialAdInterface>
+@interface EEAdMobInterstitialAd : NSObject <EEIInterstitialAd>
 
 - (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
                 testDevices:(NSArray<NSString*>* _Nullable)testDevices;

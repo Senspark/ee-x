@@ -10,11 +10,11 @@
 #define EE_X_UNITY_INTERSTITIAL_AD_HPP
 
 #include "ee/UnityAdsFwd.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace unityads {
-class InterstitialAd : public InterstitialAdInterface {
+class InterstitialAd : public IInterstitialAd {
 public:
     virtual ~InterstitialAd() override;
 

@@ -14,8 +14,8 @@
 #include <string>
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/AdViewInterface.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IAdView.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 #include "ee/facebookads/FacebookBannerAdSize.hpp"
 
 namespace ee {
@@ -39,20 +39,20 @@ public:
     /// Creates a banner ad.
     /// @param[in] adId The banner ad ID.
     /// @param[in] adSize The banner ad predefined size.
-    std::shared_ptr<AdViewInterface> createBannerAd(const std::string& adId,
+    std::shared_ptr<IAdView> createBannerAd(const std::string& adId,
                                                     BannerAdSize adSize);
 
     /// Creates a native ad.
     /// @param[in] adId The native ad ID.
     /// @param[in] layoutName The layout name (.xml for Android, .xib for iOS).
     /// @param[in] identifiers Android only.
-    std::shared_ptr<AdViewInterface>
+    std::shared_ptr<IAdView>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers);
 
     /// Creates an interstitial ad.
     /// @param[in] placementId The ad placement ID>
-    std::shared_ptr<InterstitialAdInterface>
+    std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
 
 private:

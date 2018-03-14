@@ -1,5 +1,5 @@
 //
-//  InterstitialAdInterface.h
+//  IInterstitialAd.h
 //  ee_x
 //
 //  Created by Zinge on 10/12/17.
@@ -7,7 +7,7 @@
 //
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
-#import "ee/ads/internal/EEInterstitialAdInterface.h"
+#import "ee/ads/internal/EEIInterstitialAd.h"
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
@@ -51,7 +51,7 @@
     return [NSString stringWithFormat:@"%@_show_%@", prefix_, adId_];
 }
 
-- (void)registerHandlers:(id<EEInterstitialAdInterface> _Nonnull)ad {
+- (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
     [bridge registerHandler:[self k__isLoaded]

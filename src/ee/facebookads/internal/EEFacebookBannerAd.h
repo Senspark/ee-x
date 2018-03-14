@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewInterface.h"
+#import "ee/ads/internal/EEIAdView.h"
 
-@interface EEFacebookBannerAd : NSObject <EEAdViewInterface>
+@interface EEFacebookBannerAd : NSObject <EEIAdView>
 
 + (FBAdSize)adSizeFor:(int)index;
 

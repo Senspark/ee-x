@@ -126,7 +126,7 @@ void Self::addTestDevice(const std::string& hash) {
     bridge.call(k__addTestDevice, hash);
 }
 
-std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
+std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                                       BannerAdSize adSize) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
@@ -139,7 +139,7 @@ std::shared_ptr<AdViewInterface> Self::createBannerAd(const std::string& adId,
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<AdViewInterface>(new BannerAd(this, adId));
+    return std::shared_ptr<IAdView>(new BannerAd(this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
@@ -150,7 +150,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<AdViewInterface>
+std::shared_ptr<IAdView>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
@@ -165,7 +165,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<AdViewInterface>(new NativeAd(this, adId));
+    return std::shared_ptr<IAdView>(new NativeAd(this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
@@ -176,7 +176,7 @@ bool Self::destroyNativeAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<InterstitialAdInterface>
+std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
@@ -185,7 +185,7 @@ Self::createInterstitialAd(const std::string& adId) {
     if (not core::toBool(response)) {
         return std::make_shared<NullInterstitialAd>();
     }
-    return std::shared_ptr<InterstitialAdInterface>(
+    return std::shared_ptr<IInterstitialAd>(
         new InterstitialAd(this, adId));
 }
 
@@ -197,7 +197,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<RewardedVideoInterface>
+std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
@@ -206,7 +206,7 @@ Self::createRewardedVideo(const std::string& adId) {
     }
     auto result = new RewardedVideo(this, adId);
     rewardedVideos_[adId] = result;
-    return std::shared_ptr<RewardedVideoInterface>(result);
+    return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& adId) {

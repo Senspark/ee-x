@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
 
@@ -36,6 +37,7 @@ private:
     bool errored_;
     bool rewarded_;
 
+    IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace ironsource

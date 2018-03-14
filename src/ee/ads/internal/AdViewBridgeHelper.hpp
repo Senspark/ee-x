@@ -9,6 +9,7 @@
 #ifndef EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 #define EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 
+#include "ee/CoreFwd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
@@ -18,7 +19,8 @@ class AdViewHelper;
 
 class AdViewBridgeHelper : public IAdView {
 public:
-    explicit AdViewBridgeHelper(const AdViewHelper& helper);
+    explicit AdViewBridgeHelper(IMessageBridge& bridge,
+                                const AdViewHelper& helper);
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -54,6 +56,7 @@ private:
 
     float anchorX_;
     float anchorY_;
+    IMessageBridge& bridge_;
     AdViewHelper helper_;
 };
 } // namespace ads

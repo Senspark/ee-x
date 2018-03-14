@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
@@ -63,6 +64,8 @@ private:
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& placementId);
+    
+    IMessageBridge& bridge_;
 };
 } // namespace facebook
 } // namespace ee

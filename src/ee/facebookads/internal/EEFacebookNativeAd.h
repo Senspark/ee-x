@@ -8,10 +8,13 @@
 
 #import "ee/ads/internal/EEIAdView.h"
 
+@class EEMessageBridge;
+
 @interface EEFacebookNativeAd : NSObject <EEIAdView>
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                     layout:(NSString* _Nonnull)layoutName;
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                       layout:(NSString* _Nonnull)layoutName;
 
 - (void)destroy;
 

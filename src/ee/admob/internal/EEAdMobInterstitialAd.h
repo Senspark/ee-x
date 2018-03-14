@@ -8,10 +8,13 @@
 
 #import "ee/ads/internal/EEIInterstitialAd.h"
 
+@class EEMessageBridge;
+
 @interface EEAdMobInterstitialAd : NSObject <EEIInterstitialAd>
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                testDevices:(NSArray<NSString*>* _Nullable)testDevices;
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                  testDevices:(NSArray<NSString*>* _Nullable)testDevices;
 
 - (void)destroy;
 

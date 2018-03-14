@@ -15,6 +15,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobBannerAd () <GADBannerViewDelegate> {
+    EEMessageBridge* bridge_;
     BOOL isLoaded_;
     GADBannerView* bannerView_;
     GADAdSize adSize_;
@@ -43,13 +44,15 @@
     return kGADAdSizeInvalid;
 }
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                       size:(GADAdSize)adSize
-                testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                         size:(GADAdSize)adSize
+                  testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     isLoaded_ = NO;
     bannerView_ = nil;
     adId_ = [adId copy];
@@ -164,18 +167,14 @@
 - (void)adViewDidReceiveAd:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(bannerView_ == bannerView, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)adView:(GADBannerView*)bannerView
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(bannerView_ == bannerView, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView*)bannerView {

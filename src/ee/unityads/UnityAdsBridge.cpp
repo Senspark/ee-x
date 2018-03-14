@@ -43,25 +43,25 @@ constexpr auto k__testModeEnabled = "testModeEnabled";
 // clang-format on
 } // namespace
 
-Self::UnityAds() {
+Self::UnityAds()
+    : bridge_(MessageBridge::getInstance()) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
     displayed_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onError(message);
             return "";
         },
         k__onError);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onSkipped(message);
             return "";
         },
         k__onSkipped);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFinished(message);
             return "";
@@ -71,10 +71,9 @@ Self::UnityAds() {
 
 Self::~UnityAds() {
     Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onError);
-    bridge.deregisterHandler(k__onSkipped);
-    bridge.deregisterHandler(k__onFinished);
+    bridge_.deregisterHandler(k__onError);
+    bridge_.deregisterHandler(k__onSkipped);
+    bridge_.deregisterHandler(k__onFinished);
 }
 
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
@@ -84,14 +83,11 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     nlohmann::json json;
     json[k__gameId] = gameId;
     json[k__testModeEnabled] = core::toString(testModeEnabled);
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__initialize, json.dump());
+    bridge_.call(k__initialize, json.dump());
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setDebugModeEnabled, core::toString(enabled));
+    bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<IRewardedVideo>
@@ -139,8 +135,7 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 }
 
 bool Self::isRewardedVideoReady(const std::string& placementId) const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isRewardedVideoReady, placementId);
+    auto response = bridge_.call(k__isRewardedVideoReady, placementId);
     return core::toBool(response);
 }
 
@@ -152,8 +147,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
                                     placementId.c_str());
     errored_ = false;
     displayed_ = false;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showRewardedVideo, placementId);
+    bridge_.call(k__showRewardedVideo, placementId);
     if (not errored_) {
         displayed_ = true;
         return true;

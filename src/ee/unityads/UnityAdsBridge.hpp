@@ -11,6 +11,7 @@
 
 #include <map>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/UnityAdsFwd.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
@@ -56,6 +57,7 @@ private:
     bool errored_;
     bool displayed_;
 
+    IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
 };

@@ -10,10 +10,12 @@
 #import <Foundation/NSString.h>
 
 @protocol EEIInterstitialAd;
+@class EEMessageBridge;
 
 @interface EEInterstitialAdHelper : NSObject
 
-- (id _Nonnull)initWithPrefix:(NSString* _Nonnull)prefix
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                       prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId;
 
 - (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad;

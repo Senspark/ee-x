@@ -26,31 +26,31 @@ constexpr auto k__onClosed          = "IronSource_onClosed";
 // clang-format on
 } // namespace
 
-Self::IronSource() {
+Self::IronSource()
+    : bridge_(MessageBridge::getInstance()) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
     rewarded_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onRewarded(message);
             return "";
         },
         k__onRewarded);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailed();
             return "";
         },
         k__onFailed);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onOpened();
             return "";
         },
         k__onOpened);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onClosed();
             return "";
@@ -60,18 +60,16 @@ Self::IronSource() {
 
 Self::~IronSource() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onRewarded);
-    bridge.deregisterHandler(k__onFailed);
-    bridge.deregisterHandler(k__onOpened);
-    bridge.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(k__onRewarded);
+    bridge_.deregisterHandler(k__onFailed);
+    bridge_.deregisterHandler(k__onOpened);
+    bridge_.deregisterHandler(k__onClosed);
 }
 
 void Self::initialize(const std::string& gameId) {
     Logger::getSystemLogger().debug("%s: gameId = %s", __PRETTY_FUNCTION__,
                                     gameId.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__initialize, gameId);
+    bridge_.call(k__initialize, gameId);
 }
 
 std::shared_ptr<IRewardedVideo>
@@ -97,8 +95,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 }
 
 bool Self::hasRewardedVideo() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__hasRewardedVideo);
+    auto response = bridge_.call(k__hasRewardedVideo);
     return core::toBool(response);
 }
 
@@ -108,8 +105,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     }
     errored_ = false;
     rewarded_ = false;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showRewardedVideo, placementId);
+    bridge_.call(k__showRewardedVideo, placementId);
     return not errored_;
 }
 

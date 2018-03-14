@@ -57,8 +57,9 @@ std::string k__setFullScreenEnabled(const std::string& tag) {
 }
 } // namespace
 
-Self::VideoPlayer(const std::string& tag)
-    : tag_(tag) {
+Self::VideoPlayer(IMessageBridge& bridge, const std::string& tag)
+    : bridge_(bridge)
+    , tag_(tag) {
     //
 }
 
@@ -67,46 +68,37 @@ Self::~VideoPlayer() {
 }
 
 void Self::loadFile(const std::string& path) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__loadFile(tag_), path);
+    bridge_.call(k__loadFile(tag_), path);
 }
 
 void Self::setPosition(int x, int y) {
     nlohmann::json json;
     json["x"] = x;
     json["y"] = y;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setPosition(tag_), json.dump());
+    bridge_.call(k__setPosition(tag_), json.dump());
 }
 
 void Self::setSize(int width, int height) {
     nlohmann::json json;
     json["width"] = width;
     json["height"] = height;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setSize(tag_), json.dump());
+    bridge_.call(k__setSize(tag_), json.dump());
 }
 
 void Self::play() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__play(tag_));
+    bridge_.call(k__play(tag_));
 }
 
 void Self::pause() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__pause(tag_));
+    bridge_.call(k__pause(tag_));
 }
 
 void Self::resume() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__resume(tag_));
+    bridge_.call(k__resume(tag_));
 }
 
 void Self::stop() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__stop(tag_));
+    bridge_.call(k__stop(tag_));
 }
 
 bool Self::isVisible() const {
@@ -114,8 +106,7 @@ bool Self::isVisible() const {
 }
 
 void Self::setVisible(bool visible) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setVisible(tag_), toString(visible));
+    bridge_.call(k__setVisible(tag_), toString(visible));
 }
 
 bool Self::isKeepAspectRatioEnabled() const {
@@ -123,8 +114,7 @@ bool Self::isKeepAspectRatioEnabled() const {
 }
 
 void Self::setKeepAspectRatioEnabled(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setKeepAspectRatioEnabled(tag_), toString(enabled));
+    bridge_.call(k__setKeepAspectRatioEnabled(tag_), toString(enabled));
 }
 
 bool Self::isFullScreenEnabled() const {
@@ -132,8 +122,7 @@ bool Self::isFullScreenEnabled() const {
 }
 
 void Self::setFullScreenEnabled(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setFullScreenEnabled(tag_), toString(enabled));
+    bridge_.call(k__setFullScreenEnabled(tag_), toString(enabled));
 }
 } // namespace core
 } // namespace ee

@@ -10,6 +10,7 @@
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
 #include "ee/AdMobFwd.hpp"
+#include "ee/CoreFwd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewBridgeHelper.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
@@ -54,7 +55,8 @@ public:
 protected:
     friend AdMob;
 
-    explicit NativeAd(AdMob* plugin, const std::string& adId);
+    explicit NativeAd(IMessageBridge& bridge, AdMob* plugin,
+                      const std::string& adId);
 
 private:
     void onLoaded();
@@ -62,6 +64,7 @@ private:
 
     bool loading_;
     std::string adId_;
+    IMessageBridge& bridge_;
     AdMob* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

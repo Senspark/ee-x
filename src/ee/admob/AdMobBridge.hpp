@@ -14,6 +14,7 @@
 #include <unordered_map>
 
 #include "ee/AdMobFwd.hpp"
+#include "ee/CoreFwd.hpp"
 #include "ee/admob/AdMobBannerAdSize.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
@@ -81,6 +82,7 @@ private:
     bool rewarded_;
     std::string currentId_;
 
+    IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace admob

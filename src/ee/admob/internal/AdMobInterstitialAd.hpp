@@ -25,7 +25,8 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(AdMob* plugin, const std::string& adId);
+    explicit InterstitialAd(IMessageBridge& bridge, AdMob* plugin,
+                            const std::string& adId);
 
     bool createInternalAd();
     bool destroyInternalAd();
@@ -43,6 +44,7 @@ private:
 
     bool errored_;
 
+    IMessageBridge& bridge_;
     AdMob* plugin_;
     std::string adId_;
 };

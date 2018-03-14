@@ -16,6 +16,7 @@
 
 @interface EEUnityAds () <UnityAdsDelegate> {
     BOOL initialized_;
+    EEMessageBridge* bridge_;
 }
 
 @end
@@ -38,6 +39,7 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
         return self;
     }
     initialized_ = NO;
+    bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
@@ -49,47 +51,43 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:k__initialize
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        NSString* gameId = dict[@"gameId"];
+                        BOOL testModeEnabled = [EEUtils
+                            toBool:(NSString*)dict[@"testModeEnabled"]];
+                        [self initialize:gameId testMode:testModeEnabled];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__initialize
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* gameId = dict[@"gameId"];
-                       BOOL testModeEnabled =
-                           [EEUtils toBool:(NSString*)dict[@"testModeEnabled"]];
-                       [self initialize:gameId testMode:testModeEnabled];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__setDebugModeEnabled
+                    callback:^(NSString* message) {
+                        [self setDebugMode:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__setDebugModeEnabled
-                   callback:^(NSString* message) {
-                       [self setDebugMode:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__isRewardedVideoReady
+                    callback:^(NSString* message) {
+                        NSString* placementId = message;
+                        return [EEUtils
+                            toString:[self isRewardedVideoReady:placementId]];
+                    }];
 
-    [bridge registerHandler:k__isRewardedVideoReady
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                           toString:[self isRewardedVideoReady:placementId]];
-                   }];
-
-    [bridge registerHandler:k__showRewardedVideo
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       [self showRewardedVideo:placementId];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__showRewardedVideo
+                    callback:^(NSString* message) {
+                        NSString* placementId = message;
+                        [self showRewardedVideo:placementId];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__initialize];
-    [bridge deregisterHandler:k__setDebugModeEnabled];
-    [bridge deregisterHandler:k__isRewardedVideoReady];
-    [bridge deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__setDebugModeEnabled];
+    [bridge_ deregisterHandler:k__isRewardedVideoReady];
+    [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled {
@@ -137,17 +135,16 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     NSLog(@"%s: placementId = %@ state = %d", __PRETTY_FUNCTION__, placementId,
           (int)state);
 
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
     if (state == kUnityAdsFinishStateError) {
-        [bridge callCpp:k__onError message:placementId];
+        [bridge_ callCpp:k__onError message:placementId];
         return;
     }
     if (state == kUnityAdsFinishStateSkipped) {
-        [bridge callCpp:k__onSkipped message:placementId];
+        [bridge_ callCpp:k__onSkipped message:placementId];
         return;
     }
     if (state == kUnityAdsFinishStateCompleted) {
-        [bridge callCpp:k__onFinished message:placementId];
+        [bridge_ callCpp:k__onFinished message:placementId];
         return;
     }
     NSAssert(NO, @"");

@@ -11,6 +11,8 @@
 #include <map>
 #include <memory>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 class VideoPlayer;
@@ -29,8 +31,12 @@ public:
     /// Destroys the specified video player.
     /// Must be called on the main thread.
     bool destroyVideoPlayer(VideoPlayer* player);
+    
+protected:
+    VideoPlayerManager();
 
 private:
+    IMessageBridge& bridge_;
     std::map<std::string, std::unique_ptr<VideoPlayer>> players_;
 };
 } // namespace core

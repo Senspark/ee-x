@@ -1,10 +1,11 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
+#include <map>
+
+#include "ee/CoreFwd.hpp"
 #include "ee/VungleFwd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
-
-#include <map>
 
 namespace ee {
 namespace vungle {
@@ -32,6 +33,7 @@ private:
     void onUnavailable();
 
     bool errored_;
+    IMessageBridge& bridge_;
 //    RewardedVideo* rewardedVideo_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };

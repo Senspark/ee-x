@@ -24,6 +24,7 @@
 #endif // TARGET_OS_IOS
 
 @interface EEAdViewHelper () {
+    EEMessageBridge* bridge_;
     NSString* prefix_;
     NSString* adId_;
 }
@@ -32,12 +33,14 @@
 
 @implementation EEAdViewHelper
 
-- (id _Nonnull)initWithPrefix:(NSString* _Nonnull)prefix
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                       prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     prefix_ = [prefix copy];
     adId_ = [adId copy];
     return self;
@@ -80,76 +83,72 @@
 }
 
 - (void)registerHandlers:(id<EEIAdView> _Nonnull)adView {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:[self k__isLoaded]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[adView isLoaded]];
+                    }];
 
-    [bridge registerHandler:[self k__isLoaded]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[adView isLoaded]];
-                   }];
+    [bridge_ registerHandler:[self k__load]
+                    callback:^(NSString* message) {
+                        [adView load];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__load]
-                   callback:^(NSString* message) {
-                       [adView load];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__getPosition]
+                    callback:^(NSString* message) {
+                        CGPoint position = [adView getPosition];
+                        NSMutableDictionary* dict =
+                            [NSMutableDictionary dictionary];
+                        [dict setValue:@(position.x) forKey:@"x"];
+                        [dict setValue:@(position.y) forKey:@"y"];
+                        return [EEJsonUtils convertDictionaryToString:dict];
+                    }];
 
-    [bridge registerHandler:[self k__getPosition]
-                   callback:^(NSString* message) {
-                       CGPoint position = [adView getPosition];
-                       NSMutableDictionary* dict =
-                           [NSMutableDictionary dictionary];
-                       [dict setValue:@(position.x) forKey:@"x"];
-                       [dict setValue:@(position.y) forKey:@"y"];
-                       return [EEJsonUtils convertDictionaryToString:dict];
-                   }];
+    [bridge_ registerHandler:[self k__setPosition]
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        int x = [dict[@"x"] intValue];
+                        int y = [dict[@"y"] intValue];
+                        [adView setPosition:CGPointMake(x, y)];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__setPosition]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int x = [dict[@"x"] intValue];
-                       int y = [dict[@"y"] intValue];
-                       [adView setPosition:CGPointMake(x, y)];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__getSize]
+                    callback:^(NSString* message) {
+                        CGSize size = [adView getSize];
+                        NSMutableDictionary* dict =
+                            [NSMutableDictionary dictionary];
+                        [dict setValue:@(size.width) forKey:@"width"];
+                        [dict setValue:@(size.height) forKey:@"height"];
+                        return [EEJsonUtils convertDictionaryToString:dict];
+                    }];
 
-    [bridge registerHandler:[self k__getSize]
-                   callback:^(NSString* message) {
-                       CGSize size = [adView getSize];
-                       NSMutableDictionary* dict =
-                           [NSMutableDictionary dictionary];
-                       [dict setValue:@(size.width) forKey:@"width"];
-                       [dict setValue:@(size.height) forKey:@"height"];
-                       return [EEJsonUtils convertDictionaryToString:dict];
-                   }];
+    [bridge_ registerHandler:[self k__setSize]
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        int width = [dict[@"width"] intValue];
+                        int height = [dict[@"height"] intValue];
+                        [adView setSize:CGSizeMake(width, height)];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__setSize]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int width = [dict[@"width"] intValue];
-                       int height = [dict[@"height"] intValue];
-                       [adView setSize:CGSizeMake(width, height)];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__setVisible]
-                   callback:^(NSString* message) {
-                       [adView setVisible:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__setVisible]
+                    callback:^(NSString* message) {
+                        [adView setVisible:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:[self k__isLoaded]];
-    [bridge deregisterHandler:[self k__load]];
-    [bridge deregisterHandler:[self k__getPosition]];
-    [bridge deregisterHandler:[self k__setPosition]];
-    [bridge deregisterHandler:[self k__getSize]];
-    [bridge deregisterHandler:[self k__setSize]];
-    [bridge deregisterHandler:[self k__setVisible]];
+    [bridge_ deregisterHandler:[self k__isLoaded]];
+    [bridge_ deregisterHandler:[self k__load]];
+    [bridge_ deregisterHandler:[self k__getPosition]];
+    [bridge_ deregisterHandler:[self k__setPosition]];
+    [bridge_ deregisterHandler:[self k__getSize]];
+    [bridge_ deregisterHandler:[self k__setSize]];
+    [bridge_ deregisterHandler:[self k__setVisible]];
 }
 
 + (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view {

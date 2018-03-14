@@ -10,6 +10,8 @@
 
 #include <string>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 class VideoPlayerManager;
@@ -62,9 +64,10 @@ public:
 protected:
     friend VideoPlayerManager;
 
-    explicit VideoPlayer(const std::string& tag);
+    explicit VideoPlayer(IMessageBridge& bridge, const std::string& tag);
 
 private:
+    IMessageBridge& bridge_;
     std::string tag_;
 };
 } // namespace core

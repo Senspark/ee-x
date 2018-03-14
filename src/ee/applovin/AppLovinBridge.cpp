@@ -112,38 +112,38 @@ constexpr auto k__onUserRewardVerified     = "AppLovin_onUserRewardVerified";
 // clang-format on
 } // namespace
 
-Self::AppLovin() {
+Self::AppLovin()
+    : bridge_(MessageBridge::getInstance()) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     verified_ = false;
     errored_ = false;
     rewardedVideo_ = nullptr;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onInterstitialAdHidden();
             return "";
         },
         k__onInterstitialAdHidden);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedVideoFailed(std::stoi(message));
             return "";
         },
         k__onRewardedVideoFailed);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedVideoDisplayed();
             return "";
         },
         k__onRewardedVideoDisplayed);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedVideoHidden();
             return "";
         },
         k__onRewardedVideoHidden);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onUserRewardVerified();
             return "";
@@ -153,36 +153,30 @@ Self::AppLovin() {
 
 Self::~AppLovin() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onInterstitialAdHidden);
-    bridge.deregisterHandler(k__onRewardedVideoFailed);
+    bridge_.deregisterHandler(k__onInterstitialAdHidden);
+    bridge_.deregisterHandler(k__onRewardedVideoFailed);
 }
 
 void Self::initialize(const std::string& key) {
     Logger::getSystemLogger().debug("%s: key = %s", __PRETTY_FUNCTION__,
                                     key.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__initialize, key);
+    bridge_.call(k__initialize, key);
 }
 
 void Self::setTestAdsEnabled(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setTestAdsEnabled, core::toString(enabled));
+    bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
 }
 
 void Self::setVerboseLogging(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setVerboseLogging, core::toString(enabled));
+    bridge_.call(k__setVerboseLogging, core::toString(enabled));
 }
 
 void Self::setMuted(bool enabled) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setMuted, core::toString(enabled));
+    bridge_.call(k__setMuted, core::toString(enabled));
 }
 
 bool Self::hasInterstitialAd() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto result = bridge.call(k__hasInterstitialAd);
+    auto result = bridge_.call(k__hasInterstitialAd);
     return core::toBool(result);
 }
 
@@ -190,8 +184,7 @@ bool Self::showInterstitialAd() {
     if (not hasInterstitialAd()) {
         return false;
     }
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showInterstitialAd);
+    bridge_.call(k__showInterstitialAd);
     return true;
 }
 
@@ -216,13 +209,11 @@ bool Self::destroyRewardedVideo() {
 
 void Self::loadRewardedVideo() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__loadRewardedVideo);
+    bridge_.call(k__loadRewardedVideo);
 }
 
 bool Self::hasRewardedVideo() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto result = bridge.call(k__hasRewardedVideo);
+    auto result = bridge_.call(k__hasRewardedVideo);
     return core::toBool(result);
 }
 
@@ -232,8 +223,7 @@ bool Self::showRewardedVideo() {
     }
     verified_ = false;
     errored_ = false;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showRewardedVideo);
+    bridge_.call(k__showRewardedVideo);
     return not errored_;
 }
 

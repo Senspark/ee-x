@@ -12,6 +12,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEInterstitialAdHelper () {
+    EEMessageBridge* bridge_;
     NSString* prefix_;
     NSString* adId_;
 }
@@ -20,12 +21,14 @@
 
 @implementation EEInterstitialAdHelper
 
-- (id _Nonnull)initWithPrefix:(NSString* _Nonnull)prefix
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                       prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     prefix_ = [prefix copy];
     adId_ = [adId copy];
     return self;
@@ -52,32 +55,28 @@
 }
 
 - (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:[self k__isLoaded]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[ad isLoaded]];
+                    }];
 
-    [bridge registerHandler:[self k__isLoaded]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[ad isLoaded]];
-                   }];
+    [bridge_ registerHandler:[self k__load]
+                    callback:^(NSString* message) {
+                        [ad load];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__load]
-                   callback:^(NSString* message) {
-                       [ad load];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__show]
-                   callback:^(NSString* message) {
-                       [ad show];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__show]
+                    callback:^(NSString* message) {
+                        [ad show];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:[self k__isLoaded]];
-    [bridge deregisterHandler:[self k__load]];
-    [bridge deregisterHandler:[self k__show]];
+    [bridge_ deregisterHandler:[self k__isLoaded]];
+    [bridge_ deregisterHandler:[self k__load]];
+    [bridge_ deregisterHandler:[self k__show]];
 }
 
 @end

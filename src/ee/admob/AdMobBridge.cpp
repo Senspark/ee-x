@@ -63,37 +63,37 @@ constexpr auto k__identifiers           = "identifiers";
 // clang-format on
 } // namespace
 
-Self::AdMob() {
+Self::AdMob()
+    : bridge_(MessageBridge::getInstance()) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     rewarded_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onReward();
             return "";
         },
         k__onRewarded);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
         },
         k__onFailedToLoad);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onOpened();
             return "";
         },
         k__onOpened);
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onClosed();
             return "";
@@ -103,27 +103,23 @@ Self::AdMob() {
 
 Self::~AdMob() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onRewarded);
-    bridge.deregisterHandler(k__onFailedToLoad);
-    bridge.deregisterHandler(k__onLoaded);
-    bridge.deregisterHandler(k__onOpened);
-    bridge.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(k__onRewarded);
+    bridge_.deregisterHandler(k__onFailedToLoad);
+    bridge_.deregisterHandler(k__onLoaded);
+    bridge_.deregisterHandler(k__onOpened);
+    bridge_.deregisterHandler(k__onClosed);
 }
 
 void Self::initialize(const std::string& applicationId) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__initialize, applicationId);
+    bridge_.call(k__initialize, applicationId);
 }
 
 std::string Self::getEmulatorTestDeviceHash() const {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getEmulatorTestDeviceHash);
+    return bridge_.call(k__getEmulatorTestDeviceHash);
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__addTestDevice, hash);
+    bridge_.call(k__addTestDevice, hash);
 }
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
@@ -134,19 +130,17 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
 
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createBannerAd, json.dump());
+    auto response = bridge_.call(k__createBannerAd, json.dump());
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<IAdView>(new BannerAd(this, adId));
+    return std::shared_ptr<IAdView>(new BannerAd(bridge_, this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__destroyBannerAd, adId);
+    auto response = bridge_.call(k__destroyBannerAd, adId);
     return core::toBool(response);
 }
 
@@ -160,19 +154,17 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     json[k__layout_name] = layoutName;
     json[k__identifiers] = identifiers.params_;
 
-    auto&& bridge = MessageBridge::getInstance();
-    auto&& response = bridge.call(k__createNativeAd, json.dump());
+    auto&& response = bridge_.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<IAdView>(new NativeAd(this, adId));
+    return std::shared_ptr<IAdView>(new NativeAd(bridge_, this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    auto&& response = bridge.call(k__destroyNativeAd, adId);
+    auto&& response = bridge_.call(k__destroyNativeAd, adId);
     return core::toBool(response);
 }
 
@@ -180,20 +172,18 @@ std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createInterstitialAd, adId);
+    auto response = bridge_.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
         return std::make_shared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
-        new InterstitialAd(this, adId));
+        new InterstitialAd(bridge_, this, adId));
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
     Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
                                     adId.c_str());
-    auto&& bridge = MessageBridge::getInstance();
-    auto&& response = bridge.call(k__destroyInterstitialAd, adId);
+    auto&& response = bridge_.call(k__destroyInterstitialAd, adId);
     return core::toBool(response);
 }
 
@@ -220,8 +210,7 @@ bool Self::destroyRewardedVideo(const std::string& adId) {
 }
 
 bool Self::hasRewardedVideo() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__hasRewardedVideo);
+    auto response = bridge_.call(k__hasRewardedVideo);
     return core::toBool(response);
 }
 
@@ -231,8 +220,7 @@ void Self::loadRewardedVideo(const std::string& adId) {
     }
     loading_ = true;
     currentId_ = adId;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__loadRewardedVideo, adId);
+    bridge_.call(k__loadRewardedVideo, adId);
 }
 
 bool Self::showRewardedVideo() {
@@ -240,8 +228,7 @@ bool Self::showRewardedVideo() {
         return false;
     }
     rewarded_ = false;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showRewardedVideo);
+    bridge_.call(k__showRewardedVideo);
     return true;
 }
 

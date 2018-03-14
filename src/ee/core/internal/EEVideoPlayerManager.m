@@ -11,6 +11,7 @@
 #import "ee/core/EEMessageBridge.h"
 
 @implementation EEVideoPlayerManager {
+    EEMessageBridge* bridge_;
     NSMutableDictionary<NSString*, EEVideoPlayer*>* players_;
 }
 
@@ -48,6 +49,7 @@ static NSString* const k__destroy = @"VideoPlayerManager_destroy";
     if (self == nil) {
         return nil;
     }
+    bridge_ = [EEMessageBridge getInstance];
     players_ = [[NSMutableDictionary alloc] init];
     return self;
 }
@@ -57,7 +59,7 @@ static NSString* const k__destroy = @"VideoPlayerManager_destroy";
         return NO;
     }
     EEVideoPlayer* player =
-        [[[EEVideoPlayer alloc] initWithTag:tag] autorelease];
+        [[[EEVideoPlayer alloc] initWithBridge:bridge_ tag:tag] autorelease];
     [players_ setObject:player forKey:tag];
     return YES;
 }

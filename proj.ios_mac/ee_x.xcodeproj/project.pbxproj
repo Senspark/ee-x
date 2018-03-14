@@ -290,8 +290,8 @@
 		6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */; };
 		6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */; };
 		6FB7D6491FA0796B00EFE441 /* GoogleAnalytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */; };
-		6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
-		6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
+		6FBD03E01FCC207A0050C980 /* EEIMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */; };
+		6FBD03E11FCC207A0050C980 /* EEIMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */; };
 		6FBD03E21FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
 		6FBD03E31FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
 		6FBD03E41FCC207A0050C980 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */; };
@@ -392,6 +392,10 @@
 		AD10C312204934A500C92CFE /* RecorderBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30C204934A400C92CFE /* RecorderBridge.hpp */; };
 		AD10C313204934A500C92CFE /* RecorderFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30D204934A400C92CFE /* RecorderFwd.hpp */; };
 		AD10C314204934A500C92CFE /* Recorder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30E204934A500C92CFE /* Recorder.hpp */; };
+		AD2FB34B2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
+		AD2FB34C2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
+		AD2FB34E2059019700140ED7 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34D2059019700140ED7 /* EEMessageBridge.h */; };
+		AD2FB34F2059019700140ED7 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34D2059019700140ED7 /* EEMessageBridge.h */; };
 		AD56EF73202026A300DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
 		AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */; };
 		AD56EF75202026A700DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
@@ -913,7 +917,7 @@
 		6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsSocialBuilder.cpp; sourceTree = "<group>"; };
 		6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsSocialBuilder.hpp; sourceTree = "<group>"; };
 		6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalytics.hpp; sourceTree = "<group>"; };
-		6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
+		6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEIMessageBridge.h; sourceTree = "<group>"; };
 		6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMessageBridge.m; sourceTree = "<group>"; };
 		6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
 		6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
@@ -974,6 +978,8 @@
 		AD10C30C204934A400C92CFE /* RecorderBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderBridge.hpp; sourceTree = "<group>"; };
 		AD10C30D204934A400C92CFE /* RecorderFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderFwd.hpp; sourceTree = "<group>"; };
 		AD10C30E204934A500C92CFE /* Recorder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recorder.hpp; sourceTree = "<group>"; };
+		AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IMessageBridge.hpp; sourceTree = "<group>"; };
+		AD2FB34D2059019700140ED7 /* EEMessageBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
 		AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayer.cpp; sourceTree = "<group>"; };
 		AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayer.hpp; sourceTree = "<group>"; };
 		AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEVideoPlayer.m; sourceTree = "<group>"; };
@@ -1395,8 +1401,10 @@
 			children = (
 				6F43A2281EC19F3100C68152 /* EEPluginManager.h */,
 				6F43A2291EC19F3100C68152 /* EEPluginManager.m */,
-				6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */,
+				6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */,
+				AD2FB34D2059019700140ED7 /* EEMessageBridge.h */,
 				6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */,
+				AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */,
 				6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */,
 				6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */,
 				6F43A22A1EC19F3100C68152 /* internal */,
@@ -1766,10 +1774,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD2FB34B2058C88900140ED7 /* IMessageBridge.hpp in Headers */,
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
 				AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */,
 				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
-				6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */,
+				6FBD03E01FCC207A0050C980 /* EEIMessageBridge.h in Headers */,
 				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
@@ -1780,6 +1789,7 @@
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
 				AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */,
+				AD2FB34E2059019700140ED7 /* EEMessageBridge.h in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
 				6FAF79111FA0A41E00405AF8 /* SpinLock.hpp in Headers */,
 				6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */,
@@ -1969,9 +1979,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD2FB34C2058C88900140ED7 /* IMessageBridge.hpp in Headers */,
 				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
-				6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */,
+				AD2FB34F2059019700140ED7 /* EEMessageBridge.h in Headers */,
+				6FBD03E11FCC207A0050C980 /* EEIMessageBridge.h in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
 				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,

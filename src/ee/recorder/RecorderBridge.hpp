@@ -23,6 +23,9 @@ public:
 
     std::string getScreenRecordingUrl() const;
     bool checkRecordingPermission() const;
+
+private:
+    MessageBridge& bridge_;
 };
 } // namespace recorder
 } // namespace ee

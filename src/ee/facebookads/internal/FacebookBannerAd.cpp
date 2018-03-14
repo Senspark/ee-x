@@ -8,7 +8,7 @@
 
 #include <cassert>
 
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/facebookads/internal/FacebookBannerAd.hpp"
 
@@ -28,22 +28,23 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::BannerAd(FacebookAds* plugin, const std::string& adId)
+Self::BannerAd(IMessageBridge& bridge, FacebookAds* plugin,
+               const std::string& adId)
     : Super()
     , adId_(adId)
+    , bridge_(bridge)
     , plugin_(plugin)
     , helper_("FacebookBannerAd", adId)
-    , bridgeHelper_(helper_) {
+    , bridgeHelper_(bridge, helper_) {
     loading_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
@@ -55,9 +56,8 @@ Self::~BannerAd() {
     bool succeeded = plugin_->destroyBannerAd(adId_);
     assert(succeeded);
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onLoaded(adId_));
-    bridge.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onLoaded(adId_));
+    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
 }
 
 bool Self::isLoaded() const {

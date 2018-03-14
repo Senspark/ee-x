@@ -54,7 +54,8 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit BannerAd(FacebookAds* plugin, const std::string& adId);
+    explicit BannerAd(IMessageBridge& bridge, FacebookAds* plugin,
+                      const std::string& adId);
 
 private:
     void onLoaded();
@@ -62,6 +63,7 @@ private:
 
     bool loading_;
     std::string adId_;
+    IMessageBridge& bridge_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

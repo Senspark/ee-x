@@ -11,12 +11,16 @@
 
 #include <string>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace notification {
 class NotificationBuilder;
 
 class Notification final {
 public:
+    Notification();
+    
     /// Schedules a notification.
     void schedule(const NotificationBuilder& builder);
 
@@ -30,6 +34,8 @@ private:
     /// Unschedule all notifications.
     /// Only supported on iOS.
     void unscheduleAll();
+    
+    IMessageBridge& bridge_;
 };
 } // namespace notification
 } // namespace ee

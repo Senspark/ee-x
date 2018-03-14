@@ -25,7 +25,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(FacebookAds* plugin,
+    explicit InterstitialAd(IMessageBridge& bridge, FacebookAds* plugin,
                             const std::string& placementId);
 
     bool createInternalAd();
@@ -41,6 +41,7 @@ private:
     /// Whether the ad is in loading progress.
     bool loading_;
 
+    IMessageBridge& bridge_;
     FacebookAds* plugin_;
     std::string placementId_;
 };

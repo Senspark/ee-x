@@ -16,6 +16,8 @@
 #import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
+    EEMessageBridge* bridge_;
+    
     /// Internal Facebook ad.
     FBNativeAd* nativeAd_;
 
@@ -41,12 +43,15 @@
 
 static NSString* const k__tag = @"FacebookNativeAd";
 
-- (id)initWithAdId:(NSString*)adId layout:(NSString*)layoutName {
+- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                adId:(NSString* _Nonnull)adId
+              layout:(NSString* _Nonnull)layoutName {
     self = [super init];
     if (self == nil) {
         return self;
     }
 
+    bridge_ = bridge;
     isAdLoaded_ = NO;
     adId_ = [adId copy];
     layoutName_ = [layoutName copy];
@@ -95,24 +100,20 @@ static NSString* const k__tag = @"FacebookNativeAd";
 
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge registerHandler:[self k__createInternalAd]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self createInternalAd]];
-                   }];
-    [bridge registerHandler:[self k__destroyInternalAd]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self destroyInternalAd]];
-                   }];
+    [bridge_ registerHandler:[self k__createInternalAd]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self createInternalAd]];
+                    }];
+    [bridge_ registerHandler:[self k__destroyInternalAd]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self destroyInternalAd]];
+                    }];
 }
 
 - (void)deregisterhandlers {
     [helper_ deregisterHandlers];
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge deregisterHandler:[self k__createInternalAd]];
-    [bridge deregisterHandler:[self k__destroyInternalAd]];
+    [bridge_ deregisterHandler:[self k__createInternalAd]];
+    [bridge_ deregisterHandler:[self k__destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
@@ -227,8 +228,7 @@ static NSString* const k__tag = @"FacebookNativeAd";
     [[nativeAdView_ titleLabel] setText:[nativeAd title]];
 
     isAdLoaded_ = YES;
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)nativeAdWillLogImpression:(FBNativeAd*)nativeAd {
@@ -237,8 +237,7 @@ static NSString* const k__tag = @"FacebookNativeAd";
 
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)nativeAdDidClick:(FBNativeAd*)nativeAd {

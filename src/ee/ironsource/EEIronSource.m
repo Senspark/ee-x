@@ -17,6 +17,7 @@
 
 @interface EEIronSource () <ISRewardedVideoDelegate> {
     BOOL initialized_;
+    EEMessageBridge* bridge_;
 }
 
 @end
@@ -39,6 +40,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
         return self;
     }
     initialized_ = NO;
+    bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
@@ -50,34 +52,30 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:k__initialize
+                    callback:^(NSString* message) {
+                        NSString* gameId = message;
+                        [self initialize:gameId];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__initialize
-                   callback:^(NSString* message) {
-                       NSString* gameId = message;
-                       [self initialize:gameId];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__hasRewardedVideo
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self hasRewardedVideo]];
+                    }];
 
-    [bridge registerHandler:k__hasRewardedVideo
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasRewardedVideo]];
-                   }];
-
-    [bridge registerHandler:k__showRewardedVideo
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       [self showRewardedVideo:placementId];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__showRewardedVideo
+                    callback:^(NSString* message) {
+                        NSString* placementId = message;
+                        [self showRewardedVideo:placementId];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__initialize];
-    [bridge deregisterHandler:k__hasRewardedVideo];
-    [bridge deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__hasRewardedVideo];
+    [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize:(NSString*)gameId {
@@ -112,26 +110,22 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onRewarded message:[placementInfo placementName]];
+    [bridge_ callCpp:k__onRewarded message:[placementInfo placementName]];
 }
 
 - (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onFailed];
+    [bridge_ callCpp:k__onFailed];
 }
 
 - (void)rewardedVideoDidOpen {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onOpened];
+    [bridge_ callCpp:k__onOpened];
 }
 
 - (void)rewardedVideoDidClose {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onClosed];
+    [bridge_ callCpp:k__onClosed];
 }
 
 - (void)rewardedVideoDidStart {

@@ -12,10 +12,11 @@
 #include <functional>
 #include <memory>
 #include <string>
-
+#include <map>
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/AdViewInterface.hpp"
 #include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/RewardedVideoInterface.hpp"
 #include "ee/facebookads/FacebookBannerAdSize.hpp"
 
 namespace ee {
@@ -54,15 +55,22 @@ public:
     /// @param[in] placementId The ad placement ID>
     std::shared_ptr<InterstitialAdInterface>
     createInterstitialAd(const std::string& placementId);
-
+    
+    std::shared_ptr<RewardedVideoInterface> createRewardVideoAd(const std::string& placementId);    
+    
+    std::string currentId_;
 private:
     friend BannerAd;
     friend NativeAd;
     friend InterstitialAd;
+    friend RewardedVideo;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& placementId);
+    bool destroyRewardVideoAd(const std::string& placementId);
+    
+    std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace facebook
 } // namespace ee

@@ -16,11 +16,13 @@
 #import "ee/facebookads/internal/EEFacebookBannerAd.h"
 #import "ee/facebookads/internal/EEFacebookInterstitialAd.h"
 #import "ee/facebookads/internal/EEFacebookNativeAd.h"
+#import "ee/facebookads/internal/EEFacebookRewardVideoAd.h"
 
 @interface EEFacebookAds () {
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
+    NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* rewardVideoAds_;
 }
 
 @end
@@ -40,6 +42,9 @@ static NSString* const k__destroyNativeAd       = @"FacebookAds_destroyNativeAd"
 
 static NSString* const k__createInterstitialAd  = @"FacebookAds_createInterstitialAd";
 static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstitialAd";
+
+static NSString* const k__createRewardVideoAd   = @"FacebookAds_createRewardVideoAd";
+static NSString* const k__destroyRewardVideoAd  = @"FacebookAds_destroyRewardVideoAd";
 // clang-format on
 
 // clang-format off
@@ -140,6 +145,20 @@ static NSString* const k__layout_name           = @"layout_name";
                        return [EEUtils
                            toString:[self destroyInterstitialAd:placementId]];
                    }];
+    
+    [bridge registerHandler:k__createRewardVideoAd
+                   callback:^(NSString* message) {
+                       NSString* placementId = message;
+                       return [EEUtils
+                               toString:[self createRewardVideoAd:placementId]];
+                   }];
+    
+    [bridge registerHandler:k__destroyRewardVideoAd
+                   callback:^(NSString* message) {
+                       NSString* placementId = message;
+                       return [EEUtils
+                               toString:[self destroyRewardVideoAd:placementId]];
+                   }];
 }
 
 - (void)deregisterHandlers {
@@ -157,6 +176,9 @@ static NSString* const k__layout_name           = @"layout_name";
 
     [bridge deregisterHandler:k__createInterstitialAd];
     [bridge deregisterHandler:k__destroyInterstitialAd];
+    
+    [bridge deregisterHandler:k__createRewardVideoAd];
+    [bridge deregisterHandler:k__destroyRewardVideoAd];
 }
 
 - (NSString* _Nonnull)getTestDeviceHash {
@@ -232,4 +254,23 @@ static NSString* const k__layout_name           = @"layout_name";
     return YES;
 }
 
+- (BOOL)createRewardVideoAd:(NSString* _Nonnull)placementId {
+    if ([rewardVideoAds_ objectForKey:placementId] != nil) {
+        return NO;
+    }
+    EEFacebookRewardVideoAd* ad = [[[EEFacebookRewardVideoAd alloc]
+                                     initWithPlacementId:placementId] autorelease];
+    [rewardVideoAds_ setObject:ad forKey:placementId];
+    return YES;
+}
+
+- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)placementId {
+    if ([rewardVideoAds_ objectForKey:placementId] == nil) {
+        return NO;
+    }
+    EEFacebookRewardVideoAd* ad = [rewardVideoAds_ objectForKey:placementId];
+    [ad destroy];
+    [rewardVideoAds_ removeObjectForKey:placementId];
+    return YES;
+}
 @end

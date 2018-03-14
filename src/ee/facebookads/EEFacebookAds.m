@@ -126,58 +126,39 @@ static NSString* const k__layout_name           = @"layout_name";
                        toString:[self createNativeAd:adId layout:layoutName]];
                }];
 
-    [bridge registerHandler:k__destroyNativeAd
+    [bridge_ registerHandler:k__destroyNativeAd
                    callback:^(NSString* message) {
                        NSString* adId = message;
                        return [EEUtils toString:[self destroyNativeAd:adId]];
                    }];
 
-    [bridge registerHandler:k__createInterstitialAd
+    [bridge_ registerHandler:k__createInterstitialAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
                        return [EEUtils
                            toString:[self createInterstitialAd:placementId]];
                    }];
 
-    [bridge registerHandler:k__destroyInterstitialAd
+    [bridge_ registerHandler:k__destroyInterstitialAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
                        return [EEUtils
                            toString:[self destroyInterstitialAd:placementId]];
                    }];
     
-    [bridge registerHandler:k__createRewardVideoAd
+    [bridge_ registerHandler:k__createRewardVideoAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
                        return [EEUtils
                                toString:[self createRewardVideoAd:placementId]];
                    }];
     
-    [bridge registerHandler:k__destroyRewardVideoAd
+    [bridge_ registerHandler:k__destroyRewardVideoAd
                    callback:^(NSString* message) {
                        NSString* placementId = message;
                        return [EEUtils
                                toString:[self destroyRewardVideoAd:placementId]];
                    }];
-    [bridge_ registerHandler:k__destroyNativeAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self destroyNativeAd:adId]];
-                    }];
-
-    [bridge_ registerHandler:k__createInterstitialAd
-                    callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self createInterstitialAd:placementId]];
-                    }];
-
-    [bridge_ registerHandler:k__destroyInterstitialAd
-                    callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self destroyInterstitialAd:placementId]];
-                    }];
 }
 
 - (void)deregisterHandlers {
@@ -191,16 +172,11 @@ static NSString* const k__layout_name           = @"layout_name";
     [bridge_ deregisterHandler:k__createNativeAd];
     [bridge_ deregisterHandler:k__destroyNativeAd];
 
-    [bridge deregisterHandler:k__createNativeAd];
-    [bridge deregisterHandler:k__destroyNativeAd];
-
-    [bridge deregisterHandler:k__createInterstitialAd];
-    [bridge deregisterHandler:k__destroyInterstitialAd];
-    
-    [bridge deregisterHandler:k__createRewardVideoAd];
-    [bridge deregisterHandler:k__destroyRewardVideoAd];
     [bridge_ deregisterHandler:k__createInterstitialAd];
     [bridge_ deregisterHandler:k__destroyInterstitialAd];
+    
+    [bridge_ deregisterHandler:k__createRewardVideoAd];
+    [bridge_ deregisterHandler:k__destroyRewardVideoAd];
 }
 
 - (NSString* _Nonnull)getTestDeviceHash {

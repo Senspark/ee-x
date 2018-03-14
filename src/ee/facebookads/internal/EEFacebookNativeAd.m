@@ -17,7 +17,7 @@
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
     EEMessageBridge* bridge_;
-    
+
     /// Internal Facebook ad.
     FBNativeAd* nativeAd_;
 
@@ -57,7 +57,9 @@ static NSString* const k__tag = @"FacebookNativeAd";
     layoutName_ = [layoutName copy];
     nativeAd_ = nil;
     nativeAdView_ = nil;
-    helper_ = [[EEAdViewHelper alloc] initWithPrefix:k__tag adId:adId_];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:k__tag
+                                                adId:adId_];
 
     [self createInternalAd];
     [self createView];

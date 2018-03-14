@@ -97,18 +97,18 @@ Self::~RewardedVideo() {
 
 bool Self::isLoaded() const {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__hasRewardedVideo);
+    auto response = bridge.call(k__hasRewardedVideo(adId_));
     return core::toBool(response);
 }
 
 void Self::load() {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__loadRewardedVideo);
+    bridge.call(k__loadRewardedVideo(adId_));
 }
 
 bool Self::show() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__showRewardedVideo);
+    auto response = bridge.call(k__showRewardedVideo(adId_));
     return core::toBool(response);
 }
 #pragma mark - on

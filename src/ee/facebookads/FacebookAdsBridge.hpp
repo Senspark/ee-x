@@ -57,7 +57,7 @@ public:
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
     
-    std::shared_ptr<RewardedVideoInterface> createRewardVideoAd(const std::string& placementId);    
+    std::shared_ptr<IRewardedVideo> createRewardVideoAd(const std::string& placementId);    
     
     std::string currentId_;
 private:

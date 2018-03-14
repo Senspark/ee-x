@@ -38,7 +38,8 @@
     interstitialAd_ = nil;
     testDevices_ = [testDevices retain];
     helper_ =
-        [[EEInterstitialAdHelper alloc] initWithPrefix:@"AdMobInterstitialAd"
+        [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
+                                                prefix:@"AdMobInterstitialAd"
                                                   adId:adId_];
     [self registerHandlers];
     return self;

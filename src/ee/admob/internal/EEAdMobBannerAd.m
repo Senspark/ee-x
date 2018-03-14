@@ -58,8 +58,9 @@
     adId_ = [adId copy];
     adSize_ = adSize;
     testDevices_ = [testDevices retain];
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"AdMobBannerAd" adId:adId];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:@"AdMobBannerAd"
+                                                adId:adId];
 
     [self createInternalAd];
     [self registerHandlers];

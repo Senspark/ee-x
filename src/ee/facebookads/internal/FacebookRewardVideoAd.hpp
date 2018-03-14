@@ -14,7 +14,7 @@
 
 namespace ee {
 namespace facebook {
-class RewardedVideo : public RewardedVideoInterface {
+class RewardedVideo : public IRewardedVideo {
 public:
     virtual ~RewardedVideo() override;
 

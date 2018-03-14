@@ -57,8 +57,9 @@
     adId_ = [adId copy];
     adSize_ = adSize;
     adView_ = nil;
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"FacebookBannerAd" adId:adId_];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:@"FacebookBannerAd"
+                                                adId:adId_];
 
     [self createInternalAd];
     [self registerHandlers];

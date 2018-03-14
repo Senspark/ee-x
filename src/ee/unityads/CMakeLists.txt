@@ -24,22 +24,28 @@
 # ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+project(ee_x_unityads)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/unityads
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/unityads/internal
+  ../../
+  ../../../third_party/nlohmann/include
+  internal
 )
 
-set(GAME_SRC
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/internal/UnityInterstitialAd.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/internal/UnityRewardedVideo.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/UnityAdsBridge.cpp
+set(LIB_SRC
+  internal/UnityInterstitialAd.cpp
+  internal/UnityRewardedVideo.cpp
+  UnityAdsBridge.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/internal/UnityInterstitialAd.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/internal/UnityRewardedVideo.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/unityads/UnityAdsBridge.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/UnityAds.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/UnityAdsFwd.hpp
+set(LIB_HEADERS
+  internal/UnityInterstitialAd.hpp
+  internal/UnityRewardedVideo.hpp
+  UnityAdsBridge.hpp
+)
+
+add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+
+target_link_libraries(${PROJECT_NAME}
+  ee_x_ads
 )

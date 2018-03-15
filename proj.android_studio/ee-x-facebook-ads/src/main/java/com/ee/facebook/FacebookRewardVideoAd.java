@@ -3,16 +3,12 @@ package com.ee.facebook;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.ee.ads.InterstitialAdHelper;
-import com.ee.ads.InterstitialAdInterface;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
-import com.facebook.ads.InterstitialAd;
-import com.facebook.ads.InterstitialAdListener;
 import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.RewardedVideoAdListener;
 

@@ -4,12 +4,39 @@ project(ee_x)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 
+include(src/ee/admob/CMakeLists.txt)
+include(src/ee/ads/CMakeLists.txt)
+include(src/ee/applovin/CMakeLists.txt)
+include(src/ee/core/CMakeLists.txt)
+include(src/ee/crashlytics/CMakeLists.txt)
+include(src/ee/facebook/CMakeLists.txt)
+include(src/ee/facebookads/CMakeLists.txt)
+include(src/ee/firebase/CMakeLists.txt)
+include(src/ee/google/CMakeLists.txt)
+include(src/ee/ironsource/CMakeLists.txt)
+include(src/ee/notification/CMakeLists.txt)
+include(src/ee/unityads/CMakeLists.txt)
+include(src/ee/vungle/CMakeLists.txt)
+
 set(LIB_SRC
    jni/cpp/ee/core/JniUtils.cpp
    jni/cpp/ee/core/internal/JniMethodInfo.cpp
    jni/cpp/ee/core/internal/JniString.cpp
    jni/cpp/ee/core/internal/Logger_Android.cpp
    jni/cpp/ee/core/internal/MessageBridge_Android.cpp
+   ${EE_X_ADMOB_SRC}
+   ${EE_X_ADS_SRC}
+   ${EE_X_APPLOVIN_SRC}
+   ${EE_X_CORE_SRC}
+   ${EE_X_CRASHLYTICS_SRC}
+   ${EE_X_FACEBOOK_SRC}
+   ${EE_X_FACEBOOK_ADS_SRC}
+   ${EE_X_FIREBASE_SRC}
+   ${EE_X_GOOGLE_SRC}
+   ${EE_X_IRONSOURCE_SRC}
+   ${EE_X_NOTIFICATION_SRC}
+   ${EE_X_UNITY_ADS_SRC}
+   ${EE_X_VUNGLE_ADS_SRC}
 )
 
 set(LIB_HEADERS
@@ -43,43 +70,34 @@ set(LIB_HEADERS
     src/ee/NotificationFwd.hpp
     src/ee/FirebaseFwd.hpp
     src/ee/Facebook.hpp
+    ${EE_X_ADMOB_HEADERS}
+    ${EE_X_ADS_HEADERS}
+    ${EE_X_APPLOVIN_HEADERS}
+    ${EE_X_CORE_HEADERS}
+    ${EE_X_CRASHLYTICS_HEADERS}
+    ${EE_X_FACEBOOK_HEADERS}
+    ${EE_X_FACEBOOK_ADS_HEADERS}
+    ${EE_X_FIREBASE_HEADERS}
+    ${EE_X_GOOGLE_HEADERS}
+    ${EE_X_IRONSOURCE_HEADERS}
+    ${EE_X_NOTIFICATION_HEADERS}
+    ${EE_X_UNITY_ADS_HEADERS}
+    ${EE_X_VUNGLE_ADS_HEADERS}
 )
-
-add_subdirectory(src/ee/admob)
-add_subdirectory(src/ee/ads)
-add_subdirectory(src/ee/applovin)
-add_subdirectory(src/ee/core)
-add_subdirectory(src/ee/crashlytics)
-add_subdirectory(src/ee/facebook)
-add_subdirectory(src/ee/firebase)
-add_subdirectory(src/ee/google)
-add_subdirectory(src/ee/ironsource)
-add_subdirectory(src/ee/notification)
-#add_subdirectory(src/ee/store)
-add_subdirectory(src/ee/unityads)
-add_subdirectory(src/ee/vungle)
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
-
-target_link_libraries(${PROJECT_NAME} 
-  ee_x_admob 
-  ee_x_ads
-  ee_x_applovin
-  ee_x_core
-  ee_x_crashlytics
-  ee_x_facebook_ads
-  ee_x_firebase_core
-  ee_x_google_analytics
-  ee_x_ironsource
-  ee_x_notification
-#  ee_x_store
-  ee_x_unityads
-  ee_x_vungle
-)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   src
   jni/cpp
   third_party/nlohmann/include
   third_party/firebase_cpp_sdk/include
+)
+
+target_link_libraries(${PROJECT_NAME}
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libmessaging.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libremote_config.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libstorage.a
 )

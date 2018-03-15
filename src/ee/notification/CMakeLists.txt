@@ -1,20 +1,20 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(ee_x_notification)
+# project(ee_x_notification)
 
 include_directories(
-  ../../
-  ../../../third_party/nlohmann/include
+  src/ee/notification
+  third_party/nlohmann/include
 )
 
-set(LIB_SRC
-  NotificationBridge.cpp
-  NotificationBuilder.cpp
+set(EE_X_NOTIFICATION_SRC
+  src/ee/notification/NotificationBridge.cpp
+  src/ee/notification/NotificationBuilder.cpp
 )
 
-set(LIB_HEADERS
-  NotificationBridge.hpp
-  NotificationBuilder.hpp
+set(EE_X_NOTIFICATION_HEADERS
+  src/ee/notification/NotificationBridge.hpp
+  src/ee/notification/NotificationBuilder.hpp
 )
 
-add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})

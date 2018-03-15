@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion       rootProject.ext.minSdkVersion
+        targetSdkVersion    rootProject.ext.targetSdkVersion
     }
 }
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.android.support:support-compat:27.0.2'
+    implementation "com.android.support:support-compat:${rootProject.ext.supportLibraryVersion}"
 }

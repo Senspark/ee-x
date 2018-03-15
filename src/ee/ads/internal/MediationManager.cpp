@@ -9,8 +9,8 @@
 #include <mutex>
 
 #include "ee/Core.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
@@ -34,19 +34,19 @@ Self::~MediationManager() {
     rewardedVideo_ = nullptr;
 }
 
-bool Self::startInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::startInterstitialAd(IInterstitialAd* ad) {
     return registerInterstitialAd(ad);
 }
 
-bool Self::finishInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::finishInterstitialAd(IInterstitialAd* ad) {
     return deregisterInterstitialAd(ad, false);
 }
 
-bool Self::destroyInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::destroyInterstitialAd(IInterstitialAd* ad) {
     return deregisterInterstitialAd(ad, true);
 }
 
-bool Self::registerInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::registerInterstitialAd(IInterstitialAd* ad) {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (interstitialAd_ != nullptr) {
         return false;
@@ -56,7 +56,7 @@ bool Self::registerInterstitialAd(InterstitialAdInterface* ad) {
     return true;
 }
 
-bool Self::deregisterInterstitialAd(InterstitialAdInterface* ad,
+bool Self::deregisterInterstitialAd(IInterstitialAd* ad,
                                     bool destroyed) {
     std::lock_guard<core::SpinLock> guard(locker_);
     if (interstitialAd_ == nullptr) {
@@ -86,19 +86,19 @@ bool Self::setInterstitialAdDone() {
     return true;
 }
 
-bool Self::startRewardedVideo(RewardedVideoInterface* ad) {
+bool Self::startRewardedVideo(IRewardedVideo* ad) {
     return registerRewardedVideo(ad);
 }
 
-bool Self::finishRewardedVideo(RewardedVideoInterface* ad) {
+bool Self::finishRewardedVideo(IRewardedVideo* ad) {
     return deregisterRewardedVideo(ad, false);
 }
 
-bool Self::destroyRewardedVideo(RewardedVideoInterface* ad) {
+bool Self::destroyRewardedVideo(IRewardedVideo* ad) {
     return deregisterRewardedVideo(ad, true);
 }
 
-bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
+bool Self::registerRewardedVideo(IRewardedVideo* ad) {
     Logger::getSystemLogger().debug(
         "%s: ad = %p current_ad = %p destroyed = %s", __PRETTY_FUNCTION__, ad,
         rewardedVideo_, core::toString(rewardedVideoDestroyed_).c_str());
@@ -111,7 +111,7 @@ bool Self::registerRewardedVideo(RewardedVideoInterface* ad) {
     return true;
 }
 
-bool Self::deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed) {
+bool Self::deregisterRewardedVideo(IRewardedVideo* ad, bool destroyed) {
     Logger::getSystemLogger().debug(
         "%s: ad = %p destroyed = %s current_ad = %p destroyed = %s",
         __PRETTY_FUNCTION__, ad, core::toString(destroyed).c_str(),

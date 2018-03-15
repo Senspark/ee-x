@@ -15,6 +15,7 @@
 #import "ee/facebookads/internal/EEFacebookBannerAd.h"
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
+    EEMessageBridge* bridge_;
     FBAdView* adView_;
     NSString* adId_;
     FBAdSize adSize_;
@@ -43,18 +44,22 @@
     return kFBAdSize320x50;
 }
 
-- (id)initWithAdId:(NSString* _Nonnull)adId size:(FBAdSize)adSize {
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                         size:(FBAdSize)adSize {
     self = [super init];
     if (self == nil) {
         return self;
     }
 
+    bridge_ = bridge;
     isLoaded_ = NO;
     adId_ = [adId copy];
     adSize_ = adSize;
     adView_ = nil;
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"FacebookBannerAd" adId:adId_];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:@"FacebookBannerAd"
+                                                adId:adId_];
 
     [self createInternalAd];
     [self registerHandlers];
@@ -157,16 +162,12 @@
 - (void)adViewDidLoad:(FBAdView*)adView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     isLoaded_ = YES;
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)adView:(FBAdView*)adView didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adViewWillLogImpression:(FBAdView*)adView {

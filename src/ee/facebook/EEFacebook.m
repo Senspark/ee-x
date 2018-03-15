@@ -13,7 +13,10 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
-@interface EEFacebook () <FBSDKSharingDelegate>
+@interface EEFacebook () <FBSDKSharingDelegate> {
+    EEMessageBridge* bridge_;
+}
+
 @end
 
 @implementation EEFacebook
@@ -29,7 +32,7 @@ NSString* const k__onProfileChanged  = @"Facebook_onProfileChanged";
 NSString* const k__shareLinkContent  = @"Facebook_shareLinkContent";
 NSString* const k__sharePhotoContent = @"Facebook_sharePhotoContent";
 NSString* const k__shareVideoContent = @"Facebook_shareVideoContent";
-NSString* const k__onShareResult     = @"Facebook_shareOnResult";
+NSString* const k__onShareResult     = @"Facebook_onShareResult";
 // clang-format on
 
 - (id)init {
@@ -37,7 +40,7 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
     if (self == nil) {
         return self;
     }
-
+    bridge_ = [EEMessageBridge getInstance];
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 
     [[NSNotificationCenter defaultCenter]
@@ -66,70 +69,73 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:k__registerNotifications
+                    callback:^(NSString* message) {
+                        [self registerNotifications];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__isLoggedIn
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self isLoggedIn]];
-                   }];
+    [bridge_ registerHandler:k__isLoggedIn
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self isLoggedIn]];
+                    }];
 
-    [bridge registerHandler:k__logIn
-                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
-                       NSArray* permissions =
-                           [EEJsonUtils convertStringToArray:message];
-                       [self logIn:permissions];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__logIn
+                    callback:^NSString* _Nonnull(NSString* _Nonnull message) {
+                        NSArray* permissions =
+                            [EEJsonUtils convertStringToArray:message];
+                        [self logIn:permissions];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__logOut
-                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
-                       [self logOut];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__logOut
+                    callback:^NSString* _Nonnull(NSString* _Nonnull message) {
+                        [self logOut];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__getAccessToken
-                   callback:^(NSString* _Nonnull message) {
-                       return [self getAccessToken];
-                   }];
+    [bridge_ registerHandler:k__getAccessToken
+                    callback:^(NSString* _Nonnull message) {
+                        return [self getAccessToken];
+                    }];
 
-    [bridge registerHandler:k__getUserId
-                   callback:^(NSString* _Nonnull message) {
-                       return [self getUserId];
-                   }];
+    [bridge_ registerHandler:k__getUserId
+                    callback:^(NSString* _Nonnull message) {
+                        return [self getUserId];
+                    }];
 
-    [bridge registerHandler:k__shareLinkContent
-                   callback:^(NSString* message) {
-                       NSString* url = message;
-                       [self shareLinkContent:url];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__shareLinkContent
+                    callback:^(NSString* message) {
+                        NSString* url = message;
+                        [self shareLinkContent:url];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__sharePhotoContent
-                   callback:^(NSString* message) {
-                       NSString* url = message;
-                       [self sharePhotoContent:url];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__sharePhotoContent
+                    callback:^(NSString* message) {
+                        NSString* url = message;
+                        [self sharePhotoContent:url];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__shareVideoContent
-                   callback:^(NSString* message) {
-                       NSString* url = message;
-                       [self shareVideoContent:url];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__shareVideoContent
+                    callback:^(NSString* message) {
+                        NSString* url = message;
+                        [self shareVideoContent:url];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__isLoggedIn];
-    [bridge deregisterHandler:k__logIn];
-    [bridge deregisterHandler:k__logOut];
-    [bridge deregisterHandler:k__getAccessToken];
-    [bridge deregisterHandler:k__getUserId];
-    [bridge deregisterHandler:k__shareLinkContent];
-    [bridge deregisterHandler:k__sharePhotoContent];
-    [bridge deregisterHandler:k__shareVideoContent];
+    [bridge_ deregisterHandler:k__registerNotifications];
+    [bridge_ deregisterHandler:k__isLoggedIn];
+    [bridge_ deregisterHandler:k__logIn];
+    [bridge_ deregisterHandler:k__logOut];
+    [bridge_ deregisterHandler:k__getAccessToken];
+    [bridge_ deregisterHandler:k__getUserId];
+    [bridge_ deregisterHandler:k__shareLinkContent];
+    [bridge_ deregisterHandler:k__sharePhotoContent];
+    [bridge_ deregisterHandler:k__shareVideoContent];
 }
 
 - (void)accessTokenDidChange:(NSNotification*)notification {
@@ -153,9 +159,8 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
                  forKey:@"picture"];
     }
 
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onProfileChanged
-            message:[EEJsonUtils convertDictionaryToString:dict]];
+    [bridge_ callCpp:k__onProfileChanged
+             message:[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (BOOL)isLoggedIn {
@@ -165,13 +170,12 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
 - (void)logIn:(NSArray* _Nonnull)permissions {
     FBSDKLoginManagerRequestTokenHandler handler = ^(
         FBSDKLoginManagerLoginResult* result, NSError* error) {
-        EEMessageBridge* bridge = [EEMessageBridge getInstance];
         if (error != nil) {
-            [bridge callCpp:k__onLoginResult message:[EEUtils toString:NO]];
+            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:NO]];
         } else if ([result isCancelled]) {
-            [bridge callCpp:k__onLoginResult message:[EEUtils toString:NO]];
+            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:NO]];
         } else {
-            [bridge callCpp:k__onLoginResult message:[EEUtils toString:YES]];
+            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:YES]];
         }
     };
 
@@ -245,18 +249,15 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
 
 - (void)sharer:(id<FBSDKSharing>)sharer
     didCompleteWithResults:(NSDictionary*)results {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onShareResult message:[EEUtils toString:YES]];
+    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:YES]];
 }
 
 - (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError*)error {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onShareResult message:[EEUtils toString:NO]];
+    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:NO]];
 }
 
 - (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onShareResult message:[EEUtils toString:NO]];
+    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:NO]];
 }
 
 @end

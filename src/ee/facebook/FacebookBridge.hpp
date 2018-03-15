@@ -9,6 +9,8 @@
 #include <functional>
 #include <string>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace facebook {
 using ShareCallback = std::function<void(bool result)>;
@@ -40,6 +42,7 @@ private:
     bool isLoggingIn_;
     LoginCallback loginCallback_;
     ShareCallback shareCallback_;
+    IMessageBridge& bridge_;
 };
 } // namespace facebook
 } // namespace ee

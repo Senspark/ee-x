@@ -16,21 +16,20 @@ namespace ee {
 namespace ads {
 using Self = AdViewBridgeHelper;
 
-Self::AdViewBridgeHelper(const AdViewHelper& helper)
-    : helper_(helper) {
+Self::AdViewBridgeHelper(IMessageBridge& bridge, const AdViewHelper& helper)
+    : bridge_(bridge)
+    , helper_(helper) {
     anchorX_ = 0.0f;
     anchorY_ = 0.0f;
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__isLoaded());
+    auto response = bridge_.call(helper_.k__isLoaded());
     return core::toBool(response);
 }
 
 void Self::load() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__load());
+    auto response = bridge_.call(helper_.k__load());
 }
 
 std::pair<float, float> Self::getAnchor() const {
@@ -68,8 +67,7 @@ void Self::setPosition(int x, int y) {
 }
 
 std::pair<int, int> Self::getPositionTopLeft() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__getPosition());
+    auto response = bridge_.call(helper_.k__getPosition());
     auto json = nlohmann::json::parse(response);
     auto x = json["x"].get<int>();
     auto y = json["y"].get<int>();
@@ -80,14 +78,11 @@ void Self::setPositionTopLeft(int x, int y) {
     nlohmann::json json;
     json["x"] = x;
     json["y"] = y;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(helper_.k__setPosition(), json.dump());
+    bridge_.call(helper_.k__setPosition(), json.dump());
 }
 
 std::pair<int, int> Self::getSize() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(helper_.k__getSize());
+    auto response = bridge_.call(helper_.k__getSize());
     auto json = nlohmann::json::parse(response);
     auto width = json["width"].get<int>();
     auto height = json["height"].get<int>();
@@ -108,14 +103,11 @@ void Self::setSize(int width, int height) {
     nlohmann::json json;
     json["width"] = width;
     json["height"] = height;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(helper_.k__setSize(), json.dump());
+    bridge_.call(helper_.k__setSize(), json.dump());
 }
 
 void Self::setVisible(bool visible) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(helper_.k__setVisible(), core::toString(visible));
+    bridge_.call(helper_.k__setVisible(), core::toString(visible));
 }
 } // namespace ads
 } // namespace ee

@@ -85,4 +85,13 @@
     return handler(message);
 }
 
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag {
+    return [self callCppInternal:tag message:@""];
+}
+
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
+                      message:(NSString* _Nonnull)message {
+    return [self callCppInternal:tag message:message];
+}
+
 @end

@@ -1,13 +1,13 @@
 //
-//  InterstitialAdInterface.hpp
+//  IInterstitialAd.hpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
 //
 //
 
-#ifndef EE_X_INTERSTITIAL_AD_INTERFACE_HPP
-#define EE_X_INTERSTITIAL_AD_INTERFACE_HPP
+#ifndef EE_X_I_INTERSTITIAL_AD_HPP
+#define EE_X_I_INTERSTITIAL_AD_HPP
 
 #include <functional>
 #include <string>
@@ -18,10 +18,10 @@ namespace ee {
 namespace ads {
 using InterstitialAdCallback = std::function<void()>;
 
-class InterstitialAdInterface {
+class IInterstitialAd {
 public:
-    InterstitialAdInterface();
-    virtual ~InterstitialAdInterface();
+    IInterstitialAd();
+    virtual ~IInterstitialAd();
 
     virtual bool isLoaded() const = 0;
 
@@ -42,4 +42,4 @@ private:
 } // namespace ads
 } // namespace ee
 
-#endif /* EE_X_INTERSTITIAL_AD_INTERFACE_HPP */
+#endif /* EE_X_I_INTERSTITIAL_AD_HPP */

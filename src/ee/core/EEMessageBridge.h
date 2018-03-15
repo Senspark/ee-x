@@ -1,60 +1,47 @@
 //
-//  EEPluginManager.hpp
-//  roll-eat
+//  EEIMessageBridge.hpp
+//  ee_x
 //
-//  Created by Zinge on 5/16/16.
-//
+//  Created by eps on 3/14/18.
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIMessageBridge.h"
 
-typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
-
-@interface EEMessageBridge : NSObject
+@interface EEMessageBridge : NSObject <EEIMessageBridge>
 
 /// Gets the message bridge instance.
 + (instancetype _Nonnull)getInstance;
 
 - (BOOL)isHandlerRegistered:(NSString* _Nonnull)tag;
 
-/// Registers a new handler to receive messages from C++.
-/// @param handler The handler.
-/// @param tag The unique tag of the handler.
-/// @return Whether the registration was successful.
+/// @see Super.
 - (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag;
 
-/// Convenience method to fix clang-format.
+/// @see Super.
 - (BOOL)registerHandler:(NSString* _Nonnull)tag
                callback:(EEMessageHandler _Nonnull)handler;
 
-/// Deregisters an existing handler not to receive messages from C++.
-/// @param tag The unique tag of the handler.
-/// @return Whether the deregistration was successful.
+/// @see Super.
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag;
 
-/// Calls a handler from Objective-C with a message.
-/// @warning This method should not be called manually.
-/// @param tag The tag of the handler.
-/// @param message The message.
-/// @return Reply message from Objective-C.
+/// @see Super.
 - (NSString* _Nonnull)call:(NSString* _Nonnull)tag
                    message:(NSString* _Nonnull)message;
+
+/// @see Super.
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag;
+
+/// @see Super.
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
+                      message:(NSString* _Nonnull)message;
 
 @end
 
 @interface EEMessageBridge (Cpp)
 
-/// Calls a handler from C++ without a message.
-/// @param tag The unique tag of the handler.
-/// @return Reply message from C++.
-- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag;
-
-/// Calls a handler from C++ with a message.
-/// @param tag The unique tag of the handler.
-/// @param message The message.
-/// @return Reply message from C++.
-- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
-                      message:(NSString* _Nonnull)message;
+/// Used internally.
+- (NSString* _Nonnull)callCppInternal:(NSString* _Nonnull)tag
+                              message:(NSString* _Nonnull)message;
 
 @end

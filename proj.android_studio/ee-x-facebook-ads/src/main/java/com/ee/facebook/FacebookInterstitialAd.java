@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
-import com.ee.ads.InterstitialAdInterface;
+import com.ee.ads.IInterstitialAd;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -18,7 +18,7 @@ import com.facebook.ads.InterstitialAdListener;
  * Created by Zinge on 10/11/17.
  */
 
-class FacebookInterstitialAd implements InterstitialAdListener, InterstitialAdInterface {
+class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd {
     private static final Logger _logger = new Logger(FacebookInterstitialAd.class.getName());
 
     private Context              _context;

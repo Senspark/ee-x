@@ -39,7 +39,7 @@ abstract_target 'common' do
     end
     
     target 'ee_x_mobile_vungle' do
-        pod 'VungleSDK-iOS', '4.1.0'
+        pod 'VungleSDK-iOS'
     end
     
     target 'ee_x_mobile_admob' do

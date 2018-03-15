@@ -110,8 +110,8 @@
 		6F3688451F85F1EE00AE2D93 /* VungleBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36883F1F85F1EE00AE2D93 /* VungleBridge.hpp */; };
 		6F3688461F85F1EE00AE2D93 /* Vungle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688401F85F1EE00AE2D93 /* Vungle.hpp */; };
 		6F3688471F85F1EE00AE2D93 /* VungleFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688411F85F1EE00AE2D93 /* VungleFwd.hpp */; };
-		6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */; };
-		6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */; };
+		6F36885F1F8613B800AE2D93 /* IRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* IRewardedVideo.cpp */; };
+		6F3688601F8613B800AE2D93 /* IRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* IRewardedVideo.hpp */; };
 		6F3688611F86161D00AE2D93 /* ee_x_mobile_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */; };
 		6F3688681F863C7D00AE2D93 /* EEIronSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688641F863C7D00AE2D93 /* EEIronSource.h */; };
 		6F3688691F863C7D00AE2D93 /* EEIronSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3688651F863C7D00AE2D93 /* EEIronSource.m */; };
@@ -119,10 +119,10 @@
 		6F36886B1F863C7D00AE2D93 /* IronSourceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */; };
 		6F3B3E2C1FA9B3660089E322 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B3E2A1FA9B3660089E322 /* Logger.cpp */; };
 		6F3B3E2D1FA9B3660089E322 /* Logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F3B3E2B1FA9B3660089E322 /* Logger.hpp */; };
-		6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* AdViewInterface.cpp */; };
-		6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* AdViewInterface.hpp */; };
-		6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */; };
-		6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */; };
+		6F426D351F87822A009E202A /* IAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* IAdView.cpp */; };
+		6F426D361F87822A009E202A /* IAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* IAdView.hpp */; };
+		6F426D421F87955E009E202A /* IInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D401F87955E009E202A /* IInterstitialAd.cpp */; };
+		6F426D431F87955E009E202A /* IInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D411F87955E009E202A /* IInterstitialAd.hpp */; };
 		6F426E351F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
 		6F426E361F8BAEB7009E202A /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E331F8BAEB7009E202A /* Utils.cpp */; };
 		6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426E341F8BAEB7009E202A /* Utils.hpp */; };
@@ -153,21 +153,21 @@
 		6F43A2DD1EC1A3A200C68152 /* NotificationBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F43A29C1EC19F3100C68152 /* NotificationBuilder.hpp */; };
 		6F5360D51F8F5ECE00E1E9A6 /* EEAdMobInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5360D41F8F5ECE00E1E9A6 /* EEAdMobInterstitialAd.m */; };
 		6F5360D71F8F5EF700E1E9A6 /* EEAdMobInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360D61F8F5EF700E1E9A6 /* EEAdMobInterstitialAd.h */; };
-		6F5360D91F8F603300E1E9A6 /* EEInterstitialAdInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360D81F8F603300E1E9A6 /* EEInterstitialAdInterface.h */; };
+		6F5360D91F8F603300E1E9A6 /* EEIInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360D81F8F603300E1E9A6 /* EEIInterstitialAd.h */; };
 		6F5360DD1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360DC1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h */; };
-		6F59E71E1FA70B3A007D3070 /* EEAdViewInterface.h in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */; };
+		6F59E71E1FA70B3A007D3070 /* EEIAdView.h in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5771F8F2C8E00A27634 /* EEIAdView.h */; };
 		6F59E71F1FA70B3A007D3070 /* AdViewHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5A21F8F6C6A007BC7A3 /* AdViewHelper.cpp */; };
 		6F59E7201FA70B3A007D3070 /* MediationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F29349F1FA1D52E008B6246 /* MediationManager.cpp */; };
 		6F59E7211FA70B3A007D3070 /* MultiInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */; };
 		6F59E7221FA70B3A007D3070 /* NullAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934A31FA2DA25008B6246 /* NullAdView.cpp */; };
 		6F59E7231FA70B3A007D3070 /* NullInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934A71FA2DA38008B6246 /* NullInterstitialAd.cpp */; };
 		6F59E7241FA70B3A007D3070 /* NullRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2934AB1FA2DA4A008B6246 /* NullRewardedVideo.cpp */; };
-		6F59E7251FA70B3A007D3070 /* InterstitialAdInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */; };
+		6F59E7251FA70B3A007D3070 /* IInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D401F87955E009E202A /* IInterstitialAd.cpp */; };
 		6F59E7261FA70B3A007D3070 /* MultiAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F9E73211F97430B00EE467B /* MultiAdView.cpp */; };
 		6F59E7271FA70B3A007D3070 /* AdViewBridgeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F04C5CA1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp */; };
 		6F59E7281FA70B3A007D3070 /* EEAdViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */; };
-		6F59E7291FA70B3A007D3070 /* RewardedVideoInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */; };
-		6F59E72A1FA70B3A007D3070 /* AdViewInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* AdViewInterface.cpp */; };
+		6F59E7291FA70B3A007D3070 /* IRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F36885D1F8613B800AE2D93 /* IRewardedVideo.cpp */; };
+		6F59E72A1FA70B3A007D3070 /* IAdView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F426D331F87822A009E202A /* IAdView.cpp */; };
 		6F59E72B1FA70B3A007D3070 /* EEInterstitialAdHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */; };
 		6F59E72C1FA70B3A007D3070 /* MultiRewardedVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2479CB1F8DFBB0009E702C /* MultiRewardedVideo.cpp */; };
 		6F59E72F1FA70B3A007D3070 /* MultiAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F9E73221F97430B00EE467B /* MultiAdView.hpp */; };
@@ -177,16 +177,16 @@
 		6F59E7331FA70B3A007D3070 /* EEAdViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */; };
 		6F59E7341FA70B3A007D3070 /* Ads.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479C81F8DF482009E702C /* Ads.hpp */; };
 		6F59E7351FA70B3A007D3070 /* MultiRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479CC1F8DFBB0009E702C /* MultiRewardedVideo.hpp */; };
-		6F59E7361FA70B3A007D3070 /* InterstitialAdInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */; };
+		6F59E7361FA70B3A007D3070 /* IInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D411F87955E009E202A /* IInterstitialAd.hpp */; };
 		6F59E7371FA70B3A007D3070 /* NullInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A81FA2DA38008B6246 /* NullInterstitialAd.hpp */; };
 		6F59E7381FA70B3A007D3070 /* MediationManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934A01FA1D52E008B6246 /* MediationManager.hpp */; };
 		6F59E7391FA70B3A007D3070 /* MultiInterstitialAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2479D01F8DFC2D009E702C /* MultiInterstitialAd.hpp */; };
-		6F59E73A1FA70B3A007D3070 /* EEInterstitialAdInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360D81F8F603300E1E9A6 /* EEInterstitialAdInterface.h */; };
+		6F59E73A1FA70B3A007D3070 /* EEIInterstitialAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360D81F8F603300E1E9A6 /* EEIInterstitialAd.h */; };
 		6F59E73B1FA70B3A007D3070 /* EEInterstitialAdHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F5360DC1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h */; };
-		6F59E73C1FA70B3A007D3070 /* AdViewInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* AdViewInterface.hpp */; };
+		6F59E73C1FA70B3A007D3070 /* IAdView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F426D341F87822A009E202A /* IAdView.hpp */; };
 		6F59E73D1FA70B3A007D3070 /* AdViewHelper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F04C5A31F8F6C6A007BC7A3 /* AdViewHelper.hpp */; };
 		6F59E73E1FA70B3A007D3070 /* NullRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F2934AC1FA2DA4A008B6246 /* NullRewardedVideo.hpp */; };
-		6F59E73F1FA70B3A007D3070 /* RewardedVideoInterface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */; };
+		6F59E73F1FA70B3A007D3070 /* IRewardedVideo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F36885E1F8613B800AE2D93 /* IRewardedVideo.hpp */; };
 		6F5E62141ECD979A0036D83B /* PurchaseWithVirtualItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E62121ECD979A0036D83B /* PurchaseWithVirtualItem.cpp */; };
 		6F5E62151ECD979A0036D83B /* PurchaseWithVirtualItem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6F5E62131ECD979A0036D83B /* PurchaseWithVirtualItem.hpp */; };
 		6F5E621C1ECDA9210036D83B /* VirtualCurrencyPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E621A1ECDA9210036D83B /* VirtualCurrencyPack.cpp */; };
@@ -290,8 +290,8 @@
 		6FB7D63F1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */; };
 		6FB7D6401FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */; };
 		6FB7D6491FA0796B00EFE441 /* GoogleAnalytics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */; };
-		6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
-		6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */; };
+		6FBD03E01FCC207A0050C980 /* EEIMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */; };
+		6FBD03E11FCC207A0050C980 /* EEIMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */; };
 		6FBD03E21FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
 		6FBD03E31FCC207A0050C980 /* EEMessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */; };
 		6FBD03E41FCC207A0050C980 /* MessageBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */; };
@@ -310,7 +310,7 @@
 		6FDD659E1F94989100BAEA66 /* AdMobFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */; };
 		6FF6B5731F8F273800A27634 /* EEAdMobBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5721F8F273800A27634 /* EEAdMobBannerAd.m */; };
 		6FF6B5751F8F276300A27634 /* EEAdMobBannerAd.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B5741F8F276300A27634 /* EEAdMobBannerAd.h */; };
-		6FF6B5781F8F2C8E00A27634 /* EEAdViewInterface.h in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */; };
+		6FF6B5781F8F2C8E00A27634 /* EEIAdView.h in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5771F8F2C8E00A27634 /* EEIAdView.h */; };
 		6FF6B57A1F8F492900A27634 /* EEAdViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */; };
 		6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */; };
 		71316B903291F64DBF053615 /* libPods-common-ee_x_mobile_admob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EAA3A17ADA7FA895FF0018 /* libPods-common-ee_x_mobile_admob.a */; };
@@ -337,14 +337,10 @@
 		AD10C2AA20492A8A00C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
 		AD10C2AB20492A8A00C92CFE /* FacebookNativeAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29620492A8A00C92CFE /* FacebookNativeAd.hpp */; };
 		AD10C2B120492A9D00C92CFE /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */; };
-		AD10C2B220492A9D00C92CFE /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28220492A8A00C92CFE /* EEFacebookAds.m */; };
 		AD10C2B320492A9D00C92CFE /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */; };
-		AD10C2B420492A9D00C92CFE /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */; };
 		AD10C2B520492A9D00C92CFE /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */; };
 		AD10C2B620492A9D00C92CFE /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */; };
-		AD10C2B720492A9D00C92CFE /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */; };
 		AD10C2B820492A9D00C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
-		AD10C2B920492A9D00C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
 		AD10C2BA20492A9D00C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
 		AD10C2BC20492A9D00C92CFE /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		AD10C2BE20492A9D00C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
@@ -367,16 +363,11 @@
 		AD10C2DB20492B2300C92CFE /* FacebookFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */; };
 		AD10C2DC20492B2300C92CFE /* Facebook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D620492B2300C92CFE /* Facebook.hpp */; };
 		AD10C2E22049345600C92CFE /* EEFacebookNativeAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28420492A8A00C92CFE /* EEFacebookNativeAdView.m */; };
-		AD10C2E32049345600C92CFE /* EEFacebookAds.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28220492A8A00C92CFE /* EEFacebookAds.m */; };
 		AD10C2E42049345600C92CFE /* FacebookBannerAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29120492A8A00C92CFE /* FacebookBannerAd.cpp */; };
-		AD10C2E52049345600C92CFE /* EEFacebookNativeAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29020492A8A00C92CFE /* EEFacebookNativeAd.m */; };
 		AD10C2E62049345600C92CFE /* FacebookAdsBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28520492A8A00C92CFE /* FacebookAdsBridge.cpp */; };
 		AD10C2E72049345600C92CFE /* FacebookNativeAdLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28820492A8A00C92CFE /* FacebookNativeAdLayout.cpp */; };
 		AD10C2E82049345600C92CFE /* FacebookBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */; };
-		AD10C2E92049345600C92CFE /* EEFacebookInterstitialAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28E20492A8A00C92CFE /* EEFacebookInterstitialAd.m */; };
-		AD10C2EA2049345600C92CFE /* EEFacebook.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C2D220492B2200C92CFE /* EEFacebook.m */; };
 		AD10C2EB2049345600C92CFE /* FacebookNativeAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29520492A8A00C92CFE /* FacebookNativeAd.cpp */; };
-		AD10C2EC2049345600C92CFE /* EEFacebookBannerAd.m in Sources */ = {isa = PBXBuildFile; fileRef = AD10C28C20492A8A00C92CFE /* EEFacebookBannerAd.m */; };
 		AD10C2ED2049345600C92CFE /* FacebookInterstitialAd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD10C29320492A8A00C92CFE /* FacebookInterstitialAd.cpp */; };
 		AD10C2F22049345600C92CFE /* FacebookFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */; };
 		AD10C2F32049345600C92CFE /* FacebookBannerAd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C29220492A8A00C92CFE /* FacebookBannerAd.hpp */; };
@@ -401,6 +392,10 @@
 		AD10C312204934A500C92CFE /* RecorderBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30C204934A400C92CFE /* RecorderBridge.hpp */; };
 		AD10C313204934A500C92CFE /* RecorderFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30D204934A400C92CFE /* RecorderFwd.hpp */; };
 		AD10C314204934A500C92CFE /* Recorder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30E204934A500C92CFE /* Recorder.hpp */; };
+		AD2FB34B2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
+		AD2FB34C2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
+		AD2FB34E2059019700140ED7 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34D2059019700140ED7 /* EEMessageBridge.h */; };
+		AD2FB34F2059019700140ED7 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34D2059019700140ED7 /* EEMessageBridge.h */; };
 		AD56EF73202026A300DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
 		AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */; };
 		AD56EF75202026A700DC9B56 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */; };
@@ -774,18 +769,18 @@
 		6F3688401F85F1EE00AE2D93 /* Vungle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vungle.hpp; sourceTree = "<group>"; };
 		6F3688411F85F1EE00AE2D93 /* VungleFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleFwd.hpp; sourceTree = "<group>"; };
 		6F36885C1F86137800AE2D93 /* ee_x_mobile_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RewardedVideoInterface.cpp; path = ads/RewardedVideoInterface.cpp; sourceTree = "<group>"; };
-		6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RewardedVideoInterface.hpp; path = ads/RewardedVideoInterface.hpp; sourceTree = "<group>"; };
+		6F36885D1F8613B800AE2D93 /* IRewardedVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IRewardedVideo.cpp; path = ads/IRewardedVideo.cpp; sourceTree = "<group>"; };
+		6F36885E1F8613B800AE2D93 /* IRewardedVideo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IRewardedVideo.hpp; path = ads/IRewardedVideo.hpp; sourceTree = "<group>"; };
 		6F3688641F863C7D00AE2D93 /* EEIronSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIronSource.h; path = ironsource/EEIronSource.h; sourceTree = "<group>"; };
 		6F3688651F863C7D00AE2D93 /* EEIronSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEIronSource.m; path = ironsource/EEIronSource.m; sourceTree = "<group>"; };
 		6F3688661F863C7D00AE2D93 /* IronSourceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IronSourceBridge.cpp; path = ironsource/IronSourceBridge.cpp; sourceTree = "<group>"; };
 		6F3688671F863C7D00AE2D93 /* IronSourceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IronSourceBridge.hpp; path = ironsource/IronSourceBridge.hpp; sourceTree = "<group>"; };
 		6F3B3E2A1FA9B3660089E322 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		6F3B3E2B1FA9B3660089E322 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
-		6F426D331F87822A009E202A /* AdViewInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdViewInterface.cpp; path = ads/AdViewInterface.cpp; sourceTree = "<group>"; };
-		6F426D341F87822A009E202A /* AdViewInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AdViewInterface.hpp; path = ads/AdViewInterface.hpp; sourceTree = "<group>"; };
-		6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterstitialAdInterface.cpp; path = ads/InterstitialAdInterface.cpp; sourceTree = "<group>"; };
-		6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterstitialAdInterface.hpp; path = ads/InterstitialAdInterface.hpp; sourceTree = "<group>"; };
+		6F426D331F87822A009E202A /* IAdView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IAdView.cpp; path = ads/IAdView.cpp; sourceTree = "<group>"; };
+		6F426D341F87822A009E202A /* IAdView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IAdView.hpp; path = ads/IAdView.hpp; sourceTree = "<group>"; };
+		6F426D401F87955E009E202A /* IInterstitialAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IInterstitialAd.cpp; path = ads/IInterstitialAd.cpp; sourceTree = "<group>"; };
+		6F426D411F87955E009E202A /* IInterstitialAd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IInterstitialAd.hpp; path = ads/IInterstitialAd.hpp; sourceTree = "<group>"; };
 		6F426E331F8BAEB7009E202A /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6F426E341F8BAEB7009E202A /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
 		6F43A2281EC19F3100C68152 /* EEPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEPluginManager.h; sourceTree = "<group>"; };
@@ -814,7 +809,7 @@
 		6F43A2D61EC1A39900C68152 /* Notification.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Notification.hpp; sourceTree = "<group>"; };
 		6F5360D41F8F5ECE00E1E9A6 /* EEAdMobInterstitialAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdMobInterstitialAd.m; path = admob/internal/EEAdMobInterstitialAd.m; sourceTree = "<group>"; };
 		6F5360D61F8F5EF700E1E9A6 /* EEAdMobInterstitialAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdMobInterstitialAd.h; path = admob/internal/EEAdMobInterstitialAd.h; sourceTree = "<group>"; };
-		6F5360D81F8F603300E1E9A6 /* EEInterstitialAdInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEInterstitialAdInterface.h; path = ads/internal/EEInterstitialAdInterface.h; sourceTree = "<group>"; };
+		6F5360D81F8F603300E1E9A6 /* EEIInterstitialAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIInterstitialAd.h; path = ads/internal/EEIInterstitialAd.h; sourceTree = "<group>"; };
 		6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEInterstitialAdHelper.m; path = ads/internal/EEInterstitialAdHelper.m; sourceTree = "<group>"; };
 		6F5360DC1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEInterstitialAdHelper.h; path = ads/internal/EEInterstitialAdHelper.h; sourceTree = "<group>"; };
 		6F59E7431FA70B3A007D3070 /* ee_x_desktop_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_desktop_ads.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -922,7 +917,7 @@
 		6FB7D63D1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsSocialBuilder.cpp; sourceTree = "<group>"; };
 		6FB7D63E1FA04B2700EFE441 /* GoogleAnalyticsSocialBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsSocialBuilder.hpp; sourceTree = "<group>"; };
 		6FB7D6481FA0796B00EFE441 /* GoogleAnalytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalytics.hpp; sourceTree = "<group>"; };
-		6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
+		6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEIMessageBridge.h; sourceTree = "<group>"; };
 		6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMessageBridge.m; sourceTree = "<group>"; };
 		6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBridge.cpp; sourceTree = "<group>"; };
 		6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MessageBridge.hpp; sourceTree = "<group>"; };
@@ -938,7 +933,7 @@
 		6FDD659D1F94989100BAEA66 /* AdMobFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMobFwd.hpp; sourceTree = "<group>"; };
 		6FF6B5721F8F273800A27634 /* EEAdMobBannerAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdMobBannerAd.m; path = admob/internal/EEAdMobBannerAd.m; sourceTree = "<group>"; };
 		6FF6B5741F8F276300A27634 /* EEAdMobBannerAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdMobBannerAd.h; path = admob/internal/EEAdMobBannerAd.h; sourceTree = "<group>"; };
-		6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewInterface.h; path = ads/internal/EEAdViewInterface.h; sourceTree = "<group>"; };
+		6FF6B5771F8F2C8E00A27634 /* EEIAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIAdView.h; path = ads/internal/EEIAdView.h; sourceTree = "<group>"; };
 		6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdViewHelper.m; path = ads/internal/EEAdViewHelper.m; sourceTree = "<group>"; };
 		6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewHelper.h; path = ads/internal/EEAdViewHelper.h; sourceTree = "<group>"; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
@@ -983,6 +978,8 @@
 		AD10C30C204934A400C92CFE /* RecorderBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderBridge.hpp; sourceTree = "<group>"; };
 		AD10C30D204934A400C92CFE /* RecorderFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderFwd.hpp; sourceTree = "<group>"; };
 		AD10C30E204934A500C92CFE /* Recorder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recorder.hpp; sourceTree = "<group>"; };
+		AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IMessageBridge.hpp; sourceTree = "<group>"; };
+		AD2FB34D2059019700140ED7 /* EEMessageBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
 		AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayer.cpp; sourceTree = "<group>"; };
 		AD56EF72202026A300DC9B56 /* VideoPlayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayer.hpp; sourceTree = "<group>"; };
 		AD56EF76202027CE00DC9B56 /* EEVideoPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEVideoPlayer.m; sourceTree = "<group>"; };
@@ -1177,7 +1174,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				95DC76171EF8F28D00CAA8F3 /* CHANGELOG */,
@@ -1325,12 +1322,12 @@
 		6F3688481F86135600AE2D93 /* ads */ = {
 			isa = PBXGroup;
 			children = (
-				6F426D331F87822A009E202A /* AdViewInterface.cpp */,
-				6F426D341F87822A009E202A /* AdViewInterface.hpp */,
-				6F426D401F87955E009E202A /* InterstitialAdInterface.cpp */,
-				6F426D411F87955E009E202A /* InterstitialAdInterface.hpp */,
-				6F36885D1F8613B800AE2D93 /* RewardedVideoInterface.cpp */,
-				6F36885E1F8613B800AE2D93 /* RewardedVideoInterface.hpp */,
+				6F426D331F87822A009E202A /* IAdView.cpp */,
+				6F426D341F87822A009E202A /* IAdView.hpp */,
+				6F426D401F87955E009E202A /* IInterstitialAd.cpp */,
+				6F426D411F87955E009E202A /* IInterstitialAd.hpp */,
+				6F36885D1F8613B800AE2D93 /* IRewardedVideo.cpp */,
+				6F36885E1F8613B800AE2D93 /* IRewardedVideo.hpp */,
 				6F9E73211F97430B00EE467B /* MultiAdView.cpp */,
 				6F9E73221F97430B00EE467B /* MultiAdView.hpp */,
 				6F2479CF1F8DFC2D009E702C /* MultiInterstitialAd.cpp */,
@@ -1404,8 +1401,10 @@
 			children = (
 				6F43A2281EC19F3100C68152 /* EEPluginManager.h */,
 				6F43A2291EC19F3100C68152 /* EEPluginManager.m */,
-				6FBD03DC1FCC207A0050C980 /* EEMessageBridge.h */,
+				6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */,
+				AD2FB34D2059019700140ED7 /* EEMessageBridge.h */,
 				6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */,
+				AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */,
 				6FBD03DE1FCC207A0050C980 /* MessageBridge.cpp */,
 				6FBD03DF1FCC207A0050C980 /* MessageBridge.hpp */,
 				6F43A22A1EC19F3100C68152 /* internal */,
@@ -1663,10 +1662,10 @@
 		6FF6B5761F8F2C5900A27634 /* internal */ = {
 			isa = PBXGroup;
 			children = (
-				6FF6B5771F8F2C8E00A27634 /* EEAdViewInterface.h */,
+				6FF6B5771F8F2C8E00A27634 /* EEIAdView.h */,
 				6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */,
 				6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */,
-				6F5360D81F8F603300E1E9A6 /* EEInterstitialAdInterface.h */,
+				6F5360D81F8F603300E1E9A6 /* EEIInterstitialAd.h */,
 				6F5360DC1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h */,
 				6F5360DA1F8F60AD00E1E9A6 /* EEInterstitialAdHelper.m */,
 				6F04C5A21F8F6C6A007BC7A3 /* AdViewHelper.cpp */,
@@ -1775,10 +1774,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD2FB34B2058C88900140ED7 /* IMessageBridge.hpp in Headers */,
 				6F43A2BF1EC1A18900C68152 /* EEJsonUtils.h in Headers */,
 				AD56EF74202026A300DC9B56 /* VideoPlayer.hpp in Headers */,
 				6FAF790B1FA0A41E00405AF8 /* EEMetrics.h in Headers */,
-				6FBD03E01FCC207A0050C980 /* EEMessageBridge.h in Headers */,
+				6FBD03E01FCC207A0050C980 /* EEIMessageBridge.h in Headers */,
 				6FAF79101FA0A41E00405AF8 /* ScopeGuard.hpp in Headers */,
 				6F43A2B81EC1A01A00C68152 /* Core.hpp in Headers */,
 				6F43A2CC1EC1A18900C68152 /* LogLevel.hpp in Headers */,
@@ -1789,6 +1789,7 @@
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
 				AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */,
+				AD2FB34E2059019700140ED7 /* EEMessageBridge.h in Headers */,
 				6F43A2BD1EC1A18900C68152 /* EEDictionaryUtils.h in Headers */,
 				6FAF79111FA0A41E00405AF8 /* SpinLock.hpp in Headers */,
 				6F426E371F8BAEB7009E202A /* Utils.hpp in Headers */,
@@ -1914,16 +1915,16 @@
 				6FF6B57C1F8F493800A27634 /* EEAdViewHelper.h in Headers */,
 				6F2479CA1F8DF482009E702C /* Ads.hpp in Headers */,
 				6F2479CE1F8DFBB0009E702C /* MultiRewardedVideo.hpp in Headers */,
-				6F426D431F87955E009E202A /* InterstitialAdInterface.hpp in Headers */,
+				6F426D431F87955E009E202A /* IInterstitialAd.hpp in Headers */,
 				6F2934AA1FA2DA38008B6246 /* NullInterstitialAd.hpp in Headers */,
 				6F2934A21FA1D52E008B6246 /* MediationManager.hpp in Headers */,
 				6F2479D21F8DFC2D009E702C /* MultiInterstitialAd.hpp in Headers */,
-				6F5360D91F8F603300E1E9A6 /* EEInterstitialAdInterface.h in Headers */,
+				6F5360D91F8F603300E1E9A6 /* EEIInterstitialAd.h in Headers */,
 				6F5360DD1F8F60CC00E1E9A6 /* EEInterstitialAdHelper.h in Headers */,
-				6F426D361F87822A009E202A /* AdViewInterface.hpp in Headers */,
+				6F426D361F87822A009E202A /* IAdView.hpp in Headers */,
 				6F04C5A51F8F6C6A007BC7A3 /* AdViewHelper.hpp in Headers */,
 				6F2934AE1FA2DA4A008B6246 /* NullRewardedVideo.hpp in Headers */,
-				6F3688601F8613B800AE2D93 /* RewardedVideoInterface.hpp in Headers */,
+				6F3688601F8613B800AE2D93 /* IRewardedVideo.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1961,16 +1962,16 @@
 				6F59E7331FA70B3A007D3070 /* EEAdViewHelper.h in Headers */,
 				6F59E7341FA70B3A007D3070 /* Ads.hpp in Headers */,
 				6F59E7351FA70B3A007D3070 /* MultiRewardedVideo.hpp in Headers */,
-				6F59E7361FA70B3A007D3070 /* InterstitialAdInterface.hpp in Headers */,
+				6F59E7361FA70B3A007D3070 /* IInterstitialAd.hpp in Headers */,
 				6F59E7371FA70B3A007D3070 /* NullInterstitialAd.hpp in Headers */,
 				6F59E7381FA70B3A007D3070 /* MediationManager.hpp in Headers */,
 				6F59E7391FA70B3A007D3070 /* MultiInterstitialAd.hpp in Headers */,
-				6F59E73A1FA70B3A007D3070 /* EEInterstitialAdInterface.h in Headers */,
+				6F59E73A1FA70B3A007D3070 /* EEIInterstitialAd.h in Headers */,
 				6F59E73B1FA70B3A007D3070 /* EEInterstitialAdHelper.h in Headers */,
-				6F59E73C1FA70B3A007D3070 /* AdViewInterface.hpp in Headers */,
+				6F59E73C1FA70B3A007D3070 /* IAdView.hpp in Headers */,
 				6F59E73D1FA70B3A007D3070 /* AdViewHelper.hpp in Headers */,
 				6F59E73E1FA70B3A007D3070 /* NullRewardedVideo.hpp in Headers */,
-				6F59E73F1FA70B3A007D3070 /* RewardedVideoInterface.hpp in Headers */,
+				6F59E73F1FA70B3A007D3070 /* IRewardedVideo.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1978,9 +1979,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD2FB34C2058C88900140ED7 /* IMessageBridge.hpp in Headers */,
 				6F83DCA01EC1C800004C5500 /* EEJsonUtils.h in Headers */,
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
-				6FBD03E11FCC207A0050C980 /* EEMessageBridge.h in Headers */,
+				AD2FB34F2059019700140ED7 /* EEMessageBridge.h in Headers */,
+				6FBD03E11FCC207A0050C980 /* EEIMessageBridge.h in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
 				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
 				6F83DCA41EC1C800004C5500 /* EEUtils.h in Headers */,
@@ -2522,8 +2525,8 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
-			productRefGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			productRefGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -2999,19 +3002,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FF6B5781F8F2C8E00A27634 /* EEAdViewInterface.h in Sources */,
+				6FF6B5781F8F2C8E00A27634 /* EEIAdView.h in Sources */,
 				6F04C5A41F8F6C6A007BC7A3 /* AdViewHelper.cpp in Sources */,
 				6F2934A11FA1D52E008B6246 /* MediationManager.cpp in Sources */,
 				6F2479D11F8DFC2D009E702C /* MultiInterstitialAd.cpp in Sources */,
 				6F2934A51FA2DA25008B6246 /* NullAdView.cpp in Sources */,
 				6F2934A91FA2DA38008B6246 /* NullInterstitialAd.cpp in Sources */,
 				6F2934AD1FA2DA4A008B6246 /* NullRewardedVideo.cpp in Sources */,
-				6F426D421F87955E009E202A /* InterstitialAdInterface.cpp in Sources */,
+				6F426D421F87955E009E202A /* IInterstitialAd.cpp in Sources */,
 				6F9E73231F97430B00EE467B /* MultiAdView.cpp in Sources */,
 				6F04C5CC1F8F8214007BC7A3 /* AdViewBridgeHelper.cpp in Sources */,
 				6FF6B57A1F8F492900A27634 /* EEAdViewHelper.m in Sources */,
-				6F36885F1F8613B800AE2D93 /* RewardedVideoInterface.cpp in Sources */,
-				6F426D351F87822A009E202A /* AdViewInterface.cpp in Sources */,
+				6F36885F1F8613B800AE2D93 /* IRewardedVideo.cpp in Sources */,
+				6F426D351F87822A009E202A /* IAdView.cpp in Sources */,
 				6F04C5991F8F61BF007BC7A3 /* EEInterstitialAdHelper.m in Sources */,
 				6F2479CD1F8DFBB0009E702C /* MultiRewardedVideo.cpp in Sources */,
 			);
@@ -3040,19 +3043,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F59E71E1FA70B3A007D3070 /* EEAdViewInterface.h in Sources */,
+				6F59E71E1FA70B3A007D3070 /* EEIAdView.h in Sources */,
 				6F59E71F1FA70B3A007D3070 /* AdViewHelper.cpp in Sources */,
 				6F59E7201FA70B3A007D3070 /* MediationManager.cpp in Sources */,
 				6F59E7211FA70B3A007D3070 /* MultiInterstitialAd.cpp in Sources */,
 				6F59E7221FA70B3A007D3070 /* NullAdView.cpp in Sources */,
 				6F59E7231FA70B3A007D3070 /* NullInterstitialAd.cpp in Sources */,
 				6F59E7241FA70B3A007D3070 /* NullRewardedVideo.cpp in Sources */,
-				6F59E7251FA70B3A007D3070 /* InterstitialAdInterface.cpp in Sources */,
+				6F59E7251FA70B3A007D3070 /* IInterstitialAd.cpp in Sources */,
 				6F59E7261FA70B3A007D3070 /* MultiAdView.cpp in Sources */,
 				6F59E7271FA70B3A007D3070 /* AdViewBridgeHelper.cpp in Sources */,
 				6F59E7281FA70B3A007D3070 /* EEAdViewHelper.m in Sources */,
-				6F59E7291FA70B3A007D3070 /* RewardedVideoInterface.cpp in Sources */,
-				6F59E72A1FA70B3A007D3070 /* AdViewInterface.cpp in Sources */,
+				6F59E7291FA70B3A007D3070 /* IRewardedVideo.cpp in Sources */,
+				6F59E72A1FA70B3A007D3070 /* IAdView.cpp in Sources */,
 				6F59E72B1FA70B3A007D3070 /* EEInterstitialAdHelper.m in Sources */,
 				6F59E72C1FA70B3A007D3070 /* MultiRewardedVideo.cpp in Sources */,
 			);
@@ -3171,16 +3174,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD10C2B120492A9D00C92CFE /* EEFacebookNativeAdView.m in Sources */,
-				AD10C2B220492A9D00C92CFE /* EEFacebookAds.m in Sources */,
 				AD10C2B320492A9D00C92CFE /* FacebookBannerAd.cpp in Sources */,
-				AD10C2B420492A9D00C92CFE /* EEFacebookNativeAd.m in Sources */,
 				AD10C2B520492A9D00C92CFE /* FacebookAdsBridge.cpp in Sources */,
 				AD10C2B620492A9D00C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
 				AD10C2D920492B2300C92CFE /* FacebookBridge.cpp in Sources */,
-				AD10C2B720492A9D00C92CFE /* EEFacebookInterstitialAd.m in Sources */,
 				AD10C2D820492B2300C92CFE /* EEFacebook.m in Sources */,
 				AD10C2B820492A9D00C92CFE /* FacebookNativeAd.cpp in Sources */,
-				AD10C2B920492A9D00C92CFE /* EEFacebookBannerAd.m in Sources */,
 				AD10C2BA20492A9D00C92CFE /* FacebookInterstitialAd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3190,18 +3189,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD10C2E22049345600C92CFE /* EEFacebookNativeAdView.m in Sources */,
-				AD10C2E32049345600C92CFE /* EEFacebookAds.m in Sources */,
 				AD10C2E42049345600C92CFE /* FacebookBannerAd.cpp in Sources */,
-				AD10C2E52049345600C92CFE /* EEFacebookNativeAd.m in Sources */,
 				AD10C2E62049345600C92CFE /* FacebookAdsBridge.cpp in Sources */,
 				AD10C2E72049345600C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
 				AD10C2E82049345600C92CFE /* FacebookBridge.cpp in Sources */,
 				AD10C310204934A500C92CFE /* EERecorder.m in Sources */,
-				AD10C2E92049345600C92CFE /* EEFacebookInterstitialAd.m in Sources */,
-				AD10C2EA2049345600C92CFE /* EEFacebook.m in Sources */,
 				AD10C311204934A500C92CFE /* RecorderBridge.cpp in Sources */,
 				AD10C2EB2049345600C92CFE /* FacebookNativeAd.cpp in Sources */,
-				AD10C2EC2049345600C92CFE /* EEFacebookBannerAd.m in Sources */,
 				AD10C2ED2049345600C92CFE /* FacebookInterstitialAd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,7 +9,7 @@
 #import <CoreGraphics/CGGeometry.h>
 #import <Foundation/NSObject.h>
 
-@protocol EEAdViewInterface <NSObject>
+@protocol EEIAdView <NSObject>
 
 - (BOOL)isLoaded;
 - (void)load;

@@ -21,18 +21,21 @@
 
 @implementation EEVideoPlayer {
     NSString* tag_;
+    EEMessageBridge* bridge_;
 }
 
 #if TARGET_OS_IOS
 @synthesize moviePlayer = moviePlayer_;
 #endif // TARGET_OS_IOS
 
-- (id)initWithTag:(NSString* _Nonnull)tag {
+- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                 tag:(NSString* _Nonnull)tag {
     self = [super init];
     if (self == nil) {
         return nil;
     }
     tag_ = [tag copy];
+    bridge_ = bridge;
 
 #if TARGET_OS_IOS
     MPMoviePlayerController* player =
@@ -130,79 +133,75 @@
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:[self k__loadFile]
-                   callback:^(NSString* message) {
-                       [self loadFile:message];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__setPosition]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int x = [dict[@"x"] intValue];
-                       int y = [dict[@"y"] intValue];
-                       [self setPosition:CGPointMake(x, y)];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__setSize]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       int width = [dict[@"width"] intValue];
-                       int height = [dict[@"height"] intValue];
-                       [self setSize:CGSizeMake(width, height)];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__play]
-                   callback:^(NSString* message) {
-                       [self play];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__pause]
-                   callback:^(NSString* message) {
-                       [self pause];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__resume]
-                   callback:^(NSString* message) {
-                       [self pause];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__stop]
-                   callback:^(NSString* message) {
-                       [self resume];
-                       return @"";
-                   }];
-    [bridge registerHandler:[self k__setVisible]
-                   callback:^(NSString* message) {
-                       [self setVisible:[EEUtils toBool:message]];
-                       return @"";
-                   }];
-    [bridge
+    [bridge_ registerHandler:[self k__loadFile]
+                    callback:^(NSString* message) {
+                        [self loadFile:message];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__setPosition]
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        int x = [dict[@"x"] intValue];
+                        int y = [dict[@"y"] intValue];
+                        [self setPosition:CGPointMake(x, y)];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__setSize]
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        int width = [dict[@"width"] intValue];
+                        int height = [dict[@"height"] intValue];
+                        [self setSize:CGSizeMake(width, height)];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__play]
+                    callback:^(NSString* message) {
+                        [self play];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__pause]
+                    callback:^(NSString* message) {
+                        [self pause];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__resume]
+                    callback:^(NSString* message) {
+                        [self pause];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__stop]
+                    callback:^(NSString* message) {
+                        [self resume];
+                        return @"";
+                    }];
+    [bridge_ registerHandler:[self k__setVisible]
+                    callback:^(NSString* message) {
+                        [self setVisible:[EEUtils toBool:message]];
+                        return @"";
+                    }];
+    [bridge_
         registerHandler:[self k__setKeepAspectRatioEnabled]
                callback:^(NSString* message) {
                    [self setKeepAspectRatioEnabled:[EEUtils toBool:message]];
                    return @"";
                }];
-    [bridge registerHandler:[self k__setFullScreenEnabled]
-                   callback:^(NSString* message) {
-                       [self setFullScreenEnabled:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__setFullScreenEnabled]
+                    callback:^(NSString* message) {
+                        [self setFullScreenEnabled:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:[self k__play]];
-    [bridge deregisterHandler:[self k__pause]];
-    [bridge deregisterHandler:[self k__resume]];
-    [bridge deregisterHandler:[self k__stop]];
-    [bridge deregisterHandler:[self k__setVisible]];
-    [bridge deregisterHandler:[self k__setKeepAspectRatioEnabled]];
-    [bridge deregisterHandler:[self k__setFullScreenEnabled]];
+    [bridge_ deregisterHandler:[self k__play]];
+    [bridge_ deregisterHandler:[self k__pause]];
+    [bridge_ deregisterHandler:[self k__resume]];
+    [bridge_ deregisterHandler:[self k__stop]];
+    [bridge_ deregisterHandler:[self k__setVisible]];
+    [bridge_ deregisterHandler:[self k__setKeepAspectRatioEnabled]];
+    [bridge_ deregisterHandler:[self k__setFullScreenEnabled]];
 }
 
 - (void)loadFile:(NSString* _Nonnull)path {

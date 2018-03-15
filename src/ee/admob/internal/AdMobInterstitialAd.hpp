@@ -10,11 +10,11 @@
 #define EE_X_ADMOB_INTERSTITIAL_AD_HPP
 
 #include "ee/AdMobFwd.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace admob {
-class InterstitialAd : public InterstitialAdInterface {
+class InterstitialAd : public IInterstitialAd {
 public:
     virtual ~InterstitialAd() override;
 
@@ -25,7 +25,8 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(AdMob* plugin, const std::string& adId);
+    explicit InterstitialAd(IMessageBridge& bridge, AdMob* plugin,
+                            const std::string& adId);
 
     bool createInternalAd();
     bool destroyInternalAd();
@@ -43,6 +44,7 @@ private:
 
     bool errored_;
 
+    IMessageBridge& bridge_;
     AdMob* plugin_;
     std::string adId_;
 };

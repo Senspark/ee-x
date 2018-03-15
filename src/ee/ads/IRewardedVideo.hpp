@@ -1,13 +1,13 @@
 //
-//  RewardedVideoInterface.hpp
+//  IRewardedVideo.hpp
 //  ee_x
 //
 //  Created by Zinge on 10/5/17.
 //
 //
 
-#ifndef EE_X_REWARDED_VIDEO_INTERFACE_HPP
-#define EE_X_REWARDED_VIDEO_INTERFACE_HPP
+#ifndef EE_X_I_REWARDED_VIDEO_HPP
+#define EE_X_I_REWARDED_VIDEO_HPP
 
 #include <functional>
 #include <string>
@@ -18,10 +18,10 @@ namespace ee {
 namespace ads {
 using RewardedVideoCallback = std::function<void(bool result)>;
 
-class RewardedVideoInterface {
+class IRewardedVideo {
 public:
-    RewardedVideoInterface();
-    virtual ~RewardedVideoInterface();
+    IRewardedVideo();
+    virtual ~IRewardedVideo();
 
     virtual bool isLoaded() const = 0;
 
@@ -42,4 +42,4 @@ private:
 } // namespace ads
 } // namespace ee
 
-#endif /* EE_X_REWARDED_VIDEO_INTERFACE_HPP */
+#endif /* EE_X_I_REWARDED_VIDEO_HPP */

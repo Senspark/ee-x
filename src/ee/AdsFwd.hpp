@@ -11,9 +11,9 @@
 
 namespace ee {
 namespace ads {
-class AdViewInterface;
-class InterstitialAdInterface;
-class RewardedVideoInterface;
+class IAdView;
+class IInterstitialAd;
+class IRewardedVideo;
 
 class MultiAdView;
 class MultiInterstitialAd;
@@ -26,9 +26,9 @@ class NullRewardedVideo;
 class MediationManager;
 } // namespace ads
 
-using ads::AdViewInterface;
-using ads::InterstitialAdInterface;
-using ads::RewardedVideoInterface;
+using ads::IAdView;
+using ads::IInterstitialAd;
+using ads::IRewardedVideo;
 
 using ads::MultiAdView;
 using ads::MultiInterstitialAd;

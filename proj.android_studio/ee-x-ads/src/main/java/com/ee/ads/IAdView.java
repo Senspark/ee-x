@@ -3,7 +3,7 @@ package com.ee.ads;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 
-public interface AdViewInterface {
+public interface IAdView {
     boolean isLoaded();
 
     void load();

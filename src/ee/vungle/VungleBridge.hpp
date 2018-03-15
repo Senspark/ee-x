@@ -1,10 +1,11 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
-#include "ee/VungleFwd.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
-
 #include <map>
+
+#include "ee/CoreFwd.hpp"
+#include "ee/VungleFwd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {
@@ -17,7 +18,7 @@ public:
     void initialize(const std::string& gameId, const std::string& placementId);
 
     /// Creates a rewarded video.
-    std::shared_ptr<RewardedVideoInterface> createRewardedVideo(const std::string& placementId);
+    std::shared_ptr<IRewardedVideo> createRewardedVideo(const std::string& placementId);
 
 private:
     friend RewardedVideo;
@@ -32,6 +33,7 @@ private:
     void onUnavailable();
 
     bool errored_;
+    IMessageBridge& bridge_;
 //    RewardedVideo* rewardedVideo_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };

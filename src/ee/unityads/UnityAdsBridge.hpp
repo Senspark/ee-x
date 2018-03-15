@@ -11,9 +11,10 @@
 
 #include <map>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/UnityAdsFwd.hpp"
-#include "ee/ads/InterstitialAdInterface.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace unityads {
@@ -31,11 +32,11 @@ public:
     void setDebugModeEnabled(bool enabled);
 
     /// Creates a rewarded video with the specified placement ID.
-    std::shared_ptr<RewardedVideoInterface>
+    std::shared_ptr<IRewardedVideo>
     createRewardedVideo(const std::string& placementId);
 
     /// Creates an interstitial ad with the specified placement ID.
-    std::shared_ptr<InterstitialAdInterface>
+    std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
 
 private:
@@ -56,6 +57,7 @@ private:
     bool errored_;
     bool displayed_;
 
+    IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
 };

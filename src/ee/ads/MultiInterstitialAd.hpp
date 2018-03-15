@@ -12,20 +12,20 @@
 #include <memory>
 #include <vector>
 
-#include "ee/ads/InterstitialAdInterface.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {
-class MultiInterstitialAd : public InterstitialAdInterface {
+class MultiInterstitialAd : public IInterstitialAd {
 private:
     using Self = MultiInterstitialAd;
-    using Super = InterstitialAdInterface;
+    using Super = IInterstitialAd;
 
 public:
     MultiInterstitialAd();
     virtual ~MultiInterstitialAd() override;
 
-    Self& addItem(const std::shared_ptr<InterstitialAdInterface>& item);
+    Self& addItem(const std::shared_ptr<IInterstitialAd>& item);
 
     /// @see Super.
     virtual bool isLoaded() const override;
@@ -40,7 +40,7 @@ private:
     void assignCallbacks();
     void clearCallbacks();
 
-    std::vector<std::shared_ptr<InterstitialAdInterface>> items_;
+    std::vector<std::shared_ptr<IInterstitialAd>> items_;
 };
 } // namespace ads
 } // namespace ee

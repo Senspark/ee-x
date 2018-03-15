@@ -1,13 +1,13 @@
 //
-//  AdViewInterface.hpp
+//  IAdView.hpp
 //  ee_x
 //
 //  Created by Zinge on 10/6/17.
 //
 //
 
-#ifndef EE_X_AD_VIEW_INTERFACE_HPP
-#define EE_X_AD_VIEW_INTERFACE_HPP
+#ifndef EE_X_I_AD_VIEW_HPP
+#define EE_X_I_AD_VIEW_HPP
 
 #include <functional>
 #include <string>
@@ -19,11 +19,11 @@ namespace ee {
 namespace ads {
 using AdViewCallback = std::function<void(bool result)>;
 
-class AdViewInterface {
+class IAdView {
 public:
-    AdViewInterface();
+    IAdView();
 
-    virtual ~AdViewInterface();
+    virtual ~IAdView();
 
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
@@ -62,4 +62,4 @@ private:
 } // namespace ads
 } // namespace ee
 
-#endif /* EE_X_AD_VIEW_INTERFACE_HPP */
+#endif /* EE_X_I_AD_VIEW_HPP */

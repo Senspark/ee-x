@@ -9,7 +9,7 @@
 #include <cassert>
 
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/facebookads/internal/FacebookNativeAd.hpp"
@@ -40,24 +40,25 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(FacebookAds* plugin, const std::string& adId)
+Self::NativeAd(IMessageBridge& bridge, FacebookAds* plugin,
+               const std::string& adId)
     : Super()
     , adId_(adId)
+    , bridge_(bridge)
     , plugin_(plugin)
     , helper_("FacebookNativeAd", adId)
-    , bridgeHelper_(helper_) {
+    , bridgeHelper_(bridge, helper_) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     attempted_ = false;
     loading_ = false;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
@@ -67,9 +68,8 @@ Self::NativeAd(FacebookAds* plugin, const std::string& adId)
 
 Self::~NativeAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onLoaded(adId_));
-    bridge.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onLoaded(adId_));
+    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
 
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
@@ -77,15 +77,13 @@ Self::~NativeAd() {
 
 bool Self::createInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createInternalAd(adId_));
+    auto response = bridge_.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__destroyInternalAd(adId_));
+    auto response = bridge_.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
 }
 

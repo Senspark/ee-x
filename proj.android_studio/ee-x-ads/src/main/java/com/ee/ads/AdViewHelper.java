@@ -61,7 +61,7 @@ public class AdViewHelper {
         return _prefix + "_setVisible_" + _adId;
     }
 
-    public void registerHandlers(final AdViewInterface adView) {
+    public void registerHandlers(final IAdView adView) {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {

@@ -154,11 +154,11 @@ inline FutureStatus FutureBase::status() const {
 }
 
 inline int FutureBase::error() const {
-  return api_ == NULL ? 0 : api_->GetFutureError(handle_);  // NOLINT
+  return api_ == NULL ? -1 : api_->GetFutureError(handle_);  // NOLINT
 }
 
 inline const char* FutureBase::error_message() const {
-  return api_ == NULL ? 0 : api_->GetFutureErrorMessage(handle_);  // NOLINT
+  return api_ == NULL ? NULL : api_->GetFutureErrorMessage(handle_);  // NOLINT
 }
 
 inline const void* FutureBase::result_void() const {

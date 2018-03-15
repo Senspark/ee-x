@@ -144,7 +144,8 @@ class StorageReference {
   /// memory. Therefore, using this method will impact memory usage of your
   /// process.
   ///
-  /// @param[in] buffer A byte buffer to read the data into.
+  /// @param[in] buffer A byte buffer to read the data into. This buffer must
+  /// be valid for the duration of the transfer.
   /// @param[in] buffer_size The size of the byte buffer.
   /// @param[in] listener A listener that will respond to events on this read
   /// operation. If not nullptr, a listener that will respond to events on this
@@ -232,7 +233,8 @@ class StorageReference {
   /// @brief Asynchronously uploads data to the currently specified
   /// StorageReference, without additional metadata.
   ///
-  /// @param[in] buffer A byte buffer to write data from.
+  /// @param[in] buffer A byte buffer to write data from. This buffer must be
+  /// valid for the duration of the transfer.
   /// @param[in] buffer_size The size of the byte buffer.
   /// @param[in] listener A listener that will respond to events on this read
   /// operation. If not nullptr, a listener that will respond to events on this
@@ -251,8 +253,9 @@ class StorageReference {
   /// @brief Asynchronously uploads data to the currently specified
   /// StorageReference, without additional metadata.
   ///
-  /// @param[in] buffer A pointer to a byte buffer to write.
-  /// @param[in] buffer_size The number of butes to write.
+  /// @param[in] buffer A byte buffer to write data from. This buffer must be
+  /// valid for the duration of the transfer.
+  /// @param[in] buffer_size The number of bytes to write.
   /// @param[in] metadata Metadata containing additional information (MIME type,
   /// etc.) about the object being uploaded.
   /// @param[in] listener A listener that will respond to events on this read

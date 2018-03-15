@@ -382,6 +382,12 @@ class Auth {
   /// @cond FIREBASE_APP_INTERNAL
   friend class ::firebase::App;
   friend class ::firebase::auth::PhoneAuthProvider;
+  friend class IdTokenRefreshListener;
+  friend class IdTokenRefreshThread;
+
+  friend void StartAuthTokenRefresher(AuthData* authData);
+  friend void StopAuthTokenRefresher(AuthData* authData);
+  friend void ResetAuthRefreshCounter(AuthData* authData);
   /// @endcond
 
   // Provides access to the auth token for the current user.  Returns the

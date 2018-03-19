@@ -40,17 +40,18 @@ import java.util.Map;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Facebook implements PluginProtocol {
-    private static final String k__isLoggedIn        = "Facebook_isLoggedIn";
-    private static final String k__logIn             = "Facebook_logIn";
-    private static final String k__logOut            = "Facebook_logOut";
-    private static final String k__getAccessToken    = "Facebook_getAccessToken";
-    private static final String k__getUserId         = "Facebook_getUserId";
-    private static final String k__onLoginResult     = "Facebook_onLoginResult";
-    private static final String k__onProfileChanged  = "Facebook_onProfileChanged";
-    private static final String k__shareLinkContent  = "Facebook_shareLinkContent";
-    private static final String k__sharePhotoContent = "Facebook_sharePhotoContent";
-    private static final String k__shareVideoContent = "Facebook_shareVideoContent";
-    private static final String k__onShareResult     = "Facebook_onShareResult";
+    private static final String k__registerNotifications = "Facebook_registerNotifications";
+    private static final String k__isLoggedIn            = "Facebook_isLoggedIn";
+    private static final String k__logIn                 = "Facebook_logIn";
+    private static final String k__logOut                = "Facebook_logOut";
+    private static final String k__getAccessToken        = "Facebook_getAccessToken";
+    private static final String k__getUserId             = "Facebook_getUserId";
+    private static final String k__onLoginResult         = "Facebook_onLoginResult";
+    private static final String k__onProfileChanged      = "Facebook_onProfileChanged";
+    private static final String k__shareLinkContent      = "Facebook_shareLinkContent";
+    private static final String k__sharePhotoContent     = "Facebook_sharePhotoContent";
+    private static final String k__shareVideoContent     = "Facebook_shareVideoContent";
+    private static final String k__onShareResult         = "Facebook_onShareResult";
 
     private static final Logger _logger = new Logger(Facebook.class.getName());
 
@@ -191,8 +192,23 @@ public class Facebook implements PluginProtocol {
         return _callbackManager.onActivityResult(requestCode, responseCode, data);
     }
 
+    @SuppressWarnings("WeakerAccess")
+    public void registerNotifications() {
+        _profileTracker.startTracking();
+        _accessTokenTracker.startTracking();
+    }
+
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                registerNotifications();
+                return "";
+            }
+        }, k__registerNotifications);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull

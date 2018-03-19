@@ -34,6 +34,7 @@ public:
     void setShareCallback(const ShareCallback& callback);
 
 protected:
+    void registerNotifications();
     void onLoginResult(bool result);
     void onProfileChanged(const std::string& profile);
     void onShareResult(bool result);

@@ -22,17 +22,18 @@
 @implementation EEFacebook
 
 // clang-format off
-NSString* const k__isLoggedIn        = @"Facebook_isLoggedIn";
-NSString* const k__logIn             = @"Facebook_logIn";
-NSString* const k__logOut            = @"Facebook_logOut";
-NSString* const k__getAccessToken    = @"Facebook_getAccessToken";
-NSString* const k__getUserId         = @"Facebook_getUserId";
-NSString* const k__onLoginResult     = @"Facebook_onLoginResult";
-NSString* const k__onProfileChanged  = @"Facebook_onProfileChanged";
-NSString* const k__shareLinkContent  = @"Facebook_shareLinkContent";
-NSString* const k__sharePhotoContent = @"Facebook_sharePhotoContent";
-NSString* const k__shareVideoContent = @"Facebook_shareVideoContent";
-NSString* const k__onShareResult     = @"Facebook_shareOnResult";
+NSString* const k__registerNotifications = @"Facebook_registerNotifications";
+NSString* const k__isLoggedIn            = @"Facebook_isLoggedIn";
+NSString* const k__logIn                 = @"Facebook_logIn";
+NSString* const k__logOut                = @"Facebook_logOut";
+NSString* const k__getAccessToken        = @"Facebook_getAccessToken";
+NSString* const k__getUserId             = @"Facebook_getUserId";
+NSString* const k__onLoginResult         = @"Facebook_onLoginResult";
+NSString* const k__onProfileChanged      = @"Facebook_onProfileChanged";
+NSString* const k__shareLinkContent      = @"Facebook_shareLinkContent";
+NSString* const k__sharePhotoContent     = @"Facebook_sharePhotoContent";
+NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
+NSString* const k__onShareResult         = @"Facebook_shareOnResult";
 // clang-format on
 
 - (id)init {
@@ -42,7 +43,16 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
     }
     bridge_ = [EEMessageBridge getInstance];
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    [self registerHandlers];
+    return self;
+}
 
+- (void)dealloc {
+    [self deregisterHandlers];
+    [super dealloc];
+}
+
+- (void)registerNotifications {
     [[NSNotificationCenter defaultCenter]
         addObserverForName:FBSDKAccessTokenDidChangeNotification
                     object:nil
@@ -58,14 +68,6 @@ NSString* const k__onShareResult     = @"Facebook_shareOnResult";
                 usingBlock:^(NSNotification* notification) {
                     [self profileDidChange:notification];
                 }];
-
-    [self registerHandlers];
-    return self;
-}
-
-- (void)dealloc {
-    [self deregisterHandlers];
-    [super dealloc];
 }
 
 - (void)registerHandlers {

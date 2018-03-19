@@ -16,8 +16,11 @@
 #include "ee/facebookads/internal/FacebookBannerAd.hpp"
 #include "ee/facebookads/internal/FacebookInterstitialAd.hpp"
 #include "ee/facebookads/internal/FacebookNativeAd.hpp"
-
+#include "ee/core/Logger.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include <ee/nlohmann/json.hpp>
+#include "ee/ads/NullRewardedVideo.hpp"
+#include "ee/facebookads/internal/FacebookRewardVideoAd.hpp"
 
 namespace ee {
 namespace facebook {
@@ -37,7 +40,10 @@ constexpr auto k__destroyNativeAd       = "FacebookAds_destroyNativeAd";
 
 constexpr auto k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
 constexpr auto k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
-// clang-format on
+    
+constexpr auto k__createRewardVideoAd   = "FacebookAds_createRewardVideoAd";
+constexpr auto k__destroyRewardVideoAd  = "FacebookAds_destroyRewardVideoAd";
+    
 } // namespace
 
 namespace {
@@ -116,5 +122,22 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
     auto&& response = bridge_.call(k__destroyInterstitialAd, placementId);
     return core::toBool(response);
 }
+
+std::shared_ptr<IRewardedVideo>
+Self::createRewardVideoAd(const std::string& placementId) {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__createRewardVideoAd, placementId);
+    if (not core::toBool(response)) {
+        return std::make_shared<NullRewardedVideo>();
+    }
+    return std::shared_ptr<IRewardedVideo>(new RewardedVideo(placementId));
+}
+
+bool Self::destroyRewardVideoAd(const std::string& placementId) {
+    auto&& bridge = MessageBridge::getInstance();
+    auto&& response = bridge.call(k__destroyRewardVideoAd, placementId);
+    return core::toBool(response);
+}
+
 } // namespace facebook
 } // namespace ee

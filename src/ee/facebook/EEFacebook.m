@@ -33,7 +33,7 @@ NSString* const k__onProfileChanged      = @"Facebook_onProfileChanged";
 NSString* const k__shareLinkContent      = @"Facebook_shareLinkContent";
 NSString* const k__sharePhotoContent     = @"Facebook_sharePhotoContent";
 NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
-NSString* const k__onShareResult         = @"Facebook_shareOnResult";
+NSString* const k__onShareResult         = @"Facebook_onShareResult";
 // clang-format on
 
 - (id)init {

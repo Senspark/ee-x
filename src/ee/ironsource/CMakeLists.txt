@@ -24,25 +24,26 @@
 # ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
-project(ee_x_ironsource)
+# project(ee_x_ironsource)
 
 include_directories(
-  ../../../third_party/nlohmann/include
-  internal
+  third_party/nlohmann/include
+  src/ee/ironsource/internal
+  src/ee/ironsource
 )
 
-set(LIB_SRC
-  internal/IronSourceRewardedVideo.cpp
-  IronSourceBridge.cpp
+set(EE_X_IRONSOURCE_SRC
+  src/ee/ironsource/internal/IronSourceRewardedVideo.cpp
+  src/ee/ironsource/IronSourceBridge.cpp
 )
 
-set(LIB_HEADERS
-  internal/IronSourceRewardedVideo.hpp
-  IronSourceBridge.hpp
+set(EE_X_IRONSOURCE_HEADERS
+  src/ee/ironsource/internal/IronSourceRewardedVideo.hpp
+  src/ee/ironsource/IronSourceBridge.hpp
 )
 
-add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
 
-target_link_libraries(${PROJECT_NAME}
-  ee_x_ads
-)
+# target_link_libraries(${PROJECT_NAME}
+#   ee_x_ads
+# )

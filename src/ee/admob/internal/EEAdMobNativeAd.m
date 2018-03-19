@@ -46,8 +46,9 @@
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
     testDevices_ = [testDevices retain];
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"AdMobNativeAd" adId:adId];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:@"AdMobNativeAd"
+                                                adId:adId];
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -230,16 +231,17 @@
             [[adView mediaView] setHidden:NO];
             // This app uses a fixed width for the GADMediaView and changes its
             // height to match the aspect ratio of the video it displays.
-//            NSLayoutConstraint* constraint = [NSLayoutConstraint
-//                constraintWithItem:[adView mediaView]
-//                         attribute:NSLayoutAttributeHeight
-//                         relatedBy:NSLayoutRelationEqual
-//                            toItem:[adView mediaView]
-//                         attribute:NSLayoutAttributeWidth
-//                        multiplier:(1 / [[nativeAppInstallAd videoController]
-//                                            aspectRatio])
-//                          constant:0];
-//            [constraint setActive:YES];
+            //            NSLayoutConstraint* constraint = [NSLayoutConstraint
+            //                constraintWithItem:[adView mediaView]
+            //                         attribute:NSLayoutAttributeHeight
+            //                         relatedBy:NSLayoutRelationEqual
+            //                            toItem:[adView mediaView]
+            //                         attribute:NSLayoutAttributeWidth
+            //                        multiplier:(1 / [[nativeAppInstallAd
+            //                        videoController]
+            //                                            aspectRatio])
+            //                          constant:0];
+            //            [constraint setActive:YES];
         }
     } else {
         [[adView mediaView] setHidden:YES];

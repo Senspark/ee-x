@@ -12,7 +12,8 @@
 #include <functional>
 #include <memory>
 #include <string>
-
+#include <map>
+#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/CoreFwd.hpp"
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/IAdView.hpp"
@@ -55,15 +56,22 @@ public:
     /// @param[in] placementId The ad placement ID>
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
-
+    
+    std::shared_ptr<IRewardedVideo> createRewardVideoAd(const std::string& placementId);    
+    
+    std::string currentId_;
 private:
     friend BannerAd;
     friend NativeAd;
     friend InterstitialAd;
+    friend RewardedVideo;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& placementId);
+    bool destroyRewardVideoAd(const std::string& placementId);
+    
+    std::map<std::string, RewardedVideo*> rewardedVideos_;
     
     IMessageBridge& bridge_;
 };

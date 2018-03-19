@@ -16,6 +16,7 @@ class BannerAd;
 class NativeAd;
 class NativeAdLayout;
 class InterstitialAd;
+class RewardedVideo;
 } // namespace facebook
 
 using facebook::FacebookAds;

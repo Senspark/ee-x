@@ -35,7 +35,8 @@
     placementId_ = [placementId copy];
     interstitialAd_ = nil;
     helper_ =
-        [[EEInterstitialAdHelper alloc] initWithPrefix:@"FacebookInterstitialAd"
+        [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
+                                                prefix:@"FacebookInterstitialAd"
                                                   adId:placementId];
     [self registerHandlers];
     return self;

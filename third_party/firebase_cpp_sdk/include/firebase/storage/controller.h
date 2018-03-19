@@ -8,9 +8,12 @@
 namespace firebase {
 namespace storage {
 
+/// @cond FIREBASE_APP_INTERNAL
 namespace internal {
 class ControllerInternal;
+class ListenerInternal;
 }  // namespace internal
+/// @endcond
 
 /// @brief Controls an ongoing operation, allowing the caller to Pause, Resume
 /// or Cancel an ongoing download or upload.
@@ -114,6 +117,7 @@ class Controller {
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::StorageReferenceInternal;
   friend class internal::ControllerInternal;
+  friend class internal::ListenerInternal;
 
   Controller(internal::ControllerInternal* internal);
 

@@ -2,11 +2,15 @@ package com.ee.facebook;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.SparseArray;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -23,12 +27,17 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.share.Sharer;
+import com.facebook.share.model.GameRequestContent;
+import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.model.ShareVideo;
 import com.facebook.share.model.ShareVideoContent;
+import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.ShareDialog;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -45,77 +54,28 @@ public class Facebook implements PluginProtocol {
     private static final String k__logIn                 = "Facebook_logIn";
     private static final String k__logOut                = "Facebook_logOut";
     private static final String k__getAccessToken        = "Facebook_getAccessToken";
-    private static final String k__getUserId             = "Facebook_getUserId";
-    private static final String k__onLoginResult         = "Facebook_onLoginResult";
     private static final String k__onProfileChanged      = "Facebook_onProfileChanged";
+    private static final String k__sendRequest           = "Facebook_sendRequest";
     private static final String k__shareLinkContent      = "Facebook_shareLinkContent";
     private static final String k__sharePhotoContent     = "Facebook_sharePhotoContent";
     private static final String k__shareVideoContent     = "Facebook_shareVideoContent";
-    private static final String k__onShareResult         = "Facebook_onShareResult";
 
     private static final Logger _logger = new Logger(Facebook.class.getName());
 
-    private Activity                        _activity;
-    private ShareDialog                     _shareDialog;
-    private CallbackManager                 _callbackManager;
-    private FacebookCallback<Sharer.Result> _shareCallback;
-    private FacebookCallback<LoginResult>   _loginCallback;
-    private AccessTokenTracker              _accessTokenTracker;
-    private ProfileTracker                  _profileTracker;
+    private IMessageBridge     _bridge;
+    private Activity           _activity;
+    private CallbackManager    _callbackManager;
+    private AccessTokenTracker _accessTokenTracker;
+    private ProfileTracker     _profileTracker;
 
     public Facebook() {
         Utils.checkMainThread();
+        _bridge = MessageBridge.getInstance();
         _activity = null;
-        _shareDialog = null;
         _callbackManager = CallbackManager.Factory.create();
-        _shareCallback = new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onShareResult, Utils.toString(true));
-            }
-
-            @Override
-            public void onCancel() {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onShareResult, Utils.toString(false));
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onShareResult, Utils.toString(false));
-            }
-        };
-        _loginCallback = new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onLoginResult, Utils.toString(true));
-            }
-
-            @Override
-            public void onCancel() {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onLoginResult, Utils.toString(false));
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Utils.checkMainThread();
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onLoginResult, Utils.toString(false));
-            }
-        };
         _accessTokenTracker = new AccessTokenTracker() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken
-                    currentAccessToken) {
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 _logger.debug("onCurrentAccessTokenChanged");
             }
         };
@@ -127,17 +87,15 @@ public class Facebook implements PluginProtocol {
                 if (currentProfile != null) {
                     dict.put("userId", currentProfile.getId());
                     dict.put("firstName", currentProfile.getFirstName());
-                    dict.put("middleName", currentProfile.getMiddleName() == null ? "" :
-                            currentProfile.getMiddleName());
+                    dict.put("middleName",
+                            currentProfile.getMiddleName() == null ? "" : currentProfile.getMiddleName());
                     dict.put("lastName", currentProfile.getLastName());
                     dict.put("name", currentProfile.getName());
                     dict.put("picture", currentProfile.getProfilePictureUri(128, 128).toString());
                 }
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
+                _bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
             }
         };
-        LoginManager.getInstance().registerCallback(_callbackManager, _loginCallback);
         registerHandlers();
     }
 
@@ -150,8 +108,6 @@ public class Facebook implements PluginProtocol {
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
-        _shareDialog = new ShareDialog(activity);
-        _shareDialog.registerCallback(_callbackManager, _shareCallback);
     }
 
     @Override
@@ -172,7 +128,6 @@ public class Facebook implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        _shareDialog = null;
         _activity = null;
     }
 
@@ -199,9 +154,7 @@ public class Facebook implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -210,7 +163,7 @@ public class Facebook implements PluginProtocol {
             }
         }, k__registerNotifications);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -218,21 +171,19 @@ public class Facebook implements PluginProtocol {
             }
         }, k__isLoggedIn);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                List<Object> permissions_ = JsonUtils.convertStringToArray(message);
-                List<String> permissions = new LinkedList<>();
-                for (Object object : permissions_) {
-                    permissions.add((String) object);
-                }
-                logIn(permissions);
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                List<String> permissions = (List<String>) dict.get("permissions");
+                Integer tag = (Integer) dict.get("tag");
+                logIn(permissions, new FacebookLoginDelegate(_bridge, tag));
                 return "";
             }
         }, k__logIn);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -241,57 +192,77 @@ public class Facebook implements PluginProtocol {
             }
         }, k__logOut);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return getAccessToken();
+                AccessToken token = getAccessToken();
+                return convertAccessTokenToString(token);
             }
         }, k__getAccessToken);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return getUserId();
-            }
-        }, k__getUserId);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                shareLinkContent(message);
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+                Integer tag = (Integer) dict.get("tag");
+                String url = (String) dict.get("url");
+                shareLinkContent(url, new FacebookShareDelegate(_bridge, tag));
                 return "";
             }
         }, k__shareLinkContent);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                sharePhotoContent(message);
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+                Integer tag = (Integer) dict.get("tag");
+                String url = (String) dict.get("url");
+                sharePhotoContent(url, new FacebookShareDelegate(_bridge, tag));
                 return "";
             }
         }, k__sharePhotoContent);
 
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                shareVideoContent(message);
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+                Integer tag = (Integer) dict.get("tag");
+                String url = (String) dict.get("url");
+                shareVideoContent(url, new FacebookShareDelegate(_bridge, tag));
                 return "";
             }
         }, k__shareVideoContent);
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
+        _bridge.deregisterHandler(k__registerNotifications);
+        _bridge.deregisterHandler(k__isLoggedIn);
+        _bridge.deregisterHandler(k__logIn);
+        _bridge.deregisterHandler(k__logOut);
+        _bridge.deregisterHandler(k__getAccessToken);
+        _bridge.deregisterHandler(k__shareLinkContent);
+        _bridge.deregisterHandler(k__sharePhotoContent);
+        _bridge.deregisterHandler(k__shareVideoContent);
+        _bridge.deregisterHandler(k__sendRequest);
+    }
 
-        bridge.deregisterHandler(k__shareLinkContent);
-        bridge.deregisterHandler(k__sharePhotoContent);
-        bridge.deregisterHandler(k__shareVideoContent);
+    @NonNull
+    static String convertAccessTokenToString(@Nullable AccessToken token) {
+        if (token == null) {
+            return "";
+        }
+        Map<String, Object> dict = new HashMap<>();
+        dict.put("token", token.getToken());
+        dict.put("applicationId", token.getApplicationId());
+        dict.put("userId", token.getUserId());
+        return JsonUtils.convertDictionaryToString(dict);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -300,7 +271,8 @@ public class Facebook implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void logIn(@NonNull List<String> permissions) {
+    public void logIn(@NonNull List<String> permissions, @NonNull FacebookCallback<LoginResult> callback) {
+        LoginManager.getInstance().registerCallback(_callbackManager, callback);
         LoginManager.getInstance().logInWithReadPermissions(_activity, permissions);
     }
 
@@ -309,53 +281,80 @@ public class Facebook implements PluginProtocol {
         LoginManager.getInstance().logOut();
     }
 
-    @NonNull
-    public String getAccessToken() {
-        if (!isLoggedIn()) {
-            return "";
-        }
-        return AccessToken.getCurrentAccessToken().getToken();
+    @Nullable
+    public AccessToken getAccessToken() {
+        return AccessToken.getCurrentAccessToken();
     }
 
     @NonNull
-    public String getUserId() {
-        if (!isLoggedIn()) {
-            return "";
-        }
-        return AccessToken.getCurrentAccessToken().getUserId();
+    private String sendRequest(@NonNull String message_) {
+        Map<String, Object> dict = JsonUtils.convertStringToDictionary(message_);
+        int tag = (Integer) dict.get("tag");
+
+        SparseArray<GameRequestContent.ActionType> actionTypes = new SparseArray<>();
+        actionTypes.put(0, null);
+        actionTypes.put(1, GameRequestContent.ActionType.SEND);
+        actionTypes.put(2, GameRequestContent.ActionType.ASKFOR);
+        actionTypes.put(3, GameRequestContent.ActionType.TURN);
+        int actionType = (Integer) dict.get("actionType");
+
+        SparseArray<GameRequestContent.Filters> filters = new SparseArray<>();
+        filters.put(0, null);
+        filters.put(1, GameRequestContent.Filters.APP_USERS);
+        filters.put(2, GameRequestContent.Filters.APP_NON_USERS);
+        int filter = (Integer) dict.get("filter");
+
+        String title = (String) dict.get("title");
+        List<String> recipients = (List<String>) dict.get("recipients");
+        String objectId = (String) dict.get("objectId");
+        String data = (String) dict.get("data");
+        String message = (String) dict.get("message");
+
+        sendRequest(actionTypes.get(actionType), filters.get(filter), title, recipients, objectId, data, message,
+                new FacebookRequestDelegate(_bridge, tag));
+        return "";
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void shareLinkContent(@NonNull String url) {
-        ShareLinkContent shareContent = new ShareLinkContent.Builder().setContentUrl(Uri.parse
-                (url)).build();
-
-        _shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void sharePhotoContent(@NonNull String url) {
-        Bitmap image = BitmapFactory.decodeFile(url);
-
-        SharePhoto photo = new SharePhoto.Builder().setBitmap(image).build();
-
-        SharePhotoContent shareContent = new SharePhotoContent.Builder().addPhoto(photo).build();
-
-        _shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void shareVideoContent(@NonNull String url) {
-        _logger.debug("shareVideoContent: url = " + url);
-
-        File video = new File(url);
-        Uri videoFileUri = Uri.fromFile(video);
-
-        ShareVideo videoContent = new ShareVideo.Builder().setLocalUrl(videoFileUri).build();
-
-        ShareVideoContent shareContent = new ShareVideoContent.Builder().setVideo(videoContent)
+    public void sendRequest(@Nullable GameRequestContent.ActionType actionType,
+            @Nullable GameRequestContent.Filters filter, @Nullable String title, @Nullable List<String> recipients,
+            @Nullable String objectId, @Nullable String data, @NonNull String message,
+            @NonNull FacebookCallback<GameRequestDialog.Result> delegate) {
+        GameRequestContent content = new GameRequestContent.Builder().setActionType(actionType).setFilters(filter)
+                .setTitle(title).setObjectId(objectId).setRecipients(recipients).setData(data).setMessage(message)
                 .build();
 
-        _shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
+        GameRequestDialog dialog = new GameRequestDialog(_activity);
+        dialog.registerCallback(_callbackManager, delegate);
+        dialog.show(content);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void shareLinkContent(@NonNull String url, FacebookCallback<Sharer.Result> delegate) {
+        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(url)).build();
+        shareContent(content, delegate);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void sharePhotoContent(@NonNull String url, FacebookCallback<Sharer.Result> delegate) {
+        Bitmap image = BitmapFactory.decodeFile(url);
+        SharePhoto photo = new SharePhoto.Builder().setBitmap(image).build();
+        SharePhotoContent content = new SharePhotoContent.Builder().addPhoto(photo).build();
+        shareContent(content, delegate);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void shareVideoContent(@NonNull String url, FacebookCallback<Sharer.Result> delegate) {
+        File video = new File(url);
+        Uri videoFileUri = Uri.fromFile(video);
+        ShareVideo videoContent = new ShareVideo.Builder().setLocalUrl(videoFileUri).build();
+        ShareVideoContent content = new ShareVideoContent.Builder().setVideo(videoContent).build();
+        shareContent(content, delegate);
+
+    }
+
+    private void shareContent(ShareContent content, FacebookCallback<Sharer.Result> delegate) {
+        ShareDialog dialog = new ShareDialog(_activity);
+        dialog.registerCallback(_callbackManager, delegate);
+        dialog.show(content, ShareDialog.Mode.AUTOMATIC);
     }
 }

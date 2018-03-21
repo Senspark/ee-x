@@ -70,7 +70,8 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Facebook.hpp',
       'src/ee/FacebookFwd.hpp',
-      'src/ee/facebook/*'
+      'src/ee/facebook/*',
+      'src/ee/facebook/internal/*'
 
     s.public_header_files =
       'src/ee/Facebook.hpp',

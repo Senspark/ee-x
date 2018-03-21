@@ -8,18 +8,16 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/facebook/EEFacebook.h"
+#import "ee/facebook/internal/EEFacebookRequestDelegate.h"
+#import "ee/facebook/internal/EEFacebookShareDelegate.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
-@interface EEFacebook () <FBSDKSharingDelegate> {
-    EEMessageBridge* bridge_;
+@implementation EEFacebook {
+    id<EEIMessageBridge> bridge_;
 }
-
-@end
-
-@implementation EEFacebook
 
 // clang-format off
 NSString* const k__registerNotifications = @"Facebook_registerNotifications";
@@ -27,13 +25,11 @@ NSString* const k__isLoggedIn            = @"Facebook_isLoggedIn";
 NSString* const k__logIn                 = @"Facebook_logIn";
 NSString* const k__logOut                = @"Facebook_logOut";
 NSString* const k__getAccessToken        = @"Facebook_getAccessToken";
-NSString* const k__getUserId             = @"Facebook_getUserId";
-NSString* const k__onLoginResult         = @"Facebook_onLoginResult";
 NSString* const k__onProfileChanged      = @"Facebook_onProfileChanged";
 NSString* const k__shareLinkContent      = @"Facebook_shareLinkContent";
 NSString* const k__sharePhotoContent     = @"Facebook_sharePhotoContent";
 NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
-NSString* const k__onShareResult         = @"Facebook_onShareResult";
+NSString* const k__sendRequest           = @"Facebook_sendRequest";
 // clang-format on
 
 - (id)init {
@@ -83,48 +79,40 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
                     }];
 
     [bridge_ registerHandler:k__logIn
-                    callback:^NSString* _Nonnull(NSString* _Nonnull message) {
-                        NSArray* permissions =
-                            [EEJsonUtils convertStringToArray:message];
-                        [self logIn:permissions];
-                        return @"";
+                    callback:^(NSString* _Nonnull message) {
+                        return [self logIn:message];
                     }];
 
     [bridge_ registerHandler:k__logOut
-                    callback:^NSString* _Nonnull(NSString* _Nonnull message) {
+                    callback:^(NSString* _Nonnull message) {
                         [self logOut];
                         return @"";
                     }];
 
     [bridge_ registerHandler:k__getAccessToken
                     callback:^(NSString* _Nonnull message) {
-                        return [self getAccessToken];
+                        FBSDKAccessToken* token = [self getAccessToken];
+                        return [self convertAccessTokenToString:token];
                     }];
 
-    [bridge_ registerHandler:k__getUserId
-                    callback:^(NSString* _Nonnull message) {
-                        return [self getUserId];
+    [bridge_ registerHandler:k__sendRequest
+                    callback:^(NSString* message) {
+                        return [self sendRequest:message];
                     }];
 
     [bridge_ registerHandler:k__shareLinkContent
                     callback:^(NSString* message) {
-                        NSString* url = message;
-                        [self shareLinkContent:url];
-                        return @"";
+                        return [self shareLinkContent:message];
                     }];
 
     [bridge_ registerHandler:k__sharePhotoContent
                     callback:^(NSString* message) {
-                        NSString* url = message;
-                        [self sharePhotoContent:url];
-                        return @"";
+                        return [self sharePhotoContent:message];
                     }];
 
     [bridge_ registerHandler:k__shareVideoContent
                     callback:^(NSString* message) {
-                        NSString* url = message;
-                        [self shareVideoContent:url];
-                        return @"";
+                        return [self shareVideoContent:message];
                     }];
 }
 
@@ -134,10 +122,21 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
     [bridge_ deregisterHandler:k__logIn];
     [bridge_ deregisterHandler:k__logOut];
     [bridge_ deregisterHandler:k__getAccessToken];
-    [bridge_ deregisterHandler:k__getUserId];
     [bridge_ deregisterHandler:k__shareLinkContent];
     [bridge_ deregisterHandler:k__sharePhotoContent];
     [bridge_ deregisterHandler:k__shareVideoContent];
+    [bridge_ deregisterHandler:k__sendRequest];
+}
+
+- (NSString* _Nonnull)convertAccessTokenToString:(FBSDKAccessToken*)token {
+    if (token == nil) {
+        return @"";
+    }
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    [dict setObject:[token tokenString] forKey:@"token"];
+    [dict setObject:[token appID] forKey:@"applicationId"];
+    [dict setObject:[token userID] forKey:@"userId"];
+    return [EEJsonUtils convertDictionaryToString:dict];
 }
 
 - (void)accessTokenDidChange:(NSNotification*)notification {
@@ -169,18 +168,43 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
     return [FBSDKAccessToken currentAccessToken] != nil;
 }
 
-- (void)logIn:(NSArray* _Nonnull)permissions {
+- (NSString* _Nonnull)k__onLoginSuccess:(int)tag {
+    return [@"FacebookLoginDelegate_onSuccess_"
+        stringByAppendingString:[@(tag) stringValue]];
+}
+
+- (NSString* _Nonnull)k__onLoginFailure:(int)tag {
+    return [@"FacebookLoginDelegate_onFailure_"
+        stringByAppendingString:[@(tag) stringValue]];
+}
+
+- (NSString* _Nonnull)k__onLoginCancel:(int)tag {
+    return [@"FacebookLoginDelegate_onCancel_"
+        stringByAppendingString:[@(tag) stringValue]];
+}
+
+- (NSString* _Nonnull)logIn:(NSString* _Nonnull)message {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+    NSArray* permissions = [dict objectForKey:@"permissions"];
+    int tag = [[dict objectForKey:@"tag"] intValue];
     FBSDKLoginManagerRequestTokenHandler handler = ^(
         FBSDKLoginManagerLoginResult* result, NSError* error) {
         if (error != nil) {
-            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:NO]];
+            [bridge_ callCpp:[self k__onLoginFailure:tag]
+                     message:[error localizedDescription]];
         } else if ([result isCancelled]) {
-            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:NO]];
+            [bridge_ callCpp:[self k__onLoginCancel:tag]];
         } else {
-            [bridge_ callCpp:k__onLoginResult message:[EEUtils toString:YES]];
+            [bridge_ callCpp:[self k__onLoginSuccess:tag]
+                     message:[self convertAccessTokenToString:[result token]]];
         }
     };
+    [self logIn:permissions handler:handler];
+    return @"";
+}
 
+- (void)logIn:(NSArray* _Nonnull)permissions
+      handler:(FBSDKLoginManagerRequestTokenHandler _Nonnull)handler {
     FBSDKLoginManager* loginManager =
         [[[FBSDKLoginManager alloc] init] autorelease];
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
@@ -195,32 +219,83 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
     [loginManager logOut];
 }
 
-- (NSString* _Nonnull)getAccessToken {
-    if (![self isLoggedIn]) {
-        return @"";
-    }
-    return [[FBSDKAccessToken currentAccessToken] tokenString];
+- (FBSDKAccessToken* _Nullable)getAccessToken {
+    return [FBSDKAccessToken currentAccessToken];
 }
 
-- (NSString* _Nonnull)getUserId {
-    if (![self isLoggedIn]) {
-        return @"";
-    }
-    return [[FBSDKAccessToken currentAccessToken] userID];
+- (NSString* _Nonnull)sendRequest:(NSString* _Nonnull)message_ {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message_];
+    int tag = [[dict objectForKey:@"tag"] intValue];
+    int actionType = [[dict objectForKey:@"actionType"] intValue];
+    int filter = [[dict objectForKey:@"filter"] intValue];
+    NSString* title = [dict objectForKey:@"title"];
+    NSArray* recipients = [dict objectForKey:@"recipients"];
+    NSString* objectId = [dict objectForKey:@"objectId"];
+    NSString* data = [dict objectForKey:@"data"];
+    NSString* message = [dict objectForKey:@"message"];
+    [self sendRequest:(FBSDKGameRequestActionType)actionType
+               filter:(FBSDKGameRequestFilter)filter
+                title:title
+           recipients:recipients
+             objectId:objectId
+                 data:data
+              message:message
+             delegate:[EEFacebookRequestDelegate delegateWithBridge:bridge_
+                                                                tag:tag]];
+    return @"";
 }
 
-- (void)shareLinkContent:(NSString*)url {
+- (void)sendRequest:(FBSDKGameRequestActionType)actionType
+             filter:(FBSDKGameRequestFilter)filter
+              title:(NSString* _Nullable)title
+         recipients:(NSArray* _Nullable)recipients
+           objectId:(NSString* _Nullable)objectId
+               data:(NSString* _Nullable)data
+            message:(NSString* _Nonnull)message
+           delegate:(id<FBSDKGameRequestDialogDelegate> _Nonnull)delegate {
+    FBSDKGameRequestContent* content =
+        [[[FBSDKGameRequestContent alloc] init] autorelease];
+    [content setActionType:actionType];
+    [content setFilters:filter];
+    [content setObjectID:objectId];
+    [content setTitle:title];
+    [content setRecipients:recipients];
+    [content setData:data];
+    [content setMessage:message];
+    [FBSDKGameRequestDialog showWithContent:content delegate:[delegate retain]];
+}
+
+- (NSString* _Nonnull)shareLinkContent:(NSString* _Nonnull)message {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+    int tag = [[dict objectForKey:@"tag"] intValue];
+    NSString* url = [dict objectForKey:@"url"];
+    [self shareLinkContent:url
+                  delegate:[EEFacebookShareDelegate delegateWithBridge:bridge_
+                                                                   tag:tag]];
+    return @"";
+}
+
+- (void)shareLinkContent:(NSString* _Nonnull)url
+                delegate:(id<FBSDKSharingDelegate> _Nonnull)delegate {
     FBSDKShareLinkContent* content =
         [[[FBSDKShareLinkContent alloc] init] autorelease];
     [content setContentURL:[NSURL URLWithString:url]];
 
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [FBSDKShareDialog showFromViewController:rootView
-                                 withContent:content
-                                    delegate:self];
+    [self shareContent:content delegate:delegate];
 }
 
-- (void)sharePhotoContent:(NSString*)url {
+- (NSString* _Nonnull)sharePhotoContent:(NSString* _Nonnull)message {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+    int tag = [[dict objectForKey:@"tag"] intValue];
+    NSString* url = [dict objectForKey:@"url"];
+    [self sharePhotoContent:url
+                   delegate:[EEFacebookShareDelegate delegateWithBridge:bridge_
+                                                                    tag:tag]];
+    return @"";
+}
+
+- (void)sharePhotoContent:(NSString* _Nonnull)url
+                 delegate:(id<FBSDKSharingDelegate> _Nonnull)delegate {
     FBSDKSharePhoto* photo = [[[FBSDKSharePhoto alloc] init] autorelease];
     [photo setImage:[UIImage imageNamed:url]];
     [photo setUserGenerated:YES];
@@ -229,13 +304,21 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
         [[[FBSDKSharePhotoContent alloc] init] autorelease];
     [content setPhotos:@[photo]];
 
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [FBSDKShareDialog showFromViewController:rootView
-                                 withContent:content
-                                    delegate:self];
+    [self shareContent:content delegate:delegate];
 }
 
-- (void)shareVideoContent:(NSString*)url {
+- (NSString* _Nonnull)shareVideoContent:(NSString* _Nonnull)message {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+    int tag = [[dict objectForKey:@"tag"] intValue];
+    NSString* url = [dict objectForKey:@"url"];
+    [self shareVideoContent:url
+                   delegate:[EEFacebookShareDelegate delegateWithBridge:bridge_
+                                                                    tag:tag]];
+    return @"";
+}
+
+- (void)shareVideoContent:(NSString* _Nonnull)url
+                 delegate:(id<FBSDKSharingDelegate> _Nonnull)delegate {
     FBSDKShareVideo* video = [[[FBSDKShareVideo alloc] init] autorelease];
     [video setVideoURL:[NSURL URLWithString:url]];
 
@@ -243,23 +326,15 @@ NSString* const k__onShareResult         = @"Facebook_onShareResult";
         [[[FBSDKShareVideoContent alloc] init] autorelease];
     [content setVideo:video];
 
+    [self shareContent:content delegate:delegate];
+}
+
+- (void)shareContent:(id<FBSDKSharingContent> _Nonnull)content
+            delegate:(id<FBSDKSharingDelegate> _Nonnull)delegate {
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [FBSDKShareDialog showFromViewController:rootView
                                  withContent:content
-                                    delegate:self];
-}
-
-- (void)sharer:(id<FBSDKSharing>)sharer
-    didCompleteWithResults:(NSDictionary*)results {
-    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:YES]];
-}
-
-- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError*)error {
-    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:NO]];
-}
-
-- (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
-    [bridge_ callCpp:k__onShareResult message:[EEUtils toString:NO]];
+                                    delegate:[delegate retain]];
 }
 
 @end

@@ -8,7 +8,10 @@
 
 #ifdef __cplusplus
 #include "ee/FacebookFwd.hpp"
-#include "ee/facebook/FacebookBridge.hpp"
+#include "ee/facebook/IFacebookAccessToken.hpp"
+#include "ee/facebook/IFacebookBridge.hpp"
+#include "ee/facebook/IFacebookDelegate.hpp"
+#include "ee/facebook/FacebookRequestContent.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__

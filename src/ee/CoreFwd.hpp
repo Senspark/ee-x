@@ -18,6 +18,7 @@ class Logger;
 class Metrics;
 class IMessageBridge;
 class MessageBridge;
+class PluginManager;
 class SpinLock;
 class VideoPlayer;
 class VideoPlayerManager;
@@ -32,6 +33,7 @@ using core::Logger;
 using core::Metrics;
 using core::IMessageBridge;
 using core::MessageBridge;
+using core::PluginManager;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
 

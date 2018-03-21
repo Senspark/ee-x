@@ -16,7 +16,7 @@ namespace ee {
 namespace core {
 namespace {
 extern "C" {
-JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridge_callCpp(
+JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridge_callCppInternal(
     JNIEnv* env, jobject instance, jstring tag_, jstring msg_) {
     const char* tag = env->GetStringUTFChars(tag_, nullptr);
     const char* msg = env->GetStringUTFChars(msg_, nullptr);

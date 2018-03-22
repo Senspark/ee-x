@@ -11,6 +11,8 @@
 /// Utility class to convert between @c NSString and @c NSDictionary.
 @interface EEJsonUtils : NSObject
 
++ (NSString* _Nullable)convertObjectToString:(id _Nonnull)object;
+
 /// Converts the specified array to a JSON formatted string.
 + (NSString* _Nonnull)convertArrayToString:(NSArray* _Nonnull)arr;
 

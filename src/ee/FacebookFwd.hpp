@@ -27,10 +27,13 @@ using IRequestDelegate =
               >;
 using IShareDelegate = IDelegate<const std::string& // postId
                                  >;
+using IGraphDelegate = IDelegate<const std::string& // content
+                                 >;
 class LoginDelegate;
 class ShareDelegate;
 class RequestDelegate;
 class RequestContent;
+class GraphRequest;
 } // namespace facebook
 
 using IFacebook = facebook::IBridge;
@@ -39,6 +42,7 @@ using IFacebookLoginDelegate = facebook::ILoginDelegate;
 using IFacebookRequestDelegate = facebook::IRequestDelegate;
 using IFacebookShareDelegate = facebook::IShareDelegate;
 using FacebookRequestContent = facebook::RequestContent;
+using FacebookGraphRequest = facebook::GraphRequest;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_FWD_HPP_ */

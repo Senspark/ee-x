@@ -32,6 +32,12 @@ public:
     virtual std::shared_ptr<IAccessToken> getAccessToken() const = 0;
 
     virtual void
+    graphRequest(const GraphRequest& request,
+                 const std::shared_ptr<IGraphDelegate>& delegate) = 0;
+
+    virtual std::shared_ptr<IGraphDelegate> createGraphDelegate() = 0;
+
+    virtual void
     sendRequest(const RequestContent& content,
                 const std::shared_ptr<IRequestDelegate>& delegate) = 0;
 
@@ -42,11 +48,11 @@ public:
                      const std::shared_ptr<IShareDelegate>& delegate) = 0;
 
     virtual void
-    sharePhotoContent(const std::string& name,
+    sharePhotoContent(const std::string& url,
                       const std::shared_ptr<IShareDelegate>& delegate) = 0;
 
     virtual void
-    shareVideoContent(const std::string& name,
+    shareVideoContent(const std::string& url,
                       const std::shared_ptr<IShareDelegate>& delegate) = 0;
 
     virtual std::shared_ptr<IShareDelegate> createShareDelegate() = 0;

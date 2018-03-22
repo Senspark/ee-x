@@ -38,6 +38,14 @@ public:
 
     /// @see Super.
     virtual void
+    graphRequest(const GraphRequest& request,
+                 const std::shared_ptr<IGraphDelegate>& delegate) override;
+
+    /// @see Super.
+    virtual std::shared_ptr<IGraphDelegate> createGraphDelegate() override;
+
+    /// @see Super.
+    virtual void
     sendRequest(const RequestContent& content,
                 const std::shared_ptr<IRequestDelegate>& delegate) override;
 

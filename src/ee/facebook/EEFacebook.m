@@ -26,10 +26,11 @@ NSString* const k__logIn                 = @"Facebook_logIn";
 NSString* const k__logOut                = @"Facebook_logOut";
 NSString* const k__getAccessToken        = @"Facebook_getAccessToken";
 NSString* const k__onProfileChanged      = @"Facebook_onProfileChanged";
+NSString* const k__graphRequest          = @"Facebook_graphRequest";
+NSString* const k__sendRequest           = @"Facebook_sendRequest";
 NSString* const k__shareLinkContent      = @"Facebook_shareLinkContent";
 NSString* const k__sharePhotoContent     = @"Facebook_sharePhotoContent";
 NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
-NSString* const k__sendRequest           = @"Facebook_sendRequest";
 // clang-format on
 
 - (id)init {
@@ -95,6 +96,11 @@ NSString* const k__sendRequest           = @"Facebook_sendRequest";
                         return [self convertAccessTokenToString:token];
                     }];
 
+    [bridge_ registerHandler:k__graphRequest
+                    callback:^(NSString* message) {
+                        return [self graphRequest:message];
+                    }];
+
     [bridge_ registerHandler:k__sendRequest
                     callback:^(NSString* message) {
                         return [self sendRequest:message];
@@ -122,10 +128,11 @@ NSString* const k__sendRequest           = @"Facebook_sendRequest";
     [bridge_ deregisterHandler:k__logIn];
     [bridge_ deregisterHandler:k__logOut];
     [bridge_ deregisterHandler:k__getAccessToken];
+    [bridge_ deregisterHandler:k__graphRequest];
+    [bridge_ deregisterHandler:k__sendRequest];
     [bridge_ deregisterHandler:k__shareLinkContent];
     [bridge_ deregisterHandler:k__sharePhotoContent];
     [bridge_ deregisterHandler:k__shareVideoContent];
-    [bridge_ deregisterHandler:k__sendRequest];
 }
 
 - (NSString* _Nonnull)convertAccessTokenToString:(FBSDKAccessToken*)token {
@@ -221,6 +228,48 @@ NSString* const k__sendRequest           = @"Facebook_sendRequest";
 
 - (FBSDKAccessToken* _Nullable)getAccessToken {
     return [FBSDKAccessToken currentAccessToken];
+}
+
+- (NSString* _Nonnull)k__onGraphSuccess:(int)tag {
+    return [@"FacebookGraphDelegate_onSuccess_"
+        stringByAppendingString:[@(tag) stringValue]];
+}
+
+- (NSString* _Nonnull)k__onGraphFailure:(int)tag {
+    return [@"FacebookGraphDelegate_onFailure_"
+        stringByAppendingString:[@(tag) stringValue]];
+}
+
+- (NSString* _Nonnull)graphRequest:(NSString* _Nonnull)message {
+    NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+    int tag = [[dict objectForKey:@"tag"] intValue];
+    NSString* path = [dict objectForKey:@"path"];
+    NSDictionary* parameters = [dict objectForKey:@"parameters"];
+    FBSDKGraphRequestHandler handler =
+        ^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
+            if (error != nil) {
+                [bridge_ callCpp:[self k__onGraphFailure:tag]
+                         message:[error localizedDescription]];
+            } else {
+                [bridge_ callCpp:[self k__onGraphSuccess:tag]
+                         message:[EEJsonUtils convertObjectToString:result]];
+            }
+        };
+    [self graphRequest:path parameters:parameters handler:handler];
+    return @"";
+}
+
+- (void)graphRequest:(NSString* _Nonnull)path
+          parameters:(NSDictionary* _Nullable)parameters
+             handler:(FBSDKGraphRequestHandler _Nonnull)handler {
+    FBSDKGraphRequest* request =
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:path
+                                           parameters:parameters] autorelease];
+
+    FBSDKGraphRequestConnection* connection =
+        [[[FBSDKGraphRequestConnection alloc] init] autorelease];
+    [connection addRequest:request completionHandler:handler];
+    [connection start];
 }
 
 - (NSString* _Nonnull)sendRequest:(NSString* _Nonnull)message_ {

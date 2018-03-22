@@ -6,6 +6,7 @@ import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
@@ -22,6 +23,9 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
@@ -55,6 +59,7 @@ public class Facebook implements PluginProtocol {
     private static final String k__logOut                = "Facebook_logOut";
     private static final String k__getAccessToken        = "Facebook_getAccessToken";
     private static final String k__onProfileChanged      = "Facebook_onProfileChanged";
+    private static final String k__graphRequest          = "Facebook_graphRequest";
     private static final String k__sendRequest           = "Facebook_sendRequest";
     private static final String k__shareLinkContent      = "Facebook_shareLinkContent";
     private static final String k__sharePhotoContent     = "Facebook_sharePhotoContent";
@@ -205,6 +210,22 @@ public class Facebook implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                return graphRequest(message);
+            }
+        }, k__graphRequest);
+
+        _bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return sendRequest(message);
+            }
+        }, k__sendRequest);
+
+        _bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
                 Integer tag = (Integer) dict.get("tag");
@@ -247,10 +268,11 @@ public class Facebook implements PluginProtocol {
         _bridge.deregisterHandler(k__logIn);
         _bridge.deregisterHandler(k__logOut);
         _bridge.deregisterHandler(k__getAccessToken);
+        _bridge.deregisterHandler(k__graphRequest);
+        _bridge.deregisterHandler(k__sendRequest);
         _bridge.deregisterHandler(k__shareLinkContent);
         _bridge.deregisterHandler(k__sharePhotoContent);
         _bridge.deregisterHandler(k__shareVideoContent);
-        _bridge.deregisterHandler(k__sendRequest);
     }
 
     @NonNull
@@ -284,6 +306,46 @@ public class Facebook implements PluginProtocol {
     @Nullable
     public AccessToken getAccessToken() {
         return AccessToken.getCurrentAccessToken();
+    }
+
+    @NonNull
+    private String k__onGraphSuccess(int tag) {
+        return "FacebookGraphDelegate_onSuccess_" + String.valueOf(tag);
+    }
+
+    @NonNull
+    private String k__onGraphFailure(int tag) {
+        return "FacebookGraphDelegate_onFailure_" + String.valueOf(tag);
+    }
+
+    @NonNull
+    private String graphRequest(@NonNull String message) {
+        Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+        final int tag = (Integer) dict.get("tag");
+        String path = (String) dict.get("path");
+        Map<String, Object> parameters_ = (Map<String, Object>) dict.get("parameters");
+        Bundle parameters = new Bundle();
+        for (Map.Entry<String, Object> entry : parameters_.entrySet()) {
+            parameters.putString(entry.getKey(), (String) entry.getValue());
+        }
+        GraphRequest.Callback callback = new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                if (response.getError() != null) {
+                    _bridge.callCpp(k__onGraphFailure(tag), response.getError().getErrorMessage());
+                } else {
+                    _bridge.callCpp(k__onGraphSuccess(tag), response.getRawResponse());
+                }
+            }
+        };
+        graphRequest(path, parameters, callback);
+        return "";
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void graphRequest(@NonNull String path, @Nullable Bundle parameters, GraphRequest.Callback callback) {
+        GraphRequest request = new GraphRequest(getAccessToken(), path, parameters, HttpMethod.GET, callback);
+        request.executeAsync();
     }
 
     @NonNull

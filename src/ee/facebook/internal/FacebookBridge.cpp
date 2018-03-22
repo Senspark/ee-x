@@ -6,9 +6,11 @@
 #include "ee/facebook/internal/FacebookBridge.hpp"
 #include "ee/facebook/internal/FacebookAccessToken.hpp"
 #include "ee/facebook/internal/FacebookLoginDelegate.hpp"
+#include "ee/facebook/internal/FacebookGraphDelegate.hpp"
 #include "ee/facebook/internal/FacebookRequestDelegate.hpp"
 #include "ee/facebook/internal/FacebookShareDelegate.hpp"
 #include "ee/facebook/FacebookRequestContent.hpp"
+#include "ee/facebook/FacebookGraphRequest.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/PluginManager.hpp"
@@ -33,6 +35,7 @@ constexpr auto k__logIn                 = "Facebook_logIn";
 constexpr auto k__logOut                = "Facebook_logOut";
 constexpr auto k__getAccessToken        = "Facebook_getAccessToken";
 constexpr auto k__onProfileChanged      = "Facebook_onProfileChanged";
+constexpr auto k__graphRequest          = "Facebook_graphRequest";
 constexpr auto k__sendRequest           = "Facebook_sendRequest";
 constexpr auto k__shareLinkContent      = "Facebook_shareLinkContent";
 constexpr auto k__sharePhotoContent     = "Facebook_sharePhotoContent";
@@ -96,6 +99,19 @@ std::shared_ptr<IAccessToken> Self::getAccessToken() const {
     }
     auto token = std::make_shared<AccessToken>(response);
     return token;
+}
+
+void Self::graphRequest(const GraphRequest& request,
+                        const std::shared_ptr<IGraphDelegate>& delegate_) {
+    auto&& delegate = std::dynamic_pointer_cast<GraphDelegate>(delegate_);
+    delegate->self_ = delegate;
+    auto json = nlohmann::json::parse(request.toString());
+    json["tag"] = delegate->tag_;
+    bridge_.call(k__graphRequest, json.dump());
+}
+
+std::shared_ptr<IGraphDelegate> Self::createGraphDelegate() {
+    return std::make_shared<GraphDelegate>(bridge_, delegateId_++);
 }
 
 void Self::sendRequest(const RequestContent& content,

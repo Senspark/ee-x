@@ -422,6 +422,10 @@
 		ADE6AF2E2062170A00F6135F /* FacebookAccessToken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADE6AF2C2062170A00F6135F /* FacebookAccessToken.cpp */; };
 		ADE6AF2F2062170A00F6135F /* FacebookAccessToken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADE6AF2D2062170A00F6135F /* FacebookAccessToken.hpp */; };
 		ADE6AF312062174100F6135F /* IFacebookAccessToken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADE6AF302062174100F6135F /* IFacebookAccessToken.hpp */; };
+		ADF663022063BC5400196553 /* FacebookGraphRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADF663002063BC5400196553 /* FacebookGraphRequest.cpp */; };
+		ADF663032063BC5400196553 /* FacebookGraphRequest.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADF663012063BC5400196553 /* FacebookGraphRequest.hpp */; };
+		ADF663062063BE5800196553 /* FacebookGraphDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADF663042063BE5800196553 /* FacebookGraphDelegate.cpp */; };
+		ADF663072063BE5800196553 /* FacebookGraphDelegate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADF663052063BE5800196553 /* FacebookGraphDelegate.hpp */; };
 		BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
@@ -1026,6 +1030,10 @@
 		ADE6AF2C2062170A00F6135F /* FacebookAccessToken.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAccessToken.cpp; sourceTree = "<group>"; };
 		ADE6AF2D2062170A00F6135F /* FacebookAccessToken.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FacebookAccessToken.hpp; sourceTree = "<group>"; };
 		ADE6AF302062174100F6135F /* IFacebookAccessToken.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IFacebookAccessToken.hpp; sourceTree = "<group>"; };
+		ADF663002063BC5400196553 /* FacebookGraphRequest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookGraphRequest.cpp; sourceTree = "<group>"; };
+		ADF663012063BC5400196553 /* FacebookGraphRequest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FacebookGraphRequest.hpp; sourceTree = "<group>"; };
+		ADF663042063BE5800196553 /* FacebookGraphDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookGraphDelegate.cpp; sourceTree = "<group>"; };
+		ADF663052063BE5800196553 /* FacebookGraphDelegate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FacebookGraphDelegate.hpp; sourceTree = "<group>"; };
 		B10891418FC33D0C83179F02 /* Pods-common-ee_x_mobile_iron_src.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.release.xcconfig"; sourceTree = "<group>"; };
 		B5329EBC8BC1C11E8388353C /* Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		BA3CAC97D4207BEF1DD6466F /* libPods-common-crashlytics-ee_x_mobile_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_mobile_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1795,6 +1803,8 @@
 				ADE6AF1A2062055900F6135F /* IFacebookDelegate.hpp */,
 				ADE6AF242062095D00F6135F /* FacebookRequestContent.cpp */,
 				ADE6AF252062095D00F6135F /* FacebookRequestContent.hpp */,
+				ADF663002063BC5400196553 /* FacebookGraphRequest.cpp */,
+				ADF663012063BC5400196553 /* FacebookGraphRequest.hpp */,
 				AD773EC220610FC800136655 /* internal */,
 			);
 			path = facebook;
@@ -1820,6 +1830,8 @@
 				ADE6AF062061127B00F6135F /* EEFacebookShareDelegate.m */,
 				AD10C2D320492B2200C92CFE /* FacebookBridge.cpp */,
 				AD10C2D420492B2200C92CFE /* FacebookBridge.hpp */,
+				ADF663042063BE5800196553 /* FacebookGraphDelegate.cpp */,
+				ADF663052063BE5800196553 /* FacebookGraphDelegate.hpp */,
 				ADE6AF20206208A100F6135F /* FacebookLoginDelegate.cpp */,
 				ADE6AF21206208A100F6135F /* FacebookLoginDelegate.hpp */,
 				ADE6AF1C206205B700F6135F /* FacebookRequestDelegate.cpp */,
@@ -2146,6 +2158,7 @@
 				AD10C2C020492A9D00C92CFE /* EEFacebookBannerAd.h in Headers */,
 				ADE6AF1B2062055900F6135F /* IFacebookDelegate.hpp in Headers */,
 				AD10C2C120492A9D00C92CFE /* FacebookInterstitialAd.hpp in Headers */,
+				ADF663072063BE5800196553 /* FacebookGraphDelegate.hpp in Headers */,
 				AD10C2C220492A9D00C92CFE /* EEFacebookNativeAdView.h in Headers */,
 				ADE6AF0D20611B6B00F6135F /* FacebookShareDelegate.hpp in Headers */,
 				AD10C2C320492A9D00C92CFE /* EEFacebookInterstitialAd.h in Headers */,
@@ -2157,6 +2170,7 @@
 				ADE6AF23206208A100F6135F /* FacebookLoginDelegate.hpp in Headers */,
 				AD10C2DA20492B2300C92CFE /* FacebookBridge.hpp in Headers */,
 				AD10C2C520492A9D00C92CFE /* FacebookAds.hpp in Headers */,
+				ADF663032063BC5400196553 /* FacebookGraphRequest.hpp in Headers */,
 				AD773EC620610FE400136655 /* EEFacebookRequestDelegate.h in Headers */,
 				AD10C2D720492B2300C92CFE /* EEFacebook.h in Headers */,
 				AD10C2C620492A9D00C92CFE /* EEFacebookNativeAd.h in Headers */,
@@ -3257,6 +3271,7 @@
 				ADE6AF262062095D00F6135F /* FacebookRequestContent.cpp in Sources */,
 				AD10C2B320492A9D00C92CFE /* FacebookBannerAd.cpp in Sources */,
 				ADE6AF22206208A100F6135F /* FacebookLoginDelegate.cpp in Sources */,
+				ADF663062063BE5800196553 /* FacebookGraphDelegate.cpp in Sources */,
 				AD10C2B520492A9D00C92CFE /* FacebookAdsBridge.cpp in Sources */,
 				AD10C2B620492A9D00C92CFE /* FacebookNativeAdLayout.cpp in Sources */,
 				ADE6AF2E2062170A00F6135F /* FacebookAccessToken.cpp in Sources */,
@@ -3265,6 +3280,7 @@
 				AD10C2B820492A9D00C92CFE /* FacebookNativeAd.cpp in Sources */,
 				ADE6AF0C20611B6B00F6135F /* FacebookShareDelegate.cpp in Sources */,
 				AD10C2BA20492A9D00C92CFE /* FacebookInterstitialAd.cpp in Sources */,
+				ADF663022063BC5400196553 /* FacebookGraphRequest.cpp in Sources */,
 				AD773EC520610FE400136655 /* EEFacebookRequestDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

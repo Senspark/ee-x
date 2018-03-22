@@ -4,8 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FBSDKShareKit/FBSDKGameRequestContent.h>
+
+#import <FBSDKCoreKit/FBSDKGraphRequestConnection.h>
 #import <FBSDKLoginKit/FBSDKLoginManager.h>
+#import <FBSDKShareKit/FBSDKGameRequestContent.h>
 
 @protocol FBSDKGameRequestDialogDelegate;
 @protocol FBSDKSharingDelegate;
@@ -19,6 +21,10 @@
 - (void)logOut;
 
 - (FBSDKAccessToken* _Nullable)getAccessToken;
+
+- (void)graphRequest:(NSString* _Nonnull)path
+          parameters:(NSDictionary* _Nullable)parameters
+             handler:(FBSDKGraphRequestHandler _Nonnull)handler;
 
 - (void)sendRequest:(FBSDKGameRequestActionType)actionType
              filter:(FBSDKGameRequestFilter)filter

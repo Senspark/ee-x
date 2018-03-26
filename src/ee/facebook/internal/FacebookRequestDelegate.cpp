@@ -35,8 +35,11 @@ Self::RequestDelegate(IMessageBridge& bridge, int tag)
         [this](const std::string& message) {
             if (successCallback_) {
                 auto json = nlohmann::json::parse(message);
-                auto&& requestId = json["requestId"];
-                auto&& requestRecipients = json["requestRecipients"];
+                auto&& requestId =
+                    json.value("requestId", std::string()); // Null iOS.
+                auto&& requestRecipients =
+                    json.value("requestRecipients",
+                               std::vector<std::string>()); // Null iOS.
                 successCallback_(requestId, requestRecipients);
             }
             self_.reset();

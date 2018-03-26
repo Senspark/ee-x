@@ -267,6 +267,10 @@ public class Recorder implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public boolean checkRecordingPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return false;
+        }
+
         if (_hasRecordingPermission) {
             return true;
         }

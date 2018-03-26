@@ -1,7 +1,7 @@
 /*
     __ _____ _____ _____
  __|  |   __|     |   | |  JSON for Modern C++
-|  |  |__   |  |  | | | |  version 3.1.1
+|  |  |__   |  |  | | | |  version 3.1.2
 |_____|_____|_____|_|___|  https://github.com/nlohmann/json
 
 Licensed under the MIT License <http://opensource.org/licenses/MIT>.
@@ -31,7 +31,7 @@ SOFTWARE.
 
 #define NLOHMANN_JSON_VERSION_MAJOR 3
 #define NLOHMANN_JSON_VERSION_MINOR 1
-#define NLOHMANN_JSON_VERSION_PATCH 1
+#define NLOHMANN_JSON_VERSION_PATCH 2
 
 #include <algorithm> // all_of, find, for_each
 #include <cassert> // assert
@@ -1871,6 +1871,7 @@ class lexer
     using number_integer_t = typename BasicJsonType::number_integer_t;
     using number_unsigned_t = typename BasicJsonType::number_unsigned_t;
     using number_float_t = typename BasicJsonType::number_float_t;
+    using string_t = typename BasicJsonType::string_t;
 
   public:
     /// token types for the parser
@@ -2969,7 +2970,7 @@ scan_number_done:
     }
 
     /// return current string value (implicitly resets the token; useful only once)
-    std::string&& move_string()
+    string_t&& move_string()
     {
         return std::move(token_buffer);
     }
@@ -3099,7 +3100,7 @@ scan_number_done:
     std::vector<char> token_string {};
 
     /// buffer for variable-length tokens (numbers, strings)
-    std::string token_buffer {};
+    string_t token_buffer {};
 
     /// a description of occurred lexer errors
     const char* error_message = "";
@@ -3155,6 +3156,7 @@ class parser
     using number_integer_t = typename BasicJsonType::number_integer_t;
     using number_unsigned_t = typename BasicJsonType::number_unsigned_t;
     using number_float_t = typename BasicJsonType::number_float_t;
+    using string_t = typename BasicJsonType::string_t;
     using lexer_t = lexer<BasicJsonType>;
     using token_type = typename lexer_t::token_type;
 
@@ -3298,7 +3300,7 @@ class parser
                 }
 
                 // parse values
-                std::string key;
+                string_t key;
                 BasicJsonType value;
                 while (true)
                 {
@@ -4777,11 +4779,11 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
 };
 
 /// output adapter for basic_string
-template<typename CharType>
+template<typename CharType, typename StringType = std::basic_string<CharType>>
 class output_string_adapter : public output_adapter_protocol<CharType>
 {
   public:
-    explicit output_string_adapter(std::basic_string<CharType>& s) : str(s) {}
+    explicit output_string_adapter(StringType& s) : str(s) {}
 
     void write_character(CharType c) override
     {
@@ -4794,10 +4796,10 @@ class output_string_adapter : public output_adapter_protocol<CharType>
     }
 
   private:
-    std::basic_string<CharType>& str;
+    StringType& str;
 };
 
-template<typename CharType>
+template<typename CharType, typename StringType = std::basic_string<CharType>>
 class output_adapter
 {
   public:
@@ -4807,8 +4809,8 @@ class output_adapter
     output_adapter(std::basic_ostream<CharType>& s)
         : oa(std::make_shared<output_stream_adapter<CharType>>(s)) {}
 
-    output_adapter(std::basic_string<CharType>& s)
-        : oa(std::make_shared<output_string_adapter<CharType>>(s)) {}
+    output_adapter(StringType& s)
+        : oa(std::make_shared<output_string_adapter<CharType, StringType>>(s)) {}
 
     operator output_adapter_t<CharType>()
     {
@@ -10546,7 +10548,7 @@ class basic_json
                     object = nullptr;  // silence warning, see #821
                     if (JSON_UNLIKELY(t == value_t::null))
                     {
-                        JSON_THROW(other_error::create(500, "961c151d2e87f2686a955a9be24d316f1362bf21 3.1.1")); // LCOV_EXCL_LINE
+                        JSON_THROW(other_error::create(500, "961c151d2e87f2686a955a9be24d316f1362bf21 3.1.2")); // LCOV_EXCL_LINE
                     }
                     break;
                 }
@@ -10562,7 +10564,7 @@ class basic_json
         /// constructor for rvalue strings
         json_value(string_t&& value)
         {
-            string = create<string_t>(std::forward < string_t&& > (value));
+            string = create<string_t>(std::move(value));
         }
 
         /// constructor for objects
@@ -10574,7 +10576,7 @@ class basic_json
         /// constructor for rvalue objects
         json_value(object_t&& value)
         {
-            object = create<object_t>(std::forward < object_t&& > (value));
+            object = create<object_t>(std::move(value));
         }
 
         /// constructor for arrays
@@ -10586,7 +10588,7 @@ class basic_json
         /// constructor for rvalue arrays
         json_value(array_t&& value)
         {
-            array = create<array_t>(std::forward < array_t&& > (value));
+            array = create<array_t>(std::move(value));
         }
 
         void destroy(value_t t) noexcept
@@ -11556,7 +11558,7 @@ class basic_json
                   const bool ensure_ascii = false) const
     {
         string_t result;
-        serializer s(detail::output_adapter<char>(result), indent_char);
+        serializer s(detail::output_adapter<char, string_t>(result), indent_char);
 
         if (indent >= 0)
         {

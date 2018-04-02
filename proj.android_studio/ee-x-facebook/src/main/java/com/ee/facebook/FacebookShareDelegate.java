@@ -39,7 +39,7 @@ public class FacebookShareDelegate implements FacebookCallback<Sharer.Result> {
     @Override
     public void onSuccess(Sharer.Result result) {
         Utils.checkMainThread();
-        _bridge.callCpp(k__onSuccess(), result.getPostId());
+        _bridge.callCpp(k__onSuccess(), "");
     }
 
     @Override

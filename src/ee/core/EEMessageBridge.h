@@ -26,6 +26,10 @@
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag;
 
 /// @see Super.
+- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
+                   message:(NSString* _Nonnull)message;
+
+/// @see Super.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag;
 
 /// @see Super.
@@ -35,14 +39,6 @@
 @end
 
 @interface EEMessageBridge (Cpp)
-
-/// Calls a handler from Objective-C with a message.
-/// @warning This method should not be called manually.
-/// @param tag The tag of the handler.
-/// @param message The message.
-/// @return Reply message from Objective-C.
-- (NSString* _Nonnull)call:(NSString* _Nonnull)tag
-                   message:(NSString* _Nonnull)message;
 
 /// Used internally.
 - (NSString* _Nonnull)callCppInternal:(NSString* _Nonnull)tag

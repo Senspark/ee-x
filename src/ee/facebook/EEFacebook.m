@@ -328,7 +328,11 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
                 delegate:(id<FBSDKSharingDelegate> _Nonnull)delegate {
     FBSDKShareLinkContent* content =
         [[[FBSDKShareLinkContent alloc] init] autorelease];
-    [content setContentURL:[NSURL URLWithString:url]];
+
+    NSString* escapedUrl =
+        [url stringByAddingPercentEncodingWithAllowedCharacters:
+                 [NSCharacterSet URLQueryAllowedCharacterSet]];
+    [content setContentURL:[NSURL URLWithString:escapedUrl]];
 
     [self shareContent:content delegate:delegate];
 }

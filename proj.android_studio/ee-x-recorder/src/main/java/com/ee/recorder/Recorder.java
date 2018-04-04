@@ -50,7 +50,7 @@ public class Recorder implements PluginProtocol {
 
     private Activity                 _activity;
     private MediaRecorder            _mediaRecorder;
-    private String                   _recordedFilePath;
+    private String                   _recordedFilePath = "";
     private int                      _screenDensity;
     private MediaProjectionManager   _projectionManager;
     private MediaProjection          _mediaProjection;
@@ -242,7 +242,8 @@ public class Recorder implements PluginProtocol {
     }
 
     private void stopRecordScreen() {
-        if (!_hasRecordingPermission) {
+        if (!_hasRecordingPermission
+                || _recordedFilePath.equals("")) {
             return;
         }
         _mediaRecorder.stop();
@@ -267,6 +268,10 @@ public class Recorder implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public boolean checkRecordingPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return false;
+        }
+
         if (_hasRecordingPermission) {
             return true;
         }

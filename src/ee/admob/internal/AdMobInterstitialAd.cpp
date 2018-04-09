@@ -151,7 +151,11 @@ bool Self::show() {
         return false;
     }
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.startInterstitialAd(this);
+    auto successful = mediation.startInterstitialAd([this]() {
+        this->destroyInternalAd();
+        this->createInternalAd();
+        this->setDone();
+    });
     assert(successful);
     return true;
 }
@@ -166,7 +170,7 @@ void Self::onFailedToLoad(const std::string& message) {
     Logger::getSystemLogger().debug("%s: message = %s loading = %s",
                                     __PRETTY_FUNCTION__, message.c_str(),
                                     core::toString(loading_).c_str());
-    loading_ = false;
+    loading_ = false;    
 }
 
 void Self::onFailedToShow() {
@@ -179,10 +183,8 @@ void Self::onFailedToShow() {
 void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    destroyInternalAd();
-    createInternalAd();
-    setDone();
-    auto successful = mediation.finishInterstitialAd(this);
+
+    auto successful = mediation.finishInterstitialAd();
     assert(successful);
 }
 } // namespace admob

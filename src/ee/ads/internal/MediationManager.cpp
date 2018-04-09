@@ -30,59 +30,60 @@ Self::MediationManager() {
 }
 
 Self::~MediationManager() {
-    interstitialAd_ = nullptr;
+    
     rewardedVideo_ = nullptr;
 }
 
-bool Self::startInterstitialAd(InterstitialAdInterface* ad) {
-    return registerInterstitialAd(ad);
+bool Self::startInterstitialAd(const OnCloseCallback& callback) {
+    
+    return registerInterstitialAd(callback);
 }
 
-bool Self::finishInterstitialAd(InterstitialAdInterface* ad) {
-    return deregisterInterstitialAd(ad, false);
+bool Self::finishInterstitialAd() {
+    return deregisterInterstitialAd(false);
 }
 
-bool Self::destroyInterstitialAd(InterstitialAdInterface* ad) {
-    return deregisterInterstitialAd(ad, true);
+bool Self::destroyInterstitialAd() {
+    return deregisterInterstitialAd(true);
 }
 
-bool Self::registerInterstitialAd(InterstitialAdInterface* ad) {
+bool Self::registerInterstitialAd(const OnCloseCallback& callback) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (interstitialAd_ != nullptr) {
+    if (_onCloseCallback != nullptr) {
         return false;
     }
-    interstitialAd_ = ad;
+    
+    _onCloseCallback = callback;
     interstitialAdDestroyed_ = false;
     return true;
 }
 
-bool Self::deregisterInterstitialAd(InterstitialAdInterface* ad,
-                                    bool destroyed) {
+bool Self::deregisterInterstitialAd(bool destroyed) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (interstitialAd_ == nullptr) {
+    if (_onCloseCallback == nullptr) {
         if (interstitialAdDestroyed_) {
             return true;
         }
         return false;
     }
-    if (interstitialAd_ != ad) {
-        return false;
-    }
-    interstitialAd_ = nullptr;
+    
+    _onCloseCallback();
+    _onCloseCallback = nullptr;
     interstitialAdDestroyed_ = destroyed;
     return true;
 }
 
 bool Self::setInterstitialAdDone() {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (interstitialAd_ == nullptr) {
+    if (_onCloseCallback == nullptr) {
         if (interstitialAdDestroyed_) {
             return true;
         }
         return false;
     }
-    interstitialAd_->setDone();
-    interstitialAd_ = nullptr;
+    
+    _onCloseCallback();
+    _onCloseCallback = nullptr;
     return true;
 }
 

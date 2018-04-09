@@ -135,7 +135,11 @@ bool Self::show() {
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__show(placementId_));
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.startInterstitialAd(this);
+    auto successful = mediation.startInterstitialAd([this]() {
+        this->destroyInternalAd();
+        this->createInternalAd();
+        this->setDone();
+    });
     assert(successful);
     return true;
 }
@@ -156,10 +160,8 @@ void Self::onFailedToLoad(const std::string& message) {
 void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    destroyInternalAd();
-    createInternalAd();
-    setDone();
-    auto successful = mediation.finishInterstitialAd(this);
+
+    auto successful = mediation.finishInterstitialAd();
     assert(successful);
 }
 } // namespace facebook

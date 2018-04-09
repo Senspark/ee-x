@@ -137,6 +137,10 @@
     if (interstitialAd_ == nil) {
         return NO;
     }
+    if (![interstitialAd_ isAdValid]) {
+        return NO;
+    }
+    
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     return [interstitialAd_ showAdFromRootViewController:rootView];
 }

@@ -11,10 +11,11 @@
 
 #include "ee/AdsFwd.hpp"
 #include "ee/core/internal/SpinLock.hpp"
-
+#include <functional>
 namespace ee {
 namespace ads {
 /// Fix issue where AdMob consumes other ads' callbacks.
+    using OnCloseCallback = std::function<void()>;
 class MediationManager {
 private:
     using Self = MediationManager;
@@ -22,9 +23,9 @@ private:
 public:
     static Self& getInstance();
 
-    bool startInterstitialAd(InterstitialAdInterface* ad);
-    bool finishInterstitialAd(InterstitialAdInterface* ad);
-    bool destroyInterstitialAd(InterstitialAdInterface* ad);
+    bool startInterstitialAd(const OnCloseCallback& callback);
+    bool finishInterstitialAd();
+    bool destroyInterstitialAd();
     bool setInterstitialAdDone();
 
     bool startRewardedVideo(RewardedVideoInterface* ad);
@@ -39,13 +40,14 @@ protected:
     MediationManager(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    bool registerInterstitialAd(InterstitialAdInterface* ad);
-    bool deregisterInterstitialAd(InterstitialAdInterface* ad, bool destroyed);
+    bool registerInterstitialAd(const OnCloseCallback& callback);
+    bool deregisterInterstitialAd(bool destroyed);
 
     bool registerRewardedVideo(RewardedVideoInterface* ad);
     bool deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed);
 
 private:
+    OnCloseCallback _onCloseCallback;
     InterstitialAdInterface* interstitialAd_;
     bool interstitialAdDestroyed_;
     RewardedVideoInterface* rewardedVideo_;

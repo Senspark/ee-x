@@ -79,8 +79,7 @@
 
     [bridge registerHandler:[self k__showRewardedVideo]
                    callback:^(NSString* message) {
-                       [self showRewardVideo];
-                       return @"";
+                       return [EEUtils toString:[self showRewardVideo]];
                    }];
 }
 - (void)deregisterHandlers {

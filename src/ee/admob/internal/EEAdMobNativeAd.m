@@ -15,6 +15,7 @@
 
 @interface EEAdMobNativeAd () <GADAdLoaderDelegate,
                                GADNativeAppInstallAdLoaderDelegate> {
+    EEMessageBridge* bridge_;
     GADAdLoader* adLoader_;
     NSString* adId_;
     NSArray<GADAdLoaderAdType>* adTypes_;
@@ -30,21 +31,24 @@
 
 @implementation EEAdMobNativeAd
 
-- (id _Nullable)initWithId:(NSString* _Nonnull)adId
-                     types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                    layout:(NSString* _Nonnull)layoutName
-               testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+- (id _Nullable)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                          adId:(NSString* _Nonnull)adId
+                         types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
+                        layout:(NSString* _Nonnull)layoutName
+                   testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     isAdLoaded_ = NO;
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
     testDevices_ = [testDevices retain];
-    helper_ =
-        [[EEAdViewHelper alloc] initWithPrefix:@"AdMobNativeAd" adId:adId];
+    helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                              prefix:@"AdMobNativeAd"
+                                                adId:adId];
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -177,9 +181,7 @@
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(adLoader_ == adLoader, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)adLoaderDidFinishLoading:(GADAdLoader*)adLoader {
@@ -229,16 +231,17 @@
             [[adView mediaView] setHidden:NO];
             // This app uses a fixed width for the GADMediaView and changes its
             // height to match the aspect ratio of the video it displays.
-//            NSLayoutConstraint* constraint = [NSLayoutConstraint
-//                constraintWithItem:[adView mediaView]
-//                         attribute:NSLayoutAttributeHeight
-//                         relatedBy:NSLayoutRelationEqual
-//                            toItem:[adView mediaView]
-//                         attribute:NSLayoutAttributeWidth
-//                        multiplier:(1 / [[nativeAppInstallAd videoController]
-//                                            aspectRatio])
-//                          constant:0];
-//            [constraint setActive:YES];
+            //            NSLayoutConstraint* constraint = [NSLayoutConstraint
+            //                constraintWithItem:[adView mediaView]
+            //                         attribute:NSLayoutAttributeHeight
+            //                         relatedBy:NSLayoutRelationEqual
+            //                            toItem:[adView mediaView]
+            //                         attribute:NSLayoutAttributeWidth
+            //                        multiplier:(1 / [[nativeAppInstallAd
+            //                        videoController]
+            //                                            aspectRatio])
+            //                          constant:0];
+            //            [constraint setActive:YES];
         }
     } else {
         [[adView mediaView] setHidden:YES];
@@ -283,8 +286,7 @@
     [[adView callToActionView] setUserInteractionEnabled:NO];
 
     isAdLoaded_ = YES;
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 /// Gets an image representing the number of stars. Returns nil if rating is

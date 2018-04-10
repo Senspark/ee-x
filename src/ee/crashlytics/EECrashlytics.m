@@ -24,7 +24,9 @@
 #endif // NDEBUG
 #endif // __OBJC__
 
-@implementation EECrashlytics
+@implementation EECrashlytics {
+    EEMessageBridge* bridge_;
+}
 
 // clang-format off
 NSString* const k__crashlytics_cause_crash          = @"__crashlytics_cause_crash";
@@ -50,6 +52,7 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         return self;
     }
     [Fabric with:@[[Crashlytics class], [Answers class]]];
+    bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
@@ -60,21 +63,19 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         [self causeCrash];
         return @"";
     }
-                        tag:k__crashlytics_cause_crash];
+                         tag:k__crashlytics_cause_crash];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         [self causeException];
         return @"";
     }
-                        tag:k__crashlytics_cause_exception];
+                         tag:k__crashlytics_cause_exception];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 1, @"...");
 
@@ -82,9 +83,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
 
         return @"";
     }
-                        tag:k__crashlytics_set_log_level];
+                         tag:k__crashlytics_set_log_level];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 4, @"...");
 
@@ -99,9 +100,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self log:priorityDescription tag:tag message:message];
         return @"";
     }
-                        tag:k__crashlytics_log];
+                         tag:k__crashlytics_log];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -114,9 +115,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self setString:key value:value];
         return @"";
     }
-                        tag:k__crashlytics_set_string];
+                         tag:k__crashlytics_set_string];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -129,9 +130,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self setBool:key value:value];
         return @"";
     }
-                        tag:k__crashlytics_set_bool];
+                         tag:k__crashlytics_set_bool];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -144,27 +145,27 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self setInt:key value:value];
         return @"";
     }
-                        tag:k__crashlytics_set_int];
+                         tag:k__crashlytics_set_int];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         [self setUserIdentifier:msg];
         return @"";
     }
-                        tag:k__crashlytics_set_user_identifier];
+                         tag:k__crashlytics_set_user_identifier];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         [self setUserName:msg];
         return @"";
     }
-                        tag:k__crashlytics_set_user_name];
+                         tag:k__crashlytics_set_user_name];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         [self setUserEmail:msg];
         return @"";
     }
-                        tag:k__crashlytics_set_user_email];
+                         tag:k__crashlytics_set_user_email];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -174,9 +175,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self trackLevelStart:name customAttributes:attrs];
         return @"";
     }
-                        tag:k__crashlytics_track_level_start];
+                         tag:k__crashlytics_track_level_start];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 4, @"...");
 
@@ -191,9 +192,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
             customAttributes:attrs];
         return @"";
     }
-                        tag:k__crashlytics_track_level_end];
+                         tag:k__crashlytics_track_level_end];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 7, @"...");
 
@@ -214,9 +215,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
                     customAttributes:attrs];
         return @"";
     }
-                        tag:k__crashlytics_track_purchase];
+                         tag:k__crashlytics_track_purchase];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -226,9 +227,9 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self trackCustomEvent:name customAttributes:attrs];
         return @"";
     }
-                        tag:k__crashlytics_track_custom_event];
+                         tag:k__crashlytics_track_custom_event];
 
-    [bridge registerHandler:^(NSString* msg) {
+    [bridge_ registerHandler:^(NSString* msg) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
         NSAssert([dict count] == 2, @"...");
 
@@ -238,27 +239,25 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
         [self trackInviteWithMethod:method customAttributes:attrs];
         return @"";
     }
-                        tag:k__crashlytics_track_invite];
+                         tag:k__crashlytics_track_invite];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__crashlytics_cause_crash];
-    [bridge deregisterHandler:k__crashlytics_cause_exception];
-    [bridge deregisterHandler:k__crashlytics_log];
-    [bridge deregisterHandler:k__crashlytics_set_log_level];
-    [bridge deregisterHandler:k__crashlytics_set_string];
-    [bridge deregisterHandler:k__crashlytics_set_bool];
-    [bridge deregisterHandler:k__crashlytics_set_int];
-    [bridge deregisterHandler:k__crashlytics_set_user_identifier];
-    [bridge deregisterHandler:k__crashlytics_set_user_name];
-    [bridge deregisterHandler:k__crashlytics_set_user_email];
-    [bridge deregisterHandler:k__crashlytics_track_level_start];
-    [bridge deregisterHandler:k__crashlytics_track_level_end];
-    [bridge deregisterHandler:k__crashlytics_track_purchase];
-    [bridge deregisterHandler:k__crashlytics_track_invite];
-    [bridge deregisterHandler:k__crashlytics_track_custom_event];
+    [bridge_ deregisterHandler:k__crashlytics_cause_crash];
+    [bridge_ deregisterHandler:k__crashlytics_cause_exception];
+    [bridge_ deregisterHandler:k__crashlytics_log];
+    [bridge_ deregisterHandler:k__crashlytics_set_log_level];
+    [bridge_ deregisterHandler:k__crashlytics_set_string];
+    [bridge_ deregisterHandler:k__crashlytics_set_bool];
+    [bridge_ deregisterHandler:k__crashlytics_set_int];
+    [bridge_ deregisterHandler:k__crashlytics_set_user_identifier];
+    [bridge_ deregisterHandler:k__crashlytics_set_user_name];
+    [bridge_ deregisterHandler:k__crashlytics_set_user_email];
+    [bridge_ deregisterHandler:k__crashlytics_track_level_start];
+    [bridge_ deregisterHandler:k__crashlytics_track_level_end];
+    [bridge_ deregisterHandler:k__crashlytics_track_purchase];
+    [bridge_ deregisterHandler:k__crashlytics_track_invite];
+    [bridge_ deregisterHandler:k__crashlytics_track_custom_event];
 }
 
 - (void)causeCrash {

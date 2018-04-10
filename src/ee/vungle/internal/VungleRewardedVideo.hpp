@@ -10,11 +10,11 @@
 #define EE_X_VUNGLE_REWARDED_VIDEO_HPP
 
 #include "ee/VungleFwd.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {
-class RewardedVideo : public RewardedVideoInterface {
+class RewardedVideo : public IRewardedVideo {
 public:
     virtual ~RewardedVideo() override;
 

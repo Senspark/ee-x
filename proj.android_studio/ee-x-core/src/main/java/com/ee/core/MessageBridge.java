@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by Zinge on 3/29/17.
  */
 
-public class MessageBridge {
+public class MessageBridge implements IMessageBridge {
     private static final Logger _logger = new Logger(MessageBridge.class.getName());
 
     /**
@@ -71,14 +71,19 @@ public class MessageBridge {
     }
 
     /**
-     * Calls a handler from C++ without a message.
-     *
-     * @param tag The unique tag of the handler.
-     * @return Reply message from c++.
+     * See parent.
      */
     @NonNull
     public String callCpp(@NonNull String tag) {
-        return callCpp(tag, "");
+        return callCppInternal(tag, "");
+    }
+
+    /**
+     * See parent.
+     */
+    @NonNull
+    public String callCpp(@NonNull String tag, @NonNull String message) {
+        return callCppInternal(tag, message);
     }
 
     /**
@@ -89,14 +94,10 @@ public class MessageBridge {
      * @return Reply message from C++.
      */
     @NonNull
-    public native String callCpp(@NonNull String tag, @NonNull String message);
+    private native String callCppInternal(@NonNull String tag, @NonNull String message);
 
     /**
-     * Registers a new handler to receive messages from C++.
-     *
-     * @param handler The handler.
-     * @param tag     The unique tag of the handler.
-     * @return Whether the registration was successful.
+     * See parent.
      */
     public boolean registerHandler(MessageHandler handler, @NonNull String tag) {
         synchronized (_handlerLock) {
@@ -110,10 +111,7 @@ public class MessageBridge {
     }
 
     /**
-     * Deregisters an existing handler not to receive messages from C++.
-     *
-     * @param tag The unique
-     * @return Whether the deregistration was successful.
+     * See parent.
      */
     public boolean deregisterHandler(@NonNull String tag) {
         synchronized (_handlerLock) {

@@ -30,6 +30,8 @@ public class FacebookAds implements PluginProtocol {
     private static final String k__destroyNativeAd       = "FacebookAds_destroyNativeAd";
     private static final String k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
     private static final String k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
+    private static final String k__createRewardVideoAd   = "FacebookAds_createRewardVideoAd";
+    private static final String k__destroyRewardVideoAd  = "FacebookAds_destroyRewardVideoAd";
 
     private static final String k__ad_id       = "ad_id";
     private static final String k__ad_size     = "ad_size";
@@ -43,6 +45,7 @@ public class FacebookAds implements PluginProtocol {
     private Map<String, FacebookBannerAd>       _bannerAds;
     private Map<String, FacebookNativeAd>       _nativeAds;
     private Map<String, FacebookInterstitialAd> _interstitialAds;
+    private Map<String, FacebookRewardVideoAd>  _rewardVideoAds;
 
     public FacebookAds(Context context) {
         Utils.checkMainThread();
@@ -52,6 +55,7 @@ public class FacebookAds implements PluginProtocol {
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
+        _rewardVideoAds = new HashMap<>();
 
         registerHandlers();
     }
@@ -122,6 +126,12 @@ public class FacebookAds implements PluginProtocol {
         }
         _interstitialAds.clear();
         _interstitialAds = null;
+
+        for (String key : _rewardVideoAds.keySet()) {
+            _rewardVideoAds.get(key).destroy();
+        }
+        _rewardVideoAds.clear();
+        _rewardVideoAds = null;
 
         _context = null;
     }
@@ -239,6 +249,27 @@ public class FacebookAds implements PluginProtocol {
                 return Utils.toString(destroyInterstitialAd(placementId));
             }
         }, k__destroyInterstitialAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String placementId = message;
+                return Utils.toString(createRewardVideoAd(placementId));
+            }
+        }, k__createRewardVideoAd);
+
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String placementId = message;
+                return Utils.toString(destroyRewardVideoAd(placementId));
+            }
+        }, k__destroyRewardVideoAd);
+
     }
 
     private void deregisterHandlers() {
@@ -333,6 +364,27 @@ public class FacebookAds implements PluginProtocol {
         FacebookInterstitialAd ad = _interstitialAds.get(placementId);
         ad.destroy();
         _interstitialAds.remove(placementId);
+        return true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    private boolean createRewardVideoAd(@NonNull String placementId) {
+        if (_rewardVideoAds.containsKey(placementId)) {
+            return false;
+        }
+        FacebookRewardVideoAd ad = new FacebookRewardVideoAd(_context, placementId);
+        _rewardVideoAds.put(placementId, ad);
+        return true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean destroyRewardVideoAd(@NonNull String placementId) {
+        if (!_rewardVideoAds.containsKey(placementId)) {
+            return false;
+        }
+        FacebookRewardVideoAd ad = _rewardVideoAds.get(placementId);
+        ad.destroy();
+        _rewardVideoAds.remove(placementId);
         return true;
     }
 }

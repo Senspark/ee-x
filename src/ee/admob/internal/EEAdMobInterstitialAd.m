@@ -15,6 +15,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobInterstitialAd () <GADInterstitialDelegate> {
+    EEMessageBridge* bridge_;
     NSString* adId_;
     GADInterstitial* interstitialAd_;
     NSArray<NSString*>* testDevices_;
@@ -25,17 +26,20 @@
 
 @implementation EEAdMobInterstitialAd
 
-- (id _Nonnull)initWithAdId:(NSString* _Nonnull)adId
-                testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+                         adId:(NSString* _Nonnull)adId
+                  testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     adId_ = [adId copy];
     interstitialAd_ = nil;
     testDevices_ = [testDevices retain];
     helper_ =
-        [[EEInterstitialAdHelper alloc] initWithPrefix:@"AdMobInterstitialAd"
+        [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
+                                                prefix:@"AdMobInterstitialAd"
                                                   adId:adId_];
     [self registerHandlers];
     return self;
@@ -85,27 +89,21 @@
 
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
+    [bridge_ registerHandler:[self k__createInternalAd]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self createInternalAd]];
+                    }];
 
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:[self k__createInternalAd]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self createInternalAd]];
-                   }];
-
-    [bridge registerHandler:[self k__destroyInternalAd]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self destroyInternalAd]];
-                   }];
+    [bridge_ registerHandler:[self k__destroyInternalAd]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self destroyInternalAd]];
+                    }];
 }
 
 - (void)deregisterHandlers {
     [helper_ deregisterHandlers];
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:[self k__createInternalAd]];
-    [bridge deregisterHandler:[self k__destroyInternalAd]];
+    [bridge_ deregisterHandler:[self k__createInternalAd]];
+    [bridge_ deregisterHandler:[self k__destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
@@ -157,18 +155,14 @@
 - (void)interstitialDidReceiveAd:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(interstitialAd_ == ad, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)interstitial:(GADInterstitial*)ad
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(interstitialAd_ == ad, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial*)ad {
@@ -179,9 +173,7 @@
 - (void)interstitialDidFailToPresentScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(interstitialAd_ == ad, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToShow]];
+    [bridge_ callCpp:[self k__onFailedToShow]];
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial*)ad {
@@ -192,9 +184,7 @@
 - (void)interstitialDidDismissScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(interstitialAd_ == ad, @"");
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onClosed]];
+    [bridge_ callCpp:[self k__onClosed]];
 }
 - (void)interstitialWillLeaveApplication:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);

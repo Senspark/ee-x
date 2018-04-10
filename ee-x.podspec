@@ -70,15 +70,17 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Facebook.hpp',
       'src/ee/FacebookFwd.hpp',
-      'src/ee/facebooksocial/*.{cpp,h,hpp,m}'
+      'src/ee/facebook/*',
+      'src/ee/facebook/internal/*'
 
     s.public_header_files =
       'src/ee/Facebook.hpp',
       'src/ee/FacebookFwd.hpp',
-      'src/ee/facebooksocial/FacebookBridge.hpp'
+      'src/ee/facebook/*.{h,hpp}'
 
     s.dependency 'ee-x/core'
-    s.dependency 'FBSDKShareKit'
+    s.dependency 'FBSDKLoginKit'
+    s.dependency 'FBSDKShareKit'    
   end
 
   spec.subspec 'notification' do |s|
@@ -230,13 +232,13 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/*',
-      'src/ee/facebook/internal/*'
+      'src/ee/facebookads/*',
+      'src/ee/facebookads/internal/*'
 
     s.public_header_files =
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebook/*.{h,hpp}'
+      'src/ee/facebookads/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
     s.dependency 'FBAudienceNetwork'
@@ -290,6 +292,20 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/ads'
     s.dependency 'VungleSDK-iOS', '5.3.0'
+  end
+
+  spec.subspec 'recorder' do |s|
+    s.source_files =
+      'src/ee/Recorder.hpp',
+      'src/ee/RecorderFwd.hpp',
+      'src/ee/recorder/*'
+
+    s.public_header_files =
+      'src/ee/Recorder.hpp',
+      'src/ee/RecorderFwd.hpp',
+      'src/ee/recorder/*.{h,hpp}'
+
+    s.dependency 'ee-x/core'
   end
 
 end

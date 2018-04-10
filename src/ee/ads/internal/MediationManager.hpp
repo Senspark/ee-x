@@ -28,9 +28,9 @@ public:
     bool destroyInterstitialAd();
     bool setInterstitialAdDone();
 
-    bool startRewardedVideo(RewardedVideoInterface* ad);
-    bool finishRewardedVideo(RewardedVideoInterface* ad);
-    bool destroyRewardedVideo(RewardedVideoInterface* ad);
+    bool startRewardedVideo(IRewardedVideo* ad);
+    bool finishRewardedVideo(IRewardedVideo* ad);
+    bool destroyRewardedVideo(IRewardedVideo* ad);
     bool setRewardedVideoResult(bool result);
 
 protected:
@@ -43,14 +43,13 @@ protected:
     bool registerInterstitialAd(const OnCloseCallback& callback);
     bool deregisterInterstitialAd(bool destroyed);
 
-    bool registerRewardedVideo(RewardedVideoInterface* ad);
-    bool deregisterRewardedVideo(RewardedVideoInterface* ad, bool destroyed);
+    bool registerRewardedVideo(IRewardedVideo* ad);
+    bool deregisterRewardedVideo(IRewardedVideo* ad, bool destroyed);
 
 private:
     OnCloseCallback _onCloseCallback;
-    InterstitialAdInterface* interstitialAd_;
     bool interstitialAdDestroyed_;
-    RewardedVideoInterface* rewardedVideo_;
+    IRewardedVideo* rewardedVideo_;
     bool rewardedVideoDestroyed_;
     core::SpinLock locker_;
 };

@@ -9,11 +9,11 @@
 #ifndef EE_X_NULL_AD_VIEW_HPP
 #define EE_X_NULL_AD_VIEW_HPP
 
-#include "ee/ads/AdViewInterface.hpp"
+#include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class NullAdView : public AdViewInterface {
+class NullAdView : public IAdView {
 public:
     NullAdView();
 

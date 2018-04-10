@@ -14,6 +14,8 @@
 
 namespace ee {
 namespace crashlytics {
+using Self = Crashlytics;
+
 namespace {
 // clang-format off
 constexpr auto k__crashlytics_cause_crash          = "__crashlytics_cause_crash";
@@ -34,107 +36,85 @@ constexpr auto k__crashlytics_track_invite         = "__crashlytics_track_invite
 // clang-format on
 } // namespace
 
+Self::Crashlytics()
+    : bridge_(MessageBridge::getInstance()) {}
+
 void Crashlytics::causeCrash() const {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_cause_crash);
+    bridge_.call(k__crashlytics_cause_crash);
 }
 
 void Crashlytics::causeException() const {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_cause_exception);
+    bridge_.call(k__crashlytics_cause_exception);
 }
 
 void Crashlytics::setLogLevel(const core::LogLevel& level) const {
     nlohmann::json json;
     json["priority"] = level.priority;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_log_level, json.dump());
+    bridge_.call(k__crashlytics_set_log_level, json.dump());
 }
 
 void Crashlytics::log(const core::LogLevel& level, const std::string& tag,
                       const std::string& message) const {
     nlohmann::json json;
-
     json["priorityDescription"] = level.desc;
     json["priority"] = level.priority;
     json["tag"] = tag;
     json["message"] = message;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_log, json.dump());
+    bridge_.call(k__crashlytics_log, json.dump());
 }
 
 void Crashlytics::setString(const std::string& key,
                             const std::string& value) const {
     nlohmann::json json;
-
     json["key"] = key;
     json["value"] = value;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_string, json.dump());
+    bridge_.call(k__crashlytics_set_string, json.dump());
 }
 
 void Crashlytics::setBool(const std::string& key, bool value) const {
     nlohmann::json json;
-
     json["key"] = key;
     json["value"] = value;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_bool, json.dump());
+    bridge_.call(k__crashlytics_set_bool, json.dump());
 }
 
 void Crashlytics::setInt(const std::string& key, int value) const {
     nlohmann::json json;
-
     json["key"] = key;
     json["value"] = value;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_int, json.dump());
+    bridge_.call(k__crashlytics_set_int, json.dump());
 }
 
 void Crashlytics::setUserIdentifier(const std::string& identifier) const {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_user_identifier, identifier);
+    bridge_.call(k__crashlytics_set_user_identifier, identifier);
 }
 
 void Crashlytics::setUserName(const std::string& name) const {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_user_name, name);
+    bridge_.call(k__crashlytics_set_user_name, name);
 }
 
 void Crashlytics::setUserEmail(const std::string& email) const {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_set_user_email, email);
+    bridge_.call(k__crashlytics_set_user_email, email);
 }
 
 void Crashlytics::trackLevelStart(
     const std::string& name,
     const std::unordered_map<std::string, std::string>& attrs) {
     nlohmann::json json;
-
     json["name"] = name;
     json["attrs"] = attrs;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_track_level_start, json.dump());
+    bridge_.call(k__crashlytics_track_level_start, json.dump());
 }
 
 void Crashlytics::trackLevelEnd(
     const std::string& name, int score, bool success,
     const std::unordered_map<std::string, std::string>& attrs) {
     nlohmann::json json;
-
     json["name"] = name;
     json["score"] = score;
     json["success"] = success;
     json["attrs"] = attrs;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_track_level_end, json.dump());
+    bridge_.call(k__crashlytics_track_level_end, json.dump());
 }
 
 void Crashlytics::trackPurchase(
@@ -143,7 +123,6 @@ void Crashlytics::trackPurchase(
     const std::string& itemId,
     const std::unordered_map<std::string, std::string>& attrs) {
     nlohmann::json json;
-
     json["price"] = price;
     json["currency"] = currency;
     json["success"] = success;
@@ -151,33 +130,25 @@ void Crashlytics::trackPurchase(
     json["item_type"] = itemType;
     json["item_id"] = itemId;
     json["attrs"] = attrs;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_track_purchase, json.dump());
+    bridge_.call(k__crashlytics_track_purchase, json.dump());
 }
 
 void Crashlytics::trackCustomEvent(
     const std::string& name,
     const std::unordered_map<std::string, std::string>& attrs) {
     nlohmann::json json;
-
     json["name"] = name;
     json["attrs"] = attrs;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_track_custom_event, json.dump());
+    bridge_.call(k__crashlytics_track_custom_event, json.dump());
 }
 
 void Crashlytics::trackInvite(
     const std::string& method,
     const std::unordered_map<std::string, std::string>& attrs) {
     nlohmann::json json;
-
     json["method"] = method;
     json["attrs"] = attrs;
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__crashlytics_track_invite, json.dump());
+    bridge_.call(k__crashlytics_track_invite, json.dump());
 }
 } // namespace crashlytics
 } // namespace ee

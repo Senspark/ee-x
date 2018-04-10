@@ -16,7 +16,7 @@ Self::MultiRewardedVideo() {}
 
 Self::~MultiRewardedVideo() {}
 
-Self& Self::addItem(const std::shared_ptr<RewardedVideoInterface>& item) {
+Self& Self::addItem(const std::shared_ptr<IRewardedVideo>& item) {
     items_.push_back(item);
     return *this;
 }

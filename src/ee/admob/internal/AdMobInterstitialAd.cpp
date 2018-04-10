@@ -12,7 +12,7 @@
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 
 namespace ee {
@@ -57,33 +57,34 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::InterstitialAd(AdMob* plugin, const std::string& adId) {
+Self::InterstitialAd(IMessageBridge& bridge, AdMob* plugin,
+                     const std::string& adId)
+    : bridge_(bridge) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     errored_ = false;
     plugin_ = plugin;
     adId_ = adId;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
         },
         k__onFailedToLoad(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToShow();
             return "";
         },
         k__onFailedToShow(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onClosed();
             return "";
@@ -97,31 +98,27 @@ Self::~InterstitialAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     destroyInternalAd();
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onLoaded(adId_));
-    bridge.deregisterHandler(k__onFailedToLoad(adId_));
-    bridge.deregisterHandler(k__onFailedToShow(adId_));
-    bridge.deregisterHandler(k__onClosed(adId_));
+    bridge_.deregisterHandler(k__onLoaded(adId_));
+    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onFailedToShow(adId_));
+    bridge_.deregisterHandler(k__onClosed(adId_));
     plugin_->destroyInterstitialAd(adId_);
 }
 
 bool Self::createInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createInternalAd(adId_));
+    auto response = bridge_.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__destroyInternalAd(adId_));
+    auto response = bridge_.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isLoaded(adId_));
+    auto response = bridge_.call(k__isLoaded(adId_));
     return core::toBool(response);
 }
 
@@ -135,8 +132,7 @@ void Self::load() {
         return;
     }
     loading_ = true;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__load(adId_));
+    bridge_.call(k__load(adId_));
 }
 
 bool Self::show() {
@@ -145,8 +141,7 @@ bool Self::show() {
     }
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__show(adId_));
+    bridge_.call(k__show(adId_));
     if (errored_) {
         return false;
     }

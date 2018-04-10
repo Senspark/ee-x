@@ -1,72 +1,103 @@
-#/****************************************************************************
-# Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-#
-# http://www.cocos2d-x.org
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-# ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
-include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/nlohmann/include/ee/nlohmann
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/admob
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/analytics
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/auth
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/database
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/dynamic_links
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/internal
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/storage
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/firebase/
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/include/google_play_services
-  ${CMAKE_CURRENT_LIST_DIR}/third_party/nlohmann/include
+project(ee_x)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
+
+include(src/ee/admob/CMakeLists.txt)
+include(src/ee/ads/CMakeLists.txt)
+include(src/ee/applovin/CMakeLists.txt)
+include(src/ee/core/CMakeLists.txt)
+include(src/ee/crashlytics/CMakeLists.txt)
+include(src/ee/facebook/CMakeLists.txt)
+include(src/ee/facebookads/CMakeLists.txt)
+include(src/ee/firebase/CMakeLists.txt)
+include(src/ee/google/CMakeLists.txt)
+include(src/ee/ironsource/CMakeLists.txt)
+include(src/ee/notification/CMakeLists.txt)
+include(src/ee/unityads/CMakeLists.txt)
+include(src/ee/vungle/CMakeLists.txt)
+
+set(LIB_SRC
+   jni/cpp/ee/core/JniUtils.cpp
+   jni/cpp/ee/core/internal/JniMethodInfo.cpp
+   jni/cpp/ee/core/internal/JniString.cpp
+   jni/cpp/ee/core/internal/Logger_Android.cpp
+   jni/cpp/ee/core/internal/MessageBridge_Android.cpp
+   ${EE_X_ADMOB_SRC}
+   ${EE_X_ADS_SRC}
+   ${EE_X_APPLOVIN_SRC}
+   ${EE_X_CORE_SRC}
+   ${EE_X_CRASHLYTICS_SRC}
+   ${EE_X_FACEBOOK_SRC}
+   ${EE_X_FACEBOOK_ADS_SRC}
+   ${EE_X_FIREBASE_SRC}
+   ${EE_X_GOOGLE_SRC}
+   ${EE_X_IRONSOURCE_SRC}
+   ${EE_X_NOTIFICATION_SRC}
+   ${EE_X_UNITY_ADS_SRC}
+   ${EE_X_VUNGLE_ADS_SRC}
 )
 
-set(GAME_SRC
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/JniUtils.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/JniMethodInfo.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/JniString.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/Logger_Android.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/MessageBridge_Android.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/firebase/FirebaseApp.cpp
+set(LIB_HEADERS
+    jni/cpp/ee/core/JniUtils.hpp
+    jni/cpp/ee/core/internal/JnimethodInfo.hpp
+    jni/cpp/ee/core/internal/JniString.hpp
+    third_party/nlohmann/include/ee/nlohmann/json.hpp
+    src/ee/Vungle.hpp
+    src/ee/IronSource.hpp
+    src/ee/AdsFwd.hpp
+    src/ee/FacebookAds.hpp
+    src/ee/Firebase.hpp
+    src/ee/AppLovinFwd.hpp
+    src/ee/AdMob.hpp
+    src/ee/UnityAdsFwd.hpp
+    src/ee/FacebookFwd.hpp
+    src/ee/UnityAds.hpp
+    src/ee/FacebookAdsFwd.hpp
+    src/ee/AppLovin.hpp
+    src/ee/CrashlyticsFwd.hpp
+    src/ee/AdMobFwd.hpp
+    src/ee/VungleFwd.hpp
+    src/ee/GoogleAnalytics.hpp
+    src/ee/CoreFwd.hpp
+    src/ee/Macro.hpp
+    src/ee/GoogleAnalyticsFwd.hpp
+    src/ee/IronSourceFwd.hpp
+    src/ee/Crashlytics.hpp
+    src/ee/Core.hpp
+    src/ee/Notification.hpp
+    src/ee/NotificationFwd.hpp
+    src/ee/FirebaseFwd.hpp
+    src/ee/Facebook.hpp
+    ${EE_X_ADMOB_HEADERS}
+    ${EE_X_ADS_HEADERS}
+    ${EE_X_APPLOVIN_HEADERS}
+    ${EE_X_CORE_HEADERS}
+    ${EE_X_CRASHLYTICS_HEADERS}
+    ${EE_X_FACEBOOK_HEADERS}
+    ${EE_X_FACEBOOK_ADS_HEADERS}
+    ${EE_X_FIREBASE_HEADERS}
+    ${EE_X_GOOGLE_HEADERS}
+    ${EE_X_IRONSOURCE_HEADERS}
+    ${EE_X_NOTIFICATION_HEADERS}
+    ${EE_X_UNITY_ADS_HEADERS}
+    ${EE_X_VUNGLE_ADS_HEADERS}
 )
 
-set(GAME_HEADERS_INCLUDE
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/JniUtils.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/JnimethodInfo.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/jni/cpp/ee/core/internal/JniString.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/third_party/nlohmann/include/ee/nlohmann/json.hpp
+add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+  src
+  jni/cpp
+  third_party/nlohmann/include
+  third_party/firebase_cpp_sdk/include
 )
 
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/admob/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/ads/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/applovin/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/core/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/crashlytics/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/google/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/ironsource/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/notification/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/store/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/unityads/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/src/ee/vungle/CMakeLists.txt)
-
-add_library(ee-x STATIC ${GAME_SRC} ${GAME_HEADERS_INCLUDE})
+target_link_libraries(${PROJECT_NAME}
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libmessaging.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libremote_config.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libstorage.a
+)

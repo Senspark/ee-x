@@ -23,13 +23,15 @@ Self& Self::getInstance() {
     return sharedInstance;
 }
 
+Self::VideoPlayerManager()
+    : bridge_(MessageBridge::getInstance()) {}
+
 VideoPlayer* Self::createVideoPlayer() {
     static int counter = 0;
     auto tag = std::to_string(counter++);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__create, tag);
-
-    auto player = std::unique_ptr<VideoPlayer>(new VideoPlayer(tag));
+    bridge_.call(k__create, tag);
+    
+    auto player = std::unique_ptr<VideoPlayer>(new VideoPlayer(bridge_, tag));
     auto result = player.get();
     players_.emplace(tag, std::move(player));
     return result;
@@ -42,9 +44,8 @@ bool Self::destroyVideoPlayer(VideoPlayer* player) {
         return false;
     }
     players_.erase(iter);
-
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__destroy, tag);
+    
+    bridge_.call(k__destroy, tag);
     return true;
 }
 } // namespace core

@@ -1,49 +1,35 @@
-#/****************************************************************************
-# Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-#
-# http://www.cocos2d-x.org
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-# ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+# project(ee_x_firebase)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase
+    src/ee/firebase
+    third_party/firebase_cpp_sdk/include
 )
 
-set(GAME_SRC
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseAnalytics.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseMessaging.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseRemoteConfig.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseStorage.cpp
+set(EE_X_FIREBASE_SRC
+   src/ee/firebase/FirebaseAnalytics.cpp
+   src/ee/firebase/FirebaseMessaging.cpp
+   src/ee/firebase/FirebaseRemoteConfig.cpp
+   src/ee/firebase/FirebaseStorage.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/Firebase.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/FirebaseFwd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseAnalytics.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseApp.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseMessaging.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseRemoteConfig.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseScheduler_inl.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseScheduler.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/firebase/FirebaseStorage.hpp
+set(EE_X_FIREBASE_HEADERS
+   src/ee/firebase/FirebaseAnalytics.hpp
+   src/ee/firebase/FirebaseApp.hpp
+   src/ee/firebase/FirebaseMessaging.hpp
+   src/ee/firebase/FirebaseRemoteConfig.hpp
+   src/ee/firebase/FirebaseScheduler_inl.hpp
+   src/ee/firebase/FirebaseScheduler.hpp
+   src/ee/firebase/FirebaseStorage.hpp
 )
+
+# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+
+# target_link_libraries(${PROJECT_NAME}
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libmessaging.a
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libremote_config.a
+#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libstorage.a
+# )

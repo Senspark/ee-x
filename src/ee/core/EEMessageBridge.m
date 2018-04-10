@@ -41,9 +41,13 @@
     [super dealloc];
 }
 
+- (BOOL)isHandlerRegistered:(NSString* _Nonnull)tag {
+    return [handlers_ objectForKey:tag] != nil;
+}
+
 - (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag {
-    if ([handlers_ objectForKey:tag] != nil) {
+    if ([self isHandlerRegistered:tag]) {
         NSString* message = [NSString
             stringWithFormat:@"A handler with tag %@ already exists", tag];
         NSAssert(NO, message);
@@ -59,7 +63,7 @@
 }
 
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag {
-    if ([handlers_ objectForKey:tag] == nil) {
+    if (![self isHandlerRegistered:tag]) {
         NSString* message = [NSString
             stringWithFormat:@"A handler with tag %@ doesn't exist", tag];
         NSAssert(NO, message);
@@ -79,6 +83,15 @@
         return @"";
     }
     return handler(message);
+}
+
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag {
+    return [self callCppInternal:tag message:@""];
+}
+
+- (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
+                      message:(NSString* _Nonnull)message {
+    return [self callCppInternal:tag message:message];
 }
 
 @end

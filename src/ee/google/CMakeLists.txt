@@ -1,61 +1,43 @@
-#/****************************************************************************
-# Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-#
-# http://www.cocos2d-x.org
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-# ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
+# project(ee_x_google_analytics)
+
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/google
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/google/internal
+  third_party/nlohmann/include
+  src/ee/google/internal
+  src/ee/google
 )
 
-set(GAME_SRC
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsBridge.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsEventBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsExceptionBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsProduct.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsProductAction.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsScreenViewBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsSocialBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsTimingBuilder.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsTracker.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/internal/GoogleAnalyticsParameter.cpp
+set(EE_X_GOOGLE_SRC
+  src/ee/google/GoogleAnalyticsBridge.cpp
+  src/ee/google/GoogleAnalyticsBuilder.cpp
+  src/ee/google/GoogleAnalyticsEventBuilder.cpp
+  src/ee/google/GoogleAnalyticsExceptionBuilder.cpp
+  src/ee/google/GoogleAnalyticsProduct.cpp
+  src/ee/google/GoogleAnalyticsProductAction.cpp
+  src/ee/google/GoogleAnalyticsScreenViewBuilder.cpp
+  src/ee/google/GoogleAnalyticsSocialBuilder.cpp
+  src/ee/google/GoogleAnalyticsTimingBuilder.cpp
+  src/ee/google/GoogleAnalyticsTracker.cpp
+  src/ee/google/internal/GoogleAnalyticsParameter.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsBridge.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsEventBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsExceptionBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsProduct.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsProductAction.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsScreenViewBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsSocialBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsTimingBuilder.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/GoogleAnalyticsTracker.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/google/internal/GoogleAnalyticsParameter.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/GoogleAnalytics.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/ee/GoogleAnalyticsFwd.hpp
+set(EE_X_GOOGLE_HEADERS
+  src/ee/google/GoogleAnalyticsBridge.hpp
+  src/ee/google/GoogleAnalyticsBuilder.hpp
+  src/ee/google/GoogleAnalyticsEventBuilder.hpp
+  src/ee/google/GoogleAnalyticsExceptionBuilder.hpp
+  src/ee/google/GoogleAnalyticsProduct.hpp
+  src/ee/google/GoogleAnalyticsProductAction.hpp
+  src/ee/google/GoogleAnalyticsScreenViewBuilder.hpp
+  src/ee/google/GoogleAnalyticsSocialBuilder.hpp
+  src/ee/google/GoogleAnalyticsTimingBuilder.hpp
+  src/ee/google/GoogleAnalyticsTracker.hpp
+  src/ee/google/internal/GoogleAnalyticsParameter.hpp
 )
+
+# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+
+# target_link_libraries(${PROJECT_NAME}
+#   ee_x_core
+# )

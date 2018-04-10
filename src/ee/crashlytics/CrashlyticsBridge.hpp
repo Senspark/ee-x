@@ -19,6 +19,8 @@ namespace ee {
 namespace crashlytics {
 class Crashlytics final {
 public:
+    Crashlytics();
+    
     /// Causes a crash.
     void causeCrash() const;
 
@@ -74,6 +76,9 @@ public:
 
     void trackInvite(const std::string& method,
                      const std::unordered_map<std::string, std::string>& attrs);
+    
+private:
+    IMessageBridge& bridge_;
 };
 } // namespace crashlytics
 } // namespace ee

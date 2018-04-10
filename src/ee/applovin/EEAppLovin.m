@@ -33,14 +33,29 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 // clang-format on
 
 @interface EEAppLovinIncentivizedInterstitialAdDisplayDelegate
-    : NSObject <ALAdDisplayDelegate>
+    : NSObject <ALAdDisplayDelegate> {
+    EEMessageBridge* bridge_;
+}
+
 @end
 
 @interface EEAppLovinInterstitialAdDisplayDelegate
-    : NSObject <ALAdDisplayDelegate>
+    : NSObject <ALAdDisplayDelegate> {
+    EEMessageBridge* bridge_;
+}
+
 @end
 
 @implementation EEAppLovinIncentivizedInterstitialAdDisplayDelegate
+
+- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge {
+    self = [super init];
+    if (self == nil) {
+        return nil;
+    }
+    bridge_ = bridge;
+    return self;
+}
 
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -52,34 +67,41 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
 - (void)ad:(ALAd*)ad wasHiddenIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onInterstitialAdHidden];
+    [bridge_ callCpp:k__onInterstitialAdHidden];
 }
 
 @end
 
 @implementation EEAppLovinInterstitialAdDisplayDelegate
 
+- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge {
+    self = [super init];
+    if (self == nil) {
+        return nil;
+    }
+    bridge_ = bridge;
+    return self;
+}
+
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)ad:(ALAd*)ad wasDisplayedIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onRewardedVideoDisplayed];
+    [bridge_ callCpp:k__onRewardedVideoDisplayed];
 }
 
 - (void)ad:(ALAd*)ad wasHiddenIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onRewardedVideoHidden];
+    [bridge_ callCpp:k__onRewardedVideoHidden];
 }
 
 @end
 
 @interface EEAppLovin () <ALAdRewardDelegate, ALAdLoadDelegate> {
     BOOL initialized_;
+    EEMessageBridge* bridge_;
     ALSdk* sdk_;
     ALInterstitialAd* interstitialAd_;
     EEAppLovinInterstitialAdDisplayDelegate* interstitialAdDisplayDelegate_;
@@ -98,6 +120,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
         return self;
     }
     initialized_ = NO;
+    bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
@@ -109,74 +132,70 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:k__initialize
+                    callback:^(NSString* message) {
+                        NSString* key = message;
+                        [self initialize:key];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__initialize
-                   callback:^(NSString* message) {
-                       NSString* key = message;
-                       [self initialize:key];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__setTestAdsEnabled
+                    callback:^(NSString* message) {
+                        [self setTestAdsEnabled:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__setTestAdsEnabled
-                   callback:^(NSString* message) {
-                       [self setTestAdsEnabled:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__setVerboseLogging
+                    callback:^(NSString* message) {
+                        [self setVerboseLogging:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__setVerboseLogging
-                   callback:^(NSString* message) {
-                       [self setVerboseLogging:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__setMuted
+                    callback:^(NSString* message) {
+                        [self setMuted:[EEUtils toBool:message]];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__setMuted
-                   callback:^(NSString* message) {
-                       [self setMuted:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__hasInterstitialAd
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self hasInterstitialAd]];
+                    }];
 
-    [bridge registerHandler:k__hasInterstitialAd
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasInterstitialAd]];
-                   }];
+    [bridge_ registerHandler:k__showInterstitialAd
+                    callback:^(NSString* message) {
+                        [self showInterstitialAd];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__showInterstitialAd
-                   callback:^(NSString* message) {
-                       [self showInterstitialAd];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__loadRewardedVideo
+                    callback:^(NSString* message) {
+                        [self loadRewardedVideo];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__loadRewardedVideo
-                   callback:^(NSString* message) {
-                       [self loadRewardedVideo];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__hasRewardedVideo
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self hasRewardedVideo]];
+                    }];
 
-    [bridge registerHandler:k__hasRewardedVideo
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasRewardedVideo]];
-                   }];
-
-    [bridge registerHandler:k__showRewardedVideo
-                   callback:^(NSString* message) {
-                       [self showRewardedVideo];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__showRewardedVideo
+                    callback:^(NSString* message) {
+                        [self showRewardedVideo];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__initialize];
-    [bridge deregisterHandler:k__setTestAdsEnabled];
-    [bridge deregisterHandler:k__setVerboseLogging];
-    [bridge deregisterHandler:k__setMuted];
-    [bridge deregisterHandler:k__hasInterstitialAd];
-    [bridge deregisterHandler:k__showInterstitialAd];
-    [bridge deregisterHandler:k__loadRewardedVideo];
-    [bridge deregisterHandler:k__hasRewardedVideo];
-    [bridge deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__setTestAdsEnabled];
+    [bridge_ deregisterHandler:k__setVerboseLogging];
+    [bridge_ deregisterHandler:k__setMuted];
+    [bridge_ deregisterHandler:k__hasInterstitialAd];
+    [bridge_ deregisterHandler:k__showInterstitialAd];
+    [bridge_ deregisterHandler:k__loadRewardedVideo];
+    [bridge_ deregisterHandler:k__hasRewardedVideo];
+    [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize:(NSString* _Nonnull)key {
@@ -190,13 +209,14 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
         [[ALIncentivizedInterstitialAd alloc] initWithSdk:sdk_];
 
     incentivizedInterstitialAdDisplayDelegate_ =
-        [[EEAppLovinIncentivizedInterstitialAdDisplayDelegate alloc] init];
+        [[EEAppLovinIncentivizedInterstitialAdDisplayDelegate alloc]
+            initWithBridge:bridge_];
     [incentivizedInterstitialAd_
         setAdDisplayDelegate:incentivizedInterstitialAdDisplayDelegate_];
 
     interstitialAd_ = [[ALInterstitialAd alloc] initWithSdk:sdk_];
-    interstitialAdDisplayDelegate_ =
-        [[EEAppLovinInterstitialAdDisplayDelegate alloc] init];
+    interstitialAdDisplayDelegate_ = [
+        [EEAppLovinInterstitialAdDisplayDelegate alloc] initWithBridge:bridge_];
     [interstitialAd_ setAdDisplayDelegate:interstitialAdDisplayDelegate_];
 
     initialized_ = YES;
@@ -255,16 +275,14 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
 - (void)adService:(ALAdService*)adService didFailToLoadAdWithError:(int)code {
     NSLog(@"%s: code = %d", __PRETTY_FUNCTION__, code);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onRewardedVideoFailed
-            message:[NSString stringWithFormat:@"%d", code]];
+    [bridge_ callCpp:k__onRewardedVideoFailed
+             message:[NSString stringWithFormat:@"%d", code]];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
               didSucceedWithResponse:(NSDictionary*)response {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, response);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onUserRewardVerified];
+    [bridge_ callCpp:k__onUserRewardVerified];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad

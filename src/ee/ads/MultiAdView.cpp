@@ -23,7 +23,7 @@ Self::MultiAdView() {
 
 Self::~MultiAdView() {}
 
-Self& Self::addItem(const std::shared_ptr<AdViewInterface>& item) {
+Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
     items_.push_back(item);
     item->setLoadCallback([this, item](bool result) {
         if (result) {

@@ -1,50 +1,33 @@
-#/****************************************************************************
-# Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-#
-# http://www.cocos2d-x.org
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-# ****************************************************************************/
 cmake_minimum_required(VERSION 3.1)
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook
-  ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal
+  src/ee/facebook
+  third_party/nlohmann/include
 )
 
-set(GAME_SRC
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/FacebookAdsBridge.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/FacebookNativeAdLayout.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookBannerAd.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookInterstitialAd.cpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookNativeAd.cpp
+set(EE_X_FACEBOOK_SRC
+  src/ee/facebook/FacebookGraphRequest.cpp
+  src/ee/facebook/internal/FacebookShareDelegate.cpp
+  src/ee/facebook/internal/FacebookBridge.cpp
+  src/ee/facebook/internal/FacebookLoginDelegate.cpp
+  src/ee/facebook/internal/FacebookRequestDelegate.cpp
+  src/ee/facebook/internal/FacebookAccessToken.cpp
+  src/ee/facebook/internal/FacebookGraphDelegate.cpp
+  src/ee/facebook/FacebookRequestContent.cpp
 )
 
-set(GAME_HEADERS_INCLUDE
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/FacebookAds.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/FacebookAdsFwd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/FacebookAdsBridge.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/FacebookBannerAdSize.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/FacebookNativeAdLayout.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookBannerAd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookInterstitialAd.hpp
-   ${CMAKE_CURRENT_LIST_DIR}/src/ee/facebook/internal/FacebookNativeAd.hpp
+set(EE_X_FACEBOOK_HEADERS
+  src/ee/facebook/internal/FacebookGraphDelegate.hpp
+  src/ee/facebook/internal/FacebookRequestDelegate.hpp
+  src/ee/facebook/internal/FacebookAccessToken.hpp
+  src/ee/facebook/internal/FacebookShareDelegate.hpp
+  src/ee/facebook/internal/FacebookBridge.hpp
+  src/ee/facebook/internal/FacebookLoginDelegate.hpp
+  src/ee/facebook/FacebookGraphRequest.hpp
+  src/ee/facebook/FacebookRequestContent.hpp
+  src/ee/facebook/IFacebookDelegate.hpp
+  src/ee/facebook/IFacebookAccessToken.hpp
+  src/ee/facebook/IFacebookBridge.hpp
 )
+
+# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})

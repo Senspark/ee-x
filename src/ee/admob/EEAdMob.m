@@ -17,6 +17,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMob () <GADRewardBasedVideoAdDelegate> {
+    EEMessageBridge* bridge_;
     NSMutableArray<NSString*>* testDevices_;
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
@@ -64,6 +65,7 @@ static NSString* const k__layout_name           = @"layout_name";
     if (self == nil) {
         return self;
     }
+    bridge_ = [EEMessageBridge getInstance];
     testDevices_ = [[NSMutableArray alloc] init];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
@@ -87,46 +89,44 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:k__initialize
+                    callback:^(NSString* message) {
+                        NSString* applicationId = message;
+                        [self initialize:applicationId];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__initialize
-                   callback:^(NSString* message) {
-                       NSString* applicationId = message;
-                       [self initialize:applicationId];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__getEmulatorTestDeviceHash
+                    callback:^(NSString* message) {
+                        return [self getEmulatorTestDeviceHash];
+                    }];
 
-    [bridge registerHandler:k__getEmulatorTestDeviceHash
-                   callback:^(NSString* message) {
-                       return [self getEmulatorTestDeviceHash];
-                   }];
+    [bridge_ registerHandler:k__addTestDevice
+                    callback:^(NSString* message) {
+                        NSString* hash = message;
+                        [self addTestDevice:hash];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__addTestDevice
-                   callback:^(NSString* message) {
-                       NSString* hash = message;
-                       [self addTestDevice:hash];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__createBannerAd
+                    callback:^(NSString* message) {
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        NSString* adId = dict[k__ad_id];
+                        int adSizeIndex = [dict[k__ad_size] intValue];
+                        GADAdSize adSize =
+                            [EEAdMobBannerAd adSizeFor:adSizeIndex];
+                        return [EEUtils
+                            toString:[self createBannerAd:adId size:adSize]];
+                    }];
 
-    [bridge registerHandler:k__createBannerAd
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* adId = dict[k__ad_id];
-                       int adSizeIndex = [dict[k__ad_size] intValue];
-                       GADAdSize adSize =
-                           [EEAdMobBannerAd adSizeFor:adSizeIndex];
-                       return [EEUtils
-                           toString:[self createBannerAd:adId size:adSize]];
-                   }];
+    [bridge_ registerHandler:k__destroyBannerAd
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return [EEUtils toString:[self destroyBannerAd:adId]];
+                    }];
 
-    [bridge registerHandler:k__destroyBannerAd
-                   callback:^(NSString* message) {
-                       NSString* adId = message;
-                       return [EEUtils toString:[self destroyBannerAd:adId]];
-                   }];
-
-    [bridge
+    [bridge_
         registerHandler:k__createNativeAd
                callback:^(NSString* message) {
                    NSDictionary* dict =
@@ -141,57 +141,55 @@ static NSString* const k__layout_name           = @"layout_name";
                                        layout:layoutName]];
                }];
 
-    [bridge registerHandler:k__destroyNativeAd
-                   callback:^(NSString* message) {
-                       NSString* adId = message;
-                       return [EEUtils toString:[self destroyNativeAd:adId]];
-                   }];
+    [bridge_ registerHandler:k__destroyNativeAd
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return [EEUtils toString:[self destroyNativeAd:adId]];
+                    }];
 
-    [bridge registerHandler:k__createInterstitialAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                           toString:[self createInterstitialAd:placementId]];
-                   }];
+    [bridge_ registerHandler:k__createInterstitialAd
+                    callback:^(NSString* message) {
+                        NSString* placementId = message;
+                        return [EEUtils
+                            toString:[self createInterstitialAd:placementId]];
+                    }];
 
-    [bridge registerHandler:k__destroyInterstitialAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                           toString:[self destroyInterstitialAd:placementId]];
-                   }];
+    [bridge_ registerHandler:k__destroyInterstitialAd
+                    callback:^(NSString* message) {
+                        NSString* placementId = message;
+                        return [EEUtils
+                            toString:[self destroyInterstitialAd:placementId]];
+                    }];
 
-    [bridge registerHandler:k__hasRewardedVideo
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasRewardedVideo]];
-                   }];
+    [bridge_ registerHandler:k__hasRewardedVideo
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self hasRewardedVideo]];
+                    }];
 
-    [bridge registerHandler:k__loadRewardedVideo
-                   callback:^(NSString* message) {
-                       NSString* adId = message;
-                       [self loadRewardedVideo:adId];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__loadRewardedVideo
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        [self loadRewardedVideo:adId];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:k__showRewardedVideo
-                   callback:^(NSString* message) {
-                       [self showRewardedVideo];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:k__showRewardedVideo
+                    callback:^(NSString* message) {
+                        [self showRewardedVideo];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge deregisterHandler:k__initialize];
-    [bridge deregisterHandler:k__addTestDevice];
-    [bridge deregisterHandler:k__createBannerAd];
-    [bridge deregisterHandler:k__destroyBannerAd];
-    [bridge deregisterHandler:k__createInterstitialAd];
-    [bridge deregisterHandler:k__destroyInterstitialAd];
-    [bridge deregisterHandler:k__hasRewardedVideo];
-    [bridge deregisterHandler:k__loadRewardedVideo];
-    [bridge deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__addTestDevice];
+    [bridge_ deregisterHandler:k__createBannerAd];
+    [bridge_ deregisterHandler:k__destroyBannerAd];
+    [bridge_ deregisterHandler:k__createInterstitialAd];
+    [bridge_ deregisterHandler:k__destroyInterstitialAd];
+    [bridge_ deregisterHandler:k__hasRewardedVideo];
+    [bridge_ deregisterHandler:k__loadRewardedVideo];
+    [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize:(NSString* _Nonnull)applicationId {
@@ -211,9 +209,10 @@ static NSString* const k__layout_name           = @"layout_name";
         return NO;
     }
     EEAdMobBannerAd* ad =
-        [[[EEAdMobBannerAd alloc] initWithAdId:adId
-                                          size:size
-                                   testDevices:testDevices_] autorelease];
+        [[[EEAdMobBannerAd alloc] initWithBridge:bridge_
+                                            adId:adId
+                                            size:size
+                                     testDevices:testDevices_] autorelease];
     [bannerAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -235,10 +234,11 @@ static NSString* const k__layout_name           = @"layout_name";
         return NO;
     }
     EEAdMobNativeAd* ad =
-        [[[EEAdMobNativeAd alloc] initWithId:adId
-                                       types:@[type]
-                                      layout:layoutName
-                                 testDevices:testDevices_] autorelease];
+        [[[EEAdMobNativeAd alloc] initWithBridge:bridge_
+                                            adId:adId
+                                           types:@[type]
+                                          layout:layoutName
+                                     testDevices:testDevices_] autorelease];
     [nativeAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -257,9 +257,10 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEAdMobInterstitialAd* ad =
-        [[[EEAdMobInterstitialAd alloc] initWithAdId:adId
-                                         testDevices:testDevices_] autorelease];
+    EEAdMobInterstitialAd* ad = [[[EEAdMobInterstitialAd alloc]
+        initWithBridge:bridge_
+                  adId:adId
+           testDevices:testDevices_] autorelease];
     [interstitialAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -293,28 +294,24 @@ static NSString* const k__layout_name           = @"layout_name";
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
     didRewardUserWithReward:(GADAdReward*)reward {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onRewarded];
+    [bridge_ callCpp:k__onRewarded];
 }
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
     didFailToLoadWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onFailedToLoad message:[error description]];
+    [bridge_ callCpp:k__onFailedToLoad message:[error description]];
 }
 
 - (void)rewardBasedVideoAdDidReceiveAd:
     (GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onLoaded];
+    [bridge_ callCpp:k__onLoaded];
 }
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onOpened];
+    [bridge_ callCpp:k__onOpened];
 }
 
 - (void)rewardBasedVideoAdDidStartPlaying:
@@ -324,8 +321,7 @@ static NSString* const k__layout_name           = @"layout_name";
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__onClosed];
+    [bridge_ callCpp:k__onClosed];
 }
 
 - (void)rewardBasedVideoAdWillLeaveApplication:

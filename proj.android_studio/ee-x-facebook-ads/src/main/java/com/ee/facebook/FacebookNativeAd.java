@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ee.ads.AdViewHelper;
-import com.ee.ads.AdViewInterface;
+import com.ee.ads.IAdView;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -36,7 +36,7 @@ import java.util.Map;
  * Created by Zinge on 10/9/17.
  */
 
-class FacebookNativeAd implements AdListener, AdViewInterface {
+class FacebookNativeAd implements AdListener, IAdView {
     private static final String k__ad_choices     = "ad_choices";
     private static final String k__body           = "body";
     private static final String k__call_to_action = "call_to_action";

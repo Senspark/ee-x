@@ -14,28 +14,33 @@
 
 namespace ee {
 namespace notification {
-void Notification::schedule(const NotificationBuilder& builder) {
+using Self = Notification;
+
+Self::Notification()
+    : bridge_(MessageBridge::getInstance()) {}
+
+void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
     json["title"] = builder.title_;
     json["body"] = builder.body_;
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;
     json["tag"] = builder.tag_;
-    MessageBridge::getInstance().call("__notification_schedule", json.dump());
+    bridge_.call("__notification_schedule", json.dump());
 }
 
-void Notification::unschedule(int tag) {
+void Self::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;
-    MessageBridge::getInstance().call("__notification_unschedule", json.dump());
+    bridge_.call("__notification_unschedule", json.dump());
 }
 
-void Notification::unscheduleAll() {
-    MessageBridge::getInstance().call("__notification_unschedule_all");
+void Self::unscheduleAll() {
+    bridge_.call("__notification_unschedule_all");
 }
 
-void Notification::clearAll() {
-    MessageBridge::getInstance().call("__notification_clear_all");
+void Self::clearAll() {
+    bridge_.call("__notification_clear_all");
 }
 } // namespace notification
 } // namespace ee

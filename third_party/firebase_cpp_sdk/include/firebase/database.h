@@ -60,12 +60,12 @@ class Database {
   /// Database instance will be created.
   ~Database();
 
-  /// @brief Get the firease::App that this Database was created with.
+  /// @brief Get the firebase::App that this Database was created with.
   ///
   /// @returns The firebase::App this Database was created with.
   App* app() const;
 
-  /// @brief Get the firease::App that this Database was created with.
+  /// @brief Get the firebase::App that this Database was created with.
   ///
   /// @returns The firebase::App this Database was created with.
   ///

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
-import com.ee.ads.InterstitialAdInterface;
+import com.ee.ads.IInterstitialAd;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Zinge on 10/13/17.
  */
 
-class AdMobInterstitialAd extends AdListener implements InterstitialAdInterface {
+class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     private static final Logger _logger = new Logger(AdMobInterstitialAd.class.getName());
 
     private Context              _context;

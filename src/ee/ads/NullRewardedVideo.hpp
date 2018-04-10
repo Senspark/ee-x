@@ -9,11 +9,11 @@
 #ifndef EE_X_NULL_REWARDED_VIDEO_HPP
 #define EE_X_NULL_REWARDED_VIDEO_HPP
 
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ads {
-class NullRewardedVideo : public RewardedVideoInterface {
+class NullRewardedVideo : public IRewardedVideo {
 public:
     virtual bool isLoaded() const override;
 

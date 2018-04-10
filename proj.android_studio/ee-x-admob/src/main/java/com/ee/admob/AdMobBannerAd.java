@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 
 import com.ee.ads.AdViewHelper;
-import com.ee.ads.AdViewInterface;
+import com.ee.ads.IAdView;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Zinge on 10/13/17.
  */
 
-class AdMobBannerAd extends AdListener implements AdViewInterface {
+class AdMobBannerAd extends AdListener implements IAdView {
     private static final Logger _logger = new Logger(AdMobBannerAd.class.getName());
 
     static AdSize adSizeFor(int index) {

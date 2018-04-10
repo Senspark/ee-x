@@ -3,8 +3,9 @@
 
 #include <map>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
-#include "ee/ads/RewardedVideoInterface.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {
@@ -17,7 +18,7 @@ public:
     void initialize(const std::string& gameId);
 
     /// Creates a rewarded vided with the specifie placement ID.
-    std::shared_ptr<RewardedVideoInterface>
+    std::shared_ptr<IRewardedVideo>
     createRewardedVideo(const std::string& placementId);
 
 private:
@@ -36,6 +37,7 @@ private:
     bool errored_;
     bool rewarded_;
 
+    IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace ironsource

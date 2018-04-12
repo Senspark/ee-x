@@ -43,9 +43,9 @@ bool Self::show() {
     }
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.startInterstitialAd([]()
+    auto successful = mediation.startInterstitialAd([this]()
                                                     {
-                                                        
+                                                        this->setDone();
                                                     });
     assert(successful);
     return true;

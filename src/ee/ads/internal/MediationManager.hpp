@@ -15,7 +15,8 @@
 namespace ee {
 namespace ads {
 /// Fix issue where AdMob consumes other ads' callbacks.
-    using OnCloseCallback = std::function<void()>;
+    using OnInterstitialCloseCallback = std::function<void()>;
+     using OnVideoCloseCallback = std::function<void(bool rewarded)>;
 class MediationManager {
 private:
     using Self = MediationManager;
@@ -23,15 +24,14 @@ private:
 public:
     static Self& getInstance();
 
-    bool startInterstitialAd(const OnCloseCallback& callback);
+    bool startInterstitialAd(const OnInterstitialCloseCallback& callback);
     bool finishInterstitialAd();
     bool destroyInterstitialAd();
     bool setInterstitialAdDone();
 
-    bool startRewardedVideo(IRewardedVideo* ad);
-    bool finishRewardedVideo(IRewardedVideo* ad);
-    bool destroyRewardedVideo(IRewardedVideo* ad);
-    bool setRewardedVideoResult(bool result);
+    bool startRewardedVideo(const OnVideoCloseCallback& callback);
+    bool finishRewardedVideo(bool rewarded);
+    bool destroyRewardedVideo();
 
 protected:
     MediationManager();
@@ -40,16 +40,16 @@ protected:
     MediationManager(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    bool registerInterstitialAd(const OnCloseCallback& callback);
+    bool registerInterstitialAd(const OnInterstitialCloseCallback& callback);
     bool deregisterInterstitialAd(bool destroyed);
 
-    bool registerRewardedVideo(IRewardedVideo* ad);
-    bool deregisterRewardedVideo(IRewardedVideo* ad, bool destroyed);
+    bool registerRewardedVideo(const OnVideoCloseCallback& callback);
+    bool deregisterRewardedVideo(bool destroyed, bool rewarded);
 
 private:
-    OnCloseCallback _onCloseCallback;
+    OnInterstitialCloseCallback _onInterstitialCloseCallback;
+    OnVideoCloseCallback _onVideoCloseCallback;
     bool interstitialAdDestroyed_;
-    IRewardedVideo* rewardedVideo_;
     bool rewardedVideoDestroyed_;
     core::SpinLock locker_;
 };

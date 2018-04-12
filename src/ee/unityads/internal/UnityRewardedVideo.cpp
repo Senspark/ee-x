@@ -43,7 +43,9 @@ bool Self::show() {
         return false;
     }
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.startRewardedVideo(this);
+    auto successful = mediation.startRewardedVideo([this](bool rewarded) { //
+        this->setResult(rewarded);
+    });
     assert(successful);
     return true;
 }

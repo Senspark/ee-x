@@ -260,17 +260,13 @@ void Self::onClosed() {
         auto ad = rewardedVideos_.at(currentId_);
         ad->setResult(rewarded_);
         currentId_.clear();
-        auto successful = mediation.finishRewardedVideo(ad);
+        auto successful = mediation.finishRewardedVideo(rewarded_);
         if (successful) {
             // AdMob ad.
         }
         assert(successful);
         return;
     }
-
-    // Other network mediation.
-    auto successful = mediation.setRewardedVideoResult(rewarded_);
-    assert(successful);
 }
 } // namespace admob
 } // namespace ee

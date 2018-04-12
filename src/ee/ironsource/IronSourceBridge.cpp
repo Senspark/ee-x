@@ -147,7 +147,7 @@ void Self::onClosed() {
      */
 
     // Other mediation network.
-    auto successful = mediation.setRewardedVideoResult(rewarded_);
+    auto successful = mediation.finishRewardedVideo(rewarded_);
     assert(successful);
 }
 } // namespace ironsource

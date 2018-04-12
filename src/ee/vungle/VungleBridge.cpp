@@ -113,7 +113,7 @@ void Self::onEnd(bool wasSuccessfulView) {
     Logger::getSystemLogger().debug("%s: %s", __PRETTY_FUNCTION__,
                                     core::toString(wasSuccessfulView).c_str());
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.setRewardedVideoResult(wasSuccessfulView);
+    auto successful = mediation.finishRewardedVideo(wasSuccessfulView);
     assert(successful);
 
     /*

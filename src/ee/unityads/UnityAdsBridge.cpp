@@ -201,7 +201,7 @@ void Self::finish(const std::string& placementId, bool result) {
     // Other mediation network.
     // Not sure interstitial ad or rewarded video so check both.
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.setRewardedVideoResult(result);
+    auto wasRewardedVideo = mediation.finishRewardedVideo(result);
 
     assert(wasInterstitialAd || wasRewardedVideo);
 }

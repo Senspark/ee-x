@@ -24,16 +24,14 @@ Self& Self::getInstance() {
 
 Self::MediationManager() {
     interstitialAdDestroyed_ = false;
-    rewardedVideo_ = nullptr;
     rewardedVideoDestroyed_ = false;
 }
 
 Self::~MediationManager() {
     
-    rewardedVideo_ = nullptr;
 }
 
-bool Self::startInterstitialAd(const OnCloseCallback& callback) {
+bool Self::startInterstitialAd(const OnInterstitialCloseCallback& callback) {
     
     return registerInterstitialAd(callback);
 }
@@ -46,105 +44,81 @@ bool Self::destroyInterstitialAd() {
     return deregisterInterstitialAd(true);
 }
 
-bool Self::registerInterstitialAd(const OnCloseCallback& callback) {
+bool Self::registerInterstitialAd(const OnInterstitialCloseCallback& callback) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onCloseCallback != nullptr) {
+    if (_onInterstitialCloseCallback != nullptr) {
         return false;
     }
     
-    _onCloseCallback = callback;
+    _onInterstitialCloseCallback = callback;
     interstitialAdDestroyed_ = false;
     return true;
 }
 
 bool Self::deregisterInterstitialAd(bool destroyed) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onCloseCallback == nullptr) {
+    if (_onInterstitialCloseCallback == nullptr) {
         if (interstitialAdDestroyed_) {
             return true;
         }
         return false;
     }
     
-    _onCloseCallback();
-    _onCloseCallback = nullptr;
+    _onInterstitialCloseCallback();
+    _onInterstitialCloseCallback = nullptr;
     interstitialAdDestroyed_ = destroyed;
     return true;
 }
 
 bool Self::setInterstitialAdDone() {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onCloseCallback == nullptr) {
+    if (_onInterstitialCloseCallback == nullptr) {
         if (interstitialAdDestroyed_) {
             return true;
         }
         return false;
     }
     
-    _onCloseCallback();
-    _onCloseCallback = nullptr;
+    _onInterstitialCloseCallback();
+    _onInterstitialCloseCallback = nullptr;
     return true;
 }
 
-bool Self::startRewardedVideo(IRewardedVideo* ad) {
-    return registerRewardedVideo(ad);
+bool Self::startRewardedVideo(const OnVideoCloseCallback& callback) {
+    return registerRewardedVideo(callback);
 }
 
-bool Self::finishRewardedVideo(IRewardedVideo* ad) {
-    return deregisterRewardedVideo(ad, false);
+bool Self::finishRewardedVideo(bool rewarded) {
+    return deregisterRewardedVideo(false, rewarded);
 }
 
-bool Self::destroyRewardedVideo(IRewardedVideo* ad) {
-    return deregisterRewardedVideo(ad, true);
+bool Self::destroyRewardedVideo() {
+    return deregisterRewardedVideo(true, false);
 }
 
-bool Self::registerRewardedVideo(IRewardedVideo* ad) {
-    Logger::getSystemLogger().debug(
-        "%s: ad = %p current_ad = %p destroyed = %s", __PRETTY_FUNCTION__, ad,
-        rewardedVideo_, core::toString(rewardedVideoDestroyed_).c_str());
+bool Self::registerRewardedVideo(const OnVideoCloseCallback& callback) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (rewardedVideo_ != nullptr) {
+    if (_onVideoCloseCallback != nullptr) {
         return false;
     }
-    rewardedVideo_ = ad;
+    _onVideoCloseCallback = callback;
     rewardedVideoDestroyed_ = false;
     return true;
 }
 
-bool Self::deregisterRewardedVideo(IRewardedVideo* ad, bool destroyed) {
-    Logger::getSystemLogger().debug(
-        "%s: ad = %p destroyed = %s current_ad = %p destroyed = %s",
-        __PRETTY_FUNCTION__, ad, core::toString(destroyed).c_str(),
-        rewardedVideo_, core::toString(rewardedVideoDestroyed_).c_str());
+bool Self::deregisterRewardedVideo(bool destroyed, bool rewarded) {
     std::lock_guard<core::SpinLock> guard(locker_);
-    if (rewardedVideo_ == nullptr) {
+    if (_onVideoCloseCallback == nullptr) {
         if (rewardedVideoDestroyed_) {
             return true;
         }
         return false;
     }
-    if (rewardedVideo_ != ad) {
-        return false;
-    }
-    rewardedVideo_ = nullptr;
+    
+    _onVideoCloseCallback(rewarded);
+    _onVideoCloseCallback = nullptr;
+    
     rewardedVideoDestroyed_ = destroyed;
-    return true;
-}
-
-bool Self::setRewardedVideoResult(bool result) {
-    Logger::getSystemLogger().debug(
-        "%s: result = %s current_ad = %p destroyed = %s", __PRETTY_FUNCTION__,
-        core::toString(result).c_str(), rewardedVideo_,
-        core::toString(rewardedVideoDestroyed_).c_str());
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (rewardedVideo_ == nullptr) {
-        if (rewardedVideoDestroyed_) {
-            return true;
-        }
-        return false;
-    }
-    rewardedVideo_->setResult(result);
-    rewardedVideo_ = nullptr;
     return true;
 }
 } // namespace ads

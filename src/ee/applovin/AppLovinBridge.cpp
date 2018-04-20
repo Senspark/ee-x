@@ -14,7 +14,7 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-
+#include "ee/ads/internal/MediationManager.hpp"
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
@@ -224,6 +224,11 @@ bool Self::showRewardedVideo() {
     verified_ = false;
     errored_ = false;
     bridge_.call(k__showRewardedVideo);
+
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.startRewardedVideo(
+        [this](bool rewarded) { this->rewardedVideo_->setResult(rewarded); });
+    assert(successful);
     return not errored_;
 }
 
@@ -246,11 +251,15 @@ void Self::onRewardedVideoDisplayed() {
 void Self::onRewardedVideoHidden() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     assert(rewardedVideo_ != nullptr);
+
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto result = false;
     if (verified_ && not errored_) {
-        rewardedVideo_->setResult(true);
-    } else {
-        rewardedVideo_->setResult(false);
+        result = true;
     }
+
+    auto wasRewardedVideo = mediation.finishRewardedVideo(result);
+    assert(wasRewardedVideo);
 }
 
 void Self::onUserRewardVerified() {

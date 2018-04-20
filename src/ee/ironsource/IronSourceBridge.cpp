@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
@@ -7,6 +8,7 @@
 #include "ee/core/Utils.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
+#include "ee/ironsource/internal/IronSourceInterstitialAd.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -19,6 +21,10 @@ namespace {
 constexpr auto k__initialize        = "IronSource_initialize";
 constexpr auto k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
+    
+constexpr auto k__loadInterstitial   = "IronSource_loadInterstitial";
+constexpr auto k__hasInterstitial   = "IronSource_hasInterstitial";
+constexpr auto k__showInterstitial  = "IronSource_showInterstitial";
 constexpr auto k__onRewarded        = "IronSource_onRewarded";
 constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
@@ -51,7 +57,7 @@ Self::IronSource()
         },
         k__onOpened);
     bridge_.registerHandler(
-        [this](const std::string& message) {
+        [this](const std::string& message) {            
             onClosed();
             return "";
         },
@@ -94,6 +100,48 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
     return true;
 }
 
+std::shared_ptr<IInterstitialAd>
+Self::createInterstitialAd(const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
+    if (interstitialAds_.count(placementId) != 0) {
+        return std::make_shared<NullInterstitialAd>();
+    }
+    auto result = new InterstitialAd(this, placementId);
+    interstitialAds_[placementId] = result;
+    return std::shared_ptr<IInterstitialAd>(result);
+}
+
+bool Self::destroyInterstitialAd(const std::string& placementId) {
+    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                                    placementId.c_str());
+    if (interstitialAds_.count(placementId) == 0) {
+        return false;
+    }
+    interstitialAds_.erase(placementId);
+    return true;
+}
+
+void Self::loadInterstitial()
+{
+    bridge_.call(k__loadInterstitial);
+}
+    
+bool Self::hasInterstitial() const {
+    auto response = bridge_.call(k__hasInterstitial);
+    return core::toBool(response);
+}
+
+bool Self::showInterstitial(const std::string& placementId) {    
+    if (not hasInterstitial()) {
+        return false;
+    }
+    errored_ = false;
+
+    bridge_.call(k__showInterstitial, placementId);
+    return not errored_;
+}
+
 bool Self::hasRewardedVideo() const {
     auto response = bridge_.call(k__hasRewardedVideo);
     return core::toBool(response);
@@ -120,6 +168,8 @@ void Self::onFailed() {
     if (not errored_) {
         errored_ = true;
     }
+
+    onClosed();
 }
 
 void Self::onOpened() {
@@ -131,24 +181,11 @@ void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
-    /*
-     Don't care which ad is displaying.
-    if (rewardedVideos_.count(placementId_)) {
-        auto ad = rewardedVideos_.at(placementId_);
-        if (rewarded_) {
-            ad->setResult(true);
-        } else {
-            ad->setResult(false);
-        }
-        auto successful = mediation.finishRewardedVideo(ad);
-        assert(successful);
-        return;
-    }
-     */
-
     // Other mediation network.
-    auto successful = mediation.finishRewardedVideo(rewarded_);
-    assert(successful);
+    auto wasInterstitialAd = mediation.setInterstitialAdDone();
+    auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded_);
+    
+    assert(wasInterstitialAd || wasRewardedVideo);
 }
 } // namespace ironsource
 } // namespace ee

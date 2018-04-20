@@ -12,6 +12,20 @@ android {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':ee-x-core')
+    api 'com.github.vungle:vungle-android-sdk:5.3.2'
+//    api 'com.ironsource.adapters:vungleadapter:4.1.0@jar'
+
+    //for Vungle
+    api 'com.google.dagger:dagger:2.7'
+    api 'javax.inject:javax.inject:1'
+    api 'de.greenrobot:eventbus:2.2.1'
+    api 'io.reactivex:rxjava:1.2.0'
+    api 'io.reactivex:rxandroid:1.2.1'
+    api 'com.squareup.okhttp3:okhttp:3.6.0'
+    api 'com.squareup.okio:okio:1.11.0'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    api 'com.google.code.gson:gson:2.7'
 }

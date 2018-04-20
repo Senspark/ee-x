@@ -12,6 +12,7 @@
 #include "ee/core/Utils.hpp"
 #include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/facebookads/internal/FacebookRewardVideoAd.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include <cassert>
 namespace ee {
 namespace facebook {
@@ -46,7 +47,7 @@ auto k__onOpened(const std::string& id) {
 auto k__onClosed(const std::string& id) {
     return "FacebookAds_Video_onClosed_" + id;
 }
-}
+} // namespace
 
 Self::RewardedVideo(const std::string& adId) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
@@ -109,7 +110,17 @@ void Self::load() {
 bool Self::show() {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo(adId_));
-    return core::toBool(response);
+    if (not core::toBool(response)) {
+        return false;
+    }
+
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.startRewardedVideo([this](bool rewarded) { //
+        this->setResult(rewarded);
+    });
+    assert(successful);
+
+    return true;
 }
 #pragma mark - on
 void Self::onLoaded() {
@@ -133,7 +144,9 @@ void Self::onReward() {
 void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
 
-    setResult(rewarded_);
+    auto&& mediation = ads::MediationManager::getInstance();
+    auto successful = mediation.finishRewardedVideo(rewarded_);
+    assert(successful);
 }
 } // namespace facebook
 } // namespace ee

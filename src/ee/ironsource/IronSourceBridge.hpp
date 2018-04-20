@@ -6,6 +6,7 @@
 #include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ironsource {
@@ -21,13 +22,22 @@ public:
     std::shared_ptr<IRewardedVideo>
     createRewardedVideo(const std::string& placementId);
 
+    /// Creates an interstitial ad with the specified placement ID.
+    std::shared_ptr<IInterstitialAd>
+    createInterstitialAd(const std::string& placementId);
 private:
     friend RewardedVideo;
+    friend InterstitialAd;
 
     bool destroyRewardedVideo(const std::string& placementId);
+    bool destroyInterstitialAd(const std::string& placementId);
 
     bool hasRewardedVideo() const;
     bool showRewardedVideo(const std::string& placementId);
+    
+    void loadInterstitial();    
+    bool hasInterstitial() const;
+    bool showInterstitial(const std::string& placementId);
 
     void onRewarded(const std::string& placementId);
     void onFailed();
@@ -39,6 +49,7 @@ private:
 
     IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
+    std::map<std::string, InterstitialAd*> interstitialAds_;
 };
 } // namespace ironsource
 } // namespace ee

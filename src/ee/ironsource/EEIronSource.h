@@ -7,4 +7,7 @@
 - (BOOL)hasRewardedVideo;
 - (void)showRewardedVideo:(NSString* _Nonnull)placementId;
 
+- (BOOL)hasInterstitial;
+- (void)showInterstitial:(NSString* _Nonnull)placementId;
+
 @end

@@ -5,6 +5,7 @@ namespace ee {
 namespace ironsource {
 class IronSource;
 class RewardedVideo;
+class InterstitialAd;
 } // namespace ironsource
 
 using ironsource::IronSource;

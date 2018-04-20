@@ -257,13 +257,8 @@ void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideos_.count(currentId_)) {
-        auto ad = rewardedVideos_.at(currentId_);
-        ad->setResult(rewarded_);
         currentId_.clear();
-        auto successful = mediation.finishRewardedVideo(rewarded_);
-        if (successful) {
-            // AdMob ad.
-        }
+        auto successful = mediation.finishRewardedVideo(rewarded_);        
         assert(successful);
         return;
     }

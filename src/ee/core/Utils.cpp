@@ -46,6 +46,13 @@ void runOnUiThreadAndWait(const Runnable<void>& runnable) {
 }
 */
 
+std::string str_tolower(std::string s) {
+    std::transform(s.begin(), s.end(), s.begin(),
+                   [](unsigned char c) { return std::tolower(c); } // correct
+    );
+    return s;
+}
+
 std::string toString(float value) {
     std::stringstream ss;
     ss << value;
@@ -210,4 +217,3 @@ std::string getDeviceId() {
 }
 } // namespace core
 } // namespace ee
-

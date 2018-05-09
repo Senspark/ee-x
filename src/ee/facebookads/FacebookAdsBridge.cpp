@@ -124,7 +124,7 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 }
 
 std::shared_ptr<IRewardedVideo>
-Self::createRewardVideoAd(const std::string& placementId) {
+Self::createRewardedVideo(const std::string& placementId) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createRewardVideoAd, placementId);
     if (not core::toBool(response)) {

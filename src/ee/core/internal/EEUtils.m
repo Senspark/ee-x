@@ -64,10 +64,16 @@ static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationI
 static NSString* const k__openApplication               = @"Utils_openApplication";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
+static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
 // clang-format on
 
 + (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    
+    [bridge registerHandler:k__getDeviceId
+                   callback:^(NSString* message) {
+                       return [self getDeviceId];
+                   }];
 
     [bridge registerHandler:k__isMainThread
                    callback:^(NSString* message) {

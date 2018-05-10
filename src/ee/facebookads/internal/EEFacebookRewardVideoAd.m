@@ -23,6 +23,16 @@
 
 @implementation EEFacebookRewardVideoAd
 
+- (NSString*)k__createInternalVideo {
+    return [@"FacebookAds_createInternalVideo_"
+        stringByAppendingString:placementId_];
+}
+
+- (NSString*)k__destroyInternalVideo {
+    return [@"FacebookAds_destroyInternalVideo_"
+        stringByAppendingString:placementId_];
+}
+
 - (NSString*)k__hasRewardedVideo {
     return
         [@"FacebookAds_hasRewardedVideo_" stringByAppendingString:placementId_];
@@ -66,6 +76,18 @@
 - (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
 
+    [bridge registerHandler:[self k__createInternalVideo]
+                   callback:^(NSString* message) {
+                       [self createInternalVideo];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:[self k__destroyInternalVideo]
+                   callback:^(NSString* message) {
+                       [self destroyInternalVideo];
+                       return @"";
+                   }];
+
     [bridge registerHandler:[self k__hasRewardedVideo]
                    callback:^(NSString* message) {
                        return [EEUtils toString:[self hasRewardVideo]];
@@ -88,6 +110,9 @@
     [bridge deregisterHandler:[self k__hasRewardedVideo]];
     [bridge deregisterHandler:[self k__loadRewardedVideo]];
     [bridge deregisterHandler:[self k__showRewardedVideo]];
+
+    [bridge deregisterHandler:[self k__createInternalVideo]];
+    [bridge deregisterHandler:[self k__destroyInternalVideo]];
 }
 
 - (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId {
@@ -96,6 +121,7 @@
         return self;
     }
     placementId_ = [placementId copy];
+    [self createInternalVideo];
     [self registerHandlers];
     return self;
 }
@@ -108,16 +134,25 @@
     [rewardedVideoAd_ dealloc];
 }
 
-- (BOOL)k_createVideoAd {
+#pragma mark - video methods
+- (void)createInternalVideo {
+    if (rewardedVideoAd_ != nil) {
+        return;
+    }
     rewardedVideoAd_ =
         [[FBRewardedVideoAd alloc] initWithPlacementID:placementId_];
     rewardedVideoAd_.delegate = self;
-    [rewardedVideoAd_ loadAd];
-
-    return YES;
 }
 
-#pragma mark - video methods
+- (void)destroyInternalVideo {
+    if (rewardedVideoAd_ == nil) {
+        return;
+    }
+    rewardedVideoAd_.delegate = nil;
+    [rewardedVideoAd_ release];
+    rewardedVideoAd_ = nil;
+}
+
 - (BOOL)hasRewardVideo {
     return [rewardedVideoAd_ isAdValid];
 }

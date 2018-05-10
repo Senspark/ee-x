@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.ironsource.sdk:mediationsdk:6.7.5@jar'
+    implementation 'com.ironsource.sdk:mediationsdk:6.7.8@jar'
 }

@@ -16,6 +16,9 @@
 
 namespace ee {
 namespace core {
+// lower string
+std::string str_tolower(std::string s);
+    
 /// Converts float to string without trailing zeroes.
 std::string toString(float value);
 
@@ -72,24 +75,24 @@ bool openApplication(const std::string& applicationId);
 bool isTablet();
 
 bool testConnection();
-    
+
 /// Gets device's unique ID.
 std::string getDeviceId();
 } // namespace core
 
 using core::format;
+using core::getDeviceId;
+using core::getSHA1CertificateFingerprint;
+using core::getVersionCode;
+using core::getVersionName;
+using core::isApplicationInstalled;
 using core::isMainThread;
+using core::isTablet;
+using core::openApplication;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
-using core::getSHA1CertificateFingerprint;
-using core::getVersionName;
-using core::getVersionCode;
-using core::isApplicationInstalled;
-using core::openApplication;
-using core::isTablet;
 using core::testConnection;
-using core::getDeviceId;
 } // namespace ee
 
 #endif /* EE_X_UTILS_HPP */

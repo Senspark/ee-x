@@ -19,6 +19,14 @@ namespace facebook {
 using Self = RewardedVideo;
 namespace {
 
+auto k__createInternalVideo(const std::string& id) {
+    return "FacebookAds_createInternalVideo_" + id;
+}
+
+auto k__destroyInternalVideo(const std::string& id) {
+    return "FacebookAds_destroyInternalVideo_" + id;
+}
+
 auto k__hasRewardedVideo(const std::string& id) {
     return "FacebookAds_hasRewardedVideo_" + id;
 }
@@ -103,11 +111,13 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__loadRewardedVideo(adId_));
 }
 
 bool Self::show() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo(adId_));
     if (not core::toBool(response)) {
@@ -117,10 +127,26 @@ bool Self::show() {
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startRewardedVideo([this](bool rewarded) { //
         this->setResult(rewarded);
+
+        this->destroyInternalVideo();
+        this->createInternalVideo();
+        this->load();
     });
     assert(successful);
 
     return true;
+}
+
+void Self::createInternalVideo() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__createInternalVideo(adId_));
+}
+    
+void Self::destroyInternalVideo() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__destroyInternalVideo(adId_));
 }
 #pragma mark - on
 void Self::onLoaded() {

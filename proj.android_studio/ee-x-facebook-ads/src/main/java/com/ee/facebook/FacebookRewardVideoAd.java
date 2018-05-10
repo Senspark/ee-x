@@ -18,6 +18,14 @@ import com.facebook.ads.RewardedVideoAdListener;
 
 class FacebookRewardVideoAd implements RewardedVideoAdListener {
 
+    private String k__createInternalVideo() {
+        return "FacebookAds_createInternalVideo_" + _placementId;
+    }
+
+    private String k__destroyInternalVideo() {
+        return "FacebookAds_destroyInternalVideo_" + _placementId;
+    }
+
     private String k__hasRewardedVideo() {
         return "FacebookAds_hasRewardedVideo_" + _placementId;
     }
@@ -61,8 +69,7 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
         _context = context;
         _placementId = placementId;
 
-        _rewardedVideoAd = new RewardedVideoAd(_context, placementId);
-        _rewardedVideoAd.setAdListener(this);
+        createInternalVideo();
 
         registerHandlers();
     }
@@ -105,6 +112,24 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
                 return Utils.toString(showRewardVideo());
             }
         }, k__showRewardedVideo());
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                createInternalVideo();
+                return "";
+            }
+        }, k__createInternalVideo());
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                destroyInternalVideo();
+                return "";
+            }
+        }, k__destroyInternalVideo());
     }
 
     private void deregisterHandlers() {
@@ -114,6 +139,18 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
         bridge.deregisterHandler(k__hasRewardedVideo());
         bridge.deregisterHandler(k__loadRewardedVideo());
         bridge.deregisterHandler(k__showRewardedVideo());
+    }
+
+    private void createInternalVideo()
+    {
+        _rewardedVideoAd = new RewardedVideoAd(_context, _placementId);
+        _rewardedVideoAd.setAdListener(this);
+    }
+
+    private void destroyInternalVideo()
+    {
+        _rewardedVideoAd.setAdListener(null);
+        _rewardedVideoAd = null;
     }
 
     private boolean hasRewardVideo() {

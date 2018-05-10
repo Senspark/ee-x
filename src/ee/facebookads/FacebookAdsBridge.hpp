@@ -42,24 +42,26 @@ public:
     /// @param[in] adId The banner ad ID.
     /// @param[in] adSize The banner ad predefined size.
     std::shared_ptr<IAdView> createBannerAd(const std::string& adId,
-                                                    BannerAdSize adSize);
+                                            BannerAdSize adSize);
 
     /// Creates a native ad.
     /// @param[in] adId The native ad ID.
     /// @param[in] layoutName The layout name (.xml for Android, .xib for iOS).
     /// @param[in] identifiers Android only.
-    std::shared_ptr<IAdView>
-    createNativeAd(const std::string& adId, const std::string& layoutName,
-                   const NativeAdLayout& identifiers);
+    std::shared_ptr<IAdView> createNativeAd(const std::string& adId,
+                                            const std::string& layoutName,
+                                            const NativeAdLayout& identifiers);
 
     /// Creates an interstitial ad.
     /// @param[in] placementId The ad placement ID>
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
-    
-    std::shared_ptr<IRewardedVideo> createRewardVideoAd(const std::string& placementId);    
-    
+
+    std::shared_ptr<IRewardedVideo>
+    createRewardedVideo(const std::string& placementId);
+
     std::string currentId_;
+
 private:
     friend BannerAd;
     friend NativeAd;
@@ -70,9 +72,9 @@ private:
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& placementId);
     bool destroyRewardVideoAd(const std::string& placementId);
-    
+
     std::map<std::string, RewardedVideo*> rewardedVideos_;
-    
+
     IMessageBridge& bridge_;
 };
 } // namespace facebook

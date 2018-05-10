@@ -73,7 +73,7 @@ void Self::clearTestDevices() {
 }
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
-                                                      BannerAdSize adSize) {
+                                              BannerAdSize adSize) {
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
@@ -124,7 +124,7 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 }
 
 std::shared_ptr<IRewardedVideo>
-Self::createRewardVideoAd(const std::string& placementId) {
+Self::createRewardedVideo(const std::string& placementId) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__createRewardVideoAd, placementId);
     if (not core::toBool(response)) {

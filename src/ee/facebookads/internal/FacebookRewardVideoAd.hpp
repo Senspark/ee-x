@@ -36,6 +36,9 @@ private:
     void onReward();
     void onOpened();
     void onClosed();
+    
+    void createInternalVideo();
+    void destroyInternalVideo();
 };
 } // namespace facebook
 } // namespace ee

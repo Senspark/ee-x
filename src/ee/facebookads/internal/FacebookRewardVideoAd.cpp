@@ -117,6 +117,11 @@ void Self::load() {
 }
 
 bool Self::show() {
+    if(not isLoaded())
+    {
+        return false;
+    }
+
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__showRewardedVideo(adId_));
@@ -130,7 +135,6 @@ bool Self::show() {
 
         this->destroyInternalVideo();
         this->createInternalVideo();
-        this->load();
     });
     assert(successful);
 

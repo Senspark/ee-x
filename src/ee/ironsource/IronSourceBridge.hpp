@@ -43,9 +43,14 @@ private:
     void onFailed();
     void onOpened();
     void onClosed();
+    void doRewardInGame();
+    
+    void onInterstitialOpened();
+    void onInterstitialFailed();
+    void onInterstitialClosed();
 
-    bool errored_;
     bool rewarded_;
+    bool _shouldDoRewardInGame;
 
     IMessageBridge& bridge_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;

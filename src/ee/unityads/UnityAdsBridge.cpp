@@ -180,24 +180,6 @@ void Self::onFinished(const std::string& placementId) {
 void Self::finish(const std::string& placementId, bool result) {
     auto&& mediation = ads::MediationManager::getInstance();
 
-    /*
-     Don't care which ad is displaying.
-    if (rewardedVideos_.count(placementId)) {
-        auto ad = rewardedVideos_.at(placementId);
-        ad->setResult(result);
-        auto successful = mediation.finishRewardedVideo(ad);
-        assert(successful);
-        return;
-    }
-    if (interstitialAds_.count(placementId)) {
-        auto ad = interstitialAds_.at(placementId);
-        ad->setDone();
-        auto successful = mediation.finishInterstitialAd(ad);
-        assert(successful);
-        return;
-    }
-     */
-
     // Other mediation network.
     // Not sure interstitial ad or rewarded video so check both.
     auto wasInterstitialAd = mediation.setInterstitialAdDone();

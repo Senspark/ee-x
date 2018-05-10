@@ -115,19 +115,6 @@ void Self::onEnd(bool wasSuccessfulView) {
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.finishRewardedVideo(wasSuccessfulView);
     assert(successful);
-
-    /*
-     Don't care which ad is displaying.
-    if (rewardedVideo_ == nullptr) {
-        // Other mediation network.
-
-    } else {
-        assert(not errored_);
-        rewardedVideo_->setResult(wasSuccessfulView);
-        auto successful = mediation.finishRewardedVideo(rewardedVideo_);
-        assert(successful);
-    }
-     */
 }
 
 void Self::onUnavailable() {

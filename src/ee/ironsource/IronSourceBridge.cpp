@@ -29,13 +29,16 @@ constexpr auto k__onRewarded        = "IronSource_onRewarded";
 constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
 constexpr auto k__onClosed          = "IronSource_onClosed";
+    
+constexpr auto k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
+constexpr auto k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
+constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
 // clang-format on
 } // namespace
 
 Self::IronSource()
     : bridge_(MessageBridge::getInstance()) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    errored_ = false;
     rewarded_ = false;
 
     bridge_.registerHandler(
@@ -57,11 +60,32 @@ Self::IronSource()
         },
         k__onOpened);
     bridge_.registerHandler(
-        [this](const std::string& message) {            
+        [this](const std::string& message) {
             onClosed();
             return "";
         },
         k__onClosed);
+
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialOpened();
+            return "";
+        },
+        k__onInterstitialOpened);
+
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialFailed();
+            return "";
+        },
+        k__onInterstitialFailed);
+
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialClosed();
+            return "";
+        },
+        k__onInterstitialClosed);
 }
 
 Self::~IronSource() {
@@ -70,6 +94,10 @@ Self::~IronSource() {
     bridge_.deregisterHandler(k__onFailed);
     bridge_.deregisterHandler(k__onOpened);
     bridge_.deregisterHandler(k__onClosed);
+
+    bridge_.deregisterHandler(k__onInterstitialOpened);
+    bridge_.deregisterHandler(k__onInterstitialFailed);
+    bridge_.deregisterHandler(k__onInterstitialClosed);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -122,24 +150,22 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
     return true;
 }
 
-void Self::loadInterstitial()
-{
+void Self::loadInterstitial() {
     bridge_.call(k__loadInterstitial);
 }
-    
+
 bool Self::hasInterstitial() const {
     auto response = bridge_.call(k__hasInterstitial);
     return core::toBool(response);
 }
 
-bool Self::showInterstitial(const std::string& placementId) {    
+bool Self::showInterstitial(const std::string& placementId) {
     if (not hasInterstitial()) {
         return false;
     }
-    errored_ = false;
 
     bridge_.call(k__showInterstitial, placementId);
-    return not errored_;
+    return true;
 }
 
 bool Self::hasRewardedVideo() const {
@@ -151,24 +177,26 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     if (not hasRewardedVideo()) {
         return false;
     }
-    errored_ = false;
     rewarded_ = false;
+    _shouldDoRewardInGame = false;
     bridge_.call(k__showRewardedVideo, placementId);
-    return not errored_;
+    return true;
 }
 
 void Self::onRewarded(const std::string& placementId) {
     Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                                     placementId.c_str());
     rewarded_ = true;
+    if (_shouldDoRewardInGame) {
+        doRewardInGame();
+    }
+    _shouldDoRewardInGame = true;
 }
 
 void Self::onFailed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    if (not errored_) {
-        errored_ = true;
-    }
 
+    _shouldDoRewardInGame = true;
     onClosed();
 }
 
@@ -179,13 +207,40 @@ void Self::onOpened() {
 
 void Self::onClosed() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+
+    if (_shouldDoRewardInGame) {
+        doRewardInGame();
+    }
+    _shouldDoRewardInGame = true;
+}
+
+void Self::doRewardInGame() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
     // Other mediation network.
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
     auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded_);
-    
+
     assert(wasInterstitialAd || wasRewardedVideo);
+}
+
+#pragma mark - For Interstitial
+void Self::onInterstitialOpened() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+}
+void Self::onInterstitialFailed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    onInterstitialClosed();
+}
+void Self::onInterstitialClosed() {
+    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+//    auto&& mediation = ads::MediationManager::getInstance();
+//
+//    auto successful = mediation.finishInterstitialAd();
+//    assert(successful);
+    _shouldDoRewardInGame = true;
+    onClosed();
 }
 } // namespace ironsource
 } // namespace ee

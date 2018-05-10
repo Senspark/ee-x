@@ -31,6 +31,10 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     private static final String k__onOpened = "IronSource_onOpened";
     private static final String k__onClosed = "IronSource_onClosed";
 
+    private static final String k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
+    private static final String k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
+    private static final String k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _activity;
@@ -193,14 +197,14 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     public void onInterstitialAdOpened() {
         _logger.debug("onInterstitialAdOpened");
         MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onOpened);
+        bridge.callCpp(k__onInterstitialOpened);
     }
 
     @Override
     public void onInterstitialAdClosed() {
         _logger.debug("onInterstitialAdClosed");
         MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClosed);
+        bridge.callCpp(k__onInterstitialClosed);
     }
 
     @Override
@@ -212,7 +216,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onInterstitialAdShowFailed");
         MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailed);
+        bridge.callCpp(k__onInterstitialFailed);
     }
 
     @Override
@@ -293,7 +297,9 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @SuppressWarnings("WeakerAccess")
     public boolean hasRewardedVideo() {
         Utils.checkMainThread();
-        return com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
+        boolean value = com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
+        _logger.debug("hasRewardedVideo " + value);
+        return value;
     }
 
     @SuppressWarnings("WeakerAccess")

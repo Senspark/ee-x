@@ -37,6 +37,10 @@ static NSString* const k__onRewarded        = @"IronSource_onRewarded";
 static NSString* const k__onFailed          = @"IronSource_onFailed";
 static NSString* const k__onOpened          = @"IronSource_onOpened";
 static NSString* const k__onClosed          = @"IronSource_onClosed";
+
+static NSString* const k__onInterstitialFailed         = @"IronSource_onInterstitialFailed";
+static NSString* const k__onInterstitialOpened          = @"IronSource_onInterstitialOpened";
+static NSString* const k__onInterstitialClosed          = @"IronSource_onInterstitialClosed";
 // clang-format on
 
 - (id)init {
@@ -75,7 +79,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
                         [self showRewardedVideo:placementId];
                         return @"";
                     }];
-    
+
     [bridge_ registerHandler:k__loadInterstitial
                     callback:^(NSString* message) {
                         [self loadInterstitial];
@@ -111,7 +115,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
                        adUnits:@[IS_REWARDED_VIDEO, IS_INTERSTITIAL]];
     [IronSource setRewardedVideoDelegate:self];
     [IronSource setInterstitialDelegate:self];
-    
+
     [IronSource setUserId:[IronSource advertiserId]];
     initialized_ = YES;
 }
@@ -169,8 +173,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
 }
 #pragma mark - Interstitial
--(void) loadInterstitial
-{
+- (void)loadInterstitial {
     [IronSource loadInterstitial];
 }
 
@@ -194,12 +197,12 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 
 - (void)interstitialDidOpen {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onOpened];
+    [bridge_ callCpp:k__onInterstitialOpened];
 }
 
 - (void)interstitialDidClose {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onClosed];
+    [bridge_ callCpp:k__onInterstitialClosed];
 }
 
 - (void)interstitialDidShow {
@@ -208,7 +211,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 
 - (void)interstitialDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onFailed];
+    [bridge_ callCpp:k__onInterstitialFailed];
 }
 
 - (void)didClickInterstitial {

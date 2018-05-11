@@ -48,6 +48,7 @@ constexpr auto k__showRewardedVideo         = "AdMob_showRewardedVideo";
 
 constexpr auto k__onRewarded                = "AdMob_onRewarded";
 constexpr auto k__onFailedToLoad            = "AdMob_onFailedToLoad";
+constexpr auto k__onRewardedVideoCompleted  = "AdMob_onRewardedVideoCompleted";
 constexpr auto k__onLoaded                  = "AdMob_onLoaded";
 constexpr auto k__onOpened                  = "AdMob_onOpened";
 constexpr auto k__onClosed                  = "AdMob_onClosed";

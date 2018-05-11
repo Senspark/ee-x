@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api "com.google.android.gms:play-services-base:${rootProject.ext.firebaseVersion}"
+    api "com.google.android.gms:play-services-base:${rootProject.ext.playservicesLibraryVersion}"
 }

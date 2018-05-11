@@ -24,12 +24,3 @@ set(EE_X_FIREBASE_HEADERS
    src/ee/firebase/FirebaseStorage.hpp
 )
 
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
-
-# target_link_libraries(${PROJECT_NAME}
-#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
-#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a
-#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libmessaging.a
-#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libremote_config.a
-#     ${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libstorage.a
-# )

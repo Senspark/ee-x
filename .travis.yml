@@ -19,6 +19,7 @@ matrix:
         - pod repo update
         - brew install p7zip
         - brew install git-lfs
+        - git lfs install
 
       install:
         - pod install --project-directory=test/proj.ios_mac --verbose

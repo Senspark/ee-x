@@ -149,6 +149,12 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/firebase-core'
   end
 
+spec.subspec 'firebase-dynamic-link' do |s|
+    s.source_files = 'src/ee/firebase/FirebaseDynamicLink.*'
+    s.public_header_files = 'src/ee/firebase/FirebaseDynamicLink.hpp'
+    s.dependency 'ee-x/firebase-core'
+  end
+
   spec.subspec 'firebase-messaging' do |s|
     s.source_files = 'src/ee/firebase/FirebaseMessaging.*'
     s.public_header_files = 'src/ee/firebase/FirebaseMessaging.hpp'

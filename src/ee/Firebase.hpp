@@ -31,4 +31,8 @@
 #include "ee/firebase/FirebaseMessaging.hpp"
 #endif
 
+#if __has_include("ee/firebase/FirebaseDynamicLink.hpp")
+#include "ee/firebase/FirebaseDynamicLink.hpp"
+#endif
+
 #endif /* EE_X_FIREBASE_HPP_ */

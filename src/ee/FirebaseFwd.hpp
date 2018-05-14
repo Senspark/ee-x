@@ -17,8 +17,10 @@ class RemoteConfig;
 class Storage;
 class Messaging;
 class Message;
+class DynamicLink;
 } // namespace firebase
-
+    
+using FirebaseDynamicLink = firebase::DynamicLink;
 using FirebaseApp = firebase::App;
 using FirebaseAnalytics = firebase::Analytics;
 using FirebaseRemoteConfig = firebase::RemoteConfig;

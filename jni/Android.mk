@@ -218,6 +218,14 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_firebase_dynamic_link_static
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseDynamicLink.cpp
+LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_messaging_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseMessaging.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static

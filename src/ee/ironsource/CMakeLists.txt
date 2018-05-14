@@ -33,17 +33,13 @@ include_directories(
 )
 
 set(EE_X_IRONSOURCE_SRC
+  src/ee/ironsource/internal/IronSourceInterstitialAd.cpp
   src/ee/ironsource/internal/IronSourceRewardedVideo.cpp
   src/ee/ironsource/IronSourceBridge.cpp
 )
 
 set(EE_X_IRONSOURCE_HEADERS
+  src/ee/ironsource/internal/IronSourceInterstitialAd.hpp
   src/ee/ironsource/internal/IronSourceRewardedVideo.hpp
   src/ee/ironsource/IronSourceBridge.hpp
 )
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
-
-# target_link_libraries(${PROJECT_NAME}
-#   ee_x_ads
-# )

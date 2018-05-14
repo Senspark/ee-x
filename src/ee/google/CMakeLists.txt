@@ -35,9 +35,3 @@ set(EE_X_GOOGLE_HEADERS
   src/ee/google/GoogleAnalyticsTracker.hpp
   src/ee/google/internal/GoogleAnalyticsParameter.hpp
 )
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
-
-# target_link_libraries(${PROJECT_NAME}
-#   ee_x_core
-# )

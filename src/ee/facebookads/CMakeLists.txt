@@ -13,6 +13,7 @@ set(EE_X_FACEBOOK_ADS_SRC
    src/ee/facebookads/internal/FacebookBannerAd.cpp
    src/ee/facebookads/internal/FacebookInterstitialAd.cpp
    src/ee/facebookads/internal/FacebookNativeAd.cpp
+   src/ee/facebookads/internal/FacebookRewardVideoAd.cpp
 )
 
 set(EE_X_FACEBOOK_ADS_HEADERS
@@ -22,6 +23,5 @@ set(EE_X_FACEBOOK_ADS_HEADERS
   src/ee/facebookads/internal/FacebookBannerAd.hpp
   src/ee/facebookads/internal/FacebookInterstitialAd.hpp
   src/ee/facebookads/internal/FacebookNativeAd.hpp
+  src/ee/facebookads/internal/FacebookRewardVideoAd.hpp
 )
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})

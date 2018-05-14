@@ -16,7 +16,7 @@ dependencies {
     api project(':ee-x-core')
     api project(':ee-x-ads')
     api 'com.facebook.android:audience-network-sdk:4.28.1'
-    api "com.google.android.gms:play-services-ads:${rootProject.ext.firebaseVersion}"
+    api "com.google.android.gms:play-services-ads:${rootProject.ext.playservicesLibraryVersion}"
     api "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
     api "com.android.support:recyclerview-v7:${rootProject.ext.supportLibraryVersion}"
 }

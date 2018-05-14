@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
-    api "com.google.android.gms:play-services-ads:${rootProject.ext.firebaseVersion}"
+    api "com.google.android.gms:play-services-ads:${rootProject.ext.playservicesLibraryVersion}"
 }

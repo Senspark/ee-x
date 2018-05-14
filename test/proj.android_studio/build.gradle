@@ -7,21 +7,31 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'io.fabric.tools:gradle:1.24.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'io.fabric.tools:gradle:1.25.1'
         classpath 'com.google.gms:google-services:3.1.0'
     }
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
         flatDir { dirs 'libs' }
         mavenLocal()
         maven { url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
         maven { url 'https://maven.fabric.io/public' }
-        maven { url "https://maven.google.com" }
-        google()
+        maven { url "https://maven.google.com" }        
     }
+}
+
+ext {
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
+    targetSdkVersion = 27
+    supportLibraryVersion = '27.1.1'
+    firebaseVersion = '11.8.0'
+    playservicesLibraryVersion = '11.8.0'
 }

@@ -43,11 +43,11 @@ std::string getVungleRewardedVideoId() {
 
 void testVungleRewardedVideo() {
     // Create a Vungle rewarded video on the main thread.
-    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::RewardedVideoInterface>>([] {
-        FunctionLogger logger("Create Vungle rewarded video");
-        return getVungle()->createRewardedVideo(getVungleRewardedVideoId());
-    });
+    auto rewardedVideo =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
+            FunctionLogger logger("Create Vungle rewarded video");
+            return getVungle()->createRewardedVideo(getVungleRewardedVideoId());
+        });
 
     // Set the result callback.
     rewardedVideo->setResultCallback([](bool result) {

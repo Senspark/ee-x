@@ -16,9 +16,9 @@ ee::FacebookAds* getFacebookAds();
 
 std::string getFacebookInterstitialAdId();
 
-std::shared_ptr<ee::AdViewInterface> createFacebookNativeAd();
+std::shared_ptr<ee::IAdView> createFacebookNativeAd();
 
-std::shared_ptr<ee::InterstitialAdInterface> createFacebookInterstitialAd();
+std::shared_ptr<ee::IInterstitialAd> createFacebookInterstitialAd();
 
 void testFacebookNativeAd();
 

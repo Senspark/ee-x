@@ -48,7 +48,7 @@ std::string getAdMobNativeAdId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::shared_ptr<ee::AdViewInterface> createAdMobNativeAd() {
+std::shared_ptr<ee::IAdView> createAdMobNativeAd() {
     return getAdMob()->createNativeAd(getAdMobNativeAdId(), "admob_native_spin",
                                       ee::AdMobNativeAdLayout()
                                           .setBody("ad_body")
@@ -69,17 +69,16 @@ void testAdMobBannerAd() {
     int screenHeight = static_cast<int>(frameSize.height);
 
     auto bannerAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
-            [] {
-                getLogger().info("Create AdMob banner ad begin");
-                auto ad = getAdMob()->createBannerAd(
-                    "ca-app-pub-3940256099942544/6300978111",
-                    ee::AdMobBannerAdSize::Normal);
-                ad->load();
-                ad->setVisible(false);
-                getLogger().info("Create AdMob banner ad end");
-                return ad;
-            });
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+            getLogger().info("Create AdMob banner ad begin");
+            auto ad = getAdMob()->createBannerAd(
+                "ca-app-pub-3940256099942544/6300978111",
+                ee::AdMobBannerAdSize::Normal);
+            ad->load();
+            ad->setVisible(false);
+            getLogger().info("Create AdMob banner ad end");
+            return ad;
+        });
 
     float delay = 0.0f;
     scheduleOnce(delay += 2.0f, [screenWidth, screenHeight, bannerAd] {
@@ -136,15 +135,14 @@ void testAdMobNativeAd() {
     int screenHeight = static_cast<int>(frameSize.height);
 
     auto nativeAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
-            [] {
-                getLogger().info("Create AdMob native ad begin");
-                auto ad = createAdMobNativeAd();
-                ad->setVisible(true);
-                ad->setSize(600, 100);
-                getLogger().info("Create AdMob native ad end");
-                return ad;
-            });
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+            getLogger().info("Create AdMob native ad begin");
+            auto ad = createAdMobNativeAd();
+            ad->setVisible(true);
+            ad->setSize(600, 100);
+            getLogger().info("Create AdMob native ad end");
+            return ad;
+        });
 
     float delay = 0.0f;
     scheduleForever(delay + 1.0f, 4.0f, [nativeAd] {
@@ -224,14 +222,15 @@ void testAdMobNativeAd() {
 }
 
 void testAdMobInterstitial() {
-    auto interstitialAd = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::InterstitialAdInterface>>([] {
-        getLogger().info("Create AdMob interstitial ad begin");
-        auto ad = getAdMob()->createInterstitialAd(
-            "ca-app-pub-3940256099942544/1033173712");
-        getLogger().info("Create AdMob interstitial ad end");
-        return ad;
-    });
+    auto interstitialAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IInterstitialAd>>(
+            [] {
+                getLogger().info("Create AdMob interstitial ad begin");
+                auto ad = getAdMob()->createInterstitialAd(
+                    "ca-app-pub-3940256099942544/1033173712");
+                getLogger().info("Create AdMob interstitial ad end");
+                return ad;
+            });
 
     scheduleForever(1.0f, 3.0f, [interstitialAd] {
         ee::runOnUiThread([interstitialAd] {
@@ -248,13 +247,14 @@ void testAdMobInterstitial() {
 }
 
 void testAdMobRewardedVideo() {
-    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::RewardedVideoInterface>>([] {
-        getLogger().info("Create AdMob rewarded video begin");
-        auto ad = getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
-        getLogger().info("Create AdMob rewarded video end");
-        return ad;
-    });
+    auto rewardedVideo =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
+            getLogger().info("Create AdMob rewarded video begin");
+            auto ad =
+                getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
+            getLogger().info("Create AdMob rewarded video end");
+            return ad;
+        });
 
     scheduleForever(1.0f, 3.0f, [rewardedVideo] {
         ee::runOnUiThread([rewardedVideo] {

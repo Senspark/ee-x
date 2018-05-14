@@ -20,16 +20,16 @@ private:
     using Super = cocos2d::Scene;
 
 public:
-    static Self* createWithAdView(std::shared_ptr<ee::AdViewInterface> adView);
+    static Self* createWithAdView(std::shared_ptr<ee::IAdView> adView);
 
 protected:
-    bool initWithAdView(std::shared_ptr<ee::AdViewInterface> adView);
+    bool initWithAdView(std::shared_ptr<ee::IAdView> adView);
 
     virtual void onEnter() override;
     virtual void onExit() override;
 
 private:
-    std::shared_ptr<ee::AdViewInterface> adView_;
+    std::shared_ptr<ee::IAdView> adView_;
 
     bool firstTouch_;
     cocos2d::Point lastPosition_;

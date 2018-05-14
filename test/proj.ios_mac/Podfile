@@ -11,6 +11,7 @@ abstract_target 'common' do
         pod_ee_x('crashlytics')
         pod_ee_x('notification')
         pod_ee_x('firebase')
+        pod_ee_x('firebase-dynamic-link')
         pod_ee_x('facebook-ads')
         pod_ee_x('applovin')
         pod_ee_x('admob')

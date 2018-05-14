@@ -26,14 +26,14 @@ cocos2d::ui::Button* createButton() {
 }
 } // namespace
 
-Self* Self::createWithAdView(std::shared_ptr<ee::AdViewInterface> adView) {
+Self* Self::createWithAdView(std::shared_ptr<ee::IAdView> adView) {
     auto result = new Self();
     result->initWithAdView(adView);
     result->autorelease();
     return result;
 }
 
-bool Self::initWithAdView(std::shared_ptr<ee::AdViewInterface> adView) {
+bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     if (not Super::init()) {
         return false;
     }

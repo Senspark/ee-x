@@ -54,11 +54,12 @@ std::string getUnityRewardedVideoId() {
 }
 
 void testUnityAdsRewardedVideo() {
-    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::RewardedVideoInterface>>([] {
-        FunctionLogger logger("Create Unity Ads rewarded video");
-        return getUnityAds()->createRewardedVideo(getUnityRewardedVideoId());
-    });
+    auto rewardedVideo =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
+            FunctionLogger logger("Create Unity Ads rewarded video");
+            return getUnityAds()->createRewardedVideo(
+                getUnityRewardedVideoId());
+        });
 
     rewardedVideo->setResultCallback([](bool result) {
         FunctionLogger logger("Unity Ads rewarded video callback");
@@ -66,11 +67,13 @@ void testUnityAdsRewardedVideo() {
         getLogger().info("Result = ", result ? "succeeded" : "failed");
     });
 
-    auto interstitialAd = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::InterstitialAdInterface>>([] {
-        FunctionLogger logger("Create Unity Ads interstitial ad");
-        return getUnityAds()->createInterstitialAd(getUnityInterstitialAdId());
-    });
+    auto interstitialAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IInterstitialAd>>(
+            [] {
+                FunctionLogger logger("Create Unity Ads interstitial ad");
+                return getUnityAds()->createInterstitialAd(
+                    getUnityInterstitialAdId());
+            });
 
     interstitialAd->setResultCallback([] {
         FunctionLogger logger("Unity Ads interstitial ad callback");

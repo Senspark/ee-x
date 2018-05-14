@@ -38,7 +38,7 @@ std::string getFacebookInterstitialAdId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::shared_ptr<ee::AdViewInterface> createFacebookNativeAd() {
+std::shared_ptr<ee::IAdView> createFacebookNativeAd() {
     return getFacebookAds()->createNativeAd(
         "869337403086643_1444948412192203", "fb_native_spin",
         ee::FacebookNativeAdLayout()
@@ -51,7 +51,7 @@ std::shared_ptr<ee::AdViewInterface> createFacebookNativeAd() {
             .setTitle("native_ad_title"));
 }
 
-std::shared_ptr<ee::InterstitialAdInterface> createFacebookInterstitialAd() {
+std::shared_ptr<ee::IInterstitialAd> createFacebookInterstitialAd() {
     return getFacebookAds()->createInterstitialAd(
         getFacebookInterstitialAdId());
 }
@@ -63,13 +63,12 @@ void testFacebookNativeAd() {
     int screenHeight = static_cast<int>(frameSize.height);
 
     auto nativeAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::AdViewInterface>>(
-            [] {
-                getLogger().info("Create Facebook native ad");
-                auto ad = createFacebookNativeAd();
-                ad->setVisible(true);
-                return ad;
-            });
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+            getLogger().info("Create Facebook native ad");
+            auto ad = createFacebookNativeAd();
+            ad->setVisible(true);
+            return ad;
+        });
 
     float delay = 0.0f;
     scheduleForever(delay += 1.0f, 5.0f, [nativeAd] {

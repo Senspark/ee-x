@@ -41,12 +41,12 @@ std::string getIronSourceRewardedVideoId() {
 }
 
 void testIronSourceRewardedVideo() {
-    auto rewardedVideo = ee::runOnUiThreadAndWaitResult<
-        std::shared_ptr<ee::RewardedVideoInterface>>([] {
-        FunctionLogger logger("Create ironSource rewarded video");
-        return getIronSource()->createRewardedVideo(
-            getIronSourceRewardedVideoId());
-    });
+    auto rewardedVideo =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
+            FunctionLogger logger("Create ironSource rewarded video");
+            return getIronSource()->createRewardedVideo(
+                getIronSourceRewardedVideoId());
+        });
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {

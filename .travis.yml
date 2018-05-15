@@ -61,9 +61,7 @@ matrix:
           - ${HOME}/.android/build-cache
 
       before_install:
-        - brew install p7zip
-        - brew install git-lfs
-        - git lfs install
+        - sudo apt-get install p7zip-full
 
       install:
         - travis_retry sudo apt-get install unzip

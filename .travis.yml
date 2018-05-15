@@ -25,7 +25,8 @@ matrix:
         - pod install --project-directory=test/proj.ios_mac --verbose
 
       script:
-        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphoneos ONLY_ACTIVE_ARCH=NO
+        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO -arch armv7s -arch arm64 -arch x86_64
+
 
     - language: android
 
@@ -74,7 +75,7 @@ matrix:
         - chmod +x test/proj.android_studio/gradlew
 
       script:
-        - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
+        # - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
 
 notifications:
   slack:

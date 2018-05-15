@@ -23,7 +23,7 @@
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
-    NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* rewardVideoAds_;
+    NSMutableDictionary<NSString*, EEFacebookRewardVideoAd*>* rewardVideoAds_;
 }
 
 @end
@@ -260,7 +260,8 @@ static NSString* const k__layout_name           = @"layout_name";
         return NO;
     }
     EEFacebookRewardVideoAd* ad = [[[EEFacebookRewardVideoAd alloc]
-                                     initWithPlacementId:placementId] autorelease];
+        initWithBridge:bridge_
+           placementId:placementId] autorelease];
     [rewardVideoAds_ setObject:ad forKey:placementId];
     return YES;
 }

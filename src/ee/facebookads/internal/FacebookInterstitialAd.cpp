@@ -79,14 +79,10 @@ Self::InterstitialAd(IMessageBridge& bridge, FacebookAds* plugin,
             return "";
         },
         k__onClosed(placementId_));
-
-    createInternalAd();
 }
 
 Self::~InterstitialAd() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    destroyInternalAd();
-
     bridge_.deregisterHandler(k__onLoaded(placementId_));
     bridge_.deregisterHandler(k__onFailedToLoad(placementId_));
     bridge_.deregisterHandler(k__onClosed(placementId_));

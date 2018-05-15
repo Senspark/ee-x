@@ -38,12 +38,14 @@
         [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
                                                 prefix:@"FacebookInterstitialAd"
                                                   adId:placementId];
+    [self createInternalAd];
     [self registerHandlers];
     return self;
 }
 
 - (void)destroy {
     [self deregisterHandlers];
+    [self destroyInternalAd];
 }
 
 - (void)dealloc {

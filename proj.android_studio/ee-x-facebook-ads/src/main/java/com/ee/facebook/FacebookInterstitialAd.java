@@ -32,7 +32,8 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         _placementId = placementId;
         _interstitialAd = null;
         _helper = new InterstitialAdHelper("FacebookInterstitialAd", placementId);
-        registerHandlers();
+        createInternalAd();
+        registerHandlers();        
     }
 
     void destroy() {

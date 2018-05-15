@@ -44,8 +44,12 @@ constexpr auto k__testModeEnabled = "testModeEnabled";
 } // namespace
 
 Self::UnityAds()
-    : bridge_(MessageBridge::getInstance()) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    : Self(Logger::getSystemLogger()) {}
+
+Self::UnityAds(Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     errored_ = false;
     displayed_ = false;
 
@@ -70,16 +74,15 @@ Self::UnityAds()
 }
 
 Self::~UnityAds() {
-    Logger::getSystemLogger().debug(__PRETTY_FUNCTION__);
+    logger_.debug(__PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onError);
     bridge_.deregisterHandler(k__onSkipped);
     bridge_.deregisterHandler(k__onFinished);
 }
 
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
-    Logger::getSystemLogger().debug("%s: gameId = %s test = %s",
-                                    __PRETTY_FUNCTION__, gameId.c_str(),
-                                    core::toString(testModeEnabled).c_str());
+    logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
+                  gameId.c_str(), core::toString(testModeEnabled).c_str());
     nlohmann::json json;
     json[k__gameId] = gameId;
     json[k__testModeEnabled] = core::toString(testModeEnabled);
@@ -92,19 +95,19 @@ void Self::setDebugModeEnabled(bool enabled) {
 
 std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (rewardedVideos_.count(placementId) != 0) {
-        return std::make_shared<NullRewardedVideo>();
+        return std::make_shared<NullRewardedVideo>(logger_);
     }
-    auto result = new RewardedVideo(this, placementId);
+    auto result = new RewardedVideo(logger_, this, placementId);
     rewardedVideos_[placementId] = result;
     return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (rewardedVideos_.count(placementId) == 0) {
         return false;
     }
@@ -114,19 +117,19 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 
 std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (interstitialAds_.count(placementId) != 0) {
         return std::make_shared<NullInterstitialAd>();
     }
-    auto result = new InterstitialAd(this, placementId);
+    auto result = new InterstitialAd(logger_, this, placementId);
     interstitialAds_[placementId] = result;
     return std::shared_ptr<IInterstitialAd>(result);
 }
 
 bool Self::destroyInterstitialAd(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (interstitialAds_.count(placementId) == 0) {
         return false;
     }
@@ -143,8 +146,8 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     if (not isRewardedVideoReady(placementId)) {
         return false;
     }
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     errored_ = false;
     displayed_ = false;
     bridge_.call(k__showRewardedVideo, placementId);
@@ -156,8 +159,8 @@ bool Self::showRewardedVideo(const std::string& placementId) {
 }
 
 void Self::onError(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (not errored_ && not displayed_) {
         errored_ = true;
         return;
@@ -166,14 +169,14 @@ void Self::onError(const std::string& placementId) {
 }
 
 void Self::onSkipped(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     finish(placementId, false);
 }
 
 void Self::onFinished(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     finish(placementId, true);
 }
 

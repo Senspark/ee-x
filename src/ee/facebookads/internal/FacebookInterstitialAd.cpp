@@ -53,10 +53,11 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::InterstitialAd(IMessageBridge& bridge, FacebookAds* plugin,
-                     const std::string& placementId)
-    : bridge_(bridge) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+Self::InterstitialAd(IMessageBridge& bridge, Logger& logger,
+                     FacebookAds* plugin, const std::string& placementId)
+    : bridge_(bridge)
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     plugin_ = plugin;
     placementId_ = placementId;
@@ -82,7 +83,7 @@ Self::InterstitialAd(IMessageBridge& bridge, FacebookAds* plugin,
 }
 
 Self::~InterstitialAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onLoaded(placementId_));
     bridge_.deregisterHandler(k__onFailedToLoad(placementId_));
     bridge_.deregisterHandler(k__onClosed(placementId_));
@@ -90,13 +91,13 @@ Self::~InterstitialAd() {
 }
 
 bool Self::createInternalAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__createInternalAd(placementId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__destroyInternalAd(placementId_));
     return core::toBool(response);
 }
@@ -110,8 +111,8 @@ void Self::load() {
     if (isLoaded()) {
         return;
     }
-    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -123,7 +124,7 @@ bool Self::show() {
     if (not isLoaded()) {
         return false;
     }
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.call(k__show(placementId_));
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startInterstitialAd([this]() {
@@ -136,20 +137,19 @@ bool Self::show() {
 }
 
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loading_).c_str());
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s: message = %s loading = %s",
-                                    __PRETTY_FUNCTION__, message.c_str(),
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
+                  message.c_str(), core::toString(loading_).c_str());
     loading_ = false;
 }
 
 void Self::onClosed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
     auto successful = mediation.finishInterstitialAd();

@@ -113,8 +113,12 @@ constexpr auto k__onUserRewardVerified     = "AppLovin_onUserRewardVerified";
 } // namespace
 
 Self::AppLovin()
-    : bridge_(MessageBridge::getInstance()) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    : Self(Logger::getSystemLogger()) {}
+
+Self::AppLovin(Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     verified_ = false;
     errored_ = false;
     rewardedVideo_ = nullptr;
@@ -152,14 +156,13 @@ Self::AppLovin()
 }
 
 Self::~AppLovin() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onInterstitialAdHidden);
     bridge_.deregisterHandler(k__onRewardedVideoFailed);
 }
 
 void Self::initialize(const std::string& key) {
-    Logger::getSystemLogger().debug("%s: key = %s", __PRETTY_FUNCTION__,
-                                    key.c_str());
+    logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
     bridge_.call(k__initialize, key);
 }
 
@@ -189,17 +192,17 @@ bool Self::showInterstitialAd() {
 }
 
 std::shared_ptr<IRewardedVideo> Self::createRewardedVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     if (rewardedVideo_ != nullptr) {
-        return std::make_shared<NullRewardedVideo>();
+        return std::make_shared<NullRewardedVideo>(logger_);
     }
-    auto result = new RewardedVideo(this);
+    auto result = new RewardedVideo(logger_, this);
     rewardedVideo_ = result;
     return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     if (rewardedVideo_ == nullptr) {
         return false;
     }
@@ -208,7 +211,7 @@ bool Self::destroyRewardedVideo() {
 }
 
 void Self::loadRewardedVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.call(k__loadRewardedVideo);
 }
 
@@ -233,23 +236,22 @@ bool Self::showRewardedVideo() {
 }
 
 void Self::onInterstitialAdHidden() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 
 void Self::onRewardedVideoFailed(int errorCode) {
-    Logger::getSystemLogger().debug("%s: errorCode = %d", __PRETTY_FUNCTION__,
-                                    errorCode);
+    logger_.debug("%s: errorCode = %d", __PRETTY_FUNCTION__, errorCode);
     if (not errored_) {
         errored_ = true;
     }
 }
 
 void Self::onRewardedVideoDisplayed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 
 void Self::onRewardedVideoHidden() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     assert(rewardedVideo_ != nullptr);
 
     auto&& mediation = ads::MediationManager::getInstance();
@@ -263,7 +265,7 @@ void Self::onRewardedVideoHidden() {
 }
 
 void Self::onUserRewardVerified() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     verified_ = true;
 }
 } // namespace applovin

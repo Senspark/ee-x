@@ -55,7 +55,11 @@ constexpr auto k__identifiers = "identifiers";
 } // namespace
 
 Self::FacebookAds()
-    : bridge_(MessageBridge::getInstance()) {}
+    : Self(Logger::getSystemLogger()) {}
+
+Self::FacebookAds(Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {}
 
 Self::~FacebookAds() {}
 
@@ -99,7 +103,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<IAdView>(new NativeAd(bridge_, this, adId));
+    return std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
@@ -114,7 +118,7 @@ Self::createInterstitialAd(const std::string& placementId) {
         return std::make_shared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
-        new InterstitialAd(bridge_, this, placementId));
+        new InterstitialAd(bridge_, logger_, this, placementId));
 }
 
 bool Self::destroyInterstitialAd(const std::string& placementId) {
@@ -126,10 +130,10 @@ std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
     auto response = bridge_.call(k__createRewardVideoAd, placementId);
     if (not core::toBool(response)) {
-        return std::make_shared<NullRewardedVideo>();
+        return std::make_shared<NullRewardedVideo>(logger_);
     }
     return std::shared_ptr<IRewardedVideo>(
-        new RewardedVideo(bridge_, placementId));
+        new RewardedVideo(bridge_, logger_, placementId));
 }
 
 bool Self::destroyRewardVideoAd(const std::string& placementId) {

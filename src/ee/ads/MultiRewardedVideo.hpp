@@ -23,6 +23,8 @@ private:
 
 public:
     MultiRewardedVideo();
+    explicit MultiRewardedVideo(Logger& logger);
+    
     virtual ~MultiRewardedVideo() override;
 
     Self& addItem(const std::shared_ptr<IRewardedVideo>& item);

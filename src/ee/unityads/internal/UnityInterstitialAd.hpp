@@ -25,11 +25,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(UnityAds* plugin, const std::string& placementId);
+    explicit InterstitialAd(Logger& logger, UnityAds* plugin,
+                            const std::string& placementId);
 
 private:
     friend UnityAds;
 
+    Logger& logger_;
     UnityAds* plugin_;
     std::string placementId_;
 };

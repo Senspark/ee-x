@@ -37,8 +37,12 @@ constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClos
 } // namespace
 
 Self::IronSource()
-    : bridge_(MessageBridge::getInstance()) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    : Self(Logger::getSystemLogger()) {}
+
+Self::IronSource(Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 
     bridge_.registerHandler(
@@ -89,7 +93,7 @@ Self::IronSource()
 }
 
 Self::~IronSource() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onRewarded);
     bridge_.deregisterHandler(k__onFailed);
     bridge_.deregisterHandler(k__onOpened);
@@ -101,26 +105,25 @@ Self::~IronSource() {
 }
 
 void Self::initialize(const std::string& gameId) {
-    Logger::getSystemLogger().debug("%s: gameId = %s", __PRETTY_FUNCTION__,
-                                    gameId.c_str());
+    logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
     bridge_.call(k__initialize, gameId);
 }
 
 std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (rewardedVideos_.count(placementId) != 0) {
-        return std::make_shared<NullRewardedVideo>();
+        return std::make_shared<NullRewardedVideo>(logger_);
     }
-    auto result = new RewardedVideo(this, placementId);
+    auto result = new RewardedVideo(logger_, this, placementId);
     rewardedVideos_[placementId] = result;
     return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (rewardedVideos_.count(placementId) == 0) {
         return false;
     }
@@ -130,19 +133,19 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
 
 std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (interstitialAds_.count(placementId) != 0) {
         return std::make_shared<NullInterstitialAd>();
     }
-    auto result = new InterstitialAd(this, placementId);
+    auto result = new InterstitialAd(logger_, this, placementId);
     interstitialAds_[placementId] = result;
     return std::shared_ptr<IInterstitialAd>(result);
 }
 
 bool Self::destroyInterstitialAd(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     if (interstitialAds_.count(placementId) == 0) {
         return false;
     }
@@ -184,8 +187,8 @@ bool Self::showRewardedVideo(const std::string& placementId) {
 }
 
 void Self::onRewarded(const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     rewarded_ = true;
     if (_shouldDoRewardInGame) {
         doRewardInGame();
@@ -194,19 +197,19 @@ void Self::onRewarded(const std::string& placementId) {
 }
 
 void Self::onFailed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 
     _shouldDoRewardInGame = true;
     onClosed();
 }
 
 void Self::onOpened() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onClosed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 
     if (_shouldDoRewardInGame) {
         doRewardInGame();
@@ -215,7 +218,7 @@ void Self::onClosed() {
 }
 
 void Self::doRewardInGame() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
     // Other mediation network.
@@ -227,18 +230,18 @@ void Self::doRewardInGame() {
 
 #pragma mark - For Interstitial
 void Self::onInterstitialOpened() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 void Self::onInterstitialFailed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     onInterstitialClosed();
 }
 void Self::onInterstitialClosed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-//    auto&& mediation = ads::MediationManager::getInstance();
-//
-//    auto successful = mediation.finishInterstitialAd();
-//    assert(successful);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    //    auto&& mediation = ads::MediationManager::getInstance();
+    //
+    //    auto successful = mediation.finishInterstitialAd();
+    //    assert(successful);
     _shouldDoRewardInGame = true;
     onClosed();
 }

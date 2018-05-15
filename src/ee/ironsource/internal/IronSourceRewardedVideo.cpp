@@ -17,17 +17,20 @@ namespace ee {
 namespace ironsource {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(IronSource* plugin, const std::string& placementId) {
-    Logger::getSystemLogger().debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                                    placementId.c_str());
+Self::RewardedVideo(Logger& logger, IronSource* plugin,
+                    const std::string& placementId)
+    : Super(logger)
+    , logger_(logger) {
+    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
     plugin_ = plugin;
     placementId_ = placementId;
 }
 
 Self::~RewardedVideo() {
-    Logger::getSystemLogger().debug("%s: begin", __PRETTY_FUNCTION__);
+    logger_.debug("%s: begin", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedVideo(placementId_);
-    Logger::getSystemLogger().debug("%s: end", __PRETTY_FUNCTION__);
+    logger_.debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {

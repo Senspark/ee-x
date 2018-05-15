@@ -15,6 +15,9 @@
 namespace ee {
 namespace vungle {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -25,11 +28,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Vungle* plugin, const std::string& placementId);
+    explicit RewardedVideo(Logger& logger, Vungle* plugin,
+                           const std::string& placementId);
 
 private:
     friend Vungle;
 
+    Logger& logger_;
     Vungle* plugin_;
     std::string placementId_;
 };

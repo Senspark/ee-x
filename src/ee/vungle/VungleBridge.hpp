@@ -13,12 +13,15 @@ class Vungle final {
 public:
     Vungle();
     ~Vungle();
+    
+    explicit Vungle(Logger& logger);
 
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId, const std::string& placementId);
 
     /// Creates a rewarded video.
-    std::shared_ptr<IRewardedVideo> createRewardedVideo(const std::string& placementId);
+    std::shared_ptr<IRewardedVideo>
+    createRewardedVideo(const std::string& placementId);
 
 private:
     friend RewardedVideo;
@@ -34,7 +37,8 @@ private:
 
     bool errored_;
     IMessageBridge& bridge_;
-//    RewardedVideo* rewardedVideo_;
+    Logger& logger_;
+    //    RewardedVideo* rewardedVideo_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace vungle

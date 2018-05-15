@@ -28,14 +28,16 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
+Self::NativeAd(IMessageBridge& bridge, Logger& logger, AdMob* plugin,
+               const std::string& adId)
     : Super()
     , adId_(adId)
     , bridge_(bridge)
+    , logger_(logger)
     , plugin_(plugin)
     , helper_("AdMobNativeAd", adId)
     , bridgeHelper_(bridge, helper_) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 
     bridge_.registerHandler(
@@ -53,7 +55,7 @@ Self::NativeAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
 }
 
 Self::~NativeAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
 
@@ -66,8 +68,8 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -104,8 +106,8 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loading_).c_str());
     // Auto refresh customized in server.
     // assert(loading_);
     loading_ = false;
@@ -113,9 +115,8 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s: message = %s loading = %s",
-                                    __PRETTY_FUNCTION__, message.c_str(),
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
+                  message.c_str(), core::toString(loading_).c_str());
     // Auto refresh customized in server.
     // assert(loading_);
     loading_ = false;

@@ -14,7 +14,12 @@
 namespace ee {
 namespace ads {
 class NullRewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
+    explicit NullRewardedVideo(Logger& logger);
+
     virtual bool isLoaded() const override;
 
     virtual void load() override;

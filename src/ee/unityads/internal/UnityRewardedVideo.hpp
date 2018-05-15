@@ -15,6 +15,9 @@
 namespace ee {
 namespace unityads {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -25,11 +28,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(UnityAds* plugin, const std::string& placementId);
+    explicit RewardedVideo(Logger& logger, UnityAds* plugin,
+                           const std::string& placementId);
 
 private:
     friend UnityAds;
 
+    Logger& logger_;
     UnityAds* plugin_;
     std::string placementId_;
 };

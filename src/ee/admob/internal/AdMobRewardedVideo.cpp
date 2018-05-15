@@ -17,14 +17,16 @@ namespace ee {
 namespace admob {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(AdMob* plugin, const std::string& adId) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+Self::RewardedVideo(Logger& logger, AdMob* plugin, const std::string& adId)
+    : Super(logger)
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_ = plugin;
     adId_ = adId;
 }
 
 Self::~RewardedVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedVideo(adId_);
 }
 
@@ -40,7 +42,7 @@ bool Self::show() {
     if (adId_ != plugin_->currentId_ || not plugin_->showRewardedVideo()) {
         return false;
     }
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startRewardedVideo([this](bool rewarded) { //
         this->setResult(rewarded);

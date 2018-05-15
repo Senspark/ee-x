@@ -40,15 +40,16 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(IMessageBridge& bridge, FacebookAds* plugin,
+Self::NativeAd(IMessageBridge& bridge, Logger& logger, FacebookAds* plugin,
                const std::string& adId)
     : Super()
     , adId_(adId)
     , bridge_(bridge)
+    , logger_(logger)
     , plugin_(plugin)
     , helper_("FacebookNativeAd", adId)
     , bridgeHelper_(bridge, helper_) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     attempted_ = false;
     loading_ = false;
 
@@ -67,7 +68,7 @@ Self::NativeAd(IMessageBridge& bridge, FacebookAds* plugin,
 }
 
 Self::~NativeAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onLoaded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
 
@@ -76,13 +77,13 @@ Self::~NativeAd() {
 }
 
 bool Self::createInternalAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__createInternalAd(adId_));
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__destroyInternalAd(adId_));
     return core::toBool(response);
 }
@@ -92,8 +93,8 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    Logger::getSystemLogger().debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                                    core::toString(loading_).c_str());
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loading_).c_str());
     if (loading_) {
         return;
     }
@@ -135,15 +136,14 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     assert(loading_);
     loading_ = false;
     setLoadResult(true);
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
-                                    message.c_str());
+    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     assert(loading_);
     loading_ = false;
     setLoadResult(false);

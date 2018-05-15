@@ -12,6 +12,9 @@ namespace ee {
 namespace ads {
 using Self = NullRewardedVideo;
 
+Self::NullRewardedVideo(Logger& logger)
+    : Super(logger) {}
+
 bool Self::isLoaded() const {
     return false;
 }

@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/Logger.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {
-void Logger::log(const LogLevel& level, const std::string& tag,
-                 const std::string& message) {
+void log(const LogLevel& level, const std::string& tag,
+         const std::string& message) {
     NSLog(@"%s %s: %s", level.desc.c_str(), tag.c_str(), message.c_str());
 }
 } // namespace core

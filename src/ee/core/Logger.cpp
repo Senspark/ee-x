@@ -15,9 +15,10 @@ namespace core {
 using Self = Logger;
 
 Self& Self::getSystemLogger() {
-    static Self logger(
-        "ee_x", [](const LogLevel& level, const std::string& tag,
-                   const std::string& message) { log(level, tag, message); });
+    static Self logger("ee_x", [](const LogLevel& level, const std::string& tag,
+                                  const std::string& message) { //
+        ::ee::log(level, tag, message);
+    });
     return logger;
 }
 
@@ -30,9 +31,10 @@ Self Self::nullLogger() {
 }
 
 Self::Logger(const std::string& tag)
-    : Logger(tag,
-             [](const LogLevel& level, const std::string& tag,
-                const std::string& message) { log(level, tag, message); }) {}
+    : Logger(tag, [](const LogLevel& level, const std::string& tag,
+                     const std::string& message) {
+        ::ee::log(level, tag, message);
+    }) {}
 
 Self::Logger(const std::string& tag, const LogCallback& callback)
     : enabled_(true)

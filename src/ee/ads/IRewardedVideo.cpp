@@ -15,7 +15,8 @@ namespace ee {
 namespace ads {
 using Self = IRewardedVideo;
 
-Self::IRewardedVideo() {
+Self::IRewardedVideo(Logger& logger)
+    : logger_(logger) {
     callback_ = nullptr;
 }
 
@@ -29,10 +30,9 @@ void Self::setResultCallback(const RewardedVideoCallback& callback) {
 }
 
 void Self::setResult(bool result) {
-    Logger::getSystemLogger().debug(
-        "%s: this = %p result = %s has callback = %s", __PRETTY_FUNCTION__,
-        this, core::toString(result).c_str(),
-        core::toString(!!callback_).c_str());
+    logger_.debug("%s: this = %p result = %s has callback = %s",
+                  __PRETTY_FUNCTION__, this, core::toString(result).c_str(),
+                  core::toString(!!callback_).c_str());
     if (callback_) {
         callback_(result);
     }

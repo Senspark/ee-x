@@ -15,6 +15,9 @@
 namespace ee {
 namespace ironsource {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -25,11 +28,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(IronSource* plugin, const std::string& placementId);
+    explicit RewardedVideo(Logger& logger, IronSource* plugin,
+                           const std::string& placementId);
 
 private:
     friend IronSource;
 
+    Logger& logger_;
     IronSource* plugin_;
     std::string placementId_;
 };

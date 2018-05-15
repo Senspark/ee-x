@@ -15,6 +15,9 @@
 namespace ee {
 namespace facebook {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -27,7 +30,8 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit RewardedVideo(IMessageBridge& bridge, const std::string& adId);
+    explicit RewardedVideo(IMessageBridge& bridge, Logger& logger,
+                           const std::string& adId);
 
 private:
     std::string adId_;
@@ -43,6 +47,7 @@ private:
     void destroyInternalVideo();
 
     IMessageBridge& bridge_;
+    Logger& logger_;
 };
 } // namespace facebook
 } // namespace ee

@@ -15,6 +15,9 @@
 namespace ee {
 namespace applovin {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -25,7 +28,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(AppLovin* plugin);
+    explicit RewardedVideo(Logger& logger, AppLovin* plugin);
 
 private:
     friend AppLovin;

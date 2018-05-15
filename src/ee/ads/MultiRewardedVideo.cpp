@@ -7,12 +7,17 @@
 //
 
 #include "ee/ads/MultiRewardedVideo.hpp"
+#include "ee/core/Logger.hpp"
 
 namespace ee {
 namespace ads {
 using Self = MultiRewardedVideo;
 
-Self::MultiRewardedVideo() {}
+Self::MultiRewardedVideo()
+    : Self(Logger::getSystemLogger()) {}
+
+Self::MultiRewardedVideo(Logger& logger)
+    : Super(logger) {}
 
 Self::~MultiRewardedVideo() {}
 

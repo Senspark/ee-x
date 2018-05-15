@@ -9,12 +9,16 @@
 #ifndef EE_X_ADMOB_REWARDED_VIDEO_HPP
 #define EE_X_ADMOB_REWARDED_VIDEO_HPP
 
+#include "ee/CoreFwd.hpp"
 #include "ee/AdMobFwd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace admob {
 class RewardedVideo : public IRewardedVideo {
+private:
+    using Super = IRewardedVideo;
+
 public:
     virtual ~RewardedVideo() override;
 
@@ -25,11 +29,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(AdMob* plugin, const std::string& adId);
+    explicit RewardedVideo(Logger& logger, AdMob* plugin,
+                           const std::string& adId);
 
 private:
     friend AdMob;
 
+    Logger& logger_;
     AdMob* plugin_;
     std::string adId_;
 };

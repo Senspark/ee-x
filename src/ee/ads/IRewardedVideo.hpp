@@ -12,6 +12,7 @@
 #include <functional>
 #include <string>
 
+#include "ee/CoreFwd.hpp"
 #include "ee/AdsFwd.hpp"
 
 namespace ee {
@@ -20,7 +21,8 @@ using RewardedVideoCallback = std::function<void(bool result)>;
 
 class IRewardedVideo {
 public:
-    IRewardedVideo();
+    explicit IRewardedVideo(Logger& logger);
+
     virtual ~IRewardedVideo();
 
     virtual bool isLoaded() const = 0;
@@ -37,6 +39,7 @@ protected:
     void setResult(bool result);
 
 private:
+    Logger& logger_;
     RewardedVideoCallback callback_;
 };
 } // namespace ads

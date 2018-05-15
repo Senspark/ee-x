@@ -65,8 +65,12 @@ constexpr auto k__identifiers           = "identifiers";
 } // namespace
 
 Self::AdMob()
-    : bridge_(MessageBridge::getInstance()) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    : Self(Logger::getSystemLogger()) {}
+
+Self::AdMob(Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
     rewarded_ = false;
 
@@ -103,7 +107,7 @@ Self::AdMob()
 }
 
 Self::~AdMob() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onRewarded);
     bridge_.deregisterHandler(k__onFailedToLoad);
     bridge_.deregisterHandler(k__onLoaded);
@@ -124,9 +128,8 @@ void Self::addTestDevice(const std::string& hash) {
 }
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
-                                                      BannerAdSize adSize) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+                                              BannerAdSize adSize) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
@@ -139,8 +142,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = bridge_.call(k__destroyBannerAd, adId);
     return core::toBool(response);
 }
@@ -148,8 +150,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
 std::shared_ptr<IAdView>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__layout_name] = layoutName;
@@ -159,50 +160,45 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     if (not core::toBool(response)) {
         return std::make_shared<NullAdView>();
     }
-    return std::shared_ptr<IAdView>(new NativeAd(bridge_, this, adId));
+    return std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId));
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto&& response = bridge_.call(k__destroyNativeAd, adId);
     return core::toBool(response);
 }
 
 std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = bridge_.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
         return std::make_shared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
-        new InterstitialAd(bridge_, this, adId));
+        new InterstitialAd(bridge_, logger_, this, adId));
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto&& response = bridge_.call(k__destroyInterstitialAd, adId);
     return core::toBool(response);
 }
 
 std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (rewardedVideos_.count(adId) != 0) {
-        return std::make_shared<NullRewardedVideo>();
+        return std::make_shared<NullRewardedVideo>(logger_);
     }
-    auto result = new RewardedVideo(this, adId);
+    auto result = new RewardedVideo(logger_, this, adId);
     rewardedVideos_[adId] = result;
     return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& adId) {
-    Logger::getSystemLogger().debug("%s: id = %s", __PRETTY_FUNCTION__,
-                                    adId.c_str());
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (rewardedVideos_.count(adId) == 0) {
         return false;
     }
@@ -234,32 +230,31 @@ bool Self::showRewardedVideo() {
 }
 
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s: message = %s", __PRETTY_FUNCTION__,
-                                    message.c_str());
+    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     loading_ = false;
 }
 
 void Self::onReward() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = true;
 }
 
 void Self::onOpened() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onClosed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     if (rewardedVideos_.count(currentId_)) {
         currentId_.clear();
-        auto successful = mediation.finishRewardedVideo(rewarded_);        
+        auto successful = mediation.finishRewardedVideo(rewarded_);
         assert(successful);
         return;
     }

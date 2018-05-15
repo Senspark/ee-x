@@ -14,6 +14,8 @@
 #include <future>
 #include <string>
 
+#include "ee/core/LogLevel.hpp"
+
 namespace ee {
 namespace core {
 // lower string
@@ -31,6 +33,9 @@ bool toBool(const std::string& value);
 /// http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 std::string format(std::string formatString, ...);
 std::string format(std::string formatString, std::va_list args);
+
+void log(const LogLevel& level, const std::string& tag,
+         const std::string& message);
 
 /// Checks whether the current thread is the main thread (UI thread on Android).
 bool isMainThread();
@@ -81,6 +86,7 @@ std::string getDeviceId();
 } // namespace core
 
 using core::format;
+using core::log;
 using core::getDeviceId;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionCode;

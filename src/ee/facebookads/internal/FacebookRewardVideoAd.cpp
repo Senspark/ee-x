@@ -58,9 +58,12 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::RewardedVideo(IMessageBridge& bridge, const std::string& adId)
-    : bridge_(bridge) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+Self::RewardedVideo(IMessageBridge& bridge, Logger& logger,
+                    const std::string& adId)
+    : Super(logger)
+    , bridge_(bridge)
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     adId_ = adId;
 
     bridge_.registerHandler(
@@ -96,7 +99,7 @@ Self::RewardedVideo(IMessageBridge& bridge, const std::string& adId)
 }
 
 Self::~RewardedVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onRewarded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
     bridge_.deregisterHandler(k__onLoaded(adId_));
@@ -110,7 +113,7 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.call(k__loadRewardedVideo(adId_));
 }
 
@@ -119,7 +122,7 @@ bool Self::show() {
         return false;
     }
 
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__showRewardedVideo(adId_));
     if (not core::toBool(response)) {
         return false;
@@ -137,36 +140,35 @@ bool Self::show() {
 }
 
 void Self::createInternalVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__createInternalVideo(adId_));
 }
 
 void Self::destroyInternalVideo() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto response = bridge_.call(k__destroyInternalVideo(adId_));
 }
 #pragma mark - on
 void Self::onLoaded() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 
 void Self::onOpened() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onReward() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = true;
 }
 
 void Self::onClosed() {
-    Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.finishRewardedVideo(rewarded_);
     assert(successful);

@@ -16,7 +16,7 @@
 
 @interface EEUnityAds () <UnityAdsDelegate> {
     BOOL initialized_;
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 @end

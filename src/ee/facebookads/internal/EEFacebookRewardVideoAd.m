@@ -9,19 +9,19 @@
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/internal/EEFacebookRewardVideoAd.h"
 
-@interface EEFacebookRewardVideoAd () <FBRewardedVideoAdDelegate> {
+@interface EEFacebookRewardVideoAd () <FBRewardedVideoAdDelegate>
+@end
+
+@implementation EEFacebookRewardVideoAd {
+    id<EEIMessageBridge> bridge_;
     NSString* placementId_;
     FBRewardedVideoAd* rewardedVideoAd_;
 }
-
-@end
-
-@implementation EEFacebookRewardVideoAd
 
 - (NSString*)k__createInternalVideo {
     return [@"FacebookAds_createInternalVideo_"
@@ -74,52 +74,51 @@
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ registerHandler:[self k__createInternalVideo]
+                    callback:^(NSString* message) {
+                        [self createInternalVideo];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__createInternalVideo]
-                   callback:^(NSString* message) {
-                       [self createInternalVideo];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__destroyInternalVideo]
+                    callback:^(NSString* message) {
+                        [self destroyInternalVideo];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__destroyInternalVideo]
-                   callback:^(NSString* message) {
-                       [self destroyInternalVideo];
-                       return @"";
-                   }];
+    [bridge_ registerHandler:[self k__hasRewardedVideo]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self hasRewardVideo]];
+                    }];
 
-    [bridge registerHandler:[self k__hasRewardedVideo]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self hasRewardVideo]];
-                   }];
+    [bridge_ registerHandler:[self k__loadRewardedVideo]
+                    callback:^(NSString* message) {
+                        [self loadRewardedVideo];
+                        return @"";
+                    }];
 
-    [bridge registerHandler:[self k__loadRewardedVideo]
-                   callback:^(NSString* message) {
-                       [self loadRewardedVideo];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:[self k__showRewardedVideo]
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self showRewardVideo]];
-                   }];
+    [bridge_ registerHandler:[self k__showRewardedVideo]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[self showRewardVideo]];
+                    }];
 }
+
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge_ deregisterHandler:[self k__hasRewardedVideo]];
+    [bridge_ deregisterHandler:[self k__loadRewardedVideo]];
+    [bridge_ deregisterHandler:[self k__showRewardedVideo]];
 
-    [bridge deregisterHandler:[self k__hasRewardedVideo]];
-    [bridge deregisterHandler:[self k__loadRewardedVideo]];
-    [bridge deregisterHandler:[self k__showRewardedVideo]];
-
-    [bridge deregisterHandler:[self k__createInternalVideo]];
-    [bridge deregisterHandler:[self k__destroyInternalVideo]];
+    [bridge_ deregisterHandler:[self k__createInternalVideo]];
+    [bridge_ deregisterHandler:[self k__destroyInternalVideo]];
 }
 
-- (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId {
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+                  placementId:(NSString* _Nonnull)placementId {
     self = [super init];
     if (self == nil) {
         return self;
     }
+    bridge_ = bridge;
     placementId_ = [placementId copy];
     [self createInternalVideo];
     [self registerHandlers];
@@ -127,11 +126,14 @@
 }
 
 - (void)dealloc {
-    [self deregisterHandlers];
+    [placementId_ release];
+    placementId_ = nil;
+    [super dealloc];
 }
 
 - (void)destroy {
-    [rewardedVideoAd_ dealloc];
+    [self deregisterHandlers];
+    [self destroyInternalVideo];
 }
 
 #pragma mark - video methods
@@ -141,14 +143,14 @@
     }
     rewardedVideoAd_ =
         [[FBRewardedVideoAd alloc] initWithPlacementID:placementId_];
-    rewardedVideoAd_.delegate = self;
+    [rewardedVideoAd_ setDelegate:self];
 }
 
 - (void)destroyInternalVideo {
     if (rewardedVideoAd_ == nil) {
         return;
     }
-    rewardedVideoAd_.delegate = nil;
+    [rewardedVideoAd_ setDelegate:nil];
     [rewardedVideoAd_ release];
     rewardedVideoAd_ = nil;
 }
@@ -168,18 +170,15 @@
 
 #pragma mark - facebook delegate
 - (void)rewardedVideoAdDidClick:(FBRewardedVideoAd*)rewardedVideoAd {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onOpened]];
+    [bridge_ callCpp:[self k__onOpened]];
 }
 
 - (void)rewardedVideoAdDidLoad:(FBRewardedVideoAd*)rewardedVideoAd {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onLoaded]];
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)rewardedVideoAdDidClose:(FBRewardedVideoAd*)rewardedVideoAd {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onClosed]];
+    [bridge_ callCpp:[self k__onClosed]];
 }
 
 - (void)rewardedVideoAdWillClose:(FBRewardedVideoAd*)rewardedVideoAd {
@@ -187,13 +186,11 @@
 
 - (void)rewardedVideoAd:(FBRewardedVideoAd*)rewardedVideoAd
        didFailWithError:(NSError*)error {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onFailedToLoad]];
+    [bridge_ callCpp:[self k__onFailedToLoad]];
 }
 
 - (void)rewardedVideoAdComplete:(FBRewardedVideoAd*)rewardedVideoAd {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:[self k__onRewarded]];
+    [bridge_ callCpp:[self k__onRewarded]];
 }
 
 - (void)rewardedVideoAdWillLogImpression:(FBRewardedVideoAd*)rewardedVideoAd {

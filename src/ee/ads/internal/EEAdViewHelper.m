@@ -9,7 +9,7 @@
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/ads/internal/EEIAdView.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
 
@@ -24,7 +24,7 @@
 #endif // TARGET_OS_IOS
 
 @interface EEAdViewHelper () {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSString* prefix_;
     NSString* adId_;
 }
@@ -33,7 +33,7 @@
 
 @implementation EEAdViewHelper
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                        prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId {
     self = [super init];

@@ -8,11 +8,11 @@
 
 #import "ee/ads/internal/EEIInterstitialAd.h"
 
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEFacebookInterstitialAd : NSObject <EEIInterstitialAd>
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                   placementId:(NSString* _Nonnull)placementId;
 
 - (void)destroy;

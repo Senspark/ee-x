@@ -10,12 +10,12 @@
 
 #import "ee/admob/internal/EEAdMobBannerAd.h"
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobBannerAd () <GADBannerViewDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     BOOL isLoaded_;
     GADBannerView* bannerView_;
     GADAdSize adSize_;
@@ -44,7 +44,7 @@
     return kGADAdSizeInvalid;
 }
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(GADAdSize)adSize
                   testDevices:(NSArray<NSString*>* _Nullable)testDevices {

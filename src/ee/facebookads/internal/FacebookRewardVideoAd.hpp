@@ -23,22 +23,26 @@ public:
     virtual void load() override;
 
     virtual bool show() override;
-protected:
-    explicit RewardedVideo(const std::string& adId);
 
+protected:
     friend FacebookAds;
+
+    explicit RewardedVideo(IMessageBridge& bridge, const std::string& adId);
+
 private:
     std::string adId_;
-    bool rewarded_ {false};
-    
+    bool rewarded_{false};
+
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onReward();
     void onOpened();
     void onClosed();
-    
+
     void createInternalVideo();
     void destroyInternalVideo();
+
+    IMessageBridge& bridge_;
 };
 } // namespace facebook
 } // namespace ee

@@ -9,13 +9,13 @@
 #import <FBAudienceNetwork/FBAdView.h>
 
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/internal/EEFacebookBannerAd.h"
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     FBAdView* adView_;
     NSString* adId_;
     FBAdSize adSize_;
@@ -44,7 +44,7 @@
     return kFBAdSize320x50;
 }
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(FBAdSize)adSize {
     self = [super init];

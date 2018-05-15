@@ -43,7 +43,6 @@ constexpr auto k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
     
 constexpr auto k__createRewardVideoAd   = "FacebookAds_createRewardVideoAd";
 constexpr auto k__destroyRewardVideoAd  = "FacebookAds_destroyRewardVideoAd";
-    
 } // namespace
 
 namespace {
@@ -125,19 +124,17 @@ bool Self::destroyInterstitialAd(const std::string& placementId) {
 
 std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createRewardVideoAd, placementId);
+    auto response = bridge_.call(k__createRewardVideoAd, placementId);
     if (not core::toBool(response)) {
         return std::make_shared<NullRewardedVideo>();
     }
-    return std::shared_ptr<IRewardedVideo>(new RewardedVideo(placementId));
+    return std::shared_ptr<IRewardedVideo>(
+        new RewardedVideo(bridge_, placementId));
 }
 
 bool Self::destroyRewardVideoAd(const std::string& placementId) {
-    auto&& bridge = MessageBridge::getInstance();
-    auto&& response = bridge.call(k__destroyRewardVideoAd, placementId);
+    auto&& response = bridge_.call(k__destroyRewardVideoAd, placementId);
     return core::toBool(response);
 }
-
 } // namespace facebook
 } // namespace ee

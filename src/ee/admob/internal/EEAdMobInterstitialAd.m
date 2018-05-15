@@ -10,12 +10,12 @@
 
 #import "ee/admob/internal/EEAdMobInterstitialAd.h"
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobInterstitialAd () <GADInterstitialDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSString* adId_;
     GADInterstitial* interstitialAd_;
     NSArray<NSString*>* testDevices_;
@@ -26,7 +26,7 @@
 
 @implementation EEAdMobInterstitialAd
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                   testDevices:(NSArray<NSString*>* _Nullable)testDevices {
     self = [super init];

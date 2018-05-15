@@ -9,14 +9,14 @@
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/EEFacebookNativeAdView.h"
 #import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 
     /// Internal Facebook ad.
     FBNativeAd* nativeAd_;
@@ -43,7 +43,7 @@
 
 static NSString* const k__tag = @"FacebookNativeAd";
 
-- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id)initWithBridge:(id<EEIMessageBridge>)bridge
                 adId:(NSString* _Nonnull)adId
               layout:(NSString* _Nonnull)layoutName {
     self = [super init];

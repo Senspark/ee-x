@@ -8,13 +8,13 @@
 
 #import "ee/ads/internal/EEIAdView.h"
 
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEFacebookBannerAd : NSObject <EEIAdView>
 
 + (FBAdSize)adSizeFor:(int)index;
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(FBAdSize)adSize;
 

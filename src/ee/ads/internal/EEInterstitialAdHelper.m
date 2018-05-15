@@ -8,11 +8,11 @@
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
 #import "ee/ads/internal/EEIInterstitialAd.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEInterstitialAdHelper () {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSString* prefix_;
     NSString* adId_;
 }
@@ -21,7 +21,7 @@
 
 @implementation EEInterstitialAdHelper
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                        prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId {
     self = [super init];

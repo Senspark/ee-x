@@ -8,13 +8,13 @@
 
 #import "ee/ads/internal/EEIAdView.h"
 
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEAdMobBannerAd : NSObject <EEIAdView>
 
 + (GADAdSize)adSizeFor:(int)index;
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(GADAdSize)adSize
                   testDevices:(NSArray<NSString*>* _Nullable)testDevices;

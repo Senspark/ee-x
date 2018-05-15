@@ -8,11 +8,11 @@
 
 #import "ee/ads/internal/EEIAdView.h"
 
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEAdMobNativeAd : NSObject <EEIAdView>
 
-- (id _Nullable)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                         layout:(NSString* _Nonnull)layoutName

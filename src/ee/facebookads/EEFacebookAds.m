@@ -19,7 +19,7 @@
 #import "ee/facebookads/internal/EEFacebookRewardVideoAd.h"
 
 @interface EEFacebookAds () {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;

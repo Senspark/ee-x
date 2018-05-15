@@ -6,19 +6,20 @@
 //
 //
 
-#include "ee/ads/internal/MediationManager.hpp"
+#include <cassert>
+
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/facebookads/internal/FacebookRewardVideoAd.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
-#include <cassert>
+
 namespace ee {
 namespace facebook {
 using Self = RewardedVideo;
-namespace {
 
+namespace {
 auto k__createInternalVideo(const std::string& id) {
     return "FacebookAds_createInternalVideo_" + id;
 }
@@ -57,36 +58,36 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::RewardedVideo(const std::string& adId) {
+Self::RewardedVideo(IMessageBridge& bridge, const std::string& adId)
+    : bridge_(bridge) {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
     adId_ = adId;
 
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onReward();
             return "";
         },
         k__onRewarded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
         },
         k__onFailedToLoad(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
         k__onLoaded(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onOpened();
             return "";
         },
         k__onOpened(adId_));
-    bridge.registerHandler(
+    bridge_.registerHandler(
         [this](const std::string& message) {
             onClosed();
             return "";
@@ -96,35 +97,30 @@ Self::RewardedVideo(const std::string& adId) {
 
 Self::~RewardedVideo() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__onRewarded(adId_));
-    bridge.deregisterHandler(k__onFailedToLoad(adId_));
-    bridge.deregisterHandler(k__onLoaded(adId_));
-    bridge.deregisterHandler(k__onOpened(adId_));
-    bridge.deregisterHandler(k__onClosed(adId_));
+    bridge_.deregisterHandler(k__onRewarded(adId_));
+    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onLoaded(adId_));
+    bridge_.deregisterHandler(k__onOpened(adId_));
+    bridge_.deregisterHandler(k__onClosed(adId_));
 }
 
 bool Self::isLoaded() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__hasRewardedVideo(adId_));
+    auto response = bridge_.call(k__hasRewardedVideo(adId_));
     return core::toBool(response);
 }
 
 void Self::load() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__loadRewardedVideo(adId_));
+    bridge_.call(k__loadRewardedVideo(adId_));
 }
 
 bool Self::show() {
-    if(not isLoaded())
-    {
+    if (not isLoaded()) {
         return false;
     }
 
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__showRewardedVideo(adId_));
+    auto response = bridge_.call(k__showRewardedVideo(adId_));
     if (not core::toBool(response)) {
         return false;
     }
@@ -137,20 +133,17 @@ bool Self::show() {
         this->createInternalVideo();
     });
     assert(successful);
-
     return true;
 }
 
 void Self::createInternalVideo() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createInternalVideo(adId_));
+    auto response = bridge_.call(k__createInternalVideo(adId_));
 }
-    
+
 void Self::destroyInternalVideo() {
     Logger::getSystemLogger().debug("%s", __PRETTY_FUNCTION__);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__destroyInternalVideo(adId_));
+    auto response = bridge_.call(k__destroyInternalVideo(adId_));
 }
 #pragma mark - on
 void Self::onLoaded() {

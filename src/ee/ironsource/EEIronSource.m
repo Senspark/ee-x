@@ -17,7 +17,7 @@
 
 @interface EEIronSource () <ISRewardedVideoDelegate, ISInterstitialDelegate> {
     BOOL initialized_;
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 @end

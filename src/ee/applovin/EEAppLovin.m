@@ -34,21 +34,21 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
 @interface EEAppLovinIncentivizedInterstitialAdDisplayDelegate
     : NSObject <ALAdDisplayDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 @end
 
 @interface EEAppLovinInterstitialAdDisplayDelegate
     : NSObject <ALAdDisplayDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 @end
 
 @implementation EEAppLovinIncentivizedInterstitialAdDisplayDelegate
 
-- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge {
+- (id)initWithBridge:(id<EEIMessageBridge>)bridge {
     self = [super init];
     if (self == nil) {
         return nil;
@@ -74,7 +74,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
 @implementation EEAppLovinInterstitialAdDisplayDelegate
 
-- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge {
+- (id)initWithBridge:(id<EEIMessageBridge>)bridge {
     self = [super init];
     if (self == nil) {
         return nil;
@@ -101,7 +101,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 
 @interface EEAppLovin () <ALAdRewardDelegate, ALAdLoadDelegate> {
     BOOL initialized_;
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     ALSdk* sdk_;
     ALInterstitialAd* interstitialAd_;
     EEAppLovinInterstitialAdDisplayDelegate* interstitialAdDisplayDelegate_;

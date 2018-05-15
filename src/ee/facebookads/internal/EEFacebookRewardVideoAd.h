@@ -6,15 +6,19 @@
 //
 //
 
-@interface EEFacebookRewardVideoAd : NSObject 
+@protocol EEIMessageBridge;
 
-- (id _Nonnull)initWithPlacementId:(NSString* _Nonnull)placementId;
+@interface EEFacebookRewardVideoAd : NSObject
+
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+                  placementId:(NSString* _Nonnull)placementId;
 
 - (void)destroy;
 
--(BOOL) hasRewardVideo;
+- (BOOL)hasRewardVideo;
 
--(void) loadRewardedVideo;
+- (void)loadRewardedVideo;
 
--(BOOL) showRewardVideo;
+- (BOOL)showRewardVideo;
+
 @end

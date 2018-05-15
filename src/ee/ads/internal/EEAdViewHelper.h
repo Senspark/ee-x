@@ -20,11 +20,11 @@
 #endif // TARGET_OS_IOS
 
 @protocol EEIAdView;
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEAdViewHelper : NSObject
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                        prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId;
 

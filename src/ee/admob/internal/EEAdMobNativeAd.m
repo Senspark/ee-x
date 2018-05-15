@@ -10,12 +10,12 @@
 
 #import "ee/admob/internal/EEAdMobNativeAd.h"
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobNativeAd () <GADAdLoaderDelegate,
                                GADNativeAppInstallAdLoaderDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     GADAdLoader* adLoader_;
     NSString* adId_;
     NSArray<GADAdLoaderAdType>* adTypes_;
@@ -31,7 +31,7 @@
 
 @implementation EEAdMobNativeAd
 
-- (id _Nullable)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                         layout:(NSString* _Nonnull)layoutName

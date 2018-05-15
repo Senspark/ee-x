@@ -9,13 +9,13 @@
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
-#import "ee/core/EEMessageBridge.h"
+#import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/internal/EEFacebookInterstitialAd.h"
 
 @interface EEFacebookInterstitialAd () <FBInterstitialAdDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSString* placementId_;
     FBInterstitialAd* interstitialAd_;
     EEInterstitialAdHelper* helper_;
@@ -25,7 +25,7 @@
 
 @implementation EEFacebookInterstitialAd
 
-- (id _Nonnull)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                   placementId:(NSString* _Nonnull)placementId {
     self = [super init];
     if (self == nil) {
@@ -140,7 +140,7 @@
     if (![interstitialAd_ isAdValid]) {
         return NO;
     }
-    
+
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     return [interstitialAd_ showAdFromRootViewController:rootView];
 }

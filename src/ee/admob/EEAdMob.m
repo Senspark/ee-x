@@ -17,7 +17,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMob () <GADRewardBasedVideoAdDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSMutableArray<NSString*>* testDevices_;
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;

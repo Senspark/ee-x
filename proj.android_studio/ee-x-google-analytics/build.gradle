@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api "com.google.android.gms:play-services-analytics:${rootProject.ext.playservicesLibraryVersion}"
+    api "com.google.android.gms:play-services-analytics:15.0.2"
 }

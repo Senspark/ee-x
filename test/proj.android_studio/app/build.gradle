@@ -109,17 +109,21 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libcocos2dx')
-    implementation project(':ee-x-notification')
-    implementation project(':ee-x-crashlytics')
-    implementation project(':ee-x-google-analytics')
-    implementation project(':ee-x-firebase')
     implementation project(':ee-x-ads')
     implementation project(':ee-x-admob')
     implementation project(':ee-x-applovin')
+    implementation project(':ee-x-crashlytics')
     implementation project(':ee-x-facebook-ads')
+    implementation project(':ee-x-google-analytics')
+    implementation project(':ee-x-firebase-analytics')
+    implementation project(':ee-x-firebase-dynamic-link')
+    implementation project(':ee-x-firebase-messaging')
+    implementation project(':ee-x-firebase-remote-config')
+    implementation project(':ee-x-firebase-storage')
+    implementation project(':ee-x-ironsource')
+    implementation project(':ee-x-notification')
     implementation project(':ee-x-unity-ads')
     implementation project(':ee-x-vungle')
-    implementation project(':ee-x-ironsource')
 
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
     implementation "com.android.support:cardview-v7:${rootProject.ext.supportLibraryVersion}"
@@ -127,7 +131,8 @@ dependencies {
     implementation "com.android.support:support-v4:${rootProject.ext.supportLibraryVersion}"
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'com.google.android.gms:play-services-base:11.8.0'
+    implementation 'com.google.firebase:firebase-core:15.0.2'
+    implementation 'com.google.android.gms:play-services-base:15.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

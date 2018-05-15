@@ -9,6 +9,7 @@ import com.ee.applovin.AppLovin;
 import com.ee.core.PluginManager;
 import com.ee.crashlytics.Crashlytics;
 import com.ee.facebook.FacebookAds;
+import com.ee.firebase.core.Firebase;
 import com.ee.ironsource.IronSource;
 import com.ee.notification.Notification;
 import com.ee.unityads.UnityAds;
@@ -25,12 +26,13 @@ public class MyApplication extends Application {
 
         PluginManager manager = PluginManager.getInstance();
         manager.initializePlugins(this);
-        manager.addPlugin(new Crashlytics(this));
-        manager.addPlugin(new Notification(this));
         manager.addPlugin(new AdMob(this));
         manager.addPlugin(new AppLovin(this));
+        manager.addPlugin(new Crashlytics(this));
         manager.addPlugin(new FacebookAds(this));
+        manager.addPlugin(new Firebase());
         manager.addPlugin(new IronSource());
+        manager.addPlugin(new Notification(this));
         manager.addPlugin(new UnityAds());
         manager.addPlugin(new Vungle(this));
     }

@@ -62,20 +62,19 @@ matrix:
 
       install:
         - travis_retry sudo apt-get install unzip
-        - travis_retry wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O ndk.zip
+        - travis_retry wget https://dl.google.com/android/repository/android-ndk-r17-linux-x86_64.zip -O ndk.zip
         - chmod a+x ndk.zip
         - unzip ./ndk.zip 2>&1 >/dev/null
-        - chmod a+x ./android-ndk-r10e/ndk-build
+        - chmod a+x ./android-ndk-r17/ndk-build
+        - travis_retry sh test/download_deps.sh
 
       before_script:
         # Overwrite.
-        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r10e') > 'test/proj.android_studio/local.properties'
-        
+        - echo -e $(echo 'ndk.dir=')$(pwd)$(echo '/android-ndk-r17') > 'test/proj.android_studio/local.properties'        
         - cat test/proj.android_studio/local.properties
-        - chmod +x test/proj.android_studio/gradlew
 
       script:
-        # - test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
+        - sh test/proj.android_studio/gradlew -p test/proj.android_studio clean assembleRelease
 
 notifications:
   slack:

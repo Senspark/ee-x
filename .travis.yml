@@ -66,7 +66,7 @@ matrix:
         - chmod a+x ndk.zip
         - unzip ./ndk.zip 2>&1 >/dev/null
         - chmod a+x ./android-ndk-r17/ndk-build
-        - travis_retry sh test/download_deps.sh
+        - travis_retry bash test/download_deps.sh
 
       before_script:
         # Overwrite.

@@ -84,6 +84,7 @@ void Self::setLinkReceivedCallback(const LinkReceivedCallback& callback) {
     ::firebase::dynamic_links::SetListener(nullptr);
     auto listener = std::make_unique<Listener>(
         std::bind(&Self::onLinkReceived, this, std::placeholders::_1));
+    ::firebase::dynamic_links::SetListener(listener.get());
     listener_ = std::move(listener);
 #endif // EE_X_MOBILE
 }

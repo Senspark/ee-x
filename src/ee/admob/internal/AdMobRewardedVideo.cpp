@@ -17,7 +17,8 @@ namespace ee {
 namespace admob {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Logger& logger, AdMob* plugin, const std::string& adId)
+Self::RewardedVideo(const Logger& logger, AdMob* plugin,
+                    const std::string& adId)
     : Super(logger)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

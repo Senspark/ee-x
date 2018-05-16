@@ -23,7 +23,7 @@ public:
     UnityAds();
     ~UnityAds();
     
-    explicit UnityAds(Logger& logger);
+    explicit UnityAds(const Logger& logger);
 
     /// Initializes Unity Ads.
     /// @param[in] gameId Unity Ads game ID.
@@ -60,7 +60,7 @@ private:
     bool displayed_;
 
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
 };

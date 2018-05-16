@@ -15,7 +15,7 @@ namespace ee {
 namespace ads {
 using Self = IRewardedVideo;
 
-Self::IRewardedVideo(Logger& logger)
+Self::IRewardedVideo(const Logger& logger)
     : logger_(logger) {
     callback_ = nullptr;
 }

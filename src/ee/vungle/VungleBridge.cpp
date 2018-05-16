@@ -26,7 +26,7 @@ constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 Self::Vungle()
     : Self(Logger::getSystemLogger()) {}
 
-Self::Vungle(Logger& logger)
+Self::Vungle(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);

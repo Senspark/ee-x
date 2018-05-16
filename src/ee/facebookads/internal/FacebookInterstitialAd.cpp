@@ -53,7 +53,7 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::InterstitialAd(IMessageBridge& bridge, Logger& logger,
+Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
                      FacebookAds* plugin, const std::string& placementId)
     : bridge_(bridge)
     , logger_(logger) {

@@ -54,7 +54,7 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit NativeAd(IMessageBridge& bridge, Logger& logger,
+    explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
                       FacebookAds* plugin, const std::string& adId);
 
     bool createInternalAd();
@@ -73,7 +73,7 @@ private:
 
     std::string adId_;
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     FacebookAds* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

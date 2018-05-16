@@ -28,7 +28,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Logger& logger, AppLovin* plugin);
+    explicit RewardedVideo(const Logger& logger, AppLovin* plugin);
 
 private:
     friend AppLovin;

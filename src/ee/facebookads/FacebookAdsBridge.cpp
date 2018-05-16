@@ -57,7 +57,7 @@ constexpr auto k__identifiers = "identifiers";
 Self::FacebookAds()
     : Self(Logger::getSystemLogger()) {}
 
-Self::FacebookAds(Logger& logger)
+Self::FacebookAds(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {}
 

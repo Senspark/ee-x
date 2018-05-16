@@ -13,33 +13,54 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <ee/core/IMessageBridge.hpp>
 
-#include "ee/Macro.hpp"
+#include <ee/Macro.hpp>
+#include <ee/CoreFwd.hpp>
+
+#if defined(EE_X_MOBILE)
+namespace firebase {
+namespace dynamic_links {
+class Listener;
+} // namespace dynamic_links
+} // namespace firebase
+#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
-
+// https://firebase.google.com/docs/dynamic-links/cpp/receive
 class DynamicLink final {
-    using OnReceiveLinkCallback = std::function<void(std::string link)>;
-    
+private:
+    using LinkReceivedCallback = std::function<void(const std::string& link)>;
+
 public:
     DynamicLink();
     ~DynamicLink();
 
-    void setupReceiver(const OnReceiveLinkCallback& callback);
+    explicit DynamicLink(Logger& logger);
 
-    void registerHandlers();
+    bool initialize();
 
-    void deRegisterHandlers();
+    /// Fetch any pending dynamic links. Each pending link will trigger a call
+    /// to the registered Listener class.
+    void fetch();
 
-    void onReceiveDynamicLink(std::string link);
+    void setLinkReceivedCallback(const LinkReceivedCallback& callback);
+
+protected:
+    void onLinkReceived(const std::string& link);
 
 private:
-    IMessageBridge& bridge_;
-    OnReceiveLinkCallback callback_;
-};
+#if defined(EE_X_MOBILE)
+    class Listener;
+#endif // EE_X_MOBILE
 
+    bool initialized_;
+    Logger& logger_;
+    LinkReceivedCallback callback_;
+#if defined(EE_X_MOBILE)
+    std::unique_ptr<::firebase::dynamic_links::Listener> listener_;
+#endif // EE_X_MOBILE
+};
 } // namespace firebase
 } // namespace ee
 

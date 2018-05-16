@@ -36,6 +36,7 @@ protected:
 private:
     std::string adId_;
     bool rewarded_{false};
+    bool loading_{false};
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

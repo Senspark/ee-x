@@ -186,7 +186,10 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
     @Override
     public void onError(Ad ad, AdError adError) {
         MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailedToLoad());
+        
+        if(adError.getErrorCode() != AdError.INTERNAL_ERROR_CODE) {
+            bridge.callCpp(k__onFailedToLoad());
+        }
     }
 
     @Override

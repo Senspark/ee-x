@@ -113,6 +113,11 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
+    if(loading_)
+    {
+        return;
+    }
+    loading_ = true;
     logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.call(k__loadRewardedVideo(adId_));
 }
@@ -151,10 +156,14 @@ void Self::destroyInternalVideo() {
 #pragma mark - on
 void Self::onLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    loading_ = false;
 }
 
 void Self::onFailedToLoad(const std::string& message) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    loading_ = false;
+    destroyInternalVideo();
+    createInternalVideo();
 }
 
 void Self::onOpened() {

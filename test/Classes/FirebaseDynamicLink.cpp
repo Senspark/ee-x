@@ -22,6 +22,5 @@ Self::FirebaseDynamicLink() {
         getLogger().info("link = %s", link.c_str());
     });
     plugin_->fetch();
-    // plugin_
 }
 } // namespace eetest

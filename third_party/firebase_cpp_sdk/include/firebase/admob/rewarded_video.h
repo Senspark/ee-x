@@ -89,7 +89,9 @@ enum PresentationState {
   kPresentationStateCoveringUI,
   /// All of the above conditions are true *except* that the video associated
   /// with the ad began playing at some point in the past.
-  kPresentationStateVideoHasStarted
+  kPresentationStateVideoHasStarted,
+  /// The rewarded video has played and completed.
+  kPresentationStateVideoHasCompleted,
 };
 
 /// @brief A reward to be given to the user in exchange for watching a rewarded

@@ -24,6 +24,7 @@ namespace storage {
 
 namespace internal {
 class StorageInternal;
+class MetadataInternal;
 }  // namespace internal
 
 class StorageReference;
@@ -121,6 +122,7 @@ class Storage {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class Metadata;
+  friend class internal::MetadataInternal;
 
   Storage(::firebase::App* app, const char* url);
   Storage(const Storage& src);

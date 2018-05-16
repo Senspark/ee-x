@@ -13,6 +13,7 @@ namespace database {
 namespace internal {
 class Callbacks;
 class DataSnapshotInternal;
+class DatabaseInternal;
 class DatabaseReferenceInternal;
 class QueryInternal;
 }  // namespace internal
@@ -206,6 +207,7 @@ class DataSnapshot {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::DatabaseReferenceInternal;
+  friend class internal::DatabaseInternal;
   friend class internal::DataSnapshotInternal;
   friend class internal::Callbacks;
   friend class internal::QueryInternal;

@@ -12,6 +12,7 @@ namespace storage {
 namespace internal {
 class ListenerInternal;
 class StorageReferenceInternal;
+class RestOperation;
 }  // namespace internal
 /// @endcond
 
@@ -47,6 +48,7 @@ class Listener {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::StorageReferenceInternal;
+  friend class internal::RestOperation;
 
   // Platform specific data.
   internal::ListenerInternal* impl_;

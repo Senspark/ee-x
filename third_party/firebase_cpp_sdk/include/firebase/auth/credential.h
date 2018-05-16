@@ -38,6 +38,7 @@ class Credential {
   friend class JniAuthPhoneListener;
   friend class OAuthProvider;
   friend class PhoneAuthProvider;
+  friend class PlayGamesAuthProvider;
   friend class TwitterAuthProvider;
   /// @endcond
 
@@ -138,6 +139,16 @@ class GoogleAuthProvider {
                                   const char* access_token);
 };
 
+/// @brief Use a server auth code provided by Google Play Games to authenticate.
+class PlayGamesAuthProvider {
+ public:
+  /// Generate a credential from the given Server Auth Code.
+  ///
+  /// @param server_auth_code Play Games Sign in Server Auth Code.
+  ///
+  /// @returns New Credential.
+  static Credential GetCredential(const char* server_auth_code);
+};
 
 /// @brief Use a token and secret provided by Twitter to authenticate.
 class TwitterAuthProvider {

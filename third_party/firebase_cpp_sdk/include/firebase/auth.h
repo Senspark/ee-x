@@ -385,14 +385,22 @@ class Auth {
   friend class IdTokenRefreshListener;
   friend class IdTokenRefreshThread;
 
-  friend void StartAuthTokenRefresher(AuthData* authData);
-  friend void StopAuthTokenRefresher(AuthData* authData);
-  friend void ResetAuthRefreshCounter(AuthData* authData);
+  friend void EnableTokenAutoRefresh(AuthData* authData);
+  friend void DisableTokenAutoRefresh(AuthData* authData);
+  friend void ResetTokenRefreshCounter(AuthData* authData);
   /// @endcond
 
   // Provides access to the auth token for the current user.  Returns the
   // current user's auth token, or an empty string, if there isn't one.
   static bool GetAuthTokenForRegistry(App* app, void* /*unused*/, void* out);
+
+  // Starts and stops a thread to ensure that the cached auth token is never
+  // kept long enough for it to expire.  Refcounted, so multiple classes can
+  // register this without causing problems.
+  static bool StartTokenRefreshThreadForRegistry(App* app, void* /*unused*/,
+                                                 void* /*unused*/);
+  static bool StopTokenRefreshThreadForRegistry(App* app, void* /*unused*/,
+                                                void* /*unused*/);
 
   // Init and Destroy the platform specific auth data.
   void InitPlatformAuth(AuthData* const auth_data);

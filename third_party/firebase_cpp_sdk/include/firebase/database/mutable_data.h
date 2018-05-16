@@ -9,6 +9,7 @@
 namespace firebase {
 namespace database {
 namespace internal {
+class DatabaseInternal;
 class DatabaseReferenceInternal;
 class MutableDataInternal;
 }  // namespace internal
@@ -18,19 +19,44 @@ class MutableDataInternal;
 /// to the desired data at that location.
 class MutableData {
  public:
+  /// @brief Copy constructor.
+  ///
+  /// This only makes a shallow copy and copies of MutableData will share the
+  /// same internal data. I.e. changes to one copy will appear in the other.
+  /// The main reason the copy constructor is provided is to allow the Child
+  /// method to return a MutableData by value.
+  MutableData(const MutableData& rhs);
+
+  /// @brief Copy assignment operator
+  ///
+  /// @deprecated MutableData is not supposed to be assigned.
+  FIREBASE_DEPRECATED MutableData& operator=(const MutableData& rhs);
+
+#if defined(FIREBASE_USE_MOVE_OPERATORS)
+  /// Move constructor
+  /// Move is more efficient than copy and delete.
+  MutableData(MutableData&& rhs);
+
+  // MutableData is not supposed to be assigned.
+  MutableData& operator=(MutableData&& rhs) = delete;
+#endif  // defined(FIREBASE_USE_MOVE_OPERATORS)
+
   /// Destructor.
   ~MutableData();
 
   /// @brief Used to obtain a MutableData instance that encapsulates
   /// the data and priority at the given relative path.
   ///
+  /// Note that changes made to a child MutableData instance will be visible
+  /// to the parent and vice versa.
+  ///
   /// @param[in] path Path relative to this snapshot's location.
   /// The pointer only needs to be valid during this call.
   ///
   /// @returns MutableData for the Child relative to this location. The memory
   /// will be freed when the Transaction is finished.
-
   MutableData Child(const char* path);
+
   /// @brief Used to obtain a MutableData instance that encapsulates
   /// the data and priority at the given relative path.
   ///
@@ -197,6 +223,7 @@ class MutableData {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::DatabaseReferenceInternal;
+  friend class internal::DatabaseInternal;
   friend class internal::MutableDataInternal;
   /// @endcond
 

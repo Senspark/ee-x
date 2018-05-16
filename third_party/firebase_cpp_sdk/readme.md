@@ -10,15 +10,32 @@ services on *iOS* and *Android*:
 * Firebase Authentication
 * Firebase Cloud Messaging
 * Firebase Dynamic Links
+* Firebase Instance ID
+* Firebase Invites
 * Firebase Realtime Database
 * Firebase Remote Config
 * Firebase Storage
 
+## Desktop Workflow Implementations
+
+The Firebase C++ SDK includes desktop workflow support for the following subset
+of Firebase features, enabling their use on Windows, OS X, and Linux:
+
+* Firebase Authentication
+* Firebase Remote Config
+* Firebase Realtime Database*
+* Firebase Storage
+
+(* See Known Issues in the Release Notes below.)
+
+This is a Beta feature, and is intended for workflow use only during the
+development of your app, not for publicly shipping code.
+
 ## Stub Implementations
 
-Stub (non-functional) implementations are provided for convenience when
-building for Windows, OSX and Linux so the developer does not need to
-conditionally compile code when also targeting the desktop.
+Stub (non-functional) implementations of the remaining libraries are provided
+for convenience when building for Windows, Mac OS, and Linux so that you don't
+need to conditionally compile code when also targeting the desktop.
 
 Directory Structure
 -------------------
@@ -26,34 +43,35 @@ Directory Structure
 The following table provides an overview of the Firebase C++ SDK directory
 structure.
 
-| Directories                   | Contents                                    |
-|-------------------------------|---------------------------------------------|
-| include                       | C++ headers                                 |
-| frameworks/ios/ARCH           | iOS frameworks (compiled against libc++)    |
-|                               | A multi-architecture framework is \         |
-|                               | provided in the *universal* directory.      |
-| libs/ios/ARCH                 | OSX static libraries (compiled against \    |
-|                               | libc++)                                     |
-|                               | Multi-architecture libraries are  \         |
-|                               | provided in the *universal* directory.      |
-| libs/android/ARCH/STL         | Android (GCC 4.8+ compatible) static \      |
-|                               | libraries for each architecture and STL \   |
-|                               | variant.                                    |
-|                               | _STL variants available:_                   |
-|                               | * `c++`: LLVM libc++ runtime (recommended)  |
-|                               | * `gnustl`: GNU STL                         |
-|                               | * `stlport`: STLport runtime                |
-|                               | More information can be found in the \      |
-|                               | [NDK C++ Helper Runtimes](https://developer.android.com/ndk/guides/cpp-support.html#runtimes) \ |
-|                               | documentation.                              |
-| *Stub Implementations*        |                                             |
-| libs/darwin                   | OSX static libraries (stub \                |
-|                               | implementation, compiled against libc++)    |
-| frameworks/darwin             | OSX frameworks (stub implementations, \     |
-|                               | compiled against libc++)                    |
-| libs/linux                    | Linux static libraries (GCC 4.7+, libc++).  |
-| libs/windows                  | Windows static libraries \                  |
-|                               | (stub implementation, MSVC 2015+)           |
+| Directories                    | Contents                                    |
+|--------------------------------|---------------------------------------------|
+| include                        | C++ headers                                 |
+| frameworks/ios/ARCH            | iOS frameworks (compiled against libc++)    |
+|                                | A multi-architecture framework is \         |
+|                                | provided in the *universal* directory.      |
+| libs/ios/ARCH                  | iOS static libraries (compiled against \    |
+|                                | libc++)                                     |
+|                                | Multi-architecture libraries are  \         |
+|                                | provided in the *universal* directory.      |
+| libs/android/ARCH/STL          | Android (GCC 4.8+ compatible) static \      |
+|                                | libraries for each architecture and STL \   |
+|                                | variant.                                    |
+|                                | _STL variants available:_                   |
+|                                | * `c++`: LLVM libc++ runtime (recommended)  |
+|                                | * `gnustl`: GNU STL                         |
+|                                | * `stlport`: STLport runtime                |
+|                                | More information can be found in the \      |
+|                                | [NDK C++ Helper Runtimes](https://developer.android.com/ndk/guides/cpp-support.html#runtimes) \ |
+|                                | documentation.                              |
+| *Desktop Implementations*      |                                             |
+| libs/darwin                    | OS X static libraries (desktop or stub \    |
+|                                | implementations, compiled against libc++)   |
+| frameworks/darwin              | OS X frameworks (desktop or stub \          |
+|                                | implementations, compiled against libc++)   |
+| libs/linux                     | Linux static libraries (desktop or stub \   |
+|                                | implementations, GCC 4.8+, libc++).         |
+| libs/windows                   | Windows static libraries (desktop or stub \ |
+|                                | implementations, MSVC 2015+)                |
 
 Library / Framework Dependencies
 --------------------------------
@@ -82,6 +100,10 @@ distributed as part of the core Firebase
 | Firebase Dynamic Links   | libdynamic_links.a<br> \                         |
 |                          | libapp.a<br> \                                   |
 |                          | com.google.android.gms:firebase-invites \        |
+|                          | (Maven package)                                  |
+| Firebase Instance ID     | libinstance_id.a<br> \                           |
+|                          | libapp.a<br> \                                   |
+|                          | com.google.firebase:firebase-iid \               |
 |                          | (Maven package)                                  |
 | Firebase Invites         | libinvites.a<br> \                               |
 |                          | libapp.a<br> \                                   |
@@ -133,6 +155,9 @@ their preferred build environment.
 | Firebase Dynamic Links       | firebase_dynamic_links.framework<br> \       |
 |                              | firebase.framework<br> \                     |
 |                              | Firebase/DynamicLinks Cocoapod               |
+| Firebase Instance ID         | firebase_instance_id.framework<br> \         |
+|                              | firebase.framework<br> \                     |
+|                              | FirebaseInstanceID Cocoapod                  |
 | Firebase Invites             | firebase_invites.framework<br> \             |
 |                              | firebase.framework<br> \                     |
 |                              | Firebase/Invites Cocoapod                    |
@@ -175,6 +200,9 @@ required for each SDK feature.
 | Firebase Dynamic Links       | libdynamic_links.a<br> \                     |
 |                              | libapp.a<br> \                               |
 |                              | Firebase/DynamicLinks Cocoapod               |
+| Firebase Instance ID         | libinstance_id.a<br> \                       |
+|                              | libapp.a<br> \                               |
+|                              | Firebase/Invites Cocoapod                    |
 | Firebase Invites             | libinvites.a<br> \                           |
 |                              | libapp.a<br> \                               |
 |                              | Firebase/Invites Cocoapod                    |
@@ -196,30 +224,122 @@ required for each SDK feature.
 |                              | Firebase/Auth Cocoapod                       |
 
 
-### Stub Implementation Dependencies
+### Desktop Implementation Dependencies
 
-| Feature                      | Required Libraries and Gradle Packages       |
-|------------------------------|----------------------------------------------|
-| Firebase AdMob               | libadmob.a<br> \                             |
-|                              | libapp.a<br>                                 |
-| Firebase Analytics           | libanalytics.a<br> \                         |
-|                              | libapp.a<br>                                 |
-| Firebase Authentication      | libauth.a<br>  \                             |
-|                              | libapp.a<br>                                 |
-| Firebase Dynamic Links       | libdynamic_links.a<br> \                     |
-|                              | libapp.a<br>                                 |
-| Firebase Invites             | libinvites.a<br> \                           |
-|                              | libapp.a<br>                                 |
-| Firebase Cloud Messaging     | libmessaging.a<br> \                         |
-|                              | libapp.a<br>                                 |
-| Firebase Realtime Database   | libdatabase.a<br> \                          |
-|                              | libauth.a<br> \                              |
-|                              | libapp.a<br>                                 |
-| Firebase Remote Config       | libremote_config.a<br> \                     |
-|                              | libapp.a<br>                                 |
-| Firebase Storage             | libstorage.a<br> \                           |
-|                              | libauth.a<br> \                              |
-|                              | libapp.a<br>                                 |
+#### Linux libraries
+
+For Linux, library versions are provided for 32-bit (i386) and 64-bit (x86_64)
+platforms.
+
+| Feature                         | Required Libraries                       |
+|---------------------------------|------------------------------------------|
+| Firebase Authentication         | libfirebase_auth.a<br>  \                |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Realtime Database      | libfirebase_database.a<br> \             |
+|                                 | libfirebase_auth.a<br> \                 |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Remote Config          | libfirebase_remote_config.a<br> \        |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Storage                | libfirebase_storage.a<br> \              |
+|                                 | libfirebase_auth.a<br> \                 |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase AdMob (stub)           | libfirebase_admob.a<br> \                |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Analytics (stub)       | libfirebase_analytics.a<br> \            |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Dynamic Links (stub)   | libfirebase_dynamic_links.a<br> \        |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Instance ID (stub)     | libfirebase_instance_id.a<br> \          |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Invites (stub)         | libfirebase_invites.a<br> \              |
+|                                 | libfirebase_app.a<br>                    |
+| Firebase Cloud Messaging (stub) | libfirebase_messaging.a<br> \            |
+|                                 | libfirebase_app.a<br>                    |
+
+The provided libraries have been tested using GCC 4.8.0, GCC 7.2.0, and Clang
+5.0 on Ubuntu. When building C++ desktop apps on Linux, you will need to link
+the `pthread` system library (consult your compiler documentation for more
+information).
+
+#### OS X libraries
+
+For OS X (Darwin), library versions are only provided for the 64-bit (x86_64)
+platform. See the table above (in the "Linux libraries" section) for the list of
+library dependencies. Frameworks are also provided for convenience.
+
+| Feature                         | Required Frameworks                      |
+|---------------------------------|------------------------------------------|
+| Firebase Authentication         | firebase_auth.framework<br>  \           |
+|                                 | firebase.framework<br>                   |
+| Firebase Realtime Database      | firebase_database.framework<br> \        |
+|                                 | firebase_auth.framework<br> \            |
+|                                 | firebase.framework<br>                   |
+| Firebase Remote Config          | firebase_remote_config.framework<br> \   |
+|                                 | firebase.framework<br>                   |
+| Firebase Storage                | firebase_storage.framework<br> \         |
+|                                 | firebase_auth.framework<br> \            |
+|                                 | firebase.framework<br>                   |
+| Firebase AdMob (stub)           | firebase_admob.framework<br> \           |
+|                                 | firebase.framework<br>                   |
+| Firebase Analytics (stub)       | firebase_analytics.framework<br> \       |
+|                                 | firebase.frameworkb<br>                  |
+| Firebase Dynamic Links (stub)   | firebase_dynamic_links.framework<br> \   |
+|                                 | firebase.framework<br>                   |
+| Firebase Instance ID (stub)     | firebase_instance_id.framework<br> \     |
+|                                 | firebase.framework<br>                   |
+| Firebase Invites (stub)         | firebase_invites.framework<br> \         |
+|                                 | firebase.framework<br>                   |
+| Firebase Cloud Messaging (stub) | firebase_messaging.framework<br> \       |
+|                                 | firebase.framework<br>                   |
+
+The provided libraries have been tested using Xcode 8.3.3 and 9.2. When building
+C++ desktop apps on OS X, you will need to link the `pthread` system library, as
+well as the `CoreFoundation` and `Security` OS X system frameworks (consult your
+compiler documentation for more information).
+
+#### Windows libraries
+
+For Windows, library versions are provided depending on whether your project is
+building in 32-bit (x86) or 64-bit (x64) mode, which Windows runtime environment
+you are using (Multithreaded /MT or Multithreaded DLL /MD), and whether you are
+targeting Release or Debug.
+
+| Feature                         | Required Libraries and Gradle Packages   |
+|---------------------------------|------------------------------------------|
+| Firebase Authentication         | firebase_auth.lib<br>  \                 |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Realtime Database      | firebase_database.lib<br> \              |
+|                                 | firebase_auth.lib<br> \                  |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Remote Config          | firebase_remote_config.lib<br> \         |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Storage                | firebase_storage.lib<br> \               |
+|                                 | firebase_auth.lib<br> \                  |
+|                                 | firebase_app.lib<br>                     |
+| Firebase AdMob (stub)           | firebase_admob.lib<br> \                 |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Analytics (stub)       | firebase_analytics.lib<br> \             |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Dynamic Links (stub)   | firebase_dynamic_links.lib<br> \         |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Instance ID (stub)     | firebase_instance_id.lib<br> \           |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Invites (stub)         | firebase_invites.lib<br> \               |
+|                                 | firebase_app.lib<br>                     |
+| Firebase Cloud Messaging (stub) | firebase_messaging.lib<br> \             |
+|                                 | firebase_app.lib<br>                     |
+
+The provided libraries have been tested using Visual Studio 2015 and 2017. When
+building C++ desktop apps on Windows, you will need to link the following
+Windows SDK libraries (consult your compiler documentation for more
+information):
+
+| Firebase C++ Library | Windows SDK library dependencies                      |
+| -------------------- |-------------------------------------------------------|
+| Authentication       | `advapi32, ws2_32, crypt32`                           |
+| Realtime Database    | `advapi32, ws2_32, crypt32, iphlpapi, psapi, userenv` |
+| Remote Config        | `advapi32, ws2_32, crypt32`                           |
+| Storage              | `advapi32, ws2_32, crypt32`                           |
 
 Getting Started
 ---------------
@@ -251,7 +371,7 @@ method implementation.
 We currently provide generate\_xml\_from\_google\_services\_json.py to convert
 google-services.json to .xml resources to be included in an Android application.
 This script applies the same transformation that the Google Play Services Gradle
-plug-in performs when building Android applications.  Users who don't use Gradle
+plug-in performs when building Android applications. Users who don't use Gradle
 (e.g ndk-build, makefiles, Visual Studio etc.) can use this script to automate
 the generation of string resources.
 
@@ -304,12 +424,13 @@ below summarizes whether Google Play services is required by each Firebase C++
 library.
 
 | Firebase C++ Library    | Google Play services required?    |
-| ----------------------- |:---------------------------------:|
+| ----------------------- |-----------------------------------|
 | Analytics               | Not required                      |
 | AdMob                   | Not required (usually; see below) |
 | Cloud Messaging         | Required                          |
 | Auth                    | Required                          |
 | Dynamic Links           | Required                          |
+| Instance ID             | Required                          |
 | Invites                 | Required                          |
 | Realtime Database       | Required                          |
 | Remote Config           | Required                          |
@@ -327,9 +448,202 @@ AdMob initialization will only return `kInitResultFailedMissingDependency` when
 Google Play services is unavailable AND you are using
 `com.google.android.gms:play-services-ads-lite`.
 
+### Desktop project setup
+
+To use desktop workflow support, you must have an Android or iOS project set
+up in the Firebase console.
+
+If you have an Android project, you can simply use the `google-services.json`
+file on desktop.
+
+If you have an iOS project and don't wish to create an Android project, you can
+use the included Python script `generate_xml_from_google_services_json.py
+--plist` to convert your `GoogleService-Info.plist` file into a
+`google-services-desktop.json` file.
+
+By default, when your app initializes, Firebase will look for a file named
+`google-services.json` or `google-services-desktop.json` in the current
+directory. Ensure that one of these files is present, or call
+`AppOptions::LoadFromJsonConfig()` before initializing Firebase to specify your
+JSON configuration data directly.
+
+### Note on Firebase C++ desktop support
+
+Firebase C++ SDK desktop support is a **Beta** feature, and is intended for
+workflow use only during the development of your app, not for publicly shipping
+code.
+
 
 Release Notes
 -------------
+### 4.5.1
+  - Overview
+    - Fixed bugs in Database (Desktop) and Remote Config and exposed new APIs in
+      Auth on Desktop and Messaging.
+  - Changes
+    - Messaging: Added the SetAutoTokenRegistrationOnInitEnabled() and
+      IsAutoTokenRegistrationOnInitEnabled() methods to enable or disable
+      auto-token generation.
+    - Auth (Desktop): Added support for accessing user metadata.
+    - Database (Desktop): Fixed a bug to make creation of database instances
+      with invalid URLs return NULL.
+    - Database (Desktop): Fixed an issue where incorrect values could be passed
+      to OnChildAdded.
+    - Remote Config: Fixed a bug causing incorrect reporting of success or
+      failure during a Fetch().
+
+### 4.5.0
+  - Overview
+    - Desktop workflow support for some features, Google Play Games
+      authentication on Android, and changes to AdMob, Auth, and Storage.
+  - Changes
+    - Auth, Realtime Database, Remote Config, Storage (Desktop): Stub
+      implementations have been replaced with functional desktop implementations
+      on Windows, OS X, and Linux.
+    - AdMob: Native Express ads have been discontinued, so `NativeExpressAdView`
+      has been marked deprecated and will be removed in a future version.
+    - Auth (Android): Added Google Play Games authentication.
+    - Auth: Fixed a race condition initializing/destroying Auth instances.
+    - Storage: Added MD5 hash to Metadata.
+    - Storage: Fixed a crash when deleting listeners and other object instances.
+    - Storage: Controller can now be used from any thread.
+    - Storage (iOS): Fixed incorrect content type when uploading.
+  - Known Issues
+    - When using Firebase Realtime Database on desktop, only one Transaction may
+      be run on a given subtree at the same time.
+    - When using Firebase Realtime Database on desktop, data persistence is not
+      available.
+
+### 4.4.3
+  - Overview
+    - Fixed linking bug in App.
+  - Changes
+    - App (iOS): Removed unresolved symbols in the App library that could cause
+      errors when forcing resolution.
+
+### 4.4.2
+  - Overview
+    - Fixed bugs in Dynamic Links, Invites, Remote Config and Storage and
+      fixed linking issues with the Windows and Linux stub libraries.
+  - Changes
+    - Dynamic Links (iOS): Now fetches the invite ID when using universal links.
+    - Dynamic Links (iOS): Fixed crash on failure of dynamic link completion.
+    - Dynamic Links (iOS): Fixed an issue where some errors weren't correctly
+      reported.
+    - Invites: Fixed SendInvite never completing in the stub implementation.
+    - Remote Config (iOS): Fixed an issue where some errors weren't correctly
+      reported.
+    - Storage: Fixed Metadata::content_language returning the wrong data.
+    - Storage (iOS): Reference paths formats are now consistent with other
+      platforms.
+    - Storage (iOS): Fixed an issue where trying to upload to a non-existent
+      path would not complete the Future.
+    - Storage (iOS): Fixed a crash when a download fails.
+    - General (Windows): Updated all static libs to suppport different C runtime
+      libraries and correspondingly updated the package directory structure.
+    - Linux: Fixed linking problems with all of the C++ stub libraries.
+
+### 4.4.1
+  - Overview
+    - Bug fixes for Realtime Database and Instance ID.
+  - Changes
+    - Realtime Database: SetPersistenceEnabled now sets persistence enabled.
+    - Instance ID (iOS): GetToken no longer fails without an APNS certificate,
+      and no longer forces registering for notifications.
+
+### 4.4.0
+  - Overview
+    - Support for Instance ID.
+  - Changes
+    - Instance ID: Added Instance ID library.
+
+### 4.3.0
+  - Overview
+    - Bug fix for Remote Config and a new feature for Auth.
+  - Changes
+    - Auth: Added support for accessing user metadata.
+    - Remote Config (Android): Fixed remote_config::ValueSource conversion.
+
+### 4.2.0
+  - Overview
+    - Bug fixes for Analytics, Database, and Messaging; and updates for Auth and
+      Messaging.
+  - Changes
+    - Analytics (iOS): Fixed a bug which prevented the user ID and user
+      properties being cleared.
+    - Database (Android): Fixed MutableData::children_count().
+    - Messaging (Android): Fixed a bug which prevented the message ID field
+      being set.
+    - Auth: Failed operations now return more specific error codes.
+    - Auth (iOS): Phone Authentication no longer requires push notifications.
+      When push notifications aren't available, reCAPTCHA verification is used
+      instead.
+    - Messaging: Messages sent to users can now contain a link URL.
+
+### 4.1.0
+  - Overview
+    - Bug fixes for AdMob, Auth, Messaging, Database, Storage, and Remote
+      Config, and added features for Future's OnCompletion callbacks and
+      Database transaction callbacks.
+  - Changes
+    - General: Futures are now invalidated when their underlying Firebase API is
+      destroyed.
+    - General: Added std::function support to Future::OnCompletion, to allow
+      use of C++11 lambdas with captures.
+    - AdMob (iOS): Fixed a crash if a BannerView is deleted while a call to
+      Destroy() is still pending.
+    - Auth (Android): Now assert fails if you call GetCredential without an Auth
+      instance created.
+    - Database: DataSnapshot, DatabaseReference, Query, and other objects are
+      invalidated when their Database instance is destroyed.
+    - Database: Added a context pointer to DatabaseReference::RunTransaction, as
+      well as std::function support to allow use of C++11 lambdas with captures.
+    - Messaging (Android): Fixed a bug where message_type was not set in the
+      Message struct.
+    - Messaging (iOS): Fixed a race condition if a message is received before
+      Firebase Cloud Messaging is initialized.
+    - Messaging (iOS): Fixed a bug detecting whether the notification was opened
+      if the app was running in the background.
+    - Remote Config: When listing keys, the list now includes keys with defaults
+      set, even if they were not present in the fetched config.
+    - Storage: StorageReference objects are invalidated when their Storage
+      instance is destroyed.
+  - Known Issues
+    - When building on Android using STLPort, the std::function versions of
+      Future::OnCompletion and DatabaseReference::RunTransaction are not
+      available.
+
+### 4.0.4
+  - Changes
+    - Messaging (Android): Fixed a bug resulting in Messages not having their
+      message_type field populated.
+
+### 4.0.3
+  - Overview
+    - Bug fixes for Dynamic Links, Messaging and iOS SDK compatibility.
+  - Changes
+    - General (iOS): Fixed an issue which resulted in custom options not being
+      applied to firebase::App instances.
+    - General (iOS): Fixed a bug which caused method implementation look ups
+      to fail when other iOS SDKs rename the selectors of swizzled methods.
+    - Dynamic Links (Android): Fixed future completion if short link
+      creation fails.
+    - Messaging (iOS): Fixed message handling when messages they are received
+      via the direct channel to the FCM backend (i.e not via APNS).
+
+### 4.0.2
+  - Overview
+    - Bug fixes for Analytics, Auth, Dynamic Links, and Messaging.
+  - Changes
+    - Analytics (Android): Fix SetCurrentScreen to work from any thread.
+    - Auth (iOS): Fixed user being invalidated when linking a credential fails.
+    - Dynamic Links: Fixed an issue which caused an app to crash or not receive
+      a Dynamic Link if the link is opened when the app is installed and not
+      running.
+    - Messaging (iOS): Fixed a crash when no Listener is set.
+    - Messaging: Fixed Listener::OnTokenReceived occasionally being called twice
+      with the same token.
+
 ### 4.0.1
   - Overview
     - Bug fixes for Dynamic links and Invites on iOS and Cloud Messaging on

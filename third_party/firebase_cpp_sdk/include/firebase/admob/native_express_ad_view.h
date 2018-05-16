@@ -5,6 +5,7 @@
 
 #include "firebase/admob/types.h"
 #include "firebase/future.h"
+#include "firebase/internal/common.h"
 
 namespace firebase {
 namespace admob {
@@ -53,6 +54,9 @@ class NativeExpressAdViewInternal;
 ///   ad_view->LoadAd(your_ad_request);
 /// }
 /// @endcode
+///
+/// @deprecated This class will be removed in a future version.
+/// Native Express Ads has been discontinued, and are no longer served.
 class NativeExpressAdView {
  public:
   /// The presentation state of a @ref NativeExpressAdView.
@@ -112,15 +116,25 @@ class NativeExpressAdView {
 
   /// Creates an uninitialized @ref NativeExpressAdView object.
   /// @ref Initialize must be called before the object is used.
-  NativeExpressAdView();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED NativeExpressAdView();
 
-  ~NativeExpressAdView();
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED ~NativeExpressAdView();
 
   /// Initializes the @ref NativeExpressAdView object.
   /// @param[in] parent The platform-specific UI element that will host the ad.
   /// @param[in] ad_unit_id The ad unit ID to use when requesting ads.
   /// @param[in] size The desired ad size for the native express ad.
-  Future<void> Initialize(AdParent parent, const char* ad_unit_id, AdSize size);
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Initialize(AdParent parent,
+                                              const char* ad_unit_id,
+                                              AdSize size);
 
   /// Returns a @ref Future that has the status of the last call to
   /// @ref Initialize.
@@ -130,48 +144,84 @@ class NativeExpressAdView {
   /// automatically be displayed in the NativeExpressAdView.
   /// @param[in] request An AdRequest struct with information about the request
   ///                    to be made (such as targeting info).
-  Future<void> LoadAd(const AdRequest& request);
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> LoadAd(const AdRequest& request);
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref LoadAd.
-  Future<void> LoadAdLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> LoadAdLastResult() const;
 
   /// Hides the NativeExpressAdView.
-  Future<void> Hide();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Hide();
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref Hide.
-  Future<void> HideLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> HideLastResult() const;
 
   /// Shows the @ref NativeExpressAdView.
-  Future<void> Show();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Show();
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref Show.
-  Future<void> ShowLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> ShowLastResult() const;
 
   /// Pauses the @ref NativeExpressAdView. Should be called whenever the C++
   /// engine pauses or the application loses focus.
-  Future<void> Pause();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Pause();
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref Pause.
-  Future<void> PauseLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> PauseLastResult() const;
 
   /// Resumes the @ref NativeExpressAdView after pausing.
-  Future<void> Resume();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Resume();
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref Resume.
-  Future<void> ResumeLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> ResumeLastResult() const;
 
   /// Cleans up and deallocates any resources used by the
   /// @ref NativeExpressAdView.
-  Future<void> Destroy();
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> Destroy();
 
   /// Returns a @ref Future containing the status of the last call to
   /// @ref Destroy.
-  Future<void> DestroyLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> DestroyLastResult() const;
 
   /// Moves the @ref NativeExpressAdView so that its top-left corner is located
   /// at (x, y). Coordinates are in pixels from the top-left corner of the
@@ -183,32 +233,50 @@ class NativeExpressAdView {
   /// so no overlap occurs.
   /// @param[in] x The desired horizontal coordinate.
   /// @param[in] y The desired vertical coordinate.
-  Future<void> MoveTo(int x, int y);
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> MoveTo(int x, int y);
 
   /// Moves the @ref NativeExpressAdView so that it's located at the given
   /// pre-defined position.
   /// @param[in] position The pre-defined position to which to move the
   ///                     @ref NativeExpressAdView.
-  Future<void> MoveTo(Position position);
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> MoveTo(Position position);
 
   /// Returns a @ref Future containing the status of the last call to either
   /// version of @ref MoveTo.
-  Future<void> MoveToLastResult() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED Future<void> MoveToLastResult() const;
 
   /// Returns the current presentation state of the @ref NativeExpressAdView.
   /// @return The current presentation state.
-  PresentationState GetPresentationState() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED PresentationState GetPresentationState() const;
 
   /// Retrieves the @ref NativeExpressAdView's current onscreen size and
   /// location.
   /// @return The current size and location. Values are in pixels, and location
   ///         coordinates originate from the top-left corner of the screen.
-  BoundingBox GetBoundingBox() const;
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED BoundingBox GetBoundingBox() const;
 
   /// Sets the @ref Listener for this object.
   /// @param[in] listener A valid NativeExpressAdView::Listener to receive
   /// callbacks.
-  void SetListener(Listener* listener);
+  ///
+  /// @deprecated This class will be removed in a future version.
+  /// Native Express Ads has been discontinued, and are no longer served.
+  FIREBASE_DEPRECATED void SetListener(Listener* listener);
 
  private:
   // An internal, platform-specific implementation object that this class uses

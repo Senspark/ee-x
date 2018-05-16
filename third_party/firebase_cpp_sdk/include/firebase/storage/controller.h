@@ -12,6 +12,7 @@ namespace storage {
 namespace internal {
 class ControllerInternal;
 class ListenerInternal;
+class RestOperation;
 }  // namespace internal
 /// @endcond
 
@@ -97,7 +98,8 @@ class Controller {
 
   /// @brief Returns the total bytes to be transferred.
   ///
-  /// @returns The total bytes to be transferred.
+  /// @returns The total bytes to be transferred.  This will return -1 if
+  /// the size of the transfer is unknown.
   int64_t total_byte_count() const;
 
   /// @brief Returns the StorageReference associated with this Controller.
@@ -118,6 +120,7 @@ class Controller {
   friend class internal::StorageReferenceInternal;
   friend class internal::ControllerInternal;
   friend class internal::ListenerInternal;
+  friend class internal::RestOperation;
 
   Controller(internal::ControllerInternal* internal);
 

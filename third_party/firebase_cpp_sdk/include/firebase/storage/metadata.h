@@ -14,6 +14,7 @@ namespace storage {
 
 namespace internal {
 class MetadataInternal;
+class MetadataInternalCommon;
 class StorageReferenceInternal;
 }  // namespace internal
 
@@ -244,10 +245,16 @@ class Metadata {
   /// invalid.
   bool is_valid() const;
 
+  /// @brief MD5 hash of the data; encoded using base64.
+  ///
+  /// @returns MD5 hash of the data; encoded using base64.
+  const char* md5_hash() const;
+
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class StorageReference;
   friend class internal::MetadataInternal;
+  friend class internal::MetadataInternalCommon;
   friend class internal::StorageReferenceInternal;
 
   Metadata(internal::MetadataInternal* internal);

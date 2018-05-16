@@ -344,6 +344,46 @@ InitResult Initialize(const App& app, Listener* listener);
 /// @note On Android, the services will not be shut down by this method.
 void Terminate();
 
+/// Determines if automatic token registration during initalization is enabled.
+///
+/// @return true if auto token registration is enabled and false if disabled.
+bool IsTokenRegistrationOnInitEnabled();
+
+/// Enable or disable token registration during initialization of Firebase Cloud
+/// Messaging.
+///
+/// This token is what identifies the user to Firebase, so disabling this avoids
+/// creating any new identity and automatically sending it to Firebase, unless
+/// consent has been granted.
+///
+/// If this setting is enabled, it triggers the token registration refresh
+/// immediately. This setting is persisted across app restarts and overrides the
+/// setting "firebase_messaging_auto_init_enabled" specified in your Android
+/// manifest (on Android) or Info.plist (on iOS).
+///
+/// <p>By default, token registration during initialization is enabled.
+///
+/// The registration happens before you can programmatically disable it, so
+/// if you need to change the default, (for example, because you want to prompt
+/// the user before FCM generates/refreshes a registration token on app
+/// startup), add to your application’s manifest:
+///
+/// @code
+/// <meta-data android:name="firebase_messaging_auto_init_enabled"
+/// android:value="false" />
+/// @endcode
+///
+/// or on iOS to your info.plist:
+///
+/// @code
+/// <key>FirebaseMessagingAutoInitEnabled</key>
+/// <false/>
+/// @endcode
+///
+/// @param enable sets if a registration token should be requested on
+/// initialization.
+void SetTokenRegistrationOnInitEnabled(bool enable);
+
 /// @brief Set the listener for events from the Firebase Cloud Messaging
 /// servers.
 ///
@@ -464,7 +504,7 @@ class PollableListener : public Listener {
   ///     }
   ///
   /// @param[out] token A string to be populated with the new token if one has
-  /// been recieved. If there were no new token, the string is left unmodified.
+  /// been received. If there were no new token, the string is left unmodified.
   ///
   /// @return Returns `true` if there was a new token, `false` otherwise.
   bool PollRegistrationToken(std::string* token) {

@@ -138,6 +138,8 @@ class User : public UserInfoInterface {
     const char* photo_url;
   };
 
+  ~User();
+
   /// The Java Web Token (JWT) that can be used to identify the user to
   /// the backend.
   ///
@@ -408,9 +410,18 @@ class User : public UserInfoInterface {
 
  private:
   friend struct AuthData;
-
   // Only exists in AuthData. Access via @ref Auth::CurrentUser().
   User(AuthData* auth_data) : auth_data_(auth_data) {}
+
+#if defined(INTERNAL_EXPERIMENTAL)
+  // Doxygen should not make docs for this function.
+  /// @cond FIREBASE_APP_INTERNAL
+  friend class IdTokenRefreshThread;
+  friend class IdTokenRefreshListener;
+  Future<std::string> GetTokenInternal(const bool force_refresh,
+                                       const int future_identifier);
+  /// @endcon
+#endif  // defined(INTERNAL_EXPERIMENTAL)
 
   // Use the pimpl mechanism to hide data details in the cpp files.
   AuthData* auth_data_;

@@ -17,9 +17,14 @@ class Controller;
 class Listener;
 class Storage;
 
+/// @cond FIREBASE_APP_INTERNAL
 namespace internal {
+class ControllerInternal;
+class MetadataInternal;
+class StorageReferenceInternalCommon;
 class StorageReferenceInternal;
 }  // namespace internal
+/// @endcond FIREBASE_APP_INTERNAL
 
 /// Represents a reference to a Cloud Storage object.
 /// Developers can upload and download objects, get/set object metadata, and
@@ -334,8 +339,12 @@ class StorageReference {
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class Controller;
+  friend class internal::ControllerInternal;
   friend class Metadata;
+  friend class internal::MetadataInternal;
   friend class Storage;
+  friend class internal::StorageReferenceInternal;
+  friend class internal::StorageReferenceInternalCommon;
 
   StorageReference(internal::StorageReferenceInternal* internal);
 

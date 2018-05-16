@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-firebase-core')
-    api "com.google.firebase:firebase-analytics:${rootProject.ext.firebaseVersion}"
+    api "com.google.firebase:firebase-analytics:15.0.2"
 }

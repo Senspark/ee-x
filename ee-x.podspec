@@ -269,6 +269,8 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'facebook-ads-mediation' do |s|
+    s.public_header_files = 'third_party/facebook-ads-mediation/FBAudienceNetwork/*'
+    s.header_mappings_dir = 'third_party/facebook-ads-mediation'
     s.dependency 'ee-x/facebook-ads-base'
     s.dependency 'ee-x/ironsource-mediation-base'
     s.dependency 'IronSourceFacebookAdapter','4.1.2.0'

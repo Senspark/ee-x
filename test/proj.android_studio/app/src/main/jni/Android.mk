@@ -25,6 +25,7 @@ LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
 LOCAL_STATIC_LIBRARIES += ee_x_facebook_static
 LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_static
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_dynamic_link_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage_static

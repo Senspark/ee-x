@@ -46,17 +46,17 @@ public:
 
     void setEnabled(bool enabled);
 
-    void log(const LogLevel& level, std::string formatString, ...);
-    void verbose(std::string formatString, ...);
-    void debug(std::string formatString, ...);
-    void info(std::string formatString, ...);
-    void warn(std::string formatString, ...);
-    void error(std::string formatString, ...);
-    void wtf(std::string formatString, ...);
+    void log(const LogLevel& level, std::string formatString, ...) const;
+    void verbose(std::string formatString, ...) const;
+    void debug(std::string formatString, ...) const;
+    void info(std::string formatString, ...) const;
+    void warn(std::string formatString, ...) const;
+    void error(std::string formatString, ...) const;
+    void wtf(std::string formatString, ...) const;
 
 protected:
     void log(const LogLevel& level, std::string formatString,
-             std::va_list args);
+             std::va_list args) const;
 
 private:
     bool enabled_;

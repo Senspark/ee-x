@@ -55,8 +55,8 @@ public:
 protected:
     friend AdMob;
 
-    explicit NativeAd(IMessageBridge& bridge, Logger& logger, AdMob* plugin,
-                      const std::string& adId);
+    explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
+                      AdMob* plugin, const std::string& adId);
 
 private:
     void onLoaded();
@@ -65,7 +65,7 @@ private:
     bool loading_;
     std::string adId_;
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     AdMob* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;

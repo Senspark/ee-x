@@ -46,7 +46,7 @@ constexpr auto k__testModeEnabled = "testModeEnabled";
 Self::UnityAds()
     : Self(Logger::getSystemLogger()) {}
 
-Self::UnityAds(Logger& logger)
+Self::UnityAds(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

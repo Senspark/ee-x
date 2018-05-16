@@ -30,7 +30,7 @@ public:
 protected:
     friend FacebookAds;
 
-    explicit RewardedVideo(IMessageBridge& bridge, Logger& logger,
+    explicit RewardedVideo(IMessageBridge& bridge, const Logger& logger,
                            const std::string& adId);
 
 private:
@@ -48,7 +48,7 @@ private:
     void destroyInternalVideo();
 
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
 };
 } // namespace facebook
 } // namespace ee

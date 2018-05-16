@@ -36,7 +36,7 @@ public:
     DynamicLink();
     ~DynamicLink();
 
-    explicit DynamicLink(Logger& logger);
+    explicit DynamicLink(const Logger& logger);
 
     bool initialize();
 
@@ -55,7 +55,7 @@ private:
 #endif // EE_X_MOBILE
 
     bool initialized_;
-    Logger& logger_;
+    const Logger& logger_;
     LinkReceivedCallback callback_;
 #if defined(EE_X_MOBILE)
     std::unique_ptr<::firebase::dynamic_links::Listener> listener_;

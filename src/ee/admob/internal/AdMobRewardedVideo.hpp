@@ -29,13 +29,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Logger& logger, AdMob* plugin,
+    explicit RewardedVideo(const Logger& logger, AdMob* plugin,
                            const std::string& adId);
 
 private:
     friend AdMob;
 
-    Logger& logger_;
+    const Logger& logger_;
     AdMob* plugin_;
     std::string adId_;
 };

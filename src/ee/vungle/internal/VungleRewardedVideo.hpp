@@ -28,13 +28,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Logger& logger, Vungle* plugin,
+    explicit RewardedVideo(const Logger& logger, Vungle* plugin,
                            const std::string& placementId);
 
 private:
     friend Vungle;
 
-    Logger& logger_;
+    const Logger& logger_;
     Vungle* plugin_;
     std::string placementId_;
 };

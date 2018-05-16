@@ -28,7 +28,7 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(IMessageBridge& bridge, Logger& logger, AdMob* plugin,
+Self::NativeAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
                const std::string& adId)
     : Super()
     , adId_(adId)

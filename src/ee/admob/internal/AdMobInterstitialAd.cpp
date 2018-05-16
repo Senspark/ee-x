@@ -57,8 +57,8 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::InterstitialAd(IMessageBridge& bridge, Logger& logger, AdMob* plugin,
-                     const std::string& adId)
+Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
+                     AdMob* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

@@ -37,7 +37,7 @@ private:
 Self::DynamicLink()
     : Self(Logger::getSystemLogger()) {}
 
-Self::DynamicLink(Logger& logger)
+Self::DynamicLink(const Logger& logger)
     : logger_(logger) {
     initialized_ = false;
 }

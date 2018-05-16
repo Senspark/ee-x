@@ -25,13 +25,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit InterstitialAd(Logger& logger, IronSource* plugin,
+    explicit InterstitialAd(const Logger& logger, IronSource* plugin,
                             const std::string& placementId);
 
 private:
     friend IronSource;
 
-    Logger& logger_;
+    const Logger& logger_;
     IronSource* plugin_;
     std::string placementId_;
 };

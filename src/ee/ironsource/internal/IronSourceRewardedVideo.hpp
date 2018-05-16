@@ -28,13 +28,13 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(Logger& logger, IronSource* plugin,
+    explicit RewardedVideo(const Logger& logger, IronSource* plugin,
                            const std::string& placementId);
 
 private:
     friend IronSource;
 
-    Logger& logger_;
+    const Logger& logger_;
     IronSource* plugin_;
     std::string placementId_;
 };

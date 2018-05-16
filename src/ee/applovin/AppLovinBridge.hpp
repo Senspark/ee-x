@@ -20,7 +20,7 @@ public:
     AppLovin();
     ~AppLovin();
     
-    explicit AppLovin(Logger& logger);
+    explicit AppLovin(const Logger& logger);
 
     void initialize(const std::string& key);
 
@@ -56,7 +56,7 @@ private:
     bool errored_;
     RewardedVideo* rewardedVideo_;
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
 };
 } // namespace applovin
 } // namespace ee

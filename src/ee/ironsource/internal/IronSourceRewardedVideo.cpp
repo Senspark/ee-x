@@ -17,7 +17,7 @@ namespace ee {
 namespace ironsource {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Logger& logger, IronSource* plugin,
+Self::RewardedVideo(const Logger& logger, IronSource* plugin,
                     const std::string& placementId)
     : Super(logger)
     , logger_(logger) {

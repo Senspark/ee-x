@@ -17,7 +17,7 @@ namespace ee {
 namespace ironsource {
 using Self = InterstitialAd;
 
-Self::InterstitialAd(Logger& logger, IronSource* plugin,
+Self::InterstitialAd(const Logger& logger, IronSource* plugin,
                      const std::string& placementId)
     : logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);

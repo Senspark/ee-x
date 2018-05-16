@@ -21,7 +21,7 @@ using RewardedVideoCallback = std::function<void(bool result)>;
 
 class IRewardedVideo {
 public:
-    explicit IRewardedVideo(Logger& logger);
+    explicit IRewardedVideo(const Logger& logger);
 
     virtual ~IRewardedVideo();
 
@@ -39,7 +39,7 @@ protected:
     void setResult(bool result);
 
 private:
-    Logger& logger_;
+    const Logger& logger_;
     RewardedVideoCallback callback_;
 };
 } // namespace ads

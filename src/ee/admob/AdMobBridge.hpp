@@ -28,7 +28,7 @@ public:
     ~AdMob();
     
     /// Constructs an AdMob bridge with a custom logger.
-    explicit AdMob(Logger& logger);
+    explicit AdMob(const Logger& logger);
 
     /// Optional.
     /// Calls this method for faster ads loading.
@@ -86,7 +86,7 @@ private:
     std::string currentId_;
 
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace admob

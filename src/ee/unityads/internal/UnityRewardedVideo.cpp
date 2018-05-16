@@ -17,7 +17,7 @@ namespace ee {
 namespace unityads {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Logger& logger, UnityAds* plugin,
+Self::RewardedVideo(const Logger& logger, UnityAds* plugin,
                     const std::string& placementId)
     : Super(logger)
     , logger_(logger) {

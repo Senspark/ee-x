@@ -15,7 +15,7 @@ public:
     IronSource();
     ~IronSource();
     
-    explicit IronSource(Logger& logger);
+    explicit IronSource(const Logger& logger);
 
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);
@@ -55,7 +55,7 @@ private:
     bool _shouldDoRewardInGame;
 
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
 };

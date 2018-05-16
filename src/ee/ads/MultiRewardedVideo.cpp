@@ -16,7 +16,7 @@ using Self = MultiRewardedVideo;
 Self::MultiRewardedVideo()
     : Self(Logger::getSystemLogger()) {}
 
-Self::MultiRewardedVideo(Logger& logger)
+Self::MultiRewardedVideo(const Logger& logger)
     : Super(logger) {}
 
 Self::~MultiRewardedVideo() {}

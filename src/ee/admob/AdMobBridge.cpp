@@ -67,7 +67,7 @@ constexpr auto k__identifiers           = "identifiers";
 Self::AdMob()
     : Self(Logger::getSystemLogger()) {}
 
-Self::AdMob(Logger& logger)
+Self::AdMob(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

@@ -13,7 +13,7 @@ namespace ee {
 namespace applovin {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Logger& logger, AppLovin* plugin)
+Self::RewardedVideo(const Logger& logger, AppLovin* plugin)
     : Super(logger) {
     plugin_ = plugin;
 }

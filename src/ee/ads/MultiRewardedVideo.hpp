@@ -23,7 +23,7 @@ private:
 
 public:
     MultiRewardedVideo();
-    explicit MultiRewardedVideo(Logger& logger);
+    explicit MultiRewardedVideo(const Logger& logger);
     
     virtual ~MultiRewardedVideo() override;
 

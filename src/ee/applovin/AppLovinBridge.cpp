@@ -115,7 +115,7 @@ constexpr auto k__onUserRewardVerified     = "AppLovin_onUserRewardVerified";
 Self::AppLovin()
     : Self(Logger::getSystemLogger()) {}
 
-Self::AppLovin(Logger& logger)
+Self::AppLovin(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

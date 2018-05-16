@@ -39,7 +39,7 @@ constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClos
 Self::IronSource()
     : Self(Logger::getSystemLogger()) {}
 
-Self::IronSource(Logger& logger)
+Self::IronSource(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);

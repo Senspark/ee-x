@@ -17,7 +17,7 @@ namespace ee {
 namespace vungle {
 using Self = RewardedVideo;
 
-Self::RewardedVideo(Logger& logger, Vungle* plugin,
+Self::RewardedVideo(const Logger& logger, Vungle* plugin,
                     const std::string& placementId)
     : Super(logger)
     , logger_(logger) {

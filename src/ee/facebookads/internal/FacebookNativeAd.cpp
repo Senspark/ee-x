@@ -40,8 +40,8 @@ auto k__onFailedToLoad(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(IMessageBridge& bridge, Logger& logger, FacebookAds* plugin,
-               const std::string& adId)
+Self::NativeAd(IMessageBridge& bridge, const Logger& logger,
+               FacebookAds* plugin, const std::string& adId)
     : Super()
     , adId_(adId)
     , bridge_(bridge)

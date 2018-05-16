@@ -18,7 +18,7 @@ private:
     using Super = IRewardedVideo;
 
 public:
-    explicit NullRewardedVideo(Logger& logger);
+    explicit NullRewardedVideo(const Logger& logger);
 
     virtual bool isLoaded() const override;
 

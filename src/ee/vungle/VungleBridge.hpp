@@ -13,8 +13,8 @@ class Vungle final {
 public:
     Vungle();
     ~Vungle();
-    
-    explicit Vungle(Logger& logger);
+
+    explicit Vungle(const Logger& logger);
 
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId, const std::string& placementId);
@@ -37,7 +37,7 @@ private:
 
     bool errored_;
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
     //    RewardedVideo* rewardedVideo_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 };

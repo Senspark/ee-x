@@ -27,7 +27,7 @@ public:
     FacebookAds();
     ~FacebookAds();
     
-    explicit FacebookAds(Logger& logger);
+    explicit FacebookAds(const Logger& logger);
 
     /// Gets the current device's hash, iOS only, for Android search for
     /// AdSettings tag.
@@ -78,7 +78,7 @@ private:
     std::map<std::string, RewardedVideo*> rewardedVideos_;
 
     IMessageBridge& bridge_;
-    Logger& logger_;
+    const Logger& logger_;
 };
 } // namespace facebook
 } // namespace ee

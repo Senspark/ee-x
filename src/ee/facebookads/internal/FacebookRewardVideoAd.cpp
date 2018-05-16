@@ -58,7 +58,7 @@ auto k__onClosed(const std::string& id) {
 }
 } // namespace
 
-Self::RewardedVideo(IMessageBridge& bridge, Logger& logger,
+Self::RewardedVideo(IMessageBridge& bridge, const Logger& logger,
                     const std::string& adId)
     : Super(logger)
     , bridge_(bridge)

@@ -82,10 +82,10 @@ void Self::setLinkReceivedCallback(const LinkReceivedCallback& callback) {
     callback_ = callback;
 #if defined(EE_X_MOBILE)
     ::firebase::dynamic_links::SetListener(nullptr);
-#endif // EE_X_MOBILE
     auto listener = std::make_unique<Listener>(
         std::bind(&Self::onLinkReceived, this, std::placeholders::_1));
     listener_ = std::move(listener);
+#endif // EE_X_MOBILE
 }
 
 void Self::onLinkReceived(const std::string& link) {

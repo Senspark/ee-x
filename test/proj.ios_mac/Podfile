@@ -17,7 +17,7 @@ abstract_target 'common' do
         pod_ee_x('firebase-dynamic-link')
         pod_ee_x('firebase-messaging')
         pod_ee_x('firebase-remote-config')
-        pod_ee_x('firebase-storage')        
+        pod_ee_x('firebase-storage')
         pod_ee_x('google-analytics')
         pod_ee_x('ironsource')
         pod_ee_x('notification')
@@ -29,6 +29,10 @@ abstract_target 'common' do
     target 'ee_x_test_desktop' do
         pod_ee_x('ads')
         pod_ee_x('crashlytics')
-        pod_ee_x('firebase')
+        pod_ee_x('firebase-analytics')
+        pod_ee_x('firebase-dynamic-link')
+        pod_ee_x('firebase-messaging')
+        pod_ee_x('firebase-remote-config')
+        pod_ee_x('firebase-storage')
     end
 end

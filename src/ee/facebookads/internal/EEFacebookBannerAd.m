@@ -6,13 +6,17 @@
 //
 //
 
-#import <FBAudienceNetwork/FBAdView.h>
-
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/internal/EEFacebookBannerAd.h"
+
+#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
+#import <ISFacebookAdapter/FBAdView.h>
+#else // EE_X_USE_IRON_SOURCE_MEDIATION
+#import <FBAudienceNetwork/FBAdView.h>
+#endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
     id<EEIMessageBridge> bridge_;

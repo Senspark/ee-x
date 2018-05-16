@@ -149,7 +149,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/firebase-core'
   end
 
-spec.subspec 'firebase-dynamic-link' do |s|
+  spec.subspec 'firebase-dynamic-link' do |s|
     s.source_files = 'src/ee/firebase/FirebaseDynamicLink.*'
     s.public_header_files = 'src/ee/firebase/FirebaseDynamicLink.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
@@ -196,6 +196,15 @@ spec.subspec 'firebase-dynamic-link' do |s|
     s.dependency 'ee-x/core'
   end
 
+  spec.subspec 'ironsource-mediation-base' do |s|
+    s.preserve_path = 'dummy_path'
+    s.xcconfig = {
+      'GCC_PREPROCESSOR_DEFINITIONS' => [
+        'EE_X_USE_IRON_SOURCE_MEDIATION'
+      ].join(' ')
+    }
+  end
+
   spec.subspec 'admob' do |s|
     s.source_files =
       'src/ee/AdMob.hpp',
@@ -213,7 +222,7 @@ spec.subspec 'firebase-dynamic-link' do |s|
     s.dependency 'Google-Mobile-Ads-SDK'
   end
 
-  spec.subspec 'applovin' do |s|
+  spec.subspec 'applovin-base' do |s|
     s.source_files =
       'src/ee/AppLovin.hpp',
       'src/ee/AppLovinFwd.hpp',
@@ -226,10 +235,20 @@ spec.subspec 'firebase-dynamic-link' do |s|
       'src/ee/applovin/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'applovin' do |s|
+    s.dependency 'ee-x/applovin-base'
     s.dependency 'AppLovinSDK'
   end
 
-  spec.subspec 'facebook-ads' do |s|
+  spec.subspec 'applovin-mediation' do |s|
+    s.dependency 'ee-x/applovin-base'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'IronSourceAppLovinAdapter','4.1.2.0'
+  end
+
+  spec.subspec 'facebook-ads-base' do |s|
     s.source_files =
       'src/ee/FacebookAds.hpp',
       'src/ee/FacebookAdsFwd.hpp',
@@ -242,7 +261,17 @@ spec.subspec 'firebase-dynamic-link' do |s|
       'src/ee/facebookads/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'facebook-ads' do |s|
+    s.dependency 'ee-x/facebook-ads-base'
     s.dependency 'FBAudienceNetwork'
+  end
+
+  spec.subspec 'facebook-ads-mediation' do |s|
+    s.dependency 'ee-x/facebook-ads-base'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'IronSourceFacebookAdapter','4.1.2.0'
   end
 
   spec.subspec 'ironsource' do |s|
@@ -258,10 +287,20 @@ spec.subspec 'firebase-dynamic-link' do |s|
       'src/ee/ironsource/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK'
+    s.dependency 'IronSourceSDK', '6.7.8.0'
   end
 
-  spec.subspec 'unity-ads' do |s|
+  spec.subspec 'ironsource-mediation' do |s|
+    s.dependency 'ee-x/ironsource'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    # s.dependency 'IronSourceAdMobAdapter','4.1.3.0'
+    s.dependency 'IronSourceAppLovinAdapter','4.1.2.0'
+    s.dependency 'IronSourceFacebookAdapter','4.1.2.0'
+    s.dependency 'IronSourceUnityAdsAdapter','4.1.0.2'
+    s.dependency 'IronSourceVungleAdapter','4.1.1.1'
+  end
+
+  spec.subspec 'unity-ads-base' do |s|
     s.source_files =
       'src/ee/UnityAds.hpp',
       'src/ee/UnityAdsFwd.hpp',
@@ -274,12 +313,22 @@ spec.subspec 'firebase-dynamic-link' do |s|
       'src/ee/unityads/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'unity-ads' do |s|
+    s.dependency 'ee-x/unity-ads-base'
 
     # UnityAds conflicts with GoogleMobileAdsMediationUnity
     s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
   end
 
-  spec.subspec 'vungle' do |s|
+  spec.subspec 'unity-ads-mediation' do |s|
+    s.dependency 'ee-x/unity-ads-base'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'IronSourceUnityAdsAdapter','4.1.0.2'
+  end
+
+  spec.subspec 'vungle-base' do |s|
     s.source_files =
       'src/ee/Vungle.hpp',
       'src/ee/VungleFwd.hpp',
@@ -292,7 +341,17 @@ spec.subspec 'firebase-dynamic-link' do |s|
       'src/ee/vungle/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'vungle' do |s|
+    s.dependency 'ee-x/vungle-base'
     s.dependency 'VungleSDK-iOS', '5.3.0'
+  end
+
+  spec.subspec 'vungle-mediation' do |s|
+    s.dependency 'ee-x/vungle-base'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'IronSourceVungleAdapter','4.1.1.1'
   end
 
   spec.subspec 'recorder' do |s|

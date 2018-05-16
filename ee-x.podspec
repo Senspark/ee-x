@@ -136,7 +136,7 @@ Pod::Spec.new do |spec|
       'src/ee/FirebaseFwd.hpp',
       'src/ee/firebase/FirebaseApp.hpp'
 
-    s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libapp.a'
+    s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-headers'
     s.ios.dependency 'Firebase/Core', '4.13.0'

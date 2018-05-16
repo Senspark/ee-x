@@ -13,6 +13,11 @@ LOCAL_SRC_FILES := $(FIREBASE_LIBS_DIR)/$(TARGET_ARCH_ABI)/libanalytics.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
 include $(PREBUILT_STATIC_LIBRARY)
 
+LOCAL_MODULE := ee_x_firebase_dynamic_link_prebuilt
+LOCAL_SRC_FILES := $(FIREBASE_LIBS_DIR)/$(TARGET_ARCH_ABI)/libdynamic_links.a
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+include $(PREBUILT_STATIC_LIBRARY)
+
 LOCAL_MODULE := ee_x_firebase_messaging_prebuilt
 LOCAL_SRC_FILES := $(FIREBASE_LIBS_DIR)/$(TARGET_ARCH_ABI)/libmessaging.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include

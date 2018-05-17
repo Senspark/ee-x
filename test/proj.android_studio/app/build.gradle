@@ -110,26 +110,33 @@ dependencies {
 
     implementation project(':libcocos2dx')
     implementation project(':ee-x-ads')
-    implementation project(':ee-x-admob')
-    implementation project(':ee-x-applovin')
     implementation project(':ee-x-crashlytics')
-    implementation project(':ee-x-facebook-ads')
     implementation project(':ee-x-google-analytics')
     implementation project(':ee-x-firebase-analytics')
     implementation project(':ee-x-firebase-dynamic-link')
     implementation project(':ee-x-firebase-messaging')
     implementation project(':ee-x-firebase-remote-config')
     implementation project(':ee-x-firebase-storage')
-    implementation project(':ee-x-ironsource')
     implementation project(':ee-x-notification')
-    implementation project(':ee-x-unity-ads')
-    implementation project(':ee-x-vungle')
+
+    implementation project(':ee-x-admob')
+    // implementation project(':ee-x-applovin')
+    // implementation project(':ee-x-facebook-ads')
+    // implementation project(':ee-x-ironsource')
+    // implementation project(':ee-x-unity-ads')
+    // implementation project(':ee-x-vungle')
+
+    implementation project(':ee-x-applovin-mediation')
+    implementation project(':ee-x-facebook-ads-mediation')
+    implementation project(':ee-x-ironsource-mediation')
+    implementation project(':ee-x-unity-ads-mediation')
+    implementation project(':ee-x-vungle-mediation')
 
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
     implementation "com.android.support:cardview-v7:${rootProject.ext.supportLibraryVersion}"
     implementation "com.android.support:customtabs:${rootProject.ext.supportLibraryVersion}"
+    implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibraryVersion}"
     implementation "com.android.support:support-v4:${rootProject.ext.supportLibraryVersion}"
-    implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.google.firebase:firebase-core:15.0.2'
     implementation 'com.google.android.gms:play-services-base:15.0.1'

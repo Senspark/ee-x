@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+// Forward.
+struct FBAdSize;
+typedef struct FBAdSize FBAdSize;
+
 @interface EEFacebookAds : NSObject
 
 - (NSString* _Nonnull)getTestDeviceHash;

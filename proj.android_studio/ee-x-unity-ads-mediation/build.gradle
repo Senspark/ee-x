@@ -1,0 +1,18 @@
+// https://developers.ironsrc.com/ironsource-mobile/android/unityads-mediation-guide
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-core')
+    api 'com.ironsource.adapters:unityadsadapter:4.1.0@jar'
+}

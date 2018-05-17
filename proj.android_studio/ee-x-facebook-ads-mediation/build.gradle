@@ -1,0 +1,18 @@
+// https://developers.ironsrc.com/ironsource-mobile/android/facebook-mediation-guide/
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-ads')
+    implementation 'com.ironsource.adapters:facebookadapter:4.1.3@jar'
+}

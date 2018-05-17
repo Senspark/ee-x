@@ -1,20 +1,21 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ee.applovin">
     <!-- These permissions are mandatory to run AppLovin SDK -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- These permissions are strongly recommended and will result in higher performance -->
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-    <activity android:name="com.applovin.adview.AppLovinInterstitialActivity"
-              android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name="com.applovin.adview.AppLovinInterstitialActivity"
+            android:configChanges="orientation|screenSize" />
 
-    <activity android:name="com.applovin.adview.AppLovinConfirmationActivity"
-              android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name="com.applovin.adview.AppLovinConfirmationActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 </manifest>

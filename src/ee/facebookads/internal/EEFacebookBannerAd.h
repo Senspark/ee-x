@@ -8,6 +8,10 @@
 
 #import "ee/ads/internal/EEIAdView.h"
 
+// Forward.
+struct FBAdSize;
+typedef struct FBAdSize FBAdSize;
+
 @protocol EEIMessageBridge;
 
 @interface EEFacebookBannerAd : NSObject <EEIAdView>

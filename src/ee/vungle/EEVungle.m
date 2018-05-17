@@ -7,13 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <VungleSDK/VungleSDK.h>
 
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/vungle/EEVungle.h"
+
+#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
+#import <ISVungleAdapter/VungleSDK.h>
+#else // EE_X_USE_IRON_SOURCE_MEDIATION
+#import <VungleSDK/VungleSDK.h>
+#endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
 @interface EEVungle () <VungleSDKDelegate> {
     BOOL initialized_;

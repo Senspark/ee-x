@@ -2,7 +2,6 @@ package com.ee.facebook;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,7 +21,6 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -41,11 +39,10 @@ import com.facebook.share.model.ShareVideoContent;
 import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.ShareDialog;
 
-import org.json.JSONObject;
-
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,24 +51,24 @@ import java.util.Map;
  */
 public class Facebook implements PluginProtocol {
     private static final String k__registerNotifications = "Facebook_registerNotifications";
-    private static final String k__isLoggedIn            = "Facebook_isLoggedIn";
-    private static final String k__logIn                 = "Facebook_logIn";
-    private static final String k__logOut                = "Facebook_logOut";
-    private static final String k__getAccessToken        = "Facebook_getAccessToken";
-    private static final String k__onProfileChanged      = "Facebook_onProfileChanged";
-    private static final String k__graphRequest          = "Facebook_graphRequest";
-    private static final String k__sendRequest           = "Facebook_sendRequest";
-    private static final String k__shareLinkContent      = "Facebook_shareLinkContent";
-    private static final String k__sharePhotoContent     = "Facebook_sharePhotoContent";
-    private static final String k__shareVideoContent     = "Facebook_shareVideoContent";
+    private static final String k__isLoggedIn = "Facebook_isLoggedIn";
+    private static final String k__logIn = "Facebook_logIn";
+    private static final String k__logOut = "Facebook_logOut";
+    private static final String k__getAccessToken = "Facebook_getAccessToken";
+    private static final String k__onProfileChanged = "Facebook_onProfileChanged";
+    private static final String k__graphRequest = "Facebook_graphRequest";
+    private static final String k__sendRequest = "Facebook_sendRequest";
+    private static final String k__shareLinkContent = "Facebook_shareLinkContent";
+    private static final String k__sharePhotoContent = "Facebook_sharePhotoContent";
+    private static final String k__shareVideoContent = "Facebook_shareVideoContent";
 
     private static final Logger _logger = new Logger(Facebook.class.getName());
 
-    private IMessageBridge     _bridge;
-    private Activity           _activity;
-    private CallbackManager    _callbackManager;
+    private IMessageBridge _bridge;
+    private Activity _activity;
+    private CallbackManager _callbackManager;
     private AccessTokenTracker _accessTokenTracker;
-    private ProfileTracker     _profileTracker;
+    private ProfileTracker _profileTracker;
 
     public Facebook() {
         Utils.checkMainThread();
@@ -102,6 +99,18 @@ public class Facebook implements PluginProtocol {
             }
         };
         registerHandlers();
+    }
+
+    @NonNull
+    static String convertAccessTokenToString(@Nullable AccessToken token) {
+        if (token == null) {
+            return "";
+        }
+        Map<String, Object> dict = new HashMap<>();
+        dict.put("token", token.getToken());
+        dict.put("applicationId", token.getApplicationId());
+        dict.put("userId", token.getUserId());
+        return JsonUtils.convertDictionaryToString(dict);
     }
 
     @NonNull
@@ -275,18 +284,6 @@ public class Facebook implements PluginProtocol {
         _bridge.deregisterHandler(k__shareVideoContent);
     }
 
-    @NonNull
-    static String convertAccessTokenToString(@Nullable AccessToken token) {
-        if (token == null) {
-            return "";
-        }
-        Map<String, Object> dict = new HashMap<>();
-        dict.put("token", token.getToken());
-        dict.put("applicationId", token.getApplicationId());
-        dict.put("userId", token.getUserId());
-        return JsonUtils.convertDictionaryToString(dict);
-    }
-
     @SuppressWarnings("WeakerAccess")
     public boolean isLoggedIn() {
         return AccessToken.getCurrentAccessToken() != null;
@@ -378,9 +375,9 @@ public class Facebook implements PluginProtocol {
     }
 
     public void sendRequest(@Nullable GameRequestContent.ActionType actionType,
-            @Nullable GameRequestContent.Filters filter, @Nullable String title, @Nullable List<String> recipients,
-            @Nullable String objectId, @Nullable String data, @NonNull String message,
-            @NonNull FacebookCallback<GameRequestDialog.Result> delegate) {
+                            @Nullable GameRequestContent.Filters filter, @Nullable String title, @Nullable List<String> recipients,
+                            @Nullable String objectId, @Nullable String data, @NonNull String message,
+                            @NonNull FacebookCallback<GameRequestDialog.Result> delegate) {
         GameRequestContent content = new GameRequestContent.Builder().setActionType(actionType).setFilters(filter)
                 .setTitle(title).setObjectId(objectId).setRecipients(recipients).setData(data).setMessage(message)
                 .build();
@@ -392,7 +389,14 @@ public class Facebook implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void shareLinkContent(@NonNull String url, FacebookCallback<Sharer.Result> delegate) {
-        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(url)).build();
+        String encodedUrl;
+        try {
+            encodedUrl = URLEncoder.encode(url, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            encodedUrl = url;
+    }
+
+        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(encodedUrl)).build();
         shareContent(content, delegate);
     }
 

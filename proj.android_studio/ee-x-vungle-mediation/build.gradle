@@ -1,0 +1,37 @@
+// https://developers.ironsrc.com/ironsource-mobile/android/vungle-mediation-guide
+
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url "https://dl.bintray.com/ironsource-mobile/android-adapters" }
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-core')
+
+    implementation 'com.ironsource.adapters:vungleadapter:4.1.1@jar'
+    implementation 'com.google.dagger:dagger:2.7'
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'de.greenrobot:eventbus:2.2.1'
+    implementation 'io.reactivex:rxjava:1.2.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+    implementation 'com.squareup.okio:okio:1.12.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
+
+    implementation 'com.google.android.gms:play-services-basement:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+}

@@ -1,3 +1,5 @@
+// https://developers.ironsrc.com/ironsource-mobile/android/unityads-mediation-guide
+
 apply plugin: 'com.android.library'
 
 android {
@@ -11,6 +13,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     api project(':ee-x-core')
+    api 'com.ironsource.adapters:unityadsadapter:4.1.0@jar'
 }

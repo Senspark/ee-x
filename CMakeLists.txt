@@ -24,6 +24,7 @@ set(LIB_SRC
    jni/cpp/ee/core/internal/JniString.cpp
    jni/cpp/ee/core/internal/Logger_Android.cpp
    jni/cpp/ee/core/internal/MessageBridge_Android.cpp
+   jni/cpp/ee/firebase/FirebaseApp.cpp
    ${EE_X_ADMOB_SRC}
    ${EE_X_ADS_SRC}
    ${EE_X_APPLOVIN_SRC}
@@ -44,6 +45,7 @@ set(LIB_HEADERS
     jni/cpp/ee/core/internal/JnimethodInfo.hpp
     jni/cpp/ee/core/internal/JniString.hpp
     third_party/nlohmann/include/ee/nlohmann/json.hpp
+    src/ee/firebase/FirebaseApp.hpp
     src/ee/Vungle.hpp
     src/ee/IronSource.hpp
     src/ee/AdsFwd.hpp
@@ -97,6 +99,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME}
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libinvites.a
+    ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libdynamic_links.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libmessaging.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libremote_config.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libstorage.a

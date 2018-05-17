@@ -13,6 +13,7 @@ set(EE_X_FIREBASE_SRC
     src/ee/firebase/FirebaseMessaging.cpp
     src/ee/firebase/FirebaseRemoteConfig.cpp
     src/ee/firebase/FirebaseStorage.cpp
+    jni/cpp/ee/firebase/FirebaseApp.cpp
 )
 
 set(EE_X_FIREBASE_HEADERS
@@ -23,5 +24,6 @@ set(EE_X_FIREBASE_HEADERS
     src/ee/firebase/FirebaseScheduler.hpp
     src/ee/firebase/FirebaseScheduler_inl.hpp
     src/ee/firebase/FirebaseStorage.hpp
+    src/ee/firebase/FirebaseApp.hpp
 )
 

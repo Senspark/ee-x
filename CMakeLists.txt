@@ -4,6 +4,11 @@ project(ee_x)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 
+include_directories(
+    src/ee/firebase
+    third_party/firebase_cpp_sdk/include
+)
+
 include(src/ee/admob/CMakeLists.txt)
 include(src/ee/ads/CMakeLists.txt)
 include(src/ee/applovin/CMakeLists.txt)
@@ -24,7 +29,6 @@ set(LIB_SRC
    jni/cpp/ee/core/internal/JniString.cpp
    jni/cpp/ee/core/internal/Logger_Android.cpp
    jni/cpp/ee/core/internal/MessageBridge_Android.cpp
-   jni/cpp/ee/firebase/FirebaseApp.cpp
    ${EE_X_ADMOB_SRC}
    ${EE_X_ADS_SRC}
    ${EE_X_APPLOVIN_SRC}
@@ -45,7 +49,6 @@ set(LIB_HEADERS
     jni/cpp/ee/core/internal/JnimethodInfo.hpp
     jni/cpp/ee/core/internal/JniString.hpp
     third_party/nlohmann/include/ee/nlohmann/json.hpp
-    src/ee/firebase/FirebaseApp.hpp
     src/ee/Vungle.hpp
     src/ee/IronSource.hpp
     src/ee/AdsFwd.hpp

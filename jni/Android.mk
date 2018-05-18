@@ -194,6 +194,20 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 include $(BUILD_STATIC_LIBRARY)
 
 ############
+# CAMPAIGN RECEIVER #
+############
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_campaign_receiver_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/campaignreceiver -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
+############
 # FIREBASE #
 ############
 

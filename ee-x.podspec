@@ -65,6 +65,20 @@ Pod::Spec.new do |spec|
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
   end
+  
+  spec.subspec 'campaign-receiver' do |s|
+    s.source_files =
+      'src/ee/CampaignReceiver.hpp',
+      'src/ee/CampaignReceiverFwd.hpp',
+      'src/ee/campaignreceiver/*'
+
+    s.public_header_files =
+      'src/ee/CampaignReceiver.hpp',
+      'src/ee/CampaignReceiverFwd.hpp',
+      'src/ee/campaignreceiver/*.{h,hpp}'
+
+    s.dependency 'ee-x/core'   
+  end
 
   spec.subspec 'facebook' do |s|
     s.source_files =

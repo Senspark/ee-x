@@ -12,7 +12,7 @@
 namespace ee {
 namespace campaignreceiver {
 class CampaignReceiver;
-} // namespace unityads
+} // namespace campaignreceiver
 
 using campaignreceiver::CampaignReceiver;
 } // namespace ee

@@ -12,6 +12,6 @@
 
 + (BOOL)application:(UIApplication*)app
             openURL:(nonnull NSURL*)url
-            options:(nonnull NSDictionary<NSString*, id>*)options ;
+            options:(nonnull NSDictionary<NSString*, id>*)options;
 
 @end

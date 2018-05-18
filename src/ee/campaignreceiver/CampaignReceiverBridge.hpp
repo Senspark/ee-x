@@ -11,8 +11,8 @@
 
 #include <map>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/CampaignReceiverFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace campaignreceiver {

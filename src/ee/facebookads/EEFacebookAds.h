@@ -22,7 +22,8 @@ typedef struct FBAdSize FBAdSize;
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 
 - (BOOL)createNativeAd:(NSString* _Nonnull)adId
-                layout:(NSString* _Nonnull)layout;
+                layout:(NSString* _Nonnull)layout
+           identifiers:(NSDictionary* _Nonnull)identifiers;
 - (BOOL)destroyNativeAd:(NSString* _Nonnull)adId;
 
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)placementId;

@@ -44,6 +44,7 @@ class FacebookNativeAd implements AdListener, IAdView {
     private static final String k__media          = "media";
     private static final String k__social_context = "social_context";
     private static final String k__title          = "title";
+    private static final String k__cover          = "cover";
 
     private static final String k__tag = "FacebookNativeAd";
 
@@ -345,6 +346,7 @@ class FacebookNativeAd implements AdListener, IAdView {
             public void process(MediaView view) {
                 // Download and display the cover image.
                 view.setNativeAd(_nativeAd);
+
             }
         });
 
@@ -360,6 +362,14 @@ class FacebookNativeAd implements AdListener, IAdView {
             public void process(TextView view) {
                 view.setText(_nativeAd.getAdTitle());
                 clickableViews.add(view);
+            }
+        });
+
+        processView(_nativeAdView, k__cover, new ViewProcessor<ImageView>() {
+            @Override
+            public void process(ImageView view) {
+                NativeAd.Image adCover = _nativeAd.getAdCoverImage();
+                NativeAd.downloadAndDisplayImage(adCover, view);
             }
         });
 

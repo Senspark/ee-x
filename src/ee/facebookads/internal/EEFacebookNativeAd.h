@@ -14,7 +14,8 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
-                       layout:(NSString* _Nonnull)layoutName;
+                       layout:(NSString* _Nonnull)layoutName
+                  identifiers:(NSDictionary* _Nonnull)identifiers;
 
 - (void)destroy;
 

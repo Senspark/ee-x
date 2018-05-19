@@ -1,0 +1,11 @@
+<manifest package="com.ee.campaignreceiver" xmlns:android="http://schemas.android.com/apk/res/android" >
+    <application>
+        <receiver
+            android:name=".CampaignReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.andvoid.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

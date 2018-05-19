@@ -23,7 +23,7 @@ private:
 public:
     NativeAdLayout();
     ~NativeAdLayout();
-
+    
     Self& setAdChoices(const std::string& id);
     Self& setBody(const std::string& id);
     Self& setCallToAction(const std::string& id);
@@ -31,7 +31,8 @@ public:
     Self& setMedia(const std::string& id);
     Self& setSocialContext(const std::string& id);
     Self& setTitle(const std::string& id);
-
+    Self& setCover(const std::string& id);
+    Self& setSponsor(const std::string& id);
 private:
     friend FacebookAds;
 

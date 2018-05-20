@@ -239,7 +239,7 @@ class FacebookNativeAd implements AdListener, IAdView {
             return;
         }
         _logger.info("load");
-        _nativeAd.loadAd();
+        _nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
     }
 
     @NonNull
@@ -283,19 +283,20 @@ class FacebookNativeAd implements AdListener, IAdView {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends View> void processView(@NonNull View view, @NonNull String key,
+    private <T extends View> boolean processView(@NonNull View view, @NonNull String key,
                                               @NonNull ViewProcessor<T> processor) {
         int id = getIdentifier(key);
         if (id == 0) {
             _logger.error("Can not find identifier for key: " + key);
-            return;
+            return false;
         }
         View subView = view.findViewById(id);
         if (subView == null) {
             _logger.error("Can not find view for key: " + key);
-            return;
+            return false;
         }
         processor.process((T) subView);
+        return true;
     }
 
     @Override
@@ -341,12 +342,22 @@ class FacebookNativeAd implements AdListener, IAdView {
             }
         });
 
-        processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
+        boolean hasCoverView = processView(_nativeAdView, k__cover, new ViewProcessor<ImageView>() {
+            @Override
+            public void process(ImageView view) {
+                // Download and display the cover image.
+                NativeAd.Image adCover = _nativeAd.getAdCoverImage();
+                NativeAd.downloadAndDisplayImage(adCover, view);
+                clickableViews.add(view);
+            }
+        });
+
+        boolean hasMediaView = processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
             @Override
             public void process(MediaView view) {
-                // Download and display the cover image.
+                // Download and display the ad media.
                 view.setNativeAd(_nativeAd);
-
+                clickableViews.add(view);
             }
         });
 
@@ -365,14 +376,6 @@ class FacebookNativeAd implements AdListener, IAdView {
             }
         });
 
-        processView(_nativeAdView, k__cover, new ViewProcessor<ImageView>() {
-            @Override
-            public void process(ImageView view) {
-                NativeAd.Image adCover = _nativeAd.getAdCoverImage();
-                NativeAd.downloadAndDisplayImage(adCover, view);
-            }
-        });
-
         processView(_nativeAdView, k__ad_choices, new ViewProcessor<LinearLayout>() {
             @Override
             public void process(LinearLayout view) {
@@ -385,6 +388,12 @@ class FacebookNativeAd implements AdListener, IAdView {
             }
         });
 
+        //if the ad has both media & cover, hide the cover view.
+        //TODO: upgrade this feature to support the flexibility of native ad.
+        if (hasCoverView && hasMediaView) {
+            _nativeAdView.findViewById(getIdentifier(k__cover)).setVisibility(View.INVISIBLE);
+        }
+        
         _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
 
         _isAdLoaded = true;

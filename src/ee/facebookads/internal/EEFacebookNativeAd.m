@@ -239,49 +239,34 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ coverImage] setImage:image];
     }];
-    [[nativeAdView_ coverImage]
-        setHidden:![identifiers_ objectForKey:k__cover]];
 
     // ad icon
     [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ iconImage] setImage:image];
     }];
-    [[nativeAdView_ iconImage] setHidden:![identifiers_ objectForKey:k__icon]];
 
     // adchoices view
     [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
-    [[nativeAdView_ adchoicesView]
-        setHidden:![identifiers_ objectForKey:k__ad_choices]];
 
     // ad body view
     [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
-    [[nativeAdView_ bodyLabel] setHidden:![identifiers_ objectForKey:k__body]];
 
     // ad call to action button
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
                                         forState:UIControlStateNormal];
-    [[nativeAdView_ callToActionButton]
-        setHidden:![identifiers_ objectForKey:k__call_to_action]];
 
     // ad social context label
     [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
-    [[nativeAdView_ socialContextLabel]
-        setHidden:![identifiers_ objectForKey:k__social_context]];
 
     // ad sponsored view
     [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
-    [[nativeAdView_ sponsorLabel]
-        setHidden:![identifiers_ objectForKey:k__sponsor]];
 
     // ad title view
     [[nativeAdView_ titleLabel] setText:[nativeAd title]];
-    [[nativeAdView_ titleLabel]
-        setHidden:![identifiers_ objectForKey:k__title]];
-
+    
     // ad media view
     [[nativeAdView_ mediaView] setNativeAd:nativeAd];
     [[nativeAdView_ mediaView] setDelegate:self];
-    [[nativeAdView_ mediaView] setHidden:![identifiers_ objectForKey:k__media]];
 
     isAdLoaded_ = YES;
     [bridge_ callCpp:[self k__onLoaded]];

@@ -14,12 +14,14 @@
 #import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 #ifdef EE_X_USE_IRON_SOURCE_MEDIATION
+#import <ISFacebookAdapter/FBMediaView.h>
 #import <ISFacebookAdapter/FBNativeAd.h>
 #else // EE_X_USE_IRON_SOURCE_MEDIATION
+#import <FBAudienceNetwork/FBMediaView.h>
 #import <FBAudienceNetwork/FBNativeAd.h>
 #endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
-@interface EEFacebookNativeAd () <FBNativeAdDelegate> {
+@interface EEFacebookNativeAd () <FBNativeAdDelegate, FBMediaViewDelegate> {
     id<EEIMessageBridge> bridge_;
 
     /// Internal Facebook ad.
@@ -39,6 +41,9 @@
 
     /// Common helper.
     EEAdViewHelper* helper_;
+
+    /// Identifiers
+    NSDictionary* identifiers_;
 }
 
 @end
@@ -47,9 +52,22 @@
 
 static NSString* const k__tag = @"FacebookNativeAd";
 
+// clang-format off
+static NSString* const k__ad_choices        = @"ad_choices";
+static NSString* const k__body              = @"body";
+static NSString* const k__call_to_action    = @"call_to_action";
+static NSString* const k__icon              = @"icon";
+static NSString* const k__media             = @"media";
+static NSString* const k__social_context    = @"social_context";
+static NSString* const k__title             = @"title";
+static NSString* const k__cover             = @"cover";
+static NSString* const k__sponsor           = @"sponsor";
+// clang-format on
+
 - (id)initWithBridge:(id<EEIMessageBridge>)bridge
                 adId:(NSString* _Nonnull)adId
-              layout:(NSString* _Nonnull)layoutName {
+              layout:(NSString* _Nonnull)layoutName
+         identifiers:(NSDictionary* _Nonnull)identifiers {
     self = [super init];
     if (self == nil) {
         return self;
@@ -61,6 +79,7 @@ static NSString* const k__tag = @"FacebookNativeAd";
     layoutName_ = [layoutName copy];
     nativeAd_ = nil;
     nativeAdView_ = nil;
+    identifiers_ = [identifiers copy];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                               prefix:k__tag
                                                 adId:adId_];
@@ -84,6 +103,7 @@ static NSString* const k__tag = @"FacebookNativeAd";
     adId_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
+    [identifiers_ release];
     [super dealloc];
 }
 
@@ -216,22 +236,38 @@ static NSString* const k__tag = @"FacebookNativeAd";
     [nativeAd registerViewForInteraction:nativeAdView_
                       withViewController:rootView
                       withClickableViews:@[[nativeAdView_ callToActionButton]]];
-
+    // cover image
     [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ coverImage] setImage:image];
     }];
 
+    // ad icon
     [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ iconImage] setImage:image];
     }];
 
+    // adchoices view
     [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
+
+    // ad body view
     [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
+
+    // ad call to action button
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
                                         forState:UIControlStateNormal];
+
+    // ad social context label
     [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
+
+    // ad sponsored view
     [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
+
+    // ad title view
     [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+    
+    // ad media view
+    [[nativeAdView_ mediaView] setNativeAd:nativeAd];
+    [[nativeAdView_ mediaView] setDelegate:self];
 
     isAdLoaded_ = YES;
     [bridge_ callCpp:[self k__onLoaded]];
@@ -254,4 +290,9 @@ static NSString* const k__tag = @"FacebookNativeAd";
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
+- (void)mediaViewDidLoad:(FBMediaView*)mediaView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    // hidden cover image when media did load.
+    [[nativeAdView_ coverImage] setHidden:[identifiers_ objectForKey:k__media]];
+}
 @end

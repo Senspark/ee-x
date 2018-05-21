@@ -58,6 +58,7 @@ static NSString* const k__destroyRewardVideoAd  = @"FacebookAds_destroyRewardVid
 static NSString* const k__ad_id                 = @"ad_id";
 static NSString* const k__ad_size               = @"ad_size";
 static NSString* const k__layout_name           = @"layout_name";
+static NSString* const k__identifiers           = @"identifiers";
 // clang-format on
 
 - (id)init {
@@ -128,8 +129,9 @@ static NSString* const k__layout_name           = @"layout_name";
                        [EEJsonUtils convertStringToDictionary:message];
                    NSString* adId = dict[k__ad_id];
                    NSString* layoutName = dict[k__layout_name];
+                   NSDictionary* identifiers = dict[k__identifiers];
                    return [EEUtils
-                       toString:[self createNativeAd:adId layout:layoutName]];
+                       toString:[self createNativeAd:adId layout:layoutName identifiers: identifiers]];
                }];
 
     [bridge_ registerHandler:k__destroyNativeAd
@@ -218,14 +220,17 @@ static NSString* const k__layout_name           = @"layout_name";
     return YES;
 }
 
-- (BOOL)createNativeAd:(NSString*)adId layout:(NSString*)layout {
+- (BOOL)createNativeAd:(NSString*)adId
+                layout:(NSString*)layout
+           identifiers:(NSDictionary* _Nonnull)identifiers {
     if ([nativeAds_ objectForKey:adId] != nil) {
         return NO;
     }
     EEFacebookNativeAd* ad =
         [[[EEFacebookNativeAd alloc] initWithBridge:bridge_
                                                adId:adId
-                                             layout:layout] autorelease];
+                                             layout:layout
+                                        identifiers:identifiers] autorelease];
     [nativeAds_ setObject:ad forKey:adId];
     return YES;
 }

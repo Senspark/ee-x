@@ -21,6 +21,8 @@ constexpr auto k__icon           = "icon";
 constexpr auto k__media          = "media";
 constexpr auto k__social_context = "social_context";
 constexpr auto k__title          = "title";
+constexpr auto k__cover          = "cover";
+constexpr auto k__sponsor        = "sponsor";
 // clang-format on
 } // namespace
 
@@ -60,6 +62,16 @@ Self& Self::setSocialContext(const std::string& id) {
 
 Self& Self::setTitle(const std::string& id) {
     params_[k__title] = id;
+    return *this;
+}
+
+Self& Self::setCover(const std::string& id) {
+    params_[k__cover] = id;
+    return *this;
+}
+
+Self& Self::setSponsor(const std::string &id) {
+    params_[k__sponsor] = id;
     return *this;
 }
 } // namespace facebook

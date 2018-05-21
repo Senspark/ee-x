@@ -239,6 +239,12 @@ class FacebookNativeAd implements AdListener, IAdView {
             return;
         }
         _logger.info("load");
+
+        ///
+        /// Audience Network supports pre-caching video or image assets which enables
+        /// the MediaView to play videos immediately after nativeAd finishes loading.
+        /// https://developers.facebook.com/docs/audience-network/android-native#mediaview
+        ///
         _nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
     }
 

@@ -17,7 +17,7 @@ namespace core {
 class ScopeGuard final {
 public:
     template <class Callable>
-    ScopeGuard(Callable&& undoFunction)
+    explicit ScopeGuard(Callable&& undoFunction)
         : f_(std::forward<Callable>(undoFunction)) {}
 
     ScopeGuard(ScopeGuard&& other)

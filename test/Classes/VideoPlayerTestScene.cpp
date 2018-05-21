@@ -19,6 +19,9 @@ Self* Self::create() {
     return result;
 }
 
+Self::VideoPlayerTestScene()
+    : player_(nullptr) {}
+
 bool Self::init() {
     if (not Super::init()) {
         return false;

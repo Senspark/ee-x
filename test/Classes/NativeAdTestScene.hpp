@@ -23,6 +23,8 @@ public:
     static Self* createWithAdView(std::shared_ptr<ee::IAdView> adView);
 
 protected:
+    NativeAdTestScene();
+    
     bool initWithAdView(std::shared_ptr<ee::IAdView> adView);
 
     virtual void onEnter() override;

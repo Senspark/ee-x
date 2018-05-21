@@ -29,6 +29,15 @@ import com.facebook.ads.AdView;
 class FacebookBannerAd implements AdListener, IAdView {
     private static final Logger _logger = new Logger(FacebookBannerAd.class.getName());
 
+    private Context      _context;
+    private Activity     _activity;
+    private AdView       _adView;
+    private boolean      _isAdLoaded;
+    private String       _adId;
+    private AdSize       _adSize;
+    private AdViewHelper _helper;
+    private boolean      _customSize;
+
     static AdSize adSizeFor(int index) {
         if (index == 0) {
             return AdSize.BANNER_HEIGHT_50;
@@ -44,15 +53,6 @@ class FacebookBannerAd implements AdListener, IAdView {
         }
         return AdSize.BANNER_320_50;
     }
-
-    private Context      _context;
-    private Activity     _activity;
-    private AdView       _adView;
-    private boolean      _isAdLoaded;
-    private String       _adId;
-    private AdSize       _adSize;
-    private AdViewHelper _helper;
-    private boolean      _customSize;
 
     FacebookBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId,
                      @NonNull AdSize adSize) {

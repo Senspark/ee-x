@@ -137,7 +137,7 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                adView.setVisible(message.equals("true"));
+                adView.setVisible(Utils.toBoolean(message));
                 return "";
             }
         }, k__setVisible());

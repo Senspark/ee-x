@@ -33,6 +33,10 @@ Self* Self::createWithAdView(std::shared_ptr<ee::IAdView> adView) {
     return result;
 }
 
+Self::NativeAdTestScene()
+    : firstTouch_(false)
+    , lastPosition_(cocos2d::Point::ZERO) {}
+
 bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     if (not Super::init()) {
         return false;

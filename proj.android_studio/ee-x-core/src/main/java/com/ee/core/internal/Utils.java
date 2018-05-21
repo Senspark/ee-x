@@ -30,6 +30,21 @@ import java.util.Locale;
  */
 
 public class Utils {
+    private static final Logger _logger = new Logger(Utils.class.getName());
+
+    private static final String k__isMainThread                  = "Utils_isMainThread";
+    private static final String k__runOnUiThread                 = "Utils_runOnUiThread";
+    private static final String k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
+    private static final String k__getSHA1CertificateFingerprint =
+            "Utils_getSHA1CertificateFingerprint";
+    private static final String k__getVersionName                = "Utils_getVersionName";
+    private static final String k__getVersionCode                = "Utils_getVersionCode";
+    private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
+    private static final String k__openApplication               = "Utils_openApplication";
+    private static final String k__isTablet                      = "Utils_isTablet";
+    private static final String k__testConnection                = "Utils_testConnection";
+    private static final String k__getDeviceId                   = "Utils_getDeviceId";
+
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
     }
@@ -51,8 +66,8 @@ public class Utils {
 
     @NonNull
     public static Boolean toBoolean(@NonNull String value) {
-        assert value.equals("true") || value.equals("false");
-        return value.equals("true");
+        assert "true".equals(value) || "false".equals(value);
+        return "true".equals(value);
     }
 
     /// https://stackoverflow.com/questions/1069066/get-current-stack-trace-in-java
@@ -60,21 +75,6 @@ public class Utils {
     public static StackTraceElement[] getCurrentStackTrace() {
         return Thread.currentThread().getStackTrace();
     }
-
-    private static final Logger _logger = new Logger(Utils.class.getName());
-
-    private static final String k__isMainThread                  = "Utils_isMainThread";
-    private static final String k__runOnUiThread                 = "Utils_runOnUiThread";
-    private static final String k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
-    private static final String k__getSHA1CertificateFingerprint =
-        "Utils_getSHA1CertificateFingerprint";
-    private static final String k__getVersionName                = "Utils_getVersionName";
-    private static final String k__getVersionCode                = "Utils_getVersionCode";
-    private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
-    private static final String k__openApplication               = "Utils_openApplication";
-    private static final String k__isTablet                      = "Utils_isTablet";
-    private static final String k__testConnection                = "Utils_testConnection";
-    private static final String k__getDeviceId                   = "Utils_getDeviceId";
 
     public static void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();

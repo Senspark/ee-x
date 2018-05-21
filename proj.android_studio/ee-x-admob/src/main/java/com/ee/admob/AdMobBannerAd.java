@@ -28,6 +28,16 @@ import java.util.List;
 class AdMobBannerAd extends AdListener implements IAdView {
     private static final Logger _logger = new Logger(AdMobBannerAd.class.getName());
 
+    private Context      _context;
+    private Activity     _activity;
+    private AdView       _adView;
+    private boolean      _isAdLoaded;
+    private String       _adId;
+    private AdSize       _adSize;
+    private List<String> _testDevices;
+    private AdViewHelper _helper;
+    private boolean      _customSize;
+
     static AdSize adSizeFor(int index) {
         if (index == 0) {
             return AdSize.BANNER;
@@ -40,16 +50,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         }
         return AdSize.BANNER;
     }
-
-    private Context      _context;
-    private Activity     _activity;
-    private AdView       _adView;
-    private boolean      _isAdLoaded;
-    private String       _adId;
-    private AdSize       _adSize;
-    private List<String> _testDevices;
-    private AdViewHelper _helper;
-    private boolean      _customSize;
 
     AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId,
                   @NonNull AdSize adSize, @NonNull List<String> testDevices) {

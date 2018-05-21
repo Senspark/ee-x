@@ -4,6 +4,7 @@
 
 |Travis|Jenkins-Android|Jenkins-iOS|Jenkins-macOS|
 |:--:|:--:|:--:|:--:|
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/324fa30030e74532a907054489a3b032)](https://app.codacy.com/app/Senspark/ee-x?utm_source=github.com&utm_medium=referral&utm_content=Senspark/ee-x&utm_campaign=badger)
 |[![Build Status](https://travis-ci.org/Senspark/ee-x.svg?branch=master)](https://travis-ci.org/Senspark/ee-x)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=android)](http://14.161.14.97:8080/job/ee_x/platform=android/)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=ios)](http://14.161.14.97:8080/job/ee_x/platform=ios)|[![Build Status](http://14.161.14.97:8080/buildStatus/icon?job=ee_x/platform=macos)](http://14.161.14.97:8080/job/ee_x/platform=macos)|
 
 ## Modules

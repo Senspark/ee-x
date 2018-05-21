@@ -39,7 +39,7 @@ public:
     Notification& operator=(const Notification&) = default;
 
 #if defined(EE_X_MOBILE)
-    Notification(const ::firebase::messaging::Notification& other);
+    explicit Notification(const ::firebase::messaging::Notification& other);
 #endif // EE_X_MOBILE
 
     /// Indicates notification title. This field is not visible on iOS phones

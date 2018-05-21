@@ -14,7 +14,7 @@
 namespace eetest {
 class FunctionLogger {
 public:
-    FunctionLogger(const std::string& function);
+    explicit FunctionLogger(const std::string& function);
     ~FunctionLogger();
 
 private:

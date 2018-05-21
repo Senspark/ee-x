@@ -17,6 +17,11 @@ import com.facebook.ads.RewardedVideoAdListener;
  */
 
 class FacebookRewardVideoAd implements RewardedVideoAdListener {
+    private static final Logger _logger = new Logger(FacebookRewardVideoAd.class.getName());
+
+    private Context _context;
+    private RewardedVideoAd _rewardedVideoAd;
+    private String _placementId;
 
     private String k__createInternalVideo() {
         return "FacebookAds_createInternalVideo_" + _placementId;
@@ -58,11 +63,6 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
         return "FacebookAds_Video_onClosed_" + _placementId;
     }
 
-    private static final Logger _logger = new Logger(FacebookRewardVideoAd.class.getName());
-
-    private Context _context;
-    private RewardedVideoAd _rewardedVideoAd;
-    private String _placementId;
 
     public FacebookRewardVideoAd(@NonNull Context context, @NonNull String placementId) {
         Utils.checkMainThread();

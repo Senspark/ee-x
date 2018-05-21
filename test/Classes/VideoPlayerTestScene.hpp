@@ -23,7 +23,7 @@ public:
 
 protected:
     VideoPlayerTestScene();
-    
+
     virtual bool init() override;
 
     virtual void onEnter() override;

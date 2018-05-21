@@ -24,7 +24,7 @@ public:
 
 protected:
     NativeAdTestScene();
-    
+
     bool initWithAdView(std::shared_ptr<ee::IAdView> adView);
 
     virtual void onEnter() override;

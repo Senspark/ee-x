@@ -103,6 +103,7 @@ static NSString* const k__sponsor           = @"sponsor";
     adId_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
+    [identifiers_ release];
     [super dealloc];
 }
 

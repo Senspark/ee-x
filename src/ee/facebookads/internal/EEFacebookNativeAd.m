@@ -233,9 +233,12 @@ static NSString* const k__sponsor           = @"sponsor";
 
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [nativeAd unregisterView];
-    [nativeAd registerViewForInteraction:nativeAdView_
+    
+    if ([nativeAdView_ callToActionButton]) {
+        [nativeAd registerViewForInteraction:nativeAdView_
                       withViewController:rootView
                       withClickableViews:@[[nativeAdView_ callToActionButton]]];
+    }
     // cover image
     [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ coverImage] setImage:image];

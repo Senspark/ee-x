@@ -104,6 +104,8 @@ Self::AdMob(const Logger& logger)
             return "";
         },
         k__onClosed);
+    bridge_.registerHandler([this](const std::string& message) { return ""; },
+                            k__onRewardedVideoCompleted);
 }
 
 Self::~AdMob() {

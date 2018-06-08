@@ -7,7 +7,9 @@
 //
 
 #import "ee/core/internal/EEUtils.h"
+
 #import "ee/core/EEMessageBridge.h"
+#import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEReachability.h"
 
 #if TARGET_OS_IOS
@@ -62,6 +64,7 @@ static NSString* const k__getVersionName                = @"Utils_getVersionName
 static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
 static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationInstalled";
 static NSString* const k__openApplication               = @"Utils_openApplication";
+static NSString* const k__sendMail                      = @"Utils_sendMail";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
@@ -113,6 +116,18 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
                        NSString* applicationId = message;
                        return
                            [self toString:[self openApplication:applicationId]];
+                   }];
+
+    [bridge registerHandler:k__sendMail
+                   callback:^(NSString* message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* recipient = dict[@"recipient"];
+                       NSString* subject = dict[@"subject"];
+                       NSString* body = dict[@"body"];
+                       return [self toString:[self sendMail:recipient
+                                                    subject:subject
+                                                       body:body]];
                    }];
 
     [bridge registerHandler:k__isTablet
@@ -174,6 +189,21 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
 #if TARGET_OS_IOS
     NSURL* url =
         [NSURL URLWithString:[applicationId stringByAppendingString:@"://"]];
+    return [[UIApplication sharedApplication] openURL:url];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
+}
+
++ (BOOL)sendMail:(NSString* _Nonnull)recipient
+         subject:(NSString* _Nonnull)subject
+            body:(NSString* _Nonnull)body {
+#if TARGET_OS_IOS
+    NSString* str = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@",
+                                               recipient, subject, body];
+    NSURL* url =
+        [NSURL URLWithString:[str stringByAddingPercentEscapesUsingEncoding:
+                                      NSUTF8StringEncoding]];
     return [[UIApplication sharedApplication] openURL:url];
 #else  // TARGET_OS_IOS
     return NO;

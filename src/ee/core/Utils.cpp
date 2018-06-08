@@ -6,6 +6,8 @@
 //
 //
 
+#include "ee/core/Utils.hpp"
+
 #include <cassert>
 #include <cstdarg>
 #include <cstdlib>
@@ -14,9 +16,10 @@
 #include <sstream>
 #include <thread>
 
+#include <ee/nlohmann/json.hpp>
+
 #include "ee/Macro.hpp"
 #include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
 #include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {
@@ -104,6 +107,7 @@ constexpr auto k__getVersionName                = "Utils_getVersionName";
 constexpr auto k__getVersionCode                = "Utils_getVersionCode";
 constexpr auto k__isApplicationInstalled        = "Utils_isApplicationInstalled";
 constexpr auto k__openApplication               = "Utils_openApplication";
+constexpr auto k__sendMail                      = "Utils_sendMail";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
 constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
@@ -196,6 +200,17 @@ bool isApplicationInstalled(const std::string& applicationId) {
 bool openApplication(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__openApplication, applicationId);
+    return toBool(response);
+}
+
+bool sendMail(const std::string& recipient, const std::string& subject,
+              const std::string& body) {
+    nlohmann::json json;
+    json["recipient"] = recipient;
+    json["subject"] = subject;
+    json["body"] = body;
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__sendMail, json.dump());
     return toBool(response);
 }
 

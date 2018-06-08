@@ -2,6 +2,7 @@ package com.ee.core.internal;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -24,6 +25,7 @@ import com.ee.core.PluginManager;
 
 import java.security.MessageDigest;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Zinge on 10/9/17.
@@ -41,6 +43,7 @@ public class Utils {
     private static final String k__getVersionCode                = "Utils_getVersionCode";
     private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
     private static final String k__openApplication               = "Utils_openApplication";
+    private static final String k__sendMail                      = "Utils_sendMail";
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
     private static final String k__getDeviceId                   = "Utils_getDeviceId";
@@ -143,6 +146,20 @@ public class Utils {
                 return Utils.toString(openApplication(context, applicationId));
             }
         }, k__openApplication);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
+                String recipient = (String) dict.get("recipient");
+                String subject = (String) dict.get("subject");
+                String body = (String) dict.get("body");
+                return Utils.toString(sendMail(context, recipient, subject, body));
+            }
+        }, k__sendMail);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -277,6 +294,22 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static boolean sendMail(@NonNull Context context, @NonNull String recipient, @NonNull String subject,
+            @NonNull String body) {
+        Intent intent = new Intent(Intent.ACTION_SEND) //
+                .setType("message/rfc822") //
+                .putExtra(Intent.EXTRA_EMAIL, new String[] {recipient}) //
+                .putExtra(Intent.EXTRA_SUBJECT, subject) //
+                .putExtra(Intent.EXTRA_TEXT, body);
+        try {
+            context.startActivity(Intent.createChooser(intent, "Send mail..."));
+            return true;
+        } catch (ActivityNotFoundException ex) {
+            // There are no email clients installed.
+            return false;
+        }
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -77,6 +77,9 @@ bool isApplicationInstalled(const std::string& applicationId);
 /// (iOS).
 bool openApplication(const std::string& applicationId);
 
+bool sendMail(const std::string& recipient, const std::string& subject,
+              const std::string& body);
+
 bool isTablet();
 
 bool testConnection();
@@ -86,7 +89,6 @@ std::string getDeviceId();
 } // namespace core
 
 using core::format;
-using core::log;
 using core::getDeviceId;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionCode;
@@ -94,10 +96,12 @@ using core::getVersionName;
 using core::isApplicationInstalled;
 using core::isMainThread;
 using core::isTablet;
+using core::log;
 using core::openApplication;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
+using core::sendMail;
 using core::testConnection;
 } // namespace ee
 

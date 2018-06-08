@@ -40,6 +40,10 @@
 + (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId;
 + (BOOL)openApplication:(NSString* _Nonnull)applicationId;
 
++ (BOOL)sendMail:(NSString* _Nonnull)recipient
+         subject:(NSString* _Nonnull)subject
+            body:(NSString* _Nonnull)body;
+
 + (BOOL)isTablet;
 + (BOOL)testConnection:(NSString* _Nonnull)hostName;
 

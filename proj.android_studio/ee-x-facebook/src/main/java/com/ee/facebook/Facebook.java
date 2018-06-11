@@ -419,6 +419,11 @@ public class Facebook implements PluginProtocol {
     }
 
     private void shareContent(ShareContent content, FacebookCallback<Sharer.Result> delegate) {
+        if(_activity == null)
+        {
+            return;
+        }
+        
         ShareDialog dialog = new ShareDialog(_activity);
         dialog.registerCallback(_callbackManager, delegate);
         dialog.show(content, ShareDialog.Mode.AUTOMATIC);

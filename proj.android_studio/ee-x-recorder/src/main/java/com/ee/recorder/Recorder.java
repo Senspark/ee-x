@@ -36,25 +36,25 @@ import static android.app.Activity.RESULT_OK;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Recorder implements PluginProtocol {
-    private static final String k__startScreenRecording     = "Recorder_startScreenRecording";
-    private static final String k__stopScreenRecording      = "Recorder_stopScreenRecording";
-    private static final String k__cancelScreenRecording    = "Recorder_cancelScreenRecording";
-    private static final String k__getScreenRecordingUrl    = "Recorder_getScreenRecordingUrl";
+    private static final String k__startScreenRecording = "Recorder_startScreenRecording";
+    private static final String k__stopScreenRecording = "Recorder_stopScreenRecording";
+    private static final String k__cancelScreenRecording = "Recorder_cancelScreenRecording";
+    private static final String k__getScreenRecordingUrl = "Recorder_getScreenRecordingUrl";
     private static final String k__checkRecordingPermission = "Recorder_checkRecordingPermission";
 
     private static final Logger _logger = new Logger(Recorder.class.getName());
 
     private static final int PERMISSION_CODE = 1;
-    private static final int DISPLAY_WIDTH   = 480;
-    private static final int DISPLAY_HEIGHT  = 640;
+    private static final int DISPLAY_WIDTH = 480;
+    private static final int DISPLAY_HEIGHT = 640;
 
-    private Activity                 _activity;
-    private MediaRecorder            _mediaRecorder;
-    private String                   _recordedFilePath = "";
-    private int                      _screenDensity;
-    private MediaProjectionManager   _projectionManager;
-    private MediaProjection          _mediaProjection;
-    private VirtualDisplay           _virtualDisplay;
+    private Activity _activity;
+    private MediaRecorder _mediaRecorder;
+    private String _recordedFilePath = "";
+    private int _screenDensity;
+    private MediaProjectionManager _projectionManager;
+    private MediaProjection _mediaProjection;
+    private VirtualDisplay _virtualDisplay;
     private MediaProjection.Callback _mediaProjectionCallback;
 
     private boolean _hasRecordingPermission;
@@ -268,13 +268,15 @@ public class Recorder implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public boolean checkRecordingPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+                || _activity == null) {
             return false;
         }
 
         if (_hasRecordingPermission) {
             return true;
         }
+
         if (ContextCompat.checkSelfPermission(_activity, Manifest.permission
                 .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat
                 .checkSelfPermission(_activity, Manifest.permission.RECORD_AUDIO) !=

@@ -131,6 +131,7 @@ public class AppsFlyer implements PluginProtocol {
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _bridge.deregisterHandler(kInitialize);
+        _bridge.deregisterHandler(kGetDeviceId);
         _bridge.deregisterHandler(kSetDebugEnabled);
         _bridge.deregisterHandler(kTrackEvent);
     }

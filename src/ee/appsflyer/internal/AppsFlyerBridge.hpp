@@ -20,7 +20,7 @@ public:
 
     virtual void initialize(const std::string& devKey,
                             const std::string& appId) override;
-    
+
     virtual std::string getDeviceId() const override;
 
     virtual void setDebugEnabled(bool enabled) override;

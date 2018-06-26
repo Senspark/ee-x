@@ -45,4 +45,8 @@ abstract_target 'common' do
     target 'ee_x_mobile_admob' do
         pod 'Google-Mobile-Ads-SDK'
     end
+    
+    target 'ee_x_mobile_apps_flyer' do
+        pod 'AppsFlyerFramework'
+    end
 end

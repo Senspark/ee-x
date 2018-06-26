@@ -110,6 +110,7 @@ dependencies {
 
     implementation project(':libcocos2dx')
     implementation project(':ee-x-ads')
+    implementation project(':ee-x-apps-flyer')
     implementation project(':ee-x-crashlytics')
     implementation project(':ee-x-google-analytics')
     implementation project(':ee-x-firebase-analytics')

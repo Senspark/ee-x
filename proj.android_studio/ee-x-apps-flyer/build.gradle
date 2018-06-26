@@ -1,0 +1,19 @@
+// https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-core')
+    implementation 'com.appsflyer:af-android-sdk:4.8.6@aar'
+    implementation 'com.android.installreferrer:installreferrer:1.0'
+}

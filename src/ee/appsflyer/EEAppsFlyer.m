@@ -37,10 +37,12 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
            selector:@selector(applicationDidBecomeActive:)
                name:UIApplicationDidBecomeActiveNotification
              object:nil];
+    [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
+    [self deregisterHandlers];
     [[NSNotificationCenter defaultCenter]
         removeObserver:self
                   name:UIApplicationDidBecomeActiveNotification
@@ -92,6 +94,7 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
     [tracker_ setAppsFlyerDevKey:devKey];
     [tracker_ setAppleAppID:appId];
     [tracker_ setShouldCollectDeviceName:YES];
+    [tracker_ trackAppLaunch];
 }
 
 - (NSString* _Nonnull)getDeviceId {
@@ -108,7 +111,8 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
-    [tracker_ trackAppLaunch];
+    // Moved to initialization.
+    // [tracker_ trackAppLaunch];
 }
 
 - (void)onConversionDataReceived:(NSDictionary*)installData {

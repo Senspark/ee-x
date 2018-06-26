@@ -403,6 +403,8 @@
 		AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */; };
 		AD773EC520610FE400136655 /* EEFacebookRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD773EC320610FE400136655 /* EEFacebookRequestDelegate.m */; };
 		AD773EC620610FE400136655 /* EEFacebookRequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = AD773EC420610FE400136655 /* EEFacebookRequestDelegate.h */; };
+		ADD236BB20E1E5C00073950F /* AppsFlyer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADD236BA20E1E5C00073950F /* AppsFlyer.hpp */; };
+		ADD236BD20E1E6070073950F /* AppsFlyerFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADD236BC20E1E6040073950F /* AppsFlyerFwd.hpp */; };
 		ADE6AF082061127B00F6135F /* EEFacebookShareDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE6AF062061127B00F6135F /* EEFacebookShareDelegate.m */; };
 		ADE6AF092061127B00F6135F /* EEFacebookShareDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = ADE6AF072061127B00F6135F /* EEFacebookShareDelegate.h */; };
 		ADE6AF0C20611B6B00F6135F /* FacebookShareDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADE6AF0A20611B6B00F6135F /* FacebookShareDelegate.cpp */; };
@@ -422,6 +424,11 @@
 		ADE6AF2E2062170A00F6135F /* FacebookAccessToken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADE6AF2C2062170A00F6135F /* FacebookAccessToken.cpp */; };
 		ADE6AF2F2062170A00F6135F /* FacebookAccessToken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADE6AF2D2062170A00F6135F /* FacebookAccessToken.hpp */; };
 		ADE6AF312062174100F6135F /* IFacebookAccessToken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADE6AF302062174100F6135F /* IFacebookAccessToken.hpp */; };
+		ADEE09B320E1E6F400C17E45 /* AppsFlyerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADEE09AE20E1E6F400C17E45 /* AppsFlyerBridge.cpp */; };
+		ADEE09B420E1E6F400C17E45 /* AppsFlyerBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADEE09AF20E1E6F400C17E45 /* AppsFlyerBridge.hpp */; };
+		ADEE09B520E1E6F400C17E45 /* EEAppsFlyer.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEE09B020E1E6F400C17E45 /* EEAppsFlyer.h */; };
+		ADEE09B620E1E6F400C17E45 /* EEAppsFlyer.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEE09B120E1E6F400C17E45 /* EEAppsFlyer.m */; };
+		ADEE09BF20E1EF0100C17E45 /* IAppsFlyerBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADEE09BE20E1EEFE00C17E45 /* IAppsFlyerBridge.hpp */; };
 		ADF663022063BC5400196553 /* FacebookGraphRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADF663002063BC5400196553 /* FacebookGraphRequest.cpp */; };
 		ADF663032063BC5400196553 /* FacebookGraphRequest.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADF663012063BC5400196553 /* FacebookGraphRequest.hpp */; };
 		ADF663062063BE5800196553 /* FacebookGraphDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADF663042063BE5800196553 /* FacebookGraphDelegate.cpp */; };
@@ -429,6 +436,7 @@
 		BDE7F2B811136B40BA731765 /* libPods-common-ee_x_mobile_facebook_ads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */; };
 		C03CD6E5352F92D23E407159 /* libPods-common-ee_x_mobile_facebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */; };
 		E8F514AC1C427857C940C7A0 /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */; };
+		F79D305FE6B4F114EDCE7770 /* libPods-common-ee_x_mobile_apps_flyer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72330131700A4258997C25F4 /* libPods-common-ee_x_mobile_apps_flyer.a */; };
 		F8E14BB75FB4AA2DEEF491E0 /* libPods-common-ee_x_mobile_firebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F889C05EF7CE568FD346E730 /* libPods-common-ee_x_mobile_firebase.a */; };
 /* End PBXBuildFile section */
 
@@ -546,6 +554,13 @@
 			remoteInfo = ee_x_mobile_core;
 		};
 		AD10C2DF2049345600C92CFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C43A8051BDDDF1800D0597F;
+			remoteInfo = ee_x_mobile_core;
+		};
+		ADD2369120E1E5340073950F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -714,7 +729,9 @@
 		1F1E0990024A18EA0149D5D0 /* Pods-common-ee_x_mobile_firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		2106BA66E0EE721371EB19F2 /* Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.debug.xcconfig"; sourceTree = "<group>"; };
 		30A2ACDB88283BBA02B63398 /* libPods-common-ee_x_mobile_vungle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_vungle.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4273A17BC78A6C9D2BC2E364 /* Pods-common-ee_x_mobile_apps_flyer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_apps_flyer.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_apps_flyer/Pods-common-ee_x_mobile_apps_flyer.release.xcconfig"; sourceTree = "<group>"; };
 		4A71CA238E20EC0D9F03C6CB /* libPods-common-crashlytics-ee_x_desktop_crashlytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-crashlytics-ee_x_desktop_crashlytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CAF3D365AB59CC679F5F524 /* Pods-common-ee_x_mobile_apps_flyer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_apps_flyer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_apps_flyer/Pods-common-ee_x_mobile_apps_flyer.debug.xcconfig"; sourceTree = "<group>"; };
 		64690F6982D86DE4B1E6AEB7 /* Pods-common-ee_x_mobile_facebook_ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads.release.xcconfig"; sourceTree = "<group>"; };
 		6B234B279C58E3F8EA9E069B /* Pods-common-ee_x_mobile_iron_src.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_iron_src/Pods-common-ee_x_mobile_iron_src.debug.xcconfig"; sourceTree = "<group>"; };
 		6F04C59A1F8F6AEE007BC7A3 /* AdMobBannerAd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdMobBannerAd.cpp; path = admob/internal/AdMobBannerAd.cpp; sourceTree = "<group>"; };
@@ -959,6 +976,7 @@
 		6FF6B5771F8F2C8E00A27634 /* EEIAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEIAdView.h; path = ads/internal/EEIAdView.h; sourceTree = "<group>"; };
 		6FF6B5791F8F492900A27634 /* EEAdViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EEAdViewHelper.m; path = ads/internal/EEAdViewHelper.m; sourceTree = "<group>"; };
 		6FF6B57B1F8F493800A27634 /* EEAdViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EEAdViewHelper.h; path = ads/internal/EEAdViewHelper.h; sourceTree = "<group>"; };
+		72330131700A4258997C25F4 /* libPods-common-ee_x_mobile_apps_flyer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_apps_flyer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		82896FD58FB2A81BA63FED93 /* Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics.release.xcconfig"; sourceTree = "<group>"; };
 		8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_mobile_facebook.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook.release.xcconfig"; sourceTree = "<group>"; };
 		93FF4675984A472C254B6EEF /* libPods-common-ee_x_mobile_facebook_ads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_mobile_facebook_ads.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1013,6 +1031,9 @@
 		AD56EF862021730B00DC9B56 /* EEVideoPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEVideoPlayerManager.h; sourceTree = "<group>"; };
 		AD773EC320610FE400136655 /* EEFacebookRequestDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEFacebookRequestDelegate.m; sourceTree = "<group>"; };
 		AD773EC420610FE400136655 /* EEFacebookRequestDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEFacebookRequestDelegate.h; sourceTree = "<group>"; };
+		ADD236B420E1E5340073950F /* ee_x_mobile_apps_flyer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_apps_flyer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADD236BA20E1E5C00073950F /* AppsFlyer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppsFlyer.hpp; sourceTree = "<group>"; };
+		ADD236BC20E1E6040073950F /* AppsFlyerFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppsFlyerFwd.hpp; sourceTree = "<group>"; };
 		ADE6AF062061127B00F6135F /* EEFacebookShareDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEFacebookShareDelegate.m; sourceTree = "<group>"; };
 		ADE6AF072061127B00F6135F /* EEFacebookShareDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEFacebookShareDelegate.h; sourceTree = "<group>"; };
 		ADE6AF0A20611B6B00F6135F /* FacebookShareDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookShareDelegate.cpp; sourceTree = "<group>"; };
@@ -1030,6 +1051,11 @@
 		ADE6AF2C2062170A00F6135F /* FacebookAccessToken.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAccessToken.cpp; sourceTree = "<group>"; };
 		ADE6AF2D2062170A00F6135F /* FacebookAccessToken.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FacebookAccessToken.hpp; sourceTree = "<group>"; };
 		ADE6AF302062174100F6135F /* IFacebookAccessToken.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IFacebookAccessToken.hpp; sourceTree = "<group>"; };
+		ADEE09AE20E1E6F400C17E45 /* AppsFlyerBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppsFlyerBridge.cpp; sourceTree = "<group>"; };
+		ADEE09AF20E1E6F400C17E45 /* AppsFlyerBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppsFlyerBridge.hpp; sourceTree = "<group>"; };
+		ADEE09B020E1E6F400C17E45 /* EEAppsFlyer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEAppsFlyer.h; sourceTree = "<group>"; };
+		ADEE09B120E1E6F400C17E45 /* EEAppsFlyer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEAppsFlyer.m; sourceTree = "<group>"; };
+		ADEE09BE20E1EEFE00C17E45 /* IAppsFlyerBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAppsFlyerBridge.hpp; sourceTree = "<group>"; };
 		ADF663002063BC5400196553 /* FacebookGraphRequest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookGraphRequest.cpp; sourceTree = "<group>"; };
 		ADF663012063BC5400196553 /* FacebookGraphRequest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FacebookGraphRequest.hpp; sourceTree = "<group>"; };
 		ADF663042063BE5800196553 /* FacebookGraphDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookGraphDelegate.cpp; sourceTree = "<group>"; };
@@ -1208,6 +1234,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ADD2369B20E1E5340073950F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F79D305FE6B4F114EDCE7770 /* libPods-common-ee_x_mobile_apps_flyer.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB684DF61EC5639F00ED9E4A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1249,6 +1283,7 @@
 				6F59E7431FA70B3A007D3070 /* ee_x_desktop_ads.a */,
 				AD10C2CF20492A9D00C92CFE /* ee_x_mobile_facebook.a */,
 				AD10C3072049345600C92CFE /* ee_x_mobile_recorder.a */,
+				ADD236B420E1E5340073950F /* ee_x_mobile_apps_flyer.a */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -1273,6 +1308,7 @@
 				C6450659AD5016C5A424A000 /* libPods-common-ee_x_mobile_iron_source.a */,
 				CD14898BB9B816EF827F5B7C /* libPods-common-ee_x_mobile_google.a */,
 				ECBB07E1A889EEA1967CDF33 /* libPods-common-ee_x_mobile_facebook.a */,
+				72330131700A4258997C25F4 /* libPods-common-ee_x_mobile_apps_flyer.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1423,6 +1459,9 @@
 				6F36881F1F85E38000AE2D93 /* AppLovin.hpp */,
 				6F3688201F85E38000AE2D93 /* AppLovinFwd.hpp */,
 				6F36881A1F85E38000AE2D93 /* applovin */,
+				ADD236BA20E1E5C00073950F /* AppsFlyer.hpp */,
+				ADD236BC20E1E6040073950F /* AppsFlyerFwd.hpp */,
+				ADEE09AD20E1E6F400C17E45 /* appsflyer */,
 				AD10C2D020492B2200C92CFE /* facebook */,
 				AD10C2D620492B2300C92CFE /* Facebook.hpp */,
 				AD10C2D520492B2200C92CFE /* FacebookFwd.hpp */,
@@ -1753,6 +1792,8 @@
 				0A979356ADAEF3680BAC2D70 /* Pods-common-ee_x_mobile_google.release.xcconfig */,
 				00346BA132A60CFD248A0057 /* Pods-common-ee_x_mobile_facebook.debug.xcconfig */,
 				8A1484373AA16031A4559EBC /* Pods-common-ee_x_mobile_facebook.release.xcconfig */,
+				4CAF3D365AB59CC679F5F524 /* Pods-common-ee_x_mobile_apps_flyer.debug.xcconfig */,
+				4273A17BC78A6C9D2BC2E364 /* Pods-common-ee_x_mobile_apps_flyer.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1840,6 +1881,26 @@
 				ADE6AF0B20611B6B00F6135F /* FacebookShareDelegate.hpp */,
 				ADE6AF2C2062170A00F6135F /* FacebookAccessToken.cpp */,
 				ADE6AF2D2062170A00F6135F /* FacebookAccessToken.hpp */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
+		ADEE09AD20E1E6F400C17E45 /* appsflyer */ = {
+			isa = PBXGroup;
+			children = (
+				ADEE09BE20E1EEFE00C17E45 /* IAppsFlyerBridge.hpp */,
+				ADEE09B020E1E6F400C17E45 /* EEAppsFlyer.h */,
+				ADEE09B120E1E6F400C17E45 /* EEAppsFlyer.m */,
+				ADEE09B220E1E6F400C17E45 /* internal */,
+			);
+			path = appsflyer;
+			sourceTree = "<group>";
+		};
+		ADEE09B220E1E6F400C17E45 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				ADEE09AE20E1E6F400C17E45 /* AppsFlyerBridge.cpp */,
+				ADEE09AF20E1E6F400C17E45 /* AppsFlyerBridge.hpp */,
 			);
 			path = internal;
 			sourceTree = "<group>";
@@ -2209,6 +2270,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ADD2369C20E1E5340073950F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADEE09B520E1E6F400C17E45 /* EEAppsFlyer.h in Headers */,
+				ADEE09BF20E1EF0100C17E45 /* IAppsFlyerBridge.hpp in Headers */,
+				ADD236BB20E1E5C00073950F /* AppsFlyer.hpp in Headers */,
+				ADD236BD20E1E6070073950F /* AppsFlyerFwd.hpp in Headers */,
+				ADEE09B420E1E6F400C17E45 /* AppsFlyerBridge.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -2239,7 +2312,6 @@
 				6F2479E51F8E3569009E702C /* Sources */,
 				6F2479E91F8E3569009E702C /* Copy Files */,
 				6F2479EA1F8E3569009E702C /* Headers */,
-				6F2479F01F8E3569009E702C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2280,7 +2352,6 @@
 				6F36880A1F85E32C00AE2D93 /* Sources */,
 				6F36880F1F85E32C00AE2D93 /* Copy Files */,
 				6F3688101F85E32C00AE2D93 /* Headers */,
-				6F3688151F85E32C00AE2D93 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2301,7 +2372,6 @@
 				6F36882D1F85F1B800AE2D93 /* Sources */,
 				6F3688301F85F1B800AE2D93 /* Copy Files */,
 				6F3688311F85F1B800AE2D93 /* Headers */,
-				6F3688361F85F1B800AE2D93 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2341,7 +2411,6 @@
 				6F43A2A11EC19F5700C68152 /* Frameworks */,
 				6F43A2A31EC19F5700C68152 /* Copy Files */,
 				6F43A2A41EC19F5700C68152 /* Headers */,
-				6F43A2A51EC19F5700C68152 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2416,7 +2485,6 @@
 				6F83DC8D1EC1C787004C5500 /* Frameworks */,
 				6F83DC8E1EC1C787004C5500 /* Copy Files */,
 				6F83DC8F1EC1C787004C5500 /* Headers */,
-				6F83DC941EC1C787004C5500 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2437,7 +2505,6 @@
 				6F83DCFA1EC1CD9B004C5500 /* Frameworks */,
 				6F83DCFB1EC1CD9B004C5500 /* Copy Files */,
 				6F83DCFC1EC1CD9B004C5500 /* Headers */,
-				FA0DE9B48647A9C2F5C880EF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2458,7 +2525,6 @@
 				6F978C671F4184C500247CA8 /* Frameworks */,
 				6F978C6E1F4184C500247CA8 /* Copy Files */,
 				6F978C6F1F4184C500247CA8 /* Headers */,
-				6F978C781F4184C500247CA8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2479,7 +2545,6 @@
 				6F978C881F4184CF00247CA8 /* Frameworks */,
 				6F978C8F1F4184CF00247CA8 /* Copy Files */,
 				6F978C901F4184CF00247CA8 /* Headers */,
-				37790495BA56D9D9210C6C22 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2500,7 +2565,6 @@
 				6F9EFA881F9EFA1A00C931D7 /* Frameworks */,
 				6F9EFA901F9EFA1A00C931D7 /* Copy Files */,
 				6F9EFA911F9EFA1A00C931D7 /* Headers */,
-				6F9EFA9A1F9EFA1A00C931D7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2569,6 +2633,25 @@
 			productReference = AD10C3072049345600C92CFE /* ee_x_mobile_recorder.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		ADD2368F20E1E5340073950F /* ee_x_mobile_apps_flyer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADD236B120E1E5340073950F /* Build configuration list for PBXNativeTarget "ee_x_mobile_apps_flyer" */;
+			buildPhases = (
+				C34FB0BA2EF27F77059B037B /* [CP] Check Pods Manifest.lock */,
+				ADD2369220E1E5340073950F /* Sources */,
+				ADD2369B20E1E5340073950F /* Frameworks */,
+				ADD2369C20E1E5340073950F /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ADD2369020E1E5340073950F /* PBXTargetDependency */,
+			);
+			name = ee_x_mobile_apps_flyer;
+			productName = "ee-library";
+			productReference = ADD236B420E1E5340073950F /* ee_x_mobile_apps_flyer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		EB684DEC1EC5639F00ED9E4A /* ee_x_mobile_facebook_ads */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB684E071EC5639F00ED9E4A /* Build configuration list for PBXNativeTarget "ee_x_mobile_facebook_ads" */;
@@ -2577,7 +2660,6 @@
 				EB684DF01EC5639F00ED9E4A /* Sources */,
 				EB684DF61EC5639F00ED9E4A /* Frameworks */,
 				6F257FFC1ECB15F100B910F9 /* Headers */,
-				CF8ED5822B5BF4B1E3ABE118 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2635,6 +2717,7 @@
 				AD10C2AC20492A9D00C92CFE /* ee_x_mobile_facebook */,
 				6FAFB5C51EC94E0F00450E67 /* ee_x_mobile_store */,
 				AD10C2DD2049345600C92CFE /* ee_x_mobile_recorder */,
+				ADD2368F20E1E5340073950F /* ee_x_mobile_apps_flyer */,
 				6F79B6111CCA7AA00008EFAC /* ee_x_desktop_core */,
 				6F83DC861EC1C787004C5500 /* ee_x_desktop_crashlytics */,
 				6F24C3561EC2B9A600509B6C /* ee_x_desktop_firebase */,
@@ -2644,21 +2727,6 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		37790495BA56D9D9210C6C22 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_iron_source/Pods-common-ee_x_mobile_iron_source-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3B3B26BAE4B5720CA835B225 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2713,21 +2781,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F2479F01F8E3569009E702C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_admob/Pods-common-ee_x_mobile_admob-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6F3688091F85E32C00AE2D93 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2744,21 +2797,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6F3688151F85E32C00AE2D93 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_app_lovin/Pods-common-ee_x_mobile_app_lovin-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F36882A1F85F1B800AE2D93 /* [CP] Check Pods Manifest.lock */ = {
@@ -2779,21 +2817,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F3688361F85F1B800AE2D93 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_vungle/Pods-common-ee_x_mobile_vungle-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6F43A29F1EC19F5700C68152 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2810,21 +2833,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6F43A2A51EC19F5700C68152 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_mobile_crashlytics/Pods-common-crashlytics-ee_x_mobile_crashlytics-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6F83DC891EC1C787004C5500 /* [CP] Check Pods Manifest.lock */ = {
@@ -2845,21 +2853,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F83DC941EC1C787004C5500 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-crashlytics-ee_x_desktop_crashlytics/Pods-common-crashlytics-ee_x_desktop_crashlytics-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6F978C5F1F4184C500247CA8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2878,21 +2871,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F978C781F4184C500247CA8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_unity_ads/Pods-common-ee_x_mobile_unity_ads-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6F9EFA801F9EFA1A00C931D7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2909,21 +2887,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6F9EFA9A1F9EFA1A00C931D7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_google/Pods-common-ee_x_mobile_google-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8F60490D1EA29FF94F5C343E /* [CP] Check Pods Manifest.lock */ = {
@@ -2980,34 +2943,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook/Pods-common-ee_x_mobile_facebook-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CF8ED5822B5BF4B1E3ABE118 /* [CP] Copy Pods Resources */ = {
+		C34FB0BA2EF27F77059B037B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-common-ee_x_mobile_apps_flyer-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_facebook_ads/Pods-common-ee_x_mobile_facebook_ads-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FA0DE9B48647A9C2F5C880EF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_mobile_firebase/Pods-common-ee_x_mobile_firebase-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3300,6 +3251,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ADD2369220E1E5340073950F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADEE09B320E1E6F400C17E45 /* AppsFlyerBridge.cpp in Sources */,
+				ADEE09B620E1E6F400C17E45 /* EEAppsFlyer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB684DF01EC5639F00ED9E4A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3399,6 +3359,11 @@
 			isa = PBXTargetDependency;
 			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
 			targetProxy = AD10C2DF2049345600C92CFE /* PBXContainerItemProxy */;
+		};
+		ADD2369020E1E5340073950F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C43A8051BDDDF1800D0597F /* ee_x_mobile_core */;
+			targetProxy = ADD2369120E1E5340073950F /* PBXContainerItemProxy */;
 		};
 		EB684DED1EC5639F00ED9E4A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3826,6 +3791,26 @@
 			};
 			name = Release;
 		};
+		ADD236B220E1E5340073950F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CAF3D365AB59CC679F5F524 /* Pods-common-ee_x_mobile_apps_flyer.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		ADD236B320E1E5340073950F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4273A17BC78A6C9D2BC2E364 /* Pods-common-ee_x_mobile_apps_flyer.release.xcconfig */;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4129,6 +4114,15 @@
 			buildConfigurations = (
 				AD10C3052049345600C92CFE /* Debug */,
 				AD10C3062049345600C92CFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ADD236B120E1E5340073950F /* Build configuration list for PBXNativeTarget "ee_x_mobile_apps_flyer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADD236B220E1E5340073950F /* Debug */,
+				ADD236B320E1E5340073950F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

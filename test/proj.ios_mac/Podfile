@@ -9,7 +9,8 @@ abstract_target 'common' do
     
     target 'ee_x_test_mobile' do
         pod_ee_x('admob')
-        pod_ee_x('crashlytics')        
+        pod_ee_x('appsflyer')
+        pod_ee_x('crashlytics')
         pod_ee_x('facebook')
         pod_ee_x('firebase-analytics')
         pod_ee_x('firebase-dynamic-link')

@@ -384,4 +384,19 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
+  spec.subspec 'appsflyer' do |s|
+    s.source_files =
+      'src/ee/AppsFlyer.hpp',
+      'src/ee/AppsFlyerFwd.hpp',
+      'src/ee/appsflyer/*',
+      'src/ee/appsflyer/internal/*'
+
+    s.public_header_files =
+      'src/ee/AppsFlyer.hpp',
+      'src/ee/AppsFlyerFwd.hpp',
+      'src/ee/appsflyer/*.{h,hpp}'
+
+    s.dependency 'ee-x/core'
+    s.dependency 'AppsFlyerFramework'
+  end
 end

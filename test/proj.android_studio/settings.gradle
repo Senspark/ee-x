@@ -10,6 +10,7 @@ def include_lib(name) {
 }
 
 include_lib('ee-x-ads')
+include_lib('ee-x-apps-flyer')
 include_lib('ee-x-core')
 include_lib('ee-x-crashlytics')
 include_lib('ee-x-google-analytics')

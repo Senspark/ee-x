@@ -9,8 +9,8 @@
 #define EE_X_APPS_FLYER_HPP
 
 #ifdef __cplusplus
-#include "ee/appsflyer/AppsFlyerBridge.hpp"
-#include "ee/appsflyer/AppsFlyerFwd.hpp"
+#include "ee/AppsFlyerFwd.hpp"
+#include "ee/appsflyer/IAppsFlyerBridge.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__

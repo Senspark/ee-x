@@ -223,7 +223,10 @@ public class AppLovin implements PluginProtocol {
         if (_initialized) {
             return;
         }
-        AppLovinSdkSettings settings = AppLovinSdkUtils.retrieveUserSettings(_context);
+
+        AppLovinSdkSettings settings = new AppLovinSdkSettings();
+        settings.setVerboseLogging(false);
+
         _sdk = AppLovinSdk.getInstance(key, settings, _context);
         _sdk.initializeSdk();
 

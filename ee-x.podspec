@@ -314,6 +314,8 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceFacebookAdapter','4.1.2.0'
     s.dependency 'IronSourceUnityAdsAdapter','4.1.0.2'
     s.dependency 'IronSourceVungleAdapter','4.1.1.1'
+    s.dependency 'IronSourceAdColonyAdapter','4.1.2.1'
+    s.dependency 'IronSourceAdMobAdapter','4.1.5.0'
   end
 
   spec.subspec 'unity-ads-base' do |s|

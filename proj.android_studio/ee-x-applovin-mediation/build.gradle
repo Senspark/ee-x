@@ -14,5 +14,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.ironsource.adapters:applovinadapter:4.1.5@jar'
+    implementation 'com.ironsource.adapters:applovinadapter:4.1.3@jar'
 }

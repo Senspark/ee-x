@@ -14,5 +14,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api 'com.ironsource.adapters:unityadsadapter:4.1.1@jar'
+    api 'com.ironsource.adapters:unityadsadapter:4.1.0@jar'
 }

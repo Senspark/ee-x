@@ -193,7 +193,7 @@
     [bridge_ callCpp:[self k__onFailedToLoad]];
 }
 
-- (void)rewardedVideoAdComplete:(FBRewardedVideoAd*)rewardedVideoAd {
+- (void)rewardedVideoAdVideoComplete:(FBRewardedVideoAd*)rewardedVideoAd {
     [bridge_ callCpp:[self k__onRewarded]];
 }
 

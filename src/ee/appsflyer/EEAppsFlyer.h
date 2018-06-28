@@ -12,10 +12,14 @@
 
 - (void)initialize:(NSString* _Nonnull)devKey appId:(NSString* _Nonnull)appId;
 
+- (void)startTracking;
+
 - (NSString* _Nonnull)getDeviceId;
 
 /// If enabled, AppsFlyer SDK logs are shown in the XCode console.
 - (void)setDebugEnabled:(BOOL)enabled;
+
+- (void)setStopTracking:(BOOL)enabled;
 
 - (void)trackEvent:(NSString* _Nonnull)name values:(NSDictionary* _Nonnull)dict;
 

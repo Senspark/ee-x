@@ -26,10 +26,14 @@ public:
     virtual void initialize(const std::string& devKey,
                             const std::string& appId) = 0;
 
+    virtual void startTracking() = 0;
+
     /// AppsFlyer's unique device ID is created for every new install of an app.
     virtual std::string getDeviceId() const = 0;
 
     virtual void setDebugEnabled(bool enabled) = 0;
+
+    virtual void setStopTracking(bool enabled) = 0;
 
     virtual void
     trackEvent(const std::string& name,

@@ -15,15 +15,21 @@
 
 // clang-format off
 static NSString* const kInitialize      = @"AppsFlyerInitialize";
+static NSString* const kStartTracking   = @"AppsFlyerStartTracking";
 static NSString* const kGetDeviceId     = @"AppsFlyerGetDeviceId";
 static NSString* const kSetDebugEnabled = @"AppsFlyerSetDebugEnabled";
+static NSString* const kSetStopTracking = @"AppsFlyerSetStopTracking";
 static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
 // clang-format on
 
-@implementation EEAppsFlyer {
+@interface EEAppsFlyer () <AppsFlyerTrackerDelegate> {
     id<EEIMessageBridge> bridge_;
     AppsFlyerTracker* tracker_;
 }
+
+@end
+
+@implementation EEAppsFlyer
 
 - (id)init {
     self = [super init];
@@ -61,6 +67,12 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
                         return @"";
                     }];
 
+    [bridge_ registerHandler:kStartTracking
+                    callback:^(NSString* message) {
+                        [self startTracking];
+                        return @"";
+                    }];
+
     [bridge_ registerHandler:kGetDeviceId
                     callback:^(NSString* message) {
                         return [self getDeviceId];
@@ -69,6 +81,12 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
     [bridge_ registerHandler:kSetDebugEnabled
                     callback:^(NSString* message) {
                         [self setDebugEnabled:[EEUtils toBool:message]];
+                        return @"";
+                    }];
+
+    [bridge_ registerHandler:kSetStopTracking
+                    callback:^(NSString* message) {
+                        [self setStopTracking:[EEUtils toBool:message]];
                         return @"";
                     }];
 
@@ -85,15 +103,23 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
 
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:kInitialize];
+    [bridge_ deregisterHandler:kStartTracking];
     [bridge_ deregisterHandler:kGetDeviceId];
     [bridge_ deregisterHandler:kSetDebugEnabled];
+    [bridge_ deregisterHandler:kSetStopTracking];
     [bridge_ deregisterHandler:kTrackEvent];
 }
 
 - (void)initialize:(NSString* _Nonnull)devKey appId:(NSString* _Nonnull)appId {
     [tracker_ setAppsFlyerDevKey:devKey];
     [tracker_ setAppleAppID:appId];
+    [tracker_ setDelegate:self];
     [tracker_ setShouldCollectDeviceName:YES];
+    [tracker_ setDeviceTrackingDisabled:NO];
+    [tracker_ trackAppLaunch];
+}
+
+- (void)startTracking {
     [tracker_ trackAppLaunch];
 }
 
@@ -105,13 +131,17 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
     [tracker_ setIsDebug:enabled];
 }
 
+- (void)setStopTracking:(BOOL)enabled {
+    [tracker_ setIsStopTracking:enabled];
+}
+
 - (void)trackEvent:(NSString* _Nonnull)name
             values:(NSDictionary* _Nonnull)dict {
     [tracker_ trackEvent:name withValues:dict];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
-    // Moved to initialization.
+    // Moved to separated method.
     // [tracker_ trackAppLaunch];
 }
 
@@ -151,7 +181,7 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
 - (BOOL)application:(UIApplication* _Nonnull)application
     continueUserActivity:(NSUserActivity* _Nonnull)userActivity
       restorationHandler:(EERestorationHandler _Nonnull)restorationHandler {
-    [tracker_ continueUserActivity:userActivty
+    [tracker_ continueUserActivity:userActivity
                 restorationHandler:restorationHandler];
     return YES;
 }

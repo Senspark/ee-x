@@ -25,8 +25,10 @@ namespace appsflyer {
 namespace {
 // clang-format off
 constexpr auto kInitialize      = "AppsFlyerInitialize";
+constexpr auto kStartTracking   = "AppsFlyerStartTracking";
 constexpr auto kGetDeviceId     = "AppsFlyerGetDeviceId";
 constexpr auto kSetDebugEnabled = "AppsFlyerSetDebugEnabled";
+constexpr auto kSetStopTracking = "AppsFlyerSetStopTracking";
 constexpr auto kTrackEvent      = "AppsFlyerTrackEvent";
 // clang-format on
 } // namespace
@@ -53,12 +55,20 @@ void Self::initialize(const std::string& devKey, const std::string& appId) {
 #endif // EE_X_ANDROID
 }
 
+void Self::startTracking() {
+    bridge_.call(kStartTracking);
+}
+
 std::string Self::getDeviceId() const {
     return bridge_.call(kGetDeviceId);
 }
 
 void Self::setDebugEnabled(bool enabled) {
     bridge_.call(kSetDebugEnabled, core::toString(enabled));
+}
+
+void Self::setStopTracking(bool enabled) {
+    bridge_.call(kSetStopTracking, core::toString(enabled));
 }
 
 void Self::trackEvent(const std::string& name,

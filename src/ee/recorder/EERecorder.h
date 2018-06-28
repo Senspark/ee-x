@@ -3,9 +3,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EERecorder : NSObject
+@interface EERecorder : NSObject <EEIPlugin>
 
 - (void)startScreenRecording;
 - (void)stopScreenRecording;

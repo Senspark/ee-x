@@ -1,6 +1,6 @@
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEIronSource : NSObject
+@interface EEIronSource : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)gameId;
 

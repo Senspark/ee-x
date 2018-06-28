@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEAppLovin : NSObject
+@interface EEAppLovin : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)key;
 

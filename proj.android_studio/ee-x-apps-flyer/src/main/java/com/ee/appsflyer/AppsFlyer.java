@@ -19,8 +19,10 @@ import java.util.Map;
 
 public class AppsFlyer implements PluginProtocol {
     private static final String kInitialize      = "AppsFlyerInitialize";
+    private static final String kStartTracking   = "AppsFlyerStartTracking";
     private static final String kGetDeviceId     = "AppsFlyerGetDeviceId";
     private static final String kSetDebugEnabled = "AppsFlyerSetDebugEnabled";
+    private static final String kSetStopTracking = "AppsFlyerSetStopTracking";
     private static final String kTrackEvent      = "AppsFlyerTrackEvent";
 
     private static final Logger _logger = new Logger(AppsFlyer.class.getName());
@@ -71,8 +73,6 @@ public class AppsFlyer implements PluginProtocol {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
-        deregisterHandlers();
     }
 
     @Override
@@ -96,6 +96,15 @@ public class AppsFlyer implements PluginProtocol {
                 return "";
             }
         }, kInitialize);
+
+        _bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                startTracking();
+                return "";
+            }
+        }, kStartTracking);
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -131,8 +140,10 @@ public class AppsFlyer implements PluginProtocol {
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _bridge.deregisterHandler(kInitialize);
+        _bridge.deregisterHandler(kStartTracking);
         _bridge.deregisterHandler(kGetDeviceId);
         _bridge.deregisterHandler(kSetDebugEnabled);
+        _bridge.deregisterHandler(kSetStopTracking);
         _bridge.deregisterHandler(kTrackEvent);
     }
 
@@ -140,9 +151,13 @@ public class AppsFlyer implements PluginProtocol {
     public void initialize(@NonNull String devKey) {
         Utils.checkMainThread();
         _tracker.init(devKey, null, _context.getApplicationContext());
-        _tracker.startTracking((Application) _context, devKey);
         _tracker.setCollectAndroidID(true);
         _tracker.setDeviceTrackingDisabled(false);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void startTracking() {
+        _tracker.startTracking((Application) _context);
     }
 
     @SuppressWarnings("WeakerAccess")

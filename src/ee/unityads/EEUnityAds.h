@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEUnityAds : NSObject
+@interface EEUnityAds : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled;
 - (void)setDebugMode:(BOOL)enabled;

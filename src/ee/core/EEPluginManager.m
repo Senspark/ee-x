@@ -7,12 +7,13 @@
 //
 
 #import "ee/core/EEPluginManager.h"
+
 #import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/internal/EEVideoPlayerManager.h"
 
 @interface EEPluginManager () {
-    NSMutableDictionary* plugins_;
+    NSMutableDictionary<NSString*, id<EEIPlugin>>* plugins_;
 }
 
 @end
@@ -54,10 +55,12 @@
         NSAssert(NO, @"...");
         return;
     }
-
     Class clazz =
         NSClassFromString([NSString stringWithFormat:@"EE%@", pluginName]);
-    [plugins_ setObject:[[[clazz alloc] init] autorelease] forKey:pluginName];
+    if ([clazz conformsToProtocol:@protocol(EEIPlugin)]) {
+        id plugin = [[[clazz alloc] init] autorelease];
+        [plugins_ setObject:plugin forKey:pluginName];
+    }
 }
 
 - (void)removePlugin:(NSString* _Nonnull)pluginName {
@@ -66,6 +69,53 @@
         return;
     }
     [plugins_ removeObjectForKey:pluginName];
+}
+
+- (BOOL)application:(UIApplication* _Nonnull)application
+            openURL:(NSURL* _Nonnull)url
+            options:(NSDictionary* _Nonnull)options {
+    BOOL result = NO;
+    for (id<EEIPlugin> plugin in plugins_) {
+        if ([plugin
+                respondsToSelector:@selector(application:openURL:options:)]) {
+            result =
+                result ||
+                [plugin application:application openURL:url options:options];
+        }
+    }
+    return result;
+}
+
+- (BOOL)application:(UIApplication* _Nonnull)application
+              openURL:(NSURL* _Nonnull)url
+    sourceApplication:(NSString* _Nonnull)sourceApplication
+           annotation:(id _Nonnull)annotation {
+    BOOL result = NO;
+    for (id<EEIPlugin> plugin in plugins_) {
+        if ([plugin respondsToSelector:@selector
+                    (application:openURL:sourceApplication:annotation:)]) {
+            result = result || [plugin application:application
+                                             openURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+        }
+    }
+    return result;
+}
+
+- (BOOL)application:(UIApplication* _Nonnull)application
+    continueUserActivity:(NSUserActivity* _Nonnull)userActivity
+      restorationHandler:(EERestorationHandler _Nonnull)restorationHandler {
+    BOOL result = NO;
+    for (id<EEIPlugin> plugin in plugins_) {
+        if ([plugin respondsToSelector:@selector
+                    (application:continueUserActivity:restorationHandler:)]) {
+            result = result || [plugin application:application
+                                   continueUserActivity:userActivity
+                                     restorationHandler:restorationHandler];
+        }
+    }
+    return result;
 }
 
 @end

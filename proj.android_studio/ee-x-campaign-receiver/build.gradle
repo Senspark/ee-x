@@ -12,4 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
+    api 'com.android.installreferrer:installreferrer:1.0'
 }

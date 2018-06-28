@@ -19,6 +19,7 @@ using Self = CampaignReceiver;
 namespace {
 // clang-format off
 constexpr auto k__onReceivedLink            = "CampaignReceiver_onReceivedLink";
+constexpr auto k__initialize                = "CampaignReceiver_initialize";
 // clang-format on
 } // namespace
 
@@ -46,6 +47,9 @@ Self::~CampaignReceiver() {
 }
 
 void Self::initialize(const OnReceivedLinkCallback& callback) {
+#ifdef EE_X_ANDROID
+    bridge_.call(k__initialize);
+#endif
     callback_ = callback;
 }
 } // namespace campaignreceiver

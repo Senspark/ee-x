@@ -5,10 +5,10 @@
 //  Created by eps on 6/26/18.
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
 /// https://support.appsflyer.com/hc/en-us/articles/207032066-AppsFlyer-SDK-Integration-iOS
-@interface EEAppsFlyer : NSObject
+@interface EEAppsFlyer : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)devKey appId:(NSString* _Nonnull)appId;
 

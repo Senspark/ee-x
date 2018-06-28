@@ -6,13 +6,13 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
 // Forward.
 struct FBAdSize;
 typedef struct FBAdSize FBAdSize;
 
-@interface EEFacebookAds : NSObject
+@interface EEFacebookAds : NSObject <EEIPlugin>
 
 - (NSString* _Nonnull)getTestDeviceHash;
 - (void)addTestDevice:(NSString* _Nonnull)hash;

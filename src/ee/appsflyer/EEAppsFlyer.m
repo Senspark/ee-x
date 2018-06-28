@@ -131,4 +131,29 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
 }
 
+- (BOOL)application:(UIApplication* _Nonnull)application
+              openURL:(NSURL* _Nonnull)url
+    sourceApplication:(NSString* _Nonnull)sourceApplication
+           annotation:(id _Nonnull)annotation {
+    [tracker_ handleOpenURL:url
+          sourceApplication:sourceApplication
+             withAnnotation:annotation];
+    return YES;
+}
+
+- (BOOL)application:(UIApplication* _Nonnull)application
+            openURL:(NSURL* _Nonnull)url
+            options:(NSDictionary* _Nonnull)options {
+    [tracker_ handleOpenUrl:url options:options];
+    return YES;
+}
+
+- (BOOL)application:(UIApplication* _Nonnull)application
+    continueUserActivity:(NSUserActivity* _Nonnull)userActivity
+      restorationHandler:(EERestorationHandler _Nonnull)restorationHandler {
+    [tracker_ continueUserActivity:userActivty
+                restorationHandler:restorationHandler];
+    return YES;
+}
+
 @end

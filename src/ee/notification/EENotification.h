@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EENotification : NSObject
+@interface EENotification : NSObject <EEIPlugin>
 
 - (void)schedule:(NSString*)title
             body:(NSString*)body

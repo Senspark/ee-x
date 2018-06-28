@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEGoogleAnalytics : NSObject
+@interface EEGoogleAnalytics : NSObject <EEIPlugin>
 
 - (void)setDispatchInterval:(NSTimeInterval)interval;
 - (void)setDryRun:(BOOL)enabled;

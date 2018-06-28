@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EECrashlytics : NSObject
+@interface EECrashlytics : NSObject <EEIPlugin>
 
 - (void)causeCrash;
 

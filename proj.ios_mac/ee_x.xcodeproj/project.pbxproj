@@ -390,6 +390,8 @@
 		AD10C312204934A500C92CFE /* RecorderBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30C204934A400C92CFE /* RecorderBridge.hpp */; };
 		AD10C313204934A500C92CFE /* RecorderFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30D204934A400C92CFE /* RecorderFwd.hpp */; };
 		AD10C314204934A500C92CFE /* Recorder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD10C30E204934A500C92CFE /* Recorder.hpp */; };
+		AD25B57520E4CEC1009685A4 /* EEIPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = AD25B57420E4CEC1009685A4 /* EEIPlugin.h */; };
+		AD25B57620E4CEC1009685A4 /* EEIPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = AD25B57420E4CEC1009685A4 /* EEIPlugin.h */; };
 		AD2FB34B2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
 		AD2FB34C2058C88900140ED7 /* IMessageBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */; };
 		AD2FB34E2059019700140ED7 /* EEMessageBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2FB34D2059019700140ED7 /* EEMessageBridge.h */; };
@@ -1019,6 +1021,7 @@
 		AD10C30C204934A400C92CFE /* RecorderBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderBridge.hpp; sourceTree = "<group>"; };
 		AD10C30D204934A400C92CFE /* RecorderFwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RecorderFwd.hpp; sourceTree = "<group>"; };
 		AD10C30E204934A500C92CFE /* Recorder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Recorder.hpp; sourceTree = "<group>"; };
+		AD25B57420E4CEC1009685A4 /* EEIPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEIPlugin.h; sourceTree = "<group>"; };
 		AD2FB34A2058C88900140ED7 /* IMessageBridge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IMessageBridge.hpp; sourceTree = "<group>"; };
 		AD2FB34D2059019700140ED7 /* EEMessageBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEMessageBridge.h; sourceTree = "<group>"; };
 		AD56EF71202026A300DC9B56 /* VideoPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayer.cpp; sourceTree = "<group>"; };
@@ -1488,6 +1491,7 @@
 				6F43A2291EC19F3100C68152 /* EEPluginManager.m */,
 				ADE6AF122061219700F6135F /* PluginManager.cpp */,
 				ADE6AF132061219700F6135F /* PluginManager.hpp */,
+				AD25B57420E4CEC1009685A4 /* EEIPlugin.h */,
 				6FBD03DC1FCC207A0050C980 /* EEIMessageBridge.h */,
 				AD2FB34D2059019700140ED7 /* EEMessageBridge.h */,
 				6FBD03DD1FCC207A0050C980 /* EEMessageBridge.m */,
@@ -1925,6 +1929,7 @@
 				6FAF79171FA0A53100405AF8 /* Metrics.hpp in Headers */,
 				6F43A2BC1EC1A18900C68152 /* EEPluginManager.h in Headers */,
 				6FBD03E61FCC207A0050C980 /* MessageBridge.hpp in Headers */,
+				AD25B57520E4CEC1009685A4 /* EEIPlugin.h in Headers */,
 				6F43A2C31EC1A18900C68152 /* EEUtils.h in Headers */,
 				6FAF79131FA0A4A500405AF8 /* CoreFwd.hpp in Headers */,
 				AD56EF8320216DE100DC9B56 /* VideoPlayerManager.hpp in Headers */,
@@ -2123,6 +2128,7 @@
 				6F83DC9B1EC1C7F2004C5500 /* Core.hpp in Headers */,
 				AD2FB34F2059019700140ED7 /* EEMessageBridge.h in Headers */,
 				6FBD03E11FCC207A0050C980 /* EEIMessageBridge.h in Headers */,
+				AD25B57620E4CEC1009685A4 /* EEIPlugin.h in Headers */,
 				6F83DCAD1EC1C800004C5500 /* LogLevel.hpp in Headers */,
 				6F83DC9C1EC1C800004C5500 /* EEPluginManager.h in Headers */,
 				ADE6AF192061219700F6135F /* PluginManager.hpp in Headers */,

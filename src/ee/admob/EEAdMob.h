@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/NSObject.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEAdMob : NSObject
+@interface EEAdMob : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)applicationId;
 

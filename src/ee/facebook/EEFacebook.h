@@ -3,17 +3,17 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-
 #import <FBSDKCoreKit/FBSDKGraphRequestConnection.h>
 #import <FBSDKLoginKit/FBSDKLoginManager.h>
 #import <FBSDKShareKit/FBSDKGameRequestContent.h>
+
+#import "ee/core/EEIPlugin.h"
 
 @protocol FBSDKGameRequestDialogDelegate;
 @protocol FBSDKSharingDelegate;
 @class FBSDKAccessToken;
 
-@interface EEFacebook : NSObject
+@interface EEFacebook : NSObject <EEIPlugin>
 
 - (BOOL)isLoggedIn;
 - (void)logIn:(NSArray* _Nonnull)permissions

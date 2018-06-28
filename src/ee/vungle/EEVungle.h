@@ -1,6 +1,6 @@
-#import <Foundation/Foundation.h>
+#import "ee/core/EEIPlugin.h"
 
-@interface EEVungle : NSObject
+@interface EEVungle : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString* _Nonnull)gameId
        placementId:(NSString* _Nonnull)placementId;

@@ -78,9 +78,9 @@
     for (id<EEIPlugin> plugin in plugins_) {
         if ([plugin
                 respondsToSelector:@selector(application:openURL:options:)]) {
-            result =
-                result ||
-                [plugin application:application openURL:url options:options];
+            if ([plugin application:application openURL:url options:options]) {
+                result = YES;
+            }
         }
     }
     return result;
@@ -94,10 +94,12 @@
     for (id<EEIPlugin> plugin in plugins_) {
         if ([plugin respondsToSelector:@selector
                     (application:openURL:sourceApplication:annotation:)]) {
-            result = result || [plugin application:application
-                                             openURL:url
-                                   sourceApplication:sourceApplication
-                                          annotation:annotation];
+            if ([plugin application:application
+                              openURL:url
+                    sourceApplication:sourceApplication
+                           annotation:annotation]) {
+                result = YES;
+            }
         }
     }
     return result;
@@ -110,9 +112,11 @@
     for (id<EEIPlugin> plugin in plugins_) {
         if ([plugin respondsToSelector:@selector
                     (application:continueUserActivity:restorationHandler:)]) {
-            result = result || [plugin application:application
-                                   continueUserActivity:userActivity
-                                     restorationHandler:restorationHandler];
+            if ([plugin application:application
+                    continueUserActivity:userActivity
+                      restorationHandler:restorationHandler]) {
+                result = YES;
+            }
         }
     }
     return result;

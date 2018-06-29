@@ -385,6 +385,14 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
+  spec.subspec 'google-play' do |s|
+    s.source_files = 
+      'src/ee/GooglePlay.hpp',
+      'src/ee/GooglePlayFwd.hpp',
+      'src/ee/googleplay/*.{h,hpp}'
+    s.dependency 'ee-x/core'
+  end
+
   spec.subspec 'appsflyer' do |s|
     s.source_files =
       'src/ee/AppsFlyer.hpp',

@@ -4,6 +4,7 @@
 //
 
 #import "ee/core/EEMessageBridge.h"
+#import "ee/googleplay/EEGooglePlay.h"
 
 @implementation EEGooglePlay
 @end

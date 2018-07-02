@@ -386,7 +386,12 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'google-play' do |s|
-    s.source_files = 
+    s.source_files =
+      'src/ee/GooglePlay.hpp',
+      'src/ee/GooglePlayFwd.hpp',
+      'src/ee/googleplay/*'
+      
+    s.public_header_files = 
       'src/ee/GooglePlay.hpp',
       'src/ee/GooglePlayFwd.hpp',
       'src/ee/googleplay/*.{h,hpp}'

@@ -1,7 +1,10 @@
 package com.ee.googleplay;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
@@ -42,9 +45,9 @@ public class GooglePlay implements PluginProtocol {
     private static final String k_leaderboardId          = "leaderboard_id";
     private static final String k_score                 = "score";
 
-    private static final int RC_SIGN_IN = 9001;
-    private static final int RC_ACHIEVEMENT_UI = 9002;
-    private static final int RC_LEADERBOARD_UI = 9003;
+    private static final int RC_SIGN_IN = 2921001;
+    private static final int RC_ACHIEVEMENT_UI = 2921002;
+    private static final int RC_LEADERBOARD_UI = 2921003;
     private static final Logger _logger = new Logger(GooglePlay.class.getName());
 
     private Activity _activity;
@@ -311,6 +314,28 @@ public class GooglePlay implements PluginProtocol {
                     showLeaderboard(_lastLeaderboardId);
                 }
             }
+        }
+        else
+        {
+            _activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(_activity, android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(_activity);
+                    }
+                    builder.setMessage("Failed to sign in. Please check your network connection and try again.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+            });
         }
 
         _pendingShowAchievement = false;

@@ -30,6 +30,7 @@ include_lib('ee-x-facebook-ads')
 include_lib('ee-x-ironsource')
 include_lib('ee-x-unity-ads')
 include_lib('ee-x-vungle')
+include_lib('ee-x-game-center')
 
 include_lib('ee-x-applovin-mediation')
 include_lib('ee-x-facebook-ads-mediation')

@@ -121,6 +121,7 @@ dependencies {
     implementation project(':ee-x-notification')
 
     implementation project(':ee-x-admob')
+    implementation project(':ee-x-game-center')
     // implementation project(':ee-x-applovin')
     // implementation project(':ee-x-facebook-ads')
     // implementation project(':ee-x-ironsource')

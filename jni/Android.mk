@@ -228,8 +228,8 @@ include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
-LOCAL_MODULE := ee_x_google_play
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/googleplay -name "*.cpp" -print}
+LOCAL_MODULE := ee_x_game_center
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/gamecenter -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)

@@ -385,16 +385,16 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'google-play' do |s|
+  spec.subspec 'game-center' do |s|
     s.source_files =
-      'src/ee/GooglePlay.hpp',
-      'src/ee/GooglePlayFwd.hpp',
-      'src/ee/googleplay/*'
+      'src/ee/GameCenter.hpp',
+      'src/ee/GameCenterFwd.hpp',
+      'src/ee/gamecenter/*'
       
     s.public_header_files = 
-      'src/ee/GooglePlay.hpp',
-      'src/ee/GooglePlayFwd.hpp',
-      'src/ee/googleplay/*.{h,hpp}'
+      'src/ee/GameCenter.hpp',
+      'src/ee/GameCenterFwd.hpp',
+      'src/ee/gamecenter/*.{h,hpp}'
     s.dependency 'ee-x/core'
   end
 

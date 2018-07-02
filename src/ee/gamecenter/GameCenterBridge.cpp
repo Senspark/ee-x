@@ -5,44 +5,44 @@
 
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/googleplay/GooglePlayBridge.hpp"
+#include "ee/gamecenter/GameCenterBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
-namespace google {
+namespace game {
 namespace {
 // clang-format off
-	constexpr auto k__isSignedIn           = "GooglePlay_isSignedIn";
-	constexpr auto k_signin                = "GooglePlay_signin";
-    constexpr auto k_signout               = "GooglePlay_signout";
-    constexpr auto k_showAchievements      = "GooglePlay_showAchievements";
-    constexpr auto k_increaseAchievement   = "GooglePlay_increaseAchievement";
-    constexpr auto k_unlockAchievement     = "GooglePlay_unlockAchievement";
-    constexpr auto k_showLeaderboard       = "GooglePlay_showLeaderboard";
-    constexpr auto k_showAllLeaderboards   = "GooglePlay_showAllLeaderboards";
-    constexpr auto k_submitScore           = "GooglePlay_submitScore";
+constexpr auto k__isSignedIn           = "GameCenter_isSignedIn";
+constexpr auto k_signin                = "GameCenter_signin";
+constexpr auto k_signout               = "GameCenter_signout";
+constexpr auto k_showAchievements      = "GameCenter_showAchievements";
+constexpr auto k_increaseAchievement   = "GameCenter_increaseAchievement";
+constexpr auto k_unlockAchievement     = "GameCenter_unlockAchievement";
+constexpr auto k_showLeaderboard       = "GameCenter_showLeaderboard";
+constexpr auto k_showAllLeaderboards   = "GameCenter_showAllLeaderboards";
+constexpr auto k_submitScore           = "GameCenter_submitScore";
 // clang-format on
 } // namespace
 
 namespace {
 // clang-format off
-    constexpr auto k_showLoginUI           = "show_login_ui";
-    constexpr auto k_achievementId         = "achievement_id";
-    constexpr auto k_increment             = "increment";
-    constexpr auto k_leaderboardId         = "leaderboard_id";
-    constexpr auto k_score                 = "score";
+constexpr auto k_showLoginUI           = "show_login_ui";
+constexpr auto k_achievementId         = "achievement_id";
+constexpr auto k_increment             = "increment";
+constexpr auto k_leaderboardId         = "leaderboard_id";
+constexpr auto k_score                 = "score";
 // clang-format on
 } // namespace
 
-using Self = Play;
+using Self = GameCenter;
 
-Self::Play()
+Self::GameCenter()
     : bridge_(MessageBridge::getInstance()) {
     //
 }
 
-Self::~Play() {
+Self::~GameCenter() {
     //
 }
 
@@ -59,10 +59,6 @@ void Self::signin(bool showLoginUI) {
 
 void Self::signout() {
     bridge_.call(k_signout);
-}
-
-void Self::setSteps(const std::string& achievement_name, double steps) {
-    // Not implement
 }
 
 void Self::showAchievements() {
@@ -97,7 +93,7 @@ void Self::showAllLeaderboards() {
     bridge_.call(k_showAllLeaderboards);
 }
 
-void Self::submitScore(const std::string& leaderboard_name, long score) {
+void Self::submitScore(const std::string& leaderboard_name, int64_t score) {
     nlohmann::json json;
     json[k_leaderboardId] = leaderboard_name;
     json[k_score] = score;

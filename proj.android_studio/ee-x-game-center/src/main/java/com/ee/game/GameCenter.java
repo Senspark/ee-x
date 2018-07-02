@@ -1,4 +1,4 @@
-package com.ee.googleplay;
+package com.ee.game;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,18 +26,18 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.Map;
 
-public class GooglePlay implements PluginProtocol {
+public class GameCenter implements PluginProtocol {
 
     // Define
-    private static final String k_isSignedIn            = "GooglePlay_isSignedIn";
-    private static final String k_signin                = "GooglePlay_signin";
-    private static final String k_signout               = "GooglePlay_signout";
-    private static final String k_showAchievements      = "GooglePlay_showAchievements";
-    private static final String k_increaseAchievement   = "GooglePlay_increaseAchievement";
-    private static final String k_unlockAchievement     = "GooglePlay_unlockAchievement";
-    private static final String k_showLeaderboard       = "GooglePlay_showLeaderboard";
-    private static final String k_showAllLeaderboards   = "GooglePlay_showAllLeaderboards";
-    private static final String k_submitScore           = "GooglePlay_submitScore";
+    private static final String k_isSignedIn            = "GameCenter_isSignedIn";
+    private static final String k_signin                = "GameCenter_signin";
+    private static final String k_signout               = "GameCenter_signout";
+    private static final String k_showAchievements      = "GameCenter_showAchievements";
+    private static final String k_increaseAchievement   = "GameCenter_increaseAchievement";
+    private static final String k_unlockAchievement     = "GameCenter_unlockAchievement";
+    private static final String k_showLeaderboard       = "GameCenter_showLeaderboard";
+    private static final String k_showAllLeaderboards   = "GameCenter_showAllLeaderboards";
+    private static final String k_submitScore           = "GameCenter_submitScore";
 
     private static final String k_showLoginUI           = "show_login_ui";
     private static final String k_achievementId         = "achievement_id";
@@ -48,7 +48,7 @@ public class GooglePlay implements PluginProtocol {
     private static final int RC_SIGN_IN = 2921001;
     private static final int RC_ACHIEVEMENT_UI = 2921002;
     private static final int RC_LEADERBOARD_UI = 2921003;
-    private static final Logger _logger = new Logger(GooglePlay.class.getName());
+    private static final Logger _logger = new Logger(GameCenter.class.getName());
 
     private Activity _activity;
 
@@ -62,7 +62,7 @@ public class GooglePlay implements PluginProtocol {
     private boolean _pendingShowLeaderboard = false;
     private String _lastLeaderboardId = "";
 
-    public GooglePlay() {
+    public GameCenter() {
         Utils.checkMainThread();
         _activity = null;
         registerHandlers();
@@ -71,7 +71,7 @@ public class GooglePlay implements PluginProtocol {
     @NonNull
     @Override
     public String getPluginName() {
-        return "GooglePlay";
+        return "GameCenter";
     }
 
     @Override
@@ -233,8 +233,9 @@ public class GooglePlay implements PluginProtocol {
         if (requestCode == RC_SIGN_IN)
         {
             onSigninCallback(responseCode == Activity.RESULT_OK);
+            return true;
         }
-        return true;
+        return false;
     }
 
 

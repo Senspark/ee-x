@@ -3,25 +3,24 @@
 //
 //
 
-#ifndef EE_X_RECORDER_BRIDGE_HPP
-#define EE_X_RECORDER_BRIDGE_HPP
+#ifndef EE_X_GAMECENTER_BRIDGE_HPP
+#define EE_X_GAMECENTER_BRIDGE_HPP
 
 #include <string>
 
 #include "ee/core/LogLevel.hpp"
 
 namespace ee {
-namespace google {
-class Play final {
+namespace game {
+class GameCenter final {
 public:
-    Play();
-    ~Play();
+    GameCenter();
+    ~GameCenter();
 
     bool isSignedIn();
     void signin(bool showLoginUI = true);
     void signout();
 
-    void setSteps(const std::string& achievement_name, double steps);
     void showAchievements();
     void loadAchievements(bool force_reload);
 
@@ -31,12 +30,12 @@ public:
 
     void showLeaderboard(const std::string& leaderboard_name = "");
     void showAllLeaderboards();
-    void submitScore(const std::string& leaderboard_name, long score);
+    void submitScore(const std::string& leaderboard_name, int64_t score);
 
 private:
-    MessageBridge& bridge_;
+    IMessageBridge& bridge_;
 };
-} // namespace google
+} // namespace game
 } // namespace ee
 
-#endif /* EE_X_RECORDER_BRIDGE_HPP */
+#endif /* EE_X_GAMECENTER_BRIDGE_HPP */

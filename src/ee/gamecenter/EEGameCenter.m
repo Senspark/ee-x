@@ -4,8 +4,8 @@
 //
 
 #import "ee/core/EEMessageBridge.h"
-#import "ee/googleplay/EEGooglePlay.h"
+#import "ee/gamecenter/EEGameCenter.h"
 
-@implementation EEGooglePlay
+@implementation EEGameCenter
 @end
 

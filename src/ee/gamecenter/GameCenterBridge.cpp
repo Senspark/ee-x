@@ -69,23 +69,23 @@ void Self::loadAchievements(bool force_reload) {
     // Not implement
 }
 
-void Self::incrementAchievement(const std::string& achievement_name,
-                                int increment) {
+void Self::incrementAchievement(const std::string& achievement_id,
+                                double percent) {
     nlohmann::json json;
-    json[k_achievementId] = achievement_name;
-    json[k_increment] = increment;
+    json[k_achievementId] = achievement_id;
+    json[k_increment] = percent;
     bridge_.call(k_increaseAchievement, json.dump());
 }
 
-void Self::unlockAchievement(const std::string& achievement_name) {
+void Self::unlockAchievement(const std::string& achievement_id) {
     nlohmann::json json;
-    json[k_achievementId] = achievement_name;
+    json[k_achievementId] = achievement_id;
     bridge_.call(k_unlockAchievement, json.dump());
 }
 
-void Self::showLeaderboard(const std::string& leaderboard_name) {
+void Self::showLeaderboard(const std::string& leaderboard_id) {
     nlohmann::json json;
-    json[k_leaderboardId] = leaderboard_name;
+    json[k_leaderboardId] = leaderboard_id;
     bridge_.call(k_showLeaderboard, json.dump());
 }
 
@@ -93,9 +93,9 @@ void Self::showAllLeaderboards() {
     bridge_.call(k_showAllLeaderboards);
 }
 
-void Self::submitScore(const std::string& leaderboard_name, int64_t score) {
+void Self::submitScore(const std::string& leaderboard_id, int64_t score) {
     nlohmann::json json;
-    json[k_leaderboardId] = leaderboard_name;
+    json[k_leaderboardId] = leaderboard_id;
     json[k_score] = score;
     bridge_.call(k_submitScore, json.dump());
 }

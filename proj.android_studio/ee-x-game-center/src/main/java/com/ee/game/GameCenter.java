@@ -18,8 +18,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.games.AchievementsClient;
+import com.google.android.gms.games.AnnotatedData;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.LeaderboardsClient;
+import com.google.android.gms.games.achievement.Achievement;
+import com.google.android.gms.games.achievement.AchievementBuffer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +30,8 @@ import com.google.android.gms.tasks.Task;
 import java.util.Map;
 
 public class GameCenter implements PluginProtocol {
+    //TODO: Need to cache achievements in client, if user signed in then report them to store
+    //TODO: Need to optimize when report achievement into score, don't need to load all of them
 
     // Define
     private static final String k_isSignedIn          = "GameCenter_isSignedIn";
@@ -161,7 +166,7 @@ public class GameCenter implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 String achievementId = (String) dict.get(k_achievementId);
-                Integer increment = (Integer) dict.get(k_increment);
+                double increment = (double) dict.get(k_increment);
                 incrementAchievement(achievementId, increment);
 
                 return null;
@@ -265,8 +270,6 @@ public class GameCenter implements PluginProtocol {
                 } else {
                     _logger.debug("signInSliently: failed");
                 }
-
-                // TODO: Handle callback
             }
         });
     }
@@ -281,7 +284,6 @@ public class GameCenter implements PluginProtocol {
             public void onComplete(@NonNull Task<Void> task) {
                 boolean successful = task.isSuccessful();
                 _logger.debug("signOut(): " + (successful ? "success" : "failed"));
-                //TODO: Handle signout
             }
         });
     }
@@ -335,22 +337,49 @@ public class GameCenter implements PluginProtocol {
         }
     }
 
-    private void incrementAchievement(String achievement_name, int increment) {
+    // Load all achievements and check increment
+    // Ref: https://stackoverflow.com/questions/23848014/google-play-game-services-unlock-achievement-store-unlock-in-game-or-call-unlo/23853222#23853222
+    // ==========
+    private void incrementAchievement(final String achievement_id, final double percent) {
         if (!isSignedIn()) {
             return;
         }
 
         if (_achievementClient != null) {
-            _achievementClient.increment(achievement_name, increment);
+            _achievementClient.load(true).addOnCompleteListener(new OnCompleteListener<AnnotatedData<AchievementBuffer>>() {
+                @Override
+                public void onComplete(@NonNull Task<AnnotatedData<AchievementBuffer>> task) {
+                    AchievementBuffer buff = task.getResult().get();
+                    int bufSize = buff.getCount();
+                    for (int i = 0; i < bufSize; i++) {
+                        Achievement ach = buff.get(i);
+                        String id = ach.getAchievementId();
+                        if (ach.getType() != Achievement.TYPE_INCREMENTAL) {
+                            continue;
+                        }
+                        if (id.compareTo(achievement_id) == 0) {
+                            int currStep = ach.getCurrentSteps();
+                            int totalStep = ach.getTotalSteps();
+                            int reportStep = (int) (percent * totalStep);
+                            int increment = reportStep - currStep;
+                            if (increment > 0) {
+                                _achievementClient.increment(achievement_id, increment);
+                            }
+                            break;
+                        }
+                    }
+                    buff.release();
+                }
+            });
         }
     }
 
-    private void unlockAchievement(String achievement_name) {
+    private void unlockAchievement(String achievement_id) {
         if (!isSignedIn()) {
             return;
         }
         if (_achievementClient != null) {
-            _achievementClient.unlock(achievement_name);
+            _achievementClient.unlock(achievement_id);
         }
     }
 

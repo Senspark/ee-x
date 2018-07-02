@@ -24,13 +24,13 @@ public:
     void showAchievements();
     void loadAchievements(bool force_reload);
 
-    void incrementAchievement(const std::string& achievement_name,
-                              int increment);
-    void unlockAchievement(const std::string& achievement_name);
+    void incrementAchievement(const std::string& achievement_id,
+                              double percent);
+    void unlockAchievement(const std::string& achievement_id);
 
-    void showLeaderboard(const std::string& leaderboard_name = "");
+    void showLeaderboard(const std::string& leaderboard_id = "");
     void showAllLeaderboards();
-    void submitScore(const std::string& leaderboard_name, int64_t score);
+    void submitScore(const std::string& leaderboard_id, int64_t score);
 
 private:
     IMessageBridge& bridge_;

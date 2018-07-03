@@ -26,6 +26,7 @@ abstract_target 'common' do
         pod_ee_x('ironsource')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
+        pod_ee_x('game-center')
         
         # pod_ee_x('applovin-mediation')
         # pod_ee_x('facebook-ads-mediation')

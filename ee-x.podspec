@@ -385,6 +385,19 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
+  spec.subspec 'game-center' do |s|
+    s.source_files =
+      'src/ee/GameCenter.hpp',
+      'src/ee/GameCenterFwd.hpp',
+      'src/ee/gamecenter/*'
+      
+    s.public_header_files = 
+      'src/ee/GameCenter.hpp',
+      'src/ee/GameCenterFwd.hpp',
+      'src/ee/gamecenter/*.{h,hpp}'
+    s.dependency 'ee-x/core'
+  end
+
   spec.subspec 'appsflyer' do |s|
     s.source_files =
       'src/ee/AppsFlyer.hpp',

@@ -16,6 +16,7 @@
 // signin
 
 @interface EEGameCenter () <GKGameCenterControllerDelegate> {
+    id<EEIMessageBridge> _bridge;
 }
 @end
 
@@ -41,7 +42,7 @@ static NSString* const k_score         = @"score";
 
 - (id)init {
     self = [super init];
-
+    _bridge = [EEMessageBridge getInstance];
     [self registerHandlers];
 
     return self;
@@ -53,85 +54,82 @@ static NSString* const k_score         = @"score";
 }
 
 - (void)registerHandlers {
-    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         return [EEUtils toString:[self isSignedIn]];
     }
-                        tag:k_isSignedIn];
+                         tag:k_isSignedIn];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
         BOOL showLoginUI = [dict[k_showLoginUI] boolValue];
         [self signin:showLoginUI];
         return @"";
     }
-                        tag:k_signin];
+                         tag:k_signin];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         [self signout];
         return @"";
     }
-                        tag:k_signout];
+                         tag:k_signout];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         [self showAchievements];
         return @"";
     }
-                        tag:k_showAchievements];
+                         tag:k_showAchievements];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
         NSString* achievementId = dict[k_achievementId];
         double percent = [dict[k_increment] doubleValue];
         [self incrementAchievement:achievementId withPercent:percent];
         return @"";
     }
-                        tag:k_increaseAchievement];
+                         tag:k_increaseAchievement];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
         NSString* achievementId = dict[k_achievementId];
         [self unlockAchievement:achievementId];
         return @"";
     }
-                        tag:k_unlockAchievement];
+                         tag:k_unlockAchievement];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
         NSString* leaderboardId = dict[k_leaderboardId];
         [self showLeaderboard:leaderboardId];
         return @"";
     }
-                        tag:k_showLeaderboard];
+                         tag:k_showLeaderboard];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         [self showAllLeaderboards];
         return @"";
     }
-                        tag:k_showAllLeaderboards];
+                         tag:k_showAllLeaderboards];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
         NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
         NSString* leaderboardId = dict[k_leaderboardId];
         long long score = [dict[k_score] longLongValue];
         [self submitScore:leaderboardId withScore:score];
         return @"";
     }
-                        tag:k_submitScore];
+                         tag:k_submitScore];
 }
 
 - (void)deregisterHandlers {
-    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
-    [bridge deregisterHandler:k_isSignedIn];
-    [bridge deregisterHandler:k_signin];
-    [bridge deregisterHandler:k_signout];
-    [bridge deregisterHandler:k_showAchievements];
-    [bridge deregisterHandler:k_increaseAchievement];
-    [bridge deregisterHandler:k_unlockAchievement];
-    [bridge deregisterHandler:k_showLeaderboard];
-    [bridge deregisterHandler:k_showAllLeaderboards];
-    [bridge deregisterHandler:k_submitScore];
+    [_bridge deregisterHandler:k_isSignedIn];
+    [_bridge deregisterHandler:k_signin];
+    [_bridge deregisterHandler:k_signout];
+    [_bridge deregisterHandler:k_showAchievements];
+    [_bridge deregisterHandler:k_increaseAchievement];
+    [_bridge deregisterHandler:k_unlockAchievement];
+    [_bridge deregisterHandler:k_showLeaderboard];
+    [_bridge deregisterHandler:k_showAllLeaderboards];
+    [_bridge deregisterHandler:k_submitScore];
 }
 
 #pragma mark - Implement Game Center

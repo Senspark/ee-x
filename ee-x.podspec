@@ -430,4 +430,22 @@ Pod::Spec.new do |spec|
     
     s.dependency 'ee-x/core'
   end
+
+  spec.subspec 'jsb-ads' do |s|
+    s.source_files = 
+      'src/ee/jsb/ads/*'
+    s.public_header_files = 
+      'src/ee/jsb/ads/*.{h, hpp}'
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'jsb-admob' do |s|
+    s.source_files =
+      'src/ee/jsb/admob/*'
+    s.public_header_files = 
+      'src/ee/jsb/admob/*.{h, hpp}'
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/admob'
+  end
 end

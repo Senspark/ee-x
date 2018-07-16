@@ -14,9 +14,28 @@
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 
 #include <ee/Core.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace core {
+
+template <typename T> se::Object* create_JSON_object(const T& value);
+
+template <>
+inline se::Object* create_JSON_object(const std::pair<float, float>& value) {
+    auto&& jsonArray = nlohmann::json::array();
+    jsonArray.push_back(value.first);
+    jsonArray.push_back(value.second);
+    return se::Object::createJSONObject(jsonArray.dump());
+}
+
+template <>
+inline se::Object* create_JSON_object(const std::pair<int, int>& value) {
+    auto&& jsonArray = nlohmann::json::array();
+    jsonArray.push_back(value.first);
+    jsonArray.push_back(value.second);
+    return se::Object::createJSONObject(jsonArray.dump());
+}
 
 template <typename T> T get_value(const se::Value& value);
 
@@ -26,6 +45,10 @@ template <> inline bool get_value(const se::Value& value) {
 
 template <> inline std::int32_t get_value(const se::Value& value) {
     return value.toInt32();
+}
+
+template <> inline float get_value(const se::Value& value) {
+    return value.toFloat();
 }
 
 template <> inline std::string get_value(const se::Value& value) {
@@ -51,6 +74,17 @@ template <> inline void set_value(se::Value& value, bool input) {
 }
 
 template <> inline void set_value(se::Value& value, se::Object* obj) {
+    value.setObject(obj);
+}
+
+template <>
+inline void set_value(se::Value& value, std::pair<float, float> input) {
+    auto obj = create_JSON_object<std::pair<float, float>>(input);
+    value.setObject(obj);
+}
+
+template <> inline void set_value(se::Value& value, std::pair<int, int> input) {
+    auto obj = create_JSON_object<std::pair<int, int>>(input);
     value.setObject(obj);
 }
 
@@ -223,9 +257,10 @@ bool jsb_method_get_on_ui_thread(se::State& s) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         set_value<ReturnType>(
             s.rval(),
-            ee::runOnUiThreadAndWaitResult([cObj, args]() -> ReturnType {
-                call_instance_func<InstanceType, FunctionPtr, Args...>(
-                    cObj, args, Indices());
+            ee::runOnUiThreadAndWaitResult<ReturnType>([cObj,
+                                                        args]() -> ReturnType {
+                return std::forward<ReturnType>(call_instance_func<InstanceType, FunctionPtr, Args...>(
+                    cObj, args, Indices()));
             }));
         return true;
     }

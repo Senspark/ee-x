@@ -413,4 +413,12 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
   end
+  
+  spec.subspec 'jsb-core' do |s|
+    s.source_files =
+      'src/ee/jsb/core/*'
+    s.public_header_files =
+      'src/ee/jsb/core/*.{h, hpp}'
+    s.dependency 'ee-x/core'
+  end
 end

@@ -44,7 +44,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/*.{h,hpp}'
 
     s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
     }
 
     s.dependency 'ee-x/nlohmann-json'
@@ -419,6 +419,15 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/core/*'
     s.public_header_files =
       'src/ee/jsb/core/*.{h, hpp}'
+
+    s.xcconfig = {
+      'HEADER_SEARCH_PATHS' => 
+        '${PODS_ROOT}/../../../cocos2d-x ' +   
+        '${PODS_ROOT}/../../../cocos2d-x/cocos ' +
+        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ' +
+        '${PODS_ROOT}/../../../cocos2d-x/external/sources'
+    }
+    
     s.dependency 'ee-x/core'
   end
 end

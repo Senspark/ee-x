@@ -416,9 +416,11 @@ Pod::Spec.new do |spec|
   
   spec.subspec 'jsb-core' do |s|
     s.source_files =
+      'src/ee/jsb/jsb_core.hpp',
       'src/ee/jsb/core/*'
     s.public_header_files =
-      'src/ee/jsb/core/*.{h, hpp}'
+      'src/ee/jsb/jsb_core.hpp'
+      'src/ee/jsb/core/*.{h,hpp}'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => 

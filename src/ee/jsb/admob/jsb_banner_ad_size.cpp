@@ -7,7 +7,7 @@
 
 #include "jsb_banner_ad_size.hpp"
 
-#include "jsb_admob.hpp"
+#include "jsb_admob_bridge.hpp"
 #include "jsb_core_common.hpp"
 
 #include <ee/Admob.hpp>

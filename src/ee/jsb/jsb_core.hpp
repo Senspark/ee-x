@@ -10,7 +10,7 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/core/jsb_core_common_hpp"
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_log_level.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_utils.hpp"

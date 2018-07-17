@@ -5,8 +5,8 @@
 //  Created by Duc Nguyen on 7/15/18.
 //
 
-#ifndef JSB_ADMOB_HPP__
-#define JSB_ADMOB_HPP__
+#ifndef JSB_ADMOB_BRIDGE_HPP__
+#define JSB_ADMOB_BRIDGE_HPP__
 
 namespace se {
 class Object;

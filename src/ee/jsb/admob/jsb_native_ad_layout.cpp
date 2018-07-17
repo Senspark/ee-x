@@ -7,10 +7,10 @@
 
 #include "jsb_native_ad_layout.hpp"
 
-#include "jsb_admob.hpp"
+#include "jsb_admob_bridge.hpp"
 #include "jsb_core_common.hpp"
 
-#include <ee/Admob.hpp>
+#include "ee/AdMob.hpp"
 
 namespace ee {
 

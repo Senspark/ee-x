@@ -419,7 +419,7 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/jsb_core.hpp',
       'src/ee/jsb/core/*'
     s.public_header_files =
-      'src/ee/jsb/jsb_core.hpp'
+      'src/ee/jsb/jsb_core.hpp',
       'src/ee/jsb/core/*.{h,hpp}'
 
     s.xcconfig = {
@@ -434,19 +434,25 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'jsb-ads' do |s|
-    s.source_files = 
+    s.source_files =
+      'src/ee/jsb/jsb_ads.hpp',
       'src/ee/jsb/ads/*'
-    s.public_header_files = 
-      'src/ee/jsb/ads/*.{h, hpp}'
+    s.public_header_files =
+      'src/ee/jsb/jsb_ads.hpp',
+      'src/ee/jsb/ads/*.{h,hpp}'
+
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/ads'
   end
 
   spec.subspec 'jsb-admob' do |s|
     s.source_files =
+      'src/ee/jsb/jsb_admob.hpp',
       'src/ee/jsb/admob/*'
-    s.public_header_files = 
-      'src/ee/jsb/admob/*.{h, hpp}'
+    s.public_header_files =
+      'src/ee/jsb/jsb_admob.hpp',
+      'src/ee/jsb/admob/*.{h,hpp}'
+
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/admob'
   end

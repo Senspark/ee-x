@@ -5,7 +5,7 @@
 //  Created by Duc Nguyen on 7/15/18.
 //
 
-#include "jsb_admob.hpp"
+#include "jsb_admob_bridge.hpp"
 #include "jsb_core_common.hpp"
 #include "jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"

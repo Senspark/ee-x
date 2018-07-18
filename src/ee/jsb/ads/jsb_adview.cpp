@@ -21,7 +21,7 @@ static se::Class* __jsb_AdView_class = nullptr;
 
 static std::unordered_map<std::shared_ptr<ee::IAdView>, se::Object*>
     __jsb_s_adviews;
-static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_ptrStored;
+static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
 } // namespace ads
 
 namespace core {
@@ -31,7 +31,7 @@ void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
     if (ads::__jsb_s_adviews.count(input) != 0) {
         obj = ads::__jsb_s_adviews.at(input);
     } else {
-        ads::__jsb_s_ptrStored.push_back(input);
+        ads::__jsb_s_adviewArchive.push_back(input);
         obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
         obj->setPrivateData(input.get());
         obj->root();

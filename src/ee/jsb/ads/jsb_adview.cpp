@@ -19,15 +19,23 @@ namespace ads {
 static se::Object* __jsb_AdView_proto = nullptr;
 static se::Class* __jsb_AdView_class = nullptr;
 
-//static std::shared_ptr<std::shared_ptr<ee::IAdView>, se::Object*> __s_adviews;
+static std::unordered_map<std::shared_ptr<ee::IAdView>, se::Object*>
+    __jsb_s_adviews;
+static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_ptrStored;
 } // namespace ads
 
 namespace core {
 template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
-//    ads::testPtr = input;
-    se::Object* obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
-    obj->setPrivateData(input.get());
+    se::Object* obj = nullptr;
+    if (ads::__jsb_s_adviews.count(input) != 0) {
+        obj = ads::__jsb_s_adviews.at(input);
+    } else {
+        ads::__jsb_s_ptrStored.push_back(input);
+        obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
+        obj->setPrivateData(input.get());
+        obj->root();
+    }
     value.setObject(obj);
 }
 } // namespace core

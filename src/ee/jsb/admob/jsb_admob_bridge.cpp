@@ -15,11 +15,6 @@
 namespace ee {
 namespace core {
 template <>
-void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
-// TODO: implementation
-}
-
-template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
 // TODO: implementation
 }

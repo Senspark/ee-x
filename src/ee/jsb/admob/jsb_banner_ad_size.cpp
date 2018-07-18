@@ -18,7 +18,8 @@ namespace ee {
 namespace admob {
 static se::Object* __jsb_BannerAdSize_proto = nullptr;
 static se::Class* __jsb_BannerAdSize_class = nullptr;
-static std::unordered_map<BannerAdSize, se::Object*> __s_bannerSizes;
+
+static std::unordered_map<BannerAdSize, se::Object*> __jsb_s_bannerSizes;
 } // namespace admob
 
 namespace core {
@@ -29,12 +30,11 @@ template <> ee::AdMobBannerAdSize get_value(const se::Value& value) {
 
 template <> void set_value(se::Value& value, ee::admob::BannerAdSize input) {
     se::Object* obj = nullptr;
-    if (admob::__s_bannerSizes.count(input) == 0) {
-        obj =
-            se::Object::createObjectWithClass(admob::__jsb_BannerAdSize_class);
-        obj->setPrivateData(new admob::BannerAdSize(input));
+    if (admob::__jsb_s_bannerSizes.count(input) != 0) {
+        obj = admob::__jsb_s_bannerSizes.at(input);
     } else {
-        obj = admob::__s_bannerSizes[input];
+        obj = se::Object::createObjectWithClass(admob::__jsb_BannerAdSize_class);
+        obj->setPrivateData(new admob::BannerAdSize(input));
     }
     value.setObject(obj);
 }
@@ -89,6 +89,19 @@ bool register_banner_ad_size_manual(se::Object* globalObj) {
                                            nullptr);
         ctorVal.toObject()->defineProperty("Smart", _SE(jsb_BannerAdSize_Smart),
                                            nullptr);
+    }
+
+    // Register predefined Banner Size
+    BannerAdSize predefinedSizes[3] = {
+        BannerAdSize::Large,
+        BannerAdSize::Normal,
+        BannerAdSize::Smart,
+    };
+    
+    for (auto& size : predefinedSizes) {
+        __jsb_s_bannerSizes[size] = se::Object::createObjectWithClass(__jsb_BannerAdSize_class);
+        __jsb_s_bannerSizes[size]->setPrivateData((void*)&size);
+        __jsb_s_bannerSizes[size]->root();
     }
 
     se::ScriptEngine::getInstance()->clearException();

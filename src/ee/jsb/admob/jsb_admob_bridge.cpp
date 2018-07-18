@@ -10,7 +10,7 @@
 #include "jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-#include <ee/Admob.hpp>
+#include "ee/AdMob.hpp"
 
 namespace ee {
 namespace core {

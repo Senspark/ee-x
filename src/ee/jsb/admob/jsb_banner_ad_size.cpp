@@ -10,7 +10,7 @@
 #include "jsb_admob_bridge.hpp"
 #include "jsb_core_common.hpp"
 
-#include <ee/Admob.hpp>
+#include "ee/AdMob.hpp"
 
 #include <unordered_map>
 

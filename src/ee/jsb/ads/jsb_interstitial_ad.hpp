@@ -5,9 +5,28 @@
 //  Created by Duc Nguyen on 7/17/18.
 //
 
-#ifndef jsb_interstitial_ad_hpp
-#define jsb_interstitial_ad_hpp
+#ifndef JSB_INTERSTITIAL_AD_HPP__
+#define JSB_INTERSTITIAL_AD_HPP__
 
-#include <stdio.h>
+#include "ee/jsb/core/jsb_templates.hpp"
+
+#include <ee/AdsFwd.hpp>
+
+namespace se {
+class Object;
+class Value;
+} // namespace se
+
+namespace ee {
+namespace core {
+
+} // namespace core
+} // namespace ee
+
+namespace ads {
+
+bool register_interstitial_ad_manual(se::Object* object);
+
+}
 
 #endif /* jsb_interstitial_ad_hpp */

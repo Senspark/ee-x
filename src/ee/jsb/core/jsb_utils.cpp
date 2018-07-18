@@ -14,20 +14,20 @@
 namespace ee {
 namespace core {
 
-constexpr static auto jsb_getSHA1CertificateFingerprint =
+constexpr auto jsb_getSHA1CertificateFingerprint =
     &jsb_static_get<std::string, &ee::getSHA1CertificateFingerprint>;
-constexpr static auto jsb_getVersionName =
+constexpr auto jsb_getVersionName =
     &jsb_static_get<std::string, &ee::getVersionName>;
-constexpr static auto jsb_getVersionCode =
+constexpr auto jsb_getVersionCode =
     &jsb_static_get<std::string, &ee::getVersionCode>;
-constexpr static auto jsb_isApplicationInstalled =
+constexpr auto jsb_isApplicationInstalled =
     &jsb_static_get<bool, &ee::isApplicationInstalled, std::string>;
-constexpr static auto jsb_openApplication =
+constexpr auto jsb_openApplication =
     &jsb_static_call<&ee::openApplication, std::string>;
-constexpr static auto jsb_sendMail =
+constexpr auto jsb_sendMail =
     &jsb_static_call<&ee::sendMail, std::string, std::string, std::string>;
-constexpr static auto jsb_isTablet = &jsb_static_get<bool, &ee::isTablet>;
-constexpr static auto jsb_getDeviceId = &jsb_static_get<std::string, &ee::getDeviceId>;
+constexpr auto jsb_isTablet = &jsb_static_get<bool, &ee::isTablet>;
+constexpr auto jsb_getDeviceId = &jsb_static_get<std::string, &ee::getDeviceId>;
 
 SE_BIND_FUNC(jsb_getSHA1CertificateFingerprint)
 SE_BIND_FUNC(jsb_getVersionName)

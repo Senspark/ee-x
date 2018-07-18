@@ -12,6 +12,7 @@
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
+#include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
 
 #include <ee/Core.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -19,7 +20,8 @@
 namespace ee {
 namespace core {
 
-template <typename T> se::Object* create_JSON_object(const T& value);
+template <typename T>
+se::Object* create_JSON_object(const T& value);
 
 template <>
 inline se::Object* create_JSON_object(const std::pair<float, float>& value) {
@@ -37,43 +39,54 @@ inline se::Object* create_JSON_object(const std::pair<int, int>& value) {
     return se::Object::createJSONObject(jsonArray.dump());
 }
 
-template <typename T> T get_value(const se::Value& value);
+template <typename T>
+T get_value(const se::Value& value);
 
-template <> inline bool get_value(const se::Value& value) {
+template <>
+inline bool get_value(const se::Value& value) {
     return value.toBoolean();
 }
 
-template <> inline std::int32_t get_value(const se::Value& value) {
+template <>
+inline std::int32_t get_value(const se::Value& value) {
     return value.toInt32();
 }
 
-template <> inline float get_value(const se::Value& value) {
+template <>
+inline float get_value(const se::Value& value) {
     return value.toFloat();
 }
 
-template <> inline std::string get_value(const se::Value& value) {
+template <>
+inline std::string get_value(const se::Value& value) {
     return std::move(value.toString());
 }
 
-template <> inline const std::string& get_value(const se::Value& value) {
+template <>
+inline const std::string& get_value(const se::Value& value) {
     return value.toString();
 }
 
-template <typename T> void set_value(se::Value& value, T input);
+template <typename T>
+void set_value(se::Value& value, T input);
 
-template <> inline void set_value(se::Value& value, std::int32_t input) {
+template <>
+inline void set_value(se::Value& value, std::int32_t input) {
     value.setInt32(input);
 }
 
-template <> inline void set_value(se::Value& value, std::string input) {
+template <>
+inline void set_value(se::Value& value, std::string input) {
     value.setString(input);
 }
 
-template <> inline void set_value(se::Value& value, bool input) {
+template <>
+inline void set_value(se::Value& value, bool input) {
     value.setBoolean(input);
 }
 
-template <> inline void set_value(se::Value& value, se::Object* obj) {
+template <>
+inline void set_value(se::Value& value, se::Object* obj) {
     value.setObject(obj);
 }
 
@@ -83,7 +96,8 @@ inline void set_value(se::Value& value, std::pair<float, float> input) {
     value.setObject(obj);
 }
 
-template <> inline void set_value(se::Value& value, std::pair<int, int> input) {
+template <>
+inline void set_value(se::Value& value, std::pair<int, int> input) {
     auto obj = create_JSON_object<std::pair<int, int>>(input);
     value.setObject(obj);
 }
@@ -106,6 +120,46 @@ auto make_object(const se::ValueArray& args, std::index_sequence<Indices...>) {
     return new T(get_value<Args>(args[Indices])...);
 }
 
+template <typename InstanceType>
+void jsb_dispose_callback(InstanceType* instance) {
+    se::Object* seObj = nullptr;
+
+    auto iter = se::NativePtrToObjectMap::find(instance);
+    if (iter != se::NativePtrToObjectMap::end()) {
+        // Save se::Object pointer for being used in cleanup method.
+        seObj = iter->second;
+        // Unmap native and js object since native object was destroyed.
+        // Otherwise, it may trigger 'assertion' in se::Object::setPrivateData
+        // later since native obj is already released and the new native object
+        // may be assigned with the same address.
+        se::NativePtrToObjectMap::erase(iter);
+    } else {
+        return;
+    }
+
+    auto cleanup = [seObj]() {
+        auto se = se::ScriptEngine::getInstance();
+        if (!se->isValid() || se->isInCleanup())
+            return;
+
+        se::AutoHandleScope hs;
+        se->clearException();
+
+        // The mapping of native object & se::Object was cleared in above code.
+        // The private data (native object) may be a different object associated
+        // with other se::Object. Therefore, don't clear the mapping again.
+        seObj->clearPrivateData(false);
+        seObj->unroot();
+        seObj->decRef();
+    };
+
+    if (!se::ScriptEngine::getInstance()->isGarbageCollecting()) {
+        cleanup();
+    } else {
+        CleanupTask::pushTaskToAutoReleasePool(cleanup);
+    }
+}
+
 template <typename T, typename... Args>
 static bool jsb_constructor(se::State& s) {
     auto argc = sizeof...(Args);
@@ -123,13 +177,33 @@ static bool jsb_constructor(se::State& s) {
     return false;
 }
 
-template <typename T> static bool jsb_finalize(se::State& s) {
+template <typename T, typename... Args>
+static bool jsb_constructor_with_dispose_callback(se::State& s) {
+    auto argc = sizeof...(Args);
+    const auto& args = s.args();
+
+    using Indices = std::make_index_sequence<sizeof...(Args)>;
+
+    if (argc == args.size()) {
+        auto cObj = make_object<T, Args...>(args, Indices());
+        cObj->setDisposeCallback(&jsb_dispose_callback<T>);
+        s.thisObject()->setPrivateData(cObj);
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.", argc,
+                    2);
+    return false;
+}
+
+template <typename T>
+static bool jsb_finalize(se::State& s) {
     T* cObj = static_cast<T*>(s.nativeThisObject());
     delete cObj;
     return true;
 }
 
-template <auto Function, typename... Args> bool jsb_static_call(se::State& s) {
+template <auto Function, typename... Args>
+bool jsb_static_call(se::State& s) {
     auto argc = sizeof...(Args);
     const auto& args = s.args();
 
@@ -257,11 +331,12 @@ bool jsb_method_get_on_ui_thread(se::State& s) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         set_value<ReturnType>(
             s.rval(),
-            ee::runOnUiThreadAndWaitResult<ReturnType>([cObj,
-                                                        args]() -> ReturnType {
-                return std::forward<ReturnType>(call_instance_func<InstanceType, FunctionPtr, Args...>(
-                    cObj, args, Indices()));
-            }));
+            ee::runOnUiThreadAndWaitResult<ReturnType>(
+                [cObj, args]() -> ReturnType {
+                    return std::forward<ReturnType>(
+                        call_instance_func<InstanceType, FunctionPtr, Args...>(
+                            cObj, args, Indices()));
+                }));
         return true;
     }
 
@@ -335,7 +410,6 @@ bool jsb_propterty_set(se::State& s) {
                     args.size(), 1);
     return false;
 }
-
 } // namespace core
 } // namespace ee
 

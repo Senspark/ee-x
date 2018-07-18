@@ -19,7 +19,7 @@ namespace core {
 static se::Object* __jsb_Logger_proto = nullptr;
 static se::Class* __jsb_Logger_class = nullptr;
 
-static std::unordered_map<const Logger*, se::Object*> __s_loggers;
+static se::Object* __jsb_s_Logger = nullptr;
 
 template <> const Logger& get_value(const se::Value& value) {
     return *static_cast<Logger*>(value.toObject()->getPrivateData());
@@ -27,11 +27,18 @@ template <> const Logger& get_value(const se::Value& value) {
 
 template <> void set_value(se::Value& value, ee::Logger& input) {
     se::Object* obj = nullptr;
-    if (__s_loggers.count(&input) == 0) {
+    if (&input  == &input.getSystemLogger()) {
+        if (__jsb_s_Logger == nullptr) {
+            obj = se::Object::createObjectWithClass(__jsb_Logger_class);
+            obj->setPrivateData(&input);
+            obj->root();
+            __jsb_s_Logger = obj;
+        } else {
+            obj = __jsb_s_Logger;
+        }
+    } else {
         obj = se::Object::createObjectWithClass(__jsb_Logger_class);
         obj->setPrivateData(new ee::Logger(input));
-    } else {
-        obj = __s_loggers[&input];
     }
     value.setObject(obj);
 }
@@ -111,6 +118,7 @@ bool register_logger_manual(se::Object* globalObj) {
         ctorVal.toObject()->defineFunction("setSystemLogger",
                                            _SE(jsb_Logger_setSystemLogger));
     }
+    
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

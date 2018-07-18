@@ -5,11 +5,12 @@
 //  Created by Duc Nguyen on 7/13/18.
 //
 
-#include "jsb_log_level.hpp"
 #include "jsb_core_common.hpp"
+#include "jsb_log_level.hpp"
 
 #include <ee/Core.hpp>
 
+#include <set>
 #include <unordered_map>
 
 namespace ee {
@@ -17,21 +18,23 @@ namespace core {
 
 static se::Class* __jsb_LogLevel_class = nullptr;
 static se::Object* __jsb_LogLevel_proto = nullptr;
-static std::unordered_map<const LogLevel*, se::Object*> __s_loglevels;
+static std::unordered_map<const LogLevel*, se::Object*> __jsb_s_loglevels;
 
-template <> const ee::LogLevel& get_value(const se::Value& value) {
+template <>
+const ee::LogLevel& get_value(const se::Value& value) {
     auto retObj =
         static_cast<ee::LogLevel*>(value.toObject()->getPrivateData());
     return *retObj;
 }
 
-template <> void set_value(se::Value& value, const LogLevel& input) {
+template <>
+void set_value(se::Value& value, const LogLevel& input) {
     se::Object* obj = nullptr;
-    if (__s_loglevels.count(&input) == 0) {
-        obj = se::Object::createObjectWithClass(__jsb_LogLevel_class);
-        obj->setPrivateData(new ee::LogLevel(input));
+    if (__jsb_s_loglevels.count(&input) != 0) {
+        obj = __jsb_s_loglevels[&input];
     } else {
-        obj = __s_loglevels[&input];
+        obj = se::Object::createObjectWithClass(__jsb_LogLevel_class);
+        obj->setPrivateData(new LogLevel(input));
     }
     value.setObject(obj);
 }
@@ -40,11 +43,9 @@ constexpr static auto jsb_LogLevel_finalize = &jsb_finalize<ee::LogLevel>;
 constexpr static auto jsb_LogLevel_constructor =
     &jsb_constructor<ee::LogLevel, std::int32_t, std::string>;
 constexpr static auto jsb_LogLevel_get_priority =
-    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::priority,
-                            std::int32_t>;
+    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::priority, std::int32_t>;
 constexpr static auto jsb_LogLevel_set_priority =
-    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::priority,
-                            std::int32_t>;
+    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::priority, std::int32_t>;
 constexpr static auto jsb_LogLevel_get_desc =
     &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::desc, std::string>;
 constexpr static auto jsb_LogLevel_set_desc =
@@ -119,6 +120,19 @@ bool register_log_level_manual(se::Object* globalObj) {
                                            nullptr);
         ctorVal.toObject()->defineProperty("Assert", _SE(jsb_LogLevel_Assert),
                                            nullptr);
+    }
+
+    // Register predefined Loglevel instances
+    const LogLevel* predefinedLogLevels[6] = {
+        &LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
+        &LogLevel::Warn,    &LogLevel::Error, &LogLevel::Assert,
+    };
+
+    for (auto logLevel : predefinedLogLevels) {
+        __jsb_s_loglevels[logLevel] =
+            se::Object::createObjectWithClass(__jsb_LogLevel_class);
+        __jsb_s_loglevels[logLevel]->setPrivateData((void*)logLevel);
+        __jsb_s_loglevels[logLevel]->root();
     }
 
     se::ScriptEngine::getInstance()->clearException();

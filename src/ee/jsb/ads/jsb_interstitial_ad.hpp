@@ -14,7 +14,6 @@
 
 namespace se {
 class Object;
-class Value;
 } // namespace se
 
 namespace ee {

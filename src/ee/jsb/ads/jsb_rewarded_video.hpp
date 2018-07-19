@@ -5,9 +5,23 @@
 //  Created by Duc Nguyen on 7/17/18.
 //
 
-#ifndef jsb_rewarded_video_hpp
-#define jsb_rewarded_video_hpp
+#ifndef JSB_REWARDED_VIDEO_HPP__
+#define JSB_REWARDED_VIDEO_HPP__
 
-#include <stdio.h>
+#include <ee/AdsFwd.hpp>
 
-#endif /* jsb_rewarded_video_hpp */
+namespace se {
+class Object;
+class Value;
+} // namespace se
+
+namespace ee {
+namespace core {} // namespace core
+
+namespace ads {
+bool register_rewarded_video_manual(se::Object* object);
+}
+
+} // namespace ee
+
+#endif /* JSB_REWARDED_VIDEO_HPP__ */

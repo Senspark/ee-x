@@ -11,6 +11,7 @@
 #ifdef __cplusplus
 #include "ee/jsb/ads/jsb_adview.hpp"
 #include "ee/jsb/ads/jsb_interstitial_ad.hpp"
+#include "ee/jsb/ads/jsb_rewarded_video.hpp"
 #endif // __cplusplus
 
 #endif // JSB_CORE_HPP

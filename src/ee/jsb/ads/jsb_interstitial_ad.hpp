@@ -17,8 +17,6 @@ class Object;
 } // namespace se
 
 namespace ee {
-namespace core {} // namespace core
-
 namespace ads {
 bool register_interstitial_ad_manual(se::Object* object);
 }

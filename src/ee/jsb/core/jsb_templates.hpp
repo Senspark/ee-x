@@ -102,6 +102,13 @@ inline void set_value(se::Value& value, std::pair<int, int> input) {
     value.setObject(obj);
 }
 
+template <typename... Args>
+se::ValueArray to_value_array(Args... values) {
+    se::ValueArray args;
+    args.push_back(se::Value(values...));
+    return std::move(args);
+}
+
 template <auto FunctionPtr, typename... Args, std::size_t... Indices>
 auto call_static_func(const se::ValueArray& args,
                       std::index_sequence<Indices...>) {
@@ -381,7 +388,7 @@ bool jsb_accessor_set_on_ui_thread(se::State& s) {
     if (args.size() == 1) {
         auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
         ee::runOnUiThread([cObj, args] {
-            std::bind(FunctionPtr, cObj, get_value<ArgumentType>(args[0]))();
+            (cObj->*FunctionPtr)(get_value<ArgumentType>(args[0]));
         });
         return true;
     }
@@ -404,6 +411,42 @@ bool jsb_propterty_set(se::State& s) {
     if (args.size() == 1) {
         auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
         cObj->*MemberPtr = get_value<std::decay_t<ArgumentType>>(args[0]);
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+                    args.size(), 1);
+    return false;
+}
+
+template <typename InstanceType, auto FunctionPtr, typename... Args>
+bool jsb_set_callback(se::State& s) {
+    const auto& args = s.args();
+    auto argc = args.size();
+    if (argc >= 1) {
+        InstanceType* cObj = static_cast<InstanceType*>(s.nativeThisObject());
+
+        se::Value jsFunc = args[0];
+        se::Value jsTarget = argc > 1 ? args[1] : se::Value::Undefined;
+
+        if (jsFunc.isNullOrUndefined()) {
+            std::bind(FunctionPtr, cObj, nullptr)();
+        } else {
+            assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
+
+            s.thisObject()->attachObject(jsFunc.toObject());
+            s.thisObject()->attachObject(jsTarget.toObject());
+            
+            std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
+                se::ScriptEngine::getInstance()->clearException();
+                se::AutoHandleScope hs;
+
+                se::ValueArray args = to_value_array(values...);
+                se::Object* target =
+                    jsTarget.isObject() ? jsTarget.toObject() : nullptr;
+                jsFunc.toObject()->call(args, target);
+            })();
+        }
+
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",

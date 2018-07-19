@@ -18,11 +18,6 @@ class Value;
 } // namespace se
 
 namespace ee {
-namespace core {
-template <>
-void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input);
-} // namespace core
-
 namespace ads {
 
 extern se::Object* __adsObj;

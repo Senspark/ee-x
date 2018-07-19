@@ -69,6 +69,8 @@ const static auto jsb_AdView_setSize =
 const static auto jsb_AdView_setVisible =
     &ee::core::jsb_accessor_set_on_ui_thread<IAdView, &IAdView::setVisible,
                                              bool>;
+const static auto jsb_AdView_setLoadCallback =
+    &ee::core::jsb_set_callback<IAdView, &IAdView::setLoadCallback, bool>;
 
 SE_BIND_FINALIZE_FUNC(jsb_AdView_finalize)
 SE_BIND_FUNC(jsb_AdView_isLoaded)
@@ -80,6 +82,7 @@ SE_BIND_FUNC(jsb_AdView_setPosition)
 SE_BIND_FUNC(jsb_AdView_getSize)
 SE_BIND_FUNC(jsb_AdView_setSize)
 SE_BIND_FUNC(jsb_AdView_setVisible)
+SE_BIND_FUNC(jsb_AdView_setLoadCallback)
 
 bool register_adview_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ads", globalObj, &__adsObj);
@@ -96,6 +99,7 @@ bool register_adview_manual(se::Object* globalObj) {
     cls->defineFunction("getSize", _SE(jsb_AdView_getSize));
     cls->defineFunction("setSize", _SE(jsb_AdView_setSize));
     cls->defineFunction("setVisible", _SE(jsb_AdView_setVisible));
+    cls->defineFunction("setLoadCallback", _SE(jsb_AdView_setLoadCallback));
 
     cls->install();
 

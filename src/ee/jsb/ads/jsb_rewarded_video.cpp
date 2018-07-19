@@ -27,6 +27,7 @@ static std::vector<std::shared_ptr<ee::IRewardedVideo>>
 } // namespace ads
 
 namespace core {
+template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IRewardedVideo> input) {
     se::Object* obj = nullptr;
     if (ads::__jsb_s_rewardedVideos.count(input) != 0) {
@@ -63,7 +64,7 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
     core::getOrCreatePlainObject_r("ads", globalObj, &adsObj);
 
-    auto cls = se::Class::create("InterstitialAd", adsObj, nullptr, nullptr);
+    auto cls = se::Class::create("RewardedVideo", adsObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_RewardedVideo_finalize));
 
     cls->defineFunction("isLoaded", _SE(jsb_RewardedVideo_isLoaded));
@@ -72,7 +73,7 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::IInterstitialAd>(cls);
+    JSBClassType::registerClass<ee::IRewardedVideo>(cls);
 
     __jsb_RewardedVideo_proto = cls->getProto();
     __jsb_RewardedVideo_class = cls;

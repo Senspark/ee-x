@@ -16,8 +16,6 @@ class Value;
 } // namespace se
 
 namespace ee {
-namespace core {} // namespace core
-
 namespace ads {
 bool register_rewarded_video_manual(se::Object* object);
 }

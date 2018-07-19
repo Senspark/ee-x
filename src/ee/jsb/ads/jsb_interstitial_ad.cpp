@@ -32,15 +32,55 @@ void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
         obj = ads::__jsb_s_interstitialAds.at(input);
     } else {
         ads::__jsb_s_interstitialAdArchive.push_back(input);
-        obj = se::Object::createObjectWithClass(ads::__jsb_InterstitialAd_class);
+        obj =
+            se::Object::createObjectWithClass(ads::__jsb_InterstitialAd_class);
         obj->setPrivateData(input.get());
         obj->root();
     }
     value.setObject(obj);
 }
+} // namespace core
 
 namespace ads {
+constexpr auto jsb_InterstitialAd_finalize =
+    &ee::core::jsb_finalize<IInterstitialAd>;
+constexpr auto jsb_InterstitialAd_isLoaded =
+    &ee::core::jsb_accessor_get_on_ui_thread<IInterstitialAd,
+                                             &IInterstitialAd::isLoaded, bool>;
+constexpr auto jsb_InterstitialAd_load =
+    &ee::core::jsb_method_call_on_ui_thread<IInterstitialAd,
+                                            &IInterstitialAd::load>;
+constexpr auto jsb_InterstitialAd_show =
+    &ee::core::jsb_method_call_on_ui_thread<IInterstitialAd,
+                                            &IInterstitialAd::show>;
+
+SE_BIND_FINALIZE_FUNC(jsb_InterstitialAd_finalize)
+SE_BIND_FUNC(jsb_InterstitialAd_isLoaded)
+SE_BIND_FUNC(jsb_InterstitialAd_load)
+SE_BIND_FUNC(jsb_InterstitialAd_show)
+
+bool register_interstitial_ad_manual(se::Object* globalObj) {
+    se::Object* adsObj = nullptr;
+    core::getOrCreatePlainObject_r("ads", globalObj, &adsObj);
+    
+    auto cls = se::Class::create("InterstitialAd", adsObj, nullptr, nullptr);
+    cls->defineFinalizeFunction(_SE(jsb_InterstitialAd_finalize));
+    
+    cls->defineFunction("isLoaded", _SE(jsb_InterstitialAd_isLoaded));
+    cls->defineFunction("load", _SE(jsb_InterstitialAd_load));
+    cls->defineFunction("show", _SE(jsb_InterstitialAd_show));
+    
+    cls->install();
+    
+    JSBClassType::registerClass<ee::IInterstitialAd>(cls);
+    
+    __jsb_InterstitialAd_proto = cls->getProto();
+    __jsb_InterstitialAd_class = cls;
+    
+    se::ScriptEngine::getInstance()->clearException();
+    
+    return true;
+}
 
 } // namespace ads
-} // namespace core
 } // namespace ee

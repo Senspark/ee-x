@@ -10,6 +10,7 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/ads/jsb_adview.hpp"
+#include "ee/jsb/ads/jsb_interstitial_ad.hpp"
 #endif // __cplusplus
 
 #endif // JSB_CORE_HPP

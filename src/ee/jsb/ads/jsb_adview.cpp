@@ -82,7 +82,7 @@ SE_BIND_FUNC(jsb_AdView_setSize)
 SE_BIND_FUNC(jsb_AdView_setVisible)
 
 bool register_adview_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("ads", core::__coreObj, &__adsObj);
+    core::getOrCreatePlainObject_r("ads", globalObj, &__adsObj);
 
     auto cls = se::Class::create("AdView", __adsObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_AdView_finalize));

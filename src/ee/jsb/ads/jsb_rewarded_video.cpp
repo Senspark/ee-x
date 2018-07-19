@@ -26,7 +26,20 @@ static std::vector<std::shared_ptr<ee::IRewardedVideo>>
     __jsb_s_rewardedVideoArchive;
 } // namespace ads
 
-namespace core {} // namespace core
+namespace core {
+void set_value(se::Value& value, std::shared_ptr<ee::IRewardedVideo> input) {
+    se::Object* obj = nullptr;
+    if (ads::__jsb_s_rewardedVideos.count(input) != 0) {
+        obj = ads::__jsb_s_rewardedVideos.at(input);
+    } else {
+        ads::__jsb_s_rewardedVideoArchive.push_back(input);
+        obj = se::Object::createObjectWithClass(ads::__jsb_RewardedVideo_class);
+        obj->setPrivateData(input.get());
+        obj->root();
+    }
+    value.setObject(obj);
+}
+} // namespace core
 
 namespace ads {
 constexpr auto jsb_RewardedVideo_finalize =

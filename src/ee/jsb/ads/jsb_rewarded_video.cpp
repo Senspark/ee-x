@@ -54,11 +54,15 @@ constexpr auto jsb_RewardedVideo_load =
 constexpr auto jsb_RewardedVideo_show =
     &ee::core::jsb_method_call_on_ui_thread<IRewardedVideo,
                                             &IRewardedVideo::show>;
+constexpr auto jsb_RewardedVideo_setResultCallback =
+    &ee::core::jsb_set_callback<IRewardedVideo,
+                                &IRewardedVideo::setResultCallback, bool>;
 
 SE_BIND_FINALIZE_FUNC(jsb_RewardedVideo_finalize)
 SE_BIND_FUNC(jsb_RewardedVideo_isLoaded)
 SE_BIND_FUNC(jsb_RewardedVideo_load)
 SE_BIND_FUNC(jsb_RewardedVideo_show)
+SE_BIND_FUNC(jsb_RewardedVideo_setResultCallback);
 
 bool register_rewarded_video_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
@@ -70,7 +74,8 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
     cls->defineFunction("isLoaded", _SE(jsb_RewardedVideo_isLoaded));
     cls->defineFunction("load", _SE(jsb_RewardedVideo_load));
     cls->defineFunction("show", _SE(jsb_RewardedVideo_show));
-
+    cls->defineFunction("setResultCallback",
+                        _SE(jsb_RewardedVideo_setResultCallback));
     cls->install();
 
     JSBClassType::registerClass<ee::IRewardedVideo>(cls);

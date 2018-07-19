@@ -53,32 +53,38 @@ constexpr auto jsb_InterstitialAd_load =
 constexpr auto jsb_InterstitialAd_show =
     &ee::core::jsb_method_call_on_ui_thread<IInterstitialAd,
                                             &IInterstitialAd::show>;
+constexpr auto jsb_InterstitialAd_setResultCallback =
+    &ee::core::jsb_set_callback<IInterstitialAd,
+                                &IInterstitialAd::setResultCallback>;
 
 SE_BIND_FINALIZE_FUNC(jsb_InterstitialAd_finalize)
 SE_BIND_FUNC(jsb_InterstitialAd_isLoaded)
 SE_BIND_FUNC(jsb_InterstitialAd_load)
 SE_BIND_FUNC(jsb_InterstitialAd_show)
+SE_BIND_FUNC(jsb_InterstitialAd_setResultCallback)
 
 bool register_interstitial_ad_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
     core::getOrCreatePlainObject_r("ads", globalObj, &adsObj);
-    
+
     auto cls = se::Class::create("InterstitialAd", adsObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_InterstitialAd_finalize));
-    
+
     cls->defineFunction("isLoaded", _SE(jsb_InterstitialAd_isLoaded));
     cls->defineFunction("load", _SE(jsb_InterstitialAd_load));
     cls->defineFunction("show", _SE(jsb_InterstitialAd_show));
-    
+    cls->defineFunction("setResultCallback",
+                        _SE(jsb_InterstitialAd_setResultCallback));
+
     cls->install();
-    
+
     JSBClassType::registerClass<ee::IInterstitialAd>(cls);
-    
+
     __jsb_InterstitialAd_proto = cls->getProto();
     __jsb_InterstitialAd_class = cls;
-    
+
     se::ScriptEngine::getInstance()->clearException();
-    
+
     return true;
 }
 

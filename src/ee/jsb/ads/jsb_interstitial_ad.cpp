@@ -35,9 +35,25 @@ void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
         obj =
             se::Object::createObjectWithClass(ads::__jsb_InterstitialAd_class);
         obj->setPrivateData(input.get());
-        obj->root();
+//        obj->root();
     }
     value.setObject(obj);
+}
+
+template <>
+bool jsb_finalize<IInterstitialAd>(se::State& s) {
+    auto* interstitialAdPtr = static_cast<IInterstitialAd*>(s.nativeThisObject());
+    auto iter = std::find_if(ads::__jsb_s_interstitialAdArchive.cbegin(),
+                             ads::__jsb_s_interstitialAdArchive.cend(),
+                             [=](const std::shared_ptr<IInterstitialAd>& ptr) -> bool {
+                                 return interstitialAdPtr == ptr.get();
+                             });
+    if (iter != ads::__jsb_s_interstitialAdArchive.cend()) {
+        ads::__jsb_s_interstitialAdArchive.erase(iter);
+    } else {
+        delete interstitialAdPtr;
+    }
+    return true;
 }
 } // namespace core
 

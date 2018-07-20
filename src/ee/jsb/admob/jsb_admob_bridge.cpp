@@ -13,8 +13,18 @@
 #include "ee/AdMob.hpp"
 
 namespace ee {
+namespace core {
+template <>
+ee::AdMobBannerAdSize get_value(const se::Value& value) {
+    return static_cast<ee::AdMobBannerAdSize>(value.toInt32());
+}
+
+} // namespace core
+
 namespace admob {
 se::Object* __admobObj = nullptr;
+se::Object* __bannerAdSizeObj = nullptr;
+
 static se::Object* __jsb_AdMob_proto = nullptr;
 static se::Class* __jsb_AdMob_class = nullptr;
 
@@ -59,6 +69,15 @@ SE_BIND_FUNC(jsb_AdMob_createRewardedVideo)
 
 bool register_admob_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("admob", core::__eeObj, &__admobObj);
+    core::getOrCreatePlainObject_r("BannerAdSize", __admobObj,
+                                   &__bannerAdSizeObj);
+
+    __bannerAdSizeObj->setProperty(
+        "Normal", se::Value((std::int32_t)ee::AdMobBannerAdSize::Normal));
+    __bannerAdSizeObj->setProperty(
+        "Large", se::Value((std::int32_t)ee::AdMobBannerAdSize::Large));
+    __bannerAdSizeObj->setProperty(
+        "Smart", se::Value((std::int32_t)ee::AdMobBannerAdSize::Smart));
 
     auto cls = se::Class::create("AdMob", __admobObj, nullptr,
                                  _SE(jsb_AdMob_constructor));

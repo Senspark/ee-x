@@ -106,7 +106,7 @@ template <typename... Args>
 se::ValueArray to_value_array(Args... values) {
     se::ValueArray args;
     args.push_back(se::Value(values...));
-    return std::move(args);
+    return args;
 }
 
 template <auto FunctionPtr, typename... Args, std::size_t... Indices>
@@ -168,7 +168,7 @@ void jsb_dispose_callback(InstanceType* instance) {
 }
 
 template <typename T, typename... Args>
-static bool jsb_constructor(se::State& s) {
+bool jsb_constructor(se::State& s) {
     auto argc = sizeof...(Args);
     const auto& args = s.args();
 
@@ -185,7 +185,7 @@ static bool jsb_constructor(se::State& s) {
 }
 
 template <typename T, typename... Args>
-static bool jsb_constructor_with_dispose_callback(se::State& s) {
+bool jsb_constructor_with_dispose_callback(se::State& s) {
     auto argc = sizeof...(Args);
     const auto& args = s.args();
 
@@ -203,7 +203,7 @@ static bool jsb_constructor_with_dispose_callback(se::State& s) {
 }
 
 template <typename T>
-static bool jsb_finalize(se::State& s) {
+bool jsb_finalize(se::State& s) {
     T* cObj = static_cast<T*>(s.nativeThisObject());
     delete cObj;
     return true;
@@ -443,7 +443,8 @@ bool jsb_set_callback(se::State& s) {
                 se::ValueArray args = to_value_array(values...);
                 se::Object* target =
                     jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                jsFunc.toObject()->call(args, target);
+                se::Object* func = jsFunc.toObject();
+                func->call(args, target);
             })();
         }
 

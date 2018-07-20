@@ -10,7 +10,6 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/admob/jsb_admob_bridge.hpp"
-#include "ee/jsb/admob/jsb_banner_ad_size.hpp"
 #include "ee/jsb/admob/jsb_native_ad_layout.hpp"
 #endif // __cplusplus
 

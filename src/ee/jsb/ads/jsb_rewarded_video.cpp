@@ -36,9 +36,26 @@ void set_value(se::Value& value, std::shared_ptr<ee::IRewardedVideo> input) {
         ads::__jsb_s_rewardedVideoArchive.push_back(input);
         obj = se::Object::createObjectWithClass(ads::__jsb_RewardedVideo_class);
         obj->setPrivateData(input.get());
-        obj->root();
+//        obj->root();
     }
     value.setObject(obj);
+}
+
+template <>
+bool jsb_finalize<IRewardedVideo>(se::State& s) {
+    auto* rewardedVideoPtr = static_cast<IRewardedVideo*>(s.nativeThisObject());
+    auto iter =
+        std::find_if(ads::__jsb_s_rewardedVideoArchive.cbegin(),
+                     ads::__jsb_s_rewardedVideoArchive.cend(),
+                     [=](const std::shared_ptr<IRewardedVideo>& ptr) -> bool {
+                         return rewardedVideoPtr == ptr.get();
+                     });
+    if (iter != ads::__jsb_s_rewardedVideoArchive.cend()) {
+        ads::__jsb_s_rewardedVideoArchive.erase(iter);
+    } else {
+        delete rewardedVideoPtr;
+    }
+    return true;
 }
 } // namespace core
 

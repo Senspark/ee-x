@@ -423,7 +423,7 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/core/*.{h,hpp}'
 
     s.xcconfig = {
-      'HEADER_SEARCH_PATHS' => 
+      'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../../cocos2d-x ' +   
         '${PODS_ROOT}/../../../cocos2d-x/cocos ' +
         '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ' +

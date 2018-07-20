@@ -34,9 +34,25 @@ void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
         ads::__jsb_s_adviewArchive.push_back(input);
         obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
         obj->setPrivateData(input.get());
-        obj->root();
+        //        obj->root();
     }
     value.setObject(obj);
+}
+
+template <>
+bool jsb_finalize<IAdView>(se::State& s) {
+    auto* adviewPtr = static_cast<IAdView*>(s.nativeThisObject());
+    auto iter = std::find_if(ads::__jsb_s_adviewArchive.cbegin(),
+                             ads::__jsb_s_adviewArchive.cend(),
+                             [=](const std::shared_ptr<IAdView>& ptr) -> bool {
+                                 return adviewPtr == ptr.get();
+                             });
+    if (iter != ads::__jsb_s_adviewArchive.cend()) {
+        ads::__jsb_s_adviewArchive.erase(iter);
+    } else {
+        delete adviewPtr;
+    }
+    return true;
 }
 } // namespace core
 

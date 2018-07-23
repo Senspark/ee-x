@@ -434,7 +434,10 @@ bool jsb_set_callback(se::State& s) {
             assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
 
             s.thisObject()->attachObject(jsFunc.toObject());
-            s.thisObject()->attachObject(jsTarget.toObject());
+            
+            if (jsTarget.isObject()) {
+                s.thisObject()->attachObject(jsTarget.toObject());
+            }
             
             std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
                 se::ScriptEngine::getInstance()->clearException();

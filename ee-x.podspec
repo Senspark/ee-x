@@ -424,10 +424,11 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../../cocos2d-x ' +   
-        '${PODS_ROOT}/../../../cocos2d-x/cocos ' +
-        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ' +
-        '${PODS_ROOT}/../../../cocos2d-x/external/sources'
+        '${PODS_ROOT}/../../../cocos2d-x ',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos ',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ',
+        '${PODS_ROOT}/../../../cocos2d-x/external/sources',
+        ].join(' ')
     }
     
     s.dependency 'ee-x/core'
@@ -455,5 +456,65 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/admob'
+  end
+
+  spec.subspec 'jsb-crashlytics' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_crashlytics.hpp',
+      'src/ee/jsb/crashlytics/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_crashlytics.hpp',
+      'src/ee/jsb/crashlytics/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/crashlytics'
+  end
+
+  spec.subspec 'jsb-google-analytics' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_google_analytics.hpp',
+      'src/ee/jsb/google/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_google_analytics.hpp',
+      'src/ee/jsb/google/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/google-analytics'
+  end
+
+  spec.subspec 'jsb-facebookads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/facebookads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/facebookads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/facebookads'
+  end
+
+  spec.subspec 'jsb-facebook-ads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_facebook_ads.hpp',
+      'src/ee/jsb/facebookads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/facebookads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/facebook-ads'
+  end
+
+  spec.subspec 'jsb-firebase' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/firebase/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/firebase/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/firebase'
   end
 end

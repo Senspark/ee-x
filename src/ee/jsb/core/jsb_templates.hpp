@@ -9,6 +9,7 @@
 #define JSB_TEMPLATES_HPP__
 
 #include <type_traits>
+#include <unordered_map>
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
@@ -40,6 +41,24 @@ inline se::Object* create_JSON_object(const std::pair<int, int>& value) {
 }
 
 template <typename T>
+T from_JSON_object(se::Object* jsonObj);
+
+template <>
+std::unordered_map<std::string, std::string>
+from_JSON_object(se::Object* jsonObj) {
+    std::vector<std::string> allKeys;
+    std::unordered_map<std::string, std::string> ret;
+    
+    jsonObj->getAllKeys(&allKeys);
+    for (auto& key : allKeys) {
+        se::Value value;
+        jsonObj->getProperty(key.c_str(), &value);
+        ret[key] = value.toString();
+    }
+    return std::move(ret);
+}
+
+template <typename T>
 T get_value(const se::Value& value);
 
 template <>
@@ -65,6 +84,13 @@ inline std::string get_value(const se::Value& value) {
 template <>
 inline const std::string& get_value(const se::Value& value) {
     return value.toString();
+}
+
+template <>
+inline const std::unordered_map<std::string, std::string>&
+get_value(const se::Value& value) {
+    return from_JSON_object<std::unordered_map<std::string, std::string>>(
+        value.toObject());
 }
 
 template <typename T>
@@ -434,11 +460,11 @@ bool jsb_set_callback(se::State& s) {
             assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
 
             s.thisObject()->attachObject(jsFunc.toObject());
-            
+
             if (jsTarget.isObject()) {
                 s.thisObject()->attachObject(jsTarget.toObject());
             }
-            
+
             std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
                 se::ScriptEngine::getInstance()->clearException();
                 se::AutoHandleScope hs;

@@ -15,6 +15,7 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {
@@ -47,10 +48,11 @@ JNIEnv* JniUtils::getEnv() {
     }
 
     // Check Cocos thread.
-    if (isCocosThreadMarked_ && cocosThreadId_ != std::this_thread::get_id()) {
-        Logger::getSystemLogger().error(
-            "%s: current thread is not cocos2d-x thread!", __PRETTY_FUNCTION__);
-    }
+//    if (isCocosThreadMarked_ && cocosThreadId_ != std::this_thread::get_id()) {
+//        Logger::getSystemLogger().error(
+//            "%s: current thread is not cocos2d-x thread!", __PRETTY_FUNCTION__);
+//        Logger::getSystemLogger().warn("Backtrace: %s", dumpBacktrace(30).c_str());
+//    }
 
     return env;
 }

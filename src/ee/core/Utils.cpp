@@ -15,15 +15,23 @@
 #include <queue>
 #include <sstream>
 #include <thread>
+#include <iostream>
+#include <iomanip>
+#include <unwind.h>
+#include <dlfcn.h>
 
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/Macro.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {
 namespace core {
+
+struct BacktraceState {
+    void** current;
+    void** end;
+};
 /*
 void runOnUiThreadAndWait(const Runnable<void>& runnable) {
 #ifdef EE_X_ANDROID
@@ -230,5 +238,49 @@ std::string getDeviceId() {
     auto&& bridge = MessageBridge::getInstance();
     return bridge.call(k__getDeviceId);
 }
+
+_Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
+    BacktraceState* state = static_cast<BacktraceState*>(arg);
+    uintptr_t pc = _Unwind_GetIP(context);
+    if (pc) {
+        if (state->current == state->end) {
+            return _URC_END_OF_STACK;
+        } else {
+            *state->current++ = reinterpret_cast<void*>(pc);
+        }
+    }
+    return _URC_NO_REASON;
+}
+
+size_t captureBacktrace(void** buffer, size_t max) {
+    BacktraceState state = {buffer, buffer + max};
+    _Unwind_Backtrace(unwindCallback, &state);
+
+    return state.current - buffer;
+}
+
+void dumpBacktrace(std::ostream& os, void** buffer, size_t count)
+{
+    for (size_t idx = 0; idx < count; ++idx) {
+        const void* addr = buffer[idx];
+        const char* symbol = "";
+
+        Dl_info info;
+        if (dladdr(addr, &info) && info.dli_sname) {
+            symbol = info.dli_sname;
+        }
+
+        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol << "\n";
+    }
+}
+
+std::string dumpBacktrace(size_t count) {
+    void* buffer[count];
+    std::ostringstream oss;
+
+    dumpBacktrace(oss, buffer, captureBacktrace(buffer, count));
+    return oss.str();
+}
+
 } // namespace core
 } // namespace ee

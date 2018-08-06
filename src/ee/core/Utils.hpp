@@ -18,9 +18,10 @@
 
 namespace ee {
 namespace core {
+
 // lower string
 std::string str_tolower(std::string s);
-    
+
 /// Converts float to string without trailing zeroes.
 std::string toString(float value);
 
@@ -86,6 +87,9 @@ bool testConnection();
 
 /// Gets device's unique ID.
 std::string getDeviceId();
+
+std::string dumpBacktrace(size_t count);
+
 } // namespace core
 
 using core::format;

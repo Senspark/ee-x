@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ee.vungle">
     <!-- Required permissions for caching and ad operations to work -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,14 +11,22 @@
     <application>
         <!-- Required activities for playback of Vungle video Ads -->
 
+        <!--Vungle Activities-->
         <activity
-            android:name="com.vungle.publisher.VideoFullScreenAdActivity"
+            android:name="com.vungle.warren.ui.VungleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:theme"/>
         <activity
-            android:name="com.vungle.publisher.MraidFullScreenAdActivity"
+            android:name="com.vungle.warren.ui.VungleWebViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.vungle.warren.ui.VungleFlexViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 </manifest>

@@ -2,8 +2,7 @@
 
 @interface EEVungle : NSObject <EEIPlugin>
 
-- (void)initialize:(NSString* _Nonnull)gameId
-       placementId:(NSString* _Nonnull)placementId;
+- (void)initialize:(NSString* _Nonnull)gameId;
 
 - (BOOL)hasRewardedVideo:(NSString* _Nonnull)placementId;
 

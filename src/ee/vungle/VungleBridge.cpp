@@ -1,9 +1,9 @@
-#include "ee/vungle/VungleBridge.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/vungle/VungleBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -59,15 +59,17 @@ Self::~Vungle() {
     bridge_.deregisterHandler(k__onUnavailable);
 }
 
-void Self::initialize(const std::string& gameId,
-                      const std::string& placementId) {
-    logger_.debug("%s: gameId = %s placementId = %s", __PRETTY_FUNCTION__,
-                  gameId.c_str(), placementId.c_str());
+void Self::initialize(const std::string& gameId) {
+    logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
 
     nlohmann::json json;
     json["gameId"] = gameId;
-    json["placementId"] = placementId;
     bridge_.call(k__initialize, json.dump());
+}
+
+void Self::initialize(const std::string& gameId,
+                      const std::string& placementId) {
+    initialize(gameId);
 }
 
 std::shared_ptr<IRewardedVideo>

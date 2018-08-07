@@ -362,7 +362,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'vungle' do |s|
     s.dependency 'ee-x/vungle-base'
-    s.dependency 'VungleSDK-iOS', '5.3.0'
+    s.dependency 'VungleSDK-iOS', '6.2.0'
   end
 
   spec.subspec 'vungle-mediation' do |s|

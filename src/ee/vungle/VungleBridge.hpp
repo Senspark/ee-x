@@ -17,7 +17,9 @@ public:
     explicit Vungle(const Logger& logger);
 
     /// Initializes Vungle with the specified game ID.
-    void initialize(const std::string& gameId, const std::string& placementId);
+    void initialize(const std::string& gameId);
+    void initialize(const std::string& gameId,
+                    const std::string& placementId); //deprecated
 
     /// Creates a rewarded video.
     std::shared_ptr<IRewardedVideo>

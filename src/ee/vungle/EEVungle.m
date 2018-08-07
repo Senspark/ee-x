@@ -62,8 +62,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
                         NSString* gameId = dict[@"gameId"];
-                        NSString* placementId = dict[@"placementId"];
-                        [self initialize:gameId placementId:placementId];
+                        [self initialize:gameId];
                         return @"";
                     }];
 
@@ -86,13 +85,12 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
-- (void)initialize:(NSString*)gameId placementId:(NSString*)placementId {
+- (void)initialize:(NSString*)gameId {
     if (initialized_) {
         return;
     }
-    [sdk_ startWithAppId:gameId
-              placements:[NSArray arrayWithObjects:placementId, nil]
-                   error:nil];
+    [sdk_ startWithAppId:gameId error:nil];
+    
     [sdk_ setDelegate:self];
     initialized_ = YES;
 }
@@ -122,9 +120,10 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 }
 
 - (void)vungleAdPlayabilityUpdate:(BOOL)isAdPlayable
-                      placementID:(NSString*)placementID {
-    NSLog(@"%s: playable = %d id = %@", __PRETTY_FUNCTION__, (int)isAdPlayable,
-          placementID);
+                      placementID:(nullable NSString*)placementID
+                            error:(nullable NSError*)error {
+    NSLog(@"%s: playable = %d id = %@ reason = %@", __PRETTY_FUNCTION__, (int)isAdPlayable,
+          placementID, error.description);
 }
 
 @end

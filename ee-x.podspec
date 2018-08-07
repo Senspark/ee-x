@@ -279,7 +279,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook-ads' do |s|
     s.dependency 'ee-x/facebook-ads-base'
-    s.dependency 'FBAudienceNetwork', '4.17.0'
+    s.dependency 'FBAudienceNetwork', '4.28.1'
+    s.dependency 'GoogleMobileAdsMediationFacebook'
   end
 
   spec.subspec 'facebook-ads-mediation' do |s|
@@ -363,6 +364,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'vungle' do |s|
     s.dependency 'ee-x/vungle-base'
     s.dependency 'VungleSDK-iOS', '6.2.0'
+    s.dependency 'GoogleMobileAdsMediationVungle'
   end
 
   spec.subspec 'vungle-mediation' do |s|

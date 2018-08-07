@@ -69,6 +69,21 @@ public:
     /// alphabetic character. Some event names are reserved.
     void logEvent(const std::string& name);
 
+    void logScreen(const std::string& screenName) const;
+
+    void logCustomEvent(const std::string& category, const std::string& action,
+                        const std::string& label, float value) const;
+    void logEcommerce(const std::string& productId,
+                      const std::string& productName,
+                      const std::string& category, float price,
+                      bool success = true) const;
+
+    void logGameStart(const std::string& type,
+                      const std::string& difficulty) const;
+
+    void logGameEnd(const std::string& type, const std::string& difficulty,
+                    int rank) const;
+
 private:
     bool initialized_;
 };

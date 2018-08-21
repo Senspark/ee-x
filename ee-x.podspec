@@ -436,4 +436,24 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/keeva'
   end
+
+  spec.subspec 'soomla-cocos2dx-core' do |s|
+    s.header_mappings_dir = 
+      'third_party/soomla/SoomlaCocos2dxCore'
+    s.public_header_files = 
+      'third_party/soomla/SoomlaCocos2dxCore/**/*.h'
+    s.source_files  = 
+      'third_party/soomla/SoomlaCocos2dxCore/**/*.{h,mm,cpp}'
+
+    s.xcconfig = {
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../cocos2d',
+        '${PODS_ROOT}/../../cocos2d/cocos'
+        ].join(' ')
+    }
+    
+    s.dependency 'ee-x/keeva'
+    s.dependency 'ee-x/jansson'
+    s.dependency 'ee-x/soomla-ios-core'
+  end
 end

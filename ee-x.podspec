@@ -456,4 +456,18 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jansson'
     s.dependency 'ee-x/soomla-ios-core'
   end
+
+  spec.subspec 'soomla-ios-store' do |s| 
+    s.header_mappings_dir = 
+      'third_party/soomla/SoomlaiOSStore'
+    s.source_files  = 
+      'third_party/soomla/SoomlaiOSStore', 
+      'third_party/soomla/SoomlaiOSStore/**/*.{h,m}'
+    s.public_header_files  = 
+      'third_party/soomla/SoomlaiOSStore', 
+      'third_party/soomla/SoomlaiOSStore/**/*.h'
+
+    s.dependency 'ee-x/keeva'
+    s.dependency 'ee-x/soomla-ios-core'
+  end
 end

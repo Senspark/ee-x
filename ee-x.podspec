@@ -425,4 +425,15 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'third_party/keeva/*.h'
     s.source_files = 'third_party/keeva/*.{h,m}'
   end
+
+  spec.subspec 'soomla-ios-core' do |s|
+    s.header_mappings_dir = 
+      'third_party/soomla/SoomlaiOSCore'
+    s.public_header_files = 
+      'third_party/soomla/SoomlaiOSCore/**/*.h'
+    s.source_files  = 
+      'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
+
+    s.dependency 'ee-x/keeva'
+  end
 end

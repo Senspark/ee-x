@@ -419,4 +419,10 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'third_party/jansson/*.h'
     s.source_files = 'third_party/jansson/*.{h,c}'
   end
+
+  spec.subspec 'keeva' do |s|
+    s.header_mappings_dir = 'third_party/keeva'
+    s.public_header_files = 'third_party/keeva/*.h'
+    s.source_files = 'third_party/keeva/*.{h,m}'
+  end
 end

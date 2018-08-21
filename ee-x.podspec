@@ -413,4 +413,10 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
   end
+
+  spec.subspec 'jansson' do |s| 
+    s.header_mappings_dir = 'third_party/jansson'
+    s.public_header_files = 'third_party/jansson/*.h'
+    s.source_files = 'third_party/jansson/*.{h,c}'
+  end
 end

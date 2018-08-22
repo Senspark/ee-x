@@ -32,7 +32,7 @@ class CCPurchasableVirtualItem : public CCVirtualItem {
 public:
     CCPurchasableVirtualItem()
         : CCVirtualItem()
-        , mPurchaseType(NULL) {}
+        , mPurchaseType(nullptr) {}
 
     virtual bool init(const std::string& name, const std::string& description,
                       const std::string& itemId, CCPurchaseType* purchaseType);
@@ -47,7 +47,7 @@ public:
      @return True if there are enough funds to afford the virtual item
      with the given item id
      */
-    bool canAfford(CCError** error = NULL);
+    bool canAfford(CCError** error = nullptr);
 
     /**
      Buys the `CCPurchasableVirtualItem`, after checking if the user is in a
@@ -59,7 +59,7 @@ public:
      when the purchase is completed..
      @param error A `CCError` for error checking.
      */
-    void buy(const std::string& payload, CCError** error = NULL);
+    void buy(const std::string& payload, CCError** error = nullptr);
 
     /**
      Determines if user is in a state that allows him/her to buy a specific

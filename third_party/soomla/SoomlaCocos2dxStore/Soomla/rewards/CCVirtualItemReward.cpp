@@ -55,7 +55,7 @@ const char* soomla::CCVirtualItemReward::getType() const {
 }
 
 bool soomla::CCVirtualItemReward::takeInner() {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     char const* itemId = this->getAssociatedItemId().c_str();
     CCStoreInventory::sharedStoreInventory()->takeItem(
         itemId, this->getAmount(), &error);
@@ -71,7 +71,7 @@ bool soomla::CCVirtualItemReward::takeInner() {
 }
 
 bool soomla::CCVirtualItemReward::giveInner() {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     char const* itemId = this->getAssociatedItemId().c_str();
     CCStoreInventory::sharedStoreInventory()->giveItem(
         itemId, this->getAmount(), &error);

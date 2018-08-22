@@ -76,7 +76,7 @@ public:
 public:
     CCEquippableVG()
         : CCLifetimeVG()
-        , mEquippingModel(NULL){};
+        , mEquippingModel(0){};
 
     /**
      Creates a `CCEquippableVG`.
@@ -120,7 +120,7 @@ public:
      @param error If an error was generated during the execution it will
      be returned here
      */
-    virtual void equip(CCError** error = NULL) { equip(true, error); }
+    virtual void equip(CCError** error = nullptr) { equip(true, error); }
     /**
      Equips the current `CCEquippableVG`.
      The equipping is done according to the equipping model ('GLOBAL',
@@ -129,21 +129,21 @@ public:
      @param error If an error was generated during the execution it will
      be returned here
      */
-    virtual void equip(bool notify, CCError** error = NULL);
+    virtual void equip(bool notify, CCError** error = nullptr);
 
     /**
      Unequips the current `CCEquippableVG`
      @param error If an error was generated during the execution it will
      be returned here
      */
-    virtual void unequip(CCError** error = NULL) { unequip(true, error); }
+    virtual void unequip(CCError** error = nullptr) { unequip(true, error); }
     /**
      Unequips the current `CCEquippableVG`
      @param notify if true, the relevant event will be posted when equipped.
      @param error If an error was generated during the execution it will
      be returned here
      */
-    virtual void unequip(bool notify, CCError** error = NULL);
+    virtual void unequip(bool notify, CCError** error = nullptr);
 
     virtual const char* getType() const override;
 

@@ -109,12 +109,12 @@ public:
     /**
      See parent
      */
-    virtual int give(int amount, bool notify, CCError** error = NULL) override;
+    virtual int give(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
-    virtual int take(int amount, bool notify, CCError** error = NULL) override;
+    virtual int take(int amount, bool notify, CCError** error = nullptr) override;
 
     virtual ~CCUpgradeVG() = default;
 

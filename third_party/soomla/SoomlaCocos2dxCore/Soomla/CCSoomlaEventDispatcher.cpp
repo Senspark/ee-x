@@ -25,7 +25,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCSoomlaEventDispatcher* s_SharedInstance = NULL;
+static CCSoomlaEventDispatcher* s_SharedInstance = nullptr;
 
 CCSoomlaEventDispatcher* CCSoomlaEventDispatcher::getInstance() {
     if (!s_SharedInstance) {

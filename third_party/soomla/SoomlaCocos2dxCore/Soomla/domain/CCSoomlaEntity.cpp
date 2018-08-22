@@ -64,7 +64,7 @@ cocos2d::ValueMap CCSoomlaEntity::toValueMap() {
 
 bool CCSoomlaEntity::equals(cocos2d::Ref* obj) const {
     // If parameter is null return false.
-    if (obj == NULL) {
+    if (obj == nullptr) {
         return false;
     }
 

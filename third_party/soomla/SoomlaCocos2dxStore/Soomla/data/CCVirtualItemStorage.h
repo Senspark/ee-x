@@ -33,7 +33,7 @@ public:
      @param error Gets A `CCError` for error checking.
      @return The balance of the required virtual item.
      */
-    virtual int getBalance(CCVirtualItem* item, CCError** error = NULL);
+    virtual int getBalance(CCVirtualItem* item, CCError** error = nullptr);
 
     /**
      Sets the balance of the given virtual item to be the given balance, and
@@ -44,7 +44,7 @@ public:
      @return the balance of the required virtual item
      */
     virtual int setBalance(CCVirtualItem* item, int balance,
-                           CCError** error = NULL) {
+                           CCError** error = nullptr) {
         return setBalance(item, balance, true, error);
     }
     /**
@@ -56,7 +56,7 @@ public:
      @return the balance of the required virtual item
      */
     virtual int setBalance(CCVirtualItem* item, int balance, bool notify,
-                           CCError** error = NULL);
+                           CCError** error = nullptr);
 
     /**
      Adds the given amount of items to the storage.
@@ -65,7 +65,7 @@ public:
      @param error Gets A `CCError` for error checking.
      @return the balance of the required virtual item
      */
-    virtual int add(CCVirtualItem* item, int amount, CCError** error = NULL) {
+    virtual int add(CCVirtualItem* item, int amount, CCError** error = nullptr) {
         return add(item, amount, true, error);
     }
     /**
@@ -78,7 +78,7 @@ public:
      @return the balance of the required virtual item
      */
     virtual int add(CCVirtualItem* item, int amount, bool notify,
-                    CCError** error = NULL);
+                    CCError** error = nullptr);
 
     /**
      Removes the given amount from the given virtual item's balance.
@@ -88,7 +88,7 @@ public:
      @return the balance of the required virtual item
      */
     virtual int remove(CCVirtualItem* item, int amount,
-                       CCError** error = NULL) {
+                       CCError** error = nullptr) {
         return remove(item, amount, true, error);
     }
     /**
@@ -101,7 +101,7 @@ public:
      @return the balance of the required virtual item
      */
     virtual int remove(CCVirtualItem* item, int amount, bool notify,
-                       CCError** error = NULL);
+                       CCError** error = nullptr);
 
 protected:
     virtual const char* keyBalance(const char* itemId) const = 0;

@@ -26,7 +26,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCRewardStorage* s_SharedRewardStorage = NULL;
+static CCRewardStorage* s_SharedRewardStorage = nullptr;
 
 CCRewardStorage* CCRewardStorage::getInstance() {
     if (!s_SharedRewardStorage) {

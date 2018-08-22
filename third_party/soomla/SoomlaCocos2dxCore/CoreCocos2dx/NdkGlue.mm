@@ -89,7 +89,7 @@ static NSString* TAG = @"SOOMLA NdkGlue";
         return;
     }
 
-    json_t* jsonPrms = NULL;
+    json_t* jsonPrms = nullptr;
 
     if (parameters != nil) {
         NSError* error = nil;

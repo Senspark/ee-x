@@ -24,7 +24,7 @@ CC_SYNTHESIZE_RETAIN(varType, varName, funName); \
 protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict) \
 { \
     cocos2d::Ref* obj = dict->objectForKey(jsonKey); \
-    CCAssert(obj == NULL || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
+    CCAssert(obj == nullptr || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
     if (varName != obj) \
     { \
         set##funName((varType)obj); \
@@ -40,11 +40,11 @@ protected: inline void put##funName##ToDict(cocos2d::__Dictionary* dict) { \
 CC_SYNTHESIZE_RETAIN(cocos2d::__Double *, varName, funName); \
 protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict) \
 { \
-    cocos2d::__Double *val = NULL; \
+    cocos2d::__Double *val = nullptr; \
     cocos2d::Ref* obj = dict->objectForKey(jsonKey); \
-    if (obj != NULL) { \
+    if (obj != nullptr) { \
         val = dynamic_cast<cocos2d::__Double *>(obj); \
-        if (val == NULL) { \
+        if (val == nullptr) { \
             CCAssert(dynamic_cast<cocos2d::__Integer *>(obj), "invalid object type in dictionary"); \
             val = cocos2d::__Double::create(((cocos2d::__Integer *)obj)->getValue()); \
         }\
@@ -93,7 +93,7 @@ static __class *createWithValueMap(const cocos2d::ValueMap& dict) { \
     SL_SAFE_CREATE(__T__, __ret__, (__retParams__->objectForKey("return")))
 
 #define SL_SAFE_CREATE(__T__, __ret__, __ref__)			\
-    __T__ __ret__ = NULL;\
+    __T__ __ret__ = nullptr;\
     {\
         __Dictionary *dict = dynamic_cast<__Dictionary *>(__ref__); \
         CC_ASSERT(dict); \
@@ -103,7 +103,7 @@ static __class *createWithValueMap(const cocos2d::ValueMap& dict) { \
     }\
 
 #define SL_EXTRACT_FROM_RETURN(__T__, __ret__, __retParams__) \
-__T__ *__ret__ = NULL; \
+__T__ *__ret__ = nullptr; \
 { \
   Ref *retRef = __retParams__->objectForKey("return"); \
   CC_ASSERT(retRef); \
@@ -112,14 +112,14 @@ __T__ *__ret__ = NULL; \
 } \
 
 #define SL_EXTRACT_DOUBLE_FROM_RETURN(__ret__, __retParams__) \
-__Double *__ret__ = NULL; \
+__Double *__ret__ = nullptr; \
 { \
   Ref *retRef = __retParams__->objectForKey("return"); \
   CC_ASSERT(retRef); \
   __ret__ = dynamic_cast<__Double *>(retRef); \
-  if (__ret__ == NULL) { \
+  if (__ret__ == nullptr) { \
     __Integer *intRef = dynamic_cast<__Integer *>(retRef); \
-    if (intRef != NULL) { \
+    if (intRef != nullptr) { \
         __ret__ = __Double::create(intRef->getValue());\
     }\
   } \

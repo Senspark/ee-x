@@ -35,7 +35,7 @@ namespace soomla {
         params["method"] = "CCStoreAssets::init";
         params["version"] = storeAssets->getVersion();
         params["storeAssets"] = storeAssetsMap;
-        CCNdkBridge::callNative(params, NULL);
+        CCNdkBridge::callNative(params, nullptr);
 
         CCSoomlaUtils::logDebug(TAG, "done! (pushing data to StoreAssets on native side)");
     }
@@ -45,6 +45,6 @@ namespace soomla {
         
         ValueMap params;
         params["method"] = "CCStoreInfo::loadFromDB";
-        CCNdkBridge::callNative(params, NULL);
+        CCNdkBridge::callNative(params, nullptr);
     }
 }

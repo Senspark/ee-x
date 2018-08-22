@@ -32,5 +32,5 @@ CCSoomlaStoreIosConfigBuilder::activateFraudProtection(
             this->appendConfigParameter("verifyOnServerFailure",
                                         cocos2d::Value(verifyOnServerFailure)))
                ? this
-               : NULL;
+               : nullptr;
 }

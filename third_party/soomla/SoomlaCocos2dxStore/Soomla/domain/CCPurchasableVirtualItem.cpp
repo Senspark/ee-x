@@ -106,7 +106,7 @@ void CCPurchasableVirtualItem::fillPurchaseTypeFromValueMap(
     }
 
     CCPurchaseType* purchaseType = getPurchaseType();
-    if (purchaseType != NULL) {
+    if (purchaseType != nullptr) {
         purchaseType->setAssociatedItemId(getItemId());
     }
 }

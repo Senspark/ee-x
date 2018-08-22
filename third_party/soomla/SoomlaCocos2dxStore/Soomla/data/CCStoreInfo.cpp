@@ -38,14 +38,14 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCStoreInfo* s_SharedStoreInfo = NULL;
+static CCStoreInfo* s_SharedStoreInfo = nullptr;
 
 CCStoreInfo* CCStoreInfo::sharedStoreInfo() {
     return s_SharedStoreInfo;
 }
 
 void CCStoreInfo::createShared(CCStoreAssets* storeAssets) {
-    CCStoreInfo* ret = NULL;
+    CCStoreInfo* ret = nullptr;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) ||                                 \
     (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     ret = new CCNativeStoreInfo();
@@ -82,7 +82,7 @@ bool CCStoreInfo::hasMarketIdDuplicates(
 }
 
 bool CCStoreInfo::validateStoreAssets(CCStoreAssets* storeAssets) {
-    if (storeAssets == NULL) {
+    if (storeAssets == nullptr) {
         CCSoomlaUtils::logError(TAG, "The given store assets can't be null!");
         return false;
     }
@@ -138,7 +138,7 @@ CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId,
                  .c_str());
 
     CCVirtualItem* item = getVirtualItems().at(itemId);
-    if (item != NULL) {
+    if (item != nullptr) {
         return item;
     }
 
@@ -146,7 +146,7 @@ CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId,
         error, Value(StringUtils::format(
                    "Virtual item was not found when searching with itemId=%s",
                    itemId.c_str())));
-    return NULL;
+    return nullptr;
 }
 
 CCPurchasableVirtualItem*
@@ -159,7 +159,7 @@ CCStoreInfo::getPurchasableItemWithProductId(const std::string& productId,
                  .c_str());
 
     CCPurchasableVirtualItem* item = getPurchasableItems().at(productId);
-    if (item != NULL) {
+    if (item != nullptr) {
         return item;
     }
 
@@ -168,7 +168,7 @@ CCStoreInfo::getPurchasableItemWithProductId(const std::string& productId,
         Value(StringUtils::format(
             "Virtual item was not found when searching with productId=%s",
             productId.c_str())));
-    return NULL;
+    return nullptr;
 }
 
 CCVirtualCategory*
@@ -181,7 +181,7 @@ CCStoreInfo::getCategoryForVirtualGood(const std::string& goodItemId,
                  .c_str());
 
     CCVirtualCategory* category = getGoodsCategories().at(goodItemId);
-    if (category != NULL) {
+    if (category != nullptr) {
         return category;
     }
 
@@ -189,7 +189,7 @@ CCStoreInfo::getCategoryForVirtualGood(const std::string& goodItemId,
                                      "Virtual item was not found when "
                                      "searching with goodItemId of category=%s",
                                      goodItemId.c_str())));
-    return NULL;
+    return nullptr;
 }
 
 CCUpgradeVG*
@@ -376,7 +376,7 @@ void CCStoreInfo::updateAggregatedLists() {
         CCPurchaseType* purchaseType = vi->getPurchaseType();
         CCPurchaseWithMarket* purchaseWithMarket =
             dynamic_cast<CCPurchaseWithMarket*>(purchaseType);
-        if (purchaseWithMarket != NULL) {
+        if (purchaseWithMarket != nullptr) {
             getPurchasableItems().insert(
                 purchaseWithMarket->getMarketItem()->getProductId(), vi);
         }
@@ -386,7 +386,7 @@ void CCStoreInfo::updateAggregatedLists() {
         getVirtualItems().insert(vi->getItemId(), vi);
 
         CCUpgradeVG* upgradeVG = dynamic_cast<CCUpgradeVG*>(vi);
-        if (upgradeVG != NULL) {
+        if (upgradeVG != nullptr) {
             auto& upgrades = getGoodsUpgrades().at(upgradeVG->getGoodItemId());
 
             if (getGoodsUpgrades().find(upgradeVG->getGoodItemId()) ==
@@ -399,7 +399,7 @@ void CCStoreInfo::updateAggregatedLists() {
         CCPurchaseType* purchaseType = vi->getPurchaseType();
         CCPurchaseWithMarket* purchaseWithMarket =
             dynamic_cast<CCPurchaseWithMarket*>(purchaseType);
-        if (purchaseWithMarket != NULL) {
+        if (purchaseWithMarket != nullptr) {
             getPurchasableItems().insert(
                 purchaseWithMarket->getMarketItem()->getProductId(), vi);
         }
@@ -416,7 +416,7 @@ void CCStoreInfo::replaceVirtualItem(CCVirtualItem* virtualItem) {
     getVirtualItems().insert(virtualItem->getItemId(), virtualItem);
 
     CCVirtualCurrency* currency = dynamic_cast<CCVirtualCurrency*>(virtualItem);
-    if (currency != NULL) {
+    if (currency != nullptr) {
         for (auto currentCurrency : getCurrencies()) {
             if (not currentCurrency->getItemId().compare(
                     currency->getItemId())) {
@@ -429,10 +429,10 @@ void CCStoreInfo::replaceVirtualItem(CCVirtualItem* virtualItem) {
 
     CCVirtualCurrencyPack* vcp =
         dynamic_cast<CCVirtualCurrencyPack*>(virtualItem);
-    if (vcp != NULL) {
+    if (vcp != nullptr) {
         CCPurchaseWithMarket* purchaseWithMarket =
             dynamic_cast<CCPurchaseWithMarket*>(vcp->getPurchaseType());
-        if (purchaseWithMarket != NULL) {
+        if (purchaseWithMarket != nullptr) {
             getPurchasableItems().insert(
                 purchaseWithMarket->getMarketItem()->getProductId(), vcp);
         }
@@ -448,7 +448,7 @@ void CCStoreInfo::replaceVirtualItem(CCVirtualItem* virtualItem) {
     }
 
     CCVirtualGood* vg = dynamic_cast<CCVirtualGood*>(virtualItem);
-    if (vg != NULL) {
+    if (vg != nullptr) {
         CCUpgradeVG* upgradeVG = dynamic_cast<CCUpgradeVG*>(vg);
         if (upgradeVG != nullptr) {
             if (getGoodsUpgrades().find(upgradeVG->getGoodItemId()) ==
@@ -463,7 +463,7 @@ void CCStoreInfo::replaceVirtualItem(CCVirtualItem* virtualItem) {
 
         CCPurchaseWithMarket* purchaseWithMarket =
             dynamic_cast<CCPurchaseWithMarket*>(vg->getPurchaseType());
-        if (purchaseWithMarket != NULL) {
+        if (purchaseWithMarket != nullptr) {
             getPurchasableItems().insert(
                 purchaseWithMarket->getMarketItem()->getProductId(), vg);
         }

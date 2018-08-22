@@ -94,12 +94,12 @@ void js_register(JSContext* cx, JSObject* global){
     // Binding constructor function and prototype
     jsb_prototype = JS_InitClass(
             cx, global,
-            NULL,
+            nullptr,
             jsb_class,
             js_constructor, 0,
             properties,
             funcs,
-            NULL,
+            nullptr,
             st_funcs);
 
     if (_js_global_type_map.find("JSB") == _js_global_type_map.end())
@@ -108,7 +108,7 @@ void js_register(JSContext* cx, JSObject* global){
         p = (js_type_class_t *)malloc(sizeof(js_type_class_t));
         p->jsclass = jsb_class;
         p->proto = jsb_prototype;
-        p->parentProto = NULL;
+        p->parentProto = nullptr;
         _js_global_type_map.insert(std::make_pair("JSB", p));
     }
 }
@@ -120,7 +120,7 @@ void register_jsb_soomla(JSContext *cx, JSObject *obj){
     JS::RootedObject ns(cx);
     JS_GetProperty(cx, obj, "Soomla", &nsval);
     if (nsval == JSVAL_VOID) {
-        ns = JS_NewObject(cx, NULL, NULL, NULL);
+        ns = JS_NewObject(cx, nullptr, nullptr, nullptr);
         nsval = OBJECT_TO_JSVAL(ns);
         JS_SetProperty(cx, obj, "Soomla", nsval);
     } else {

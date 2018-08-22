@@ -62,7 +62,7 @@ public:
     /**
      See parent
      */
-    virtual bool canAfford(CCError** error = NULL) override;
+    virtual bool canAfford(CCError** error = nullptr) override;
 
     virtual ~CCPurchaseWithVirtualItem() = default;
 };

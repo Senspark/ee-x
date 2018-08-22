@@ -39,11 +39,11 @@ namespace soomla {
         /**
          See parent
          */
-        virtual int resetBalance(int balance, bool notify, CCError **error = NULL);
+        virtual int resetBalance(int balance, bool notify, CCError **error = nullptr);
         /**
          See parent
          */
-        virtual int getBalance(CCError **error = NULL);
+        virtual int getBalance(CCError **error = nullptr);
     };
 };
 

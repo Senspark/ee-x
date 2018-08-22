@@ -38,9 +38,7 @@ public:
      */
     static CCStoreInventory* sharedStoreInventory();
 
-    CCStoreInventory()
-        : mLocalItemBalances(NULL)
-        , mLocalUpgrades(NULL) {}
+    CCStoreInventory() = default;
 
     virtual bool init();
 
@@ -53,14 +51,14 @@ public:
      @return True if there are enough funds to afford the virtual item
      with the given item id
      */
-    bool canAfford(const std::string& itemId, CCError** error = NULL);
+    bool canAfford(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Buys the item with the given `itemId`.
      @param itemId The id of the item to be purchased.
      @param error A `CCError` for error checking.
      */
-    void buyItem(const std::string& itemId, CCError** error = NULL);
+    void buyItem(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Buys the item with the given `itemId`.
@@ -69,7 +67,7 @@ public:
      @param error A `CCError` for error checking.
      */
     void buyItem(const std::string& itemId, const std::string& payload,
-                 CCError** error = NULL);
+                 CCError** error = nullptr);
 
     /**
      Retrieves the balance of the virtual item with the given `itemId`.
@@ -78,7 +76,7 @@ public:
      @param error A `CCError` for error checking.
      @return The balance of the virtual item with the given `itemId`.
     */
-    int getItemBalance(const std::string& itemId, CCError** error = NULL);
+    int getItemBalance(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Gives your user the given amount of the virtual item with the given
@@ -92,7 +90,7 @@ public:
      @param itemId The id of the virtual item to be given.
      @param error A `CCError`for error checking.
      */
-    void giveItem(const std::string& itemId, int amount, CCError** error = NULL);
+    void giveItem(const std::string& itemId, int amount, CCError** error = nullptr);
 
     /**
      Takes from your user the given amount of the virtual item with the
@@ -103,7 +101,7 @@ public:
      @param itemId The id of the virtual item to be taken.
      @param error A `CCError` for error checking.
      */
-    void takeItem(const std::string& itemId, int amount, CCError** error = NULL);
+    void takeItem(const std::string& itemId, int amount, CCError** error = nullptr);
 
     /**
      Equips the virtual good with the given `goodItemId`.
@@ -113,7 +111,7 @@ public:
             be of a `CCEquippableVG`.
      @param error A `CCError` for error checking.
     */
-    void equipVirtualGood(const std::string& itemId, CCError** error = NULL);
+    void equipVirtualGood(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Unequips the virtual good with the given `goodItemId`. Unequipping
@@ -123,7 +121,7 @@ public:
             be of a `CCEquippableVG`.
      @param error A `CCError` for error checking.
      */
-    void unEquipVirtualGood(const std::string& itemId, CCError** error = NULL);
+    void unEquipVirtualGood(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Checks if the virtual good with the given `goodItemId` is equipped
@@ -134,7 +132,7 @@ public:
      @return True if the virtual good with the given id is equipped, false
             otherwise.
      */
-    bool isVirtualGoodEquipped(const std::string& itemId, CCError** error = NULL);
+    bool isVirtualGoodEquipped(const std::string& itemId, CCError** error = nullptr);
 
     /**
      Retrieves the upgrade level of the virtual good with the given
@@ -155,7 +153,7 @@ public:
      @param error A `CCError` for error checking.
      @return The upgrade level.
      */
-    int getGoodUpgradeLevel(const std::string& goodItemId, CCError** error = NULL);
+    int getGoodUpgradeLevel(const std::string& goodItemId, CCError** error = nullptr);
 
     /**
      Retrieves the item id of the current upgrade of the virtual good with
@@ -166,7 +164,7 @@ public:
      @return The upgrade id if exists, or empty string otherwise.
      */
     std::string getGoodCurrentUpgrade(const std::string& goodItemId,
-                                      CCError** error = NULL);
+                                      CCError** error = nullptr);
 
     /**
      Upgrades the virtual good with the given `goodItemId` by doing the
@@ -184,7 +182,7 @@ public:
             `upgradeItemId` can be of any `CCUpgradeVG`.
      @param error A `CCError` for error checking.
      */
-    void upgradeGood(const std::string& goodItemId, CCError** error = NULL);
+    void upgradeGood(const std::string& goodItemId, CCError** error = nullptr);
 
     /**
      Removes all upgrades from the virtual good with the given `goodItemId`.
@@ -192,7 +190,7 @@ public:
             upgrades from. The `upgradeItemId` can be of any `UpgradeVG`.
      @param error A `CCError` for error checking.
      */
-    void removeGoodUpgrades(const std::string& goodItemId, CCError** error = NULL);
+    void removeGoodUpgrades(const std::string& goodItemId, CCError** error = nullptr);
 
     /**
      This function refreshes a local set of objects that will hold your user's

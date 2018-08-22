@@ -59,11 +59,10 @@ void Java_com_soomla_cocos2dx_common_NdkGlue_sendCppMessage(JNIEnv* env,
         fprintf(stderr, "error: at line #%d: %s\n", error.line, error.text);
         return;
     }
+    
+    cocos2d::Value&& dataToPass = CCJsonHelper::getValueFromJson(root);
 
-    cocos2d::Ref* dataToPass = CCJsonHelper::getCCObjectFromJson(root);
-
-    CCSoomlaEventDispatcher::getInstance()->ndkCallback(
-        (cocos2d::__Dictionary*)dataToPass);
+    CCSoomlaEventDispatcher::getInstance()->ndkCallback(dataToPass.asValueMap());
 
     json_decref(root);
 }
@@ -74,7 +73,7 @@ cocos2d::ValueMap CCNdkBridge::callNative(const cocos2d::ValueMap& params,
     auto&& methodParams = Value(params);
 
     json_t* toBeSentJson = CCJsonHelper::getJsonFromValue(methodParams);
-    json_t* retJsonParams = NULL;
+    json_t* retJsonParams = nullptr;
 
 #if (LOG_JSON == 1)
     CCSoomlaUtils::logDebug(
@@ -138,8 +137,8 @@ cocos2d::ValueMap CCNdkBridge::callNative(const cocos2d::ValueMap& params,
     }
 
     CCError* error = CCError::createWithValue(retParams);
-    if (error != NULL) {
-        if (pError != NULL) {
+    if (error != nullptr) {
+        if (pError != nullptr) {
             *pError = error;
         } else {
             CCSoomlaUtils::logException("SOOMLA NdkBridge", error);

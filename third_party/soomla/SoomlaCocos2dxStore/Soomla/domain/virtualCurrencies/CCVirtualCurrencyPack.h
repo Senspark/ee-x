@@ -42,8 +42,8 @@ class CCVirtualCurrencyPack : public CCPurchasableVirtualItem {
 public:
     CCVirtualCurrencyPack()
         : CCPurchasableVirtualItem()
-        , mCurrencyAmount(NULL)
-        , mCurrencyItemId(NULL){};
+        , mCurrencyAmount(0)
+        , mCurrencyItemId(""){};
 
     /**
      Creates a `CCVirtualCurrencyPack`.
@@ -91,22 +91,22 @@ public:
     /**
      See parent
      */
-    virtual int give(int amount, bool notify, CCError** error = NULL) override;
+    virtual int give(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
-    virtual int take(int amount, bool notify, CCError** error = NULL) override;
+    virtual int take(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
     virtual int resetBalance(int balance, bool notify,
-                             CCError** error = NULL) override;
+                             CCError** error = nullptr) override;
     /**
      See parent
      */
-    virtual int getBalance(CCError** error = NULL) override;
+    virtual int getBalance(CCError** error = nullptr) override;
 
     CC_SYNTHESIZE(std::int32_t, mCurrencyAmount, CurrencyAmount);
     CC_SYNTHESIZE_PASS_BY_REF(std::string, mCurrencyItemId, CurrencyItemId);

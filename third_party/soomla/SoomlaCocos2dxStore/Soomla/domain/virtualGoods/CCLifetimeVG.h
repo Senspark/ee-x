@@ -68,12 +68,12 @@ public:
     /**
      See parent
      */
-    virtual int give(int amount, bool notify, CCError** error = NULL);
+    virtual int give(int amount, bool notify, CCError** error = nullptr);
 
     /**
      See parent
      */
-    virtual int take(int amount, bool notify, CCError** error = NULL);
+    virtual int take(int amount, bool notify, CCError** error = nullptr);
 
     virtual const char* getType() const;
 };

@@ -86,7 +86,7 @@ int CCSingleUsePackVG::give(int amount, bool notify, CCError** error) {
     CCSingleUseVG* good = dynamic_cast<CCSingleUseVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't give this pack.",
@@ -104,7 +104,7 @@ int CCSingleUsePackVG::take(int amount, bool notify, CCError** error) {
     CCSingleUseVG* good = dynamic_cast<CCSingleUseVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't take this pack.",

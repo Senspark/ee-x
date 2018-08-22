@@ -27,7 +27,7 @@ bool soomla::CCReward::init(const std::string& id, const std::string& name,
     bool ret = CCSoomlaEntity::init(id, name);
 
     if (ret) {
-        setSchedule(schedule != NULL ? schedule
+        setSchedule(schedule != nullptr ? schedule
                                      : CCSchedule::createAnyTimeOnce());
         addReward(this);
         return true;

@@ -26,11 +26,11 @@ void Soomla::JSBinding::callNative(const char *params, std::string &result) {
     CCDictionary *dictToPass = dynamic_cast<CCDictionary *>(dataToPass);
     CC_ASSERT(dictToPass);
 
-    soomla::CCError *soomlaError = NULL;
+    soomla::CCError *soomlaError = nullptr;
     CCDictionary *retParams = (CCDictionary *) soomla::CCNdkBridge::callNative(dictToPass, &soomlaError);
 
     CCDictionary *resultParams = CCDictionary::create();
-    if (soomlaError != NULL) {
+    if (soomlaError != nullptr) {
         retParams = CCDictionary::create();
         retParams->setObject(CCString::create(soomlaError->getInfo()), "info");
 

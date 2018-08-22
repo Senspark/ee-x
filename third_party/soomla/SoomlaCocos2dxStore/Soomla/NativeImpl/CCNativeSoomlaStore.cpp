@@ -34,13 +34,13 @@ void CCNativeSoomlaStore::buyMarketItem(const std::string& productId,
 void CCNativeSoomlaStore::restoreTransactions() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::restoreTransactions";
-    CCNdkBridge::callNative(params, NULL);
+    CCNdkBridge::callNative(params, nullptr);
 }
 
 void CCNativeSoomlaStore::refreshInventory() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::refreshInventory";
-    CCNdkBridge::callNative(params, NULL);
+    CCNdkBridge::callNative(params, nullptr);
 }
 
 void CCNativeSoomlaStore::refreshMarketItemsDetails(CCError** error) {
@@ -63,19 +63,19 @@ bool CCNativeSoomlaStore::transactionsAlreadyRestored() {
 void CCNativeSoomlaStore::startIabServiceInBg() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::startIabServiceInBg";
-    CCNdkBridge::callNative(params, NULL);
+    CCNdkBridge::callNative(params, nullptr);
 }
 
 void CCNativeSoomlaStore::stopIabServiceInBg() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::stopIabServiceInBg";
-    CCNdkBridge::callNative(params, NULL);
+    CCNdkBridge::callNative(params, nullptr);
 }
 #endif
 
 void CCNativeSoomlaStore::loadBillingService() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::loadBillingService";
-    CCNdkBridge::callNative(params, NULL);
+    CCNdkBridge::callNative(params, nullptr);
 }
 } // namespace soomla

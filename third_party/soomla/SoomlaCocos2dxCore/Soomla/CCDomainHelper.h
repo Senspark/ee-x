@@ -25,11 +25,6 @@ namespace soomla {
 class CCDomainHelper {
 public:
     static CCDomainHelper* getInstance();
-    cocos2d::__Array*
-    getDomainsFromDictArray(cocos2d::__Array* dictArray,
-                            const char* type = nullptr) __deprecated;
-    cocos2d::__Array*
-    getDictArrayFromDomains(cocos2d::__Array* domainArray) __deprecated;
 
     cocos2d::Vector<CCDomain*>
     getDomainsFromValueVector(const cocos2d::ValueVector& dictArray,

@@ -32,34 +32,34 @@ public:
 
     virtual ~CCNativeVirtualGoodsStorage();
 
-    virtual int getBalance(CCVirtualItem* item, CCError** error = NULL);
+    virtual int getBalance(CCVirtualItem* item, CCError** error = nullptr);
 
     virtual int setBalance(CCVirtualItem* item, int balance, bool notify,
-                           CCError** error = NULL);
+                           CCError** error = nullptr);
 
     virtual int add(CCVirtualItem* item, int amount, bool notify,
-                    CCError** error = NULL);
+                    CCError** error = nullptr);
 
     virtual int remove(CCVirtualItem* item, int amount, bool notify,
-                       CCError** error = NULL);
+                       CCError** error = nullptr);
 
     virtual void removeUpgrades(CCVirtualGood* good, bool notify,
-                                CCError** error = NULL);
+                                CCError** error = nullptr);
 
     virtual void assignCurrentUpgrade(CCVirtualGood* good,
                                       CCUpgradeVG* upgradeVG, bool notify,
-                                      CCError** error = NULL);
+                                      CCError** error = nullptr);
 
     virtual CCUpgradeVG* getCurrentUpgrade(CCVirtualGood* good,
-                                           CCError** error = NULL);
+                                           CCError** error = nullptr);
 
-    virtual bool isEquipped(CCEquippableVG* good, CCError** error = NULL);
+    virtual bool isEquipped(CCEquippableVG* good, CCError** error = nullptr);
 
     virtual void equip(CCEquippableVG* good, bool notify,
-                       CCError** error = NULL);
+                       CCError** error = nullptr);
 
     virtual void unequip(CCEquippableVG* good, bool notify,
-                         CCError** error = NULL);
+                         CCError** error = nullptr);
 };
 } // namespace soomla
 

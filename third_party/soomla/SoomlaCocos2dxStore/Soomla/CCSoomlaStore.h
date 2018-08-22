@@ -77,7 +77,7 @@ public:
      in the market (App Store, Google Play, etc..).
      @param error A `CCError` for error checking.
      */
-    virtual void refreshMarketItemsDetails(CCError** error = NULL) {}
+    virtual void refreshMarketItemsDetails(CCError** error = nullptr) {}
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 

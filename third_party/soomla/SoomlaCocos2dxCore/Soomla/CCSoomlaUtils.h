@@ -57,7 +57,7 @@ namespace soomla {
         static void logException(const std::string& tag, CCError *error);
         
         /**
-         Checks if a string is either NULL or empty string
+         Checks if a string is either nullptr or empty string
          @param str The string to check
          @return true if the string is null or empty, false otherwise
          */

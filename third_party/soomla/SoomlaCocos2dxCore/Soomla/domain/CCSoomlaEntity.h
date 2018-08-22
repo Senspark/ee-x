@@ -40,7 +40,7 @@ public:
      * Converts this `CCSoomlaEntity` to a `CCDictionary`.
      * @return `CCDictionary` representation of this `CCSoomlaEntity`.
      */
-    virtual cocos2d::ValueMap toValueMap();
+    virtual cocos2d::ValueMap toValueMap() override;
     
     virtual char const* getType() const = 0;
 

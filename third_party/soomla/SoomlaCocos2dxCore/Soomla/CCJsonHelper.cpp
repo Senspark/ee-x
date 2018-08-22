@@ -20,7 +20,7 @@ USING_NS_CC;
 using namespace std;
 
 cocos2d::Value CCJsonHelper::getValueFromJson(json_t* obj) {
-    if (obj == NULL) {
+    if (obj == nullptr) {
         return cocos2d::Value::Null;
     }
 
@@ -114,7 +114,7 @@ json_t* CCJsonHelper::getJsonFromValue(const cocos2d::Value& value) {
         return jsonBoolean;
     } else {
         CC_ASSERT(false);
-        return NULL;
+        return nullptr;
     }
 }
 

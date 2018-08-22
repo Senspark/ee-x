@@ -146,7 +146,7 @@ cocos2d::ValueMap CCSchedule::toValueMap() {
 
 bool CCSchedule::approve(int activationTimes) {
     struct timeval now;
-    gettimeofday(&now, NULL);
+    gettimeofday(&now, nullptr);
 
     if (mActivationLimit && mActivationLimit < 1 && mTimeRanges.size() == 0) {
         CCSoomlaUtils::logDebug(

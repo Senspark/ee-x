@@ -26,7 +26,7 @@ namespace soomla {
 USING_NS_CC;
 
 std::string CCNativeKeyValueStorage::getValue(const std::string& key) const {
-    CCError* error = NULL;
+    CCError* error = nullptr;
 
     ValueMap params;
     params["method"] = "CCNativeKeyValueStorage::getValue";
@@ -37,11 +37,11 @@ std::string CCNativeKeyValueStorage::getValue(const std::string& key) const {
     if (error) {
         CCSoomlaUtils::logException(TAG, error);
         CC_ASSERT(false);
-        return NULL;
+        return nullptr;
     }
 
     if (retParams == ValueMapNull) {
-        return NULL;
+        return nullptr;
     }
 
     if (not retParams.count("return")) {
@@ -53,7 +53,7 @@ std::string CCNativeKeyValueStorage::getValue(const std::string& key) const {
 
 void CCNativeKeyValueStorage::setValue(const std::string& key,
                                        const std::string& val) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
 
     ValueMap params;
     params["method"] = "CCNativeKeyValueStorage::setValue";
@@ -69,7 +69,7 @@ void CCNativeKeyValueStorage::setValue(const std::string& key,
 }
 
 void CCNativeKeyValueStorage::deleteKeyValue(const std::string &key) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
 
     ValueMap params;
     params["method"] = "CCNativeKeyValueStorage::deleteKeyValue";
@@ -83,7 +83,7 @@ void CCNativeKeyValueStorage::deleteKeyValue(const std::string &key) {
 }
 
 void CCNativeKeyValueStorage::purge() {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     ValueMap params;
     params["method"] = "CCNativeKeyValueStorage::purge";
     CCNdkBridge::callNative(params, &error);
@@ -95,7 +95,7 @@ void CCNativeKeyValueStorage::purge() {
 }
 
 std::vector<std::string> CCNativeKeyValueStorage::getEncryptedKeys() const {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     std::vector<std::string> encryptedKeys;
     
     ValueMap params;

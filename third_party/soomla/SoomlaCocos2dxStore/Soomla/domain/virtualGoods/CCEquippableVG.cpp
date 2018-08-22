@@ -132,7 +132,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
             CCVirtualCategory* category =
                 CCStoreInfo::sharedStoreInfo()->getCategoryForVirtualGood(
                     itemId, error);
-            if (category == NULL) {
+            if (category == nullptr) {
                 CCSoomlaUtils::logError(
                     TAG, StringUtils::format(
                              "Tried to unequip all other category VirtualGoods "
@@ -149,7 +149,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
                 CCEquippableVG* equippableVG = dynamic_cast<CCEquippableVG*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId,
                                                                     error));
-                if (equippableVG == NULL) {
+                if (equippableVG == nullptr) {
                     CCSoomlaUtils::logError(
                         TAG,
                         StringUtils::format(

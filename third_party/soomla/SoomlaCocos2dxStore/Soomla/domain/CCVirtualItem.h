@@ -53,7 +53,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the giving process.
          */
-        int give(int amount, CCError **error = NULL) { return give(amount, true, error); }
+        int give(int amount, CCError **error = nullptr) { return give(amount, true, error); }
         
         /**
          Works like "give" but receives an argument, notify, to indicate
@@ -63,7 +63,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the giving process.
          */
-        virtual int give(int amount, bool notify, CCError **error = NULL) = 0;
+        virtual int give(int amount, bool notify, CCError **error = nullptr) = 0;
         
         /**
          Takes from your user the given amount of the specific virtual item.
@@ -73,7 +73,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the taking process.
          */
-        int take(int amount, CCError **error = NULL) { return take(amount, true, error); }
+        int take(int amount, CCError **error = nullptr) { return take(amount, true, error); }
         
         /**
          Works like "take" but receives an argument, notify, to indicate
@@ -84,7 +84,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the taking process.
          */
-        virtual int take(int amount, bool notify, CCError **error = NULL) = 0;
+        virtual int take(int amount, bool notify, CCError **error = nullptr) = 0;
         
         /**
          Resets this Virtual Item's balance to the given balance.
@@ -93,7 +93,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the reset process.
          */
-        int resetBalance(int balance, CCError **error = NULL) { return resetBalance(balance, true, error); }
+        int resetBalance(int balance, CCError **error = nullptr) { return resetBalance(balance, true, error); }
         
         /**
          Works like "resetBalance" but receives an argument, notify, to indicate
@@ -104,7 +104,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance after the reset process.
          */
-        virtual int resetBalance(int balance, bool notify, CCError **error = NULL) = 0;
+        virtual int resetBalance(int balance, bool notify, CCError **error = nullptr) = 0;
         
         /**
          Will fetch the balance for the current VirtualItem according to its type.
@@ -112,7 +112,7 @@ namespace soomla {
          @param error A `CCError` for error checking.
          @return The balance.
          */
-        virtual int getBalance(CCError **error = NULL) = 0;
+        virtual int getBalance(CCError **error = nullptr) = 0;
 
         /**
          Save this instance with changes that were made to it.

@@ -40,7 +40,7 @@ const char* soomla::CCSequenceReward::getType() const {
 soomla::CCReward* soomla::CCSequenceReward::getLastGivenReward() {
     int idx = CCRewardStorage::getInstance()->getLastSeqIdxGiven(this);
     if (idx < 0) {
-        return NULL;
+        return nullptr;
     }
 
     return (CCReward*)getRewards().at(idx);

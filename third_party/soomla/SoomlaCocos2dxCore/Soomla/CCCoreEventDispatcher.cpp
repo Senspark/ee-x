@@ -23,7 +23,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCCoreEventDispatcher* s_SharedInstance = NULL;
+static CCCoreEventDispatcher* s_SharedInstance = nullptr;
 
 CCCoreEventDispatcher* CCCoreEventDispatcher::getInstance() {
     if (!s_SharedInstance) {

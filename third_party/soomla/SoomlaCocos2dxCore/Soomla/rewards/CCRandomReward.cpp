@@ -40,12 +40,12 @@ const char *soomla::CCRandomReward::getType() const {
 
 bool soomla::CCRandomReward::takeInner() {
     // for now is able to take only last given
-    if (mLastGivenReward == NULL) {
+    if (mLastGivenReward == nullptr) {
         return false;
     }
 
     bool taken = mLastGivenReward->take();
-    setLastGivenReward(NULL);
+    setLastGivenReward(nullptr);
 
     return taken;
 }

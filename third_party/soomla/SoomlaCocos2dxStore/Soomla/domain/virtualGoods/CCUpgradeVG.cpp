@@ -84,17 +84,17 @@ ValueMap CCUpgradeVG::toValueMap() {
 }
 
 bool CCUpgradeVG::canBuy() {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     const char* goodItemId = getGoodItemId().c_str();
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, &error));
-    if ((error != NULL) || (good == NULL)) {
+    if ((error != nullptr) || (good == nullptr)) {
         CCSoomlaUtils::logError(TAG, StringUtils::format(
                                          "VirtualGood with itemId: %s doesn't "
                                          "exist! Returning false (can't buy).",
                                          goodItemId)
                                          .c_str());
-        if (error != NULL) {
+        if (error != nullptr) {
             CCSoomlaUtils::logException(TAG, error);
         }
         return false;
@@ -103,8 +103,8 @@ bool CCUpgradeVG::canBuy() {
     CCUpgradeVG* upgradeVG =
         CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(good);
 
-    return ((upgradeVG == NULL && CCSoomlaUtils::isEmpty(getPrevItemId())) ||
-            (upgradeVG != NULL &&
+    return ((upgradeVG == nullptr && CCSoomlaUtils::isEmpty(getPrevItemId())) ||
+            (upgradeVG != nullptr &&
              ((upgradeVG->getNextItemId().compare(getItemId()) == 0) ||
               (upgradeVG->getPrevItemId().compare(getItemId()) == 0)))) &&
            CCLifetimeVG::canBuy();
@@ -120,7 +120,7 @@ int CCUpgradeVG::give(int amount, bool notify, CCError** error) {
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG,
             StringUtils::format(
@@ -141,7 +141,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG,
             StringUtils::format(
@@ -172,7 +172,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
 
         // Case: downgrade is not possible because previous upgrade does not
         // exist
-        if (prevUpgradeVG == NULL) {
+        if (prevUpgradeVG == nullptr) {
             CCSoomlaUtils::logError(
                 TAG,
                 StringUtils::format("Previous UpgradeVG with itemId: %s "

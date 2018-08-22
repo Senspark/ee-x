@@ -26,7 +26,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCVirtualGoodsStorage* s_SharedVirtualGoodsStorage = NULL;
+static CCVirtualGoodsStorage* s_SharedVirtualGoodsStorage = nullptr;
 
 CCVirtualGoodsStorage* CCVirtualGoodsStorage::getInstance() {
     if (!s_SharedVirtualGoodsStorage) {
@@ -53,7 +53,7 @@ void CCVirtualGoodsStorage::removeUpgrades(CCVirtualGood* good, bool notify,
     CCKeyValueStorage::getInstance()->deleteKeyValue(key);
 
     if (notify) {
-        CCStoreEventDispatcher::getInstance()->onGoodUpgrade(good, NULL);
+        CCStoreEventDispatcher::getInstance()->onGoodUpgrade(good, nullptr);
     }
 }
 
@@ -61,7 +61,7 @@ void CCVirtualGoodsStorage::assignCurrentUpgrade(CCVirtualGood* good,
                                                  CCUpgradeVG* upgradeVG,
                                                  bool notify, CCError** error) {
     CCUpgradeVG* upgrade = getCurrentUpgrade(good, error);
-    if ((upgrade != NULL) &&
+    if ((upgrade != nullptr) &&
         (upgrade->getId().compare(upgradeVG->getId()) == 0)) {
         return;
     }
@@ -90,21 +90,21 @@ CCUpgradeVG* CCVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
                                      "of %s but there's not upgrade to it.",
                                      itemId)
                      .c_str());
-        return NULL;
+        return nullptr;
     }
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(upItemId, error);
-    if (item == NULL) {
-        return NULL;
+    if (item == nullptr) {
+        return nullptr;
     }
 
     CCUpgradeVG* upgrade = dynamic_cast<CCUpgradeVG*>(item);
-    if (upgrade == NULL) {
+    if (upgrade == nullptr) {
         CCSoomlaUtils::logDebug(
             TAG,
             "The current upgrade's itemId from the DB is not an UpgradeVG.");
-        return NULL;
+        return nullptr;
     }
 
     return upgrade;
@@ -162,7 +162,7 @@ void CCVirtualGoodsStorage::postBalanceChangeEvent(CCVirtualItem* item,
                                                    int balance,
                                                    int amountAdded) {
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(item);
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Trying to post good balance changed "
                                      "with a non VirtualGood item %s",

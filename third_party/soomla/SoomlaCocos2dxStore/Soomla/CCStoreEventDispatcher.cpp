@@ -13,7 +13,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCStoreEventDispatcher* s_SharedInstance = NULL;
+static CCStoreEventDispatcher* s_SharedInstance = nullptr;
 
 CCStoreEventDispatcher* CCStoreEventDispatcher::getInstance() {
     if (!s_SharedInstance) {
@@ -46,7 +46,7 @@ bool CCStoreEventDispatcher::init() {
             auto&& itemId = parameters.at("itemId").asString();
             auto balance = parameters.at("balance").asInt();
             auto amountAdded = parameters.at("amountAdded").asInt();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCVirtualCurrency* virtualCurrency =
                 dynamic_cast<CCVirtualCurrency*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -67,7 +67,7 @@ bool CCStoreEventDispatcher::init() {
             auto&& itemId = parameters.at("itemId").asString();
             auto balance = parameters.at("balance").asInt();
             auto amountAdded = parameters.at("amountAdded").asInt();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCVirtualGood* virtualGood = dynamic_cast<CCVirtualGood*>(
                 CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
                                                                 &error));
@@ -84,7 +84,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_GOOD_EQUIPPED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCEquippableVG* equippableVG = dynamic_cast<CCEquippableVG*>(
                 CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
                                                                 &error));
@@ -101,7 +101,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_GOOD_UNEQUIPPED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCEquippableVG* equippableVG = dynamic_cast<CCEquippableVG*>(
                 CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
                                                                 &error));
@@ -122,7 +122,7 @@ bool CCStoreEventDispatcher::init() {
 
             CCError* error;
 
-            error = NULL;
+            error = nullptr;
             CCVirtualGood* virtualGood = dynamic_cast<CCVirtualGood*>(
                 CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
                                                                 &error));
@@ -133,8 +133,8 @@ bool CCStoreEventDispatcher::init() {
             }
             CC_ASSERT(virtualGood);
 
-            error = NULL;
-            CCUpgradeVG* upgradeVG = NULL;
+            error = nullptr;
+            CCUpgradeVG* upgradeVG = nullptr;
             if (vguItemId.length() > 0) {
                 upgradeVG = dynamic_cast<CCUpgradeVG*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(vguItemId,
@@ -154,7 +154,7 @@ bool CCStoreEventDispatcher::init() {
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
             auto&& payload = parameters.at("payload").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -172,7 +172,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_ITEM_PURCHASE_STARTED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -190,7 +190,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -209,7 +209,7 @@ bool CCStoreEventDispatcher::init() {
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
             auto&& payload = parameters.at("payload").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -227,7 +227,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_MARKET_PURCHASE,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -247,7 +247,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -265,7 +265,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -287,7 +287,7 @@ bool CCStoreEventDispatcher::init() {
             Vector<CCMarketItem*> marketItems;
             Vector<CCVirtualItem*> virtualItems;
 
-            CCError* error = NULL;
+            CCError* error = nullptr;
             for (auto marketItemDict : marketItemDicts) {
                 CC_ASSERT(marketItemDict.getType() ==
                           cocos2d::Value::Type::MAP);
@@ -357,7 +357,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_VERIFICATION_STARTED,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -375,7 +375,7 @@ bool CCStoreEventDispatcher::init() {
         CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION,
         [this](const cocos2d::ValueMap& parameters) {
             auto&& itemId = parameters.at("itemId").asString();
-            CCError* error = NULL;
+            CCError* error = nullptr;
             CCPurchasableVirtualItem* purchasableVirtualItem =
                 dynamic_cast<CCPurchasableVirtualItem*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId,
@@ -514,7 +514,7 @@ void CCStoreEventDispatcher::onGoodUpgrade(CCVirtualGood* virtualGood,
 
     ValueMap eventMap;
     eventMap[CCStoreConsts::DICT_ELEMENT_GOOD] = virtualGood->toValueMap();
-    if (upgradeVG != NULL) {
+    if (upgradeVG != nullptr) {
         eventMap[CCStoreConsts::DICT_ELEMENT_UPGRADEVG] =
             upgradeVG->toValueMap();
     }
@@ -547,7 +547,7 @@ void CCStoreEventDispatcher::onItemPurchased(
         params["method"] = "CCStoreEventDispatcher::pushOnItemPurchased";
         params["itemId"] = purchasableVirtualItem->getItemId();
         params["payload"] = payload;
-        CCNdkBridge::callNative(params, NULL);
+        CCNdkBridge::callNative(params, nullptr);
 #endif
     }
 }
@@ -571,7 +571,7 @@ void CCStoreEventDispatcher::onItemPurchaseStarted(
         ValueMap params;
         params["method"] = "CCStoreEventDispatcher::pushOnItemPurchaseStarted";
         params["itemId"] = purchasableVirtualItem->getItemId();
-        CCNdkBridge::callNative(params, NULL);
+        CCNdkBridge::callNative(params, nullptr);
 #endif
     }
 }

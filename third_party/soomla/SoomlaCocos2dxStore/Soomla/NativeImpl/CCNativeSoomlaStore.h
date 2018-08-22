@@ -31,13 +31,13 @@ namespace soomla {
     public:
         virtual void buyMarketItem(const std::string& productId,
                                    const std::string& payload,
-                                   CCError** error = NULL);
+                                   CCError** error = nullptr);
 
         virtual void restoreTransactions();
         
         virtual void refreshInventory();
         
-        virtual void refreshMarketItemsDetails(CCError **error = NULL);
+        virtual void refreshMarketItemsDetails(CCError **error = nullptr);
         
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         

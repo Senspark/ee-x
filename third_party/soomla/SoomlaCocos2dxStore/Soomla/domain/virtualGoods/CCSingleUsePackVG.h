@@ -48,8 +48,8 @@ class CCSingleUsePackVG : public CCVirtualGood {
 public:
     CCSingleUsePackVG()
         : CCVirtualGood()
-        , mGoodItemId(NULL)
-        , mGoodAmount(NULL){};
+        , mGoodItemId("")
+        , mGoodAmount(0){};
 
     static CCSingleUsePackVG*
     create(const std::string& goodItemId, std::int32_t goodAmount,
@@ -94,22 +94,22 @@ public:
     /**
      See parent
      */
-    virtual int give(int amount, bool notify, CCError** error = NULL) override;
+    virtual int give(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
-    virtual int take(int amount, bool notify, CCError** error = NULL) override;
+    virtual int take(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
     virtual int resetBalance(int balance, bool notify,
-                             CCError** error = NULL) override;
+                             CCError** error = nullptr) override;
     /**
      See parent
      */
-    virtual int getBalance(CCError** error = NULL) override;
+    virtual int getBalance(CCError** error = nullptr) override;
 
     virtual const char* getType() const override;
 

@@ -27,7 +27,7 @@ USING_NS_CC;
 
 void CCNativeRewardStorage::setRewardStatus(CCReward* reward, bool give,
                                             bool notify) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     
     ValueMap params;
     params["method"] = "CCNativeRewardStorage::setRewardStatus";
@@ -43,7 +43,7 @@ void CCNativeRewardStorage::setRewardStatus(CCReward* reward, bool give,
 }
 
 int CCNativeRewardStorage::getTimesGiven(CCReward* reward) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
     
     ValueMap params;
     params["method"] = "CCNativeRewardStorage::getTimesGiven";
@@ -67,7 +67,7 @@ int CCNativeRewardStorage::getTimesGiven(CCReward* reward) {
 
 int CCNativeRewardStorage::getLastSeqIdxGiven(
     CCSequenceReward* sequenceReward) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
 
     ValueMap params;
     params["method"] = "CCNativeRewardStorage::getLastSeqIdxGiven";
@@ -90,7 +90,7 @@ int CCNativeRewardStorage::getLastSeqIdxGiven(
 
 void CCNativeRewardStorage::setLastSeqIdxGiven(CCSequenceReward* sequenceReward,
                                                unsigned int idx) {
-    CCError* error = NULL;
+    CCError* error = nullptr;
 
     ValueMap params;
     params["method"] = "CCNativeRewardStorage::setLastSeqIdxGiven";

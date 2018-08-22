@@ -27,10 +27,10 @@ CCSoomlaStoreConfigBuilder* CCSoomlaStoreConfigBuilder::create() {
 
 CCSoomlaStoreConfigBuilder* CCSoomlaStoreConfigBuilder::setIosConfiguration(
     CCSoomlaStoreIosConfigBuilder* iosConfig) {
-    return this->appendConfigParameter(iosConfig->build()) ? this : NULL;
+    return this->appendConfigParameter(iosConfig->build()) ? this : nullptr;
 }
 
 CCSoomlaStoreConfigBuilder* CCSoomlaStoreConfigBuilder::setGpConfiguration(
     CCSoomlaStoreGpConfigBuilder* gpConfig) {
-    return this->appendConfigParameter(gpConfig->build()) ? this : NULL;
+    return this->appendConfigParameter(gpConfig->build()) ? this : nullptr;
 }

@@ -26,13 +26,10 @@
 
 namespace soomla {
 class CCReward : public CCSoomlaEntity {
-    SL_SYNTHESIZE_RETAIN_WITH_DICT(CCSchedule*, mSchedule, Schedule,
-                                   CCCoreConsts::JSON_SCHEDULE);
-
 public:
     CCReward()
         : CCSoomlaEntity()
-        , mSchedule(NULL){};
+        , mSchedule(nullptr){};
 
     virtual bool init(const std::string& id, const std::string& name,
                       CCSchedule* schedule = nullptr);
@@ -42,6 +39,8 @@ public:
     virtual cocos2d::ValueMap toValueMap();
 
     virtual ~CCReward();
+    
+    CC_SYNTHESIZE_RETAIN(CCSchedule*, mSchedule, Schedule);
 
 public:
     virtual bool take();

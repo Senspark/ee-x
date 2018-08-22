@@ -27,7 +27,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCStoreInventory* s_SharedStoreInventory = NULL;
+static CCStoreInventory* s_SharedStoreInventory = nullptr;
 
 CCStoreInventory* CCStoreInventory::sharedStoreInventory() {
     if (!s_SharedStoreInventory) {
@@ -71,7 +71,7 @@ void CCStoreInventory::buyItem(const std::string& itemId,
 
     CCPurchasableVirtualItem* pvi = dynamic_cast<CCPurchasableVirtualItem*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
-    if (pvi != NULL) {
+    if (pvi != nullptr) {
         pvi->buy(payload, error);
     }
 }
@@ -111,7 +111,7 @@ void CCStoreInventory::takeItem(const std::string& itemId, int amount,
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error);
-    if (item != NULL) {
+    if (item != nullptr) {
         item->take(amount, error);
     }
 }
@@ -123,7 +123,7 @@ void CCStoreInventory::equipVirtualGood(const std::string& itemId,
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
-    if (good != NULL) {
+    if (good != nullptr) {
         good->equip(error);
     }
 }
@@ -135,7 +135,7 @@ void CCStoreInventory::unEquipVirtualGood(const std::string& itemId,
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
-    if (good != NULL) {
+    if (good != nullptr) {
         good->unequip(error);
     }
 }
@@ -148,7 +148,7 @@ bool CCStoreInventory::isVirtualGoodEquipped(const std::string& itemId,
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
-    if (good != NULL) {
+    if (good != nullptr) {
         return CCVirtualGoodsStorage::getInstance()->isEquipped(good, error);
     }
 
@@ -164,14 +164,14 @@ int CCStoreInventory::getGoodUpgradeLevel(const std::string& goodItemId,
 
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
-    if (good == NULL) {
+    if (good == nullptr) {
         CCSoomlaUtils::logError(
             TAG, "You tried to get the level of a non-existant virtual good.");
         return 0;
     }
     CCUpgradeVG* upgradeVG =
         CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(good, error);
-    if (upgradeVG == NULL) {
+    if (upgradeVG == nullptr) {
         return 0; // no upgrade
     }
 
@@ -199,13 +199,13 @@ CCStoreInventory::getGoodCurrentUpgrade(const std::string& goodItemId,
 
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
-    if (good == NULL) {
+    if (good == nullptr) {
         return "";
     }
 
     CCUpgradeVG* upgradeVG =
         CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(good, error);
-    if (upgradeVG == NULL) {
+    if (upgradeVG == nullptr) {
         return "";
     }
     return upgradeVG->getItemId();
@@ -218,14 +218,14 @@ void CCStoreInventory::upgradeGood(const std::string& goodItemId,
                  .c_str());
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
-    if (good == NULL) {
+    if (good == nullptr) {
         return;
     }
 
     CCUpgradeVG* upgradeVG =
         CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(good, error);
 
-    if (upgradeVG != NULL) {
+    if (upgradeVG != nullptr) {
         const auto& nextItemId = upgradeVG->getNextItemId();
         if (CCSoomlaUtils::isEmpty(nextItemId)) {
             return;
@@ -233,14 +233,14 @@ void CCStoreInventory::upgradeGood(const std::string& goodItemId,
         CCUpgradeVG* vgu = dynamic_cast<CCUpgradeVG*>(
             CCStoreInfo::sharedStoreInfo()->getItemByItemId(nextItemId.c_str(),
                                                             error));
-        if (vgu != NULL) {
+        if (vgu != nullptr) {
             vgu->buy("");
         }
     } else {
         CCUpgradeVG* first = dynamic_cast<CCUpgradeVG*>(
             CCStoreInfo::sharedStoreInfo()->getFirstUpgradeForVirtualGood(
                 goodItemId));
-        if (first != NULL) {
+        if (first != nullptr) {
             first->buy("");
         }
     }
@@ -281,7 +281,7 @@ void CCStoreInventory::refreshLocalInventory() {
 
         CCUpgradeVG* upgrade =
             CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(item);
-        if (upgrade != NULL) {
+        if (upgrade != nullptr) {
             int upgradeLevel = getGoodUpgradeLevel(item->getItemId().c_str());
             CCLocalUpgrade* localUpgrade = CCLocalUpgrade::create();
             localUpgrade->setItemId(upgrade->getItemId());
@@ -306,7 +306,7 @@ void CCStoreInventory::refreshOnGoodUpgrade(CCVirtualGood* vg,
     } else {
         int upgradeLevel = getGoodUpgradeLevel(vg->getItemId());
         auto upgrade = mLocalUpgrades.at(vg->getItemId());
-        if (upgrade != NULL) {
+        if (upgrade != nullptr) {
             upgrade->setItemId(uvg->getItemId());
             upgrade->setLevel(upgradeLevel);
         } else {

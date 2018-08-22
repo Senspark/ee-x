@@ -62,7 +62,7 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
             }
             params["verifyOnServerFailure"] = verifyOnServerFailure;
         }
-        CCNdkBridge::callNative(params, NULL);
+        CCNdkBridge::callNative(params, nullptr);
     }
 #endif
 
@@ -74,7 +74,7 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
                 ValueMap params;
                 params["method"] = "CCSoomlaStore::setAndroidPublicKey";
                 params["androidPublicKey"] = androidPublicKey;
-                CCNdkBridge::callNative(params, NULL);
+                CCNdkBridge::callNative(params, nullptr);
             }
         }
 
@@ -92,7 +92,7 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
                 params["clientSecret"] = clientSecret;
                 params["refreshToken"] = refreshToken;
                 params["verifyOnServerFailure"] = verifyOnServerFailure;
-                CCNdkBridge::callNative(params, NULL);
+                CCNdkBridge::callNative(params, nullptr);
             }
         }
 
@@ -105,7 +105,7 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
             ValueMap params;
             params["method"] = "CCSoomlaStore::setTestPurchases";
             params["testPurchases"] = testPurchases;
-            CCNdkBridge::callNative(params, NULL);
+            CCNdkBridge::callNative(params, nullptr);
         }
 #endif
     }

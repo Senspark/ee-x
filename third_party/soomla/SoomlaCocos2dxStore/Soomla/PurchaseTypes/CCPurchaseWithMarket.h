@@ -34,7 +34,7 @@ class CCPurchaseWithMarket : public CCPurchaseType {
 
 public:
     CCPurchaseWithMarket()
-        : mMarketItem(NULL){};
+        : mMarketItem(nullptr){};
 
     /**
      Creates a `CCPurchaseWithMarket`.
@@ -55,12 +55,12 @@ public:
     /**
      See parent
      */
-    virtual void buy(const std::string& payload, CCError** error = NULL) override;
+    virtual void buy(const std::string& payload, CCError** error = nullptr) override;
 
     /**
      See parent
      */
-    virtual bool canAfford(CCError** error = NULL) override;
+    virtual bool canAfford(CCError** error = nullptr) override;
 
     ~CCPurchaseWithMarket();
 };

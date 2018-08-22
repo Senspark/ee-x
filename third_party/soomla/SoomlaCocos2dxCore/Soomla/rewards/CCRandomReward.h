@@ -28,7 +28,7 @@ class CCRandomReward : public CCAggregateReward {
 public:
     CCRandomReward()
         : CCAggregateReward()
-        , mLastGivenReward(NULL){};
+        , mLastGivenReward(nullptr){};
 
     static CCRandomReward* create(const std::string& id,
                                   const std::string& name,

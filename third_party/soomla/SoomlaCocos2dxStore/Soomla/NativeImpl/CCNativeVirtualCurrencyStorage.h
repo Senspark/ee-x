@@ -32,16 +32,16 @@ public:
 
     virtual ~CCNativeVirtualCurrencyStorage();
 
-    virtual int getBalance(CCVirtualItem* item, CCError** error = NULL);
+    virtual int getBalance(CCVirtualItem* item, CCError** error = nullptr);
 
     virtual int setBalance(CCVirtualItem* item, int balance, bool notify,
-                           CCError** error = NULL);
+                           CCError** error = nullptr);
 
     virtual int add(CCVirtualItem* item, int amount, bool notify,
-                    CCError** error = NULL);
+                    CCError** error = nullptr);
 
     virtual int remove(CCVirtualItem* item, int amount, bool notify,
-                       CCError** error = NULL);
+                       CCError** error = nullptr);
 };
 } // namespace soomla
 

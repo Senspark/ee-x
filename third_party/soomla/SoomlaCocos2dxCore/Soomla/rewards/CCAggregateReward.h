@@ -25,7 +25,7 @@
 namespace soomla {
     class CCAggregateReward : public CCReward {
     public:
-        CCAggregateReward() : CCReward(), mRewards(NULL) {
+        CCAggregateReward() : CCReward() {
         };
 
         virtual bool init(const std::string& id, const std::string& name,

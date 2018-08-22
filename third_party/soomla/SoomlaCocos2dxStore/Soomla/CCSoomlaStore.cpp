@@ -27,7 +27,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCSoomlaStore* s_SharedSoomlaStore = NULL;
+static CCSoomlaStore* s_SharedSoomlaStore = nullptr;
 
 bool CCSoomlaStore::initialized = false;
 
@@ -65,7 +65,7 @@ void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
 
     // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     // On iOS we only refresh market items
-    // CCError *error = NULL;
+    // CCError *error = nullptr;
     // getInstance()->refreshMarketItemsDetails(&error);
     // #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     // On Android we refresh market items and restore transactions
@@ -81,7 +81,7 @@ void CCSoomlaStore::buyMarketItem(const std::string& productId,
     CCPurchasableVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getPurchasableItemWithProductId(
             productId.c_str(), error);
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 

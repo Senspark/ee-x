@@ -24,7 +24,7 @@ namespace soomla {
 
 USING_NS_CC;
 
-static CCVirtualCurrencyStorage* s_SharedVirtualCurrencyStorage = NULL;
+static CCVirtualCurrencyStorage* s_SharedVirtualCurrencyStorage = nullptr;
 
 CCVirtualCurrencyStorage* CCVirtualCurrencyStorage::getInstance() {
     if (!s_SharedVirtualCurrencyStorage) {
@@ -51,7 +51,7 @@ void CCVirtualCurrencyStorage::postBalanceChangeEvent(CCVirtualItem* item,
                                                       int balance,
                                                       int amountAdded) {
     CCVirtualCurrency* virtualCurrency = dynamic_cast<CCVirtualCurrency*>(item);
-    if (virtualCurrency == NULL) {
+    if (virtualCurrency == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format(
                      "Trying to post currency balance changed with a non "

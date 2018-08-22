@@ -34,8 +34,7 @@ namespace soomla {
 class CCVirtualCategory : public CCDomain {
 public:
     CCVirtualCategory()
-        : mName(NULL)
-        , mGoodItemIds(NULL){};
+        : mName(nullptr) {};
 
     /**
      Creates a virtual category.

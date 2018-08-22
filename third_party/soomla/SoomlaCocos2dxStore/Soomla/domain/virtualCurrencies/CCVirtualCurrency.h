@@ -67,22 +67,22 @@ public:
     /**
      See parent
      */
-    virtual int give(int amount, bool notify, CCError** error = NULL) override;
+    virtual int give(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
-    virtual int take(int amount, bool notify, CCError** error = NULL) override;
+    virtual int take(int amount, bool notify, CCError** error = nullptr) override;
 
     /**
      See parent
      */
     virtual int resetBalance(int balance, bool notify,
-                             CCError** error = NULL) override;
+                             CCError** error = nullptr) override;
     /**
      See parent
      */
-    virtual int getBalance(CCError** error = NULL) override;
+    virtual int getBalance(CCError** error = nullptr) override;
 };
 } // namespace soomla
 

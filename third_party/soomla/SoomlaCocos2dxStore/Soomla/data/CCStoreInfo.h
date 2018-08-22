@@ -72,7 +72,7 @@ public:
      @return The virtual item with the given `itemId`.
      */
     CCVirtualItem* getItemByItemId(const std::string& itemId,
-                                   CCError** error = NULL);
+                                   CCError** error = nullptr);
 
     /**
      Retrieves a single `CCPurchasableVirtualItem` that resides in the
@@ -87,7 +87,7 @@ public:
     */
     CCPurchasableVirtualItem*
     getPurchasableItemWithProductId(const std::string& productId,
-                                    CCError** error = NULL);
+                                    CCError** error = nullptr);
 
     /**
      Retrieves the `CCVirtualCategory` that the `CCVirtualGood` with the
@@ -99,7 +99,7 @@ public:
      `goodItemId`.
     */
     CCVirtualCategory* getCategoryForVirtualGood(const std::string& goodItemId,
-                                                 CCError** error = NULL);
+                                                 CCError** error = nullptr);
 
     /**
      Retrieves the first `CCUpgradeVG` for the`CCVirtualGood` with the given
@@ -109,7 +109,7 @@ public:
             `itemId`.
     */
     CCUpgradeVG*
-    getFirstUpgradeForVirtualGood(const std::string& goodItemId = NULL);
+    getFirstUpgradeForVirtualGood(const std::string& goodItemId = nullptr);
 
     /**
      Retrieves the last `CCUpgradeVG` for the`CCVirtualGood` with the given
@@ -119,7 +119,7 @@ public:
             `ItemId`.
     */
     CCUpgradeVG*
-    getLastUpgradeForVirtualGood(const std::string& goodItemId = NULL);
+    getLastUpgradeForVirtualGood(const std::string& goodItemId = nullptr);
 
     /**
      Retrieves all `CCUpgradeVG`s for the `CCVirtualGood` with the given

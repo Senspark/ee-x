@@ -38,7 +38,7 @@ CCSoomlaStoreGpConfigBuilder::setTestPurchases(bool isTestPurchases) {
     return this->appendConfigParameter("testPurchases",
                                        cocos2d::Value(isTestPurchases))
                ? this
-               : NULL;
+               : nullptr;
 }
 
 CCSoomlaStoreGpConfigBuilder*
@@ -54,5 +54,5 @@ CCSoomlaStoreGpConfigBuilder::activateFraudProtection(
                        "verifyOnServerFailure",
                        cocos2d::Value(verifyOnServerFailure))
                ? this
-               : NULL;
+               : nullptr;
 }

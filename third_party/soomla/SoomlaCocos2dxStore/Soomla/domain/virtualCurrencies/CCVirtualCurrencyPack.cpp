@@ -85,7 +85,7 @@ int CCVirtualCurrencyPack::give(int amount, bool notify, CCError** error) {
     CCVirtualCurrency* currency = dynamic_cast<CCVirtualCurrency*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(currencyId, error));
 
-    if (currency == NULL) {
+    if (currency == nullptr) {
         CCSoomlaUtils::logError(TAG, StringUtils::format(
                                          "VirtualCurrency with itemId: %s "
                                          "doesn't exist! Can't give this pack.",
@@ -103,7 +103,7 @@ int CCVirtualCurrencyPack::take(int amount, bool notify, CCError** error) {
     CCVirtualCurrency* currency = dynamic_cast<CCVirtualCurrency*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(currencyId, error));
 
-    if (currency == NULL) {
+    if (currency == nullptr) {
         CCSoomlaUtils::logError(TAG, StringUtils::format(
                                          "VirtualCurrency with itemId: %s "
                                          "doesn't exist! Can't take this pack.",

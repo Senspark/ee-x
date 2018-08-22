@@ -39,7 +39,7 @@ public:
      @param good `CCVirtualGood` to remove upgrade from.
      @param error Gets A `CCError` for error checking.
      */
-    virtual void removeUpgrades(CCVirtualGood* good, CCError** error = NULL) {
+    virtual void removeUpgrades(CCVirtualGood* good, CCError** error = nullptr) {
         removeUpgrades(good, true, error);
     }
     /**
@@ -49,7 +49,7 @@ public:
      @param error Gets A `CCError` for error checking.
      */
     virtual void removeUpgrades(CCVirtualGood* good, bool notify,
-                                CCError** error = NULL);
+                                CCError** error = nullptr);
 
     /**
      Assigns a specific upgrade to the given virtual good.
@@ -59,7 +59,7 @@ public:
      */
     virtual void assignCurrentUpgrade(CCVirtualGood* good,
                                       CCUpgradeVG* upgradeVG,
-                                      CCError** error = NULL) {
+                                      CCError** error = nullptr) {
         assignCurrentUpgrade(good, upgradeVG, true, error);
     }
     /**
@@ -71,31 +71,31 @@ public:
      */
     virtual void assignCurrentUpgrade(CCVirtualGood* good,
                                       CCUpgradeVG* upgradeVG, bool notify,
-                                      CCError** error = NULL);
+                                      CCError** error = nullptr);
 
     /**
      Retrieves the current upgrade for the given virtual good.
      @param good the virtual good to retrieve upgrade for.
      @param error Gets A `CCError` for error checking.
-     @return the current upgrade for the given virtual good, or NULL if one
+     @return the current upgrade for the given virtual good, or nullptr if one
      does not exist
      */
     virtual CCUpgradeVG* getCurrentUpgrade(CCVirtualGood* good,
-                                           CCError** error = NULL);
+                                           CCError** error = nullptr);
     /**
      Checks the equipping status of the given `CCEquippableVG`.
      @param good The `CCEquippableVG` to check the status for.
      @param error Gets A `CCError` for error checking.
      @return true if the good is equipped, false otherwise
      */
-    virtual bool isEquipped(CCEquippableVG* good, CCError** error = NULL);
+    virtual bool isEquipped(CCEquippableVG* good, CCError** error = nullptr);
 
     /**
      Equips the given `CCEquippableVG`.
      @param good The `CCEquippableVG` to equip.
      @param error Gets A `CCError` for error checking.
      */
-    virtual void equip(CCEquippableVG* good, CCError** error = NULL) {
+    virtual void equip(CCEquippableVG* good, CCError** error = nullptr) {
         equip(good, true, error);
     }
     /**
@@ -105,14 +105,14 @@ public:
      @param error Gets A `CCError` for error checking.
      */
     virtual void equip(CCEquippableVG* good, bool notify,
-                       CCError** error = NULL);
+                       CCError** error = nullptr);
 
     /**
      UnEquips the given `CCEquippableVG`.
      @param good The `CCEquippableVG` to unequip.
      @param error Gets A `CCError` for error checking.
      */
-    virtual void unequip(CCEquippableVG* good, CCError** error = NULL) {
+    virtual void unequip(CCEquippableVG* good, CCError** error = nullptr) {
         unequip(good, true, error);
     }
     /**
@@ -122,7 +122,7 @@ public:
      @param error Gets A `CCError` for error checking.
      */
     virtual void unequip(CCEquippableVG* good, bool notify,
-                         CCError** error = NULL);
+                         CCError** error = nullptr);
 
 protected:
     virtual const char* keyBalance(const char* itemId) const;
@@ -131,7 +131,7 @@ protected:
 
 private:
     void equipPriv(CCEquippableVG* good, bool equip, bool notify,
-                   CCError** error = NULL);
+                   CCError** error = nullptr);
 
     static const char* keyGoodBalance(const char* itemId);
     static const char* keyGoodEquipped(const char* itemId);

@@ -18,7 +18,7 @@
 #include "CCNativeKeyValueStorage.h"
 
 namespace soomla {
-static CCKeyValueStorage* s_SharedKeyValueStorage = NULL;
+static CCKeyValueStorage* s_SharedKeyValueStorage = nullptr;
 
 CCKeyValueStorage* CCKeyValueStorage::getInstance() {
     if (!s_SharedKeyValueStorage) {

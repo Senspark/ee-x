@@ -31,7 +31,7 @@ USING_NS_CC;
 
 #define TAG "SOOMLA CoreBridge"
 
-static CCCoreBridge* sInstance = NULL;
+static CCCoreBridge* sInstance = nullptr;
 
 CCCoreBridge* CCCoreBridge::getInstance() {
     if (!sInstance) {

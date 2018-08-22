@@ -15,3 +15,9 @@ CMakeFiles/
 *.cmake
 CMakeCache.txt
 Makefile
+proj.android_studio/ee-x-soomla-store/.idea
+gradlew
+gradlew.bat
+local.properties
+proj.android_studio/ee-x-soomla-store/.gradle
+proj.android_studio/ee-x-soomla-store/gradle

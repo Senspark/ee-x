@@ -24,6 +24,7 @@
     BOOL initialized_;
     EEMessageBridge* bridge_;
     VungleSDK* sdk_;
+    NSString* gameId_;
 }
 
 @end
@@ -34,6 +35,7 @@
 static NSString* const k__initialize        = @"Vungle_initialize";
 static NSString* const k__hasRewardedVideo  = @"Vungle_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"Vungle_showRewardedVideo";
+static NSString* const k__loadVideoAd       = @"Vungle_loadVideoAd";
 static NSString* const k__onStart           = @"Vungle_onStart";
 static NSString* const k__onEnd             = @"Vungle_onEnd";
 // clang-format on
@@ -46,6 +48,7 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
     initialized_ = NO;
     bridge_ = [EEMessageBridge getInstance];
     sdk_ = [VungleSDK sharedSDK];
+    
     [self registerHandlers];
     return self;
 }
@@ -77,18 +80,25 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
                         return [EEUtils
                             toString:[self showRewardedVideo:placementId]];
                     }];
+    [bridge_ registerHandler:k__loadVideoAd
+                    callback:^(NSString* placementId) {
+                        [self loadVideoAd:placementId];
+                        return @"";
+                    }];
 }
 
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:k__initialize];
     [bridge_ deregisterHandler:k__hasRewardedVideo];
     [bridge_ deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__loadVideoAd];
 }
 
 - (void)initialize:(NSString*)gameId {
     if (initialized_) {
         return;
     }
+    gameId_ = gameId;
     [sdk_ startWithAppId:gameId error:nil];
     
     [sdk_ setDelegate:self];
@@ -97,6 +107,18 @@ static NSString* const k__onEnd             = @"Vungle_onEnd";
 
 - (void)destroy {
     [sdk_ setDelegate:nil];
+}
+
+- (void)loadVideoAd:(NSString *)placementId {
+    NSError* err = nil;
+    [sdk_ loadPlacementWithID:placementId error:&err];
+    if (err) {
+        NSLog(@"Error when loading adId %s %@ reason: %@", __PRETTY_FUNCTION__,
+              placementId, err.description);
+        if (err.code == VungleSDKErrorSDKNotInitialized) {
+            [sdk_ startWithAppId:gameId_ error:nil];
+        }
+    }
 }
 
 - (BOOL)hasRewardedVideo:(NSString* _Nonnull)placementId {

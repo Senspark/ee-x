@@ -29,7 +29,9 @@ private:
     friend RewardedVideo;
 
     bool destroyRewardedVideo(const std::string& placementId);
-
+    
+    void loadVideoAd(const std::string& placementId) const;
+    
     bool hasRewardedVideo(const std::string& placementId) const;
     bool showRewardedVideo(const std::string& placementId);
 

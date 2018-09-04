@@ -17,6 +17,7 @@ namespace {
 constexpr auto k__initialize        = "Vungle_initialize";
 constexpr auto k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "Vungle_showRewardedVideo";
+constexpr auto k__loadVideoAd       = "Vungle_loadVideoAd";
 constexpr auto k__onStart           = "Vungle_onStart";
 constexpr auto k__onEnd             = "Vungle_onEnd";
 constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
@@ -92,6 +93,12 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
     }
     rewardedVideos_.erase(placementId);
     return true;
+}
+
+void Self::loadVideoAd(const std::string &placementId) const {
+    logger_.debug("%s: load placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
+    bridge_.call(k__loadVideoAd, placementId);
 }
 
 bool Self::hasRewardedVideo(const std::string& placementId) const {

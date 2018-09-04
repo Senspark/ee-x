@@ -29,6 +29,7 @@ public class Vungle implements PluginProtocol {
     private static final String k__onStart           = "Vungle_onStart";
     private static final String k__onEnd             = "Vungle_onEnd";
     private static final String k__onUnavailable     = "Vungle_onUnavailable";
+    private static final String k__loadVideoAd       = "Vungle_loadVideoAd";
 
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
@@ -141,6 +142,16 @@ public class Vungle implements PluginProtocol {
                 return "true";
             }
         }, k__showRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                loadVideoAd(message);
+
+                return "";
+            }
+        }, k__loadVideoAd);
     }
 
     private void deregisterHandlers() {
@@ -150,6 +161,7 @@ public class Vungle implements PluginProtocol {
         bridge.deregisterHandler(k__initialize);
         bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
+        bridge.deregisterHandler(k__loadVideoAd);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -165,7 +177,6 @@ public class Vungle implements PluginProtocol {
             @Override
             public void onSuccess() {
                 _logger.info("vunglePub.init onSuccess");
-//                com.vungle.warren.Vungle.loadAd(placementId, _loadAdCallback);
                 _initializing = false;
             }
 
@@ -242,5 +253,10 @@ public class Vungle implements PluginProtocol {
     private void showRewardedVideo(String placementId) {
         Utils.checkMainThread();
         com.vungle.warren.Vungle.playAd(placementId, new AdConfig(), _playAdCallback);
+    }
+
+    private void loadVideoAd(String placementId) {
+        Utils.checkMainThread();
+        com.vungle.warren.Vungle.loadAd(placementId, _loadAdCallback);
     }
 }

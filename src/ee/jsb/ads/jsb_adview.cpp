@@ -77,6 +77,9 @@ const static auto jsb_AdView_getPosition =
 const static auto jsb_AdView_setPosition =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPosition,
                                             float, float>;
+const static auto jsb_AdView_setPositionInPoints =
+    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPositionInPoints,
+                                            float, float>;
 const static auto jsb_AdView_getSize = &ee::core::jsb_accessor_get_on_ui_thread<
     IAdView, &IAdView::getSize, std::pair<std::int32_t, std::int32_t>>;
 const static auto jsb_AdView_setSize =
@@ -95,6 +98,7 @@ SE_BIND_FUNC(jsb_AdView_getAnchor)
 SE_BIND_FUNC(jsb_AdView_setAnchor)
 SE_BIND_FUNC(jsb_AdView_getPosition)
 SE_BIND_FUNC(jsb_AdView_setPosition)
+SE_BIND_FUNC(jsb_AdView_setPositionInPoints)
 SE_BIND_FUNC(jsb_AdView_getSize)
 SE_BIND_FUNC(jsb_AdView_setSize)
 SE_BIND_FUNC(jsb_AdView_setVisible)
@@ -112,6 +116,7 @@ bool register_adview_manual(se::Object* globalObj) {
     cls->defineFunction("setAnchor", _SE(jsb_AdView_setAnchor));
     cls->defineFunction("getPosition", _SE(jsb_AdView_getPosition));
     cls->defineFunction("setPosition", _SE(jsb_AdView_setPosition));
+    cls->defineFunction("setPositionInPoints", _SE(jsb_AdView_setPositionInPoints));
     cls->defineFunction("getSize", _SE(jsb_AdView_getSize));
     cls->defineFunction("setSize", _SE(jsb_AdView_setSize));
     cls->defineFunction("setVisible", _SE(jsb_AdView_setVisible));

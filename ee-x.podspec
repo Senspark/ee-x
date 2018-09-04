@@ -278,9 +278,10 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'facebook-ads' do |s|
-    s.dependency 'ee-x/facebook-ads-base'
-    s.dependency 'FBAudienceNetwork'
-  end
+   s.dependency 'ee-x/facebook-ads-base'
+   s.dependency 'FBAudienceNetwork', '4.28.1'
+   s.dependency 'GoogleMobileAdsMediationFacebook'
+ end
 
   spec.subspec 'facebook-ads-mediation' do |s|
     s.public_header_files = 'third_party/facebook-ads-mediation/FBAudienceNetwork/*'
@@ -499,14 +500,14 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/jsb_facebook_ads.hpp',
       'src/ee/jsb/facebookads/*'
     s.public_header_files =
-      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/jsb_facebook_ads.hpp',
       'src/ee/jsb/facebookads/*.{h,hpp}'
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/facebook-ads'
   end
 
-  spec.subspec 'jsb-firebase' do |s|
+  spec.subspec 'jsb-firebase-analytics' do |s|
     s.source_files =
       'src/ee/jsb/jsb_firebase.hpp',
       'src/ee/jsb/firebase/*'
@@ -515,6 +516,53 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/firebase/*.{h,hpp}'
     
     s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/firebase'
+    s.dependency 'ee-x/firebase-analytics'
+  end
+  
+  spec.subspec 'jsb-notification' do |s|
+    s.platform = :ios
+    s.source_files =
+      'src/ee/jsb/jsb_notification.hpp',
+      'src/ee/jsb/notification/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_notification.hpp',
+      'src/ee/jsb/notification/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/notification'
+  end
+  
+  spec.subspec 'jsb-unity-ads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_unity_ads.hpp',
+      'src/ee/jsb/unityads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_unity_ads.hpp',
+      'src/ee/jsb/unityads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/unity-ads'
+  end
+  spec.subspec 'jsb-ironsource' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_ironsource.hpp',
+      'src/ee/jsb/ironsource/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_ironsource.hpp',
+      'src/ee/jsb/ironsource/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/ironsource'
+  end
+  spec.subspec 'jsb-vungle' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_vungle.hpp',
+      'src/ee/jsb/vungle/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_vungle.hpp',
+      'src/ee/jsb/vungle/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/vungle'
   end
 end

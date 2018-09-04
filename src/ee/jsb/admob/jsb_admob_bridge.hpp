@@ -17,7 +17,7 @@ namespace admob {
 
 extern se::Object* __admobObj;
 
-bool register_admob_manual(se::Object* object);
+bool register_admob_bridge_manual(se::Object* object);
 
 }
 }

@@ -51,5 +51,6 @@ bool Self::show() {
     assert(successful);
     return true;
 }
+    
 } // namespace admob
 } // namespace ee

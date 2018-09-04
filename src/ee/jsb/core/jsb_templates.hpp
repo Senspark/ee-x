@@ -48,14 +48,29 @@ std::unordered_map<std::string, std::string>
 from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::unordered_map<std::string, std::string> ret;
-    
+
     jsonObj->getAllKeys(&allKeys);
     for (auto& key : allKeys) {
         se::Value value;
         jsonObj->getProperty(key.c_str(), &value);
         ret[key] = value.toString();
     }
-    return std::move(ret);
+    return ret;
+}
+
+template <>
+std::map<std::string, std::string>
+from_JSON_object(se::Object* jsonObj) {
+    std::vector<std::string> allKeys;
+    std::map<std::string, std::string> ret;
+
+    jsonObj->getAllKeys(&allKeys);
+    for (auto& key : allKeys) {
+        se::Value value;
+        jsonObj->getProperty(key.c_str(), &value);
+        ret[key] = value.toString();
+    }
+    return ret;
 }
 
 template <typename T>
@@ -72,13 +87,18 @@ inline std::int32_t get_value(const se::Value& value) {
 }
 
 template <>
+inline std::int64_t get_value(const se::Value& value) {
+    return static_cast<std::int64_t>(value.toLong());
+}
+
+template <>
 inline float get_value(const se::Value& value) {
     return value.toFloat();
 }
 
 template <>
 inline std::string get_value(const se::Value& value) {
-    return std::move(value.toString());
+    return value.toString();
 }
 
 template <>
@@ -87,9 +107,16 @@ inline const std::string& get_value(const se::Value& value) {
 }
 
 template <>
-inline const std::unordered_map<std::string, std::string>&
+inline std::unordered_map<std::string, std::string>
 get_value(const se::Value& value) {
     return from_JSON_object<std::unordered_map<std::string, std::string>>(
+        value.toObject());
+}
+
+template <>
+inline std::map<std::string, std::string>
+get_value(const se::Value& value) {
+    return from_JSON_object<std::map<std::string, std::string>>(
         value.toObject());
 }
 

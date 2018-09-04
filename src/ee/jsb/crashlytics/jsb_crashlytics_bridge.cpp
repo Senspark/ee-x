@@ -1,7 +1,7 @@
-#include "jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/core/jsb_log_level.hpp"
 #include "ee/Crashlytics.hpp"
+#include "ee/jsb/core/jsb_log_level.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
+#include "jsb_core_common.hpp"
 
 namespace ee {
 namespace core {} // namespace core
@@ -46,28 +46,28 @@ const auto jsb_Crashlytics_setUserEmail =
 const auto jsb_Crashlytics_trackLevelStart =
     &core::jsb_method_call<Crashlytics, &Crashlytics::trackLevelStart,
                            const std::string&,
-                           const std::unordered_map<std::string, std::string>&>;
+                           std::unordered_map<std::string, std::string>>;
 const auto jsb_Crashlytics_trackLevelEnd =
     &core::jsb_method_call<Crashlytics, &Crashlytics::trackLevelEnd,
                            const std::string&, int32_t, bool,
-                           const std::unordered_map<std::string, std::string>&>;
+                           std::unordered_map<std::string, std::string>>;
 const auto jsb_Crashlytics_trackPurchase =
     &core::jsb_method_call<Crashlytics, &Crashlytics::trackPurchase, float,
                            const std::string&, bool, const std::string&,
                            const std::string&, const std::string&,
-                           const std::unordered_map<std::string, std::string>&>;
+                           std::unordered_map<std::string, std::string>>;
 const auto jsb_Crashlytics_trackCustomEvent =
     &core::jsb_method_call<Crashlytics, &Crashlytics::trackCustomEvent,
                            const std::string&,
-                           const std::unordered_map<std::string, std::string>&>;
+                           std::unordered_map<std::string, std::string>>;
 const auto jsb_Crashlytics_trackInvite =
     &core::jsb_method_call<Crashlytics, &Crashlytics::trackInvite,
                            const std::string&,
-                           const std::unordered_map<std::string, std::string>&>;
+                           std::unordered_map<std::string, std::string>>;
 
 SE_BIND_FINALIZE_FUNC(jsb_Crashlytics_finalize)
 SE_BIND_CTOR(jsb_Crashlytics_constructor, __jsb_Crashlytics_class,
-             __jsb_Crashlytics_finalize)
+             jsb_Crashlytics_finalize)
 SE_BIND_FUNC(jsb_Crashlytics_causeCrash)
 SE_BIND_FUNC(jsb_Crashlytics_causeException)
 SE_BIND_FUNC(jsb_Crashlytics_setLogLevel)
@@ -84,13 +84,14 @@ SE_BIND_FUNC(jsb_Crashlytics_trackPurchase)
 SE_BIND_FUNC(jsb_Crashlytics_trackCustomEvent)
 SE_BIND_FUNC(jsb_Crashlytics_trackInvite)
 
-bool register_crashlytics_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("crashlytics", core::__eeObj, &__crashlyticsObj);
+bool register_crashlytics_bridge_manual(se::Object* globalObj) {
+    core::getOrCreatePlainObject_r("crashlytics", core::__eeObj,
+                                   &__crashlyticsObj);
 
     auto cls = se::Class::create("Crashlytics", __crashlyticsObj, nullptr,
                                  _SE(jsb_Crashlytics_constructor));
     cls->defineFinalizeFunction(_SE(jsb_Crashlytics_finalize));
-    
+
     cls->defineFunction("causeCrash", _SE(jsb_Crashlytics_causeCrash));
     cls->defineFunction("causeException", _SE(jsb_Crashlytics_causeException));
     cls->defineFunction("setLogLevel", _SE(jsb_Crashlytics_setLogLevel));
@@ -98,22 +99,25 @@ bool register_crashlytics_manual(se::Object* globalObj) {
     cls->defineFunction("setString", _SE(jsb_Crashlytics_setString));
     cls->defineFunction("setBool", _SE(jsb_Crashlytics_setBool));
     cls->defineFunction("setInt32", _SE(jsb_Crashlytics_setInt32));
-    cls->defineFunction("setUserIdentifier", _SE(jsb_Crashlytics_setUserIdentifier));
+    cls->defineFunction("setUserIdentifier",
+                        _SE(jsb_Crashlytics_setUserIdentifier));
     cls->defineFunction("setUserName", _SE(jsb_Crashlytics_setUserName));
     cls->defineFunction("setUserEmail", _SE(jsb_Crashlytics_setUserEmail));
-    cls->defineFunction("trackLevelStart", _SE(jsb_Crashlytics_trackLevelStart));
+    cls->defineFunction("trackLevelStart",
+                        _SE(jsb_Crashlytics_trackLevelStart));
     cls->defineFunction("trackLevelEnd", _SE(jsb_Crashlytics_trackLevelEnd));
     cls->defineFunction("trackPurchase", _SE(jsb_Crashlytics_trackPurchase));
-    cls->defineFunction("trackCustomEvent", _SE(jsb_Crashlytics_trackCustomEvent));
+    cls->defineFunction("trackCustomEvent",
+                        _SE(jsb_Crashlytics_trackCustomEvent));
     cls->defineFunction("trackInvite", _SE(jsb_Crashlytics_trackInvite));
-    
+
     cls->install();
-    
+
     JSBClassType::registerClass<ee::Crashlytics>(cls);
-    
+
     __jsb_Crashlytics_proto = cls->getProto();
     __jsb_Crashlytics_class = cls;
-    
+
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

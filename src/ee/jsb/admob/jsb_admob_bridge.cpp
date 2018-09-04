@@ -67,7 +67,7 @@ SE_BIND_FUNC(jsb_AdMob_createNativeAd)
 SE_BIND_FUNC(jsb_AdMob_createInterstitialAd)
 SE_BIND_FUNC(jsb_AdMob_createRewardedVideo)
 
-bool register_admob_manual(se::Object* globalObj) {
+bool register_admob_bridge_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("admob", core::__eeObj, &__admobObj);
     core::getOrCreatePlainObject_r("BannerAdSize", __admobObj,
                                    &__bannerAdSizeObj);

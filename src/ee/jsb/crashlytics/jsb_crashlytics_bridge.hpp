@@ -17,8 +17,8 @@ class Object;
 namespace ee {
 namespace crashlytics {
 
-bool register_crashlytics_manual(se::Object* object);
-
+bool register_crashlytics_bridge_manual(se::Object* object);
+    
 } // namespace crashlytics
 } // namespace ee
 

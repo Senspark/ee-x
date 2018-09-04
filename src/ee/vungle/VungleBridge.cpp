@@ -1,9 +1,9 @@
-#include "ee/vungle/VungleBridge.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/vungle/VungleBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -17,6 +17,7 @@ namespace {
 constexpr auto k__initialize        = "Vungle_initialize";
 constexpr auto k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "Vungle_showRewardedVideo";
+constexpr auto k__loadVideoAd       = "Vungle_loadVideoAd";
 constexpr auto k__onStart           = "Vungle_onStart";
 constexpr auto k__onEnd             = "Vungle_onEnd";
 constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
@@ -59,15 +60,17 @@ Self::~Vungle() {
     bridge_.deregisterHandler(k__onUnavailable);
 }
 
-void Self::initialize(const std::string& gameId,
-                      const std::string& placementId) {
-    logger_.debug("%s: gameId = %s placementId = %s", __PRETTY_FUNCTION__,
-                  gameId.c_str(), placementId.c_str());
+void Self::initialize(const std::string& gameId) {
+    logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
 
     nlohmann::json json;
     json["gameId"] = gameId;
-    json["placementId"] = placementId;
     bridge_.call(k__initialize, json.dump());
+}
+
+void Self::initialize(const std::string& gameId,
+                      const std::string& placementId) {
+    initialize(gameId);
 }
 
 std::shared_ptr<IRewardedVideo>
@@ -90,6 +93,12 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
     }
     rewardedVideos_.erase(placementId);
     return true;
+}
+
+void Self::loadVideoAd(const std::string &placementId) const {
+    logger_.debug("%s: load placementId = %s", __PRETTY_FUNCTION__,
+                  placementId.c_str());
+    bridge_.call(k__loadVideoAd, placementId);
 }
 
 bool Self::hasRewardedVideo(const std::string& placementId) const {

@@ -45,7 +45,7 @@ const static auto jsb_NativeAdLayout_setHeadline =
                                 std::string>;
 const static auto jsb_NativeAdLayout_setIcon =
     &ee::core::jsb_accessor_set<ee::AdMobNativeAdLayout,
-                                &ee::AdMobNativeAdLayout::setHeadline,
+                                &ee::AdMobNativeAdLayout::setIcon,
                                 std::string>;
 const static auto jsb_NativeAdLayout_setImage = &ee::core::jsb_accessor_set<
     ee::AdMobNativeAdLayout, &ee::AdMobNativeAdLayout::setImage, std::string>;

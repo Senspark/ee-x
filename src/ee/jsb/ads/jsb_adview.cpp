@@ -26,6 +26,12 @@ static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
 
 namespace core {
 template <>
+std::shared_ptr<ee::IAdView> get_value(const se::Value& value) {
+    auto data = (ee::IAdView*)value.toObject()->getPrivateData();
+    return std::shared_ptr<ee::IAdView>(data);
+}
+
+template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
     se::Object* obj = nullptr;
     if (ads::__jsb_s_adviews.count(input) != 0) {
@@ -78,8 +84,8 @@ const static auto jsb_AdView_setPosition =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPosition,
                                             float, float>;
 const static auto jsb_AdView_setPositionInPoints =
-    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPositionInPoints,
-                                            float, float>;
+    &ee::core::jsb_method_call_on_ui_thread<
+        IAdView, &IAdView::setPositionInPoints, float, float>;
 const static auto jsb_AdView_getSize = &ee::core::jsb_accessor_get_on_ui_thread<
     IAdView, &IAdView::getSize, std::pair<std::int32_t, std::int32_t>>;
 const static auto jsb_AdView_setSize =
@@ -116,7 +122,8 @@ bool register_adview_manual(se::Object* globalObj) {
     cls->defineFunction("setAnchor", _SE(jsb_AdView_setAnchor));
     cls->defineFunction("getPosition", _SE(jsb_AdView_getPosition));
     cls->defineFunction("setPosition", _SE(jsb_AdView_setPosition));
-    cls->defineFunction("setPositionInPoints", _SE(jsb_AdView_setPositionInPoints));
+    cls->defineFunction("setPositionInPoints",
+                        _SE(jsb_AdView_setPositionInPoints));
     cls->defineFunction("getSize", _SE(jsb_AdView_getSize));
     cls->defineFunction("setSize", _SE(jsb_AdView_setSize));
     cls->defineFunction("setVisible", _SE(jsb_AdView_setVisible));

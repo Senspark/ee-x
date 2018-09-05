@@ -77,7 +77,7 @@ Pod::Spec.new do |spec|
       'src/ee/CampaignReceiverFwd.hpp',
       'src/ee/campaignreceiver/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'   
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'facebook' do |s|
@@ -94,7 +94,7 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKLoginKit'
-    s.dependency 'FBSDKShareKit'    
+    s.dependency 'FBSDKShareKit'
   end
 
   spec.subspec 'notification' do |s|
@@ -392,7 +392,7 @@ Pod::Spec.new do |spec|
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*'
       
-    s.public_header_files = 
+    s.public_header_files =
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*.{h,hpp}'

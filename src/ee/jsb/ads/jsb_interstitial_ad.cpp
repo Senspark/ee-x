@@ -26,6 +26,12 @@ static std::vector<std::shared_ptr<ee::IInterstitialAd>>
 
 namespace core {
 template <>
+std::shared_ptr<ee::IInterstitialAd> get_value(const se::Value& value) {
+    auto data = (ee::IInterstitialAd*)value.toObject()->getPrivateData();
+    return std::shared_ptr<ee::IInterstitialAd>(data);
+}
+
+template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
     se::Object* obj = nullptr;
     if (ads::__jsb_s_interstitialAds.count(input) != 0) {
@@ -35,19 +41,21 @@ void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
         obj =
             se::Object::createObjectWithClass(ads::__jsb_InterstitialAd_class);
         obj->setPrivateData(input.get());
-//        obj->root();
+        //        obj->root();
     }
     value.setObject(obj);
 }
 
 template <>
 bool jsb_finalize<IInterstitialAd>(se::State& s) {
-    auto* interstitialAdPtr = static_cast<IInterstitialAd*>(s.nativeThisObject());
-    auto iter = std::find_if(ads::__jsb_s_interstitialAdArchive.cbegin(),
-                             ads::__jsb_s_interstitialAdArchive.cend(),
-                             [=](const std::shared_ptr<IInterstitialAd>& ptr) -> bool {
-                                 return interstitialAdPtr == ptr.get();
-                             });
+    auto* interstitialAdPtr =
+        static_cast<IInterstitialAd*>(s.nativeThisObject());
+    auto iter =
+        std::find_if(ads::__jsb_s_interstitialAdArchive.cbegin(),
+                     ads::__jsb_s_interstitialAdArchive.cend(),
+                     [=](const std::shared_ptr<IInterstitialAd>& ptr) -> bool {
+                         return interstitialAdPtr == ptr.get();
+                     });
     if (iter != ads::__jsb_s_interstitialAdArchive.cend()) {
         ads::__jsb_s_interstitialAdArchive.erase(iter);
     } else {

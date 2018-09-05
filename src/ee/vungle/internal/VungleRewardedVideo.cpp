@@ -37,7 +37,7 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    // No op.
+    return plugin_->loadVideoAd(placementId_);
 }
 
 bool Self::show() {

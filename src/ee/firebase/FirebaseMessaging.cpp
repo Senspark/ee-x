@@ -69,6 +69,11 @@ Message& Message::operator=(const Message& other) {
 Message::Message(const ::firebase::messaging::Message& other) {
     from = other.from;
     data = other.data;
+    to = other.to;
+    rawData = other.raw_data;
+    messageType = other.message_type;
+    error = other.error;
+    errorDescription = other.error_description;
     messageId = other.message_id;
     if (other.notification != nullptr) {
         notification = std::make_unique<Notification>(*other.notification);
@@ -80,6 +85,11 @@ Message::Message(const ::firebase::messaging::Message& other) {
 void Message::copy(const Message& other) {
     from = other.from;
     data = other.data;
+    to = other.to;
+    rawData = other.rawData;
+    messageType = other.messageType;
+    error = other.error;
+    errorDescription = other.errorDescription;
     messageId = other.messageId;
     notification.reset();
     if (other.notification) {

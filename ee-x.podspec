@@ -448,7 +448,8 @@ Pod::Spec.new do |spec|
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
-        '${PODS_ROOT}/../../cocos2d/cocos'
+        '${PODS_ROOT}/../../cocos2d/cocos',
+        "${PODS_ROOT}/Headers/Public/#{spec.name}/Soomla/**"
         ].join(' ')
     }
     

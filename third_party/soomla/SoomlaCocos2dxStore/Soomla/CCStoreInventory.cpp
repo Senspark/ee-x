@@ -338,7 +338,11 @@ void CCStoreInventory::refreshOnGoodBalanceChanged(CCVirtualGood* good,
 }
 
 void CCStoreInventory::updateLocalBalance(const char* itemId, int balance) {
-    mLocalItemBalances.emplace(itemId, balance);
+    if (mLocalItemBalances.count(itemId)) {
+        mLocalItemBalances[itemId] = balance;
+    } else {
+        mLocalItemBalances.emplace(itemId, balance);
+    }
 }
 
 CCStoreInventory::CCLocalUpgrade* CCStoreInventory::CCLocalUpgrade::create() {

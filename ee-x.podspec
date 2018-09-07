@@ -458,6 +458,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/keeva'
     s.dependency 'ee-x/jansson'
     s.dependency 'ee-x/soomla-ios-core'
+    s.dependency 'ee-x/nlohmann-json'
   end
 
   spec.subspec 'soomla-ios-store' do |s| 

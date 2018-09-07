@@ -303,7 +303,7 @@ bool CCStoreEventDispatcher::init() {
 
                 CCPurchasableVirtualItem* pvi =
                     CCStoreInfo::sharedStoreInfo()
-                        ->getPurchasableItemWithProductId(productId.c_str(),
+                        ->getPurchasableItemWithProductId(productId,
                                                           &error);
                 if (error) {
                     CCSoomlaUtils::logException(

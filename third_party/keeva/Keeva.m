@@ -22,9 +22,9 @@
 
 @interface Keeva()
 
-@property(nonatomic) KeevaDatabase *kvDatabase;
-@property(nonatomic) NSString *storageName;
-@property(nonatomic) NSString *key;
+@property(nonatomic,retain) KeevaDatabase *kvDatabase;
+@property(nonatomic,retain) NSString *storageName;
+@property(nonatomic,retain) NSString *key;
 
 @end
 

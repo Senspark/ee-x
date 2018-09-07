@@ -46,9 +46,9 @@ bool CCMarketItem::initWithValueMap(const cocos2d::ValueMap& dict) {
     char const* key = CCStoreConsts::JSON_MARKET_ITEM_PRODUCT_ID;
 #endif
     CCAssert(dict.count(key), "invalid object type in dictionary");
-    setProductId(dict.at(key).asString());
-
-    if (mProductId.length() == 0) {
+    if (dict.count(key)) {
+        setProductId(dict.at(key).asString());
+    } else {
         fillProductIdFromValueMap(dict);
     }
 

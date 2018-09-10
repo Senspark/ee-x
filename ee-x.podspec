@@ -42,6 +42,9 @@ Pod::Spec.new do |spec|
       'src/ee/Core.hpp',
       'src/ee/CoreFwd.hpp',
       'src/ee/core/*.{h,hpp}'
+    
+    s.exclude_files =
+      'src/ee/core/CMakeLists.txt'
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
@@ -60,6 +63,9 @@ Pod::Spec.new do |spec|
       'src/ee/Crashlytics.hpp',
       'src/ee/CrashlyticsFwd.hpp',
       'src/ee/crashlytics/CrashlyticsBridge.hpp'
+
+    s.exclude_files =
+      'src/ee/crashlytics/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
     s.dependency 'Crashlytics'
@@ -125,7 +131,10 @@ Pod::Spec.new do |spec|
       'src/ee/GoogleAnalytics.hpp',
       'src/ee/GoogleAnalyticsFwd.hpp',
       'src/ee/google/*.{h,hpp}'
-
+    
+    s.exclude_files =
+      'src/ee/google/CMakeLists.txt'
+    
     s.dependency 'ee-x/core'
     s.ios.dependency 'GoogleAnalytics'
   end
@@ -149,6 +158,9 @@ Pod::Spec.new do |spec|
       'src/ee/Firebase.hpp',
       'src/ee/FirebaseFwd.hpp',
       'src/ee/firebase/FirebaseApp.hpp'
+
+    s.exclude_files =
+      'src/ee/firebase/CMakeLists.txt'
 
     s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
@@ -207,6 +219,9 @@ Pod::Spec.new do |spec|
       'src/ee/AdsFwd.hpp',
       'src/ee/ads/*'
 
+    s.exclude_files =
+      'src/ee/ads/CMakeLists.txt'
+
     s.dependency 'ee-x/core'
   end
 
@@ -230,6 +245,9 @@ Pod::Spec.new do |spec|
       'src/ee/AdMob.hpp',
       'src/ee/AdMobFwd.hpp',
       'src/ee/admob/*.{h,hpp}'
+    
+    s.exclude_files =
+      'src/ee/admob/CMakeLists.txt'
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
@@ -247,6 +265,9 @@ Pod::Spec.new do |spec|
       'src/ee/AppLovin.hpp',
       'src/ee/AppLovinFwd.hpp',
       'src/ee/applovin/*.{h,hpp}'
+    
+    s.exclude_files =
+      'src/ee/applovin/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
@@ -274,6 +295,9 @@ Pod::Spec.new do |spec|
       'src/ee/FacebookAdsFwd.hpp',
       'src/ee/facebookads/*.{h,hpp}'
 
+    s.exclude_files =
+      'src/ee/facebookads/CMakeLists.txt'
+      
     s.dependency 'ee-x/ads'
   end
 
@@ -295,8 +319,8 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/IronSource.hpp',
       'src/ee/IronSourceFwd.hpp',
-      'src/ee/ironsource/*',
-      'src/ee/ironsource/internal/*'
+      'src/ee/ironsource/*.{h,m,hpp,cpp}',
+      'src/ee/ironsource/internal/*.{hpp,cpp}'
 
     s.public_header_files =
       'src/ee/IronSource.hpp',
@@ -322,8 +346,8 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/UnityAds.hpp',
       'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/*',
-      'src/ee/unityads/internal/*'
+      'src/ee/unityads/*.{h,hpp,m,cpp}',
+      'src/ee/unityads/internal/*.{hpp,cpp}'
 
     s.public_header_files =
       'src/ee/UnityAds.hpp',
@@ -350,8 +374,8 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Vungle.hpp',
       'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/*',
-      'src/ee/vungle/internal/*'
+      'src/ee/vungle/*.{h,m,hpp,cpp}',
+      'src/ee/vungle/internal/*.{hpp,cpp}'
 
     s.public_header_files =
       'src/ee/Vungle.hpp',

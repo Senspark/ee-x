@@ -7,6 +7,8 @@
 //
 
 #include "ee/ads/IAdView.hpp"
+#include <ee/Core.hpp>
+#include "cocos2d.h"
 
 namespace ee {
 namespace ads {
@@ -25,5 +27,12 @@ void Self::setLoadResult(bool result) {
         callback_(result);
     }
 }
+
+void Self::setPositionInPoints(float x, float y) {
+    int&& xInPixels = (int)ee::Metrics::fromPoint(x).toPixel();
+    int&& yInPixels = (int)ee::Metrics::fromPoint(y).toPixel();
+    setPosition(xInPixels, yInPixels);
+}
+
 } // namespace ads
 } // namespace ee

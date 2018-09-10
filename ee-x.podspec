@@ -44,7 +44,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/*.{h,hpp}'
 
     s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
     }
 
     s.dependency 'ee-x/nlohmann-json'
@@ -77,7 +77,7 @@ Pod::Spec.new do |spec|
       'src/ee/CampaignReceiverFwd.hpp',
       'src/ee/campaignreceiver/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'   
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'facebook' do |s|
@@ -94,7 +94,7 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKLoginKit'
-    s.dependency 'FBSDKShareKit'    
+    s.dependency 'FBSDKShareKit'
   end
 
   spec.subspec 'notification' do |s|
@@ -278,10 +278,10 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'facebook-ads' do |s|
-    s.dependency 'ee-x/facebook-ads-base'
+   s.dependency 'ee-x/facebook-ads-base'
     s.dependency 'FBAudienceNetwork', '4.28.1'
     s.dependency 'GoogleMobileAdsMediationFacebook'
-  end
+ end
 
   spec.subspec 'facebook-ads-mediation' do |s|
     s.public_header_files = 'third_party/facebook-ads-mediation/FBAudienceNetwork/*'
@@ -393,7 +393,7 @@ Pod::Spec.new do |spec|
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*'
       
-    s.public_header_files = 
+    s.public_header_files =
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*.{h,hpp}'
@@ -414,6 +414,26 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
+  end
+  
+  spec.subspec 'jsb-core' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_core.hpp',
+      'src/ee/jsb/core/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_core.hpp',
+      'src/ee/jsb/core/*.{h,hpp}'
+
+    s.xcconfig = {
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../../cocos2d-x ',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos ',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ',
+        '${PODS_ROOT}/../../../cocos2d-x/external/sources',
+        ].join(' ')
+    }
+    
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'jansson' do |s| 
@@ -436,6 +456,60 @@ Pod::Spec.new do |spec|
     s.source_files  = 
       'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
 
+  spec.subspec 'jsb-ads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_ads.hpp',
+      'src/ee/jsb/ads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_ads.hpp',
+      'src/ee/jsb/ads/*.{h,hpp}'
+
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/ads'
+  end
+
+  spec.subspec 'jsb-admob' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_admob.hpp',
+      'src/ee/jsb/admob/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_admob.hpp',
+      'src/ee/jsb/admob/*.{h,hpp}'
+
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/admob'
+  end
+
+  spec.subspec 'jsb-crashlytics' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_crashlytics.hpp',
+      'src/ee/jsb/crashlytics/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_crashlytics.hpp',
+      'src/ee/jsb/crashlytics/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/crashlytics'
+  end
+
+  spec.subspec 'jsb-google-analytics' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_google_analytics.hpp',
+      'src/ee/jsb/google/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_google_analytics.hpp',
+      'src/ee/jsb/google/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/google-analytics'
+  end
+
+  spec.subspec 'jsb-facebookads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/facebookads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_facebookads.hpp',
     s.dependency 'ee-x/keeva'
   end
 
@@ -490,5 +564,80 @@ Pod::Spec.new do |spec|
     }
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
+      'src/ee/jsb/facebookads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/facebookads'
+  end
+
+  spec.subspec 'jsb-facebook-ads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_facebook_ads.hpp',
+      'src/ee/jsb/facebookads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_facebook_ads.hpp',
+      'src/ee/jsb/facebookads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/facebook-ads'
+  end
+
+  spec.subspec 'jsb-firebase-analytics' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/firebase/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/firebase/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/firebase-analytics'
+  end
+  
+  spec.subspec 'jsb-notification' do |s|
+    s.platform = :ios
+    s.source_files =
+      'src/ee/jsb/jsb_notification.hpp',
+      'src/ee/jsb/notification/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_notification.hpp',
+      'src/ee/jsb/notification/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/notification'
+  end
+  
+  spec.subspec 'jsb-unity-ads' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_unity_ads.hpp',
+      'src/ee/jsb/unityads/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_unity_ads.hpp',
+      'src/ee/jsb/unityads/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/unity-ads'
+  end
+  spec.subspec 'jsb-ironsource' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_ironsource.hpp',
+      'src/ee/jsb/ironsource/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_ironsource.hpp',
+      'src/ee/jsb/ironsource/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/ironsource'
+  end
+  spec.subspec 'jsb-vungle' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_vungle.hpp',
+      'src/ee/jsb/vungle/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_vungle.hpp',
+      'src/ee/jsb/vungle/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-ads'
+    s.dependency 'ee-x/vungle'
   end
 end

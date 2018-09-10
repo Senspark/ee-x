@@ -40,6 +40,8 @@ public:
     /// @param[in] x The horizontal position in pixels.
     /// @param[in] y The vertical position in pixels.
     virtual void setPosition(int x, int y) = 0;
+    
+    virtual void setPositionInPoints(float x, float y);
 
     /// Gets this ad view's size in pixels.
     /// @return A pair of width and height in pixels.

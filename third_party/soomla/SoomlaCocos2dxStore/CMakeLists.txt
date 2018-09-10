@@ -14,7 +14,7 @@ include_directories(
     Soomla/rewards
 )
 
-set(LIB_SRC
+set(EE_X_SOOMLA_STORE_SRC
     Soomla/NativeImpl/CCNativeStoreInfo.cpp
     Soomla/NativeImpl/CCNativeVirtualCurrencyStorage.cpp
     Soomla/NativeImpl/CCNativeStoreBridge.cpp
@@ -50,7 +50,7 @@ set(LIB_SRC
     Soomla/domain/CCVirtualItem.cpp
 )
 
-set(LIB_HEADERS
+set(EE_X_SOOMLA_STORE_HEADERS
     Soomla/NativeImpl/CCNativeVirtualGoodsStorage.h
     Soomla/NativeImpl/CCNativeStoreInfo.h
     Soomla/NativeImpl/CCNativeStoreBridge.h
@@ -88,7 +88,7 @@ set(LIB_HEADERS
     Soomla/domain/CCVirtualCategory.h
 )
 
-add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${EE_X_SOOMLA_STORE_SRC} ${EE_X_SOOMLA_STORE_HEADERS})
 
 add_subdirectory(../SoomlaCocos2dxCore "${CMAKE_BINARY_DIR}/lib/soomla_cocos2dx_core")
 

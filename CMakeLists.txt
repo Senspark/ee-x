@@ -90,6 +90,8 @@ set(LIB_HEADERS
     ${EE_X_VUNGLE_HEADERS}
 )
 
+add_subdirectory(third_party/soomla/SoomlaCocos2dxStore)
+
 add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -100,6 +102,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 target_link_libraries(${PROJECT_NAME}
+    soomla_cocos2dx_store
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libdynamic_links.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libapp.a
     ${CMAKE_CURRENT_LIST_DIR}/third_party/firebase_cpp_sdk/libs/android/${ANDROID_ABI}/libanalytics.a

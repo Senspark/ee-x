@@ -30,7 +30,7 @@
 /**
  Retrieves the balance of the given virtual item.
  
- @param item The virtual item whose balance is being fetched.
+ @param itemId The virtual item whose balance is being fetched.
  @return The balance of the given virtual item.
  */
 - (int)balanceForItem:(NSString*)itemId;
@@ -39,7 +39,7 @@
  Adds the given amount of the given item to the storage.
  
  @param amount The amount of items to add.
- @param item The virtual item to add the given amount to.
+ @param itemId The virtual item to add the given amount to.
  @return The balance of the given virtual item.
  */
 - (int)addAmount:(int)amount toItem:(NSString*)itemId;
@@ -49,7 +49,7 @@
  Removes the given amount of the given item from the storage.
  
  @param amount The amount of items to remove.
- @param item The virtual item to remove the given amount from.
+ @param itemId The virtual item to remove the given amount from.
  @return The balance of the given virtual item.
  */
 - (int)removeAmount:(int)amount fromItem:(NSString*)itemId;

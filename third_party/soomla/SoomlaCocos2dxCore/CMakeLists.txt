@@ -10,7 +10,7 @@ include_directories(
     Soomla/NativeImpl
 )
 
-set(LIB_SRC
+set(EE_X_SOOMLA_CORE_SRC
     Soomla/NativeImpl/CCNativeCoreBridge.cpp
     Soomla/NativeImpl/CCNativeKeyValueStorage.cpp
     Soomla/NativeImpl/CCNativeRewardStorage.cpp
@@ -39,7 +39,7 @@ set(LIB_SRC
     Soomla/CCNdkBridge.cpp
 )
 
-set(LIB_HEADERS
+set(EE_X_SOOMLA_CORE_HEADERS
     Soomla/NativeImpl/CCNativeCoreBridge.h
     Soomla/NativeImpl/CCNativeKeyValueStorage.h
     Soomla/NativeImpl/CCNativeRewardStorage.h
@@ -71,7 +71,7 @@ set(LIB_HEADERS
     Soomla/CCSchedule.h
 )
 
-add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
+add_library(${PROJECT_NAME} STATIC ${EE_X_SOOMLA_CORE_SRC} ${EE_X_SOOMLA_CORE_HEADERS})
 
 add_subdirectory(../../jansson "${CMAKE_BINARY_DIR}/lib/jansson")
 

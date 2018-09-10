@@ -69,8 +69,8 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
     {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         {
-            auto&& androidPublicKey = storeParams.at("androidPublicKey").asString();
-            if (androidPublicKey.length() > 0) {
+            if (storeParams.count("androidPublicKey")) {
+                auto&& androidPublicKey = storeParams.at("androidPublicKey").asString();
                 ValueMap params;
                 params["method"] = "CCSoomlaStore::setAndroidPublicKey";
                 params["androidPublicKey"] = androidPublicKey;
@@ -79,13 +79,16 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
         }
 
         {
-            auto&& clientId = storeParams.at("clientId").asString();
-            auto&& clientSecret = storeParams.at("clientSecret").asString();
-            auto&& refreshToken = storeParams.at("refreshToken").asString();
-            auto verifyOnServerFailure = storeParams.at("verifyOnServerFailure").asBool();
-
-            if (clientId.length() > 0 && clientSecret.length() > 0 &&
-                refreshToken.length() > 0) {
+            if (storeParams.count("clientId") &&
+                storeParams.count("clientSecret") &&
+                storeParams.count("refreshToken") &&
+                storeParams.count("verifyOnServerFailure")) {
+                
+                auto&& clientId = storeParams.at("clientId").asString();
+                auto&& clientSecret = storeParams.at("clientSecret").asString();
+                auto&& refreshToken = storeParams.at("refreshToken").asString();
+                auto verifyOnServerFailure = storeParams.at("verifyOnServerFailure").asBool();
+                
                 ValueMap params;
                 params["method"] = "CCSoomlaStore::configVerifyPurchases";
                 params["clientId"] = clientId;

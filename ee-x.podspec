@@ -416,6 +416,22 @@ Pod::Spec.new do |spec|
     s.dependency 'AppsFlyerFramework'
   end
   
+  spec.subspec 'cocos' do |s|
+    s.source_files = 
+      'src/ee/cocos/*.{hpp,cpp}'
+    s.public_header_files = 
+      'src/ee/cocos/*.hpp'
+    s.xcconfig =  {
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../cocos2d ',
+        '${PODS_ROOT}/../../cocos2d/cocos ',
+        '${PODS_ROOT}/../../cocos2d/cocos/editor-support ',
+        '${PODS_ROOT}/../../cocos2d/external ',
+        '${PODS_ROOT}/../../cocos2d/extensions'
+      ].join(' ')
+    }
+  end
+
   spec.subspec 'jsb-core' do |s|
     s.source_files =
       'src/ee/jsb/jsb_core.hpp',
@@ -429,7 +445,7 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../../cocos2d-x ',
         '${PODS_ROOT}/../../../cocos2d-x/cocos ',
         '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ',
-        '${PODS_ROOT}/../../../cocos2d-x/external/sources',
+        '${PODS_ROOT}/../../../cocos2d-x/external/sources'
         ].join(' ')
     }
     
@@ -441,20 +457,6 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'third_party/jansson/*.h'
     s.source_files = 'third_party/jansson/*.{h,c}'
   end
-
-  spec.subspec 'keeva' do |s|
-    s.header_mappings_dir = 'third_party/keeva'
-    s.public_header_files = 'third_party/keeva/*.h'
-    s.source_files = 'third_party/keeva/*.{h,m}'
-  end
-
-  spec.subspec 'soomla-ios-core' do |s|
-    s.header_mappings_dir = 
-      'third_party/soomla/SoomlaiOSCore'
-    s.public_header_files = 
-      'third_party/soomla/SoomlaiOSCore/**/*.h'
-    s.source_files  = 
-      'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
 
   spec.subspec 'jsb-ads' do |s|
     s.source_files =
@@ -509,7 +511,24 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/jsb_facebookads.hpp',
       'src/ee/jsb/facebookads/*'
     s.public_header_files =
-      'src/ee/jsb/jsb_facebookads.hpp',
+      'src/ee/jsb/jsb_facebookads.hpp'
+    s.dependency 'ee-x/keeva'
+  end
+
+  spec.subspec 'keeva' do |s|
+    s.header_mappings_dir = 'third_party/keeva'
+    s.public_header_files = 'third_party/keeva/*.h'
+    s.source_files = 'third_party/keeva/*.{h,m}'
+  end
+
+  spec.subspec 'soomla-ios-core' do |s|
+    s.header_mappings_dir = 
+      'third_party/soomla/SoomlaiOSCore'
+    s.public_header_files = 
+      'third_party/soomla/SoomlaiOSCore/**/*.h'
+    s.source_files  = 
+      'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
+
     s.dependency 'ee-x/keeva'
   end
 
@@ -565,9 +584,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
       'src/ee/jsb/facebookads/*.{h,hpp}'
-    
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/facebookads'
   end
 
   spec.subspec 'jsb-facebook-ads' do |s|
@@ -618,6 +634,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/unity-ads'
   end
+
   spec.subspec 'jsb-ironsource' do |s|
     s.source_files =
       'src/ee/jsb/jsb_ironsource.hpp',
@@ -629,6 +646,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/ironsource'
   end
+
   spec.subspec 'jsb-vungle' do |s|
     s.source_files =
       'src/ee/jsb/jsb_vungle.hpp',
@@ -640,4 +658,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/vungle'
   end
+
 end
+

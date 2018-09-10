@@ -93,12 +93,14 @@ public:
                                   const std::string& description,
                                   const std::string& itemId,
                                   CCPurchaseType* purchaseType);
-
-    bool init(std::int32_t equippingModel, const std::string& name,
+    
+    using CCLifetimeVG::init;
+    
+    virtual bool init(std::int32_t equippingModel, const std::string& name,
               const std::string& description, const std::string& itemId,
               CCPurchaseType* purchaseType);
 
-    bool initWithValueMap(const cocos2d::ValueMap& map) override;
+    virtual bool initWithValueMap(const cocos2d::ValueMap& map) override;
     /**
      Creates a `CCEquippableVG` from a dictionary.
      @param dict A dictionary containing keys to each of the parameters
@@ -111,7 +113,7 @@ public:
     Converts this `CCEquippableVG` to a `CCDictionary`.
     @return `CCDictionary` representation of this `CCEquippableVG`.
     */
-    cocos2d::ValueMap toValueMap() override;
+    virtual cocos2d::ValueMap toValueMap() override;
     
     virtual ~CCEquippableVG() = default;
 

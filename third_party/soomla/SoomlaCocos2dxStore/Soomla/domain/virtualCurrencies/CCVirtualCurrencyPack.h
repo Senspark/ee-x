@@ -60,7 +60,9 @@ public:
     create(const std::string& name, const std::string& description,
            const std::string& itemId, std::int32_t currencyAmount,
            const std::string& currencyItemId, CCPurchaseType* purchaseType);
-
+    
+    using CCPurchasableVirtualItem::init;
+    
     bool init(const std::string& name, const std::string& description,
               const std::string& itemId, std::int32_t currencyAmount,
               const std::string& currencyItemId, CCPurchaseType* purchaseType);

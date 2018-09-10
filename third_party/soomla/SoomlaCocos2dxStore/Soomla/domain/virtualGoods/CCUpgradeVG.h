@@ -86,6 +86,8 @@ public:
     */
     SL_CREATE_WITH_VALUE_MAP(CCUpgradeVG);
 
+    using CCLifetimeVG::init;
+
     bool init(const std::string& goodItemId, const std::string& prevItemId,
               const std::string& nextItemId, const std::string& name,
               const std::string& description, const std::string& itemId,

@@ -32,6 +32,8 @@ public:
      @return The Virtual Item Reward.
      */
     SL_CREATE_WITH_VALUE_MAP(CCVirtualItemReward);
+    
+    using CCReward::init;
 
     virtual bool init(const std::string& rewardId, const std::string& name,
                       const std::string& associatedItemId, std::int32_t amount);

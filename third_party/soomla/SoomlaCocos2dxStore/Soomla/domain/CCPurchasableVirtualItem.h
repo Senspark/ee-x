@@ -34,6 +34,8 @@ public:
         : CCVirtualItem()
         , mPurchaseType(nullptr) {}
 
+    using CCVirtualItem::init;
+
     virtual bool init(const std::string& name, const std::string& description,
                       const std::string& itemId, CCPurchaseType* purchaseType);
     virtual bool initWithValueMap(const cocos2d::ValueMap& map) override;

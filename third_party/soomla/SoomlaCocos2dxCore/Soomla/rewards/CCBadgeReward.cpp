@@ -31,7 +31,7 @@ soomla::CCBadgeReward::create(const std::string& id, const std::string& name,
 
 bool soomla::CCBadgeReward::init(const std::string& id, const std::string& name,
                                  const std::string& iconUrl) {
-    bool result = CCReward::init(id, name);
+    bool result = CCReward::init(id, name, nullptr);
 
     if (result) {
         setIconUrl(iconUrl);

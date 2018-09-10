@@ -51,6 +51,8 @@ public:
     */
     static CCPurchaseWithVirtualItem* create(const std::string& itemId,
                                              std::int32_t amount);
+    
+    using CCPurchaseType::init;
 
     virtual bool init(const std::string& itemId, std::int32_t amount);
 

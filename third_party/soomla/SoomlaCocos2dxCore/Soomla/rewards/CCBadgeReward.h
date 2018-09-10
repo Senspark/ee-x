@@ -33,6 +33,8 @@ public:
 
     SL_CREATE_WITH_VALUE_MAP(CCBadgeReward);
 
+    using CCReward::init;
+
     virtual bool init(const std::string& id, const std::string& name,
                       const std::string& iconUrl = "") override;
 

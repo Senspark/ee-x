@@ -23,7 +23,7 @@ bool soomla::CCVirtualItemReward::init(const std::string& rewardId,
                                        const std::string& name,
                                        const std::string& associatedItemId,
                                        std::int32_t amount) {
-    bool result = CCReward::init(rewardId, name);
+    bool result = CCReward::init(rewardId, name, nullptr);
     if (result) {
         setAmount(amount);
         setAssociatedItemId(associatedItemId);

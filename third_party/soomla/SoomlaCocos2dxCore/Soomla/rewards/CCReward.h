@@ -31,6 +31,8 @@ public:
         : CCSoomlaEntity()
         , mSchedule(nullptr){};
 
+    using CCSoomlaEntity::init;
+
     virtual bool init(const std::string& id, const std::string& name,
                       CCSchedule* schedule = nullptr);
 

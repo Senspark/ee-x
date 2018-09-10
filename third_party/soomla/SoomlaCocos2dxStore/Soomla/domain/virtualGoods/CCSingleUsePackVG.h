@@ -62,6 +62,8 @@ public:
     @return The Sinlge Use Pack good.
     */
     SL_CREATE_WITH_VALUE_MAP(CCSingleUsePackVG);
+    
+    using CCVirtualGood::init;
     /**
     Creates a `CCSingleUsePackVG`.
     @param goodItemId The item id of the Single Use item associated with

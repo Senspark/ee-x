@@ -25,8 +25,9 @@
 namespace soomla {
     class CCAggregateReward : public CCReward {
     public:
-        CCAggregateReward() : CCReward() {
-        };
+        CCAggregateReward() : CCReward() {}
+
+        using CCReward::init;
 
         virtual bool init(const std::string& id, const std::string& name,
                           const cocos2d::Vector<CCDomain*>& rewards,

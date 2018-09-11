@@ -47,6 +47,6 @@
 + (BOOL)isTablet;
 + (BOOL)testConnection:(NSString* _Nonnull)hostName;
 
-+ (NSString* _Nonnull)getDeviceId;
+//+ (NSString* _Nonnull)getDeviceId;
 
 @end

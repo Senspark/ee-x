@@ -65,6 +65,23 @@ public:
 
     /// Authenticated ID of the sender. This is a project number in most cases.
     std::string from;
+    
+    /// This parameter specifies the recipient of a message.
+    std::string to;
+    
+    /// Binary payload. This field is currently unused.
+    std::string rawData;
+    
+    /// Equivalent with a content-type.
+    /// This field is only used for downstream messages received through
+    std::string messageType;
+    
+    /// Error code.
+    std::string error;
+    
+    /// Human readable details about the error.
+    std::string errorDescription;
+
 
     /// The metadata, including all original key/value pairs. Includes some of
     /// the HTTP headers used when sending the message. `gcm`, `google` and

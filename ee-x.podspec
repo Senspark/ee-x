@@ -538,6 +538,17 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/jsb_facebookads.hpp'
     s.dependency 'ee-x/keeva'
   end
+  
+  spec.subspec 'jsb-soomla-store' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_soomla.hpp',
+      'src/ee/jsb/soomla/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_soomla.hpp',
+      'src/ee/jsb/soomla/*.{h,hpp}'
+
+    s.dependency 'ee-x/soomla-cocos2dx-store'
+  end
 
   spec.subspec 'keeva' do |s|
     s.header_mappings_dir = 'third_party/keeva'

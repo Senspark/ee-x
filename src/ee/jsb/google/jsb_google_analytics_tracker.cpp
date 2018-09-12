@@ -41,19 +41,17 @@ namespace google {
 const auto jsb_AnalyticsTracker_finalize =
     &core::jsb_finalize<AnalyticsTracker>;
 const auto jsb_AnalyticsTracker_setParameter =
-    &core::jsb_method_call_on_ui_thread<AnalyticsTracker,
-                                        &AnalyticsTracker::setParameter,
-                                        const std::string&, const std::string&>;
+    &core::jsb_method_call<AnalyticsTracker, &AnalyticsTracker::setParameter,
+                           const std::string&, const std::string&>;
 const auto jsb_AnalyticsTracker_setAllowIDFACollection =
-    &core::jsb_method_call_on_ui_thread<
-        AnalyticsTracker, &AnalyticsTracker::setAllowIDFACollection, bool>;
+    &core::jsb_method_call<AnalyticsTracker,
+                           &AnalyticsTracker::setAllowIDFACollection, bool>;
 const auto jsb_AnalyticsTracker_setScreenName =
-    &core::jsb_method_call_on_ui_thread<
-        AnalyticsTracker, &AnalyticsTracker::setScreenName, const std::string&>;
+    &core::jsb_method_call<AnalyticsTracker, &AnalyticsTracker::setScreenName,
+                           const std::string&>;
 const auto jsb_AnalyticsTracker_send =
-    &core::jsb_method_call_on_ui_thread<AnalyticsTracker,
-                                        &AnalyticsTracker::send,
-                                        std::map<std::string, std::string>>;
+    &core::jsb_method_call<AnalyticsTracker, &AnalyticsTracker::send,
+                           std::map<std::string, std::string>>;
 
 SE_BIND_FINALIZE_FUNC(jsb_AnalyticsTracker_finalize)
 SE_BIND_FUNC(jsb_AnalyticsTracker_setParameter)

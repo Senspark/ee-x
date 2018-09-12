@@ -40,6 +40,15 @@ inline se::Object* create_JSON_object(const std::pair<int, int>& value) {
     return se::Object::createJSONObject(jsonArray.dump());
 }
 
+template <>
+inline se::Object* create_JSON_object(const std::map<std::string, std::string>& value) {
+    auto&& jsonObj = nlohmann::json();
+    for(auto it = value.begin(); it != value.end(); it++) {
+        jsonObj[it->first] = it->second;
+    }
+    return se::Object::createJSONObject(jsonObj.dump());
+}
+
 template <typename T>
 T from_JSON_object(se::Object* jsonObj);
 
@@ -152,6 +161,13 @@ inline void set_value(se::Value& value, std::pair<float, float> input) {
 template <>
 inline void set_value(se::Value& value, std::pair<int, int> input) {
     auto obj = create_JSON_object<std::pair<int, int>>(input);
+    value.setObject(obj);
+}
+
+template <>
+inline void set_value(se::Value& value,
+                      std::map<std::string, std::string> input) {
+    auto obj = create_JSON_object<std::map<std::string, std::string>>(input);
     value.setObject(obj);
 }
 

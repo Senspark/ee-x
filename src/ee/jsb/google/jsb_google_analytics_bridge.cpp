@@ -31,24 +31,21 @@ const auto jsb_GoogleAnalytics_finalize = &core::jsb_finalize<GoogleAnalytics>;
 const auto jsb_GoogleAnalytics_constructor =
     &core::jsb_constructor<GoogleAnalytics>;
 const auto jsb_GoogleAnalytics_setDispatchInterval =
-    &core::jsb_method_call_on_ui_thread<
-        GoogleAnalytics, &GoogleAnalytics::setDispatchInterval, int>;
+    &core::jsb_method_call<GoogleAnalytics,
+                           &GoogleAnalytics::setDispatchInterval, int>;
 const auto jsb_GoogleAnalytics_setDryRun =
-    &core::jsb_method_call_on_ui_thread<GoogleAnalytics,
-                                        &GoogleAnalytics::setDryRun, bool>;
+    &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::setDryRun, bool>;
 const auto jsb_GoogleAnalytics_setOptOut =
-    &core::jsb_method_call_on_ui_thread<GoogleAnalytics,
-                                        &GoogleAnalytics::setOptOut, bool>;
+    &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::setOptOut, bool>;
 const auto jsb_GoogleAnalytics_setTrackUncaughtException =
-    &core::jsb_method_call_on_ui_thread<
-        GoogleAnalytics, &GoogleAnalytics::setTrackUncaughtException, bool>;
+    &core::jsb_method_call<GoogleAnalytics,
+                           &GoogleAnalytics::setTrackUncaughtException, bool>;
 const auto jsb_GoogleAnalytics_dispatch =
-    &core::jsb_method_call_on_ui_thread<GoogleAnalytics,
-                                        &GoogleAnalytics::dispatch>;
+    &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::dispatch>;
 const auto jsb_GoogleAnalytics_createTracker =
-    &core::jsb_method_get_on_ui_thread<
-        GoogleAnalytics, &GoogleAnalytics::createTracker,
-        std::shared_ptr<AnalyticsTracker>, const std::string&>;
+    &core::jsb_method_get<GoogleAnalytics, &GoogleAnalytics::createTracker,
+                          std::shared_ptr<AnalyticsTracker>,
+                          const std::string&>;
 const auto jsb_GoogleAnalytics_doTests =
     &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::doTests>;
 

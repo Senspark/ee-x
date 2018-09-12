@@ -72,10 +72,15 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
 
 + (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    
+
     [bridge registerHandler:k__getDeviceId
                    callback:^(NSString* message) {
-                       return [self getDeviceId];
+                       NSString* deviceId = [self getDeviceId];
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* callbackTag = dict[@"callback_id"];
+                       [bridge callCpp:callbackTag message:deviceId];
+                       return @"";
                    }];
 
     [bridge registerHandler:k__isMainThread

@@ -86,7 +86,7 @@ bool isTablet();
 bool testConnection();
 
 /// Gets device's unique ID.
-std::string getDeviceId();
+void getDeviceId(const std::function<void(const std::string&)>& callback);
 
 std::string dumpBacktrace(size_t count);
 

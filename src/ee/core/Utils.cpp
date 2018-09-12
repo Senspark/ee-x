@@ -11,14 +11,14 @@
 #include <cassert>
 #include <cstdarg>
 #include <cstdlib>
+#include <dlfcn.h>
+#include <iomanip>
+#include <iostream>
 #include <mutex>
 #include <queue>
 #include <sstream>
 #include <thread>
-#include <iostream>
-#include <iomanip>
 #include <unwind.h>
-#include <dlfcn.h>
 
 #include <ee/nlohmann/json.hpp>
 
@@ -234,9 +234,22 @@ bool testConnection() {
     return toBool(response);
 }
 
-std::string getDeviceId() {
+void getDeviceId(const std::function<void(const std::string&)>& callback) {
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getDeviceId);
+    static int callbackCounter = 0;
+    auto callbackTag = ee::format("getDeviceId_%d", callbackCounter++);
+    bridge.registerHandler(
+        [callback, callbackTag, &bridge](const std::string& msg) {
+            bridge.deregisterHandler(callbackTag);
+            if (callback) {
+                callback(msg);
+            }
+            return "";
+        },
+        callbackTag);
+    nlohmann::json json;
+    json["callback_id"] = callbackTag;
+    bridge.call(k__getDeviceId, json.dump());
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
@@ -259,8 +272,7 @@ size_t captureBacktrace(void** buffer, size_t max) {
     return state.current - buffer;
 }
 
-void dumpBacktrace(std::ostream& os, void** buffer, size_t count)
-{
+void dumpBacktrace(std::ostream& os, void** buffer, size_t count) {
     for (size_t idx = 0; idx < count; ++idx) {
         const void* addr = buffer[idx];
         const char* symbol = "";
@@ -270,7 +282,8 @@ void dumpBacktrace(std::ostream& os, void** buffer, size_t count)
             symbol = info.dli_sname;
         }
 
-        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol << "\n";
+        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol
+           << "\n";
     }
 }
 

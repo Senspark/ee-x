@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -22,7 +23,11 @@ import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.PluginManager;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Locale;
 import java.util.Map;
@@ -184,7 +189,10 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
-                return Utils.getDeviceId(context);
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                String callbackTag = (String)dict.get("callback_id");
+                Utils.getDeviceId(context, callbackTag);
+                return "";
             }
         }, k__getDeviceId);
     }
@@ -352,8 +360,52 @@ public class Utils {
 
     @SuppressLint("HardwareIds")
     @NonNull
-    public static String getDeviceId(@NonNull Context context) {
-        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    private static void getDeviceId(@NonNull Context context, @NonNull final String tag) {
+        (new GetGAIDTask(context, new GetGAIDListener() {
+            @Override
+            public void onGAIDCallback(String s) {
+                MessageBridge.getInstance().callCpp(tag, s);
+            }
+        })).execute();
+    }
+
+    private static class GetGAIDTask extends AsyncTask<String, Integer, String> {
+
+        private Context _context;
+        private GetGAIDListener _listener;
+        public GetGAIDTask(Context context, GetGAIDListener listener)
+        {
+            _context = context;
+            _listener = listener;
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            String gaId = "";
+            try {
+                AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(_context.getApplicationContext());
+                if (adInfo.isLimitAdTrackingEnabled()) // check if user has opted out of tracking
+                    return gaId;
+                gaId = adInfo.getId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            }
+            return gaId;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (_listener != null) {
+                _listener.onGAIDCallback(s);
+            }
+        }
+    }
+
+    private interface GetGAIDListener
+    {
+        void onGAIDCallback(String s);
     }
 }

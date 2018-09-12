@@ -239,8 +239,8 @@ void getDeviceId(const std::function<void(const std::string&)>& callback) {
     static int callbackCounter = 0;
     auto callbackTag = ee::format("getDeviceId_%d", callbackCounter++);
     bridge.registerHandler(
-        [callback, callbackTag](const std::string& msg) {
-            MessageBridge::getInstance().deregisterHandler(callbackTag);
+        [callback, callbackTag, &bridge](const std::string& msg) {
+            bridge.deregisterHandler(callbackTag);
             if (callback) {
                 callback(msg);
             }

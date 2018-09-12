@@ -190,7 +190,7 @@ public class Utils {
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                String callbackTag = (String)dict.get("callback_id");
+                String callbackTag = (String) dict.get("callback_id");
                 Utils.getDeviceId(context, callbackTag);
                 return "";
             }
@@ -370,14 +370,14 @@ public class Utils {
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {
-
-        private Context _context;
+        private Context         _context;
         private GetGAIDListener _listener;
-        public GetGAIDTask(Context context, GetGAIDListener listener)
-        {
+
+        public GetGAIDTask(Context context, GetGAIDListener listener) {
             _context = context;
             _listener = listener;
         }
+
         @Override
         protected String doInBackground(String... strings) {
             String gaId = "";
@@ -404,8 +404,7 @@ public class Utils {
         }
     }
 
-    private interface GetGAIDListener
-    {
+    private interface GetGAIDListener {
         void onGAIDCallback(String s);
     }
 }

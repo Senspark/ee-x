@@ -79,8 +79,7 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
                        NSDictionary* dict =
                            [EEJsonUtils convertStringToDictionary:message];
                        NSString* callbackTag = dict[@"callback_id"];
-                       [[EEMessageBridge getInstance] callCpp:callbackTag
-                                                      message:deviceId];
+                       [bridge callCpp:callbackTag message:deviceId];
                        return @"";
                    }];
 

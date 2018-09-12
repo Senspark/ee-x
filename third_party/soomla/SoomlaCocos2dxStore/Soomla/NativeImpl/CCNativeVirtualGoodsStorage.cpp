@@ -158,7 +158,7 @@ CCUpgradeVG* CCNativeVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
                  .c_str());
 
     ValueMap params;
-    params["method"] = "CCNativeaVirtualGoodsStorage::getCurrentUpgrade";
+    params["method"] = "CCNativeVirtualGoodsStorage::getCurrentUpgrade";
     params["itemId"] = "itemId";
 
     auto&& retParams = CCNdkBridge::callNative(params, error);

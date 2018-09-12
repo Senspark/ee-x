@@ -208,6 +208,7 @@ public class StoreEventHandlerBridge {
                     JSONObject parameters = new JSONObject();
                     parameters.put("method", "CCStoreEventHandler::onItemPurchased");
                     parameters.put("itemId", itemPurchasedEvent.getItemId());
+                    parameters.put("payload", itemPurchasedEvent.getPayload());
                     NdkGlue.getInstance().sendMessageWithParameters(parameters);
                 } catch (JSONException e) {
                     throw new IllegalStateException(e);

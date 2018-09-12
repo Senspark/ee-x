@@ -265,6 +265,8 @@ public class SoomlaStore {
 
                         // no events like in restore purchases - keep subscription restoring silent for end-user
 
+                        BusProvider.getInstance().post(new RestoreTransactionsStartedEvent());
+
                         try {
                             mInAppBillingService.restorePurchasesAsync(restorePurchasesListener);
                         } catch (IllegalStateException ex) {

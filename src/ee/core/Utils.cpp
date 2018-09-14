@@ -118,7 +118,7 @@ constexpr auto k__openApplication               = "Utils_openApplication";
 constexpr auto k__sendMail                      = "Utils_sendMail";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
-constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
+//constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 // clang-format on
 } // namespace
 
@@ -234,10 +234,10 @@ bool testConnection() {
     return toBool(response);
 }
 
-std::string getDeviceId() {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getDeviceId);
-}
+//std::string getDeviceId() {
+//    auto&& bridge = MessageBridge::getInstance();
+//    return bridge.call(k__getDeviceId);
+//}
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
     BacktraceState* state = static_cast<BacktraceState*>(arg);

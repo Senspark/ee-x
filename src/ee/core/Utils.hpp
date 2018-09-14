@@ -85,15 +85,15 @@ bool isTablet();
 
 bool testConnection();
 
-/// Gets device's unique ID.
-std::string getDeviceId();
+///// Gets device's unique ID.
+//std::string getDeviceId();
 
 std::string dumpBacktrace(size_t count);
 
 } // namespace core
 
 using core::format;
-using core::getDeviceId;
+//using core::getDeviceId;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionCode;
 using core::getVersionName;

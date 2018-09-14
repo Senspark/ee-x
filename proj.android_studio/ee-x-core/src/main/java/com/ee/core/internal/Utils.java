@@ -46,7 +46,7 @@ public class Utils {
     private static final String k__sendMail                      = "Utils_sendMail";
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
-    private static final String k__getDeviceId                   = "Utils_getDeviceId";
+//    private static final String k__getDeviceId                   = "Utils_getDeviceId";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -179,14 +179,14 @@ public class Utils {
             }
         }, k__testConnection);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Context context = PluginManager.getInstance().getContext();
-                return Utils.getDeviceId(context);
-            }
-        }, k__getDeviceId);
+//        bridge.registerHandler(new MessageHandler() {
+//            @NonNull
+//            @Override
+//            public String handle(@NonNull String message) {
+//                Context context = PluginManager.getInstance().getContext();
+//                return Utils.getDeviceId(context);
+//            }
+//        }, k__getDeviceId);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -350,10 +350,10 @@ public class Utils {
         return info != null && info.isConnectedOrConnecting();
     }
 
-    @SuppressLint("HardwareIds")
-    @NonNull
-    public static String getDeviceId(@NonNull Context context) {
-        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
+//    @SuppressLint("HardwareIds")
+//    @NonNull
+//    public static String getDeviceId(@NonNull Context context) {
+//        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
+//        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+//    }
 }

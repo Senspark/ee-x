@@ -41,9 +41,10 @@ inline se::Object* create_JSON_object(const std::pair<int, int>& value) {
 }
 
 template <>
-inline se::Object* create_JSON_object(const std::map<std::string, std::string>& value) {
+inline se::Object*
+create_JSON_object(const std::map<std::string, std::string>& value) {
     auto&& jsonObj = nlohmann::json();
-    for(auto it = value.begin(); it != value.end(); it++) {
+    for (auto it = value.begin(); it != value.end(); it++) {
         jsonObj[it->first] = it->second;
     }
     return se::Object::createJSONObject(jsonObj.dump());
@@ -68,8 +69,31 @@ from_JSON_object(se::Object* jsonObj) {
 }
 
 template <>
-std::map<std::string, std::string>
+std::unordered_map<std::string, cocos2d::Value>
 from_JSON_object(se::Object* jsonObj) {
+    std::vector<std::string> allKeys;
+    std::unordered_map<std::string, cocos2d::Value> ret;
+
+    jsonObj->getAllKeys(&allKeys);
+    for (auto& key : allKeys) {
+        se::Value value;
+        jsonObj->getProperty(key.c_str(), &value);
+
+        if (value.isNumber()) {
+            ret[key] = cocos2d::Value(value.toNumber());
+        } else if (value.isString()) {
+            ret[key] = cocos2d::Value(value.toString());
+        } else if (value.isBoolean()) {
+            ret[key] = cocos2d::Value(value.toBoolean());
+        } else {
+            ret[key] = cocos2d::Value::Null;
+        }
+    }
+    return ret;
+}
+
+template <>
+std::map<std::string, std::string> from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::map<std::string, std::string> ret;
 
@@ -123,10 +147,29 @@ get_value(const se::Value& value) {
 }
 
 template <>
-inline std::map<std::string, std::string>
-get_value(const se::Value& value) {
+inline std::map<std::string, std::string> get_value(const se::Value& value) {
     return from_JSON_object<std::map<std::string, std::string>>(
         value.toObject());
+}
+
+template <>
+inline std::unordered_map<std::string, cocos2d::Value>
+get_value(const se::Value& value) {
+    return from_JSON_object<std::unordered_map<std::string, cocos2d::Value>>(
+        value.toObject());
+}
+
+template <>
+inline cocos2d::Value get_value(const se::Value& value) {
+    if (value.isNumber()) {
+        return cocos2d::Value(value.toNumber());
+    } else if (value.isString()) {
+        return cocos2d::Value(value.toString());
+    } else if (value.isBoolean()) {
+        return cocos2d::Value(value.toBoolean());
+    } else {
+        return cocos2d::Value::Null;
+    }
 }
 
 template <typename T>
@@ -139,6 +182,11 @@ inline void set_value(se::Value& value, std::int32_t input) {
 
 template <>
 inline void set_value(se::Value& value, std::string input) {
+    value.setString(input);
+}
+
+template <>
+inline void set_value(se::Value& value, const char* input) {
     value.setString(input);
 }
 

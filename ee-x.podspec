@@ -466,9 +466,9 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../../cocos2d-x ',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos ',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support ',
+        '${PODS_ROOT}/../../../cocos2d-x',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support',
         '${PODS_ROOT}/../../../cocos2d-x/external/sources'
         ].join(' ')
     }
@@ -574,11 +574,15 @@ Pod::Spec.new do |spec|
       'third_party/soomla/SoomlaCocos2dxCore/**/*.h'
     s.source_files  = 
       'third_party/soomla/SoomlaCocos2dxCore/**/*.{h,mm,cpp}'
+    s.exclude_files =
+      'third_party/soomla/SoomlaCocos2dxCore/Soomla/jsb/*'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
         '${PODS_ROOT}/../../cocos2d/cocos',
+        '${PODS_ROOT}/../../../cocos2d-x',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos',
         "${PODS_ROOT}/Headers/Public/#{spec.name}/Soomla/**"
         ].join(' ')
     }
@@ -613,7 +617,9 @@ Pod::Spec.new do |spec|
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
-        '${PODS_ROOT}/../../cocos2d/cocos'
+        '${PODS_ROOT}/../../cocos2d/cocos',
+        '${PODS_ROOT}/../../../cocos2d-x',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos',
         ].join(' ')
     }
     s.dependency 'ee-x/soomla-cocos2dx-core'

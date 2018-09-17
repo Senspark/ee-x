@@ -22,12 +22,16 @@ namespace core {
 template <>
 void set_value(se::Value& value,
                std::shared_ptr<ee::GoogleAnalyticsTracker> input) {
-    se::Object* obj = nullptr;
-    google::__jsb_s_googleAnalyticsArchive.push_back(input);
-    obj =
-        se::Object::createObjectWithClass(google::__jsb_AnalyticsTracker_class);
-    obj->setPrivateData(input.get());
-    value.setObject(obj);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        google::__jsb_s_googleAnalyticsArchive.push_back(input);
+        obj = se::Object::createObjectWithClass(
+            google::__jsb_AnalyticsTracker_class);
+        obj->setPrivateData(input.get());
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
 }
 } // namespace core
 

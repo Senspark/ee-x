@@ -5,9 +5,9 @@
 //  Created by Duc Nguyen on 7/12/18.
 //
 
+#include "ee/jsb/core/jsb_templates.hpp"
 #include "jsb_core_common.hpp"
 #include "jsb_logger.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
 
 #include <ee/Core.hpp>
 
@@ -21,13 +21,15 @@ static se::Class* __jsb_Logger_class = nullptr;
 
 static se::Object* __jsb_s_Logger = nullptr;
 
-template <> const Logger& get_value(const se::Value& value) {
+template <>
+const Logger& get_value(const se::Value& value) {
     return *static_cast<Logger*>(value.toObject()->getPrivateData());
 }
 
-template <> void set_value(se::Value& value, ee::Logger& input) {
+template <>
+void set_value(se::Value& value, ee::Logger& input) {
     se::Object* obj = nullptr;
-    if (&input  == &input.getSystemLogger()) {
+    if (&input == &input.getSystemLogger()) {
         if (__jsb_s_Logger == nullptr) {
             obj = se::Object::createObjectWithClass(__jsb_Logger_class);
             obj->setPrivateData(&input);
@@ -54,10 +56,10 @@ constexpr static auto jsb_Logger_setEnabled =
     &jsb_accessor_set<ee::Logger, &ee::Logger::setEnabled, bool>;
 constexpr static auto jsb_Logger_log =
     &jsb_method_call<ee::Logger,
-                           (void (ee::Logger::*)(const ee::LogLevel&,
-                                                 std::string, ...) const) &
-                               ee::Logger::log,
-                           const ee::LogLevel&, std::string>;
+                     (void (ee::Logger::*)(const ee::LogLevel&, std::string,
+                                           ...) const) &
+                         ee::Logger::log,
+                     const ee::LogLevel&, std::string>;
 constexpr static auto jsb_Logger_verbose =
     &jsb_method_call<ee::Logger, &ee::Logger::verbose, std::string>;
 constexpr static auto jsb_Logger_debug =
@@ -118,7 +120,7 @@ bool register_logger_manual(se::Object* globalObj) {
         ctorVal.toObject()->defineFunction("setSystemLogger",
                                            _SE(jsb_Logger_setSystemLogger));
     }
-    
+
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

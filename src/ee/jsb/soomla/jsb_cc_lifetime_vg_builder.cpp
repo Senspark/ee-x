@@ -18,16 +18,6 @@ static se::Class* __jsb_CCVirtualItem_class = nullptr;
 
 namespace ee {
 namespace core {
-
-template <>
-void set_value(se::Value& value, soomla::CCVirtualItem* input) {
-    se::Object* obj = nullptr;
-    obj = se::Object::createObjectWithClass(soomla::__jsb_CCVirtualItem_class);
-    if (input)
-        obj->setPrivateData(input);
-    value.setObject(obj);
-}
-
 } // namespace core
 } // namespace ee
 

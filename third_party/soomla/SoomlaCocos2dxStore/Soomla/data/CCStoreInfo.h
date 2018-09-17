@@ -71,8 +71,9 @@ public:
      @param error A `CCError` for error checking.
      @return The virtual item with the given `itemId`.
      */
+    CCVirtualItem* getItemByItemId(const std::string& itemId);
     CCVirtualItem* getItemByItemId(const std::string& itemId,
-                                   CCError** error = nullptr);
+                                   CCError** error);
 
     /**
      Retrieves a single `CCPurchasableVirtualItem` that resides in the

@@ -10,15 +10,41 @@
 #include "jsb_cc_virtual_item.hpp"
 #include "jsb_core_common.hpp"
 
-namespace ee {
-namespace core {} // namespace core
-} // namespace ee
-
 namespace soomla {
-
 static se::Object* __jsb_CCVirtualItem_proto = nullptr;
 static se::Class* __jsb_CCVirtualItem_class = nullptr;
 static se::Object* __soomlaObj = nullptr;
+} // namespace soomla
+
+namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, soomla::CCVirtualItem* input) {
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        obj = se::Object::createObjectWithClass(
+            soomla::__jsb_CCVirtualItem_class);
+        if (input) {
+            obj->setPrivateData(input);
+        } else {
+            value.setNull();
+        }
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
+}
+
+template <>
+soomla::CCVirtualItem* get_value(const se::Value& value) {
+    return static_cast<soomla::CCVirtualItem*>(
+        value.toObject()->getPrivateData());
+}
+
+} // namespace core
+} // namespace ee
+
+namespace soomla {
 
 const auto jsb_CCVirtualItem_finalize = &ee::core::jsb_finalize<CCVirtualItem>;
 const auto jsb_CCVirtualItem_getItemId =

@@ -33,17 +33,21 @@ std::shared_ptr<ee::IInterstitialAd> get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IInterstitialAd> input) {
-    se::Object* obj = nullptr;
-    if (ads::__jsb_s_interstitialAds.count(input) != 0) {
-        obj = ads::__jsb_s_interstitialAds.at(input);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        if (ads::__jsb_s_interstitialAds.count(input) != 0) {
+            obj = ads::__jsb_s_interstitialAds.at(input);
+        } else {
+            ads::__jsb_s_interstitialAdArchive.push_back(input);
+            obj = se::Object::createObjectWithClass(
+                ads::__jsb_InterstitialAd_class);
+            obj->setPrivateData(input.get());
+            //        obj->root();
+        }
+        value.setObject(obj);
     } else {
-        ads::__jsb_s_interstitialAdArchive.push_back(input);
-        obj =
-            se::Object::createObjectWithClass(ads::__jsb_InterstitialAd_class);
-        obj->setPrivateData(input.get());
-        //        obj->root();
+        value.setNull();
     }
-    value.setObject(obj);
 }
 
 template <>

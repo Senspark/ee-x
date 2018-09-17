@@ -33,16 +33,19 @@ std::shared_ptr<ee::IAdView> get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
-    se::Object* obj = nullptr;
-    if (ads::__jsb_s_adviews.count(input) != 0) {
-        obj = ads::__jsb_s_adviews.at(input);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        if (ads::__jsb_s_adviews.count(input) != 0) {
+            obj = ads::__jsb_s_adviews.at(input);
+        } else {
+            ads::__jsb_s_adviewArchive.push_back(input);
+            obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
+            obj->setPrivateData(input.get());
+        }
+        value.setObject(obj);
     } else {
-        ads::__jsb_s_adviewArchive.push_back(input);
-        obj = se::Object::createObjectWithClass(ads::__jsb_AdView_class);
-        obj->setPrivateData(input.get());
-        //        obj->root();
+        value.setNull();
     }
-    value.setObject(obj);
 }
 
 template <>

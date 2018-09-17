@@ -22,18 +22,22 @@ namespace core {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreInventory* input) {
-    se::Object* obj = nullptr;
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
 
-    if (not soomla::__jsb__s_storeObjArchive.empty()) {
-        obj = *soomla::__jsb__s_storeObjArchive.begin();
+        if (not soomla::__jsb__s_storeObjArchive.empty()) {
+            obj = *soomla::__jsb__s_storeObjArchive.begin();
+        } else {
+            obj = se::Object::createObjectWithClass(
+                soomla::__jsb_CCStoreInventory_class);
+            obj->setPrivateData(input);
+            soomla::__jsb__s_storeObjArchive.push_back(obj);
+        }
+
+        value.setObject(obj);
     } else {
-        obj = se::Object::createObjectWithClass(
-            soomla::__jsb_CCStoreInventory_class);
-        obj->setPrivateData(input);
-        soomla::__jsb__s_storeObjArchive.push_back(obj);
+        value.setNull();
     }
-
-    value.setObject(obj);
 }
 
 template <>

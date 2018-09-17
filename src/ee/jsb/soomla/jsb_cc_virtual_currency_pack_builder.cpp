@@ -29,11 +29,15 @@ soomla::CCPurchaseType* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
-    se::Object* obj = nullptr;
-    obj = se::Object::createObjectWithClass(
-        soomla::__jsb_CCVirtualCurrencyPack_class);
-    obj->setPrivateData(input);
-    value.setObject(obj);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        obj = se::Object::createObjectWithClass(
+            soomla::__jsb_CCVirtualCurrencyPack_class);
+        obj->setPrivateData(input);
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
 }
 
 } // namespace core

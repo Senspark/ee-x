@@ -14,6 +14,7 @@
 namespace soomla {
 static se::Object* __jsb_CCStoreInfo_proto = nullptr;
 static se::Class* __jsb_CCStoreInfo_class = nullptr;
+static std::vector<se::Object*> __jsb__s_storeObjArchive;
 } // namespace soomla
 
 namespace ee {
@@ -27,10 +28,29 @@ soomla::CCStoreInfo* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreInfo* input) {
-    se::Object* obj = nullptr;
-    obj = se::Object::createObjectWithClass(soomla::__jsb_CCStoreInfo_class);
-    obj->setPrivateData(input);
-    value.setObject(obj);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        if (not soomla::__jsb__s_storeObjArchive.empty()) {
+            obj = *soomla::__jsb__s_storeObjArchive.begin();
+        } else {
+            obj = se::Object::createObjectWithClass(
+                soomla::__jsb_CCStoreInfo_class);
+            obj->setPrivateData(input);
+            soomla::__jsb__s_storeObjArchive.push_back(obj);
+        }
+
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
+}
+
+template <>
+bool jsb_finalize<soomla::CCStoreInfo>(se::State& s) {
+    auto* cObj = static_cast<soomla::CCStoreInfo*>(s.nativeThisObject());
+    soomla::__jsb__s_storeObjArchive.clear();
+    delete cObj;
+    return true;
 }
 
 template <>
@@ -46,16 +66,25 @@ void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
 
 namespace soomla {
 
+const auto jsb_CCStoreInfo_finalize = &ee::core::jsb_finalize<CCStoreInfo>;
+const auto jsb_CCStoreInfo_constructor =
+    &ee::core::jsb_constructor<CCStoreInfo>;
 const static auto jsb_CCStoreInfo_sharedStoreInfo =
     &ee::core::jsb_static_get<CCStoreInfo*, &CCStoreInfo::sharedStoreInfo>;
 const auto jsb_CCStoreInfo_getItemByItemId =
-    &ee::core::jsb_method_get<CCStoreInfo, &CCStoreInfo::getItemByItemId,
-                              CCVirtualItem*, const std::string&, CCError**>;
+    &ee::core::jsb_method_get<CCStoreInfo,
+                              (CCVirtualItem *
+                               (CCStoreInfo::*)(const std::string&)) &
+                                  CCStoreInfo::getItemByItemId,
+                              CCVirtualItem*, const std::string&>;
 const auto jsb_CCStoreInfo_getPurchasableItemWithProductId =
     &ee::core::jsb_method_get<
         CCStoreInfo, &CCStoreInfo::getPurchasableItemWithProductId,
         CCPurchasableVirtualItem*, const std::string&, CCError**>;
 
+SE_BIND_FINALIZE_FUNC(jsb_CCStoreInfo_finalize)
+SE_BIND_CTOR(jsb_CCStoreInfo_constructor, __jsb_CCStoreInfo_class,
+             jsb_CCStoreInfo_finalize)
 SE_BIND_FUNC(jsb_CCStoreInfo_sharedStoreInfo)
 SE_BIND_FUNC(jsb_CCStoreInfo_getItemByItemId)
 SE_BIND_FUNC(jsb_CCStoreInfo_getPurchasableItemWithProductId)

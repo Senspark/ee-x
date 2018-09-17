@@ -130,6 +130,10 @@ bool CCStoreInfo::init(CCStoreAssets* storeAssets) {
     return true;
 }
 
+CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId) {
+    return getItemByItemId(itemId, nullptr);
+}
+
 CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId,
                                             CCError** error) {
     CCSoomlaUtils::logDebug(

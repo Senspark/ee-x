@@ -25,11 +25,15 @@ soomla::CCError** get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCError* input) {
-    se::Object* obj = nullptr;
-    obj = se::Object::createObjectWithClass(soomla::__jsb_CCError_class);
-    if (input)
-        obj->setPrivateData(input);
-    value.setObject(obj);
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        obj = se::Object::createObjectWithClass(soomla::__jsb_CCError_class);
+        if (input)
+            obj->setPrivateData(input);
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
 }
 } // namespace core
 } // namespace ee

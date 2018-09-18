@@ -5,6 +5,7 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
+#include "CCPurchasableVirtualItem.h"
 #include "CCStoreInfo.h"
 #include "Cocos2dxCore.h"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -28,21 +29,7 @@ soomla::CCStoreInfo* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreInfo* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        if (not soomla::__jsb__s_storeObjArchive.empty()) {
-            obj = *soomla::__jsb__s_storeObjArchive.begin();
-        } else {
-            obj = se::Object::createObjectWithClass(
-                soomla::__jsb_CCStoreInfo_class);
-            obj->setPrivateData(input);
-            soomla::__jsb__s_storeObjArchive.push_back(obj);
-        }
-
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
 
 template <>
@@ -53,13 +40,14 @@ bool jsb_finalize<soomla::CCStoreInfo>(se::State& s) {
     return true;
 }
 
-template <>
-void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
-    se::Object* obj = nullptr;
-    obj = se::Object::createObjectWithClass(soomla::__jsb_CCStoreInfo_class);
-    obj->setPrivateData(input);
-    value.setObject(obj);
-}
+/// QUYNH
+//template <>
+//void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
+//    se::Object* obj = nullptr;
+//    obj = se::Object::createObjectWithClass(soomla::__jsb_CCPurchasableVirtualItem_class);
+//    obj->setPrivateData(input);
+//    value.setObject(obj);
+//}
 
 } // namespace core
 } // namespace ee
@@ -113,7 +101,7 @@ bool register_cc_store_info_manual(se::Object* globalObj) {
         ctorVal.toObject()->defineFunction(
             "sharedStoreInfo", _SE(jsb_CCStoreInfo_sharedStoreInfo));
     }
-
+    
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

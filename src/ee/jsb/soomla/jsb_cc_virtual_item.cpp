@@ -5,34 +5,26 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
+#include "CCPurchasableVirtualItem.h"
+#include "CCVirtualCurrencyPack.h"
 #include "CCVirtualItem.h"
 #include "ee/jsb/core/jsb_templates.hpp"
+#include "jsb_cc_purchasable_virtual_item.hpp"
+#include "jsb_cc_virtual_curreny_pack.hpp"
 #include "jsb_cc_virtual_item.hpp"
 #include "jsb_core_common.hpp"
 
 namespace soomla {
-static se::Object* __jsb_CCVirtualItem_proto = nullptr;
-static se::Class* __jsb_CCVirtualItem_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
+se::Object* __jsb_CCVirtualItem_proto = nullptr;
+se::Class* __jsb_CCVirtualItem_class = nullptr;
+se::Object* __soomlaObj = nullptr;
 } // namespace soomla
 
 namespace ee {
 namespace core {
 template <>
 void set_value(se::Value& value, soomla::CCVirtualItem* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        obj = se::Object::createObjectWithClass(
-            soomla::__jsb_CCVirtualItem_class);
-        if (input) {
-            obj->setPrivateData(input);
-        } else {
-            value.setNull();
-        }
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
 
 template <>
@@ -45,6 +37,10 @@ soomla::CCVirtualItem* get_value(const se::Value& value) {
 } // namespace ee
 
 namespace soomla {
+
+CCPurchasableVirtualItem* asPurchasableVirtualItem(CCVirtualItem* item) {
+    return dynamic_cast<CCPurchasableVirtualItem*>(item);
+}
 
 const auto jsb_CCVirtualItem_finalize = &ee::core::jsb_finalize<CCVirtualItem>;
 const auto jsb_CCVirtualItem_getItemId =
@@ -65,11 +61,8 @@ const auto jsb_CCVirtualItem_resetBalance =
                               (int (CCVirtualItem::*)(int, CCError**)) &
                                   CCVirtualItem::resetBalance,
                               int, int, CCError**>;
-const auto jsb_CCVirtualItem_getBalance =
-    &ee::core::jsb_method_get<CCVirtualItem,
-                              (int (CCVirtualItem::*)(CCError**)) &
-                                  CCVirtualItem::getBalance,
-                              int, CCError**>;
+const auto jsb_CCVirtualItem_getBalance = &ee::core::jsb_method_get<
+    CCVirtualItem, (int (CCVirtualItem::*)()) & CCVirtualItem::getBalance, int>;
 const auto jsb_CCVirtualItem_save =
     &ee::core::jsb_method_call<CCVirtualItem, &CCVirtualItem::save, bool>;
 
@@ -101,6 +94,8 @@ bool register_cc_virtual_item_manual(se::Object* globalObj) {
 
     __jsb_CCVirtualItem_proto = cls->getProto();
     __jsb_CCVirtualItem_class = cls;
+
+    // Register static member variables and static member functions
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

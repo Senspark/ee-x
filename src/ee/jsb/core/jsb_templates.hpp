@@ -130,6 +130,11 @@ inline float get_value(const se::Value& value) {
 }
 
 template <>
+inline double get_value(const se::Value& value) {
+    return value.toNumber();
+}
+
+template <>
 inline std::string get_value(const se::Value& value) {
     return value.toString();
 }
@@ -221,9 +226,11 @@ inline void set_value(se::Value& value,
 
 template <typename T>
 inline void set_value_from_pointer(se::Value& value, T* input) {
+    CCLOG("%", __PRETTY_FUNCTION__);
+    
     if (input != nullptr) {
         auto clazz = JSBClassType::findClass(input);
-        CCASSERT(clazz, "ERROR: Class is not registered yet.")
+        CCASSERT(clazz, "ERROR: Class is not registered yet.");
         se::Object* obj = nullptr;
         auto found = se::NativePtrToObjectMap::find(input);
         if (found != se::NativePtrToObjectMap::end()) {

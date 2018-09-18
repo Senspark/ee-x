@@ -5,6 +5,7 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
+#include "CCPurchaseWithMarket.h"
 #include "CCPurchaseWithMarketBuilder.h"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "jsb_cc_purchase_with_market_builder.hpp"
@@ -27,16 +28,13 @@ soomla::CCPurchaseType* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCPurchaseType* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        obj = se::Object::createObjectWithClass(
-            soomla::__jsb_CCPurchaseTypes_class);
-        obj->setPrivateData(input);
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
+//
+// template <>
+// void set_value(se::Value& value, soomla::CCPurchaseWithMarket* input) {
+//    set_value_from_pointer(value, input);
+//}
 } // namespace core
 } // namespace ee
 
@@ -96,6 +94,7 @@ bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
     auto clsPurchase =
         se::Class::create("CCPurchaseType", __soomlaObj, nullptr, nullptr);
     clsPurchase->install();
+    JSBClassType::registerClass<CCPurchaseType>(clsPurchase);
     __jsb_CCPurchaseTypes_class = clsPurchase;
 
     se::ScriptEngine::getInstance()->clearException();

@@ -46,15 +46,7 @@ soomla::CCVirtualCategory* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreAssets* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        obj = se::Object::createObjectWithClass(
-            soomla::__jsb_CCStoreAssets_class);
-        obj->setPrivateData(input);
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
 } // namespace core
 } // namespace ee
@@ -127,6 +119,8 @@ bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
     auto clsStoreAssets =
         se::Class::create("CCStoreAssets", __soomlaObj, nullptr, nullptr);
     clsStoreAssets->install();
+    JSBClassType::registerClass<CCStoreAssets>(clsStoreAssets);
+
     __jsb_CCStoreAssets_class = clsStoreAssets;
 
     se::ScriptEngine::getInstance()->clearException();

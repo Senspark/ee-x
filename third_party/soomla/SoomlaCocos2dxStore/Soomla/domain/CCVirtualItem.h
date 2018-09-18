@@ -113,7 +113,9 @@ namespace soomla {
          @return The balance.
          */
         virtual int getBalance(CCError **error = nullptr) = 0;
-
+        virtual int getBalance() {
+            return getBalance(nullptr);
+        }
         /**
          Save this instance with changes that were made to it.
          The saving is done in the metadata in StoreInfo and being persisted to the local DB.

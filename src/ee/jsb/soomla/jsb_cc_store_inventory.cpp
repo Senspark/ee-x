@@ -14,7 +14,6 @@
 namespace soomla {
 static se::Object* __jsb_CCStoreInventory_proto = nullptr;
 static se::Class* __jsb_CCStoreInventory_class = nullptr;
-static std::vector<se::Object*> __jsb__s_storeObjArchive;
 } // namespace soomla
 
 namespace ee {
@@ -22,32 +21,8 @@ namespace core {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreInventory* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-
-        if (not soomla::__jsb__s_storeObjArchive.empty()) {
-            obj = *soomla::__jsb__s_storeObjArchive.begin();
-        } else {
-            obj = se::Object::createObjectWithClass(
-                soomla::__jsb_CCStoreInventory_class);
-            obj->setPrivateData(input);
-            soomla::__jsb__s_storeObjArchive.push_back(obj);
-        }
-
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
-
-template <>
-bool jsb_finalize<soomla::CCStoreInventory>(se::State& s) {
-    auto* cObj = static_cast<soomla::CCStoreInventory*>(s.nativeThisObject());
-    soomla::__jsb__s_storeObjArchive.clear();
-    delete cObj;
-    return true;
-}
-
 } // namespace core
 } // namespace ee
 

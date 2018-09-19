@@ -50,6 +50,46 @@ create_JSON_object(const std::map<std::string, std::string>& value) {
     return se::Object::createJSONObject(jsonObj.dump());
 }
 
+template <>
+inline se::Object*
+create_JSON_object(const std::unordered_map<std::string, std::string>& value) {
+    auto&& jsonObj = nlohmann::json();
+    for (auto it = value.begin(); it != value.end(); it++) {
+        jsonObj[it->first] = it->second;
+    }
+    return se::Object::createJSONObject(jsonObj.dump());
+}
+
+template <>
+inline se::Object* create_JSON_object(const int& value) {
+    auto&& jsonObj = nlohmann::json();
+    jsonObj.push_back(value);
+    return se::Object::createJSONObject(jsonObj.dump());
+}
+
+template <>
+inline se::Object* create_JSON_object(const std::string& value) {
+    auto&& jsonObj = nlohmann::json();
+    jsonObj.push_back(value);
+    return se::Object::createJSONObject(jsonObj.dump());
+}
+
+template <>
+inline se::Object* create_JSON_object(const bool& value) {
+    auto&& jsonObj = nlohmann::json();
+    jsonObj.push_back(value);
+    return se::Object::createJSONObject(jsonObj.dump());
+}
+
+template <>
+inline se::Object* create_JSON_object(const std::vector<std::string>& value) {
+    auto&& jsonArray = nlohmann::json::array();
+    for (auto it = value.begin(); it != value.end(); it++) {
+        jsonArray.push_back(*it);
+    }
+    return se::Object::createJSONObject(jsonArray.dump());
+}
+
 template <typename T>
 T from_JSON_object(se::Object* jsonObj);
 
@@ -253,8 +293,8 @@ inline void set_value_from_pointer(se::Value& value, T* input) {
 
 template <typename... Args>
 se::ValueArray to_value_array(Args... values) {
-    se::ValueArray args;
-    args.push_back(se::Value(values...));
+    se::ValueArray args = {
+        se::Value(create_JSON_object(std::forward<Args>(values)))...};
     return args;
 }
 
@@ -596,7 +636,7 @@ bool jsb_set_callback(se::State& s) {
                 se::ScriptEngine::getInstance()->clearException();
                 se::AutoHandleScope hs;
 
-                se::ValueArray args = to_value_array(values...);
+                auto&& args = to_value_array(values...);
                 se::Object* target =
                     jsTarget.isObject() ? jsTarget.toObject() : nullptr;
                 se::Object* func = jsFunc.toObject();

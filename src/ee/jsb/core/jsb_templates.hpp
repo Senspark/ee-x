@@ -226,8 +226,6 @@ inline void set_value(se::Value& value,
 
 template <typename T>
 inline void set_value_from_pointer(se::Value& value, T* input) {
-    CCLOG("%", __PRETTY_FUNCTION__);
-    
     if (input != nullptr) {
         auto clazz = JSBClassType::findClass(input);
         CCASSERT(clazz, "ERROR: Class is not registered yet.");
@@ -240,6 +238,13 @@ inline void set_value_from_pointer(se::Value& value, T* input) {
             obj->setPrivateData(input);
         }
         value.setObject(obj);
+        // need increase retain count to
+        // make this object exist in javascript environment after retrieving.
+        // Because the object may be autorelease if it created by CREATE method
+        auto pool = cocos2d::PoolManager::getInstance()->getCurrentPool();
+        if (pool->contains(input)) {
+            dynamic_cast<cocos2d::Ref*>(input)->retain();
+        }
     } else {
         value.setNull();
     }
@@ -348,8 +353,12 @@ bool jsb_constructor_with_dispose_callback(se::State& s) {
 
 template <typename T>
 bool jsb_finalize(se::State& s) {
-    T* cObj = static_cast<T*>(s.nativeThisObject());
-    delete cObj;
+    if (std::is_convertible<T*, cocos2d::Ref*>::value) {
+        static_cast<cocos2d::Ref*>(s.nativeThisObject())->release();
+    } else {
+        T* cObj = static_cast<T*>(s.nativeThisObject());
+        delete cObj;
+    }
     return true;
 }
 

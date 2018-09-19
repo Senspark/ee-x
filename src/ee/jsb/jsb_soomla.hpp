@@ -20,22 +20,24 @@
 #include "ee/jsb/soomla/jsb_cc_store_assets_builder.hpp"
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack_builder.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
-#include "ee/jsb/soomla/jsb_cc_virtual_curreny_pack.hpp"
+#include "ee/jsb/soomla/jsb_cc_virtual_currency_pack.hpp"
+#include "ee/jsb/soomla/jsb_cc_purchase_with_market.hpp"
 
 namespace soomla {
 bool register_all_soomla_manual(se::Object* object) {
-    register_cc_soomla_store_manual(object);
-    register_cc_soomla_manual(object);
-    register_cc_store_assets_builder_manual(object);
+    register_cc_soomla_store_manual(object); //
+    register_cc_soomla_manual(object); //
+    register_cc_store_assets_builder_manual(object); //
     register_cc_error_manual(object);
     register_cc_store_inventory_manual(object);
-    register_cc_purchase_with_market_builder_manual(object);
+    register_cc_purchase_with_market_manual(object); //
+    register_cc_purchase_with_market_builder_manual(object); //
+    register_cc_virtual_item_manual(object);
     register_cc_lifetime_vg_builder_manual(object);
     register_cc_store_info_manual(object);
-    register_cc_virtual_item_manual(object);
     register_cc_purchasable_virtual_item_manual(object);
+    register_cc_virtual_currency_pack_manual(object);
     register_cc_virtual_currency_pack_builder_manual(object);
-    register_cc_virtual_currency_manual(object);
 
     return true;
 }

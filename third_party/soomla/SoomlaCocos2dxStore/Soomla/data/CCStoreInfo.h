@@ -38,7 +38,7 @@ namespace soomla {
  virtual categories, and
  non-consumables
 */
-class CCStoreInfo : cocos2d::Ref {
+class CCStoreInfo : public cocos2d::Ref {
     CC_SYNTHESIZE_PASS_BY_REF(cocos2d::Vector<CCVirtualCurrency*>, mCurrencies,
                               Currencies);
     CC_SYNTHESIZE_PASS_BY_REF(cocos2d::Vector<CCVirtualCurrencyPack*>,

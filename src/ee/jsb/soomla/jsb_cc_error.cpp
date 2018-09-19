@@ -20,20 +20,16 @@ namespace core {
 
 template <>
 soomla::CCError** get_value(const se::Value& value) {
-    return static_cast<soomla::CCError**>(value.toObject()->getPrivateData());
+   if (value.isNull()) {
+       return nullptr;
+   } else
+       return static_cast<soomla::CCError**>(
+           value.toObject()->getPrivateData());
 }
 
 template <>
 void set_value(se::Value& value, soomla::CCError* input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        obj = se::Object::createObjectWithClass(soomla::__jsb_CCError_class);
-        if (input)
-            obj->setPrivateData(input);
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+    set_value_from_pointer(value, input);
 }
 } // namespace core
 } // namespace ee

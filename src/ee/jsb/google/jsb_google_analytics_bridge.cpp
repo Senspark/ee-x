@@ -11,14 +11,7 @@
 #include "jsb_core_common.hpp"
 
 namespace ee {
-namespace core {
-
-// template <>
-// ee::google::Analytics* get_value(const se::Value& value) {
-//    return static_cast<ee::google::Analytics*>(
-//        value.toObject()->getPrivateData());
-//}
-} // namespace core
+namespace core {} // namespace core
 
 namespace google {
 

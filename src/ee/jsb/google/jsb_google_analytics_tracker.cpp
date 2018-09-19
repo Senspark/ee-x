@@ -37,11 +37,6 @@ void set_value(se::Value& value,
 
 namespace google {
 
-// static se::Object* __jsb_AnalyticsTracker_proto = nullptr;
-// static se::Class* __jsb_AnalyticsTracker_class = nullptr;
-
-// static se::Object* __googleObj = nullptr;
-
 const auto jsb_AnalyticsTracker_finalize =
     &core::jsb_finalize<AnalyticsTracker>;
 const auto jsb_AnalyticsTracker_setParameter =

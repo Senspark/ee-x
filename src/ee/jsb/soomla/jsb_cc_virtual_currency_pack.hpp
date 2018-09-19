@@ -17,7 +17,7 @@ namespace soomla {
 
 extern se::Class* __jsb_CCVirtualCurrencyPack_class;
 
-bool register_cc_virtual_currency_manual(se::Object* object);
+bool register_cc_virtual_currency_pack_manual(se::Object* object);
 
 } // namespace soomla
 

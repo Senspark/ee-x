@@ -14,7 +14,6 @@ namespace soomla {
 
 static se::Object* __jsb_CCVirtualCurrencyPackBuilder_proto = nullptr;
 static se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;
-static se::Class* __jsb_CCVirtualCurrencyPack_class = nullptr;
 
 } // namespace soomla
 
@@ -25,11 +24,6 @@ template <>
 soomla::CCPurchaseType* get_value(const se::Value& value) {
     return static_cast<soomla::CCPurchaseType*>(
         value.toObject()->getPrivateData());
-}
-
-template <>
-void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
-    set_value_from_pointer(value, input);
 }
 
 } // namespace core
@@ -114,12 +108,6 @@ bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
 
     __jsb_CCVirtualCurrencyPackBuilder_proto = cls->getProto();
     __jsb_CCVirtualCurrencyPackBuilder_class = cls;
-
-    // CCVirtualCurrencyPack
-    auto clsVirtualCP = se::Class::create("CCVirtualCurrencyPack", __soomlaObj,
-                                          nullptr, nullptr);
-    clsVirtualCP->install();
-    __jsb_CCVirtualCurrencyPack_class = clsVirtualCP;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

@@ -13,7 +13,6 @@
 namespace soomla {
 static se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
 static se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
-static se::Class* __jsb_CCVirtualItem_class = nullptr;
 } // namespace soomla
 
 namespace ee {
@@ -80,12 +79,6 @@ bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
 
     __jsb_CCLifetimeVGBuilder_proto = cls->getProto();
     __jsb_CCLifetimeVGBuilder_class = cls;
-
-    // CCVirtualItem
-    auto clsVirtualItem =
-        se::Class::create("CCVirtualItem", __soomlaObj, nullptr, nullptr);
-    clsVirtualItem->install();
-    __jsb_CCVirtualItem_class = clsVirtualItem;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

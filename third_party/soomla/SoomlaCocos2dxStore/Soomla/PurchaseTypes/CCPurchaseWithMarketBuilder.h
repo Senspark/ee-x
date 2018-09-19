@@ -25,7 +25,7 @@ public:
     Self& setPrice(float price);
 
     CCPurchaseType* build();
-
+    
 private:
     std::unique_ptr<std::string> productId_;
     std::unique_ptr<float> price_;

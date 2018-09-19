@@ -8,7 +8,7 @@
 #include "CCVirtualCurrencyPack.h"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "jsb_cc_purchasable_virtual_item.hpp"
-#include "jsb_cc_virtual_curreny_pack.hpp"
+#include "jsb_cc_virtual_currency_pack.hpp"
 #include "jsb_core_common.hpp"
 
 namespace soomla {
@@ -35,7 +35,7 @@ const auto jsb_CCVirtualCurrencyPack_finalize =
 
 SE_BIND_FINALIZE_FUNC(jsb_CCVirtualCurrencyPack_finalize)
 
-bool register_cc_virtual_currency_manual(se::Object* globalObj) {
+bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCVirtualCurrencyPack", __soomlaObj,

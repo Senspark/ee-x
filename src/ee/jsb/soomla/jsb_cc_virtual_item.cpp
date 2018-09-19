@@ -10,7 +10,7 @@
 #include "CCVirtualItem.h"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "jsb_cc_purchasable_virtual_item.hpp"
-#include "jsb_cc_virtual_curreny_pack.hpp"
+#include "jsb_cc_virtual_currency_pack.hpp"
 #include "jsb_cc_virtual_item.hpp"
 #include "jsb_core_common.hpp"
 

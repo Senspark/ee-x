@@ -13,7 +13,6 @@
 namespace soomla {
 static se::Object* __jsb_CCPurchaseWithMarket_proto = nullptr;
 static se::Class* __jsb_CCPurchaseWithMarket_class = nullptr;
-static se::Class* __jsb_CCMarketItem_class = nullptr;
 } // namespace soomla
 
 namespace ee {
@@ -64,13 +63,6 @@ bool register_cc_purchase_with_market_manual(se::Object* globalObj) {
 
     __jsb_CCPurchaseWithMarket_proto = cls->getProto();
     __jsb_CCPurchaseWithMarket_class = cls;
-
-    //__jsb_CCMarketItem_class
-    auto clsCCMarketItem =
-        se::Class::create("CCMarketItem", __soomlaObj, nullptr, nullptr);
-    clsCCMarketItem->install();
-    JSBClassType::registerClass<CCMarketItem>(clsCCMarketItem);
-    __jsb_CCMarketItem_class = clsCCMarketItem;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

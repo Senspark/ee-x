@@ -31,14 +31,16 @@ const static auto jsb_CCSoomlaStore_initialize =
                                cocos2d::ValueMap>;
 const static auto jsb_CCSoomlaStore_getInstance =
     &ee::core::jsb_static_get<CCSoomlaStore*, &CCSoomlaStore::getInstance>;
-
 const auto jsb_CCSoomlaStore_refreshMarketItemsDetails =
     &ee::core::jsb_method_call<
         CCSoomlaStore, &CCSoomlaStore::refreshMarketItemsDetails, CCError**>;
-
+const auto jsb_CCSoomlaStore_restoreTransactions =
+    &ee::core::jsb_method_call<CCSoomlaStore,
+                               &CCSoomlaStore::restoreTransactions>;
 SE_BIND_FUNC(jsb_CCSoomlaStore_initialize)
 SE_BIND_FUNC(jsb_CCSoomlaStore_getInstance)
 SE_BIND_FUNC(jsb_CCSoomlaStore_refreshMarketItemsDetails)
+SE_BIND_FUNC(jsb_CCSoomlaStore_restoreTransactions)
 
 bool register_cc_soomla_store_manual(se::Object* globalObj) {
     se::Object* soomlaObj = nullptr;
@@ -47,7 +49,8 @@ bool register_cc_soomla_store_manual(se::Object* globalObj) {
     auto cls = se::Class::create("CCSoomlaStore", soomlaObj, nullptr, nullptr);
     cls->defineFunction("refreshMarketItemsDetails",
                         _SE(jsb_CCSoomlaStore_refreshMarketItemsDetails));
-
+    cls->defineFunction("restoreTransactions",
+                        _SE(jsb_CCSoomlaStore_restoreTransactions));
     cls->install();
 
     JSBClassType::registerClass<soomla::CCSoomlaStore>(cls);

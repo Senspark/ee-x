@@ -42,7 +42,7 @@ soomla::CCStoreAssets* CCStoreAssetsBuilder::build() {
 }
 
 Self& CCStoreAssetsBuilder::setVersion(std::int32_t version) {
-    storeAssets_->getVersion();
+    storeAssets_->version_ = version;
     return *this;
 }
 

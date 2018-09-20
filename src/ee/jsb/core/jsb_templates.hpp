@@ -278,12 +278,9 @@ inline void set_value_from_pointer(se::Value& value, T* input) {
             obj->setPrivateData(input);
         }
         value.setObject(obj);
-        // need increase retain count to
-        // make this object exist in javascript environment after retrieving.
-        // Because the object may be autorelease if it created by CREATE method
-        auto pool = cocos2d::PoolManager::getInstance()->getCurrentPool();
-        if (pool->contains(input)) {
-            dynamic_cast<cocos2d::Ref*>(input)->retain();
+        
+        if (std::is_convertible<T*, cocos2d::Ref*>::value) {
+            static_cast<cocos2d::Ref*>(input)->retain();
         }
     } else {
         value.setNull();

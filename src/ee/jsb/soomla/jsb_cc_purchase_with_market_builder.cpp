@@ -64,10 +64,11 @@ SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_build)
 SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_setPrice)
 SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_setProductId)
 
-const auto jsb_CCPurchaseType_finalize = &ee::core::jsb_finalize<CCPurchaseType>;
+const auto jsb_CCPurchaseType_finalize =
+    &ee::core::jsb_finalize<CCPurchaseType>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCPurchaseType_finalize)
-    
+
 bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
@@ -93,7 +94,7 @@ bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
     auto clsPurchase =
         se::Class::create("CCPurchaseType", __soomlaObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_CCPurchaseType_finalize));
-    
+
     clsPurchase->install();
     JSBClassType::registerClass<CCPurchaseType>(clsPurchase);
     __jsb_CCPurchaseTypes_class = clsPurchase;

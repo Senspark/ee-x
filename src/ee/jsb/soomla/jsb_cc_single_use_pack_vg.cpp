@@ -24,8 +24,9 @@ static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCSingleUsePackVG_finalize =
     &ee::core::jsb_finalize<CCSingleUsePackVG>;
-const auto jsb_CCSingleUsePackVG_getGoodAmount = &ee::core::jsb_method_get<
-    CCSingleUsePackVG, &CCSingleUsePackVG::getGoodAmount, std::int32_t>;
+const auto jsb_CCSingleUsePackVG_getGoodAmount =
+    &ee::core::jsb_method_get<CCSingleUsePackVG,
+                              &CCSingleUsePackVG::getGoodAmount, std::int32_t>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCSingleUsePackVG_finalize)
 SE_BIND_FUNC(jsb_CCSingleUsePackVG_getGoodAmount)

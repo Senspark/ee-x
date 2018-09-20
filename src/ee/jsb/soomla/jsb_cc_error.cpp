@@ -20,11 +20,11 @@ namespace core {
 
 template <>
 soomla::CCError** get_value(const se::Value& value) {
-   if (value.isNull()) {
-       return nullptr;
-   } else
-       return static_cast<soomla::CCError**>(
-           value.toObject()->getPrivateData());
+    if (value.isNull()) {
+        return nullptr;
+    } else
+        return static_cast<soomla::CCError**>(
+            value.toObject()->getPrivateData());
 }
 
 template <>

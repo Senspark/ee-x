@@ -23,8 +23,12 @@ static se::Class* __jsb_CCLifetimeVG_class = nullptr;
 static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCLifetimeVG_finalize = &ee::core::jsb_finalize<CCLifetimeVG>;
+const auto jsb_CCLifttimeVG_getBalance =
+    &ee::core::jsb_method_get<CCLifetimeVG, &CCLifetimeVG::getBalance, int,
+                              CCError**>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCLifetimeVG_finalize)
+SE_BIND_FUNC(jsb_CCLifttimeVG_getBalance)
 
 bool register_cc_life_time_vg_manual(se::Object* globalObj) {
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
@@ -32,6 +36,9 @@ bool register_cc_life_time_vg_manual(se::Object* globalObj) {
                                  __jsb_CCPurchasableVirtualItem_proto, nullptr);
 
     cls->defineFinalizeFunction(_SE(jsb_CCLifetimeVG_finalize));
+
+    cls->defineFunction("getBalance", _SE(jsb_CCLifttimeVG_getBalance));
+
     cls->install();
 
     JSBClassType::registerClass<CCLifetimeVG>(cls);

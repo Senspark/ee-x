@@ -10,10 +10,13 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/soomla/jsb_cc_error.hpp"
+#include "ee/jsb/soomla/jsb_cc_life_time_vg.hpp"
 #include "ee/jsb/soomla/jsb_cc_lifetime_vg_builder.hpp"
+#include "ee/jsb/soomla/jsb_cc_market_item.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
+#include "ee/jsb/soomla/jsb_cc_single_use_pack_vg.hpp"
 #include "ee/jsb/soomla/jsb_cc_soomla.hpp"
 #include "ee/jsb/soomla/jsb_cc_soomla_store.hpp"
 #include "ee/jsb/soomla/jsb_cc_store_assets_builder.hpp"
@@ -24,9 +27,6 @@
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack_builder.hpp"
 #include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
 #include "ee/jsb/soomla/jsb_store_event_listener.hpp"
-#include "ee/jsb/soomla/jsb_cc_market_item.hpp"
-#include "ee/jsb/soomla/jsb_cc_single_use_pack_vg.hpp"
-#include "ee/jsb/soomla/jsb_cc_life_time_vg.hpp"
 
 namespace soomla {
 bool register_all_soomla_manual(se::Object* object) {

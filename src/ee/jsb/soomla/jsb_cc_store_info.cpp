@@ -91,7 +91,7 @@ bool register_cc_store_info_manual(se::Object* globalObj) {
         ctorVal.toObject()->defineFunction(
             "sharedStoreInfo", _SE(jsb_CCStoreInfo_sharedStoreInfo));
     }
-    
+
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

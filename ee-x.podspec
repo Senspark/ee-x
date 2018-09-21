@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
 
-  spec.ios.deployment_target = '7.0'
+  spec.ios.deployment_target = '9.0'
   spec.osx.deployment_target = '10.8'
 
   spec.source = {
@@ -78,6 +78,21 @@ Pod::Spec.new do |spec|
       'src/ee/campaignreceiver/*.{h,hpp}'
 
     s.dependency 'ee-x/core'   
+  end
+
+  spec.subspec 'twitter' do |s|
+    s.source_files =
+    'src/ee/Twitter.hpp',
+    'src/ee/TwitterFwd.hpp',
+    'src/ee/twitter/*.{cpp,h,hpp,m}'
+    
+    s.public_header_files =
+    'src/ee/Twitter.hpp',
+    'src/ee/TwitterFwd.hpp',
+    'src/ee/twitter/TwitterBridge.hpp'
+    
+    s.dependency 'ee-x/core'
+    s.dependency 'TwitterKit'
   end
 
   spec.subspec 'facebook' do |s|

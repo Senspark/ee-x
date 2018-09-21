@@ -1,0 +1,40 @@
+//
+//  Created by Zinge on 7/4/16.
+//
+//
+
+#ifndef EE_X_TWITTER_BRIDGE_HPP
+#define EE_X_TWITTER_BRIDGE_HPP
+
+#include <string>
+
+#include "ee/core/LogLevel.hpp"
+
+namespace ee {
+namespace twitter {
+
+using ShareResultCallback = std::function<void(bool result)>;
+
+class Twitter final {
+public:
+    Twitter();
+    ~Twitter();
+
+    void setShareResultCallback(const ShareResultCallback& callback);
+    void initialize();
+    void shareContent(const std::string& text);
+    void shareScreenShot(const std::string& text, const std::string& image);
+
+private:
+    MessageBridge& bridge_;
+
+    void onSuccess();
+    void onFailure();
+    void onCancel();
+
+    ShareResultCallback _callback;
+};
+} // namespace twitter
+} // namespace ee
+
+#endif /* EE_X_TWITTER_BRIDGE_HPP */

@@ -149,4 +149,11 @@ static NSString* const k__image  = @"twitter_image";
                           }];
 }
 
+- (BOOL)application:(UIApplication*)app
+            openURL:(nonnull NSURL*)url
+            options:(nonnull NSDictionary<NSString*, id>*)options {
+    return [Twitter.sharedInstance application:app openURL:url options:options];
+}
+
+
 @end

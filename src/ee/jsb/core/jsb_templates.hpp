@@ -226,6 +226,12 @@ inline void set_value(se::Value& value, std::int32_t input) {
 }
 
 template <>
+inline void set_value(se::Value& value, std::int64_t input) {
+    auto temp = static_cast<std::int32_t>(input);
+    value.setInt32(temp);
+}
+
+template <>
 inline void set_value(se::Value& value, double input) {
     value.setFloat(input);
 }

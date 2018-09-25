@@ -77,7 +77,7 @@ SE_BIND_FUNC(jsb_FirebaseAnalytics_logEcommerce)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_logGameStart)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_logGameEnd)
 
-bool register_firebase_manual(se::Object* globalObj) {
+bool register_firebase_analytics_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
 
     auto cls = se::Class::create("FirebaseAnalytics", __firebaseObj, nullptr,

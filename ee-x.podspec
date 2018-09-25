@@ -639,7 +639,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/facebook-ads'
   end
 
-  spec.subspec 'jsb-firebase-analytics' do |s|
+  spec.subspec 'jsb-firebase' do |s|
     s.source_files =
       'src/ee/jsb/jsb_firebase.hpp',
       'src/ee/jsb/firebase/*'
@@ -649,6 +649,7 @@ Pod::Spec.new do |spec|
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/firebase-analytics'
+    s.dependency 'ee-x/firebase-remote-config'
   end
   
   spec.subspec 'jsb-notification' do |s|

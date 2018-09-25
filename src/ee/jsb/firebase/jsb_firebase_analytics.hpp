@@ -17,7 +17,7 @@ class Object;
 namespace ee {
 namespace firebase {
 
-bool register_firebase_manual(se::Object* object);
+bool register_firebase_analytics_manual(se::Object* object);
 
 } // namespace firebase
 } // namespace ee

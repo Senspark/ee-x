@@ -178,9 +178,41 @@ public class Twitter implements PluginProtocol {
 
     private void shareContent(String text) {
 
-        TweetComposer.Builder builder = new TweetComposer.Builder(_activity)
-                .text(text);
-        builder.show();
+        final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+                .getActiveSession();
+
+        if (session == null) {
+
+            _twiterLoginButton = new TwitterLoginButton(_activity);
+            final String ftext = text;
+
+
+            _twiterLoginButton.setCallback(new Callback<TwitterSession>() {
+
+                @Override
+                public void success(Result<TwitterSession> result) {
+                    shareContentAfterCheckAuthen (ftext);
+
+                }
+
+                @Override
+                public void failure(TwitterException exception) {
+                    _bridge.callCpp(k__onFailure);
+
+                }
+            });
+
+            _twiterLoginButton.performClick();
+
+        }
+        else {
+            shareContentAfterCheckAuthen (text);
+        }
+
+
+//        TweetComposer.Builder builder = new TweetComposer.Builder(_activity)
+//                .text(text);
+//        builder.show();
 
     }
 
@@ -222,9 +254,7 @@ public class Twitter implements PluginProtocol {
 
         }
         else {
-
             shareScreenShotAfterCheckAuthen(text, imageUri);
-
         }
 
 
@@ -247,6 +277,19 @@ public class Twitter implements PluginProtocol {
 //                .image(imageUri);
 //        builder.show();
 
+
+    }
+
+    private void shareContentAfterCheckAuthen(String text) {
+
+        final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+                .getActiveSession();
+
+        final Intent intent = new ComposerActivity.Builder(_activity)
+                .session(session)
+                .text(text)
+                .createIntent();
+        _activity.startActivity(intent);
 
     }
 

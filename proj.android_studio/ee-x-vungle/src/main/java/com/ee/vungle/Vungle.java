@@ -12,6 +12,7 @@ import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.vungle.publisher.AdConfig;
+import com.vungle.publisher.Orientation;
 import com.vungle.publisher.VungleAdEventListener;
 import com.vungle.publisher.VungleInitListener;
 import com.vungle.publisher.VunglePub;
@@ -200,6 +201,9 @@ public class Vungle implements PluginProtocol {
                 _logger.info("onAdAvailabilityUpdate: " + isAdPlayable);
             }
         });
+
+        final AdConfig config = _vunglePub.getGlobalAdConfig();
+        config.setOrientation(Orientation.autoRotate);
     }
 
     private boolean hasRewardedVideo(String placementId) {

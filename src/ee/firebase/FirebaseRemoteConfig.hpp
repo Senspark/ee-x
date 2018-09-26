@@ -45,6 +45,7 @@ public:
     /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
+    void fetch(bool devModeEnabled);
     void fetch(bool devModeEnabled, const FetchCallback& callback);
 
     /// Sets a default bool value for the given key.

@@ -27,6 +27,10 @@ const auto jsb_FirebaseRemoteConfig_constructor =
 const auto jsb_FirebaseRemoteConfig_initialize =
     &core::jsb_method_get<FirebaseRemoteConfig,
                           &FirebaseRemoteConfig::initialize, bool>;
+const auto jsb_FirebaseRemoteConfig_fetch =
+    &core::jsb_method_call<FirebaseRemoteConfig,
+                           (void (FirebaseRemoteConfig::*)(bool)) &
+                               FirebaseRemoteConfig::fetch, bool>;
 const auto jsb_FirebaseRemoteConfig_setDefaultBool =
     &core::jsb_method_call<FirebaseRemoteConfig,
                            &FirebaseRemoteConfig::setDefaultBool,
@@ -66,6 +70,7 @@ SE_BIND_CTOR(jsb_FirebaseRemoteConfig_constructor,
              __jsb_FirebaseRemoteConfig_class,
              jsb_FirebaseRemoteConfig_finalize)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_initialize)
+SE_BIND_FUNC(jsb_FirebaseRemoteConfig_fetch)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultBool)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultLong)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultDouble)
@@ -84,6 +89,7 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
     cls->defineFinalizeFunction(_SE(jsb_FirebaseRemoteConfig_finalize));
 
     cls->defineFunction("initialize", _SE(jsb_FirebaseRemoteConfig_initialize));
+    cls->defineFunction("fetch", _SE(jsb_FirebaseRemoteConfig_fetch));
     cls->defineFunction("setDefaultBool",
                         _SE(jsb_FirebaseRemoteConfig_setDefaultBool));
     cls->defineFunction("setDefaultLong",

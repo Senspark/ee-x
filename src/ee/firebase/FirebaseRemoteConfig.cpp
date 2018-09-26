@@ -63,6 +63,10 @@ bool Self::initialize() {
     return true;
 }
 
+void Self::fetch(bool devModeEnabled) {
+    fetch(devModeEnabled, nullptr);
+}
+
 void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
     auto guard = std::make_shared<core::ScopeGuard>(std::bind(callback, false));
     if (not initialized_) {
@@ -81,7 +85,9 @@ void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
                 return;
             }
             guard->dismiss();
-            callback(true);
+            if (callback) {
+                callback(true);
+            }
         });
 #endif // EE_X_MOBILE
 }

@@ -12,10 +12,10 @@ namespace ee {
 namespace ironsource {
 class IronSource final {
 public:
-    IronSource(float timeout);
+    IronSource(float timeout = 1.0f);
     ~IronSource();
 
-    explicit IronSource(const Logger& logger, float timeout);
+    explicit IronSource(const Logger& logger, float timeout = 1.0f);
 
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);

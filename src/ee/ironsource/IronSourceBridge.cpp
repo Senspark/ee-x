@@ -36,12 +36,12 @@ constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClos
 // clang-format on
 } // namespace
 
-Self::IronSource(float timeout)
-    : Self(Logger::getSystemLogger(), timeout) {}
+Self::IronSource()
+    : Self(Logger::getSystemLogger()) {}
 
-Self::IronSource(const Logger& logger, float timeout)
+Self::IronSource(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , _closeTimeout(timeout)
+    , _closeTimeout(0.0f)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
@@ -91,6 +91,8 @@ Self::IronSource(const Logger& logger, float timeout)
             return "";
         },
         k__onInterstitialClosed);
+
+    handlerLock_ = std::make_unique<core::SpinLock>();
 }
 
 Self::~IronSource() {
@@ -220,6 +222,7 @@ void Self::onClosed() {
         // if out of time just callback failed
         ee::core::runFunctionDelay(
             [this] {
+                std::lock_guard<core::SpinLock> guard(*handlerLock_);
                 rewarded_ = false;
                 doRewardInGame();
             },
@@ -245,13 +248,16 @@ void Self::doRewardInGame() {
 }
 
 #pragma mark - For Interstitial
+
 void Self::onInterstitialOpened() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 }
+
 void Self::onInterstitialFailed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     onInterstitialClosed();
 }
+
 void Self::onInterstitialClosed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     //    auto&& mediation = ads::MediationManager::getInstance();
@@ -260,6 +266,12 @@ void Self::onInterstitialClosed() {
     //    assert(successful);
     _shouldDoRewardInGame = true;
     onClosed();
+}
+
+#pragma mark - Config
+
+void Self::setCloseTimeout(float timeout) {
+    _closeTimeout = timeout;
 }
 } // namespace ironsource
 } // namespace ee

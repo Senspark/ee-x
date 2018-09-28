@@ -119,7 +119,7 @@ constexpr auto k__sendMail                      = "Utils_sendMail";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
 constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
-constexpr auto k__runFunctionDelay              = "Utils_funFunctionDelay";
+constexpr auto k__runFunctionDelay              = "Utils_runFunctionDelay";
 // clang-format on
 } // namespace
 

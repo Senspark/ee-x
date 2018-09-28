@@ -5,17 +5,17 @@
 
 #include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {
 class IronSource final {
 public:
-    IronSource(float timeout = 1.0f);
+    IronSource();
     ~IronSource();
 
-    explicit IronSource(const Logger& logger, float timeout = 1.0f);
+    explicit IronSource(const Logger& logger);
 
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);
@@ -27,6 +27,8 @@ public:
     /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
+
+    void setCloseTimeout(float timeout);
 
 private:
     friend RewardedVideo;
@@ -59,6 +61,8 @@ private:
     const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
+
+    std::unique_ptr<core::SpinLock> handlerLock_;
 
     float _closeTimeout;
     bool _didRewardFlag{false};

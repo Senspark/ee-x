@@ -68,7 +68,7 @@ static NSString* const k__sendMail                      = @"Utils_sendMail";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
-static NSString* const k__runFunctionDelay              = @"Utils_funFunctionDelay";
+static NSString* const k__runFunctionDelay              = @"Utils_runFunctionDelay";
 // clang-format on
 
 + (void)registerHandlers {
@@ -271,11 +271,6 @@ static NSString* const k__runFunctionDelay              = @"Utils_funFunctionDel
 
 - (void)functionCallback:(NSString*)callbackTag {
     [[EEMessageBridge getInstance] callCpp:callbackTag];
-}
-
--(void)funcCall
-{
-    int a = 1;
 }
 
 @end

@@ -52,7 +52,7 @@ public class Utils {
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
     private static final String k__getDeviceId                   = "Utils_getDeviceId";
-    private static final String k__runFunctionDelay              = "Utils_funFunctionDelay";
+    private static final String k__runFunctionDelay              = "Utils_runFunctionDelay";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -202,8 +202,8 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                String callbackTag = (String)dict.get("callback_id");
-                float delayTime = Float.parseFloat((String)dict.get("delay_time"));
+                String callbackTag = (String) dict.get("callback_id");
+                float delayTime = Float.parseFloat((String) dict.get("delay_time"));
                 Utils.runFunctionDelay(callbackTag, delayTime);
 
                 return "";
@@ -363,9 +363,8 @@ public class Utils {
         return false;
     }
 
-    public static void runFunctionDelay(final String callbackTag, float delay)
-    {
-        long delayMilis = (long)delay * 1000;
+    public static void runFunctionDelay(final String callbackTag, float delay) {
+        long delayMilis = (long) delay * 1000;
         Handler handler = new Handler(Looper.getMainLooper());
         boolean result = handler.postDelayed(new Runnable() {
             @Override
@@ -376,7 +375,6 @@ public class Utils {
         if (!result) {
             _logger.error("runOnUiThread: failed to post the runnable");
         }
-        return;
     }
 
     @SuppressWarnings("WeakerAccess")

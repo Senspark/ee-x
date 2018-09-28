@@ -18,6 +18,8 @@
 #define __CCBridgelessKeyValueStorage_H
 
 #include "CCKeyValueStorage.h"
+#include <set>
+
 
 namespace soomla {
 

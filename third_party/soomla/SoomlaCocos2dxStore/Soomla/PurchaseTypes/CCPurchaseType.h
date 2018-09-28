@@ -21,6 +21,7 @@
 
 #include "CCError.h"
 #include "cocos2d.h"
+#include "CCSoomlaMacros.h"
 
 namespace soomla {
 /**

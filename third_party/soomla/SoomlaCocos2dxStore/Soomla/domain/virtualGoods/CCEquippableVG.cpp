@@ -82,7 +82,7 @@ const char* CCEquippableVG::getType() const {
 
 void CCEquippableVG::fillEquippingModelFromValueMap(
     const cocos2d::ValueMap& map) {
-    CCAssert(map.count(CCStoreConsts::JSON_EQUIPPABLE_EQUIPPING),
+    CCASSERT(map.count(CCStoreConsts::JSON_EQUIPPABLE_EQUIPPING),
              "invalid object type in dictionary");
     const auto& equippingModelStr =
         map.at(CCStoreConsts::JSON_EQUIPPABLE_EQUIPPING).asString();

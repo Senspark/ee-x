@@ -13,16 +13,12 @@ namespace ironsource {
 class IronSource final {
 private:
     using Self = IronSource;
-    
+
 public:
     IronSource();
     ~IronSource();
 
     explicit IronSource(const Logger& logger);
-    
-    /// Add move constructor to fix spinlock deleted-copy constructor.
-    IronSource(Self&&) = default;
-    Self& operator=(Self&&) = default;
 
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);

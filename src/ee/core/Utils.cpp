@@ -119,6 +119,7 @@ constexpr auto k__sendMail                      = "Utils_sendMail";
 constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
 constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
+constexpr auto k__runFunctionDelay              = "Utils_funFunctionDelay";
 // clang-format on
 } // namespace
 
@@ -250,6 +251,25 @@ void getDeviceId(const std::function<void(const std::string&)>& callback) {
     nlohmann::json json;
     json["callback_id"] = callbackTag;
     bridge.call(k__getDeviceId, json.dump());
+}
+
+void runFunctionDelay(const std::function<void()>& func, float delay) {
+    auto&& bridge = MessageBridge::getInstance();
+    static int funcCallbackCounter = 0;
+    auto callbackTag = ee::format("runFunctionDelay_%d", funcCallbackCounter);
+    bridge.registerHandler(
+        [func, callbackTag, &bridge](const std::string& msg) {
+            bridge.deregisterHandler(callbackTag);
+            if (func) {
+                func();
+            }
+            return "";
+        },
+        callbackTag);
+    nlohmann::json json;
+    json["callback_id"] = callbackTag;
+    json["delay_time"] = delay;
+    bridge.call(k__runFunctionDelay, json.dump());
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {

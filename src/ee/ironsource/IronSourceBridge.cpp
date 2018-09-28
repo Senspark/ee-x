@@ -7,8 +7,8 @@
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
-#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 #include "ee/ironsource/internal/IronSourceInterstitialAd.hpp"
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -36,11 +36,12 @@ constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClos
 // clang-format on
 } // namespace
 
-Self::IronSource()
-    : Self(Logger::getSystemLogger()) {}
+Self::IronSource(float timeout)
+    : Self(Logger::getSystemLogger(), timeout) {}
 
-Self::IronSource(const Logger& logger)
+Self::IronSource(const Logger& logger, float timeout)
     : bridge_(MessageBridge::getInstance())
+    , _closeTimeout(timeout)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
@@ -206,6 +207,7 @@ void Self::onFailed() {
 void Self::onOpened() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
+    _didRewardFlag = false;
 }
 
 void Self::onClosed() {
@@ -213,11 +215,24 @@ void Self::onClosed() {
 
     if (_shouldDoRewardInGame) {
         doRewardInGame();
+    } else {
+        // wait for reward
+        // if out of time just callback failed
+        ee::core::runFunctionDelay(
+            [this] {
+                rewarded_ = false;
+                doRewardInGame();
+            },
+            _closeTimeout);
     }
     _shouldDoRewardInGame = true;
 }
 
 void Self::doRewardInGame() {
+    if (_didRewardFlag) {
+        return;
+    }
+
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
@@ -225,6 +240,7 @@ void Self::doRewardInGame() {
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
     auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded_);
 
+    _didRewardFlag = true;
     assert(wasInterstitialAd || wasRewardedVideo);
 }
 

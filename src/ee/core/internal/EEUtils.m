@@ -68,6 +68,7 @@ static NSString* const k__sendMail                      = @"Utils_sendMail";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
+static NSString* const k__runFunctionDelay              = @"Utils_funFunctionDelay";
 // clang-format on
 
 + (void)registerHandlers {
@@ -145,6 +146,21 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
                        return [self
                            toString:[self testConnection:@"www.google.com"]];
                    }];
+
+    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        NSString* callbackTag = dict[@"callback_id"];
+        float delay = [dict[@"delay_time"] floatValue];
+
+        dispatch_time_t popTime =
+            dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+            [bridge callCpp:callbackTag];
+        });
+
+        return @"";
+    }
+                        tag:k__runFunctionDelay];
 }
 
 + (BOOL)isMainThread {
@@ -251,6 +267,15 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
     }
     return @"";
 #endif // TARGET_OS_IOS
+}
+
+- (void)functionCallback:(NSString*)callbackTag {
+    [[EEMessageBridge getInstance] callCpp:callbackTag];
+}
+
+-(void)funcCall
+{
+    int a = 1;
 }
 
 @end

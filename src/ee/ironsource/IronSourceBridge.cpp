@@ -6,6 +6,7 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/internal/SpinLock.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
 #include "ee/ironsource/internal/IronSourceInterstitialAd.hpp"
 #include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"

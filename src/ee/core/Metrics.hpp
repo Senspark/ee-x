@@ -10,6 +10,7 @@
 #define EE_X_CORE_METRICS_HPP
 
 #include "ee/CoreFwd.hpp"
+#include <string>
 
 namespace ee {
 namespace core {
@@ -50,6 +51,7 @@ public:
     float toDip() const;
 
 private:
+//    explicit Metrics(const std::pair<float, float>& winSize, ResolutionPolicy policy);
     explicit Metrics(float pixels, float pixelToDp, float pixelToPoint);
 
     float pixels_;

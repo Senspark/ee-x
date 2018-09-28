@@ -14,6 +14,7 @@
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/core/jsb_utils.hpp"
+#include "ee/jsb/core/jsb_metrics.hpp"
 
 namespace ee {
 namespace core {
@@ -21,6 +22,7 @@ bool register_all_core_manual(se::Object* object) {
     register_log_level_manual(object);
     register_logger_manual(object);
     register_utils_manual(object);
+    register_metrics_manual(object);
     return true;
 }
 } // namespace core

@@ -23,7 +23,7 @@ namespace core {
 
 template <typename T>
 se::Object* create_JSON_object(const T& value);
-
+ 
 template <>
 inline se::Object* create_JSON_object(const std::pair<float, float>& value) {
     auto&& jsonArray = nlohmann::json::array();
@@ -236,6 +236,10 @@ inline void set_value(se::Value& value, double input) {
     value.setFloat(input);
 }
 
+template <>
+inline void set_value(se::Value& value, float input) {
+    value.setFloat(input);
+}
 
 template <>
 inline void set_value(se::Value& value, std::string input) {
@@ -290,7 +294,7 @@ inline void set_value_from_pointer(se::Value& value, T* input) {
             obj->setPrivateData(input);
         }
         value.setObject(obj);
-        
+
         if (std::is_convertible<T*, cocos2d::Ref*>::value) {
             static_cast<cocos2d::Ref*>(input)->retain();
         }
@@ -298,7 +302,6 @@ inline void set_value_from_pointer(se::Value& value, T* input) {
         value.setNull();
     }
 }
-
 
 template <typename... Args>
 se::ValueArray to_value_array(Args... values) {

@@ -45,7 +45,8 @@ public:
     /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
-    void fetch(bool devModeEnabled);
+    /// fetchJS use call fetch in Javascript
+    void fetchJS(const FetchCallback& callback);
     void fetch(bool devModeEnabled, const FetchCallback& callback);
 
     /// Sets a default bool value for the given key.

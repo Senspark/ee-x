@@ -63,8 +63,8 @@ bool Self::initialize() {
     return true;
 }
 
-void Self::fetch(bool devModeEnabled) {
-    fetch(devModeEnabled, nullptr);
+void Self::fetchJS(const FetchCallback& callback) {
+    fetch(false, callback);
 }
 
 void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {

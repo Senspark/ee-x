@@ -39,7 +39,18 @@ void set_value(se::Value& value, const LogLevel& input) {
     value.setObject(obj);
 }
 
-constexpr static auto jsb_LogLevel_finalize = &jsb_finalize<ee::LogLevel>;
+bool jsb_LogLevel_finalize(se::State& s) {
+    LogLevel* cObj = static_cast<LogLevel*>(s.nativeThisObject());
+    CCLOG("DELETE LOG_LEVEL");
+
+    if (cObj != &LogLevel::Verbose && cObj != &LogLevel::Info &&
+        cObj != &LogLevel::Error && cObj != &LogLevel::Assert &&
+        cObj != &LogLevel::Debug && cObj != &LogLevel::Warn) {
+        delete cObj;
+    }
+    return true;
+}
+
 constexpr static auto jsb_LogLevel_constructor =
     &jsb_constructor<ee::LogLevel, std::int32_t, std::string>;
 constexpr static auto jsb_LogLevel_get_priority =

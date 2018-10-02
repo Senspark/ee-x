@@ -21,7 +21,7 @@ public:
     ~Twitter();
 
     void setShareResultCallback(const ShareResultCallback& callback);
-    void initialize();
+    void initialize(const std::string& key, const std::string& secret);
     void shareContent(const std::string& text);
     void shareScreenShot(const std::string& text, const std::string& image);
 

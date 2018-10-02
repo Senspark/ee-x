@@ -13,20 +13,16 @@ namespace ee {
 namespace twitter {
 namespace {
 // clang-format off
-constexpr auto k__initialize        = "Twitter_initialize";
-constexpr auto k__shareContent      = "Twitter_shareContent";
-constexpr auto k__shareScreenShot   = "Twitter_shareScreenShot";
-constexpr auto k__onSuccess         = "Twitter_onSuccess";
-constexpr auto k__onFailure         = "Twitter_onFailure";
-constexpr auto k__onCancel          = "Twitter_onCancel";
-
-// clang-format on
-} // namespace
-
-namespace {
-// clang-format off
-constexpr auto k__text          = "twitter_text";
-constexpr auto k__image         = "twitter_image";
+constexpr auto k__initialize        = "twitter_initialize";
+constexpr auto k__shareContent      = "twitter_shareContent";
+constexpr auto k__shareScreenShot   = "twitter_shareScreenShot";
+constexpr auto k__onSuccess         = "twitter_onSuccess";
+constexpr auto k__onFailure         = "twitter_onFailure";
+constexpr auto k__onCancel          = "twitter_onCancel";
+constexpr auto k__key               = "twitter_key";
+constexpr auto k__secret            = "twitter_secret";
+constexpr auto k__text              = "twitter_text";
+constexpr auto k__image             = "twitter_image";
 // clang-format on
 } // namespace
 
@@ -58,8 +54,11 @@ Self::~Twitter() {
     //
 }
 
-void Self::initialize() {
-    bridge_.call(k__initialize);
+void Self::initialize(const std::string& key, const std::string& secret) {
+    nlohmann::json json;
+    json[k__key] = key;
+    json[k__secret] = secret;
+    bridge_.call(k__initialize, json.dump());
 }
 
 void Self::setShareResultCallback(const ShareResultCallback& callback) {
@@ -86,9 +85,9 @@ void Self::onSuccess() {
 }
 
 void Self::onFailure() {
-    if (_callback) {
-        _callback(false);
-    }
+//    if (_callback) {
+//        _callback(false);
+//    }
 }
 
 void Self::onCancel() {

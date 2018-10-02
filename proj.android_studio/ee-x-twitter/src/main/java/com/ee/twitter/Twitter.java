@@ -45,14 +45,16 @@ import retrofit2.Response;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Twitter implements PluginProtocol {
-    private static final String k__initialize       = "Twitter_initialize";
-    private static final String k__shareContent     = "Twitter_shareContent";
-    private static final String k__shareScreenShot  = "Twitter_shareScreenShot";
+    private static final String k__initialize       = "twitter_initialize";
+    private static final String k__shareContent     = "twitter_shareContent";
+    private static final String k__shareScreenShot  = "twitter_shareScreenShot";
 
-    private static final String k__onSuccess        = "Twitter_onSuccess";
-    private static final String k__onFailure        = "Twitter_onFailure";
-    private static final String k__onCancel         = "Twitter_onCancel";
+    private static final String k__onSuccess        = "twitter_onSuccess";
+    private static final String k__onFailure        = "twitter_onFailure";
+    private static final String k__onCancel         = "twitter_onCancel";
 
+    private static final String k__key              = "twitter_key";
+    private static final String k_secret            = "twitter_secret";
     private static final String k__text             = "twitter_text";
     private static final String k__image            = "twitter_image";
 
@@ -117,7 +119,10 @@ public class Twitter implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                initialize();
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                String key = dict.get(k__key).toString();
+                String secret = dict.get(k_secret).toString();
+                initialize(key, secret);
                 return "";
             }
         }, k__initialize);
@@ -166,10 +171,9 @@ public class Twitter implements PluginProtocol {
     }
 
 
-    private void initialize() {
-
+    private void initialize(String key, String secret) {
         TwitterConfig config = new TwitterConfig.Builder(_activity)
-                .twitterAuthConfig(new TwitterAuthConfig("WgRdd92MiYn1L4JiskaGfl8wK", "FYlWKjtQXDedTRaiuyWF9nl6wIWu243QaI0BMIitrW2GMna9Aq"))
+                .twitterAuthConfig(new TwitterAuthConfig(key, secret))
                 .debug(true)
                 .build();
         com.twitter.sdk.android.core.Twitter.initialize(config);

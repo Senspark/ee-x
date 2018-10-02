@@ -5,9 +5,9 @@
 
 #import "ee/core/EEIPlugin.h"
 
-@interface EETwitter : NSObject <EEIPlugin>
+@interface EETwitter : NSObject <EEIPlugin, TWTRComposerViewControllerDelegate>
 
-- (void)initialize;
+- (void)initialize:(NSString*)key secret:(NSString*)secret;
 - (void)shareContent:(NSString*)text;
 - (void)shareScreenShot:(NSString*)text image:(NSString*)image;
 

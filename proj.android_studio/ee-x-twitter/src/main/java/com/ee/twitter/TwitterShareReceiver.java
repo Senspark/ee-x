@@ -11,9 +11,9 @@ import com.twitter.sdk.android.tweetcomposer.TweetUploadService;
 
 public class TwitterShareReceiver extends BroadcastReceiver {
 
-    private static final String k__onSuccess        = "Twitter_onSuccess";
-    private static final String k__onFailure        = "Twitter_onFailure";
-    private static final String k__onCancel         = "Twitter_onCancel";
+    private static final String k__onSuccess        = "twitter_onSuccess";
+    private static final String k__onFailure        = "twitter_onFailure";
+    private static final String k__onCancel         = "twitter_onCancel";
 
     @Override
     public void onReceive(Context context, Intent intent) {

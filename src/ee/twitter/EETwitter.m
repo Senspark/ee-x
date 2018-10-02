@@ -23,17 +23,16 @@
 @implementation EETwitter
 
 // clang-format off
-NSString* const k__initialize       = @"Twitter_initialize";
-NSString* const k__shareContent     = @"Twitter_shareContent";
-NSString* const k__shareScreenShot  = @"Twitter_shareScreenShot";
-NSString* const k__onSuccess        = @"Twitter_onSuccess";
-NSString* const k__onFailure        = @"Twitter_onFailure";
-NSString* const k__onCancel         = @"Twitter_onCancel";
-// clang-format on
-
-// clang-format off
-static NSString* const k__text   = @"twitter_text";
-static NSString* const k__image  = @"twitter_image";
+static NSString* const k__initialize       = @"twitter_initialize";
+static NSString* const k__shareContent     = @"twitter_shareContent";
+static NSString* const k__shareScreenShot  = @"twitter_shareScreenShot";
+static NSString* const k__onSuccess        = @"twitter_onSuccess";
+static NSString* const k__onFailure        = @"twitter_onFailure";
+static NSString* const k__onCancel         = @"twitter_onCancel";
+static NSString* const k__key              = @"twitter_key";
+static NSString* const k__secret           = @"twitter_secret";
+static NSString* const k__text             = @"twitter_text";
+static NSString* const k__image            = @"twitter_image";
 // clang-format on
 
 - (id)init {
@@ -55,7 +54,11 @@ static NSString* const k__image  = @"twitter_image";
 - (void)registerHandlers {
     [bridge_ registerHandler:k__initialize
                     callback:^(NSString* message) {
-                        [self initialize];
+                        NSDictionary* dict =
+                            [EEJsonUtils convertStringToDictionary:message];
+                        NSString* key = dict[k__key];
+                        NSString* secret = dict[k__secret];
+                        [self initialize:key secret:secret];
                         return @"";
                     }];
 
@@ -84,11 +87,8 @@ static NSString* const k__image  = @"twitter_image";
     [bridge_ deregisterHandler:k__shareContent];
 }
 
-- (void)initialize {
-    [[Twitter sharedInstance]
-        startWithConsumerKey:@"WgRdd92MiYn1L4JiskaGfl8wK"
-              consumerSecret:
-                  @"FYlWKjtQXDedTRaiuyWF9nl6wIWu243QaI0BMIitrW2GMna9Aq"];
+- (void)initialize:(NSString*)key secret:(NSString*)secret {
+    [[Twitter sharedInstance] startWithConsumerKey:key consumerSecret:secret];
 }
 
 - (void)shareContent:(NSString*)text {
@@ -129,24 +129,34 @@ static NSString* const k__image  = @"twitter_image";
     UIWindow* window = [UIApplication sharedApplication].keyWindow;
     UIViewController* vc = [window rootViewController];
 
-    TWTRComposer* composer = [[TWTRComposer alloc] init];
-    [composer setText:text];
-
+    UIImage* uiimage = nil;
     if (image != nil) {
-        [composer setImage:[UIImage imageNamed:image]];
+        uiimage = [UIImage imageNamed:image];
     }
 
-    // Called from a UIViewController
-    [composer showFromViewController:vc
-                          completion:^(TWTRComposerResult result) {
-                              if (result == TWTRComposerResultCancelled) {
-                                  NSLog(@"Tweet composition cancelled");
-                                  [bridge_ callCpp:k__onCancel message:@""];
-                              } else {
-                                  NSLog(@"Sending Tweet!");
-                                  [bridge_ callCpp:k__onSuccess message:@""];
-                              }
-                          }];
+    TWTRComposerViewController* composer =
+        [TWTRComposerViewController emptyComposer];
+    [composer initWithInitialText:text image:uiimage videoURL:nil];
+    composer.delegate = self;
+    [vc presentViewController:composer animated:YES completion:nil];
+
+}
+
+- (void)composerDidCancel:(TWTRComposerViewController*)controller {
+    NSLog(@"Tweet composition cancelled");
+    [bridge_ callCpp:k__onCancel message:@""];
+}
+
+- (void)composerDidSucceed:(TWTRComposerViewController*)controller
+                 withTweet:(TWTRTweet*)tweet {
+    NSLog(@"Sending Tweet!");
+    [bridge_ callCpp:k__onSuccess message:@""];
+}
+
+- (void)composerDidFail:(TWTRComposerViewController*)controller
+              withError:(NSError*)error {
+    NSLog(@"Tweet composition fail");
+    [bridge_ callCpp:k__onFailure message:@""];
 }
 
 - (BOOL)application:(UIApplication*)app
@@ -154,6 +164,5 @@ static NSString* const k__image  = @"twitter_image";
             options:(nonnull NSDictionary<NSString*, id>*)options {
     return [Twitter.sharedInstance application:app openURL:url options:options];
 }
-
 
 @end

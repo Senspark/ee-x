@@ -171,6 +171,7 @@ bool Self::showInterstitial(const std::string& placementId) {
         return false;
     }
 
+    _didRewardFlag = false;
     bridge_.call(k__showInterstitial, placementId);
     return true;
 }
@@ -186,6 +187,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
     }
     rewarded_ = false;
     _shouldDoRewardInGame = false;
+    _didRewardFlag = false;
     bridge_.call(k__showRewardedVideo, placementId);
     return true;
 }

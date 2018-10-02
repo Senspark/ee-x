@@ -203,7 +203,7 @@ public class Utils {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 String callbackTag = (String) dict.get("callback_id");
-                float delayTime = Float.parseFloat((String) dict.get("delay_time"));
+                float delayTime = ((Double)dict.get("delay_time")).floatValue();
                 Utils.runFunctionDelay(callbackTag, delayTime);
 
                 return "";

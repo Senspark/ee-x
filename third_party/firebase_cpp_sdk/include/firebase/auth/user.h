@@ -6,11 +6,11 @@
 #include <string>
 #include <vector>
 
-#include "firebase/auth/credential.h"
-#include "firebase/auth/types.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
+#include "firebase/auth/credential.h"
+#include "firebase/auth/types.h"
 
 namespace firebase {
 namespace auth {
@@ -48,31 +48,6 @@ class UserInfoInterface {
 
   /// Gets the phone number for the user, in E.164 format.
   virtual std::string phone_number() const = 0;
-
-  /// Gets the unique user ID for the user.
-  ///
-  /// @deprecated Renamed to uid().
-  FIREBASE_DEPRECATED std::string UID() const { return uid(); }
-
-  /// Gets email associated with the user, if any.
-  ///
-  /// @deprecated Renamed to email().
-  FIREBASE_DEPRECATED std::string Email() const { return email(); }
-
-  /// Gets the display name associated with the user, if any.
-  ///
-  /// @deprecated Renamed to display_name().
-  FIREBASE_DEPRECATED std::string DisplayName() const { return display_name(); }
-
-  /// Gets the photo url associated with the user, if any.
-  ///
-  /// @deprecated Renamed to photo_url().
-  FIREBASE_DEPRECATED std::string PhotoUrl() const { return photo_url(); }
-
-  /// Gets the provider ID for the user (For example, "Facebook").
-  ///
-  /// @deprecated Renamed to provider_id().
-  FIREBASE_DEPRECATED std::string ProviderId() const { return provider_id(); }
 };
 
 /// @brief Additional user data returned from an identity provider.
@@ -161,57 +136,12 @@ class User : public UserInfoInterface {
   Future<std::string> GetTokenThreadSafe(bool force_refresh);
 #endif  // defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
 
-  /// Get results of the most recent call to @ref Token.
+  /// Get results of the most recent call to @ref GetToken.
   Future<std::string> GetTokenLastResult() const;
-
-  /// The Java Web Token (JWT) that can be used to identify the user to
-  /// the backend.
-  ///
-  /// If a current ID token is still believed to be valid (i.e. it has not yet
-  /// expired), that token will be returned immediately.
-  /// A developer may set the optional force_refresh flag to get a new ID token,
-  /// whether or not the existing token has expired. For example, a developer
-  /// may use this when they have discovered that the token is invalid for some
-  /// other reason.
-  ///
-  /// @deprecated Renamed to GetToken().
-  FIREBASE_DEPRECATED Future<std::string> Token(bool force_refresh) {
-    return GetToken(force_refresh);
-  }
-
-  /// Get results of the most recent call to @ref Token.
-  ///
-  /// @deprecated Renamed to GetTokenLastResult().
-  FIREBASE_DEPRECATED Future<std::string> TokenLastResult() const {
-    return GetTokenLastResult();
-  }
-
-  /// Gets the raw refresh token (only for use in advanced scenarios where
-  /// manually refresh of tokens is required).
-  ///
-  /// @deprecated This method is deprecated and should not be used.
-  FIREBASE_DEPRECATED std::string refresh_token() const;
-
-  /// Gets the raw refresh token (only for use in advanced scenarios where
-  /// manually refresh of tokens is required).
-  ///
-  /// @deprecated Renamed to refresh_token().
-  FIREBASE_DEPRECATED std::string RefreshToken() const {
-    return refresh_token();
-  }
 
   /// Gets the third party profile data associated with this user returned by
   /// the authentication server, if any.
   const std::vector<UserInfoInterface*>& provider_data() const;
-
-  /// Gets the third party profile data associated with this user returned by
-  /// the authentication server, if any.
-  ///
-  /// @deprecated Renamed to provider_data().
-  FIREBASE_DEPRECATED const std::vector<UserInfoInterface*>& ProviderData()
-      const {
-    return provider_data();
-  }
 
   /// Sets the email address for the user.
   ///
@@ -344,19 +274,8 @@ class User : public UserInfoInterface {
   /// verified.
   bool is_email_verified() const;
 
-  /// Returns true if the email address associated with this user has been
-  /// verified.
-  ///
-  /// @deprecated Renamed to is_email_verified().
-  FIREBASE_DEPRECATED bool EmailVerified() const { return is_email_verified(); }
-
   /// Returns true if user signed in anonymously.
   bool is_anonymous() const;
-
-  /// Returns true if user signed in anonymously.
-  ///
-  /// @deprecated Renamed to is_anonymous().
-  FIREBASE_DEPRECATED bool Anonymous() const { return is_anonymous(); }
 
   /// Gets the unique Firebase user ID for the user.
   ///
@@ -382,31 +301,6 @@ class User : public UserInfoInterface {
 
   /// Gets the phone number for the user, in E.164 format.
   virtual std::string phone_number() const;
-
-  /// Gets the unique user ID for the user.
-  ///
-  /// @deprecated Renamed to uid().
-  FIREBASE_DEPRECATED std::string UID() const { return uid(); }
-
-  /// Gets email associated with the user, if any.
-  ///
-  /// @deprecated Renamed to email().
-  FIREBASE_DEPRECATED std::string Email() const { return email(); }
-
-  /// Gets the display name associated with the user, if any.
-  ///
-  /// @deprecated Renamed to display_name().
-  FIREBASE_DEPRECATED std::string DisplayName() const { return display_name(); }
-
-  /// Gets the photo url associated with the user, if any.
-  ///
-  /// @deprecated Renamed to photo_url().
-  FIREBASE_DEPRECATED std::string PhotoUrl() const { return photo_url(); }
-
-  /// Gets the provider ID for the user (For example, "Facebook").
-  ///
-  /// @deprecated Renamed to provider_id().
-  FIREBASE_DEPRECATED std::string ProviderId() const { return provider_id(); }
 
  private:
   friend struct AuthData;

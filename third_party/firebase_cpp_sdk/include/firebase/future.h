@@ -103,18 +103,7 @@ class FutureBase {
   void Release();
 
   /// Completion status of the asynchronous call.
-  ///
-  /// @deprecated Renamed to status().
-  FIREBASE_DEPRECATED FutureStatus Status() const { return status(); }
-
-  /// Completion status of the asynchronous call.
   FutureStatus status() const;
-
-  /// When status() is kFutureStatusComplete, returns the API-defined
-  /// error code. Otherwise, return value is undefined.
-  ///
-  /// @deprecated Renamed to error().
-  FIREBASE_DEPRECATED int Error() const { return error(); }
 
   /// When status() is kFutureStatusComplete, returns the API-defined
   /// error code. Otherwise, return value is undefined.
@@ -126,25 +115,7 @@ class FutureBase {
   ///
   /// @note The returned pointer is only valid for the lifetime of the Future
   ///       or its copies.
-  ///
-  /// @deprecated Renamed to error_message().
-  FIREBASE_DEPRECATED const char* ErrorMessage() const {
-    return error_message();
-  }
-
-  /// When status() is kFutureStatusComplete, returns the API-defined error
-  /// message, as human-readable text, or an empty string if the API does not
-  /// provide a human readable description of the error.
-  ///
-  /// @note The returned pointer is only valid for the lifetime of the Future
-  ///       or its copies.
   const char* error_message() const;
-
-  /// Result of the asynchronous call, or nullptr if the result is still
-  /// pending. Cast is required since GetFutureResult() returns void*.
-  ///
-  /// @deprecated Renamed to result_void().
-  FIREBASE_DEPRECATED const void* ResultVoid() const { return result_void(); }
 
   /// Result of the asynchronous call, or nullptr if the result is still
   /// pending. Cast is required since GetFutureResult() returns void*.
@@ -286,12 +257,6 @@ class Future : public FutureBase {
       : FutureBase(api, handle) {}
 
   /// @endcond
-
-  /// Result of the asynchronous call, or nullptr if the result is still
-  /// pending. Allows the API to provide a type-specific interface.
-  ///
-  /// @deprecated Renamed to result().
-  FIREBASE_DEPRECATED const ResultType* Result() const { return result(); }
 
   /// Result of the asynchronous call, or nullptr if the result is still
   /// pending. Allows the API to provide a type-specific interface.

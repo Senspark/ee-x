@@ -36,7 +36,7 @@ typedef id AdParent;
 typedef void *AdParent;
 #endif  // __ANDROID__, TARGET_OS_IPHONE
 
-/// Error codes returned by Future::Error().
+/// Error codes returned by Future::error().
 enum AdMobError {
   /// Call completed successfully.
   kAdMobErrorNone,

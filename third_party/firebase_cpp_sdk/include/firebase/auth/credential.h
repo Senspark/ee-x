@@ -64,11 +64,6 @@ class Credential {
   ///
   std::string provider() const;
 
-  /// Gets the name of the Identification Provider (IDP) for the credential.
-  ///
-  /// @deprecated Renamed to provider().
-  FIREBASE_DEPRECATED std::string Provider() const { return provider(); }
-
   /// Get whether this credential is valid. A credential can be
   /// invalid in an error condition, e.g. empty username/password.
   ///
@@ -192,14 +187,16 @@ class OAuthProvider {
 ///
 /// Possible verification flows:
 /// (1) User manually enters verification code.
+/// @if cpp_examples
 ///     - App calls @ref VerifyPhoneNumber.
 ///     - Web verification page is displayed to user where they may need to
 ///       solve a CAPTCHA. [iOS only].
 ///     - Auth server sends the verification code via SMS to the provided
-///       phone number. App recieves verification id via Listener::OnCodeSent().
+///       phone number. App receives verification id via Listener::OnCodeSent().
 ///     - User receives SMS and enters verification code in app's GUI.
 ///     - App uses user's verification code to call
 ///       @ref PhoneAuthProvider::GetCredential.
+/// @endif
 ///
 /// (2) SMS is automatically retrieved (Android only).
 ///     - App calls @ref VerifyPhoneNumber with `timeout_ms` > 0.
@@ -207,14 +204,20 @@ class OAuthProvider {
 ///       phone number.
 ///     - SMS arrives and is automatically retrieved by the operating system.
 ///       Credential is automatically created and passed to the app via
+///       @if cpp_examples
 ///       Listener::OnVerificationCompleted().
+///       @endif
 ///
 /// (3) Phone number is instantly verified (Android only).
 ///     - App calls @ref VerifyPhoneNumber.
 ///     - The operating system validates the phone number without having to
 ///       send an SMS. Credential is automatically created and passed to
-///       the app via Listener::OnVerificationCompleted().
+///       the app via
+///       @if cpp_examples
+///       Listener::OnVerificationCompleted().
+///       @endif
 ///
+/// @if cpp_examples
 /// All three flows can be handled with the example code below.
 /// The flow is complete when PhoneVerifier::credential() returns non-NULL.
 ///
@@ -325,6 +328,7 @@ class OAuthProvider {
 ///   Mutex mutex_;
 /// };
 /// @endcode
+/// @endif
 class PhoneAuthProvider {
  public:
   /// @brief Token to maintain current phone number verification session.
@@ -447,7 +451,7 @@ class PhoneAuthProvider {
   ///    number to verify. If not-NULL, bypass the verification session deduping
   ///    and force resending a new SMS.
   ///    This token is received in @ref Listener::OnCodeSent.
-  ///    This should only be used when the user presses a "Resend SMS" button.
+  ///    This should only be used when the user presses a Resend SMS button.
   /// @param[in,out] listener Class that receives notification whenever an SMS
   ///    verification event occurs. See sample code at top of class.
   void VerifyPhoneNumber(const char* phone_number,

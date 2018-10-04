@@ -207,18 +207,6 @@ class StorageReference {
   /// kErrorNone, the operation succeeded and the Metadata is returned.
   Future<Metadata> UpdateMetadata(const Metadata& metadata);
 
-  /// @brief Updates the metadata associated with this StorageReference.
-  ///
-  /// @returns A Future result, which will complete when the operation either
-  /// succeeds or fails. When the Future is completed, if its Error is
-  /// kErrorNone, the operation succeeded and the Metadata is returned.
-  ///
-  /// @deprecated Deprecated in favor of UpdateMetadata(const Metadata&).
-  FIREBASE_DEPRECATED Future<Metadata> UpdateMetadata(
-      const Metadata* metadata) {
-    return UpdateMetadata(*metadata);
-  }
-
   /// @brief Returns the result of the most recent call to UpdateMetadata();
   ///
   /// @returns The result of the most recent call to UpdateMetadata();

@@ -3,6 +3,7 @@
 #ifndef FIREBASE_STORAGE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_STORAGE_METADATA_H_
 #define FIREBASE_STORAGE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_STORAGE_METADATA_H_
 
+#include <cassert>
 #include <map>
 #include <string>
 #include <vector>
@@ -30,6 +31,7 @@ class Metadata {
  public:
   /// @brief Create a default Metadata that you can modify and use.
   Metadata();
+
 
   /// @brief Copy constructor.
   ///
@@ -179,21 +181,8 @@ class Metadata {
   /// @returns The keys for custom metadata.
   std::map<std::string, std::string>* custom_metadata() const;
 
-  /// @brief Returns a long lived download URL with a revokable token.
-  ///
-  /// This can be used to share the file with others, but can be revoked by a
-  /// developer in the Firebase Console if desired.
-  ///
-  /// @returns A long lived download URL with a revokable token, or nullptr
-  /// if there is none.
-  const char* download_url() const;
-
-  /// @brief Return all unguessable Urls that can be used to download the
-  /// StorageReference.
-  ///
-  /// @returns All unguessable Urls that can be used to download the
-  /// StorageReference.
-  std::vector<std::string> download_urls() const;
+  // download_url() and download_urls() are deprecated and removed.
+  // Please use StorageReference::GetDownloadUrl() instead.
 
   /// @brief Return a version String indicating what version of the
   /// StorageReference.

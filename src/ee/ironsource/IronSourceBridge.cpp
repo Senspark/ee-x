@@ -171,7 +171,7 @@ bool Self::showInterstitial(const std::string& placementId) {
         return false;
     }
 
-    _didRewardFlag = false;
+    rewarded_ = false;
     bridge_.call(k__showInterstitial, placementId);
     return true;
 }
@@ -186,12 +186,12 @@ bool Self::showRewardedVideo(const std::string& placementId) {
         return false;
     }
     rewarded_ = false;
-    _didRewardFlag = false;
     bridge_.call(k__showRewardedVideo, placementId);
     return true;
 }
 
 void Self::onRewarded(const std::string& placementId) {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     rewarded_ = true;
@@ -199,6 +199,7 @@ void Self::onRewarded(const std::string& placementId) {
 }
 
 void Self::onFailed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     rewarded_ = false;
@@ -206,34 +207,26 @@ void Self::onFailed() {
 }
 
 void Self::onOpened() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
-    _didRewardFlag = false;
 }
 
 void Self::onClosed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    if (not rewarded_ && _closeTimeout > 0) {
-        // wait for reward
-        // if out of time just callback failed
-        ee::core::runOnUiThreadDelayed(
-            [this] {
-                std::lock_guard<core::SpinLock> guard(*handlerLock_);
-                rewarded_ = false;
-                doRewardAndFinishAds();
-            },
-            _closeTimeout);
-    } else {
-        doRewardAndFinishAds();
-    }
+    // wait for reward
+    // if out of time just callback failed
+    ee::core::runOnUiThreadDelayed(
+        [this] {
+            std::lock_guard<core::SpinLock> guard(*handlerLock_);
+            doRewardAndFinishAds();
+        },
+        _closeTimeout);
 }
 
 void Self::doRewardAndFinishAds() {
-    if (_didRewardFlag) {
-        return;
-    }
-
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
@@ -241,7 +234,6 @@ void Self::doRewardAndFinishAds() {
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
     auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded_);
 
-    _didRewardFlag = true;
     assert(wasInterstitialAd || wasRewardedVideo);
 }
 
@@ -257,6 +249,7 @@ void Self::onInterstitialFailed() {
 }
 
 void Self::onInterstitialClosed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
     //    auto&& mediation = ads::MediationManager::getInstance();
     //
@@ -268,7 +261,8 @@ void Self::onInterstitialClosed() {
 #pragma mark - Config
 
 void Self::setCloseTimeout(float timeout) {
-    _closeTimeout = timeout;
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
+    _closeTimeout = timeout < 1 ? 1 : timeout;
 }
 } // namespace ironsource
 } // namespace ee

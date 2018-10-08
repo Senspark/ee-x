@@ -64,8 +64,7 @@ private:
 
     std::unique_ptr<core::SpinLock> handlerLock_;
 
-    float _closeTimeout{0};
-    bool _didRewardFlag{false};
+    float _closeTimeout{1};
     bool rewarded_{false};
 };
 } // namespace ironsource

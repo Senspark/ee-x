@@ -68,7 +68,7 @@ static NSString* const k__sendMail                      = @"Utils_sendMail";
 static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
-static NSString* const k__runFunctionDelay              = @"Utils_runFunctionDelay";
+static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadDelayed";
 // clang-format on
 
 + (void)registerHandlers {
@@ -160,7 +160,7 @@ static NSString* const k__runFunctionDelay              = @"Utils_runFunctionDel
 
         return @"";
     }
-                        tag:k__runFunctionDelay];
+                        tag:k__runOnUiThreadDelayed];
 }
 
 + (BOOL)isMainThread {

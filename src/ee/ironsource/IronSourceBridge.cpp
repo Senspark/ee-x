@@ -186,7 +186,6 @@ bool Self::showRewardedVideo(const std::string& placementId) {
         return false;
     }
     rewarded_ = false;
-    _shouldDoRewardInGame = false;
     _didRewardFlag = false;
     bridge_.call(k__showRewardedVideo, placementId);
     return true;
@@ -196,17 +195,14 @@ void Self::onRewarded(const std::string& placementId) {
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     rewarded_ = true;
-    if (_shouldDoRewardInGame) {
-        doRewardInGame();
-    }
-    _shouldDoRewardInGame = true;
+    doRewardAndFinishAds();
 }
 
 void Self::onFailed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    _shouldDoRewardInGame = true;
-    onClosed();
+    rewarded_ = false;
+    doRewardAndFinishAds();
 }
 
 void Self::onOpened() {
@@ -218,23 +214,22 @@ void Self::onOpened() {
 void Self::onClosed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    if (_shouldDoRewardInGame) {
-        doRewardInGame();
-    } else {
+    if (not rewarded_ && _closeTimeout > 0) {
         // wait for reward
         // if out of time just callback failed
-        ee::core::runFunctionDelay(
+        ee::core::runOnUiThreadDelayed(
             [this] {
                 std::lock_guard<core::SpinLock> guard(*handlerLock_);
                 rewarded_ = false;
-                doRewardInGame();
+                doRewardAndFinishAds();
             },
             _closeTimeout);
+    } else {
+        doRewardAndFinishAds();
     }
-    _shouldDoRewardInGame = true;
 }
 
-void Self::doRewardInGame() {
+void Self::doRewardAndFinishAds() {
     if (_didRewardFlag) {
         return;
     }
@@ -267,8 +262,7 @@ void Self::onInterstitialClosed() {
     //
     //    auto successful = mediation.finishInterstitialAd();
     //    assert(successful);
-    _shouldDoRewardInGame = true;
-    onClosed();
+    doRewardAndFinishAds();
 }
 
 #pragma mark - Config

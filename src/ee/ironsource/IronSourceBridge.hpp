@@ -51,14 +51,11 @@ private:
     void onFailed();
     void onOpened();
     void onClosed();
-    void doRewardInGame();
+    void doRewardAndFinishAds();
 
     void onInterstitialOpened();
     void onInterstitialFailed();
     void onInterstitialClosed();
-
-    bool rewarded_;
-    bool _shouldDoRewardInGame;
 
     IMessageBridge& bridge_;
     const Logger& logger_;
@@ -67,8 +64,9 @@ private:
 
     std::unique_ptr<core::SpinLock> handlerLock_;
 
-    float _closeTimeout;
+    float _closeTimeout{0};
     bool _didRewardFlag{false};
+    bool rewarded_{false};
 };
 } // namespace ironsource
 } // namespace ee

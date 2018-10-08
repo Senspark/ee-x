@@ -3,9 +3,10 @@
 #ifndef FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_QUERY_H_
 #define FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_QUERY_H_
 
-#include "firebase/database/listener.h"
+#include <string>
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
+#include "firebase/database/listener.h"
 
 namespace firebase {
 namespace database {
@@ -30,13 +31,13 @@ class Query {
 
   /// Copy assignment operator. Queries can be copied. Copies exist
   /// independently of each other.
-  Query operator=(const Query& query);
+  Query& operator=(const Query& query);
 
 #if defined(FIREBASE_USE_MOVE_OPERATORS) || defined(DOXYGEN)
   /// Move constructor.
   Query(Query&& query);
   /// Move assignment operator.
-  Query operator=(Query&& query);
+  Query& operator=(Query&& query);
 #endif  // defined(FIREBASE_USE_MOVE_OPERATORS) || defined(DOXYGEN)
 
   /// @brief Required virtual destructor.
@@ -194,6 +195,9 @@ class Query {
   /// directive (or priority as default), and additionally only child nodes with
   /// a key greater than or equal to the given key.
   ///
+  /// <b>Known issue</b> This currently does not work properly on all platforms.
+  /// Please use StartAt(Variant order_value) instead.
+  ///
   /// @param[in] order_value The lowest sort value the Query should include.
   /// @param[in] child_key The lowest key the Query should include.
   ///
@@ -225,6 +229,9 @@ class Query {
   /// OrderBy directive (or priority as default), and additionally only child
   /// nodes with a key less than or equal to the given key.
   ///
+  /// <b>Known issue</b> This currently does not work properly on all platforms.
+  /// Please use EndAt(Variant order_value) instead.
+  ///
   /// @param[in] order_value The highest sort value the Query should include.
   /// @param[in] child_key The highest key the Query should include.
   ///
@@ -251,6 +258,9 @@ class Query {
   /// node with the given value, using the given OrderBy directive (or priority
   /// as default), and the given key. Note that there is at most one such child
   /// as child key names are unique.
+  ///
+  /// <b>Known issue</b> This currently does not work properly on iOS and
+  /// desktop. Please use EqualTo(Variant order_value) instead.
   ///
   /// @param[in] order_value The exact sort value the Query should include.
   /// @param[in] child_key The exact key the Query should include.
@@ -292,22 +302,12 @@ class Query {
   /// invalid.
   virtual bool is_valid() const;
 
-  /// @brief Returns true if this query is valid, false if it is not valid. An
-  /// invalid query could be returned by, say, attempting to OrderBy two
-  /// different items, or calling OrderByChild() with an empty path. If a Query
-  /// is invalid, attempting to add more constraints will also result in an
-  /// invalid Query.
-  ///
-  /// @returns true if this query is valid, false if this query is
-  /// invalid.
-  ///
-  /// @deprecated Renamed to is_valid().
-  FIREBASE_DEPRECATED virtual bool IsValid() const { return is_valid(); }
-
  protected:
   /// @cond FIREBASE_APP_INTERNAL
   explicit Query(internal::QueryInternal* internal);
   void SetInternal(internal::QueryInternal* internal);
+  void RegisterCleanup();
+  void UnregisterCleanup();
   /// @endcond
 
  private:

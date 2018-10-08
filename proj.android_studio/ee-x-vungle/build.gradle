@@ -19,6 +19,6 @@ android {
 dependencies {
     api project(':ee-x-core')
     implementation 'com.github.vungle:vungle-android-sdk:5.3.2'
-    implementation "com.google.android.gms:play-services-basement:15.0.1"
-    implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation "com.google.android.gms:play-services-basement:16.0.1"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
 }

@@ -389,14 +389,14 @@ public class Facebook implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void shareLinkContent(@NonNull String url, FacebookCallback<Sharer.Result> delegate) {
-        String encodedUrl;
-        try {
-            encodedUrl = URLEncoder.encode(url, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            encodedUrl = url;
-    }
+//        String encodedUrl;
+//        try {
+//            encodedUrl = URLEncoder.encode(url, "utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            encodedUrl = url;
+//        }
 
-        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(encodedUrl)).build();
+        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(url)).build();
         shareContent(content, delegate);
     }
 

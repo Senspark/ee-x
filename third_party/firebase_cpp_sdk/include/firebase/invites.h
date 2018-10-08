@@ -39,6 +39,27 @@ void Terminate();
 
 class InvitesSharedData;
 
+/// @brief Enum describing the strength of a dynamic links match.
+///
+/// This version is local to invites; it mirrors the enum
+/// firebase::dynamic_links::LinkMatchStrength in dynamic_links.
+enum LinkMatchStrength {
+  /// No match has been achieved
+  kLinkMatchStrengthNoMatch = 0,
+
+  /// The match between the Dynamic Link and device is not perfect.  You should
+  /// not reveal any personal information related to the Dynamic Link.
+  kLinkMatchStrengthWeakMatch,
+
+  /// The match between the Dynamic Link and this device has a high confidence,
+  /// but there is a small possibility of error.
+  kLinkMatchStrengthStrongMatch,
+
+  /// The match between the Dynamic Link and the device is exact.  You may
+  /// safely reveal any personal information related to this Dynamic Link.
+  kLinkMatchStrengthPerfectMatch
+};
+
 namespace internal {
 // Forward declaration for platform-specific data, implemented in each library.
 class InvitesSenderInternal;
@@ -356,9 +377,31 @@ class Listener {
   /// just an App Invite and not a Dynamic Link.
   /// @param[in] is_strong_match Whether the Dynamic Link is a "strong match" or
   /// a "weak match" as defined by the Invites library.
+  /// @deprecated use the alternate version instead.
+  FIREBASE_DEPRECATED virtual void OnInviteReceived(const char* invitation_id,
+                                                    const char* dynamic_link,
+                                                    bool is_strong_match);
+
+  /// Called when an invitation is received.
+  ///
+  /// This invitation ID will match the invitation ID on the sender side, so
+  /// you can use analytics to determine that the invitation was accepted, and
+  /// even save it for future analytical use.
+  ///
+  /// If Firebase indicates a weak match for a dynamic link, it means that the
+  /// match between the dynamic link and the receiving device may not be
+  /// perfect. In this case your app should reveal no personal information from
+  /// the dynamic link.
+  ///
+  /// @param[in] invitation_id The Invitation ID. Will be null if there was
+  /// just a dynamic link, without an invitation.
+  /// @param[in] dynamic_link The Dynamic Link URL. Will be empty if there was
+  /// just an App Invite and not a Dynamic Link.
+  /// @param[in] match_strength An enum describing the strength of the match,
+  /// as defined by the Invites library.
   virtual void OnInviteReceived(const char* invitation_id,
                                 const char* dynamic_link,
-                                bool is_strong_match) = 0;
+                                LinkMatchStrength match_strength);
 
   /// Called when there was no invitation or dynamic link tied to
   /// opening the app.

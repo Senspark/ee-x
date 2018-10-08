@@ -12,10 +12,13 @@ namespace firebase {
 namespace database {
 namespace internal {
 class Callbacks;
+class ChildEventRegistration;
 class DataSnapshotInternal;
 class DatabaseInternal;
+class DatabaseInternalTestMatcherTest;
 class DatabaseReferenceInternal;
 class QueryInternal;
+class ValueEventRegistration;
 }  // namespace internal
 
 class Database;
@@ -27,6 +30,7 @@ class DatabaseReference;
 /// use DatabaseReference::SetValue() or DatabaseReference::RunTransaction().
 class DataSnapshot {
  public:
+
   /// @brief Copy constructor. DataSnapshots are immutable, so they can be
   /// efficiently copied.
   ///
@@ -83,40 +87,15 @@ class DataSnapshot {
   /// @returns The immediate children of this snapshot.
   std::vector<DataSnapshot> children() const;
 
-  /// @brief Get all the immediate children of this location.
-  ///
-  /// @returns The immediate children of this snapshot.
-  ///
-  /// @deprecated Renamed to children().
-  FIREBASE_DEPRECATED std::vector<DataSnapshot> GetChildren() const {
-    return children();
-  }
-
   /// @brief Get the number of children of this location.
   ///
   /// @returns The number of immediate children of this snapshot.
   size_t children_count() const;
 
-  /// @brief Get the number of children of this location.
-  ///
-  /// @returns The number of immediate children of this snapshot.
-  ///
-  /// @deprecated Renamed to children_count().
-  FIREBASE_DEPRECATED size_t GetChildrenCount() const {
-    return children_count();
-  }
-
   /// @brief Does this DataSnapshot have any children at all?
   ///
   /// @returns True if the snapshot has any children, false otherwise.
   bool has_children() const;
-
-  /// @brief Does this DataSnapshot have any children at all?
-  ///
-  /// @returns True if the snapshot has any children, false otherwise.
-  ///
-  /// @deprecated Renamed to has_children().
-  FIREBASE_DEPRECATED bool HasChildren() const { return has_children(); }
 
   /// @brief Get the key name of the source location of this snapshot.
   ///
@@ -128,49 +107,18 @@ class DataSnapshot {
 
   /// @brief Get the key name of the source location of this snapshot.
   ///
-  /// @note The returned pointer is only guaranteed to be valid while the
-  /// DataSnapshot is still in memory.
-  ///
-  /// @returns Key name of the source location of this snapshot.
-  ///
-  /// @deprecated Renamed to key().
-  FIREBASE_DEPRECATED const char* GetKey() const { return key(); }
-
-  /// @brief Get the key name of the source location of this snapshot.
-  ///
   /// @returns Key name of the source location of this snapshot.
   std::string key_string() const;
-
-  /// @brief Get the key name of the source location of this snapshot.
-  ///
-  /// @returns Key name of the source location of this snapshot.
-  ///
-  /// @deprecated Renamed to key_string();
-  FIREBASE_DEPRECATED std::string GetKeyString() const { return key_string(); }
 
   /// @brief Get the value of the data contained in this snapshot.
   ///
   /// @returns The value of the data contained in this location.
   Variant value() const;
 
-  /// @brief Get the value of the data contained in this snapshot.
-  ///
-  /// @returns The value of the data contained in this location.
-  ///
-  /// @deprecated Renamed to Value().
-  FIREBASE_DEPRECATED Variant GetValue() const { return value(); }
-
   /// @brief Get the priority of the data contained in this snapshot.
   ///
   /// @returns The value of this location's Priority relative to its siblings.
   Variant priority() const;
-
-  /// @brief Get the priority of the data contained in this snapshot.
-  ///
-  /// @returns The value of this location's Priority relative to its siblings.
-  ///
-  /// @deprecated Renamed to priority().
-  FIREBASE_DEPRECATED Variant GetPriority() const { return priority(); }
 
   /// @brief Obtain a DatabaseReference to the source location for this
   /// snapshot.
@@ -206,14 +154,17 @@ class DataSnapshot {
 
  private:
   /// @cond FIREBASE_APP_INTERNAL
-  friend class internal::DatabaseReferenceInternal;
-  friend class internal::DatabaseInternal;
-  friend class internal::DataSnapshotInternal;
   friend class internal::Callbacks;
+  friend class internal::ChildEventRegistration;
+  friend class internal::DataSnapshotInternal;
+  friend class internal::DatabaseInternal;
+  friend class internal::DatabaseInternalTestMatcherTest;
+  friend class internal::DatabaseReferenceInternal;
   friend class internal::QueryInternal;
+  friend class internal::ValueEventRegistration;
   /// @endcond
 
-  DataSnapshot(internal::DataSnapshotInternal* internal);
+  explicit DataSnapshot(internal::DataSnapshotInternal* internal);
 
   internal::DataSnapshotInternal* internal_;
 };

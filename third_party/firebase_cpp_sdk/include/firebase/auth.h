@@ -5,9 +5,9 @@
 
 #include <vector>
 #include "firebase/app.h"
-#include "firebase/auth/user.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
+#include "firebase/auth/user.h"
 
 #if !defined(DOXYGEN)
 FIREBASE_APP_REGISTER_CALLBACKS_REFERENCE(auth)
@@ -80,11 +80,6 @@ class Auth {
 
   /// Synchronously gets the cached current user, or nullptr if there is none.
   User* current_user();
-
-  /// Synchronously gets the cached current user, or nullptr if there is none.
-  ///
-  /// @deprecated Renamed to current_user().
-  FIREBASE_DEPRECATED User* CurrentUser() { return current_user(); }
 
   // ----- Providers -------------------------------------------------------
   /// Asynchronously requests the IDPs (identity providers) that can be used
@@ -357,11 +352,6 @@ class Auth {
 
   /// Gets the App this auth object is connected to.
   App& app();
-
-  /// Gets the App this auth object is connected to.
-  ///
-  /// @deprecated Renamed to app().
-  FIREBASE_DEPRECATED App& GetApp() { return app(); }
 
   /// Returns the Auth object for an App. Creates the Auth if required.
   ///

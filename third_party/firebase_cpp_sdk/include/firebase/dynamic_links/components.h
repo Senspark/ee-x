@@ -275,8 +275,7 @@ Future<GeneratedDynamicLink> GetShortLink(
 /// whether or not to produce an unguessable or shortest possible link.
 /// No references to the options object will be retained after the call.
 Future<GeneratedDynamicLink> GetShortLink(
-    const DynamicLinkComponents& components,
-    const DynamicLinkOptions& options);
+    const DynamicLinkComponents& components, const DynamicLinkOptions& options);
 
 /// Creates a shortened Dynamic Link from a given long Dynamic Link.
 /// @param long_dynamic_link A link previously generated from GetLongLink.
@@ -288,7 +287,7 @@ Future<GeneratedDynamicLink> GetShortLink(const char* long_dynamic_link);
 /// whether or not to produce an unguessable or shortest possible link.
 /// No references to the options object will be retained after the call.
 Future<GeneratedDynamicLink> GetShortLink(const char* long_dynamic_link,
-    const DynamicLinkOptions& options);
+                                          const DynamicLinkOptions& options);
 
 /// Get the (possibly still pending) results of the most recent GetShortUrl
 /// call.

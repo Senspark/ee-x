@@ -5,8 +5,10 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #include "firebase/app.h"
+#include "firebase/future.h"
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
 
@@ -328,7 +330,7 @@ void SetUserProperty(const char* name, const char* property);
 /// Policy</a>
 ///
 /// @param[in] user_id The user ID associated with the user of this app on this
-/// device.  The user ID must be non-empty and no more than 100 characters long.
+/// device.  The user ID must be non-empty and no more than 256 characters long.
 /// Setting user_id to NULL or nullptr removes the user ID.
 void SetUserId(const char* user_id);
 
@@ -359,6 +361,27 @@ void SetSessionTimeoutDuration(int64_t milliseconds);
 /// the current Activity. On iOS, the default is the class name of the current
 /// UIViewController. Limited to 100 characters.
 void SetCurrentScreen(const char* screen_name, const char* screen_class);
+
+/// Clears all analytics data for this app from the device and resets the app
+/// instance id.
+void ResetAnalyticsData();
+
+/// Get the instance ID from the analytics service.
+///
+/// @note This is *not* the same ID as the ID returned by
+/// @if cpp_examples
+/// firebase::instance_id::InstanceId.
+/// @else
+/// Firebase.InstanceId.FirebaseInstanceId.
+/// @endif
+///
+/// @returns Object which can be used to retrieve the analytics instance ID.
+Future<std::string> GetAnalyticsInstanceId();
+
+/// Get the result of the most recent GetAnalyticsInstanceId() call.
+///
+/// @returns Object which can be used to retrieve the analytics instance ID.
+Future<std::string> GetAnalyticsInstanceIdLastResult();
 
 }  // namespace analytics
 }  // namespace firebase

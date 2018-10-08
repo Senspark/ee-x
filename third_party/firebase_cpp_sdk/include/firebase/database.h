@@ -4,6 +4,7 @@
 #define FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_H_
 
 #include "firebase/app.h"
+#include "firebase/internal/common.h"
 #include "firebase/database/common.h"
 #include "firebase/database/data_snapshot.h"
 #include "firebase/database/database_reference.h"
@@ -12,7 +13,6 @@
 #include "firebase/database/mutable_data.h"
 #include "firebase/database/query.h"
 #include "firebase/database/transaction.h"
-#include "firebase/internal/common.h"
 
 namespace firebase {
 
@@ -40,7 +40,7 @@ class Database {
   /// Authentication to authenticate users to the Database server backend.
   ///
   /// If you call GetInstance() multiple times with the same App, you will get
-  /// the same instance of App.
+  /// the same instance of Database.
   ///
   /// @param[in] app Your instance of firebase::App. Firebase Realtime Database
   /// will use this to communicate with Firebase Authentication.
@@ -51,6 +51,24 @@ class Database {
   ///
   /// @returns An instance of Database corresponding to the given App.
   static Database* GetInstance(::firebase::App* app,
+                               InitResult* init_result_out = nullptr);
+
+  /// @brief Gets an instance of FirebaseDatabase for the specified URL.
+  ///
+  /// If you call GetInstance() multiple times with the same App and URL, you
+  /// will get the same instance of Database.
+  ///
+  /// @param[in] app Your instance of firebase::App. Firebase Realtime Database
+  /// will use this to communicate with Firebase Authentication.
+  /// @param[in] url The URL of your Firebase Realtime Database. This overrides
+  /// any url specified in the App options.
+  /// @param[out] init_result_out Optional: If provided, write the init result
+  /// here. Will be set to kInitResultSuccess if initialization succeeded, or
+  /// kInitResultFailedMissingDependency on Android if Google Play services is
+  /// not available on the current device.
+  ///
+  /// @returns An instance of Database corresponding to the given App and URL.
+  static Database* GetInstance(::firebase::App* app, const char* url,
                                InitResult* init_result_out = nullptr);
 
   /// @brief Destructor for the Database object.
@@ -65,12 +83,12 @@ class Database {
   /// @returns The firebase::App this Database was created with.
   App* app() const;
 
-  /// @brief Get the firebase::App that this Database was created with.
+  /// @brief Get the URL that this Database was created with.
   ///
-  /// @returns The firebase::App this Database was created with.
-  ///
-  /// @deprecated Renamed to app().
-  FIREBASE_DEPRECATED App* GetApp() const { return app(); }
+  /// @returns The URL this Database was created with, or an empty string if
+  /// this Database was created with default parameters. This string will remain
+  /// valid in memory for the lifetime of this Database.
+  const char* url() const;
 
   /// @brief Get a DatabaseReference to the root of the database.
   ///
@@ -130,32 +148,10 @@ class Database {
   /// (disk) storage, or false to discard pending writes when the app exists.
   void set_persistence_enabled(bool enabled);
 
-  /// @brief Sets whether pending write data will persist between application
-  /// exits.
-  ///
-  /// The Firebase Database client will cache synchronized data and keep track
-  /// of all writes you've initiated while your application is running. It
-  /// seamlessly handles intermittent network connections and re-sends write
-  /// operations when the network connection is restored. However by default
-  /// your write operations and cached data are only stored in-memory and will
-  /// be lost when your app restarts. By setting this value to `true`, the data
-  /// will be persisted to on-device (disk) storage and will thus be available
-  /// again when the app is restarted (even when there is no network
-  /// connectivity at that time).
-  ///
-  /// @note SetPersistenceEnabled should be called before creating any instances
-  /// of DatabaseReference, and only needs to be called once per application.
-  ///
-  /// @param[in] enabled Set this to true to persist write data to on-device
-  /// (disk) storage, or false to discard pending writes when the app exists.
-  ///
-  /// @deprecated Renamed to set_persistence_enabled().
-  FIREBASE_DEPRECATED void SetPersistenceEnabled(bool enabled) {
-    set_persistence_enabled(enabled);
-  }
-
  private:
-  Database(::firebase::App* app);
+  friend Database* GetDatabaseInstance(::firebase::App* app, const char* url,
+                                       InitResult* init_result_out);
+  Database(::firebase::App* app, internal::DatabaseInternal* internal);
   Database(const Database& src);
   Database& operator=(const Database& src);
 

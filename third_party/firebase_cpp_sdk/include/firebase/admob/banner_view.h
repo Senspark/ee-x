@@ -195,27 +195,10 @@ class BannerView {
   /// @return The current presentation state.
   PresentationState presentation_state() const;
 
-  /// Returns the current presentation state of the @ref BannerView.
-  /// @return The current presentation state.
-  ///
-  /// @deprecated Renamed to bounding_box().
-  FIREBASE_DEPRECATED PresentationState GetPresentationState() const {
-    return presentation_state();
-  }
-
   /// Retrieves the @ref BannerView's current onscreen size and location.
   /// @return The current size and location. Values are in pixels, and location
   ///         coordinates originate from the top-left corner of the screen.
   BoundingBox bounding_box() const;
-
-  /// Retrieves the @ref BannerView's current onscreen size and location.
-  /// @return The current size and location. Values are in pixels, and location
-  ///         coordinates originate from the top-left corner of the screen.
-  ///
-  /// @deprecated Renamed to bounding_box().
-  FIREBASE_DEPRECATED BoundingBox GetBoundingBox() const {
-    return bounding_box();
-  }
 
   /// Sets the @ref Listener for this object.
   /// @param[in] listener A valid BannerView::Listener to receive callbacks.

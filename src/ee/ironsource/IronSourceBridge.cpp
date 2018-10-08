@@ -195,7 +195,6 @@ void Self::onRewarded(const std::string& placementId) {
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     rewarded_ = true;
-    doRewardAndFinishAds();
 }
 
 void Self::onFailed() {

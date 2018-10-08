@@ -6,9 +6,10 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/internal/SpinLock.hpp"
 #include "ee/ironsource/IronSourceBridge.hpp"
-#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 #include "ee/ironsource/internal/IronSourceInterstitialAd.hpp"
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -41,6 +42,7 @@ Self::IronSource()
 
 Self::IronSource(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
+    , _closeTimeout(0.0f)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
@@ -90,6 +92,8 @@ Self::IronSource(const Logger& logger)
             return "";
         },
         k__onInterstitialClosed);
+
+    handlerLock_ = std::make_unique<core::SpinLock>();
 }
 
 Self::~IronSource() {
@@ -167,6 +171,7 @@ bool Self::showInterstitial(const std::string& placementId) {
         return false;
     }
 
+    rewarded_ = false;
     bridge_.call(k__showInterstitial, placementId);
     return true;
 }
@@ -181,43 +186,46 @@ bool Self::showRewardedVideo(const std::string& placementId) {
         return false;
     }
     rewarded_ = false;
-    _shouldDoRewardInGame = false;
     bridge_.call(k__showRewardedVideo, placementId);
     return true;
 }
 
 void Self::onRewarded(const std::string& placementId) {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     rewarded_ = true;
-    if (_shouldDoRewardInGame) {
-        doRewardInGame();
-    }
-    _shouldDoRewardInGame = true;
 }
 
 void Self::onFailed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    _shouldDoRewardInGame = true;
-    onClosed();
+    rewarded_ = false;
+    doRewardAndFinishAds();
 }
 
 void Self::onOpened() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 }
 
 void Self::onClosed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    if (_shouldDoRewardInGame) {
-        doRewardInGame();
-    }
-    _shouldDoRewardInGame = true;
+    // wait for reward
+    // if out of time just callback failed
+    ee::core::runOnUiThreadDelayed(
+        [this] {
+            std::lock_guard<core::SpinLock> guard(*handlerLock_);
+            doRewardAndFinishAds();
+        },
+        _closeTimeout);
 }
 
-void Self::doRewardInGame() {
+void Self::doRewardAndFinishAds() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
@@ -229,21 +237,31 @@ void Self::doRewardInGame() {
 }
 
 #pragma mark - For Interstitial
+
 void Self::onInterstitialOpened() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 }
+
 void Self::onInterstitialFailed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     onInterstitialClosed();
 }
+
 void Self::onInterstitialClosed() {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
     logger_.debug("%s", __PRETTY_FUNCTION__);
     //    auto&& mediation = ads::MediationManager::getInstance();
     //
     //    auto successful = mediation.finishInterstitialAd();
     //    assert(successful);
-    _shouldDoRewardInGame = true;
-    onClosed();
+    doRewardAndFinishAds();
+}
+
+#pragma mark - Config
+
+void Self::setCloseTimeout(float timeout) {
+    std::lock_guard<core::SpinLock> guard(*handlerLock_);
+    _closeTimeout = timeout < 1 ? 1 : timeout;
 }
 } // namespace ironsource
 } // namespace ee

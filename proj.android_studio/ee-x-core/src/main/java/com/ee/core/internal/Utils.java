@@ -52,6 +52,7 @@ public class Utils {
     private static final String k__isTablet                      = "Utils_isTablet";
     private static final String k__testConnection                = "Utils_testConnection";
     private static final String k__getDeviceId                   = "Utils_getDeviceId";
+    private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -195,6 +196,19 @@ public class Utils {
                 return "";
             }
         }, k__getDeviceId);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                String callbackTag = (String) dict.get("callback_id");
+                float delayTime = ((Double) dict.get("delay_time")).floatValue();
+                Utils.runOnUiThreadDelayed(callbackTag, delayTime);
+
+                return "";
+            }
+        }, k__runOnUiThreadDelayed);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -347,6 +361,20 @@ public class Utils {
 
         // No, this is not a tablet!
         return false;
+    }
+
+    public static void runOnUiThreadDelayed(final String callbackTag, float delay) {
+        long delayMilis = (long) delay * 1000;
+        Handler handler = new Handler(Looper.getMainLooper());
+        boolean result = handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MessageBridge.getInstance().callCpp(callbackTag);
+            }
+        }, delayMilis);
+        if (!result) {
+            _logger.error("runOnUiThread: failed to post the runnable");
+        }
     }
 
     @SuppressWarnings("WeakerAccess")

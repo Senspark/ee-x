@@ -90,6 +90,7 @@ void getDeviceId(const std::function<void(const std::string&)>& callback);
 
 std::string dumpBacktrace(size_t count);
 
+void runOnUiThreadDelayed(const std::function<void()>& func, float delay);
 } // namespace core
 
 using core::format;

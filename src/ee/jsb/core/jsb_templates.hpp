@@ -23,7 +23,7 @@ namespace core {
 
 template <typename T>
 se::Object* create_JSON_object(const T& value);
- 
+
 template <>
 inline se::Object* create_JSON_object(const std::pair<float, float>& value) {
     auto&& jsonArray = nlohmann::json::array();
@@ -408,8 +408,12 @@ bool jsb_finalize(se::State& s) {
     if (std::is_convertible<T*, cocos2d::Ref*>::value) {
         static_cast<cocos2d::Ref*>(s.nativeThisObject())->release();
     } else {
-        T* cObj = static_cast<T*>(s.nativeThisObject());
-        delete cObj;
+        std::shared_ptr<T>* casted =
+            static_cast<std::shared_ptr<T>*>(s.nativeThisObject());
+        if (casted == nullptr) {
+            T* cObj = static_cast<T*>(s.nativeThisObject());
+            delete cObj;
+        }
     }
     return true;
 }

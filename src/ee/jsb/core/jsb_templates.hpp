@@ -405,11 +405,22 @@ bool jsb_constructor_with_dispose_callback(se::State& s) {
 
 template <typename T>
 bool jsb_finalize(se::State& s) {
+//    if (std::is_convertible<T*, cocos2d::Ref*>::value) {
+//        static_cast<cocos2d::Ref*>(s.nativeThisObject())->release();
+//    } else {
+//        T* cObj = static_cast<T*>(s.nativeThisObject());
+//        delete cObj;
+//    }
+//    return true;
     if (std::is_convertible<T*, cocos2d::Ref*>::value) {
         static_cast<cocos2d::Ref*>(s.nativeThisObject())->release();
     } else {
-        T* cObj = static_cast<T*>(s.nativeThisObject());
-        delete cObj;
+        std::shared_ptr<T>* casted =
+        static_cast<std::shared_ptr<T>*>(s.nativeThisObject());
+        if (casted == nullptr) {
+            T* cObj = static_cast<T*>(s.nativeThisObject());
+            delete cObj;
+        }
     }
     return true;
 }

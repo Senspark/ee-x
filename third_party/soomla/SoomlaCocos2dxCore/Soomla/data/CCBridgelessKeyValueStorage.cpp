@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#include "base/CCUserDefault.h"
+#include "CCNativeKeyValueStorage.h"
 
 #include "CCBridgelessKeyValueStorage.h"
 
@@ -32,7 +32,7 @@ std::string
 CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
     std::string defaultValue = "";
     std::string result =
-        UserDefault::getInstance()->getStringForKey(key.c_str(), defaultValue);
+        CCKeyValueStorage::getInstance()->getValue(key.c_str());
     if (result == defaultValue) {
         return "";
     }
@@ -41,8 +41,8 @@ CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
 }
 
 void CCBridgelessKeyValueStorage::setValue(const std::string &key, const std::string &val) {
-    UserDefault::getInstance()->setStringForKey(key.c_str(), val);
-    UserDefault::getInstance()->flush();
+    CCKeyValueStorage::getInstance()->setValue(key.c_str(), val);
+    //CCKeyValueStorage::getInstance()->flush();
     addStoredKeys(key);
     saveStoredKeys();
 }
@@ -62,8 +62,8 @@ void CCBridgelessKeyValueStorage::purge() {
 
     mStoredKeys.clear();
 
-    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY, "");
-    UserDefault::getInstance()->flush();
+    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY, "");
+    //UserDefault::getInstance()->flush();
 }
 
 void CCBridgelessKeyValueStorage::addStoredKeys(const std::string& key) {
@@ -84,14 +84,14 @@ void CCBridgelessKeyValueStorage::saveStoredKeys() {
         joinedKeys.append("#").append(key);
     }
     
-    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY,
+    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY,
                                                 joinedKeys);
-    UserDefault::getInstance()->flush();
+    //UserDefault::getInstance()->flush();
 }
 
 void CCBridgelessKeyValueStorage::loadStoredKeys() {
     std::string joinedKeys =
-        UserDefault::getInstance()->getStringForKey(KEY_VALUE_STORAGE_KEY, "");
+        CCKeyValueStorage::getInstance()->getValue(KEY_VALUE_STORAGE_KEY);
 
     std::stringstream ss(joinedKeys);
     std::string item;

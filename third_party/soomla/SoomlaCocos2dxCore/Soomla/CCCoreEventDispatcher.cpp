@@ -18,6 +18,7 @@
 #include "CCCoreEventDispatcher.h"
 #include "CCDomainFactory.h"
 #include "CCSoomlaEventDispatcher.h"
+#include "cocos/scripting/js-bindings/event/Eventdispatcher.h"
 
 namespace soomla {
 
@@ -67,17 +68,27 @@ bool CCCoreEventDispatcher::init() {
 void CCCoreEventDispatcher::onRewardGivenEvent(CCReward* reward) {
     ValueMap eventMap;
     eventMap[CCCoreConsts::DICT_ELEMENT_REWARD] = reward->toValueMap();
-
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-        CCCoreConsts::EVENT_REWARD_GIVEN, &eventMap);
+    
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_REWARD_GIVEN;
+    event.args[0].ptrVal = &eventMap;
+    EventDispatcher::dispatchCustomEvent(event);
+    
+//    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+//        CCCoreConsts::EVENT_REWARD_GIVEN , &eventMap);
 }
 
 void CCCoreEventDispatcher::onRewardTakenEvent(CCReward* reward) {
     ValueMap eventMap;
     eventMap[CCCoreConsts::DICT_ELEMENT_REWARD] = reward->toValueMap();
-
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-        CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
+    
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_REWARD_TAKEN;
+    event.args[0].ptrVal = &eventMap;
+    EventDispatcher::dispatchCustomEvent(event);
+    
+//    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+//        CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
 }
 
 void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
@@ -85,9 +96,14 @@ void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
     ValueMap eventDict;
     eventDict[CCCoreConsts::DICT_ELEMENT_NAME] = name;
     eventDict[CCCoreConsts::DICT_ELEMENT_EXTRA] = extra;
+    
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_CUSTOM;
+    event.args[0].ptrVal = &eventDict;
+    EventDispatcher::dispatchCustomEvent(event);
 
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-        CCCoreConsts::EVENT_CUSTOM, &eventDict);
+//    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+//        CCCoreConsts::EVENT_CUSTOM, &eventDict);
 }
 
 } // namespace soomla

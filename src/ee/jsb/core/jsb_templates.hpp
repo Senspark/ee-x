@@ -94,7 +94,7 @@ template <typename T>
 T from_JSON_object(se::Object* jsonObj);
 
 template <>
-std::unordered_map<std::string, std::string>
+inline std::unordered_map<std::string, std::string>
 from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::unordered_map<std::string, std::string> ret;
@@ -109,7 +109,7 @@ from_JSON_object(se::Object* jsonObj) {
 }
 
 template <>
-std::unordered_map<std::string, cocos2d::Value>
+inline std::unordered_map<std::string, cocos2d::Value>
 from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::unordered_map<std::string, cocos2d::Value> ret;
@@ -133,7 +133,7 @@ from_JSON_object(se::Object* jsonObj) {
 }
 
 template <>
-std::map<std::string, std::string> from_JSON_object(se::Object* jsonObj) {
+inline std::map<std::string, std::string> from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::map<std::string, std::string> ret;
 

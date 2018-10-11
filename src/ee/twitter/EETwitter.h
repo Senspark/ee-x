@@ -5,7 +5,7 @@
 
 #import "ee/core/EEIPlugin.h"
 
-@interface EETwitter : NSObject <EEIPlugin, TWTRComposerViewControllerDelegate>
+@interface EETwitter : NSObject <EEIPlugin>
 
 - (void)initialize:(NSString*)key secret:(NSString*)secret;
 - (void)shareContent:(NSString*)text;

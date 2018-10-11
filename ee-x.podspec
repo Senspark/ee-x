@@ -89,7 +89,7 @@ Pod::Spec.new do |spec|
     s.public_header_files =
     'src/ee/Twitter.hpp',
     'src/ee/TwitterFwd.hpp',
-    'src/ee/twitter/TwitterBridge.hpp'
+    'src/ee/twitter/*.{h,hpp}'
     
     s.dependency 'ee-x/core'
     s.dependency 'TwitterKit'

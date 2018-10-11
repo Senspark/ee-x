@@ -14,7 +14,7 @@
 
 #import <ReplayKit/ReplayKit.h>
 
-@interface EETwitter () {
+@interface EETwitter () <TWTRComposerViewControllerDelegate> {
     EEMessageBridge* bridge_;
 }
 

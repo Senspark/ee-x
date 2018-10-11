@@ -6,7 +6,7 @@
 //
 
 #include "jsb_core_common.hpp"
-#include "jsb_facebook_ads_bridge.cpp"
+#include "jsb_facebook_ads_bridge.hpp"
 #include "jsb_facebook_native_ads_layout.hpp"
 
 #include "ee/FacebookAds.hpp"

@@ -76,17 +76,17 @@ constexpr static auto jsb_LogLevel_Assert =
 
 SE_BIND_FINALIZE_FUNC(jsb_LogLevel_finalize);
 SE_BIND_CTOR(jsb_LogLevel_constructor, __jsb_LogLevel_class,
-             js_LogLevel_finalize);
+             jsb_LogLevel_finalize);
 SE_BIND_PROP_GET(jsb_LogLevel_get_priority);
 SE_BIND_PROP_SET(jsb_LogLevel_set_priority);
 SE_BIND_PROP_GET(jsb_LogLevel_get_desc);
 SE_BIND_PROP_SET(jsb_LogLevel_set_desc);
-SE_BIND_FUNC(jsb_LogLevel_Verbose);
-SE_BIND_FUNC(jsb_LogLevel_Debug);
-SE_BIND_FUNC(jsb_LogLevel_Info);
-SE_BIND_FUNC(jsb_LogLevel_Warn);
-SE_BIND_FUNC(jsb_LogLevel_Error);
-SE_BIND_FUNC(jsb_LogLevel_Assert);
+SE_BIND_PROP_GET(jsb_LogLevel_Verbose);
+SE_BIND_PROP_GET(jsb_LogLevel_Debug);
+SE_BIND_PROP_GET(jsb_LogLevel_Info);
+SE_BIND_PROP_GET(jsb_LogLevel_Warn);
+SE_BIND_PROP_GET(jsb_LogLevel_Error);
+SE_BIND_PROP_GET(jsb_LogLevel_Assert);
 
 bool register_log_level_manual(se::Object* globalObj) {
     getOrCreatePlainObject_r("ee", globalObj, &__eeObj);
@@ -135,7 +135,7 @@ bool register_log_level_manual(se::Object* globalObj) {
 
     // Register predefined Loglevel instances
     const LogLevel* predefinedLogLevels[6] = {
-        &LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
+        &ee::core::LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
         &LogLevel::Warn,    &LogLevel::Error, &LogLevel::Assert,
     };
 

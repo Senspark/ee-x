@@ -8,7 +8,6 @@
 
 #include "ee/ads/IAdView.hpp"
 #include <ee/Core.hpp>
-#include "cocos2d.h"
 
 namespace ee {
 namespace ads {

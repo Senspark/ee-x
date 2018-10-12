@@ -29,7 +29,6 @@ void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
 
 namespace soomla {
 
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCPurchasableVirtualItem_finalize =
     &ee::core::jsb_finalize<CCPurchasableVirtualItem>;
@@ -47,6 +46,7 @@ SE_BIND_FUNC(jsb_CCPurchasableVirtualItem_getPurchaseType)
 SE_BIND_FUNC(jsb_CCPurchasableVirtualItem_canAfford)
 
 bool register_cc_purchasable_virtual_item_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCPurchasableVirtualItem", __soomlaObj,

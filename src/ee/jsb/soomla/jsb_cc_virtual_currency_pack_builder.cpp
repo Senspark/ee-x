@@ -21,7 +21,7 @@ namespace ee {
 namespace core {
 
 template <>
-soomla::CCPurchaseType* get_value(const se::Value& value) {
+inline soomla::CCPurchaseType* get_value(const se::Value& value) {
     return static_cast<soomla::CCPurchaseType*>(
         value.toObject()->getPrivateData());
 }
@@ -30,8 +30,6 @@ soomla::CCPurchaseType* get_value(const se::Value& value) {
 } // namespace ee
 
 namespace soomla {
-
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCVirtualCurrencyPackBuilder_finalize =
     &ee::core::jsb_finalize<CCVirtualCurrencyPackBuilder>;
@@ -79,6 +77,7 @@ SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setPurchaseType)
 SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_build)
 
 bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls =

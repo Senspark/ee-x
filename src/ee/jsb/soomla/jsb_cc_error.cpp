@@ -35,7 +35,6 @@ void set_value(se::Value& value, soomla::CCError* input) {
 } // namespace ee
 
 namespace soomla {
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCError_finalize = &ee::core::jsb_finalize<CCError>;
 const static auto jsb_CCError_createWithValue =
@@ -49,6 +48,7 @@ SE_BIND_FUNC(jsb_CCError_createWithValue)
 SE_BIND_FUNC(jsb_CCError_getInfo)
 
 bool register_cc_error_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCError", __soomlaObj, nullptr, nullptr);

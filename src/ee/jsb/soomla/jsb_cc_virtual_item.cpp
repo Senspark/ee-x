@@ -17,7 +17,6 @@
 namespace soomla {
 se::Object* __jsb_CCVirtualItem_proto = nullptr;
 se::Class* __jsb_CCVirtualItem_class = nullptr;
-se::Object* __soomlaObj = nullptr;
 } // namespace soomla
 
 namespace ee {
@@ -75,6 +74,7 @@ SE_BIND_FUNC(jsb_CCVirtualItem_getBalance)
 SE_BIND_FUNC(jsb_CCVirtualItem_save)
 
 bool register_cc_virtual_item_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls =

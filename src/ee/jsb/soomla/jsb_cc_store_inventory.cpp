@@ -28,8 +28,6 @@ void set_value(se::Value& value, soomla::CCStoreInventory* input) {
 
 namespace soomla {
 
-static se::Object* __soomlaObj = nullptr;
-
 const auto jsb_CCStoreInventory_finalize =
     &ee::core::jsb_finalize<CCStoreInventory>;
 const auto jsb_CCStoreInventory_constructor =
@@ -64,6 +62,7 @@ SE_BIND_FUNC(jsb_CCStoreInventory_giveItem)
 SE_BIND_FUNC(jsb_CCStoreInventory_takeItem)
 
 bool register_cc_store_inventory_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCStoreInventory", __soomlaObj, nullptr,

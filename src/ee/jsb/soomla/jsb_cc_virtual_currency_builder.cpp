@@ -13,7 +13,6 @@
 namespace soomla {
 static se::Object* __jsb_CCVirtualCurrencyBuilder_proto = nullptr;
 static se::Class* __jsb_CCVirtualCurrencyBuilder_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCVirtualCurrencyBuilder_finalize =
     &ee::core::jsb_finalize<CCVirtualCurrencyBuilder>;
@@ -45,6 +44,7 @@ SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_setItemId)
 SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_build)
 
 bool register_cc_virtual_currency_builder_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls =

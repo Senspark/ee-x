@@ -20,7 +20,6 @@ namespace soomla {
 
 static se::Object* __jsb_CCLifetimeVG_proto = nullptr;
 static se::Class* __jsb_CCLifetimeVG_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCLifetimeVG_finalize = &ee::core::jsb_finalize<CCLifetimeVG>;
 const auto jsb_CCLifttimeVG_getBalance =
@@ -31,6 +30,7 @@ SE_BIND_FINALIZE_FUNC(jsb_CCLifetimeVG_finalize)
 SE_BIND_FUNC(jsb_CCLifttimeVG_getBalance)
 
 bool register_cc_life_time_vg_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
     auto cls = se::Class::create("CCLifetimeVG", __soomlaObj,
                                  __jsb_CCPurchasableVirtualItem_proto, nullptr);

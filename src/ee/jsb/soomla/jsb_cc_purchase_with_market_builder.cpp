@@ -35,8 +35,6 @@ void set_value(se::Value& value, soomla::CCPurchaseType* input) {
 
 namespace soomla {
 
-static se::Object* __soomlaObj = nullptr;
-
 const static auto jsb_CCPurchaseWithMarketBuilder_finalize =
     &ee::core::jsb_finalize<CCPurchaseWithMarketBuilder>;
 const static auto jsb_CCPurchaseWithMarketBuilder_constructor =
@@ -70,6 +68,7 @@ const auto jsb_CCPurchaseType_finalize =
 SE_BIND_FINALIZE_FUNC(jsb_CCPurchaseType_finalize)
 
 bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls =

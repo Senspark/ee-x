@@ -18,7 +18,6 @@ namespace soomla {
 
 static se::Object* __jsb_CCMarketItem_proto = nullptr;
 static se::Class* __jsb_CCMarketItem_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCMarketItem_finalize = &ee::core::jsb_finalize<CCMarketItem>;
 const auto jsb_CCMarketItem_constructor =
@@ -44,6 +43,7 @@ SE_BIND_FUNC(jsb_CCMarketItem_getPrice)
 SE_BIND_FUNC(jsb_CCMarketItem_getMarketTitle)
 
 bool register_cc_market_item_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCMarketItem", __soomlaObj, nullptr,

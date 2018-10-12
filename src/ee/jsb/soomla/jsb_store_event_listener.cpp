@@ -15,7 +15,6 @@ namespace soomla {
 
 static se::Object* __jsb_StoreEventListener_proto = nullptr;
 static se::Class* __jsb_StoreEventListener_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_StoreEventListener_finalize =
     &ee::core::jsb_finalize<StoreEventListener>;
@@ -98,6 +97,7 @@ SE_BIND_FUNC(jsb_StoreEventListener_setRestoreTransactionStartedCallback)
 SE_BIND_FUNC(jsb_StoreEventListener_setRestoreTransactionFinishedCallback)
 
 bool register_store_event_listener_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("StoreEventListener", __soomlaObj, nullptr,

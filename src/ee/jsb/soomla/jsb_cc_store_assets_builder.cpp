@@ -53,8 +53,6 @@ void set_value(se::Value& value, soomla::CCStoreAssets* input) {
 
 namespace soomla {
 
-static se::Object* __soomlaObj = nullptr;
-
 const auto jsb_CCStoreAssetsBuilder_finalize =
     &ee::core::jsb_finalize<CCStoreAssetsBuilder>;
 const auto jsb_CCStoreAssetsBuilder_constructor =
@@ -92,6 +90,7 @@ SE_BIND_FUNC(jsb_CCStoreAssetsBuilder_addCategorie)
 SE_BIND_FUNC(jsb_CCStoreAssetsBuilder_build)
 
 bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCStoreAssetsBuilder", __soomlaObj, nullptr,

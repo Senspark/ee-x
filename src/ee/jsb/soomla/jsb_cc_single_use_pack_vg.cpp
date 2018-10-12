@@ -20,7 +20,6 @@ namespace soomla {
 
 static se::Object* __jsb_CCSingleUsePackVG_proto = nullptr;
 static se::Class* __jsb_CCSingleUsePackVG_class = nullptr;
-static se::Object* __soomlaObj = nullptr;
 
 const auto jsb_CCSingleUsePackVG_finalize =
     &ee::core::jsb_finalize<CCSingleUsePackVG>;
@@ -32,6 +31,7 @@ SE_BIND_FINALIZE_FUNC(jsb_CCSingleUsePackVG_finalize)
 SE_BIND_FUNC(jsb_CCSingleUsePackVG_getGoodAmount)
 
 bool register_cc_single_use_pack_vg_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCSingleUsePackVG", __soomlaObj,

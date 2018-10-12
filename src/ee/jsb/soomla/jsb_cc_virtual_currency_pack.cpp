@@ -14,7 +14,6 @@
 namespace soomla {
 se::Object* __jsb_CCVirtualCurrencyPack_proto = nullptr;
 se::Class* __jsb_CCVirtualCurrencyPack_class = nullptr;
-se::Object* __soomlaObj = nullptr;
 } // namespace soomla
 
 namespace ee {
@@ -44,6 +43,7 @@ SE_BIND_FUNC(jsb_CCVirtualCurrencyPack_getCurrencyAmount)
 SE_BIND_FUNC(jsb_CCVirtualCurrencyPack_canAfford)
 
 bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCVirtualCurrencyPack", __soomlaObj,

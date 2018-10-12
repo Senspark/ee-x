@@ -22,8 +22,6 @@ namespace core {
 
 namespace soomla {
 
-static se::Object* __soomlaObj = nullptr;
-
 const static auto jsb_CCLifetimeVGBuilder_finalize =
     &ee::core::jsb_finalize<CCLifetimeVGBuilder>;
 const static auto jsb_CCLifetimeVGBuilder_constructor =
@@ -59,6 +57,7 @@ SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setName)
 SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setPurchaseType)
 
 bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
+    se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCLifetimeVGBuilder", __soomlaObj, nullptr,

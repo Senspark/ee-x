@@ -80,19 +80,23 @@ void Self::shareScreenShot(const std::string& text, const std::string& image) {
 
 void Self::onSuccess() {
     if (_callback) {
+        _hadCallFailure = false;
         _callback(true);
     }
 }
 
 void Self::onFailure() {
-//    if (_callback) {
-//        _callback(false);
-//    }
+    if (_callback) {
+        _hadCallFailure = true;
+        _callback(false);
+    }
 }
 
 void Self::onCancel() {
     if (_callback) {
-        _callback(false);
+        if (!_hadCallFailure) {
+            _callback(false);
+        }
     }
 }
 

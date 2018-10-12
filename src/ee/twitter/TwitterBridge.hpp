@@ -32,6 +32,7 @@ private:
     void onFailure();
     void onCancel();
 
+    bool _hadCallFailure{false};
     ShareResultCallback _callback;
 };
 } // namespace twitter

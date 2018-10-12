@@ -62,6 +62,7 @@ static eetest::AppDelegate s_sharedApplication;
     [manager addPlugin:@"IronSource"];
     [manager addPlugin:@"UnityAds"];
     [manager addPlugin:@"Vungle"];
+    [manager addPlugin:@"Twitter"];
 
     // run the cocos2d-x game scene
     app->run();

@@ -2,11 +2,10 @@
 //  Created by Zinge on 7/4/16.
 //
 //
+#include "ee/twitter/TwitterBridge.hpp"
 
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/twitter/TwitterBridge.hpp"
-
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {

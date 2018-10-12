@@ -65,7 +65,7 @@ Pod::Spec.new do |spec|
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
   end
-  
+
   spec.subspec 'campaign-receiver' do |s|
     s.source_files =
       'src/ee/CampaignReceiver.hpp',
@@ -77,20 +77,20 @@ Pod::Spec.new do |spec|
       'src/ee/CampaignReceiverFwd.hpp',
       'src/ee/campaignreceiver/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'   
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'twitter' do |s|
     s.source_files =
-    'src/ee/Twitter.hpp',
-    'src/ee/TwitterFwd.hpp',
-    'src/ee/twitter/*.{cpp,h,hpp,m}'
-    
+      'src/ee/Twitter.hpp',
+      'src/ee/TwitterFwd.hpp',
+      'src/ee/twitter/*.{cpp,h,hpp,m}'
+
     s.public_header_files =
-    'src/ee/Twitter.hpp',
-    'src/ee/TwitterFwd.hpp',
-    'src/ee/twitter/*.{h,hpp}'
-    
+      'src/ee/Twitter.hpp',
+      'src/ee/TwitterFwd.hpp',
+      'src/ee/twitter/*.{h,hpp}'
+
     s.dependency 'ee-x/core'
     s.dependency 'TwitterKit'
   end
@@ -109,7 +109,7 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKLoginKit'
-    s.dependency 'FBSDKShareKit'    
+    s.dependency 'FBSDKShareKit'
   end
 
   spec.subspec 'notification' do |s|
@@ -405,8 +405,8 @@ Pod::Spec.new do |spec|
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*'
-      
-    s.public_header_files = 
+
+    s.public_header_files =
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*.{h,hpp}'

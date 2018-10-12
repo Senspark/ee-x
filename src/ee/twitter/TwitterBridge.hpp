@@ -6,13 +6,13 @@
 #ifndef EE_X_TWITTER_BRIDGE_HPP
 #define EE_X_TWITTER_BRIDGE_HPP
 
+#include <functional>
 #include <string>
 
 #include "ee/core/LogLevel.hpp"
 
 namespace ee {
 namespace twitter {
-
 using ShareResultCallback = std::function<void(bool result)>;
 
 class Twitter final {

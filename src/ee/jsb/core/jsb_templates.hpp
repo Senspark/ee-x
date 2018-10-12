@@ -133,7 +133,8 @@ from_JSON_object(se::Object* jsonObj) {
 }
 
 template <>
-inline std::map<std::string, std::string> from_JSON_object(se::Object* jsonObj) {
+inline std::map<std::string, std::string>
+from_JSON_object(se::Object* jsonObj) {
     std::vector<std::string> allKeys;
     std::map<std::string, std::string> ret;
 
@@ -649,14 +650,18 @@ bool jsb_set_callback(se::State& s) {
             }
 
             std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
-                se::ScriptEngine::getInstance()->clearException();
-                se::AutoHandleScope hs;
+                cocos2d::Director::getInstance()
+                    ->getScheduler()
+                    ->performFunctionInCocosThread([=]() -> void {
+                        se::ScriptEngine::getInstance()->clearException();
+                        se::AutoHandleScope hs;
 
-                auto&& args = to_value_array(values...);
-                se::Object* target =
-                    jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                se::Object* func = jsFunc.toObject();
-                func->call(args, target);
+                        auto&& args = to_value_array(values...);
+                        se::Object* target =
+                            jsTarget.isObject() ? jsTarget.toObject() : nullptr;
+                        se::Object* func = jsFunc.toObject();
+                        func->call(args, target);
+                    });
             })();
         }
 

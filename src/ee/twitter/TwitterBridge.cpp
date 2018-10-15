@@ -65,12 +65,14 @@ void Self::setShareResultCallback(const ShareResultCallback& callback) {
 }
 
 void Self::shareContent(const std::string& text) {
+    _hadCallFailure = false;
     nlohmann::json json;
     json[k__text] = text;
     bridge_.call(k__shareContent, json.dump());
 }
 
 void Self::shareScreenShot(const std::string& text, const std::string& image) {
+    _hadCallFailure = false;
     nlohmann::json json;
     json[k__text] = text;
     json[k__image] = image;

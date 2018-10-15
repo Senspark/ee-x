@@ -5,9 +5,9 @@
 
 #import "ee/twitter/EETwitter.h"
 
+#import <ReplayKit/ReplayKit.h>
 #import <TwitterKit/TWTRKit.h>
 #import <UIKit/UIKit.h>
-#import <ReplayKit/ReplayKit.h>
 
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
@@ -101,7 +101,7 @@ static NSString* const k__image            = @"twitter_image";
                 if (session) {
                     [self showTwitterShare:text image:nil];
                 } else {
-                    NSLog(@"Tweet not login");
+                    NSLog(@"%s:%@", __PRETTY_FUNCTION__, @"Tweet not login");
                     [bridge_ callCpp:k__onFailure message:@""];
                 }
             }];
@@ -118,7 +118,7 @@ static NSString* const k__image            = @"twitter_image";
                 if (session) {
                     [self showTwitterShare:text image:image];
                 } else {
-                    NSLog(@"Tweet not login");
+                    NSLog(@"%s:%@", __PRETTY_FUNCTION__, @"Tweet not login");
                     [bridge_ callCpp:k__onFailure message:@""];
                 }
             }];
@@ -139,23 +139,22 @@ static NSString* const k__image            = @"twitter_image";
     [composer initWithInitialText:text image:uiimage videoURL:nil];
     composer.delegate = self;
     [vc presentViewController:composer animated:YES completion:nil];
-
 }
 
 - (void)composerDidCancel:(TWTRComposerViewController*)controller {
-    NSLog(@"Tweet composition cancelled");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [bridge_ callCpp:k__onCancel message:@""];
 }
 
 - (void)composerDidSucceed:(TWTRComposerViewController*)controller
                  withTweet:(TWTRTweet*)tweet {
-    NSLog(@"Sending Tweet!");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [bridge_ callCpp:k__onSuccess message:@""];
 }
 
 - (void)composerDidFail:(TWTRComposerViewController*)controller
               withError:(NSError*)error {
-    NSLog(@"Tweet composition fail");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [bridge_ callCpp:k__onFailure message:@""];
 }
 

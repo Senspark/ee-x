@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.Map;
 
 import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -40,14 +40,14 @@ public class Twitter implements PluginProtocol {
     private static final String k__text   = "twitter_text";
     private static final String k__image  = "twitter_image";
 
-    private Activity           _activity;
-    private IMessageBridge     _bridge;
-    private TwitterLoginButton _twiterLoginButton;
+    private Activity          _activity;
+    private IMessageBridge    _bridge;
+    private TwitterAuthClient _authClient;
 
     public Twitter() {
         _activity = null;
         _bridge = MessageBridge.getInstance();
-        _twiterLoginButton = null;
+        _authClient = null;
 
         registerHandlers();
     }
@@ -86,11 +86,12 @@ public class Twitter implements PluginProtocol {
     @Override
     public void onDestroy() {
         _activity = null;
+        _authClient = null;
     }
 
     @Override
     public void destroy() {
-        //do nothing
+        deregisterHandlers();
     }
 
     @Override
@@ -135,13 +136,24 @@ public class Twitter implements PluginProtocol {
         }, k__shareScreenShot);
     }
 
+    private void deregisterHandlers() {
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.deregisterHandler(k__initialize);
+        bridge.deregisterHandler(k__shareContent);
+        bridge.deregisterHandler(k__shareScreenShot);
+    }
+
+    private TwitterAuthClient getTwitterAuthClient() {
+        if (_authClient == null) {
+            _authClient = new TwitterAuthClient();
+        }
+        return _authClient;
+    }
+
     @Override
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        if (requestCode == TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE) {
-            if (_twiterLoginButton != null) {
-                _twiterLoginButton.onActivityResult(requestCode, responseCode, data);
-                _twiterLoginButton = null;
-            }
+        if (requestCode == getTwitterAuthClient().getRequestCode()) {
+            getTwitterAuthClient().onActivityResult(requestCode, responseCode, data);
             return true;
         }
         return false;
@@ -155,69 +167,52 @@ public class Twitter implements PluginProtocol {
     private void shareContent(String text) {
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session == null) {
-            _twiterLoginButton = new TwitterLoginButton(_activity);
             final String ftext = text;
-
-            _twiterLoginButton.setCallback(new Callback<TwitterSession>() {
+            getTwitterAuthClient().authorize(_activity, new Callback<TwitterSession>() {
                 @Override
-                public void success(Result<TwitterSession> result) {
+                public void success(Result<TwitterSession> twitterSessionResult) {
                     shareContentAfterCheckAuthen(ftext);
                 }
 
                 @Override
-                public void failure(TwitterException exception) {
+                public void failure(TwitterException e) {
                     _bridge.callCpp(k__onFailure);
                 }
             });
-
-            _twiterLoginButton.performClick();
         } else {
             shareContentAfterCheckAuthen(text);
         }
     }
 
     private void shareScreenShot(String text, final String image) {
-
         final Uri imageUri = Uri.fromFile(new File(image));
-
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
         if (session == null) {
-            _twiterLoginButton = new TwitterLoginButton(_activity);
             final String ftext = text;
-
-            _twiterLoginButton.setCallback(new Callback<TwitterSession>() {
-
+            getTwitterAuthClient().authorize(_activity, new Callback<TwitterSession>() {
                 @Override
-                public void success(Result<TwitterSession> result) {
+                public void success(Result<TwitterSession> twitterSessionResult) {
                     shareScreenShotAfterCheckAuthen(ftext, imageUri);
                 }
 
                 @Override
-                public void failure(TwitterException exception) {
+                public void failure(TwitterException e) {
                     _bridge.callCpp(k__onFailure);
-
                 }
             });
-
-            _twiterLoginButton.performClick();
-
         } else {
             shareScreenShotAfterCheckAuthen(text, imageUri);
         }
     }
 
     private void shareScreenShotAfterCheckAuthen(String text, Uri imageUri) {
-
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
         final Intent intent = new ComposerActivity.Builder(_activity).session(session).image(imageUri).text(text).createIntent();
         _activity.startActivity(intent);
     }
 
     private void shareContentAfterCheckAuthen(String text) {
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
         final Intent intent = new ComposerActivity.Builder(_activity).session(session).text(text).createIntent();
         _activity.startActivity(intent);
     }

@@ -29,6 +29,7 @@
 #include "CCSoomlaEventDispatcher.h"
 #include "CCSoomlaUtils.h"
 #include "CCStoreInfo.h"
+#include <set>
 
 namespace soomla {
 

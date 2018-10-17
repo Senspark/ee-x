@@ -548,6 +548,7 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/soomla/*.{h,hpp}'
 
     s.dependency 'ee-x/soomla-cocos2dx-store'
+    s.dependency 'ee-x/jsb-core'
   end
 
   spec.subspec 'keeva' do |s|

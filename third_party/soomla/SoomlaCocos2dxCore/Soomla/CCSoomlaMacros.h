@@ -19,12 +19,43 @@
 
 #include "cocos2d.h"
 
+#define CC_SYNTHESIZE(varType, varName, funName)\
+protected: varType varName;\
+public: virtual varType get##funName(void) const { return varName; }\
+public: virtual void set##funName(varType var){ varName = var; }
+
+#define CC_SYNTHESIZE_PASS_BY_REF(varType, varName, funName)\
+protected: varType varName;\
+public: virtual const varType& get##funName(void) const { return varName; }\
+public: virtual void set##funName(const varType& var){ varName = var; }
+
+#define CC_SYNTHESIZE_RETAIN(varType, varName, funName)    \
+private: varType varName; \
+public: virtual varType get##funName(void) const { return varName; } \
+public: virtual void set##funName(varType var)   \
+{ \
+if (varName != var) \
+{ \
+CC_SAFE_RETAIN(var); \
+CC_SAFE_RELEASE(varName); \
+varName = var; \
+} \
+}
+
+#define CC_SAFE_DELETE(p)           do { delete (p); (p) = nullptr; } while(0)
+#define CC_SAFE_DELETE_ARRAY(p)     do { if(p) { delete[] (p); (p) = nullptr; } } while(0)
+#define CC_SAFE_FREE(p)             do { if(p) { free(p); (p) = nullptr; } } while(0)
+#define CC_SAFE_RELEASE(p)          do { if(p) { (p)->release(); } } while(0)
+#define CC_SAFE_RELEASE_NULL(p)     do { if(p) { (p)->release(); (p) = nullptr; } } while(0)
+#define CC_SAFE_RETAIN(p)           do { if(p) { (p)->retain(); } } while(0)
+#define CC_BREAK_IF(cond)           if(cond) break
+
 #define SL_SYNTHESIZE_RETAIN_WITH_DICT(varType, varName, funName, jsonKey)    \
 CC_SYNTHESIZE_RETAIN(varType, varName, funName); \
 protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict) \
 { \
     cocos2d::Ref* obj = dict->objectForKey(jsonKey); \
-    CCAssert(obj == nullptr || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
+    CCASSERT(obj == nullptr || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
     if (varName != obj) \
     { \
         set##funName((varType)obj); \
@@ -45,7 +76,7 @@ protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict) \
     if (obj != nullptr) { \
         val = dynamic_cast<cocos2d::__Double *>(obj); \
         if (val == nullptr) { \
-            CCAssert(dynamic_cast<cocos2d::__Integer *>(obj), "invalid object type in dictionary"); \
+            CCASSERT(dynamic_cast<cocos2d::__Integer *>(obj), "invalid object type in dictionary"); \
             val = cocos2d::__Double::create(((cocos2d::__Integer *)obj)->getValue()); \
         }\
     } \

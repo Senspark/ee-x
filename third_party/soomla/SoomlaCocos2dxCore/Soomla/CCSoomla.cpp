@@ -29,7 +29,7 @@ void CCSoomla::initialize(const std::string& soomlaSecret) {
     if (soomlaSecret.length() == 0) {
         CCSoomlaUtils::logError(TAG,
                                 "Can't initialize SOOMLA without soomlaSecret");
-        CCAssert(true, "");
+        CCASSERT(true, "");
         return;
     }
 

@@ -19,6 +19,14 @@
 #include "CCDomainFactory.h"
 #include "CCSoomlaEventDispatcher.h"
 
+#ifndef COCOSCREATOR_VERSION
+#define COCOSCREATOR_VERSION 1
+#endif
+
+#if COCOSCREATOR_VERSION == 2
+#include "cocos/scripting/js-bindings/event/EventDispatcher.h"
+#endif
+
 namespace soomla {
 
 USING_NS_CC;
@@ -67,17 +75,32 @@ bool CCCoreEventDispatcher::init() {
 void CCCoreEventDispatcher::onRewardGivenEvent(CCReward* reward) {
     ValueMap eventMap;
     eventMap[CCCoreConsts::DICT_ELEMENT_REWARD] = reward->toValueMap();
-
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-        CCCoreConsts::EVENT_REWARD_GIVEN, &eventMap);
+    
+#if COCOSCREATOR_VERSION == 2
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_REWARD_GIVEN;
+    event.args[0].ptrVal = &eventMap;
+    EventDispatcher::dispatchCustomEvent(event);
+#elif COCOSCREATOR_VERSION == 1
+    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+    CCCoreConsts::EVENT_REWARD_GIVEN , &eventMap);
+#endif
 }
 
 void CCCoreEventDispatcher::onRewardTakenEvent(CCReward* reward) {
     ValueMap eventMap;
     eventMap[CCCoreConsts::DICT_ELEMENT_REWARD] = reward->toValueMap();
 
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-        CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
+#if COCOSCREATOR_VERSION == 2
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_REWARD_TAKEN;
+    event.args[0].ptrVal = &eventMap;
+    EventDispatcher::dispatchCustomEvent(event);
+#elif COCOSCREATOR_VERSION == 1
+    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+    CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
+#endif
+    
 }
 
 void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
@@ -85,9 +108,16 @@ void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
     ValueMap eventDict;
     eventDict[CCCoreConsts::DICT_ELEMENT_NAME] = name;
     eventDict[CCCoreConsts::DICT_ELEMENT_EXTRA] = extra;
-
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+    
+#if COCOSCREATOR_VERSION == 2
+    cocos2d::CustomEvent event;
+    event.name = CCCoreConsts::EVENT_CUSTOM;
+    event.args[0].ptrVal = &eventDict;
+    EventDispatcher::dispatchCustomEvent(event);
+#elif COCOSCREATOR_VERSION == 1
+    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
         CCCoreConsts::EVENT_CUSTOM, &eventDict);
+#endif
 }
 
 } // namespace soomla

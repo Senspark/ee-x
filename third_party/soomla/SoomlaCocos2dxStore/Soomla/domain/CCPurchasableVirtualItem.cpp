@@ -73,7 +73,7 @@ void CCPurchasableVirtualItem::fillPurchaseTypeFromValueMap(
     CC_ASSERT(dict.count(CCStoreConsts::JSON_PURCHASABLE_ITEM));
     auto& purchasableDict =
         dict.at(CCStoreConsts::JSON_PURCHASABLE_ITEM).asValueMap();
-    CCAssert(purchasableDict.count(CCStoreConsts::JSON_PURCHASE_TYPE),
+    CCASSERT(purchasableDict.count(CCStoreConsts::JSON_PURCHASE_TYPE),
              "invalid object type in dictionary");
     auto&& purchaseTypeStr =
         purchasableDict.at(CCStoreConsts::JSON_PURCHASE_TYPE).asString();

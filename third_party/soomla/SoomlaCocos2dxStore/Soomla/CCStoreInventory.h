@@ -23,6 +23,7 @@
 #include "CCVirtualCurrency.h"
 #include "CCVirtualGood.h"
 #include "cocos2d.h"
+#include <set>
 
 namespace soomla {
 /** @class CCStoreInventory

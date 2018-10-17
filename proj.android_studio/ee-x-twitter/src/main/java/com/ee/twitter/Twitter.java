@@ -159,19 +159,18 @@ public class Twitter implements PluginProtocol {
         return false;
     }
 
-    private void initialize(String key, String secret) {
+    private void initialize(final String key, final String secret) {
         TwitterConfig config = new TwitterConfig.Builder(_activity).twitterAuthConfig(new TwitterAuthConfig(key, secret)).debug(true).build();
         com.twitter.sdk.android.core.Twitter.initialize(config);
     }
 
-    private void shareContent(String text) {
+    private void shareContent(final String text) {
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session == null) {
-            final String ftext = text;
             getTwitterAuthClient().authorize(_activity, new Callback<TwitterSession>() {
                 @Override
                 public void success(Result<TwitterSession> twitterSessionResult) {
-                    shareContentAfterCheckAuthen(ftext);
+                    shareContentAfterCheckAuthen(text);
                 }
 
                 @Override
@@ -184,15 +183,14 @@ public class Twitter implements PluginProtocol {
         }
     }
 
-    private void shareScreenShot(String text, final String image) {
+    private void shareScreenShot(final String text, final String image) {
         final Uri imageUri = Uri.fromFile(new File(image));
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session == null) {
-            final String ftext = text;
             getTwitterAuthClient().authorize(_activity, new Callback<TwitterSession>() {
                 @Override
                 public void success(Result<TwitterSession> twitterSessionResult) {
-                    shareScreenShotAfterCheckAuthen(ftext, imageUri);
+                    shareScreenShotAfterCheckAuthen(text, imageUri);
                 }
 
                 @Override
@@ -205,13 +203,13 @@ public class Twitter implements PluginProtocol {
         }
     }
 
-    private void shareScreenShotAfterCheckAuthen(String text, Uri imageUri) {
+    private void shareScreenShotAfterCheckAuthen(final String text, final Uri imageUri) {
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         final Intent intent = new ComposerActivity.Builder(_activity).session(session).image(imageUri).text(text).createIntent();
         _activity.startActivity(intent);
     }
 
-    private void shareContentAfterCheckAuthen(String text) {
+    private void shareContentAfterCheckAuthen(final String text) {
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         final Intent intent = new ComposerActivity.Builder(_activity).session(session).text(text).createIntent();
         _activity.startActivity(intent);

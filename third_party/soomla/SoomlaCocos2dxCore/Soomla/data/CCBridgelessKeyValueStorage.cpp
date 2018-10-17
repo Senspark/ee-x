@@ -13,10 +13,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-
-#include "CCNativeKeyValueStorage.h"
-
 #include "CCBridgelessKeyValueStorage.h"
+
+#ifndef COCOSCREATOR_VERSION
+#define COCOSCREATOR_VERSION 1
+#endif
+
+#if COCOSCREATOR_VERSION == 2
+#include "CCNativeKeyValueStorage.h"
+#elif COCOSCREATOR_VERSION == 1
+#include "base/CCUserDefault.h"
+#endif
 
 namespace soomla {
 
@@ -28,11 +35,15 @@ CCBridgelessKeyValueStorage::CCBridgelessKeyValueStorage() {
     loadStoredKeys();
 }
 
-std::string
-CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
+std::string CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
     std::string defaultValue = "";
     std::string result =
+#if COCOSCREATOR_VERSION == 2
         CCKeyValueStorage::getInstance()->getValue(key.c_str());
+#elif COCOSCREATOR_VERSION == 1
+        UserDefault::getInstance()->getStringForKey(key.c_str(), defaultValue);
+#endif
+
     if (result == defaultValue) {
         return "";
     }
@@ -41,8 +52,13 @@ CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
 }
 
 void CCBridgelessKeyValueStorage::setValue(const std::string &key, const std::string &val) {
+    
+#if COCOSCREATOR_VERSION == 2
     CCKeyValueStorage::getInstance()->setValue(key.c_str(), val);
-    //CCKeyValueStorage::getInstance()->flush();
+#elif COCOSCREATOR_VERSION == 1
+    UserDefault::getInstance()->setStringForKey(key.c_str(), val);
+    UserDefault::getInstance()->flush();
+#endif
     addStoredKeys(key);
     saveStoredKeys();
 }
@@ -61,9 +77,13 @@ void CCBridgelessKeyValueStorage::purge() {
     }
 
     mStoredKeys.clear();
-
+    
+#if COCOSCREATOR_VERSION == 2
     CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY, "");
-    //UserDefault::getInstance()->flush();
+#elif COCOSCREATOR_VERSION == 1
+    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY, "");
+    UserDefault::getInstance()->flush();
+#endif
 }
 
 void CCBridgelessKeyValueStorage::addStoredKeys(const std::string& key) {
@@ -84,14 +104,21 @@ void CCBridgelessKeyValueStorage::saveStoredKeys() {
         joinedKeys.append("#").append(key);
     }
     
-    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY,
-                                                joinedKeys);
-    //UserDefault::getInstance()->flush();
+#if COCOSCREATOR_VERSION == 2
+    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY, joinedKeys);
+#elif COCOSCREATOR_VERSION == 1
+    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY, joinedKeys);
+    UserDefault::getInstance()->flush();
+#endif
 }
 
 void CCBridgelessKeyValueStorage::loadStoredKeys() {
     std::string joinedKeys =
-        CCKeyValueStorage::getInstance()->getValue(KEY_VALUE_STORAGE_KEY);
+#if COCOSCREATOR_VERSION == 2
+    CCKeyValueStorage::getInstance()->getValue(KEY_VALUE_STORAGE_KEY);
+#elif COCOSCREATOR_VERSION == 1
+    UserDefault::getInstance()->getStringForKey(KEY_VALUE_STORAGE_KEY, "");
+#endif
 
     std::stringstream ss(joinedKeys);
     std::string item;

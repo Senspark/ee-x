@@ -8,7 +8,15 @@
 #include "CCStoreEventDispatcher.h"
 #include "CCStoreInfo.h"
 #include "CCStoreInventory.h"
-#include "cocos/scripting/js-bindings/event/Eventdispatcher.h"
+
+#ifndef COCOSCREATOR_VERSION
+#define COCOSCREATOR_VERSION 1
+#endif
+
+#if COCOSCREATOR_VERSION == 2
+#include "cocos/scripting/js-bindings/event/EventDispatcher.h"
+#endif
+
 
 namespace soomla {
 
@@ -445,22 +453,26 @@ bool CCStoreEventDispatcher::init() {
     return true;
 }
 
-void CCStoreEventDispatcher::onBillingNotSupported() {
+void dispatchCustomEvent(const std::string& eventName, ValueMap* eventData = nullptr) {
+#if COCOSCREATOR_VERSION == 2
     cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_BILLING_NOT_SUPPORTED;
+    event.name = eventName;
+    if (eventData != nullptr) {
+        event.args[0].ptrVal = eventData;
+    }
     EventDispatcher::dispatchCustomEvent(event);
+#elif COCOSCREATOR_VERSION == 1
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
+        eventName, eventData);
+#endif
+}
     
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_BILLING_NOT_SUPPORTED);
+void CCStoreEventDispatcher::onBillingNotSupported() {
+    dispatchCustomEvent(CCStoreConsts::EVENT_BILLING_NOT_SUPPORTED);
 }
 
 void CCStoreEventDispatcher::onBillingSupported() {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_BILLING_NOT_SUPPORTED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_BILLING_SUPPORTED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_BILLING_SUPPORTED);
 }
 
 void CCStoreEventDispatcher::onCurrencyBalanceChanged(
@@ -473,13 +485,7 @@ void CCStoreEventDispatcher::onCurrencyBalanceChanged(
     eventMap[CCStoreConsts::CCStoreConsts::DICT_ELEMENT_BALANCE] = balance;
     eventMap[CCStoreConsts::DICT_ELEMENT_AMOUNT_ADDED] = amountAdded;
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED, &eventMap);
 }
 
 void CCStoreEventDispatcher::onGoodBalanceChanged(CCVirtualGood* virtualGood,
@@ -493,13 +499,7 @@ void CCStoreEventDispatcher::onGoodBalanceChanged(CCVirtualGood* virtualGood,
     eventMap[CCStoreConsts::DICT_ELEMENT_BALANCE] = balance;
     eventMap[CCStoreConsts::DICT_ELEMENT_AMOUNT_ADDED] = amountAdded;
 
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_GOOD_BALANCE_CHANGED;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_GOOD_BALANCE_CHANGED, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_BALANCE_CHANGED, &eventMap);
 }
 
 void CCStoreEventDispatcher::onGoodEquipped(CCEquippableVG* equippableVG) {
@@ -510,13 +510,7 @@ void CCStoreEventDispatcher::onGoodEquipped(CCEquippableVG* equippableVG) {
     eventMap[CCStoreConsts::DICT_ELEMENT_EQUIPPABLEVG] =
         equippableVG->toValueMap();
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_GOOD_EQUIPPED;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_GOOD_EQUIPPED, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_EQUIPPED, &eventMap);
 }
 
 void CCStoreEventDispatcher::onGoodUnEquipped(CCEquippableVG* equippableVG) {
@@ -527,13 +521,7 @@ void CCStoreEventDispatcher::onGoodUnEquipped(CCEquippableVG* equippableVG) {
     eventMap[CCStoreConsts::DICT_ELEMENT_EQUIPPABLEVG] =
         equippableVG->toValueMap();
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_GOOD_UNEQUIPPED;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_GOOD_UNEQUIPPED, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_UNEQUIPPED, &eventMap);
 }
 
 void CCStoreEventDispatcher::onGoodUpgrade(CCVirtualGood* virtualGood,
@@ -548,13 +536,7 @@ void CCStoreEventDispatcher::onGoodUpgrade(CCVirtualGood* virtualGood,
             upgradeVG->toValueMap();
     }
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_GOOD_UPGRADE;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_GOOD_UPGRADE, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_UPGRADE, &eventMap);
 }
 
 void CCStoreEventDispatcher::onItemPurchased(
@@ -571,13 +553,7 @@ void CCStoreEventDispatcher::onItemPurchased(
         purchasableVirtualItem->toValueMap();
     eventDict[CCStoreConsts::DICT_ELEMENT_DEVELOPERPAYLOAD] = payload;
 
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_ITEM_PURCHASED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_ITEM_PURCHASED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_ITEM_PURCHASED, &eventDict);
 
     if (alsoPush) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) ||                                 \
@@ -601,13 +577,7 @@ void CCStoreEventDispatcher::onItemPurchaseStarted(
     ValueMap eventMap;
     eventMap[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] = purchasableVirtualItem->toValueMap();
 
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_ITEM_PURCHASE_STARTED;
-    event.args[0].ptrVal = &eventMap;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_ITEM_PURCHASE_STARTED, &eventMap);
+    dispatchCustomEvent(CCStoreConsts::EVENT_ITEM_PURCHASE_STARTED, &eventMap);
 
     if (alsoPush) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) ||                                 \
@@ -626,13 +596,7 @@ void CCStoreEventDispatcher::onMarketPurchaseCancelled(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchaseDeferred(
@@ -643,13 +607,7 @@ void CCStoreEventDispatcher::onMarketPurchaseDeferred(
         purchasableVirtualItem->toValueMap();
     eventDict[CCStoreConsts::DICT_ELEMENT_DEVELOPERPAYLOAD] = payload;
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_PURCHASE_DEFERRED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_PURCHASE_DEFERRED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_DEFERRED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchase(
@@ -661,13 +619,7 @@ void CCStoreEventDispatcher::onMarketPurchase(
     eventDict[CCStoreConsts::DICT_ELEMENT_DEVELOPERPAYLOAD] = payload;
     eventDict[CCStoreConsts::DICT_ELEMENT_EXTRA_INFO] = extraInfo;
 
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_PURCHASE;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_PURCHASE, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE, &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchaseStarted(
@@ -676,13 +628,7 @@ void CCStoreEventDispatcher::onMarketPurchaseStarted(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onVerificationStarted(
@@ -690,14 +636,8 @@ void CCStoreEventDispatcher::onVerificationStarted(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
-
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_VERIFICATION_STARTED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
     
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_VERIFICATION_STARTED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_VERIFICATION_STARTED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchaseVerification(
@@ -706,35 +646,18 @@ void CCStoreEventDispatcher::onMarketPurchaseVerification(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
 
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION, &eventDict);
 }
 
 void CCStoreEventDispatcher::onRestoreTransactionsFinished(bool success) {
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_SUCCESS] = success;
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onRestoreTransactionsStarted() {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_RESTORE_TRANSACTION_STARTED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_RESTORE_TRANSACTION_STARTED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_RESTORE_TRANSACTION_STARTED);
 }
 
 void CCStoreEventDispatcher::onUnexpectedStoreError(std::int32_t errorCode) {
@@ -745,15 +668,9 @@ void CCStoreEventDispatcher::onUnexpectedStoreError(std::int32_t errorCode,
                                                     bool alsoPush) {
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_ERROR_CODE] = errorCode;
-
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
     
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR, &eventDict);
-
+    dispatchCustomEvent(CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR, &eventDict);
+    
     if (alsoPush) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) ||                                 \
     (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -770,12 +687,7 @@ void CCStoreEventDispatcher::onSoomlaStoreInitialized() {
 }
 
 void CCStoreEventDispatcher::onSoomlaStoreInitialized(bool alsoPush) {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_SOOMLA_STORE_INITIALIZED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_SOOMLA_STORE_INITIALIZED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_SOOMLA_STORE_INITIALIZED);
 
     CCStoreInventory::sharedStoreInventory()->refreshLocalInventory();
 
@@ -800,22 +712,11 @@ void CCStoreEventDispatcher::onMarketItemsRefreshed(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_MARKET_ITEMS] = vvMarketItems;
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED, &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketItemsRefreshStarted() {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_STARTED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_STARTED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_STARTED);
 }
 
 void CCStoreEventDispatcher::onMarketItemsRefreshFailed(
@@ -823,13 +724,7 @@ void CCStoreEventDispatcher::onMarketItemsRefreshFailed(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_ERROR_MESSAGE] = errorMessage;
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED, &eventDict);
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -839,31 +734,15 @@ void CCStoreEventDispatcher::onMarketRefund(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
     
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_MARKET_REFUND;
-    event.args[0].ptrVal = &eventDict;
-    EventDispatcher::dispatchCustomEvent(event);
-
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_MARKET_REFUND, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_REFUND, &eventDict);
 }
 
 void CCStoreEventDispatcher::onIabServiceStarted() {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_IAB_SERVICE_STARTED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_IAB_SERVICE_STARTED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_IAB_SERVICE_STARTED);
 }
 
 void CCStoreEventDispatcher::onIabServiceStopped() {
-    cocos2d::CustomEvent event;
-    event.name = CCStoreConsts::EVENT_IAB_SERVICE_STOPPED;
-    EventDispatcher::dispatchCustomEvent(event);
-    
-//    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-//        CCStoreConsts::EVENT_IAB_SERVICE_STOPPED);
+    dispatchCustomEvent(CCStoreConsts::EVENT_IAB_SERVICE_STOPPED);
 }
 #endif
 

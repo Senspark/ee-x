@@ -22,6 +22,6 @@ BOOL VERIFY_PURCHASES = NO;
 
 BOOL VERIFY_ON_ITUNES_FAILURE = NO;
 
-NSString* VERIFY_URL = @"https://verify.senspark.com:5556/ios";
+NSString* VERIFY_URL = @"https://verify.senspark.com/ios";
 
 

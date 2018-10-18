@@ -24,9 +24,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * @author vedi
@@ -34,7 +52,7 @@ import java.util.Map;
  */
 public class SoomlaGpVerification {
 
-    private static final String VERIFY_URL = "https://verify.senspark.com:5556/android";
+    private static final String VERIFY_URL      = "https://verify.senspark.com/android";
     private static final String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/token";
     private static final String TAG = "SOOMLA SoomlaGpVerification";
 
@@ -57,6 +75,48 @@ public class SoomlaGpVerification {
         this.verifyOnServerFailure = verifyOnServerFailure;
 
         this.purchase = purchase;
+    }
+
+    private Response doVerifyPostNew(JSONObject jsonObject)
+            throws IOException, NoSuchAlgorithmException, KeyManagementException {
+        // https://stackoverflow.com/questions/1201048/allowing-java-to-use-an-untrusted-certificate-for-ssl-https-connection
+        // https://www.stubbornjava.com/posts/okhttpclient-trust-all-ssl-certificates
+        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                // Do nothing.
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                // Do nothing.
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[] {};
+            }
+        }};
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustAllCerts, new SecureRandom());
+        SSLSocketFactory factory = sslContext.getSocketFactory();
+
+        Request request = new Request.Builder() //
+                .url(VERIFY_URL) //
+                .post(RequestBody.create( //
+                        MediaType.parse("application/json;charset=utf-8"), //
+                        jsonObject.toString())) //
+                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder() //
+                .sslSocketFactory(factory, (X509TrustManager) trustAllCerts[0])
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+        OkHttpClient client = builder.build();
+        return client.newCall(request).execute();
     }
 
     private HttpResponse doVerifyPost(JSONObject jsonObject) throws IOException {
@@ -103,13 +163,18 @@ public class SoomlaGpVerification {
                         }
                     }
 
-                    HttpResponse resp = doVerifyPost(jsonObject);
+                    // HttpResponse resp = doVerifyPost(jsonObject);
+                    Response response = doVerifyPostNew(jsonObject);
+                    ResponseBody body = response.body();
 
-                    if (resp != null) {
-                        int statusCode = resp.getStatusLine().getStatusCode();
+                    // if (resp != null) {
+                    if (body != null) {
+                        // int statusCode = resp.getStatusLine().getStatusCode();
+                        int statusCode = response.code();
 
                         StringBuilder stringBuilder = new StringBuilder();
-                        InputStream inputStream = resp.getEntity().getContent();
+                        // InputStream inputStream = resp.getEntity().getContent();
+                        InputStream inputStream = body.byteStream();
                         Reader reader = new BufferedReader(new InputStreamReader(inputStream));
                         final char[] buffer = new char[1024];
                         int bytesRead;
@@ -145,9 +210,17 @@ public class SoomlaGpVerification {
                 SoomlaUtils.LogError(TAG, "Cannot refresh token");
             }
 
-        } catch (JSONException e) {
+        } catch (JSONException e)
+
+        {
             SoomlaUtils.LogError(TAG, "Cannot build up json for verification: " + e);
-        } catch (IOException e) {
+        } catch (IOException e)
+
+        {
+            SoomlaUtils.LogError(TAG, e.getMessage());
+        } catch (Exception e)
+
+        {
             SoomlaUtils.LogError(TAG, e.getMessage());
         }
 

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class SoomlaGpVerification {
 
-    private static final String VERIFY_URL = "https://iap.vedidev.com/verify_android";
+    private static final String VERIFY_URL = "https://verify.senspark.com:5556/android";
     private static final String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/token";
     private static final String TAG = "SOOMLA SoomlaGpVerification";
 

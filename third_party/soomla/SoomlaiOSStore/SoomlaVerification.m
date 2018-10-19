@@ -100,6 +100,31 @@ static NSString* TAG = @"SOOMLA SoomlaVerification";
     }
 }
 
+// https://stackoverflow.com/questions/933331/how-to-use-nsurlconnection-to-connect-with-ssl-for-an-untrusted-cert
+- (BOOL)connection:(NSURLConnection*)connection
+    canAuthenticateAgainstProtectionSpace:
+        (NSURLProtectionSpace*)protectionSpace {
+    return [[protectionSpace authenticationMethod]
+        isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void)connection:(NSURLConnection*)connection
+    didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge*)challenge {
+    NSArray* trustedHosts = @[@"verify.senspark.com"];
+    NSURLProtectionSpace* protectionSpace = [challenge protectionSpace];
+    if ([[protectionSpace authenticationMethod]
+            isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        if ([trustedHosts containsObject:[protectionSpace host]]) {
+            NSURLCredential* credential = [NSURLCredential
+                credentialForTrust:[protectionSpace serverTrust]];
+            [[challenge sender] useCredential:credential
+                   forAuthenticationChallenge:challenge];
+        }
+    }
+    [[challenge sender]
+        continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     responseData = [[NSMutableData alloc] init];
     NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse*)response;

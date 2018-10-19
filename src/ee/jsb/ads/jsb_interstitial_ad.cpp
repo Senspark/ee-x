@@ -27,7 +27,8 @@ static std::vector<std::shared_ptr<ee::IInterstitialAd>>
 namespace core {
 template <>
 std::shared_ptr<ee::IInterstitialAd> get_value(const se::Value& value) {
-    auto data = (ee::IInterstitialAd*)value.toObject()->getPrivateData();
+    auto data =
+        static_cast<ee::IInterstitialAd*>(value.toObject()->getPrivateData());
     return std::shared_ptr<ee::IInterstitialAd>(data);
 }
 

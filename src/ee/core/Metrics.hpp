@@ -9,8 +9,9 @@
 #ifndef EE_X_CORE_METRICS_HPP
 #define EE_X_CORE_METRICS_HPP
 
-#include "ee/CoreFwd.hpp"
 #include <string>
+
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {

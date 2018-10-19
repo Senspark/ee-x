@@ -72,11 +72,12 @@ bool register_admob_bridge_manual(se::Object* globalObj) {
                                    &__bannerAdSizeObj);
 
     __bannerAdSizeObj->setProperty(
-        "Normal", se::Value((std::int32_t)ee::AdMobBannerAdSize::Normal));
-    __bannerAdSizeObj->setProperty(
-        "Large", se::Value((std::int32_t)ee::AdMobBannerAdSize::Large));
-    __bannerAdSizeObj->setProperty(
-        "Smart", se::Value((std::int32_t)ee::AdMobBannerAdSize::Smart));
+        "Normal",
+        se::Value(static_cast<std::int32_t>(ee::AdMobBannerAdSize::Normal)));
+    __bannerAdSizeObj->setProperty("Large", se::Value(static_cast<std::int32_t>(
+                                                ee::AdMobBannerAdSize::Large)));
+    __bannerAdSizeObj->setProperty("Smart", se::Value(static_cast<std::int32_t>(
+                                                ee::AdMobBannerAdSize::Smart)));
 
     auto cls = se::Class::create("AdMob", __admobObj, nullptr,
                                  _SE(jsb_AdMob_constructor));

@@ -14,9 +14,6 @@ class Object;
 
 namespace soomla {
 
-extern se::Class* __jsb_CCPurchasableVirtualItem_class;
-extern se::Object* __jsb_CCPurchasableVirtualItem_proto;
-
 bool register_cc_purchasable_virtual_item_manual(se::Object* object);
 
 } // namespace soomla

@@ -27,7 +27,7 @@ static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
 namespace core {
 template <>
 std::shared_ptr<ee::IAdView> get_value(const se::Value& value) {
-    auto data = (ee::IAdView*)value.toObject()->getPrivateData();
+    auto data = static_cast<ee::IAdView*>(value.toObject()->getPrivateData());
     return std::shared_ptr<ee::IAdView>(data);
 }
 

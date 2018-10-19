@@ -39,7 +39,8 @@ public:
 protected:
     friend Analytics;
 
-public:   explicit AnalyticsTracker(Analytics* plugin, const std::string& trackingId);
+public:
+    explicit AnalyticsTracker(Analytics* plugin, const std::string& trackingId);
 
 private:
     Analytics* plugin_;

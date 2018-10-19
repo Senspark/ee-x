@@ -20,8 +20,6 @@ class Value;
 namespace ee {
 namespace ads {
 
-extern se::Object* __adsObj;
-
 bool register_adview_manual(se::Object* object);
 } // namespace ads
 } // namespace ee

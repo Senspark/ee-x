@@ -1,23 +1,21 @@
 build
 xcuserdata
+local.properties
 *.xcworkspace
 *.iml
 Pods
 Podfile.lock
 *.DS_Store
-test/proj.android_studio/.idea
-test/proj.android_studio/app/.externalNativeBuild
-test/proj.android_studio/.gradle
-test/proj.android_studio/app/src/main/obj
+.idea/
+.externalNativeBuild/
+obj
 
 # CMake related files.
 CMakeFiles/
 *.cmake
 CMakeCache.txt
 Makefile
-proj.android_studio/ee-x-soomla-store/.idea
 gradlew
 gradlew.bat
-local.properties
-proj.android_studio/ee-x-soomla-store/.gradle
-proj.android_studio/ee-x-soomla-store/gradle
+.gradle/
+gradle/

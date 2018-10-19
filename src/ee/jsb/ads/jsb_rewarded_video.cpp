@@ -28,7 +28,8 @@ static std::vector<std::shared_ptr<ee::IRewardedVideo>>
 namespace core {
 template <>
 std::shared_ptr<ee::IRewardedVideo> get_value(const se::Value& value) {
-    auto data = (ee::IRewardedVideo*)value.toObject()->getPrivateData();
+    auto data =
+        static_cast<ee::IRewardedVideo*>(value.toObject()->getPrivateData());
     return std::shared_ptr<ee::IRewardedVideo>(data);
 }
 

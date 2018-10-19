@@ -19,7 +19,7 @@ extern se::Object* __admobObj;
 
 bool register_admob_bridge_manual(se::Object* object);
 
-}
-}
+} // namespace admob
+} // namespace ee
 
 #endif /* JSB_ADMOB_HPP__ */

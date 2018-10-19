@@ -8,8 +8,6 @@
 #ifndef jsb_cc_purchase_with_market_hpp
 #define jsb_cc_purchase_with_market_hpp
 
-#include <stdio.h>
-
 namespace se {
 class Object;
 } // namespace se

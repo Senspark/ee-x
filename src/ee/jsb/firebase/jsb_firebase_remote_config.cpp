@@ -6,12 +6,14 @@
 //
 //
 
+#include "ee/jsb/firebase/jsb_firebase_remote_config.hpp"
+
 #include "ee/Firebase.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
 
 namespace ee {
-namespace core {} // namespace core
 
 namespace firebase {
 

@@ -5,11 +5,13 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
-#include "CCVirtualCurrencyPack.h"
+#include "ee/jsb/soomla/jsb_cc_virtual_currency_pack.hpp"
+
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_purchasable_virtual_item.hpp"
-#include "jsb_cc_virtual_currency_pack.hpp"
-#include "jsb_core_common.hpp"
+#include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 
 namespace soomla {
 se::Object* __jsb_CCVirtualCurrencyPack_proto = nullptr;

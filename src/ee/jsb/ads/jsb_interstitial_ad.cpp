@@ -5,13 +5,13 @@
 //  Created by Duc Nguyen on 7/17/18.
 //
 
-#include "jsb_interstitial_ad.hpp"
+#include "ee/jsb/ads/jsb_interstitial_ad.hpp"
 
-#include "jsb_core_common.hpp"
+#include <unordered_map>
 
 #include <ee/Ads.hpp>
 
-#include <unordered_map>
+#include "ee/jsb/core/jsb_core_common.hpp"
 
 namespace ee {
 namespace ads {

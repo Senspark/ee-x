@@ -1,10 +1,19 @@
+//
+//  jsb_crashlytics_bridge.cpp
+//  ee-x
+//
+//  Created by Duc Nguyen on 7/17/18.
+//
+
+#include "ee/jsb/crashlytics/jsb_crashlytics_bridge.hpp"
+
 #include "ee/Crashlytics.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_log_level.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
 
 namespace ee {
-namespace core {} // namespace core
 
 namespace crashlytics {
 

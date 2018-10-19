@@ -27,11 +27,5 @@ void Self::setLoadResult(bool result) {
     }
 }
 
-void Self::setPositionInPoints(float x, float y) {
-    int&& xInPixels = (int)ee::Metrics::fromPoint(x).toPixel();
-    int&& yInPixels = (int)ee::Metrics::fromPoint(y).toPixel();
-    setPosition(xInPixels, yInPixels);
-}
-
 } // namespace ads
 } // namespace ee

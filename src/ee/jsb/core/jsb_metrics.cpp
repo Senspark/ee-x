@@ -5,10 +5,12 @@
 //  Created by Nguyen Van Quynh on 9/26/18.
 //
 
+#include "ee/jsb/core/jsb_metrics.hpp"
+
 #include "ee/core/Metrics.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_metrics.hpp"
 
 namespace ee {
 namespace core {
@@ -36,7 +38,7 @@ Metrics::ResolutionPolicy get_value(const se::Value& value) {
 }
 
 const auto jsb_Metrics_initialize =
-    &jsb_static_call<(void (*)(float))(Metrics::initialize),float>;
+    &jsb_static_call<(void (*)(float))(Metrics::initialize), float>;
 const auto jsb_Metrics_getWinSize =
     &jsb_static_get<std::pair<float, float>, &Metrics::getWinSize>;
 const auto jsb_Metrics_getFrameSize =

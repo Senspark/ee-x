@@ -8,9 +8,9 @@
 #ifndef JSB_INTERSTITIAL_AD_HPP__
 #define JSB_INTERSTITIAL_AD_HPP__
 
-#include "ee/jsb/core/jsb_templates.hpp"
-
 #include <ee/AdsFwd.hpp>
+
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace se {
 class Object;

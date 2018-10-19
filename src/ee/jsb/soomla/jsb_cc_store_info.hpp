@@ -8,8 +8,6 @@
 #ifndef JSB_CC_STORE_INFO_HPP
 #define JSB_CC_STORE_INFO_HPP
 
-#pragma once
-
 namespace se {
 class Object;
 } // namespace se

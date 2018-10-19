@@ -5,11 +5,13 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#include "CCPurchaseWithMarket.h"
-#include "CCPurchaseWithMarketBuilder.h"
+#include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
+
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_purchase_with_market_builder.hpp"
-#include "jsb_core_common.hpp"
 
 namespace soomla {
 static se::Object* __jsb_CCPurchaseWithMarketBuilder_proto = nullptr;

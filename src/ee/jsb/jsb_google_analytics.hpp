@@ -10,8 +10,8 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/google/jsb_google_analytics_bridge.hpp"
-#include "ee/jsb/google/jsb_google_analytics_tracker.hpp"
 #include "ee/jsb/google/jsb_google_analytics_event_builder.hpp"
+#include "ee/jsb/google/jsb_google_analytics_tracker.hpp"
 
 namespace ee {
 namespace google {
@@ -23,8 +23,8 @@ bool register_all_google_analytics_manual(se::Object* object) {
     return true;
 }
 
-}
-}
+} // namespace google
+} // namespace ee
 
 #endif // __cplusplus
 #endif // JSB_GOOGLE_ANALYTICS_HPP__

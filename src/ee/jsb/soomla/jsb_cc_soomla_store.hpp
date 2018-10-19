@@ -8,8 +8,6 @@
 #ifndef JSB_CC_SOOMLA_STORE_HPP__
 #define JSB_CC_SOOMLA_STORE_HPP__
 
-#pragma once
-
 namespace se {
 class Object;
 } // namespace se

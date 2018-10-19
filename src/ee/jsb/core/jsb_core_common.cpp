@@ -5,7 +5,8 @@
 //  Created by Duc Nguyen on 7/13/18.
 //
 
-#include "jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_core_common.hpp"
+
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
 namespace ee {
@@ -33,4 +34,3 @@ bool getOrCreatePlainObject_r(const char* name, se::Object* parent,
 
 } // namespace core
 } // namespace ee
-

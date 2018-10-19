@@ -5,11 +5,14 @@
 //  Created by Nguyen Van Quynh on 9/13/18.
 //
 
-#include "CCStoreInventory.h"
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_store_inventory.hpp"
-#include "jsb_core_common.hpp"
+#include "ee/jsb/soomla/jsb_cc_store_inventory.hpp"
+
 #include <unordered_map>
+
+#include "Soomla/CCStoreInventory.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
 static se::Object* __jsb_CCStoreInventory_proto = nullptr;

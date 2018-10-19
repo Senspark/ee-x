@@ -5,11 +5,13 @@
 //  Created by Le Van Kiet on 9/17/18.
 //
 
-#include "StoreEventListener.h"
+#include "ee/jsb/soomla/jsb_store_event_listener.hpp"
+
+#include "Soomla/StoreEventListener.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_soomla.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_store_event_listener.hpp"
+#include "ee/jsb/soomla/jsb_cc_soomla.hpp"
 
 namespace soomla {
 

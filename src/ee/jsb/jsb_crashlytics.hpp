@@ -17,7 +17,7 @@ bool register_crashlytics_manual(se::Object* object) {
     register_crashlytics_bridge_manual(object);
     return true;
 }
-} // namespace register_crashlytics_manual
+} // namespace crashlytics
 } // namespace ee
 
 #endif // __cplusplus

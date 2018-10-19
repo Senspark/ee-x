@@ -6,13 +6,15 @@
 //
 //
 
+#include "ee/jsb/ironsource/jsb_iron_source_bridge.hpp"
+
 #include "ee/IronSource.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_logger.hpp"
 
 namespace ee {
-namespace core {} // namespace core
 
 namespace ironsource {
 
@@ -43,22 +45,26 @@ SE_BIND_FUNC(jsb_IronSource_createRewardedVideo)
 SE_BIND_FUNC(jsb_IronSource_createInterstitialAd)
 
 bool register_iron_source_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("ironsource", core::__eeObj, &__ironsourceObj);
-    
-    auto cls = se::Class::create("IronSource", __ironsourceObj, nullptr, _SE(jsb_IronSource_constructor));
+    core::getOrCreatePlainObject_r("ironsource", core::__eeObj,
+                                   &__ironsourceObj);
+
+    auto cls = se::Class::create("IronSource", __ironsourceObj, nullptr,
+                                 _SE(jsb_IronSource_constructor));
     cls->defineFinalizeFunction(_SE(jsb_IronSource_finalize));
-    
+
     cls->defineFunction("initialize", _SE(jsb_IronSource_initialize));
-    cls->defineFunction("createRewardedVideo", _SE(jsb_IronSource_createRewardedVideo));
-    cls->defineFunction("createInterstitialAd", _SE(jsb_IronSource_createInterstitialAd));
-    
+    cls->defineFunction("createRewardedVideo",
+                        _SE(jsb_IronSource_createRewardedVideo));
+    cls->defineFunction("createInterstitialAd",
+                        _SE(jsb_IronSource_createInterstitialAd));
+
     cls->install();
-    
+
     JSBClassType::registerClass<ee::IronSource>(cls);
-    
+
     __jsb_IronSource_proto = cls->getProto();
     __jsb_IronSource_class = cls;
-    
+
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }

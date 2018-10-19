@@ -8,8 +8,6 @@
 #ifndef JSB_LOG_LEVEL_HPP__
 #define JSB_LOG_LEVEL_HPP__
 
-#pragma once
-
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace se {
@@ -21,9 +19,11 @@ namespace core {
 
 class LogLevel;
 
-template <> const LogLevel& get_value<const LogLevel&>(const se::Value& value);
+template <>
+const LogLevel& get_value<const LogLevel&>(const se::Value& value);
 
-template <> void set_value<const LogLevel&>(se::Value& value, const LogLevel& input);
+template <>
+void set_value<const LogLevel&>(se::Value& value, const LogLevel& input);
 
 bool register_log_level_manual(se::Object* object);
 

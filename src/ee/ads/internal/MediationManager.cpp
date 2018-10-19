@@ -28,12 +28,9 @@ Self::MediationManager() {
     rewardedVideoDestroyed_ = false;
 }
 
-Self::~MediationManager() {
-    
-}
+Self::~MediationManager() {}
 
 bool Self::startInterstitialAd(const OnInterstitialCloseCallback& callback) {
-    
     return registerInterstitialAd(callback);
 }
 
@@ -50,7 +47,7 @@ bool Self::registerInterstitialAd(const OnInterstitialCloseCallback& callback) {
     if (_onInterstitialCloseCallback != nullptr) {
         return false;
     }
-    
+
     _onInterstitialCloseCallback = callback;
     interstitialAdDestroyed_ = false;
     return true;
@@ -64,7 +61,7 @@ bool Self::deregisterInterstitialAd(bool destroyed) {
         }
         return false;
     }
-    
+
     _onInterstitialCloseCallback();
     _onInterstitialCloseCallback = nullptr;
     interstitialAdDestroyed_ = destroyed;
@@ -79,7 +76,7 @@ bool Self::setInterstitialAdDone() {
         }
         return false;
     }
-    
+
     _onInterstitialCloseCallback();
     _onInterstitialCloseCallback = nullptr;
     return true;
@@ -115,10 +112,10 @@ bool Self::deregisterRewardedVideo(bool destroyed, bool rewarded) {
         }
         return false;
     }
-    
+
     _onVideoCloseCallback(rewarded);
     _onVideoCloseCallback = nullptr;
-    
+
     rewardedVideoDestroyed_ = destroyed;
     return true;
 }

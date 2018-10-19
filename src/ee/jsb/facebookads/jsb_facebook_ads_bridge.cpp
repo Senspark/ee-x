@@ -5,12 +5,13 @@
 //  Created by Le Van Kiet on 8/21/18.
 //
 
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_facebook_ads_bridge.hpp"
-#include "jsb_logger.hpp"
+#include "ee/jsb/facebookads/jsb_facebook_ads_bridge.hpp"
 
 #include "ee/FacebookAds.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_logger.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {

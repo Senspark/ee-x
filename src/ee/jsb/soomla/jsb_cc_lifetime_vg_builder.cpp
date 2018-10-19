@@ -1,14 +1,17 @@
 //
-//  jsb_cc_purchase_with_market_builder.cpp
+//  jsb_cc_lifetime_vg_builder.hpp
 //  ee-x
 //
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#include "CCLifetimeVGBuilder.h"
+#include "ee/jsb/soomla/jsb_cc_lifetime_vg_builder.hpp"
+
+#include "Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_purchase_with_market_builder.hpp"
-#include "jsb_core_common.hpp"
+#include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
 
 namespace soomla {
 static se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
@@ -16,8 +19,7 @@ static se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
 } // namespace soomla
 
 namespace ee {
-namespace core {
-} // namespace core
+namespace core {} // namespace core
 } // namespace ee
 
 namespace soomla {

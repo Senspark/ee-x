@@ -95,7 +95,7 @@ bool Self::destroyRewardedVideo(const std::string& placementId) {
     return true;
 }
 
-void Self::loadVideoAd(const std::string &placementId) const {
+void Self::loadVideoAd(const std::string& placementId) const {
     logger_.debug("%s: load placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     bridge_.call(k__loadVideoAd, placementId);

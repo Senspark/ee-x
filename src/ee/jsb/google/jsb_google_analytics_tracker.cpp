@@ -5,9 +5,12 @@
 //  Created by Nguyen Van Quynh on 8/23/18.
 //
 
+#include "ee/jsb/google/jsb_google_analytics_tracker.hpp"
+
 #include "ee/GoogleAnalytics.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
 
 namespace ee {
 

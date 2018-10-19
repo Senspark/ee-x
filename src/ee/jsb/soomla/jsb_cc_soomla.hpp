@@ -8,8 +8,6 @@
 #ifndef JSB_CC_SOOMLA_HPP
 #define JSB_CC_SOOMLA_HPP
 
-#include <stdio.h>
-
 namespace se {
 class Object;
 } // namespace se

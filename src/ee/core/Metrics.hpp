@@ -24,16 +24,16 @@ public:
         FixedHeight,
     };
 
-    static void
-    initialize(const std::pair<float, float>& frameSize,
-               const std::pair<float, float>& winSize, ResolutionPolicy policy);
+    static void initialize(const std::pair<float, float>& frameSize,
+                           const std::pair<float, float>& winSize,
+                           ResolutionPolicy policy);
     /// Initializes the metrics.
     /// @param[in] ratio Pixel to (cocos2d-x) point ratio, should pass
     /// cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize().width
     /// / cocos2d::Director::getInstance()->getWinSize().width (FIXED_WIDTH
     /// policy).
     static void initialize(float ratio);
-    
+
     static const std::pair<float, float>& getWinSize();
     static const std::pair<float, float>& getFrameSize();
 
@@ -51,7 +51,6 @@ public:
     float toDip() const;
 
 private:
-//    explicit Metrics(const std::pair<float, float>& winSize, ResolutionPolicy policy);
     explicit Metrics(float pixels, float pixelToDp, float pixelToPoint);
 
     float pixels_;

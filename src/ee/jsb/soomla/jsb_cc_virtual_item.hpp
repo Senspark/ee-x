@@ -17,6 +17,8 @@ namespace soomla {
 extern se::Object* __jsb_CCVirtualItem_proto;
 extern se::Class* __jsb_CCVirtualItem_class;
 
+se::Object* getVirtualItemProto();
+
 bool register_cc_virtual_item_manual(se::Object* object);
 
 } // namespace soomla

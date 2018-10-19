@@ -9,12 +9,13 @@
 #define JSB_CORE_HPP__
 
 #ifdef __cplusplus
+
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_log_level.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
+#include "ee/jsb/core/jsb_metrics.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/core/jsb_utils.hpp"
-#include "ee/jsb/core/jsb_metrics.hpp"
 
 namespace ee {
 namespace core {

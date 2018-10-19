@@ -1,8 +1,16 @@
-#include "ee/jsb/core/jsb_core_common.hpp"
+//
+//  jsb_cc_soomla_store.cpp
+//  ee-x
+//
+//  Created by Kiet Le on 9/13/18.
+//
 
-#include "Cocos2dxStore.h"
+#include "ee/jsb/soomla/jsb_cc_soomla_store.hpp"
+
+#include "Soomla/Cocos2dxStore.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_soomla_store.hpp"
 
 namespace ee {
 namespace core {

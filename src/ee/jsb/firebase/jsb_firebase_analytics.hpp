@@ -8,8 +8,6 @@
 #ifndef JSB_FIREBASE_ANALYTICS_HPP__
 #define JSB_FIREBASE_ANALYTICS_HPP__
 
-#pragma one
-
 namespace se {
 class Object;
 } // namespace se

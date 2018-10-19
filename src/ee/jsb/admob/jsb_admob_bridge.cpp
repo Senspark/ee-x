@@ -5,12 +5,11 @@
 //  Created by Duc Nguyen on 7/15/18.
 //
 
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_admob_bridge.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_logger.hpp"
-
 #include "ee/AdMob.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_logger.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {

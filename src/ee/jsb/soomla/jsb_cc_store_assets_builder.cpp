@@ -5,11 +5,13 @@
 //  Created by Nguyen Van Quynh on 9/13/18.
 //
 
-#include "CCStoreAssetsBuilder.h"
-#include "Cocos2dxCore.h"
+#include "ee/jsb/soomla/jsb_cc_store_assets_builder.hpp"
+
+#include "Soomla/CCStoreAssetsBuilder.h"
+#include "Soomla/Cocos2dxCore.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_store_assets_builder.hpp"
-#include "jsb_core_common.hpp"
 
 namespace soomla {
 static se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;

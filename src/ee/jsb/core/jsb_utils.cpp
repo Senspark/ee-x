@@ -5,11 +5,11 @@
 //  Created by Duc Nguyen on 7/12/18.
 //
 
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_utils.hpp"
-
 #include <ee/Core.hpp>
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
+#include "ee/jsb/core/jsb_utils.hpp"
 
 namespace ee {
 int getIntergerUserDefault(std::string key) {

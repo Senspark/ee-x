@@ -25,24 +25,26 @@
 namespace soomla {
 class EventListenerProxy final {
 public:
-
 #if COCOSCREATOR_VERSION == 2
     EventListenerProxy(
         const std::string& eventName,
         const std::function<void(cocos2d::CustomEvent event)>& callback) {
-        wrapped_ = cocos2d::EventDispatcher::addCustomEventListener(eventName, callback);
+        wrapped_ = cocos2d::EventDispatcher::addCustomEventListener(eventName,
+                                                                    callback);
         eventName_ = eventName;
     }
-    ~EventListenerProxy(){
-        cocos2d::EventDispatcher::removeCustomEventListener(eventName_, wrapped_);
+    ~EventListenerProxy() {
+        cocos2d::EventDispatcher::removeCustomEventListener(eventName_,
+                                                            wrapped_);
     }
 #elif COCOSCREATOR_VERSION == 1
     EventListenerProxy(
-       const std::string& eventName,
-       const cocos2d::EventDispatcher::CustomEventListener& callback){
-            wrapped_ = cocos2d::EventDispatcher::addCustomEventListener(eventName, callback);
-            eventName_ = eventName;
-        }
+        const std::string& eventName,
+        const std::function<void(cocos2d::EventCustom* event)>& callback) {
+        wrapped_ = cocos2d::Director::getInstance()
+                       ->getEventDispatcher()
+                       ->addCustomEventListener(eventName, callback);
+    }
 
     ~EventListenerProxy() {
         cocos2d::Director::getInstance()
@@ -68,9 +70,9 @@ public:
     void addListener(
         const std::string& eventName,
 #if COCOSCREATOR_VERSION == 2
-    const std::function<void(cocos2d::CustomEvent event)>& callback);
+        const std::function<void(cocos2d::CustomEvent event)>& callback);
 #elif COCOSCREATOR_VERSION == 1
-    const std::function<void(cocos2d::EventCustom* event)>& callback);
+        const std::function<void(cocos2d::EventCustom* event)>& callback);
 #endif
     std::unordered_map<std::string, EventListenerProxy> listeners_;
 };
@@ -80,7 +82,7 @@ void StoreEventListener::Impl::addListener(
 #if COCOSCREATOR_VERSION == 2
     const std::function<void(cocos2d::CustomEvent)>& callback) {
 #elif COCOSCREATOR_VERSION == 1
-    const cocos2d::EventDispatcher::CustomEventListener& callback) {
+    const std::function<void(cocos2d::EventCustom*)>& callback) {
 #endif
     bool inserted =
         listeners_

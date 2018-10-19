@@ -5,12 +5,14 @@
 //  Created by Nguyen Van Quynh on 9/18/18.
 //
 
-#include "CCPurchasableVirtualItem.h"
-#include "CCVirtualCurrencyPack.h"
+//#include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
+
+#include "Soomla/domain/CCPurchasableVirtualItem.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_purchasable_virtual_item.hpp"
-#include "jsb_cc_virtual_item.hpp"
-#include "jsb_core_common.hpp"
+#include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
 
 namespace soomla {
 se::Object* __jsb_CCPurchasableVirtualItem_proto = nullptr;
@@ -28,7 +30,6 @@ void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
 } // namespace ee
 
 namespace soomla {
-
 
 const auto jsb_CCPurchasableVirtualItem_finalize =
     &ee::core::jsb_finalize<CCPurchasableVirtualItem>;

@@ -8,8 +8,6 @@
 #ifndef JSB_LOGGER_HPP__
 #define JSB_LOGGER_HPP__
 
-#pragma once
-
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace se {
@@ -21,9 +19,11 @@ namespace core {
 
 class Logger;
 
-template <> const Logger& get_value(const se::Value& value);
+template <>
+const Logger& get_value(const se::Value& value);
 
-template <> void set_value<Logger&>(se::Value& value, Logger& input);
+template <>
+void set_value<Logger&>(se::Value& value, Logger& input);
 
 bool register_logger_manual(se::Object* object);
 

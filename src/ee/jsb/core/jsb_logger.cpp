@@ -5,13 +5,14 @@
 //  Created by Duc Nguyen on 7/12/18.
 //
 
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
-#include "jsb_logger.hpp"
+#include "ee/jsb/core/jsb_logger.hpp"
+
+#include <unordered_map>
 
 #include <ee/Core.hpp>
 
-#include <unordered_map>
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {

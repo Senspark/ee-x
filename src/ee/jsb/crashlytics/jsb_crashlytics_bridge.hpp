@@ -8,8 +8,6 @@
 #ifndef JSB_CRASHLYTICS_BRIDGE_HPP__
 #define JSB_CRASHLYTICS_BRIDGE_HPP__
 
-#pragma once
-
 namespace se {
 class Object;
 } // namespace se

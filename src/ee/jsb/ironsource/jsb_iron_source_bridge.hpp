@@ -9,8 +9,6 @@
 #ifndef JSB_IRON_SOURCE_BRIDGE_HPP__
 #define JSB_IRON_SOURCE_BRIDGE_HPP__
 
-#pragma one
-
 namespace se {
 class Object;
 } // namespace se

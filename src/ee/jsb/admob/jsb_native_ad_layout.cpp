@@ -5,17 +5,17 @@
 //  Created by Duc Nguyen on 7/15/18.
 //
 
-#include "jsb_native_ad_layout.hpp"
-
-#include "jsb_admob_bridge.hpp"
-#include "jsb_core_common.hpp"
-
 #include "ee/AdMob.hpp"
+
+#include "ee/jsb/admob/jsb_admob_bridge.hpp"
+#include "ee/jsb/admob/jsb_native_ad_layout.hpp"
+#include "ee/jsb/core/jsb_core_common.hpp"
 
 namespace ee {
 
 namespace core {
-template <> ee::AdMobNativeAdLayout get_value(const se::Value& value) {
+template <>
+ee::AdMobNativeAdLayout get_value(const se::Value& value) {
     return *static_cast<ee::AdMobNativeAdLayout*>(
         value.toObject()->getPrivateData());
 }
@@ -45,8 +45,7 @@ const static auto jsb_NativeAdLayout_setHeadline =
                                 std::string>;
 const static auto jsb_NativeAdLayout_setIcon =
     &ee::core::jsb_accessor_set<ee::AdMobNativeAdLayout,
-                                &ee::AdMobNativeAdLayout::setIcon,
-                                std::string>;
+                                &ee::AdMobNativeAdLayout::setIcon, std::string>;
 const static auto jsb_NativeAdLayout_setImage = &ee::core::jsb_accessor_set<
     ee::AdMobNativeAdLayout, &ee::AdMobNativeAdLayout::setImage, std::string>;
 const static auto jsb_NativeAdLayout_setMedia = &ee::core::jsb_accessor_set<

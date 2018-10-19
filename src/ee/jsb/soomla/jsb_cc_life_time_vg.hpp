@@ -8,8 +8,6 @@
 #ifndef jsb_cc_life_time_vg_hpp
 #define jsb_cc_life_time_vg_hpp
 
-#include <stdio.h>
-
 namespace se {
 class Object;
 } // namespace se

@@ -5,11 +5,12 @@
 //  Created by Le Van Kiet on 8/21/18.
 //
 
-#include "jsb_core_common.hpp"
-#include "jsb_facebook_ads_bridge.hpp"
-#include "jsb_facebook_native_ads_layout.hpp"
+#include "ee/jsb/facebookads/jsb_facebook_native_ads_layout.hpp"
 
 #include "ee/FacebookAds.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/facebookads/jsb_facebook_ads_bridge.hpp"
 
 namespace ee {
 

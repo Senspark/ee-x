@@ -5,15 +5,14 @@
 //  Created by Duc Nguyen on 7/17/18.
 //
 
-#include "jsb_rewarded_video.hpp"
+#include "ee/jsb/ads/jsb_rewarded_video.hpp"
 
-#include "jsb_core_common.hpp"
-
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <unordered_map>
 
 #include <ee/Ads.hpp>
 
-#include <unordered_map>
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace ads {

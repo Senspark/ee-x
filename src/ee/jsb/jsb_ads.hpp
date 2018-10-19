@@ -10,11 +10,11 @@
 
 #ifdef __cplusplus
 #include "ee/jsb/ads/jsb_adview.hpp"
-#include "ee/jsb/ads/jsb_multi_adview.hpp"
 #include "ee/jsb/ads/jsb_interstitial_ad.hpp"
+#include "ee/jsb/ads/jsb_multi_adview.hpp"
 #include "ee/jsb/ads/jsb_multi_interstitial_ad.hpp"
-#include "ee/jsb/ads/jsb_rewarded_video.hpp"
 #include "ee/jsb/ads/jsb_multi_rewarded_video.hpp"
+#include "ee/jsb/ads/jsb_rewarded_video.hpp"
 
 namespace ee {
 namespace ads {

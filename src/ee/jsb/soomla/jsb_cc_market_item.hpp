@@ -8,8 +8,6 @@
 #ifndef jsb_cc_market_item_hpp
 #define jsb_cc_market_item_hpp
 
-#include <stdio.h>
-
 namespace se {
 class Object;
 } // namespace se

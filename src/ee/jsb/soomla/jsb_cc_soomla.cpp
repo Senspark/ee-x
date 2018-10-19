@@ -5,10 +5,12 @@
 //  Created by Nguyen Van Quynh on 9/13/18.
 //
 
-#include "Cocos2dxCore.h"
+#include "ee/jsb/soomla/jsb_cc_soomla.hpp"
+
+#include "Soomla/Cocos2dxCore.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_soomla.hpp"
-#include "jsb_core_common.hpp"
 
 namespace soomla {
 

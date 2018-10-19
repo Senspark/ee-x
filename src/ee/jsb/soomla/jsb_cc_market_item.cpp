@@ -5,14 +5,12 @@
 //  Created by Nguyen Van Quynh on 9/19/18.
 //
 
-#include "CCMarketItem.h"
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_cc_market_item.hpp"
-#include "jsb_core_common.hpp"
+#include "ee/jsb/soomla/jsb_cc_market_item.hpp"
 
-namespace ee {
-namespace core {}
-} // namespace ee
+#include "Soomla/domain/CCMarketItem.h"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
 

@@ -5,9 +5,11 @@
 //  Created by Kiet Le on 9/05/18.
 //
 
-#include "jsb_core_common.hpp"
-#include "jsb_multi_adview.hpp"
+#include "ee/jsb/ads/jsb_multi_adview.hpp"
+
 #include <ee/Ads.hpp>
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 
 namespace ee {
 namespace ads {
@@ -38,9 +40,6 @@ const static auto jsb_Multi_AdView_getPosition =
 const static auto jsb_Multi_AdView_setPosition =
     &ee::core::jsb_method_call_on_ui_thread<
         MultiAdView, &MultiAdView::setPosition, float, float>;
-const static auto jsb_Multi_AdView_setPositionInPoints =
-    &ee::core::jsb_method_call_on_ui_thread<
-        MultiAdView, &MultiAdView::setPositionInPoints, float, float>;
 const static auto jsb_Multi_AdView_getSize =
     &ee::core::jsb_accessor_get_on_ui_thread<
         MultiAdView, &MultiAdView::getSize,
@@ -65,7 +64,6 @@ SE_BIND_FUNC(jsb_Multi_AdView_getAnchor)
 SE_BIND_FUNC(jsb_Multi_AdView_setAnchor)
 SE_BIND_FUNC(jsb_Multi_AdView_getPosition)
 SE_BIND_FUNC(jsb_Multi_AdView_setPosition)
-SE_BIND_FUNC(jsb_Multi_AdView_setPositionInPoints)
 SE_BIND_FUNC(jsb_Multi_AdView_getSize)
 SE_BIND_FUNC(jsb_Multi_AdView_setSize)
 SE_BIND_FUNC(jsb_Multi_AdView_setVisible)
@@ -86,8 +84,6 @@ bool register_multi_adview_manual(se::Object* globalObj) {
     cls->defineFunction("setAnchor", _SE(jsb_Multi_AdView_setAnchor));
     cls->defineFunction("getPosition", _SE(jsb_Multi_AdView_getPosition));
     cls->defineFunction("setPosition", _SE(jsb_Multi_AdView_setPosition));
-    cls->defineFunction("setPositionInPoints",
-                        _SE(jsb_Multi_AdView_setPositionInPoints));
     cls->defineFunction("getSize", _SE(jsb_Multi_AdView_getSize));
     cls->defineFunction("setSize", _SE(jsb_Multi_AdView_setSize));
     cls->defineFunction("setVisible", _SE(jsb_Multi_AdView_setVisible));

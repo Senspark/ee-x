@@ -8,8 +8,6 @@
 #ifndef JSB_CC_STORE_ASSETS_BUILDER_HPP
 #define JSB_CC_STORE_ASSETS_BUILDER_HPP
 
-#include <stdio.h>
-
 namespace se {
 class Object;
 } // namespace se

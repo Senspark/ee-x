@@ -5,13 +5,14 @@
 //  Created by Duc Nguyen on 7/13/18.
 //
 
-#include "jsb_core_common.hpp"
-#include "jsb_log_level.hpp"
-
-#include <ee/Core.hpp>
+#include "ee/jsb/core/jsb_log_level.hpp"
 
 #include <set>
 #include <unordered_map>
+
+#include <ee/Core.hpp>
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 
 namespace ee {
 namespace core {
@@ -135,8 +136,12 @@ bool register_log_level_manual(se::Object* globalObj) {
 
     // Register predefined Loglevel instances
     const LogLevel* predefinedLogLevels[6] = {
-        &ee::core::LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
-        &LogLevel::Warn,    &LogLevel::Error, &LogLevel::Assert,
+        &ee::core::LogLevel::Verbose,
+        &LogLevel::Debug,
+        &LogLevel::Info,
+        &LogLevel::Warn,
+        &LogLevel::Error,
+        &LogLevel::Assert,
     };
 
     for (auto logLevel : predefinedLogLevels) {

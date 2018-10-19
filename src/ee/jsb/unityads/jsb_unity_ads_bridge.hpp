@@ -9,8 +9,6 @@
 #ifndef JSB_UNITY_ADS_BRIDGE_HPP__
 #define JSB_UNITY_ADS_BRIDGE_HPP__
 
-#pragma one
-
 namespace se {
 class Object;
 } // namespace se

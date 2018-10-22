@@ -8,9 +8,7 @@
 #ifndef JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
 #define JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace google {
@@ -21,4 +19,3 @@ bool register_google_tracker_manual(se::Object* object);
 } // namespace ee
 
 #endif // JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
-

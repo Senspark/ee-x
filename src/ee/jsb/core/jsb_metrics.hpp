@@ -8,11 +8,8 @@
 #ifndef jsb_metrics_hpp
 #define jsb_metrics_hpp
 
+#include "ee/jsb/core/jsb_fwd.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-
-namespace se {
-class Object;
-} // namespace se
 
 namespace ee {
 namespace core {

@@ -8,9 +8,7 @@
 #ifndef JSB_CRASHLYTICS_BRIDGE_HPP__
 #define JSB_CRASHLYTICS_BRIDGE_HPP__
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace crashlytics {

@@ -8,9 +8,7 @@
 #ifndef JSB_GOOGLE_ANALYTICS_EVENT_BUILDER_HPP__
 #define JSB_GOOGLE_ANALYTICS_EVENT_BUILDER_HPP__
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace google {

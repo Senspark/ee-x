@@ -8,9 +8,7 @@
 #ifndef jsb_cc_single_use_pack_vg_hpp
 #define jsb_cc_single_use_pack_vg_hpp
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

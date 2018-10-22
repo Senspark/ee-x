@@ -8,9 +8,7 @@
 #ifndef JSB_FIREBASE_REMOTE_CONFIG_HPP__
 #define JSB_FIREBASE_REMOTE_CONFIG_HPP__
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace firebase {

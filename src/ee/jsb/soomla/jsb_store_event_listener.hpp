@@ -8,9 +8,7 @@
 #ifndef jsb_store_event_listener_hpp
 #define jsb_store_event_listener_hpp
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

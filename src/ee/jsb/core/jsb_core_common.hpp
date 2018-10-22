@@ -8,9 +8,7 @@
 #ifndef JSB_COMMON_HPP__
 #define JSB_COMMON_HPP__
 
-namespace se {
-class Object;
-}
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace core {

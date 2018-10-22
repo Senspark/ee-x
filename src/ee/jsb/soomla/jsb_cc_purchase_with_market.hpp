@@ -8,9 +8,7 @@
 #ifndef jsb_cc_purchase_with_market_hpp
 #define jsb_cc_purchase_with_market_hpp
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

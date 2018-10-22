@@ -8,9 +8,7 @@
 #ifndef JSB_CC_VIRTUAL_ITEM_HPP
 #define JSB_CC_VIRTUAL_ITEM_HPP
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

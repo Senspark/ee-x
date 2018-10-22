@@ -8,9 +8,7 @@
 #ifndef jsb_cc_virtual_currency_builder_hpp
 #define jsb_cc_virtual_currency_builder_hpp
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

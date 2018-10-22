@@ -9,9 +9,7 @@
 #ifndef JSB_UNITY_ADS_BRIDGE_HPP__
 #define JSB_UNITY_ADS_BRIDGE_HPP__
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace unityads {

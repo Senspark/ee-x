@@ -8,9 +8,7 @@
 #ifndef JSB_CC_ERROR_HPP
 #define JSB_CC_ERROR_HPP
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

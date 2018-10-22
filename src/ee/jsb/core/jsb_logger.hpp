@@ -8,11 +8,8 @@
 #ifndef JSB_LOGGER_HPP__
 #define JSB_LOGGER_HPP__
 
+#include "ee/jsb/core/jsb_fwd.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-
-namespace se {
-class Object;
-} // namespace se
 
 namespace ee {
 namespace core {

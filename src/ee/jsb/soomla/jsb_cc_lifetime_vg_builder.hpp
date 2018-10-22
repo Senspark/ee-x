@@ -8,9 +8,7 @@
 #ifndef jsb_cc_lifetime_vg_builder.hpp
 #define jsb_cc_lifetime_vg_builder .hpp
 
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

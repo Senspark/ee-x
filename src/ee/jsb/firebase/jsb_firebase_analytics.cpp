@@ -46,23 +46,8 @@ const auto jsb_FirebaseAnalytics_setUserId =
                            const std::string&>;
 const auto jsb_FirebaseAnalytics_logEvent =
     &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logEvent,
-                           const std::string&>;
-const auto jsb_FirebaseAnalytics_logScreen =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logScreen,
-                           const std::string&>;
-const auto jsb_FirebaseAnalytics_logCustomEvent = &core::jsb_method_call<
-    FirebaseAnalytics, &FirebaseAnalytics::logCustomEvent, const std::string&,
-    const std::string&, const std::string&, float>;
-const auto jsb_FirebaseAnalytics_logEcommerce =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logEcommerce,
-                           const std::string&, const std::string&,
-                           const std::string&, float, bool>;
-const auto jsb_FirebaseAnalytics_logGameStart =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logGameStart,
-                           const std::string&, const std::string&>;
-const auto jsb_FirebaseAnalytics_logGameEnd =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logGameEnd,
-                           const std::string&, const std::string&, int>;
+                           const std::string&,
+                           std::unordered_map<std::string, std::string>>;
 
 SE_BIND_FINALIZE_FUNC(jsb_FirebaseAnalytics_finalize)
 SE_BIND_CTOR(jsb_FirebaseAnalytics_constructor, __jsb_FirebaseAnalytics_class,
@@ -73,11 +58,6 @@ SE_BIND_FUNC(jsb_FirebaseAnalytics_setMinimumSessionDuration)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_setSessionTimeoutDuration)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_setUserId)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_logEvent)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logScreen)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logCustomEvent)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logEcommerce)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logGameStart)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logGameEnd)
 
 bool register_firebase_analytics_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
@@ -95,14 +75,6 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
                         _SE(jsb_FirebaseAnalytics_setSessionTimeoutDuration));
     cls->defineFunction("setUserId", _SE(jsb_FirebaseAnalytics_setUserId));
     cls->defineFunction("logEvent", _SE(jsb_FirebaseAnalytics_logEvent));
-    cls->defineFunction("logScreen", _SE(jsb_FirebaseAnalytics_logScreen));
-    cls->defineFunction("logCustomEvent",
-                        _SE(jsb_FirebaseAnalytics_logCustomEvent));
-    cls->defineFunction("logEcommerce",
-                        _SE(jsb_FirebaseAnalytics_logEcommerce));
-    cls->defineFunction("logGameStart",
-                        _SE(jsb_FirebaseAnalytics_logGameStart));
-    cls->defineFunction("logGameEnd", _SE(jsb_FirebaseAnalytics_logGameEnd));
 
     cls->install();
 

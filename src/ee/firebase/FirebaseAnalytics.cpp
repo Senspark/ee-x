@@ -99,76 +99,25 @@ void Self::setUserProperty(const std::string& name,
 #endif // EE_X_MOBILE
 }
 
-void Self::logEvent(const std::string& name) {
+void Self::logEvent(const std::string& name,
+                    const ee::firebase::TrackingDict& dict) {
 #ifdef EE_X_MOBILE
-    ::firebase::analytics::LogEvent(name.c_str());
+    if (dict.empty()) {
+        ::firebase::analytics::LogEvent(name.c_str());
+    } else {
+        ::firebase::analytics::Parameter* parameters =
+            new ::firebase::analytics::Parameter[dict.size()];
+        size_t index = 0;
+        for (const auto& item : dict) {
+            parameters[index++] = ::firebase::analytics::Parameter(
+                item.first.c_str(), item.second.c_str());
+        }
+
+        ::firebase::analytics::LogEvent(name.c_str(), parameters, dict.size());
+        delete[] parameters;
+    }
+
 #endif // EE_X_MOBILE
-}
-
-void Self::logScreen(const std::string& screenName) const {
-#ifdef EE_X_MOBILE
-    ::firebase::analytics::LogEvent("screen",
-                                    ::firebase::analytics::kParameterItemName,
-                                    screenName.c_str());
-#endif // EE_X_MOBILE
-}
-
-void Self::logCustomEvent(const std::string& category,
-                          const std::string& action, const std::string& label,
-                          float value) const {
-#ifdef EE_X_MOBILE
-    ::firebase::analytics::Parameter parameters[] = {
-        ::firebase::analytics::Parameter("category", category),
-        ::firebase::analytics::Parameter("action", action),
-        ::firebase::analytics::Parameter("label", label),
-        ::firebase::analytics::Parameter("value", value),
-    };
-    ::firebase::analytics::LogEvent("event", parameters,
-                                    sizeof(parameters) / sizeof(parameters[0]));
-#endif // EE_X_MOBILE
-}
-
-void Self::logEcommerce(const std::string& productId,
-                        const std::string& productName,
-                        const std::string& category, float price,
-                        bool success) const {
-#ifdef EE_X_MOBILE
-    ::firebase::analytics::Parameter parameters[] = {
-        ::firebase::analytics::Parameter(
-            ::firebase::analytics::kParameterItemID, productId),
-        ::firebase::analytics::Parameter(
-            ::firebase::analytics::kParameterItemName, productName),
-        ::firebase::analytics::Parameter(
-            ::firebase::analytics::kParameterItemCategory, category),
-        ::firebase::analytics::Parameter(::firebase::analytics::kParameterPrice,
-                                         price),
-        ::firebase::analytics::Parameter(
-            ::firebase::analytics::kParameterSuccess, success),
-    };
-    ::firebase::analytics::LogEvent("buy", parameters,
-                                    sizeof(parameters) / sizeof(parameters[0]));
-#endif // EE_X_MOBILE
-}
-
-void Self::logGameStart(const std::string& type,
-                        const std::string& difficulty) const {
-    ::firebase::analytics::Parameter parameters[] = {
-        ::firebase::analytics::Parameter("type", type),
-        ::firebase::analytics::Parameter("difficulty", difficulty),
-    };
-    ::firebase::analytics::LogEvent("game_start", parameters,
-                                    sizeof(parameters) / sizeof(parameters[0]));
-}
-
-void Self::logGameEnd(const std::string& type, const std::string& difficulty,
-                      int rank) const {
-    ::firebase::analytics::Parameter parameters[] = {
-        ::firebase::analytics::Parameter("type", type),
-        ::firebase::analytics::Parameter("difficulty", difficulty),
-        ::firebase::analytics::Parameter("rank", rank),
-    };
-    ::firebase::analytics::LogEvent("game_end", parameters,
-                                    sizeof(parameters) / sizeof(parameters[0]));
 }
 } // namespace firebase
 } // namespace ee

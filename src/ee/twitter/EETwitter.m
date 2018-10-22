@@ -84,6 +84,7 @@ static NSString* const k__image            = @"twitter_image";
 
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__shareScreenShot];
     [bridge_ deregisterHandler:k__shareContent];
 }
 

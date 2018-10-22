@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include "firebase/app.h"
+#include "firebase/future.h"
 #include "firebase/internal/common.h"
 
 #if !defined(DOXYGEN) && !defined(SWIG)
@@ -25,6 +26,26 @@ namespace firebase {
 /// The FCM service handles all aspects of queueing of messages and delivery
 /// to client applications running on target devices.
 namespace messaging {
+
+/// @brief A class to configure the behavior of Firebase Cloud Messaging.
+///
+/// This class contains various configuration options that control some of
+/// Firebase Cloud Messaging's behavior.
+struct MessagingOptions {
+  /// Default constructor.
+  MessagingOptions() : suppress_notification_permission_prompt(false) {}
+
+  /// If true, do not display the prompt to the user requesting permission to
+  /// allow notifications to this app. If the prompt is suppressed in this way,
+  /// the developer must manually prompt the user for permission at some point
+  /// in the future using `RequestPermission()`.
+  ///
+  /// If this prompt has already been accepted once in the past the prompt will
+  /// not be displayed again.
+  ///
+  /// This option currently only applies to iOS.
+  bool suppress_notification_permission_prompt;
+};
 
 /// Used for messages that display a notification.
 ///
@@ -337,6 +358,23 @@ class Listener {
 /// not available on the current device.
 InitResult Initialize(const App& app, Listener* listener);
 
+/// @brief Initialize Firebase Cloud Messaging.
+///
+/// After Initialize is called, the implementation may call functions on the
+/// Listener provided at any time.
+///
+/// @param[in] app The Firebase App object for this application.
+/// @param[in] listener A Listener object that listens for events from the
+///            Firebase Cloud Messaging servers.
+/// @param[in] options A set of options that configure the
+///            initialzation behavior of Firebase Cloud Messaging.
+///
+/// @return kInitResultSuccess if initialization succeeded, or
+/// kInitResultFailedMissingDependency on Android if Google Play services is
+/// not available on the current device.
+InitResult Initialize(const App& app, Listener* listener,
+                      const MessagingOptions& options);
+
 /// @brief Terminate Firebase Cloud Messaging.
 ///
 /// Frees resources associated with Firebase Cloud Messaging.
@@ -368,17 +406,28 @@ bool IsTokenRegistrationOnInitEnabled();
 /// the user before FCM generates/refreshes a registration token on app
 /// startup), add to your application’s manifest:
 ///
-/// @code
-/// <meta-data android:name="firebase_messaging_auto_init_enabled"
-/// android:value="false" />
-/// @endcode
 ///
-/// or on iOS to your info.plist:
-///
+/// @if NOT_DOXYGEN
+///   <meta-data android:name="firebase_messaging_auto_init_enabled"
+///   android:value="false" />
+/// @else
 /// @code
-/// <key>FirebaseMessagingAutoInitEnabled</key>
-/// <false/>
+///   &lt;meta-data android:name="firebase_messaging_auto_init_enabled"
+///   android:value="false" /&gt;
 /// @endcode
+/// @endif
+///
+/// or on iOS to your Info.plist:
+///
+/// @if NOT_DOXYGEN
+///   <key>FirebaseMessagingAutoInitEnabled</key>
+///   <false/>
+/// @else
+/// @code
+///   &lt;key&gt;FirebaseMessagingAutoInitEnabled&lt;/key&gt;
+///   &lt;false/&gt;
+/// @endcode
+/// @endif
 ///
 /// @param enable sets if a registration token should be requested on
 /// initialization.
@@ -397,6 +446,34 @@ void SetTokenRegistrationOnInitEnabled(bool enable);
 /// @return Pointer to the previously set listener.
 Listener* SetListener(Listener* listener);
 
+/// Error code returned by Firebase Cloud Messaging C++ functions.
+enum Error {
+  /// The operation was a success, no error occurred.
+  kErrorNone = 0,
+  /// Permission to receive notifications was not granted.
+  kErrorFailedToRegisterForRemoteNotifications,
+  /// Topic name is invalid for subscription/unsubscription.
+  kErrorInvalidTopicName,
+  /// Unknown error.
+  kErrorUnknown,
+};
+
+/// @brief Displays a prompt to the user requesting permission to display
+///        notifications.
+///
+/// The permission prompt only appears on iOS. If the user has already agreed to
+/// allow notifications, no prompt is displayed and the returned future is
+/// completed immediately.
+///
+/// @return A future that completes when the notification prompt has been
+///         dismissed.
+Future<void> RequestPermission();
+
+/// @brief Gets the result of the most recent call to RequestPermission();
+///
+/// @returns Result of the most recent call to RequestPermission().
+Future<void> RequestPermissionLastResult();
+
 /// Send an upstream ("device to cloud") message. You can only use the upstream
 /// feature if your FCM implementation uses the XMPP-based Cloud Connection
 /// Server. The current limits for max storage time and number of outstanding
@@ -414,9 +491,14 @@ void Send(const Message& message);
 ///
 /// Call this function from the main thread. FCM is not thread safe.
 ///
-/// @param topic The topic to subscribe to. Should be of the form
-///              `"/topics/<topic-name>"`.
-void Subscribe(const char* topic);
+/// @param[in] topic The name of the topic to subscribe. Must match the
+///            following regular expression: `[a-zA-Z0-9-_.~%]{1,900}`.
+Future<void> Subscribe(const char* topic);
+
+/// @brief Gets the result of the most recent call to Unsubscribe();
+///
+/// @returns Result of the most recent call to Unsubscribe().
+Future<void> SubscribeLastResult();
 
 /// @brief Unsubscribe from a topic.
 ///
@@ -425,8 +507,14 @@ void Subscribe(const char* topic);
 ///
 /// Call this function from the main thread. FCM is not thread safe.
 ///
-/// @param topic The topic to unsubscribe from.
-void Unsubscribe(const char* topic);
+/// @param[in] topic The name of the topic to unsubscribe from. Must match the
+///            following regular expression: `[a-zA-Z0-9-_.~%]{1,900}`.
+Future<void> Unsubscribe(const char* topic);
+
+/// @brief Gets the result of the most recent call to Unsubscribe();
+///
+/// @returns Result of the most recent call to Unsubscribe().
+Future<void> UnsubscribeLastResult();
 
 class PollableListenerImpl;
 
@@ -526,4 +614,4 @@ class PollableListener : public Listener {
 }  // namespace messaging
 }  // namespace firebase
 
-#endif  // FIREBASE_MESSAGING_CLIENT_CPP_INCLUDE_FIREBASE_MESSAGING_H_
+#endif  // FIREBASE_MESSAGING_CLIENT_CPP_SRC_INCLUDE_FIREBASE_MESSAGING_H_

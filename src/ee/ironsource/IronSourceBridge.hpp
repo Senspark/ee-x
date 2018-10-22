@@ -5,16 +5,19 @@
 
 #include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {
 class IronSource final {
+private:
+    using Self = IronSource;
+
 public:
     IronSource();
     ~IronSource();
-    
+
     explicit IronSource(const Logger& logger);
 
     /// Initializes ironSource with the specified game ID.
@@ -27,6 +30,9 @@ public:
     /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& placementId);
+
+    void setCloseTimeout(float timeout);
+
 private:
     friend RewardedVideo;
     friend InterstitialAd;
@@ -36,8 +42,8 @@ private:
 
     bool hasRewardedVideo() const;
     bool showRewardedVideo(const std::string& placementId);
-    
-    void loadInterstitial();    
+
+    void loadInterstitial();
     bool hasInterstitial() const;
     bool showInterstitial(const std::string& placementId);
 
@@ -45,19 +51,21 @@ private:
     void onFailed();
     void onOpened();
     void onClosed();
-    void doRewardInGame();
-    
+    void doRewardAndFinishAds();
+
     void onInterstitialOpened();
     void onInterstitialFailed();
     void onInterstitialClosed();
-
-    bool rewarded_;
-    bool _shouldDoRewardInGame;
 
     IMessageBridge& bridge_;
     const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
+
+    std::unique_ptr<core::SpinLock> handlerLock_;
+
+    float _closeTimeout{1};
+    bool rewarded_{false};
 };
 } // namespace ironsource
 } // namespace ee

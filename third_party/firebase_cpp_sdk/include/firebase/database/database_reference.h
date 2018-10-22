@@ -5,12 +5,12 @@
 
 #include <map>
 #include <string>
-#include "firebase/database/disconnection.h"
-#include "firebase/database/query.h"
-#include "firebase/database/transaction.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
+#include "firebase/database/disconnection.h"
+#include "firebase/database/query.h"
+#include "firebase/database/transaction.h"
 
 namespace firebase {
 namespace database {
@@ -76,15 +76,6 @@ class DatabaseReference : public Query {
   /// @returns Firebase Database instance that this DatabaseReference refers to.
   Database* database() const;
 
-  /// @brief Gets the database to which we refer.
-  ///
-  /// The pointer will remain valid indefinitely.
-  ///
-  /// @returns Firebase Database instance that this DatabaseReference refers to.
-  ///
-  /// @deprecated Renamed to database().
-  FIREBASE_DEPRECATED Database* GetDatabase() const { return database(); }
-
   /// @brief Gets the string key of this database location.
   ///
   /// The pointer is only valid while the DatabaseReference remains in memory.
@@ -95,37 +86,14 @@ class DatabaseReference : public Query {
 
   /// @brief Gets the string key of this database location.
   ///
-  /// The pointer is only valid while the DatabaseReference remains in memory.
-  ///
-  /// @returns String key of this database location, which will remain valid in
-  /// memory until the DatabaseReference itself goes away.
-  FIREBASE_DEPRECATED const char* GetKey() const { return key(); }
-
-  /// @brief Gets the string key of this database location.
-  ///
   /// @returns String key of this database location.
   std::string key_string() const;
-
-  /// @brief Gets the string key of this database location.
-  ///
-  /// @returns String key of this database location.
-  ///
-  /// @deprecated Renamed to key_string().
-  FIREBASE_DEPRECATED std::string GetKeyString() const { return key_string(); }
 
   /// @brief Returns true if this reference refers to the root of the database.
   ///
   /// @returns true if this reference refers to the root of the database, false
   /// otherwise.
   bool is_root() const;
-
-  /// @brief Returns true if this reference refers to the root of the database.
-  ///
-  /// @returns true if this reference refers to the root of the database, false
-  /// otherwise.
-  ///
-  /// @deprecated Renamed to is_root().
-  FIREBASE_DEPRECATED bool IsRoot() const { return is_root(); }
 
   /// @brief Returns true if this reference is valid, false if it is not
   /// valid. DatabaseReferences constructed with the default constructor
@@ -136,18 +104,7 @@ class DatabaseReference : public Query {
   ///
   /// @returns true if this reference is valid, false if this reference is
   /// invalid.
-  virtual bool is_valid() const;
-
-  /// @brief Returns true if this reference is valid, false if it is not
-  /// valid. An invalid reference could be returned by Database::GetReference()
-  /// or Database::GetReferenceFromUrl() if you specify an incorrect location,
-  /// or calling Query::GetReference() on an invalid query.
-  ///
-  /// @returns true if this reference is valid, false if this reference is
-  /// invalid.
-  ///
-  /// @deprecated Renamed to is_valid().
-  FIREBASE_DEPRECATED virtual bool IsValid() const { return is_valid(); }
+  bool is_valid() const override;
 
   /// @brief Gets the parent of this location, or get this location again if
   /// IsRoot().
@@ -441,13 +398,6 @@ class DatabaseReference : public Query {
   /// @returns The absolute URL of the location this reference refers to.
   std::string url() const;
 
-  /// @brief Get the absolute URL of this reference.
-  ///
-  /// @returns The absolute URL of the location this reference refers to.
-  ///
-  /// @deprecated Renamed to url().
-  FIREBASE_DEPRECATED std::string GetUrl() const { return url(); }
-
   /// @brief Get the disconnect handler, which controls what actions the server
   /// will perform to this location's data when this client disconnects.
   ///
@@ -473,6 +423,18 @@ class DatabaseReference : public Query {
 
  private:
   /// @cond FIREBASE_APP_INTERNAL
+
+  // Remove the "Query" cleanup registration (which the base class constructor
+  // already registered) and replace it with a "DatabaseReference" registration.
+  //
+  // This is necessary so that if the instance needs to be cleaned up, the
+  // correct pointer type will be used to access it.
+  void SwitchCleanupRegistrationToDatabaseReference();
+
+  // Remove the "DatabaseReference" cleanup registration and replace it with a
+  // "Query" one. ~Query() will unregister that one.
+  void SwitchCleanupRegistrationBackToQuery();
+
   friend class DataSnapshot;
   friend class Query;
   friend class internal::DatabaseInternal;

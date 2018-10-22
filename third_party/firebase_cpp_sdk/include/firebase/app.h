@@ -374,6 +374,7 @@ class App {
   const AppOptions& options() const { return options_; }
 
 
+
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class auth::Auth;

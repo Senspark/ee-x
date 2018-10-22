@@ -126,15 +126,6 @@ class InterstitialAd {
   /// @return The current presentation state.
   PresentationState presentation_state() const;
 
-  /// Returns the current presentation state of the @ref InterstitialAd.
-  ///
-  /// @return The current presentation state.
-  ///
-  /// @deprecated Renamed to presentation_state().
-  FIREBASE_DEPRECATED PresentationState GetPresentationState() const {
-    return presentation_state();
-  }
-
   /// Sets the @ref Listener for this @ref InterstitialAd.
   /// @param[in] listener A valid InterstititalAd::Listener to receive
   ///                     callbacks.

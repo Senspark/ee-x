@@ -199,16 +199,6 @@ void Destroy();
 /// @return The current presentation state.
 PresentationState presentation_state();
 
-/// Returns the current presentation state, indicating if an ad is visible or
-/// if a video has started playing.
-///
-/// @return The current presentation state.
-///
-/// @deprecated Renamed to presentation_state().
-FIREBASE_DEPRECATED inline PresentationState GetPresentationState() {
-  return presentation_state();
-}
-
 /// Sets the @ref Listener that should receive callbacks.
 /// @param[in] listener A valid Listener.
 void SetListener(Listener* listener);

@@ -16,16 +16,16 @@
 
 namespace eetest {
 ee::IronSource* getIronSource() {
-    static auto plugin = ee::IronSource();
+    static auto plugin = std::make_unique<ee::IronSource>();
     static bool initialized;
     if (not initialized) {
         ee::runOnUiThreadAndWait([] {
             FunctionLogger logger("Initialize ironSource");
-            plugin.initialize(getIronSourceGameId());
+            plugin->initialize(getIronSourceGameId());
         });
         initialized = true;
     }
-    return &plugin;
+    return plugin.get();
 }
 
 std::string getIronSourceGameId() {

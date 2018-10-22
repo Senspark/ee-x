@@ -26,10 +26,33 @@ enum ErrorCode {
   kErrorCodeFailed,
 };
 
+/// @brief Enum describing the strength of a dynamic links match.
+///
+/// This version is local to dynamic links; there is a similar enum in invites
+/// and another (internal only) one in app.
+enum LinkMatchStrength {
+  /// No match has been achieved
+  kLinkMatchStrengthNoMatch = 0,
+
+  /// The match between the Dynamic Link and device is not perfect.  You should
+  /// not reveal any personal information related to the Dynamic Link.
+  kLinkMatchStrengthWeakMatch,
+
+  /// The match between the Dynamic Link and this device has a high confidence,
+  /// but there is a small possibility of error.
+  kLinkMatchStrengthStrongMatch,
+
+  /// The match between the Dynamic Link and the device is exact.  You may
+  /// safely reveal any personal information related to this Dynamic Link.
+  kLinkMatchStrengthPerfectMatch
+};
+
 /// @brief The received Dynamic Link.
 struct DynamicLink {
   /// The URL that was passed to the app.
   std::string url;
+  /// The match strength of the dynamic link.
+  LinkMatchStrength match_strength;
 };
 
 /// @brief Base class used to receive Dynamic Links.

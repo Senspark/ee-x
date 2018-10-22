@@ -37,8 +37,8 @@ class MutableData {
   /// Move is more efficient than copy and delete.
   MutableData(MutableData&& rhs);
 
-  // MutableData is not supposed to be assigned.
-  MutableData& operator=(MutableData&& rhs) = delete;
+  // MutableData may be moved.
+  MutableData& operator=(MutableData&& rhs);
 #endif  // defined(FIREBASE_USE_MOVE_OPERATORS)
 
   /// Destructor.
@@ -71,26 +71,10 @@ class MutableData {
   /// @returns The immediate children of this location.
   std::vector<MutableData> children();
 
-  /// @brief Get all the immediate children of this location.
-  ///
-  /// @returns The immediate children of this location.
-  ///
-  /// @deprecated Renamed to children().
-  FIREBASE_DEPRECATED std::vector<MutableData> GetChildren() {
-    return children();
-  }
-
   /// @brief Get the number of children of this location.
   ///
   /// @returns The number of immediate children of this location.
   size_t children_count();
-
-  /// @brief Get the number of children of this location.
-  ///
-  /// @returns The number of immediate children of this location.
-  ///
-  /// @deprecated Renamed to children_count().
-  FIREBASE_DEPRECATED size_t GetChildrenCount() { return children_count(); }
 
   /// @brief Get the key name of the source location of this data.
   ///
@@ -102,49 +86,18 @@ class MutableData {
 
   /// @brief Get the key name of the source location of this data.
   ///
-  /// @note The returned pointer is only guaranteed to be valid during the
-  /// transaction.
-  ///
-  /// @returns Key name of the source location of this data.
-  ///
-  /// @deprecated Renamed to key().
-  FIREBASE_DEPRECATED const char* GetKey() const { return key(); }
-
-  /// @brief Get the key name of the source location of this data.
-  ///
   /// @returns Key name of the source location of this data.
   std::string key_string() const;
-
-  /// @brief Get the key name of the source location of this data.
-  ///
-  /// @returns Key name of the source location of this data.
-  ///
-  /// @deprecated Renamed to key_string().
-  FIREBASE_DEPRECATED std::string GetKeyString() const { return key_string(); }
 
   /// @brief Get the value of the data contained at this location.
   ///
   /// @returns The value of the data contained at this location.
   Variant value() const;
 
-  /// @brief Get the value of the data contained at this location.
-  ///
-  /// @returns The value of the data contained at this location.
-  ///
-  /// @deprecated Renamed to value().
-  FIREBASE_DEPRECATED Variant GetValue() const { return value(); }
-
   /// @brief Get the priority of the data contained at this snapshot.
   ///
   /// @returns The value of this location's Priority relative to its siblings.
   Variant priority();
-
-  /// @brief Get the priority of the data contained at this snapshot.
-  ///
-  /// @returns The value of this location's Priority relative to its siblings.
-  ///
-  /// @deprecated Renamed to priority().
-  FIREBASE_DEPRECATED Variant GetPriority() { return priority(); }
 
   /// @brief Does this MutableData have data at a particular location?
   ///
@@ -174,25 +127,7 @@ class MutableData {
   /// Map: Inserts a JSON associative array into this location. The keys must
   ///      be of type String (or Int64/Double which are converted to String).
   ///      The values can be any Variant type, including Vector and Map.
-  void set_value(Variant value);
-
-  /// @brief Sets the data at this location to the given value.
-  ///
-  /// @param[in] value The value to set this location to. The Variant's type
-  /// corresponds to the types accepted by the database JSON:
-  /// Null: Deletes this location from the database.
-  /// Int64: Inserts an integer value into this location.
-  /// Double: Inserts a floating point value into this location.
-  /// String: Inserts a string into this location.
-  ///         (Accepts both Mutable and Static strings)
-  /// Vector: Inserts a JSON array into this location. The elements can be any
-  ///         Variant type, including Vector and Map.
-  /// Map: Inserts a JSON associative array into this location. The keys must
-  ///      be of type String (or Int64/Double which are converted to String).
-  ///      The values can be any Variant type, including Vector and Map.
-  ///
-  /// @deprecated Renamed to set_value().
-  FIREBASE_DEPRECATED void SetValue(Variant value) { set_value(value); }
+  void set_value(const Variant& value);
 
   /// @brief Sets the priority of this field, which controls its sort
   /// order relative to its siblings.
@@ -203,28 +138,14 @@ class MutableData {
   /// @param[in] priority Sort priority for this child relative to its siblings.
   /// The Variant types accepted are Null, Int64, Double, and String. Other
   /// types will return kErrorInvalidVariantType.
-  void set_priority(Variant priority);
-
-  /// @brief Sets the priority of this field, which controls its sort
-  /// order relative to its siblings.
-  ///
-  /// @see firebase::database::DatabaseReference::SetPriority() for information
-  /// on how Priority affects the ordering of a node's children.
-  ///
-  /// @param[in] priority Sort priority for this child relative to its siblings.
-  /// The Variant types accepted are Null, Int64, Double, and String. Other
-  /// types will return kErrorInvalidVariantType.
-  ///
-  /// @deprecated Renamed to set_priority().
-  FIREBASE_DEPRECATED void SetPriority(Variant priority) {
-    set_priority(priority);
-  }
+  void set_priority(const Variant& priority);
 
  private:
   /// @cond FIREBASE_APP_INTERNAL
   friend class internal::DatabaseReferenceInternal;
   friend class internal::DatabaseInternal;
   friend class internal::MutableDataInternal;
+  friend MutableData GetInvalidMutableData();
   /// @endcond
 
   MutableData(internal::MutableDataInternal* internal);

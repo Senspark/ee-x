@@ -140,8 +140,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibraryVersion}"
     implementation "com.android.support:support-v4:${rootProject.ext.supportLibraryVersion}"
 
-    implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'com.google.android.gms:play-services-base:15.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.android.gms:play-services-base:16.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

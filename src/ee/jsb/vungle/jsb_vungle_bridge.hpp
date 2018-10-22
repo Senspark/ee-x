@@ -9,8 +9,6 @@
 #ifndef JSB_VUNGLE_BRIDGE_HPP__
 #define JSB_VUNGLE_BRIDGE_HPP__
 
-#pragma one
-
 namespace se {
 class Object;
 } // namespace se

@@ -15,7 +15,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-namespace core {} // namespace core
 
 namespace vungle {
 

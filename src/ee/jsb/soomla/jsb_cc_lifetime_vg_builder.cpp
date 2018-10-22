@@ -18,10 +18,6 @@ static se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
 static se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
 } // namespace soomla
 
-namespace ee {
-namespace core {} // namespace core
-} // namespace ee
-
 namespace soomla {
 
 const static auto jsb_CCLifetimeVGBuilder_finalize =

@@ -352,8 +352,8 @@ public class Utils {
 
 //    @SuppressLint("HardwareIds")
 //    @NonNull
-//    public static String getDeviceId(@NonNull Context context) {
-//        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
-//        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-//    }
+    public static String getDeviceId(@NonNull Context context) {
+        // https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 }

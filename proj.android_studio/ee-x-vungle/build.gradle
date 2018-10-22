@@ -18,7 +18,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api "com.github.vungle:vungle-android-sdk:6.3.12"
+    api "com.github.vungle:vungle-android-sdk:6.3.17"
 
     api 'com.google.ads.mediation:vungle:6.2.5.1'
 

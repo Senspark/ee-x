@@ -328,7 +328,7 @@ Pod::Spec.new do |spec|
       'src/ee/ironsource/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK', '6.7.9.3'
+    s.dependency 'IronSourceSDK', '6.7.12.0'
   end
 
   spec.subspec 'ironsource-mediation' do |s|
@@ -337,7 +337,7 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceAppLovinAdapter','4.1.4.3'
     s.dependency 'IronSourceFacebookAdapter','4.1.3.4'
     s.dependency 'IronSourceUnityAdsAdapter','4.1.1.3'
-    s.dependency 'IronSourceVungleAdapter','4.1.5.3'
+    s.dependency 'IronSourceVungleAdapter','4.1.5.6'
     s.dependency 'IronSourceAdColonyAdapter','4.1.2.1'
     s.dependency 'IronSourceAdMobAdapter','4.1.5.0'
   end
@@ -394,7 +394,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'vungle-mediation' do |s|
     s.dependency 'ee-x/vungle-base'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceVungleAdapter','4.1.5.3'
+    s.dependency 'IronSourceVungleAdapter','4.1.5.6'
   end
 
   spec.subspec 'recorder' do |s|

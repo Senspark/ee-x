@@ -3,6 +3,8 @@
 apply plugin: 'com.android.library'
 
 repositories {
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
     maven { url "https://dl.bintray.com/ironsource-mobile/android-adapters" }
 }
 
@@ -19,7 +21,8 @@ android {
 dependencies {
     api project(':ee-x-core')
 
-    implementation 'com.ironsource.adapters:vungleadapter:4.1.1@jar'
+    implementation 'com.github.vungle:vungle-android-sdk:6.3.17'
+    implementation 'com.ironsource.adapters:vungleadapter:4.1.4@jar'
     implementation 'com.google.dagger:dagger:2.7'
     implementation 'javax.inject:javax.inject:1'
     implementation 'de.greenrobot:eventbus:2.2.1'

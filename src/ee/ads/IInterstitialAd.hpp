@@ -17,6 +17,7 @@
 namespace ee {
 namespace ads {
 using InterstitialAdCallback = std::function<void()>;
+using OnClickedCallback = std::function<void()>;
 
 class IInterstitialAd {
 public:
@@ -30,14 +31,18 @@ public:
     virtual bool show() = 0;
 
     void setResultCallback(const InterstitialAdCallback& callback);
+    virtual void setOnClickedCallback(const OnClickedCallback& callback);
 
 protected:
     friend MediationManager;
 
     void setDone();
+    void performClick();
 
 private:
     InterstitialAdCallback callback_;
+    OnClickedCallback onclickcallback_;
+
 };
 } // namespace ads
 } // namespace ee

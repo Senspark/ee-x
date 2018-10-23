@@ -31,5 +31,15 @@ void Self::setDone() {
         callback_();
     }
 }
+
+void Self::setOnClickedCallback(const OnClickedCallback& callback) {
+    onclickcallback_ = callback;
+}
+
+void Self::performClick() {
+    if (onclickcallback_) {
+        onclickcallback_();
+    }
+}
 } // namespace ads
 } // namespace ee

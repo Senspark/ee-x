@@ -109,6 +109,12 @@ class AdMobBannerAd extends AdListener implements IAdView {
         return "AdMobBannerAd_onFailedToLoad_" + _adId;
     }
 
+    @NonNull
+    private String k__onClicked() {
+        return "AdMobBannerAd_onClicked_" + _adId;
+    }
+
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
@@ -246,6 +252,9 @@ class AdMobBannerAd extends AdListener implements IAdView {
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
         Utils.checkMainThread();
+
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onClicked());
     }
 
     @Override

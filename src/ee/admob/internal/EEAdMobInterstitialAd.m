@@ -87,6 +87,10 @@
     return [@"AdMobInterstitialAd_onClosed_" stringByAppendingString:adId_];
 }
 
+- (NSString* _Nonnull)k__onClicked {
+    return [@"AdMobInterstitialAd_onClicked_" stringByAppendingString:adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
     [bridge_ registerHandler:[self k__createInternalAd]
@@ -186,9 +190,14 @@
     NSAssert(interstitialAd_ == ad, @"");
     [bridge_ callCpp:[self k__onClosed]];
 }
+
+
+/// Tells the delegate that a user click will open another app
+/// (such as the App Store), backgrounding the current app.
 - (void)interstitialWillLeaveApplication:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(interstitialAd_ == ad, @"");
+    [bridge_ callCpp:[self k__onClicked]];
 }
 
 @end

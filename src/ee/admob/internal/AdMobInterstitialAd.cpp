@@ -55,6 +55,10 @@ auto k__onFailedToShow(const std::string& id) {
 auto k__onClosed(const std::string& id) {
     return "AdMobInterstitialAd_onClosed_" + id;
 }
+
+auto k__onClicked(const std::string& id) {
+    return "AdMobInterstitialAd_onClicked_" + id;
+}
 } // namespace
 
 Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
@@ -91,6 +95,12 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
             return "";
         },
         k__onClosed(adId_));
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked();
+            return "";
+        },
+        k__onClicked(adId_));
 
     createInternalAd();
 }
@@ -181,6 +191,11 @@ void Self::onClosed() {
 
     auto successful = mediation.finishInterstitialAd();
     assert(successful);
+}
+
+void Self::onClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    performClick();
 }
 } // namespace admob
 } // namespace ee

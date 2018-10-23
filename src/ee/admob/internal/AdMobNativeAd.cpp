@@ -26,6 +26,10 @@ auto k__onLoaded(const std::string& id) {
 auto k__onFailedToLoad(const std::string& id) {
     return "AdMobNativeAd_onFailedToLoad_" + id;
 }
+
+auto k__onClicked(const std::string& id) {
+    return "AdMobNativeAd_onClicked_" + id;
+}
 } // namespace
 
 Self::NativeAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
@@ -52,6 +56,12 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
             return "";
         },
         k__onFailedToLoad(adId_));
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked();
+            return "";
+        },
+        k__onClicked(adId_));
 }
 
 Self::~NativeAd() {
@@ -121,6 +131,10 @@ void Self::onFailedToLoad(const std::string& message) {
     // assert(loading_);
     loading_ = false;
     setLoadResult(false);
+}
+
+void Self::onClicked() {
+    performClick();
 }
 } // namespace admob
 } // namespace ee

@@ -35,6 +35,8 @@ public:
 
     /// @see Super.
     virtual bool show() override;
+    
+    virtual void setOnClickedCallback(const OnClickedCallback& callback) override;
 
 private:
     void assignCallbacks();

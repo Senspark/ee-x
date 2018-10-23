@@ -65,7 +65,7 @@ Pod::Spec.new do |spec|
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
   end
-  
+
   spec.subspec 'campaign-receiver' do |s|
     s.source_files =
       'src/ee/CampaignReceiver.hpp',
@@ -77,7 +77,7 @@ Pod::Spec.new do |spec|
       'src/ee/CampaignReceiverFwd.hpp',
       'src/ee/campaignreceiver/*.{h,hpp}'
 
-    s.dependency 'ee-x/core'   
+    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'facebook' do |s|
@@ -94,7 +94,7 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKLoginKit'
-    s.dependency 'FBSDKShareKit'    
+    s.dependency 'FBSDKShareKit'
   end
 
   spec.subspec 'notification' do |s|
@@ -314,7 +314,7 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceUnityAdsAdapter','4.1.1.3'
     s.dependency 'IronSourceVungleAdapter','4.1.5.3'
     s.dependency 'IronSourceAdColonyAdapter','4.1.2.1'
-    s.dependency 'IronSourceAdMobAdapter','4.1.5.0'
+    # s.dependency 'IronSourceAdMobAdapter','4.1.5.0'
   end
 
   spec.subspec 'unity-ads-base' do |s|
@@ -390,8 +390,8 @@ Pod::Spec.new do |spec|
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*'
-      
-    s.public_header_files = 
+
+    s.public_header_files =
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*.{h,hpp}'

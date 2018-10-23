@@ -18,6 +18,7 @@
 namespace ee {
 namespace ads {
 using AdViewCallback = std::function<void(bool result)>;
+using OnClickedCallback = std::function<void()>;
 
 class IAdView {
 public:
@@ -52,12 +53,15 @@ public:
     virtual void setVisible(bool visible) = 0;
 
     void setLoadCallback(const AdViewCallback& callback);
+    virtual void setOnClickedCallback(const OnClickedCallback& callback);
 
 protected:
     void setLoadResult(bool result);
+    void performClick();
 
 private:
-    AdViewCallback callback_;
+    AdViewCallback callback_{nullptr};
+    OnClickedCallback onclickcallback_{nullptr};
 };
 } // namespace ads
 } // namespace ee

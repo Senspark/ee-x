@@ -6,8 +6,8 @@
 //
 //
 
-#include "ee/admob/internal/AdMobBannerAd.hpp"
 #include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/internal/AdMobBannerAd.hpp"
 #include "ee/core/IMessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>

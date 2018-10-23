@@ -39,7 +39,7 @@ const auto jsb_GoogleAnalytics_dispatch =
     &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::dispatch>;
 const auto jsb_GoogleAnalytics_createTracker =
     &core::jsb_method_get<GoogleAnalytics, &GoogleAnalytics::createTracker,
-                          std::shared_ptr<AnalyticsTracker>,
+                          const std::shared_ptr<AnalyticsTracker>&,
                           const std::string&>;
 const auto jsb_GoogleAnalytics_doTests =
     &core::jsb_method_call<GoogleAnalytics, &GoogleAnalytics::doTests>;

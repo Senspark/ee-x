@@ -20,7 +20,7 @@ static se::Class* __jsb_Metrics_class = nullptr;
 static std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
 
 template <>
-void set_value(se::Value& value, ee::Metrics& input) {
+void set_value(se::Value& value, const ee::Metrics& input) {
     se::Object* obj = nullptr;
     if (__jsb_s_Metrics.count(&input) != 0) {
         obj = __jsb_s_Metrics[&input];
@@ -40,15 +40,15 @@ Metrics::ResolutionPolicy get_value(const se::Value& value) {
 const auto jsb_Metrics_initialize =
     &jsb_static_call<(void (*)(float))(Metrics::initialize), float>;
 const auto jsb_Metrics_getWinSize =
-    &jsb_static_get<std::pair<float, float>, &Metrics::getWinSize>;
+    &jsb_static_get<const std::pair<float, float>&, &Metrics::getWinSize>;
 const auto jsb_Metrics_getFrameSize =
-    &jsb_static_get<std::pair<float, float>, &Metrics::getFrameSize>;
+    &jsb_static_get<const std::pair<float, float>&, &Metrics::getFrameSize>;
 const auto jsb_Metrics_getDensity =
     &jsb_static_get<float, &Metrics::getDensity>;
 const auto jsb_Metrics_fromPoint =
-    &jsb_static_get<Metrics&, &Metrics::fromPoint, float>;
+    &jsb_static_get<const Metrics&, &Metrics::fromPoint, float>;
 const auto jsb_Metrics_fromPixel =
-    &jsb_static_get<Metrics&, &Metrics::fromPixel, float>;
+    &jsb_static_get<const Metrics&, &Metrics::fromPixel, float>;
 const auto jsb_Metrics_toPoint =
     &jsb_method_get<Metrics, &Metrics::toPoint, float>;
 const auto jsb_Metrics_toPixel =

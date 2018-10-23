@@ -63,7 +63,7 @@ const auto jsb_FirebaseRemoteConfig_getDouble =
                           const std::string&>;
 const auto jsb_FirebaseRemoteConfig_getString =
     &core::jsb_method_get<FirebaseRemoteConfig,
-                          &FirebaseRemoteConfig::getString, std::string,
+                          &FirebaseRemoteConfig::getString, const std::string&,
                           const std::string&>;
 
 SE_BIND_FINALIZE_FUNC(jsb_FirebaseRemoteConfig_finalize)

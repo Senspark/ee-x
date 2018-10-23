@@ -76,18 +76,18 @@ const static auto jsb_AdView_load =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::load>;
 const static auto jsb_AdView_getAnchor =
     &ee::core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getAnchor,
-                                             std::pair<float, float>>;
+                                             const std::pair<float, float>&>;
 const static auto jsb_AdView_setAnchor =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setAnchor, float,
                                             float>;
 const static auto jsb_AdView_getPosition =
     &ee::core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getPosition,
-                                             std::pair<float, float>>;
+                                             const std::pair<float, float>&>;
 const static auto jsb_AdView_setPosition =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPosition,
                                             float, float>;
 const static auto jsb_AdView_getSize = &ee::core::jsb_accessor_get_on_ui_thread<
-    IAdView, &IAdView::getSize, std::pair<std::int32_t, std::int32_t>>;
+    IAdView, &IAdView::getSize, const std::pair<std::int32_t, std::int32_t>&>;
 const static auto jsb_AdView_setSize =
     &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setSize,
                                             std::int32_t, std::int32_t>;

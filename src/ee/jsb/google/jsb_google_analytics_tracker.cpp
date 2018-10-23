@@ -24,7 +24,7 @@ static se::Class* __jsb_AnalyticsTracker_class = nullptr;
 namespace core {
 template <>
 void set_value(se::Value& value,
-               std::shared_ptr<ee::GoogleAnalyticsTracker> input) {
+               const std::shared_ptr<ee::GoogleAnalyticsTracker>& input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
         google::__jsb_s_googleAnalyticsArchive.push_back(input);

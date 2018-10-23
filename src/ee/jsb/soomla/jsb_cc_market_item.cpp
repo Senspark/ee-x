@@ -21,16 +21,17 @@ const auto jsb_CCMarketItem_finalize = &ee::core::jsb_finalize<CCMarketItem>;
 const auto jsb_CCMarketItem_constructor =
     &ee::core::jsb_constructor<CCMarketItem>;
 const auto jsb_CCMarketItem_getMarketPriceAndCurrency =
-    &ee::core::jsb_method_get<
-        CCMarketItem, &CCMarketItem::getMarketPriceAndCurrency, std::string>;
+    &ee::core::jsb_method_get<CCMarketItem,
+                              &CCMarketItem::getMarketPriceAndCurrency,
+                              const std::string&>;
 const auto jsb_CCMarketItem_getProductId =
     &ee::core::jsb_method_get<CCMarketItem, &CCMarketItem::getProductId,
-                              std::string>;
+                              const std::string&>;
 const auto jsb_CCMarketItem_getPrice =
     &ee::core::jsb_method_get<CCMarketItem, &CCMarketItem::getPrice, double>;
 const auto jsb_CCMarketItem_getMarketTitle =
     &ee::core::jsb_method_get<CCMarketItem, &CCMarketItem::getMarketTitle,
-                              std::string>;
+                              const std::string&>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCMarketItem_finalize)
 SE_BIND_CTOR(jsb_CCMarketItem_constructor, __jsb_CCMarketItem_class,

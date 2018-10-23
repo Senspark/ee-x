@@ -46,7 +46,7 @@ CCPurchasableVirtualItem* asPurchasableVirtualItem(CCVirtualItem* item) {
 const auto jsb_CCVirtualItem_finalize = &ee::core::jsb_finalize<CCVirtualItem>;
 const auto jsb_CCVirtualItem_getItemId =
     &ee::core::jsb_method_get<CCVirtualItem, &CCVirtualItem::getItemId,
-                              std::string>;
+                              const std::string&>;
 const auto jsb_CCVirtualItem_give =
     &ee::core::jsb_method_get<CCVirtualItem,
                               (int (CCVirtualItem::*)(int, CCError**)) &

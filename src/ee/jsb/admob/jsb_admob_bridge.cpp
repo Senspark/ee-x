@@ -35,7 +35,7 @@ constexpr static auto jsb_AdMob_initialize =
         ee::AdMob, &ee::AdMob::initialize, const std::string&>;
 constexpr static auto jsb_AdMob_getEmulatorTestDeviceHash =
     &ee::core::jsb_accessor_get<
-        ee::AdMob, &ee::AdMob::getEmulatorTestDeviceHash, std::string>;
+        ee::AdMob, &ee::AdMob::getEmulatorTestDeviceHash, const std::string&>;
 constexpr static auto jsb_AdMob_addTestDevice =
     &ee::core::jsb_method_call_on_ui_thread<
         ee::AdMob, &ee::AdMob::addTestDevice, const std::string&>;

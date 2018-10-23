@@ -53,15 +53,16 @@ bool jsb_LogLevel_finalize(se::State& s) {
 }
 
 constexpr static auto jsb_LogLevel_constructor =
-    &jsb_constructor<ee::LogLevel, std::int32_t, std::string>;
+    &jsb_constructor<ee::LogLevel, std::int32_t, const std::string&>;
 constexpr static auto jsb_LogLevel_get_priority =
     &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::priority, std::int32_t>;
 constexpr static auto jsb_LogLevel_set_priority =
-    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::priority, std::int32_t>;
+    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::priority,
+                       const std::int32_t&>;
 constexpr static auto jsb_LogLevel_get_desc =
-    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::desc, std::string>;
+    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::desc, const std::string&>;
 constexpr static auto jsb_LogLevel_set_desc =
-    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::desc, std::string>;
+    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::desc, const std::string&>;
 constexpr static auto jsb_LogLevel_Verbose =
     &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Verbose>;
 constexpr static auto jsb_LogLevel_Debug =

@@ -35,8 +35,9 @@ constexpr static auto jsb_FacebookAds_finalize =
 constexpr static auto jsb_FacebookAds_constructor =
     &ee::core::jsb_constructor<ee::FacebookAds>;
 constexpr static auto jsb_FacebookAds_getTestDeviceHash =
-    &ee::core::jsb_accessor_get<
-        ee::FacebookAds, &ee::FacebookAds::getTestDeviceHash, std::string>;
+    &ee::core::jsb_accessor_get<ee::FacebookAds,
+                                &ee::FacebookAds::getTestDeviceHash,
+                                const std::string&>;
 constexpr static auto jsb_FacebookAds_addTestDevice =
     &ee::core::jsb_method_call_on_ui_thread<
         ee::FacebookAds, &ee::FacebookAds::addTestDevice, const std::string&>;

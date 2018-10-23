@@ -243,7 +243,7 @@ inline void set_value(se::Value& value, float input) {
 }
 
 template <>
-inline void set_value(se::Value& value, std::string input) {
+inline void set_value(se::Value& value, const std::string& input) {
     value.setString(input);
 }
 
@@ -263,20 +263,20 @@ inline void set_value(se::Value& value, se::Object* obj) {
 }
 
 template <>
-inline void set_value(se::Value& value, std::pair<float, float> input) {
+inline void set_value(se::Value& value, const std::pair<float, float>& input) {
     auto obj = create_JSON_object<std::pair<float, float>>(input);
     value.setObject(obj);
 }
 
 template <>
-inline void set_value(se::Value& value, std::pair<int, int> input) {
+inline void set_value(se::Value& value, const std::pair<int, int>& input) {
     auto obj = create_JSON_object<std::pair<int, int>>(input);
     value.setObject(obj);
 }
 
 template <>
 inline void set_value(se::Value& value,
-                      std::map<std::string, std::string> input) {
+                      const std::map<std::string, std::string>& input) {
     auto obj = create_JSON_object<std::map<std::string, std::string>>(input);
     value.setObject(obj);
 }
@@ -650,6 +650,48 @@ bool jsb_set_callback(se::State& s) {
             }
 
             std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
+                cocos2d::Director::getInstance()
+                    ->getScheduler()
+                    ->performFunctionInCocosThread([=]() -> void {
+                        se::ScriptEngine::getInstance()->clearException();
+                        se::AutoHandleScope hs;
+
+                        auto&& args = to_value_array(values...);
+                        se::Object* target =
+                            jsTarget.isObject() ? jsTarget.toObject() : nullptr;
+                        se::Object* func = jsFunc.toObject();
+                        func->call(args, target);
+                    });
+            })();
+        }
+
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+                    args.size(), 1);
+    return false;
+}
+
+template <auto FunctionPtr, typename... Args>
+bool jsb_static_set_callback(se::State& s) {
+    const auto& args = s.args();
+    auto argc = args.size();
+    if (argc >= 1) {
+        se::Value jsFunc = args[0];
+        se::Value jsTarget = argc > 1 ? args[1] : se::Value::Undefined;
+
+        if (jsFunc.isNullOrUndefined()) {
+            std::bind(FunctionPtr, nullptr)();
+        } else {
+            assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
+
+            s.thisObject()->attachObject(jsFunc.toObject());
+
+            if (jsTarget.isObject()) {
+                s.thisObject()->attachObject(jsTarget.toObject());
+            }
+
+            std::bind(FunctionPtr, [jsFunc, jsTarget](Args... values) {
                 cocos2d::Director::getInstance()
                     ->getScheduler()
                     ->performFunctionInCocosThread([=]() -> void {

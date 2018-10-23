@@ -30,20 +30,20 @@ constexpr auto jsb_Multi_AdView_addItem =
                                             std::shared_ptr<IAdView>>;
 const static auto jsb_Multi_AdView_getAnchor =
     &ee::core::jsb_accessor_get_on_ui_thread<
-        MultiAdView, &MultiAdView::getAnchor, std::pair<float, float>>;
+        MultiAdView, &MultiAdView::getAnchor, const std::pair<float, float>&>;
 const static auto jsb_Multi_AdView_setAnchor =
     &ee::core::jsb_method_call_on_ui_thread<
         MultiAdView, &MultiAdView::setAnchor, float, float>;
 const static auto jsb_Multi_AdView_getPosition =
     &ee::core::jsb_accessor_get_on_ui_thread<
-        MultiAdView, &MultiAdView::getPosition, std::pair<float, float>>;
+        MultiAdView, &MultiAdView::getPosition, const std::pair<float, float>&>;
 const static auto jsb_Multi_AdView_setPosition =
     &ee::core::jsb_method_call_on_ui_thread<
         MultiAdView, &MultiAdView::setPosition, float, float>;
 const static auto jsb_Multi_AdView_getSize =
     &ee::core::jsb_accessor_get_on_ui_thread<
         MultiAdView, &MultiAdView::getSize,
-        std::pair<std::int32_t, std::int32_t>>;
+        const std::pair<std::int32_t, std::int32_t>&>;
 const static auto jsb_Multi_AdView_setSize =
     &ee::core::jsb_method_call_on_ui_thread<MultiAdView, &MultiAdView::setSize,
                                             std::int32_t, std::int32_t>;

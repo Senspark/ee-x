@@ -52,7 +52,7 @@ const auto jsb_EventBuilder_setValue =
 const auto jsb_EventBuilder_build =
     &core::jsb_method_get<ee::GoogleEventBuilder,
                           &ee::GoogleEventBuilder::build,
-                          std::map<std::string, std::string>>;
+                          const std::map<std::string, std::string>&>;
 
 SE_BIND_FINALIZE_FUNC(jsb_EventBuilder_finalize)
 SE_BIND_CTOR(jsb_EventBuilder_constructor, __jsb_EventBuilder_class,

@@ -16,23 +16,29 @@ int getIntergerUserDefault(std::string key) {
     return cocos2d::UserDefault::getInstance()->getIntegerForKey(key.c_str());
 };
 
+// TODO:
+// REDUDE ARGUMENT DECLARATIONS
+// https://stackoverflow.com/questions/37426283/get-the-type-of-a-function-parameter-with-boosthana
+
 namespace core {
 constexpr auto jsb_getSHA1CertificateFingerprint =
-    &jsb_static_get<std::string, &ee::getSHA1CertificateFingerprint>;
+    &jsb_static_get<const std::string&, &getSHA1CertificateFingerprint>;
 constexpr auto jsb_getVersionName =
-    &jsb_static_get<std::string, &ee::getVersionName>;
+    &jsb_static_get<const std::string&, &getVersionName>;
 constexpr auto jsb_getVersionCode =
-    &jsb_static_get<std::string, &ee::getVersionCode>;
+    &jsb_static_get<const std::string&, &getVersionCode>;
 constexpr auto jsb_isApplicationInstalled =
-    &jsb_static_get<bool, &ee::isApplicationInstalled, std::string>;
+    &jsb_static_get<bool, &isApplicationInstalled, const std::string&>;
 constexpr auto jsb_openApplication =
-    &jsb_static_call<&ee::openApplication, std::string>;
+    &jsb_static_call<&openApplication, const std::string&>;
 constexpr auto jsb_sendMail =
-    &jsb_static_call<&ee::sendMail, std::string, std::string, std::string>;
-constexpr auto jsb_isTablet = &jsb_static_get<bool, &ee::isTablet>;
+    &jsb_static_call<&sendMail, const std::string&, const std::string&,
+                     const std::string&>;
+constexpr auto jsb_isTablet = &jsb_static_get<bool, &isTablet>;
 constexpr auto jsb_getIntergerUserDefault =
-    &jsb_static_get<int, &ee::getIntergerUserDefault, std::string>;
-constexpr auto jsb_getDeviceId = &jsb_static_get<std::string, &ee::getDeviceId>;
+    &jsb_static_get<int, &getIntergerUserDefault, const std::string&>;
+constexpr auto jsb_getDeviceId =
+    &jsb_static_set_callback<&getDeviceId, const std::string&>;
 
 SE_BIND_FUNC(jsb_getSHA1CertificateFingerprint)
 SE_BIND_FUNC(jsb_getVersionName)

@@ -100,6 +100,11 @@ class FacebookBannerAd implements AdListener, IAdView {
         return "FacebookBannerAd_onFailedToLoad_" + _adId;
     }
 
+    @NonNull
+    private String k__onClicked() {
+        return "FacebookBannerAd_onClicked_" + _adId;
+    }
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
@@ -232,6 +237,8 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onClicked());
     }
 
     @Override

@@ -124,6 +124,10 @@ static NSString* const k__sponsor           = @"sponsor";
     return [NSString stringWithFormat:@"%@_onFailedToLoad_%@", k__tag, adId_];
 }
 
+- (NSString* _Nonnull)k__onClicked {
+    return [NSString stringWithFormat:@"%@_onClicked_%@", k__tag, adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
     [bridge_ registerHandler:[self k__createInternalAd]
@@ -288,6 +292,7 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)nativeAdDidClick:(FBNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:[self k__onClicked]];
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd*)nativeAd {

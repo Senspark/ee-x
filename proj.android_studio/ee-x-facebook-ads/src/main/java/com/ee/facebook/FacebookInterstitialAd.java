@@ -65,6 +65,10 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         return "FacebookInterstitialAd_onClosed_" + _placementId;
     }
 
+    private String k__onClicked() {
+        return "FacebookInterstitialAd_onClicked_" + _placementId;
+    }
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
@@ -179,6 +183,9 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onClicked());
+
     }
 
     @Override

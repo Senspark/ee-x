@@ -123,6 +123,11 @@ class FacebookNativeAd implements AdListener, IAdView {
         return k__tag + "_onFailedToLoad_" + _adId;
     }
 
+    @NonNull
+    private String k__onClicked() {
+        return k__tag + "_onClicked_" + _adId;
+    }
+
     private void registerHandlers() {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
@@ -411,6 +416,8 @@ class FacebookNativeAd implements AdListener, IAdView {
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onClicked());
     }
 
     @Override

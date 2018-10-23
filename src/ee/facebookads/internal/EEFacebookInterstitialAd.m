@@ -83,6 +83,11 @@
         stringByAppendingString:placementId_];
 }
 
+- (NSString*)k__onClicked {
+    return [@"FacebookInterstitialAd_onClicked_"
+            stringByAppendingString:placementId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
     [bridge_ registerHandler:[self k__createInternalAd]
@@ -152,6 +157,7 @@
 - (void)interstitialAdDidClick:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(interstitialAd == interstitialAd_, @"");
+    [bridge_ callCpp:[self k__onClicked]];
 }
 
 - (void)interstitialAdDidClose:(FBInterstitialAd*)interstitialAd {

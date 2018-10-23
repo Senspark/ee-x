@@ -51,6 +51,10 @@ auto k__onFailedToLoad(const std::string& id) {
 auto k__onClosed(const std::string& id) {
     return "FacebookInterstitialAd_onClosed_" + id;
 }
+
+auto k__onClicked(const std::string& id) {
+    return "FacebookInterstitialAd_onClicked_" + id;
+}
 } // namespace
 
 Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
@@ -80,6 +84,12 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
             return "";
         },
         k__onClosed(placementId_));
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked();
+            return "";
+        },
+        k__onClicked(placementId_));
 }
 
 Self::~InterstitialAd() {
@@ -87,6 +97,7 @@ Self::~InterstitialAd() {
     bridge_.deregisterHandler(k__onLoaded(placementId_));
     bridge_.deregisterHandler(k__onFailedToLoad(placementId_));
     bridge_.deregisterHandler(k__onClosed(placementId_));
+    bridge_.deregisterHandler(k__onClicked(placementId_));
     plugin_->destroyInterstitialAd(placementId_);
 }
 
@@ -154,6 +165,10 @@ void Self::onClosed() {
 
     auto successful = mediation.finishInterstitialAd();
     assert(successful);
+}
+
+void Self::onClicked() {
+    performClick();
 }
 } // namespace facebook
 } // namespace ee

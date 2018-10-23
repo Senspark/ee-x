@@ -63,6 +63,7 @@ protected:
 private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
+    void onClicked();
 
     /// Whether the current internal ad is loaded.
     /// Facebook native ads can not be loaded twice.

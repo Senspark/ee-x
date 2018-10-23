@@ -91,6 +91,10 @@
     return [@"FacebookBannerAd_onFailedToLoad_" stringByAppendingString:adId_];
 }
 
+- (NSString* _Nonnull)k__onClicked {
+    return [@"FacebookBannerAd_onClicked_" stringByAppendingString:adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
 }
@@ -103,6 +107,7 @@
     if (adView_ != nil) {
         return NO;
     }
+
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     FBAdView* adView =
         [[[FBAdView alloc] initWithPlacementID:adId_
@@ -157,6 +162,7 @@
 
 - (void)adViewDidClick:(FBAdView*)adView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:[self k__onClicked]];
 }
 
 - (void)adViewDidFinishHandlingClick:(FBAdView*)adView {

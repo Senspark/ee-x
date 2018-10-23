@@ -50,7 +50,9 @@ Self::Twitter()
 }
 
 Self::~Twitter() {
-    //
+    bridge_.deregisterHandler(k__onSuccess);
+    bridge_.deregisterHandler(k__onFailure);
+    bridge_.deregisterHandler(k__onCancel);
 }
 
 void Self::initialize(const std::string& key, const std::string& secret) {

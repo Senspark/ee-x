@@ -4,9 +4,10 @@
 //
 #include "ee/twitter/TwitterBridge.hpp"
 
+#include <ee/nlohmann/json.hpp>
+
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace twitter {

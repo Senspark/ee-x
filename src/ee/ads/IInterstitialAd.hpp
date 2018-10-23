@@ -32,7 +32,8 @@ public:
 
     void setResultCallback(const InterstitialAdCallback& callback);
     virtual void setOnClickedCallback(const OnClickedCallback& callback);
-
+    void doOnClicked();
+    
 protected:
     friend MediationManager;
 

@@ -41,6 +41,7 @@ static NSString* const k__onClosed          = @"IronSource_onClosed";
 static NSString* const k__onInterstitialFailed         = @"IronSource_onInterstitialFailed";
 static NSString* const k__onInterstitialOpened          = @"IronSource_onInterstitialOpened";
 static NSString* const k__onInterstitialClosed          = @"IronSource_onInterstitialClosed";
+static NSString* const k__onInterstitialClicked          = @"IronSource_onInterstitialClicked";
 // clang-format on
 
 - (id)init {
@@ -216,5 +217,6 @@ static NSString* const k__onInterstitialClosed          = @"IronSource_onInterst
 
 - (void)didClickInterstitial {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialClicked];
 }
 @end

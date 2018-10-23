@@ -36,6 +36,10 @@ void Self::setOnClickedCallback(const OnClickedCallback& callback) {
     onclickcallback_ = callback;
 }
 
+void Self::doOnClicked() {
+    performClick();
+}
+
 void Self::performClick() {
     if (onclickcallback_) {
         onclickcallback_();

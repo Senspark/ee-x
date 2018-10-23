@@ -34,6 +34,7 @@ constexpr auto k__onClosed          = "IronSource_onClosed";
 constexpr auto k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
 constexpr auto k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
 constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+constexpr auto k__onInterstitialClicked         = "IronSource_onInterstitialClicked";
 // clang-format on
 } // namespace
 
@@ -93,6 +94,13 @@ Self::IronSource(const Logger& logger)
         },
         k__onInterstitialClosed);
 
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialClicked();
+            return "";
+        },
+        k__onInterstitialClicked);
+
     handlerLock_ = std::make_unique<core::SpinLock>();
 }
 
@@ -106,6 +114,7 @@ Self::~IronSource() {
     bridge_.deregisterHandler(k__onInterstitialOpened);
     bridge_.deregisterHandler(k__onInterstitialFailed);
     bridge_.deregisterHandler(k__onInterstitialClosed);
+    bridge_.deregisterHandler(k__onInterstitialClicked);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -144,6 +153,7 @@ Self::createInterstitialAd(const std::string& placementId) {
     }
     auto result = new InterstitialAd(logger_, this, placementId);
     interstitialAds_[placementId] = result;
+    ironAd_ = result;
     return std::shared_ptr<IInterstitialAd>(result);
 }
 
@@ -255,6 +265,10 @@ void Self::onInterstitialClosed() {
     //    auto successful = mediation.finishInterstitialAd();
     //    assert(successful);
     doRewardAndFinishAds();
+}
+
+void Self::onInterstitialClicked() {
+    ironAd_->doOnClicked();
 }
 
 #pragma mark - Config

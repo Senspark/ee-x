@@ -34,6 +34,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     private static final String k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
     private static final String k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
     private static final String k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+    private static final String k__onInterstitialClicked          = "IronSource_onInterstitialClicked";
 
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
@@ -222,6 +223,8 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onInterstitialAdClicked() {
         _logger.debug("onInterstitialAdClicked");
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onInterstitialClicked);
     }
 
     @Override

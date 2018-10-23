@@ -86,7 +86,6 @@ public class Twitter implements PluginProtocol {
     @Override
     public void onDestroy() {
         _activity = null;
-        _authClient = null;
     }
 
     @Override
@@ -137,10 +136,9 @@ public class Twitter implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__shareContent);
-        bridge.deregisterHandler(k__shareScreenShot);
+        _bridge.deregisterHandler(k__initialize);
+        _bridge.deregisterHandler(k__shareContent);
+        _bridge.deregisterHandler(k__shareScreenShot);
     }
 
     private TwitterAuthClient getTwitterAuthClient() {

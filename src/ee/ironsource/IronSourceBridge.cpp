@@ -267,9 +267,9 @@ void Self::onInterstitialClosed() {
 }
 
 void Self::onInterstitialClicked() {
-    auto interstitialAd = interstitialAds_[placementId_];
-    if (interstitialAd) {
-        interstitialAd->doOnClicked();
+    auto iter = interstitialAds_.find(placementId_);
+    if (iter != interstitialAds_.cend()) {
+        iter->second->doOnClicked();
     }
 }
 

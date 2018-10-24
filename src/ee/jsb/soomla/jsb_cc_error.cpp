@@ -13,8 +13,8 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
-static se::Object* __jsb_CCError_proto = nullptr;
-static se::Class* __jsb_CCError_class = nullptr;
+se::Object* __jsb_CCError_proto = nullptr;
+se::Class* __jsb_CCError_class = nullptr;
 } // namespace soomla
 
 namespace ee {

@@ -314,7 +314,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/core -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_core.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/core -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
 include $(BUILD_STATIC_LIBRARY)
 
@@ -333,7 +334,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/ads -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_ads.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/ads -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 
 include $(BUILD_STATIC_LIBRARY)
@@ -353,7 +355,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/admob -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_admob.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/admob -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_admob_static
 LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
@@ -374,7 +377,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/facebookads -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_facebook_ads.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/facebookads -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_facebook_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
@@ -395,7 +399,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/ironsource -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_ironsource.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/ironsource -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_ironsource_static
 LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
@@ -416,7 +421,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/unityads -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_unity_ads.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/unityads -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_unity_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
@@ -437,7 +443,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/vungle -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_vungle.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/vungle -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_vungle_static
 LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
@@ -458,7 +465,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/crashlytics -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_crashlytics.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/crashlytics -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
 
@@ -479,7 +487,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/google -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_google_analytics.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/google -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_google_analytics_static
 
@@ -500,7 +509,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/notification -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_notification.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/notification -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_notification_static
 
@@ -520,7 +530,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/jsb_firebase_analytics.cpp
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_firebase.cpp
+LOCAL_SRC_FILES += $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/jsb_firebase_analytics.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_static
 include $(BUILD_STATIC_LIBRARY)

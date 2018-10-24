@@ -17,10 +17,10 @@
 namespace ee {
 namespace core {
 
-static se::Object* __jsb_Logger_proto = nullptr;
-static se::Class* __jsb_Logger_class = nullptr;
+se::Object* __jsb_Logger_proto = nullptr;
+se::Class* __jsb_Logger_class = nullptr;
 
-static se::Object* __jsb_s_Logger = nullptr;
+se::Object* __jsb_s_Logger = nullptr;
 
 template <>
 const Logger& get_value(const se::Value& value) {

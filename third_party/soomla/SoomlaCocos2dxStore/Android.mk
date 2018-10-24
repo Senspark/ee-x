@@ -63,7 +63,8 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
 LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
-LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/soomla -name "*.cpp" -print}
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_soomla.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/soomla -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += cocos2dx_store_static
 

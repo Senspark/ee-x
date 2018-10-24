@@ -9,17 +9,8 @@
 #define JSB_NATIVE_AD_LAYOUT_HPP__
 
 #include "ee/jsb/core/jsb_templates.hpp"
-
-namespace se {
-class Object;
-class Value;
-} // namespace se
-
-namespace ee {
-namespace admob {
-class NativeAdLayout;
-} // namespace admob
-} // namespace ee
+#include "ee/jsb/jsb_admob_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace core {

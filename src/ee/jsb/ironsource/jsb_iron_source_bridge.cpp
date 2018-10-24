@@ -18,10 +18,10 @@ namespace ee {
 
 namespace ironsource {
 
-static se::Object* __jsb_IronSource_proto = nullptr;
-static se::Class* __jsb_IronSource_class = nullptr;
+se::Object* __jsb_IronSource_proto = nullptr;
+se::Class* __jsb_IronSource_class = nullptr;
 
-static se::Object* __ironsourceObj = nullptr;
+se::Object* __ironsourceObj = nullptr;
 
 const auto jsb_IronSource_finalize = &core::jsb_finalize<IronSource>;
 const auto jsb_IronSource_constructor = &core::jsb_constructor<IronSource>;

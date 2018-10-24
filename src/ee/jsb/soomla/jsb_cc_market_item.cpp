@@ -14,8 +14,8 @@
 
 namespace soomla {
 
-static se::Object* __jsb_CCMarketItem_proto = nullptr;
-static se::Class* __jsb_CCMarketItem_class = nullptr;
+se::Object* __jsb_CCMarketItem_proto = nullptr;
+se::Class* __jsb_CCMarketItem_class = nullptr;
 
 const auto jsb_CCMarketItem_finalize = &ee::core::jsb_finalize<CCMarketItem>;
 const auto jsb_CCMarketItem_constructor =

@@ -16,12 +16,12 @@
 namespace ee {
 
 namespace ads {
-static se::Object* __jsb_AdView_proto = nullptr;
-static se::Class* __jsb_AdView_class = nullptr;
+se::Object* __jsb_AdView_proto = nullptr;
+se::Class* __jsb_AdView_class = nullptr;
 
-static std::unordered_map<std::shared_ptr<ee::IAdView>, se::Object*>
+std::unordered_map<std::shared_ptr<ee::IAdView>, se::Object*>
     __jsb_s_adviews;
-static std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
+std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
 } // namespace ads
 
 namespace core {

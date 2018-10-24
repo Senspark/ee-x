@@ -15,8 +15,8 @@
 
 namespace soomla {
 
-static se::Object* __jsb_StoreEventListener_proto = nullptr;
-static se::Class* __jsb_StoreEventListener_class = nullptr;
+se::Object* __jsb_StoreEventListener_proto = nullptr;
+se::Class* __jsb_StoreEventListener_class = nullptr;
 
 const auto jsb_StoreEventListener_finalize =
     &ee::core::jsb_finalize<StoreEventListener>;

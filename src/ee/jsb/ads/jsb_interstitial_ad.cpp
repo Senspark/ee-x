@@ -15,12 +15,12 @@
 
 namespace ee {
 namespace ads {
-static se::Object* __jsb_InterstitialAd_proto = nullptr;
-static se::Class* __jsb_InterstitialAd_class = nullptr;
+se::Object* __jsb_InterstitialAd_proto = nullptr;
+se::Class* __jsb_InterstitialAd_class = nullptr;
 
-static std::unordered_map<std::shared_ptr<ee::IInterstitialAd>, se::Object*>
+std::unordered_map<std::shared_ptr<ee::IInterstitialAd>, se::Object*>
     __jsb_s_interstitialAds;
-static std::vector<std::shared_ptr<ee::IInterstitialAd>>
+std::vector<std::shared_ptr<ee::IInterstitialAd>>
     __jsb_s_interstitialAdArchive;
 } // namespace ads
 

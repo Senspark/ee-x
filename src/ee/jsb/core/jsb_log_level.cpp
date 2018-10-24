@@ -17,9 +17,9 @@
 namespace ee {
 namespace core {
 
-static se::Class* __jsb_LogLevel_class = nullptr;
-static se::Object* __jsb_LogLevel_proto = nullptr;
-static std::unordered_map<const LogLevel*, se::Object*> __jsb_s_loglevels;
+se::Class* __jsb_LogLevel_class = nullptr;
+se::Object* __jsb_LogLevel_proto = nullptr;
+std::unordered_map<const LogLevel*, se::Object*> __jsb_s_loglevels;
 
 template <>
 const ee::LogLevel& get_value(const se::Value& value) {

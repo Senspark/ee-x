@@ -73,6 +73,12 @@ SE_BIND_FUNC(jsb_CCVirtualItem_resetBalance)
 SE_BIND_FUNC(jsb_CCVirtualItem_getBalance)
 SE_BIND_FUNC(jsb_CCVirtualItem_save)
 
+se::Object* getCCVirtualItemProto() {
+    CCASSERT(__jsb_CCVirtualItem_proto != nullptr,
+             "__jsb_CCVirtualItem_proto null");
+    return __jsb_CCVirtualItem_proto;
+}
+
 bool register_cc_virtual_item_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);

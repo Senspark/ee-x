@@ -23,8 +23,8 @@ ee::AdMobNativeAdLayout get_value(const se::Value& value) {
 
 namespace admob {
 
-static se::Object* __jsb_NativeAdLayout_proto = nullptr;
-static se::Class* __jsb_NativeAdLayout_class = nullptr;
+se::Object* __jsb_NativeAdLayout_proto = nullptr;
+se::Class* __jsb_NativeAdLayout_class = nullptr;
 
 const static auto jsb_NativeAdLayout_finalize =
     &ee::core::jsb_finalize<ee::AdMobNativeAdLayout>;

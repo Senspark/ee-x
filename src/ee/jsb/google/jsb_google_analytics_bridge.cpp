@@ -17,10 +17,8 @@ namespace ee {
 
 namespace google {
 
-static se::Object* __jsb_GoogleAnalytics_proto = nullptr;
-static se::Class* __jsb_GoogleAnalytics_class = nullptr;
-
-static se::Object* __googleObj = nullptr;
+se::Object* __jsb_GoogleAnalytics_proto = nullptr;
+se::Class* __jsb_GoogleAnalytics_class = nullptr;
 
 const auto jsb_GoogleAnalytics_finalize = &core::jsb_finalize<GoogleAnalytics>;
 const auto jsb_GoogleAnalytics_constructor =
@@ -56,6 +54,7 @@ SE_BIND_FUNC(jsb_GoogleAnalytics_createTracker)
 SE_BIND_FUNC(jsb_GoogleAnalytics_doTests)
 
 bool register_google_bridge_manual(se::Object* globalObj) {
+    se::Object* __googleObj = nullptr;
     core::getOrCreatePlainObject_r("google", core::__eeObj, &__googleObj);
 
     auto cls = se::Class::create("GoogleAnalytics", __googleObj, nullptr,

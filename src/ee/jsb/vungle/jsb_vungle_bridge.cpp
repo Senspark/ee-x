@@ -18,10 +18,10 @@ namespace ee {
 
 namespace vungle {
 
-static se::Object* __jsb_Vungle_proto = nullptr;
-static se::Class* __jsb_Vungle_class = nullptr;
+se::Object* __jsb_Vungle_proto = nullptr;
+se::Class* __jsb_Vungle_class = nullptr;
 
-static se::Object* __vungleObj = nullptr;
+se::Object* __vungleObj = nullptr;
 
 const auto jsb_Vungle_finalize = &core::jsb_finalize<Vungle>;
 const auto jsb_Vungle_constructor = &core::jsb_constructor<Vungle>;

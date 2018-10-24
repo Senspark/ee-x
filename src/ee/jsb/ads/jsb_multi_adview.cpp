@@ -14,8 +14,8 @@
 namespace ee {
 namespace ads {
 
-static se::Object* __jsb_Multi_AdView_proto = nullptr;
-static se::Class* __jsb_Multi_AdView_class = nullptr;
+se::Object* __jsb_Multi_AdView_proto = nullptr;
+se::Class* __jsb_Multi_AdView_class = nullptr;
 
 constexpr auto jsb_Multi_AdView_finalize = &ee::core::jsb_finalize<MultiAdView>;
 constexpr static auto jsb_Multi_AdView_contructor =

@@ -4,8 +4,7 @@
 //
 //  Created by Nguyen Van Quynh on 9/18/18.
 //
-
-//#include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
+#include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 
 #include "Soomla/domain/CCPurchasableVirtualItem.h"
 #include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
@@ -46,12 +45,19 @@ SE_BIND_FINALIZE_FUNC(jsb_CCPurchasableVirtualItem_finalize)
 SE_BIND_FUNC(jsb_CCPurchasableVirtualItem_getPurchaseType)
 SE_BIND_FUNC(jsb_CCPurchasableVirtualItem_canAfford)
 
+se::Object* getCCPurchasableVirtualItemProto() {
+    CCASSERT(__jsb_CCPurchasableVirtualItem_proto != nullptr,
+             "__jsb_CCPurchasableVirtualItem_proto null");
+    return __jsb_CCPurchasableVirtualItem_proto;
+}
+
 bool register_cc_purchasable_virtual_item_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
+    auto virtualItemProto = getCCVirtualItemProto();
     auto cls = se::Class::create("CCPurchasableVirtualItem", __soomlaObj,
-                                 __jsb_CCVirtualItem_proto, nullptr);
+                                 virtualItemProto, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_CCPurchasableVirtualItem_finalize));
     cls->defineFunction("getPurchaseType",
                         _SE(jsb_CCPurchasableVirtualItem_getPurchaseType));

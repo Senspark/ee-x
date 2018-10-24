@@ -14,22 +14,10 @@
 
 namespace soomla {
 
-static se::Object* __jsb_CCVirtualCurrencyPackBuilder_proto = nullptr;
-static se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;
+se::Object* __jsb_CCVirtualCurrencyPackBuilder_proto = nullptr;
+se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;
 
 } // namespace soomla
-
-namespace ee {
-namespace core {
-
-template <>
-soomla::CCPurchaseType* get_value(const se::Value& value) {
-    return static_cast<soomla::CCPurchaseType*>(
-        value.toObject()->getPrivateData());
-}
-
-} // namespace core
-} // namespace ee
 
 namespace soomla {
 

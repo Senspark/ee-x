@@ -24,10 +24,8 @@ ee::GoogleEventBuilder get_value(const se::Value& value) {
 
 namespace google {
 
-static se::Object* __jsb_EventBuilder_proto = nullptr;
-static se::Class* __jsb_EventBuilder_class = nullptr;
-
-static se::Object* __googleObj = nullptr;
+se::Object* __jsb_EventBuilder_proto = nullptr;
+se::Class* __jsb_EventBuilder_class = nullptr;
 
 const auto jsb_EventBuilder_finalize =
     &core::jsb_finalize<ee::GoogleEventBuilder>;
@@ -64,6 +62,7 @@ SE_BIND_FUNC(jsb_EventBuilder_setValue)
 SE_BIND_FUNC(jsb_EventBuilder_build)
 
 bool register_google_event_builder_manual(se::Object* globalObj) {
+    se::Object* __googleObj = nullptr;
     core::getOrCreatePlainObject_r("google", core::__eeObj, &__googleObj);
 
     auto cls = se::Class::create("EventBuilder", __googleObj, nullptr,

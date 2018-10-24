@@ -15,9 +15,9 @@
 namespace ee {
 namespace core {
 
-static se::Object* __jsb_Metrics_proto = nullptr;
-static se::Class* __jsb_Metrics_class = nullptr;
-static std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
+se::Object* __jsb_Metrics_proto = nullptr;
+se::Class* __jsb_Metrics_class = nullptr;
+std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
 
 template <>
 void set_value(se::Value& value, const ee::Metrics& input) {

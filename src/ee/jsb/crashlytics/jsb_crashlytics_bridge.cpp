@@ -17,8 +17,8 @@ namespace ee {
 
 namespace crashlytics {
 
-static se::Object* __jsb_Crashlytics_proto = nullptr;
-static se::Class* __jsb_Crashlytics_class = nullptr;
+se::Object* __jsb_Crashlytics_proto = nullptr;
+se::Class* __jsb_Crashlytics_class = nullptr;
 
 se::Object* __crashlyticsObj = nullptr;
 

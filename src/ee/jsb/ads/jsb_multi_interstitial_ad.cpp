@@ -16,8 +16,8 @@
 namespace ee {
 namespace ads {
 
-static se::Object* __jsb_Multi_InterstitialAd_proto = nullptr;
-static se::Class* __jsb_Multi_InterstitialAd_class = nullptr;
+se::Object* __jsb_Multi_InterstitialAd_proto = nullptr;
+se::Class* __jsb_Multi_InterstitialAd_class = nullptr;
 
 constexpr auto jsb_Multi_InterstitialAd_finalize =
     &ee::core::jsb_finalize<MultiInterstitialAd>;

@@ -463,6 +463,7 @@ Pod::Spec.new do |spec|
       'src/ee/jsb/jsb_fwd.hpp',
       'src/ee/jsb/core/*'
     s.public_header_files =
+      'src/ee/jsb/jsb_fwd.hpp',
       'src/ee/jsb/jsb_core.hpp',
       'src/ee/jsb/core/*.{h,hpp}'
 
@@ -500,6 +501,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-admob' do |s|
     s.source_files =
       'src/ee/jsb/jsb_admob.hpp',
+      'src/ee/jsb/jsb_admob_fwd.hpp',
       'src/ee/jsb/jsb_admob.cpp',
       'src/ee/jsb/admob/*'
     s.public_header_files =
@@ -629,6 +631,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-facebook-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_facebook_ads.hpp',
+      'src/ee/jsb/jsb_facebook_ads_fwd.hpp',
       'src/ee/jsb/jsb_facebook_ads.cpp',
       'src/ee/jsb/facebookads/*'
     s.public_header_files =

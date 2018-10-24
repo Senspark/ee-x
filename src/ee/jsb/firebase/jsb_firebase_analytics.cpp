@@ -17,10 +17,8 @@ namespace ee {
 
 namespace firebase {
 
-static se::Object* __jsb_FirebaseAnalytics_proto = nullptr;
-static se::Class* __jsb_FirebaseAnalytics_class = nullptr;
-
-static se::Object* __firebaseObj = nullptr;
+se::Object* __jsb_FirebaseAnalytics_proto = nullptr;
+se::Class* __jsb_FirebaseAnalytics_class = nullptr;
 
 const auto jsb_FirebaseAnalytics_finalize =
     &core::jsb_finalize<FirebaseAnalytics>;
@@ -60,6 +58,7 @@ SE_BIND_FUNC(jsb_FirebaseAnalytics_setUserId)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_logEvent)
 
 bool register_firebase_analytics_manual(se::Object* globalObj) {
+    se::Object* __firebaseObj = nullptr;
     core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
 
     auto cls = se::Class::create("FirebaseAnalytics", __firebaseObj, nullptr,

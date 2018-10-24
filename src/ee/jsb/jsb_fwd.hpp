@@ -10,6 +10,7 @@
 
 namespace se {
 class Object;
+class Value;
 } // namespace se
 
 #endif // JSB_FWD_HPP__

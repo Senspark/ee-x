@@ -13,8 +13,8 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
-static se::Object* __jsb_CCPurchaseWithMarket_proto = nullptr;
-static se::Class* __jsb_CCPurchaseWithMarket_class = nullptr;
+se::Object* __jsb_CCPurchaseWithMarket_proto = nullptr;
+se::Class* __jsb_CCPurchaseWithMarket_class = nullptr;
 } // namespace soomla
 
 namespace ee {

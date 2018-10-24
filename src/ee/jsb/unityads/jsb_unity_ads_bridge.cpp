@@ -17,10 +17,10 @@
 namespace ee {
 namespace unityads {
 
-static se::Object* __jsb_UnityAds_proto = nullptr;
-static se::Class* __jsb_UnityAds_class = nullptr;
+se::Object* __jsb_UnityAds_proto = nullptr;
+se::Class* __jsb_UnityAds_class = nullptr;
 
-static se::Object* __unityadsObj = nullptr;
+se::Object* __unityadsObj = nullptr;
 
 const auto jsb_UnityAds_finalize = &core::jsb_finalize<UnityAds>;
 const auto jsb_UnityAds_constructor = &core::jsb_constructor<UnityAds>;

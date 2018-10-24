@@ -14,8 +14,8 @@
 
 namespace soomla {
 
-static se::Object* __jsb_CCSoomla_proto = nullptr;
-static se::Class* __jsb_CCSoomla_class = nullptr;
+se::Object* __jsb_CCSoomla_proto = nullptr;
+se::Class* __jsb_CCSoomla_class = nullptr;
 
 const static auto jsb_CCSoomla_initialize =
     &ee::core::jsb_static_call<&CCSoomla::initialize, const std::string&>;

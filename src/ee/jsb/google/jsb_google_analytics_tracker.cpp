@@ -15,10 +15,10 @@
 namespace ee {
 
 namespace google {
-static std::vector<std::shared_ptr<ee::GoogleAnalyticsTracker>>
+std::vector<std::shared_ptr<ee::GoogleAnalyticsTracker>>
     __jsb_s_googleAnalyticsArchive;
-static se::Object* __jsb_AnalyticsTracker_proto = nullptr;
-static se::Class* __jsb_AnalyticsTracker_class = nullptr;
+se::Object* __jsb_AnalyticsTracker_proto = nullptr;
+se::Class* __jsb_AnalyticsTracker_class = nullptr;
 } // namespace google
 
 namespace core {

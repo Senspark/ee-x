@@ -48,8 +48,9 @@ bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
+    auto purchasableVirtualItemProto = getCCPurchasableVirtualItemProto();
     auto cls = se::Class::create("CCVirtualCurrencyPack", __soomlaObj,
-                                 __jsb_CCPurchasableVirtualItem_proto, nullptr);
+                                 purchasableVirtualItemProto, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_CCVirtualCurrencyPack_finalize));
 
     cls->defineFunction("getCurrencyAmount",

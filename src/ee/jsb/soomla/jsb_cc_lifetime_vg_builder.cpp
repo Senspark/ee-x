@@ -14,8 +14,8 @@
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
 
 namespace soomla {
-static se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
-static se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
+se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
+se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
 } // namespace soomla
 
 namespace soomla {

@@ -17,10 +17,8 @@ namespace ee {
 
 namespace firebase {
 
-static se::Object* __jsb_FirebaseRemoteConfig_proto = nullptr;
-static se::Class* __jsb_FirebaseRemoteConfig_class = nullptr;
-
-static se::Object* __firebaseObj = nullptr;
+se::Object* __jsb_FirebaseRemoteConfig_proto = nullptr;
+se::Class* __jsb_FirebaseRemoteConfig_class = nullptr;
 
 const auto jsb_FirebaseRemoteConfig_finalize =
     &core::jsb_finalize<FirebaseRemoteConfig>;
@@ -83,6 +81,7 @@ SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getDouble)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getString)
 
 bool register_firebase_remote_config_manual(se::Object* globalObj) {
+    se::Object* __firebaseObj = nullptr;
     core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
 
     auto cls = se::Class::create("FirebaseRemoteConfig", __firebaseObj, nullptr,

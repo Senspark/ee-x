@@ -14,9 +14,9 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
-static se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;
-static se::Class* __jsb_CCStoreAssetsBuilder_class = nullptr;
-static se::Class* __jsb_CCStoreAssets_class = nullptr;
+se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;
+se::Class* __jsb_CCStoreAssetsBuilder_class = nullptr;
+se::Class* __jsb_CCStoreAssets_class = nullptr;
 } // namespace soomla
 
 namespace ee {

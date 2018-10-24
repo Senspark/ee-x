@@ -27,8 +27,8 @@ namespace facebook {
 se::Object* __facebookAdObj = nullptr;
 se::Object* __bannerAdSizeObj = nullptr;
 
-static se::Object* __jsb_FacebookAds_proto = nullptr;
-static se::Class* __jsb_FacebookAds_class = nullptr;
+se::Object* __jsb_FacebookAds_proto = nullptr;
+se::Class* __jsb_FacebookAds_class = nullptr;
 
 constexpr static auto jsb_FacebookAds_finalize =
     &ee::core::jsb_finalize<ee::FacebookAds>;

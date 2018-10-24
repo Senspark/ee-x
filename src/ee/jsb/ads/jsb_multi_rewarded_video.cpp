@@ -16,8 +16,8 @@
 namespace ee {
 namespace ads {
 
-static se::Object* __jsb_Multi_Rewarded_Video_proto = nullptr;
-static se::Class* __jsb_Multi_Rewarded_Video_class = nullptr;
+se::Object* __jsb_Multi_Rewarded_Video_proto = nullptr;
+se::Class* __jsb_Multi_Rewarded_Video_class = nullptr;
 
 constexpr auto jsb_Multi_Rewarded_Video_finalize =
     &ee::core::jsb_finalize<MultiRewardedVideo>;

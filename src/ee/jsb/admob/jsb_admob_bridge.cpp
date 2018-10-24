@@ -24,8 +24,8 @@ namespace admob {
 se::Object* __admobObj = nullptr;
 se::Object* __bannerAdSizeObj = nullptr;
 
-static se::Object* __jsb_AdMob_proto = nullptr;
-static se::Class* __jsb_AdMob_class = nullptr;
+se::Object* __jsb_AdMob_proto = nullptr;
+se::Class* __jsb_AdMob_class = nullptr;
 
 constexpr static auto jsb_AdMob_finalize = &ee::core::jsb_finalize<ee::AdMob>;
 constexpr static auto jsb_AdMob_constructor =

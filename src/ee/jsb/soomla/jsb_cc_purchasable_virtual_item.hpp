@@ -12,7 +12,7 @@
 
 namespace soomla {
 
-extern se::Object* __jsb_CCPurchasableVirtualItem_proto;
+se::Object* getCCPurchasableVirtualItemProto();
 
 bool register_cc_purchasable_virtual_item_manual(se::Object* object);
 

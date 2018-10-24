@@ -10,16 +10,11 @@
 
 #include <ee/AdsFwd.hpp>
 
+#include "ee/jsb/jsb_fwd.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-
-namespace se {
-class Object;
-class Value;
-} // namespace se
 
 namespace ee {
 namespace ads {
-
 bool register_adview_manual(se::Object* object);
 } // namespace ads
 } // namespace ee

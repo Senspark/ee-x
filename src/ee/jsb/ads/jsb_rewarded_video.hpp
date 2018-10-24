@@ -8,12 +8,7 @@
 #ifndef JSB_REWARDED_VIDEO_HPP__
 #define JSB_REWARDED_VIDEO_HPP__
 
-#include <ee/AdsFwd.hpp>
-
-namespace se {
-class Object;
-class Value;
-} // namespace se
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace ads {

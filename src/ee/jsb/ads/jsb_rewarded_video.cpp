@@ -16,12 +16,12 @@
 
 namespace ee {
 namespace ads {
-static se::Object* __jsb_RewardedVideo_proto = nullptr;
-static se::Class* __jsb_RewardedVideo_class = nullptr;
+se::Object* __jsb_RewardedVideo_proto = nullptr;
+se::Class* __jsb_RewardedVideo_class = nullptr;
 
-static std::unordered_map<std::shared_ptr<ee::IRewardedVideo>, se::Object*>
+std::unordered_map<std::shared_ptr<ee::IRewardedVideo>, se::Object*>
     __jsb_s_rewardedVideos;
-static std::vector<std::shared_ptr<ee::IRewardedVideo>>
+std::vector<std::shared_ptr<ee::IRewardedVideo>>
     __jsb_s_rewardedVideoArchive;
 } // namespace ads
 

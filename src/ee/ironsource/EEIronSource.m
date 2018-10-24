@@ -24,25 +24,27 @@
 
 @implementation EEIronSource
 
-// clang-format off
-static NSString* const k__initialize        = @"IronSource_initialize";
-static NSString* const k__hasRewardedVideo  = @"IronSource_hasRewardedVideo";
+static NSString* const k__initialize = @"IronSource_initialize";
+static NSString* const k__hasRewardedVideo = @"IronSource_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
 
-static NSString* const k__loadInterstitial   = @"IronSource_loadInterstitial";
-static NSString* const k__hasInterstitial   = @"IronSource_hasInterstitial";
-static NSString* const k__showInterstitial  = @"IronSource_showInterstitial";
+static NSString* const k__loadInterstitial = @"IronSource_loadInterstitial";
+static NSString* const k__hasInterstitial = @"IronSource_hasInterstitial";
+static NSString* const k__showInterstitial = @"IronSource_showInterstitial";
 
-static NSString* const k__onRewarded        = @"IronSource_onRewarded";
-static NSString* const k__onFailed          = @"IronSource_onFailed";
-static NSString* const k__onOpened          = @"IronSource_onOpened";
-static NSString* const k__onClosed          = @"IronSource_onClosed";
+static NSString* const k__onRewarded = @"IronSource_onRewarded";
+static NSString* const k__onFailed = @"IronSource_onFailed";
+static NSString* const k__onOpened = @"IronSource_onOpened";
+static NSString* const k__onClosed = @"IronSource_onClosed";
 
-static NSString* const k__onInterstitialFailed         = @"IronSource_onInterstitialFailed";
-static NSString* const k__onInterstitialOpened          = @"IronSource_onInterstitialOpened";
-static NSString* const k__onInterstitialClosed          = @"IronSource_onInterstitialClosed";
-static NSString* const k__onInterstitialClicked          = @"IronSource_onInterstitialClicked";
-// clang-format on
+static NSString* const k__onInterstitialFailed =
+    @"IronSource_onInterstitialFailed";
+static NSString* const k__onInterstitialOpened =
+    @"IronSource_onInterstitialOpened";
+static NSString* const k__onInterstitialClosed =
+    @"IronSource_onInterstitialClosed";
+static NSString* const k__onInterstitialClicked =
+    @"IronSource_onInterstitialClicked";
 
 - (id)init {
     self = [super init];

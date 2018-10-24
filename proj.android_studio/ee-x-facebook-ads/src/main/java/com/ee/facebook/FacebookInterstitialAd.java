@@ -5,9 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.IInterstitialAd;
-import com.ee.core.Logger;
+import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.Logger;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -25,6 +26,8 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     private InterstitialAd       _interstitialAd;
     private String               _placementId;
     private InterstitialAdHelper _helper;
+    private IMessageBridge       _bridge;
+
 
     public FacebookInterstitialAd(@NonNull Context context, @NonNull String placementId) {
         Utils.checkMainThread();
@@ -32,8 +35,9 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         _placementId = placementId;
         _interstitialAd = null;
         _helper = new InterstitialAdHelper("FacebookInterstitialAd", placementId);
+        _bridge = MessageBridge.getInstance();
         createInternalAd();
-        registerHandlers();        
+        registerHandlers();
     }
 
     void destroy() {
@@ -43,6 +47,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         _helper = null;
         _context = null;
         _placementId = null;
+        _bridge = null;
     }
 
     private String k__createInternalAd() {
@@ -73,9 +78,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         Utils.checkMainThread();
         _helper.registerHandlers(this);
 
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -83,7 +86,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
             }
         }, k__createInternalAd());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -95,11 +98,8 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _helper.deregisterHandlers();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__createInternalAd());
-        bridge.deregisterHandler(k__destroyInternalAd());
+        _bridge.deregisterHandler(k__createInternalAd());
+        _bridge.deregisterHandler(k__destroyInternalAd());
     }
 
     private boolean createInternalAd() {
@@ -156,36 +156,28 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     public void onInterstitialDismissed(Ad ad) {
         _logger.info("onInterstitialDismissed");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClosed());
+        _bridge.callCpp(k__onClosed());
     }
 
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(k__onLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClicked());
-
+        _bridge.callCpp(k__onClicked());
     }
 
     @Override

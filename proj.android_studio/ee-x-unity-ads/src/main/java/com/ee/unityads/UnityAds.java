@@ -157,8 +157,7 @@ public class UnityAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(@NonNull Activity activity, @NonNull String gameId,
-                           boolean testModeEnabled) {
+    public void initialize(@NonNull Activity activity, @NonNull String gameId, boolean testModeEnabled) {
         Utils.checkMainThread();
         if (_initialized) {
             return;

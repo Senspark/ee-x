@@ -63,9 +63,9 @@ Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
 Self::~BannerAd() {
     bool succeeded = plugin_->destroyBannerAd(adId_);
     assert(succeeded);
-
     bridge_.deregisterHandler(k__onLoaded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onClicked(adId_));
 }
 
 bool Self::isLoaded() const {

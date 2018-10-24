@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
@@ -61,6 +62,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     private Map<String, AdMobBannerAd>       _bannerAds;
     private Map<String, AdMobNativeAd>       _nativeAds;
     private Map<String, AdMobInterstitialAd> _interstitialAds;
+    private IMessageBridge                   _bridge;
+
 
     public AdMob(Context context) {
         Utils.checkMainThread();
@@ -72,6 +75,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
+        _bridge = MessageBridge.getInstance();
 
         _rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(_context);
         _rewardedVideoAd.setRewardedVideoAdListener(this);
@@ -122,7 +126,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onDestroy() {
-        if(_activity != null) {
+        if (_activity != null) {
             for (String key : _bannerAds.keySet()) {
                 _bannerAds.get(key).onDestroy(_activity);
             }
@@ -157,6 +161,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         }
         _interstitialAds.clear();
         _interstitialAds = null;
+        _bridge = null;
 
         _context = null;
     }
@@ -173,9 +178,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     private void registerHandlers() {
         Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -186,7 +190,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__initialize);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -194,7 +198,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__getEmulatorTestDeviceHash);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -205,7 +209,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__addTestDevice);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -219,7 +223,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__createBannerAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -229,7 +233,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__destroyBannerAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -238,8 +242,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
                 String adId = (String) dict.get(k__ad_id);
                 String layoutName = (String) dict.get(k__layout_name);
-                @SuppressWarnings("unchecked") Map<String, Object> identifiers_raw =
-                    (Map<String, Object>) dict.get(k__identifiers);
+                @SuppressWarnings("unchecked") Map<String, Object> identifiers_raw = (Map<String, Object>) dict.get(k__identifiers);
                 Map<String, String> identifiers = new HashMap<>();
                 for (String key : identifiers_raw.keySet()) {
                     identifiers.put(key, (String) identifiers_raw.get(key));
@@ -248,7 +251,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__createNativeAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -258,7 +261,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__destroyNativeAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -268,7 +271,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__createInterstitialAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -278,7 +281,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__destroyInterstitialAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -286,7 +289,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__hasRewardedVideo);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -297,7 +300,7 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
             }
         }, k__loadRewardedVideo);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -309,20 +312,19 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     private void deregisterHandlers() {
         Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
-        bridge.deregisterHandler(k__addTestDevice);
-        bridge.deregisterHandler(k__createBannerAd);
-        bridge.deregisterHandler(k__destroyBannerAd);
-        bridge.deregisterHandler(k__createNativeAd);
-        bridge.deregisterHandler(k__destroyNativeAd);
-        bridge.deregisterHandler(k__createInterstitialAd);
-        bridge.deregisterHandler(k__destroyInterstitialAd);
-        bridge.deregisterHandler(k__hasRewardedVideo);
-        bridge.deregisterHandler(k__loadRewardedVideo);
-        bridge.deregisterHandler(k__showRewardedVideo);
+        _bridge.deregisterHandler(k__initialize);
+        _bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
+        _bridge.deregisterHandler(k__addTestDevice);
+        _bridge.deregisterHandler(k__createBannerAd);
+        _bridge.deregisterHandler(k__destroyBannerAd);
+        _bridge.deregisterHandler(k__createNativeAd);
+        _bridge.deregisterHandler(k__destroyNativeAd);
+        _bridge.deregisterHandler(k__createInterstitialAd);
+        _bridge.deregisterHandler(k__destroyInterstitialAd);
+        _bridge.deregisterHandler(k__hasRewardedVideo);
+        _bridge.deregisterHandler(k__loadRewardedVideo);
+        _bridge.deregisterHandler(k__showRewardedVideo);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -362,14 +364,12 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         return true;
     }
 
-    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
-                                  @NonNull Map<String, String> identifiers) {
+    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        AdMobNativeAd ad =
-            new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers, _testDevices);
+        AdMobNativeAd ad = new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers, _testDevices);
         _nativeAds.put(adId, ad);
         return true;
     }
@@ -431,18 +431,14 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onRewardedVideoAdLoaded() {
         _logger.info("onRewardedVideoAdLoaded");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onLoaded);
+        _bridge.callCpp(k__onLoaded);
     }
 
     @Override
     public void onRewardedVideoAdOpened() {
         _logger.info("onRewardedVideoAdOpened");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onOpened);
+        _bridge.callCpp(k__onOpened);
     }
 
     @Override
@@ -455,18 +451,14 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onRewardedVideoAdClosed() {
         _logger.info("onRewardedVideoAdClosed");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClosed);
+        _bridge.callCpp(k__onClosed);
     }
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
         _logger.info("onRewarded");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onRewarded);
+        _bridge.callCpp(k__onRewarded);
     }
 
     @Override
@@ -479,17 +471,13 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     public void onRewardedVideoAdFailedToLoad(int errorCode) {
         _logger.info("onRewardedVideoAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailedToLoad, String.valueOf(errorCode));
+        _bridge.callCpp(k__onFailedToLoad, String.valueOf(errorCode));
     }
 
     @Override
     public void onRewardedVideoCompleted() {
         _logger.info("onRewardedVideoCompleted");
-        Utils.checkMainThread();;
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onRewardedVideoCompleted);
+        Utils.checkMainThread();
+        _bridge.callCpp(k__onRewardedVideoCompleted);
     }
 }

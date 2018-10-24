@@ -153,7 +153,6 @@ Self::createInterstitialAd(const std::string& placementId) {
     }
     auto result = new InterstitialAd(logger_, this, placementId);
     interstitialAds_[placementId] = result;
-    ironAd_ = result;
     return std::shared_ptr<IInterstitialAd>(result);
 }
 
@@ -180,7 +179,7 @@ bool Self::showInterstitial(const std::string& placementId) {
     if (not hasInterstitial()) {
         return false;
     }
-
+    placementId_ = placementId;
     rewarded_ = false;
     bridge_.call(k__showInterstitial, placementId);
     return true;
@@ -268,7 +267,10 @@ void Self::onInterstitialClosed() {
 }
 
 void Self::onInterstitialClicked() {
-    ironAd_->doOnClicked();
+    auto interstitialAd = interstitialAds_[placementId_];
+    if (interstitialAd) {
+        interstitialAd->doOnClicked();
+    }
 }
 
 #pragma mark - Config

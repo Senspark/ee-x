@@ -27,12 +27,12 @@ void Self::setLoadResult(bool result) {
 }
 
 void Self::setOnClickedCallback(const OnClickedCallback& callback) {
-    onclickcallback_ = callback;
+    onclickCallback_ = callback;
 }
 
 void Self::performClick() {
-    if (onclickcallback_) {
-        onclickcallback_();
+    if (onclickCallback_) {
+        onclickCallback_();
     }
 }
 } // namespace ads

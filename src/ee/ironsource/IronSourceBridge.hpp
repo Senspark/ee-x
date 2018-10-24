@@ -62,7 +62,7 @@ private:
     const Logger& logger_;
     std::map<std::string, RewardedVideo*> rewardedVideos_;
     std::map<std::string, InterstitialAd*> interstitialAds_;
-    IInterstitialAd* ironAd_;
+    std::string placementId_;
 
     std::unique_ptr<core::SpinLock> handlerLock_;
 

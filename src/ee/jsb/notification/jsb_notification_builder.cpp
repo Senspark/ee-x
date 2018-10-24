@@ -6,24 +6,25 @@
 //
 
 #include "ee/Notification.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
 
 namespace ee {
 namespace core {
 template <>
-ee::NotificationBuilder get_value(const se::Value& value) {
-    return *static_cast<ee::NotificationBuilder*>(
+NotificationBuilder get_value(const se::Value& value) {
+    return *static_cast<NotificationBuilder*>(
         value.toObject()->getPrivateData());
 }
 } // namespace core
 
 namespace notification {
 
-static se::Object* __jsb_NotificationBuilder_proto = nullptr;
-static se::Class* __jsb_NotificationBuilder_class = nullptr;
+se::Object* __jsb_NotificationBuilder_proto = nullptr;
+se::Class* __jsb_NotificationBuilder_class = nullptr;
 
-static se::Object* __notificationObj = nullptr;
+se::Object* __notificationObj = nullptr;
 
 const auto jsb_NotificationBuilder_finalize =
     &core::jsb_finalize<NotificationBuilder>;
@@ -71,14 +72,13 @@ bool register_notification_builder_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::NotificationBuilder>(cls);
+    JSBClassType::registerClass<NotificationBuilder>(cls);
 
     __jsb_NotificationBuilder_proto = cls->getProto();
     __jsb_NotificationBuilder_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
-
-} // namespace NotificationBuilder
+}
 } // namespace notification
 } // namespace ee

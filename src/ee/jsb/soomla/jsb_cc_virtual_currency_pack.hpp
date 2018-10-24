@@ -8,10 +8,7 @@
 #ifndef JSB_CC_VIRTUAL_CURRENCY_PACK_HPP
 #define JSB_CC_VIRTUAL_CURRENCY_PACK_HPP
 
-namespace se {
-class Object;
-class Class;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace soomla {
 

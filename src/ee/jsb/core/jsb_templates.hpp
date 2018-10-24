@@ -11,8 +11,9 @@
 #include <type_traits>
 #include <unordered_map>
 
-#include <ee/Core.hpp>
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/Core.hpp>
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"

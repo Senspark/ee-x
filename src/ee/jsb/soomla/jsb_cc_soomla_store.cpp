@@ -31,8 +31,8 @@ void set_value(se::Value& value, soomla::CCSoomlaStore* input) {
 
 namespace soomla {
 
-static se::Object* __jsb_CCSoomlaStore_proto = nullptr;
-static se::Class* __jsb_CCSoomlaStore_class = nullptr;
+se::Object* __jsb_CCSoomlaStore_proto = nullptr;
+se::Class* __jsb_CCSoomlaStore_class = nullptr;
 
 const static auto jsb_CCSoomlaStore_initialize =
     &ee::core::jsb_static_call<&CCSoomlaStore::initialize, CCStoreAssets*,

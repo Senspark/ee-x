@@ -6,18 +6,17 @@
 //
 
 #include "ee/Notification.hpp"
+
+#include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "jsb_core_common.hpp"
 
 namespace ee {
-namespace core {} // namespace core
-
 namespace notification {
 
-static se::Object* __jsb_Notification_proto = nullptr;
-static se::Class* __jsb_Notification_class = nullptr;
+se::Object* __jsb_Notification_proto = nullptr;
+se::Class* __jsb_Notification_class = nullptr;
 
-static se::Object* __notificationObj = nullptr;
+se::Object* __notificationObj = nullptr;
 
 const auto jsb_Notification_finalize = &core::jsb_finalize<Notification>;
 const auto jsb_Notification_constructor = &core::jsb_constructor<Notification>;

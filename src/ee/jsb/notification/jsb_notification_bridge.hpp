@@ -8,11 +8,7 @@
 #ifndef JSB_NOTIFICATION_BRIDGE_HPP__
 #define JSB_NOTIFICATION_BRIDGE_HPP__
 
-#pragma one
-
-namespace se {
-class Object;
-} // namespace se
+#include "ee/jsb/core/jsb_fwd.hpp"
 
 namespace ee {
 namespace notification {

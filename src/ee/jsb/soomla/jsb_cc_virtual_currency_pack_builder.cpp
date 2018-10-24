@@ -23,7 +23,7 @@ namespace ee {
 namespace core {
 
 template <>
-inline soomla::CCPurchaseType* get_value(const se::Value& value) {
+soomla::CCPurchaseType* get_value(const se::Value& value) {
     return static_cast<soomla::CCPurchaseType*>(
         value.toObject()->getPrivateData());
 }

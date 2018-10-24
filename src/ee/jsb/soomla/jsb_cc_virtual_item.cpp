@@ -5,8 +5,6 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
-//#include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
-
 #include "Soomla/domain/CCPurchasableVirtualItem.h"
 #include "Soomla/domain/CCVirtualItem.h"
 #include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
@@ -96,8 +94,6 @@ bool register_cc_virtual_item_manual(se::Object* globalObj) {
 
     __jsb_CCVirtualItem_proto = cls->getProto();
     __jsb_CCVirtualItem_class = cls;
-
-    // Register static member variables and static member functions
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

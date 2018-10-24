@@ -9,17 +9,12 @@
 #ifndef JSB_VUNGLE_HPP__
 #define JSB_VUNGLE_HPP__
 
-#ifdef __cplusplus
-#include "ee/jsb/vungle/jsb_vungle_bridge.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace vungle {
-bool register_vungle_manual(se::Object* object) {
-    register_vungle_bridge_manual(object);
-    return true;
-}
+bool register_vungle_manual(se::Object* object);
 } // namespace vungle
 } // namespace ee
 
-#endif // __cplusplus
 #endif // JSB_VUNGLE_HPP__

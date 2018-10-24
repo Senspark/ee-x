@@ -8,7 +8,7 @@
 #ifndef JSB_CC_SOOMLA_STORE_HPP__
 #define JSB_CC_SOOMLA_STORE_HPP__
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace soomla {
 

@@ -8,7 +8,7 @@
 #ifndef jsb_facebook_ads_bridge_hpp
 #define jsb_facebook_ads_bridge_hpp
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace facebook {

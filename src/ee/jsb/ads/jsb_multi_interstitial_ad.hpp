@@ -10,7 +10,7 @@
 
 #include <ee/AdsFwd.hpp>
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {

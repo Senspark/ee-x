@@ -8,7 +8,7 @@
 #ifndef jsb_cc_market_item_hpp
 #define jsb_cc_market_item_hpp
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace soomla {
 

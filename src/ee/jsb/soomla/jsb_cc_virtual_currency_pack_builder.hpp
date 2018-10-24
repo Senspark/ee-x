@@ -8,7 +8,7 @@
 #ifndef jsb_cc_virtual_currency_pack_builder_hpp
 #define jsb_cc_virtual_currency_pack_builder_hpp
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace soomla {
 

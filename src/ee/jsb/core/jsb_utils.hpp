@@ -8,7 +8,7 @@
 #ifndef JSB_EE_UTILS_HPP__
 #define JSB_EE_UTILS_HPP__
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace core {

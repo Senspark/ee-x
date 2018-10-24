@@ -9,7 +9,7 @@
 #ifndef JSB_VUNGLE_BRIDGE_HPP__
 #define JSB_VUNGLE_BRIDGE_HPP__
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace vungle {

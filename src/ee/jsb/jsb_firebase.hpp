@@ -8,19 +8,12 @@
 #ifndef JSB_FIREBASE_HPP__
 #define JSB_FIREBASE_HPP__
 
-#ifdef __cplusplus
-#include "ee/jsb/firebase/jsb_firebase_analytics.hpp"
-#include "ee/jsb/firebase/jsb_firebase_remote_config.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace firebase {
-bool register_all_firebase_manual(se::Object* object) {
-    register_firebase_analytics_manual(object);
-    register_firebase_remote_config_manual(object);
-    return true;
-} // namespace register_all_firebase_manual
+bool register_all_firebase_manual(se::Object* object);
 } // namespace firebase
 } // namespace ee
 
-#endif // __cplusplus
 #endif // JSB_FIREBASE_HPP__

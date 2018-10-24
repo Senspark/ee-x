@@ -1,13 +1,11 @@
 //
-// jsb_unity_ads.cpp
-// ee_x
+//  jsb_vungle.cpp
+//  ee-x
 //
-//  Created by Nguyen Van Quynh on 8/23/18
-//
+//  Created by Quynhnv on 10/24/18.
 //
 
-#ifndef JSB_UNITY_ADS_HPP__
-#define JSB_UNITY_ADS_HPP__
+#include "ee/jsb/jsb_vungle.hpp"
 
 #include "ee/jsb/jsb_fwd.hpp"
 
@@ -16,5 +14,3 @@ namespace unityads {
 bool register_unity_ads_manual(se::Object* object);
 } // namespace unityads
 } // namespace ee
-
-#endif // JSB_UNITY_ADS_HPP__

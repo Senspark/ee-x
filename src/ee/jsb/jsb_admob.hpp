@@ -8,7 +8,7 @@
 #ifndef JSB_ADMOB_HPP__
 #define JSB_ADMOB_HPP__
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace admob {

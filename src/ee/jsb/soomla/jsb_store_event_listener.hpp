@@ -8,7 +8,7 @@
 #ifndef jsb_store_event_listener_hpp
 #define jsb_store_event_listener_hpp
 
-#include "ee/jsb/core/jsb_fwd.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace soomla {
 

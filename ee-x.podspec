@@ -459,6 +459,8 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-core' do |s|
     s.source_files =
       'src/ee/jsb/jsb_core.hpp',
+      'src/ee/jsb/jsb_core.cpp',
+      'src/ee/jsb/jsb_fwd.hpp',
       'src/ee/jsb/core/*'
     s.public_header_files =
       'src/ee/jsb/jsb_core.hpp',
@@ -485,6 +487,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_ads.hpp',
+      'src/ee/jsb/jsb_ads.cpp',
       'src/ee/jsb/ads/*'
     s.public_header_files =
       'src/ee/jsb/jsb_ads.hpp',
@@ -510,6 +513,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-crashlytics' do |s|
     s.source_files =
       'src/ee/jsb/jsb_crashlytics.hpp',
+      'src/ee/jsb/jsb_crashlytics.cpp',
       'src/ee/jsb/crashlytics/*'
     s.public_header_files =
       'src/ee/jsb/jsb_crashlytics.hpp',
@@ -522,6 +526,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-google-analytics' do |s|
     s.source_files =
       'src/ee/jsb/jsb_google_analytics.hpp',
+      'src/ee/jsb/jsb_google_analytics.cpp',
       'src/ee/jsb/google/*'
     s.public_header_files =
       'src/ee/jsb/jsb_google_analytics.hpp',
@@ -530,19 +535,11 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/google-analytics'
   end
-
-  spec.subspec 'jsb-facebookads' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_facebookads.hpp',
-      'src/ee/jsb/facebookads/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_facebookads.hpp'
-    s.dependency 'ee-x/keeva'
-  end
   
   spec.subspec 'jsb-soomla-store' do |s|
     s.source_files =
       'src/ee/jsb/jsb_soomla.hpp',
+      'src/ee/jsb/jsb_soomla.cpp',
       'src/ee/jsb/soomla/*'
     s.public_header_files =
       'src/ee/jsb/jsb_soomla.hpp',
@@ -632,6 +629,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-facebook-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_facebook_ads.hpp',
+      'src/ee/jsb/jsb_facebook_ads.cpp',
       'src/ee/jsb/facebookads/*'
     s.public_header_files =
       'src/ee/jsb/jsb_facebook_ads.hpp',
@@ -644,6 +642,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-firebase' do |s|
     s.source_files =
       'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/jsb_firebase.cpp',
       'src/ee/jsb/firebase/*'
     s.public_header_files =
       'src/ee/jsb/jsb_firebase.hpp',
@@ -658,6 +657,7 @@ Pod::Spec.new do |spec|
     s.platform = :ios
     s.source_files =
       'src/ee/jsb/jsb_notification.hpp',
+      'src/ee/jsb/jsb_notification.cpp',
       'src/ee/jsb/notification/*'
     s.public_header_files =
       'src/ee/jsb/jsb_notification.hpp',
@@ -670,6 +670,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-unity-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_unity_ads.hpp',
+      'src/ee/jsb/jsb_unity_ads.cpp',
       'src/ee/jsb/unityads/*'
     s.public_header_files =
       'src/ee/jsb/jsb_unity_ads.hpp',
@@ -682,6 +683,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-ironsource' do |s|
     s.source_files =
       'src/ee/jsb/jsb_ironsource.hpp',
+      'src/ee/jsb/jsb_ironsource.cpp',
       'src/ee/jsb/ironsource/*'
     s.public_header_files =
       'src/ee/jsb/jsb_ironsource.hpp',
@@ -694,6 +696,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-vungle' do |s|
     s.source_files =
       'src/ee/jsb/jsb_vungle.hpp',
+      'src/ee/jsb/jsb_vungle.cpp',
       'src/ee/jsb/vungle/*'
     s.public_header_files =
       'src/ee/jsb/jsb_vungle.hpp',

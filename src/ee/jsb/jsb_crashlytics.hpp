@@ -8,18 +8,12 @@
 #ifndef JSB_CRASHLYTICS_HPP__
 #define JSB_CRASHLYTICS_HPP__
 
-#ifdef __cplusplus
-#include "ee/jsb/crashlytics/jsb_crashlytics_bridge.hpp"
+#include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace crashlytics {
-bool register_crashlytics_manual(se::Object* object) {
-    register_crashlytics_bridge_manual(object);
-    return true;
-}
+bool register_crashlytics_manual(se::Object* object);
 } // namespace crashlytics
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif // JSB_CRASHLYTICS_HPP

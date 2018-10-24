@@ -23,7 +23,7 @@ constexpr auto k__initialize        = "IronSource_initialize";
 constexpr auto k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
     
-constexpr auto k__loadInterstitial   = "IronSource_loadInterstitial";
+constexpr auto k__loadInterstitial  = "IronSource_loadInterstitial";
 constexpr auto k__hasInterstitial   = "IronSource_hasInterstitial";
 constexpr auto k__showInterstitial  = "IronSource_showInterstitial";
 constexpr auto k__onRewarded        = "IronSource_onRewarded";
@@ -31,10 +31,10 @@ constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
 constexpr auto k__onClosed          = "IronSource_onClosed";
     
-constexpr auto k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
-constexpr auto k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
-constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
-constexpr auto k__onInterstitialClicked         = "IronSource_onInterstitialClicked";
+constexpr auto k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
+constexpr auto k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
+constexpr auto k__onInterstitialClosed  = "IronSource_onInterstitialClosed";
+constexpr auto k__onInterstitialClicked = "IronSource_onInterstitialClicked";
 // clang-format on
 } // namespace
 

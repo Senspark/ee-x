@@ -107,27 +107,27 @@ class FacebookNativeAd implements AdListener, IAdView {
     }
 
     @NonNull
-    private String k__createInternalAd() {
+    private String kCreateInternalAd() {
         return k__tag + "_createInternalAd_" + _adId;
     }
 
     @NonNull
-    private String k__destroyInternalAd() {
+    private String kDestroyInternalAd() {
         return k__tag + "_destroyInternalAd_" + _adId;
     }
 
     @NonNull
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return k__tag + "_onLoaded_" + _adId;
     }
 
     @NonNull
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return k__tag + "_onFailedToLoad_" + _adId;
     }
 
     @NonNull
-    private String k__onClicked() {
+    private String kOnClicked() {
         return k__tag + "_onClicked_" + _adId;
     }
 
@@ -141,7 +141,7 @@ class FacebookNativeAd implements AdListener, IAdView {
             public String handle(@NonNull String message) {
                 return Utils.toString(createInternalAd());
             }
-        }, k__createInternalAd());
+        }, kCreateInternalAd());
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -149,15 +149,15 @@ class FacebookNativeAd implements AdListener, IAdView {
             public String handle(@NonNull String message) {
                 return Utils.toString(destroyInternalAd());
             }
-        }, k__destroyInternalAd());
+        }, kDestroyInternalAd());
     }
 
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _helper.deregisterHandlers();
 
-        _bridge.deregisterHandler(k__createInternalAd());
-        _bridge.deregisterHandler(k__destroyInternalAd());
+        _bridge.deregisterHandler(kCreateInternalAd());
+        _bridge.deregisterHandler(kDestroyInternalAd());
     }
 
     private boolean createInternalAd() {
@@ -308,7 +308,7 @@ class FacebookNativeAd implements AdListener, IAdView {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-        _bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
@@ -399,14 +399,14 @@ class FacebookNativeAd implements AdListener, IAdView {
 
         _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
         _isAdLoaded = true;
-        _bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(kOnLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onClicked());
+        _bridge.callCpp(kOnClicked());
     }
 
     @Override

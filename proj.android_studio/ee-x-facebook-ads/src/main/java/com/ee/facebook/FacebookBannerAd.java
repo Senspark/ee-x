@@ -94,17 +94,17 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     @NonNull
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return "FacebookBannerAd_onLoaded_" + _adId;
     }
 
     @NonNull
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return "FacebookBannerAd_onFailedToLoad_" + _adId;
     }
 
     @NonNull
-    private String k__onClicked() {
+    private String kOnClicked() {
         return "FacebookBannerAd_onClicked_" + _adId;
     }
 
@@ -219,7 +219,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-        _bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
@@ -227,14 +227,14 @@ class FacebookBannerAd implements AdListener, IAdView {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
         _isAdLoaded = true;
-        _bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(kOnLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onClicked());
+        _bridge.callCpp(kOnClicked());
     }
 
     @Override

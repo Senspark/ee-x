@@ -50,27 +50,27 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
         _bridge = null;
     }
 
-    private String k__createInternalAd() {
+    private String kCreateInternalAd() {
         return "FacebookInterstitialAd_createInternalAd_" + _placementId;
     }
 
-    private String k__destroyInternalAd() {
+    private String kDestroyInternalAd() {
         return "FacebookInterstitialAd_destroyInternalAd_" + _placementId;
     }
 
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return "FacebookInterstitialAd_onLoaded_" + _placementId;
     }
 
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return "FacebookInterstitialAd_onFailedToLoad_" + _placementId;
     }
 
-    private String k__onClosed() {
+    private String kOnClosed() {
         return "FacebookInterstitialAd_onClosed_" + _placementId;
     }
 
-    private String k__onClicked() {
+    private String kOnClicked() {
         return "FacebookInterstitialAd_onClicked_" + _placementId;
     }
 
@@ -84,7 +84,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
             public String handle(@NonNull String message) {
                 return Utils.toString(createInternalAd());
             }
-        }, k__createInternalAd());
+        }, kCreateInternalAd());
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -92,14 +92,14 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
             public String handle(@NonNull String message) {
                 return Utils.toString(destroyInternalAd());
             }
-        }, k__destroyInternalAd());
+        }, kDestroyInternalAd());
     }
 
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _helper.deregisterHandlers();
-        _bridge.deregisterHandler(k__createInternalAd());
-        _bridge.deregisterHandler(k__destroyInternalAd());
+        _bridge.deregisterHandler(kCreateInternalAd());
+        _bridge.deregisterHandler(kDestroyInternalAd());
     }
 
     private boolean createInternalAd() {
@@ -156,28 +156,28 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     public void onInterstitialDismissed(Ad ad) {
         _logger.info("onInterstitialDismissed");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onClosed());
+        _bridge.callCpp(kOnClosed());
     }
 
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-        _bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(kOnLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onClicked());
+        _bridge.callCpp(kOnClicked());
     }
 
     @Override

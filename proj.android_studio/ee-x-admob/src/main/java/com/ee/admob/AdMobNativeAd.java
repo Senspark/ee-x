@@ -106,15 +106,15 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _bridge = null;
     }
 
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return "AdMobNativeAd_onLoaded_" + _adId;
     }
 
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return "AdMobNativeAd_onFailedToLoad_" + _adId;
     }
 
-    private String k__onClicked() {
+    private String kOnClicked() {
         return "AdMobNativeAd_onClicked_" + _adId;
     }
 
@@ -147,7 +147,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
                 _nativeAdPlaceholder.addView(adView, params);
 
                 _isAdLoaded = true;
-                _bridge.callCpp(k__onLoaded());
+                _bridge.callCpp(kOnLoaded());
             }
         }).withAdListener(this).build();
         return true;
@@ -420,14 +420,14 @@ class AdMobNativeAd extends AdListener implements IAdView {
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-        _bridge.callCpp(k__onFailedToLoad(), String.valueOf(errorCode));
+        _bridge.callCpp(kOnFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
         Utils.checkMainThread();
-        _bridge.callCpp(k__onClicked());
+        _bridge.callCpp(kOnClicked());
     }
 
     @Override

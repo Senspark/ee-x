@@ -13,8 +13,6 @@
 namespace ee {
 namespace facebook {
 
-extern se::Object* __facebookAdObj;
-
 bool register_facebookads_bridge_manual(se::Object* object);
 
 } // namespace facebook

@@ -11,8 +11,10 @@
 #include <unordered_map>
 
 #include <ee/Core.hpp>
+#include <ee/CoreFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {
@@ -22,9 +24,8 @@ se::Object* __jsb_LogLevel_proto = nullptr;
 std::unordered_map<const LogLevel*, se::Object*> __jsb_s_loglevels;
 
 template <>
-const ee::LogLevel& get_value(const se::Value& value) {
-    auto retObj =
-        static_cast<ee::LogLevel*>(value.toObject()->getPrivateData());
+const LogLevel& get_value(const se::Value& value) {
+    auto retObj = static_cast<LogLevel*>(value.toObject()->getPrivateData());
     return *retObj;
 }
 
@@ -52,29 +53,28 @@ bool jsb_LogLevel_finalize(se::State& s) {
     return true;
 }
 
-constexpr static auto jsb_LogLevel_constructor =
-    &jsb_constructor<ee::LogLevel, std::int32_t, const std::string&>;
-constexpr static auto jsb_LogLevel_get_priority =
-    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::priority, std::int32_t>;
-constexpr static auto jsb_LogLevel_set_priority =
-    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::priority,
-                       const std::int32_t&>;
-constexpr static auto jsb_LogLevel_get_desc =
-    &jsb_propterty_get<ee::LogLevel, &ee::LogLevel::desc, const std::string&>;
-constexpr static auto jsb_LogLevel_set_desc =
-    &jsb_propterty_set<ee::LogLevel, &ee::LogLevel::desc, const std::string&>;
-constexpr static auto jsb_LogLevel_Verbose =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Verbose>;
-constexpr static auto jsb_LogLevel_Debug =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Debug>;
-constexpr static auto jsb_LogLevel_Info =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Info>;
-constexpr static auto jsb_LogLevel_Warn =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Warn>;
-constexpr static auto jsb_LogLevel_Error =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Error>;
-constexpr static auto jsb_LogLevel_Assert =
-    &jsb_static_property_get<const ee::LogLevel&, &ee::LogLevel::Assert>;
+constexpr auto jsb_LogLevel_constructor =
+    &jsb_constructor<LogLevel, std::int32_t, const std::string&>;
+constexpr auto jsb_LogLevel_get_priority =
+    &jsb_propterty_get<LogLevel, &LogLevel::priority, std::int32_t>;
+constexpr auto jsb_LogLevel_set_priority =
+    &jsb_propterty_set<LogLevel, &LogLevel::priority, const std::int32_t&>;
+constexpr auto jsb_LogLevel_get_desc =
+    &jsb_propterty_get<LogLevel, &LogLevel::desc, const std::string&>;
+constexpr auto jsb_LogLevel_set_desc =
+    &jsb_propterty_set<LogLevel, &LogLevel::desc, const std::string&>;
+constexpr auto jsb_LogLevel_Verbose =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Verbose>;
+constexpr auto jsb_LogLevel_Debug =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Debug>;
+constexpr auto jsb_LogLevel_Info =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Info>;
+constexpr auto jsb_LogLevel_Warn =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Warn>;
+constexpr auto jsb_LogLevel_Error =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Error>;
+constexpr auto jsb_LogLevel_Assert =
+    &jsb_static_property_get<const LogLevel&, &LogLevel::Assert>;
 
 SE_BIND_FINALIZE_FUNC(jsb_LogLevel_finalize);
 SE_BIND_CTOR(jsb_LogLevel_constructor, __jsb_LogLevel_class,
@@ -91,13 +91,15 @@ SE_BIND_PROP_GET(jsb_LogLevel_Error);
 SE_BIND_PROP_GET(jsb_LogLevel_Assert);
 
 bool register_log_level_manual(se::Object* globalObj) {
-    getOrCreatePlainObject_r("ee", globalObj, &__eeObj);
-    getOrCreatePlainObject_r("core", __eeObj, &__coreObj);
+    se::Object* eeObj = nullptr;
+    se::Object* coreObj = nullptr;
+    getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    getOrCreatePlainObject_r("core", eeObj, &coreObj);
 
     // Create a se::Class object, developers do not need to consider the release
     // of the se::Class object, which is automatically handled by the
     // ScriptEngine.
-    auto cls = se::Class::create("LogLevel", __coreObj, nullptr,
+    auto cls = se::Class::create("LogLevel", coreObj, nullptr,
                                  _SE(jsb_LogLevel_constructor));
 
     // Define finalize callback function
@@ -113,14 +115,14 @@ bool register_log_level_manual(se::Object* globalObj) {
 
     // JSBClassType::registerClass is a helper function in the Cocos2D-X native
     // binding code, which is not a part of the ScriptEngine.
-    JSBClassType::registerClass<ee::LogLevel>(cls);
+    JSBClassType::registerClass<LogLevel>(cls);
 
     __jsb_LogLevel_proto = cls->getProto();
     __jsb_LogLevel_class = cls;
 
     // Register static member variables and static member functions
     se::Value ctorVal;
-    if (__coreObj->getProperty("LogLevel", &ctorVal) && ctorVal.isObject()) {
+    if (coreObj->getProperty("LogLevel", &ctorVal) && ctorVal.isObject()) {
         ctorVal.toObject()->defineProperty("Verbose", _SE(jsb_LogLevel_Verbose),
                                            nullptr);
         ctorVal.toObject()->defineProperty("Debug", _SE(jsb_LogLevel_Debug),
@@ -137,12 +139,8 @@ bool register_log_level_manual(se::Object* globalObj) {
 
     // Register predefined Loglevel instances
     const LogLevel* predefinedLogLevels[6] = {
-        &ee::core::LogLevel::Verbose,
-        &LogLevel::Debug,
-        &LogLevel::Info,
-        &LogLevel::Warn,
-        &LogLevel::Error,
-        &LogLevel::Assert,
+        &core::LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
+        &LogLevel::Warn,          &LogLevel::Error, &LogLevel::Assert,
     };
 
     for (auto logLevel : predefinedLogLevels) {

@@ -5,6 +5,8 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
+#include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
+
 #include "Soomla/domain/CCPurchasableVirtualItem.h"
 #include "Soomla/domain/CCVirtualItem.h"
 #include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
@@ -13,11 +15,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack.hpp"
-
-namespace soomla {
-se::Object* __jsb_CCVirtualItem_proto = nullptr;
-se::Class* __jsb_CCVirtualItem_class = nullptr;
-} // namespace soomla
 
 namespace ee {
 namespace core {
@@ -36,6 +33,8 @@ soomla::CCVirtualItem* get_value(const se::Value& value) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCVirtualItem_proto = nullptr;
+se::Class* __jsb_CCVirtualItem_class = nullptr;
 
 CCPurchasableVirtualItem* asPurchasableVirtualItem(CCVirtualItem* item) {
     return dynamic_cast<CCPurchasableVirtualItem*>(item);

@@ -15,7 +15,7 @@
 namespace ee {
 
 namespace google {
-std::vector<std::shared_ptr<ee::GoogleAnalyticsTracker>>
+std::vector<std::shared_ptr<GoogleAnalyticsTracker>>
     __jsb_s_googleAnalyticsArchive;
 se::Object* __jsb_AnalyticsTracker_proto = nullptr;
 se::Class* __jsb_AnalyticsTracker_class = nullptr;
@@ -24,7 +24,7 @@ se::Class* __jsb_AnalyticsTracker_class = nullptr;
 namespace core {
 template <>
 void set_value(se::Value& value,
-               const std::shared_ptr<ee::GoogleAnalyticsTracker>& input) {
+               const std::shared_ptr<GoogleAnalyticsTracker>& input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
         google::__jsb_s_googleAnalyticsArchive.push_back(input);
@@ -62,8 +62,10 @@ SE_BIND_FUNC(jsb_AnalyticsTracker_setScreenName)
 SE_BIND_FUNC(jsb_AnalyticsTracker_send)
 
 bool register_google_tracker_manual(se::Object* globalObj) {
+    se::Object* eeObj = nullptr;
     se::Object* googleObj = nullptr;
-    core::getOrCreatePlainObject_r("google", core::__eeObj, &googleObj);
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("google", eeObj, &googleObj);
 
     auto cls =
         se::Class::create("AnalyticsTracker", googleObj, nullptr, nullptr);
@@ -78,7 +80,7 @@ bool register_google_tracker_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::google::AnalyticsTracker>(cls);
+    JSBClassType::registerClass<google::AnalyticsTracker>(cls);
 
     __jsb_AnalyticsTracker_proto = cls->getProto();
     __jsb_AnalyticsTracker_class = cls;

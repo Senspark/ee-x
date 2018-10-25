@@ -14,11 +14,6 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCStoreInventory_proto = nullptr;
-se::Class* __jsb_CCStoreInventory_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -30,6 +25,9 @@ void set_value(se::Value& value, soomla::CCStoreInventory* input) {
 } // namespace ee
 
 namespace soomla {
+
+se::Object* __jsb_CCStoreInventory_proto = nullptr;
+se::Class* __jsb_CCStoreInventory_class = nullptr;
 
 const auto jsb_CCStoreInventory_finalize =
     &ee::core::jsb_finalize<CCStoreInventory>;

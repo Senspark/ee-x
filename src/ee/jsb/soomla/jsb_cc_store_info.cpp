@@ -15,8 +15,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
-se::Object* __jsb_CCStoreInfo_proto = nullptr;
-se::Class* __jsb_CCStoreInfo_class = nullptr;
 std::vector<se::Object*> __jsb__s_storeObjArchive;
 } // namespace soomla
 
@@ -45,11 +43,13 @@ bool jsb_finalize<soomla::CCStoreInfo>(se::State& s) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCStoreInfo_proto = nullptr;
+se::Class* __jsb_CCStoreInfo_class = nullptr;
 
 const auto jsb_CCStoreInfo_finalize = &ee::core::jsb_finalize<CCStoreInfo>;
 const auto jsb_CCStoreInfo_constructor =
     &ee::core::jsb_constructor<CCStoreInfo>;
-const static auto jsb_CCStoreInfo_sharedStoreInfo =
+const auto jsb_CCStoreInfo_sharedStoreInfo =
     &ee::core::jsb_static_get<CCStoreInfo*, &CCStoreInfo::sharedStoreInfo>;
 const auto jsb_CCStoreInfo_getItemByItemId =
     &ee::core::jsb_method_get<CCStoreInfo,

@@ -13,9 +13,6 @@
 namespace ee {
 namespace core {
 
-extern se::Object* __coreObj;
-extern se::Object* __eeObj;
-
 bool getOrCreatePlainObject_r(const char* name, se::Object* parent,
                               se::Object** outObj);
 

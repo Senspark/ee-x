@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include <ee/Core.hpp>
+#include <ee/CoreFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -28,7 +29,7 @@ const Logger& get_value(const se::Value& value) {
 }
 
 template <>
-void set_value(se::Value& value, ee::Logger& input) {
+void set_value(se::Value& value, Logger& input) {
     se::Object* obj = nullptr;
     if (&input == &input.getSystemLogger()) {
         if (__jsb_s_Logger == nullptr) {
@@ -41,38 +42,35 @@ void set_value(se::Value& value, ee::Logger& input) {
         }
     } else {
         obj = se::Object::createObjectWithClass(__jsb_Logger_class);
-        obj->setPrivateData(new ee::Logger(input));
+        obj->setPrivateData(new Logger(input));
     }
     value.setObject(obj);
 }
 
-constexpr static auto jsb_Logger_finalize = &jsb_finalize<ee::Logger>;
-constexpr static auto jsb_Logger_constructor =
-    &jsb_constructor<ee::Logger, std::string>;
-constexpr static auto jsb_Logger_getSystemLogger =
-    &jsb_static_get<ee::Logger&, &Logger::getSystemLogger>;
-constexpr static auto jsb_Logger_setSystemLogger =
-    &jsb_static_call<&Logger::setSystemLogger, const ee::Logger&>;
-constexpr static auto jsb_Logger_setEnabled =
-    &jsb_accessor_set<ee::Logger, &ee::Logger::setEnabled, bool>;
-constexpr static auto jsb_Logger_log =
-    &jsb_method_call<ee::Logger,
-                     (void (ee::Logger::*)(const ee::LogLevel&, std::string,
-                                           ...) const) &
-                         ee::Logger::log,
-                     const ee::LogLevel&, std::string>;
-constexpr static auto jsb_Logger_verbose =
-    &jsb_method_call<ee::Logger, &ee::Logger::verbose, std::string>;
-constexpr static auto jsb_Logger_debug =
-    &jsb_method_call<ee::Logger, &ee::Logger::debug, std::string>;
-constexpr static auto jsb_Logger_info =
-    &jsb_method_call<ee::Logger, &ee::Logger::info, std::string>;
-constexpr static auto jsb_Logger_warn =
-    &jsb_method_call<ee::Logger, &ee::Logger::warn, std::string>;
-constexpr static auto jsb_Logger_error =
-    &jsb_method_call<ee::Logger, &ee::Logger::error, std::string>;
-constexpr static auto jsb_Logger_assert =
-    &jsb_method_call<ee::Logger, &ee::Logger::error, std::string>;
+constexpr auto jsb_Logger_finalize = &jsb_finalize<Logger>;
+constexpr auto jsb_Logger_constructor = &jsb_constructor<Logger, std::string>;
+constexpr auto jsb_Logger_getSystemLogger =
+    &jsb_static_get<Logger&, &Logger::getSystemLogger>;
+constexpr auto jsb_Logger_setSystemLogger =
+    &jsb_static_call<&Logger::setSystemLogger, const Logger&>;
+constexpr auto jsb_Logger_setEnabled =
+    &jsb_accessor_set<Logger, &Logger::setEnabled, bool>;
+constexpr auto jsb_Logger_log = &jsb_method_call<
+    Logger,
+    (void (Logger::*)(const LogLevel&, std::string, ...) const) & Logger::log,
+    const LogLevel&, std::string>;
+constexpr auto jsb_Logger_verbose =
+    &jsb_method_call<Logger, &Logger::verbose, std::string>;
+constexpr auto jsb_Logger_debug =
+    &jsb_method_call<Logger, &Logger::debug, std::string>;
+constexpr auto jsb_Logger_info =
+    &jsb_method_call<Logger, &Logger::info, std::string>;
+constexpr auto jsb_Logger_warn =
+    &jsb_method_call<Logger, &Logger::warn, std::string>;
+constexpr auto jsb_Logger_error =
+    &jsb_method_call<Logger, &Logger::error, std::string>;
+constexpr auto jsb_Logger_assert =
+    &jsb_method_call<Logger, &Logger::error, std::string>;
 
 SE_BIND_FINALIZE_FUNC(jsb_Logger_finalize)
 SE_BIND_CTOR(jsb_Logger_constructor, __jsb_Logger_class, jsb_Logger_finalize)
@@ -88,10 +86,12 @@ SE_BIND_FUNC(jsb_Logger_error)
 SE_BIND_FUNC(jsb_Logger_assert)
 
 bool register_logger_manual(se::Object* globalObj) {
-    getOrCreatePlainObject_r("ee", globalObj, &__eeObj);
-    getOrCreatePlainObject_r("core", __eeObj, &__coreObj);
+    se::Object* eeObj = nullptr;
+    se::Object* coreObj = nullptr;
+    getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    getOrCreatePlainObject_r("core", eeObj, &coreObj);
 
-    auto cls = se::Class::create("Logger", __coreObj, nullptr,
+    auto cls = se::Class::create("Logger", coreObj, nullptr,
                                  _SE(jsb_Logger_constructor));
     cls->defineFinalizeFunction(_SE(jsb_Logger_finalize));
 
@@ -108,14 +108,14 @@ bool register_logger_manual(se::Object* globalObj) {
     // Install the class to JS virtual machine
     cls->install();
 
-    JSBClassType::registerClass<ee::Logger>(cls);
+    JSBClassType::registerClass<Logger>(cls);
 
     __jsb_Logger_proto = cls->getProto();
     __jsb_Logger_class = cls;
 
     // Register static member variables and static member functions
     se::Value ctorVal;
-    if (__coreObj->getProperty("Logger", &ctorVal) && ctorVal.isObject()) {
+    if (coreObj->getProperty("Logger", &ctorVal) && ctorVal.isObject()) {
         ctorVal.toObject()->defineFunction("getSystemLogger",
                                            _SE(jsb_Logger_getSystemLogger));
         ctorVal.toObject()->defineFunction("setSystemLogger",

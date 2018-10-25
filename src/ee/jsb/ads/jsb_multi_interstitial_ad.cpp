@@ -10,8 +10,10 @@
 #include <unordered_map>
 
 #include <ee/Ads.hpp>
+#include <ee/AdsFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace ads {
@@ -20,25 +22,25 @@ se::Object* __jsb_Multi_InterstitialAd_proto = nullptr;
 se::Class* __jsb_Multi_InterstitialAd_class = nullptr;
 
 constexpr auto jsb_Multi_InterstitialAd_finalize =
-    &ee::core::jsb_finalize<MultiInterstitialAd>;
-constexpr static auto jsb_Multi_InterstitialAd_contructor =
-    &ee::core::jsb_constructor<ee::MultiInterstitialAd>;
+    &core::jsb_finalize<MultiInterstitialAd>;
+constexpr auto jsb_Multi_InterstitialAd_contructor =
+    &core::jsb_constructor<MultiInterstitialAd>;
 constexpr auto jsb_Multi_InterstitialAd_isLoaded =
-    &ee::core::jsb_accessor_get_on_ui_thread<
-        MultiInterstitialAd, &MultiInterstitialAd::isLoaded, bool>;
+    &core::jsb_accessor_get_on_ui_thread<MultiInterstitialAd,
+                                         &MultiInterstitialAd::isLoaded, bool>;
 constexpr auto jsb_Multi_InterstitialAd_load =
-    &ee::core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
-                                            &MultiInterstitialAd::load>;
+    &core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
+                                        &MultiInterstitialAd::load>;
 constexpr auto jsb_Multi_InterstitialAd_show =
-    &ee::core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
-                                            &MultiInterstitialAd::show>;
+    &core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
+                                        &MultiInterstitialAd::show>;
 constexpr auto jsb_Multi_InterstitialAd_addItem =
-    &ee::core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
-                                            &MultiInterstitialAd::addItem,
-                                            std::shared_ptr<IInterstitialAd>>;
+    &core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
+                                        &MultiInterstitialAd::addItem,
+                                        std::shared_ptr<IInterstitialAd>>;
 constexpr auto jsb_Multi_InterstitialAd_setResultCallback =
-    &ee::core::jsb_set_callback<MultiInterstitialAd,
-                                &MultiInterstitialAd::setResultCallback>;
+    &core::jsb_set_callback<MultiInterstitialAd,
+                            &MultiInterstitialAd::setResultCallback>;
 
 SE_BIND_FINALIZE_FUNC(jsb_Multi_InterstitialAd_finalize)
 SE_BIND_CTOR(jsb_Multi_InterstitialAd_contructor,
@@ -52,7 +54,9 @@ SE_BIND_FUNC(jsb_Multi_InterstitialAd_setResultCallback)
 
 bool register_multi_interstitial_ad_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
-    core::getOrCreatePlainObject_r("ads", core::__eeObj, &adsObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("ads", eeObj, &adsObj);
 
     auto cls = se::Class::create("MultiInterstitialAd", adsObj, nullptr,
                                  _SE(jsb_Multi_InterstitialAd_contructor));
@@ -67,7 +71,7 @@ bool register_multi_interstitial_ad_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::MultiInterstitialAd>(cls);
+    JSBClassType::registerClass<MultiInterstitialAd>(cls);
 
     __jsb_Multi_InterstitialAd_proto = cls->getProto();
     __jsb_Multi_InterstitialAd_class = cls;

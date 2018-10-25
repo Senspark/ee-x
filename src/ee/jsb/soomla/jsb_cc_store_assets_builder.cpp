@@ -13,12 +13,6 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;
-se::Class* __jsb_CCStoreAssetsBuilder_class = nullptr;
-se::Class* __jsb_CCStoreAssets_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -54,6 +48,9 @@ void set_value(se::Value& value, soomla::CCStoreAssets* input) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;
+se::Class* __jsb_CCStoreAssetsBuilder_class = nullptr;
+se::Class* __jsb_CCStoreAssets_class = nullptr;
 
 const auto jsb_CCStoreAssetsBuilder_finalize =
     &ee::core::jsb_finalize<CCStoreAssetsBuilder>;

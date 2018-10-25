@@ -9,18 +9,9 @@
 #define JSB_LOGGER_HPP__
 
 #include "ee/jsb/jsb_fwd.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {
-
-class Logger;
-
-template <>
-const Logger& get_value(const se::Value& value);
-
-template <>
-void set_value<Logger&>(se::Value& value, Logger& input);
 
 bool register_logger_manual(se::Object* object);
 

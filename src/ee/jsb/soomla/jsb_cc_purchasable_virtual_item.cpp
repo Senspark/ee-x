@@ -13,11 +13,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCPurchasableVirtualItem_proto = nullptr;
-se::Class* __jsb_CCPurchasableVirtualItem_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -29,6 +24,8 @@ void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCPurchasableVirtualItem_proto = nullptr;
+se::Class* __jsb_CCPurchasableVirtualItem_class = nullptr;
 
 const auto jsb_CCPurchasableVirtualItem_finalize =
     &ee::core::jsb_finalize<CCPurchasableVirtualItem>;

@@ -13,12 +13,6 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCPurchaseWithMarketBuilder_proto = nullptr;
-se::Class* __jsb_CCPurchaseWithMarketBuilder_class = nullptr;
-se::Class* __jsb_CCPurchaseTypes_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -36,10 +30,13 @@ void set_value(se::Value& value, soomla::CCPurchaseType* input) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCPurchaseWithMarketBuilder_proto = nullptr;
+se::Class* __jsb_CCPurchaseWithMarketBuilder_class = nullptr;
+se::Class* __jsb_CCPurchaseTypes_class = nullptr;
 
-const static auto jsb_CCPurchaseWithMarketBuilder_finalize =
+const auto jsb_CCPurchaseWithMarketBuilder_finalize =
     &ee::core::jsb_finalize<CCPurchaseWithMarketBuilder>;
-const static auto jsb_CCPurchaseWithMarketBuilder_constructor =
+const auto jsb_CCPurchaseWithMarketBuilder_constructor =
     &ee::core::jsb_constructor<CCPurchaseWithMarketBuilder>;
 
 const auto jsb_CCPurchaseWithMarketBuilder_build =

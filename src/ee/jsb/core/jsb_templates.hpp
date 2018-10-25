@@ -238,7 +238,7 @@ bool jsb_method_call_on_ui_thread(se::State& s) {
 
     if (argc == args.size()) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        ee::runOnUiThread([cObj, args] {
+        runOnUiThread([cObj, args] {
             call_instance_func<InstanceType, FunctionPtr, Args...>(cObj, args,
                                                                    Indices());
         });
@@ -258,7 +258,7 @@ bool jsb_method_call_on_ui_thread_and_wait(se::State& s) {
 
     if (argc == args.size()) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        ee::runOnUiThreadAndWait([cObj, args] {
+        runOnUiThreadAndWait([cObj, args] {
             call_instance_func<InstanceType, FunctionPtr, Args...>(cObj, args,
                                                                    Indices());
         });
@@ -301,7 +301,7 @@ bool jsb_method_get_on_ui_thread(se::State& s) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         set_value<ReturnType>(
             s.rval(),
-            ee::runOnUiThreadAndWaitResult<ReturnType>(
+            runOnUiThreadAndWaitResult<ReturnType>(
                 [cObj, args]() -> ReturnType {
                     return std::forward<ReturnType>(
                         call_instance_func<InstanceType, FunctionPtr, Args...>(
@@ -327,7 +327,7 @@ bool jsb_accessor_get_on_ui_thread(se::State& s) {
     auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
     set_value<ReturnType>(
         s.rval(),
-        ee::runOnUiThreadAndWaitResult<ReturnType>(
+        runOnUiThreadAndWaitResult<ReturnType>(
             [cObj]() -> ReturnType { return std::bind(FunctionPtr, cObj)(); }));
     return true;
 }
@@ -350,7 +350,7 @@ bool jsb_accessor_set_on_ui_thread(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
         auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        ee::runOnUiThread([cObj, args] {
+        runOnUiThread([cObj, args] {
             (cObj->*FunctionPtr)(get_value<ArgumentType>(args[0]));
         });
         return true;

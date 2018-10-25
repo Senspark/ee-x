@@ -17,7 +17,7 @@ namespace soomla {
 se::Object* __jsb_CCSoomla_proto = nullptr;
 se::Class* __jsb_CCSoomla_class = nullptr;
 
-const static auto jsb_CCSoomla_initialize =
+const auto jsb_CCSoomla_initialize =
     &ee::core::jsb_static_call<&CCSoomla::initialize, const std::string&>;
 
 SE_BIND_FUNC(jsb_CCSoomla_initialize)
@@ -45,5 +45,4 @@ bool register_cc_soomla_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

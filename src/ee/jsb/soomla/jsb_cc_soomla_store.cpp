@@ -34,10 +34,10 @@ namespace soomla {
 se::Object* __jsb_CCSoomlaStore_proto = nullptr;
 se::Class* __jsb_CCSoomlaStore_class = nullptr;
 
-const static auto jsb_CCSoomlaStore_initialize =
+const auto jsb_CCSoomlaStore_initialize =
     &ee::core::jsb_static_call<&CCSoomlaStore::initialize, CCStoreAssets*,
                                cocos2d::ValueMap>;
-const static auto jsb_CCSoomlaStore_getInstance =
+const auto jsb_CCSoomlaStore_getInstance =
     &ee::core::jsb_static_get<CCSoomlaStore*, &CCSoomlaStore::getInstance>;
 const auto jsb_CCSoomlaStore_refreshMarketItemsDetails =
     &ee::core::jsb_method_call<

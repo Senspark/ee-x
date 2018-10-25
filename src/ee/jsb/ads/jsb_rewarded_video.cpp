@@ -19,22 +19,21 @@ namespace ads {
 se::Object* __jsb_RewardedVideo_proto = nullptr;
 se::Class* __jsb_RewardedVideo_class = nullptr;
 
-std::unordered_map<std::shared_ptr<ee::IRewardedVideo>, se::Object*>
+std::unordered_map<std::shared_ptr<IRewardedVideo>, se::Object*>
     __jsb_s_rewardedVideos;
-std::vector<std::shared_ptr<ee::IRewardedVideo>>
-    __jsb_s_rewardedVideoArchive;
+std::vector<std::shared_ptr<IRewardedVideo>> __jsb_s_rewardedVideoArchive;
 } // namespace ads
 
 namespace core {
 template <>
-std::shared_ptr<ee::IRewardedVideo> get_value(const se::Value& value) {
+std::shared_ptr<IRewardedVideo> get_value(const se::Value& value) {
     auto data =
-        static_cast<ee::IRewardedVideo*>(value.toObject()->getPrivateData());
-    return std::shared_ptr<ee::IRewardedVideo>(data);
+        static_cast<IRewardedVideo*>(value.toObject()->getPrivateData());
+    return std::shared_ptr<IRewardedVideo>(data);
 }
 
 template <>
-void set_value(se::Value& value, std::shared_ptr<ee::IRewardedVideo> input) {
+void set_value(se::Value& value, std::shared_ptr<IRewardedVideo> input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
         if (ads::__jsb_s_rewardedVideos.count(input) != 0) {
@@ -71,20 +70,17 @@ bool jsb_finalize<IRewardedVideo>(se::State& s) {
 } // namespace core
 
 namespace ads {
-constexpr auto jsb_RewardedVideo_finalize =
-    &ee::core::jsb_finalize<IRewardedVideo>;
+constexpr auto jsb_RewardedVideo_finalize = &core::jsb_finalize<IRewardedVideo>;
 constexpr auto jsb_RewardedVideo_isLoaded =
-    &ee::core::jsb_accessor_get_on_ui_thread<IRewardedVideo,
-                                             &IRewardedVideo::isLoaded, bool>;
+    &core::jsb_accessor_get_on_ui_thread<IRewardedVideo,
+                                         &IRewardedVideo::isLoaded, bool>;
 constexpr auto jsb_RewardedVideo_load =
-    &ee::core::jsb_method_call_on_ui_thread<IRewardedVideo,
-                                            &IRewardedVideo::load>;
+    &core::jsb_method_call_on_ui_thread<IRewardedVideo, &IRewardedVideo::load>;
 constexpr auto jsb_RewardedVideo_show =
-    &ee::core::jsb_method_call_on_ui_thread<IRewardedVideo,
-                                            &IRewardedVideo::show>;
+    &core::jsb_method_call_on_ui_thread<IRewardedVideo, &IRewardedVideo::show>;
 constexpr auto jsb_RewardedVideo_setResultCallback =
-    &ee::core::jsb_set_callback<IRewardedVideo,
-                                &IRewardedVideo::setResultCallback, bool>;
+    &core::jsb_set_callback<IRewardedVideo, &IRewardedVideo::setResultCallback,
+                            bool>;
 
 SE_BIND_FINALIZE_FUNC(jsb_RewardedVideo_finalize)
 SE_BIND_FUNC(jsb_RewardedVideo_isLoaded)
@@ -106,7 +102,7 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
                         _SE(jsb_RewardedVideo_setResultCallback));
     cls->install();
 
-    JSBClassType::registerClass<ee::IRewardedVideo>(cls);
+    JSBClassType::registerClass<IRewardedVideo>(cls);
 
     __jsb_RewardedVideo_proto = cls->getProto();
     __jsb_RewardedVideo_class = cls;

@@ -54,10 +54,12 @@ SE_BIND_FUNC(jsb_GoogleAnalytics_createTracker)
 SE_BIND_FUNC(jsb_GoogleAnalytics_doTests)
 
 bool register_google_bridge_manual(se::Object* globalObj) {
-    se::Object* __googleObj = nullptr;
-    core::getOrCreatePlainObject_r("google", core::__eeObj, &__googleObj);
+    se::Object* eeObj = nullptr;
+    se::Object* googleObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("google", eeObj, &googleObj);
 
-    auto cls = se::Class::create("GoogleAnalytics", __googleObj, nullptr,
+    auto cls = se::Class::create("GoogleAnalytics", googleObj, nullptr,
                                  _SE(jsb_GoogleAnalytics_constructor));
     cls->defineFinalizeFunction(_SE(jsb_GoogleAnalytics_finalize));
 
@@ -76,7 +78,7 @@ bool register_google_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::GoogleAnalytics>(cls);
+    JSBClassType::registerClass<GoogleAnalytics>(cls);
 
     __jsb_GoogleAnalytics_proto = cls->getProto();
     __jsb_GoogleAnalytics_class = cls;

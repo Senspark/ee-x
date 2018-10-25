@@ -5,6 +5,8 @@
 //  Created by Nguyen Van Quynh on 8/23/18
 //
 
+#include "ee/jsb/notification/jsb_notification_builder.hpp"
+
 #include "ee/Notification.hpp"
 
 #include "ee/jsb/core/jsb_core_common.hpp"
@@ -55,8 +57,9 @@ SE_BIND_FUNC(jsb_NotificationBuilder_setInterval)
 SE_BIND_FUNC(jsb_NotificationBuilder_setTag)
 
 bool register_notification_builder_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("notification", core::__eeObj,
-                                   &__notificationObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("notification", eeObj, &__notificationObj);
 
     auto cls =
         se::Class::create("NotificationBuilder", __notificationObj, nullptr,

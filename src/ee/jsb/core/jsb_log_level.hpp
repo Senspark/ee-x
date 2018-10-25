@@ -9,18 +9,9 @@
 #define JSB_LOG_LEVEL_HPP__
 
 #include "ee/jsb/jsb_fwd.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {
-
-class LogLevel;
-
-template <>
-const LogLevel& get_value<const LogLevel&>(const se::Value& value);
-
-template <>
-void set_value<const LogLevel&>(se::Value& value, const LogLevel& input);
 
 bool register_log_level_manual(se::Object* object);
 

@@ -1,5 +1,5 @@
 //
-//  jsb_admob.hpp
+//  jsb_admob_bridge.hpp
 //  hello_world-mobile
 //
 //  Created by Duc Nguyen on 7/15/18.
@@ -12,8 +12,6 @@
 
 namespace ee {
 namespace admob {
-
-extern se::Object* __admobObj;
 
 bool register_admob_bridge_manual(se::Object* object);
 

@@ -81,10 +81,12 @@ SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getDouble)
 SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getString)
 
 bool register_firebase_remote_config_manual(se::Object* globalObj) {
-    se::Object* __firebaseObj = nullptr;
-    core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
+    se::Object* firebaseObj = nullptr;
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
-    auto cls = se::Class::create("FirebaseRemoteConfig", __firebaseObj, nullptr,
+    auto cls = se::Class::create("FirebaseRemoteConfig", firebaseObj, nullptr,
                                  _SE(jsb_FirebaseRemoteConfig_constructor));
     cls->defineFinalizeFunction(_SE(jsb_FirebaseRemoteConfig_finalize));
 
@@ -107,7 +109,7 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::FirebaseRemoteConfig>(cls);
+    JSBClassType::registerClass<FirebaseRemoteConfig>(cls);
 
     __jsb_FirebaseRemoteConfig_proto = cls->getProto();
     __jsb_FirebaseRemoteConfig_class = cls;

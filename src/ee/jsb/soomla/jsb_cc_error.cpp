@@ -12,11 +12,6 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCError_proto = nullptr;
-se::Class* __jsb_CCError_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -37,9 +32,11 @@ void set_value(se::Value& value, soomla::CCError* input) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCError_proto = nullptr;
+se::Class* __jsb_CCError_class = nullptr;
 
 const auto jsb_CCError_finalize = &ee::core::jsb_finalize<CCError>;
-const static auto jsb_CCError_createWithValue =
+const auto jsb_CCError_createWithValue =
     &ee::core::jsb_static_get<CCError*, &CCError::createWithValue,
                               cocos2d::Value>;
 const auto jsb_CCError_getInfo =

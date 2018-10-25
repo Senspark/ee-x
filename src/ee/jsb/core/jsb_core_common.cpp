@@ -12,9 +12,6 @@
 namespace ee {
 namespace core {
 
-se::Object* __eeObj = nullptr;
-se::Object* __coreObj = nullptr;
-
 bool getOrCreatePlainObject_r(const char* name, se::Object* parent,
                               se::Object** outObj) {
     assert(parent != nullptr);

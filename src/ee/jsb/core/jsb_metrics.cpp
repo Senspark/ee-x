@@ -20,7 +20,7 @@ se::Class* __jsb_Metrics_class = nullptr;
 std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
 
 template <>
-void set_value(se::Value& value, const ee::Metrics& input) {
+void set_value(se::Value& value, const Metrics& input) {
     se::Object* obj = nullptr;
     if (__jsb_s_Metrics.count(&input) != 0) {
         obj = __jsb_s_Metrics[&input];
@@ -66,10 +66,12 @@ SE_BIND_FUNC(jsb_Metrics_toPixel)
 SE_BIND_FUNC(jsb_Metrics_toDip)
 
 bool register_metrics_manual(se::Object* globalObj) {
-    getOrCreatePlainObject_r("ee", globalObj, &__eeObj);
-    getOrCreatePlainObject_r("core", __eeObj, &__coreObj);
+    se::Object* eeObj = nullptr;
+    se::Object* coreObj = nullptr;
+    getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    getOrCreatePlainObject_r("core", eeObj, &coreObj);
 
-    auto cls = se::Class::create("Metrics", __coreObj, nullptr, nullptr);
+    auto cls = se::Class::create("Metrics", coreObj, nullptr, nullptr);
     cls->defineFunction("toPoint", _SE(jsb_Metrics_toPoint));
     cls->defineFunction("toPixel", _SE(jsb_Metrics_toPixel));
     cls->defineFunction("toDip", _SE(jsb_Metrics_toDip));
@@ -77,14 +79,14 @@ bool register_metrics_manual(se::Object* globalObj) {
     // Install the class to JS virtual machine
     cls->install();
 
-    JSBClassType::registerClass<ee::Metrics>(cls);
+    JSBClassType::registerClass<Metrics>(cls);
 
     __jsb_Metrics_proto = cls->getProto();
     __jsb_Metrics_class = cls;
 
     // Register static member variables and static member functions
     se::Value ctorVal;
-    if (__coreObj->getProperty("Metrics", &ctorVal) && ctorVal.isObject()) {
+    if (coreObj->getProperty("Metrics", &ctorVal) && ctorVal.isObject()) {
         ctorVal.toObject()->defineFunction("initialize",
                                            _SE(jsb_Metrics_initialize));
         ctorVal.toObject()->defineFunction("getWinSize",

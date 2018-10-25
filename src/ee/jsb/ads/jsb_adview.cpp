@@ -10,29 +10,29 @@
 #include <unordered_map>
 
 #include <ee/Ads.hpp>
+#include <ee/AdsFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
+#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace ads {
 se::Object* __jsb_AdView_proto = nullptr;
 se::Class* __jsb_AdView_class = nullptr;
 
-std::unordered_map<std::shared_ptr<ee::IAdView>, se::Object*>
-    __jsb_s_adviews;
-std::vector<std::shared_ptr<ee::IAdView>> __jsb_s_adviewArchive;
+std::unordered_map<std::shared_ptr<IAdView>, se::Object*> __jsb_s_adviews;
+std::vector<std::shared_ptr<IAdView>> __jsb_s_adviewArchive;
 } // namespace ads
 
 namespace core {
 template <>
-std::shared_ptr<ee::IAdView> get_value(const se::Value& value) {
-    auto data = static_cast<ee::IAdView*>(value.toObject()->getPrivateData());
-    return std::shared_ptr<ee::IAdView>(data);
+std::shared_ptr<IAdView> get_value(const se::Value& value) {
+    auto data = static_cast<IAdView*>(value.toObject()->getPrivateData());
+    return std::shared_ptr<IAdView>(data);
 }
 
 template <>
-void set_value(se::Value& value, std::shared_ptr<ee::IAdView> input) {
+void set_value(se::Value& value, std::shared_ptr<IAdView> input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
         if (ads::__jsb_s_adviews.count(input) != 0) {
@@ -69,33 +69,32 @@ namespace ads {
 
 se::Object* __adsObj = nullptr;
 
-const static auto jsb_AdView_finalize = &ee::core::jsb_finalize<IAdView>;
-const static auto jsb_AdView_isLoaded =
-    &ee::core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::isLoaded, bool>;
-const static auto jsb_AdView_load =
-    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::load>;
-const static auto jsb_AdView_getAnchor =
-    &ee::core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getAnchor,
-                                             const std::pair<float, float>&>;
-const static auto jsb_AdView_setAnchor =
-    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setAnchor, float,
-                                            float>;
-const static auto jsb_AdView_getPosition =
-    &ee::core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getPosition,
-                                             const std::pair<float, float>&>;
-const static auto jsb_AdView_setPosition =
-    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPosition,
-                                            float, float>;
-const static auto jsb_AdView_getSize = &ee::core::jsb_accessor_get_on_ui_thread<
+const auto jsb_AdView_finalize = &core::jsb_finalize<IAdView>;
+const auto jsb_AdView_isLoaded =
+    &core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::isLoaded, bool>;
+const auto jsb_AdView_load =
+    &core::jsb_method_call_on_ui_thread<IAdView, &IAdView::load>;
+const auto jsb_AdView_getAnchor =
+    &core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getAnchor,
+                                         const std::pair<float, float>&>;
+const auto jsb_AdView_setAnchor =
+    &core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setAnchor, float,
+                                        float>;
+const auto jsb_AdView_getPosition =
+    &core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::getPosition,
+                                         const std::pair<float, float>&>;
+const auto jsb_AdView_setPosition =
+    &core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setPosition, float,
+                                        float>;
+const auto jsb_AdView_getSize = &core::jsb_accessor_get_on_ui_thread<
     IAdView, &IAdView::getSize, const std::pair<std::int32_t, std::int32_t>&>;
-const static auto jsb_AdView_setSize =
-    &ee::core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setSize,
-                                            std::int32_t, std::int32_t>;
-const static auto jsb_AdView_setVisible =
-    &ee::core::jsb_accessor_set_on_ui_thread<IAdView, &IAdView::setVisible,
-                                             bool>;
-const static auto jsb_AdView_setLoadCallback =
-    &ee::core::jsb_set_callback<IAdView, &IAdView::setLoadCallback, bool>;
+const auto jsb_AdView_setSize =
+    &core::jsb_method_call_on_ui_thread<IAdView, &IAdView::setSize,
+                                        std::int32_t, std::int32_t>;
+const auto jsb_AdView_setVisible =
+    &core::jsb_accessor_set_on_ui_thread<IAdView, &IAdView::setVisible, bool>;
+const auto jsb_AdView_setLoadCallback =
+    &core::jsb_set_callback<IAdView, &IAdView::setLoadCallback, bool>;
 
 SE_BIND_FINALIZE_FUNC(jsb_AdView_finalize)
 SE_BIND_FUNC(jsb_AdView_isLoaded)
@@ -128,7 +127,7 @@ bool register_adview_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::IAdView>(cls);
+    JSBClassType::registerClass<IAdView>(cls);
 
     __jsb_AdView_proto = cls->getProto();
     __jsb_AdView_class = cls;

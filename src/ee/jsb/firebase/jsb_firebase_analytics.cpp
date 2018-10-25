@@ -58,10 +58,12 @@ SE_BIND_FUNC(jsb_FirebaseAnalytics_setUserId)
 SE_BIND_FUNC(jsb_FirebaseAnalytics_logEvent)
 
 bool register_firebase_analytics_manual(se::Object* globalObj) {
-    se::Object* __firebaseObj = nullptr;
-    core::getOrCreatePlainObject_r("firebase", core::__eeObj, &__firebaseObj);
+    se::Object* eeObj = nullptr;
+    se::Object* firebaseObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
-    auto cls = se::Class::create("FirebaseAnalytics", __firebaseObj, nullptr,
+    auto cls = se::Class::create("FirebaseAnalytics", firebaseObj, nullptr,
                                  _SE(jsb_FirebaseAnalytics_constructor));
     cls->defineFinalizeFunction(_SE(jsb_FirebaseAnalytics_finalize));
 
@@ -77,7 +79,7 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::FirebaseAnalytics>(cls);
+    JSBClassType::registerClass<FirebaseAnalytics>(cls);
 
     __jsb_FirebaseAnalytics_proto = cls->getProto();
     __jsb_FirebaseAnalytics_class = cls;

@@ -15,7 +15,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace ironsource {
 
 se::Object* __jsb_IronSource_proto = nullptr;
@@ -45,8 +44,9 @@ SE_BIND_FUNC(jsb_IronSource_createRewardedVideo)
 SE_BIND_FUNC(jsb_IronSource_createInterstitialAd)
 
 bool register_iron_source_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("ironsource", core::__eeObj,
-                                   &__ironsourceObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("ironsource", eeObj, &__ironsourceObj);
 
     auto cls = se::Class::create("IronSource", __ironsourceObj, nullptr,
                                  _SE(jsb_IronSource_constructor));
@@ -60,7 +60,7 @@ bool register_iron_source_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::IronSource>(cls);
+    JSBClassType::registerClass<IronSource>(cls);
 
     __jsb_IronSource_proto = cls->getProto();
     __jsb_IronSource_class = cls;

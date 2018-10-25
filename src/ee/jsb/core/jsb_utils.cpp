@@ -4,12 +4,12 @@
 //
 //  Created by Duc Nguyen on 7/12/18.
 //
+#include "ee/jsb/core/jsb_utils.hpp"
 
 #include <ee/Core.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/core/jsb_utils.hpp"
 
 namespace ee {
 int getIntergerUserDefault(std::string key) {
@@ -51,23 +51,23 @@ SE_BIND_FUNC(jsb_getIntergerUserDefault)
 SE_BIND_FUNC(jsb_getDeviceId)
 
 bool register_utils_manual(se::Object* globalObj) {
-    if (__eeObj == nullptr || __coreObj == nullptr) {
-        getOrCreatePlainObject_r("ee", globalObj, &__eeObj);
-        getOrCreatePlainObject_r("core", __eeObj, &__coreObj);
-    }
+    se::Object* eeObj = nullptr;
+    se::Object* coreObj = nullptr;
+    getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    getOrCreatePlainObject_r("core", eeObj, &coreObj);
 
-    __coreObj->defineFunction("getSHA1CertificateFingerprint",
-                              _SE(jsb_getSHA1CertificateFingerprint));
-    __coreObj->defineFunction("getVersionName", _SE(jsb_getVersionName));
-    __coreObj->defineFunction("getVersionCode", _SE(jsb_getVersionCode));
-    __coreObj->defineFunction("isApplicationInstalled",
-                              _SE(jsb_isApplicationInstalled));
-    __coreObj->defineFunction("openApplication", _SE(jsb_openApplication));
-    __coreObj->defineFunction("sendMail", _SE(jsb_sendMail));
-    __coreObj->defineFunction("isTablet", _SE(jsb_isTablet));
-    __coreObj->defineFunction("getIntergerUserDefault",
-                              _SE(jsb_getIntergerUserDefault));
-    __coreObj->defineFunction("getDeviceId", _SE(jsb_getDeviceId));
+    coreObj->defineFunction("getSHA1CertificateFingerprint",
+                            _SE(jsb_getSHA1CertificateFingerprint));
+    coreObj->defineFunction("getVersionName", _SE(jsb_getVersionName));
+    coreObj->defineFunction("getVersionCode", _SE(jsb_getVersionCode));
+    coreObj->defineFunction("isApplicationInstalled",
+                            _SE(jsb_isApplicationInstalled));
+    coreObj->defineFunction("openApplication", _SE(jsb_openApplication));
+    coreObj->defineFunction("sendMail", _SE(jsb_sendMail));
+    coreObj->defineFunction("isTablet", _SE(jsb_isTablet));
+    coreObj->defineFunction("getIntergerUserDefault",
+                            _SE(jsb_getIntergerUserDefault));
+    coreObj->defineFunction("getDeviceId", _SE(jsb_getDeviceId));
     return true;
 }
 } // namespace core

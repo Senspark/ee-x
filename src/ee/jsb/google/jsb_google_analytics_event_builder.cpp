@@ -16,8 +16,8 @@ namespace ee {
 
 namespace core {
 template <>
-ee::GoogleEventBuilder get_value(const se::Value& value) {
-    return *static_cast<ee::GoogleEventBuilder*>(
+GoogleEventBuilder get_value(const se::Value& value) {
+    return *static_cast<GoogleEventBuilder*>(
         value.toObject()->getPrivateData());
 }
 } // namespace core
@@ -27,29 +27,23 @@ namespace google {
 se::Object* __jsb_EventBuilder_proto = nullptr;
 se::Class* __jsb_EventBuilder_class = nullptr;
 
-const auto jsb_EventBuilder_finalize =
-    &core::jsb_finalize<ee::GoogleEventBuilder>;
+const auto jsb_EventBuilder_finalize = &core::jsb_finalize<GoogleEventBuilder>;
 const auto jsb_EventBuilder_constructor =
-    &core::jsb_constructor<ee::GoogleEventBuilder, const std::string&,
+    &core::jsb_constructor<GoogleEventBuilder, const std::string&,
                            const std::string&>;
-const auto jsb_EventBuilder_setCategory =
-    &core::jsb_accessor_set<ee::GoogleEventBuilder,
-                            &ee::GoogleEventBuilder::setCategory,
-                            const std::string&>;
+const auto jsb_EventBuilder_setCategory = &core::jsb_accessor_set<
+    GoogleEventBuilder, &GoogleEventBuilder::setCategory, const std::string&>;
 const auto jsb_EventBuilder_setAction =
-    &core::jsb_accessor_set<ee::GoogleEventBuilder,
-                            &ee::GoogleEventBuilder::setAction,
+    &core::jsb_accessor_set<GoogleEventBuilder, &GoogleEventBuilder::setAction,
                             const std::string&>;
 const auto jsb_EventBuilder_setLabel =
-    &core::jsb_accessor_set<ee::GoogleEventBuilder,
-                            &ee::GoogleEventBuilder::setLabel,
+    &core::jsb_accessor_set<GoogleEventBuilder, &GoogleEventBuilder::setLabel,
                             const std::string&>;
 const auto jsb_EventBuilder_setValue =
-    &core::jsb_accessor_set<ee::GoogleEventBuilder,
-                            &ee::GoogleEventBuilder::setValue, int>;
+    &core::jsb_accessor_set<GoogleEventBuilder, &GoogleEventBuilder::setValue,
+                            int>;
 const auto jsb_EventBuilder_build =
-    &core::jsb_method_get<ee::GoogleEventBuilder,
-                          &ee::GoogleEventBuilder::build,
+    &core::jsb_method_get<GoogleEventBuilder, &GoogleEventBuilder::build,
                           const std::map<std::string, std::string>&>;
 
 SE_BIND_FINALIZE_FUNC(jsb_EventBuilder_finalize)
@@ -62,10 +56,12 @@ SE_BIND_FUNC(jsb_EventBuilder_setValue)
 SE_BIND_FUNC(jsb_EventBuilder_build)
 
 bool register_google_event_builder_manual(se::Object* globalObj) {
-    se::Object* __googleObj = nullptr;
-    core::getOrCreatePlainObject_r("google", core::__eeObj, &__googleObj);
+    se::Object* eeObj = nullptr;
+    se::Object* googleObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("google", eeObj, &googleObj);
 
-    auto cls = se::Class::create("EventBuilder", __googleObj, nullptr,
+    auto cls = se::Class::create("EventBuilder", googleObj, nullptr,
                                  _SE(jsb_EventBuilder_constructor));
     cls->defineFinalizeFunction(_SE(jsb_EventBuilder_finalize));
 
@@ -77,7 +73,7 @@ bool register_google_event_builder_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::GoogleEventBuilder>(cls);
+    JSBClassType::registerClass<GoogleEventBuilder>(cls);
 
     __jsb_EventBuilder_proto = cls->getProto();
     __jsb_EventBuilder_class = cls;

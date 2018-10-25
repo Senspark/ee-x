@@ -8,14 +8,13 @@
 
 #include "ee/jsb/vungle/jsb_vungle_bridge.hpp"
 
-#include "ee/Vungle.hpp"
+#include <ee/Vungle.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace vungle {
 
 se::Object* __jsb_Vungle_proto = nullptr;
@@ -35,7 +34,9 @@ SE_BIND_CTOR(jsb_Vungle_constructor, __jsb_Vungle_class, jsb_Vungle_finalize)
 SE_BIND_FUNC(jsb_Vungle_createRewardedVideo)
 
 bool register_vungle_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("vungle", core::__eeObj, &__vungleObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("vungle", eeObj, &__vungleObj);
 
     auto cls = se::Class::create("Vungle", __vungleObj, nullptr,
                                  _SE(jsb_Vungle_constructor));
@@ -46,7 +47,7 @@ bool register_vungle_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::Vungle>(cls);
+    JSBClassType::registerClass<Vungle>(cls);
 
     __jsb_Vungle_proto = cls->getProto();
     __jsb_Vungle_class = cls;

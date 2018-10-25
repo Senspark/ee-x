@@ -13,11 +13,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 
-namespace soomla {
-se::Object* __jsb_CCVirtualCurrencyPack_proto = nullptr;
-se::Class* __jsb_CCVirtualCurrencyPack_class = nullptr;
-} // namespace soomla
-
 namespace ee {
 namespace core {
 
@@ -30,6 +25,8 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
 } // namespace ee
 
 namespace soomla {
+se::Object* __jsb_CCVirtualCurrencyPack_proto = nullptr;
+se::Class* __jsb_CCVirtualCurrencyPack_class = nullptr;
 
 const auto jsb_CCVirtualCurrencyPack_finalize =
     &ee::core::jsb_finalize<CCVirtualCurrencyPack>;

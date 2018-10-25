@@ -1,9 +1,10 @@
+#include "ee/vungle/VungleBridge.hpp"
+
 #include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/vungle/VungleBridge.hpp"
 #include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 #include <ee/nlohmann/json.hpp>

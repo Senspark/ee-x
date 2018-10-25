@@ -94,8 +94,9 @@ SE_BIND_FUNC(jsb_Crashlytics_trackCustomEvent)
 SE_BIND_FUNC(jsb_Crashlytics_trackInvite)
 
 bool register_crashlytics_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("crashlytics", core::__eeObj,
-                                   &__crashlyticsObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("crashlytics", eeObj, &__crashlyticsObj);
 
     auto cls = se::Class::create("Crashlytics", __crashlyticsObj, nullptr,
                                  _SE(jsb_Crashlytics_constructor));
@@ -122,7 +123,7 @@ bool register_crashlytics_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::Crashlytics>(cls);
+    JSBClassType::registerClass<Crashlytics>(cls);
 
     __jsb_Crashlytics_proto = cls->getProto();
     __jsb_Crashlytics_class = cls;

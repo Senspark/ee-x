@@ -48,7 +48,9 @@ SE_BIND_FUNC(jsb_UnityAds_createRewardedVideo)
 SE_BIND_FUNC(jsb_UnityAds_createInterstitialAd)
 
 bool register_unity_ads_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("unityads", core::__eeObj, &__unityadsObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("unityads", eeObj, &__unityadsObj);
 
     auto cls = se::Class::create("UnityAds", __unityadsObj, nullptr,
                                  _SE(jsb_UnityAds_constructor));
@@ -64,7 +66,7 @@ bool register_unity_ads_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::UnityAds>(cls);
+    JSBClassType::registerClass<UnityAds>(cls);
 
     __jsb_UnityAds_proto = cls->getProto();
     __jsb_UnityAds_class = cls;

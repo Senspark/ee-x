@@ -4,6 +4,7 @@
 //
 //  Created by Nguyen Van Quynh on 8/23/18
 //
+#include "ee/jsb/notification/jsb_notification_bridge.hpp"
 
 #include "ee/Notification.hpp"
 
@@ -22,7 +23,7 @@ const auto jsb_Notification_finalize = &core::jsb_finalize<Notification>;
 const auto jsb_Notification_constructor = &core::jsb_constructor<Notification>;
 const auto jsb_Notification_schedule =
     &core::jsb_method_call<Notification, &Notification::schedule,
-                           ee::NotificationBuilder>;
+                           NotificationBuilder>;
 const auto jsb_Notification_unschedule =
     &core::jsb_method_call<Notification, &Notification::unschedule, int>;
 const auto jsb_Notification_clearAll =
@@ -36,8 +37,9 @@ SE_BIND_FUNC(jsb_Notification_unschedule)
 SE_BIND_FUNC(jsb_Notification_clearAll)
 
 bool register_notification_bridge_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("notification", core::__eeObj,
-                                   &__notificationObj);
+    se::Object* eeObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("notification", eeObj, &__notificationObj);
 
     auto cls = se::Class::create("Notification", __notificationObj, nullptr,
                                  _SE(jsb_Notification_constructor));
@@ -49,7 +51,7 @@ bool register_notification_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<ee::Notification>(cls);
+    JSBClassType::registerClass<Notification>(cls);
 
     __jsb_Notification_proto = cls->getProto();
     __jsb_Notification_class = cls;

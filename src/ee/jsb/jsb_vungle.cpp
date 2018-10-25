@@ -7,10 +7,13 @@
 
 #include "ee/jsb/jsb_vungle.hpp"
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include "ee/jsb/vungle/jsb_vungle_bridge.hpp"
 
 namespace ee {
-namespace unityads {
-bool register_unity_ads_manual(se::Object* object);
-} // namespace unityads
+namespace vungle {
+bool register_vungle_manual(se::Object* object) {
+    register_vungle_bridge_manual(object);
+    return true;
+}
+} // namespace vungle
 } // namespace ee

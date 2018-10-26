@@ -53,10 +53,11 @@ constexpr auto jsb_Logger_setSystemLogger =
     &jsb_static_call<&Logger::setSystemLogger, const Logger&>;
 constexpr auto jsb_Logger_setEnabled =
     &jsb_accessor_set<Logger, &Logger::setEnabled, bool>;
-constexpr auto jsb_Logger_log = &jsb_method_call<
-    Logger,
-    (void (Logger::*)(const LogLevel&, std::string, ...) const) & Logger::log,
-    const LogLevel&, std::string>;
+constexpr auto jsb_Logger_log =
+    &jsb_method_call<Logger,
+                     static_cast<void (Logger::*)(const LogLevel&, std::string,
+                                                  ...) const>(&Logger::log),
+                     const LogLevel&, std::string>;
 constexpr auto jsb_Logger_verbose =
     &jsb_method_call<Logger, &Logger::verbose, std::string>;
 constexpr auto jsb_Logger_debug =

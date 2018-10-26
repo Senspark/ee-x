@@ -187,5 +187,4 @@ void CCMarketItem::putMarketPriceMicrosToValueMap(cocos2d::ValueMap& map) {
     map[CCStoreConsts::JSON_MARKET_ITEM_MARKET_PRICE_MICROS] =
         getMarketPriceMicros();
 }
-
 }; // namespace soomla

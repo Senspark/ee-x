@@ -115,6 +115,5 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace firebase
 } // namespace ee

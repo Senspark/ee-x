@@ -37,7 +37,7 @@ Metrics::ResolutionPolicy get_value(const se::Value& value) {
 }
 
 const auto jsb_Metrics_initialize =
-    &jsb_static_call<(void (*)(float))(Metrics::initialize), float>;
+    &jsb_static_call<static_cast<void (*)(float)>(Metrics::initialize), float>;
 const auto jsb_Metrics_getWinSize =
     &jsb_static_get<const std::pair<float, float>&, &Metrics::getWinSize>;
 const auto jsb_Metrics_getFrameSize =

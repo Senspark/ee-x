@@ -139,5 +139,4 @@ void CCPurchasableVirtualItem::putPurchaseTypeToValueMap(
     
     dict[CCStoreConsts::JSON_PURCHASABLE_ITEM] = purchasableObj;
 }
-
 } // namespace soomla

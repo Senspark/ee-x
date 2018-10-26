@@ -100,6 +100,5 @@ bool register_native_ad_layout_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace admob
 } // namespace ee

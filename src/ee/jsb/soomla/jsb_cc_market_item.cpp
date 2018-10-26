@@ -63,5 +63,4 @@ bool register_cc_market_item_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

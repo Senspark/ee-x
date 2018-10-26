@@ -303,5 +303,4 @@ void CCSchedule::fillActivationLimitFromValueMap(
 void CCSchedule::putActivationLimitToValueMap(cocos2d::ValueMap& map) {
     map[CCCoreConsts::JSON_SCHE_APPROVALS] = mActivationLimit;
 }
-
 } // namespace soomla

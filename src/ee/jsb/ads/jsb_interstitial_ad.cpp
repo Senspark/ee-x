@@ -51,7 +51,7 @@ void set_value(se::Value& value, std::shared_ptr<IInterstitialAd> input) {
 
 template <>
 bool jsb_finalize<IInterstitialAd>(se::State& s) {
-    auto* interstitialAdPtr =
+    auto interstitialAdPtr =
         static_cast<IInterstitialAd*>(s.nativeThisObject());
     auto iter =
         std::find_if(ads::__jsb_s_interstitialAdArchive.cbegin(),
@@ -91,7 +91,8 @@ SE_BIND_FUNC(jsb_InterstitialAd_show)
 SE_BIND_FUNC(jsb_InterstitialAd_setResultCallback)
 
 se::Class* getIInterstitialClass() {
-    CCASSERT(__jsb_InterstitialAd_class != nullptr, "__jsb_InterstitialAd_class is null");
+    CCASSERT(__jsb_InterstitialAd_class != nullptr,
+             "__jsb_InterstitialAd_class is null");
     return __jsb_InterstitialAd_class;
 }
 
@@ -120,6 +121,5 @@ bool register_interstitial_ad_manual(se::Object* globalObj) {
 
     return true;
 }
-
 } // namespace ads
 } // namespace ee

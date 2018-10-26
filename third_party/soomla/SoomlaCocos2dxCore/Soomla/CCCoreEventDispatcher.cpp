@@ -119,5 +119,4 @@ void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
         CCCoreConsts::EVENT_CUSTOM, &eventDict);
 #endif
 }
-
 } // namespace soomla

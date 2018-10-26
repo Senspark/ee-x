@@ -336,7 +336,7 @@ template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
 bool jsb_accessor_set(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
-        auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
+        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         std::bind(FunctionPtr, cObj, get_value<ArgumentType>(args[0]))();
         return true;
     }
@@ -349,7 +349,7 @@ template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
 bool jsb_accessor_set_on_ui_thread(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
-        auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
+        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         runOnUiThread([cObj, args] {
             (cObj->*FunctionPtr)(get_value<ArgumentType>(args[0]));
         });
@@ -372,7 +372,7 @@ template <typename InstanceType, auto MemberPtr, typename ArgumentType>
 bool jsb_propterty_set(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
-        auto* cObj = static_cast<InstanceType*>(s.nativeThisObject());
+        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         cObj->*MemberPtr = get_value<std::decay_t<ArgumentType>>(args[0]);
         return true;
     }

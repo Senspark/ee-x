@@ -22,40 +22,25 @@ import java.util.Map;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public
-class Vungle implements PluginProtocol {
-private
-    static final String k__initialize = "Vungle_initialize";
-private
-    static final String k__hasRewardedVideo = "Vungle_hasRewardedVideo";
-private
-    static final String k__showRewardedVideo = "Vungle_showRewardedVideo";
-private
-    static final String k__onStart = "Vungle_onStart";
-private
-    static final String k__onEnd = "Vungle_onEnd";
-private
-    static final String k__onUnavailable = "Vungle_onUnavailable";
-private
-    static final String k__loadVideoAd = "Vungle_loadVideoAd";
+public class Vungle implements PluginProtocol {
+    private static final String k__initialize        = "Vungle_initialize";
+    private static final String k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
+    private static final String k__showRewardedVideo = "Vungle_showRewardedVideo";
+    private static final String k__onStart           = "Vungle_onStart";
+    private static final String k__onEnd             = "Vungle_onEnd";
+    private static final String k__onUnavailable     = "Vungle_onUnavailable";
+    private static final String k__loadVideoAd       = "Vungle_loadVideoAd";
 
-private
-    static final Logger _logger = new Logger(Vungle.class.getName());
+    private static final Logger _logger = new Logger(Vungle.class.getName());
 
-private
-    Context _context;
-private
-    boolean _initializing;
+    private Context _context;
+    private boolean _initializing;
 
-private
-    PlayAdCallback _playAdCallback;
-private
-    LoadAdCallback _loadAdCallback;
-private
-    InitCallback _initCallback;
+    private PlayAdCallback _playAdCallback;
+    private LoadAdCallback _loadAdCallback;
+    private InitCallback   _initCallback;
 
-public
-    Vungle(Context context) {
+    public Vungle(Context context) {
         Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = context;
@@ -64,107 +49,110 @@ public
         _logger.debug("constructor end.");
     }
 
-    @NonNull @Override public String getPluginName() {
+    @NonNull
+    @Override
+    public String getPluginName() {
         return "Vungle";
     }
 
-    @Override public void onCreate(@NonNull Activity activity) {
+    @Override
+    public void onCreate(@NonNull Activity activity) {
         // do nothing
     }
 
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
         // do nothing
     }
 
-    @Override public void onStop() {
+    @Override
+    public void onStop() {
         // do nothing
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         // do nothing
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         // do nothing
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         // do nothing
     }
 
-    @Override public void destroy() {
+    @Override
+    public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
     }
 
-    @Override public boolean onActivityResult(int requestCode, int responseCode,
-                                              Intent data) {
+    @Override
+    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         return false;
     }
 
-    @Override public boolean onBackPressed() {
+    @Override
+    public boolean onBackPressed() {
         return false;
     }
 
-private
-    void registerHandlers() {
+    private void registerHandlers() {
         Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.registerHandler(
-            new MessageHandler() {
-                @SuppressWarnings("UnnecessaryLocalVariable") @NonNull
-                    @Override public String
-                    handle(@NonNull String message) {
-                    Map<String, Object> dict =
-                        JsonUtils.convertStringToDictionary(message);
-                    assert dict != null;
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assert dict != null;
 
-                    String gameId = (String)dict.get("gameId");
+                String gameId = (String) dict.get("gameId");
 
-                    initialize(gameId);
+                initialize(gameId);
 
-                    return "";
-                }
-            },
-            k__initialize);
+                return "";
+            }
+        }, k__initialize);
 
-        bridge.registerHandler(
-            new MessageHandler() {
-                @NonNull @Override public String handle(
-                    @NonNull String message) {
-                    return Utils.toString(hasRewardedVideo(message));
-                }
-            },
-            k__hasRewardedVideo);
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return Utils.toString(hasRewardedVideo(message));
+            }
+        }, k__hasRewardedVideo);
 
-        bridge.registerHandler(
-            new MessageHandler() {
-                @SuppressWarnings("UnnecessaryLocalVariable") @NonNull
-                    @Override public String
-                    handle(@NonNull String message) {
-                    showRewardedVideo(message);
+        bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                showRewardedVideo(message);
 
-                    // Compliant with iOS.
-                    return "true";
-                }
-            },
-            k__showRewardedVideo);
+                // Compliant with iOS.
+                return "true";
+            }
+        }, k__showRewardedVideo);
 
-        bridge.registerHandler(
-            new MessageHandler() {
-                @NonNull @Override public String handle(
-                    @NonNull String message) {
-                    loadVideoAd(message);
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                loadVideoAd(message);
 
-                    return "";
-                }
-            },
-            k__loadVideoAd);
+                return "";
+            }
+        }, k__loadVideoAd);
     }
 
-private
-    void deregisterHandlers() {
+    private void deregisterHandlers() {
         Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
@@ -174,8 +162,8 @@ private
         bridge.deregisterHandler(k__loadVideoAd);
     }
 
-    @SuppressWarnings("WeakerAccess") public void initialize(
-        final @NonNull String gameId) {
+    @SuppressWarnings("WeakerAccess")
+    public void initialize(final @NonNull String gameId) {
         Utils.checkMainThread();
         if (_initializing) {
             return;
@@ -184,50 +172,51 @@ private
         _initializing = true;
 
         _initCallback = new InitCallback() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
                 _logger.info("vunglePub.init onSuccess");
                 _initializing = false;
             }
 
-            @Override public void onError(Throwable throwable) {
+            @Override
+            public void onError(Throwable throwable) {
                 _logger.info("vunglePub.init onFailure");
                 _initializing = false;
             }
 
-            @Override public void onAutoCacheAdAvailable(String s) {
+            @Override
+            public void onAutoCacheAdAvailable(String s) {
             }
         };
 
         com.vungle.warren.Vungle.init(gameId, _context, _initCallback);
 
         _playAdCallback = new PlayAdCallback() {
-            @Override public void onAdStart(String s) {
+            @Override
+            public void onAdStart(String s) {
                 _logger.info("onAdStart");
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onStart);
             }
 
-            @Override public void onAdEnd(String s, boolean completed,
-                                          boolean isCTAClicked) {
-                _logger.info("onAdEnd: successful = " + completed +
-                             " clicked = " + isCTAClicked);
+            @Override
+            public void onAdEnd(String s, boolean completed, boolean isCTAClicked) {
+                _logger.info("onAdEnd: successful = " + completed + " clicked = " + isCTAClicked);
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onEnd, Utils.toString(completed));
             }
 
-            @Override public void onError(String placementReferenceId,
-                                          Throwable throwable) {
+            @Override
+            public void onError(String placementReferenceId, Throwable throwable) {
                 _logger.info("onUnableToPlayAd: " + placementReferenceId);
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUnavailable);
 
                 try {
-                    VungleException ex = (VungleException)throwable;
+                    VungleException ex = (VungleException) throwable;
 
-                    if (ex.getExceptionCode() ==
-                        VungleException.VUNGLE_NOT_INTIALIZED) {
-                        com.vungle.warren.Vungle.init(gameId, _context,
-                                                      _initCallback);
+                    if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
+                        com.vungle.warren.Vungle.init(gameId, _context, _initCallback);
                     }
                 } catch (ClassCastException cex) {
                     _logger.info("Error: " + cex.getMessage());
@@ -236,20 +225,19 @@ private
         };
 
         _loadAdCallback = new LoadAdCallback() {
-            @Override public void onAdLoad(String placementReferenceId) {
+            @Override
+            public void onAdLoad(String placementReferenceId) {
                 _logger.info("onAdLoaded: " + placementReferenceId);
             }
 
-            @Override public void onError(String placementReferenceId,
-                                          Throwable throwable) {
-                _logger.info("onAdLoadError: " + placementReferenceId +
-                             " reason: " + throwable.getMessage());
+            @Override
+            public void onError(String placementReferenceId, Throwable throwable) {
+                _logger.info("onAdLoadError: " + placementReferenceId + " reason: " + throwable.getMessage());
             }
         };
     }
 
-private
-    boolean hasRewardedVideo(String placementId) {
+    private boolean hasRewardedVideo(String placementId) {
         if (!com.vungle.warren.Vungle.isInitialized()) {
             return false;
         }
@@ -257,15 +245,12 @@ private
         return com.vungle.warren.Vungle.canPlayAd(placementId);
     }
 
-private
-    void showRewardedVideo(String placementId) {
+    private void showRewardedVideo(String placementId) {
         Utils.checkMainThread();
-        com.vungle.warren.Vungle.playAd(placementId, new AdConfig(),
-                                        _playAdCallback);
+        com.vungle.warren.Vungle.playAd(placementId, new AdConfig(), _playAdCallback);
     }
 
-private
-    void loadVideoAd(String placementId) {
+    private void loadVideoAd(String placementId) {
         Utils.checkMainThread();
         com.vungle.warren.Vungle.loadAd(placementId, _loadAdCallback);
     }

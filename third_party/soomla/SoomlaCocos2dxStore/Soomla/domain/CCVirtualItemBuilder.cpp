@@ -33,5 +33,4 @@ Self& Self::setItemId(const std::string& itemId) {
     virtualItem_->itemId_ = std::make_unique<std::string>(itemId);
     return *this;
 }
-
 } // namespace soomla

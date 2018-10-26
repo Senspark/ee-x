@@ -147,6 +147,5 @@ cocos2d::ValueMap CCNdkBridge::callNative(const cocos2d::ValueMap& params,
 
     return retParams.asValueMap();
 }
-
 }
 } // namespace soomla

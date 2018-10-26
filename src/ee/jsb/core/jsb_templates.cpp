@@ -255,6 +255,5 @@ void set_value(se::Value& value,
     auto obj = create_JSON_object<std::map<std::string, std::string>>(input);
     value.setObject(obj);
 }
-
 } // namespace core
 } // namespace ee

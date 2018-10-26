@@ -69,6 +69,5 @@ bool register_unity_ads_bridge_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace unityads
 } // namespace ee

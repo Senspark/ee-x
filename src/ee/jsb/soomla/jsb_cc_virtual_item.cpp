@@ -28,7 +28,6 @@ soomla::CCVirtualItem* get_value(const se::Value& value) {
     return static_cast<soomla::CCVirtualItem*>(
         value.toObject()->getPrivateData());
 }
-
 } // namespace core
 } // namespace ee
 

@@ -30,5 +30,4 @@ CCPurchaseType* Self::build() {
     CC_ASSERT(price_);
     return CCPurchaseWithMarket::create(*productId_, *price_);
 }
-
 } // namespace soomla

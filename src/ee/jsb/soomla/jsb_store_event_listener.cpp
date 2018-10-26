@@ -160,5 +160,4 @@ bool register_store_event_listener_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

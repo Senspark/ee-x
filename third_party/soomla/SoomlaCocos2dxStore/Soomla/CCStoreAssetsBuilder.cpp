@@ -66,5 +66,4 @@ Self& CCStoreAssetsBuilder::addCategorie(soomla::CCVirtualCategory* category) {
     storeAssets_->categories_.pushBack(category);
     return *this;
 }
-
 } // namespace soomla

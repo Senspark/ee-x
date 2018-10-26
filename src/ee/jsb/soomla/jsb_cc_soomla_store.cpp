@@ -25,7 +25,6 @@ template <>
 void set_value(se::Value& value, soomla::CCSoomlaStore* input) {
     set_value_from_pointer(value, input);
 }
-
 } // namespace core
 } // namespace ee
 

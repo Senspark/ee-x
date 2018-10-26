@@ -245,5 +245,4 @@ void CCUpgradeVG::fillNextItemIdFromValueMap(const cocos2d::ValueMap& map) {
 void CCUpgradeVG::putNextItemIdToValueMap(cocos2d::ValueMap& map) {
     map[CCStoreConsts::JSON_VGU_NEXT_ITEM_ID] = getNextItemId();
 }
-
 } // namespace soomla

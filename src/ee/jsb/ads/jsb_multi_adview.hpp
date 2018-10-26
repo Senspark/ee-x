@@ -14,7 +14,6 @@ namespace ee {
 namespace ads {
 bool register_multi_adview_manual(se::Object* object);
 }
-
 } // namespace ee
 
 #endif /* JSB_MULTI_REWARDED_VIDEO_HPP__ */

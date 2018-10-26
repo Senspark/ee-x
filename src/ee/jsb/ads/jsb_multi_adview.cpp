@@ -53,6 +53,5 @@ bool register_multi_adview_manual(se::Object* globalObj) {
 
     return true;
 }
-
 } // namespace ads
 } // namespace ee

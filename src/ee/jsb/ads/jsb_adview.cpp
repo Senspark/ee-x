@@ -104,7 +104,7 @@ SE_BIND_FUNC(jsb_AdView_setVisible)
 SE_BIND_FUNC(jsb_AdView_setLoadCallback)
 
 se::Class* getIAdViewClass() {
-    CCASSERT(__jsb_AdView_proto != nullptr, "__jsb_AdView_proto is null");
+    CCASSERT(__jsb_AdView_class != nullptr, "__jsb_AdView_class is null");
     return __jsb_AdView_class;
 }
 
@@ -137,6 +137,5 @@ bool register_adview_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace ads
 } // namespace ee

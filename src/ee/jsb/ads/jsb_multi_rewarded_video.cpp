@@ -58,6 +58,5 @@ bool register_multi_rewarded_video_manual(se::Object* globalObj) {
 
     return true;
 }
-
 } // namespace ads
 } // namespace ee

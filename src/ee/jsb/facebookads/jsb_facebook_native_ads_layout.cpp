@@ -112,6 +112,5 @@ bool register_facebook_native_ad_layout_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace facebook
 } // namespace ee

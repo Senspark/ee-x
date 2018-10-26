@@ -20,7 +20,6 @@ template <>
 void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
     set_value_from_pointer(value, input);
 }
-
 } // namespace core
 } // namespace ee
 
@@ -59,5 +58,4 @@ bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

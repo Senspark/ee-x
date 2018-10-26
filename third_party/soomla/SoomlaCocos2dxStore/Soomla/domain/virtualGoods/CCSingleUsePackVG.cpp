@@ -156,5 +156,4 @@ void CCSingleUsePackVG::fillGoodAmountFromValueMap(
 void CCSingleUsePackVG::putGoodAmountToValueMap(cocos2d::ValueMap& map) {
     map[CCStoreConsts::JSON_VGP_GOOD_AMOUNT] = getGoodAmount();
 }
-
 } // namespace soomla

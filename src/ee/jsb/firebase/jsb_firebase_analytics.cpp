@@ -85,6 +85,5 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace firebase
 } // namespace ee

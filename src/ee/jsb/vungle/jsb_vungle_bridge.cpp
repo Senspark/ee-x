@@ -51,6 +51,5 @@ bool register_vungle_bridge_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace vungle
 } // namespace ee

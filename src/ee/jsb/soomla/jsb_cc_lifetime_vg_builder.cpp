@@ -75,5 +75,4 @@ bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

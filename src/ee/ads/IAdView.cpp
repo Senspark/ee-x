@@ -7,15 +7,10 @@
 //
 
 #include "ee/ads/IAdView.hpp"
-#include <ee/Core.hpp>
 
 namespace ee {
 namespace ads {
 using Self = IAdView;
-
-Self::IAdView() {}
-
-Self::~IAdView() {}
 
 void Self::setLoadCallback(const AdViewCallback& callback) {
     callback_ = callback;
@@ -26,6 +21,5 @@ void Self::setLoadResult(bool result) {
         callback_(result);
     }
 }
-
 } // namespace ads
 } // namespace ee

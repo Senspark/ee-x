@@ -92,5 +92,4 @@ bool register_cc_store_inventory_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

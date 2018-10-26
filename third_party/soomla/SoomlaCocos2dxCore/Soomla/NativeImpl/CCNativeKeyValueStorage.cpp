@@ -116,5 +116,4 @@ std::vector<std::string> CCNativeKeyValueStorage::getEncryptedKeys() const {
     
     return encryptedKeys;
 }
-
 } // namespace soomla

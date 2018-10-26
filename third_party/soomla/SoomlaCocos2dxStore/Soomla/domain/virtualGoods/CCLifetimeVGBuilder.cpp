@@ -42,5 +42,4 @@ CCVirtualItem* Self::build() {
     CC_ASSERT(type_);
     return CCLifetimeVG::create(*name_, *description_, *itemId_, type_);
 }
-
 } // namespace soomla

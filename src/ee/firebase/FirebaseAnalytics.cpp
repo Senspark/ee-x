@@ -99,22 +99,21 @@ void Self::setUserProperty(const std::string& name,
 #endif // EE_X_MOBILE
 }
 
-void Self::logEvent(const std::string& name,
-                    const ee::firebase::TrackingDict& dict) {
+void Self::logEvent(const std::string& name, const TrackingDict& dict) {
 #ifdef EE_X_MOBILE
     if (dict.empty()) {
         ::firebase::analytics::LogEvent(name.c_str());
     } else {
-        ::firebase::analytics::Parameter* parameters =
-            new ::firebase::analytics::Parameter[dict.size()];
-        size_t index = 0;
+        auto parameters =
+            std::make_unique<::firebase::analytics::Parameter[]>(dict.size());
+        std::size_t index = 0;
         for (const auto& item : dict) {
             parameters[index++] = ::firebase::analytics::Parameter(
                 item.first.c_str(), item.second.c_str());
         }
 
-        ::firebase::analytics::LogEvent(name.c_str(), parameters, dict.size());
-        delete[] parameters;
+        ::firebase::analytics::LogEvent(name.c_str(), parameters.get(),
+                                        dict.size());
     }
 
 #endif // EE_X_MOBILE

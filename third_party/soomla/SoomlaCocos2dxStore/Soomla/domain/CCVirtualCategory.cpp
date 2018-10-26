@@ -89,5 +89,4 @@ void CCVirtualCategory::putGoodItemIdsToValueMap(cocos2d::ValueMap& map) {
     }
     map[CCStoreConsts::JSON_CATEGORY_GOODS_ITEM_IDS] = vIds;
 }
-
 } // namespace soomla

@@ -58,6 +58,5 @@ bool register_multi_interstitial_ad_manual(se::Object* globalObj) {
 
     return true;
 }
-
 } // namespace ads
 } // namespace ee

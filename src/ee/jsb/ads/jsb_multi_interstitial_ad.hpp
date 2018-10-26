@@ -14,7 +14,6 @@ namespace ee {
 namespace ads {
 bool register_multi_interstitial_ad_manual(se::Object* object);
 }
-
 } // namespace ee
 
 #endif /* jsb_multi_interstitial_ad.hpp */

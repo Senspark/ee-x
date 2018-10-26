@@ -95,5 +95,4 @@ bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

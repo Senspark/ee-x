@@ -84,6 +84,5 @@ bool register_google_bridge_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace google
 } // namespace ee

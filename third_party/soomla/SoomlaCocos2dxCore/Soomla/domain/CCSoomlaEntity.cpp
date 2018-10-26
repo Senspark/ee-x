@@ -127,5 +127,4 @@ void CCSoomlaEntity::fillDescriptionFromValueMap(
 void CCSoomlaEntity::putDescriptionToValueMap(cocos2d::ValueMap& dict) {
     dict[CCCoreConsts::JSON_ITEM_DESCRIPTION] = getDescription();
 }
-
 } // namespace soomla

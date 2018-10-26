@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_METRICS_HPP
 #define EE_X_CORE_METRICS_HPP
 
+#include <string>
+
 #include "ee/CoreFwd.hpp"
 
 namespace ee {
@@ -18,12 +20,23 @@ private:
     using Self = Metrics;
 
 public:
+    enum class ResolutionPolicy {
+        FixedWidth,
+        FixedHeight,
+    };
+
+    static void initialize(const std::pair<float, float>& frameSize,
+                           const std::pair<float, float>& winSize,
+                           ResolutionPolicy policy);
     /// Initializes the metrics.
     /// @param[in] ratio Pixel to (cocos2d-x) point ratio, should pass
     /// cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize().width
     /// / cocos2d::Director::getInstance()->getWinSize().width (FIXED_WIDTH
     /// policy).
     static void initialize(float ratio);
+
+    static const std::pair<float, float>& getWinSize();
+    static const std::pair<float, float>& getFrameSize();
 
     /// Gets the screen density, i.e. pixel to dp ratio.
     static float getDensity();

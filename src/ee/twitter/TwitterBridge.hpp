@@ -13,7 +13,7 @@
 
 namespace ee {
 namespace twitter {
-using ShareResultCallback = std::function<void(bool result)>;
+using ShareResultCallback = std::function<void(int result)>;
 
 class Twitter final {
 public:

@@ -14,8 +14,6 @@
 namespace eetest {
 class TwitterShareTestScene : public cocos2d::Scene {
 private:
-    using ShareResultCallback =
-        std::function<void(bool result, bool is_share_twitter)>;
     using Self = TwitterShareTestScene;
     using Super = cocos2d::Scene;
 
@@ -32,8 +30,7 @@ protected:
 
 private:
     std::unique_ptr<ee::Twitter> twitter_;
-    ShareResultCallback _callback{nullptr};
-    void doShareSuccess(bool result);
+    void doShareSuccess(int result);
 };
 } // namespace eetest
 

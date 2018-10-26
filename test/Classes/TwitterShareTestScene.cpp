@@ -14,6 +14,11 @@
 #include <ui/CocosGUI.h>
 
 namespace {
+constexpr auto k__failed            = 0;
+constexpr auto k__succeeded         = 1;
+} // namespace
+
+namespace {
 cocos2d::ui::Button* createButton() {
     auto button = cocos2d::ui::Button::create("images/button.png");
     button->setTitleFontSize(50);
@@ -36,7 +41,7 @@ Self::TwitterShareTestScene() {
     twitter_ = std::make_unique<ee::Twitter>();
     twitter_->initialize("ConsumerKey", "ConsumerSecret");
     twitter_->setShareResultCallback(
-        [this](bool value) { this->doShareSuccess(value); });
+        [this](int value) { this->doShareSuccess(value); });
 }
 
 bool Self::init() {
@@ -75,13 +80,16 @@ void Self::onExit() {
     Super::onExit();
 }
 
-void Self::doShareSuccess(bool result) {
+void Self::doShareSuccess(int result) {
     auto lb = dynamic_cast<cocos2d::Label*>(getChildByName("label"));
-    if (result) {
+    if (result == k__succeeded) {
         lb->setString("Twitter Success");
+    } else if (result == k__failed) {
+        lb->setString("Twitter Failed");
     } else {
-        lb->setString("Twitter Fail");
+        lb->setString("Twitter Cancelled");
     }
 }
+
 
 } // namespace eetest

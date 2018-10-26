@@ -23,6 +23,9 @@ constexpr auto k__key               = "twitter_key";
 constexpr auto k__secret            = "twitter_secret";
 constexpr auto k__text              = "twitter_text";
 constexpr auto k__image             = "twitter_image";
+constexpr auto k__cancelled         = -1;
+constexpr auto k__failed            = 0;
+constexpr auto k__succeeded         = 1;
 // clang-format on
 } // namespace
 
@@ -85,21 +88,21 @@ void Self::shareScreenShot(const std::string& text, const std::string& image) {
 void Self::onSuccess() {
     if (_callback) {
         _hadCallFailure = false;
-        _callback(true);
+        _callback(k__succeeded);
     }
 }
 
 void Self::onFailure() {
     if (_callback) {
         _hadCallFailure = true;
-        _callback(false);
+        _callback(k__failed);
     }
 }
 
 void Self::onCancel() {
     if (_callback) {
         if (!_hadCallFailure) {
-            _callback(false);
+            _callback(k__cancelled);
         }
     }
 }

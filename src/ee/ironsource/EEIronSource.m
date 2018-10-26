@@ -24,6 +24,7 @@
 
 @implementation EEIronSource
 
+// clang-format off
 static NSString* const k__initialize        = @"IronSource_initialize";
 static NSString* const k__hasRewardedVideo  = @"IronSource_hasRewardedVideo";
 static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
@@ -41,6 +42,7 @@ static NSString* const k__onInterstitialFailed  = @"IronSource_onInterstitialFai
 static NSString* const k__onInterstitialOpened  = @"IronSource_onInterstitialOpened";
 static NSString* const k__onInterstitialClosed  = @"IronSource_onInterstitialClosed";
 static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialClicked";
+// clang-format on
 
 - (id)init {
     self = [super init];

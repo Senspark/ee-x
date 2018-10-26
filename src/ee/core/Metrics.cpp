@@ -18,6 +18,8 @@ using Self = Metrics;
 namespace {
 bool initialized_ = false;
 float ratio_;
+std::pair<float, float> frameSize_;
+std::pair<float, float> winSize_;
 } // namespace
 
 namespace {
@@ -37,9 +39,33 @@ float getPixelToPointRatio() {
 }
 } // namespace
 
+void Self::initialize(const std::pair<float, float>& frameSize,
+                      const std::pair<float, float>& winSize,
+                      ee::core::Metrics::ResolutionPolicy policy) {
+    frameSize_ = frameSize;
+    winSize_ = winSize;
+    
+    switch (policy) {
+    case ResolutionPolicy::FixedWidth:
+        initialize(frameSize.first / winSize.first);
+        break;
+    case ResolutionPolicy::FixedHeight:
+        initialize(frameSize.second / winSize.second);
+        break;
+    }
+}
+
 void Self::initialize(float ratio) {
     initialized_ = true;
     ratio_ = ratio;
+}
+
+const std::pair<float, float>& Self::getWinSize() {
+    return winSize_;
+}
+
+const std::pair<float, float>& Self::getFrameSize() {
+    return frameSize_;
 }
 
 float Self::getDensity() {

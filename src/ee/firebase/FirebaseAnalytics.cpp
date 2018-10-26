@@ -11,6 +11,7 @@
 
 #if defined(EE_X_MOBILE)
 #include <firebase/analytics.h>
+#include <firebase/analytics/parameter_names.h>
 #endif // EE_X_MOBILE
 
 namespace ee {
@@ -98,9 +99,23 @@ void Self::setUserProperty(const std::string& name,
 #endif // EE_X_MOBILE
 }
 
-void Self::logEvent(const std::string& name) {
+void Self::logEvent(const std::string& name, const TrackingDict& dict) {
 #ifdef EE_X_MOBILE
-    ::firebase::analytics::LogEvent(name.c_str());
+    if (dict.empty()) {
+        ::firebase::analytics::LogEvent(name.c_str());
+    } else {
+        auto parameters =
+            std::make_unique<::firebase::analytics::Parameter[]>(dict.size());
+        std::size_t index = 0;
+        for (const auto& item : dict) {
+            parameters[index++] = ::firebase::analytics::Parameter(
+                item.first.c_str(), item.second.c_str());
+        }
+
+        ::firebase::analytics::LogEvent(name.c_str(), parameters.get(),
+                                        dict.size());
+    }
+
 #endif // EE_X_MOBILE
 }
 } // namespace firebase

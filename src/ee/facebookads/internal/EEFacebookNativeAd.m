@@ -17,6 +17,7 @@
 #import <ISFacebookAdapter/FBMediaView.h>
 #import <ISFacebookAdapter/FBNativeAd.h>
 #else // EE_X_USE_IRON_SOURCE_MEDIATION
+#import <FBAudienceNetwork/FBAdChoicesView.h>
 #import <FBAudienceNetwork/FBMediaView.h>
 #import <FBAudienceNetwork/FBNativeAd.h>
 #endif // EE_X_USE_IRON_SOURCE_MEDIATION
@@ -177,7 +178,7 @@ static NSString* const k__sponsor           = @"sponsor";
         [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
             firstObject];
     [adView setHidden:YES];
-    [[adView adchoicesView] setCorner:UIRectCornerTopRight];
+    [adView adchoicesView].corner = UIRectCornerTopRight;
 
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [[rootView view] addSubview:adView];
@@ -252,6 +253,8 @@ static NSString* const k__sponsor           = @"sponsor";
     // ad icon
     [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
         [[nativeAdView_ iconImage] setImage:image];
+        [nativeAd registerViewForInteraction:nativeAdView_
+                          withViewController:rootView];
     }];
 
     // adchoices view
@@ -272,7 +275,7 @@ static NSString* const k__sponsor           = @"sponsor";
 
     // ad title view
     [[nativeAdView_ titleLabel] setText:[nativeAd title]];
-    
+
     // ad media view
     [[nativeAdView_ mediaView] setNativeAd:nativeAd];
     [[nativeAdView_ mediaView] setDelegate:self];

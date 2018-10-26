@@ -303,7 +303,9 @@ class AdMobNativeAd extends AdListener implements IAdView {
             @Override
             public void process(ImageView view) {
                 adView.setIconView(view);
-                view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
+                if (nativeAppInstallAd.getIcon() != null) {
+                    view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
+                }
             }
         });
 
@@ -326,13 +328,15 @@ class AdMobNativeAd extends AdListener implements IAdView {
             processView(adView, k__image, new ViewProcessor<ImageView>() {
                 @Override
                 public void process(ImageView view) {
-                    List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-                    if (images.isEmpty()) {
-                        view.setVisibility(View.GONE);
-                    } else {
-                        adView.setImageView(view);
+                List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+                if (images.isEmpty()) {
+                    view.setVisibility(View.GONE);
+                } else {
+                    adView.setImageView(view);
+                    if (images.size() > 0) {
                         view.setImageDrawable(images.get(0).getDrawable());
                     }
+                }
                 }
             });
             processView(adView, k__media, new ViewProcessor<MediaView>() {

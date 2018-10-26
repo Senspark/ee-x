@@ -16,9 +16,6 @@
 
 namespace soomla {
 
-se::Object* __jsb_CCSingleUsePackVG_proto = nullptr;
-se::Class* __jsb_CCSingleUsePackVG_class = nullptr;
-
 const auto jsb_CCSingleUsePackVG_finalize =
     &ee::core::jsb_finalize<CCSingleUsePackVG>;
 const auto jsb_CCSingleUsePackVG_getGoodAmount =
@@ -44,11 +41,7 @@ bool register_cc_single_use_pack_vg_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCSingleUsePackVG>(cls);
 
-    __jsb_CCSingleUsePackVG_proto = cls->getProto();
-    __jsb_CCSingleUsePackVG_class = cls;
-
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

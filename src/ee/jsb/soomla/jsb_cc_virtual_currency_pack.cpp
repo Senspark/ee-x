@@ -25,8 +25,6 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
 } // namespace ee
 
 namespace soomla {
-se::Object* __jsb_CCVirtualCurrencyPack_proto = nullptr;
-se::Class* __jsb_CCVirtualCurrencyPack_class = nullptr;
 
 const auto jsb_CCVirtualCurrencyPack_finalize =
     &ee::core::jsb_finalize<CCVirtualCurrencyPack>;
@@ -57,9 +55,6 @@ bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     cls->install();
 
     JSBClassType::registerClass<CCVirtualCurrencyPack>(cls);
-
-    __jsb_CCVirtualCurrencyPack_proto = cls->getProto();
-    __jsb_CCVirtualCurrencyPack_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

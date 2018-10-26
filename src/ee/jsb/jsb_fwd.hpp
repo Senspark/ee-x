@@ -11,6 +11,7 @@
 namespace se {
 class Object;
 class Value;
+class Class;
 } // namespace se
 
 #endif // JSB_FWD_HPP__

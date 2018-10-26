@@ -13,7 +13,7 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace soomla {
-se::Object* __jsb_CCVirtualCurrencyPackBuilder_proto = nullptr;
+
 se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;
 
 const auto jsb_CCVirtualCurrencyPackBuilder_finalize =
@@ -90,7 +90,6 @@ bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCVirtualCurrencyPackBuilder>(cls);
 
-    __jsb_CCVirtualCurrencyPackBuilder_proto = cls->getProto();
     __jsb_CCVirtualCurrencyPackBuilder_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

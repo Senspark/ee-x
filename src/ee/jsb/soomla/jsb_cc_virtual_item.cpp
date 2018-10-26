@@ -34,7 +34,6 @@ soomla::CCVirtualItem* get_value(const se::Value& value) {
 
 namespace soomla {
 se::Object* __jsb_CCVirtualItem_proto = nullptr;
-se::Class* __jsb_CCVirtualItem_class = nullptr;
 
 CCPurchasableVirtualItem* asPurchasableVirtualItem(CCVirtualItem* item) {
     return dynamic_cast<CCPurchasableVirtualItem*>(item);
@@ -98,10 +97,8 @@ bool register_cc_virtual_item_manual(se::Object* globalObj) {
     JSBClassType::registerClass<CCVirtualItem>(cls);
 
     __jsb_CCVirtualItem_proto = cls->getProto();
-    __jsb_CCVirtualItem_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

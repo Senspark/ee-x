@@ -17,10 +17,7 @@ namespace ee {
 
 namespace crashlytics {
 
-se::Object* __jsb_Crashlytics_proto = nullptr;
 se::Class* __jsb_Crashlytics_class = nullptr;
-
-se::Object* __crashlyticsObj = nullptr;
 
 const auto jsb_Crashlytics_finalize = &core::jsb_finalize<Crashlytics>;
 const auto jsb_Crashlytics_constructor = &core::jsb_constructor<Crashlytics>;
@@ -95,10 +92,11 @@ SE_BIND_FUNC(jsb_Crashlytics_trackInvite)
 
 bool register_crashlytics_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* crashlyticsObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("crashlytics", eeObj, &__crashlyticsObj);
+    core::getOrCreatePlainObject_r("crashlytics", eeObj, &crashlyticsObj);
 
-    auto cls = se::Class::create("Crashlytics", __crashlyticsObj, nullptr,
+    auto cls = se::Class::create("Crashlytics", crashlyticsObj, nullptr,
                                  _SE(jsb_Crashlytics_constructor));
     cls->defineFinalizeFunction(_SE(jsb_Crashlytics_finalize));
 
@@ -125,7 +123,6 @@ bool register_crashlytics_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<Crashlytics>(cls);
 
-    __jsb_Crashlytics_proto = cls->getProto();
     __jsb_Crashlytics_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

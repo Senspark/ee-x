@@ -17,10 +17,7 @@
 namespace ee {
 namespace ironsource {
 
-se::Object* __jsb_IronSource_proto = nullptr;
 se::Class* __jsb_IronSource_class = nullptr;
-
-se::Object* __ironsourceObj = nullptr;
 
 const auto jsb_IronSource_finalize = &core::jsb_finalize<IronSource>;
 const auto jsb_IronSource_constructor = &core::jsb_constructor<IronSource>;
@@ -45,10 +42,11 @@ SE_BIND_FUNC(jsb_IronSource_createInterstitialAd)
 
 bool register_iron_source_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* ironsourceObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("ironsource", eeObj, &__ironsourceObj);
+    core::getOrCreatePlainObject_r("ironsource", eeObj, &ironsourceObj);
 
-    auto cls = se::Class::create("IronSource", __ironsourceObj, nullptr,
+    auto cls = se::Class::create("IronSource", ironsourceObj, nullptr,
                                  _SE(jsb_IronSource_constructor));
     cls->defineFinalizeFunction(_SE(jsb_IronSource_finalize));
 
@@ -62,12 +60,10 @@ bool register_iron_source_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<IronSource>(cls);
 
-    __jsb_IronSource_proto = cls->getProto();
     __jsb_IronSource_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace ironsource
 } // namespace ee

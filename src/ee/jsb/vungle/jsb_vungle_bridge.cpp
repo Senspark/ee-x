@@ -16,11 +16,7 @@
 
 namespace ee {
 namespace vungle {
-
-se::Object* __jsb_Vungle_proto = nullptr;
 se::Class* __jsb_Vungle_class = nullptr;
-
-se::Object* __vungleObj = nullptr;
 
 const auto jsb_Vungle_finalize = &core::jsb_finalize<Vungle>;
 const auto jsb_Vungle_constructor = &core::jsb_constructor<Vungle>;
@@ -35,10 +31,11 @@ SE_BIND_FUNC(jsb_Vungle_createRewardedVideo)
 
 bool register_vungle_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* vungleObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("vungle", eeObj, &__vungleObj);
+    core::getOrCreatePlainObject_r("vungle", eeObj, &vungleObj);
 
-    auto cls = se::Class::create("Vungle", __vungleObj, nullptr,
+    auto cls = se::Class::create("Vungle", vungleObj, nullptr,
                                  _SE(jsb_Vungle_constructor));
     cls->defineFinalizeFunction(_SE(jsb_Vungle_finalize));
 
@@ -49,7 +46,6 @@ bool register_vungle_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<Vungle>(cls);
 
-    __jsb_Vungle_proto = cls->getProto();
     __jsb_Vungle_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

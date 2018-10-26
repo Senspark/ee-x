@@ -28,7 +28,6 @@ void set_value(se::Value& value, soomla::CCMarketItem* input) {
 } // namespace ee
 
 namespace soomla {
-se::Object* __jsb_CCPurchaseWithMarket_proto = nullptr;
 se::Class* __jsb_CCPurchaseWithMarket_class = nullptr;
 
 const auto jsb_CCPurchaseWithMarket_finalize =
@@ -59,11 +58,9 @@ bool register_cc_purchase_with_market_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCPurchaseWithMarket>(cls);
 
-    __jsb_CCPurchaseWithMarket_proto = cls->getProto();
     __jsb_CCPurchaseWithMarket_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

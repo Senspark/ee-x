@@ -15,7 +15,6 @@
 namespace ee {
 namespace core {
 
-se::Object* __jsb_Metrics_proto = nullptr;
 se::Class* __jsb_Metrics_class = nullptr;
 std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
 
@@ -81,7 +80,6 @@ bool register_metrics_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<Metrics>(cls);
 
-    __jsb_Metrics_proto = cls->getProto();
     __jsb_Metrics_class = cls;
 
     // Register static member variables and static member functions
@@ -104,6 +102,5 @@ bool register_metrics_manual(se::Object* globalObj) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace core
 } // namespace ee

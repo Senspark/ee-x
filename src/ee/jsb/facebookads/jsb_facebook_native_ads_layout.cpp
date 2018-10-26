@@ -14,7 +14,6 @@
 #include "ee/jsb/facebookads/jsb_facebook_ads_bridge.hpp"
 
 namespace ee {
-
 namespace core {
 template <>
 FacebookNativeAdLayout get_value(const se::Value& value) {
@@ -25,7 +24,6 @@ FacebookNativeAdLayout get_value(const se::Value& value) {
 
 namespace facebook {
 
-se::Object* __jsb_NativeAdLayout_proto = nullptr;
 se::Class* __jsb_NativeAdLayout_class = nullptr;
 
 const auto jsb_NativeAdLayout_finalize =
@@ -109,7 +107,6 @@ bool register_facebook_native_ad_layout_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<FacebookNativeAdLayout>(cls);
 
-    __jsb_NativeAdLayout_proto = cls->getProto();
     __jsb_NativeAdLayout_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

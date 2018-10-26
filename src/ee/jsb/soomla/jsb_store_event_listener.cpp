@@ -15,7 +15,6 @@
 
 namespace soomla {
 
-se::Object* __jsb_StoreEventListener_proto = nullptr;
 se::Class* __jsb_StoreEventListener_class = nullptr;
 
 const auto jsb_StoreEventListener_finalize =
@@ -156,7 +155,6 @@ bool register_store_event_listener_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<StoreEventListener>(cls);
 
-    __jsb_StoreEventListener_proto = cls->getProto();
     __jsb_StoreEventListener_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

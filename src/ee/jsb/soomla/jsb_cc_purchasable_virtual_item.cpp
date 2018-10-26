@@ -25,7 +25,6 @@ void set_value(se::Value& value, soomla::CCPurchasableVirtualItem* input) {
 
 namespace soomla {
 se::Object* __jsb_CCPurchasableVirtualItem_proto = nullptr;
-se::Class* __jsb_CCPurchasableVirtualItem_class = nullptr;
 
 const auto jsb_CCPurchasableVirtualItem_finalize =
     &ee::core::jsb_finalize<CCPurchasableVirtualItem>;
@@ -66,10 +65,8 @@ bool register_cc_purchasable_virtual_item_manual(se::Object* globalObj) {
     JSBClassType::registerClass<CCPurchasableVirtualItem>(cls);
 
     __jsb_CCPurchasableVirtualItem_proto = cls->getProto();
-    __jsb_CCPurchasableVirtualItem_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

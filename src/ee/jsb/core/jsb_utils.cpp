@@ -12,7 +12,7 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-int getIntergerUserDefault(std::string key) {
+int getIntergerUserDefault(const std::string& key) {
     return cocos2d::UserDefault::getInstance()->getIntegerForKey(key.c_str());
 };
 

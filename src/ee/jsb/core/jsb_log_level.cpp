@@ -20,7 +20,6 @@ namespace ee {
 namespace core {
 
 se::Class* __jsb_LogLevel_class = nullptr;
-se::Object* __jsb_LogLevel_proto = nullptr;
 std::unordered_map<const LogLevel*, se::Object*> __jsb_s_loglevels;
 
 template <>
@@ -42,7 +41,7 @@ void set_value(se::Value& value, const LogLevel& input) {
 }
 
 bool jsb_LogLevel_finalize(se::State& s) {
-    LogLevel* cObj = static_cast<LogLevel*>(s.nativeThisObject());
+    auto cObj = static_cast<LogLevel*>(s.nativeThisObject());
     CCLOG("DELETE LOG_LEVEL");
 
     if (cObj != &LogLevel::Verbose && cObj != &LogLevel::Info &&
@@ -117,7 +116,6 @@ bool register_log_level_manual(se::Object* globalObj) {
     // binding code, which is not a part of the ScriptEngine.
     JSBClassType::registerClass<LogLevel>(cls);
 
-    __jsb_LogLevel_proto = cls->getProto();
     __jsb_LogLevel_class = cls;
 
     // Register static member variables and static member functions
@@ -138,21 +136,21 @@ bool register_log_level_manual(se::Object* globalObj) {
     }
 
     // Register predefined Loglevel instances
-    const LogLevel* predefinedLogLevels[6] = {
-        &core::LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
-        &LogLevel::Warn,          &LogLevel::Error, &LogLevel::Assert,
+    const auto predefinedLogLevels = {
+        &LogLevel::Verbose, &LogLevel::Debug, &LogLevel::Info,
+        &LogLevel::Warn,    &LogLevel::Error, &LogLevel::Assert,
     };
 
     for (auto logLevel : predefinedLogLevels) {
         __jsb_s_loglevels[logLevel] =
             se::Object::createObjectWithClass(__jsb_LogLevel_class);
-        __jsb_s_loglevels[logLevel]->setPrivateData((void*)logLevel);
+        __jsb_s_loglevels[logLevel]->setPrivateData(
+            const_cast<LogLevel*>(logLevel));
         __jsb_s_loglevels[logLevel]->root();
     }
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace core
 } // namespace ee

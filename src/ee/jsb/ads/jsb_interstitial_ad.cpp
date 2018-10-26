@@ -10,16 +10,13 @@
 #include <unordered_map>
 
 #include <ee/Ads.hpp>
-#include <ee/AdsFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace ads {
-se::Object* __jsb_InterstitialAd_proto = nullptr;
 se::Class* __jsb_InterstitialAd_class = nullptr;
-
 std::unordered_map<std::shared_ptr<IInterstitialAd>, se::Object*>
     __jsb_s_interstitialAds;
 std::vector<std::shared_ptr<IInterstitialAd>> __jsb_s_interstitialAdArchive;
@@ -76,16 +73,16 @@ constexpr auto jsb_InterstitialAd_finalize =
     &core::jsb_finalize<IInterstitialAd>;
 constexpr auto jsb_InterstitialAd_isLoaded =
     &core::jsb_accessor_get_on_ui_thread<IInterstitialAd,
-                                             &IInterstitialAd::isLoaded, bool>;
+                                         &IInterstitialAd::isLoaded, bool>;
 constexpr auto jsb_InterstitialAd_load =
     &core::jsb_method_call_on_ui_thread<IInterstitialAd,
-                                            &IInterstitialAd::load>;
+                                        &IInterstitialAd::load>;
 constexpr auto jsb_InterstitialAd_show =
     &core::jsb_method_call_on_ui_thread<IInterstitialAd,
-                                            &IInterstitialAd::show>;
+                                        &IInterstitialAd::show>;
 constexpr auto jsb_InterstitialAd_setResultCallback =
     &core::jsb_set_callback<IInterstitialAd,
-                                &IInterstitialAd::setResultCallback>;
+                            &IInterstitialAd::setResultCallback>;
 
 SE_BIND_FINALIZE_FUNC(jsb_InterstitialAd_finalize)
 SE_BIND_FUNC(jsb_InterstitialAd_isLoaded)
@@ -93,11 +90,18 @@ SE_BIND_FUNC(jsb_InterstitialAd_load)
 SE_BIND_FUNC(jsb_InterstitialAd_show)
 SE_BIND_FUNC(jsb_InterstitialAd_setResultCallback)
 
-bool register_interstitial_ad_manual(se::Object* globalObj) {
-    se::Object* adsObj = nullptr;
-    core::getOrCreatePlainObject_r("ads", globalObj, &adsObj);
+se::Class* getIInterstitialClass() {
+    CCASSERT(__jsb_InterstitialAd_class != nullptr, "__jsb_InterstitialAd_class is null");
+    return __jsb_InterstitialAd_class;
+}
 
-    auto cls = se::Class::create("InterstitialAd", adsObj, nullptr, nullptr);
+bool register_interstitial_ad_manual(se::Object* globalObj) {
+    se::Object* eeObj = nullptr;
+    se::Object* adsObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("ads", eeObj, &adsObj);
+
+    auto cls = se::Class::create("IInterstitialAd", adsObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_InterstitialAd_finalize));
 
     cls->defineFunction("isLoaded", _SE(jsb_InterstitialAd_isLoaded));
@@ -110,7 +114,6 @@ bool register_interstitial_ad_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<IInterstitialAd>(cls);
 
-    __jsb_InterstitialAd_proto = cls->getProto();
     __jsb_InterstitialAd_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

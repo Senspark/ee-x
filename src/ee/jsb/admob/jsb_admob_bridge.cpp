@@ -18,13 +18,9 @@ template <>
 AdMobBannerAdSize get_value(const se::Value& value) {
     return static_cast<AdMobBannerAdSize>(value.toInt32());
 }
-
 } // namespace core
 
 namespace admob {
-se::Object* __bannerAdSizeObj = nullptr;
-
-se::Object* __jsb_AdMob_proto = nullptr;
 se::Class* __jsb_AdMob_class = nullptr;
 
 constexpr auto jsb_AdMob_finalize = &core::jsb_finalize<AdMob>;
@@ -42,10 +38,9 @@ constexpr auto jsb_AdMob_createBannerAd =
     &core::jsb_method_get_on_ui_thread<AdMob, &AdMob::createBannerAd,
                                        std::shared_ptr<IAdView>,
                                        const std::string&, AdMobBannerAdSize>;
-constexpr auto jsb_AdMob_createNativeAd =
-    &core::jsb_method_get_on_ui_thread<
-        AdMob, &AdMob::createNativeAd, std::shared_ptr<IAdView>,
-        const std::string&, const std::string&, AdMobNativeAdLayout>;
+constexpr auto jsb_AdMob_createNativeAd = &core::jsb_method_get_on_ui_thread<
+    AdMob, &AdMob::createNativeAd, std::shared_ptr<IAdView>, const std::string&,
+    const std::string&, AdMobNativeAdLayout>;
 constexpr auto jsb_AdMob_createInterstitialAd =
     &core::jsb_method_get_on_ui_thread<AdMob, &AdMob::createInterstitialAd,
                                        std::shared_ptr<IInterstitialAd>,
@@ -68,18 +63,17 @@ SE_BIND_FUNC(jsb_AdMob_createRewardedVideo)
 bool register_admob_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
     se::Object* admobObj = nullptr;
+    se::Object* bannerAdSizeObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("admob", eeObj, &admobObj);
-    core::getOrCreatePlainObject_r("BannerAdSize", admobObj,
-                                   &__bannerAdSizeObj);
+    core::getOrCreatePlainObject_r("BannerAdSize", admobObj, &bannerAdSizeObj);
 
-    __bannerAdSizeObj->setProperty(
-        "Normal",
-        se::Value(static_cast<std::int32_t>(AdMobBannerAdSize::Normal)));
-    __bannerAdSizeObj->setProperty("Large", se::Value(static_cast<std::int32_t>(
-                                                AdMobBannerAdSize::Large)));
-    __bannerAdSizeObj->setProperty("Smart", se::Value(static_cast<std::int32_t>(
-                                                AdMobBannerAdSize::Smart)));
+    bannerAdSizeObj->setProperty("Normal", se::Value(static_cast<std::int32_t>(
+                                               AdMobBannerAdSize::Normal)));
+    bannerAdSizeObj->setProperty("Large", se::Value(static_cast<std::int32_t>(
+                                              AdMobBannerAdSize::Large)));
+    bannerAdSizeObj->setProperty("Smart", se::Value(static_cast<std::int32_t>(
+                                              AdMobBannerAdSize::Smart)));
 
     auto cls = se::Class::create("AdMob", admobObj, nullptr,
                                  _SE(jsb_AdMob_constructor));
@@ -100,7 +94,6 @@ bool register_admob_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<AdMob>(cls);
 
-    __jsb_AdMob_proto = cls->getProto();
     __jsb_AdMob_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

@@ -14,10 +14,7 @@
 namespace ee {
 namespace notification {
 
-se::Object* __jsb_Notification_proto = nullptr;
 se::Class* __jsb_Notification_class = nullptr;
-
-se::Object* __notificationObj = nullptr;
 
 const auto jsb_Notification_finalize = &core::jsb_finalize<Notification>;
 const auto jsb_Notification_constructor = &core::jsb_constructor<Notification>;
@@ -38,10 +35,11 @@ SE_BIND_FUNC(jsb_Notification_clearAll)
 
 bool register_notification_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* notificationObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("notification", eeObj, &__notificationObj);
+    core::getOrCreatePlainObject_r("notification", eeObj, &notificationObj);
 
-    auto cls = se::Class::create("Notification", __notificationObj, nullptr,
+    auto cls = se::Class::create("Notification", notificationObj, nullptr,
                                  _SE(jsb_Notification_constructor));
     cls->defineFinalizeFunction(_SE(jsb_Notification_finalize));
 
@@ -53,7 +51,6 @@ bool register_notification_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<Notification>(cls);
 
-    __jsb_Notification_proto = cls->getProto();
     __jsb_Notification_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

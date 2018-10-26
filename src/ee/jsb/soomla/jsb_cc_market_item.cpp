@@ -14,7 +14,6 @@
 
 namespace soomla {
 
-se::Object* __jsb_CCMarketItem_proto = nullptr;
 se::Class* __jsb_CCMarketItem_class = nullptr;
 
 const auto jsb_CCMarketItem_finalize = &ee::core::jsb_finalize<CCMarketItem>;
@@ -59,7 +58,6 @@ bool register_cc_market_item_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCMarketItem>(cls);
 
-    __jsb_CCMarketItem_proto = cls->getProto();
     __jsb_CCMarketItem_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

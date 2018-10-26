@@ -16,7 +16,6 @@
 
 namespace ee {
 namespace ads {
-se::Object* __jsb_RewardedVideo_proto = nullptr;
 se::Class* __jsb_RewardedVideo_class = nullptr;
 
 std::unordered_map<std::shared_ptr<IRewardedVideo>, se::Object*>
@@ -88,6 +87,12 @@ SE_BIND_FUNC(jsb_RewardedVideo_load)
 SE_BIND_FUNC(jsb_RewardedVideo_show)
 SE_BIND_FUNC(jsb_RewardedVideo_setResultCallback);
 
+se::Class* getIRewardedVideoClass() {
+    CCASSERT(__jsb_RewardedVideo_class != nullptr,
+             "__jsb_RewardedVideo_class is null");
+    return __jsb_RewardedVideo_class;
+}
+
 bool register_rewarded_video_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
     core::getOrCreatePlainObject_r("ads", globalObj, &adsObj);
@@ -104,12 +109,10 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<IRewardedVideo>(cls);
 
-    __jsb_RewardedVideo_proto = cls->getProto();
     __jsb_RewardedVideo_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
 } // namespace ads
-
 } // namespace ee

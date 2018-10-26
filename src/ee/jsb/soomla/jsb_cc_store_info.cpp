@@ -43,7 +43,6 @@ bool jsb_finalize<soomla::CCStoreInfo>(se::State& s) {
 } // namespace ee
 
 namespace soomla {
-se::Object* __jsb_CCStoreInfo_proto = nullptr;
 se::Class* __jsb_CCStoreInfo_class = nullptr;
 
 const auto jsb_CCStoreInfo_finalize = &ee::core::jsb_finalize<CCStoreInfo>;
@@ -84,7 +83,6 @@ bool register_cc_store_info_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCStoreInfo>(cls);
 
-    __jsb_CCStoreInfo_proto = cls->getProto();
     __jsb_CCStoreInfo_class = cls;
 
     // Register static member variables and static member functions

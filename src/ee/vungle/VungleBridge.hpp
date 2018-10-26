@@ -18,8 +18,8 @@ public:
 
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);
-    __attribute__((deprecated)) void initialize(const std::string& gameId,
-                                                const std::string& placementId);
+    [[deprecated]] void initialize(const std::string& gameId,
+                                   const std::string& placementId);
 
     /// Creates a rewarded video.
     std::shared_ptr<IRewardedVideo>

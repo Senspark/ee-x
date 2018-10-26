@@ -12,9 +12,10 @@
 
 namespace ee {
 namespace ads {
+se::Class* getIInterstitialClass();
+
 bool register_interstitial_ad_manual(se::Object* object);
 }
-
 } // namespace ee
 
 #endif /* jsb_interstitial_ad_hpp */

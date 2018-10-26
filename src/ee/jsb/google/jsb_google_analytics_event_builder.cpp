@@ -24,7 +24,6 @@ GoogleEventBuilder get_value(const se::Value& value) {
 
 namespace google {
 
-se::Object* __jsb_EventBuilder_proto = nullptr;
 se::Class* __jsb_EventBuilder_class = nullptr;
 
 const auto jsb_EventBuilder_finalize = &core::jsb_finalize<GoogleEventBuilder>;
@@ -75,13 +74,10 @@ bool register_google_event_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<GoogleEventBuilder>(cls);
 
-    __jsb_EventBuilder_proto = cls->getProto();
     __jsb_EventBuilder_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace google
-
 } // namespace ee

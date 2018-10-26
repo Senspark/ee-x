@@ -16,11 +16,7 @@
 
 namespace ee {
 namespace unityads {
-
-se::Object* __jsb_UnityAds_proto = nullptr;
 se::Class* __jsb_UnityAds_class = nullptr;
-
-se::Object* __unityadsObj = nullptr;
 
 const auto jsb_UnityAds_finalize = &core::jsb_finalize<UnityAds>;
 const auto jsb_UnityAds_constructor = &core::jsb_constructor<UnityAds>;
@@ -49,13 +45,13 @@ SE_BIND_FUNC(jsb_UnityAds_createInterstitialAd)
 
 bool register_unity_ads_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* unityadsObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("unityads", eeObj, &__unityadsObj);
+    core::getOrCreatePlainObject_r("unityads", eeObj, &unityadsObj);
 
-    auto cls = se::Class::create("UnityAds", __unityadsObj, nullptr,
+    auto cls = se::Class::create("UnityAds", unityadsObj, nullptr,
                                  _SE(jsb_UnityAds_constructor));
     cls->defineFinalizeFunction(_SE(jsb_UnityAds_finalize));
-
     cls->defineFunction("initialize", _SE(jsb_UnityAds_initialize));
     cls->defineFunction("setDebugModeEnabled",
                         _SE(jsb_UnityAds_setDebugModeEnabled));
@@ -68,7 +64,6 @@ bool register_unity_ads_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<UnityAds>(cls);
 
-    __jsb_UnityAds_proto = cls->getProto();
     __jsb_UnityAds_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

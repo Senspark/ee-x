@@ -17,7 +17,6 @@ namespace ee {
 
 namespace firebase {
 
-se::Object* __jsb_FirebaseAnalytics_proto = nullptr;
 se::Class* __jsb_FirebaseAnalytics_class = nullptr;
 
 const auto jsb_FirebaseAnalytics_finalize =
@@ -81,7 +80,6 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<FirebaseAnalytics>(cls);
 
-    __jsb_FirebaseAnalytics_proto = cls->getProto();
     __jsb_FirebaseAnalytics_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

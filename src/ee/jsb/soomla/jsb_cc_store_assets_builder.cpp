@@ -48,9 +48,7 @@ void set_value(se::Value& value, soomla::CCStoreAssets* input) {
 } // namespace ee
 
 namespace soomla {
-se::Object* __jsb_CCStoreAssetsBuilder_proto = nullptr;
 se::Class* __jsb_CCStoreAssetsBuilder_class = nullptr;
-se::Class* __jsb_CCStoreAssets_class = nullptr;
 
 const auto jsb_CCStoreAssetsBuilder_finalize =
     &ee::core::jsb_finalize<CCStoreAssetsBuilder>;
@@ -110,7 +108,6 @@ bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCStoreAssetsBuilder>(cls);
 
-    __jsb_CCStoreAssetsBuilder_proto = cls->getProto();
     __jsb_CCStoreAssetsBuilder_class = cls;
 
     //__jsb_CCStoreAssets_class
@@ -118,8 +115,6 @@ bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
         se::Class::create("CCStoreAssets", __soomlaObj, nullptr, nullptr);
     clsStoreAssets->install();
     JSBClassType::registerClass<CCStoreAssets>(clsStoreAssets);
-
-    __jsb_CCStoreAssets_class = clsStoreAssets;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

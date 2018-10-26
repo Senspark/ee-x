@@ -31,9 +31,6 @@ void set_value(se::Value& value, soomla::CCSoomlaStore* input) {
 
 namespace soomla {
 
-se::Object* __jsb_CCSoomlaStore_proto = nullptr;
-se::Class* __jsb_CCSoomlaStore_class = nullptr;
-
 const auto jsb_CCSoomlaStore_initialize =
     &ee::core::jsb_static_call<&CCSoomlaStore::initialize, CCStoreAssets*,
                                cocos2d::ValueMap>;
@@ -62,9 +59,6 @@ bool register_cc_soomla_store_manual(se::Object* globalObj) {
     cls->install();
 
     JSBClassType::registerClass<soomla::CCSoomlaStore>(cls);
-
-    __jsb_CCSoomlaStore_proto = cls->getProto();
-    __jsb_CCSoomlaStore_class = cls;
 
     // Register static member variables and static member functions
     se::Value ctorVal;

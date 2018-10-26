@@ -19,14 +19,10 @@ template <>
 FacebookBannerAdSize get_value(const se::Value& value) {
     return static_cast<FacebookBannerAdSize>(value.toInt32());
 }
-
 } // namespace core
 
 namespace facebook {
 
-se::Object* __bannerAdSizeObj = nullptr;
-
-se::Object* __jsb_FacebookAds_proto = nullptr;
 se::Class* __jsb_FacebookAds_class = nullptr;
 
 constexpr auto jsb_FacebookAds_finalize = &core::jsb_finalize<FacebookAds>;
@@ -68,17 +64,18 @@ SE_BIND_FUNC(jsb_FacebookAds_createRewardedVideo)
 bool register_facebookads_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
     se::Object* facebookAdObj = nullptr;
+    se::Object* bannerAdSizeObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("facebookads", eeObj, &facebookAdObj);
     core::getOrCreatePlainObject_r("BannerAdSize", facebookAdObj,
-                                   &__bannerAdSizeObj);
+                                   &bannerAdSizeObj);
 
-    __bannerAdSizeObj->setProperty(
-        "BannerHeight50",
-        se::Value((std::int32_t)FacebookBannerAdSize::BannerHeight50));
-    __bannerAdSizeObj->setProperty(
-        "BannerHeight90",
-        se::Value((std::int32_t)FacebookBannerAdSize::BannerHeight90));
+    bannerAdSizeObj->setProperty("BannerHeight50",
+                                 se::Value(static_cast<std::int32_t>(
+                                     FacebookBannerAdSize::BannerHeight50)));
+    bannerAdSizeObj->setProperty("BannerHeight90",
+                                 se::Value(static_cast<std::int32_t>(
+                                     FacebookBannerAdSize::BannerHeight90)));
 
     auto cls = se::Class::create("FacebookAds", facebookAdObj, nullptr,
                                  _SE(jsb_FacebookAds_constructor));
@@ -98,7 +95,6 @@ bool register_facebookads_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<FacebookAds>(cls);
 
-    __jsb_FacebookAds_proto = cls->getProto();
     __jsb_FacebookAds_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

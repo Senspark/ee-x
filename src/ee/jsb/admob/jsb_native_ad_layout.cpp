@@ -15,7 +15,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace core {
 template <>
 AdMobNativeAdLayout get_value(const se::Value& value) {
@@ -25,15 +24,12 @@ AdMobNativeAdLayout get_value(const se::Value& value) {
 } // namespace core
 
 namespace admob {
-
-se::Object* __jsb_NativeAdLayout_proto = nullptr;
 se::Class* __jsb_NativeAdLayout_class = nullptr;
 
 const auto jsb_NativeAdLayout_finalize =
     &core::jsb_finalize<AdMobNativeAdLayout>;
 const auto jsb_NativeAdLayout_constructor =
     &core::jsb_constructor<AdMobNativeAdLayout>;
-
 const auto jsb_NativeAdLayout_setBody =
     &core::jsb_accessor_set<AdMobNativeAdLayout, &AdMobNativeAdLayout::setBody,
                             const std::string&>;
@@ -99,7 +95,6 @@ bool register_native_ad_layout_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<AdMobNativeAdLayout>(cls);
 
-    __jsb_NativeAdLayout_proto = cls->getProto();
     __jsb_NativeAdLayout_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

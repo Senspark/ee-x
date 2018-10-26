@@ -16,9 +16,6 @@
 
 namespace soomla {
 
-se::Object* __jsb_CCLifetimeVG_proto = nullptr;
-se::Class* __jsb_CCLifetimeVG_class = nullptr;
-
 const auto jsb_CCLifetimeVG_finalize = &ee::core::jsb_finalize<CCLifetimeVG>;
 const auto jsb_CCLifttimeVG_getBalance =
     &ee::core::jsb_method_get<CCLifetimeVG, &CCLifetimeVG::getBalance, int,
@@ -42,11 +39,7 @@ bool register_cc_life_time_vg_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCLifetimeVG>(cls);
 
-    __jsb_CCLifetimeVG_proto = cls->getProto();
-    __jsb_CCLifetimeVG_class = cls;
-
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

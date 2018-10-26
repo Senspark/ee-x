@@ -30,9 +30,7 @@ void set_value(se::Value& value, soomla::CCPurchaseType* input) {
 } // namespace ee
 
 namespace soomla {
-se::Object* __jsb_CCPurchaseWithMarketBuilder_proto = nullptr;
 se::Class* __jsb_CCPurchaseWithMarketBuilder_class = nullptr;
-se::Class* __jsb_CCPurchaseTypes_class = nullptr;
 
 const auto jsb_CCPurchaseWithMarketBuilder_finalize =
     &ee::core::jsb_finalize<CCPurchaseWithMarketBuilder>;
@@ -85,20 +83,16 @@ bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCPurchaseWithMarketBuilder>(cls);
 
-    __jsb_CCPurchaseWithMarketBuilder_proto = cls->getProto();
     __jsb_CCPurchaseWithMarketBuilder_class = cls;
 
-    // CCPurchaseType
     auto clsPurchase =
         se::Class::create("CCPurchaseType", __soomlaObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_CCPurchaseType_finalize));
 
     clsPurchase->install();
     JSBClassType::registerClass<CCPurchaseType>(clsPurchase);
-    __jsb_CCPurchaseTypes_class = clsPurchase;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace soomla

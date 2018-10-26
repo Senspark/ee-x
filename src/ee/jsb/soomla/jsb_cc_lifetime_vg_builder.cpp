@@ -14,7 +14,6 @@
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
 
 namespace soomla {
-se::Object* __jsb_CCLifetimeVGBuilder_proto = nullptr;
 se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
 
 const auto jsb_CCLifetimeVGBuilder_finalize =
@@ -71,7 +70,6 @@ bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCLifetimeVGBuilder>(cls);
 
-    __jsb_CCLifetimeVGBuilder_proto = cls->getProto();
     __jsb_CCLifetimeVGBuilder_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

@@ -25,8 +25,6 @@ void set_value(se::Value& value, soomla::CCStoreInventory* input) {
 } // namespace ee
 
 namespace soomla {
-
-se::Object* __jsb_CCStoreInventory_proto = nullptr;
 se::Class* __jsb_CCStoreInventory_class = nullptr;
 
 const auto jsb_CCStoreInventory_finalize =
@@ -80,7 +78,6 @@ bool register_cc_store_inventory_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<CCStoreInventory>(cls);
 
-    __jsb_CCStoreInventory_proto = cls->getProto();
     __jsb_CCStoreInventory_class = cls;
 
     // Register static member variables and static member functions

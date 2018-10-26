@@ -14,9 +14,6 @@
 
 namespace soomla {
 
-se::Object* __jsb_CCSoomla_proto = nullptr;
-se::Class* __jsb_CCSoomla_class = nullptr;
-
 const auto jsb_CCSoomla_initialize =
     &ee::core::jsb_static_call<&CCSoomla::initialize, const std::string&>;
 
@@ -31,9 +28,6 @@ bool register_cc_soomla_manual(se::Object* globalObj) {
     cls->install();
 
     JSBClassType::registerClass<CCSoomla>(cls);
-
-    __jsb_CCSoomla_proto = cls->getProto();
-    __jsb_CCSoomla_class = cls;
 
     // Register static member variables and static member functions
     se::Value ctorVal;

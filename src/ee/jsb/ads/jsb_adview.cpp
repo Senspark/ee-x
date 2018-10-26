@@ -10,16 +10,13 @@
 #include <unordered_map>
 
 #include <ee/Ads.hpp>
-#include <ee/AdsFwd.hpp>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace ads {
-se::Object* __jsb_AdView_proto = nullptr;
 se::Class* __jsb_AdView_class = nullptr;
-
 std::unordered_map<std::shared_ptr<IAdView>, se::Object*> __jsb_s_adviews;
 std::vector<std::shared_ptr<IAdView>> __jsb_s_adviewArchive;
 } // namespace ads
@@ -67,8 +64,6 @@ bool jsb_finalize<IAdView>(se::State& s) {
 
 namespace ads {
 
-se::Object* __adsObj = nullptr;
-
 const auto jsb_AdView_finalize = &core::jsb_finalize<IAdView>;
 const auto jsb_AdView_isLoaded =
     &core::jsb_accessor_get_on_ui_thread<IAdView, &IAdView::isLoaded, bool>;
@@ -108,10 +103,18 @@ SE_BIND_FUNC(jsb_AdView_setSize)
 SE_BIND_FUNC(jsb_AdView_setVisible)
 SE_BIND_FUNC(jsb_AdView_setLoadCallback)
 
-bool register_adview_manual(se::Object* globalObj) {
-    core::getOrCreatePlainObject_r("ads", globalObj, &__adsObj);
+se::Class* getIAdViewClass() {
+    CCASSERT(__jsb_AdView_proto != nullptr, "__jsb_AdView_proto is null");
+    return __jsb_AdView_class;
+}
 
-    auto cls = se::Class::create("AdView", __adsObj, nullptr, nullptr);
+bool register_adview_manual(se::Object* globalObj) {
+    se::Object* eeObj = nullptr;
+    se::Object* adsObj = nullptr;
+    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
+    core::getOrCreatePlainObject_r("ads", eeObj, &adsObj);
+
+    auto cls = se::Class::create("IAdView", adsObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(jsb_AdView_finalize));
 
     cls->defineFunction("isLoaded", _SE(jsb_AdView_isLoaded));
@@ -129,7 +132,6 @@ bool register_adview_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<IAdView>(cls);
 
-    __jsb_AdView_proto = cls->getProto();
     __jsb_AdView_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

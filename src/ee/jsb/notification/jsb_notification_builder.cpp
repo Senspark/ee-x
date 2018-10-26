@@ -23,10 +23,7 @@ NotificationBuilder get_value(const se::Value& value) {
 
 namespace notification {
 
-se::Object* __jsb_NotificationBuilder_proto = nullptr;
 se::Class* __jsb_NotificationBuilder_class = nullptr;
-
-se::Object* __notificationObj = nullptr;
 
 const auto jsb_NotificationBuilder_finalize =
     &core::jsb_finalize<NotificationBuilder>;
@@ -58,11 +55,12 @@ SE_BIND_FUNC(jsb_NotificationBuilder_setTag)
 
 bool register_notification_builder_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
+    se::Object* notificationObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("notification", eeObj, &__notificationObj);
+    core::getOrCreatePlainObject_r("notification", eeObj, &notificationObj);
 
     auto cls =
-        se::Class::create("NotificationBuilder", __notificationObj, nullptr,
+        se::Class::create("NotificationBuilder", notificationObj, nullptr,
                           _SE(jsb_NotificationBuilder_constructor));
     cls->defineFinalizeFunction(_SE(jsb_NotificationBuilder_finalize));
 
@@ -77,7 +75,6 @@ bool register_notification_builder_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<NotificationBuilder>(cls);
 
-    __jsb_NotificationBuilder_proto = cls->getProto();
     __jsb_NotificationBuilder_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

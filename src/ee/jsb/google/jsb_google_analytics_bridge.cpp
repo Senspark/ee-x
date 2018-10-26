@@ -17,7 +17,6 @@ namespace ee {
 
 namespace google {
 
-se::Object* __jsb_GoogleAnalytics_proto = nullptr;
 se::Class* __jsb_GoogleAnalytics_class = nullptr;
 
 const auto jsb_GoogleAnalytics_finalize = &core::jsb_finalize<GoogleAnalytics>;
@@ -80,7 +79,6 @@ bool register_google_bridge_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<GoogleAnalytics>(cls);
 
-    __jsb_GoogleAnalytics_proto = cls->getProto();
     __jsb_GoogleAnalytics_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

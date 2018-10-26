@@ -17,7 +17,6 @@ namespace ee {
 namespace google {
 std::vector<std::shared_ptr<GoogleAnalyticsTracker>>
     __jsb_s_googleAnalyticsArchive;
-se::Object* __jsb_AnalyticsTracker_proto = nullptr;
 se::Class* __jsb_AnalyticsTracker_class = nullptr;
 } // namespace google
 
@@ -82,12 +81,10 @@ bool register_google_tracker_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<google::AnalyticsTracker>(cls);
 
-    __jsb_AnalyticsTracker_proto = cls->getProto();
     __jsb_AnalyticsTracker_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-
 } // namespace google
 } // namespace ee

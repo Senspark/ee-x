@@ -17,7 +17,6 @@ namespace ee {
 
 namespace firebase {
 
-se::Object* __jsb_FirebaseRemoteConfig_proto = nullptr;
 se::Class* __jsb_FirebaseRemoteConfig_class = nullptr;
 
 const auto jsb_FirebaseRemoteConfig_finalize =
@@ -111,7 +110,6 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
 
     JSBClassType::registerClass<FirebaseRemoteConfig>(cls);
 
-    __jsb_FirebaseRemoteConfig_proto = cls->getProto();
     __jsb_FirebaseRemoteConfig_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

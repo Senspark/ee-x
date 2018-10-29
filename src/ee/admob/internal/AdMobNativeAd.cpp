@@ -71,6 +71,7 @@ Self::~NativeAd() {
 
     bridge_.deregisterHandler(k__onLoaded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onClicked(adId_));
 }
 
 bool Self::isLoaded() const {

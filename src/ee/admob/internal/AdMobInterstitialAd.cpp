@@ -113,6 +113,7 @@ Self::~InterstitialAd() {
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
     bridge_.deregisterHandler(k__onFailedToShow(adId_));
     bridge_.deregisterHandler(k__onClosed(adId_));
+    bridge_.deregisterHandler(k__onClicked(adId_));
     plugin_->destroyInterstitialAd(adId_);
 }
 

@@ -61,7 +61,7 @@ protected:
 
 private:
     AdViewCallback callback_{nullptr};
-    OnClickedCallback onclickCallback_{nullptr};
+    OnClickedCallback onClickCallback_{nullptr};
 };
 } // namespace ads
 } // namespace ee

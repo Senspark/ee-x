@@ -21,9 +21,9 @@ using AdViewCallback = std::function<void(bool result)>;
 
 class IAdView {
 public:
-    IAdView();
+    IAdView() = default;
 
-    virtual ~IAdView();
+    virtual ~IAdView() = default;
 
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;

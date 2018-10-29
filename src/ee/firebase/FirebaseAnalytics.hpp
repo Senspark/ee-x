@@ -11,9 +11,12 @@
 
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 
 namespace ee {
 namespace firebase {
+using TrackingDict = std::unordered_map<std::string, std::string>;
+
 /// Wrapper for Firebase Analytics.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/analytics/cpp/start
@@ -63,12 +66,12 @@ public:
     /// @param[in] property Value to set the user property to.
     void setUserProperty(const std::string& name, const std::string& property);
 
-    /// Log an event with no parameters.
+    /// Log an event with with associated parameters.
     /// @param[in] name Name of the event to log. Should contain 1 to 32
     /// alphanumeric characters or underscores. The name must start with an
     /// alphabetic character. Some event names are reserved.
-    void logEvent(const std::string& name);
-
+    /// @param[in] dict Dictionary of Parameter structures.
+    void logEvent(const std::string& name, const TrackingDict& dict = {});
 private:
     bool initialized_;
 };

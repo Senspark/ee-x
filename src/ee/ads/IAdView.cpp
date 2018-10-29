@@ -12,10 +12,6 @@ namespace ee {
 namespace ads {
 using Self = IAdView;
 
-Self::IAdView() {}
-
-Self::~IAdView() {}
-
 void Self::setLoadCallback(const AdViewCallback& callback) {
     callback_ = callback;
 }

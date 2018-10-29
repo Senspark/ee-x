@@ -1,0 +1,18 @@
+<resources>
+    <string name="alert_dialog_ok">Ok</string>
+    <string name="alert_dialog_cancel">Cancel</string>
+    <string name="learn_more">Learn more</string>
+    <string name="help_url" formatted="false">http://market.android.com/support/bin/answer.py?answer=1050566&amp;hl=%lang%&amp;dl=%region%</string>
+    <string name="billing_not_supported_title">Can\'t make purchases</string>
+    <string name="billing_not_supported_message">The Market billing
+        service is not available at this time.  You can continue to use this app but you
+        won\'t be able to make purchases.</string>
+    <string name="subscriptions_not_supported_title">Can\'t purchase subscriptions</string>
+    <string name="subscriptions_not_supported_message">The Market billing
+        service on this device does not support subscriptions at this time.</string>
+    <string name="cannot_connect_title">Can\'t connect to Market</string>
+    <string name="cannot_connect_message">This app cannot connect to Market.
+        Your version of Market may be out of date.
+        You can continue to use this app but you
+        won\'t be able to make purchases.</string>
+</resources>

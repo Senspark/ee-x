@@ -11,11 +11,11 @@ import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
-import com.vungle.publisher.AdConfig;
-import com.vungle.publisher.Orientation;
-import com.vungle.publisher.VungleAdEventListener;
-import com.vungle.publisher.VungleInitListener;
-import com.vungle.publisher.VunglePub;
+import com.vungle.warren.AdConfig;
+import com.vungle.warren.InitCallback;
+import com.vungle.warren.LoadAdCallback;
+import com.vungle.warren.PlayAdCallback;
+import com.vungle.warren.error.VungleException;
 
 import java.util.Map;
 
@@ -29,21 +29,22 @@ public class Vungle implements PluginProtocol {
     private static final String k__onStart           = "Vungle_onStart";
     private static final String k__onEnd             = "Vungle_onEnd";
     private static final String k__onUnavailable     = "Vungle_onUnavailable";
+    private static final String k__loadVideoAd       = "Vungle_loadVideoAd";
 
     private static final Logger _logger = new Logger(Vungle.class.getName());
 
     private Context _context;
     private boolean _initializing;
 
-    private final VunglePub _vunglePub = VunglePub.getInstance();
-    private AdConfig _globalAdConfig;
+    private PlayAdCallback _playAdCallback;
+    private LoadAdCallback _loadAdCallback;
+    private InitCallback   _initCallback;
 
     public Vungle(Context context) {
         Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = context;
         _initializing = false;
-        _globalAdConfig = null;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -56,37 +57,38 @@ public class Vungle implements PluginProtocol {
 
     @Override
     public void onCreate(@NonNull Activity activity) {
+        // do nothing
     }
 
     @Override
     public void onStart() {
+        // do nothing
     }
 
     @Override
     public void onStop() {
+        // do nothing
     }
 
     @Override
     public void onResume() {
-        Utils.checkMainThread();
-        _vunglePub.onResume();
+        // do nothing
     }
 
     @Override
     public void onPause() {
-        Utils.checkMainThread();
-        _vunglePub.onPause();
+        // do nothing
     }
 
     @Override
     public void onDestroy() {
+        // do nothing
     }
 
     @Override
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        _vunglePub.clearEventListeners();
     }
 
     @Override
@@ -108,14 +110,12 @@ public class Vungle implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 assert dict != null;
 
                 String gameId = (String) dict.get("gameId");
-                String placementId = (String) dict.get("placementId");
 
-                initialize(gameId, placementId);
+                initialize(gameId);
 
                 return "";
             }
@@ -140,6 +140,16 @@ public class Vungle implements PluginProtocol {
                 return "true";
             }
         }, k__showRewardedVideo);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                loadVideoAd(message);
+
+                return "";
+            }
+        }, k__loadVideoAd);
     }
 
     private void deregisterHandlers() {
@@ -149,76 +159,99 @@ public class Vungle implements PluginProtocol {
         bridge.deregisterHandler(k__initialize);
         bridge.deregisterHandler(k__hasRewardedVideo);
         bridge.deregisterHandler(k__showRewardedVideo);
+        bridge.deregisterHandler(k__loadVideoAd);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(final @NonNull String gameId, final @NonNull String placementId) {
+    public void initialize(final @NonNull String gameId) {
         Utils.checkMainThread();
         if (_initializing) {
             return;
         }
 
         _initializing = true;
-        _vunglePub.init(_context, gameId, new String[] { placementId }, new VungleInitListener() {
+
+        _initCallback = new InitCallback() {
             @Override
             public void onSuccess() {
                 _logger.info("vunglePub.init onSuccess");
-                _globalAdConfig = _vunglePub.getGlobalAdConfig();
-                _vunglePub.loadAd(placementId);
                 _initializing = false;
-            }
-            @Override
-            public void onFailure(Throwable e) {
-                _logger.info("vunglePub.init onFailure");
-                _initializing = false;
-            }
-        });
-        _vunglePub.addEventListeners(new VungleAdEventListener() {
-            @Override
-            public void onAdEnd(@NonNull String s, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
-                _logger.info("onAdEnd: successful = " + wasSuccessfulView + " clicked = " +
-                             wasCallToActionClicked);
-                MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onEnd, Utils.toString(wasSuccessfulView));
             }
 
             @Override
-            public void onAdStart(@NonNull String s) {
+            public void onError(Throwable throwable) {
+                _logger.info("vunglePub.init onFailure");
+                _initializing = false;
+            }
+
+            @Override
+            public void onAutoCacheAdAvailable(String s) {
+            }
+        };
+
+        com.vungle.warren.Vungle.init(gameId, _context, _initCallback);
+
+        _playAdCallback = new PlayAdCallback() {
+            @Override
+            public void onAdStart(String s) {
                 _logger.info("onAdStart");
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onStart);
             }
 
             @Override
-            public void onUnableToPlayAd(@NonNull String s, String reason) {
-                _logger.info("onUnableToPlayAd: " + reason);
+            public void onAdEnd(String s, boolean completed, boolean isCTAClicked) {
+                _logger.info("onAdEnd: successful = " + completed + " clicked = " + isCTAClicked);
                 MessageBridge bridge = MessageBridge.getInstance();
-                bridge.callCpp(k__onUnavailable);
+                bridge.callCpp(k__onEnd, Utils.toString(completed));
             }
 
             @Override
-            public void onAdAvailabilityUpdate(@NonNull String s, boolean isAdPlayable) {
-                _logger.info("onAdAvailabilityUpdate: " + isAdPlayable);
-            }
-        });
+            public void onError(String placementReferenceId, Throwable throwable) {
+                _logger.info("onUnableToPlayAd: " + placementReferenceId);
+                MessageBridge bridge = MessageBridge.getInstance();
+                bridge.callCpp(k__onUnavailable);
 
-        final AdConfig config = _vunglePub.getGlobalAdConfig();
-        config.setOrientation(Orientation.autoRotate);
+                try {
+                    VungleException ex = (VungleException) throwable;
+
+                    if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
+                        com.vungle.warren.Vungle.init(gameId, _context, _initCallback);
+                    }
+                } catch (ClassCastException cex) {
+                    _logger.info("Error: " + cex.getMessage());
+                }
+            }
+        };
+
+        _loadAdCallback = new LoadAdCallback() {
+            @Override
+            public void onAdLoad(String placementReferenceId) {
+                _logger.info("onAdLoaded: " + placementReferenceId);
+            }
+
+            @Override
+            public void onError(String placementReferenceId, Throwable throwable) {
+                _logger.info("onAdLoadError: " + placementReferenceId + " reason: " + throwable.getMessage());
+            }
+        };
     }
 
     private boolean hasRewardedVideo(String placementId) {
-        if (!_vunglePub.isInitialized()) {
+        if (!com.vungle.warren.Vungle.isInitialized()) {
             return false;
         }
         Utils.checkMainThread();
-        return _vunglePub.isAdPlayable(placementId);
+        return com.vungle.warren.Vungle.canPlayAd(placementId);
     }
 
     private void showRewardedVideo(String placementId) {
         Utils.checkMainThread();
-        if (!_vunglePub.isInitialized()) {
-            return;
-        }
-        _vunglePub.playAd(placementId, _globalAdConfig);
+        com.vungle.warren.Vungle.playAd(placementId, new AdConfig(), _playAdCallback);
+    }
+
+    private void loadVideoAd(String placementId) {
+        Utils.checkMainThread();
+        com.vungle.warren.Vungle.loadAd(placementId, _loadAdCallback);
     }
 }

@@ -314,6 +314,5 @@ std::string dumpBacktrace(size_t count) {
     dumpBacktrace(oss, buffer, captureBacktrace(buffer, count));
     return oss.str();
 }
-
 } // namespace core
 } // namespace ee

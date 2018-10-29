@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'SoomlaiOSStore' target in the 'SoomlaiOSStore' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif

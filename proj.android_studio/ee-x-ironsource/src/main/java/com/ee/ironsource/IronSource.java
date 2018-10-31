@@ -26,10 +26,11 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     private static final String k__hasInterstitial  = "IronSource_hasInterstitial";
     private static final String k__showInterstitial = "IronSource_showInterstitial";
 
-    private static final String k__onRewarded = "IronSource_onRewarded";
-    private static final String k__onFailed   = "IronSource_onFailed";
-    private static final String k__onOpened   = "IronSource_onOpened";
-    private static final String k__onClosed   = "IronSource_onClosed";
+    private static final String k__onRewarded      = "IronSource_onRewarded";
+    private static final String k__onFailed        = "IronSource_onFailed";
+    private static final String k__onOpened        = "IronSource_onOpened";
+    private static final String k__onClosed        = "IronSource_onClosed";
+    private static final String k__onRewardClicked = "IronSource_onRewardClicked";
 
     private static final String k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
     private static final String k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
@@ -249,7 +250,10 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     @Override
     public void onRewardedVideoAdClicked(Placement placement) {
+        _logger.debug("onRewardedVideoAdClicked");
 
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onRewardClicked);
     }
 
     @Override

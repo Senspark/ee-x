@@ -12,12 +12,13 @@
 #include <functional>
 #include <string>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/AdsFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace ads {
 using RewardedVideoCallback = std::function<void(bool result)>;
+using OnRewardClickedCallback = std::function<void()>;
 
 class IRewardedVideo {
 public:
@@ -32,6 +33,9 @@ public:
     virtual bool show() = 0;
 
     void setResultCallback(const RewardedVideoCallback& callback);
+    virtual void setOnClickedCallback(const OnRewardClickedCallback& callback);
+
+    void doOnClicked();
 
 protected:
     friend MediationManager;
@@ -41,6 +45,7 @@ protected:
 private:
     const Logger& logger_;
     RewardedVideoCallback callback_;
+    OnRewardClickedCallback onClickedCallback_{nullptr};
 };
 } // namespace ads
 } // namespace ee

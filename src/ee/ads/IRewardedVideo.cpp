@@ -29,12 +29,22 @@ void Self::setResultCallback(const RewardedVideoCallback& callback) {
     callback_ = callback;
 }
 
+void Self::setOnClickedCallback(const OnRewardClickedCallback& callback) {
+    onClickedCallback_ = callback;
+}
+
 void Self::setResult(bool result) {
     logger_.debug("%s: this = %p result = %s has callback = %s",
                   __PRETTY_FUNCTION__, this, core::toString(result).c_str(),
                   core::toString(!!callback_).c_str());
     if (callback_) {
         callback_(result);
+    }
+}
+
+void Self::doOnClicked() {
+    if (onClickedCallback_) {
+        onClickedCallback_();
     }
 }
 } // namespace ads

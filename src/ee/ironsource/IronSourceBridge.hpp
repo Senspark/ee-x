@@ -51,6 +51,7 @@ private:
     void onFailed();
     void onOpened();
     void onClosed();
+    void onRewardClicked();
     void doRewardAndFinishAds();
 
     void onInterstitialOpened();

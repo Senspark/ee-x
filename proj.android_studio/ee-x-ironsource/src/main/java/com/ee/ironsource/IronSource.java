@@ -41,12 +41,14 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     private Activity _activity;
     private boolean  _initialized;
+    private MessageBridge _bridge;
 
     public IronSource() {
         Utils.checkMainThread();
         _logger.debug("constructor begin.");
         _activity = null;
         _initialized = false;
+        _bridge = MessageBridge.getInstance();
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -108,9 +110,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -122,7 +122,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             }
         }, k__initialize);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -131,7 +131,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             }
         }, k__hasRewardedVideo);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -142,7 +142,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             }
         }, k__showRewardedVideo);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -151,7 +151,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             }
         }, k__hasInterstitial);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -162,7 +162,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             }
         }, k__showInterstitial);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
@@ -174,15 +174,13 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
+        _bridge.deregisterHandler(k__initialize);
+        _bridge.deregisterHandler(k__hasRewardedVideo);
+        _bridge.deregisterHandler(k__showRewardedVideo);
 
-        bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__hasRewardedVideo);
-        bridge.deregisterHandler(k__showRewardedVideo);
-
-        bridge.deregisterHandler(k__loadInterstitial);
-        bridge.deregisterHandler(k__hasInterstitial);
-        bridge.deregisterHandler(k__showInterstitial);
+        _bridge.deregisterHandler(k__loadInterstitial);
+        _bridge.deregisterHandler(k__hasInterstitial);
+        _bridge.deregisterHandler(k__showInterstitial);
     }
 
     @Override
@@ -198,15 +196,13 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onInterstitialAdOpened() {
         _logger.debug("onInterstitialAdOpened");
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onInterstitialOpened);
+        _bridge.callCpp(k__onInterstitialOpened);
     }
 
     @Override
     public void onInterstitialAdClosed() {
         _logger.debug("onInterstitialAdClosed");
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onInterstitialClosed);
+        _bridge.callCpp(k__onInterstitialClosed);
     }
 
     @Override
@@ -217,15 +213,13 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onInterstitialAdShowFailed");
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onInterstitialFailed);
+        _bridge.callCpp(k__onInterstitialFailed);
     }
 
     @Override
     public void onInterstitialAdClicked() {
         _logger.debug("onInterstitialAdClicked");
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onInterstitialClicked);
+        _bridge.callCpp(k__onInterstitialClicked);
     }
 
     @Override
@@ -236,39 +230,34 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
         _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onRewarded, placement.getPlacementName());
+        _bridge.callCpp(k__onRewarded, placement.getPlacementName());
     }
 
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
 
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailed);
+        _bridge.callCpp(k__onFailed);
     }
 
     @Override
     public void onRewardedVideoAdClicked(Placement placement) {
         _logger.debug("onRewardedVideoAdClicked");
 
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onRewardClicked);
+        _bridge.callCpp(k__onRewardClicked);
     }
 
     @Override
     public void onRewardedVideoAdOpened() {
         _logger.debug("onRewardedVideoAdOpened");
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onOpened);
+        _bridge.callCpp(k__onOpened);
     }
 
     @Override
     public void onRewardedVideoAdClosed() {
         _logger.debug("onRewardedVideoAdClosed");
 
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClosed);
+        _bridge.callCpp(k__onClosed);
     }
 
     @Override

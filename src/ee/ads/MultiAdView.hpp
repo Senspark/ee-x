@@ -54,6 +54,8 @@ public:
 
     /// @see Super.
     virtual void setVisible(bool visible) override;
+    
+    virtual void setOnClickedCallback(const OnClickedCallback& callback) override;
 
 private:
     std::shared_ptr<IAdView> activeItem_;

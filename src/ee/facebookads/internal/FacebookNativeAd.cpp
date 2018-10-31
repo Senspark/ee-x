@@ -38,6 +38,10 @@ auto k__onLoaded(const std::string& id) {
 auto k__onFailedToLoad(const std::string& id) {
     return k__tag + "_onFailedToLoad_" + id;
 }
+
+auto k__onClicked(const std::string& id) {
+    return k__tag + "_onClicked_" + id;
+}
 } // namespace
 
 Self::NativeAd(IMessageBridge& bridge, const Logger& logger,
@@ -65,12 +69,19 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger,
             return "";
         },
         k__onFailedToLoad(adId_));
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked();
+            return "";
+        },
+        k__onClicked(adId_));
 }
 
 Self::~NativeAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onLoaded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onClicked(adId_));
 
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
@@ -147,6 +158,10 @@ void Self::onFailedToLoad(const std::string& message) {
     assert(loading_);
     loading_ = false;
     setLoadResult(false);
+}
+
+void Self::onClicked() {
+    performClick();
 }
 } // namespace facebook
 } // namespace ee

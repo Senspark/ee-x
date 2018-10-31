@@ -12,8 +12,9 @@ import android.widget.FrameLayout;
 
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
-import com.ee.core.Logger;
+import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
+import com.ee.core.Logger;
 import com.ee.core.internal.Metrics;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
@@ -29,14 +30,15 @@ import com.facebook.ads.AdView;
 class FacebookBannerAd implements AdListener, IAdView {
     private static final Logger _logger = new Logger(FacebookBannerAd.class.getName());
 
-    private Context      _context;
-    private Activity     _activity;
-    private AdView       _adView;
-    private boolean      _isAdLoaded;
-    private String       _adId;
-    private AdSize       _adSize;
-    private AdViewHelper _helper;
-    private boolean      _customSize;
+    private Context        _context;
+    private Activity       _activity;
+    private AdView         _adView;
+    private boolean        _isAdLoaded;
+    private String         _adId;
+    private AdSize         _adSize;
+    private AdViewHelper   _helper;
+    private boolean        _customSize;
+    private IMessageBridge _bridge;
 
     static AdSize adSizeFor(int index) {
         if (index == 0) {
@@ -54,8 +56,7 @@ class FacebookBannerAd implements AdListener, IAdView {
         return AdSize.BANNER_320_50;
     }
 
-    FacebookBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId,
-                     @NonNull AdSize adSize) {
+    FacebookBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         Utils.checkMainThread();
         _isAdLoaded = false;
         _adId = adId;
@@ -65,6 +66,7 @@ class FacebookBannerAd implements AdListener, IAdView {
         _activity = activity;
         _customSize = false;
         _helper = new AdViewHelper("FacebookBannerAd", _adId);
+        _bridge = MessageBridge.getInstance();
         createInternalAd();
         registerHandlers();
     }
@@ -88,16 +90,22 @@ class FacebookBannerAd implements AdListener, IAdView {
         _context = null;
         _adId = null;
         _adSize = null;
+        _bridge = null;
     }
 
     @NonNull
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return "FacebookBannerAd_onLoaded_" + _adId;
     }
 
     @NonNull
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return "FacebookBannerAd_onFailedToLoad_" + _adId;
+    }
+
+    @NonNull
+    private String kOnClicked() {
+        return "FacebookBannerAd_onClicked_" + _adId;
     }
 
     private void registerHandlers() {
@@ -121,9 +129,7 @@ class FacebookBannerAd implements AdListener, IAdView {
         adView.setAdListener(this);
         _adView = adView;
 
-        FrameLayout.LayoutParams params =
-            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
         _adView.setLayoutParams(params);
 
@@ -213,9 +219,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
@@ -223,15 +227,14 @@ class FacebookBannerAd implements AdListener, IAdView {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
         _isAdLoaded = true;
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(kOnLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
+        _bridge.callCpp(kOnClicked());
     }
 
     @Override
@@ -242,20 +245,20 @@ class FacebookBannerAd implements AdListener, IAdView {
 
     private static int getWidthInPixels(AdSize size) {
         switch (size.getWidth()) {
-        case 0: // Interstitial.
-        case -1: // Normal ads.
-            return Resources.getSystem().getDisplayMetrics().widthPixels;
-        default: // Deprecated ads.
-            return (int) Metrics.convertDpToPixel((double) size.getWidth());
+            case 0: // Interstitial.
+            case -1: // Normal ads.
+                return Resources.getSystem().getDisplayMetrics().widthPixels;
+            default: // Deprecated ads.
+                return (int) Metrics.convertDpToPixel((double) size.getWidth());
         }
     }
 
     private static int getHeightInPixels(AdSize size) {
         switch (size.getHeight()) {
-        case 0: // Interstitial.
-            return Resources.getSystem().getDisplayMetrics().heightPixels;
-        default: // Normal ads.
-            return (int) Metrics.convertDpToPixel((double) size.getHeight());
+            case 0: // Interstitial.
+                return Resources.getSystem().getDisplayMetrics().heightPixels;
+            default: // Normal ads.
+                return (int) Metrics.convertDpToPixel((double) size.getHeight());
         }
     }
 }

@@ -14,7 +14,7 @@
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEAdMobNativeAd () <GADAdLoaderDelegate,
-                               GADNativeAppInstallAdLoaderDelegate> {
+                               GADNativeAppInstallAdLoaderDelegate, GADNativeAdDelegate> {
     id<EEIMessageBridge> bridge_;
     GADAdLoader* adLoader_;
     NSString* adId_;
@@ -81,6 +81,10 @@
 
 - (NSString*)k__onFailedToLoad {
     return [@"AdMobNativeAd_onFailedToLoad_" stringByAppendingString:adId_];
+}
+
+- (NSString*)k__onClicked {
+    return [@"AdMobNativeAd_onClicked_" stringByAppendingString:adId_];
 }
 
 - (void)registerHandlers {
@@ -194,6 +198,8 @@
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(adLoader_ == adLoader, @"");
 
+    nativeAppInstallAd.delegate = self;
+    
     GADNativeAppInstallAdView* adView =
         [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
             firstObject];
@@ -334,4 +340,34 @@
                                                  views:viewDictionary]];
 }
 
+// The native ad was shown.
+- (void)nativeAdDidRecordImpression:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// The native ad was clicked on.
+- (void)nativeAdDidRecordClick:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// The native ad will present a full screen view.
+- (void)nativeAdWillPresentScreen:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// The native ad will dismiss a full screen view.
+- (void)nativeAdWillDismissScreen:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// The native ad did dismiss a full screen view.
+- (void)nativeAdDidDismissScreen:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+// The native ad will cause the application to become inactive and open a new application.
+- (void)nativeAdWillLeaveApplication:(GADNativeAd *)nativeAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:[self k__onClicked]];
+}
 @end

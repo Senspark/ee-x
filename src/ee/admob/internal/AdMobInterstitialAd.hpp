@@ -35,6 +35,7 @@ protected:
     void onFailedToLoad(const std::string& message);
     void onFailedToShow();
     void onClosed();
+    void onClicked();
 
 private:
     friend AdMob;

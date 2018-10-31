@@ -25,6 +25,11 @@ auto k__onLoaded(const std::string& id) {
 auto k__onFailedToLoad(const std::string& id) {
     return "AdMobBannerAd_onFailedToLoad_" + id;
 }
+
+auto k__onClicked(const std::string& id) {
+    return "AdMobBannerAd_onClicked_" + id;
+}
+
 } // namespace
 
 Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
@@ -48,14 +53,20 @@ Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
             return "";
         },
         k__onFailedToLoad(adId_));
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked();
+            return "";
+        },
+        k__onClicked(adId_));
 }
 
 Self::~BannerAd() {
     bool succeeded = plugin_->destroyBannerAd(adId_);
     assert(succeeded);
-
     bridge_.deregisterHandler(k__onLoaded(adId_));
     bridge_.deregisterHandler(k__onFailedToLoad(adId_));
+    bridge_.deregisterHandler(k__onClicked(adId_));
 }
 
 bool Self::isLoaded() const {
@@ -111,5 +122,10 @@ void Self::onFailedToLoad(const std::string& message) {
     loading_ = false;
     setLoadResult(false);
 }
+
+void Self::onClicked() {
+    performClick();
+}
+
 } // namespace admob
 } // namespace ee

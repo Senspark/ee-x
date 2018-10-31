@@ -23,7 +23,7 @@ constexpr auto k__initialize        = "IronSource_initialize";
 constexpr auto k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
     
-constexpr auto k__loadInterstitial   = "IronSource_loadInterstitial";
+constexpr auto k__loadInterstitial  = "IronSource_loadInterstitial";
 constexpr auto k__hasInterstitial   = "IronSource_hasInterstitial";
 constexpr auto k__showInterstitial  = "IronSource_showInterstitial";
 constexpr auto k__onRewarded        = "IronSource_onRewarded";
@@ -31,9 +31,10 @@ constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
 constexpr auto k__onClosed          = "IronSource_onClosed";
     
-constexpr auto k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
-constexpr auto k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
-constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+constexpr auto k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
+constexpr auto k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
+constexpr auto k__onInterstitialClosed  = "IronSource_onInterstitialClosed";
+constexpr auto k__onInterstitialClicked = "IronSource_onInterstitialClicked";
 // clang-format on
 } // namespace
 
@@ -93,6 +94,13 @@ Self::IronSource(const Logger& logger)
         },
         k__onInterstitialClosed);
 
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialClicked();
+            return "";
+        },
+        k__onInterstitialClicked);
+
     handlerLock_ = std::make_unique<core::SpinLock>();
 }
 
@@ -106,6 +114,7 @@ Self::~IronSource() {
     bridge_.deregisterHandler(k__onInterstitialOpened);
     bridge_.deregisterHandler(k__onInterstitialFailed);
     bridge_.deregisterHandler(k__onInterstitialClosed);
+    bridge_.deregisterHandler(k__onInterstitialClicked);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -170,7 +179,7 @@ bool Self::showInterstitial(const std::string& placementId) {
     if (not hasInterstitial()) {
         return false;
     }
-
+    placementId_ = placementId;
     rewarded_ = false;
     bridge_.call(k__showInterstitial, placementId);
     return true;
@@ -255,6 +264,13 @@ void Self::onInterstitialClosed() {
     //    auto successful = mediation.finishInterstitialAd();
     //    assert(successful);
     doRewardAndFinishAds();
+}
+
+void Self::onInterstitialClicked() {
+    auto iter = interstitialAds_.find(placementId_);
+    if (iter != interstitialAds_.cend()) {
+        iter->second->doOnClicked();
+    }
 }
 
 #pragma mark - Config

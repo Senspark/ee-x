@@ -71,7 +71,7 @@ Pod::Spec.new do |spec|
     s.dependency 'Crashlytics'
     s.dependency 'Fabric'
   end
-  
+
   spec.subspec 'campaign-receiver' do |s|
     s.source_files =
       'src/ee/CampaignReceiver.hpp',
@@ -416,7 +416,7 @@ Pod::Spec.new do |spec|
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',
       'src/ee/gamecenter/*'
-      
+
     s.public_header_files =
       'src/ee/GameCenter.hpp',
       'src/ee/GameCenterFwd.hpp',

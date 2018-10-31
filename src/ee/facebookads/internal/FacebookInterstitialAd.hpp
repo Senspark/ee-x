@@ -35,6 +35,7 @@ protected:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onClosed();
+    void onClicked();
 
 private:
     friend FacebookAds;

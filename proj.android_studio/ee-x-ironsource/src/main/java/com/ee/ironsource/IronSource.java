@@ -18,27 +18,28 @@ import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class IronSource implements PluginProtocol, RewardedVideoListener, InterstitialListener {
-    private static final String k__initialize = "IronSource_initialize";
-    private static final String k__hasRewardedVideo = "IronSource_hasRewardedVideo";
+    private static final String k__initialize        = "IronSource_initialize";
+    private static final String k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
     private static final String k__showRewardedVideo = "IronSource_showRewardedVideo";
 
     private static final String k__loadInterstitial = "IronSource_loadInterstitial";
-    private static final String k__hasInterstitial = "IronSource_hasInterstitial";
+    private static final String k__hasInterstitial  = "IronSource_hasInterstitial";
     private static final String k__showInterstitial = "IronSource_showInterstitial";
 
     private static final String k__onRewarded = "IronSource_onRewarded";
-    private static final String k__onFailed = "IronSource_onFailed";
-    private static final String k__onOpened = "IronSource_onOpened";
-    private static final String k__onClosed = "IronSource_onClosed";
+    private static final String k__onFailed   = "IronSource_onFailed";
+    private static final String k__onOpened   = "IronSource_onOpened";
+    private static final String k__onClosed   = "IronSource_onClosed";
 
-    private static final String k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
-    private static final String k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
-    private static final String k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+    private static final String k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
+    private static final String k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
+    private static final String k__onInterstitialClosed  = "IronSource_onInterstitialClosed";
+    private static final String k__onInterstitialClicked = "IronSource_onInterstitialClicked";
 
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _activity;
-    private boolean _initialized;
+    private boolean  _initialized;
 
     public IronSource() {
         Utils.checkMainThread();
@@ -222,6 +223,8 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onInterstitialAdClicked() {
         _logger.debug("onInterstitialAdClicked");
+        MessageBridge bridge = MessageBridge.getInstance();
+        bridge.callCpp(k__onInterstitialClicked);
     }
 
     @Override
@@ -238,8 +241,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-        _logger.debug(
-                "onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
+        _logger.debug("onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
 
         MessageBridge bridge = MessageBridge.getInstance();
         bridge.callCpp(k__onFailed);
@@ -286,10 +288,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
         com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this);
 
-        com.ironsource.mediationsdk.IronSource.init(activity, gameId,
-                com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO,
-                com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL)
-        ;
+        com.ironsource.mediationsdk.IronSource.init(activity, gameId, com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO, com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL);
 
         _initialized = true;
     }

@@ -60,6 +60,7 @@ protected:
 private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
+    void onClicked();
 
     bool loading_;
     std::string adId_;

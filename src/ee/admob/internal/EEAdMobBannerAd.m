@@ -90,6 +90,10 @@
     return [@"AdMobBannerAd_onFailedToLoad_" stringByAppendingString:adId_];
 }
 
+- (NSString* _Nonnull)k__onClicked {
+    return [@"AdMobBannerAd_onClicked_" stringByAppendingString:adId_];
+}
+
 - (void)registerHandlers {
     [helper_ registerHandlers:self];
 }
@@ -193,9 +197,12 @@
     NSAssert(bannerView_ == bannerView, @"");
 }
 
+/// Tells the delegate that a user click will open another app
+/// (such as the App Store), backgrounding the current app.
 - (void)adViewWillLeaveApplication:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(bannerView_ == bannerView, @"");
+    [bridge_ callCpp:[self k__onClicked]];
 }
 
 @end

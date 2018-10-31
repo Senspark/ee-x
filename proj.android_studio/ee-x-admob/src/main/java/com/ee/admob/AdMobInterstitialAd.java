@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.IInterstitialAd;
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -27,15 +28,17 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     private String               _adId;
     private List<String>         _testDevices;
     private InterstitialAdHelper _helper;
+    private IMessageBridge       _bridge;
 
-    AdMobInterstitialAd(@NonNull Context context, @NonNull String adId,
-                        @NonNull List<String> testDevices) {
+
+    AdMobInterstitialAd(@NonNull Context context, @NonNull String adId, @NonNull List<String> testDevices) {
         Utils.checkMainThread();
         _context = context;
         _adId = adId;
         _interstitialAd = null;
         _testDevices = testDevices;
         _helper = new InterstitialAdHelper("AdMobInterstitialAd", adId);
+        _bridge = MessageBridge.getInstance();
         registerHandlers();
     }
 
@@ -49,25 +52,26 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
         _adId = null;
         _testDevices = null;
         _helper = null;
+        _bridge = null;
     }
 
-    private String k__createInternalAd() {
+    private String kCreateInternalAd() {
         return "AdMobInterstitialAd_createInternalAd_" + _adId;
     }
 
-    private String k__destroyInternalAd() {
+    private String kDestroyInternalAd() {
         return "AdMobInterstitialAd_destroyInternalAd_" + _adId;
     }
 
-    private String k__onLoaded() {
+    private String kOnLoaded() {
         return "AdMobInterstitialAd_onLoaded_" + _adId;
     }
 
-    private String k__onFailedToLoad() {
+    private String kOnFailedToLoad() {
         return "AdMobInterstitialAd_onFailedToLoad_" + _adId;
     }
 
-    private String k__onClosed() {
+    private String kOnClosed() {
         return "AdMobInterstitialAd_onClosed_" + _adId;
     }
 
@@ -75,33 +79,29 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
         Utils.checkMainThread();
         _helper.registerHandlers(this);
 
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
                 return Utils.toString(createInternalAd());
             }
-        }, k__createInternalAd());
+        }, kCreateInternalAd());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
                 return Utils.toString(destroyInternalAd());
             }
-        }, k__destroyInternalAd());
+        }, kDestroyInternalAd());
     }
 
     private void deregisterHandlers() {
         Utils.checkMainThread();
         _helper.deregisterHandlers();
 
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__createInternalAd());
-        bridge.deregisterHandler(k__destroyInternalAd());
+        _bridge.deregisterHandler(kCreateInternalAd());
+        _bridge.deregisterHandler(kDestroyInternalAd());
     }
 
     private boolean createInternalAd() {
@@ -159,18 +159,14 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     public void onAdClosed() {
         _logger.info("onAdClosed");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onClosed());
+        _bridge.callCpp(kOnClosed());
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onFailedToLoad(), String.valueOf(errorCode));
+        _bridge.callCpp(kOnFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
@@ -189,9 +185,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-
-        MessageBridge bridge = MessageBridge.getInstance();
-        bridge.callCpp(k__onLoaded());
+        _bridge.callCpp(kOnLoaded());
     }
 
     @Override

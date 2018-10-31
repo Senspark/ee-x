@@ -138,5 +138,11 @@ void Self::setVisible(bool visible) {
         }
     }
 }
+
+void Self::setOnClickedCallback(const OnClickedCallback& callback) {
+    for (auto&& item : items_) {
+        item->setOnClickedCallback(callback);
+    }
+}
 } // namespace ads
 } // namespace ee

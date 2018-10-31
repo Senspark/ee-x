@@ -82,5 +82,11 @@ void Self::clearCallbacks() {
         item->setResultCallback(nullptr);
     }
 }
+
+void Self::setOnClickedCallback(const OnRewardClickedCallback& callback) {
+    for (auto&& item : items_) {
+        item->setOnClickedCallback(callback);
+    }
+}
 } // namespace ads
 } // namespace ee

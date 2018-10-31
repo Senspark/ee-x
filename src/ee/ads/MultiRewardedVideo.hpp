@@ -24,7 +24,7 @@ private:
 public:
     MultiRewardedVideo();
     explicit MultiRewardedVideo(const Logger& logger);
-    
+
     virtual ~MultiRewardedVideo() override;
 
     Self& addItem(const std::shared_ptr<IRewardedVideo>& item);
@@ -37,6 +37,9 @@ public:
 
     /// @see Super.
     virtual bool show() override;
+
+    virtual void
+    setOnClickedCallback(const OnRewardClickedCallback& callback) override;
 
 private:
     void assignCallbacks();

@@ -37,6 +37,7 @@ static NSString* const k__onRewarded = @"IronSource_onRewarded";
 static NSString* const k__onFailed   = @"IronSource_onFailed";
 static NSString* const k__onOpened   = @"IronSource_onOpened";
 static NSString* const k__onClosed   = @"IronSource_onClosed";
+static NSString* const k__onRewardClicked   = @"IronSource_onRewardClicked";
 
 static NSString* const k__onInterstitialFailed  = @"IronSource_onInterstitialFailed";
 static NSString* const k__onInterstitialOpened  = @"IronSource_onInterstitialOpened";
@@ -172,6 +173,7 @@ static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialCli
 
 - (void)didClickRewardedVideo:(ISPlacementInfo*)placementInfo {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
+    [bridge_ callCpp:k__onRewardClicked];
 }
 #pragma mark - Interstitial
 - (void)loadInterstitial {

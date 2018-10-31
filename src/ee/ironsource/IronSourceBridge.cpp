@@ -30,6 +30,7 @@ constexpr auto k__onRewarded        = "IronSource_onRewarded";
 constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
 constexpr auto k__onClosed          = "IronSource_onClosed";
+constexpr auto k__onRewardClicked   = "IronSource_onRewardClicked";
     
 constexpr auto k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
 constexpr auto k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
@@ -75,6 +76,13 @@ Self::IronSource(const Logger& logger)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
+            onRewardClicked();
+            return "";
+        },
+        k__onRewardClicked);
+
+    bridge_.registerHandler(
+        [this](const std::string& message) {
             onInterstitialOpened();
             return "";
         },
@@ -110,6 +118,7 @@ Self::~IronSource() {
     bridge_.deregisterHandler(k__onFailed);
     bridge_.deregisterHandler(k__onOpened);
     bridge_.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(k__onRewardClicked);
 
     bridge_.deregisterHandler(k__onInterstitialOpened);
     bridge_.deregisterHandler(k__onInterstitialFailed);
@@ -195,6 +204,7 @@ bool Self::showRewardedVideo(const std::string& placementId) {
         return false;
     }
     rewarded_ = false;
+    placementId_ = placementId;
     bridge_.call(k__showRewardedVideo, placementId);
     return true;
 }
@@ -232,6 +242,13 @@ void Self::onClosed() {
             doRewardAndFinishAds();
         },
         _closeTimeout);
+}
+
+void Self::onRewardClicked() {
+    auto ite = rewardedVideos_.find(placementId_);
+    if (ite != rewardedVideos_.end()) {
+        ite->second->doOnClicked();
+    }
 }
 
 void Self::doRewardAndFinishAds() {

@@ -42,7 +42,7 @@ protected:
 
 private:
     InterstitialAdCallback callback_;
-    OnClickedCallback onclickCallback_;
+    OnClickedCallback onClickCallback_;
 
 };
 } // namespace ads

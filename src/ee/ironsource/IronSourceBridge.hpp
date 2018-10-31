@@ -32,6 +32,8 @@ public:
     createInterstitialAd(const std::string& placementId);
 
     void setCloseTimeout(float timeout);
+    void setOnInterstitialClickCallback(const std::function<void()>& callback);
+    void setOnRewardClickCallback(const std::function<void()>& callback);
 
 private:
     friend RewardedVideo;
@@ -51,11 +53,13 @@ private:
     void onFailed();
     void onOpened();
     void onClosed();
+    void onRewardClicked();
     void doRewardAndFinishAds();
 
     void onInterstitialOpened();
     void onInterstitialFailed();
     void onInterstitialClosed();
+    void onInterstitialClicked();
 
     IMessageBridge& bridge_;
     const Logger& logger_;
@@ -66,6 +70,9 @@ private:
 
     float _closeTimeout{1};
     bool rewarded_{false};
+
+    std::function<void()> _interstitialClickCallback{nullptr};
+    std::function<void()> _rewardClickCallback{nullptr};
 };
 } // namespace ironsource
 } // namespace ee

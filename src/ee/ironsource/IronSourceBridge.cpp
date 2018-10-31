@@ -23,17 +23,19 @@ constexpr auto k__initialize        = "IronSource_initialize";
 constexpr auto k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
 constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
     
-constexpr auto k__loadInterstitial   = "IronSource_loadInterstitial";
+constexpr auto k__loadInterstitial  = "IronSource_loadInterstitial";
 constexpr auto k__hasInterstitial   = "IronSource_hasInterstitial";
 constexpr auto k__showInterstitial  = "IronSource_showInterstitial";
 constexpr auto k__onRewarded        = "IronSource_onRewarded";
 constexpr auto k__onFailed          = "IronSource_onFailed";
 constexpr auto k__onOpened          = "IronSource_onOpened";
 constexpr auto k__onClosed          = "IronSource_onClosed";
+constexpr auto k__onRewardClicked   = "IronSource_onRewardClicked";
     
-constexpr auto k__onInterstitialFailed         = "IronSource_onInterstitialFailed";
+constexpr auto k__onInterstitialFailed          = "IronSource_onInterstitialFailed";
 constexpr auto k__onInterstitialOpened          = "IronSource_onInterstitialOpened";
 constexpr auto k__onInterstitialClosed          = "IronSource_onInterstitialClosed";
+constexpr auto k__onInterstitialClicked         = "IronSource_onInterstititalClicked";
 // clang-format on
 } // namespace
 
@@ -74,6 +76,13 @@ Self::IronSource(const Logger& logger)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
+            onRewardClicked();
+            return "";
+        },
+        k__onRewardClicked);
+
+    bridge_.registerHandler(
+        [this](const std::string& message) {
             onInterstitialOpened();
             return "";
         },
@@ -93,6 +102,13 @@ Self::IronSource(const Logger& logger)
         },
         k__onInterstitialClosed);
 
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onInterstitialClicked();
+            return "";
+        },
+        k__onInterstitialClicked);
+
     handlerLock_ = std::make_unique<core::SpinLock>();
 }
 
@@ -102,10 +118,12 @@ Self::~IronSource() {
     bridge_.deregisterHandler(k__onFailed);
     bridge_.deregisterHandler(k__onOpened);
     bridge_.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(k__onRewardClicked);
 
     bridge_.deregisterHandler(k__onInterstitialOpened);
     bridge_.deregisterHandler(k__onInterstitialFailed);
     bridge_.deregisterHandler(k__onInterstitialClosed);
+    bridge_.deregisterHandler(k__onInterstitialClicked);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -225,6 +243,13 @@ void Self::onClosed() {
         _closeTimeout);
 }
 
+void Self::onRewardClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (_rewardClickCallback) {
+        _rewardClickCallback();
+    }
+}
+
 void Self::doRewardAndFinishAds() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
@@ -257,11 +282,27 @@ void Self::onInterstitialClosed() {
     doRewardAndFinishAds();
 }
 
+void Self::onInterstitialClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (_interstitialClickCallback) {
+        _interstitialClickCallback();
+    }
+}
+
 #pragma mark - Config
 
 void Self::setCloseTimeout(float timeout) {
     std::lock_guard<core::SpinLock> guard(*handlerLock_);
     _closeTimeout = timeout < 1 ? 1 : timeout;
+}
+
+void Self::setOnInterstitialClickCallback(
+    const std::function<void()>& callback) {
+    _interstitialClickCallback = callback;
+}
+
+void Self::setOnRewardClickCallback(const std::function<void()>& callback) {
+    _rewardClickCallback = callback;
 }
 } // namespace ironsource
 } // namespace ee

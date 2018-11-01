@@ -23,6 +23,7 @@ include_lib('ee-x-firebase-remote-config')
 include_lib('ee-x-firebase-storage')
 include_lib('ee-x-notification')
 include_lib('ee-x-recorder')
+include_lib('ee-x-twitter')
 
 include_lib('ee-x-admob')
 include_lib('ee-x-applovin')

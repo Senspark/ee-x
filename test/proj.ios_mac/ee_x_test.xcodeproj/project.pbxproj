@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		062C6393216F640D0079C553 /* TwitterShareTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */; };
 		1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */; };
 		6F2580241ECBFC9A00B910F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580231ECBFC9A00B910F9 /* main.mm */; };
 		6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
@@ -46,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TwitterShareTestScene.cpp; sourceTree = "<group>"; };
+		062C6392216F640D0079C553 /* TwitterShareTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TwitterShareTestScene.hpp; sourceTree = "<group>"; };
 		1A9EE02AF42BD8282D9A8F6F /* Pods-common-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* ee_x_test_mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ee_x_test_mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2ED7E810414428AC01BFBD /* Pods-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
@@ -145,7 +148,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				46880B8319C43A87006E1F66 /* Classes */,
@@ -215,6 +218,8 @@
 				AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */,
 				AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */,
 				AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */,
+				062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */,
+				062C6392216F640D0079C553 /* TwitterShareTestScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -288,6 +293,7 @@
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 				C016B096895296658D09BD50 /* [CP] Copy Pods Resources */,
+				10DE774AF14F03B1B51C7BE9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -391,7 +397,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -427,6 +433,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		10DE774AF14F03B1B51C7BE9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7972B1E67F2A6BB2D98900DC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,6 +497,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
 				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 				"${PODS_ROOT}/../../../res/stars_3_5.png",
 				"${PODS_ROOT}/../../../res/stars_4.png",
 				"${PODS_ROOT}/../../../res/stars_4_5.png",
@@ -479,6 +506,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
@@ -498,6 +526,7 @@
 			files = (
 				6F54B3C71FB0215F00D821F1 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F54B3C41FB0207C00D821F1 /* NativeAdTestScene.cpp in Sources */,
+				062C6393216F640D0079C553 /* TwitterShareTestScene.cpp in Sources */,
 				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
 				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
 				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,

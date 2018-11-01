@@ -18,6 +18,7 @@
 #include "Utils.hpp"
 #include "Vungle.hpp"
 #include "VideoPlayerTestScene.hpp"
+#include "TwitterShareTestScene.hpp"
 
 #include <ee/Ads.hpp>
 #include <ee/Core.hpp>
@@ -141,6 +142,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     getLogger().info("isConnected: %s",
                      ee::testConnection() ? "true" : "false");
 
+    NotificationAgent::getInstance()->initialize();
     // testAdMobBannerAd();
     // testAdMobNativeAd();
     // testAdMobInterstitial();
@@ -154,8 +156,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testFacebookNativeAd();
 
     cocos2d::log("Create scene");
-    director->runWithScene(VideoPlayerTestScene::create());
+    // director->runWithScene(VideoPlayerTestScene::create());
     // director->runWithScene(createMultiNativeAdTestScene());
+    director->runWithScene(TwitterShareTestScene::create());
 
     return true;
 }

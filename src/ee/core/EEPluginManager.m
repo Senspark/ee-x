@@ -5,7 +5,6 @@
 //  Created by Zinge on 3/29/17.
 //
 //
-
 #import "ee/core/EEPluginManager.h"
 
 #import "ee/core/internal/EEMetrics.h"
@@ -75,7 +74,7 @@
             openURL:(NSURL* _Nonnull)url
             options:(NSDictionary* _Nonnull)options {
     BOOL result = NO;
-    for (id<EEIPlugin> plugin in plugins_) {
+    for (id<EEIPlugin> plugin in [plugins_ allValues]) {
         if ([plugin
                 respondsToSelector:@selector(application:openURL:options:)]) {
             if ([plugin application:application openURL:url options:options]) {
@@ -91,7 +90,7 @@
     sourceApplication:(NSString* _Nonnull)sourceApplication
            annotation:(id _Nonnull)annotation {
     BOOL result = NO;
-    for (id<EEIPlugin> plugin in plugins_) {
+    for (id<EEIPlugin> plugin in [plugins_ allValues]) {
         if ([plugin respondsToSelector:@selector
                     (application:openURL:sourceApplication:annotation:)]) {
             if ([plugin application:application
@@ -109,7 +108,7 @@
     continueUserActivity:(NSUserActivity* _Nonnull)userActivity
       restorationHandler:(EERestorationHandler _Nonnull)restorationHandler {
     BOOL result = NO;
-    for (id<EEIPlugin> plugin in plugins_) {
+    for (id<EEIPlugin> plugin in [plugins_ allValues]) {
         if ([plugin respondsToSelector:@selector
                     (application:continueUserActivity:restorationHandler:)]) {
             if ([plugin application:application

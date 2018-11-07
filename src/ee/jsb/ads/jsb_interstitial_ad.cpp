@@ -25,9 +25,19 @@ std::vector<std::shared_ptr<IInterstitialAd>> __jsb_s_interstitialAdArchive;
 namespace core {
 template <>
 std::shared_ptr<IInterstitialAd> get_value(const se::Value& value) {
-    auto data =
+    auto adPtr =
         static_cast<IInterstitialAd*>(value.toObject()->getPrivateData());
-    return std::shared_ptr<IInterstitialAd>(data);
+    auto iter =
+        std::find_if(ads::__jsb_s_interstitialAdArchive.cbegin(),
+                     ads::__jsb_s_interstitialAdArchive.cend(),
+                     [=](const std::shared_ptr<IInterstitialAd>& ptr) -> bool {
+                         return adPtr == ptr.get();
+                     });
+    if (iter != ads::__jsb_s_interstitialAdArchive.cend()) {
+        return *iter;
+    } else {
+        return std::shared_ptr<IInterstitialAd>(adPtr);
+    }
 }
 
 template <>

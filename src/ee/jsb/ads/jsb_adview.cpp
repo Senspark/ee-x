@@ -24,8 +24,17 @@ std::vector<std::shared_ptr<IAdView>> __jsb_s_adviewArchive;
 namespace core {
 template <>
 std::shared_ptr<IAdView> get_value(const se::Value& value) {
-    auto data = static_cast<IAdView*>(value.toObject()->getPrivateData());
-    return std::shared_ptr<IAdView>(data);
+    auto adPtr = static_cast<IAdView*>(value.toObject()->getPrivateData());
+    auto iter = std::find_if(ads::__jsb_s_adviewArchive.cbegin(),
+                             ads::__jsb_s_adviewArchive.cend(),
+                             [=](const std::shared_ptr<IAdView>& ptr) -> bool {
+                                 return adPtr == ptr.get();
+                             });
+    if (iter != ads::__jsb_s_adviewArchive.cend()) {
+        return *iter;
+    } else {
+        return std::shared_ptr<IAdView>(adPtr);
+    }
 }
 
 template <>

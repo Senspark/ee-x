@@ -26,9 +26,19 @@ std::vector<std::shared_ptr<IRewardedVideo>> __jsb_s_rewardedVideoArchive;
 namespace core {
 template <>
 std::shared_ptr<IRewardedVideo> get_value(const se::Value& value) {
-    auto data =
+    auto rewardedVideoPtr =
         static_cast<IRewardedVideo*>(value.toObject()->getPrivateData());
-    return std::shared_ptr<IRewardedVideo>(data);
+    auto iter =
+        std::find_if(ads::__jsb_s_rewardedVideoArchive.cbegin(),
+                     ads::__jsb_s_rewardedVideoArchive.cend(),
+                     [=](const std::shared_ptr<IRewardedVideo>& ptr) -> bool {
+                         return rewardedVideoPtr == ptr.get();
+                     });
+    if (iter != ads::__jsb_s_rewardedVideoArchive.cend()) {
+        return *iter;
+    } else {
+        return std::shared_ptr<IRewardedVideo>(rewardedVideoPtr);
+    }
 }
 
 template <>

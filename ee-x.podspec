@@ -458,7 +458,7 @@ Pod::Spec.new do |spec|
   
   spec.subspec 'cocos' do |s|
     s.source_files = 
-      'src/ee/cocos/*.{hpp,cpp}'
+      'src/ee/cocos/*.{hpp,cpp,frag,vert}'
     s.public_header_files = 
       'src/ee/cocos/*.hpp'
     s.xcconfig =  {

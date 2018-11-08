@@ -9,10 +9,11 @@
 #define JSB_EE_UTILS_HPP__
 
 #include "ee/jsb/jsb_fwd.hpp"
+#include <functional>
 
 namespace ee {
 namespace core {
-
+void runOnCocosThread(const std::function<void()>& callback);
 bool register_utils_manual(se::Object* object);
 
 } // namespace core

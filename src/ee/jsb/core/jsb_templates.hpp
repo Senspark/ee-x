@@ -18,6 +18,7 @@
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
+#include "jsb_utils.hpp"
 
 namespace ee {
 namespace core {
@@ -403,18 +404,16 @@ bool jsb_set_callback(se::State& s) {
             }
 
             std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
-                cocos2d::Director::getInstance()
-                    ->getScheduler()
-                    ->performFunctionInCocosThread([=]() -> void {
-                        se::ScriptEngine::getInstance()->clearException();
-                        se::AutoHandleScope hs;
+                runOnCocosThread([=] {
+                    se::ScriptEngine::getInstance()->clearException();
+                    se::AutoHandleScope hs;
 
-                        auto&& args = to_value_array(values...);
-                        se::Object* target =
-                            jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                        se::Object* func = jsFunc.toObject();
-                        func->call(args, target);
-                    });
+                    auto&& args = to_value_array(values...);
+                    se::Object* target =
+                        jsTarget.isObject() ? jsTarget.toObject() : nullptr;
+                    se::Object* func = jsFunc.toObject();
+                    func->call(args, target);
+                });
             })();
         }
 
@@ -445,18 +444,16 @@ bool jsb_static_set_callback(se::State& s) {
             }
 
             std::bind(FunctionPtr, [jsFunc, jsTarget](Args... values) {
-                cocos2d::Director::getInstance()
-                    ->getScheduler()
-                    ->performFunctionInCocosThread([=]() -> void {
-                        se::ScriptEngine::getInstance()->clearException();
-                        se::AutoHandleScope hs;
+                runOnCocosThread([=] {
+                    se::ScriptEngine::getInstance()->clearException();
+                    se::AutoHandleScope hs;
 
-                        auto&& args = to_value_array(values...);
-                        se::Object* target =
-                            jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                        se::Object* func = jsFunc.toObject();
-                        func->call(args, target);
-                    });
+                    auto&& args = to_value_array(values...);
+                    se::Object* target =
+                        jsTarget.isObject() ? jsTarget.toObject() : nullptr;
+                    se::Object* func = jsFunc.toObject();
+                    func->call(args, target);
+                });
             })();
         }
 

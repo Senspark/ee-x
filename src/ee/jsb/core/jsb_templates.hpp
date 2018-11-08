@@ -18,7 +18,7 @@
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
-#include "jsb_utils.hpp"
+#include "ee/jsb/core/jsb_utils.hpp"
 
 namespace ee {
 namespace core {

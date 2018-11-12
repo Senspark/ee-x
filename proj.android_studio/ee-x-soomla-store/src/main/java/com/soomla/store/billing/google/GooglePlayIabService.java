@@ -181,7 +181,7 @@ public class GooglePlayIabService implements IIabService {
                 verifyOnServerFailure = false;
             }
 
-            String verifyServer = (String)config.get("verifyServer");
+            String verifyServer = (String) config.get("verifyServer");
             if (verifyServer == null) {
                 verifyServer = "";
             }

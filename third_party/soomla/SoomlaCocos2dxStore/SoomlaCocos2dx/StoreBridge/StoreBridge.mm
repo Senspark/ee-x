@@ -164,7 +164,7 @@
         VERIFY_PURCHASES = ssv;
         if (ssv) {
             VERIFY_ON_ITUNES_FAILURE = [parameters[@"verifyOnServerFailure"] boolValue];
-            NSString *url = parameters[@"verifyServer"];
+            NSString* url = parameters[@"verifyServer"];
             if (url != nil && url.length != 0) {
                 VERIFY_URL = url;
             }

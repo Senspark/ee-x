@@ -27,7 +27,7 @@ dependencies {
     // implementation 'com.adcolony:sdk:3.3.5'
     implementation 'com.ironsource.adapters:admobadapter:4.1.6@jar'
     implementation 'com.ironsource.adapters:applovinadapter:4.1.5@jar'
-    implementation 'com.ironsource.adapters:facebookadapter:4.1.5@jar'
+    implementation 'com.ironsource.adapters:facebookadapter:4.2.0@jar'
     implementation 'com.ironsource.adapters:unityadsadapter:4.1.1@jar'
     implementation 'com.ironsource.adapters:vungleadapter:4.1.4@jar'
 }

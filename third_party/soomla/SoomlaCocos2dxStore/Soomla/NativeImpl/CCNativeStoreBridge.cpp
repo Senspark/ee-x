@@ -61,6 +61,12 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
                     storeParams.at("verifyOnServerFailure").asBool();
             }
             params["verifyOnServerFailure"] = verifyOnServerFailure;
+            
+            std::string verifyServer = "";
+            if (storeParams.count("verifyServer")) {
+                verifyServer = storeParams.at("verifyServer").asString();
+            }
+            params["verifyServer"] = verifyServer;
         }
         CCNdkBridge::callNative(params, nullptr);
     }
@@ -88,6 +94,10 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
                 auto&& clientSecret = storeParams.at("clientSecret").asString();
                 auto&& refreshToken = storeParams.at("refreshToken").asString();
                 auto verifyOnServerFailure = storeParams.at("verifyOnServerFailure").asBool();
+                std::string verifyServer = "";
+                if (storeParams.count("verifyServer")) {
+                    verifyServer = storeParams.at("verifyServer").asString();
+                }
                 
                 ValueMap params;
                 params["method"] = "CCSoomlaStore::configVerifyPurchases";
@@ -95,6 +105,7 @@ void CCNativeStoreBridge::applyParams(const cocos2d::ValueMap& storeParams) {
                 params["clientSecret"] = clientSecret;
                 params["refreshToken"] = refreshToken;
                 params["verifyOnServerFailure"] = verifyOnServerFailure;
+                params["verifyServer"] = verifyServer;
                 CCNdkBridge::callNative(params, nullptr);
             }
         }

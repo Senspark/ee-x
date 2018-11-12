@@ -521,7 +521,7 @@ public class GoogleIabHelper extends IabHelper {
             int subsResult = querySkuDetails(ITEM_TYPE_SUBS, inv, skus);
             if (inAppResult != IabResult.BILLING_RESPONSE_RESULT_OK
                     || subsResult != IabResult.BILLING_RESPONSE_RESULT_OK) {
-                throw new IabException(inAppResult != inAppResult ? inAppResult : subsResult, "Error refreshing inventory (querying prices of items).");
+                throw new IabException(inAppResult != IabResult.BILLING_RESPONSE_RESULT_OK ? inAppResult : subsResult, "Error refreshing inventory (querying prices of items).");
             }
 
             return inv;

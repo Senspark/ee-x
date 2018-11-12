@@ -374,9 +374,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'unity-ads' do |s|
     s.dependency 'ee-x/unity-ads-base'
-
-    # UnityAds conflicts with GoogleMobileAdsMediationUnity
-    s.dependency 'GoogleMobileAdsMediationUnityAdsSDK'
+    s.dependency 'UnityAds'
   end
 
   spec.subspec 'unity-ads-mediation' do |s|

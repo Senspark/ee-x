@@ -2,9 +2,7 @@ package com.soomla.store.billing.google;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Debug;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.soomla.SoomlaApp;
 import com.soomla.SoomlaUtils;

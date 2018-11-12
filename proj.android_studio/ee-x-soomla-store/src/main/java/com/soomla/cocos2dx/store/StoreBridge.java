@@ -167,6 +167,7 @@ public class StoreBridge {
                         put("clientSecret", params.getString("clientSecret"));
                         put("refreshToken", params.getString("refreshToken"));
                         put("verifyOnServerFailure", params.optBoolean("verifyOnServerFailure", false));
+                        put("verifyServer", params.optString("verifyServer", ""));
                     }};
 
                     Class googlePlayClass = Class.forName("com.soomla.store.billing.google.GooglePlayIabService");

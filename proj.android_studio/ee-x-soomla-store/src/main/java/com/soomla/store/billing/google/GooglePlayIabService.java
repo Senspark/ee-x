@@ -165,6 +165,7 @@ public class GooglePlayIabService implements IIabService {
         KeyValueStorage.deleteKeyValue(VERIFY_CLIENT_ID_KEY);
         KeyValueStorage.deleteKeyValue(VERIFY_CLIENT_SECRET_KEY);
         KeyValueStorage.deleteKeyValue(VERIFY_REFRESH_TOKEN_KEY);
+        KeyValueStorage.deleteKeyValue(VERIFY_IAP_URL);
         if (config != null) {
             try {
                 checkStringConfigItem(config, "clientId");
@@ -180,12 +181,18 @@ public class GooglePlayIabService implements IIabService {
                 verifyOnServerFailure = false;
             }
 
+            String verifyServer = (String) config.get("verifyServer");
+            if (verifyServer == null) {
+                verifyServer = "";
+            }
+
             KeyValueStorage.setValue(VERIFY_CLIENT_ID_KEY, (String) config.get("clientId"));
             KeyValueStorage.setValue(VERIFY_CLIENT_SECRET_KEY, (String) config.get("clientSecret"));
             KeyValueStorage.setValue(VERIFY_REFRESH_TOKEN_KEY, (String) config.get("refreshToken"));
             KeyValueStorage.setValue(VERIFY_ON_SERVER_FAILURE, verifyOnServerFailure.toString());
 
             KeyValueStorage.setValue(VERIFY_PURCHASES_KEY, "yes");
+            KeyValueStorage.setValue(VERIFY_IAP_URL, verifyServer);
         }
     }
 
@@ -682,6 +689,7 @@ public class GooglePlayIabService implements IIabService {
     public static final String VERIFY_CLIENT_ID_KEY = "soomla.verification.clientId";
     public static final String VERIFY_CLIENT_SECRET_KEY = "soomla.verification.clientSecret";
     public static final String VERIFY_ACCESS_TOKEN_KEY = "soomla.verification.accessToken";
+    public static final String VERIFY_IAP_URL = "soomla.verification.verifyServer";
 
     private static final String SKU = "ID#sku";
     private static final String ITEM_TYPE = "ID#itemType";

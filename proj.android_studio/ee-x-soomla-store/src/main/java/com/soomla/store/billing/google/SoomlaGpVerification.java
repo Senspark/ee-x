@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.soomla.SoomlaApp;
 import com.soomla.SoomlaUtils;
+import com.soomla.data.KeyValueStorage;
 import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.events.UnexpectedStoreErrorEvent;
 import org.apache.http.HttpResponse;
@@ -101,8 +102,10 @@ public class SoomlaGpVerification {
         sslContext.init(null, trustAllCerts, new SecureRandom());
         SSLSocketFactory factory = sslContext.getSocketFactory();
 
+        String verifyUrl = getVerifyUrl();
+
         Request request = new Request.Builder() //
-                .url(VERIFY_URL) //
+                .url(verifyUrl) //
                 .post(RequestBody.create( //
                         MediaType.parse("application/json;charset=utf-8"), //
                         jsonObject.toString())) //
@@ -121,7 +124,7 @@ public class SoomlaGpVerification {
 
     private HttpResponse doVerifyPost(JSONObject jsonObject) throws IOException {
         HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost(VERIFY_URL);
+        HttpPost post = new HttpPost(getVerifyUrl());
         post.setHeader("Content-type", "application/json");
 
         String body = jsonObject.toString();
@@ -151,7 +154,7 @@ public class SoomlaGpVerification {
                     jsonObject.put("packageName", purchase.getPackageName());
                     jsonObject.put("productId", purchase.getSku());
                     jsonObject.put("accessToken", accessToken);
-                    SoomlaUtils.LogDebug(TAG, String.format("verifying purchase on server: %s", VERIFY_URL));
+                    SoomlaUtils.LogDebug(TAG, String.format("verifying purchase on server: %s", getVerifyUrl()));
                     SoomlaUtils.LogDebug(TAG, "purchase details: sku = " + purchase.getSku() + " token = " + purchaseToken);
 
                     SharedPreferences prefs = SoomlaApp.getAppContext().
@@ -269,4 +272,11 @@ public class SoomlaGpVerification {
         return !TextUtils.isEmpty(this.accessToken);
     }
 
+    public String getVerifyUrl() {
+        String url = KeyValueStorage.getValue(GooglePlayIabService.VERIFY_IAP_URL);
+        if (url == null || url.isEmpty()) {
+            url = VERIFY_URL;
+        }
+        return url;
+    }
 }

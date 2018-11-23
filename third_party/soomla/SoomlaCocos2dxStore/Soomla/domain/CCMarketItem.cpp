@@ -84,7 +84,7 @@ cocos2d::ValueMap CCMarketItem::toValueMap() {
     putMarketCurrencyCodeToValueMap(map);
     putMarketPriceMicrosToValueMap(map);
     
-    return map;
+    return putTypeData(map, CCStoreConsts::JSON_JSON_TYPE_MARKET_ITEM);
 }
 
 void CCMarketItem::fillProductIdFromValueMap(const cocos2d::ValueMap& map) {

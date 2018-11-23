@@ -11,7 +11,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.ee.twitter.provider"
+            android:authorities="${applicationId}.com.ee.twitter.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

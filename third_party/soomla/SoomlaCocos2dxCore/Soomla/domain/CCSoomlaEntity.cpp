@@ -59,7 +59,7 @@ cocos2d::ValueMap CCSoomlaEntity::toValueMap() {
     putIdToValueMap(map);
     putNameToValueMap(map);
     putDescriptionToValueMap(map);
-    return map;
+    return putTypeData(map, getType());
 }
 
 bool CCSoomlaEntity::equals(cocos2d::Ref* obj) const {

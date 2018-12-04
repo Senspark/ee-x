@@ -16,48 +16,26 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <StoreKit/StoreKit.h>
 #import <UIKit/UIKit.h>
 
 #import <FBAudienceNetwork/FBAdDefines.h>
+#import <FBAudienceNetwork/FBNativeAd.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Represents the ad size.
-struct FBAdSize {
-    /// Internal size
-    CGSize size;
-};
-
-/// Represents the ad size.
-typedef struct FBAdSize FBAdSize;
+@class FBNativeAdViewAttributes;
 
 /**
-  DEPRECATED - Represents the fixed banner ad size - 320pt by 50pt.
+ The FBNativeAdBaseView creates prebuilt native ad base template views and manages native ads.
  */
-FB_EXPORT FBAdSize const kFBAdSize320x50;
+FB_CLASS_EXPORT
+@interface FBNativeAdBaseView : UIView
 
 /**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 50pt.
+ A view controller that is used to present modal content. If nil, the view searches for a view controller.
  */
-FB_EXPORT FBAdSize const kFBAdSizeHeight50Banner;
+@property (nonatomic, weak, nullable) UIViewController *rootViewController;
 
-/**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 90pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight90Banner;
-
-/**
-  Represents the interstitial ad size.
- */
-FB_EXPORT FBAdSize const kFBAdSizeInterstitial;
-
-/**
-  Represents the flexible rectangle ad size, where width depends on
- its container width, and height is fixed as 250pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight250Rectangle;
+@end
 
 NS_ASSUME_NONNULL_END

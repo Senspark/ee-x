@@ -16,48 +16,31 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <StoreKit/StoreKit.h>
 #import <UIKit/UIKit.h>
-
-#import <FBAudienceNetwork/FBAdDefines.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Represents the ad size.
-struct FBAdSize {
-    /// Internal size
-    CGSize size;
+/**
+ Determines the possible tags for native ad views.
+ */
+typedef NS_ENUM(NSUInteger, FBNativeAdViewTag) {
+    FBNativeAdViewTagIcon = 5,
+    FBNativeAdViewTagTitle,
+    FBNativeAdViewTagCoverImage,
+    FBNativeAdViewTagSubtitle,
+    FBNativeAdViewTagBody,
+    FBNativeAdViewTagCallToAction,
+    FBNativeAdViewTagSocialContext,
+    FBNativeAdViewTagChoicesIcon,
+    FBNativeAdViewTagMedia,
 };
 
-/// Represents the ad size.
-typedef struct FBAdSize FBAdSize;
-
 /**
-  DEPRECATED - Represents the fixed banner ad size - 320pt by 50pt.
+ Use this category to set tags for views you are using for native ad.
+ This will enable better analytics.
  */
-FB_EXPORT FBAdSize const kFBAdSize320x50;
-
-/**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 50pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight50Banner;
-
-/**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 90pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight90Banner;
-
-/**
-  Represents the interstitial ad size.
- */
-FB_EXPORT FBAdSize const kFBAdSizeInterstitial;
-
-/**
-  Represents the flexible rectangle ad size, where width depends on
- its container width, and height is fixed as 250pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight250Rectangle;
+@interface UIView (FBNativeAdViewTag)
+@property (nonatomic, assign) FBNativeAdViewTag nativeAdViewTag;
+@end
 
 NS_ASSUME_NONNULL_END

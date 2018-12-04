@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -25,7 +26,9 @@ import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AdIconView;
 import com.facebook.ads.AdListener;
+import com.facebook.ads.NativeAdListener;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 
@@ -37,7 +40,7 @@ import java.util.Map;
  * Created by Zinge on 10/9/17.
  */
 
-class FacebookNativeAd implements AdListener, IAdView {
+class FacebookNativeAd implements NativeAdListener, IAdView {
     private static final String k__ad_choices     = "ad_choices";
     private static final String k__body           = "body";
     private static final String k__call_to_action = "call_to_action";
@@ -61,6 +64,8 @@ class FacebookNativeAd implements AdListener, IAdView {
     private Map<String, String> _identifiers;
     private AdViewHelper        _helper;
     private IMessageBridge      _bridge;
+    private AdIconView          _nativAdIconView;
+    private MediaView           _nativeAdMedia;
 
 
     public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
@@ -246,7 +251,7 @@ class FacebookNativeAd implements AdListener, IAdView {
         /// the MediaView to play videos immediately after nativeAd finishes loading.
         /// https://developers.facebook.com/docs/audience-network/android-native#mediaview
         ///
-        _nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
+        _nativeAd.loadAd();
     }
 
     @NonNull
@@ -324,7 +329,7 @@ class FacebookNativeAd implements AdListener, IAdView {
         processView(_nativeAdView, k__body, new ViewProcessor<TextView>() {
             @Override
             public void process(TextView view) {
-                view.setText(_nativeAd.getAdBody());
+                view.setText(_nativeAd.getAdBodyText());
             }
         });
 
@@ -336,12 +341,10 @@ class FacebookNativeAd implements AdListener, IAdView {
             }
         });
 
-        processView(_nativeAdView, k__icon, new ViewProcessor<ImageView>() {
+        processView(_nativeAdView, k__icon, new ViewProcessor<AdIconView>() {
             @Override
-            public void process(ImageView view) {
-                // Download and display the ad icon.
-                NativeAd.Image adIcon = _nativeAd.getAdIcon();
-                NativeAd.downloadAndDisplayImage(adIcon, view);
+            public void process(AdIconView view) {
+                _nativAdIconView = view;
             }
         });
 
@@ -349,9 +352,9 @@ class FacebookNativeAd implements AdListener, IAdView {
             @Override
             public void process(ImageView view) {
                 // Download and display the cover image.
-                NativeAd.Image adCover = _nativeAd.getAdCoverImage();
-                NativeAd.downloadAndDisplayImage(adCover, view);
-                clickableViews.add(view);
+                // NativeAd.Image adCover = _nativeAd.getAdCoverImage();
+                // NativeAd.downloadAndDisplayImage(adCover, view);
+                // clickableViews.add(view);
             }
         });
 
@@ -359,7 +362,9 @@ class FacebookNativeAd implements AdListener, IAdView {
             @Override
             public void process(MediaView view) {
                 // Download and display the ad media.
-                view.setNativeAd(_nativeAd);
+                // view.setNativeAd(_nativeAd);
+                // clickableViews.add(view);
+                _nativeAdMedia = view;
                 clickableViews.add(view);
             }
         });
@@ -374,7 +379,7 @@ class FacebookNativeAd implements AdListener, IAdView {
         processView(_nativeAdView, k__title, new ViewProcessor<TextView>() {
             @Override
             public void process(TextView view) {
-                view.setText(_nativeAd.getAdTitle());
+                view.setText(_nativeAd.getAdHeadline());
                 clickableViews.add(view);
             }
         });
@@ -397,7 +402,7 @@ class FacebookNativeAd implements AdListener, IAdView {
             _nativeAdView.findViewById(getIdentifier(k__cover)).setVisibility(View.INVISIBLE);
         }
 
-        _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
+        _nativeAd.registerViewForInteraction(_nativeAdView, _nativeAdMedia, _nativAdIconView, clickableViews);
         _isAdLoaded = true;
         _bridge.callCpp(kOnLoaded());
     }
@@ -414,4 +419,9 @@ class FacebookNativeAd implements AdListener, IAdView {
         _logger.info("onLoggingImpression");
         Utils.checkMainThread();
     }
+
+    @Override
+    public void onMediaDownloaded(Ad ad) {
+    }
+
 }

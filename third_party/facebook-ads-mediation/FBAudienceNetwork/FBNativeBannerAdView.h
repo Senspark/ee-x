@@ -19,59 +19,61 @@
 #import <UIKit/UIKit.h>
 
 #import <FBAudienceNetwork/FBAdDefines.h>
-#import <FBAudienceNetwork/FBNativeAd.h>
 #import <FBAudienceNetwork/FBNativeAdBaseView.h>
 #import <FBAudienceNetwork/FBNativeAdViewAttributes.h>
+#import <FBAudienceNetwork/FBNativeBannerAd.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Determines the type of native ad template. Different views are created
- for different values of FBNativeAdViewType
+ Determines the type of native banner ad template. Different views are created
+ for different values of FBNativeAdBannerViewType
  */
-typedef NS_ENUM(NSInteger, FBNativeAdViewType) {
-    /// Fixed height view, 300 points
-    FBNativeAdViewTypeGenericHeight300 = 3,
-    /// Fixed height view, 400 points
-    FBNativeAdViewTypeGenericHeight400 = 4,
+typedef NS_ENUM(NSInteger, FBNativeBannerAdViewType) {
+    /// Fixed height view, 100 points (banner equivalent)
+    FBNativeBannerAdViewTypeGenericHeight100 = 1,
+    /// Fixed height view, 120 points (banner equivalent)
+    FBNativeBannerAdViewTypeGenericHeight120,
+    /// Fixed height view, 50 points (banner equivalent)
+    FBNativeBannerAdViewTypeGenericHeight50,
 };
 
 /**
-  The FBNativeAdView creates prebuilt native ad template views and manages native ads.
+ The FBNativeBannerAdView creates prebuilt native banner ad template views and manages native banner ads.
  */
 FB_CLASS_EXPORT
-@interface FBNativeAdView : FBNativeAdBaseView
+@interface FBNativeBannerAdView : FBNativeAdBaseView
 
 /**
  The type of the view, specifies which template to use
  */
-@property (nonatomic, assign, readonly) FBNativeAdViewType type;
+@property (nonatomic, assign, readonly) FBNativeBannerAdViewType type;
 
 /**
  This is a method to create a native ad template using the given placement id and type.
- @param nativeAd The native ad to use to create this view.
- @param type The type of this native ad template. For more information, consult FBNativeAdViewType.
+ @param nativeBannerAd The native banner ad to use to create this view.
+ @param type The type of this native banner ad template. For more information, consult FBNativeAdBannerViewType.
  */
-+ (instancetype)nativeAdViewWithNativeAd:(FBNativeAd *)nativeAd withType:(FBNativeAdViewType)type;
++ (instancetype)nativeBannerAdViewWithNativeBannerAd:(FBNativeBannerAd *)nativeBannerAd withType:(FBNativeBannerAdViewType)type;
 
 /**
  This is a method to create a native ad template using the given placement id and type.
- @param nativeAd The native ad to use to create this view.
- @param type The type of this native ad template. For more information, consult FBNativeAdViewType.
+ @param nativeBannerAd The native banner ad to use to create this view.
+ @param type The type of this native banner ad template. For more information, consult FBNativeAdBannerViewType.
  @param attributes The attributes to render this native ad template with.
  */
-+ (instancetype)nativeAdViewWithNativeAd:(FBNativeAd *)nativeAd withType:(FBNativeAdViewType)type withAttributes:(FBNativeAdViewAttributes *)attributes;
++ (instancetype)nativeBannerAdViewWithNativeBannerAd:(FBNativeBannerAd *)nativeBannerAd withType:(FBNativeBannerAdViewType)type withAttributes:(FBNativeAdViewAttributes *)attributes;
 
 @end
 
-@interface FBNativeAdViewAttributes (FBNativeAdView)
+@interface FBNativeAdViewAttributes (FBNativeBannerAdView)
 
 /**
  Returns default attributes for a given type.
 
  @param type The type for this layout.
  */
-+ (instancetype)defaultAttributesForType:(FBNativeAdViewType)type;
++ (instancetype)defaultAttributesForBannerType:(FBNativeBannerAdViewType)type;
 
 @end
 

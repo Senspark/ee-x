@@ -235,6 +235,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (void)nativeAdDidLoad:(FBNativeAd*)nativeAd {
+    
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(nativeAd == nativeAd_, @"");
 
@@ -244,26 +245,17 @@ static NSString* const k__sponsor           = @"sponsor";
     if ([nativeAdView_ callToActionButton]) {
         [nativeAd
             registerViewForInteraction:nativeAdView_
-                    withViewController:rootView
-                    withClickableViews:@[[nativeAdView_ callToActionButton]]];
+                             mediaView:[nativeAdView_ mediaView]
+                         iconImageView:[nativeAdView_ iconImage]
+                        viewController:rootView
+                        clickableViews:@[[nativeAdView_ callToActionButton]]];
     }
-    // cover image
-    [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
-        [[nativeAdView_ coverImage] setImage:image];
-    }];
-
-    // ad icon
-    [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
-        [[nativeAdView_ iconImage] setImage:image];
-        [nativeAd registerViewForInteraction:nativeAdView_
-                          withViewController:rootView];
-    }];
 
     // adchoices view
     [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
 
     // ad body view
-    [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
+    [[nativeAdView_ bodyLabel] setText:[nativeAd bodyText]];
 
     // ad call to action button
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
@@ -276,10 +268,9 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
 
     // ad title view
-    [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+    [[nativeAdView_ titleLabel] setText:[nativeAd headline]];
 
     // ad media view
-    [[nativeAdView_ mediaView] setNativeAd:nativeAd];
     [[nativeAdView_ mediaView] setDelegate:self];
 
     isAdLoaded_ = YES;

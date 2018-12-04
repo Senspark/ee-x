@@ -18,38 +18,24 @@
 
 #import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@class FBNativeAdBase;
 
-@protocol FBInstreamAdRendererViewDelegate;
+/**
+ Minimum dimensions of the view.
+ */
+extern const CGFloat FBAdOptionsViewWidth;
+extern const CGFloat FBAdOptionsViewHeight;
 
-@interface FBInstreamAdRendererView : UIView
+@interface FBAdOptionsView : UIView
 
-@property (nonatomic, getter=isAdValid, readonly) BOOL adValid;
-@property (nonatomic, weak, nullable) id<FBInstreamAdRendererViewDelegate> delegate;
+/**
+ The native ad that provides AdChoices info, such as click url. Setting this updates the nativeAd.
+ */
+@property (nonatomic, weak, readwrite, nullable) FBNativeAdBase *nativeAd;
 
-- (void)loadAdFromAdParameters:(nonnull NSString *)adParameters;
-
-- (BOOL)showAdFromRootViewController:(nullable UIViewController *)rootViewController;
-
-
-@end
-
-@protocol FBInstreamAdRendererViewDelegate <NSObject>
-
-@optional
-
-- (void)adRendererViewDidClick:(nonnull FBInstreamAdRendererView *)adRendererView;
-
-- (void)adRendererViewDidEnd:(nonnull FBInstreamAdRendererView *)adRendererView;
-
-- (void)adRendererViewDidFinishHandlingClick:(nonnull FBInstreamAdRendererView *)adRendererView;
-
-- (void)adRendererViewDidLoad:(nonnull FBInstreamAdRendererView *)adRendererView;
-
-- (void)adRendererView:(nonnull FBInstreamAdRendererView *)adRendererView didFailWithError:(nonnull NSError *)error;
-
-- (void)adRendererViewWillLogImpression:(nonnull FBInstreamAdRendererView *)adRendererView;
+/**
+ The color to be used when drawing the AdChoices view.
+ */
+@property (nonatomic, strong) UIColor *foregroundColor;
 
 @end
-
-NS_ASSUME_NONNULL_END

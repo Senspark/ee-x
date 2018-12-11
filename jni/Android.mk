@@ -111,9 +111,9 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-############
+#########
 # ADMOB #
-############
+#########
 
 include $(CLEAR_VARS)
 
@@ -223,9 +223,9 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-############
+#####################
 # CAMPAIGN RECEIVER #
-############
+#####################
 
 include $(CLEAR_VARS)
 
@@ -421,9 +421,9 @@ LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-######################
+#################
 # JSB_UNITY_ADS #
-######################
+#################
 
 include $(CLEAR_VARS)
 
@@ -443,9 +443,9 @@ LOCAL_STATIC_LIBRARIES += ee_x_jsb_ads_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-######################
+##################
 # JSB_VUNGLE_ADS #
-######################
+##################
 
 include $(CLEAR_VARS)
 
@@ -551,6 +551,10 @@ LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_static
 include $(BUILD_STATIC_LIBRARY)
 
+##############################
+# JSB FIREBASE REMOTE CONFIG #
+##############################
+
 include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
@@ -564,6 +568,29 @@ LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/incl
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/jsb_firebase_remote_config.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_static
+include $(BUILD_STATIC_LIBRARY)
+
+################
+#  JSB SOOMLA  #
+################
+
+include $(CLEAR_VARS)
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_jsb_soomla_store_static
+
+LOCAL_C_INCLUDES := $(EE_X_ROOT_DIR)/src/ee/jsb/core
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
+
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_soomla.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/soomla -name "*.cpp" -print}
+
+LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
+LOCAL_STATIC_LIBRARIES += cocos2dx_store_static
 include $(BUILD_STATIC_LIBRARY)
 
 #################

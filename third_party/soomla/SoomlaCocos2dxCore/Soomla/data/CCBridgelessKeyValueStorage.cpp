@@ -15,8 +15,10 @@
  */
 #include "CCBridgelessKeyValueStorage.h"
 
-#ifndef COCOSCREATOR_VERSION
+#if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1
+#else
+#define COCOSCREATOR_VERSION 2
 #endif
 
 #if COCOSCREATOR_VERSION == 2

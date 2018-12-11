@@ -31,6 +31,9 @@ const auto jsb_CCMarketItem_getPrice =
 const auto jsb_CCMarketItem_getMarketTitle =
     &ee::core::jsb_method_get<CCMarketItem, &CCMarketItem::getMarketTitle,
                               const std::string&>;
+const auto jsb_CCMarketItem_getMarketPriceMicros =
+    &ee::core::jsb_method_get<CCMarketItem, &CCMarketItem::getMarketPriceMicros,
+                              double>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCMarketItem_finalize)
 SE_BIND_CTOR(jsb_CCMarketItem_constructor, __jsb_CCMarketItem_class,
@@ -39,6 +42,7 @@ SE_BIND_FUNC(jsb_CCMarketItem_getMarketPriceAndCurrency)
 SE_BIND_FUNC(jsb_CCMarketItem_getProductId)
 SE_BIND_FUNC(jsb_CCMarketItem_getPrice)
 SE_BIND_FUNC(jsb_CCMarketItem_getMarketTitle)
+SE_BIND_FUNC(jsb_CCMarketItem_getMarketPriceMicros);
 
 bool register_cc_market_item_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
@@ -53,6 +57,8 @@ bool register_cc_market_item_manual(se::Object* globalObj) {
     cls->defineFunction("getProductId", _SE(jsb_CCMarketItem_getProductId));
     cls->defineFunction("getPrice", _SE(jsb_CCMarketItem_getPrice));
     cls->defineFunction("getMarketTitle", _SE(jsb_CCMarketItem_getMarketTitle));
+    cls->defineFunction("getMarketPriceMicros",
+                        _SE(jsb_CCMarketItem_getMarketPriceMicros));
 
     cls->install();
 

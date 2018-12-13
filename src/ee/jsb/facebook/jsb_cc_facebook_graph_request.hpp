@@ -12,7 +12,7 @@
 
 namespace ee {
 namespace facebook {
-bool register_cc_facebook_graph_request_manual(se::Object* globalObject);
+bool register_facebook_graph_request_manual(se::Object* globalObject);
 }
 } // namespace ee
 

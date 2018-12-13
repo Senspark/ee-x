@@ -10,10 +10,10 @@
 
 #include "ee/jsb/jsb_fwd.hpp"
 
-namespace ee {
-namespace facebook {
-bool register_facebook_request_content_manual(se::Object* globalObj);
-}
-} // namespace ee
+//namespace ee {
+//namespace facebook {
+//bool register_facebook_request_content_manual(se::Object* globalObj);
+//}
+//} // namespace ee
 
 #endif /* jsb_cc_facebook_request_content_hpp */

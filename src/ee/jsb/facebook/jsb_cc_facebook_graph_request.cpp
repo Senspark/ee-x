@@ -13,16 +13,68 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
+namespace facebook {
+se::Class* __jsb_GraphRequest_class = nullptr;
+std::unordered_map<std::shared_ptr<GraphRequest>, se::Object*> __jsb_s_items;
+std::vector<std::shared_ptr<GraphRequest>> __jsb_s_itemsArchive;
+} // namespace facebook
+
 namespace core {
 template <>
-void set_value(se::Value& value, FacebookGraphRequest& input) {
-    set_value_from_pointer(value, &input);
+std::shared_ptr<facebook::GraphRequest> get_value(const se::Value& value) {
+    auto itemPtr = static_cast<facebook::GraphRequest*>(
+        value.toObject()->getPrivateData());
+    auto iter = std::find_if(
+        facebook::__jsb_s_itemsArchive.cbegin(),
+        facebook::__jsb_s_itemsArchive.cend(),
+        [=](const std::shared_ptr<facebook::GraphRequest>& ptr) -> bool {
+            return itemPtr == ptr.get();
+        });
+    if (iter != facebook::__jsb_s_itemsArchive.cend()) {
+        return *iter;
+    } else {
+        return std::shared_ptr<facebook::GraphRequest>(itemPtr);
+    }
 }
-    
+
+template <>
+void set_value(se::Value& value,
+               std::shared_ptr<facebook::GraphRequest> input) {
+    if (input != nullptr) {
+        se::Object* obj = nullptr;
+        if (facebook::__jsb_s_items.count(input) != 0) {
+            obj = facebook::__jsb_s_items.at(input);
+        } else {
+            facebook::__jsb_s_itemsArchive.push_back(input);
+            obj = se::Object::createObjectWithClass(
+                facebook::__jsb_GraphRequest_class);
+            obj->setPrivateData(input.get());
+        }
+        value.setObject(obj);
+    } else {
+        value.setNull();
+    }
+}
+
+template <>
+bool jsb_finalize<facebook::GraphRequest>(se::State& s) {
+    auto itemPtr = static_cast<facebook::GraphRequest*>(s.nativeThisObject());
+    auto iter = std::find_if(
+        facebook::__jsb_s_itemsArchive.cbegin(),
+        facebook::__jsb_s_itemsArchive.cend(),
+        [=](const std::shared_ptr<facebook::GraphRequest>& ptr) -> bool {
+            return itemPtr == ptr.get();
+        });
+    if (iter != facebook::__jsb_s_itemsArchive.cend()) {
+        facebook::__jsb_s_itemsArchive.erase(iter);
+    } else {
+        delete itemPtr;
+    }
+    return true;
+}
 } // namespace core
 
 namespace facebook {
-se::Class* __jsb_GraphRequest_class = nullptr;
 const auto jsb_GraphRequest_finalize = &ee::core::jsb_finalize<GraphRequest>;
 const auto jsb_GraphRequest_constructor =
     &ee::core::jsb_constructor<GraphRequest>;
@@ -44,7 +96,7 @@ SE_BIND_FUNC(jsb_GraphRequest_setPath);
 SE_BIND_FUNC(jsb_GraphRequest_setParameter);
 SE_BIND_FUNC(jsb_GraphRequest_toString);
 
-bool register_cc_facebook_graph_request_manual(se::Object* globalObject) {
+bool register_facebook_graph_request_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
     se::Object* facebookObj = nullptr;
     ee::core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);

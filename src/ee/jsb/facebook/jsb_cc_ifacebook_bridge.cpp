@@ -11,11 +11,14 @@
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-#include "ee/facebook/IFacebookBridge.hpp"
+#include "ee/Facebook.hpp"
+
+#include "jsb_cc_ifacebook_access_token.hpp"
+#include "jsb_cc_facebook_graph_request.hpp"
+#include "jsb_cc_facebook_request_content.hpp"
 
 namespace ee {
 namespace facebook {
-
 se::Class* __jsb_IFacebookBridge_class = nullptr;
 std::unordered_map<std::shared_ptr<facebook::IBridge>, se::Object*>
     __jsb_s_items;
@@ -25,8 +28,8 @@ std::vector<std::shared_ptr<facebook::IBridge>> __jsb_s_itemsArchive;
 namespace core {
 template <>
 std::shared_ptr<facebook::IBridge> get_value(const se::Value& value) {
-    auto itemPtr = static_cast<facebook::IBridge*>(
-        value.toObject()->getPrivateData());
+    auto itemPtr =
+        static_cast<facebook::IBridge*>(value.toObject()->getPrivateData());
     auto iter = std::find_if(
         facebook::__jsb_s_itemsArchive.cbegin(),
         facebook::__jsb_s_itemsArchive.cend(),
@@ -41,8 +44,7 @@ std::shared_ptr<facebook::IBridge> get_value(const se::Value& value) {
 }
 
 template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::IBridge> input) {
+void set_value(se::Value& value, std::shared_ptr<facebook::IBridge> input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
         if (facebook::__jsb_s_items.count(input) != 0) {
@@ -80,66 +82,63 @@ bool jsb_finalize<facebook::IBridge>(se::State& s) {
 namespace facebook {
 const auto jsb_IFacebookBridge_finalize = &ee::core::jsb_finalize<IBridge>;
 const auto jsb_IFacebookBridge_isLoggedIn =
-    &ee::core::jsb_method_get_on_ui_thread<IBridge, &IBridge::isLoggedIn, bool>;
-const auto jsb_IFacebookBridge_logIn = &ee::core::jsb_method_call_on_ui_thread<
-    Bridge, &IBridge::logIn, const std::vector<std::string>&,
-    const std::shared_ptr<ILoginDelegate>&>;
-const auto jsb_IFacebookBridge_createLoginDelegate =
-    &ee::core::jsb_method_get_on_ui_thread<IBridge,
-                                           &IBridge::createLoginDelegate,
-                                           std::shared_ptr<ILoginDelegate>>;
-const auto jsb_IFacebookBridge_logOut =
-    &ee::core::jsb_method_call_on_ui_thread<IBridge, &IBridge::logOut>;
-const auto jsb_IFacebookBridge_getAccessToken =
-    &ee::core::jsb_method_get_on_ui_thread<IBridge, &IBridge::getAccessToken,
-                                           std::shared_ptr<IBridge>>;
-const auto jsb_IFacebookBridge_graphRequest =
-    &ee::core::jsb_method_call_on_ui_thread<
-        IBridge, &IBridge::graphRequest, const GraphRequest&,
-        const std::shared_ptr<IGraphDelegate>&>;
-const auto jsb_IFacebookBridge_createGraphDelegate =
-    &ee::core::jsb_method_get_on_ui_thread<IBridge,
-                                           &IBridge::createGraphDelegate,
-                                           std::shared_ptr<IGraphDelegate>>;
-const auto jsb_IFacebookBridge_sendRequest =
-    &ee::core::jsb_method_call_on_ui_thread<
-        IBridge, &IBridge::sendRequest, const RequestContent&,
-        const std::shared_ptr<IRequestDelegate>&>;
-const auto jsb_IFacebookBridge_createRequestDelegate =
-    &ee::core::jsb_method_get_on_ui_thread<Bridge,
-                                           &IBridge::createRequestDelegate,
-                                           std::shared_ptr<IRequestDelegate>>;
-const auto jsb_IFacebookBridge_shareLinkContent =
-    &ee::core::jsb_method_call_on_ui_thread<
-        IBridge, &IBridge::shareLinkContent, const std::string&,
-        const std::shared_ptr<IShareDelegate>&>;
-const auto jsb_IFacebookBridge_sharePhotoContent =
-    &ee::core::jsb_method_call_on_ui_thread<
-        IBridge, &IBridge::sharePhotoContent, const std::string&,
-        const std::shared_ptr<IShareDelegate>&>;
-const auto jsb_IFacebookBridge_shareVideoContent =
-    &ee::core::jsb_method_call_on_ui_thread<
-        IBridge, &IBridge::shareVideoContent, const std::string&,
-        const std::shared_ptr<IShareDelegate>>;
-const auto jsb_IFacebookBridge_createShareDelegate =
-    &ee::core::jsb_method_get_on_ui_thread<IBridge,
-                                           &IBridge::createShareDelegate,
-                                           std::shared_ptr<IShareDelegate>>;
+    &ee::core::jsb_method_get<IBridge, &IBridge::isLoggedIn, bool>;
+//const auto jsb_IFacebookBridge_logIn =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::logIn,
+//                               const std::vector<std::string>&,
+//                               const std::shared_ptr<ILoginDelegate>&>;
+//const auto jsb_IFacebookBridge_createLoginDelegate =
+//    &ee::core::jsb_method_get<IBridge, &IBridge::createLoginDelegate,
+//                              std::shared_ptr<ILoginDelegate>>;
+//const auto jsb_IFacebookBridge_logOut =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::logOut>;
+//const auto jsb_IFacebookBridge_getAccessToken =
+//    &ee::core::jsb_method_get<IBridge, &IBridge::getAccessToken,
+//                              std::shared_ptr<IAccessToken>>;
+//const auto jsb_IFacebookBridge_graphRequest =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::graphRequest,
+//                               const GraphRequest&,
+//                               const std::shared_ptr<IGraphDelegate>&>;
+//const auto jsb_IFacebookBridge_createGraphDelegate =
+//    &ee::core::jsb_method_get<IBridge, &IBridge::createGraphDelegate,
+//                              std::shared_ptr<IGraphDelegate>>;
+//const auto jsb_IFacebookBridge_sendRequest =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::sendRequest,
+//                               const RequestContent&,
+//                               const std::shared_ptr<IRequestDelegate>&>;
+//const auto jsb_IFacebookBridge_createRequestDelegate =
+//    &ee::core::jsb_method_get<IBridge, &IBridge::createRequestDelegate,
+//                              std::shared_ptr<IRequestDelegate>>;
+//const auto jsb_IFacebookBridge_shareLinkContent =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::shareLinkContent,
+//                               const std::string&,
+//                               const std::shared_ptr<IShareDelegate>&>;
+//const auto jsb_IFacebookBridge_sharePhotoContent =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::sharePhotoContent,
+//                               const std::string&,
+//                               const std::shared_ptr<IShareDelegate>&>;
+//const auto jsb_IFacebookBridge_shareVideoContent =
+//    &ee::core::jsb_method_call<IBridge, &IBridge::shareVideoContent,
+//                               const std::string&,
+//                               const std::shared_ptr<IShareDelegate>>;
+//const auto jsb_IFacebookBridge_createShareDelegate =
+//    &ee::core::jsb_method_get<IBridge, &IBridge::createShareDelegate,
+//                              std::shared_ptr<IShareDelegate>>;
 
 SE_BIND_FINALIZE_FUNC(jsb_IFacebookBridge_finalize);
 SE_BIND_FUNC(jsb_IFacebookBridge_isLoggedIn);
-SE_BIND_FUNC(jsb_IFacebookBridge_logIn);
-SE_BIND_FUNC(jsb_IFacebookBridge_createLoginDelegate);
-SE_BIND_FUNC(jsb_IFacebookBridge_logOut);
-SE_BIND_FUNC(jsb_IFacebookBridge_getAccessToken);
-SE_BIND_FUNC(jsb_IFacebookBridge_graphRequest);
-SE_BIND_FUNC(jsb_IFacebookBridge_createGraphDelegate);
-SE_BIND_FUNC(jsb_IFacebookBridge_sendRequest);
-SE_BIND_FUNC(jsb_IFacebookBridge_createRequestDelegate);
-SE_BIND_FUNC(jsb_IFacebookBridge_shareLinkContent);
-SE_BIND_FUNC(jsb_IFacebookBridge_sharePhotoContent);
-SE_BIND_FUNC(jsb_IFacebookBridge_shareVideoContent);
-SE_BIND_FUNC(jsb_IFacebookBridge_createShareDelegate);
+//SE_BIND_FUNC(jsb_IFacebookBridge_logIn);
+//SE_BIND_FUNC(jsb_IFacebookBridge_createLoginDelegate);
+//SE_BIND_FUNC(jsb_IFacebookBridge_logOut);
+//SE_BIND_FUNC(jsb_IFacebookBridge_getAccessToken);
+//SE_BIND_FUNC(jsb_IFacebookBridge_graphRequest);
+//SE_BIND_FUNC(jsb_IFacebookBridge_createGraphDelegate);
+//SE_BIND_FUNC(jsb_IFacebookBridge_sendRequest);
+//SE_BIND_FUNC(jsb_IFacebookBridge_createRequestDelegate);
+//SE_BIND_FUNC(jsb_IFacebookBridge_shareLinkContent);
+//SE_BIND_FUNC(jsb_IFacebookBridge_sharePhotoContent);
+//SE_BIND_FUNC(jsb_IFacebookBridge_shareVideoContent);
+//SE_BIND_FUNC(jsb_IFacebookBridge_createShareDelegate);
 
 se::Class* getIFacebookBridgeClass() {
     CCASSERT(__jsb_IFacebookBridge_class != nullptr,
@@ -158,30 +157,30 @@ bool register_ifacebook_bridge_manual(se::Object* globalObject) {
     cls->defineFinalizeFunction(_SE(jsb_IFacebookBridge_finalize));
 
     cls->defineFunction("isLoggedIn", _SE(jsb_IFacebookBridge_isLoggedIn));
-    cls->defineFunction("logIn", _SE(jsb_IFacebookBridge_logIn));
-    cls->defineFunction("createLoginDelegate",
-                        _SE(jsb_IFacebookBridge_createLoginDelegate));
-    cls->defineFunction("logOut", _SE(jsb_IFacebookBridge_logOut));
-    cls->defineFunction("getAccessToken",
-                        _SE(jsb_IFacebookBridge_getAccessToken));
-    cls->defineFunction("graphRequest", _SE(jsb_IFacebookBridge_graphRequest));
-    cls->defineFunction("createGraphDelegate",
-                        _SE(jsb_IFacebookBridge_createGraphDelegate));
-    cls->defineFunction("sendRequest", _SE(jsb_IFacebookBridge_sendRequest));
-    cls->defineFunction("createRequestDelegate",
-                        _SE(jsb_IFacebookBridge_createRequestDelegate));
-    cls->defineFunction("shareLinkContent",
-                        _SE(jsb_IFacebookBridge_shareLinkContent));
-    cls->defineFunction("sharePhotoContent",
-                        _SE(jsb_IFacebookBridge_sharePhotoContent));
-    cls->defineFunction("shareVideoContent",
-                        _SE(jsb_IFacebookBridge_shareVideoContent));
-    cls->defineFunction("createShareDelegate",
-                        _SE(jsb_IFacebookBridge_createShareDelegate));
+//    cls->defineFunction("logIn", _SE(jsb_IFacebookBridge_logIn));
+//    cls->defineFunction("createLoginDelegate",
+//                        _SE(jsb_IFacebookBridge_createLoginDelegate));
+//    cls->defineFunction("logOut", _SE(jsb_IFacebookBridge_logOut));
+//    cls->defineFunction("getAccessToken",
+//                        _SE(jsb_IFacebookBridge_getAccessToken));
+//    cls->defineFunction("graphRequest", _SE(jsb_IFacebookBridge_graphRequest));
+//    cls->defineFunction("createGraphDelegate",
+//                        _SE(jsb_IFacebookBridge_createGraphDelegate));
+//    cls->defineFunction("sendRequest", _SE(jsb_IFacebookBridge_sendRequest));
+//    cls->defineFunction("createRequestDelegate",
+//                        _SE(jsb_IFacebookBridge_createRequestDelegate));
+//    cls->defineFunction("shareLinkContent",
+//                        _SE(jsb_IFacebookBridge_shareLinkContent));
+//    cls->defineFunction("sharePhotoContent",
+//                        _SE(jsb_IFacebookBridge_sharePhotoContent));
+//    cls->defineFunction("shareVideoContent",
+//                        _SE(jsb_IFacebookBridge_shareVideoContent));
+//    cls->defineFunction("createShareDelegate",
+//                        _SE(jsb_IFacebookBridge_createShareDelegate));
 
     cls->install();
 
-    JSBClassType::registerClass<Bridge>(cls);
+    JSBClassType::registerClass<IBridge>(cls);
 
     __jsb_IFacebookBridge_class = cls;
 

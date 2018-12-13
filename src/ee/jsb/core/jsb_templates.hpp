@@ -50,7 +50,7 @@ void set_value_from_pointer(se::Value& value, T* input) {
         }
         value.setObject(obj);
 
-        if (std::is_convertible<T*, cocos2d::Ref*>::value) {
+        if constexpr(std::is_convertible<T*, cocos2d::Ref*>::value) {
             static_cast<cocos2d::Ref*>(input)->retain();
         }
     } else {
@@ -280,9 +280,9 @@ bool jsb_method_get(se::State& s) {
 
     if (argc == args.size()) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        set_value<ReturnType>(
-            s.rval(), call_instance_func<InstanceType, FunctionPtr, Args...>(
-                          cObj, args, Indices()));
+        auto&& result = call_instance_func<InstanceType, FunctionPtr, Args...>(
+            cObj, args, Indices());
+        set_value<ReturnType>(s.rval(), result);
         return true;
     }
 

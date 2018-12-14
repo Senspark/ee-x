@@ -22,7 +22,7 @@ se::Class* __jsb_Logger_class = nullptr;
 se::Object* __jsb_s_Logger = nullptr;
 
 template <>
-const Logger& get_value(const se::Value& value) {
+Logger get_value(const se::Value& value) {
     return *static_cast<Logger*>(value.toObject()->getPrivateData());
 }
 
@@ -43,6 +43,11 @@ void set_value(se::Value& value, Logger& input) {
         obj->setPrivateData(new Logger(input));
     }
     value.setObject(obj);
+}
+
+template <>
+LogLevel get_value(const se::Value& value) {
+    return *static_cast<LogLevel*>(value.toObject()->getPrivateData());
 }
 
 constexpr auto jsb_Logger_finalize = &jsb_finalize<Logger>;

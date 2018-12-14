@@ -11,10 +11,6 @@
 #include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
-namespace core {
-template <typename T>
-se::Object* create_JSON_object(const T& value);
-}
 namespace facebook {
 se::Class* getIAccessTokenClass();
 bool register_ifacebook_access_token_manual(se::Object* object);

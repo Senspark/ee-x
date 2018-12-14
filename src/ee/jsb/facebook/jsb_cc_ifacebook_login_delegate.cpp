@@ -19,8 +19,8 @@ namespace ee {
 namespace facebook {
 se::Class* __jsb_LoginDelegate_class = nullptr;
 std::unordered_map<std::shared_ptr<ILoginDelegate>, se::Object*>
-    __jsb_s_delegates;
-std::vector<std::shared_ptr<ILoginDelegate>> __jsb_s_delegateArchive;
+    __jsb_s_fbLoginDelegates;
+std::vector<std::shared_ptr<ILoginDelegate>> __jsb_s_fbLoginDelegateArchive;
 } // namespace facebook
 
 namespace core {
@@ -29,15 +29,16 @@ std::shared_ptr<facebook::ILoginDelegate> get_value(const se::Value& value) {
     auto delegatePtr = static_cast<facebook::ILoginDelegate*>(
         value.toObject()->getPrivateData());
     auto iter = std::find_if(
-        facebook::__jsb_s_delegateArchive.cbegin(),
-        facebook::__jsb_s_delegateArchive.cend(),
+        facebook::__jsb_s_fbLoginDelegateArchive.cbegin(),
+        facebook::__jsb_s_fbLoginDelegateArchive.cend(),
         [=](const std::shared_ptr<facebook::ILoginDelegate>& ptr) -> bool {
             return delegatePtr == ptr.get();
         });
-    if (iter != facebook::__jsb_s_delegateArchive.cend()) {
+    if (iter != facebook::__jsb_s_fbLoginDelegateArchive.cend()) {
         return *iter;
     } else {
-        return std::shared_ptr<facebook::ILoginDelegate>(delegatePtr);
+        static std::shared_ptr<facebook::ILoginDelegate> defaultPtr;
+        return defaultPtr;
     }
 }
 
@@ -46,10 +47,10 @@ void set_value(se::Value& value,
                std::shared_ptr<facebook::ILoginDelegate> input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
-        if (facebook::__jsb_s_delegates.count(input) != 0) {
-            obj = facebook::__jsb_s_delegates.at(input);
+        if (facebook::__jsb_s_fbLoginDelegates.count(input) != 0) {
+            obj = facebook::__jsb_s_fbLoginDelegates.at(input);
         } else {
-            facebook::__jsb_s_delegateArchive.push_back(input);
+            facebook::__jsb_s_fbLoginDelegateArchive.push_back(input);
             obj = se::Object::createObjectWithClass(
                 facebook::__jsb_LoginDelegate_class);
             obj->setPrivateData(input.get());
@@ -65,13 +66,13 @@ bool jsb_finalize<facebook::ILoginDelegate>(se::State& s) {
     auto delegatePtr =
         static_cast<facebook::ILoginDelegate*>(s.nativeThisObject());
     auto iter = std::find_if(
-        facebook::__jsb_s_delegateArchive.cbegin(),
-        facebook::__jsb_s_delegateArchive.cend(),
+        facebook::__jsb_s_fbLoginDelegateArchive.cbegin(),
+        facebook::__jsb_s_fbLoginDelegateArchive.cend(),
         [=](const std::shared_ptr<facebook::ILoginDelegate>& ptr) -> bool {
             return delegatePtr == ptr.get();
         });
-    if (iter != facebook::__jsb_s_delegateArchive.cend()) {
-        facebook::__jsb_s_delegateArchive.erase(iter);
+    if (iter != facebook::__jsb_s_fbLoginDelegateArchive.cend()) {
+        facebook::__jsb_s_fbLoginDelegateArchive.erase(iter);
     } else {
         delete delegatePtr;
     }
@@ -81,9 +82,9 @@ bool jsb_finalize<facebook::ILoginDelegate>(se::State& s) {
 
 namespace facebook {
 const auto jsb_LoginDelegate_finalize = &ee::core::jsb_finalize<ILoginDelegate>;
-const auto jsb_LoginDelegate_onSuccess = &ee::core::jsb_set_callback<
-    ILoginDelegate, &ILoginDelegate::onSuccess,
-    const std::shared_ptr<IAccessToken>&>;
+const auto jsb_LoginDelegate_onSuccess =
+    &ee::core::jsb_set_callback<ILoginDelegate, &ILoginDelegate::onSuccess,
+                                const std::shared_ptr<IAccessToken>&>;
 const auto jsb_LoginDelegate_onFailure =
     &ee::core::jsb_set_callback<ILoginDelegate, &ILoginDelegate::onFailure,
                                 const std::string&>;

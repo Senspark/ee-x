@@ -68,19 +68,19 @@ se::ValueArray to_value_array(Args... values) {
 template <auto FunctionPtr, typename... Args, std::size_t... Indices>
 auto call_static_func(const se::ValueArray& args,
                       std::index_sequence<Indices...>) {
-    return (*FunctionPtr)(get_value<Args>(args[Indices])...);
+    return (*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename... Args,
           std::size_t... Indices>
 auto call_instance_func(InstanceType* instance, const se::ValueArray& args,
                         std::index_sequence<Indices...>) {
-    return (instance->*FunctionPtr)(get_value<Args>(args[Indices])...);
+    return (instance->*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename T, typename... Args, std::size_t... Indices>
 auto make_object(const se::ValueArray& args, std::index_sequence<Indices...>) {
-    return new T(get_value<Args>(args[Indices])...);
+    return new T(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename InstanceType>
@@ -338,7 +338,7 @@ bool jsb_accessor_set(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        std::bind(FunctionPtr, cObj, get_value<ArgumentType>(args[0]))();
+        std::bind(FunctionPtr, cObj, get_value<std::decay_t<ArgumentType>>(args[0]))();
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
@@ -352,7 +352,7 @@ bool jsb_accessor_set_on_ui_thread(se::State& s) {
     if (args.size() == 1) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         runOnUiThread([cObj, args] {
-            (cObj->*FunctionPtr)(get_value<ArgumentType>(args[0]));
+            (cObj->*FunctionPtr)(get_value<std::decay_t<ArgumentType>>(args[0]));
         });
         return true;
     }

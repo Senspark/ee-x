@@ -16,38 +16,38 @@
 namespace ee {
 namespace facebook {
 se::Class* __jsb_ShareDelegate_class = nullptr;
-std::unordered_map<std::shared_ptr<IFacebookShareDelegate>, se::Object*>
-    __jsb_s_delegates;
-std::vector<std::shared_ptr<IFacebookShareDelegate>> __jsb_s_delegateArchive;
+std::unordered_map<std::shared_ptr<IShareDelegate>, se::Object*>
+    __jsb_s_fbShareDelegates;
+std::vector<std::shared_ptr<IShareDelegate>> __jsb_s_fbShareDelegateArchive;
 } // namespace facebook
 
 namespace core {
 template <>
-std::shared_ptr<IFacebookShareDelegate> get_value(const se::Value& value) {
-    auto delegatePtr = static_cast<IFacebookShareDelegate*>(
+std::shared_ptr<facebook::IShareDelegate> get_value(const se::Value& value) {
+    auto delegatePtr = static_cast<facebook::IGraphDelegate*>(
         value.toObject()->getPrivateData());
     auto iter = std::find_if(
-        facebook::__jsb_s_delegateArchive.cbegin(),
-        facebook::__jsb_s_delegateArchive.cend(),
-        [=](const std::shared_ptr<IFacebookShareDelegate>& ptr) -> bool {
+        facebook::__jsb_s_fbShareDelegateArchive.cbegin(),
+        facebook::__jsb_s_fbShareDelegateArchive.cend(),
+        [=](const std::shared_ptr<facebook::IShareDelegate>& ptr) -> bool {
             return delegatePtr == ptr.get();
         });
-    if (iter != facebook::__jsb_s_delegateArchive.cend()) {
+    if (iter != facebook::__jsb_s_fbShareDelegateArchive.cend()) {
         return *iter;
     } else {
-        return std::shared_ptr<IFacebookShareDelegate>(delegatePtr);
+        return std::shared_ptr<facebook::IShareDelegate>(delegatePtr);
     }
 }
 
 template <>
 void set_value(se::Value& value,
-               std::shared_ptr<IFacebookShareDelegate> input) {
+               std::shared_ptr<facebook::IShareDelegate> input) {
     if (input != nullptr) {
         se::Object* obj = nullptr;
-        if (facebook::__jsb_s_delegates.count(input) != 0) {
-            obj = facebook::__jsb_s_delegates.at(input);
+        if (facebook::__jsb_s_fbShareDelegates.count(input) != 0) {
+            obj = facebook::__jsb_s_fbShareDelegates.at(input);
         } else {
-            facebook::__jsb_s_delegateArchive.push_back(input);
+            facebook::__jsb_s_fbShareDelegateArchive.push_back(input);
             obj = se::Object::createObjectWithClass(
                 facebook::__jsb_ShareDelegate_class);
             obj->setPrivateData(input.get());
@@ -59,17 +59,17 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<IFacebookShareDelegate>(se::State& s) {
+bool jsb_finalize<facebook::IShareDelegate>(se::State& s) {
     auto delegatePtr =
-        static_cast<IFacebookShareDelegate*>(s.nativeThisObject());
+        static_cast<facebook::IShareDelegate*>(s.nativeThisObject());
     auto iter = std::find_if(
-        facebook::__jsb_s_delegateArchive.cbegin(),
-        facebook::__jsb_s_delegateArchive.cend(),
-        [=](const std::shared_ptr<IFacebookShareDelegate>& ptr) -> bool {
+        facebook::__jsb_s_fbShareDelegateArchive.cbegin(),
+        facebook::__jsb_s_fbShareDelegateArchive.cend(),
+        [=](const std::shared_ptr<facebook::IShareDelegate>& ptr) -> bool {
             return delegatePtr == ptr.get();
         });
-    if (iter != facebook::__jsb_s_delegateArchive.cend()) {
-        facebook::__jsb_s_delegateArchive.erase(iter);
+    if (iter != facebook::__jsb_s_fbShareDelegateArchive.cend()) {
+        facebook::__jsb_s_fbShareDelegateArchive.erase(iter);
     } else {
         delete delegatePtr;
     }

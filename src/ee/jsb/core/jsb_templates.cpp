@@ -130,6 +130,21 @@ std::map<std::string, std::string> from_JSON_object(se::Object* jsonObj) {
 }
 
 template <>
+std::vector<std::string> from_JSON_object(se::Object* jsonObj) {
+    std::vector<std::string> ret;
+    std::uint32_t arraySize;
+
+    jsonObj->getArrayLength(&arraySize);
+    for (int i = 0; i < arraySize; i++) {
+        se::Value value;
+        jsonObj->getArrayElement(i, &value);
+        ret.push_back(value.toString());
+    }
+
+    return ret;
+}
+
+template <>
 bool get_value(const se::Value& value) {
     return value.toBoolean();
 }
@@ -197,6 +212,11 @@ cocos2d::Value get_value(const se::Value& value) {
 }
 
 template <>
+std::vector<std::string> get_value(const se::Value& value) {
+    return from_JSON_object<std::vector<std::string>>(value.toObject());
+}
+
+template <>
 void set_value(se::Value& value, std::int32_t input) {
     value.setInt32(input);
 }
@@ -253,6 +273,12 @@ template <>
 void set_value(se::Value& value,
                const std::map<std::string, std::string>& input) {
     auto obj = create_JSON_object<std::map<std::string, std::string>>(input);
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, const std::vector<std::string>& input) {
+    auto obj = create_JSON_object<std::vector<std::string>>(input);
     value.setObject(obj);
 }
 } // namespace core

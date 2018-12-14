@@ -9,6 +9,7 @@
 #define jsb_cc_ifacebook_login_delegate_hpp
 
 #include "ee/jsb/jsb_fwd.hpp"
+#include "jsb_cc_ifacebook_access_token.hpp"
 
 namespace ee {
 namespace facebook {

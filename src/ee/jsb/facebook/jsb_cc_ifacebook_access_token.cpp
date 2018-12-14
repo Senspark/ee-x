@@ -23,7 +23,8 @@ std::vector<std::shared_ptr<facebook::IAccessToken>> __jsb_s_accessTokenArchive;
 
 namespace core {
 template <>
-std::shared_ptr<facebook::IAccessToken> get_value(const se::Value& value) {
+std::shared_ptr<facebook::IAccessToken>
+get_value(const se::Value& value) {
     auto adPtr = static_cast<facebook::IAccessToken*>(
         value.toObject()->getPrivateData());
     auto iter = std::find_if(
@@ -35,7 +36,8 @@ std::shared_ptr<facebook::IAccessToken> get_value(const se::Value& value) {
     if (iter != facebook::__jsb_s_accessTokenArchive.cend()) {
         return *iter;
     } else {
-        return std::shared_ptr<facebook::IAccessToken>(adPtr);
+        static std::shared_ptr<facebook::IAccessToken> defaultPtr;
+        return defaultPtr;
     }
 }
 
@@ -84,19 +86,27 @@ create_JSON_object(const std::shared_ptr<facebook::IAccessToken>& value) {
     json.push_back(value->getUserId());
     return se::Object::createJSONObject(json.dump());
 }
+
+// template <>
+//    std::shared_ptr<facebook::IAccessToken>
+// from_JSON_object(se::Object* jsonObj) {
+//    std::vector<std::string> allKeys;
+//    std::shared_ptr<facebook::IAccessToken> ret;
+//    return ret;
+//}
 } // namespace core
 
 namespace facebook {
 const auto jsb_AccessToken_finalize = &ee::core::jsb_finalize<IAccessToken>;
 const auto jsb_AccessToken_getToken =
     &ee::core::jsb_method_get<IAccessToken, &IAccessToken::getToken,
-                              std::string>;
+                              const std::string&>;
 const auto jsb_AccessToken_getApplicationId =
     &ee::core::jsb_method_get<IAccessToken, &IAccessToken::getApplicationId,
-                              std::string>;
+                              const std::string&>;
 const auto jsb_AccessToken_getUserId =
     &ee::core::jsb_method_get<IAccessToken, &IAccessToken::getUserId,
-                              std::string>;
+                              const std::string&>;
 
 SE_BIND_FINALIZE_FUNC(jsb_AccessToken_finalize);
 SE_BIND_FUNC(jsb_AccessToken_getToken);

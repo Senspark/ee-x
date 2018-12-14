@@ -7,11 +7,11 @@
 
 #include "ee/jsb/jsb_facebook.hpp"
 
-#include "facebook/jsb_facebook_bridge_impl.hpp"
-#include "facebook/jsb_ifacebook_access_token.hpp"
-#include "facebook/jsb_ifacebook_bridge.hpp"
-#include "facebook/jsb_ifacebook_login_delegate.hpp"
-#include "facebook/jsb_ifacebook_share_delegate.hpp"
+#include "ee/jsb/facebook/jsb_facebook_bridge_impl.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_bridge.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_login_delegate.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_share_delegate.hpp"
 
 namespace ee {
 namespace facebook {

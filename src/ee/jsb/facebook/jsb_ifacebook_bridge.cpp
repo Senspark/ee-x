@@ -13,11 +13,11 @@
 
 #include "ee/Facebook.hpp"
 
-#include "jsb_facebook_graph_request.hpp"
-#include "jsb_facebook_request_content.hpp"
-#include "jsb_ifacebook_access_token.hpp"
-#include "jsb_ifacebook_login_delegate.hpp"
-#include "jsb_ifacebook_share_delegate.hpp"
+#include "ee/jsb/facebook/jsb_facebook_graph_request.hpp"
+#include "ee/jsb/facebook/jsb_facebook_request_content.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_login_delegate.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_share_delegate.hpp"
 
 namespace ee {
 namespace facebook {

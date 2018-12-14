@@ -593,5 +593,28 @@ LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += cocos2dx_store_static
 include $(BUILD_STATIC_LIBRARY)
 
+##################
+#  JSB FACEBOOK  #
+##################
+
+include $(CLEAR_VARS)
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_jsb_facebook_static
+
+LOCAL_C_INCLUDES := $(EE_X_ROOT_DIR)/src/ee/jsb/core
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/cocos/editor-support
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/sources
+LOCAL_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_ABI)/include/v8
+
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_facebook.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/facebook -name "*.cpp" -print}
+
+LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
+LOCAL_STATIC_LIBRARIES += ee_x_facebook_static
+include $(BUILD_STATIC_LIBRARY)
+
 #################
 include $(EE_X_ROOT_DIR)/third_party/firebase_cpp_sdk/Android.mk

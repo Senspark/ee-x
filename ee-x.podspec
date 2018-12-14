@@ -654,6 +654,19 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/facebook-ads'
   end
 
+  spec.subspec 'jsb-facebook' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_facebook.hpp',
+      'src/ee/jsb/jsb_facebook.cpp',
+      'src/ee/jsb/facebook/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_facebook.hpp',
+      'src/ee/jsb/facebook/*.{h,hpp}'
+    
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/facebook'
+  end
+
   spec.subspec 'jsb-firebase' do |s|
     s.source_files =
       'src/ee/jsb/jsb_firebase.hpp',

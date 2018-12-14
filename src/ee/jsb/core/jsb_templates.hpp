@@ -50,7 +50,7 @@ void set_value_from_pointer(se::Value& value, T* input) {
         }
         value.setObject(obj);
 
-        if (std::is_convertible<T*, cocos2d::Ref*>::value) {
+        if constexpr(std::is_convertible<T*, cocos2d::Ref*>::value) {
             static_cast<cocos2d::Ref*>(input)->retain();
         }
     } else {
@@ -68,19 +68,19 @@ se::ValueArray to_value_array(Args... values) {
 template <auto FunctionPtr, typename... Args, std::size_t... Indices>
 auto call_static_func(const se::ValueArray& args,
                       std::index_sequence<Indices...>) {
-    return (*FunctionPtr)(get_value<Args>(args[Indices])...);
+    return (*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename... Args,
           std::size_t... Indices>
 auto call_instance_func(InstanceType* instance, const se::ValueArray& args,
                         std::index_sequence<Indices...>) {
-    return (instance->*FunctionPtr)(get_value<Args>(args[Indices])...);
+    return (instance->*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename T, typename... Args, std::size_t... Indices>
 auto make_object(const se::ValueArray& args, std::index_sequence<Indices...>) {
-    return new T(get_value<Args>(args[Indices])...);
+    return new T(get_value<std::decay_t<Args>>(args[Indices])...);
 }
 
 template <typename InstanceType>
@@ -280,9 +280,9 @@ bool jsb_method_get(se::State& s) {
 
     if (argc == args.size()) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        set_value<ReturnType>(
-            s.rval(), call_instance_func<InstanceType, FunctionPtr, Args...>(
-                          cObj, args, Indices()));
+        auto&& result = call_instance_func<InstanceType, FunctionPtr, Args...>(
+            cObj, args, Indices());
+        set_value<ReturnType>(s.rval(), result);
         return true;
     }
 
@@ -338,7 +338,7 @@ bool jsb_accessor_set(se::State& s) {
     const auto& args = s.args();
     if (args.size() == 1) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        std::bind(FunctionPtr, cObj, get_value<ArgumentType>(args[0]))();
+        std::bind(FunctionPtr, cObj, get_value<std::decay_t<ArgumentType>>(args[0]))();
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
@@ -352,7 +352,7 @@ bool jsb_accessor_set_on_ui_thread(se::State& s) {
     if (args.size() == 1) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         runOnUiThread([cObj, args] {
-            (cObj->*FunctionPtr)(get_value<ArgumentType>(args[0]));
+            (cObj->*FunctionPtr)(get_value<std::decay_t<ArgumentType>>(args[0]));
         });
         return true;
     }

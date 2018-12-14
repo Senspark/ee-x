@@ -1,19 +1,18 @@
 //
-//  jsb_cc_ifacebook_login_delegate.cpp
+//  jsb_ifacebook_login_delegate.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_ifacebook_login_delegate.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_login_delegate.hpp"
 
 #include "ee/Facebook.hpp"
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-
-#include "jsb_cc_ifacebook_access_token.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
 
 namespace ee {
 namespace facebook {

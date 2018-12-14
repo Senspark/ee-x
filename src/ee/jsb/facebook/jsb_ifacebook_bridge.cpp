@@ -1,11 +1,11 @@
 //
-//  jsb_cc_facebook_bridge.cpp
+//  jsb_facebook_bridge.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_ifacebook_bridge.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_bridge.hpp"
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
@@ -13,11 +13,11 @@
 
 #include "ee/Facebook.hpp"
 
-#include "jsb_cc_facebook_graph_request.hpp"
-#include "jsb_cc_facebook_request_content.hpp"
-#include "jsb_cc_ifacebook_access_token.hpp"
-#include "jsb_cc_ifacebook_login_delegate.hpp"
-#include "jsb_cc_ifacebook_share_delegate.hpp"
+#include "jsb_facebook_graph_request.hpp"
+#include "jsb_facebook_request_content.hpp"
+#include "jsb_ifacebook_access_token.hpp"
+#include "jsb_ifacebook_login_delegate.hpp"
+#include "jsb_ifacebook_share_delegate.hpp"
 
 namespace ee {
 namespace facebook {

@@ -1,11 +1,11 @@
 //
-//  jsb_cc_facebook_graph_request.cpp
+//  jsb_facebook_graph_request.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_facebook_graph_request.hpp"
+#include "ee/jsb/facebook/jsb_facebook_graph_request.hpp"
 
 #include "ee/facebook/FacebookGraphRequest.hpp"
 

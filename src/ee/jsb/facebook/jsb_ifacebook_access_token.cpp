@@ -1,11 +1,11 @@
 //
-//  jsb_cc_ifacebook_access_token.cpp
+//  jsb_ifacebook_access_token.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_ifacebook_access_token.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
 
 #include "ee/facebook/IFacebookAccessToken.hpp"
 
@@ -86,14 +86,6 @@ create_JSON_object(const std::shared_ptr<facebook::IAccessToken>& value) {
     json.push_back(value->getUserId());
     return se::Object::createJSONObject(json.dump());
 }
-
-// template <>
-//    std::shared_ptr<facebook::IAccessToken>
-// from_JSON_object(se::Object* jsonObj) {
-//    std::vector<std::string> allKeys;
-//    std::shared_ptr<facebook::IAccessToken> ret;
-//    return ret;
-//}
 } // namespace core
 
 namespace facebook {

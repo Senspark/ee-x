@@ -1,11 +1,11 @@
 //
-//  jsb_cc_facebook_request_content.cpp
+//  jsb_facebook_request_content.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_facebook_request_content.hpp"
+//#include "jsb_facebook_request_content.hpp"
 
 //#include "ee/facebook/FacebookRequestContent.hpp"
 //

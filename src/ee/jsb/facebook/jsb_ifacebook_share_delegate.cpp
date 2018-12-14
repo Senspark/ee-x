@@ -1,11 +1,11 @@
 //
-//  jsb_cc_ifacebook_share_delegate.cpp
+//  jsb_ifacebook_share_delegate.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_cc_ifacebook_share_delegate.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_share_delegate.hpp"
 
 #include "ee/facebook/IFacebookDelegate.hpp"
 

@@ -1,17 +1,16 @@
 //
-//  jsb_cc_facebook_bridge_impl.cpp
+//  jsb_facebook_bridge_impl.cpp
 //  ee-x
 //
 //  Created by senspark-dev on 12/13/18.
 //
 
-#include "jsb_cc_facebook_bridge_impl.hpp"
-
-#include "jsb_cc_ifacebook_bridge.hpp"
+#include "ee/jsb/facebook/jsb_facebook_bridge_impl.hpp"
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_bridge.hpp"
 
 #include "ee/facebook/internal/FacebookBridge.hpp"
 

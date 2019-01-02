@@ -88,8 +88,8 @@ constexpr auto jsb_InterstitialAd_load =
     &core::jsb_method_call_on_ui_thread<IInterstitialAd,
                                         &IInterstitialAd::load>;
 constexpr auto jsb_InterstitialAd_show =
-    &core::jsb_method_call_on_ui_thread<IInterstitialAd,
-                                        &IInterstitialAd::show>;
+    &core::jsb_method_get_on_ui_thread<IInterstitialAd, &IInterstitialAd::show,
+                                       bool>;
 constexpr auto jsb_InterstitialAd_setResultCallback =
     &core::jsb_set_callback<IInterstitialAd,
                             &IInterstitialAd::setResultCallback>;

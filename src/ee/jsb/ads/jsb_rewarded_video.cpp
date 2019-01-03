@@ -86,7 +86,8 @@ constexpr auto jsb_RewardedVideo_isLoaded =
 constexpr auto jsb_RewardedVideo_load =
     &core::jsb_method_call_on_ui_thread<IRewardedVideo, &IRewardedVideo::load>;
 constexpr auto jsb_RewardedVideo_show =
-    &core::jsb_method_call_on_ui_thread<IRewardedVideo, &IRewardedVideo::show>;
+    &core::jsb_method_get_on_ui_thread<IRewardedVideo, &IRewardedVideo::show,
+                                       bool>;
 constexpr auto jsb_RewardedVideo_setResultCallback =
     &core::jsb_set_callback<IRewardedVideo, &IRewardedVideo::setResultCallback,
                             bool>;

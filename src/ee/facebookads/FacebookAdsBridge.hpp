@@ -10,14 +10,15 @@
 #define EE_X_FACEBOOK_ADS_BRIDGE_HPP_
 
 #include <functional>
+#include <map>
 #include <memory>
 #include <string>
-#include <map>
-#include "ee/ads/IRewardedVideo.hpp"
+
 #include "ee/CoreFwd.hpp"
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
+#include "ee/ads/IRewardedVideo.hpp"
 #include "ee/facebookads/FacebookBannerAdSize.hpp"
 
 namespace ee {
@@ -26,7 +27,7 @@ class FacebookAds final {
 public:
     FacebookAds();
     ~FacebookAds();
-    
+
     explicit FacebookAds(const Logger& logger);
 
     /// Gets the current device's hash, iOS only, for Android search for
@@ -61,8 +62,6 @@ public:
 
     std::shared_ptr<IRewardedVideo>
     createRewardedVideo(const std::string& placementId);
-
-    std::string currentId_;
 
 private:
     friend BannerAd;

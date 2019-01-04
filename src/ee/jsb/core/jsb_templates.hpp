@@ -58,10 +58,18 @@ void set_value_from_pointer(se::Value& value, T* input) {
     }
 }
 
+namespace internal {
+template <class T>
+se::Value to_value(T&& arg) {
+    se::Value value;
+    set_value(value, std::forward<T>(arg));
+    return value;
+}
+} // namespace internal
+
 template <typename... Args>
 se::ValueArray to_value_array(Args... values) {
-    se::ValueArray args = {
-        se::Value(create_JSON_object(std::forward<Args>(values)))...};
+    se::ValueArray args = {internal::to_value(std::forward<Args>(values))...};
     return args;
 }
 

@@ -63,7 +63,7 @@ bool CCMarketItem::initWithValueMap(const cocos2d::ValueMap& dict) {
         auto item = dict.at(CCStoreConsts::JSON_MARKET_ITEM_MARKET_PRICE_MICROS)
                         .asDouble();
         if (mMarketPriceMicros != item) {
-            setMarketPriceMicros((std::int32_t)item);
+            setMarketPriceMicros(item);
         }
     } else {
         fillMarketPriceMicrosFromValueMap(dict);

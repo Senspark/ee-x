@@ -243,6 +243,11 @@ void set_value(se::Value& value, const std::string& input) {
 }
 
 template <>
+void set_value(se::Value& value, std::string input) {
+    value.setString(std::move(input));
+}
+
+template <>
 void set_value(se::Value& value, const char* input) {
     value.setString(input);
 }
@@ -277,8 +282,21 @@ void set_value(se::Value& value,
 }
 
 template <>
+void set_value(se::Value& value,
+               std::unordered_map<std::string, std::string> input) {
+    auto obj = create_JSON_object(std::move(input));
+    value.setObject(obj);
+}
+
+template <>
 void set_value(se::Value& value, const std::vector<std::string>& input) {
     auto obj = create_JSON_object<std::vector<std::string>>(input);
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::vector<std::string> input) {
+    auto obj = create_JSON_object(std::move(input));
     value.setObject(obj);
 }
 } // namespace core

@@ -487,7 +487,12 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../../cocos2d-x/cocos',
         '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support',
         '${PODS_ROOT}/../../../cocos2d-x/external/sources'
-        ].join(' ')
+      ].join(' ')
+    }
+    s.osx.xcconfig = {
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../../cocos2d-x/external/mac/include/v8'
+      ].join(' ')
     }
     
     s.dependency 'ee-x/core'

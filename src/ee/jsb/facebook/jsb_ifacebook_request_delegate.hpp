@@ -11,9 +11,9 @@
 #include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
-    namespace facebook {
-        bool register_ifacebook_request_delegate_manual(se::Object* object);
-    } // namespace facebook
+namespace facebook {
+bool register_ifacebook_request_delegate_manual(se::Object* object);
+} // namespace facebook
 } // namespace ee
 
 #endif /* jsb_ifacebook_request_delegate_hpp */

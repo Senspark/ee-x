@@ -5,7 +5,7 @@
 //  Created by senspark-dev on 1/8/19.
 //
 
-#include "jsb_ifacebook_graph_delegate.hpp"
+#include "ee/jsb/facebook/jsb_ifacebook_graph_delegate.hpp"
 
 #include "ee/facebook/IFacebookDelegate.hpp"
 

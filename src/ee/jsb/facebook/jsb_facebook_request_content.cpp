@@ -5,7 +5,7 @@
 //  Created by senspark-dev on 12/12/18.
 //
 
-#include "jsb_facebook_request_content.hpp"
+#include "ee/jsb/facebook/jsb_facebook_request_content.hpp"
 
 #include "ee/facebook/FacebookRequestContent.hpp"
 

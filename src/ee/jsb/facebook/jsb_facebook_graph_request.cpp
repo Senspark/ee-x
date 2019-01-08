@@ -15,7 +15,8 @@
 namespace ee {
 namespace facebook {
 se::Class* __jsb_GraphRequest_class = nullptr;
-std::unordered_map<std::shared_ptr<GraphRequest>, se::Object*> __jsb_s_graphRequests;
+std::unordered_map<std::shared_ptr<GraphRequest>, se::Object*>
+    __jsb_s_graphRequests;
 std::vector<std::shared_ptr<GraphRequest>> __jsb_s_graphRequestsArchive;
 } // namespace facebook
 
@@ -55,6 +56,19 @@ void set_value(se::Value& value,
         value.setNull();
     }
 }
+    
+// FIXME pls check this function
+template <>
+facebook::GraphRequest get_value(const se::Value& value) {
+    auto ptr = get_value<std::shared_ptr<facebook::GraphRequest>>(value);
+    return *ptr.get();
+}
+
+template <>
+void set_value(se::Value& value, const facebook::GraphRequest& input) {
+    auto ptr = std::make_shared<facebook::GraphRequest>(input);
+    set_value<std::shared_ptr<facebook::GraphRequest>>(value, ptr);
+}
 
 template <>
 bool jsb_finalize<facebook::GraphRequest>(se::State& s) {
@@ -79,12 +93,11 @@ const auto jsb_GraphRequest_finalize = &ee::core::jsb_finalize<GraphRequest>;
 const auto jsb_GraphRequest_constructor =
     &ee::core::jsb_constructor<GraphRequest>;
 constexpr auto jsb_GraphRequest_setPath =
-    &ee::core::jsb_accessor_set<GraphRequest, &GraphRequest::setPath,
-                                const std::string&>;
+    &ee::core::jsb_method_call<GraphRequest, &GraphRequest::setPath,
+                               const std::string&>;
 constexpr auto jsb_GraphRequest_setParameter =
-    &ee::core::jsb_method_get<GraphRequest, &GraphRequest::setParameter,
-                              GraphRequest&, const std::string&,
-                              const std::string&>;
+    &ee::core::jsb_method_call<GraphRequest, &GraphRequest::setParameter,
+                               const std::string&, const std::string&>;
 const auto jsb_GraphRequest_toString =
     &ee::core::jsb_method_get<GraphRequest, &GraphRequest::toString,
                               std::string>;

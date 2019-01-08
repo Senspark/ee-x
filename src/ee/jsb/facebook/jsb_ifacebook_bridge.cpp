@@ -85,6 +85,7 @@ namespace facebook {
 const auto jsb_IFacebookBridge_finalize = &ee::core::jsb_finalize<IBridge>;
 const auto jsb_IFacebookBridge_isLoggedIn =
     &ee::core::jsb_method_get<IBridge, &IBridge::isLoggedIn, bool>;
+
 const auto jsb_IFacebookBridge_logIn =
     &ee::core::jsb_method_call<IBridge, &IBridge::logIn,
                                const std::vector<std::string>&,
@@ -92,11 +93,14 @@ const auto jsb_IFacebookBridge_logIn =
 const auto jsb_IFacebookBridge_createLoginDelegate =
     &ee::core::jsb_method_get<IBridge, &IBridge::createLoginDelegate,
                               std::shared_ptr<ILoginDelegate>>;
+
 const auto jsb_IFacebookBridge_logOut =
     &ee::core::jsb_method_call<IBridge, &IBridge::logOut>;
+
 const auto jsb_IFacebookBridge_getAccessToken =
     &ee::core::jsb_method_get<IBridge, &IBridge::getAccessToken,
                               std::shared_ptr<IAccessToken>>;
+
 const auto jsb_IFacebookBridge_shareLinkContent =
     &ee::core::jsb_method_call<IBridge, &IBridge::shareLinkContent,
                                const std::string&,
@@ -113,6 +117,22 @@ const auto jsb_IFacebookBridge_createShareDelegate =
     &ee::core::jsb_method_get<IBridge, &IBridge::createShareDelegate,
                               std::shared_ptr<IShareDelegate>>;
 
+const auto jsb_IFacebookBridge_graphRequest =
+    &ee::core::jsb_method_call<IBridge, &IBridge::graphRequest,
+                               const GraphRequest&,
+                               const std::shared_ptr<IGraphDelegate>&>;
+const auto jsb_IFacebookBridge_createGraphDelegate =
+    &ee::core::jsb_method_get<IBridge, &IBridge::createGraphDelegate,
+                              std::shared_ptr<IGraphDelegate>>;
+
+const auto jsb_IFacebookBridge_sendRequest =
+    &ee::core::jsb_method_call<IBridge, &IBridge::sendRequest,
+                               const RequestContent&,
+                               const std::shared_ptr<IRequestDelegate>&>;
+const auto jsb_IFacebookBridge_createRequestDelegate =
+    &ee::core::jsb_method_get<IBridge, &IBridge::createRequestDelegate,
+                              std::shared_ptr<IRequestDelegate>>;
+
 SE_BIND_FINALIZE_FUNC(jsb_IFacebookBridge_finalize);
 SE_BIND_FUNC(jsb_IFacebookBridge_isLoggedIn);
 SE_BIND_FUNC(jsb_IFacebookBridge_logIn);
@@ -123,6 +143,10 @@ SE_BIND_FUNC(jsb_IFacebookBridge_shareLinkContent);
 SE_BIND_FUNC(jsb_IFacebookBridge_sharePhotoContent);
 SE_BIND_FUNC(jsb_IFacebookBridge_shareVideoContent);
 SE_BIND_FUNC(jsb_IFacebookBridge_createShareDelegate);
+SE_BIND_FUNC(jsb_IFacebookBridge_graphRequest);
+SE_BIND_FUNC(jsb_IFacebookBridge_createGraphDelegate);
+SE_BIND_FUNC(jsb_IFacebookBridge_sendRequest);
+SE_BIND_FUNC(jsb_IFacebookBridge_createRequestDelegate);
 
 se::Class* getIFacebookBridgeClass() {
     CCASSERT(__jsb_IFacebookBridge_class != nullptr,
@@ -155,6 +179,14 @@ bool register_ifacebook_bridge_manual(se::Object* globalObject) {
                         _SE(jsb_IFacebookBridge_shareVideoContent));
     cls->defineFunction("createShareDelegate",
                         _SE(jsb_IFacebookBridge_createShareDelegate));
+
+    cls->defineFunction("graphRequest", _SE(jsb_IFacebookBridge_graphRequest));
+    cls->defineFunction("createGraphDelegate",
+                        _SE(jsb_IFacebookBridge_createGraphDelegate));
+
+    cls->defineFunction("sendRequest", _SE(jsb_IFacebookBridge_sendRequest));
+    cls->defineFunction("createRequestDelegate",
+                        _SE(jsb_IFacebookBridge_createRequestDelegate));
 
     cls->install();
 

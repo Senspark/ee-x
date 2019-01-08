@@ -24,7 +24,7 @@ std::vector<std::shared_ptr<IShareDelegate>> __jsb_s_fbShareDelegateArchive;
 namespace core {
 template <>
 std::shared_ptr<facebook::IShareDelegate> get_value(const se::Value& value) {
-    auto delegatePtr = static_cast<facebook::IGraphDelegate*>(
+    auto delegatePtr = static_cast<facebook::IShareDelegate*>(
         value.toObject()->getPrivateData());
     auto iter = std::find_if(
         facebook::__jsb_s_fbShareDelegateArchive.cbegin(),
@@ -103,7 +103,7 @@ bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
     ee::core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
     ee::core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
 
-    auto cls = se::Class::create("IFacebookShareDelegate", facebookObj, nullptr,
+    auto cls = se::Class::create("IShareDelegate", facebookObj, nullptr,
                                  nullptr);
     cls->defineFinalizeFunction(_SE(jsb_ShareDelegate_finalize));
     cls->defineFunction("onSuccess", _SE(jsb_ShareDelegate_onSuccess));

@@ -13,82 +13,17 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-namespace facebook {
-se::Class* __jsb_GraphRequest_class = nullptr;
-std::unordered_map<std::shared_ptr<GraphRequest>, se::Object*>
-    __jsb_s_graphRequests;
-std::vector<std::shared_ptr<GraphRequest>> __jsb_s_graphRequestsArchive;
-} // namespace facebook
-
 namespace core {
 template <>
-std::shared_ptr<facebook::GraphRequest> get_value(const se::Value& value) {
-    auto itemPtr = static_cast<facebook::GraphRequest*>(
-        value.toObject()->getPrivateData());
-    auto iter = std::find_if(
-        facebook::__jsb_s_graphRequestsArchive.cbegin(),
-        facebook::__jsb_s_graphRequestsArchive.cend(),
-        [=](const std::shared_ptr<facebook::GraphRequest>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_graphRequestsArchive.cend()) {
-        return *iter;
-    } else {
-        return std::shared_ptr<facebook::GraphRequest>(itemPtr);
-    }
-}
-
-template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::GraphRequest> input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        if (facebook::__jsb_s_graphRequests.count(input) != 0) {
-            obj = facebook::__jsb_s_graphRequests.at(input);
-        } else {
-            facebook::__jsb_s_graphRequestsArchive.push_back(input);
-            obj = se::Object::createObjectWithClass(
-                facebook::__jsb_GraphRequest_class);
-            obj->setPrivateData(input.get());
-        }
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
-}
-    
-// FIXME pls check this function
-template <>
 facebook::GraphRequest get_value(const se::Value& value) {
-    auto ptr = get_value<std::shared_ptr<facebook::GraphRequest>>(value);
-    return *ptr.get();
-}
-
-template <>
-void set_value(se::Value& value, const facebook::GraphRequest& input) {
-    auto ptr = std::make_shared<facebook::GraphRequest>(input);
-    set_value<std::shared_ptr<facebook::GraphRequest>>(value, ptr);
-}
-
-template <>
-bool jsb_finalize<facebook::GraphRequest>(se::State& s) {
-    auto itemPtr = static_cast<facebook::GraphRequest*>(s.nativeThisObject());
-    auto iter = std::find_if(
-        facebook::__jsb_s_graphRequestsArchive.cbegin(),
-        facebook::__jsb_s_graphRequestsArchive.cend(),
-        [=](const std::shared_ptr<facebook::GraphRequest>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_graphRequestsArchive.cend()) {
-        facebook::__jsb_s_graphRequestsArchive.erase(iter);
-    } else {
-        delete itemPtr;
-    }
-    return true;
+    return *static_cast<facebook::GraphRequest*>(
+        value.toObject()->getPrivateData());
 }
 } // namespace core
 
 namespace facebook {
+se::Class* __jsb_GraphRequest_class = nullptr;
+
 const auto jsb_GraphRequest_finalize = &ee::core::jsb_finalize<GraphRequest>;
 const auto jsb_GraphRequest_constructor =
     &ee::core::jsb_constructor<GraphRequest>;

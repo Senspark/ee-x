@@ -14,12 +14,6 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-namespace facebook {
-se::Class* __jsb_RequestContent_class = nullptr;
-std::unordered_map<std::shared_ptr<RequestContent>, se::Object*>
-    __jsb_s_requestContents;
-std::vector<std::shared_ptr<RequestContent>> __jsb_s_requestContentsArchive;
-} // namespace facebook
 namespace core {
 template <>
 facebook::RequestContent::ActionType get_value(const se::Value& value) {
@@ -32,73 +26,15 @@ facebook::RequestContent::Filter get_value(const se::Value& value) {
 }
 
 template <>
-std::shared_ptr<facebook::RequestContent> get_value(const se::Value& value) {
-    auto itemPtr = static_cast<facebook::RequestContent*>(
-        value.toObject()->getPrivateData());
-    auto iter = std::find_if(
-        facebook::__jsb_s_requestContentsArchive.cbegin(),
-        facebook::__jsb_s_requestContentsArchive.cend(),
-        [=](const std::shared_ptr<facebook::RequestContent>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_requestContentsArchive.cend()) {
-        return *iter;
-    } else {
-        return std::shared_ptr<facebook::RequestContent>(itemPtr);
-    }
-}
-
-template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::RequestContent> input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        if (facebook::__jsb_s_requestContents.count(input) != 0) {
-            obj = facebook::__jsb_s_requestContents.at(input);
-        } else {
-            facebook::__jsb_s_requestContentsArchive.push_back(input);
-            obj = se::Object::createObjectWithClass(
-                facebook::__jsb_RequestContent_class);
-            obj->setPrivateData(input.get());
-        }
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
-}
-
-// FIXME pls check this function
-template <>
 facebook::RequestContent get_value(const se::Value& value) {
-    auto ptr = get_value<std::shared_ptr<facebook::RequestContent>>(value);
-    return *ptr.get();
-}
-
-template <>
-void set_value(se::Value& value, const facebook::RequestContent& input) {
-    auto ptr = std::make_shared<facebook::RequestContent>(input);
-    set_value<std::shared_ptr<facebook::RequestContent>>(value, ptr);
-}
-
-template <>
-bool jsb_finalize<facebook::RequestContent>(se::State& s) {
-    auto itemPtr = static_cast<facebook::RequestContent*>(s.nativeThisObject());
-    auto iter = std::find_if(
-        facebook::__jsb_s_requestContentsArchive.cbegin(),
-        facebook::__jsb_s_requestContentsArchive.cend(),
-        [=](const std::shared_ptr<facebook::RequestContent>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_requestContentsArchive.cend()) {
-        facebook::__jsb_s_requestContentsArchive.erase(iter);
-    } else {
-        delete itemPtr;
-    }
-    return true;
+    return *static_cast<facebook::RequestContent*>(
+        value.toObject()->getPrivateData());
 }
 } // namespace core
 
 namespace facebook {
+se::Class* __jsb_RequestContent_class = nullptr;
+
 const auto jsb_RequestContent_finalize =
     &ee::core::jsb_finalize<RequestContent>;
 const auto jsb_RequestContent_constructor =

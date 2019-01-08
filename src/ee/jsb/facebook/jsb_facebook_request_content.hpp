@@ -10,12 +10,10 @@
 
 #include "ee/jsb/jsb_fwd.hpp"
 
-// FIXME.
-
-//namespace ee {
-//namespace facebook {
-//bool register_facebook_request_content_manual(se::Object* globalObj);
-//}
-//} // namespace ee
+namespace ee {
+namespace facebook {
+bool register_facebook_request_content_manual(se::Object* globalObj);
+}
+} // namespace ee
 
 #endif /* jsb_facebook_request_content_hpp */

@@ -8,7 +8,6 @@
 #include "ee/jsb/facebook/jsb_facebook_graph_request.hpp"
 
 #include "ee/facebook/FacebookGraphRequest.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 

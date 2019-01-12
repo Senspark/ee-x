@@ -471,6 +471,65 @@ bool jsb_static_set_callback(se::State& s) {
                     args.size(), 1);
     return false;
 }
+
+template <class T>
+class SharedPtrHandler {
+public:
+    static std::unique_ptr<SharedPtrHandler> create(se::Class* clazz) {
+        return std::make_unique<SharedPtrHandler<T>>(clazz);
+    }
+
+    explicit SharedPtrHandler(se::Class* clazz)
+        : clazz_(clazz) {}
+
+    std::shared_ptr<T> getValue(const se::Value& value) const {
+        auto delegatePtr = static_cast<T*>(value.toObject()->getPrivateData());
+        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
+                                 [=](const std::shared_ptr<T>& ptr) {
+                                     return delegatePtr == ptr.get();
+                                 });
+        if (iter != archive_.cend()) {
+            return *iter;
+        } else {
+            return std::shared_ptr<T>(delegatePtr);
+        }
+    }
+
+    void setValue(se::Value& value, std::shared_ptr<T> input) {
+        if (input != nullptr) {
+            se::Object* obj = nullptr;
+            if (delegates_.count(input) != 0) {
+                obj = delegates_.at(input);
+            } else {
+                archive_.push_back(input);
+                obj = se::Object::createObjectWithClass(clazz_);
+                obj->setPrivateData(input.get());
+            }
+            value.setObject(obj);
+        } else {
+            value.setNull();
+        }
+    }
+
+    bool finalize(se::State& s) {
+        auto delegatePtr = static_cast<T*>(s.nativeThisObject());
+        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
+                                 [=](const std::shared_ptr<T>& ptr) {
+                                     return delegatePtr == ptr.get();
+                                 });
+        if (iter != archive_.cend()) {
+            archive_.erase(iter);
+        } else {
+            delete delegatePtr;
+        }
+        return true;
+    }
+
+private:
+    se::Class* clazz_;
+    std::unordered_map<std::shared_ptr<T>, se::Object*> delegates_;
+    std::vector<std::shared_ptr<T>> archive_;
+};
 } // namespace core
 } // namespace ee
 

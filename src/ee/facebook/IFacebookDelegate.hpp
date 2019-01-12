@@ -15,7 +15,7 @@
 
 namespace ee {
 namespace facebook {
-template <class... Args>
+template <std::size_t Id, class... Args>
 class IDelegate {
 private:
     using Self = IDelegate;

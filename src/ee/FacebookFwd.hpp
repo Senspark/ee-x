@@ -16,18 +16,22 @@ class IBridge;
 class Bridge;
 class IAccessToken;
 class AccessToken;
-template <class... Args>
+template <std::size_t Id, class... Args>
 class IDelegate;
 using ILoginDelegate =
-    IDelegate<const std::shared_ptr<IAccessToken>& // accessToken
+    IDelegate<0,                                   // Id
+              const std::shared_ptr<IAccessToken>& // accessToken
               >;
 using IRequestDelegate =
-    IDelegate<const std::string&,             // requestId,
+    IDelegate<1,                              // ID
+              const std::string&,             // requestId,
               const std::vector<std::string>& // requestRecipients
               >;
-using IShareDelegate = IDelegate<const std::string& // postId
+using IShareDelegate = IDelegate<2,                 // Id
+                                 const std::string& // postId
                                  >;
-using IGraphDelegate = IDelegate<const std::string& // content
+using IGraphDelegate = IDelegate<3,                 // Id
+                                 const std::string& // content
                                  >;
 class LoginDelegate;
 class ShareDelegate;

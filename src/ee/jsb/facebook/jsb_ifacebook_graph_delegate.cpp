@@ -7,30 +7,46 @@
 
 #include "ee/jsb/facebook/jsb_ifacebook_graph_delegate.hpp"
 
-#include "ee/facebook/IFacebookDelegate.hpp"
-
+#include "ee/facebook/internal/FacebookGraphDelegate.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-namespace facebook {
-se::Class* __jsb_GraphDelegate_class = nullptr;
-std::unordered_map<std::shared_ptr<IGraphDelegate>, se::Object*>
-    __jsb_s_fbGraphDelegates;
-std::vector<std::shared_ptr<IGraphDelegate>> __jsb_s_fbGraphDelegateArchive;
-} // namespace facebook
+namespace core {
+namespace {
+std::unique_ptr<SharedPtrHandler<facebook::IGraphDelegate>> handler;
+} // namespace
+
+template <>
+std::shared_ptr<facebook::IGraphDelegate> get_value(const se::Value& value) {
+    return handler->getValue(value);
+}
+
+template <>
+void set_value(se::Value& value,
+               std::shared_ptr<facebook::IGraphDelegate> input) {
+    handler->setValue(value, input);
+}
+
+template <>
+bool jsb_finalize<facebook::IGraphDelegate>(se::State& s) {
+    return handler->finalize(s);
+}
+} // namespace core
 
 namespace facebook {
-const auto jsb_GraphDelegate_finalize = &ee::core::jsb_finalize<IGraphDelegate>;
+namespace {
+const auto jsb_GraphDelegate_finalize = &core::jsb_finalize<IGraphDelegate>;
 const auto jsb_GraphDelegate_onSuccess =
-    &ee::core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onSuccess,
-                                const std::string&>;
+    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onSuccess,
+                            const std::string&>;
 const auto jsb_GraphDelegate_onFailure =
-    &ee::core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onFailure,
-                                const std::string&>;
+    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onFailure,
+                            const std::string&>;
 const auto jsb_GraphDelegate_onCancel =
-    &ee::core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onCancel>;
+    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onCancel>;
+} // namespace
 
 SE_BIND_FINALIZE_FUNC(jsb_GraphDelegate_finalize);
 SE_BIND_FUNC(jsb_GraphDelegate_onSuccess);
@@ -40,8 +56,8 @@ SE_BIND_FUNC(jsb_GraphDelegate_onCancel);
 bool register_ifacebook_graph_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
     se::Object* facebookObj = nullptr;
-    ee::core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
-    ee::core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
+    core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
+    core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
 
     auto cls =
         se::Class::create("IGraphDelegate", facebookObj, nullptr, nullptr);
@@ -51,13 +67,10 @@ bool register_ifacebook_graph_delegate_manual(se::Object* globalObject) {
     cls->defineFunction("onCancel", _SE(jsb_GraphDelegate_onCancel));
 
     cls->install();
-
-    JSBClassType::registerClass<IGraphDelegate>(cls);
-
-    __jsb_GraphDelegate_class = cls;
+    JSBClassType::registerClass<GraphDelegate>(cls);
+    core::handler = core::SharedPtrHandler<IGraphDelegate>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace facebook

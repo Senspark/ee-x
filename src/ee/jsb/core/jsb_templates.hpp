@@ -143,7 +143,7 @@ bool jsb_constructor(se::State& s) {
         s.thisObject()->setPrivateData(cObj);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.", argc,
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.", argc,
                     2);
     return false;
 }
@@ -161,7 +161,7 @@ bool jsb_constructor_with_dispose_callback(se::State& s) {
         s.thisObject()->setPrivateData(cObj);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.", argc,
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.", argc,
                     2);
     return false;
 }
@@ -192,7 +192,7 @@ bool jsb_static_call(se::State& s) {
         call_static_func<Function, Args...>(args, Indices());
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -210,7 +210,7 @@ bool jsb_static_get(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -234,7 +234,7 @@ bool jsb_method_call(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -254,7 +254,7 @@ bool jsb_method_call_on_ui_thread(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -274,7 +274,7 @@ bool jsb_method_call_on_ui_thread_and_wait(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -294,7 +294,7 @@ bool jsb_method_get(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -319,7 +319,7 @@ bool jsb_method_get_on_ui_thread(se::State& s) {
         return true;
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %ld.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), argc);
     return false;
 }
@@ -349,7 +349,7 @@ bool jsb_accessor_set(se::State& s) {
         std::bind(FunctionPtr, cObj, get_value<std::decay_t<ArgumentType>>(args[0]))();
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
                     args.size(), 1);
     return false;
 }
@@ -364,7 +364,7 @@ bool jsb_accessor_set_on_ui_thread(se::State& s) {
         });
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
                     args.size(), 1);
     return false;
 }
@@ -385,7 +385,7 @@ bool jsb_propterty_set(se::State& s) {
         cObj->*MemberPtr = get_value<std::decay_t<ArgumentType>>(args[0]);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
                     args.size(), 1);
     return false;
 }
@@ -427,7 +427,7 @@ bool jsb_set_callback(se::State& s) {
 
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
                     args.size(), 1);
     return false;
 }
@@ -467,7 +467,7 @@ bool jsb_static_set_callback(se::State& s) {
 
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %ld, was expecting: %d.",
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
                     args.size(), 1);
     return false;
 }

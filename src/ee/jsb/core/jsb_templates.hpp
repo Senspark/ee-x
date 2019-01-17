@@ -11,14 +11,15 @@
 #include <type_traits>
 #include <unordered_map>
 
+#include "ee/jsb/core/jsb_utils.hpp"
+
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/Core.hpp>
 
-#include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
-#include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
-#include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
-#include "ee/jsb/core/jsb_utils.hpp"
+#include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
+#include <cocos/scripting/js-bindings/manual/jsb_conversions.hpp>
+#include <cocos/scripting/js-bindings/manual/jsb_helper.hpp>
 
 namespace ee {
 namespace core {

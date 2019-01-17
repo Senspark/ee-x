@@ -31,7 +31,7 @@ const auto jsb_Recorder_getScreenRecordingUrl =
                           const std::string&>;
 const auto jsb_Recorder_checkRecordingPermission =
     &core::jsb_method_get<Recorder, &Recorder::checkRecordingPermission,
-                          const bool>;
+                          bool>;
 
 SE_BIND_FINALIZE_FUNC(jsb_Recorder_finalize)
 SE_BIND_CTOR(jsb_Recorder_constructor, __jsb_Recorder_class,
@@ -68,7 +68,7 @@ bool register_recorder_bridge_manual(se::Object* globalObj) {
 
     cls->install();
 
-    JSBClassType::registerClass<Notification>(cls);
+    JSBClassType::registerClass<Recorder>(cls);
 
     __jsb_Recorder_class = cls;
 

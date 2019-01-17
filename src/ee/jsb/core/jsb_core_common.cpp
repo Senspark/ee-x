@@ -7,7 +7,7 @@
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 
-#include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
+#include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
 
 namespace ee {
 namespace core {

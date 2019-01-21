@@ -26,6 +26,11 @@ template <>
 void set_value(se::Value& value, soomla::CCPurchaseType* input) {
     set_value_from_pointer(value, input);
 }
+
+template <>
+void set_value(se::Value& value, soomla::CCPurchaseWithMarketBuilder& input) {
+    value.toObject()->setPrivateData(&input);
+}
 } // namespace core
 } // namespace ee
 

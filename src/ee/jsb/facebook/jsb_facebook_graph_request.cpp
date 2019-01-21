@@ -18,27 +18,32 @@ facebook::GraphRequest get_value(const se::Value& value) {
     return *static_cast<facebook::GraphRequest*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, facebook::GraphRequest& input) {
+    value.toObject()->setPrivateData(&input);
+}
 } // namespace core
 
 namespace facebook {
-se::Class* __jsb_GraphRequest_class = nullptr;
+namespace {
+se::Class* clazz = nullptr;
+} // namespace
 
-const auto jsb_GraphRequest_finalize = &ee::core::jsb_finalize<GraphRequest>;
-const auto jsb_GraphRequest_constructor =
-    &ee::core::jsb_constructor<GraphRequest>;
+constexpr auto jsb_GraphRequest_finalize = &core::jsb_finalize<GraphRequest>;
+constexpr auto jsb_GraphRequest_constructor =
+    &core::jsb_constructor<GraphRequest>;
 constexpr auto jsb_GraphRequest_setPath =
-    &ee::core::jsb_method_call<GraphRequest, &GraphRequest::setPath,
-                               const std::string&>;
+    &core::jsb_accessor_set<GraphRequest, &GraphRequest::setPath,
+                            const std::string&>;
 constexpr auto jsb_GraphRequest_setParameter =
-    &ee::core::jsb_method_call<GraphRequest, &GraphRequest::setParameter,
-                               const std::string&, const std::string&>;
+    &core::jsb_method_call<GraphRequest, &GraphRequest::setParameter,
+                            const std::string&, const std::string&>;
 const auto jsb_GraphRequest_toString =
-    &ee::core::jsb_method_get<GraphRequest, &GraphRequest::toString,
-                              std::string>;
+    &core::jsb_method_get<GraphRequest, &GraphRequest::toString, std::string>;
 
 SE_BIND_FINALIZE_FUNC(jsb_GraphRequest_finalize);
-SE_BIND_CTOR(jsb_GraphRequest_constructor, __jsb_GraphRequest_class,
-             jsb_GraphRequest_finalize);
+SE_BIND_CTOR(jsb_GraphRequest_constructor, clazz, jsb_GraphRequest_finalize);
 SE_BIND_FUNC(jsb_GraphRequest_setPath);
 SE_BIND_FUNC(jsb_GraphRequest_setParameter);
 SE_BIND_FUNC(jsb_GraphRequest_toString);
@@ -46,8 +51,8 @@ SE_BIND_FUNC(jsb_GraphRequest_toString);
 bool register_facebook_graph_request_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
     se::Object* facebookObj = nullptr;
-    ee::core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
-    ee::core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
+    core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
+    core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
 
     auto cls = se::Class::create("GraphRequest", facebookObj, nullptr,
                                  _SE(jsb_GraphRequest_constructor));
@@ -59,11 +64,9 @@ bool register_facebook_graph_request_manual(se::Object* globalObject) {
     cls->install();
 
     JSBClassType::registerClass<GraphRequest>(cls);
-
-    __jsb_GraphRequest_class = cls;
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace facebook

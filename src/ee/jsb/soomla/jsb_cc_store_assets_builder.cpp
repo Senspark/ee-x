@@ -15,7 +15,6 @@
 
 namespace ee {
 namespace core {
-
 template <>
 soomla::CCVirtualCurrency* get_value(const se::Value& value) {
     return static_cast<soomla::CCVirtualCurrency*>(
@@ -38,6 +37,11 @@ template <>
 soomla::CCVirtualCategory* get_value(const se::Value& value) {
     return static_cast<soomla::CCVirtualCategory*>(
         value.toObject()->getPrivateData());
+}
+
+template <>
+void set_value(se::Value& value, soomla::CCStoreAssetsBuilder& input) {
+    value.toObject()->setPrivateData(&input);
 }
 
 template <>

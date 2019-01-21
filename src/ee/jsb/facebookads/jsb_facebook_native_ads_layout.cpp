@@ -20,6 +20,11 @@ FacebookNativeAdLayout get_value(const se::Value& value) {
     return *static_cast<FacebookNativeAdLayout*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, facebook::NativeAdLayout& input) {
+    value.toObject()->setPrivateData(&input);
+}
 } // namespace core
 
 namespace facebook {

@@ -19,7 +19,7 @@ se::Class* __jsb_Metrics_class = nullptr;
 std::unordered_map<const Metrics*, se::Object*> __jsb_s_Metrics;
 
 template <>
-void set_value(se::Value& value, const Metrics& input) {
+void set_value(se::Value& value, Metrics input) {
     se::Object* obj = nullptr;
     if (__jsb_s_Metrics.count(&input) != 0) {
         obj = __jsb_s_Metrics[&input];

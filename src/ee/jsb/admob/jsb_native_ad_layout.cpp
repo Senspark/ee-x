@@ -21,6 +21,11 @@ AdMobNativeAdLayout get_value(const se::Value& value) {
     return *static_cast<AdMobNativeAdLayout*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, admob::NativeAdLayout& input) {
+    value.toObject()->setPrivateData(&input);
+}
 } // namespace core
 
 namespace admob {

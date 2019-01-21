@@ -12,6 +12,15 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
+namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, soomla::CCVirtualCurrencyPackBuilder& input) {
+    value.toObject()->setPrivateData(&input);
+}
+} // namespace core
+} // namespace ee
+
 namespace soomla {
 
 se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;

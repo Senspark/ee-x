@@ -30,6 +30,11 @@ facebook::RequestContent get_value(const se::Value& value) {
     return *static_cast<facebook::RequestContent*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, facebook::RequestContent& input) {
+    value.toObject()->setPrivateData(&input);
+}
 } // namespace core
 
 namespace facebook {

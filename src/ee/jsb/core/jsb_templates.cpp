@@ -269,8 +269,20 @@ void set_value(se::Value& value, const std::pair<float, float>& input) {
 }
 
 template <>
+void set_value(se::Value& value, std::pair<float, float> input) {
+    auto obj = create_JSON_object(input);
+    value.setObject(obj);
+}
+
+template <>
 void set_value(se::Value& value, const std::pair<int, int>& input) {
     auto obj = create_JSON_object<std::pair<int, int>>(input);
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::pair<int, int> input) {
+    auto obj = create_JSON_object(input);
     value.setObject(obj);
 }
 

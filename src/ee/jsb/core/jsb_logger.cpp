@@ -58,36 +58,39 @@ constexpr auto jsb_Logger_setSystemLogger =
     &jsb_static_call<&Logger::setSystemLogger, const Logger&>;
 constexpr auto jsb_Logger_setEnabled =
     &jsb_accessor_set<Logger, &Logger::setEnabled, bool>;
-constexpr auto jsb_Logger_log =
-    &jsb_method_call<Logger,
-                     static_cast<void (Logger::*)(const LogLevel&, std::string,
-                                                  ...) const>(&Logger::log),
-                     const LogLevel&, std::string>;
-constexpr auto jsb_Logger_verbose =
-    &jsb_method_call<Logger, &Logger::verbose, std::string>;
-constexpr auto jsb_Logger_debug =
-    &jsb_method_call<Logger, &Logger::debug, std::string>;
-constexpr auto jsb_Logger_info =
-    &jsb_method_call<Logger, &Logger::info, std::string>;
-constexpr auto jsb_Logger_warn =
-    &jsb_method_call<Logger, &Logger::warn, std::string>;
-constexpr auto jsb_Logger_error =
-    &jsb_method_call<Logger, &Logger::error, std::string>;
-constexpr auto jsb_Logger_assert =
-    &jsb_method_call<Logger, &Logger::error, std::string>;
+
+// FIXME: temporarily removed.
+// constexpr auto jsb_Logger_log =
+//    &jsb_method_call<Logger,
+//                     static_cast<void (Logger::*)(const LogLevel&,
+//                     std::string,
+//                                                  ...) const>(&Logger::log),
+//                     const LogLevel&, std::string>;
+// constexpr auto jsb_Logger_verbose =
+//    &jsb_method_call<Logger, &Logger::verbose, std::string>;
+// constexpr auto jsb_Logger_debug =
+//    &jsb_method_call<Logger, &Logger::debug, std::string>;
+// constexpr auto jsb_Logger_info =
+//    &jsb_method_call<Logger, &Logger::info, std::string>;
+// constexpr auto jsb_Logger_warn =
+//    &jsb_method_call<Logger, &Logger::warn, std::string>;
+// constexpr auto jsb_Logger_error =
+//    &jsb_method_call<Logger, &Logger::error, std::string>;
+// constexpr auto jsb_Logger_assert =
+//    &jsb_method_call<Logger, &Logger::error, std::string>;
 
 SE_BIND_FINALIZE_FUNC(jsb_Logger_finalize)
 SE_BIND_CTOR(jsb_Logger_constructor, __jsb_Logger_class, jsb_Logger_finalize)
 SE_BIND_FUNC(jsb_Logger_getSystemLogger)
 SE_BIND_FUNC(jsb_Logger_setSystemLogger)
 SE_BIND_FUNC(jsb_Logger_setEnabled)
-SE_BIND_FUNC(jsb_Logger_log);
-SE_BIND_FUNC(jsb_Logger_verbose)
-SE_BIND_FUNC(jsb_Logger_debug)
-SE_BIND_FUNC(jsb_Logger_info)
-SE_BIND_FUNC(jsb_Logger_warn)
-SE_BIND_FUNC(jsb_Logger_error)
-SE_BIND_FUNC(jsb_Logger_assert)
+// SE_BIND_FUNC(jsb_Logger_log);
+// SE_BIND_FUNC(jsb_Logger_verbose)
+// SE_BIND_FUNC(jsb_Logger_debug)
+// SE_BIND_FUNC(jsb_Logger_info)
+// SE_BIND_FUNC(jsb_Logger_warn)
+// SE_BIND_FUNC(jsb_Logger_error)
+// SE_BIND_FUNC(jsb_Logger_assert)
 
 bool register_logger_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
@@ -101,13 +104,13 @@ bool register_logger_manual(se::Object* globalObj) {
 
     // Define member functions, member properties
     cls->defineFunction("setEnabled", _SE(jsb_Logger_setEnabled));
-    cls->defineFunction("log", _SE(jsb_Logger_log));
-    cls->defineFunction("verbose", _SE(jsb_Logger_verbose));
-    cls->defineFunction("debug", _SE(jsb_Logger_debug));
-    cls->defineFunction("info", _SE(jsb_Logger_info));
-    cls->defineFunction("warn", _SE(jsb_Logger_warn));
-    cls->defineFunction("error", _SE(jsb_Logger_error));
-    cls->defineFunction("assert", _SE(jsb_Logger_assert));
+    // cls->defineFunction("log", _SE(jsb_Logger_log));
+    // cls->defineFunction("verbose", _SE(jsb_Logger_verbose));
+    // cls->defineFunction("debug", _SE(jsb_Logger_debug));
+    // cls->defineFunction("info", _SE(jsb_Logger_info));
+    // cls->defineFunction("warn", _SE(jsb_Logger_warn));
+    // cls->defineFunction("error", _SE(jsb_Logger_error));
+    // cls->defineFunction("assert", _SE(jsb_Logger_assert));
 
     // Install the class to JS virtual machine
     cls->install();

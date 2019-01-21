@@ -13,6 +13,15 @@
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
 
+namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, soomla::CCLifetimeVGBuilder& input) {
+    value.toObject()->setPrivateData(&input);
+}
+} // namespace core
+} // namespace ee
+
 namespace soomla {
 se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
 

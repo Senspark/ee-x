@@ -101,6 +101,17 @@ struct MemberFunctionTraits : FunctionTraits<ResultType, ArgTypes...> {
     using Instance = InstanceType;
 };
 
+template <class PropertyType>
+struct PropertyTraits {
+    using Property = PropertyType;
+};
+
+template <class PropertyType, class InstanceType>
+struct MemberPropertyTraits {
+    using Property = PropertyType;
+    using Instance = InstanceType;
+};
+
 /// Static functions.
 template <class Result, class... Args>
 constexpr auto makeFunctionTraits(Result(Args...)) {
@@ -118,6 +129,18 @@ template <class Result, class Instance, class... Args>
 constexpr auto makeFunctionTraits(Result (Instance::*)(Args...) const) {
     return MemberFunctionTraits<Result, Instance, Args...>();
 }
+
+/// Static properties.
+template <class Property>
+constexpr auto makePropertyTraits(Property*) {
+    return PropertyTraits<Property>();
+}
+
+/// Member properties.
+template <class Property, class Instance>
+constexpr auto makePropertyTraits(Property(Instance::*)) {
+    return MemberPropertyTraits<Property, Instance>();
+}
 } // namespace internal
 
 template <auto Function>
@@ -132,8 +155,20 @@ template <auto Function>
 using FunctionArgs =
     typename decltype(internal::makeFunctionTraits(Function))::Args;
 
+template <auto Property>
+using PropertyInstance =
+    typename decltype(internal::makePropertyTraits(Property))::Instance;
+
+template <auto Property>
+using PropertyType =
+    typename decltype(internal::makePropertyTraits(Property))::Property;
+
 template <auto Function>
 constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
+
+template <class T>
+using UnifyType =
+    std::conditional_t<std::is_pointer_v<T>, T, std::add_lvalue_reference_t<T>>;
 
 namespace internal {
 template <auto Function, std::size_t... Indices>
@@ -297,7 +332,7 @@ bool makeStaticMethod(se::State& state) {
             callStaticFunction<Function>(args);
         } else {
             auto&& result = callStaticFunction<Function>(args);
-            set_value<Result>(state.rval(), result);
+            set_value<UnifyType<Result>>(state.rval(), result);
         }
         return true;
     }
@@ -318,7 +353,7 @@ bool makeInstanceMethod(se::State& state) {
             callInstanceFunction<Function>(instance, args);
         } else {
             auto&& result = callInstanceFunction<Function>(instance, args);
-            set_value<Result>(state.rval(), result);
+            set_value<UnifyType<Result>>(state.rval(), result);
         }
         return true;
     }
@@ -366,13 +401,29 @@ bool makeInstanceMethodOnUiThreadAndWait(se::State& state) {
                 runOnUiThreadAndWaitResult<Result>([instance, args] {
                     return callInstanceFunction<Function>(instance, args);
                 });
-            set_value<Result>(state.rval(), result);
+            set_value<UnifyType<Result>>(state.rval(), result);
         }
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), Arity);
     return false;
+}
+
+template <auto Property>
+bool makeStaticProperty(se::State& state) {
+    using Type = PropertyType<Property>;
+    set_value<UnifyType<Type>>(state.rval(), *Property);
+    return true;
+}
+
+template <auto Property>
+bool makeInstanceProperty(se::State& state) {
+    using Instance = PropertyInstance<Property>;
+    auto instance = static_cast<Instance*>(state.nativeThisObject());
+    using Type = PropertyType<Property>;
+    set_value<UnifyType<Type>>(state.rval(), instance->*Property);
+    return true;
 }
 
 template <auto Function, typename... Args>
@@ -386,9 +437,9 @@ template <typename ReturnType, auto FunctionPtr, typename... Args>
 }
 
 template <typename ReturnType, auto MemberPtr>
-bool jsb_static_property_get(se::State& s) {
-    set_value<ReturnType>(s.rval(), *MemberPtr);
-    return true;
+[[deprecated("Use makeStaticProperty")]] bool jsb_static_property_get(
+    se::State& s) { //
+    return makeStaticProperty<MemberPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename... Args>
@@ -422,42 +473,31 @@ template <typename InstanceType, auto FunctionPtr, typename ReturnType,
     }
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType>
-bool jsb_accessor_get(se::State& s) {
+[[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_get(se::State& s) {
     return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType>
-bool jsb_accessor_get_on_ui_thread(se::State& s) {
-    return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
-}
+[[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
+    bool jsb_accessor_get_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
+    }
 
 template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
-bool jsb_accessor_set(se::State& s) {
+[[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_set(se::State& s) {
     return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
-bool jsb_accessor_set_on_ui_thread(se::State& s) {
-    const auto& args = s.args();
-    if (args.size() == 1) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        runOnUiThread([cObj, args] {
-            (cObj->*FunctionPtr)(
-                get_value<std::decay_t<ArgumentType>>(args[0]));
-        });
-        return true;
+[[deprecated("Use makeInstanceMethodOnUiThread")]] //
+    bool jsb_accessor_set_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThread<FunctionPtr>(s);
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
-                    args.size(), 1);
-    return false;
-}
 
 template <typename InstanceType, auto MemberPtr, typename ReturnType>
-bool jsb_propterty_get(se::State& s) {
-    auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-    auto input(cObj->*MemberPtr);
-    set_value<ReturnType>(s.rval(), std::move(input));
-    return true;
+[[deprecated("Use makeInstanceProperty")]] bool jsb_propterty_get(
+    se::State& s) { //
+    return makeInstanceProperty<MemberPtr>(s);
 }
 
 template <typename InstanceType, auto MemberPtr, typename ArgumentType>

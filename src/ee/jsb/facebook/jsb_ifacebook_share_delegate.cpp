@@ -43,25 +43,19 @@ bool jsb_finalize<facebook::IShareDelegate>(se::State& s) {
 
 namespace facebook {
 namespace {
-const auto jsb_ShareDelegate_finalize =
-    &core::jsb_finalize<IFacebookShareDelegate>;
-const auto jsb_ShareDelegate_onSuccess =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onSuccess,
-                            const std::string&>;
-const auto jsb_ShareDelegate_onFailure =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onFailure,
-                            const std::string&>;
-const auto jsb_ShareDelegate_onCancel =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onCancel>;
+using Self = IShareDelegate;
+// clang-format off
+constexpr auto finalize  = &core::makeFinalize<Self>;
+constexpr auto onSuccess = &core::jsb_set_callback<IShareDelegate, &Self::onSuccess, const std::string&>;
+constexpr auto onFailure = &core::jsb_set_callback<IShareDelegate, &Self::onFailure, const std::string&>;
+constexpr auto onCancel  = &core::jsb_set_callback<IShareDelegate, &Self::onCancel>;
+// clang-format on
 } // namespace
 
-SE_BIND_FINALIZE_FUNC(jsb_ShareDelegate_finalize);
-SE_BIND_FUNC(jsb_ShareDelegate_onSuccess);
-SE_BIND_FUNC(jsb_ShareDelegate_onFailure);
-SE_BIND_FUNC(jsb_ShareDelegate_onCancel);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(onSuccess);
+SE_BIND_FUNC(onFailure);
+SE_BIND_FUNC(onCancel);
 
 bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -71,14 +65,14 @@ bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
 
     auto cls =
         se::Class::create("IShareDelegate", facebookObj, nullptr, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_ShareDelegate_finalize));
-    cls->defineFunction("onSuccess", _SE(jsb_ShareDelegate_onSuccess));
-    cls->defineFunction("onFailure", _SE(jsb_ShareDelegate_onFailure));
-    cls->defineFunction("onCancel", _SE(jsb_ShareDelegate_onCancel));
+    cls->defineFinalizeFunction(_SE(finalize));
+    cls->defineFunction("onSuccess", _SE(onSuccess));
+    cls->defineFunction("onFailure", _SE(onFailure));
+    cls->defineFunction("onCancel", _SE(onCancel));
 
     cls->install();
 
-    JSBClassType::registerClass<ShareDelegate>(cls);
+    JSBClassType::registerClass<IShareDelegate>(cls);
     core::handler = core::SharedPtrHandler<IShareDelegate>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();

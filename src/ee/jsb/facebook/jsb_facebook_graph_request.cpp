@@ -28,25 +28,23 @@ void set_value(se::Value& value, facebook::GraphRequest& input) {
 namespace facebook {
 namespace {
 se::Class* clazz = nullptr;
+
+using Self = GraphRequest;
+
+// clang-format off
+constexpr auto constructor  = &core::makeConstructor<Self>;
+constexpr auto finalize     = &core::makeFinalize<Self>;
+constexpr auto setPath      = &core::makeInstanceMethod<&Self::setPath>;
+constexpr auto setParameter = &core::makeInstanceMethod<&Self::setParameter>;
+constexpr auto toString     = &core::makeInstanceMethod<&Self::toString>;
+// clang-format on
+
+SE_BIND_CTOR(constructor, clazz, finalize);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(setPath);
+SE_BIND_FUNC(setParameter);
+SE_BIND_FUNC(toString);
 } // namespace
-
-constexpr auto jsb_GraphRequest_finalize = &core::jsb_finalize<GraphRequest>;
-constexpr auto jsb_GraphRequest_constructor =
-    &core::jsb_constructor<GraphRequest>;
-constexpr auto jsb_GraphRequest_setPath =
-    &core::jsb_accessor_set<GraphRequest, &GraphRequest::setPath,
-                            const std::string&>;
-constexpr auto jsb_GraphRequest_setParameter =
-    &core::jsb_method_call<GraphRequest, &GraphRequest::setParameter,
-                            const std::string&, const std::string&>;
-const auto jsb_GraphRequest_toString =
-    &core::jsb_method_get<GraphRequest, &GraphRequest::toString, std::string>;
-
-SE_BIND_FINALIZE_FUNC(jsb_GraphRequest_finalize);
-SE_BIND_CTOR(jsb_GraphRequest_constructor, clazz, jsb_GraphRequest_finalize);
-SE_BIND_FUNC(jsb_GraphRequest_setPath);
-SE_BIND_FUNC(jsb_GraphRequest_setParameter);
-SE_BIND_FUNC(jsb_GraphRequest_toString);
 
 bool register_facebook_graph_request_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -55,11 +53,11 @@ bool register_facebook_graph_request_manual(se::Object* globalObject) {
     core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
 
     auto cls = se::Class::create("GraphRequest", facebookObj, nullptr,
-                                 _SE(jsb_GraphRequest_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_GraphRequest_finalize));
-    cls->defineFunction("setPath", _SE(jsb_GraphRequest_setPath));
-    cls->defineFunction("setParameter", _SE(jsb_GraphRequest_setParameter));
-    cls->defineFunction("toString", _SE(jsb_GraphRequest_toString));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
+    cls->defineFunction("setPath", _SE(setPath));
+    cls->defineFunction("setParameter", _SE(setParameter));
+    cls->defineFunction("toString", _SE(toString));
 
     cls->install();
 

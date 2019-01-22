@@ -55,6 +55,11 @@ void set_value(se::Value& value, std::shared_ptr<IAdView> input) {
 }
 
 template <>
+void set_value(se::Value& value, std::shared_ptr<IAdView>& input) {
+    set_value<std::shared_ptr<IAdView>>(value, input);
+}
+
+template <>
 bool jsb_finalize<IAdView>(se::State& s) {
     auto adviewPtr = static_cast<IAdView*>(s.nativeThisObject());
     auto iter = std::find_if(ads::__jsb_s_adviewArchive.cbegin(),

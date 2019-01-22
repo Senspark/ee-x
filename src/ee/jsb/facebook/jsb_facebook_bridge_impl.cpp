@@ -7,23 +7,27 @@
 
 #include "ee/jsb/facebook/jsb_facebook_bridge_impl.hpp"
 
+#include "ee/facebook/internal/FacebookBridge.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 #include "ee/jsb/facebook/jsb_ifacebook_bridge.hpp"
 
-#include "ee/facebook/internal/FacebookBridge.hpp"
-
 namespace ee {
 namespace facebook {
-se::Class* __jsb_FacebookBridge_class = nullptr;
+namespace {
+se::Class* clazz = nullptr;
 
-constexpr auto jsb_FacebookBridge_finalize = &core::jsb_finalize<Bridge>;
-constexpr auto jsb_FacebookBridge_constructor = &core::jsb_constructor<Bridge>;
+using Self = Bridge;
 
-SE_BIND_FINALIZE_FUNC(jsb_FacebookBridge_finalize)
-SE_BIND_CTOR(jsb_FacebookBridge_constructor, __jsb_FacebookBridge_class,
-             jsb_FacebookBridge_finalize)
+// clang-format off
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto finalize    = &core::makeFinalize<Self>;
+// clang-format on
+
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+} // namespace
 
 bool register_facebook_bridge_impl_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -34,17 +38,14 @@ bool register_facebook_bridge_impl_manual(se::Object* globalObject) {
 
     auto cls = se::Class::create("Bridge", facebookObj,
                                  getIFacebookBridgeClass()->getProto(),
-                                 _SE(jsb_FacebookBridge_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_FacebookBridge_finalize));
-
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
     cls->install();
 
     JSBClassType::registerClass<Bridge>(cls);
-
-    __jsb_FacebookBridge_class = cls;
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace facebook

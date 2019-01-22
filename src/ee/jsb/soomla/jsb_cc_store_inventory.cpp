@@ -9,14 +9,13 @@
 
 #include <unordered_map>
 
-#include "Soomla/CCStoreInventory.h"
+#include <Soomla/CCStoreInventory.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {
-
 template <>
 void set_value(se::Value& value, soomla::CCStoreInventory* input) {
     set_value_from_pointer(value, input);

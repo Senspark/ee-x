@@ -14,7 +14,6 @@ namespace ee {
 namespace admob {
 bool register_native_ad_layout_manual(se::Object* object);
 } // namespace admob
-
 } // namespace ee
 
 #endif /* JSB_NATIVE_AD_LAYOUT_HPP__ */

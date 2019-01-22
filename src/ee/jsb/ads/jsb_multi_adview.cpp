@@ -7,28 +7,35 @@
 
 #include "ee/jsb/ads/jsb_multi_adview.hpp"
 
-#include <ee/Ads.hpp>
-
+#include "ee/ads/MultiAdView.hpp"
 #include "ee/jsb/ads/jsb_adview.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, MultiAdView& input) {
+    set_value_from_pointer(value, &input);
+}
+} // namespace core
+
 namespace ads {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_Multi_AdView_class = nullptr;
+using Self = MultiAdView;
 
-constexpr auto jsb_Multi_AdView_finalize = &core::jsb_finalize<MultiAdView>;
-constexpr auto jsb_Multi_AdView_contructor =
-    &core::jsb_constructor<MultiAdView>;
-constexpr auto jsb_Multi_AdView_addItem =
-    &core::jsb_method_call_on_ui_thread<MultiAdView, &MultiAdView::addItem,
-                                        std::shared_ptr<IAdView>>;
+// clang-format off
+constexpr auto finalize    = &core::makeFinalize<Self>;
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto addItem     = &core::makeInstanceMethod<&Self::addItem>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_Multi_AdView_finalize)
-SE_BIND_CTOR(jsb_Multi_AdView_contructor, __jsb_Multi_AdView_class,
-             jsb_Multi_AdView_finalize)
-SE_BIND_FUNC(jsb_Multi_AdView_addItem)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(addItem)
+} // namespace
 
 bool register_multi_adview_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
@@ -36,21 +43,18 @@ bool register_multi_adview_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("ads", eeObj, &adsObj);
 
-    auto cls =
-        se::Class::create("MultiAdView", adsObj, getIAdViewClass()->getProto(),
-                          _SE(jsb_Multi_AdView_contructor));
-    cls->defineFinalizeFunction(_SE(jsb_Multi_AdView_finalize));
+    auto cls = se::Class::create(
+        "MultiAdView", adsObj, getIAdViewClass()->getProto(), _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("addItem", _SE(jsb_Multi_AdView_addItem));
+    EE_JSB_DEFINE_FUNCTION(cls, addItem);
 
     cls->install();
 
-    JSBClassType::registerClass<MultiAdView>(cls);
-
-    __jsb_Multi_AdView_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace ads

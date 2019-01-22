@@ -222,29 +222,39 @@ void set_value(se::Value& value, std::int32_t input) {
 }
 
 template <>
-void set_value(se::Value& value, std::int64_t input) {
+void set_value(se::Value& value, std::int32_t& input) {
+    value.setInt32(input);
+}
+
+template <>
+void set_value(se::Value& value, std::int64_t& input) {
     auto temp = static_cast<std::int32_t>(input);
     value.setInt32(temp);
 }
 
 template <>
-void set_value(se::Value& value, double input) {
+void set_value(se::Value& value, double& input) {
     value.setFloat(input);
 }
 
 template <>
-void set_value(se::Value& value, float input) {
+void set_value(se::Value& value, float& input) {
     value.setFloat(input);
-}
-
-template <>
-void set_value(se::Value& value, const std::string& input) {
-    value.setString(input);
 }
 
 template <>
 void set_value(se::Value& value, std::string input) {
     value.setString(std::move(input));
+}
+
+template <>
+void set_value(se::Value& value, std::string& input) {
+    value.setString(input);
+}
+
+template <>
+void set_value(se::Value& value, const std::string& input) {
+    value.setString(input);
 }
 
 template <>
@@ -258,13 +268,42 @@ void set_value(se::Value& value, bool input) {
 }
 
 template <>
+void set_value(se::Value& value, bool& input) {
+    value.setBoolean(input);
+}
+
+template <>
 void set_value(se::Value& value, se::Object* obj) {
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::pair<float, float> input) {
+    auto obj = create_JSON_object(std::move(input));
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::pair<float, float>& input) {
+    auto obj = create_JSON_object<std::pair<float, float>>(input);
     value.setObject(obj);
 }
 
 template <>
 void set_value(se::Value& value, const std::pair<float, float>& input) {
     auto obj = create_JSON_object<std::pair<float, float>>(input);
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::pair<int, int> input) {
+    auto obj = create_JSON_object(std::move(input));
+    value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, std::pair<int, int>& input) {
+    auto obj = create_JSON_object<std::pair<int, int>>(input);
     value.setObject(obj);
 }
 

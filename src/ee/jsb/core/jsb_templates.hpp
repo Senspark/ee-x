@@ -21,41 +21,46 @@
 #include <cocos/scripting/js-bindings/manual/jsb_conversions.hpp>
 #include <cocos/scripting/js-bindings/manual/jsb_helper.hpp>
 
+#define EE_JSB_DEFINE_FUNCTION(cls, name) cls->defineFunction(#name, _SE(name))
+
 namespace ee {
 namespace core {
-
+/// Converts between se::Object and normal value.
 template <typename T>
 se::Object* create_JSON_object(const T& value);
 
+/// Converts between se::Object and normal value.
 template <typename T>
-T from_JSON_object(se::Object* jsonObj);
+T from_JSON_object(se::Object* object);
 
+/// Converts between se::Value and normal value.
 template <typename T>
 T get_value(const se::Value& value);
 
+/// Converts between se::Value and normal value.
 template <typename T>
 void set_value(se::Value& value, T input);
 
 template <typename T>
 void set_value_from_pointer(se::Value& value, T* input) {
-    if (input != nullptr) {
-        auto clazz = JSBClassType::findClass(input);
-        CCASSERT(clazz, "ERROR: Class is not registered yet.");
-        se::Object* obj = nullptr;
-        auto found = se::NativePtrToObjectMap::find(input);
-        if (found != se::NativePtrToObjectMap::end()) {
-            obj = found->second;
-        } else {
-            obj = se::Object::createObjectWithClass(clazz);
-            obj->setPrivateData(input);
-        }
-        value.setObject(obj);
-
-        if constexpr(std::is_convertible<T*, cocos2d::Ref*>::value) {
-            static_cast<cocos2d::Ref*>(input)->retain();
-        }
-    } else {
+    if (input == nullptr) {
         value.setNull();
+        return;
+    }
+    auto clazz = JSBClassType::findClass(input);
+    CCASSERT(clazz, "ERROR: Class is not registered yet.");
+    se::Object* obj = nullptr;
+    auto found = se::NativePtrToObjectMap::find(input);
+    if (found != se::NativePtrToObjectMap::end()) {
+        obj = found->second;
+    } else {
+        obj = se::Object::createObjectWithClass(clazz);
+        obj->setPrivateData(input);
+    }
+    value.setObject(obj);
+
+    if constexpr (std::is_convertible<T*, cocos2d::Ref*>::value) {
+        static_cast<cocos2d::Ref*>(input)->retain();
     }
 }
 
@@ -66,34 +71,198 @@ se::Value to_value(T&& arg) {
     set_value(value, std::forward<T>(arg));
     return value;
 }
+
+/// https://stackoverflow.com/questions/28410697/c-convert-vector-to-tuple
+template <class T, std::size_t... Indices>
+decltype(auto) makeTupleImpl(const std::vector<T>& args,
+                             std::index_sequence<Indices...>) {
+    return std::make_tuple(args[Indices]...);
+}
+
+template <std::size_t N, class T>
+decltype(auto) makeTuple(const std::vector<T>& args) {
+    return makeTupleImpl(args, std::make_index_sequence<N>());
+}
 } // namespace internal
 
 template <typename... Args>
-se::ValueArray to_value_array(Args... values) {
+se::ValueArray to_value_array(Args&&... values) {
     se::ValueArray args = {internal::to_value(std::forward<Args>(values))...};
     return args;
 }
 
-template <auto FunctionPtr, typename... Args, std::size_t... Indices>
-auto call_static_func(const se::ValueArray& args,
-                      std::index_sequence<Indices...>) {
-    return (*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
+namespace internal {
+/// https://stackoverflow.com/questions/36797770/get-function-parameters-count
+template <class ResultType, class... ArgTypes>
+struct FunctionTraits {
+    using Result = ResultType;
+    using Args = std::tuple<ArgTypes...>;
+};
+
+template <class ResultType, class InstanceType, class... ArgTypes>
+struct MemberFunctionTraits : FunctionTraits<ResultType, ArgTypes...> {
+    using Instance = InstanceType;
+};
+
+template <class PropertyType>
+struct PropertyTraits {
+    using Property = PropertyType;
+};
+
+template <class PropertyType, class InstanceType>
+struct MemberPropertyTraits {
+    using Property = PropertyType;
+    using Instance = InstanceType;
+};
+
+/// Static functions.
+template <class Result, class... Args>
+constexpr auto makeFunctionTraits(Result(Args...)) {
+    return FunctionTraits<Result, Args...>();
 }
 
-template <typename InstanceType, auto FunctionPtr, typename... Args,
-          std::size_t... Indices>
-auto call_instance_func(InstanceType* instance, const se::ValueArray& args,
-                        std::index_sequence<Indices...>) {
-    return (instance->*FunctionPtr)(get_value<std::decay_t<Args>>(args[Indices])...);
+/// Member functions.
+template <class Result, class Instance, class... Args>
+constexpr auto makeFunctionTraits(Result (Instance::*)(Args...)) {
+    return MemberFunctionTraits<Result, Instance, Args...>();
 }
 
-template <typename T, typename... Args, std::size_t... Indices>
-auto make_object(const se::ValueArray& args, std::index_sequence<Indices...>) {
-    return new T(get_value<std::decay_t<Args>>(args[Indices])...);
+/// Const member functions.
+template <class Result, class Instance, class... Args>
+constexpr auto makeFunctionTraits(Result (Instance::*)(Args...) const) {
+    return MemberFunctionTraits<Result, Instance, Args...>();
 }
 
-template <typename InstanceType>
-void jsb_dispose_callback(InstanceType* instance) {
+/// Static properties.
+template <class Property>
+constexpr auto makePropertyTraits(Property*) {
+    return PropertyTraits<Property>();
+}
+
+/// Member properties.
+template <class Property, class Instance>
+constexpr auto makePropertyTraits(Property(Instance::*)) {
+    return MemberPropertyTraits<Property, Instance>();
+}
+} // namespace internal
+
+template <auto Function>
+using FunctionInstance =
+    typename decltype(internal::makeFunctionTraits(Function))::Instance;
+
+template <auto Function>
+using FunctionResult =
+    typename decltype(internal::makeFunctionTraits(Function))::Result;
+
+template <auto Function>
+using FunctionArgs =
+    typename decltype(internal::makeFunctionTraits(Function))::Args;
+
+template <auto Property>
+using PropertyInstance =
+    typename decltype(internal::makePropertyTraits(Property))::Instance;
+
+template <auto Property>
+using PropertyType =
+    typename decltype(internal::makePropertyTraits(Property))::Property;
+
+template <auto Function>
+constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
+
+template <class T>
+using UnifyType =
+    std::conditional_t<std::is_pointer_v<T>, T, std::add_lvalue_reference_t<T>>;
+
+namespace internal {
+template <class T, class = void>
+struct ArgumentParser {
+    static decltype(auto) parse(const se::Value& jsThis, const se::Value& arg) {
+        return get_value<std::decay_t<T>>(arg);
+    }
+};
+
+template <class T>
+struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
+    static decltype(auto) parse(const se::Value& jsThis, const se::Value& arg) {
+        if (!arg.isObject() || !arg.toObject()->isFunction()) {
+            SE_REPORT_ERROR("Wrong argument type.");
+        }
+        se::Value jsFunc(arg);
+        jsFunc.toObject()->root();
+        auto lambda = [=](auto&&... values) {
+            se::ScriptEngine::getInstance()->clearException();
+            se::AutoHandleScope hs;
+            auto&& args =
+                to_value_array(std::forward<decltype(values)>(values)...);
+            se::Object* thisObj =
+                jsThis.isObject() ? jsThis.toObject() : nullptr;
+            auto funcObj = jsFunc.toObject();
+            auto succeed = funcObj->call(args, thisObj);
+            if (!succeed) {
+                se::ScriptEngine::getInstance()->clearException();
+            }
+        };
+        return lambda;
+    }
+};
+
+template <auto Function, std::size_t... Indices>
+decltype(auto) callStaticFunctionImpl(const se::Value& jsThis,
+                                      const se::ValueArray& args,
+                                      std::index_sequence<Indices...>) {
+    using Args = FunctionArgs<Function>;
+    return std::invoke(
+        Function, ArgumentParser<std::tuple_element_t<Indices, Args>>::parse(
+                      jsThis, args[Indices])...);
+}
+
+template <auto Function, class Instance, std::size_t... Indices>
+decltype(auto) callInstanceFunctionImpl(const se::Value& jsThis,
+                                        Instance* instance,
+                                        const se::ValueArray& args,
+                                        std::index_sequence<Indices...>) {
+    using Args = FunctionArgs<Function>;
+    return std::invoke(
+        Function, instance,
+        ArgumentParser<std::tuple_element_t<Indices, Args>>::parse(
+            jsThis, args[Indices])...);
+}
+
+template <class Instance, class... Args, std::size_t... Indices>
+decltype(auto) makeObjectImpl(const se::ValueArray& args,
+                              std::index_sequence<Indices...>) {
+    return std::make_unique<Instance>(
+        get_value<std::decay_t<Args>>(args[Indices])...);
+}
+} // namespace internal
+
+/// Calls a static function.
+template <auto Function>
+decltype(auto) callStaticFunction(const se::Value& jsThis,
+                                  const se::ValueArray& args) {
+    constexpr auto Arity = FunctionArity<Function>;
+    return internal::callStaticFunctionImpl<Function>(
+        jsThis, args, std::make_index_sequence<Arity>());
+}
+
+/// Calls a member instance function.
+template <auto Function, class Instance>
+decltype(auto) callInstanceFunction(const se::Value& jsThis, Instance* instance,
+                                    const se::ValueArray& args) {
+    constexpr auto Arity = FunctionArity<Function>;
+    return internal::callInstanceFunctionImpl<Function, Instance>(
+        jsThis, instance, args, std::make_index_sequence<Arity>());
+}
+
+/// Instantiates a new object (unique_ptr).
+template <class Instance, class... Args>
+decltype(auto) makeObject(const se::ValueArray& args) {
+    return internal::makeObjectImpl<Instance, Args...>(
+        args, std::make_index_sequence<sizeof...(Args)>());
+}
+
+template <class Instance>
+void makeDisposeCallback(Instance* instance) {
     se::Object* seObj = nullptr;
 
     auto iter = se::NativePtrToObjectMap::find(instance);
@@ -132,250 +301,247 @@ void jsb_dispose_callback(InstanceType* instance) {
     }
 }
 
-template <typename T, typename... Args>
-bool jsb_constructor(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = make_object<T, Args...>(args, Indices());
-        s.thisObject()->setPrivateData(cObj);
+template <class Instance, class... Args>
+bool makeConstructor(se::State& state) {
+    constexpr auto Arity = sizeof...(Args);
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        auto object = makeObject<Instance, Args...>(args).release();
+        state.thisObject()->setPrivateData(object);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.", argc,
-                    2);
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
     return false;
 }
 
 template <typename T, typename... Args>
-bool jsb_constructor_with_dispose_callback(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
+[[deprecated("Use makeConstructor")]] bool jsb_constructor(se::State& s) {
+    return makeConstructor<T, Args...>(s);
+}
 
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = make_object<T, Args...>(args, Indices());
-        cObj->setDisposeCallback(&jsb_dispose_callback<T>);
-        s.thisObject()->setPrivateData(cObj);
+template <class Instance, class... Args>
+bool makeConstructorWithDisposeCallback(se::State& state) {
+    constexpr auto Arity = sizeof...(Args);
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        auto object = makeObject<Instance, Args...>(args).release();
+        object->setDisposeCallback(&makeDisposeCallback<Instance>);
+        state.thisObject()->setPrivateData(object);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.", argc,
-                    2);
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
     return false;
 }
 
-template <typename T>
-bool jsb_finalize(se::State& s) {
-    if (std::is_convertible<T*, cocos2d::Ref*>::value) {
-        static_cast<cocos2d::Ref*>(s.nativeThisObject())->release();
+template <typename T, typename... Args>
+[[deprecated("Use makeConstructorWithDisposeCallback")]] bool
+jsb_constructor_with_dispose_callback(se::State& s) {
+    return makeConstructorWithDisposeCallback<T, Args...>(s);
+}
+
+template <class T>
+bool makeFinalize(se::State& state) {
+    auto&& object = state.nativeThisObject();
+    if constexpr (std::is_convertible_v<T*, cocos2d::Ref*>) {
+        static_cast<cocos2d::Ref*>(object)->release();
     } else {
-        std::shared_ptr<T>* casted =
-            static_cast<std::shared_ptr<T>*>(s.nativeThisObject());
-        if (casted == nullptr) {
-            T* cObj = static_cast<T*>(s.nativeThisObject());
-            delete cObj;
+        auto&& pointer = static_cast<std::shared_ptr<T>*>(object);
+        if (pointer == nullptr) {
+            delete static_cast<T*>(object);
         }
     }
     return true;
 }
 
-template <auto Function, typename... Args>
-bool jsb_static_call(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
+template <typename T>
+[[deprecated("Use makeFinalize")]] bool jsb_finalize(se::State& s) {
+    return makeFinalize<T>(s);
+}
 
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        call_static_func<Function, Args...>(args, Indices());
+template <auto Function>
+bool makeStaticMethod(se::State& state) {
+    constexpr auto Arity = FunctionArity<Function>;
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        se::Value jsThis(state.thisObject());
+        using Result = FunctionResult<Function>;
+        if constexpr (std::is_same_v<Result, void>) {
+            callStaticFunction<Function>(jsThis, args);
+        } else {
+            auto&& result = callStaticFunction<Function>(jsThis, args);
+            set_value<UnifyType<Result>>(state.rval(), result);
+        }
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
+                    args.size(), Arity);
     return false;
+}
+
+template <auto Function>
+bool makeInstanceMethod(se::State& state) {
+    constexpr auto Arity = FunctionArity<Function>;
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        se::Value jsThis(state.thisObject());
+        using Instance = FunctionInstance<Function>;
+        auto&& instance = static_cast<Instance*>(state.nativeThisObject());
+        using Result = FunctionResult<Function>;
+        if constexpr (std::is_same_v<Result, void>) {
+            callInstanceFunction<Function>(jsThis, instance, args);
+        } else {
+            auto&& result =
+                callInstanceFunction<Function>(jsThis, instance, args);
+            set_value<UnifyType<Result>>(state.rval(), result);
+        }
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
+    return false;
+}
+
+template <auto Function>
+bool makeInstanceMethodOnUiThread(se::State& state) {
+    constexpr auto Arity = FunctionArity<Function>;
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        se::Value jsThis(state.thisObject());
+        using Instance = FunctionInstance<Function>;
+        auto&& instance = static_cast<Instance*>(state.nativeThisObject());
+        using Result = FunctionResult<Function>;
+        if constexpr (std::is_same_v<Result, void>) {
+            runOnUiThread([jsThis, instance, args] {
+                callInstanceFunction<Function>(jsThis, instance, args);
+            });
+        } else {
+            return false;
+        }
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
+    return false;
+}
+
+template <auto Function>
+bool makeInstanceMethodOnUiThreadAndWait(se::State& state) {
+    constexpr auto Arity = FunctionArity<Function>;
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        se::Value jsThis(state.thisObject());
+        using Instance = FunctionInstance<Function>;
+        auto&& instance = static_cast<Instance*>(state.nativeThisObject());
+        using Result = FunctionResult<Function>;
+        if constexpr (std::is_same_v<Result, void>) {
+            runOnUiThreadAndWait([jsThis, instance, args] {
+                callInstanceFunction<Function>(jsThis, instance, args);
+            });
+        } else {
+            auto&& result =
+                runOnUiThreadAndWaitResult<Result>([jsThis, instance, args] {
+                    return callInstanceFunction<Function>(jsThis, instance,
+                                                          args);
+                });
+            set_value<UnifyType<Result>>(state.rval(), result);
+        }
+        return true;
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
+    return false;
+}
+
+template <auto Property>
+bool makeStaticProperty(se::State& state) {
+    using Type = PropertyType<Property>;
+    set_value<UnifyType<Type>>(state.rval(), *Property);
+    return true;
+}
+
+template <auto Property>
+bool makeInstanceProperty(se::State& state) {
+    using Instance = PropertyInstance<Property>;
+    auto instance = static_cast<Instance*>(state.nativeThisObject());
+    using Type = PropertyType<Property>;
+    set_value<UnifyType<Type>>(state.rval(), instance->*Property);
+    return true;
+}
+
+template <auto Function, typename... Args>
+[[deprecated("Use makeStaticMethod")]] bool jsb_static_call(se::State& s) {
+    return makeStaticMethod<Function>(s);
 }
 
 template <typename ReturnType, auto FunctionPtr, typename... Args>
-bool jsb_static_get(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto result = call_static_func<FunctionPtr, Args...>(args, Indices());
-        set_value<ReturnType>(s.rval(), result);
-        return true;
-    }
-
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
+[[deprecated("Use makeStaticMethod")]] bool jsb_static_get(se::State& s) {
+    return makeStaticMethod<FunctionPtr>(s);
 }
 
 template <typename ReturnType, auto MemberPtr>
-bool jsb_static_property_get(se::State& s) {
-    set_value<ReturnType>(s.rval(), *MemberPtr);
-    return true;
+[[deprecated("Use makeStaticProperty")]] bool jsb_static_property_get(
+    se::State& s) { //
+    return makeStaticProperty<MemberPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename... Args>
-bool jsb_method_call(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        call_instance_func<InstanceType, FunctionPtr, Args...>(cObj, args,
-                                                               Indices());
-        return true;
-    }
-
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
+[[deprecated("Use makeInstanceMethod")]] bool jsb_method_call(se::State& s) {
+    return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename... Args>
-bool jsb_method_call_on_ui_thread(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        runOnUiThread([cObj, args] {
-            call_instance_func<InstanceType, FunctionPtr, Args...>(cObj, args,
-                                                                   Indices());
-        });
-        return true;
+[[deprecated("Use makeInstanceMethodOnUiThread")]] //
+    bool jsb_method_call_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThread<FunctionPtr>(s);
     }
-
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
-}
 
 template <typename InstanceType, auto FunctionPtr, typename... Args>
-bool jsb_method_call_on_ui_thread_and_wait(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        runOnUiThreadAndWait([cObj, args] {
-            call_instance_func<InstanceType, FunctionPtr, Args...>(cObj, args,
-                                                                   Indices());
-        });
-        return true;
+[[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
+    bool jsb_method_call_on_ui_thread_and_wait(se::State& s) {
+        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
+template <typename InstanceType, auto FunctionPtr, typename ReturnType,
+          typename... Args>
+[[deprecated("Use makeInstanceMethod")]] bool jsb_method_get(se::State& s) {
+    return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType,
           typename... Args>
-bool jsb_method_get(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        auto&& result = call_instance_func<InstanceType, FunctionPtr, Args...>(
-            cObj, args, Indices());
-        set_value<ReturnType>(s.rval(), result);
-        return true;
+[[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
+    bool jsb_method_get_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
     }
 
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
-}
-
-template <typename InstanceType, auto FunctionPtr, typename ReturnType,
-          typename... Args>
-bool jsb_method_get_on_ui_thread(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-    using Indices = std::make_index_sequence<sizeof...(Args)>;
-
-    if (argc == args.size()) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        set_value<ReturnType>(
-            s.rval(),
-            runOnUiThreadAndWaitResult<ReturnType>(
-                [cObj, args]() -> ReturnType {
-                    return std::forward<ReturnType>(
-                        call_instance_func<InstanceType, FunctionPtr, Args...>(
-                            cObj, args, Indices()));
-                }));
-        return true;
-    }
-
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
-                    args.size(), argc);
-    return false;
+template <typename InstanceType, auto FunctionPtr, typename ReturnType>
+[[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_get(se::State& s) {
+    return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType>
-bool jsb_accessor_get(se::State& s) {
-    auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-    set_value<ReturnType>(s.rval(), std::bind(FunctionPtr, cObj)());
-    return true;
-}
+[[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
+    bool jsb_accessor_get_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
+    }
 
-template <typename InstanceType, auto FunctionPtr, typename ReturnType>
-bool jsb_accessor_get_on_ui_thread(se::State& s) {
-    auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-    set_value<ReturnType>(
-        s.rval(),
-        runOnUiThreadAndWaitResult<ReturnType>(
-            [cObj]() -> ReturnType { return std::bind(FunctionPtr, cObj)(); }));
-    return true;
+template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
+[[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_set(se::State& s) {
+    return makeInstanceMethod<FunctionPtr>(s);
 }
 
 template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
-bool jsb_accessor_set(se::State& s) {
-    const auto& args = s.args();
-    if (args.size() == 1) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        std::bind(FunctionPtr, cObj, get_value<std::decay_t<ArgumentType>>(args[0]))();
-        return true;
+[[deprecated("Use makeInstanceMethodOnUiThread")]] //
+    bool jsb_accessor_set_on_ui_thread(se::State& s) {
+        return makeInstanceMethodOnUiThread<FunctionPtr>(s);
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
-                    args.size(), 1);
-    return false;
-}
-
-template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
-bool jsb_accessor_set_on_ui_thread(se::State& s) {
-    const auto& args = s.args();
-    if (args.size() == 1) {
-        auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-        runOnUiThread([cObj, args] {
-            (cObj->*FunctionPtr)(get_value<std::decay_t<ArgumentType>>(args[0]));
-        });
-        return true;
-    }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
-                    args.size(), 1);
-    return false;
-}
 
 template <typename InstanceType, auto MemberPtr, typename ReturnType>
-bool jsb_propterty_get(se::State& s) {
-    auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
-    auto input(cObj->*MemberPtr);
-    set_value<ReturnType>(s.rval(), std::move(input));
-    return true;
+[[deprecated("Use makeInstanceProperty")]] bool jsb_propterty_get(
+    se::State& s) { //
+    return makeInstanceProperty<MemberPtr>(s);
 }
 
 template <typename InstanceType, auto MemberPtr, typename ArgumentType>
@@ -384,88 +550,6 @@ bool jsb_propterty_set(se::State& s) {
     if (args.size() == 1) {
         auto cObj = static_cast<InstanceType*>(s.nativeThisObject());
         cObj->*MemberPtr = get_value<std::decay_t<ArgumentType>>(args[0]);
-        return true;
-    }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
-                    args.size(), 1);
-    return false;
-}
-
-template <typename InstanceType, auto FunctionPtr, typename... Args>
-bool jsb_set_callback(se::State& s) {
-    const auto& args = s.args();
-    auto argc = args.size();
-    if (argc >= 1) {
-        InstanceType* cObj = static_cast<InstanceType*>(s.nativeThisObject());
-
-        se::Value jsFunc = args[0];
-        se::Value jsTarget = argc > 1 ? args[1] : se::Value::Undefined;
-
-        if (jsFunc.isNullOrUndefined()) {
-            std::bind(FunctionPtr, cObj, nullptr)();
-        } else {
-            assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
-
-            s.thisObject()->attachObject(jsFunc.toObject());
-
-            if (jsTarget.isObject()) {
-                s.thisObject()->attachObject(jsTarget.toObject());
-            }
-
-            std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
-                runOnCocosThread([=] {
-                    se::ScriptEngine::getInstance()->clearException();
-                    se::AutoHandleScope hs;
-
-                    auto&& args = to_value_array(values...);
-                    se::Object* target =
-                        jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                    se::Object* func = jsFunc.toObject();
-                    func->call(args, target);
-                });
-            })();
-        }
-
-        return true;
-    }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
-                    args.size(), 1);
-    return false;
-}
-
-template <auto FunctionPtr, typename... Args>
-bool jsb_static_set_callback(se::State& s) {
-    const auto& args = s.args();
-    auto argc = args.size();
-    if (argc >= 1) {
-        se::Value jsFunc = args[0];
-        se::Value jsTarget = argc > 1 ? args[1] : se::Value::Undefined;
-
-        if (jsFunc.isNullOrUndefined()) {
-            std::bind(FunctionPtr, nullptr)();
-        } else {
-            assert(jsFunc.isObject() && jsFunc.toObject()->isFunction());
-
-            s.thisObject()->attachObject(jsFunc.toObject());
-
-            if (jsTarget.isObject()) {
-                s.thisObject()->attachObject(jsTarget.toObject());
-            }
-
-            std::bind(FunctionPtr, [jsFunc, jsTarget](Args... values) {
-                runOnCocosThread([=] {
-                    se::ScriptEngine::getInstance()->clearException();
-                    se::AutoHandleScope hs;
-
-                    auto&& args = to_value_array(values...);
-                    se::Object* target =
-                        jsTarget.isObject() ? jsTarget.toObject() : nullptr;
-                    se::Object* func = jsFunc.toObject();
-                    func->call(args, target);
-                });
-            })();
-        }
-
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.",
@@ -483,6 +567,10 @@ public:
     explicit SharedPtrHandler(se::Class* clazz)
         : clazz_(clazz) {}
 
+    se::Class* getClass() {
+        return clazz_;
+    }
+
     std::shared_ptr<T> getValue(const se::Value& value) const {
         auto delegatePtr = static_cast<T*>(value.toObject()->getPrivateData());
         auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
@@ -496,7 +584,7 @@ public:
         }
     }
 
-    void setValue(se::Value& value, std::shared_ptr<T> input) {
+    void setValue(se::Value& value, const std::shared_ptr<T>& input) {
         if (input != nullptr) {
             se::Object* obj = nullptr;
             if (delegates_.count(input) != 0) {

@@ -14,148 +14,73 @@
 #include "ee/jsb/soomla/jsb_cc_soomla.hpp"
 
 namespace soomla {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_StoreEventListener_class = nullptr;
+using Self = StoreEventListener;
 
-const auto jsb_StoreEventListener_finalize =
-    &ee::core::jsb_finalize<StoreEventListener>;
-const auto jsb_StoreEventListener_constructor =
-    &ee::core::jsb_constructor<StoreEventListener>;
-const auto jsb_StoreEventListener_clear =
-    &ee::core::jsb_method_call<StoreEventListener, &StoreEventListener::clear>;
-const auto jsb_StoreEventListener_setMarketPurchaseStartedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setMarketPurchaseStartedCallback,
-        const std::string&>;
-const auto jsb_StoreEventListener_setMarketPurchaseCanceledCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setMarketPurchaseCanceledCallback,
-        const std::string&>;
-const auto jsb_StoreEventListener_setCurrencyBalanceChangedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setCurrencyBalanceChangedCallback,
-        const std::string&, int, int>;
-const auto jsb_StoreEventListener_setUnexpectedStoreErrorCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setUnexpectedStoreErrorCallback, int>;
-const auto jsb_StoreEventListener_setGoodUpgradeCallback =
-    &ee::core::jsb_set_callback<StoreEventListener,
-                                &StoreEventListener::setGoodUpgradeCallback,
-                                const std::string&, const std::string&>;
-const auto jsb_StoreEventListener_setItemPurchasedCallback =
-    &ee::core::jsb_set_callback<StoreEventListener,
-                                &StoreEventListener::setItemPurchasedCallback,
-                                const std::string&, const std::string&>;
-const auto jsb_StoreEventListener_setMarketPurchaseCallback =
-    &ee::core::jsb_set_callback<StoreEventListener,
-                                &StoreEventListener::setMarketPurchaseCallback,
-                                const std::string&, const std::string&,
-                                std::unordered_map<std::string, std::string>>;
-const auto jsb_StoreEventListener_setMarketItemsRefreshStartedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setMarketItemsRefreshStartedCallback>;
+// clang-format off
+constexpr auto constructor                           = &ee::core::makeConstructor<Self>;
+constexpr auto finalize                              = &ee::core::makeFinalize<Self>;
+constexpr auto clear                                 = &ee::core::makeInstanceMethod<&Self::clear>;
+constexpr auto setMarketPurchaseStartedCallback      = &ee::core::makeInstanceMethod<&Self::setMarketPurchaseStartedCallback>;
+constexpr auto setMarketPurchaseCanceledCallback     = &ee::core::makeInstanceMethod<&Self::setMarketPurchaseCanceledCallback>;
+constexpr auto setCurrencyBalanceChangedCallback     = &ee::core::makeInstanceMethod<&Self::setCurrencyBalanceChangedCallback>;
+constexpr auto setUnexpectedStoreErrorCallback       = &ee::core::makeInstanceMethod<&Self::setUnexpectedStoreErrorCallback>;
+constexpr auto setGoodUpgradeCallback                = &ee::core::makeInstanceMethod<&Self::setGoodUpgradeCallback>;
+constexpr auto setItemPurchasedCallback              = &ee::core::makeInstanceMethod<&Self::setItemPurchasedCallback>;
+constexpr auto setMarketPurchaseCallback             = &ee::core::makeInstanceMethod<&Self::setMarketPurchaseCallback>;
+constexpr auto setMarketItemsRefreshStartedCallback  = &ee::core::makeInstanceMethod<&Self::setMarketItemsRefreshStartedCallback>;
+constexpr auto setMarketItemsRefreshedCallback       = &ee::core::makeInstanceMethod<&Self::setMarketItemsRefreshedCallback>;
+constexpr auto setMarketItemsRefreshFailedCallback   = &ee::core::makeInstanceMethod<&Self::setMarketItemsRefreshFailedCallback>;
+constexpr auto setRestoreTransactionStartedCallback  = &ee::core::makeInstanceMethod<&Self::setRestoreTransactionStartedCallback>;
+constexpr auto setRestoreTransactionFinishedCallback = &ee::core::makeInstanceMethod<&Self::setRestoreTransactionFinishedCallback>;
+// clang-format on
 
-const auto jsb_StoreEventListener_setMarketItemsRefreshedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setMarketItemsRefreshedCallback,
-        std::vector<std::string>>;
-
-const auto jsb_StoreEventListener_setMarketItemsRefreshFailedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setMarketItemsRefreshFailedCallback,
-        const std::string&>;
-const auto jsb_StoreEventListener_setRestoreTransactionStartedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setRestoreTransactionStartedCallback>;
-const auto jsb_StoreEventListener_setRestoreTransactionFinishedCallback =
-    &ee::core::jsb_set_callback<
-        StoreEventListener,
-        &StoreEventListener::setRestoreTransactionFinishedCallback, bool>;
-
-SE_BIND_FINALIZE_FUNC(jsb_StoreEventListener_finalize)
-SE_BIND_CTOR(jsb_StoreEventListener_constructor, __jsb_StoreEventListener_class,
-             jsb_StoreEventListener_finalize)
-SE_BIND_FUNC(jsb_StoreEventListener_clear)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketPurchaseStartedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketPurchaseCanceledCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setCurrencyBalanceChangedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setUnexpectedStoreErrorCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setGoodUpgradeCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setItemPurchasedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketPurchaseCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketItemsRefreshStartedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketItemsRefreshedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setMarketItemsRefreshFailedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setRestoreTransactionStartedCallback)
-SE_BIND_FUNC(jsb_StoreEventListener_setRestoreTransactionFinishedCallback)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(clear)
+SE_BIND_FUNC(setMarketPurchaseStartedCallback)
+SE_BIND_FUNC(setMarketPurchaseCanceledCallback)
+SE_BIND_FUNC(setCurrencyBalanceChangedCallback)
+SE_BIND_FUNC(setUnexpectedStoreErrorCallback)
+SE_BIND_FUNC(setGoodUpgradeCallback)
+SE_BIND_FUNC(setItemPurchasedCallback)
+SE_BIND_FUNC(setMarketPurchaseCallback)
+SE_BIND_FUNC(setMarketItemsRefreshStartedCallback)
+SE_BIND_FUNC(setMarketItemsRefreshedCallback)
+SE_BIND_FUNC(setMarketItemsRefreshFailedCallback)
+SE_BIND_FUNC(setRestoreTransactionStartedCallback)
+SE_BIND_FUNC(setRestoreTransactionFinishedCallback)
+} // namespace
 
 bool register_store_event_listener_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("StoreEventListener", __soomlaObj, nullptr,
-                                 _SE(jsb_StoreEventListener_constructor));
+                                 _SE(constructor));
 
-    cls->defineFinalizeFunction(_SE(jsb_StoreEventListener_finalize));
-    cls->defineFunction("clear", _SE(jsb_StoreEventListener_clear));
-    cls->defineFunction(
-        "setMarketPurchaseStartedCallback",
-        _SE(jsb_StoreEventListener_setMarketPurchaseStartedCallback));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction(
-        "setMarketPurchaseCanceledCallback",
-        _SE(jsb_StoreEventListener_setMarketPurchaseCanceledCallback));
-
-    cls->defineFunction("setGoodUpgradeCallback",
-                        _SE(jsb_StoreEventListener_setGoodUpgradeCallback));
-
-    cls->defineFunction("setItemPurchasedCallback",
-                        _SE(jsb_StoreEventListener_setItemPurchasedCallback));
-
-    cls->defineFunction("setMarketPurchaseCallback",
-                        _SE(jsb_StoreEventListener_setMarketPurchaseCallback));
-
-    cls->defineFunction(
-        "setMarketItemsRefreshStartedCallback",
-        _SE(jsb_StoreEventListener_setMarketItemsRefreshStartedCallback));
-
-    cls->defineFunction(
-        "setMarketItemsRefreshedCallback",
-        _SE(jsb_StoreEventListener_setMarketItemsRefreshedCallback));
-
-    cls->defineFunction(
-        "setMarketItemsRefreshFailedCallback",
-        _SE(jsb_StoreEventListener_setMarketItemsRefreshFailedCallback));
-
-    cls->defineFunction(
-        "setRestoreTransactionStartedCallback",
-        _SE(jsb_StoreEventListener_setRestoreTransactionStartedCallback));
-
-    cls->defineFunction(
-        "setRestoreTransactionFinishedCallback",
-        _SE(jsb_StoreEventListener_setRestoreTransactionFinishedCallback));
-
-    cls->defineFunction(
-        "setUnexpectedStoreErrorCallback",
-        _SE(jsb_StoreEventListener_setUnexpectedStoreErrorCallback));
-
-    cls->defineFunction(
-        "setCurrencyBalanceChangedCallback",
-        _SE(jsb_StoreEventListener_setCurrencyBalanceChangedCallback));
+    EE_JSB_DEFINE_FUNCTION(cls, clear);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketPurchaseStartedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketPurchaseCanceledCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setCurrencyBalanceChangedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setUnexpectedStoreErrorCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setGoodUpgradeCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setItemPurchasedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketPurchaseCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketItemsRefreshStartedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketItemsRefreshedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setMarketItemsRefreshFailedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setRestoreTransactionStartedCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setRestoreTransactionFinishedCallback);
 
     cls->install();
 
-    JSBClassType::registerClass<StoreEventListener>(cls);
-
-    __jsb_StoreEventListener_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

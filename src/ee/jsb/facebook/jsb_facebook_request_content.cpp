@@ -8,7 +8,6 @@
 #include "ee/jsb/facebook/jsb_facebook_request_content.hpp"
 
 #include "ee/facebook/FacebookRequestContent.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -30,51 +29,43 @@ facebook::RequestContent get_value(const se::Value& value) {
     return *static_cast<facebook::RequestContent*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, facebook::RequestContent& input) {
+    set_value_from_pointer(value, &input);
+}
 } // namespace core
 
 namespace facebook {
-se::Class* __jsb_RequestContent_class = nullptr;
+namespace {
+se::Class* clazz = nullptr;
 
-const auto jsb_RequestContent_finalize =
-    &ee::core::jsb_finalize<RequestContent>;
-const auto jsb_RequestContent_constructor =
-    &ee::core::jsb_constructor<RequestContent>;
-const auto jsb_RequestContent_setActionType =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setActionType,
-                                RequestContent::ActionType>;
-const auto jsb_RequestContent_setFilter =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setFilter,
-                                RequestContent::Filter>;
-const auto jsb_RequestContent_setRecipients =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setRecipients,
-                                const std::vector<std::string>&>;
-const auto jsb_RequestContent_setObjectId =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setObjectId,
-                                const std::string&>;
-const auto jsb_RequestContent_setTitle =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setTitle,
-                                const std::string&>;
-const auto jsb_RequestContent_setMessage =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setMessage,
-                                const std::string&>;
-const auto jsb_RequestContent_setData =
-    &ee::core::jsb_accessor_set<RequestContent, &RequestContent::setData,
-                                const std::string&>;
-const auto jsb_RequestContent_toString =
-    &ee::core::jsb_method_get<RequestContent, &RequestContent::toString,
-                              std::string>;
+using Self = RequestContent;
 
-SE_BIND_FINALIZE_FUNC(jsb_RequestContent_finalize);
-SE_BIND_CTOR(jsb_RequestContent_constructor, __jsb_RequestContent_class,
-             jsb_RequestContent_finalize);
-SE_BIND_FUNC(jsb_RequestContent_setActionType);
-SE_BIND_FUNC(jsb_RequestContent_setFilter);
-SE_BIND_FUNC(jsb_RequestContent_setRecipients);
-SE_BIND_FUNC(jsb_RequestContent_setObjectId);
-SE_BIND_FUNC(jsb_RequestContent_setTitle);
-SE_BIND_FUNC(jsb_RequestContent_setMessage);
-SE_BIND_FUNC(jsb_RequestContent_setData);
-SE_BIND_FUNC(jsb_RequestContent_toString);
+// clang-format off
+constexpr auto constructor   = &core::makeConstructor<Self>;
+constexpr auto finalize      = &core::makeFinalize<Self>;
+constexpr auto setActionType = &core::makeInstanceMethod<&Self::setActionType>;
+constexpr auto setFilter     = &core::makeInstanceMethod<&Self::setFilter>;
+constexpr auto setRecipients = &core::makeInstanceMethod<&Self::setRecipients>;
+constexpr auto setObjectId   = &core::makeInstanceMethod<&Self::setObjectId>;
+constexpr auto setTitle      = &core::makeInstanceMethod<&Self::setTitle>;
+constexpr auto setMessage    = &core::makeInstanceMethod<&Self::setMessage>;
+constexpr auto setData       = &core::makeInstanceMethod<&Self::setData>;
+constexpr auto toString      = &core::makeInstanceMethod<&Self::toString>;
+// clang-format on
+
+SE_BIND_CTOR(constructor, clazz, finalize);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(setActionType);
+SE_BIND_FUNC(setFilter);
+SE_BIND_FUNC(setRecipients);
+SE_BIND_FUNC(setObjectId);
+SE_BIND_FUNC(setTitle);
+SE_BIND_FUNC(setMessage);
+SE_BIND_FUNC(setData);
+SE_BIND_FUNC(toString);
+} // namespace
 
 bool register_facebook_request_content_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -110,25 +101,24 @@ bool register_facebook_request_content_manual(se::Object* globalObject) {
                                RequestContent::Filter::AppNonUsers)));
 
     auto cls = se::Class::create("RequestContent", facebookObj, nullptr,
-                                 _SE(jsb_RequestContent_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_RequestContent_finalize));
-    cls->defineFunction("setActionType", _SE(jsb_RequestContent_setActionType));
-    cls->defineFunction("setFilter", _SE(jsb_RequestContent_setFilter));
-    cls->defineFunction("setRecipients", _SE(jsb_RequestContent_setRecipients));
-    cls->defineFunction("setObjectId", _SE(jsb_RequestContent_setObjectId));
-    cls->defineFunction("setTitle", _SE(jsb_RequestContent_setTitle));
-    cls->defineFunction("setMessage", _SE(jsb_RequestContent_setMessage));
-    cls->defineFunction("setData", _SE(jsb_RequestContent_setData));
-    cls->defineFunction("toString", _SE(jsb_RequestContent_toString));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
+    
+    EE_JSB_DEFINE_FUNCTION(cls, setActionType);
+    EE_JSB_DEFINE_FUNCTION(cls, setFilter);
+    EE_JSB_DEFINE_FUNCTION(cls, setRecipients);
+    EE_JSB_DEFINE_FUNCTION(cls, setObjectId);
+    EE_JSB_DEFINE_FUNCTION(cls, setTitle);
+    EE_JSB_DEFINE_FUNCTION(cls, setMessage);
+    EE_JSB_DEFINE_FUNCTION(cls, setData);
+    EE_JSB_DEFINE_FUNCTION(cls, toString);
 
     cls->install();
 
     JSBClassType::registerClass<RequestContent>(cls);
-
-    __jsb_RequestContent_class = cls;
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace facebook

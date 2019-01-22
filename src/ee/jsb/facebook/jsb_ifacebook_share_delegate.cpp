@@ -25,37 +25,37 @@ std::shared_ptr<facebook::IShareDelegate> get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value,
-               std::shared_ptr<facebook::IShareDelegate> input) {
+               std::shared_ptr<facebook::IShareDelegate>& input) {
     handler->setValue(value, input);
 }
 
 template <>
-bool jsb_finalize<facebook::IShareDelegate>(se::State& s) {
-    return handler->finalize(s);
+void set_value(se::Value& value, facebook::IShareDelegate& input) {
+    set_value_from_pointer(value, &input);
+}
+
+template <>
+bool jsb_finalize<facebook::IShareDelegate>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-const auto jsb_ShareDelegate_finalize =
-    &core::jsb_finalize<IFacebookShareDelegate>;
-const auto jsb_ShareDelegate_onSuccess =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onSuccess,
-                            const std::string&>;
-const auto jsb_ShareDelegate_onFailure =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onFailure,
-                            const std::string&>;
-const auto jsb_ShareDelegate_onCancel =
-    &core::jsb_set_callback<IFacebookShareDelegate,
-                            &IFacebookShareDelegate::onCancel>;
-} // namespace
+using Self = IShareDelegate;
 
-SE_BIND_FINALIZE_FUNC(jsb_ShareDelegate_finalize);
-SE_BIND_FUNC(jsb_ShareDelegate_onSuccess);
-SE_BIND_FUNC(jsb_ShareDelegate_onFailure);
-SE_BIND_FUNC(jsb_ShareDelegate_onCancel);
+// clang-format off
+constexpr auto finalize  = &core::makeFinalize<Self>;
+constexpr auto onSuccess = &core::makeInstanceMethod<&Self::onSuccess>;
+constexpr auto onFailure = &core::makeInstanceMethod<&Self::onFailure>;
+constexpr auto onCancel  = &core::makeInstanceMethod<&Self::onCancel>;
+// clang-format on
+
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(onSuccess);
+SE_BIND_FUNC(onFailure);
+SE_BIND_FUNC(onCancel);
+} // namespace
 
 bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -65,15 +65,16 @@ bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
 
     auto cls =
         se::Class::create("IShareDelegate", facebookObj, nullptr, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_ShareDelegate_finalize));
-    cls->defineFunction("onSuccess", _SE(jsb_ShareDelegate_onSuccess));
-    cls->defineFunction("onFailure", _SE(jsb_ShareDelegate_onFailure));
-    cls->defineFunction("onCancel", _SE(jsb_ShareDelegate_onCancel));
+    cls->defineFinalizeFunction(_SE(finalize));
+
+    EE_JSB_DEFINE_FUNCTION(cls, onSuccess);
+    EE_JSB_DEFINE_FUNCTION(cls, onFailure);
+    EE_JSB_DEFINE_FUNCTION(cls, onCancel);
 
     cls->install();
 
-    JSBClassType::registerClass<ShareDelegate>(cls);
-    core::handler = core::SharedPtrHandler<IShareDelegate>::create(cls);
+    JSBClassType::registerClass<Self>(cls);
+    core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

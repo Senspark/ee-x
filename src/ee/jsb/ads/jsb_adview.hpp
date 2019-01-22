@@ -12,7 +12,6 @@
 
 namespace ee {
 namespace ads {
-
 se::Class* getIAdViewClass();
 
 bool register_adview_manual(se::Object* object);

@@ -7,7 +7,7 @@
 
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack.hpp"
 
-#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include <Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -15,7 +15,6 @@
 
 namespace ee {
 namespace core {
-
 template <>
 void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
     set_value_from_pointer(value, input);
@@ -24,19 +23,19 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
 } // namespace ee
 
 namespace soomla {
+namespace {
+using Self = CCVirtualCurrencyPack;
 
-const auto jsb_CCVirtualCurrencyPack_finalize =
-    &ee::core::jsb_finalize<CCVirtualCurrencyPack>;
-const auto jsb_CCVirtualCurrencyPack_getCurrencyAmount =
-    &ee::core::jsb_method_get<CCVirtualCurrencyPack,
-                              &CCVirtualCurrencyPack::getCurrencyAmount,
-                              std::int32_t>;
-const auto jsb_CCVirtualCurrencyPack_canAfford = &ee::core::jsb_method_get<
-    CCVirtualCurrencyPack, &CCVirtualCurrencyPack::canAfford, bool, CCError**>;
+// clang-format off
+constexpr auto finalize          = &ee::core::makeFinalize<Self>;
+constexpr auto getCurrencyAmount = &ee::core::makeInstanceMethod<&Self::getCurrencyAmount>;
+constexpr auto canAfford         = &ee::core::makeInstanceMethod<&Self::canAfford>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_CCVirtualCurrencyPack_finalize)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPack_getCurrencyAmount)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPack_canAfford)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(getCurrencyAmount)
+SE_BIND_FUNC(canAfford)
+} // namespace
 
 bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
@@ -45,15 +44,14 @@ bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     auto purchasableVirtualItemProto = getCCPurchasableVirtualItemProto();
     auto cls = se::Class::create("CCVirtualCurrencyPack", __soomlaObj,
                                  purchasableVirtualItemProto, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_CCVirtualCurrencyPack_finalize));
 
-    cls->defineFunction("getCurrencyAmount",
-                        _SE(jsb_CCVirtualCurrencyPack_getCurrencyAmount));
-    cls->defineFunction("canAfford", _SE(jsb_CCVirtualCurrencyPack_canAfford));
+    cls->defineFinalizeFunction(_SE(finalize));
+
+    EE_JSB_DEFINE_FUNCTION(cls, getCurrencyAmount);
+    EE_JSB_DEFINE_FUNCTION(cls, canAfford);
 
     cls->install();
-
-    JSBClassType::registerClass<CCVirtualCurrencyPack>(cls);
+    JSBClassType::registerClass<Self>(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

@@ -13,9 +13,7 @@
 
 namespace ee {
 namespace vungle {
-
 bool register_vungle_bridge_manual(se::Object* object);
-
 } // namespace vungle
 } // namespace ee
 

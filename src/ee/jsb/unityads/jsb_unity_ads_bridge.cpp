@@ -9,39 +9,33 @@
 #include "ee/jsb/unityads/jsb_unity_ads_bridge.hpp"
 
 #include "ee/UnityAds.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace unityads {
-se::Class* __jsb_UnityAds_class = nullptr;
+namespace {
+se::Class* clazz = nullptr;
 
-const auto jsb_UnityAds_finalize = &core::jsb_finalize<UnityAds>;
-const auto jsb_UnityAds_constructor = &core::jsb_constructor<UnityAds>;
-const auto jsb_UnityAds_initialize =
-    &core::jsb_method_call_on_ui_thread_and_wait<
-        UnityAds, &UnityAds::initialize, const std::string&, bool>;
-const auto jsb_UnityAds_setDebugModeEnabled =
-    &core::jsb_method_call_on_ui_thread<UnityAds,
-                                        &UnityAds::setDebugModeEnabled, bool>;
-const auto jsb_UnityAds_createRewardedVideo =
-    &core::jsb_method_get_on_ui_thread<UnityAds, &UnityAds::createRewardedVideo,
-                                       std::shared_ptr<IRewardedVideo>,
-                                       const std::string&>;
-const auto jsb_UnityAds_createInterstitialAd =
-    &core::jsb_method_get_on_ui_thread<
-        UnityAds, &UnityAds::createInterstitialAd,
-        std::shared_ptr<IInterstitialAd>, const std::string&>;
+using Self = UnityAds;
 
-SE_BIND_FINALIZE_FUNC(jsb_UnityAds_finalize)
-SE_BIND_CTOR(jsb_UnityAds_constructor, __jsb_UnityAds_class,
-             jsb_UnityAds_finalize)
-SE_BIND_FUNC(jsb_UnityAds_initialize)
-SE_BIND_FUNC(jsb_UnityAds_setDebugModeEnabled)
-SE_BIND_FUNC(jsb_UnityAds_createRewardedVideo)
-SE_BIND_FUNC(jsb_UnityAds_createInterstitialAd)
+// clang-format off
+constexpr auto finalize             = &core::makeFinalize<Self>;
+constexpr auto constructor          = &core::makeConstructor<Self>;
+constexpr auto initialize           = &core::makeInstanceMethodOnUiThreadAndWait<&Self::initialize>;
+constexpr auto setDebugModeEnabled  = &core::makeInstanceMethodOnUiThread<&Self::setDebugModeEnabled>;
+constexpr auto createRewardedVideo  = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createRewardedVideo>;
+constexpr auto createInterstitialAd = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createInterstitialAd>;
+// clang-format on
+
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FUNC(initialize)
+SE_BIND_FUNC(setDebugModeEnabled)
+SE_BIND_FUNC(createRewardedVideo)
+SE_BIND_FUNC(createInterstitialAd)
+} // namespace
 
 bool register_unity_ads_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
@@ -49,22 +43,18 @@ bool register_unity_ads_bridge_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("unityads", eeObj, &unityadsObj);
 
-    auto cls = se::Class::create("UnityAds", unityadsObj, nullptr,
-                                 _SE(jsb_UnityAds_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_UnityAds_finalize));
-    cls->defineFunction("initialize", _SE(jsb_UnityAds_initialize));
-    cls->defineFunction("setDebugModeEnabled",
-                        _SE(jsb_UnityAds_setDebugModeEnabled));
-    cls->defineFunction("createRewardedVideo",
-                        _SE(jsb_UnityAds_createRewardedVideo));
-    cls->defineFunction("createInterstitialAd",
-                        _SE(jsb_UnityAds_createInterstitialAd));
+    auto cls =
+        se::Class::create("UnityAds", unityadsObj, nullptr, _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
+    EE_JSB_DEFINE_FUNCTION(cls, initialize);
+    EE_JSB_DEFINE_FUNCTION(cls, setDebugModeEnabled);
+    EE_JSB_DEFINE_FUNCTION(cls, createRewardedVideo);
+    EE_JSB_DEFINE_FUNCTION(cls, createInterstitialAd);
 
     cls->install();
 
-    JSBClassType::registerClass<UnityAds>(cls);
-
-    __jsb_UnityAds_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

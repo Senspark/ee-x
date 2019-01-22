@@ -41,7 +41,7 @@ soomla::CCVirtualCategory* get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, soomla::CCStoreAssetsBuilder& input) {
-    value.toObject()->setPrivateData(&input);
+    set_value_from_pointer(value, &input);
 }
 
 template <>

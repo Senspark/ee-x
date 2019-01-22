@@ -605,6 +605,10 @@ public:
     explicit SharedPtrHandler(se::Class* clazz)
         : clazz_(clazz) {}
 
+    se::Class* getClass() {
+        return clazz_;
+    }
+
     std::shared_ptr<T> getValue(const se::Value& value) const {
         auto delegatePtr = static_cast<T*>(value.toObject()->getPrivateData());
         auto iter = std::find_if(archive_.cbegin(), archive_.cend(),

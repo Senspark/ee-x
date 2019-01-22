@@ -60,6 +60,11 @@ void set_value(se::Value& value, std::shared_ptr<IInterstitialAd> input) {
 }
 
 template <>
+void set_value(se::Value& value, std::shared_ptr<IInterstitialAd>& input) {
+    set_value<std::shared_ptr<IInterstitialAd>>(value, input);
+}
+
+template <>
 bool jsb_finalize<IInterstitialAd>(se::State& s) {
     auto interstitialAdPtr =
         static_cast<IInterstitialAd*>(s.nativeThisObject());

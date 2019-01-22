@@ -61,6 +61,11 @@ void set_value(se::Value& value, std::shared_ptr<IRewardedVideo> input) {
 }
 
 template <>
+void set_value(se::Value& value, std::shared_ptr<IRewardedVideo>& input) {
+    set_value<std::shared_ptr<IRewardedVideo>>(value, input);
+}
+
+template <>
 bool jsb_finalize<IRewardedVideo>(se::State& s) {
     auto rewardedVideoPtr = static_cast<IRewardedVideo*>(s.nativeThisObject());
     auto iter =

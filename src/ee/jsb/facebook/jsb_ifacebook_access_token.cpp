@@ -61,6 +61,12 @@ void set_value(se::Value& value,
 }
 
 template <>
+void set_value(se::Value& value,
+               std::shared_ptr<facebook::IAccessToken>& input) {
+    set_value<std::shared_ptr<facebook::IAccessToken>>(value, input);
+}
+
+template <>
 bool jsb_finalize<facebook::IAccessToken>(se::State& s) {
     auto tokenPtr = static_cast<facebook::IAccessToken*>(s.nativeThisObject());
     auto iter = std::find_if(

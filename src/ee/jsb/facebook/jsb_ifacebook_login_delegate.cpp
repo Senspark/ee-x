@@ -31,6 +31,12 @@ void set_value(se::Value& value,
 }
 
 template <>
+void set_value(se::Value& value,
+               std::shared_ptr<facebook::ILoginDelegate>& input) {
+    handler->setValue(value, input);
+}
+
+template <>
 bool jsb_finalize<facebook::ILoginDelegate>(se::State& s) {
     return handler->finalize(s);
 }

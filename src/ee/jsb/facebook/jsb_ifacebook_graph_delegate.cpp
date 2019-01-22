@@ -30,6 +30,12 @@ void set_value(se::Value& value,
 }
 
 template <>
+void set_value(se::Value& value,
+               std::shared_ptr<facebook::IGraphDelegate>& input) {
+    handler->setValue(value, input);
+}
+
+template <>
 bool jsb_finalize<facebook::IGraphDelegate>(se::State& s) {
     return handler->finalize(s);
 }

@@ -83,7 +83,7 @@ decltype(auto) makeTuple(const std::vector<T>& args) {
 } // namespace internal
 
 template <typename... Args>
-se::ValueArray to_value_array(Args... values) {
+se::ValueArray to_value_array(Args&&... values) {
     se::ValueArray args = {internal::to_value(std::forward<Args>(values))...};
     return args;
 }
@@ -489,7 +489,7 @@ bool jsb_set_callback(se::State& s) {
                 s.thisObject()->attachObject(jsTarget.toObject());
             }
 
-            std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](Args... values) {
+            std::bind(FunctionPtr, cObj, [jsFunc, jsTarget](auto&&... values) {
                 runOnCocosThread([=] {
                     se::ScriptEngine::getInstance()->clearException();
                     se::AutoHandleScope hs;
@@ -529,7 +529,7 @@ bool jsb_static_set_callback(se::State& s) {
                 s.thisObject()->attachObject(jsTarget.toObject());
             }
 
-            std::bind(FunctionPtr, [jsFunc, jsTarget](Args... values) {
+            std::bind(FunctionPtr, [jsFunc, jsTarget](auto&&... values) {
                 runOnCocosThread([=] {
                     se::ScriptEngine::getInstance()->clearException();
                     se::AutoHandleScope hs;

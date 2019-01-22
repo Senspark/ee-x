@@ -7,8 +7,8 @@
 
 #include "ee/jsb/soomla/jsb_cc_store_assets_builder.hpp"
 
-#include "Soomla/CCStoreAssetsBuilder.h"
-#include "Soomla/Cocos2dxCore.h"
+#include <Soomla/CCStoreAssetsBuilder.h>
+#include <Soomla/Cocos2dxCore.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -90,16 +90,16 @@ bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("setVersion", _SE(setVersion));
-    cls->defineFunction("addCurrency", _SE(addCurrency));
-    cls->defineFunction("addGood", _SE(addGood));
-    cls->defineFunction("addCurrencyPack", _SE(addCurrencyPack));
-    cls->defineFunction("addCategory", _SE(addCategory));
-    cls->defineFunction("build", _SE(build));
+    EE_JSB_DEFINE_FUNCTION(cls, setVersion);
+    EE_JSB_DEFINE_FUNCTION(cls, addCurrency);
+    EE_JSB_DEFINE_FUNCTION(cls, addGood);
+    EE_JSB_DEFINE_FUNCTION(cls, addCurrencyPack);
+    EE_JSB_DEFINE_FUNCTION(cls, addCategory);
+    EE_JSB_DEFINE_FUNCTION(cls, build);
 
     cls->install();
 
-    JSBClassType::registerClass<CCStoreAssetsBuilder>(cls);
+    JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 
     //__jsb_CCStoreAssets_class

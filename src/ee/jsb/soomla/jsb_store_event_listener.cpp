@@ -154,7 +154,6 @@ bool register_store_event_listener_manual(se::Object* globalObj) {
     cls->install();
 
     JSBClassType::registerClass<StoreEventListener>(cls);
-
     __jsb_StoreEventListener_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();

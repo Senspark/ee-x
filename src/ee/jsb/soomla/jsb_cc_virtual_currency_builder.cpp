@@ -22,58 +22,43 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyBuilder& input) {
 } // namespace ee
 
 namespace soomla {
-se::Class* __jsb_CCVirtualCurrencyBuilder_class = nullptr;
+se::Class* clazz = nullptr;
 
-const auto jsb_CCVirtualCurrencyBuilder_finalize =
-    &ee::core::jsb_finalize<CCVirtualCurrencyBuilder>;
-const auto jsb_CCVirtualCurrencyBuilder_constructor =
-    &ee::core::jsb_constructor<CCVirtualCurrencyBuilder>;
-const auto jsb_CCVirtualCurrencyBuilder_setName =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyBuilder,
-                                &CCVirtualCurrencyBuilder::setName,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyBuilder_setDescription =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyBuilder,
-                                &CCVirtualCurrencyBuilder::setDescription,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyBuilder_setItemId =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyBuilder,
-                                &CCVirtualCurrencyBuilder::setItemId,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyBuilder_build =
-    &ee::core::jsb_method_get<CCVirtualCurrencyBuilder,
-                              &CCVirtualCurrencyBuilder::build, CCVirtualItem*>;
+using Self = CCVirtualCurrencyBuilder;
 
-SE_BIND_FINALIZE_FUNC(jsb_CCVirtualCurrencyBuilder_finalize)
-SE_BIND_CTOR(jsb_CCVirtualCurrencyBuilder_constructor,
-             __jsb_CCVirtualCurrencyBuilder_class,
-             jsb_CCVirtualCurrencyBuilder_finalize)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_setName)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_setDescription)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_setItemId)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyBuilder_build)
+// clang-format off
+constexpr auto finalize       = &ee::core::makeFinalize<Self>;
+constexpr auto constructor    = &ee::core::makeConstructor<Self>;
+constexpr auto setName        = &ee::core::makeInstanceMethod<&Self::setName>;
+constexpr auto setDescription = &ee::core::makeInstanceMethod<&Self::setDescription>;
+constexpr auto setItemId      = &ee::core::makeInstanceMethod<&Self::setItemId>;
+constexpr auto build          = &ee::core::makeInstanceMethod<&Self::build>;
+// clang-format on
+
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(setName)
+SE_BIND_FUNC(setDescription)
+SE_BIND_FUNC(setItemId)
+SE_BIND_FUNC(build)
 
 bool register_cc_virtual_currency_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
-    auto cls =
-        se::Class::create("CCVirtualCurrencyBuilder", __soomlaObj, nullptr,
-                          _SE(jsb_CCVirtualCurrencyBuilder_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_CCVirtualCurrencyBuilder_finalize));
+    auto cls = se::Class::create("CCVirtualCurrencyBuilder", __soomlaObj,
+                                 nullptr, _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("setName", _SE(jsb_CCVirtualCurrencyBuilder_setName));
-    cls->defineFunction("setDescription",
-                        _SE(jsb_CCVirtualCurrencyBuilder_setDescription));
-    cls->defineFunction("setItemId",
-                        _SE(jsb_CCVirtualCurrencyBuilder_setItemId));
-    cls->defineFunction("build", _SE(jsb_CCVirtualCurrencyBuilder_build));
+    EE_JSB_DEFINE_FUNCTION(cls, setName);
+    EE_JSB_DEFINE_FUNCTION(cls, setDescription);
+    EE_JSB_DEFINE_FUNCTION(cls, setItemId);
+    EE_JSB_DEFINE_FUNCTION(cls, build);
 
     cls->install();
 
-    JSBClassType::registerClass<CCVirtualCurrencyBuilder>(cls);
-
-    __jsb_CCVirtualCurrencyBuilder_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

@@ -7,7 +7,7 @@
 
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack_builder.hpp"
 
-#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPackBuilder.h"
+#include <Soomla/domain/virtualCurrencies/CCVirtualCurrencyPackBuilder.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -22,84 +22,52 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPackBuilder& input) {
 } // namespace ee
 
 namespace soomla {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_CCVirtualCurrencyPackBuilder_class = nullptr;
+using Self = CCVirtualCurrencyPackBuilder;
 
-const auto jsb_CCVirtualCurrencyPackBuilder_finalize =
-    &ee::core::jsb_finalize<CCVirtualCurrencyPackBuilder>;
-const auto jsb_CCVirtualCurrencyPackBuilder_constructor =
-    &ee::core::jsb_constructor<CCVirtualCurrencyPackBuilder>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setName =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyPackBuilder,
-                                &CCVirtualCurrencyPackBuilder::setName,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setDescription =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyPackBuilder,
-                                &CCVirtualCurrencyPackBuilder::setDescription,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setItemId =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyPackBuilder,
-                                &CCVirtualCurrencyPackBuilder::setItemId,
-                                const std::string&>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setCurrencyAmount =
-    &ee::core::jsb_accessor_set<
-        CCVirtualCurrencyPackBuilder,
-        &CCVirtualCurrencyPackBuilder::setCurrencyAmount, int>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setCurrencyItemId =
-    &ee::core::jsb_accessor_set<
-        CCVirtualCurrencyPackBuilder,
-        &CCVirtualCurrencyPackBuilder::setCurrencyItemId, const std::string&>;
-const auto jsb_CCVirtualCurrencyPackBuilder_setPurchaseType =
-    &ee::core::jsb_accessor_set<CCVirtualCurrencyPackBuilder,
-                                &CCVirtualCurrencyPackBuilder::setPurchaseType,
-                                CCPurchaseType*>;
-const auto jsb_CCVirtualCurrencyPackBuilder_build =
-    &ee::core::jsb_method_get<CCVirtualCurrencyPackBuilder,
-                              &CCVirtualCurrencyPackBuilder::build,
-                              CCVirtualCurrencyPack*>;
+// clang-format off
+constexpr auto constructor       = &ee::core::makeConstructor<Self>;
+constexpr auto finalize          = &ee::core::makeFinalize<Self>;
+constexpr auto setName           = &ee::core::makeInstanceMethod<&Self::setName>;
+constexpr auto setDescription    = &ee::core::makeInstanceMethod<&Self::setDescription>;
+constexpr auto setItemId         = &ee::core::makeInstanceMethod<&Self::setItemId>;
+constexpr auto setCurrencyAmount = &ee::core::makeInstanceMethod<&Self::setCurrencyAmount>;
+constexpr auto setCurrencyItemId = &ee::core::makeInstanceMethod<&Self::setCurrencyItemId>;
+constexpr auto setPurchaseType   = &ee::core::makeInstanceMethod<&Self::setPurchaseType>;
+constexpr auto build             = &ee::core::makeInstanceMethod<&Self::build>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_CCVirtualCurrencyPackBuilder_finalize)
-SE_BIND_CTOR(jsb_CCVirtualCurrencyPackBuilder_constructor,
-             __jsb_CCVirtualCurrencyPackBuilder_class,
-             jsb_CCVirtualCurrencyPackBuilder_finalize)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setName)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setDescription)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setItemId)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setCurrencyAmount)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setCurrencyItemId)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_setPurchaseType)
-SE_BIND_FUNC(jsb_CCVirtualCurrencyPackBuilder_build)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(setName)
+SE_BIND_FUNC(setDescription)
+SE_BIND_FUNC(setItemId)
+SE_BIND_FUNC(setCurrencyAmount)
+SE_BIND_FUNC(setCurrencyItemId)
+SE_BIND_FUNC(setPurchaseType)
+SE_BIND_FUNC(build)
 
 bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
-    auto cls =
-        se::Class::create("CCVirtualCurrencyPackBuilder", __soomlaObj, nullptr,
-                          _SE(jsb_CCVirtualCurrencyPackBuilder_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_CCVirtualCurrencyPackBuilder_finalize));
+    auto cls = se::Class::create("CCVirtualCurrencyPackBuilder", __soomlaObj,
+                                 nullptr, _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("setName",
-                        _SE(jsb_CCVirtualCurrencyPackBuilder_setName));
-    cls->defineFunction("setDescription",
-                        _SE(jsb_CCVirtualCurrencyPackBuilder_setDescription));
-    cls->defineFunction("setItemId",
-                        _SE(jsb_CCVirtualCurrencyPackBuilder_setItemId));
-    cls->defineFunction(
-        "setCurrencyAmount",
-        _SE(jsb_CCVirtualCurrencyPackBuilder_setCurrencyAmount));
-    cls->defineFunction(
-        "setCurrencyItemId",
-        _SE(jsb_CCVirtualCurrencyPackBuilder_setCurrencyItemId));
-    cls->defineFunction("setPurchaseType",
-                        _SE(jsb_CCVirtualCurrencyPackBuilder_setPurchaseType));
-    cls->defineFunction("build", _SE(jsb_CCVirtualCurrencyPackBuilder_build));
+    EE_JSB_DEFINE_FUNCTION(cls, setName);
+    EE_JSB_DEFINE_FUNCTION(cls, setDescription);
+    EE_JSB_DEFINE_FUNCTION(cls, setItemId);
+    EE_JSB_DEFINE_FUNCTION(cls, setCurrencyAmount);
+    EE_JSB_DEFINE_FUNCTION(cls, setCurrencyItemId);
+    EE_JSB_DEFINE_FUNCTION(cls, setPurchaseType);
+    EE_JSB_DEFINE_FUNCTION(cls, build);
 
     cls->install();
 
-    JSBClassType::registerClass<CCVirtualCurrencyPackBuilder>(cls);
-
-    __jsb_CCVirtualCurrencyPackBuilder_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

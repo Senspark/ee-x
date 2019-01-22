@@ -7,15 +7,14 @@
 
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
 
-#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
-#include "Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h"
+#include <Soomla/PurchaseTypes/CCPurchaseWithMarket.h>
+#include <Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace core {
-
 template <>
 soomla::CCPurchaseType* get_value(const se::Value& value) {
     return static_cast<soomla::CCPurchaseType*>(
@@ -35,37 +34,26 @@ void set_value(se::Value& value, soomla::CCPurchaseWithMarketBuilder& input) {
 } // namespace ee
 
 namespace soomla {
-se::Class* __jsb_CCPurchaseWithMarketBuilder_class = nullptr;
+se::Class* clazz = nullptr;
 
-const auto jsb_CCPurchaseWithMarketBuilder_finalize =
-    &ee::core::jsb_finalize<CCPurchaseWithMarketBuilder>;
-const auto jsb_CCPurchaseWithMarketBuilder_constructor =
-    &ee::core::jsb_constructor<CCPurchaseWithMarketBuilder>;
+using Self = CCPurchaseWithMarketBuilder;
 
-const auto jsb_CCPurchaseWithMarketBuilder_build =
-    &ee::core::jsb_method_get<CCPurchaseWithMarketBuilder,
-                              &CCPurchaseWithMarketBuilder::build,
-                              CCPurchaseType*>;
+// clang-format off
+constexpr auto finalize     = &ee::core::makeFinalize<Self>;
+constexpr auto constructor  = &ee::core::makeConstructor<Self>;
+constexpr auto setPrice     = &ee::core::makeInstanceMethod<&Self::setPrice>;
+constexpr auto setProductId = &ee::core::makeInstanceMethod<&Self::setProductId>;
+constexpr auto build        = &ee::core::makeInstanceMethod<&Self::build>;
+// clang-format on
 
-const auto jsb_CCPurchaseWithMarketBuilder_setPrice =
-    &ee::core::jsb_accessor_set<CCPurchaseWithMarketBuilder,
-                                &CCPurchaseWithMarketBuilder::setPrice, float>;
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(setPrice)
+SE_BIND_FUNC(setProductId)
+SE_BIND_FUNC(build)
 
-const auto jsb_CCPurchaseWithMarketBuilder_setProductId =
-    &ee::core::jsb_accessor_set<CCPurchaseWithMarketBuilder,
-                                &CCPurchaseWithMarketBuilder::setProductId,
-                                std::string>;
-
-SE_BIND_FINALIZE_FUNC(jsb_CCPurchaseWithMarketBuilder_finalize)
-SE_BIND_CTOR(jsb_CCPurchaseWithMarketBuilder_constructor,
-             __jsb_CCPurchaseWithMarketBuilder_class,
-             jsb_CCPurchaseWithMarketBuilder_finalize)
-SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_build)
-SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_setPrice)
-SE_BIND_FUNC(jsb_CCPurchaseWithMarketBuilder_setProductId)
-
-const auto jsb_CCPurchaseType_finalize =
-    &ee::core::jsb_finalize<CCPurchaseType>;
+constexpr auto jsb_CCPurchaseType_finalize =
+    &ee::core::makeFinalize<CCPurchaseType>;
 
 SE_BIND_FINALIZE_FUNC(jsb_CCPurchaseType_finalize)
 
@@ -73,22 +61,18 @@ bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
-    auto cls =
-        se::Class::create("CCPurchaseWithMarketBuilder", __soomlaObj, nullptr,
-                          _SE(jsb_CCPurchaseWithMarketBuilder_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_CCPurchaseWithMarketBuilder_finalize));
+    auto cls = se::Class::create("CCPurchaseWithMarketBuilder", __soomlaObj,
+                                 nullptr, _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("build", _SE(jsb_CCPurchaseWithMarketBuilder_build));
-    cls->defineFunction("setPrice",
-                        _SE(jsb_CCPurchaseWithMarketBuilder_setPrice));
-    cls->defineFunction("setProductId",
-                        _SE(jsb_CCPurchaseWithMarketBuilder_setProductId));
+    EE_JSB_DEFINE_FUNCTION(cls, setPrice);
+    EE_JSB_DEFINE_FUNCTION(cls, setProductId);
+    EE_JSB_DEFINE_FUNCTION(cls, build);
 
     cls->install();
 
-    JSBClassType::registerClass<CCPurchaseWithMarketBuilder>(cls);
-
-    __jsb_CCPurchaseWithMarketBuilder_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     auto clsPurchase =
         se::Class::create("CCPurchaseType", __soomlaObj, nullptr, nullptr);

@@ -7,7 +7,7 @@
 
 #include "ee/jsb/soomla/jsb_cc_lifetime_vg_builder.hpp"
 
-#include "Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h"
+#include <Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h>
 
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
@@ -17,69 +17,52 @@ namespace ee {
 namespace core {
 template <>
 void set_value(se::Value& value, soomla::CCLifetimeVGBuilder& input) {
-    value.toObject()->setPrivateData(&input);
+    set_value_from_pointer(value, &input);
 }
 } // namespace core
 } // namespace ee
 
 namespace soomla {
-se::Class* __jsb_CCLifetimeVGBuilder_class = nullptr;
+se::Class* clazz = nullptr;
 
-const auto jsb_CCLifetimeVGBuilder_finalize =
-    &ee::core::jsb_finalize<CCLifetimeVGBuilder>;
-const auto jsb_CCLifetimeVGBuilder_constructor =
-    &ee::core::jsb_constructor<CCLifetimeVGBuilder>;
+using Self = CCLifetimeVGBuilder;
 
-const auto jsb_CCLifetimeVGBuilder_build =
-    &ee::core::jsb_method_get<CCLifetimeVGBuilder, &CCLifetimeVGBuilder::build,
-                              CCVirtualItem*>;
+// clang-format off
+constexpr auto finalize        = &ee::core::makeFinalize<Self>;
+constexpr auto constructor     = &ee::core::makeConstructor<Self>;
+constexpr auto build           = &ee::core::makeInstanceMethod<&Self::build>;
+constexpr auto setItemId       = &ee::core::makeInstanceMethod<&Self::setItemId>;
+constexpr auto setDescription  = &ee::core::makeInstanceMethod<&Self::setDescription>;
+constexpr auto setName         = &ee::core::makeInstanceMethod<&Self::setName>;
+constexpr auto setPurchaseType = &ee::core::makeInstanceMethod<&Self::setPurchaseType>;
+// clang-format on
 
-const auto jsb_CCLifetimeVGBuilder_setItemId =
-    &ee::core::jsb_accessor_set<CCLifetimeVGBuilder,
-                                &CCLifetimeVGBuilder::setItemId, std::string>;
-
-const auto jsb_CCLifetimeVGBuilder_setDescription = &ee::core::jsb_accessor_set<
-    CCLifetimeVGBuilder, &CCLifetimeVGBuilder::setDescription, std::string>;
-
-const auto jsb_CCLifetimeVGBuilder_setName =
-    &ee::core::jsb_accessor_set<CCLifetimeVGBuilder,
-                                &CCLifetimeVGBuilder::setName, std::string>;
-
-const auto jsb_CCLifetimeVGBuilder_setPurchaseType =
-    &ee::core::jsb_accessor_set<CCLifetimeVGBuilder,
-                                &CCLifetimeVGBuilder::setPurchaseType,
-                                CCPurchaseType*>;
-
-SE_BIND_FINALIZE_FUNC(jsb_CCLifetimeVGBuilder_finalize)
-SE_BIND_CTOR(jsb_CCLifetimeVGBuilder_constructor,
-             __jsb_CCLifetimeVGBuilder_class, jsb_CCLifetimeVGBuilder_finalize)
-SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_build)
-SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setItemId)
-SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setDescription)
-SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setName)
-SE_BIND_FUNC(jsb_CCLifetimeVGBuilder_setPurchaseType)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(setItemId)
+SE_BIND_FUNC(setDescription)
+SE_BIND_FUNC(setName)
+SE_BIND_FUNC(setPurchaseType)
+SE_BIND_FUNC(build)
 
 bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;
     ee::core::getOrCreatePlainObject_r("soomla", globalObj, &__soomlaObj);
 
     auto cls = se::Class::create("CCLifetimeVGBuilder", __soomlaObj, nullptr,
-                                 _SE(jsb_CCLifetimeVGBuilder_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_CCLifetimeVGBuilder_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("build", _SE(jsb_CCLifetimeVGBuilder_build));
-    cls->defineFunction("setItemId", _SE(jsb_CCLifetimeVGBuilder_setItemId));
-    cls->defineFunction("setDescription",
-                        _SE(jsb_CCLifetimeVGBuilder_setDescription));
-    cls->defineFunction("setName", _SE(jsb_CCLifetimeVGBuilder_setName));
-    cls->defineFunction("setPurchaseType",
-                        _SE(jsb_CCLifetimeVGBuilder_setPurchaseType));
+    EE_JSB_DEFINE_FUNCTION(cls, setItemId);
+    EE_JSB_DEFINE_FUNCTION(cls, setDescription);
+    EE_JSB_DEFINE_FUNCTION(cls, setName);
+    EE_JSB_DEFINE_FUNCTION(cls, setPurchaseType);
+    EE_JSB_DEFINE_FUNCTION(cls, build);
 
     cls->install();
 
-    JSBClassType::registerClass<CCLifetimeVGBuilder>(cls);
-
-    __jsb_CCLifetimeVGBuilder_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

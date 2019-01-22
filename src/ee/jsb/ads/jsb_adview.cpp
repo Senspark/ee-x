@@ -50,7 +50,7 @@ constexpr auto setPosition     = &core::makeInstanceMethodOnUiThread<&Self::setP
 constexpr auto getSize         = &core::makeInstanceMethodOnUiThreadAndWait<&Self::getSize>;
 constexpr auto setSize         = &core::makeInstanceMethodOnUiThread<&Self::setSize>;
 constexpr auto setVisible      = &core::makeInstanceMethodOnUiThread<&Self::setVisible>;
-constexpr auto setLoadCallback = &core::jsb_set_callback<Self, &Self::setLoadCallback, bool>;
+constexpr auto setLoadCallback = &core::makeInstanceMethod<&Self::setLoadCallback>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)

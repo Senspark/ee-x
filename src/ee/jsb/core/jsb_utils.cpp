@@ -42,22 +42,17 @@ void runOnCocosThread(const std::function<void()>& callback) {
 #endif
 };
 
-constexpr auto jsb_getSHA1CertificateFingerprint =
-    &jsb_static_get<const std::string&, &getSHA1CertificateFingerprint>;
-constexpr auto jsb_getVersionName =
-    &jsb_static_get<const std::string&, &getVersionName>;
-constexpr auto jsb_getVersionCode =
-    &jsb_static_get<const std::string&, &getVersionCode>;
-constexpr auto jsb_isApplicationInstalled =
-    &jsb_static_get<bool, &isApplicationInstalled, const std::string&>;
-constexpr auto jsb_openApplication =
-    &jsb_static_call<&openApplication, const std::string&>;
-constexpr auto jsb_sendMail =
-    &jsb_static_call<&sendMail, const std::string&, const std::string&,
-                     const std::string&>;
-constexpr auto jsb_isTablet = &jsb_static_get<bool, &isTablet>;
-constexpr auto jsb_getDeviceId =
-    &jsb_static_set_callback<&getDeviceId, const std::string&>;
+namespace {
+// clang-format off
+constexpr auto jsb_getSHA1CertificateFingerprint = &makeStaticMethod<&getSHA1CertificateFingerprint>;
+constexpr auto jsb_getVersionName                = &makeStaticMethod<&getVersionName>;
+constexpr auto jsb_getVersionCode                = &makeStaticMethod<&getVersionCode>;
+constexpr auto jsb_isApplicationInstalled        = &makeStaticMethod<&isApplicationInstalled>;
+constexpr auto jsb_openApplication               = &makeStaticMethod<&openApplication>;
+constexpr auto jsb_sendMail                      = &makeStaticMethod<&sendMail>;
+constexpr auto jsb_isTablet                      = &makeStaticMethod<&isTablet>;
+constexpr auto jsb_getDeviceId                   = &makeStaticMethod<&getDeviceId>;
+// clang-format on
 
 SE_BIND_FUNC(jsb_getSHA1CertificateFingerprint)
 SE_BIND_FUNC(jsb_getVersionName)
@@ -67,6 +62,7 @@ SE_BIND_FUNC(jsb_openApplication)
 SE_BIND_FUNC(jsb_sendMail)
 SE_BIND_FUNC(jsb_isTablet)
 SE_BIND_FUNC(jsb_getDeviceId)
+} // namespace
 
 bool register_utils_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;

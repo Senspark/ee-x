@@ -30,6 +30,11 @@ void set_value(se::Value& value,
 }
 
 template <>
+void set_value(se::Value& value, facebook::IRequestDelegate& input) {
+    set_value_from_pointer(value, &input);
+}
+
+template <>
 bool jsb_finalize<facebook::IRequestDelegate>(se::State& state) {
     return handler->finalize(state);
 }
@@ -41,9 +46,9 @@ using Self = IRequestDelegate;
 
 // clang-format off
 constexpr auto finalize  = &core::makeFinalize<Self>;
-constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const std::string&, const std::vector<std::string>&>;
-constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
-constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
+constexpr auto onSuccess = &core::makeInstanceMethod<&Self::onSuccess>;
+constexpr auto onFailure = &core::makeInstanceMethod<&Self::onFailure>;
+constexpr auto onCancel  = &core::makeInstanceMethod<&Self::onCancel>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize);

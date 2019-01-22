@@ -44,7 +44,7 @@ constexpr auto finalize          = &core::makeFinalize<Self>;
 constexpr auto isLoaded          = &core::makeInstanceMethodOnUiThreadAndWait<&Self::isLoaded>;
 constexpr auto load              = &core::makeInstanceMethodOnUiThread<&Self::load>;
 constexpr auto show              = &core::makeInstanceMethodOnUiThreadAndWait<&Self::show>;
-constexpr auto setResultCallback = &core::jsb_set_callback<Self, &Self::setResultCallback>;
+constexpr auto setResultCallback = &core::makeInstanceMethod<&Self::setResultCallback>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)

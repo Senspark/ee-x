@@ -12,9 +12,7 @@
 
 namespace ee {
 namespace admob {
-
 bool register_admob_bridge_manual(se::Object* object);
-
 } // namespace admob
 } // namespace ee
 

@@ -32,7 +32,7 @@ facebook::RequestContent get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, facebook::RequestContent& input) {
-    value.toObject()->setPrivateData(&input);
+    set_value_from_pointer(value, &input);
 }
 } // namespace core
 
@@ -103,14 +103,15 @@ bool register_facebook_request_content_manual(se::Object* globalObject) {
     auto cls = se::Class::create("RequestContent", facebookObj, nullptr,
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
-    cls->defineFunction("setActionType", _SE(setActionType));
-    cls->defineFunction("setFilter", _SE(setFilter));
-    cls->defineFunction("setRecipients", _SE(setRecipients));
-    cls->defineFunction("setObjectId", _SE(setObjectId));
-    cls->defineFunction("setTitle", _SE(setTitle));
-    cls->defineFunction("setMessage", _SE(setMessage));
-    cls->defineFunction("setData", _SE(setData));
-    cls->defineFunction("toString", _SE(toString));
+    
+    EE_JSB_DEFINE_FUNCTION(cls, setActionType);
+    EE_JSB_DEFINE_FUNCTION(cls, setFilter);
+    EE_JSB_DEFINE_FUNCTION(cls, setRecipients);
+    EE_JSB_DEFINE_FUNCTION(cls, setObjectId);
+    EE_JSB_DEFINE_FUNCTION(cls, setTitle);
+    EE_JSB_DEFINE_FUNCTION(cls, setMessage);
+    EE_JSB_DEFINE_FUNCTION(cls, setData);
+    EE_JSB_DEFINE_FUNCTION(cls, toString);
 
     cls->install();
 

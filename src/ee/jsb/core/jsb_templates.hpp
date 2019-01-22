@@ -20,6 +20,8 @@
 #include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
 #include "ee/jsb/core/jsb_utils.hpp"
 
+#define EE_JSB_DEFINE_FUNCTION(cls, name) cls->defineFunction(#name, _SE(name))
+
 namespace ee {
 namespace core {
 /// Converts between se::Object and normal value.

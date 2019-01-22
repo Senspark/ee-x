@@ -13,7 +13,7 @@
 namespace ee {
 namespace facebook {
 bool register_facebook_graph_request_manual(se::Object* globalObject);
-}
+} // namespace facebook
 } // namespace ee
 
 #endif /* jsb_facebook_graph_request_hpp */

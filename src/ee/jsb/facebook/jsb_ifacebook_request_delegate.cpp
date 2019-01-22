@@ -36,31 +36,27 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<facebook::IRequestDelegate>(se::State& s) {
-    return handler->finalize(s);
+bool jsb_finalize<facebook::IRequestDelegate>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-const auto jsb_RequestDelegate_finalize =
-    &core::jsb_finalize<IFacebookRequestDelegate>;
-const auto jsb_RequestDelegate_onSuccess = &core::jsb_set_callback<
-    IFacebookRequestDelegate, &IFacebookRequestDelegate::onSuccess,
-    const std::string&, const std::vector<std::string>&>;
-const auto jsb_RequestDelegate_onFailure =
-    &core::jsb_set_callback<IFacebookRequestDelegate,
-                            &IFacebookRequestDelegate::onFailure,
-                            const std::string&>;
-const auto jsb_RequestDelegate_onCancel =
-    &core::jsb_set_callback<IFacebookRequestDelegate,
-                            &IFacebookRequestDelegate::onCancel>;
+using Self = IRequestDelegate;
+
+// clang-format off
+constexpr auto finalize  = &core::makeFinalize<Self>;
+constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const std::string&, const std::vector<std::string>&>;
+constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
+constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
+// clang-format on
 } // namespace
 
-SE_BIND_FINALIZE_FUNC(jsb_RequestDelegate_finalize);
-SE_BIND_FUNC(jsb_RequestDelegate_onSuccess);
-SE_BIND_FUNC(jsb_RequestDelegate_onFailure);
-SE_BIND_FUNC(jsb_RequestDelegate_onCancel);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(onSuccess);
+SE_BIND_FUNC(onFailure);
+SE_BIND_FUNC(onCancel);
 
 bool register_ifacebook_request_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -70,15 +66,16 @@ bool register_ifacebook_request_delegate_manual(se::Object* globalObject) {
 
     auto cls =
         se::Class::create("IRequestDelegate", facebookObj, nullptr, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_RequestDelegate_finalize));
-    cls->defineFunction("onSuccess", _SE(jsb_RequestDelegate_onSuccess));
-    cls->defineFunction("onFailure", _SE(jsb_RequestDelegate_onFailure));
-    cls->defineFunction("onCancel", _SE(jsb_RequestDelegate_onCancel));
+    cls->defineFinalizeFunction(_SE(finalize));
+
+    EE_JSB_DEFINE_FUNCTION(cls, onSuccess);
+    EE_JSB_DEFINE_FUNCTION(cls, onFailure);
+    EE_JSB_DEFINE_FUNCTION(cls, onCancel);
 
     cls->install();
 
     JSBClassType::registerClass<RequestDelegate>(cls);
-    core::handler = core::SharedPtrHandler<IRequestDelegate>::create(cls);
+    core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

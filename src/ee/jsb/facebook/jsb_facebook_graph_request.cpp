@@ -21,7 +21,7 @@ facebook::GraphRequest get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value, facebook::GraphRequest& input) {
-    value.toObject()->setPrivateData(&input);
+    set_value_from_pointer(value, &input);
 }
 } // namespace core
 

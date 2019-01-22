@@ -36,28 +36,27 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<facebook::IGraphDelegate>(se::State& s) {
-    return handler->finalize(s);
+bool jsb_finalize<facebook::IGraphDelegate>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-const auto jsb_GraphDelegate_finalize = &core::jsb_finalize<IGraphDelegate>;
-const auto jsb_GraphDelegate_onSuccess =
-    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onSuccess,
-                            const std::string&>;
-const auto jsb_GraphDelegate_onFailure =
-    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onFailure,
-                            const std::string&>;
-const auto jsb_GraphDelegate_onCancel =
-    &core::jsb_set_callback<IGraphDelegate, &IGraphDelegate::onCancel>;
+using Self = IGraphDelegate;
+
+// clang-format off
+constexpr auto finalize  = &core::makeFinalize<Self>;
+constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const std::string&>;
+constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
+constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
+// clang-format on
 } // namespace
 
-SE_BIND_FINALIZE_FUNC(jsb_GraphDelegate_finalize);
-SE_BIND_FUNC(jsb_GraphDelegate_onSuccess);
-SE_BIND_FUNC(jsb_GraphDelegate_onFailure);
-SE_BIND_FUNC(jsb_GraphDelegate_onCancel);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(onSuccess);
+SE_BIND_FUNC(onFailure);
+SE_BIND_FUNC(onCancel);
 
 bool register_ifacebook_graph_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -67,14 +66,16 @@ bool register_ifacebook_graph_delegate_manual(se::Object* globalObject) {
 
     auto cls =
         se::Class::create("IGraphDelegate", facebookObj, nullptr, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_GraphDelegate_finalize));
-    cls->defineFunction("onSuccess", _SE(jsb_GraphDelegate_onSuccess));
-    cls->defineFunction("onFailure", _SE(jsb_GraphDelegate_onFailure));
-    cls->defineFunction("onCancel", _SE(jsb_GraphDelegate_onCancel));
+    cls->defineFinalizeFunction(_SE(finalize));
+
+    EE_JSB_DEFINE_FUNCTION(cls, onSuccess);
+    EE_JSB_DEFINE_FUNCTION(cls, onFailure);
+    EE_JSB_DEFINE_FUNCTION(cls, onCancel);
 
     cls->install();
-    JSBClassType::registerClass<GraphDelegate>(cls);
-    core::handler = core::SharedPtrHandler<IGraphDelegate>::create(cls);
+
+    JSBClassType::registerClass<Self>(cls);
+    core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

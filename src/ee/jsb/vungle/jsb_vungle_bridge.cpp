@@ -8,26 +8,28 @@
 
 #include "ee/jsb/vungle/jsb_vungle_bridge.hpp"
 
-#include <ee/Vungle.hpp>
-
+#include "ee/Vungle.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace vungle {
-se::Class* __jsb_Vungle_class = nullptr;
+namespace {
+se::Class* clazz = nullptr;
 
-const auto jsb_Vungle_finalize = &core::jsb_finalize<Vungle>;
-const auto jsb_Vungle_constructor = &core::jsb_constructor<Vungle>;
-const auto jsb_Vungle_createRewardedVideo =
-    &core::jsb_method_get_on_ui_thread<Vungle, &Vungle::createRewardedVideo,
-                                       std::shared_ptr<IRewardedVideo>,
-                                       const std::string&>;
+using Self = Vungle;
 
-SE_BIND_FINALIZE_FUNC(jsb_Vungle_finalize)
-SE_BIND_CTOR(jsb_Vungle_constructor, __jsb_Vungle_class, jsb_Vungle_finalize)
-SE_BIND_FUNC(jsb_Vungle_createRewardedVideo)
+// clang-format off
+constexpr auto constructor         = &core::makeConstructor<Self>;
+constexpr auto finalize            = &core::makeFinalize<Self>;
+constexpr auto createRewardedVideo = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createRewardedVideo>;
+// clang-format on
+
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(createRewardedVideo)
+} // namespace
 
 bool register_vungle_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
@@ -35,18 +37,16 @@ bool register_vungle_bridge_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("vungle", eeObj, &vungleObj);
 
-    auto cls = se::Class::create("Vungle", vungleObj, nullptr,
-                                 _SE(jsb_Vungle_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_Vungle_finalize));
+    auto cls =
+        se::Class::create("Vungle", vungleObj, nullptr, _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("createRewardedVideo",
-                        _SE(jsb_Vungle_createRewardedVideo));
+    EE_JSB_DEFINE_FUNCTION(cls, createRewardedVideo);
 
     cls->install();
 
-    JSBClassType::registerClass<Vungle>(cls);
-
-    __jsb_Vungle_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

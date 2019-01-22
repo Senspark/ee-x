@@ -21,68 +21,9 @@ namespace ee {
 namespace facebook {
 namespace {
 se::Class* clazz = nullptr;
-} // namespace
-std::unordered_map<std::shared_ptr<facebook::IBridge>, se::Object*>
-    __jsb_s_fbBridges;
-std::vector<std::shared_ptr<facebook::IBridge>> __jsb_s_fbBridgeArchive;
-} // namespace facebook
 
-namespace core {
-template <>
-std::shared_ptr<facebook::IBridge> get_value(const se::Value& value) {
-    auto itemPtr =
-        static_cast<facebook::IBridge*>(value.toObject()->getPrivateData());
-    auto iter = std::find_if(
-        facebook::__jsb_s_fbBridgeArchive.cbegin(),
-        facebook::__jsb_s_fbBridgeArchive.cend(),
-        [=](const std::shared_ptr<facebook::IBridge>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_fbBridgeArchive.cend()) {
-        return *iter;
-    } else {
-        return std::shared_ptr<facebook::IBridge>(itemPtr);
-    }
-}
-
-template <>
-void set_value(se::Value& value, std::shared_ptr<facebook::IBridge> input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        if (facebook::__jsb_s_fbBridges.count(input) != 0) {
-            obj = facebook::__jsb_s_fbBridges.at(input);
-        } else {
-            facebook::__jsb_s_fbBridgeArchive.push_back(input);
-            obj = se::Object::createObjectWithClass(facebook::clazz);
-            obj->setPrivateData(input.get());
-        }
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
-}
-
-template <>
-bool jsb_finalize<facebook::IBridge>(se::State& s) {
-    auto itemPtr = static_cast<facebook::IBridge*>(s.nativeThisObject());
-    auto iter = std::find_if(
-        facebook::__jsb_s_fbBridgeArchive.cbegin(),
-        facebook::__jsb_s_fbBridgeArchive.cend(),
-        [=](const std::shared_ptr<facebook::IBridge>& ptr) -> bool {
-            return itemPtr == ptr.get();
-        });
-    if (iter != facebook::__jsb_s_fbBridgeArchive.cend()) {
-        facebook::__jsb_s_fbBridgeArchive.erase(iter);
-    } else {
-        delete itemPtr;
-    }
-    return true;
-}
-} // namespace core
-
-namespace facebook {
-namespace {
 using Self = IBridge;
+
 // clang-format off
 constexpr auto finalize              = &core::makeFinalize<Self>;
 constexpr auto isLoggedIn            = &core::makeInstanceMethod<&Self::isLoggedIn>;
@@ -130,22 +71,24 @@ bool register_ifacebook_bridge_manual(se::Object* globalObject) {
 
     auto cls = se::Class::create("IBridge", facebookObj, nullptr, nullptr);
     cls->defineFinalizeFunction(_SE(finalize));
-    cls->defineFunction("isLoggedIn", _SE(isLoggedIn));
-    cls->defineFunction("logIn", _SE(logIn));
-    cls->defineFunction("createLoginDelegate", _SE(createLoginDelegate));
-    cls->defineFunction("logOut", _SE(logOut));
-    cls->defineFunction("getAccessToken", _SE(getAccessToken));
-    cls->defineFunction("shareLinkContent", _SE(shareLinkContent));
-    cls->defineFunction("sharePhotoContent", _SE(sharePhotoContent));
-    cls->defineFunction("shareVideoContent", _SE(shareVideoContent));
-    cls->defineFunction("createShareDelegate", _SE(createShareDelegate));
-    cls->defineFunction("graphRequest", _SE(graphRequest));
-    cls->defineFunction("createGraphDelegate", _SE(createGraphDelegate));
-    cls->defineFunction("sendRequest", _SE(sendRequest));
-    cls->defineFunction("createRequestDelegate", _SE(createRequestDelegate));
+
+    EE_JSB_DEFINE_FUNCTION(cls, isLoggedIn);
+    EE_JSB_DEFINE_FUNCTION(cls, logIn);
+    EE_JSB_DEFINE_FUNCTION(cls, createLoginDelegate);
+    EE_JSB_DEFINE_FUNCTION(cls, logOut);
+    EE_JSB_DEFINE_FUNCTION(cls, getAccessToken);
+    EE_JSB_DEFINE_FUNCTION(cls, shareLinkContent);
+    EE_JSB_DEFINE_FUNCTION(cls, sharePhotoContent);
+    EE_JSB_DEFINE_FUNCTION(cls, shareVideoContent);
+    EE_JSB_DEFINE_FUNCTION(cls, createShareDelegate);
+    EE_JSB_DEFINE_FUNCTION(cls, graphRequest);
+    EE_JSB_DEFINE_FUNCTION(cls, createGraphDelegate);
+    EE_JSB_DEFINE_FUNCTION(cls, sendRequest);
+    EE_JSB_DEFINE_FUNCTION(cls, createRequestDelegate);
+
     cls->install();
 
-    JSBClassType::registerClass<IBridge>(cls);
+    JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();

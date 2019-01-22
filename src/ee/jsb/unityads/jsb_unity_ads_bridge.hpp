@@ -13,9 +13,7 @@
 
 namespace ee {
 namespace unityads {
-
 bool register_unity_ads_bridge_manual(se::Object* object);
-
 } // namespace unityads
 } // namespace ee
 

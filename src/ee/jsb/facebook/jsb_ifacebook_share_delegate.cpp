@@ -36,19 +36,20 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<facebook::IShareDelegate>(se::State& s) {
-    return handler->finalize(s);
+bool jsb_finalize<facebook::IShareDelegate>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
 using Self = IShareDelegate;
+
 // clang-format off
 constexpr auto finalize  = &core::makeFinalize<Self>;
-constexpr auto onSuccess = &core::jsb_set_callback<IShareDelegate, &Self::onSuccess, const std::string&>;
-constexpr auto onFailure = &core::jsb_set_callback<IShareDelegate, &Self::onFailure, const std::string&>;
-constexpr auto onCancel  = &core::jsb_set_callback<IShareDelegate, &Self::onCancel>;
+constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const std::string&>;
+constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
+constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
 // clang-format on
 } // namespace
 
@@ -72,8 +73,8 @@ bool register_ifacebook_share_delegate_manual(se::Object* globalObject) {
 
     cls->install();
 
-    JSBClassType::registerClass<IShareDelegate>(cls);
-    core::handler = core::SharedPtrHandler<IShareDelegate>::create(cls);
+    JSBClassType::registerClass<Self>(cls);
+    core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

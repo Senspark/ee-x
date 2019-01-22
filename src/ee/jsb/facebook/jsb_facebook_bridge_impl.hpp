@@ -13,7 +13,7 @@
 namespace ee {
 namespace facebook {
 bool register_facebook_bridge_impl_manual(se::Object* object);
-}
+} // namespace facebook
 } // namespace ee
 
 #endif /* jsb_facebook_bridge_impl_hpp */

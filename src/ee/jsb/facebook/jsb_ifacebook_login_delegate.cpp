@@ -37,28 +37,27 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<facebook::ILoginDelegate>(se::State& s) {
-    return handler->finalize(s);
+bool jsb_finalize<facebook::ILoginDelegate>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-const auto jsb_LoginDelegate_finalize = &core::jsb_finalize<ILoginDelegate>;
-const auto jsb_LoginDelegate_onSuccess =
-    &core::jsb_set_callback<ILoginDelegate, &ILoginDelegate::onSuccess,
-                            const std::shared_ptr<IAccessToken>&>;
-const auto jsb_LoginDelegate_onFailure =
-    &core::jsb_set_callback<ILoginDelegate, &ILoginDelegate::onFailure,
-                            const std::string&>;
-const auto jsb_LoginDelegate_onCancel =
-    &core::jsb_set_callback<ILoginDelegate, &ILoginDelegate::onCancel>;
+using Self = ILoginDelegate;
+
+// clang-format off
+constexpr auto finalize  = &core::makeFinalize<Self>;
+constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const std::shared_ptr<IAccessToken>&>;
+constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
+constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
+// clang-format on
 } // namespace
 
-SE_BIND_FINALIZE_FUNC(jsb_LoginDelegate_finalize);
-SE_BIND_FUNC(jsb_LoginDelegate_onSuccess);
-SE_BIND_FUNC(jsb_LoginDelegate_onFailure);
-SE_BIND_FUNC(jsb_LoginDelegate_onCancel);
+SE_BIND_FINALIZE_FUNC(finalize);
+SE_BIND_FUNC(onSuccess);
+SE_BIND_FUNC(onFailure);
+SE_BIND_FUNC(onCancel);
 
 bool register_ifacebook_login_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;
@@ -68,15 +67,16 @@ bool register_ifacebook_login_delegate_manual(se::Object* globalObject) {
 
     auto cls =
         se::Class::create("ILoginDelegate", facebookObj, nullptr, nullptr);
-    cls->defineFinalizeFunction(_SE(jsb_LoginDelegate_finalize));
-    cls->defineFunction("onSuccess", _SE(jsb_LoginDelegate_onSuccess));
-    cls->defineFunction("onFailure", _SE(jsb_LoginDelegate_onFailure));
-    cls->defineFunction("onCancel", _SE(jsb_LoginDelegate_onCancel));
+    cls->defineFinalizeFunction(_SE(finalize));
+
+    EE_JSB_DEFINE_FUNCTION(cls, onSuccess);
+    EE_JSB_DEFINE_FUNCTION(cls, onFailure);
+    EE_JSB_DEFINE_FUNCTION(cls, onCancel);
 
     cls->install();
 
-    JSBClassType::registerClass<ILoginDelegate>(cls);
-    core::handler = core::SharedPtrHandler<ILoginDelegate>::create(cls);
+    JSBClassType::registerClass<Self>(cls);
+    core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

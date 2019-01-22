@@ -188,8 +188,8 @@ decltype(auto) makeObject(const se::ValueArray& args) {
         args, std::make_index_sequence<sizeof...(Args)>());
 }
 
-template <typename InstanceType>
-void jsb_dispose_callback(InstanceType* instance) {
+template <class Instance>
+void makeDisposeCallback(Instance* instance) {
     se::Object* seObj = nullptr;
 
     auto iter = se::NativePtrToObjectMap::find(instance);
@@ -247,20 +247,25 @@ template <typename T, typename... Args>
     return makeConstructor<T, Args...>(s);
 }
 
-template <typename T, typename... Args>
-bool jsb_constructor_with_dispose_callback(se::State& s) {
-    auto argc = sizeof...(Args);
-    const auto& args = s.args();
-
-    if (argc == args.size()) {
-        auto cObj = makeObject<T, Args...>(args);
-        cObj->setDisposeCallback(&jsb_dispose_callback<T>);
-        s.thisObject()->setPrivateData(cObj);
+template <class Instance, class... Args>
+bool makeConstructorWithDisposeCallback(se::State& state) {
+    constexpr auto Arity = sizeof...(Args);
+    auto&& args = state.args();
+    if (Arity == args.size()) {
+        auto object = makeObject<Instance, Args...>(args).release();
+        object->setDisposeCallback(&makeDisposeCallback<Instance>);
+        state.thisObject()->setPrivateData(object);
         return true;
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %d.", argc,
-                    2);
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
+                    args.size(), Arity);
     return false;
+}
+
+template <typename T, typename... Args>
+[[deprecated("Use makeConstructorWithDisposeCallback")]] bool
+jsb_constructor_with_dispose_callback(se::State& s) {
+    return makeConstructorWithDisposeCallback<T, Args...>(s);
 }
 
 template <class T>

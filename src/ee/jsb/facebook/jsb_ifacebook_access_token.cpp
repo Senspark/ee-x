@@ -33,7 +33,7 @@ void set_value(se::Value& value,
 template <>
 void set_value(se::Value& value,
                std::shared_ptr<facebook::IAccessToken>& input) {
-    set_value<std::shared_ptr<facebook::IAccessToken>>(value, input);
+    handler->setValue(value, input);
 }
 
 template <>
@@ -62,12 +62,12 @@ constexpr auto getToken         = &core::makeInstanceMethod<&Self::getToken>;
 constexpr auto getApplicationId = &core::makeInstanceMethod<&Self::getApplicationId>;
 constexpr auto getUserId        = &core::makeInstanceMethod<&Self::getUserId>;
 // clang-format on
-} // namespace
 
 SE_BIND_FINALIZE_FUNC(finalize);
 SE_BIND_FUNC(getToken);
 SE_BIND_FUNC(getApplicationId);
 SE_BIND_FUNC(getUserId);
+} // namespace
 
 se::Class* getIAccessTokenClass() {
     CCASSERT(core::handler != nullptr, "__jsb_AccessToken_class is null");

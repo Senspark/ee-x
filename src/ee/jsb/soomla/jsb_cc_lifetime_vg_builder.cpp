@@ -23,6 +23,7 @@ void set_value(se::Value& value, soomla::CCLifetimeVGBuilder& input) {
 } // namespace ee
 
 namespace soomla {
+namespace {
 se::Class* clazz = nullptr;
 
 using Self = CCLifetimeVGBuilder;
@@ -44,6 +45,7 @@ SE_BIND_FUNC(setDescription)
 SE_BIND_FUNC(setName)
 SE_BIND_FUNC(setPurchaseType)
 SE_BIND_FUNC(build)
+} // namespace
 
 bool register_cc_lifetime_vg_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;

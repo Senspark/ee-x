@@ -23,6 +23,7 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPack* input) {
 } // namespace ee
 
 namespace soomla {
+namespace {
 using Self = CCVirtualCurrencyPack;
 
 // clang-format off
@@ -34,6 +35,7 @@ constexpr auto canAfford         = &ee::core::makeInstanceMethod<&Self::canAffor
 SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_FUNC(getCurrencyAmount)
 SE_BIND_FUNC(canAfford)
+} // namespace
 
 bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;

@@ -25,12 +25,6 @@ std::shared_ptr<facebook::IRequestDelegate> get_value(const se::Value& value) {
 
 template <>
 void set_value(se::Value& value,
-               std::shared_ptr<facebook::IRequestDelegate> input) {
-    handler->setValue(value, input);
-}
-
-template <>
-void set_value(se::Value& value,
                std::shared_ptr<facebook::IRequestDelegate>& input) {
     handler->setValue(value, input);
 }
@@ -51,12 +45,12 @@ constexpr auto onSuccess = &core::jsb_set_callback<Self, &Self::onSuccess, const
 constexpr auto onFailure = &core::jsb_set_callback<Self, &Self::onFailure, const std::string&>;
 constexpr auto onCancel  = &core::jsb_set_callback<Self, &Self::onCancel>;
 // clang-format on
-} // namespace
 
 SE_BIND_FINALIZE_FUNC(finalize);
 SE_BIND_FUNC(onSuccess);
 SE_BIND_FUNC(onFailure);
 SE_BIND_FUNC(onCancel);
+} // namespace
 
 bool register_ifacebook_request_delegate_manual(se::Object* globalObject) {
     se::Object* eeObj = nullptr;

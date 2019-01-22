@@ -15,6 +15,7 @@
 
 namespace ee {
 namespace ironsource {
+namespace {
 se::Class* clazz = nullptr;
 
 using Self = IronSource;
@@ -32,6 +33,7 @@ SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(createRewardedVideo)
 SE_BIND_FUNC(createInterstitialAd)
+} // namespace
 
 bool register_iron_source_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;

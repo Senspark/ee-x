@@ -15,7 +15,7 @@ namespace ads {
 se::Class* getIRewardedVideoClass();
 
 bool register_rewarded_video_manual(se::Object* object);
-}
+} // namespace ads
 } // namespace ee
 
 #endif /* JSB_REWARDED_VIDEO_HPP__ */

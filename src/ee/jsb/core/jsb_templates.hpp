@@ -624,7 +624,7 @@ public:
         }
     }
 
-    void setValue(se::Value& value, std::shared_ptr<T> input) {
+    void setValue(se::Value& value, const std::shared_ptr<T>& input) {
         if (input != nullptr) {
             se::Object* obj = nullptr;
             if (delegates_.count(input) != 0) {

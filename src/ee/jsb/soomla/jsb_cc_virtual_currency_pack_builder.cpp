@@ -22,6 +22,7 @@ void set_value(se::Value& value, soomla::CCVirtualCurrencyPackBuilder& input) {
 } // namespace ee
 
 namespace soomla {
+namespace {
 se::Class* clazz = nullptr;
 
 using Self = CCVirtualCurrencyPackBuilder;
@@ -47,6 +48,7 @@ SE_BIND_FUNC(setCurrencyAmount)
 SE_BIND_FUNC(setCurrencyItemId)
 SE_BIND_FUNC(setPurchaseType)
 SE_BIND_FUNC(build)
+} // namespace
 
 bool register_cc_virtual_currency_pack_builder_manual(se::Object* globalObj) {
     se::Object* __soomlaObj = nullptr;

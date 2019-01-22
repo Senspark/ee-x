@@ -80,6 +80,7 @@ bool register_native_ad_layout_manual(se::Object* globalObj) {
     EE_JSB_DEFINE_FUNCTION(cls, setStore);
 
     cls->install();
+
     JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 

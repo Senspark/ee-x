@@ -75,6 +75,7 @@ bool register_admob_bridge_manual(se::Object* globalObj) {
     EE_JSB_DEFINE_FUNCTION(cls, createRewardedVideo);
 
     cls->install();
+
     JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 

@@ -9,31 +9,35 @@
 
 #include <unordered_map>
 
-#include <ee/Ads.hpp>
-
+#include "ee/ads/MultiInterstitialAd.hpp"
 #include "ee/jsb/ads/jsb_interstitial_ad.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, MultiInterstitialAd& input) {
+    set_value_from_pointer(value, &input);
+}
+} // namespace core
+
 namespace ads {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_Multi_InterstitialAd_class = nullptr;
+using Self = MultiInterstitialAd;
 
-constexpr auto jsb_Multi_InterstitialAd_finalize =
-    &core::jsb_finalize<MultiInterstitialAd>;
-constexpr auto jsb_Multi_InterstitialAd_contructor =
-    &core::jsb_constructor<MultiInterstitialAd>;
-constexpr auto jsb_Multi_InterstitialAd_addItem =
-    &core::jsb_method_call_on_ui_thread<MultiInterstitialAd,
-                                        &MultiInterstitialAd::addItem,
-                                        std::shared_ptr<IInterstitialAd>>;
+// clang-format off
+constexpr auto finalize    = &core::makeFinalize<Self>;
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto addItem     = &core::makeInstanceMethod<&Self::addItem>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_Multi_InterstitialAd_finalize)
-SE_BIND_CTOR(jsb_Multi_InterstitialAd_contructor,
-             __jsb_Multi_InterstitialAd_class,
-             jsb_Multi_InterstitialAd_finalize)
-SE_BIND_FUNC(jsb_Multi_InterstitialAd_addItem)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(addItem)
+} // namespace
 
 bool register_multi_interstitial_ad_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
@@ -43,19 +47,17 @@ bool register_multi_interstitial_ad_manual(se::Object* globalObj) {
 
     auto cls = se::Class::create("MultiInterstitialAd", adsObj,
                                  getIInterstitialClass()->getProto(),
-                                 _SE(jsb_Multi_InterstitialAd_contructor));
-    cls->defineFinalizeFunction(_SE(jsb_Multi_InterstitialAd_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("addItem", _SE(jsb_Multi_InterstitialAd_addItem));
+    EE_JSB_DEFINE_FUNCTION(cls, addItem);
 
     cls->install();
 
-    JSBClassType::registerClass<MultiInterstitialAd>(cls);
-
-    __jsb_Multi_InterstitialAd_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace ads

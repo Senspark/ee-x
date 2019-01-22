@@ -9,31 +9,35 @@
 
 #include <unordered_map>
 
-#include <ee/Ads.hpp>
-
+#include "ee/ads/MultiRewardedVideo.hpp"
 #include "ee/jsb/ads/jsb_rewarded_video.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, MultiRewardedVideo& input) {
+    set_value_from_pointer(value, &input);
+}
+} // namespace core
+
 namespace ads {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_Multi_Rewarded_Video_class = nullptr;
+using Self = MultiRewardedVideo;
 
-constexpr auto jsb_Multi_Rewarded_Video_finalize =
-    &core::jsb_finalize<MultiRewardedVideo>;
-constexpr auto jsb_Multi_Rewarded_Video_contructor =
-    &core::jsb_constructor<MultiRewardedVideo>;
-constexpr auto jsb_Multi_Rewarded_Video_addItem =
-    &core::jsb_method_call_on_ui_thread<MultiRewardedVideo,
-                                        &MultiRewardedVideo::addItem,
-                                        std::shared_ptr<IRewardedVideo>>;
+// clang-format off
+constexpr auto finalize    = &core::makeFinalize<Self>;
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto addItem     = &core::makeInstanceMethod<&Self::addItem>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_Multi_Rewarded_Video_finalize)
-SE_BIND_CTOR(jsb_Multi_Rewarded_Video_contructor,
-             __jsb_Multi_Rewarded_Video_class,
-             jsb_Multi_Rewarded_Video_finalize)
-SE_BIND_FUNC(jsb_Multi_Rewarded_Video_addItem)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(addItem)
+} // namespace
 
 bool register_multi_rewarded_video_manual(se::Object* globalObj) {
     se::Object* adsObj = nullptr;
@@ -43,19 +47,17 @@ bool register_multi_rewarded_video_manual(se::Object* globalObj) {
 
     auto cls = se::Class::create("MultiRewardedVideo", adsObj,
                                  getIRewardedVideoClass()->getProto(),
-                                 _SE(jsb_Multi_Rewarded_Video_contructor));
-    cls->defineFinalizeFunction(_SE(jsb_Multi_Rewarded_Video_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("addItem", _SE(jsb_Multi_Rewarded_Video_addItem));
+    EE_JSB_DEFINE_FUNCTION(cls, addItem);
 
     cls->install();
 
-    JSBClassType::registerClass<MultiRewardedVideo>(cls);
-
-    __jsb_Multi_Rewarded_Video_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
-
     return true;
 }
 } // namespace ads

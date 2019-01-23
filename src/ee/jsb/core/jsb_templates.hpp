@@ -158,6 +158,9 @@ template <auto Function>
 using FunctionArgs =
     typename decltype(internal::makeFunctionTraits(Function))::Args;
 
+template <auto Function>
+constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
+
 template <auto Property>
 using PropertyInstance =
     typename decltype(internal::makePropertyTraits(Property))::Instance;
@@ -165,9 +168,6 @@ using PropertyInstance =
 template <auto Property>
 using PropertyType =
     typename decltype(internal::makePropertyTraits(Property))::Property;
-
-template <auto Function>
-constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
 
 template <class T>
 using UnifyType =
@@ -401,6 +401,15 @@ bool makeInstanceMethod(se::State& state) {
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
                     args.size(), Arity);
     return false;
+}
+
+template <auto Function>
+bool makeMethod(se::State& state) {
+    if constexpr (std::is_member_function_pointer_v<decltype(Function)>) {
+        return makeInstanceMethod<Function>(state);
+    } else {
+        return makeStaticMethod<Function>(state);
+    }
 }
 
 template <auto Function>

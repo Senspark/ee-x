@@ -63,10 +63,6 @@ bool Self::initialize() {
     return true;
 }
 
-void Self::fetchJS(const FetchCallback& callback) {
-    fetch(false, callback);
-}
-
 void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
     auto guard = std::make_shared<core::ScopeGuard>(std::bind(callback, false));
     if (not initialized_) {

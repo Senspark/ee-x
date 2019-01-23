@@ -72,6 +72,7 @@ public:
     /// alphabetic character. Some event names are reserved.
     /// @param[in] dict Dictionary of Parameter structures.
     void logEvent(const std::string& name, const TrackingDict& dict = {});
+
 private:
     bool initialized_;
 };

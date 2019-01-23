@@ -338,5 +338,19 @@ void set_value(se::Value& value, std::vector<std::string> input) {
     auto obj = create_JSON_object(std::move(input));
     value.setObject(obj);
 }
+
+namespace internal {
+void callFunction(const se::Value& jsThis, const se::Value& jsFunc,
+                  const se::ValueArray& args) {
+    se::ScriptEngine::getInstance()->clearException();
+    se::AutoHandleScope hs;
+    se::Object* thisObj = jsThis.isObject() ? jsThis.toObject() : nullptr;
+    auto funcObj = jsFunc.toObject();
+    auto succeed = funcObj->call(args, thisObj);
+    if (!succeed) {
+        se::ScriptEngine::getInstance()->clearException();
+    }
+}
+} // namespace internal
 } // namespace core
 } // namespace ee

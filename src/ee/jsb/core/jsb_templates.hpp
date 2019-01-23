@@ -83,15 +83,7 @@ template <std::size_t N, class T>
 decltype(auto) makeTuple(const std::vector<T>& args) {
     return makeTupleImpl(args, std::make_index_sequence<N>());
 }
-} // namespace internal
 
-template <typename... Args>
-se::ValueArray to_value_array(Args&&... values) {
-    se::ValueArray args = {internal::to_value(std::forward<Args>(values))...};
-    return args;
-}
-
-namespace internal {
 /// https://stackoverflow.com/questions/36797770/get-function-parameters-count
 template <class ResultType, class... ArgTypes>
 struct FunctionTraits {
@@ -144,6 +136,9 @@ template <class Property, class Instance>
 constexpr auto makePropertyTraits(Property(Instance::*)) {
     return MemberPropertyTraits<Property, Instance>();
 }
+
+void callFunction(const se::Value& jsThis, const se::Value& jsFunc,
+                  const se::ValueArray& args);
 } // namespace internal
 
 template <auto Function>
@@ -190,17 +185,9 @@ struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
         se::Value jsFunc(arg);
         jsFunc.toObject()->root();
         auto lambda = [=](auto&&... values) {
-            se::ScriptEngine::getInstance()->clearException();
-            se::AutoHandleScope hs;
-            auto&& args =
-                to_value_array(std::forward<decltype(values)>(values)...);
-            se::Object* thisObj =
-                jsThis.isObject() ? jsThis.toObject() : nullptr;
-            auto funcObj = jsFunc.toObject();
-            auto succeed = funcObj->call(args, thisObj);
-            if (!succeed) {
-                se::ScriptEngine::getInstance()->clearException();
-            }
+            auto&& args = {
+                internal::to_value(std::forward<decltype(values)>(values))...};
+            internal::callFunction(jsThis, jsFunc, args);
         };
         return lambda;
     }

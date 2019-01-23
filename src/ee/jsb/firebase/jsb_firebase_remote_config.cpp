@@ -9,75 +9,46 @@
 #include "ee/jsb/firebase/jsb_firebase_remote_config.hpp"
 
 #include "ee/Firebase.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace firebase {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_FirebaseRemoteConfig_class = nullptr;
+using Self = RemoteConfig;
 
-const auto jsb_FirebaseRemoteConfig_finalize =
-    &core::jsb_finalize<FirebaseRemoteConfig>;
-const auto jsb_FirebaseRemoteConfig_constructor =
-    &core::jsb_constructor<FirebaseRemoteConfig>;
-const auto jsb_FirebaseRemoteConfig_initialize =
-    &core::jsb_method_get<FirebaseRemoteConfig,
-                          &FirebaseRemoteConfig::initialize, bool>;
-const auto jsb_FirebaseRemoteConfig_fetchJS =
-    &core::jsb_set_callback<FirebaseRemoteConfig,
-                            &FirebaseRemoteConfig::fetchJS, bool>;
-const auto jsb_FirebaseRemoteConfig_setDefaultBool =
-    &core::jsb_method_call<FirebaseRemoteConfig,
-                           &FirebaseRemoteConfig::setDefaultBool,
-                           const std::string&, bool>;
-const auto jsb_FirebaseRemoteConfig_setDefaultLong =
-    &core::jsb_method_call<FirebaseRemoteConfig,
-                           &FirebaseRemoteConfig::setDefaultLong,
-                           const std::string&, std::int64_t>;
-const auto jsb_FirebaseRemoteConfig_setDefaultDouble =
-    &core::jsb_method_call<FirebaseRemoteConfig,
-                           &FirebaseRemoteConfig::setDefaultDouble,
-                           const std::string&, double>;
-const auto jsb_FirebaseRemoteConfig_setDefaultString =
-    &core::jsb_method_call<FirebaseRemoteConfig,
-                           &FirebaseRemoteConfig::setDefaultString,
-                           const std::string&, const std::string&>;
-const auto jsb_FirebaseRemoteConfig_flushDefaults =
-    &core::jsb_method_call<FirebaseRemoteConfig,
-                           &FirebaseRemoteConfig::flushDefaults>;
-const auto jsb_FirebaseRemoteConfig_getBool =
-    &core::jsb_method_get<FirebaseRemoteConfig, &FirebaseRemoteConfig::getBool,
-                          bool, const std::string&>;
-const auto jsb_FirebaseRemoteConfig_getLong =
-    &core::jsb_method_get<FirebaseRemoteConfig, &FirebaseRemoteConfig::getLong,
-                          std::int64_t, const std::string&>;
-const auto jsb_FirebaseRemoteConfig_getDouble =
-    &core::jsb_method_get<FirebaseRemoteConfig,
-                          &FirebaseRemoteConfig::getDouble, double,
-                          const std::string&>;
-const auto jsb_FirebaseRemoteConfig_getString =
-    &core::jsb_method_get<FirebaseRemoteConfig,
-                          &FirebaseRemoteConfig::getString, const std::string&,
-                          const std::string&>;
+// clang-format off
+constexpr auto constructor      = &core::makeConstructor<Self>;
+constexpr auto finalize         = &core::makeFinalize<Self>;
+constexpr auto initialize       = &core::makeMethod<&Self::initialize>;
+constexpr auto fetch            = &core::makeMethod<&Self::fetch>;
+constexpr auto setDefaultBool   = &core::makeMethod<&Self::setDefaultBool>;
+constexpr auto setDefaultLong   = &core::makeMethod<&Self::setDefaultLong>;
+constexpr auto setDefaultDouble = &core::makeMethod<&Self::setDefaultDouble>;
+constexpr auto setDefaultString = &core::makeMethod<&Self::setDefaultString>;
+constexpr auto flushDefaults    = &core::makeMethod<&Self::flushDefaults>;
+constexpr auto getBool          = &core::makeMethod<&Self::getBool>;
+constexpr auto getLong          = &core::makeMethod<&Self::getLong>;
+constexpr auto getDouble        = &core::makeMethod<&Self::getDouble>;
+constexpr auto getString        = &core::makeMethod<&Self::getString>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_FirebaseRemoteConfig_finalize)
-SE_BIND_CTOR(jsb_FirebaseRemoteConfig_constructor,
-             __jsb_FirebaseRemoteConfig_class,
-             jsb_FirebaseRemoteConfig_finalize)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_initialize)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_fetchJS)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultBool)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultLong)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultDouble)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_setDefaultString)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_flushDefaults)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getBool)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getLong)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getDouble)
-SE_BIND_FUNC(jsb_FirebaseRemoteConfig_getString)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(initialize)
+SE_BIND_FUNC(fetch)
+SE_BIND_FUNC(setDefaultBool)
+SE_BIND_FUNC(setDefaultLong)
+SE_BIND_FUNC(setDefaultDouble)
+SE_BIND_FUNC(setDefaultString)
+SE_BIND_FUNC(flushDefaults)
+SE_BIND_FUNC(getBool)
+SE_BIND_FUNC(getLong)
+SE_BIND_FUNC(getDouble)
+SE_BIND_FUNC(getString)
+} // namespace
 
 bool register_firebase_remote_config_manual(se::Object* globalObj) {
     se::Object* firebaseObj = nullptr;
@@ -86,31 +57,25 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
     auto cls = se::Class::create("FirebaseRemoteConfig", firebaseObj, nullptr,
-                                 _SE(jsb_FirebaseRemoteConfig_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_FirebaseRemoteConfig_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("initialize", _SE(jsb_FirebaseRemoteConfig_initialize));
-    cls->defineFunction("fetchJS", _SE(jsb_FirebaseRemoteConfig_fetchJS));
-    cls->defineFunction("setDefaultBool",
-                        _SE(jsb_FirebaseRemoteConfig_setDefaultBool));
-    cls->defineFunction("setDefaultLong",
-                        _SE(jsb_FirebaseRemoteConfig_setDefaultLong));
-    cls->defineFunction("setDefaultDouble",
-                        _SE(jsb_FirebaseRemoteConfig_setDefaultDouble));
-    cls->defineFunction("setDefaultString",
-                        _SE(jsb_FirebaseRemoteConfig_setDefaultString));
-    cls->defineFunction("flushDefaults",
-                        _SE(jsb_FirebaseRemoteConfig_flushDefaults));
-    cls->defineFunction("getBool", _SE(jsb_FirebaseRemoteConfig_getBool));
-    cls->defineFunction("getLong", _SE(jsb_FirebaseRemoteConfig_getLong));
-    cls->defineFunction("getDouble", _SE(jsb_FirebaseRemoteConfig_getDouble));
-    cls->defineFunction("getString", _SE(jsb_FirebaseRemoteConfig_getString));
+    EE_JSB_DEFINE_FUNCTION(cls, initialize);
+    EE_JSB_DEFINE_FUNCTION(cls, fetch);
+    EE_JSB_DEFINE_FUNCTION(cls, setDefaultBool);
+    EE_JSB_DEFINE_FUNCTION(cls, setDefaultLong);
+    EE_JSB_DEFINE_FUNCTION(cls, setDefaultDouble);
+    EE_JSB_DEFINE_FUNCTION(cls, setDefaultString);
+    EE_JSB_DEFINE_FUNCTION(cls, flushDefaults);
+    EE_JSB_DEFINE_FUNCTION(cls, getBool);
+    EE_JSB_DEFINE_FUNCTION(cls, getLong);
+    EE_JSB_DEFINE_FUNCTION(cls, getDouble);
+    EE_JSB_DEFINE_FUNCTION(cls, getString);
 
     cls->install();
 
-    JSBClassType::registerClass<FirebaseRemoteConfig>(cls);
-
-    __jsb_FirebaseRemoteConfig_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

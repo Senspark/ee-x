@@ -9,52 +9,36 @@
 #include "ee/jsb/firebase/jsb_firebase_analytics.hpp"
 
 #include "ee/Firebase.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
 namespace firebase {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class* __jsb_FirebaseAnalytics_class = nullptr;
+using Self = FirebaseAnalytics;
 
-const auto jsb_FirebaseAnalytics_finalize =
-    &core::jsb_finalize<FirebaseAnalytics>;
-const auto jsb_FirebaseAnalytics_constructor =
-    &core::jsb_constructor<FirebaseAnalytics>;
-const auto jsb_FirebaseAnalytics_initialize =
-    &core::jsb_method_get<FirebaseAnalytics, &FirebaseAnalytics::initialize,
-                          bool>;
-const auto jsb_FirebaseAnalytics_analyticsCollectionEnabled =
-    &core::jsb_method_call<FirebaseAnalytics,
-                           &FirebaseAnalytics::analyticsCollectionEnabled,
-                           bool>;
-const auto jsb_FirebaseAnalytics_setMinimumSessionDuration =
-    &core::jsb_method_call<FirebaseAnalytics,
-                           &FirebaseAnalytics::setMinimumSessionDuration,
-                           std::int64_t>;
-const auto jsb_FirebaseAnalytics_setSessionTimeoutDuration =
-    &core::jsb_method_call<FirebaseAnalytics,
-                           &FirebaseAnalytics::setSessionTimeoutDuration,
-                           std::int64_t>;
-const auto jsb_FirebaseAnalytics_setUserId =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::setUserId,
-                           const std::string&>;
-const auto jsb_FirebaseAnalytics_logEvent =
-    &core::jsb_method_call<FirebaseAnalytics, &FirebaseAnalytics::logEvent,
-                           const std::string&,
-                           std::unordered_map<std::string, std::string>>;
+// clang-format off
+constexpr auto finalize                   = &core::makeFinalize<Self>;
+constexpr auto constructor                = &core::makeConstructor<Self>;
+constexpr auto initialize                 = &core::makeMethod<&Self::initialize>;
+constexpr auto analyticsCollectionEnabled = &core::makeMethod<&Self::analyticsCollectionEnabled>;
+constexpr auto setMinimumSessionDuration  = &core::makeMethod<&Self::setMinimumSessionDuration>;
+constexpr auto setSessionTimeoutDuration  = &core::makeMethod<&Self::setSessionTimeoutDuration>;
+constexpr auto setUserId                  = &core::makeMethod<&Self::setUserId>;
+constexpr auto logEvent                   = &core::makeMethod<&Self::logEvent>;
+// clang-format on
 
-SE_BIND_FINALIZE_FUNC(jsb_FirebaseAnalytics_finalize)
-SE_BIND_CTOR(jsb_FirebaseAnalytics_constructor, __jsb_FirebaseAnalytics_class,
-             jsb_FirebaseAnalytics_finalize)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_initialize)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_analyticsCollectionEnabled)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_setMinimumSessionDuration)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_setSessionTimeoutDuration)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_setUserId)
-SE_BIND_FUNC(jsb_FirebaseAnalytics_logEvent)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_FUNC(initialize)
+SE_BIND_FUNC(analyticsCollectionEnabled)
+SE_BIND_FUNC(setMinimumSessionDuration)
+SE_BIND_FUNC(setSessionTimeoutDuration)
+SE_BIND_FUNC(setUserId)
+SE_BIND_FUNC(logEvent)
+} // namespace
 
 bool register_firebase_analytics_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
@@ -63,24 +47,20 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
     auto cls = se::Class::create("FirebaseAnalytics", firebaseObj, nullptr,
-                                 _SE(jsb_FirebaseAnalytics_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_FirebaseAnalytics_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("initialize", _SE(jsb_FirebaseAnalytics_initialize));
-    cls->defineFunction("analyticsCollectionEnabled",
-                        _SE(jsb_FirebaseAnalytics_analyticsCollectionEnabled));
-    cls->defineFunction("setMinimumSessionDuration",
-                        _SE(jsb_FirebaseAnalytics_setMinimumSessionDuration));
-    cls->defineFunction("setSessionTimeoutDuration",
-                        _SE(jsb_FirebaseAnalytics_setSessionTimeoutDuration));
-    cls->defineFunction("setUserId", _SE(jsb_FirebaseAnalytics_setUserId));
-    cls->defineFunction("logEvent", _SE(jsb_FirebaseAnalytics_logEvent));
+    EE_JSB_DEFINE_FUNCTION(cls, initialize);
+    EE_JSB_DEFINE_FUNCTION(cls, analyticsCollectionEnabled);
+    EE_JSB_DEFINE_FUNCTION(cls, setMinimumSessionDuration);
+    EE_JSB_DEFINE_FUNCTION(cls, setSessionTimeoutDuration);
+    EE_JSB_DEFINE_FUNCTION(cls, setUserId);
+    EE_JSB_DEFINE_FUNCTION(cls, logEvent);
 
     cls->install();
 
-    JSBClassType::registerClass<FirebaseAnalytics>(cls);
-
-    __jsb_FirebaseAnalytics_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

@@ -579,52 +579,50 @@ public:
     }
 
     std::shared_ptr<T> getValue(const se::Value& value) const {
-        auto delegatePtr = static_cast<T*>(value.toObject()->getPrivateData());
-        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
-                                 [=](const std::shared_ptr<T>& ptr) {
-                                     return delegatePtr == ptr.get();
-                                 });
-        if (iter != archive_.cend()) {
-            return *iter;
-        } else {
-            return std::shared_ptr<T>(delegatePtr);
+        auto ptr = static_cast<T*>(value.toObject()->getPrivateData());
+        auto&& iter = map_.find(ptr);
+        if (iter == map_.cend()) {
+            SE_REPORT_ERROR("Could not find shared_ptr.");
+            return nullptr;
         }
+        return iter->second;
     }
 
     void setValue(se::Value& value, const std::shared_ptr<T>& input) {
-        if (input != nullptr) {
-            se::Object* obj = nullptr;
-            if (delegates_.count(input) != 0) {
-                obj = delegates_.at(input);
-            } else {
-                archive_.push_back(input);
-                obj = se::Object::createObjectWithClass(clazz_);
-                obj->setPrivateData(input.get());
-            }
-            value.setObject(obj);
-        } else {
+        if (input == nullptr) {
             value.setNull();
+            return;
         }
+        se::Object* obj = nullptr;
+        auto ptr = input.get();
+        auto iter = se::NativePtrToObjectMap::find(ptr);
+        if (iter != se::NativePtrToObjectMap::end()) {
+            obj = iter->second;
+        } else {
+            map_.emplace(ptr, input);
+            obj = se::Object::createObjectWithClass(clazz_);
+            obj->setPrivateData(ptr);
+        }
+        value.setObject(obj);
     }
 
     bool finalize(se::State& s) {
-        auto delegatePtr = static_cast<T*>(s.nativeThisObject());
-        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
-                                 [=](const std::shared_ptr<T>& ptr) {
-                                     return delegatePtr == ptr.get();
-                                 });
-        if (iter != archive_.cend()) {
-            archive_.erase(iter);
+        auto ptr = static_cast<T*>(s.nativeThisObject());
+        auto&& iter = map_.find(ptr);
+        if (iter == map_.cend()) {
+            SE_REPORT_ERROR("Could not find raw pointer.");
+            delete ptr;
         } else {
-            delete delegatePtr;
+            map_.erase(iter);
         }
         return true;
     }
 
 private:
     se::Class* clazz_;
-    std::unordered_map<std::shared_ptr<T>, se::Object*> delegates_;
-    std::vector<std::shared_ptr<T>> archive_;
+
+    /// Keeps strong reference to shared_ptr elements.
+    std::unordered_map<T*, std::shared_ptr<T>> map_;
 };
 } // namespace core
 } // namespace ee

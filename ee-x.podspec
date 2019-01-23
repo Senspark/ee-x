@@ -699,6 +699,18 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/notification'
   end
+
+  spec.subspec 'jsb-recorder' do |s|
+    s.source_files =
+      'src/ee/jsb/jsb_recorder.*',
+      'src/ee/jsb/recorder/*'
+    s.public_header_files =
+      'src/ee/jsb/jsb_recorder.hpp',
+      'src/ee/jsb/recorder/*.hpp'
+
+    s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/recorder'
+  end
   
   spec.subspec 'jsb-unity-ads' do |s|
     s.source_files =

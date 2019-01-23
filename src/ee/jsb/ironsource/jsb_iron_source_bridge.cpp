@@ -24,8 +24,8 @@ using Self = IronSource;
 constexpr auto constructor          = &core::makeConstructor<Self>;
 constexpr auto finalize             = &core::makeFinalize<Self>;
 constexpr auto initialize           = &core::makeInstanceMethodOnUiThreadAndWait<&Self::initialize>;
-constexpr auto createRewardedVideo  = &core::makeInstanceMethodOnUiThread<&Self::createRewardedVideo>;
-constexpr auto createInterstitialAd = &core::makeInstanceMethodOnUiThread<&Self::createInterstitialAd>;
+constexpr auto createRewardedVideo  = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createRewardedVideo>;
+constexpr auto createInterstitialAd = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createInterstitialAd>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)

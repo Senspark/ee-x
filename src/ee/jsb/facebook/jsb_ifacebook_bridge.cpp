@@ -26,19 +26,19 @@ using Self = IBridge;
 
 // clang-format off
 constexpr auto finalize              = &core::makeFinalize<Self>;
-constexpr auto isLoggedIn            = &core::makeInstanceMethod<&Self::isLoggedIn>;
-constexpr auto logIn                 = &core::makeInstanceMethod<&Self::logIn>;
-constexpr auto createLoginDelegate   = &core::makeInstanceMethod<&Self::createLoginDelegate>;
-constexpr auto logOut                = &core::makeInstanceMethod<&Self::logOut>;
-constexpr auto getAccessToken        = &core::makeInstanceMethod<&Self::getAccessToken>;
-constexpr auto shareLinkContent      = &core::makeInstanceMethod<&Self::shareLinkContent>;
-constexpr auto sharePhotoContent     = &core::makeInstanceMethod<&Self::sharePhotoContent>;
-constexpr auto shareVideoContent     = &core::makeInstanceMethod<&Self::shareVideoContent>;
-constexpr auto createShareDelegate   = &core::makeInstanceMethod<&Self::createShareDelegate>;
-constexpr auto graphRequest          = &core::makeInstanceMethod<&Self::graphRequest>;
-constexpr auto createGraphDelegate   = &core::makeInstanceMethod<&Self::createGraphDelegate>;
-constexpr auto sendRequest           = &core::makeInstanceMethod<&Self::sendRequest>;
-constexpr auto createRequestDelegate = &core::makeInstanceMethod<&Self::createRequestDelegate>;
+constexpr auto isLoggedIn            = &core::makeMethod<&Self::isLoggedIn>;
+constexpr auto logIn                 = &core::makeMethod<&Self::logIn>;
+constexpr auto createLoginDelegate   = &core::makeMethod<&Self::createLoginDelegate>;
+constexpr auto logOut                = &core::makeMethod<&Self::logOut>;
+constexpr auto getAccessToken        = &core::makeMethod<&Self::getAccessToken>;
+constexpr auto shareLinkContent      = &core::makeMethod<&Self::shareLinkContent>;
+constexpr auto sharePhotoContent     = &core::makeMethod<&Self::sharePhotoContent>;
+constexpr auto shareVideoContent     = &core::makeMethod<&Self::shareVideoContent>;
+constexpr auto createShareDelegate   = &core::makeMethod<&Self::createShareDelegate>;
+constexpr auto graphRequest          = &core::makeMethod<&Self::graphRequest>;
+constexpr auto createGraphDelegate   = &core::makeMethod<&Self::createGraphDelegate>;
+constexpr auto sendRequest           = &core::makeMethod<&Self::sendRequest>;
+constexpr auto createRequestDelegate = &core::makeMethod<&Self::createRequestDelegate>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize);

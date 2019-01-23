@@ -158,6 +158,9 @@ template <auto Function>
 using FunctionArgs =
     typename decltype(internal::makeFunctionTraits(Function))::Args;
 
+template <auto Function>
+constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
+
 template <auto Property>
 using PropertyInstance =
     typename decltype(internal::makePropertyTraits(Property))::Instance;
@@ -165,9 +168,6 @@ using PropertyInstance =
 template <auto Property>
 using PropertyType =
     typename decltype(internal::makePropertyTraits(Property))::Property;
-
-template <auto Function>
-constexpr auto FunctionArity = std::tuple_size_v<FunctionArgs<Function>>;
 
 template <class T>
 using UnifyType =
@@ -404,6 +404,16 @@ bool makeInstanceMethod(se::State& state) {
 }
 
 template <auto Function>
+bool makeMethod(se::State& state) {
+    if constexpr (std::is_member_function_pointer_v<decltype(Function)>) {
+        return makeInstanceMethod<Function>(state);
+    } else {
+        return makeStaticMethod<Function>(state);
+    }
+}
+
+template <auto Function, class = std::enable_if_t<
+                             std::is_same_v<FunctionResult<Function>, void>>>
 bool makeInstanceMethodOnUiThread(se::State& state) {
     constexpr auto Arity = FunctionArity<Function>;
     auto&& args = state.args();
@@ -412,13 +422,10 @@ bool makeInstanceMethodOnUiThread(se::State& state) {
         using Instance = FunctionInstance<Function>;
         auto&& instance = static_cast<Instance*>(state.nativeThisObject());
         using Result = FunctionResult<Function>;
-        if constexpr (std::is_same_v<Result, void>) {
-            runOnUiThread([jsThis, instance, args] {
-                callInstanceFunction<Function>(jsThis, instance, args);
-            });
-        } else {
-            return false;
-        }
+        static_assert(std::is_same_v<Result, void>);
+        runOnUiThread([jsThis, instance, args] {
+            callInstanceFunction<Function>(jsThis, instance, args);
+        });
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",
@@ -572,52 +579,50 @@ public:
     }
 
     std::shared_ptr<T> getValue(const se::Value& value) const {
-        auto delegatePtr = static_cast<T*>(value.toObject()->getPrivateData());
-        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
-                                 [=](const std::shared_ptr<T>& ptr) {
-                                     return delegatePtr == ptr.get();
-                                 });
-        if (iter != archive_.cend()) {
-            return *iter;
-        } else {
-            return std::shared_ptr<T>(delegatePtr);
+        auto ptr = static_cast<T*>(value.toObject()->getPrivateData());
+        auto&& iter = map_.find(ptr);
+        if (iter == map_.cend()) {
+            SE_REPORT_ERROR("Could not find shared_ptr.");
+            return nullptr;
         }
+        return iter->second;
     }
 
     void setValue(se::Value& value, const std::shared_ptr<T>& input) {
-        if (input != nullptr) {
-            se::Object* obj = nullptr;
-            if (delegates_.count(input) != 0) {
-                obj = delegates_.at(input);
-            } else {
-                archive_.push_back(input);
-                obj = se::Object::createObjectWithClass(clazz_);
-                obj->setPrivateData(input.get());
-            }
-            value.setObject(obj);
-        } else {
+        if (input == nullptr) {
             value.setNull();
+            return;
         }
+        se::Object* obj = nullptr;
+        auto ptr = input.get();
+        auto iter = se::NativePtrToObjectMap::find(ptr);
+        if (iter != se::NativePtrToObjectMap::end()) {
+            obj = iter->second;
+        } else {
+            map_.emplace(ptr, input);
+            obj = se::Object::createObjectWithClass(clazz_);
+            obj->setPrivateData(ptr);
+        }
+        value.setObject(obj);
     }
 
     bool finalize(se::State& s) {
-        auto delegatePtr = static_cast<T*>(s.nativeThisObject());
-        auto iter = std::find_if(archive_.cbegin(), archive_.cend(),
-                                 [=](const std::shared_ptr<T>& ptr) {
-                                     return delegatePtr == ptr.get();
-                                 });
-        if (iter != archive_.cend()) {
-            archive_.erase(iter);
+        auto ptr = static_cast<T*>(s.nativeThisObject());
+        auto&& iter = map_.find(ptr);
+        if (iter == map_.cend()) {
+            SE_REPORT_ERROR("Could not find raw pointer.");
+            delete ptr;
         } else {
-            delete delegatePtr;
+            map_.erase(iter);
         }
         return true;
     }
 
 private:
     se::Class* clazz_;
-    std::unordered_map<std::shared_ptr<T>, se::Object*> delegates_;
-    std::vector<std::shared_ptr<T>> archive_;
+
+    /// Keeps strong reference to shared_ptr elements.
+    std::unordered_map<T*, std::shared_ptr<T>> map_;
 };
 } // namespace core
 } // namespace ee

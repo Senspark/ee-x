@@ -412,7 +412,8 @@ bool makeMethod(se::State& state) {
     }
 }
 
-template <auto Function>
+template <auto Function, class = std::enable_if_t<
+                             std::is_same_v<FunctionResult<Function>, void>>>
 bool makeInstanceMethodOnUiThread(se::State& state) {
     constexpr auto Arity = FunctionArity<Function>;
     auto&& args = state.args();
@@ -421,13 +422,10 @@ bool makeInstanceMethodOnUiThread(se::State& state) {
         using Instance = FunctionInstance<Function>;
         auto&& instance = static_cast<Instance*>(state.nativeThisObject());
         using Result = FunctionResult<Function>;
-        if constexpr (std::is_same_v<Result, void>) {
-            runOnUiThread([jsThis, instance, args] {
-                callInstanceFunction<Function>(jsThis, instance, args);
-            });
-        } else {
-            return false;
-        }
+        static_assert(std::is_same_v<Result, void>);
+        runOnUiThread([jsThis, instance, args] {
+            callInstanceFunction<Function>(jsThis, instance, args);
+        });
         return true;
     }
     SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu.",

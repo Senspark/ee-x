@@ -185,7 +185,7 @@ struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
         se::Value jsFunc(arg);
         jsFunc.toObject()->root();
         auto lambda = [=](auto&&... values) {
-            auto&& args = {
+            se::ValueArray args = {
                 internal::to_value(std::forward<decltype(values)>(values))...};
             internal::callFunction(jsThis, jsFunc, args);
         };

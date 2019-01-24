@@ -72,8 +72,8 @@ constexpr auto addCategory     = &ee::core::makeInstanceMethod<&Self::addCategor
 constexpr auto build           = &ee::core::makeInstanceMethod<&Self::build>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setVersion)
 SE_BIND_FUNC(addCurrency)
 SE_BIND_FUNC(addGood)

@@ -26,8 +26,8 @@ constexpr auto finalize            = &core::makeFinalize<Self>;
 constexpr auto createRewardedVideo = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createRewardedVideo>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(createRewardedVideo)
 } // namespace
 

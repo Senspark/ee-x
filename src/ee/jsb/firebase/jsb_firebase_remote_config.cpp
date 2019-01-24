@@ -35,8 +35,8 @@ constexpr auto getDouble        = &core::makeMethod<&Self::getDouble>;
 constexpr auto getString        = &core::makeMethod<&Self::getString>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(fetch)
 SE_BIND_FUNC(setDefaultBool)

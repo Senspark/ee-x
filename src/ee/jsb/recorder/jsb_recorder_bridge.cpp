@@ -27,8 +27,8 @@ constexpr auto getScreenRecordingUrl    = &core::makeMethod<&Self::getScreenReco
 constexpr auto checkRecordingPermission = &core::makeMethod<&Self::checkRecordingPermission>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(startScreenRecording)
 SE_BIND_FUNC(stopScreenRecording)
 SE_BIND_FUNC(cancelScreenRecording)

@@ -46,7 +46,7 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
-    auto cls = se::Class::create("FirebaseAnalytics", firebaseObj, nullptr,
+    auto cls = se::Class::create("Analytics", firebaseObj, nullptr,
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
 

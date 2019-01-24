@@ -56,7 +56,7 @@ bool register_firebase_remote_config_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
 
-    auto cls = se::Class::create("FirebaseRemoteConfig", firebaseObj, nullptr,
+    auto cls = se::Class::create("RemoteConfig", firebaseObj, nullptr,
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
 

@@ -46,8 +46,8 @@ constexpr auto setCover         = &core::makeInstanceMethod<&Self::setCover>;
 constexpr auto setSponsor       = &core::makeInstanceMethod<&Self::setSponsor>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setAdChoices)
 SE_BIND_FUNC(setBody)
 SE_BIND_FUNC(setCallToAction)

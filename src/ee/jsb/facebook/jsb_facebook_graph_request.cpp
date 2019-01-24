@@ -39,8 +39,8 @@ constexpr auto setParameter = &core::makeInstanceMethod<&Self::setParameter>;
 constexpr auto toString     = &core::makeInstanceMethod<&Self::toString>;
 // clang-format on
 
+SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize);
-SE_BIND_FINALIZE_FUNC(finalize);
 SE_BIND_FUNC(setPath);
 SE_BIND_FUNC(setParameter);
 SE_BIND_FUNC(toString);

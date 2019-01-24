@@ -38,8 +38,8 @@ constexpr auto setName         = &ee::core::makeInstanceMethod<&Self::setName>;
 constexpr auto setPurchaseType = &ee::core::makeInstanceMethod<&Self::setPurchaseType>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setItemId)
 SE_BIND_FUNC(setDescription)
 SE_BIND_FUNC(setName)

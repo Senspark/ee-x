@@ -30,8 +30,8 @@ constexpr auto setUserId                  = &core::makeMethod<&Self::setUserId>;
 constexpr auto logEvent                   = &core::makeMethod<&Self::logEvent>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(analyticsCollectionEnabled)
 SE_BIND_FUNC(setMinimumSessionDuration)

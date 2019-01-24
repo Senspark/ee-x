@@ -55,8 +55,8 @@ constexpr auto setData       = &core::makeInstanceMethod<&Self::setData>;
 constexpr auto toString      = &core::makeInstanceMethod<&Self::toString>;
 // clang-format on
 
+SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize);
-SE_BIND_FINALIZE_FUNC(finalize);
 SE_BIND_FUNC(setActionType);
 SE_BIND_FUNC(setFilter);
 SE_BIND_FUNC(setRecipients);

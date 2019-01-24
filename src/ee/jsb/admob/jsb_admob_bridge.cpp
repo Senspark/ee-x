@@ -37,8 +37,8 @@ constexpr auto createInterstitialAd      = &core::makeInstanceMethodOnUiThreadAn
 constexpr auto createRewardedVideo       = &core::makeInstanceMethodOnUiThreadAndWait<&Self::createRewardedVideo>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(getEmulatorTestDeviceHash)
 SE_BIND_FUNC(addTestDevice)

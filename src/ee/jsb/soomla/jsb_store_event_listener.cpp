@@ -37,8 +37,8 @@ constexpr auto setRestoreTransactionStartedCallback  = &ee::core::makeInstanceMe
 constexpr auto setRestoreTransactionFinishedCallback = &ee::core::makeInstanceMethod<&Self::setRestoreTransactionFinishedCallback>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(clear)
 SE_BIND_FUNC(setMarketPurchaseStartedCallback)
 SE_BIND_FUNC(setMarketPurchaseCanceledCallback)

@@ -32,8 +32,8 @@ constexpr auto constructor = &core::makeConstructor<Self>;
 constexpr auto addItem     = &core::makeInstanceMethod<&Self::addItem>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(addItem)
 } // namespace
 

@@ -47,8 +47,8 @@ constexpr auto setProductId = &ee::core::makeInstanceMethod<&Self::setProductId>
 constexpr auto build        = &ee::core::makeInstanceMethod<&Self::build>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setPrice)
 SE_BIND_FUNC(setProductId)
 SE_BIND_FUNC(build)

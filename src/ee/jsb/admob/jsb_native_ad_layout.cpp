@@ -47,8 +47,8 @@ constexpr auto setStarRating   = &core::makeInstanceMethod<&Self::setStarRating>
 constexpr auto setStore        = &core::makeInstanceMethod<&Self::setStore>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setBody)
 SE_BIND_FUNC(setCallToAction)
 SE_BIND_FUNC(setHeadline)

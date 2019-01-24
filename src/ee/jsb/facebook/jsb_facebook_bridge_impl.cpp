@@ -25,8 +25,8 @@ constexpr auto constructor = &core::makeConstructor<Self>;
 constexpr auto finalize    = &core::makeFinalize<Self>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 } // namespace
 
 bool register_facebook_bridge_impl_manual(se::Object* globalObject) {

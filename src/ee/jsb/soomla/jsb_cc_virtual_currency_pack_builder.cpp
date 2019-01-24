@@ -39,8 +39,8 @@ constexpr auto setPurchaseType   = &ee::core::makeInstanceMethod<&Self::setPurch
 constexpr auto build             = &ee::core::makeInstanceMethod<&Self::build>;
 // clang-format on
 
-SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(setName)
 SE_BIND_FUNC(setDescription)
 SE_BIND_FUNC(setItemId)

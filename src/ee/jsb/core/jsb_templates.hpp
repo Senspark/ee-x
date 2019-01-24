@@ -184,10 +184,13 @@ struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
         }
         se::Value jsFunc(arg);
         jsFunc.toObject()->root();
-        auto lambda = [=](auto&&... values) {
-            se::ValueArray args = {
-                internal::to_value(std::forward<decltype(values)>(values))...};
-            runOnCocosThread([=] { //
+        auto lambda = [=](auto... values) {
+            // Must copy values.
+            runOnCocosThread([=]() mutable {
+                se::ScriptEngine::getInstance()->clearException();
+                se::AutoHandleScope hs;
+                se::ValueArray args = {internal::to_value(
+                    std::forward<decltype(values)>(values))...};
                 internal::callFunction(jsThis, jsFunc, args);
             });
         };

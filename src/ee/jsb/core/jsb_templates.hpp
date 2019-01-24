@@ -187,7 +187,9 @@ struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
         auto lambda = [=](auto&&... values) {
             se::ValueArray args = {
                 internal::to_value(std::forward<decltype(values)>(values))...};
-            internal::callFunction(jsThis, jsFunc, args);
+            runOnCocosThread([=] { //
+                internal::callFunction(jsThis, jsFunc, args);
+            });
         };
         return lambda;
     }

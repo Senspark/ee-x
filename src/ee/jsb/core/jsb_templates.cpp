@@ -342,8 +342,6 @@ void set_value(se::Value& value, std::vector<std::string> input) {
 namespace internal {
 void callFunction(const se::Value& jsThis, const se::Value& jsFunc,
                   const se::ValueArray& args) {
-    se::ScriptEngine::getInstance()->clearException();
-    se::AutoHandleScope hs;
     se::Object* thisObj = jsThis.isObject() ? jsThis.toObject() : nullptr;
     auto funcObj = jsFunc.toObject();
     auto succeed = funcObj->call(args, thisObj);

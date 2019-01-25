@@ -8,37 +8,23 @@
 #include "ee/jsb/google/jsb_google_analytics_tracker.hpp"
 
 #include "ee/GoogleAnalytics.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
-
-namespace google {
-std::vector<std::shared_ptr<GoogleAnalyticsTracker>>
-    __jsb_s_googleAnalyticsArchive;
-se::Class* __jsb_AnalyticsTracker_class = nullptr;
-} // namespace google
-
 namespace core {
+namespace {
+std::unique_ptr<SharedPtrHandler<google::AnalyticsTracker>> handler;
+} // namespace
+
 template <>
 void set_value(se::Value& value,
-               const std::shared_ptr<GoogleAnalyticsTracker>& input) {
-    if (input != nullptr) {
-        se::Object* obj = nullptr;
-        google::__jsb_s_googleAnalyticsArchive.push_back(input);
-        obj = se::Object::createObjectWithClass(
-            google::__jsb_AnalyticsTracker_class);
-        obj->setPrivateData(input.get());
-        value.setObject(obj);
-    } else {
-        value.setNull();
-    }
+               std::shared_ptr<GoogleAnalyticsTracker>& input) {
+    handler->setValue(value, input);
 }
 } // namespace core
 
 namespace google {
-
 const auto jsb_AnalyticsTracker_finalize =
     &core::jsb_finalize<AnalyticsTracker>;
 const auto jsb_AnalyticsTracker_setParameter =
@@ -80,8 +66,7 @@ bool register_google_tracker_manual(se::Object* globalObj) {
     cls->install();
 
     JSBClassType::registerClass<google::AnalyticsTracker>(cls);
-
-    __jsb_AnalyticsTracker_class = cls;
+    core::handler = core::SharedPtrHandler<google::AnalyticsTracker>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

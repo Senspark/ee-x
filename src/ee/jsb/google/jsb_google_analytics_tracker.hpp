@@ -12,9 +12,7 @@
 
 namespace ee {
 namespace google {
-
 bool register_google_tracker_manual(se::Object* object);
-
 } // namespace google
 } // namespace ee
 

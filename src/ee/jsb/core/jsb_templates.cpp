@@ -314,6 +314,12 @@ void set_value(se::Value& value, const std::pair<int, int>& input) {
 }
 
 template <>
+void set_value(se::Value& value, std::map<std::string, std::string>& input) {
+    auto obj = create_JSON_object<std::map<std::string, std::string>>(input);
+    value.setObject(obj);
+}
+
+template <>
 void set_value(se::Value& value,
                const std::map<std::string, std::string>& input) {
     auto obj = create_JSON_object<std::map<std::string, std::string>>(input);

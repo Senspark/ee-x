@@ -20,6 +20,11 @@ GoogleEventBuilder get_value(const se::Value& value) {
     return *static_cast<GoogleEventBuilder*>(
         value.toObject()->getPrivateData());
 }
+
+template <>
+void set_value(se::Value& value, google::EventBuilder& input) {
+    set_value_from_pointer(value, &input);
+}
 } // namespace core
 
 namespace google {

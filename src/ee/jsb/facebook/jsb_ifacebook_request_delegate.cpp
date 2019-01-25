@@ -35,7 +35,7 @@ void set_value(se::Value& value, facebook::IRequestDelegate& input) {
 }
 
 template <>
-bool jsb_finalize<facebook::IRequestDelegate>(se::State& state) {
+bool makeFinalize<facebook::IRequestDelegate>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

@@ -33,7 +33,7 @@ void set_value(se::Value& value, soomla::CCStoreInfo* input) {
 }
 
 template <>
-bool jsb_finalize<soomla::CCStoreInfo>(se::State& s) {
+bool makeFinalize<soomla::CCStoreInfo>(se::State& s) {
     auto cObj = static_cast<soomla::CCStoreInfo*>(s.nativeThisObject());
     soomla::__jsb__s_storeObjArchive.clear();
     delete cObj;

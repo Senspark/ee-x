@@ -35,7 +35,7 @@ void set_value(se::Value& value, facebook::IShareDelegate& input) {
 }
 
 template <>
-bool jsb_finalize<facebook::IShareDelegate>(se::State& state) {
+bool makeFinalize<facebook::IShareDelegate>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

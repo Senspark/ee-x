@@ -36,7 +36,7 @@ void set_value(se::Value& value, facebook::ILoginDelegate& input) {
 }
 
 template <>
-bool jsb_finalize<facebook::ILoginDelegate>(se::State& state) {
+bool makeFinalize<facebook::ILoginDelegate>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

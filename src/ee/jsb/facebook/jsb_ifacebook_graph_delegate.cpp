@@ -35,7 +35,7 @@ void set_value(se::Value& value, facebook::IGraphDelegate& input) {
 }
 
 template <>
-bool jsb_finalize<facebook::IGraphDelegate>(se::State& state) {
+bool makeFinalize<facebook::IGraphDelegate>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

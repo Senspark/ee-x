@@ -30,7 +30,7 @@ void set_value(se::Value& value, std::shared_ptr<IInterstitialAd>& input) {
 }
 
 template <>
-bool jsb_finalize<IInterstitialAd>(se::State& state) {
+bool makeFinalize<IInterstitialAd>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

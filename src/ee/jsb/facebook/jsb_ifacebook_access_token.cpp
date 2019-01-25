@@ -37,7 +37,7 @@ void set_value(se::Value& value,
 }
 
 template <>
-bool jsb_finalize<facebook::IAccessToken>(se::State& state) {
+bool makeFinalize<facebook::IAccessToken>(se::State& state) {
     return handler->finalize(state);
 }
 

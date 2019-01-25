@@ -30,7 +30,7 @@ void set_value(se::Value& value, std::shared_ptr<IAdView>& input) {
 }
 
 template <>
-bool jsb_finalize<IAdView>(se::State& state) {
+bool makeFinalize<IAdView>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

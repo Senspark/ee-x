@@ -30,7 +30,7 @@ void set_value(se::Value& value, std::shared_ptr<IRewardedVideo>& input) {
 }
 
 template <>
-bool jsb_finalize<IRewardedVideo>(se::State& state) {
+bool makeFinalize<IRewardedVideo>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core

@@ -326,12 +326,17 @@ public class Utils {
                 .putExtra(Intent.EXTRA_SUBJECT, subject) //
                 .putExtra(Intent.EXTRA_TEXT, body);
         try {
-            context.startActivity(Intent.createChooser(intent, "Send mail..."));
+            // Fix Calling startActivity() from outside of an Activity  context requires the
+            // FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
+            Intent chooserIntent = Intent.createChooser(intent, "Send mail...");
+            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(chooserIntent);
             return true;
         } catch (ActivityNotFoundException ex) {
             // There are no email clients installed.
-            return false;
+            ex.printStackTrace();
         }
+        return false;
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -18,9 +18,19 @@ std::unique_ptr<SharedPtrHandler<google::AnalyticsTracker>> handler;
 } // namespace
 
 template <>
+std::shared_ptr<google::AnalyticsTracker> get_value(const se::Value& value) {
+    return handler->getValue(value);
+}
+
+template <>
 void set_value(se::Value& value,
-               std::shared_ptr<GoogleAnalyticsTracker>& input) {
+               std::shared_ptr<google::AnalyticsTracker>& input) {
     handler->setValue(value, input);
+}
+
+template <>
+bool makeFinalize<std::shared_ptr<google::AnalyticsTracker>>(se::State& state) {
+    return handler->finalize(state);
 }
 } // namespace core
 

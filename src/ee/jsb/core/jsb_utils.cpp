@@ -43,20 +43,27 @@ void runOnCocosThread(const std::function<void()>& callback) {
 };
 
 namespace {
+/// Gets the current device language code.
+std::string getLanguageCode() {
+    return cocos2d::Application::getInstance()->getCurrentLanguageCode();
+}
+
 // clang-format off
-constexpr auto jsb_getSHA1CertificateFingerprint = &makeStaticMethod<&getSHA1CertificateFingerprint>;
-constexpr auto jsb_getVersionName                = &makeStaticMethod<&getVersionName>;
-constexpr auto jsb_getVersionCode                = &makeStaticMethod<&getVersionCode>;
-constexpr auto jsb_isApplicationInstalled        = &makeStaticMethod<&isApplicationInstalled>;
-constexpr auto jsb_openApplication               = &makeStaticMethod<&openApplication>;
-constexpr auto jsb_sendMail                      = &makeStaticMethod<&sendMail>;
-constexpr auto jsb_isTablet                      = &makeStaticMethod<&isTablet>;
-constexpr auto jsb_getDeviceId                   = &makeStaticMethod<&getDeviceId>;
+constexpr auto jsb_getSHA1CertificateFingerprint = &makeMethod<&getSHA1CertificateFingerprint>;
+constexpr auto jsb_getVersionName                = &makeMethod<&getVersionName>;
+constexpr auto jsb_getVersionCode                = &makeMethod<&getVersionCode>;
+constexpr auto jsb_getLanguageCode               = &makeMethod<&getLanguageCode>;
+constexpr auto jsb_isApplicationInstalled        = &makeMethod<&isApplicationInstalled>;
+constexpr auto jsb_openApplication               = &makeMethod<&openApplication>;
+constexpr auto jsb_sendMail                      = &makeMethod<&sendMail>;
+constexpr auto jsb_isTablet                      = &makeMethod<&isTablet>;
+constexpr auto jsb_getDeviceId                   = &makeMethod<&getDeviceId>;
 // clang-format on
 
 SE_BIND_FUNC(jsb_getSHA1CertificateFingerprint)
 SE_BIND_FUNC(jsb_getVersionName)
 SE_BIND_FUNC(jsb_getVersionCode)
+SE_BIND_FUNC(jsb_getLanguageCode)
 SE_BIND_FUNC(jsb_isApplicationInstalled)
 SE_BIND_FUNC(jsb_openApplication)
 SE_BIND_FUNC(jsb_sendMail)
@@ -74,6 +81,7 @@ bool register_utils_manual(se::Object* globalObj) {
                             _SE(jsb_getSHA1CertificateFingerprint));
     coreObj->defineFunction("getVersionName", _SE(jsb_getVersionName));
     coreObj->defineFunction("getVersionCode", _SE(jsb_getVersionCode));
+    coreObj->defineFunction("getLanguageCode", _SE(jsb_getLanguageCode));
     coreObj->defineFunction("isApplicationInstalled",
                             _SE(jsb_isApplicationInstalled));
     coreObj->defineFunction("openApplication", _SE(jsb_openApplication));

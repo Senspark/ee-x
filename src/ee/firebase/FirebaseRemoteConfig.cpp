@@ -141,7 +141,11 @@ void Self::flushDefaults() {
 bool Self::getBool(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
-        return defaults_[key].bool_value();
+        auto iter = defaults_.find(key);
+        if (iter == defaults_.cend()) {
+            return false;
+        }
+        return iter->second.bool_value();
     }
     if (defaultsDirty_) {
         // Please call flushDefaults().
@@ -158,7 +162,11 @@ bool Self::getBool(const std::string& key) {
 std::int64_t Self::getLong(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
-        return defaults_[key].int64_value();
+        auto iter = defaults_.find(key);
+        if (iter == defaults_.cend()) {
+            return 0;
+        }
+        return iter->second.int64_value();
     }
     if (defaultsDirty_) {
         // Please call flushDefaults().
@@ -175,7 +183,11 @@ std::int64_t Self::getLong(const std::string& key) {
 double Self::getDouble(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
-        return defaults_[key].double_value();
+        auto iter = defaults_.find(key);
+        if (iter == defaults_.cend()) {
+            return 0;
+        }
+        return iter->second.double_value();
     }
     if (defaultsDirty_) {
         // Please call flushDefaults().
@@ -192,7 +204,11 @@ double Self::getDouble(const std::string& key) {
 std::string Self::getString(const std::string& key) {
 #if defined(EE_X_MOBILE)
     if (not initialized_) {
-        return defaults_[key].string_value();
+        auto iter = defaults_.find(key);
+        if (iter == defaults_.cend()) {
+            return "";
+        }
+        return iter->second.string_value();
     }
     if (defaultsDirty_) {
         // Please call flushDefaults().

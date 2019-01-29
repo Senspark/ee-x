@@ -100,6 +100,9 @@ void Self::setUserProperty(const std::string& name,
 }
 
 void Self::logEvent(const std::string& name, const TrackingDict& dict) {
+    if (not initialized_) {
+        return;
+    }
 #ifdef EE_X_MOBILE
     if (dict.empty()) {
         ::firebase::analytics::LogEvent(name.c_str());

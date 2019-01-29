@@ -51,7 +51,11 @@ NSString* const k__crashlytics_track_invite         = @"__crashlytics_track_invi
     if (self == nil) {
         return self;
     }
-    [Fabric with:@[[Crashlytics class], [Answers class]]];
+
+    // Initialized automatically.
+    // https://firebase.google.com/docs/crashlytics/upgrade-from-crash-reporting#ios
+    // [Fabric with:@[[Crashlytics class], [Answers class]]];
+
     bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;

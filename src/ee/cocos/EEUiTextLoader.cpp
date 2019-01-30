@@ -8,6 +8,7 @@
 
 #include "EEUiTextLoader.hpp"
 
+#include <2d/CCLabel.h>
 #include <ui/UIText.h>
 
 NS_EE_BEGIN
@@ -20,6 +21,9 @@ constexpr const char* text_color = "textColor";
 constexpr const char* text_area_size = "textAreaSize";
 constexpr const char* text_horizontal_alignment = "textHorizontalAlignment";
 constexpr const char* text_vertical_alignment = "textVerticalAlignment";
+constexpr auto overflow = "overflow";
+constexpr auto wordWrap = "wordWrap";
+constexpr auto lineBreakWithoutSpace = "lineBreakWithoutSpace";
 constexpr const char* touch_scale_change_enabled = "touchScaleChangeEnabled";
 constexpr const char* string = "string";
 
@@ -66,6 +70,9 @@ void UiTextLoader::onHandlePropTypeCheck(cocos2d::Node* node,
                                          const char* propertyName, bool check,
                                          cocosbuilder::CCBReader* reader) {
     auto text = dynamic_cast<cocos2d::ui::Text*>(node);
+    auto lbl = text != nullptr
+                   ? dynamic_cast<cocos2d::Label*>(text->getVirtualRenderer())
+                   : nullptr;
     std::string propName(propertyName);
     if (propName == property::touch_scale_change_enabled) {
         return text->setTouchScaleChangeEnabled(check);
@@ -77,6 +84,12 @@ void UiTextLoader::onHandlePropTypeCheck(cocos2d::Node* node,
     if (propName == property::outline_enabled) {
         outlineEnabled_ = check;
         return;
+    }
+    if (propName == property::wordWrap) {
+        return lbl->enableWrap(check);
+    }
+    if (propName == property::lineBreakWithoutSpace) {
+        return lbl->setLineBreakWithoutSpace(check);
     }
     Super::onHandlePropTypeCheck(node, parent, propertyName, check, reader);
 }
@@ -199,6 +212,11 @@ void UiTextLoader::onHandlePropTypeIntegerLabeled(
     if (propName == property::text_vertical_alignment) {
         auto alignment = static_cast<cocos2d::TextVAlignment>(integerLabeled);
         return text->setTextVerticalAlignment(alignment);
+    }
+    if (propName == property::overflow) {
+        auto overflow = static_cast<cocos2d::Label::Overflow>(integerLabeled);
+        auto label = dynamic_cast<cocos2d::Label*>(text->getVirtualRenderer());
+        return label->setOverflow(overflow);
     }
     Super::onHandlePropTypeIntegerLabeled(node, parent, propertyName,
                                           integerLabeled, reader);

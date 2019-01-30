@@ -582,12 +582,15 @@ public class GooglePlayIabService implements IIabService {
 
                 String msg = "Error purchasing item " + e.getMessage();
                 SoomlaUtils.LogError(TAG, msg);
-                GooglePlayIabService.getInstance().mWaitingServiceResponse = false;
 
-                IabCallbacks.OnPurchaseListener onPurchaseListener = GooglePlayIabService.getInstance().mSavedOnPurchaseListener;
-                if (onPurchaseListener != null) {
-                    onPurchaseListener.fail(msg);
-                    GooglePlayIabService.getInstance().mSavedOnPurchaseListener = null;
+                if (GooglePlayIabService.getInstance() != null) {
+                    GooglePlayIabService.getInstance().mWaitingServiceResponse = false;
+
+                    IabCallbacks.OnPurchaseListener onPurchaseListener = GooglePlayIabService.getInstance().mSavedOnPurchaseListener;
+                    if (onPurchaseListener != null) {
+                        onPurchaseListener.fail(msg);
+                        GooglePlayIabService.getInstance().mSavedOnPurchaseListener = null;
+                    }
                 }
             }
         }

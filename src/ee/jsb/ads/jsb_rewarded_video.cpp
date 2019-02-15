@@ -40,11 +40,12 @@ namespace {
 using Self = IRewardedVideo;
 
 // clang-format off
-constexpr auto finalize          = &core::makeFinalize<Self>;
-constexpr auto isLoaded          = &core::makeInstanceMethodOnUiThreadAndWait<&Self::isLoaded>;
-constexpr auto load              = &core::makeInstanceMethodOnUiThread<&Self::load>;
-constexpr auto show              = &core::makeInstanceMethodOnUiThreadAndWait<&Self::show>;
-constexpr auto setResultCallback = &core::makeInstanceMethod<&Self::setResultCallback>;
+constexpr auto finalize             = &core::makeFinalize<Self>;
+constexpr auto isLoaded             = &core::makeInstanceMethodOnUiThreadAndWait<&Self::isLoaded>;
+constexpr auto load                 = &core::makeInstanceMethodOnUiThread<&Self::load>;
+constexpr auto show                 = &core::makeInstanceMethodOnUiThreadAndWait<&Self::show>;
+constexpr auto setResultCallback    = &core::makeInstanceMethod<&Self::setResultCallback>;
+constexpr auto setOnClickedCallback = &core::makeInstanceMethod<&Self::setOnClickedCallback>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)
@@ -52,6 +53,7 @@ SE_BIND_FUNC(isLoaded)
 SE_BIND_FUNC(load)
 SE_BIND_FUNC(show)
 SE_BIND_FUNC(setResultCallback);
+SE_BIND_FUNC(setOnClickedCallback);
 } // namespace
 
 se::Class* getIRewardedVideoClass() {
@@ -70,6 +72,7 @@ bool register_rewarded_video_manual(se::Object* globalObj) {
     EE_JSB_DEFINE_FUNCTION(cls, load);
     EE_JSB_DEFINE_FUNCTION(cls, show);
     EE_JSB_DEFINE_FUNCTION(cls, setResultCallback);
+    EE_JSB_DEFINE_FUNCTION(cls, setOnClickedCallback);
 
     cls->install();
 

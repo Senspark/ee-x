@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -22,14 +23,19 @@ import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.Logger;
 import com.ee.core.internal.Utils;
+import com.ee.facebook.ads.R;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AdIconView;
 import com.facebook.ads.AdListener;
+import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +43,7 @@ import java.util.Map;
  * Created by Zinge on 10/9/17.
  */
 
-class FacebookNativeAd implements AdListener, IAdView {
+class FacebookNativeAd implements NativeAdListener, IAdView {
     private static final String k__ad_choices     = "ad_choices";
     private static final String k__body           = "body";
     private static final String k__call_to_action = "call_to_action";
@@ -315,52 +321,30 @@ class FacebookNativeAd implements AdListener, IAdView {
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
+        if (_nativeAd == null || _nativeAd != ad)
+            return;
 
         _nativeAd.unregisterView();
-
-        // Register the Title and CTA button to listen for clicks.
-        final List<View> clickableViews = new ArrayList<>();
-
-        processView(_nativeAdView, k__body, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                view.setText(_nativeAd.getAdBody());
-            }
-        });
 
         processView(_nativeAdView, k__call_to_action, new ViewProcessor<Button>() {
             @Override
             public void process(Button view) {
+                view.setVisibility(_nativeAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
                 view.setText(_nativeAd.getAdCallToAction());
-                clickableViews.add(view);
             }
         });
 
-        processView(_nativeAdView, k__icon, new ViewProcessor<ImageView>() {
+        processView(_nativeAdView, k__title, new ViewProcessor<TextView>() {
             @Override
-            public void process(ImageView view) {
-                // Download and display the ad icon.
-                NativeAd.Image adIcon = _nativeAd.getAdIcon();
-                NativeAd.downloadAndDisplayImage(adIcon, view);
+            public void process(TextView view) {
+                view.setText(_nativeAd.getAdvertiserName());
             }
         });
 
-        boolean hasCoverView = processView(_nativeAdView, k__cover, new ViewProcessor<ImageView>() {
+        processView(_nativeAdView, k__body, new ViewProcessor<TextView>() {
             @Override
-            public void process(ImageView view) {
-                // Download and display the cover image.
-                NativeAd.Image adCover = _nativeAd.getAdCoverImage();
-                NativeAd.downloadAndDisplayImage(adCover, view);
-                clickableViews.add(view);
-            }
-        });
-
-        boolean hasMediaView = processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
-            @Override
-            public void process(MediaView view) {
-                // Download and display the ad media.
-                view.setNativeAd(_nativeAd);
-                clickableViews.add(view);
+            public void process(TextView view) {
+                view.setText(_nativeAd.getAdBodyText());
             }
         });
 
@@ -371,14 +355,6 @@ class FacebookNativeAd implements AdListener, IAdView {
             }
         });
 
-        processView(_nativeAdView, k__title, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                view.setText(_nativeAd.getAdTitle());
-                clickableViews.add(view);
-            }
-        });
-
         processView(_nativeAdView, k__ad_choices, new ViewProcessor<LinearLayout>() {
             @Override
             public void process(LinearLayout view) {
@@ -386,18 +362,20 @@ class FacebookNativeAd implements AdListener, IAdView {
                 view.removeAllViews();
 
                 // Add the AdChoices icon.
-                AdChoicesView adChoicesView = new AdChoicesView(_context, _nativeAd, true);
-                view.addView(adChoicesView);
+                AdOptionsView adOptionsView = new AdOptionsView(_context, _nativeAd, null);
+                view.addView(adOptionsView);
             }
         });
 
-        //if the ad has both media & cover, hide the cover view.
-        //TODO: upgrade this feature to support the flexibility of native ad.
-        if (hasCoverView && hasMediaView) {
-            _nativeAdView.findViewById(getIdentifier(k__cover)).setVisibility(View.INVISIBLE);
-        }
+        processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
+            @Override
+            public void process(MediaView mediaView) {
+                final Button callToAction = _nativeAdView.findViewById(getIdentifier(k__call_to_action));
+                final ImageView icon = _nativeAdView.findViewById(getIdentifier(k__icon));
+                _nativeAd.registerViewForInteraction(_nativeAdView, mediaView, icon, Arrays.asList(callToAction, mediaView));
+            }
+        });
 
-        _nativeAd.registerViewForInteraction(_nativeAdView, clickableViews);
         _isAdLoaded = true;
         _bridge.callCpp(kOnLoaded());
     }
@@ -413,5 +391,10 @@ class FacebookNativeAd implements AdListener, IAdView {
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
         Utils.checkMainThread();
+    }
+
+    @Override
+    public void onMediaDownloaded(Ad ad) {
+        _logger.info("onMediaDownloaded");
     }
 }

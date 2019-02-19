@@ -238,7 +238,7 @@ static NSString* const k__sponsor           = @"sponsor";
     nativeAd_ = nativeAd;
     if (nativeAd_ && nativeAd_.isAdValid) {
         [nativeAd_ unregisterView];
-    
+
         // adchoices view
         [nativeAdView_ adchoicesView].nativeAd = nativeAd_;
 
@@ -257,16 +257,20 @@ static NSString* const k__sponsor           = @"sponsor";
 
         // ad title view
         [nativeAdView_ titleLabel].text = nativeAd_.advertiserName;
-        
+
         // media view
         if ([nativeAdView_ mediaView]) {
-            [nativeAd_ registerViewForInteraction:nativeAdView_
-                                        mediaView:[nativeAdView_ mediaView]
-                                    iconImageView:[nativeAdView_ iconImage]
-                                   viewController:[EEUtils getCurrentRootViewController]
-                                   clickableViews:@[[nativeAdView_ callToActionButton], [nativeAdView_ mediaView]]
-                                   ];
-        
+            [nativeAd_
+                registerViewForInteraction:nativeAdView_
+                                 mediaView:[nativeAdView_ mediaView]
+                             iconImageView:[nativeAdView_ iconImage]
+                            viewController:[EEUtils
+                                               getCurrentRootViewController]
+                            clickableViews:@[
+                                [nativeAdView_ callToActionButton],
+                                [nativeAdView_ mediaView]
+                            ]];
+
             [[nativeAdView_ mediaView] setDelegate:self];
         }
 
@@ -275,7 +279,7 @@ static NSString* const k__sponsor           = @"sponsor";
     }
 }
 
-- (void)nativeAdDidDownloadMedia:(FBNativeAd *)nativeAd {
+- (void)nativeAdDidDownloadMedia:(FBNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 

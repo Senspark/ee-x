@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "ee/ads/IRewardedVideo.hpp"
+#include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 

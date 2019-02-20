@@ -8,6 +8,7 @@
 #include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
 
 #include "ee/facebook/IFacebookAccessToken.hpp"
+#include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"

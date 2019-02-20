@@ -42,7 +42,7 @@ bool register_facebook_bridge_impl_manual(se::Object* globalObject) {
     cls->defineFinalizeFunction(_SE(finalize));
     cls->install();
 
-    JSBClassType::registerClass<Bridge>(cls);
+    JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();

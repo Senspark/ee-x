@@ -12,43 +12,42 @@
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
+using Self = ee::facebook::IRequestDelegate;
+
 namespace ee {
 namespace core {
 namespace {
-std::unique_ptr<SharedPtrHandler<facebook::IRequestDelegate>> handler;
+std::unique_ptr<SharedPtrHandler<Self>> handler;
 } // namespace
 
 template <>
-std::shared_ptr<facebook::IRequestDelegate> get_value(const se::Value& value) {
+std::shared_ptr<Self> get_value(const se::Value& value) {
     return handler->getValue(value);
 }
 
 template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::IRequestDelegate>& input) {
+void set_value(se::Value& value, std::shared_ptr<Self>& input) {
     handler->setValue(value, input);
 }
 
 template <>
-void set_value(se::Value& value, facebook::IRequestDelegate& input) {
+void set_value(se::Value& value, Self& input) {
     set_value_from_pointer(value, &input);
 }
 
 template <>
-bool makeFinalize<facebook::IRequestDelegate>(se::State& state) {
+bool makeFinalize<Self>(se::State& state) {
     return handler->finalize(state);
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-using Self = IRequestDelegate;
-
 // clang-format off
 constexpr auto finalize  = &core::makeFinalize<Self>;
-constexpr auto onSuccess = &core::makeInstanceMethod<&Self::onSuccess>;
-constexpr auto onFailure = &core::makeInstanceMethod<&Self::onFailure>;
-constexpr auto onCancel  = &core::makeInstanceMethod<&Self::onCancel>;
+constexpr auto onSuccess = &core::makeMethod<&Self::onSuccess>;
+constexpr auto onFailure = &core::makeMethod<&Self::onFailure>;
+constexpr auto onCancel  = &core::makeMethod<&Self::onCancel>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize);
@@ -73,7 +72,7 @@ bool register_ifacebook_request_delegate_manual(se::Object* globalObject) {
 
     cls->install();
 
-    JSBClassType::registerClass<RequestDelegate>(cls);
+    JSBClassType::registerClass<Self>(cls);
     core::handler = core::SharedPtrHandler<Self>::create(cls);
 
     se::ScriptEngine::getInstance()->clearException();

@@ -49,15 +49,15 @@ void set_value_from_pointer(se::Value& value, T* input) {
     }
     auto clazz = JSBClassType::findClass(input);
     CCASSERT(clazz, "ERROR: Class is not registered yet.");
-    se::Object* obj = nullptr;
     auto found = se::NativePtrToObjectMap::find(input);
     if (found != se::NativePtrToObjectMap::end()) {
-        obj = found->second;
+        auto&& obj = found->second;
+        value.setObject(obj);
     } else {
-        obj = se::Object::createObjectWithClass(clazz);
+        auto&& obj = se::Object::createObjectWithClass(clazz);
         obj->setPrivateData(input);
+        value.setObject(obj, true);
     }
-    value.setObject(obj);
 
     if constexpr (std::is_convertible<T*, cocos2d::Ref*>::value) {
         static_cast<cocos2d::Ref*>(input)->retain();

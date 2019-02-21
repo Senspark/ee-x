@@ -9,71 +9,70 @@
 
 namespace ee {
 namespace core {
-
 template <>
-se::Object* create_JSON_object(const std::pair<float, float>& value) {
+se::HandleObject create_JSON_object(const std::pair<float, float>& value) {
     auto&& jsonArray = nlohmann::json::array();
     jsonArray.push_back(value.first);
     jsonArray.push_back(value.second);
-    return se::Object::createJSONObject(jsonArray.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonArray.dump()));
 }
 
 template <>
-se::Object* create_JSON_object(const std::pair<int, int>& value) {
+se::HandleObject create_JSON_object(const std::pair<int, int>& value) {
     auto&& jsonArray = nlohmann::json::array();
     jsonArray.push_back(value.first);
     jsonArray.push_back(value.second);
-    return se::Object::createJSONObject(jsonArray.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonArray.dump()));
 }
 
 template <>
-se::Object*
+se::HandleObject
 create_JSON_object(const std::map<std::string, std::string>& value) {
     auto&& jsonObj = nlohmann::json();
     for (auto it = value.begin(); it != value.end(); it++) {
         jsonObj[it->first] = it->second;
     }
-    return se::Object::createJSONObject(jsonObj.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonObj.dump()));
 }
 
 template <>
-se::Object*
+se::HandleObject
 create_JSON_object(const std::unordered_map<std::string, std::string>& value) {
     auto&& jsonObj = nlohmann::json();
     for (auto it = value.begin(); it != value.end(); it++) {
         jsonObj[it->first] = it->second;
     }
-    return se::Object::createJSONObject(jsonObj.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonObj.dump()));
 }
 
 template <>
-se::Object* create_JSON_object(const int& value) {
+se::HandleObject create_JSON_object(const int& value) {
     auto&& jsonObj = nlohmann::json();
     jsonObj.push_back(value);
-    return se::Object::createJSONObject(jsonObj.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonObj.dump()));
 }
 
 template <>
-se::Object* create_JSON_object(const std::string& value) {
+se::HandleObject create_JSON_object(const std::string& value) {
     auto&& jsonObj = nlohmann::json();
     jsonObj.push_back(value);
-    return se::Object::createJSONObject(jsonObj.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonObj.dump()));
 }
 
 template <>
-se::Object* create_JSON_object(const bool& value) {
+se::HandleObject create_JSON_object(const bool& value) {
     auto&& jsonObj = nlohmann::json();
     jsonObj.push_back(value);
-    return se::Object::createJSONObject(jsonObj.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonObj.dump()));
 }
 
 template <>
-se::Object* create_JSON_object(const std::vector<std::string>& value) {
+se::HandleObject create_JSON_object(const std::vector<std::string>& value) {
     auto&& jsonArray = nlohmann::json::array();
     for (auto it = value.begin(); it != value.end(); it++) {
         jsonArray.push_back(*it);
     }
-    return se::Object::createJSONObject(jsonArray.dump());
+    return se::HandleObject(se::Object::createJSONObject(jsonArray.dump()));
 }
 
 template <>

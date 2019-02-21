@@ -27,7 +27,7 @@ namespace ee {
 namespace core {
 /// Converts between se::Object and normal value.
 template <typename T>
-se::Object* create_JSON_object(const T& value);
+se::HandleObject create_JSON_object(const T& value);
 
 /// Converts between se::Object and normal value.
 template <typename T>

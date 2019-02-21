@@ -42,12 +42,12 @@ bool makeFinalize<Self>(se::State& state) {
 }
 
 template <>
-se::Object* create_JSON_object(const std::shared_ptr<Self>& value) {
+se::HandleObject create_JSON_object(const std::shared_ptr<Self>& value) {
     auto&& json = nlohmann::json();
     json.push_back(value->getToken());
     json.push_back(value->getApplicationId());
     json.push_back(value->getUserId());
-    return se::Object::createJSONObject(json.dump());
+    return se::HandleObject(se::Object::createJSONObject(json.dump()));
 }
 } // namespace core
 

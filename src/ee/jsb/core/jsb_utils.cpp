@@ -25,21 +25,25 @@
 #endif
 
 namespace ee {
-// TODO:
-// REDUDE ARGUMENT DECLARATIONS
-// https://stackoverflow.com/questions/37426283/get-the-type-of-a-function-parameter-with-boosthana
-
 namespace core {
-void runOnCocosThread(const std::function<void()>& callback) {
+namespace {
+/// Gets the cocos2d-x scheduler base on the current engine version.
+cocos2d::Scheduler* getScheduler() {
 #if COCOS_CREATOR_VERSION == 1
-    cocos2d::Director::getInstance()
-        ->getScheduler()
-        ->performFunctionInCocosThread(callback);
+    return cocos2d::Director::getInstance()->getScheduler();
 #else
-    cocos2d::Application::getInstance()
-        ->getScheduler()
-        ->performFunctionInCocosThread(callback);
+    return cocos2d::Application::getInstance()->getScheduler();
 #endif
+}
+} // namespace
+
+void schedule(const std::function<void(float delta)>& callback, void* target,
+              float interval, const std::string& key) {
+    getScheduler()->schedule(callback, target, interval, false, key);
+}
+
+void runOnCocosThread(const std::function<void()>& callback) {
+    getScheduler()->performFunctionInCocosThread(callback);
 };
 
 namespace {

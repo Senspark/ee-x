@@ -27,7 +27,7 @@ namespace ee {
 namespace core {
 /// Converts between se::Object and normal value.
 template <typename T>
-se::Object* create_JSON_object(const T& value);
+se::HandleObject create_JSON_object(const T& value);
 
 /// Converts between se::Object and normal value.
 template <typename T>
@@ -49,15 +49,15 @@ void set_value_from_pointer(se::Value& value, T* input) {
     }
     auto clazz = JSBClassType::findClass(input);
     CCASSERT(clazz, "ERROR: Class is not registered yet.");
-    se::Object* obj = nullptr;
     auto found = se::NativePtrToObjectMap::find(input);
     if (found != se::NativePtrToObjectMap::end()) {
-        obj = found->second;
+        auto&& obj = found->second;
+        value.setObject(obj);
     } else {
-        obj = se::Object::createObjectWithClass(clazz);
+        auto&& obj = se::Object::createObjectWithClass(clazz);
         obj->setPrivateData(input);
+        value.setObject(obj, true);
     }
-    value.setObject(obj);
 
     if constexpr (std::is_convertible<T*, cocos2d::Ref*>::value) {
         static_cast<cocos2d::Ref*>(input)->retain();
@@ -555,67 +555,6 @@ bool jsb_propterty_set(se::State& s) {
                     args.size(), 1);
     return false;
 }
-
-template <class T>
-class SharedPtrHandler {
-public:
-    static std::unique_ptr<SharedPtrHandler> create(se::Class* clazz) {
-        return std::make_unique<SharedPtrHandler<T>>(clazz);
-    }
-
-    explicit SharedPtrHandler(se::Class* clazz)
-        : clazz_(clazz) {}
-
-    se::Class* getClass() {
-        return clazz_;
-    }
-
-    std::shared_ptr<T> getValue(const se::Value& value) const {
-        auto ptr = static_cast<T*>(value.toObject()->getPrivateData());
-        auto&& iter = map_.find(ptr);
-        if (iter == map_.cend()) {
-            SE_REPORT_ERROR("Could not find shared_ptr.");
-            return nullptr;
-        }
-        return iter->second;
-    }
-
-    void setValue(se::Value& value, const std::shared_ptr<T>& input) {
-        if (input == nullptr) {
-            value.setNull();
-            return;
-        }
-        se::Object* obj = nullptr;
-        auto ptr = input.get();
-        auto iter = se::NativePtrToObjectMap::find(ptr);
-        if (iter != se::NativePtrToObjectMap::end()) {
-            obj = iter->second;
-        } else {
-            map_.emplace(ptr, input);
-            obj = se::Object::createObjectWithClass(clazz_);
-            obj->setPrivateData(ptr);
-        }
-        value.setObject(obj);
-    }
-
-    bool finalize(se::State& s) {
-        auto ptr = static_cast<T*>(s.nativeThisObject());
-        auto&& iter = map_.find(ptr);
-        if (iter == map_.cend()) {
-            SE_REPORT_ERROR("Could not find raw pointer.");
-            delete ptr;
-        } else {
-            map_.erase(iter);
-        }
-        return true;
-    }
-
-private:
-    se::Class* clazz_;
-
-    /// Keeps strong reference to shared_ptr elements.
-    std::unordered_map<T*, std::shared_ptr<T>> map_;
-};
 } // namespace core
 } // namespace ee
 

@@ -7,19 +7,22 @@
 //
 
 #include "ee/facebookads/FacebookAdsBridge.hpp"
+
+#include <ee/nlohmann/json.hpp>
+
 #include "ee/ads/NullAdView.hpp"
 #include "ee/ads/NullInterstitialAd.hpp"
+#include "ee/ads/NullRewardedVideo.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 #include "ee/core/LogLevel.hpp"
+#include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/internal/SharedPtrUtils.hpp"
 #include "ee/facebookads/FacebookNativeAdLayout.hpp"
 #include "ee/facebookads/internal/FacebookBannerAd.hpp"
 #include "ee/facebookads/internal/FacebookInterstitialAd.hpp"
 #include "ee/facebookads/internal/FacebookNativeAd.hpp"
-#include "ee/core/Logger.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
-#include <ee/nlohmann/json.hpp>
-#include "ee/ads/NullRewardedVideo.hpp"
 #include "ee/facebookads/internal/FacebookRewardVideoAd.hpp"
 
 namespace ee {
@@ -82,7 +85,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     json[k__ad_size] = static_cast<int>(adSize);
     auto response = bridge_.call(k__createBannerAd, json.dump());
     if (not core::toBool(response)) {
-        return std::make_shared<NullAdView>();
+        return core::makeShared<NullAdView>();
     }
     return std::shared_ptr<IAdView>(new BannerAd(bridge_, this, adId));
 }
@@ -101,7 +104,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     json[k__identifiers] = identifiers.params_;
     auto response = bridge_.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
-        return std::make_shared<NullAdView>();
+        return core::makeShared<NullAdView>();
     }
     return std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId));
 }
@@ -115,7 +118,7 @@ std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& placementId) {
     auto response = bridge_.call(k__createInterstitialAd, placementId);
     if (not core::toBool(response)) {
-        return std::make_shared<NullInterstitialAd>();
+        return core::makeShared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
         new InterstitialAd(bridge_, logger_, this, placementId));
@@ -130,7 +133,7 @@ std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& placementId) {
     auto response = bridge_.call(k__createRewardVideoAd, placementId);
     if (not core::toBool(response)) {
-        return std::make_shared<NullRewardedVideo>(logger_);
+        return core::makeShared<NullRewardedVideo>(logger_);
     }
     return std::shared_ptr<IRewardedVideo>(
         new RewardedVideo(bridge_, logger_, placementId));

@@ -11,16 +11,17 @@
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
+using Self = ee::facebook::GraphRequest;
+
 namespace ee {
 namespace core {
 template <>
 facebook::GraphRequest get_value(const se::Value& value) {
-    return *static_cast<facebook::GraphRequest*>(
-        value.toObject()->getPrivateData());
+    return *static_cast<Self*>(value.toObject()->getPrivateData());
 }
 
 template <>
-void set_value(se::Value& value, facebook::GraphRequest& input) {
+void set_value(se::Value& value, Self& input) {
     set_value_from_pointer(value, &input);
 }
 } // namespace core
@@ -29,14 +30,12 @@ namespace facebook {
 namespace {
 se::Class* clazz = nullptr;
 
-using Self = GraphRequest;
-
 // clang-format off
 constexpr auto constructor  = &core::makeConstructor<Self>;
 constexpr auto finalize     = &core::makeFinalize<Self>;
-constexpr auto setPath      = &core::makeInstanceMethod<&Self::setPath>;
-constexpr auto setParameter = &core::makeInstanceMethod<&Self::setParameter>;
-constexpr auto toString     = &core::makeInstanceMethod<&Self::toString>;
+constexpr auto setPath      = &core::makeMethod<&Self::setPath>;
+constexpr auto setParameter = &core::makeMethod<&Self::setParameter>;
+constexpr auto toString     = &core::makeMethod<&Self::toString>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)
@@ -61,7 +60,7 @@ bool register_facebook_graph_request_manual(se::Object* globalObject) {
 
     cls->install();
 
-    JSBClassType::registerClass<GraphRequest>(cls);
+    JSBClassType::registerClass<Self>(cls);
     clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();

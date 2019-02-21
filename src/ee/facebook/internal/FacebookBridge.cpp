@@ -4,19 +4,21 @@
 //
 
 #include "ee/facebook/internal/FacebookBridge.hpp"
-#include "ee/facebook/internal/FacebookAccessToken.hpp"
-#include "ee/facebook/internal/FacebookLoginDelegate.hpp"
-#include "ee/facebook/internal/FacebookGraphDelegate.hpp"
-#include "ee/facebook/internal/FacebookRequestDelegate.hpp"
-#include "ee/facebook/internal/FacebookShareDelegate.hpp"
-#include "ee/facebook/FacebookRequestContent.hpp"
-#include "ee/facebook/FacebookGraphRequest.hpp"
+
+#include <ee/nlohmann/json.hpp>
+
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/Utils.hpp"
-
-#include <ee/nlohmann/json.hpp>
+#include "ee/core/internal/SharedPtrUtils.hpp"
+#include "ee/facebook/FacebookGraphRequest.hpp"
+#include "ee/facebook/FacebookRequestContent.hpp"
+#include "ee/facebook/internal/FacebookAccessToken.hpp"
+#include "ee/facebook/internal/FacebookGraphDelegate.hpp"
+#include "ee/facebook/internal/FacebookLoginDelegate.hpp"
+#include "ee/facebook/internal/FacebookRequestDelegate.hpp"
+#include "ee/facebook/internal/FacebookShareDelegate.hpp"
 
 namespace ee {
 namespace core {
@@ -85,7 +87,7 @@ void Self::logIn(const std::vector<std::string>& permissions,
 }
 
 std::shared_ptr<ILoginDelegate> Self::createLoginDelegate() {
-    return std::make_shared<LoginDelegate>(bridge_, delegateId_++);
+    return core::makeShared<LoginDelegate>(bridge_, delegateId_++);
 }
 
 void Self::logOut() {
@@ -97,7 +99,7 @@ std::shared_ptr<IAccessToken> Self::getAccessToken() const {
     if (response.empty()) {
         return nullptr;
     }
-    auto token = std::make_shared<AccessToken>(response);
+    auto token = core::makeShared<AccessToken>(response);
     return token;
 }
 
@@ -111,7 +113,7 @@ void Self::graphRequest(const GraphRequest& request,
 }
 
 std::shared_ptr<IGraphDelegate> Self::createGraphDelegate() {
-    return std::make_shared<GraphDelegate>(bridge_, delegateId_++);
+    return core::makeShared<GraphDelegate>(bridge_, delegateId_++);
 }
 
 void Self::sendRequest(const RequestContent& content,
@@ -124,7 +126,7 @@ void Self::sendRequest(const RequestContent& content,
 }
 
 std::shared_ptr<IRequestDelegate> Self::createRequestDelegate() {
-    return std::make_shared<RequestDelegate>(bridge_, delegateId_++);
+    return core::makeShared<RequestDelegate>(bridge_, delegateId_++);
 }
 
 void Self::shareLinkContent(const std::string& url,
@@ -158,7 +160,7 @@ void Self::shareVideoContent(const std::string& url,
 }
 
 std::shared_ptr<IShareDelegate> Self::createShareDelegate() {
-    return std::make_shared<ShareDelegate>(bridge_, delegateId_++);
+    return core::makeShared<ShareDelegate>(bridge_, delegateId_++);
 }
 } // namespace facebook
 } // namespace ee

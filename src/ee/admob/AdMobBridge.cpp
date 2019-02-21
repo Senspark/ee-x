@@ -7,6 +7,9 @@
 //
 
 #include "ee/admob/AdMobBridge.hpp"
+
+#include <ee/nlohmann/json.hpp>
+
 #include "ee/admob/AdMobNativeAdLayout.hpp"
 #include "ee/admob/internal/AdMobBannerAd.hpp"
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
@@ -19,8 +22,7 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-
-#include <ee/nlohmann/json.hpp>
+#include "ee/core/internal/SharedPtrUtils.hpp"
 
 namespace ee {
 namespace admob {
@@ -160,7 +162,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
 
     auto&& response = bridge_.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
-        return std::make_shared<NullAdView>();
+        return core::makeShared<NullAdView>();
     }
     return std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId));
 }
@@ -176,7 +178,7 @@ Self::createInterstitialAd(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = bridge_.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
-        return std::make_shared<NullInterstitialAd>();
+        return core::makeShared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
         new InterstitialAd(bridge_, logger_, this, adId));
@@ -192,7 +194,7 @@ std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (rewardedVideos_.count(adId) != 0) {
-        return std::make_shared<NullRewardedVideo>(logger_);
+        return core::makeShared<NullRewardedVideo>(logger_);
     }
     auto result = new RewardedVideo(logger_, this, adId);
     rewardedVideos_[adId] = result;

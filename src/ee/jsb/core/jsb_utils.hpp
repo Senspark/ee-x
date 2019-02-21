@@ -14,6 +14,8 @@
 
 namespace ee {
 namespace core {
+void schedule(const std::function<void(float delta)>& callback, void* target,
+              float interval, const std::string& key);
 void runOnCocosThread(const std::function<void()>& callback);
 bool register_utils_manual(se::Object* object);
 } // namespace core

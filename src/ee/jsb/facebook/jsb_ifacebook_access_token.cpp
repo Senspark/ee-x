@@ -8,59 +8,56 @@
 #include "ee/jsb/facebook/jsb_ifacebook_access_token.hpp"
 
 #include "ee/facebook/IFacebookAccessToken.hpp"
-
+#include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
+using Self = ee::facebook::IAccessToken;
+
 namespace ee {
 namespace core {
 namespace {
-std::unique_ptr<SharedPtrHandler<facebook::IAccessToken>> handler;
+std::unique_ptr<SharedPtrHandler<Self>> handler;
 } // namespace
 
 template <>
-std::shared_ptr<facebook::IAccessToken> get_value(const se::Value& value) {
+std::shared_ptr<Self> get_value(const se::Value& value) {
     return handler->getValue(value);
 }
 
 template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::IAccessToken> input) {
+void set_value(se::Value& value, std::shared_ptr<Self> input) {
     handler->setValue(value, input);
 }
 
 template <>
-void set_value(se::Value& value,
-               std::shared_ptr<facebook::IAccessToken>& input) {
+void set_value(se::Value& value, std::shared_ptr<Self>& input) {
     handler->setValue(value, input);
 }
 
 template <>
-bool makeFinalize<facebook::IAccessToken>(se::State& state) {
+bool makeFinalize<Self>(se::State& state) {
     return handler->finalize(state);
 }
 
 template <>
-se::Object*
-create_JSON_object(const std::shared_ptr<facebook::IAccessToken>& value) {
+se::HandleObject create_JSON_object(const std::shared_ptr<Self>& value) {
     auto&& json = nlohmann::json();
     json.push_back(value->getToken());
     json.push_back(value->getApplicationId());
     json.push_back(value->getUserId());
-    return se::Object::createJSONObject(json.dump());
+    return se::HandleObject(se::Object::createJSONObject(json.dump()));
 }
 } // namespace core
 
 namespace facebook {
 namespace {
-using Self = IAccessToken;
-
 // clang-format off
 constexpr auto finalize         = &core::makeFinalize<Self>;
-constexpr auto getToken         = &core::makeInstanceMethod<&Self::getToken>;
-constexpr auto getApplicationId = &core::makeInstanceMethod<&Self::getApplicationId>;
-constexpr auto getUserId        = &core::makeInstanceMethod<&Self::getUserId>;
+constexpr auto getToken         = &core::makeMethod<&Self::getToken>;
+constexpr auto getApplicationId = &core::makeMethod<&Self::getApplicationId>;
+constexpr auto getUserId        = &core::makeMethod<&Self::getUserId>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize);

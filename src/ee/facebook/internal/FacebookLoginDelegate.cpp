@@ -6,10 +6,12 @@
 //
 
 #include "ee/facebook/internal/FacebookLoginDelegate.hpp"
-#include "ee/facebook/internal/FacebookAccessToken.hpp"
-#include "ee/core/IMessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include "ee/core/IMessageBridge.hpp"
+#include "ee/core/internal/SharedPtrUtils.hpp"
+#include "ee/facebook/internal/FacebookAccessToken.hpp"
 
 namespace ee {
 namespace facebook {
@@ -35,7 +37,7 @@ Self::LoginDelegate(IMessageBridge& bridge, int tag)
     bridge_.registerHandler(
         [this](const std::string& message) {
             if (successCallback_) {
-                auto token = std::make_shared<AccessToken>(message);
+                auto token = core::makeShared<AccessToken>(message);
                 successCallback_(token);
             }
             self_.reset();

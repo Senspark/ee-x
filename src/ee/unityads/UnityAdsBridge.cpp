@@ -6,7 +6,11 @@
 //
 //
 
+#include "ee/unityads/UnityAdsBridge.hpp"
+
 #include <cassert>
+
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/ads/NullRewardedVideo.hpp"
@@ -14,11 +18,9 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/MessageBridge.hpp"
 #include "ee/core/Utils.hpp"
-#include "ee/unityads/UnityAdsBridge.hpp"
+#include "ee/core/internal/SharedPtrUtils.hpp"
 #include "ee/unityads/internal/UnityInterstitialAd.hpp"
 #include "ee/unityads/internal/UnityRewardedVideo.hpp"
-
-#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace unityads {
@@ -98,7 +100,7 @@ Self::createRewardedVideo(const std::string& placementId) {
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     if (rewardedVideos_.count(placementId) != 0) {
-        return std::make_shared<NullRewardedVideo>(logger_);
+        return core::makeShared<NullRewardedVideo>(logger_);
     }
     auto result = new RewardedVideo(logger_, this, placementId);
     rewardedVideos_[placementId] = result;
@@ -120,7 +122,7 @@ Self::createInterstitialAd(const std::string& placementId) {
     logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
                   placementId.c_str());
     if (interstitialAds_.count(placementId) != 0) {
-        return std::make_shared<NullInterstitialAd>();
+        return core::makeShared<NullInterstitialAd>();
     }
     auto result = new InterstitialAd(logger_, this, placementId);
     interstitialAds_[placementId] = result;

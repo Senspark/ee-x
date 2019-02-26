@@ -27,6 +27,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
+import com.google.android.gms.common.wrappers.InstantApps;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Locale;
@@ -53,6 +54,7 @@ public class Utils {
     private static final String k__testConnection                = "Utils_testConnection";
     private static final String k__getDeviceId                   = "Utils_getDeviceId";
     private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
+    private static final String k__isInstantApp                  = "Utils_isInstantApp";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -209,6 +211,15 @@ public class Utils {
                 return "";
             }
         }, k__runOnUiThreadDelayed);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                return Utils.toString(InstantApps.isInstantApp(context));
+            }
+        }, k__isInstantApp);
     }
 
     @SuppressWarnings("WeakerAccess")

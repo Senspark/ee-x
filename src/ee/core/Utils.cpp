@@ -120,6 +120,7 @@ constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__testConnection                = "Utils_testConnection";
 constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
+constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
 // clang-format on
 } // namespace
 
@@ -270,6 +271,12 @@ void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
     json["callback_id"] = callbackTag;
     json["delay_time"] = delay;
     bridge.call(k__runOnUiThreadDelayed, json.dump());
+}
+
+bool isInstantApp() {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__isInstantApp);
+    return toBool(response);
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {

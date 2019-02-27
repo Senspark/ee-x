@@ -93,6 +93,8 @@ std::string dumpBacktrace(size_t count);
 void runOnUiThreadDelayed(const std::function<void()>& func, float delay);
 
 bool isInstantApp();
+
+void showInstallPrompt(const std::string& url, const std::string& referrer);
 } // namespace core
 
 using core::format;

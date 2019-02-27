@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,7 +28,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
-import com.google.android.gms.common.wrappers.InstantApps;
+import com.google.android.gms.instantapps.InstantApps;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Locale;
@@ -38,23 +39,41 @@ import java.util.Map;
  */
 
 public class Utils {
+
+    public static final int INSTALL_APP_REQUEST_CODE = 0x10;
+
     private static final Logger _logger = new Logger(Utils.class.getName());
 
-    private static final String k__isMainThread                  = "Utils_isMainThread";
-    private static final String k__runOnUiThread                 = "Utils_runOnUiThread";
-    private static final String k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
+    private static final String k__isMainThread = "Utils_isMainThread";
+
+    private static final String k__runOnUiThread = "Utils_runOnUiThread";
+
+    private static final String k__runOnUiThreadCallback = "Utils_runOnUiThreadCallback";
+
     private static final String k__getSHA1CertificateFingerprint =
             "Utils_getSHA1CertificateFingerprint";
-    private static final String k__getVersionName                = "Utils_getVersionName";
-    private static final String k__getVersionCode                = "Utils_getVersionCode";
-    private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
-    private static final String k__openApplication               = "Utils_openApplication";
-    private static final String k__sendMail                      = "Utils_sendMail";
-    private static final String k__isTablet                      = "Utils_isTablet";
-    private static final String k__testConnection                = "Utils_testConnection";
-    private static final String k__getDeviceId                   = "Utils_getDeviceId";
-    private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
-    private static final String k__isInstantApp                  = "Utils_isInstantApp";
+
+    private static final String k__getVersionName = "Utils_getVersionName";
+
+    private static final String k__getVersionCode = "Utils_getVersionCode";
+
+    private static final String k__isApplicationInstalled = "Utils_isApplicationInstalled";
+
+    private static final String k__openApplication = "Utils_openApplication";
+
+    private static final String k__sendMail = "Utils_sendMail";
+
+    private static final String k__isTablet = "Utils_isTablet";
+
+    private static final String k__testConnection = "Utils_testConnection";
+
+    private static final String k__getDeviceId = "Utils_getDeviceId";
+
+    private static final String k__runOnUiThreadDelayed = "Utils_runOnUiThreadDelayed";
+
+    private static final String k__isInstantApp = "Utils_isInstantApp";
+
+    private static final String k__showInstallPrompt = "Utils_showInstallPrompt";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -217,9 +236,30 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
-                return Utils.toString(InstantApps.isInstantApp(context));
+                return Utils.toString(com.google.android.gms.common.wrappers.InstantApps.isInstantApp(context));
             }
         }, k__isInstantApp);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull final String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                String url = (String) dict.get("url");
+                String referrer = (String) dict.get("referrer");
+
+                boolean isInstantApp = com.google.android.gms.common.wrappers.InstantApps.isInstantApp(PluginManager.getInstance().getContext());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE);
+
+                Activity activity = PluginManager.getInstance().getActivity();
+
+                if (isInstantApp && activity != null) {
+                    InstantApps.showInstallPrompt(activity, intent, INSTALL_APP_REQUEST_CODE, referrer);
+                }
+
+                return "";
+            }
+        }, k__showInstallPrompt);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -307,7 +347,7 @@ public class Utils {
 
     @SuppressWarnings("WeakerAccess")
     public static boolean isApplicationInstalled(@NonNull Context context,
-                                                 @NonNull String applicationId) {
+            @NonNull String applicationId) {
         PackageManager packetManager = context.getPackageManager();
         boolean installed = false;
         try {
@@ -333,7 +373,7 @@ public class Utils {
             @NonNull String body) {
         Intent intent = new Intent(Intent.ACTION_SEND) //
                 .setType("message/rfc822") //
-                .putExtra(Intent.EXTRA_EMAIL, new String[] {recipient}) //
+                .putExtra(Intent.EXTRA_EMAIL, new String[]{recipient}) //
                 .putExtra(Intent.EXTRA_SUBJECT, subject) //
                 .putExtra(Intent.EXTRA_TEXT, body);
         try {
@@ -356,7 +396,7 @@ public class Utils {
         // considered a Tablet
         int screenLayout = Resources.getSystem().getConfiguration().screenLayout;
         boolean xlarge = ((screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                          Configuration.SCREENLAYOUT_SIZE_LARGE);
+                Configuration.SCREENLAYOUT_SIZE_LARGE);
 
         // If XLarge, checks if the Generalized Density is at least MDPI
         // (160dpi)
@@ -366,10 +406,10 @@ public class Utils {
             // MDPI=160, DEFAULT=160, DENSITY_HIGH=240, DENSITY_MEDIUM=160,
             // DENSITY_TV=213, DENSITY_XHIGH=320
             if (densityDpi == DisplayMetrics.DENSITY_DEFAULT ||
-                densityDpi == DisplayMetrics.DENSITY_HIGH ||
-                densityDpi == DisplayMetrics.DENSITY_MEDIUM ||
-                densityDpi == DisplayMetrics.DENSITY_TV ||
-                densityDpi == DisplayMetrics.DENSITY_XHIGH) {
+                    densityDpi == DisplayMetrics.DENSITY_HIGH ||
+                    densityDpi == DisplayMetrics.DENSITY_MEDIUM ||
+                    densityDpi == DisplayMetrics.DENSITY_TV ||
+                    densityDpi == DisplayMetrics.DENSITY_XHIGH) {
                 // Yes, this is a tablet!
                 return true;
             }
@@ -396,7 +436,7 @@ public class Utils {
     @SuppressWarnings("WeakerAccess")
     public static boolean testConnection(@NonNull Context context) {
         ConnectivityManager connectivityManager =
-            (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         return info != null && info.isConnectedOrConnecting();
@@ -414,7 +454,9 @@ public class Utils {
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {
-        private Context         _context;
+
+        private Context _context;
+
         private GetGAIDListener _listener;
 
         public GetGAIDTask(Context context, GetGAIDListener listener) {
@@ -426,9 +468,12 @@ public class Utils {
         protected String doInBackground(String... strings) {
             String gaId = "";
             try {
-                AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(_context.getApplicationContext());
+                AdvertisingIdClient.Info adInfo = AdvertisingIdClient
+                        .getAdvertisingIdInfo(_context.getApplicationContext());
                 if (adInfo.isLimitAdTrackingEnabled()) // check if user has opted out of tracking
+                {
                     return gaId;
+                }
                 gaId = adInfo.getId();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -449,6 +494,7 @@ public class Utils {
     }
 
     private interface GetGAIDListener {
+
         void onGAIDCallback(String s);
     }
 }

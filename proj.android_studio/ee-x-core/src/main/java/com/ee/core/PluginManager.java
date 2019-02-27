@@ -22,6 +22,7 @@ public class PluginManager {
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
     private Context                     _context;
+    private Activity                    _activity;
     private Map<String, PluginProtocol> _plugins;
 
     private static class Holder {
@@ -45,6 +46,7 @@ public class PluginManager {
     public Context getContext() {
         return _context;
     }
+    public Activity getActivity() { return _activity; }
 
     @SuppressWarnings({"unused", "TryWithIdenticalCatches"})
     public void addPlugin(@NonNull String pluginName) {
@@ -102,6 +104,7 @@ public class PluginManager {
     }
 
     public void onCreate(Activity activity) {
+        _activity = activity;
         for (String key : _plugins.keySet()) {
             _plugins.get(key).onCreate(activity);
         }

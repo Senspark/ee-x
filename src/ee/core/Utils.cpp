@@ -121,6 +121,8 @@ constexpr auto k__testConnection                = "Utils_testConnection";
 constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
 constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
+constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
+
 // clang-format on
 } // namespace
 
@@ -277,6 +279,14 @@ bool isInstantApp() {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isInstantApp);
     return toBool(response);
+}
+
+void showInstallPrompt(const std::string& url, const std::string& referrer) {
+    nlohmann::json json;
+    json["url"] = url;
+    json["referrer"] = referrer;
+    auto&& bridge = MessageBridge::getInstance();
+    bridge.call(k__showInstallPrompt, json.dump());
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {

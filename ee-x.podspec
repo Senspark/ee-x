@@ -222,6 +222,13 @@ Pod::Spec.new do |spec|
     s.ios.dependency 'Firebase/Storage', '4.13.0'
   end
 
+  spec.subspec 'firebase-performance' do |s|
+    s.source_files = 'src/ee/firebase/FirebasePerformance.*'
+    s.public_header_files = 'src/ee/firebase/FirebasePerformance.hpp'
+    s.dependency 'ee-x/firebase-core'
+    s.ios.dependency 'Firebase/Performance'
+  end
+
   spec.subspec 'ads' do |s|
     s.source_files =
       'src/ee/Ads.hpp',

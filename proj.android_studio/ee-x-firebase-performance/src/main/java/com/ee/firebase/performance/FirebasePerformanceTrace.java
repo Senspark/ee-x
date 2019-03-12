@@ -77,7 +77,7 @@ public class FirebasePerformanceTrace {
                 assert dict != null;
 
                 String key = (String) dict.get(k__key);
-                Long value = (Long) dict.get(k__value);
+                Integer value = (Integer) dict.get(k__value);
                 incrementMetric(key, value);
                 return "";
             }

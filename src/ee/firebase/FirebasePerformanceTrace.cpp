@@ -25,11 +25,11 @@ constexpr auto k__value     = "value";
 
 namespace {
 std::string k__start(const std::string& name) {
-    return "FirebasePerformance_start" + name;
+    return "FirebasePerformance_start_" + name;
 }
 
 std::string k__stop(const std::string& name) {
-    return "FirebasePerformance_stop" + name;
+    return "FirebasePerformance_stop_" + name;
 }
 
 std::string k__incrementMetric(const std::string& name) {
@@ -38,18 +38,6 @@ std::string k__incrementMetric(const std::string& name) {
 
 std::string k__getLongMetric(const std::string& name) {
     return "FirebasePerformance_getLongMetric_" + name;
-}
-
-std::string k__getAttribute(const std::string& name) {
-    return "FirebasePerformance_getAttribute_" + name;
-}
-
-std::string k__putAttribute(const std::string& name) {
-    return "FirebasePerformance_putAttribute_" + name;
-}
-
-std::string k__removeAttribute(const std::string& name) {
-    return "FirebasePerformance_removeAttribute_" + name;
 }
 
 std::string k__putMetric(const std::string& name) {
@@ -92,25 +80,6 @@ std::int64_t Self::getLongMetric(const std::string &metricName) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__getLongMetric(name_), metricName);
     return std::stoll(response);
-}
-
-std::string Self::getAttribute(const std::string &attribute) {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__getAttribute(name_), attribute);
-    return response;
-}
-
-void Self::putAttribute(const std::string &attribute, const std::string &value) {
-    nlohmann::json json;
-    json[k__key] = attribute;
-    json[k__value] = value;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__putAttribute(name_), json.dump());
-}
-
-void Self::removeAttribute(const std::string &attribute) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__removeAttribute(name_), attribute);
 }
 
 } // namespace firebase

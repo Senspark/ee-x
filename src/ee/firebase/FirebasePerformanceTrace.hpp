@@ -27,10 +27,6 @@ public:
     void incrementMetric(const std::string& metricName,
                          std::int64_t incrementBy);
     std::int64_t getLongMetric(const std::string& metricName);
-
-    std::string getAttribute(const std::string& attribute);
-    void putAttribute(const std::string& attribute, const std::string& value);
-    void removeAttribute(const std::string& attribute);
     
 protected:
     friend class Performance;

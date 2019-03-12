@@ -7,13 +7,17 @@
 
 #import "EEFirebasePerformance.h"
 
+#import <FirebaseCore/FIRApp.h>
+#import <FirebasePerformance/FIRPerformance.h>
+
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
+#import "ee/firebase/internal/EEFirebasePerformanceTrace.h"
 
 
 @interface EEFirebasePerformance () {
-//    NSMutableDictionary<NSString*, EE
+    NSMutableDictionary<NSString*, EEFirebasePerformanceTrace*>* traces_;
 }
 @end
 
@@ -31,6 +35,10 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
     if (self == nil) {
         return self;
     }
+    
+    [FIRApp configure];
+    
+    traces_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;
 }
@@ -73,19 +81,35 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
 }
 
 - (void) setDataCollectionEnabled:(bool)enabled {
-    
+    [FIRPerformance sharedInstance].dataCollectionEnabled = enabled;
 }
 
 - (BOOL)isDataCollectionEnabled {
-    return NO;
+    return [FIRPerformance sharedInstance].dataCollectionEnabled;
 }
 
 - (BOOL) newTrace:(NSString *)traceName {
-    return NO;
+    if ([traces_ objectForKey:traceName] != nil) {
+        return NO;
+    }
+    FIRTrace* trace = [[FIRPerformance sharedInstance] traceWithName:traceName];
+    EEFirebasePerformanceTrace* wrapper = [[[EEFirebasePerformanceTrace alloc]
+        initWithTraceName:traceName
+                    trace:trace] autorelease];
+    [traces_ setObject:trace forKey:traceName];
+    return YES;
 }
 
 - (BOOL) startTrace:(NSString *)traceName {
-    return NO;
+    if ([traces_ objectForKey:traceName] != nil) {
+        return NO;
+    }
+    FIRTrace* trace = [FIRPerformance startTraceWithName:traceName];
+    EEFirebasePerformanceTrace* wrapper = [[[EEFirebasePerformanceTrace alloc]
+        initWithTraceName:traceName
+                    trace:trace] autorelease];
+    [traces_ setObject:wrapper forKey:traceName];
+    return YES;
 }
 
 @end

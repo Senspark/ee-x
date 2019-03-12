@@ -18,6 +18,8 @@ class Storage;
 class Messaging;
 class Message;
 class DynamicLink;
+class Performance;
+class PerformanceTrace;
 } // namespace firebase
     
 using FirebaseDynamicLink = firebase::DynamicLink;

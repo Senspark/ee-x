@@ -14,6 +14,7 @@ import com.ee.core.internal.Utils;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
 
+import com.facebook.ads.AudienceNetworkAds;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +57,8 @@ public class FacebookAds implements PluginProtocol {
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
         _rewardVideoAds = new HashMap<>();
+
+        AudienceNetworkAds.initialize(context);
 
         registerHandlers();
     }

@@ -96,7 +96,7 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
     EEFirebasePerformanceTrace* wrapper = [[[EEFirebasePerformanceTrace alloc]
         initWithTraceName:traceName
                     trace:trace] autorelease];
-    [traces_ setObject:trace forKey:traceName];
+    [traces_ setObject:wrapper forKey:traceName];
     return YES;
 }
 

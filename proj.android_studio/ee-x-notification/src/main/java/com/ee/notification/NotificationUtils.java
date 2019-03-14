@@ -2,8 +2,10 @@ package com.ee.notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
@@ -62,9 +64,10 @@ public class NotificationUtils {
      */
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, null);
-
+        String channelId = context.getPackageName() + "_notification";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
         builder
+            .setOngoing(false)
             .setAutoCancel(true)
             .setContentIntent(clickIntent)
             .setContentText(body)
@@ -99,14 +102,13 @@ public class NotificationUtils {
      * @param context  The context.
      * @param activity The activity will be opened when the notification is clicked.
      */
-    static PendingIntent createClickIntent(Context context, Class activityClass) {
+    static PendingIntent createClickIntent(Context context, Class activityClass, int requestCode) {
         // Use FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP
         // to resume exist activity instead of restarting it.
         Intent intent = new Intent(context, activityClass)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**
@@ -135,7 +137,12 @@ public class NotificationUtils {
      */
     static void scheduleAlarm(Context context, Intent intent, int requestCode, int flags, int delay,
                               int interval) {
-        PendingIntent pendingIntent = PendingIntent.getService(context, requestCode, intent, flags);
+        PendingIntent pendingIntent = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pendingIntent = PendingIntent.getForegroundService(context, requestCode, intent, flags);
+        } else {
+            pendingIntent = PendingIntent.getService(context, requestCode, intent, flags);
+        }
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long intervalInMilliseconds = (long) interval * 1000;
         long delayInMilliseconds = (long) delay * 1000;
@@ -164,8 +171,14 @@ public class NotificationUtils {
      *                    of the pending intent.
      */
     static void unscheduleAlarm(Context context, Intent intent, int requestCode) {
-        PendingIntent pendingIntent = PendingIntent.getService(context, requestCode, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pendingIntent = PendingIntent.getForegroundService(context, requestCode, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        } else {
+            pendingIntent = PendingIntent.getService(context, requestCode, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         pendingIntent.cancel();
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);

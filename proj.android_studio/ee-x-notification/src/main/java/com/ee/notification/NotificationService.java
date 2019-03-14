@@ -19,6 +19,7 @@ public class NotificationService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        _logger.debug("onBind");
         return null;
     }
 
@@ -35,10 +36,12 @@ public class NotificationService extends Service {
         String className = intent.getStringExtra("className");
         try {
             Class clazz = Class.forName(className);
-            PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz);
+            PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz, tag);
             Notification notification =
                 NotificationUtils.buildNotification(this, ticker, title, body, clickIntent);
+            startForeground(tag, notification);
             NotificationUtils.showNotification(this, notification, tag);
+            stopForeground(false);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -47,5 +50,12 @@ public class NotificationService extends Service {
         }
 
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        _logger.debug("onDestroy");
+        stopForeground(true);
+        super.onDestroy();
     }
 }

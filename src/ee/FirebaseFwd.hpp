@@ -28,6 +28,8 @@ using FirebaseAnalytics = firebase::Analytics;
 using FirebaseRemoteConfig = firebase::RemoteConfig;
 using FirebaseStorage = firebase::Storage;
 using FirebaseMessaging = firebase::Messaging;
+using FirebasePerformance = firebase::Performance;
+using FirebasePerformanceTrace = firebase::PerformanceTrace;
 using firebase::Message;
 } // namespace ee
 

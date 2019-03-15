@@ -59,6 +59,7 @@ public class FacebookAds implements PluginProtocol {
         _rewardVideoAds = new HashMap<>();
 
         AudienceNetworkAds.initialize(context);
+        AudienceNetworkAds.isInAdsProcess(context);
 
         registerHandlers();
     }

@@ -275,7 +275,7 @@ Pod::Spec.new do |spec|
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
-    s.dependency 'Google-Mobile-Ads-SDK'
+    s.dependency 'Google-Mobile-Ads-SDK', '7.40.0'
   end
 
   spec.subspec 'applovin-base' do |s|

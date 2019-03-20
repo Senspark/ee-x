@@ -135,10 +135,9 @@ static NSString* const k__layout_name           = @"layout_name";
                    NSString* layoutName = dict[k__layout_name];
                    return [EEUtils
                        toString:
-                           [self
-                               createNativeAd:adId
-                                         type:kGADAdLoaderAdTypeNativeAppInstall
-                                       layout:layoutName]];
+                           [self createNativeAd:adId
+                                           type:kGADAdLoaderAdTypeUnifiedNative
+                                         layout:layoutName]];
                }];
 
     [bridge_ registerHandler:k__destroyNativeAd

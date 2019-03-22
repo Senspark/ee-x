@@ -5,7 +5,7 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/9/19.
 //
 
-#import "EEFirebasePerformance.h"
+#import "ee/firebase/internal/EEFirebasePerformance.h"
 
 #import <FirebaseCore/FIRApp.h>
 #import <FirebasePerformance/FIRPerformance.h>
@@ -15,10 +15,10 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/firebase/internal/EEFirebasePerformanceTrace.h"
 
-
 @interface EEFirebasePerformance () {
     NSMutableDictionary<NSString*, EEFirebasePerformanceTrace*>* traces_;
 }
+
 @end
 
 @implementation EEFirebasePerformance
@@ -30,57 +30,61 @@ static NSString* const k__startTrace                = @"FirebasePerformance_star
 static NSString* const k__newTrace                  = @"FirebasePerformance_newTrace";
 // clang-format on
 
-- (id) init {
+- (id)init {
     self = [super init];
     if (self == nil) {
         return self;
     }
-    
+
     [FIRApp configure];
-    
+
     traces_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
     [self deregisterHandlers];
     [super dealloc];
 }
 
-- (void) registerHandlers {
+- (void)registerHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    
-    [bridge registerHandler:k__setDataCollectionEnabled callback:^(NSString* message) {
-        [self setDataCollectionEnabled:[EEUtils toBool:message]];
-        return @"";
-    }];
-    
-    [bridge registerHandler:k__isDataCollectionEnabled callback:^(NSString* message) {
-        return [EEUtils toString:[self isDataCollectionEnabled]];
-    }];
-    
-    [bridge registerHandler:k__startTrace callback:^(NSString* message) {
-        NSString* traceName = message;
-        return [EEUtils toString:[self startTrace:traceName]];
-    }];
-    
-    [bridge registerHandler:k__newTrace callback:^(NSString* message) {
-        NSString* traceName = message;
-        return [EEUtils toString:[self newTrace:traceName]];
-    }];
+
+    [bridge registerHandler:k__setDataCollectionEnabled
+                   callback:^(NSString* message) {
+                       [self setDataCollectionEnabled:[EEUtils toBool:message]];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__isDataCollectionEnabled
+                   callback:^(NSString* message) {
+                       return [EEUtils toString:[self isDataCollectionEnabled]];
+                   }];
+
+    [bridge registerHandler:k__startTrace
+                   callback:^(NSString* message) {
+                       NSString* traceName = message;
+                       return [EEUtils toString:[self startTrace:traceName]];
+                   }];
+
+    [bridge registerHandler:k__newTrace
+                   callback:^(NSString* message) {
+                       NSString* traceName = message;
+                       return [EEUtils toString:[self newTrace:traceName]];
+                   }];
 }
 
-- (void) deregisterHandlers {
+- (void)deregisterHandlers {
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    
+
     [bridge deregisterHandler:k__setDataCollectionEnabled];
     [bridge deregisterHandler:k__isDataCollectionEnabled];
     [bridge deregisterHandler:k__startTrace];
     [bridge deregisterHandler:k__newTrace];
 }
 
-- (void) setDataCollectionEnabled:(bool)enabled {
+- (void)setDataCollectionEnabled:(bool)enabled {
     [FIRPerformance sharedInstance].dataCollectionEnabled = enabled;
 }
 
@@ -88,7 +92,7 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
     return [FIRPerformance sharedInstance].dataCollectionEnabled;
 }
 
-- (BOOL) newTrace:(NSString *)traceName {
+- (BOOL)newTrace:(NSString*)traceName {
     if ([traces_ objectForKey:traceName] != nil) {
         return NO;
     }
@@ -100,7 +104,7 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
     return YES;
 }
 
-- (BOOL) startTrace:(NSString *)traceName {
+- (BOOL)startTrace:(NSString*)traceName {
     if ([traces_ objectForKey:traceName] != nil) {
         return NO;
     }

@@ -456,8 +456,8 @@ public class Utils {
             try {
                 AdvertisingIdClient.Info adInfo = AdvertisingIdClient
                         .getAdvertisingIdInfo(_context.getApplicationContext());
-                if (adInfo.isLimitAdTrackingEnabled()) // check if user has opted out of tracking
-                {
+                // check if user has opted out of tracking
+                if (adInfo.isLimitAdTrackingEnabled()) {
                     return gaId;
                 }
                 gaId = adInfo.getId();

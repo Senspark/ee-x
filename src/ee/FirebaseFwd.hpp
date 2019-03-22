@@ -21,7 +21,7 @@ class DynamicLink;
 class Performance;
 class PerformanceTrace;
 } // namespace firebase
-    
+
 using FirebaseDynamicLink = firebase::DynamicLink;
 using FirebaseApp = firebase::App;
 using FirebaseAnalytics = firebase::Analytics;

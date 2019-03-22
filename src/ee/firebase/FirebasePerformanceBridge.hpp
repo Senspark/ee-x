@@ -20,7 +20,6 @@
 
 namespace ee {
 namespace firebase {
-
 class PerformanceTrace;
 
 class Performance final {
@@ -35,18 +34,16 @@ public:
     bool isDataCollectionEnabled();
 
     /// Creates an instance of FIRTrace after creating the shared instance of
-    /// FirebasePerformance. The trace will automatically be started on a successful
-    /// creation of the instance. The |name| of the trace cannot be an empty
-    /// string.
-    std::shared_ptr<PerformanceTrace>
-    startTrace(const std::string& name);
+    /// FirebasePerformance. The trace will automatically be started on a
+    /// successful creation of the instance. The |name| of the trace cannot be
+    /// an empty string.
+    std::shared_ptr<PerformanceTrace> startTrace(const std::string& name);
 
     /// Creates an instance of FIRTrace. This API does not start the trace. To
     /// start the trace, use the -start API on the returned |FIRTrace| object.
     /// The |name| cannot be an empty string.
     std::shared_ptr<PerformanceTrace> newTrace(const std::string& name);
 };
-
 } // namespace firebase
 } // namespace ee
 

@@ -8,11 +8,10 @@
 #ifndef EE_X_FIREBASE_PERFORMANCE_TRACE_HPP_
 #define EE_X_FIREBASE_PERFORMANCE_TRACE_HPP_
 
-#include "FirebasePerformanceBridge.hpp"
+#include "ee/firebase/FirebasePerformanceBridge.hpp"
 
 namespace ee {
 namespace firebase {
-
 class Performance;
 
 class PerformanceTrace {
@@ -29,7 +28,7 @@ public:
     std::int64_t getLongMetric(const std::string& metricName);
     
 protected:
-    friend class Performance;
+    friend Performance;
     
 private:
     explicit PerformanceTrace(Performance* plugin, const std::string& name);
@@ -38,7 +37,6 @@ private:
     Performance* plugin_;
     std::string name_;
 };
-
 } // namespace firebase
 } // namespace ee
 

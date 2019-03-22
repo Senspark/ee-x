@@ -35,4 +35,9 @@
 #include "ee/firebase/FirebaseDynamicLink.hpp"
 #endif
 
+#if __has_include("ee/firebase/FirebasePerformanceBridge.hpp")
+#include "ee/firebase/FirebasePerformanceBridge.hpp"
+#include "ee/firebase/FirebasePerformanceTrace.hpp"
+#endif
+
 #endif /* EE_X_FIREBASE_HPP_ */

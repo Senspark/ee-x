@@ -69,6 +69,8 @@ static NSString* const k__isTablet                      = @"Utils_isTablet";
 static NSString* const k__testConnection                = @"Utils_testConnection";
 static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
 static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadDelayed";
+static NSString* const k__isInstantApp                  = @"Utils_isInstantApp";
+static NSString* const k__showInstallPrompt             = @"Utils_showInstallPrompt";
 // clang-format on
 
 + (void)registerHandlers {
@@ -161,6 +163,15 @@ static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadD
         return @"";
     }
                         tag:k__runOnUiThreadDelayed];
+
+    [bridge registerHandler:k__isInstantApp
+                   callback:^(NSString* message) {
+                       return @"false";
+                   }];
+    [bridge registerHandler:k__showInstallPrompt
+                   callback:^(NSString* message) {
+                       return @"";
+                   }];
 }
 
 + (BOOL)isMainThread {

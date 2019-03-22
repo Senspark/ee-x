@@ -13,14 +13,14 @@
 #import "ee/core/EEIMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
-@interface EEAdMobNativeAd () <GADAdLoaderDelegate,
-                               GADNativeAppInstallAdLoaderDelegate, GADNativeAdDelegate> {
+@interface EEAdMobNativeAd () <GADUnifiedNativeAdLoaderDelegate,
+                               GADUnifiedNativeAdDelegate> {
     id<EEIMessageBridge> bridge_;
     GADAdLoader* adLoader_;
     NSString* adId_;
     NSArray<GADAdLoaderAdType>* adTypes_;
     UIView* nativeAdPlaceholder_;
-    UIView* nativeAdView_;
+    GADUnifiedNativeAdView* nativeAdView_;
     NSString* layoutName_;
     BOOL isAdLoaded_;
     NSArray<NSString*>* testDevices_;
@@ -101,11 +101,15 @@
     }
     isAdLoaded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
+
+    GADVideoOptions* videoOptions = [[GADVideoOptions alloc] init];
+    videoOptions.startMuted = YES;
+
     GADAdLoader* loader =
         [[[GADAdLoader alloc] initWithAdUnitID:adId_
                             rootViewController:rootView
                                        adTypes:adTypes_
-                                       options:nil] autorelease];
+                                       options:@[videoOptions]] autorelease];
     [loader setDelegate:self];
     adLoader_ = [loader retain];
     return YES;
@@ -130,6 +134,10 @@
     [[rootView view] addSubview:view];
 
     nativeAdPlaceholder_ = [view retain];
+
+    NSArray* nibObjects =
+        [[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil];
+    [self setAdView:[nibObjects firstObject]];
 }
 
 - (void)destroyView {
@@ -181,6 +189,8 @@
     }
 }
 
+#pragma mark GADAdLoaderDelegate implementation
+
 - (void)adLoader:(GADAdLoader*)adLoader
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
@@ -191,108 +201,6 @@
 - (void)adLoaderDidFinishLoading:(GADAdLoader*)adLoader {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(adLoader_ == adLoader, @"");
-}
-
-- (void)adLoader:(GADAdLoader*)adLoader
-    didReceiveNativeAppInstallAd:(GADNativeAppInstallAd*)nativeAppInstallAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(adLoader_ == adLoader, @"");
-
-    nativeAppInstallAd.delegate = self;
-    
-    GADNativeAppInstallAdView* adView =
-        [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
-            firstObject];
-    [self setAdView:adView];
-
-    // Associate the app install ad view with the app install ad object. This is
-    // required to make the ad clickable.
-    [adView setNativeAppInstallAd:nativeAppInstallAd];
-
-    // Populate the app install ad view with the app install ad assets.
-    // Some assets are guaranteed to be present in every app install ad.
-    UILabel* bodyView = (UILabel*)[adView bodyView];
-    UIButton* callToActionView = (UIButton*)[adView callToActionView];
-    UILabel* headLineView = (UILabel*)[adView headlineView];
-    UIImageView* iconView = (UIImageView*)[adView iconView];
-
-    [bodyView setText:[nativeAppInstallAd body]];
-    [callToActionView setTitle:[nativeAppInstallAd callToAction]
-                      forState:UIControlStateNormal];
-    [headLineView setText:[nativeAppInstallAd headline]];
-    [iconView setImage:[[nativeAppInstallAd icon] image]];
-
-    // Some app install ads will include a video asset, while others do not.
-    // Apps can use the GADVideoController's hasVideoContent property to
-    // determine if one is present, and adjust their UI accordingly.
-
-    // The UI for this controller constrains the image view's height to match
-    // the media view's height, so by changing the one here, the height of both
-    // views are being adjusted.
-    UIImageView* imageView = (UIImageView*)[adView imageView];
-    if ([[nativeAppInstallAd videoController] hasVideoContent]) {
-        [imageView setHidden:YES];
-
-        if ([adView mediaView] != nil) {
-            [[adView mediaView] setHidden:NO];
-            // This app uses a fixed width for the GADMediaView and changes its
-            // height to match the aspect ratio of the video it displays.
-            //            NSLayoutConstraint* constraint = [NSLayoutConstraint
-            //                constraintWithItem:[adView mediaView]
-            //                         attribute:NSLayoutAttributeHeight
-            //                         relatedBy:NSLayoutRelationEqual
-            //                            toItem:[adView mediaView]
-            //                         attribute:NSLayoutAttributeWidth
-            //                        multiplier:(1 / [[nativeAppInstallAd
-            //                        videoController]
-            //                                            aspectRatio])
-            //                          constant:0];
-            //            [constraint setActive:YES];
-        }
-    } else {
-        [[adView mediaView] setHidden:YES];
-        [imageView setHidden:NO];
-
-        GADNativeAdImage* firstImage =
-            [[nativeAppInstallAd images] firstObject];
-        [imageView setImage:[firstImage image]];
-    }
-
-    // These assets are not guaranteed to be present, and should be checked
-    // first.
-    NSString* price = [nativeAppInstallAd price];
-    UILabel* priceView = (UILabel*)[adView priceView];
-    if (price != nil) {
-        [priceView setText:price];
-        [priceView setHidden:NO];
-    } else {
-        [priceView setHidden:YES];
-    }
-
-    NSDecimalNumber* starRating = [nativeAppInstallAd starRating];
-    UIImageView* starRatingView = (UIImageView*)[adView starRatingView];
-    if (starRating != nil) {
-        [starRatingView setImage:[self imageForStars:starRating]];
-        [starRatingView setHidden:NO];
-    } else {
-        [starRatingView setHidden:YES];
-    }
-
-    NSString* store = [nativeAppInstallAd store];
-    UILabel* storeView = (UILabel*)[adView storeView];
-    if (store != nil) {
-        [storeView setText:store];
-        [storeView setHidden:NO];
-    } else {
-        [storeView setHidden:YES];
-    }
-
-    // In order for the SDK to process touch events properly, user interaction
-    // should be disabled.
-    [[adView callToActionView] setUserInteractionEnabled:NO];
-
-    isAdLoaded_ = YES;
-    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 /// Gets an image representing the number of stars. Returns nil if rating is
@@ -312,7 +220,7 @@
     }
 }
 
-- (void)setAdView:(UIView* _Nonnull)view {
+- (void)setAdView:(GADUnifiedNativeAdView* _Nonnull)view {
     if (nativeAdView_ != nil) {
         // Remove previous ad view.
         [nativeAdView_ removeFromSuperview];
@@ -340,34 +248,87 @@
                                                  views:viewDictionary]];
 }
 
+#pragma mark GADUnifiedNativeAdDelegate
+
 // The native ad was shown.
-- (void)nativeAdDidRecordImpression:(GADNativeAd *)nativeAd {
+- (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 // The native ad was clicked on.
-- (void)nativeAdDidRecordClick:(GADNativeAd *)nativeAd {
+- (void)nativeAdDidRecordClick:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 // The native ad will present a full screen view.
-- (void)nativeAdWillPresentScreen:(GADNativeAd *)nativeAd {
+- (void)nativeAdWillPresentScreen:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 // The native ad will dismiss a full screen view.
-- (void)nativeAdWillDismissScreen:(GADNativeAd *)nativeAd {
+- (void)nativeAdWillDismissScreen:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 // The native ad did dismiss a full screen view.
-- (void)nativeAdDidDismissScreen:(GADNativeAd *)nativeAd {
+- (void)nativeAdDidDismissScreen:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
-// The native ad will cause the application to become inactive and open a new application.
-- (void)nativeAdWillLeaveApplication:(GADNativeAd *)nativeAd {
+// The native ad will cause the application to become inactive and open a new
+// application.
+- (void)nativeAdWillLeaveApplication:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [bridge_ callCpp:[self k__onClicked]];
 }
+
+#pragma mark GADUnifiedNativeAdLoaderDelegate implementation
+- (void)adLoader:(nonnull GADAdLoader*)adLoader
+    didReceiveUnifiedNativeAd:(nonnull GADUnifiedNativeAd*)nativeAd {
+    GADUnifiedNativeAdView* nativeAdView = nativeAdView_;
+
+    nativeAdView.nativeAd = nativeAd;
+
+    // Set ourselves as the ad delegate to be notified of native ad events.
+    nativeAd.delegate = self;
+
+    // Populate the native ad view with the native ad assets.
+    // The headline and mediaContent are guaranteed to be present in every
+    // native ad.
+    ((UILabel*)nativeAdView.headlineView).text = nativeAd.headline;
+    nativeAdView.mediaView.mediaContent = nativeAd.mediaContent;
+
+    // These assets are not guaranteed to be present. Check that they are before
+    // showing or hiding them.
+    ((UILabel*)nativeAdView.bodyView).text = nativeAd.body;
+    nativeAdView.bodyView.hidden = nativeAd.body ? NO : YES;
+
+    [((UIButton*)nativeAdView.callToActionView) setTitle:nativeAd.callToAction
+                                                forState:UIControlStateNormal];
+    nativeAdView.callToActionView.hidden = nativeAd.callToAction ? NO : YES;
+
+    ((UIImageView*)nativeAdView.iconView).image = nativeAd.icon.image;
+    nativeAdView.iconView.hidden = nativeAd.icon ? NO : YES;
+
+    ((UIImageView*)nativeAdView.starRatingView).image =
+        [self imageForStars:nativeAd.starRating];
+    nativeAdView.starRatingView.hidden = nativeAd.starRating ? NO : YES;
+
+    ((UILabel*)nativeAdView.storeView).text = nativeAd.store;
+    nativeAdView.storeView.hidden = nativeAd.store ? NO : YES;
+
+    ((UILabel*)nativeAdView.priceView).text = nativeAd.price;
+    nativeAdView.priceView.hidden = nativeAd.price ? NO : YES;
+
+    ((UILabel*)nativeAdView.advertiserView).text = nativeAd.advertiser;
+    nativeAdView.advertiserView.hidden = nativeAd.advertiser ? NO : YES;
+
+    // In order for the SDK to process touch events properly, user interaction
+    // should be disabled.
+    nativeAdView.callToActionView.userInteractionEnabled = NO;
+
+    isAdLoaded_ = YES;
+    [bridge_ callCpp:[self k__onLoaded]];
+}
+
 @end

@@ -12,6 +12,8 @@ android {
 
 dependencies {
     api "com.android.support:support-annotations:${rootProject.ext.supportLibraryVersion}"
+
+    implementation 'com.google.android.gms:play-services-instantapps:16.0.1'
     implementation ("com.google.android.gms:play-services-ads-identifier:16.0.0")
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'

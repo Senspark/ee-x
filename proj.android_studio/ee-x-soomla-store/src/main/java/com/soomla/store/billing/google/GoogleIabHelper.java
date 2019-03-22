@@ -137,6 +137,11 @@ public class GoogleIabHelper extends IabHelper {
                     setupFailed(new IabResult(IabResult.IABHELPER_REMOTE_EXCEPTION,
                             "RemoteException while setting up in-app billing."));
                     e.printStackTrace();
+                } catch (NullPointerException e) {
+                    //This catch is for safety
+                    setupFailed(new IabResult(IabResult.IABHELPER_REMOTE_EXCEPTION,
+                            "RemoteException while setting up in-app billing."));
+                    e.printStackTrace();
                 }
             }
         };

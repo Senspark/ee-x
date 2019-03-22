@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.ee.core.Logger;
+import com.ee.core.PluginManager;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
@@ -152,12 +153,18 @@ public class Notification implements PluginProtocol {
         _logger.debug(String.format(Locale.getDefault(),
             "schedule: title = %s body = %s delay = %d interval = %d tag = %d", title, body, delay,
             interval, tag));
+        Activity activity = PluginManager.getInstance().getActivity();
+        String className = "";
+        if (activity != null) {
+            className = activity.getClass().getName();
+        }
+
         Intent intent = new Intent(_context, NotificationService.class);
         intent.putExtra("ticker", ticker);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
         intent.putExtra("tag", tag);
-        intent.putExtra("className", _context.getClass().getName());
+        intent.putExtra("className", className);
         NotificationUtils.scheduleAlarm(_context, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
             delay, interval);
     }

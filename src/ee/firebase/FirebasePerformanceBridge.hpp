@@ -5,8 +5,8 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/8/19.
 //
 
-#ifndef EE_X_FIREBASE_PERFORMANCE_HPP_
-#define EE_X_FIREBASE_PERFORMANCE_HPP_
+#ifndef EE_X_FIREBASE_PERFORMANCE_HPP
+#define EE_X_FIREBASE_PERFORMANCE_HPP
 
 #include <string>
 
@@ -47,4 +47,4 @@ public:
 } // namespace firebase
 } // namespace ee
 
-#endif /* EE_X_FIREBASE_PERFORMANCE_HPP_ */
+#endif /* EE_X_FIREBASE_PERFORMANCE_HPP */

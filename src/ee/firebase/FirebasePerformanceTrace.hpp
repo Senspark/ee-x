@@ -5,8 +5,8 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/8/19.
 //
 
-#ifndef EE_X_FIREBASE_PERFORMANCE_TRACE_HPP_
-#define EE_X_FIREBASE_PERFORMANCE_TRACE_HPP_
+#ifndef EE_X_FIREBASE_PERFORMANCE_TRACE_HPP
+#define EE_X_FIREBASE_PERFORMANCE_TRACE_HPP
 
 #include "ee/firebase/FirebasePerformanceBridge.hpp"
 
@@ -40,4 +40,4 @@ private:
 } // namespace firebase
 } // namespace ee
 
-#endif /* EE_X_FIREBASE_PERFORMANCE_TRACE_HPP_ */
+#endif /* EE_X_FIREBASE_PERFORMANCE_TRACE_HPP */

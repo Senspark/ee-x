@@ -224,9 +224,9 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files =
-        'src/ee/firebase/FirebasePerformance*.*',
-        'src/ee/firebase/internal/*'
-#    s.public_header_files = 'src/ee/firebase/FirebasePerformance.hpp'
+        'src/ee/firebase/FirebasePerformance*',
+        'src/ee/firebase/internal/EEFirebasePerformance*'
+    s.public_header_files = 'src/ee/firebase/FirebasePerformance*.hpp'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/Performance'
   end

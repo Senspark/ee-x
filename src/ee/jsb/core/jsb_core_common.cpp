@@ -23,6 +23,7 @@ std::vector<std::string> split(std::string text, const std::string& delimiter) {
         args.push_back(token);
         text.erase(0, pos + delimiter.size());
     }
+    args.push_back(text);
     return args;
 }
 } // namespace

@@ -224,9 +224,9 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files =
-        'src/ee/firebase/FirebasePerformance*.*',
-        'src/ee/firebase/internal/*'
-#    s.public_header_files = 'src/ee/firebase/FirebasePerformance.hpp'
+        'src/ee/firebase/FirebasePerformance*',
+        'src/ee/firebase/internal/EEFirebasePerformance*'
+    s.public_header_files = 'src/ee/firebase/FirebasePerformance*.hpp'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/Performance'
   end
@@ -683,15 +683,15 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-firebase' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_firebase.hpp',
-      'src/ee/jsb/jsb_firebase.cpp',
+      'src/ee/jsb/jsb_firebase*',
       'src/ee/jsb/firebase/*'
     s.public_header_files =
-      'src/ee/jsb/jsb_firebase.hpp',
+      'src/ee/jsb/jsb_firebase*.hpp',
       'src/ee/jsb/firebase/*.{h,hpp}'
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/firebase-analytics'
+    s.dependency 'ee-x/firebase-performance'
     s.dependency 'ee-x/firebase-remote-config'
   end
   

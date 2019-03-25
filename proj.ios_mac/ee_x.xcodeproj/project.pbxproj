@@ -405,6 +405,10 @@
 		AD56EF85202172FF00DC9B56 /* EEVideoPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF84202172FF00DC9B56 /* EEVideoPlayerManager.m */; };
 		AD773EC520610FE400136655 /* EEFacebookRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD773EC320610FE400136655 /* EEFacebookRequestDelegate.m */; };
 		AD773EC620610FE400136655 /* EEFacebookRequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = AD773EC420610FE400136655 /* EEFacebookRequestDelegate.h */; };
+		AD8CDC2E22486B8200AFD48C /* FirebasePerformanceTrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD8CDC2A22486B8200AFD48C /* FirebasePerformanceTrace.cpp */; };
+		AD8CDC2F22486B8200AFD48C /* FirebasePerformanceBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD8CDC2B22486B8200AFD48C /* FirebasePerformanceBridge.hpp */; };
+		AD8CDC3022486B8200AFD48C /* FirebasePerformanceTrace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AD8CDC2C22486B8200AFD48C /* FirebasePerformanceTrace.hpp */; };
+		AD8CDC3122486B8200AFD48C /* FirebasePerformanceBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD8CDC2D22486B8200AFD48C /* FirebasePerformanceBridge.cpp */; };
 		ADD236BB20E1E5C00073950F /* AppsFlyer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADD236BA20E1E5C00073950F /* AppsFlyer.hpp */; };
 		ADD236BD20E1E6070073950F /* AppsFlyerFwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = ADD236BC20E1E6040073950F /* AppsFlyerFwd.hpp */; };
 		ADE6AF082061127B00F6135F /* EEFacebookShareDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE6AF062061127B00F6135F /* EEFacebookShareDelegate.m */; };
@@ -1034,6 +1038,10 @@
 		AD56EF862021730B00DC9B56 /* EEVideoPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEVideoPlayerManager.h; sourceTree = "<group>"; };
 		AD773EC320610FE400136655 /* EEFacebookRequestDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EEFacebookRequestDelegate.m; sourceTree = "<group>"; };
 		AD773EC420610FE400136655 /* EEFacebookRequestDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EEFacebookRequestDelegate.h; sourceTree = "<group>"; };
+		AD8CDC2A22486B8200AFD48C /* FirebasePerformanceTrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebasePerformanceTrace.cpp; sourceTree = "<group>"; };
+		AD8CDC2B22486B8200AFD48C /* FirebasePerformanceBridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebasePerformanceBridge.hpp; sourceTree = "<group>"; };
+		AD8CDC2C22486B8200AFD48C /* FirebasePerformanceTrace.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FirebasePerformanceTrace.hpp; sourceTree = "<group>"; };
+		AD8CDC2D22486B8200AFD48C /* FirebasePerformanceBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirebasePerformanceBridge.cpp; sourceTree = "<group>"; };
 		ADD236B420E1E5340073950F /* ee_x_mobile_apps_flyer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = ee_x_mobile_apps_flyer.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD236BA20E1E5C00073950F /* AppsFlyer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppsFlyer.hpp; sourceTree = "<group>"; };
 		ADD236BC20E1E6040073950F /* AppsFlyerFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppsFlyerFwd.hpp; sourceTree = "<group>"; };
@@ -1626,6 +1634,10 @@
 				6F24C7011EC3255A00509B6C /* FirebaseApp.mm */,
 				6F24C3851EC2C17600509B6C /* FirebaseAnalytics.cpp */,
 				6F24C3861EC2C17600509B6C /* FirebaseAnalytics.hpp */,
+				AD8CDC2D22486B8200AFD48C /* FirebasePerformanceBridge.cpp */,
+				AD8CDC2B22486B8200AFD48C /* FirebasePerformanceBridge.hpp */,
+				AD8CDC2A22486B8200AFD48C /* FirebasePerformanceTrace.cpp */,
+				AD8CDC2C22486B8200AFD48C /* FirebasePerformanceTrace.hpp */,
 				6F83DD091EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp */,
 				6F83DD0A1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp */,
 				6F83DDA11EC1D529004C5500 /* FirebaseScheduler.hpp */,
@@ -2160,8 +2172,10 @@
 				6F83DD0C1EC1CDC1004C5500 /* FirebaseApp.hpp in Headers */,
 				6F83DDA31EC1D529004C5500 /* FirebaseScheduler.hpp in Headers */,
 				6F24C4DD1EC2EF0A00509B6C /* FirebaseFwd.hpp in Headers */,
+				AD8CDC2F22486B8200AFD48C /* FirebasePerformanceBridge.hpp in Headers */,
 				6F1AA9581F387E340061C40B /* FirebaseMessaging.hpp in Headers */,
 				6F83DD0E1EC1CDC1004C5500 /* FirebaseRemoteConfig.hpp in Headers */,
+				AD8CDC3022486B8200AFD48C /* FirebasePerformanceTrace.hpp in Headers */,
 				6F24C3521EC2B1C300509B6C /* FirebaseStorage.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3141,10 +3155,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F24C3871EC2C17600509B6C /* FirebaseAnalytics.cpp in Sources */,
+				AD8CDC2E22486B8200AFD48C /* FirebasePerformanceTrace.cpp in Sources */,
 				6F83DD0D1EC1CDC1004C5500 /* FirebaseRemoteConfig.cpp in Sources */,
 				6F83DDA21EC1D529004C5500 /* FirebaseScheduler_inl.hpp in Sources */,
 				6F24C3511EC2B1C300509B6C /* FirebaseStorage.cpp in Sources */,
 				6F1AA9561F387E340061C40B /* FirebaseMessaging.cpp in Sources */,
+				AD8CDC3122486B8200AFD48C /* FirebasePerformanceBridge.cpp in Sources */,
 				6F24C7021EC3255A00509B6C /* FirebaseApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

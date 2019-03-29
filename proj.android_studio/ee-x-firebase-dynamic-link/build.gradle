@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-firebase-core')
-    api "com.google.firebase:firebase-invites:16.0.4"
+    api "com.google.firebase:firebase-invites:16.1.1"
 }

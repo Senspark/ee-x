@@ -30,6 +30,39 @@ template <class T>
 class Scheduler;
 #endif // EE_X_MOBILE
 
+/// Describes the most recent fetch request status.
+enum class LastFetchStatus {
+    /// The most recent fetch was a success, and its data is ready to be
+    /// applied, if you have not already done so.
+    Success,
+
+    /// The most recent fetch request failed.
+    Failure,
+
+    /// The most recent fetch is still in progress.
+    Pending,
+};
+
+/// Describes the most recent fetch failure.
+enum class FetchFailureReason {
+    /// The fetch has not yet failed.
+    Invalid,
+
+    /// The most recent fetch failed because it was throttled by the server.
+    /// (You are sending too many fetch requests in too short a time.)
+    Throttled,
+
+    /// The most recent fetch failed for an unknown reason.
+    Error,
+};
+
+struct ConfigInfo {
+    std::uint64_t fetchTime;
+    LastFetchStatus lastFetchStatus;
+    FetchFailureReason lastFetchFailureReason;
+    std::uint64_t throttledEndTime;
+};
+
 /// Wrapper for Firebase Remote Config.
 /// Should have a single instance at a time.
 /// https://firebase.google.com/docs/remote-config/use-config-cpp
@@ -46,6 +79,13 @@ public:
     bool initialize();
 
     void fetch(bool devModeEnabled, const FetchCallback& callback);
+
+    /// Returns information about the last fetch request, in the form of a
+    /// ConfigInfo struct.
+    ConfigInfo getInfo() const;
+
+    /// Used for JSB.
+    std::string getInfoJsb() const;
 
     /// Sets a default bool value for the given key.
     void setDefaultBool(const std::string& key, bool value);

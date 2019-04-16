@@ -24,6 +24,7 @@ constexpr auto constructor      = &core::makeConstructor<Self>;
 constexpr auto finalize         = &core::makeFinalize<Self>;
 constexpr auto initialize       = &core::makeMethod<&Self::initialize>;
 constexpr auto fetch            = &core::makeMethod<&Self::fetch>;
+constexpr auto getInfoJsb       = &core::makeMethod<&Self::getInfoJsb>;
 constexpr auto setDefaultBool   = &core::makeMethod<&Self::setDefaultBool>;
 constexpr auto setDefaultLong   = &core::makeMethod<&Self::setDefaultLong>;
 constexpr auto setDefaultDouble = &core::makeMethod<&Self::setDefaultDouble>;
@@ -39,6 +40,7 @@ SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(fetch)
+SE_BIND_FUNC(getInfoJsb)
 SE_BIND_FUNC(setDefaultBool)
 SE_BIND_FUNC(setDefaultLong)
 SE_BIND_FUNC(setDefaultDouble)
@@ -50,18 +52,15 @@ SE_BIND_FUNC(getDouble)
 SE_BIND_FUNC(getString)
 } // namespace
 
-bool register_firebase_remote_config_manual(se::Object* globalObj) {
-    se::Object* firebaseObj = nullptr;
-    se::Object* eeObj = nullptr;
-    core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    core::getOrCreatePlainObject_r("firebase", eeObj, &firebaseObj);
-
-    auto cls = se::Class::create("RemoteConfig", firebaseObj, nullptr,
-                                 _SE(constructor));
+bool register_firebase_remote_config_manual(se::Object* global) {
+    auto firebase_ = core::getPath(global, "ee/firebase");
+    auto cls =
+        se::Class::create("RemoteConfig", firebase_, nullptr, _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
 
     EE_JSB_DEFINE_FUNCTION(cls, initialize);
     EE_JSB_DEFINE_FUNCTION(cls, fetch);
+    EE_JSB_DEFINE_FUNCTION(cls, getInfoJsb);
     EE_JSB_DEFINE_FUNCTION(cls, setDefaultBool);
     EE_JSB_DEFINE_FUNCTION(cls, setDefaultLong);
     EE_JSB_DEFINE_FUNCTION(cls, setDefaultDouble);

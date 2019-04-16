@@ -5,17 +5,15 @@
 //  Created by Nguyen Van Quynh on 9/23/18
 //
 
-#ifndef JSB_FIREBASE_REMOTE_CONFIG_HPP__
-#define JSB_FIREBASE_REMOTE_CONFIG_HPP__
+#ifndef EE_X_JSB_FIREBASE_REMOTE_CONFIG_HPP
+#define EE_X_JSB_FIREBASE_REMOTE_CONFIG_HPP
 
 #include "ee/jsb/jsb_fwd.hpp"
 
 namespace ee {
 namespace firebase {
-
-bool register_firebase_remote_config_manual(se::Object* object);
-
+bool register_firebase_remote_config_manual(se::Object* global);
 } // namespace firebase
 } // namespace ee
 
-#endif // JSB_FIREBASE_REMOTE_CONFIG_HPP__
+#endif // EE_X_JSB_FIREBASE_REMOTE_CONFIG_HPP

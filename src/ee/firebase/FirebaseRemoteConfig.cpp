@@ -6,16 +6,19 @@
 //
 //
 
-#include <cassert>
-
-#include "ee/core/internal/ScopeGuard.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
 #include "ee/firebase/FirebaseRemoteConfig.hpp"
-#include "ee/firebase/FirebaseScheduler.hpp"
+
+#include <cassert>
 
 #if defined(EE_X_MOBILE)
 #include <firebase/remote_config.h>
 #endif // EE_X_MOBILE
+
+#include <ee/nlohmann/json.hpp>
+
+#include "ee/core/internal/ScopeGuard.hpp"
+#include "ee/firebase/FirebaseApp.hpp"
+#include "ee/firebase/FirebaseScheduler.hpp"
 
 namespace ee {
 namespace firebase {
@@ -86,6 +89,64 @@ void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
             }
         });
 #endif // EE_X_MOBILE
+}
+
+ConfigInfo Self::getInfo() const {
+    ConfigInfo result;
+#if defined(EE_X_MOBILE)
+    auto&& info = ::firebase::remote_config::GetInfo();
+    result.fetchTime = info.fetch_time;
+    result.throttledEndTime = info.throttled_end_time;
+    result.lastFetchStatus = [&info] {
+        if (info.last_fetch_status ==
+            ::firebase::remote_config::kLastFetchStatusSuccess) {
+            return LastFetchStatus::Success;
+        }
+        if (info.last_fetch_status ==
+            ::firebase::remote_config::kLastFetchStatusFailure) {
+            return LastFetchStatus::Failure;
+        }
+        if (info.last_fetch_status ==
+            ::firebase::remote_config::kLastFetchStatusPending) {
+            return LastFetchStatus::Pending;
+        }
+        assert(false);
+        return LastFetchStatus::Success;
+    }();
+    result.lastFetchFailureReason = [&info] {
+        if (info.last_fetch_failure_reason ==
+            ::firebase::remote_config::kFetchFailureReasonInvalid) {
+            return FetchFailureReason::Invalid;
+        }
+        if (info.last_fetch_failure_reason ==
+            ::firebase::remote_config::kFetchFailureReasonThrottled) {
+            return FetchFailureReason::Throttled;
+        }
+        if (info.last_fetch_failure_reason ==
+            ::firebase::remote_config::kFetchFailureReasonError) {
+            return FetchFailureReason::Error;
+        }
+        assert(false);
+        return FetchFailureReason::Error;
+    }();
+#else  // EE_X_MOBILE
+    result.fetchTime = 0;
+    result.throttledEndTime = 0;
+    result.lastFetchStatus = LastFetchStatus::Success;
+    result.LastFetchFailureReason = FetchFailureReason::Error;
+#endif // EE_X_MOBILE
+    return result;
+}
+
+std::string Self::getInfoJsb() const {
+    auto&& config = getInfo();
+    auto json = nlohmann::json();
+    json["fetch_time"] = config.fetchTime;
+    json["throttled_end_time"] = config.throttledEndTime;
+    json["last_fetch_status"] = static_cast<int>(config.lastFetchStatus);
+    json["last_fetch_failure_reason"] =
+        static_cast<int>(config.lastFetchFailureReason);
+    return json.dump();
 }
 
 void Self::setDefaultBool(const std::string& key, bool value) {

@@ -192,6 +192,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {
+    //NSLog(@"the test device hash is %@",[FBAdSettings testDeviceHash]);
     [FBAdSettings addTestDevice:hash];
 }
 

@@ -334,6 +334,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         processView(_nativeAdView, k__call_to_action, new ViewProcessor<Button>() {
             @Override
             public void process(Button view) {
+                view.setClickable(true);
                 view.setText(_nativeAd.getAdCallToAction());
                 clickableViews.add(view);
             }
@@ -363,7 +364,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
                 // view.setNativeAd(_nativeAd);
                 // clickableViews.add(view);
                 _nativeAdMedia = view;
-                clickableViews.add(view);
+                //clickableViews.add(view);
             }
         });
 
@@ -378,7 +379,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
             @Override
             public void process(TextView view) {
                 view.setText(_nativeAd.getAdHeadline());
-                clickableViews.add(view);
+                //clickableViews.add(view);
             }
         });
 

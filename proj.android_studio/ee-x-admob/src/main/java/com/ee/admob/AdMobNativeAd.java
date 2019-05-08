@@ -302,6 +302,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
         processView(adView, k__icon, new ViewProcessor<ImageView>() {
             @Override
             public void process(ImageView view) {
+                view.setClickable(false);
                 adView.setIconView(view);
                 if (nativeAppInstallAd.getIcon() != null) {
                     view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
@@ -321,6 +322,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
             processView(adView, k__media, new ViewProcessor<MediaView>() {
                 @Override
                 public void process(MediaView view) {
+                    view.setClickable(false);
                     adView.setMediaView(view);
                 }
             });
@@ -328,13 +330,16 @@ class AdMobNativeAd extends AdListener implements IAdView {
             processView(adView, k__image, new ViewProcessor<ImageView>() {
                 @Override
                 public void process(ImageView view) {
-                    List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-                    view.setVisibility(View.GONE);
-                    for (NativeAd.Image image : images) {
-                        if (image != null) {
-                            view.setVisibility(View.VISIBLE);
-                            view.setImageDrawable(image.getDrawable());
-                            break;
+                    if (view.getVisibility() == View.VISIBLE || view.getVisibility() == View.GONE) {
+                        List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+                        view.setVisibility(View.GONE);
+                        for (NativeAd.Image image : images) {
+                            if (image != null) {
+                                view.setClickable(false);
+                                view.setVisibility(View.VISIBLE);
+                                view.setImageDrawable(image.getDrawable());
+                                break;
+                            }
                         }
                     }
                 }

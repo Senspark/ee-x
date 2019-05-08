@@ -1,5 +1,5 @@
 LOCAL_PATH := $(call my-dir)
-COCOS2D_ROOT_DIR = $(LOCAL_PATH)/../../../../../../cocos2d-x
+COCOS2D_ROOT_DIR = $(LOCAL_PATH)/../../../../../cocos2d
 
 # cocos2dx-soomla-common
 include $(CLEAR_VARS)

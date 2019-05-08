@@ -235,7 +235,6 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (void)nativeAdDidLoad:(FBNativeAd*)nativeAd {
-    
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(nativeAd == nativeAd_, @"");
 
@@ -261,6 +260,22 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
                                         forState:UIControlStateNormal];
 
+    //disable click on mediaView if it's not contain FBMediaViewVideoRenderer
+    BOOL isContainVideo = NO;
+    NSArray<UIView*> *subviews = [nativeAdView_ mediaView].subviews;
+    for (UIView* iter in subviews) {
+        if ([iter isKindOfClass:[FBMediaViewVideoRenderer class]]) {
+            isContainVideo = YES;
+            break;
+        }
+    }
+    
+    if (!isContainVideo) {
+        [nativeAdView_ mediaView].userInteractionEnabled = NO;
+    } else {
+        [nativeAdView_ mediaView].userInteractionEnabled = YES;
+    }
+    
     // ad social context label
     [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.AnswersEvent;
@@ -13,6 +14,7 @@ import com.crashlytics.android.answers.LevelEndEvent;
 import com.crashlytics.android.answers.LevelStartEvent;
 import com.crashlytics.android.answers.PurchaseEvent;
 import com.crashlytics.android.core.CrashTest;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.DictionaryUtils;
@@ -56,12 +58,11 @@ public class Crashlytics implements PluginProtocol {
     public Crashlytics(Context context) {
         _logger.debug("constructor begin: context = " + context);
 
-        // Initialize automatically.
-        // https://firebase.google.com/docs/crashlytics/upgrade-from-crash-reporting#android
-        // Fabric.Builder builder = new Fabric.Builder(context)
-        //     .logger(new CrashlyticsLogger(Log.DEBUG))
-        //     .kits(new com.crashlytics.android.Crashlytics(), new CrashlyticsNdk());
-        // Fabric.with(builder.build());
+        Fabric.Builder builder = new Fabric.Builder(context)
+            .logger(new CrashlyticsLogger(Log.DEBUG))
+            .kits(new com.crashlytics.android.Crashlytics(), new CrashlyticsNdk());
+
+        Fabric.with(builder.build());
 
         registerHandlers();
 

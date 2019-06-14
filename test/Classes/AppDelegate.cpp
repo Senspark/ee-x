@@ -11,6 +11,7 @@
 #include "AppLovin.hpp"
 #include "CrashlyticsAgent.hpp"
 #include "FacebookAds.hpp"
+#include "Notification.hpp"
 #include "IronSource.hpp"
 #include "MultiNativeAdTestScene.hpp"
 #include "NotificationAgent.hpp"

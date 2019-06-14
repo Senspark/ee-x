@@ -1,13 +1,19 @@
 package com.ee.notification;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import com.ee.core.Logger;
 
@@ -65,18 +71,48 @@ public class NotificationUtils {
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
         String channelId = context.getPackageName() + "_notification";
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
-        builder
-            .setOngoing(false)
-            .setAutoCancel(true)
-            .setContentIntent(clickIntent)
-            .setContentText(body)
-            .setContentTitle(title)
-            .setDefaults(android.app.Notification.DEFAULT_ALL)
-            .setSmallIcon(getNotificationIcon(context))
-            .setTicker(ticker);
-
-        return builder.build();
+        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String channelName = "My Background Service";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert mNotificationManager != null;
+            mNotificationManager.createNotificationChannel(chan);
+            String name = "snap map fake location ";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, chan.getId());
+            Log.d(body, "buildNotification: ");
+            Log.d(title, "buildNotification: ");
+            Log.d(ticker, "buildNotification: ");
+            builder
+                    .setChannelId(chan.getId())
+                    .setOngoing(false)
+                    .setAutoCancel(true)
+                    .setContentIntent(clickIntent)
+                    .setContentText(body)
+                    .setContentTitle(title)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setDefaults(android.app.Notification.DEFAULT_ALL)
+                    .setSmallIcon(getNotificationIcon(context))
+                    .setTicker(ticker);
+            return builder.build();
+        }
+        else{
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+            builder
+                    .setOngoing(false)
+                    .setAutoCancel(true)
+                    .setContentIntent(clickIntent)
+                    .setContentText(body)
+                    .setContentTitle(title)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setDefaults(android.app.Notification.DEFAULT_ALL)
+                    .setSmallIcon(getNotificationIcon(context))
+                    .setTicker(ticker);
+            return builder.build();
+        }
     }
 
     /**

@@ -16,48 +16,39 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <StoreKit/StoreKit.h>
 #import <UIKit/UIKit.h>
-
-#import <FBAudienceNetwork/FBAdDefines.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Represents the ad size.
-struct FBAdSize {
-    /// Internal size
-    CGSize size;
-};
-
-/// Represents the ad size.
-typedef struct FBAdSize FBAdSize;
+@class FBNativeAdBase;
 
 /**
-  DEPRECATED - Represents the fixed banner ad size - 320pt by 50pt.
+ Minimum dimensions of the view.
  */
-FB_EXPORT FBAdSize const kFBAdSize320x50;
+extern const CGFloat FBAdOptionsViewWidth;
+extern const CGFloat FBAdOptionsViewHeight;
+
+@interface FBAdOptionsView : UIView
 
 /**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 50pt.
+ The native ad that provides AdChoices info, such as click url. Setting this updates the nativeAd.
  */
-FB_EXPORT FBAdSize const kFBAdSizeHeight50Banner;
+@property (nonatomic, weak, readwrite, nullable) FBNativeAdBase *nativeAd;
 
 /**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 90pt.
+ The color to be used when drawing the AdChoices view.
  */
-FB_EXPORT FBAdSize const kFBAdSizeHeight90Banner;
+@property (nonatomic, strong, nullable) UIColor *foregroundColor;
 
 /**
-  Represents the interstitial ad size.
- */
-FB_EXPORT FBAdSize const kFBAdSizeInterstitial;
+ Only show the ad choices triangle icon. Default is NO.
 
-/**
-  Represents the flexible rectangle ad size, where width depends on
- its container width, and height is fixed as 250pt.
+ Sizing note:
+    - Single icon is rendered in a square frame, it will default to the smallest dimension.
+    - Non single icon requires aspect ratio of the view to be 2.4 or less.
  */
-FB_EXPORT FBAdSize const kFBAdSizeHeight250Rectangle;
+@property (nonatomic, assign) BOOL useSingleIcon;
+
+@end
 
 NS_ASSUME_NONNULL_END

@@ -16,48 +16,49 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <StoreKit/StoreKit.h>
 #import <UIKit/UIKit.h>
 
 #import <FBAudienceNetwork/FBAdDefines.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Represents the ad size.
-struct FBAdSize {
-    /// Internal size
-    CGSize size;
-};
-
-/// Represents the ad size.
-typedef struct FBAdSize FBAdSize;
+/**
+ Represents an image creative.
+ */
+FB_CLASS_EXPORT
+@interface FBAdImage : NSObject
 
 /**
-  DEPRECATED - Represents the fixed banner ad size - 320pt by 50pt.
+ Typed access to the image url.
  */
-FB_EXPORT FBAdSize const kFBAdSize320x50;
+@property (nonatomic, copy, readonly) NSURL *url;
+/**
+ Typed access to the image width.
+ */
+@property (nonatomic, assign, readonly) NSInteger width;
+/**
+ Typed access to the image height.
+ */
+@property (nonatomic, assign, readonly) NSInteger height;
 
 /**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 50pt.
+ This is a method to initialize an FBAdImage.
+
+ @param url the image url.
+ @param width the image width.
+ @param height the image height.
  */
-FB_EXPORT FBAdSize const kFBAdSizeHeight50Banner;
+- (instancetype)initWithURL:(NSURL *)url
+                      width:(NSInteger)width
+                     height:(NSInteger)height NS_DESIGNATED_INITIALIZER;
 
 /**
-  Represents the flexible banner ad size, where banner width depends on
- its container width, and banner height is fixed as 90pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight90Banner;
+ Loads an image from self.url over the network, or returns the cached image immediately.
 
-/**
-  Represents the interstitial ad size.
+ @param block Block to handle the loaded image.
  */
-FB_EXPORT FBAdSize const kFBAdSizeInterstitial;
+- (void)loadImageAsyncWithBlock:(nullable void (^)(UIImage * __nullable image))block;
 
-/**
-  Represents the flexible rectangle ad size, where width depends on
- its container width, and height is fixed as 250pt.
- */
-FB_EXPORT FBAdSize const kFBAdSizeHeight250Rectangle;
+@end
 
 NS_ASSUME_NONNULL_END

@@ -18,8 +18,8 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation "com.github.vungle:vungle-android-sdk:6.3.17"
-    implementation 'com.google.ads.mediation:vungle:6.2.5.1'
+    implementation "com.github.vungle:vungle-android-sdk:6.3.24"
+//    implementation 'com.google.ads.mediation:vungle:6.2.5.1'
     implementation "com.google.android.gms:play-services-basement:16.0.1"
     implementation "com.google.android.gms:play-services-ads-identifier:16.0.0"
     implementation "com.google.android.gms:play-services-location:16.0.0"

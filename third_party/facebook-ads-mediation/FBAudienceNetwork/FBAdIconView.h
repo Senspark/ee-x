@@ -1,4 +1,3 @@
-
 // Copyright 2004-present Facebook. All Rights Reserved.
 //
 // You are hereby granted a non-exclusive, worldwide, royalty-free license to use,
@@ -19,32 +18,21 @@
 
 #import <UIKit/UIKit.h>
 
-#import <FBAudienceNetwork/FBAdChoicesView.h>
 #import <FBAudienceNetwork/FBAdDefines.h>
-#import <FBAudienceNetwork/FBAdExtraHint.h>
-#import <FBAudienceNetwork/FBAdIconView.h>
-#import <FBAudienceNetwork/FBAdOptionsView.h>
-#import <FBAudienceNetwork/FBAdSettings.h>
-#import <FBAudienceNetwork/FBAdView.h>
-#import <FBAudienceNetwork/FBAudienceNetworkAds.h>
-#import <FBAudienceNetwork/FBInstreamAdView.h>
-#import <FBAudienceNetwork/FBInterstitialAd.h>
 #import <FBAudienceNetwork/FBMediaView.h>
-#import <FBAudienceNetwork/FBMediaViewVideoRenderer.h>
-#import <FBAudienceNetwork/FBNativeAd.h>
-#import <FBAudienceNetwork/FBNativeAdCollectionViewAdProvider.h>
-#import <FBAudienceNetwork/FBNativeAdCollectionViewCellProvider.h>
-#import <FBAudienceNetwork/FBNativeAdScrollView.h>
-#import <FBAudienceNetwork/FBNativeAdTableViewAdProvider.h>
-#import <FBAudienceNetwork/FBNativeAdTableViewCellProvider.h>
-#import <FBAudienceNetwork/FBNativeAdView.h>
-#import <FBAudienceNetwork/FBNativeAdsManager.h>
-#import <FBAudienceNetwork/FBNativeBannerAd.h>
-#import <FBAudienceNetwork/FBNativeBannerAdView.h>
-#import <FBAudienceNetwork/FBRewardedVideoAd.h>
 #import <FBAudienceNetwork/UIView+FBNativeAdViewTag.h>
 
-// NOTE: Any changes should also be made to the module.modulemap
-// to ensure comptability with Swift apps using Cocoapods
+NS_ASSUME_NONNULL_BEGIN
 
-#define FB_AD_SDK_VERSION @"5.3.2"
+FB_CLASS_EXPORT
+FB_DEPRECATED_WITH_MESSAGE("This class will be removed in a future release. Use FBMediaView instead.")
+@interface FBAdIconView : FBMediaView
+
+/**
+ The tag for the icon view. It always returns FBNativeAdViewTagIcon.
+ */
+@property (nonatomic, assign, readonly) FBNativeAdViewTag nativeAdViewTag;
+
+@end
+
+NS_ASSUME_NONNULL_END

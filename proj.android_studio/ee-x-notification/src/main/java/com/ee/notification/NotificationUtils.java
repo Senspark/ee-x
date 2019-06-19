@@ -69,23 +69,19 @@ public class NotificationUtils {
      * @param clickIntent The intent will be fired when the user clicks on the notification.
      */
     static android.app.Notification buildNotification(Context context, String ticker, String title,
-                                                      String body, PendingIntent clickIntent) {
-        String channelId = context.getPackageName() + "_notification";
-        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+                                                      String body,String tag, PendingIntent clickIntent) {
+        String channelId = context.getPackageName() + "_notification"+tag;
+        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp"+tag;
         String channelName = "My Background Service";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
-            chan.setLightColor(Color.BLUE);
             chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             assert mNotificationManager != null;
             mNotificationManager.createNotificationChannel(chan);
-            String name = "snap map fake location ";
+            String name = "Private channel";
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, chan.getId());
-            Log.d(body, "buildNotification: ");
-            Log.d(title, "buildNotification: ");
-            Log.d(ticker, "buildNotification: ");
             builder
                     .setChannelId(chan.getId())
                     .setOngoing(false)

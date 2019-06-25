@@ -337,7 +337,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook-ads' do |s|
    s.dependency 'ee-x/facebook-ads-base'
-    s.dependency 'FBAudienceNetwork', '5.1.1'
+    s.dependency 'FBAudienceNetwork'
     s.dependency 'GoogleMobileAdsMediationFacebook'
  end
 

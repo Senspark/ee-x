@@ -12,6 +12,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api 'com.google.firebase:firebase-core:16.0.8'
-    api "com.google.android.gms:play-services-base:16.1.0"
+    api 'com.google.firebase:firebase-core:17.0.0'
+    api 'com.google.firebase:firebase-iid:19.0.0'
+//    api "com.google.android.gms:play-services-base:16.1.0"
 }

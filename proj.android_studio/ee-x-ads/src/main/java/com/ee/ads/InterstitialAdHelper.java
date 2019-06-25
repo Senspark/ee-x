@@ -1,6 +1,6 @@
 package com.ee.ads;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;

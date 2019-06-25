@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    api "com.android.support:support-annotations:${rootProject.ext.supportLibraryVersion}"
+    api "androidx.annotation:annotation:1.0.0"
     api "com.google.android.gms:play-services-ads:17.2.0"
 
     implementation 'com.google.android.gms:play-services-instantapps:16.1.2'

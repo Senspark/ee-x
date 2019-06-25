@@ -1,6 +1,6 @@
 package com.ee.facebook;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.internal.JsonUtils;

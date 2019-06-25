@@ -1,6 +1,6 @@
 package com.ee.firebase.performance;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.JsonUtils;

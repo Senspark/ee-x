@@ -312,8 +312,8 @@ enum AuthError {
   /// a problem with the browser.
   kAuthErrorWebStorateUnsupported,
 
-  /// Indicates that an attempt was made to update the current user with a
-  /// different tenant ID.
+  /// Indicates that the provided tenant ID does not match the Auth instance's
+  /// tenant ID.
   kAuthErrorTenantIdMismatch,
 
   /// Indicates that a request was made to the backend with an associated tenant
@@ -335,6 +335,10 @@ enum AuthError {
   /// Indicates that the phone number provided in the MFA sign in flow to be
   /// verified does not correspond to a phone second factor for the user.
   kAuthErrorPhoneNumberNotFound,
+
+  /// Indicates that a request was made to the backend with an invalid tenant
+  /// ID.
+  kAuthErrorInvalidTenantId,
 };
 
 }  // namespace auth

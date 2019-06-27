@@ -16,7 +16,9 @@
 #define FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_DATA_SNAPSHOT_H_
 
 #include <stddef.h>
+
 #include <string>
+
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
 
@@ -43,6 +45,13 @@ class DatabaseReference;
 /// use DatabaseReference::SetValue() or DatabaseReference::RunTransaction().
 class DataSnapshot {
  public:
+  /// @brief Default constructor.
+  ///
+  /// This DataSnapshot contains nothing and is considered invalid (i.e.
+  /// is_valid() == false). Use this to construct an empty DataSnapshot that you
+  /// will later populate with data from a database callback.
+  DataSnapshot() : internal_(nullptr) {}
+
 
   /// @brief Copy constructor. DataSnapshots are immutable, so they can be
   /// efficiently copied.

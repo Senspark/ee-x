@@ -12,5 +12,5 @@ android {
 
 dependencies {
     implementation project(':ee-x-firebase-core')
-    api "com.google.firebase:firebase-perf:16.2.4"
+    api "com.google.firebase:firebase-perf:18.0.0"
 }

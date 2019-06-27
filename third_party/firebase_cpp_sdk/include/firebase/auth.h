@@ -93,6 +93,9 @@ class Auth {
   ~Auth();
 
   /// Synchronously gets the cached current user, or nullptr if there is none.
+  /// @note This function may block and wait until the Auth instance finishes
+  /// loading the saved user's state. This should only happen for a short
+  /// period of time after the Auth instance is created.
   User* current_user();
 
   // ----- Providers -------------------------------------------------------
@@ -311,6 +314,7 @@ class Auth {
   /// The listeners are called asynchronously, possibly on a different thread.
   ///
   /// Authentication state changes are:
+  ///   - Right after the listener has been registered
   ///   - When a user signs in
   ///   - When the current user signs out
   ///   - When the current user changes
@@ -342,6 +346,7 @@ class Auth {
   /// The listeners are called asynchronously, possibly on a different thread.
   ///
   /// Authentication state changes are:
+  ///   - Right after the listener has been registered
   ///   - When a user signs in
   ///   - When the current user signs out
   ///   - When the current user changes
@@ -388,6 +393,9 @@ class Auth {
   friend class ::firebase::auth::PhoneAuthProvider;
   friend class IdTokenRefreshListener;
   friend class IdTokenRefreshThread;
+  friend class UserDataPersist;
+  friend class UserDesktopTest;
+  friend class AuthDesktopTest;
 
   friend void EnableTokenAutoRefresh(AuthData* authData);
   friend void DisableTokenAutoRefresh(AuthData* authData);
@@ -435,6 +443,7 @@ class AuthStateListener {
   virtual ~AuthStateListener();
 
   /// Called when the authentication state of `auth` changes.
+  ///   - Right after the listener has been registered
   ///   - When a user is signed in
   ///   - When the current user is signed out
   ///   - When the current user changes
@@ -465,6 +474,11 @@ class IdTokenListener {
   virtual ~IdTokenListener();
 
   /// Called when there is a change in the current user's token.
+  ///   - Right after the listener has been registered
+  ///   - When a user signs in
+  ///   - When the current user signs out
+  ///   - When the current user changes
+  ///   - When there is a change in the current user's token
   ///
   /// @param[in] auth Disambiguates which @ref Auth instance the event
   /// corresponds to, in the case where you are using more than one at the same

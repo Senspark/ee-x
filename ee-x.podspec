@@ -180,7 +180,7 @@ Pod::Spec.new do |spec|
     s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-headers'
-    s.ios.dependency 'Firebase/Core', '5.18'
+    s.ios.dependency 'Firebase/Core', '6.3.0'
   end
 
   spec.subspec 'firebase-analytics' do |s|
@@ -195,7 +195,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseDynamicLink.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/DynamicLinks', '5.18'
+    s.ios.dependency 'Firebase/DynamicLinks', '6.3.0'
   end
 
   spec.subspec 'firebase-messaging' do |s|
@@ -203,7 +203,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseMessaging.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Messaging', '5.18'
+    s.ios.dependency 'Firebase/Messaging', '6.3.0'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
@@ -211,7 +211,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseRemoteConfig.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/RemoteConfig', '5.18'
+    s.ios.dependency 'Firebase/RemoteConfig', '6.3.0'
   end
 
   spec.subspec 'firebase-storage' do |s|
@@ -219,7 +219,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseStorage.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Storage', '5.18'
+    s.ios.dependency 'Firebase/Storage', '6.3.0'
   end
 
   spec.subspec 'firebase-performance' do |s|

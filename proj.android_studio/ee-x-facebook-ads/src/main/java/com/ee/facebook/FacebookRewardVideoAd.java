@@ -149,8 +149,11 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
 
     private void destroyInternalVideo()
     {
-        _rewardedVideoAd.setAdListener(null);
-        _rewardedVideoAd = null;
+        if (_rewardedVideoAd != null) {
+            _rewardedVideoAd.setAdListener(null);
+            _rewardedVideoAd.destroy();
+            _rewardedVideoAd = null;
+        }
     }
 
     private boolean hasRewardVideo() {

@@ -13,5 +13,4 @@ android {
 dependencies {
     api project(':ee-x-core')
     api 'com.google.firebase:firebase-core:17.0.0'
-//    api 'com.google.firebase:firebase-iid:19.0.0'
 }

@@ -1,16 +1,36 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+/*
+ * Copyright 2016 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
 #define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
 
 #include <stdint.h>
+
 #include <string>
+
 #include "firebase/internal/common.h"
+#include "firebase/auth/types.h"
 
 namespace firebase {
 
 // Predeclarations.
 class App;
+
+template <typename T>
+class Future;
 
 namespace auth {
 
@@ -40,6 +60,7 @@ class Credential {
   friend class PhoneAuthProvider;
   friend class PlayGamesAuthProvider;
   friend class TwitterAuthProvider;
+  friend class GameCenterAuthProvider;
   /// @endcond
 
  private:
@@ -48,10 +69,10 @@ class Credential {
   /// @see EmailAuthProvider::GetCredential()
   /// @see FacebookAuthProvider::GetCredential()
   /// @see GoogleAuthProvider::GetCredential()
-  explicit Credential(void* impl) : impl_(impl) {}
+  explicit Credential(void* impl) : impl_(impl), error_code_(kAuthErrorNone) {}
 
  public:
-  Credential() : impl_(NULL) {}
+  Credential() : impl_(nullptr), error_code_(kAuthErrorNone) {}
   ~Credential();
 
   /// Copy constructor.
@@ -70,16 +91,20 @@ class Credential {
   /// @returns True if the credential is valid, false otherwise.
   bool is_valid() const;
 
-  /// @cond FIREBASE_APP_INTERNAL
  protected:
   /// @cond FIREBASE_APP_INTERNAL
   friend class Auth;
   friend class User;
-  /// @endcond
 
   /// Platform-specific implementation.
   /// For example, FIRAuthCredential* on iOS.
   void* impl_;
+
+  // If not kAuthErrorNone, then use this error code and string to override
+  // whatever error we would normally return when trying to sign-in with this
+  // credential.
+  AuthError error_code_;
+  std::string error_message_;
   /// @endcond
 };
 
@@ -169,6 +194,25 @@ class OAuthProvider {
   ///    from Android and iOS implementations).
   static Credential GetCredential(const char* provider_id, const char* id_token,
                                   const char* access_token);
+};
+
+/// @brief GameCenter (iOS) auth provider
+class GameCenterAuthProvider {
+ public:
+  /// Generate a credential from GameCenter for the current user.
+  ///
+  /// @return a Future that will be fulfilled with the resulting credential.
+  static Future<Credential> GetCredential();
+
+  /// Get the result of the most recent GetCredential() call.
+  ///
+  /// @return an object which can be used to retrieve the Credential.
+  static Future<Credential> GetCredentialLastResult();
+
+  /// Tests to see if the current user is signed in to GameCenter.
+  ///
+  /// @return true if the user is signed in, false otherwise.
+  static bool IsPlayerAuthenticated();
 };
 
 /// @brief Use phone number text messages to authenticate.

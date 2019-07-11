@@ -180,7 +180,7 @@ Pod::Spec.new do |spec|
     s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-headers'
-    s.ios.dependency 'Firebase/Core', '5.18'
+    s.ios.dependency 'Firebase/Core', '6.3.0'
   end
 
   spec.subspec 'firebase-analytics' do |s|
@@ -195,7 +195,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseDynamicLink.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/DynamicLinks', '5.18'
+    s.ios.dependency 'Firebase/DynamicLinks', '6.3.0'
   end
 
   spec.subspec 'firebase-messaging' do |s|
@@ -203,7 +203,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseMessaging.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Messaging', '5.18'
+    s.ios.dependency 'Firebase/Messaging', '6.3.0'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
@@ -211,7 +211,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseRemoteConfig.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/RemoteConfig', '5.18'
+    s.ios.dependency 'Firebase/RemoteConfig', '6.3.0'
   end
 
   spec.subspec 'firebase-storage' do |s|
@@ -219,7 +219,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseStorage.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Storage', '5.18'
+    s.ios.dependency 'Firebase/Storage', '6.3.0'
   end
 
   spec.subspec 'firebase-performance' do |s|
@@ -258,7 +258,7 @@ Pod::Spec.new do |spec|
     }
   end
 
-  spec.subspec 'admob' do |s|
+  spec.subspec 'admob-base' do |s|
     s.source_files =
       'src/ee/AdMob.hpp',
       'src/ee/AdMobFwd.hpp',
@@ -275,7 +275,17 @@ Pod::Spec.new do |spec|
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
-    s.dependency 'Google-Mobile-Ads-SDK', '7.40.0'
+  end
+  
+  spec.subspec 'admob' do |s|
+    s.dependency 'ee-x/admob-base'
+    s.dependency 'Google-Mobile-Ads-SDK'
+  end
+  
+  spec.subspec 'admob-mediation' do |s|
+    s.dependency 'ee-x/admob-base'
+    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'IronSourceAdMobAdapter'
   end
 
   spec.subspec 'applovin-base' do |s|
@@ -304,7 +314,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'applovin-mediation' do |s|
     s.dependency 'ee-x/applovin-base'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceAppLovinAdapter','4.3.0.0'
+    s.dependency 'IronSourceAppLovinAdapter'
   end
 
   spec.subspec 'facebook-ads-base' do |s|
@@ -326,7 +336,7 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'facebook-ads' do |s|
-   s.dependency 'ee-x/facebook-ads-base'
+    s.dependency 'ee-x/facebook-ads-base'
     s.dependency 'FBAudienceNetwork' #, '5.1.1'
     s.dependency 'GoogleMobileAdsMediationFacebook'
  end
@@ -336,7 +346,7 @@ Pod::Spec.new do |spec|
     s.header_mappings_dir = 'third_party/facebook-ads-mediation'
     s.dependency 'ee-x/facebook-ads-base'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceFacebookAdapter','4.3.0.0'
+    s.dependency 'IronSourceFacebookAdapter'
   end
 
   spec.subspec 'ironsource' do |s|
@@ -352,18 +362,18 @@ Pod::Spec.new do |spec|
       'src/ee/ironsource/*.{h,hpp}'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK', '6.7.12.0'
+    s.dependency 'IronSourceSDK', '6.8.3.0'
   end
 
   spec.subspec 'ironsource-mediation' do |s|
     s.dependency 'ee-x/ironsource'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceAppLovinAdapter','4.3.0.0'
-    s.dependency 'IronSourceFacebookAdapter','4.3.0.0'
-    s.dependency 'IronSourceUnityAdsAdapter','4.1.1.6'
-    s.dependency 'IronSourceVungleAdapter','4.1.5.6'
-    s.dependency 'IronSourceAdColonyAdapter','4.1.3.2'
-    # s.dependency 'IronSourceAdMobAdapter','4.3.0.0'
+    s.dependency 'IronSourceAppLovinAdapter'
+    s.dependency 'IronSourceFacebookAdapter'
+    s.dependency 'IronSourceUnityAdsAdapter'
+    s.dependency 'IronSourceVungleAdapter'
+    s.dependency 'IronSourceAdColonyAdapter'
+    s.dependency 'IronSourceAdMobAdapter'
   end
 
   spec.subspec 'unity-ads-base' do |s|
@@ -389,7 +399,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'unity-ads-mediation' do |s|
     s.dependency 'ee-x/unity-ads-base'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceUnityAdsAdapter','4.1.1.6'
+    s.dependency 'IronSourceUnityAdsAdapter'
   end
 
   spec.subspec 'vungle-base' do |s|
@@ -416,7 +426,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'vungle-mediation' do |s|
     s.dependency 'ee-x/vungle-base'
     s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceVungleAdapter','4.1.5.6'
+    s.dependency 'IronSourceVungleAdapter'
   end
 
   spec.subspec 'recorder' do |s|

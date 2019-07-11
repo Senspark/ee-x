@@ -11,10 +11,10 @@ android {
 }
 
 dependencies {
-    api "com.android.support:support-annotations:${rootProject.ext.supportLibraryVersion}"
+    api "androidx.annotation:annotation:1.0.0"
+    api "com.google.android.gms:play-services-ads:17.2.0"
 
-    implementation 'com.google.android.gms:play-services-instantapps:16.0.1'
-    implementation ("com.google.android.gms:play-services-ads-identifier:16.0.0")
+    implementation 'com.google.android.gms:play-services-instantapps:16.1.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'

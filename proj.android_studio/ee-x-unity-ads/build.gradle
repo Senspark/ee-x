@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     api project(':ee-x-core')
+
+    implementation 'com.unity3d.ads:unity-ads:3.1.0'
 }

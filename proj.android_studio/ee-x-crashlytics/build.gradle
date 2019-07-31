@@ -12,10 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api ('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
-        transitive = true
-    }
-    api ('com.crashlytics.sdk.android:crashlytics-ndk:2.0.3@aar') {
-        transitive = true
-    }
+    api 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

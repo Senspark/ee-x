@@ -1,6 +1,6 @@
 package com.ee.core;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by eps on 3/20/18.

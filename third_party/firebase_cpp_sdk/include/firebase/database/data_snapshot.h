@@ -1,10 +1,24 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #ifndef FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_DATA_SNAPSHOT_H_
 #define FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_DATA_SNAPSHOT_H_
 
 #include <stddef.h>
+
 #include <string>
+
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
 
@@ -18,6 +32,7 @@ class DatabaseInternal;
 class DatabaseInternalTestMatcherTest;
 class DatabaseReferenceInternal;
 class QueryInternal;
+class Repo;
 class ValueEventRegistration;
 }  // namespace internal
 
@@ -30,6 +45,13 @@ class DatabaseReference;
 /// use DatabaseReference::SetValue() or DatabaseReference::RunTransaction().
 class DataSnapshot {
  public:
+  /// @brief Default constructor.
+  ///
+  /// This DataSnapshot contains nothing and is considered invalid (i.e.
+  /// is_valid() == false). Use this to construct an empty DataSnapshot that you
+  /// will later populate with data from a database callback.
+  DataSnapshot() : internal_(nullptr) {}
+
 
   /// @brief Copy constructor. DataSnapshots are immutable, so they can be
   /// efficiently copied.
@@ -161,6 +183,7 @@ class DataSnapshot {
   friend class internal::DatabaseInternalTestMatcherTest;
   friend class internal::DatabaseReferenceInternal;
   friend class internal::QueryInternal;
+  friend class internal::Repo;
   friend class internal::ValueEventRegistration;
   /// @endcond
 

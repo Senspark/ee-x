@@ -644,15 +644,15 @@ public class GooglePlayIabService implements IIabService {
         @Override
         protected void onDestroy() {
             SoomlaUtils.LogDebug(TAG, "onDestroy 1");
-            if (!mInProgressDestroy && GooglePlayIabService.getInstance().mWaitingServiceResponse)
-            {
-                SoomlaUtils.LogDebug(TAG, "onDestroy 2");
-                GooglePlayIabService.getInstance().mWaitingServiceResponse = false;
-                String err = "IabActivity is destroyed during purchase.";
-                SoomlaUtils.LogError(TAG, err);
+            if (GooglePlayIabService.getInstance()!=null) {
+                if (!mInProgressDestroy && GooglePlayIabService.getInstance().mWaitingServiceResponse) {
+                    SoomlaUtils.LogDebug(TAG, "onDestroy 2");
+                    GooglePlayIabService.getInstance().mWaitingServiceResponse = false;
+                    String err = "IabActivity is destroyed during purchase.";
+                    SoomlaUtils.LogError(TAG, err);
 
-                // we're letting the helper take care of closing so there won't be any async process stuck in it.
-                onActivityResult(10001, Activity.RESULT_CANCELED, null);
+                    // we're letting the helper take care of closing so there won't be any async process stuck in it.
+                    onActivityResult(10001, Activity.RESULT_CANCELED, null);
 
 //                IabCallbacks.OnPurchaseListener onPurchaseListener = GooglePlayIabService.getInstance().mSavedOnPurchaseListener;
 //                if (onPurchaseListener != null) {
@@ -660,6 +660,7 @@ public class GooglePlayIabService implements IIabService {
 //                    onPurchaseListener.fail(err);
 //                    GooglePlayIabService.getInstance().mSavedOnPurchaseListener = null;
 //                }
+                }
             }
             SoomlaUtils.LogDebug(TAG, "onDestroy 4");
             super.onDestroy();

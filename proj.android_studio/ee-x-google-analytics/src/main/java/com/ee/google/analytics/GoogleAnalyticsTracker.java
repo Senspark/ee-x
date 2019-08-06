@@ -1,6 +1,6 @@
 package com.ee.google.analytics;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;

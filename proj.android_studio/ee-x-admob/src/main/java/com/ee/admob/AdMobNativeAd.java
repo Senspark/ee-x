@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +28,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAd;
-import com.google.android.gms.ads.formats.NativeAppInstallAd;
-import com.google.android.gms.ads.formats.NativeAppInstallAdView;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
 import java.util.List;
 import java.util.Map;
@@ -134,13 +134,13 @@ class AdMobNativeAd extends AdListener implements IAdView {
             return false;
         }
         _isAdLoaded = false;
-        _adLoader = new AdLoader.Builder(_context, _adId).forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
+        _adLoader = new AdLoader.Builder(_context, _adId).forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
             @Override
-            public void onAppInstallAdLoaded(NativeAppInstallAd nativeAppInstallAd) {
+            public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAppInstallAd) {
                 _logger.info("onAppInstallAdLoaded");
                 int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
-                NativeAppInstallAdView adView = (NativeAppInstallAdView) LayoutInflater.from(_context).inflate(layoutId, null, false);
-                populateAppInstallAdView(nativeAppInstallAd, adView);
+                UnifiedNativeAdView adView = (UnifiedNativeAdView) LayoutInflater.from(_context).inflate(layoutId, null, false);
+                populateUnifiedNativeAdView(nativeAppInstallAd, adView);
                 _nativeAdPlaceholder.removeAllViews();
 
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -258,7 +258,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
         return resources.getIdentifier(_identifiers.get(identifier), "id", _context.getPackageName());
     }
 
-    private void populateAppInstallAdView(final NativeAppInstallAd nativeAppInstallAd, final NativeAppInstallAdView adView) {
+    private void populateUnifiedNativeAdView(final UnifiedNativeAd nativeAppInstallAd, final UnifiedNativeAdView adView) {
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
         // have a video asset.
         VideoController vc = nativeAppInstallAd.getVideoController();

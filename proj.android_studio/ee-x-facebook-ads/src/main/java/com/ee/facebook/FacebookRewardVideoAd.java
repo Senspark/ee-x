@@ -1,7 +1,7 @@
 package com.ee.facebook;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -149,8 +149,11 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
 
     private void destroyInternalVideo()
     {
-        _rewardedVideoAd.setAdListener(null);
-        _rewardedVideoAd = null;
+        if (_rewardedVideoAd != null) {
+            _rewardedVideoAd.setAdListener(null);
+            _rewardedVideoAd.destroy();
+            _rewardedVideoAd = null;
+        }
     }
 
     private boolean hasRewardVideo() {

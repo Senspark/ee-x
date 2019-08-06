@@ -2,6 +2,11 @@
 
 apply plugin: 'com.android.library'
 
+repositories {
+    maven { url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -14,7 +19,9 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
-    implementation 'com.ironsource.adapters:facebookadapter:4.2.0@jar'
-    api "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
-    api "com.android.support:recyclerview-v7:${rootProject.ext.supportLibraryVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
+    api "androidx.recyclerview:recyclerview:1.0.0"
+
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.3@jar'
+    implementation 'com.facebook.android:audience-network-sdk:5.3.1'
 }

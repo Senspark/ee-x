@@ -3,7 +3,11 @@ package com.ee.crashlytics;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+
+import android.util.Log;
+
+
+import androidx.annotation.NonNull;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.AnswersEvent;
@@ -56,12 +60,11 @@ public class Crashlytics implements PluginProtocol {
     public Crashlytics(Context context) {
         _logger.debug("constructor begin: context = " + context);
 
-        // Initialize automatically.
-        // https://firebase.google.com/docs/crashlytics/upgrade-from-crash-reporting#android
-        // Fabric.Builder builder = new Fabric.Builder(context)
-        //     .logger(new CrashlyticsLogger(Log.DEBUG))
-        //     .kits(new com.crashlytics.android.Crashlytics(), new CrashlyticsNdk());
-        // Fabric.with(builder.build());
+//        Fabric.Builder builder = new Fabric.Builder(context)
+//            .logger(new CrashlyticsLogger(Log.DEBUG))
+//            .kits(new com.crashlytics.android.Crashlytics(), new CrashlyticsNdk());
+//
+//        Fabric.with(builder.build());
 
         registerHandlers();
 

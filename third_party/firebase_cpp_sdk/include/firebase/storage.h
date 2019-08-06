@@ -1,4 +1,16 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #ifndef FIREBASE_STORAGE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_STORAGE_H_
 #define FIREBASE_STORAGE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_STORAGE_H_
@@ -92,12 +104,16 @@ class Storage {
   /// @brief Get a StorageReference for the specified path.
   StorageReference GetReference(const char* path) const;
   /// @brief Get a StorageReference for the specified path.
-  StorageReference GetReference(const std::string& path) const;
+  StorageReference GetReference(const std::string& path) const {
+    return GetReference(path.c_str());
+  }
 
   /// @brief Get a StorageReference for the provided URL.
   StorageReference GetReferenceFromUrl(const char* url) const;
   /// @brief Get a StorageReference for the provided URL.
-  StorageReference GetReferenceFromUrl(const std::string& url) const;
+  StorageReference GetReferenceFromUrl(const std::string& url) const {
+    return GetReferenceFromUrl(url.c_str());
+  }
 
   /// @brief Returns the maximum time in seconds to retry a download if a
   /// failure occurs.
@@ -127,6 +143,9 @@ class Storage {
   Storage(::firebase::App* app, const char* url);
   Storage(const Storage& src);
   Storage& operator=(const Storage& src);
+
+  // Destroy the internal_ object.
+  void DeleteInternal();
 
   internal::StorageInternal* internal_;
   /// @endcond

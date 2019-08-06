@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation "com.android.support:support-compat:${rootProject.ext.supportLibraryVersion}"
+    implementation "androidx.core:core:1.0.0"
 }

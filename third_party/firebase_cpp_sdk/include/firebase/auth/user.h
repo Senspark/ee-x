@@ -1,4 +1,18 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+/*
+ * Copyright 2016 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
 #define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
@@ -303,9 +317,16 @@ class User : public UserInfoInterface {
   virtual std::string phone_number() const;
 
  private:
+  /// @cond FIREBASE_APP_INTERNAL
   friend struct AuthData;
   // Only exists in AuthData. Access via @ref Auth::CurrentUser().
-  User(AuthData* auth_data) : auth_data_(auth_data) {}
+  explicit User(AuthData* auth_data) : auth_data_(auth_data) {}
+
+  // Disable copy constructor.
+  User(const User&) = delete;
+  // Disable copy operator.
+  User& operator=(const User&) = delete;
+  /// @endcond
 
 #if defined(INTERNAL_EXPERIMENTAL)
   // Doxygen should not make docs for this function.
@@ -314,7 +335,7 @@ class User : public UserInfoInterface {
   friend class IdTokenRefreshListener;
   Future<std::string> GetTokenInternal(const bool force_refresh,
                                        const int future_identifier);
-  /// @endcon
+  /// @endcond
 #endif  // defined(INTERNAL_EXPERIMENTAL)
 
   // Use the pimpl mechanism to hide data details in the cpp files.

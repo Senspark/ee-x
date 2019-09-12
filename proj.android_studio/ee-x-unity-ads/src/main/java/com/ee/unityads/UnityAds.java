@@ -2,7 +2,7 @@ package com.ee.unityads;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;

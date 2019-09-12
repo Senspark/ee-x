@@ -36,17 +36,17 @@ FB_CLASS_EXPORT FB_SUBCLASSING_RESTRICTED
 /**
   Method to create a FBNativeAdCollectionViewCellProvider.
 
- - Parameter manager: The naitve ad manager consumed by this provider
- - Parameter type: The type of this native ad template. For more information, consult FBNativeAdViewType.
+ @param manager The naitve ad manager consumed by this provider
+ @param type The type of this native ad template. For more information, consult FBNativeAdViewType.
  */
 - (instancetype)initWithManager:(FBNativeAdsManager *)manager forType:(FBNativeAdViewType)type;
 
 /**
   Method to create a FBNativeAdCollectionViewCellProvider.
 
- - Parameter manager: The naitve ad manager consumed by this provider
- - Parameter type: The type of this native ad template. For more information, consult FBNativeAdViewType.
- - Parameter attributes: The layout of this native ad template. For more information, consult FBNativeAdViewLayout.
+ @param manager The naitve ad manager consumed by this provider
+ @param type The type of this native ad template. For more information, consult FBNativeAdViewType.
+ @param attributes The layout of this native ad template. For more information, consult FBNativeAdViewLayout.
  */
 - (instancetype)initWithManager:(FBNativeAdsManager *)manager forType:(FBNativeAdViewType)type forAttributes:(FBNativeAdViewAttributes *)attributes NS_DESIGNATED_INITIALIZER;
 
@@ -58,7 +58,7 @@ FB_CLASS_EXPORT FB_SUBCLASSING_RESTRICTED
 /**
   Helper method for implementors of UICollectionViewDelegate who would like to host native ad UICollectionViewCells in their collection view.
  */
-- (CGFloat)collectionView:(nonnull UICollectionView *)collectionView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath;
+- (CGFloat)collectionView:(UICollectionView *)collectionView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

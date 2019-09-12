@@ -1,7 +1,7 @@
 package com.ee.core.internal;
 
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import com.ee.core.MessageBridge;

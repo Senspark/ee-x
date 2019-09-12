@@ -1,7 +1,7 @@
 package com.ee.facebook;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.IInterstitialAd;

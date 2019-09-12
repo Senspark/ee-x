@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2019 Google Inc. All Rights Reserved.
 
 #ifndef FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_USER_PROPERTY_NAMES_H_
 #define FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_USER_PROPERTY_NAMES_H_
@@ -26,6 +26,19 @@ namespace analytics {
 /// The method used to sign in. For example, "google", "facebook" or
 /// "twitter".
 static const char *const kUserPropertySignUpMethod = "sign_up_method";
+
+/// Indicates whether events logged by Google Analytics can be used to
+/// personalize ads for the user. Set to "YES" to enable, or "NO" to
+/// disable. Default is enabled. See the
+/// <a href="https://firebase.google.com/support/guides/disable-analytics">documentation</a> for
+/// more details and information about related settings.
+///
+/// @code
+///  [FIRAnalytics setUserPropertyString:"NO"
+///                              forName:kUserPropertyAllowAdPersonalizationSignals];
+/// @endcode
+static const char *const kUserPropertyAllowAdPersonalizationSignals =
+    "allow_personalized_ads";
 /// @}
 
 } // namespace analytics

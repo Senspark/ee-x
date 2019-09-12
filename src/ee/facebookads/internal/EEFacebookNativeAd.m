@@ -26,25 +26,25 @@
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate, FBMediaViewDelegate> {
     id<EEIMessageBridge> bridge_;
-
+    
     /// Internal Facebook ad.
     FBNativeAd* nativeAd_;
-
+    
     /// Loaded from xib.
     EEFacebookNativeAdView* nativeAdView_;
-
+    
     /// Ad ID Unit.
     NSString* adId_;
-
+    
     /// Layout name (xib).
     NSString* layoutName_;
-
+    
     /// Whether the ad is loaded.
     BOOL isAdLoaded_;
-
+    
     /// Common helper.
     EEAdViewHelper* helper_;
-
+    
     /// Identifiers
     NSDictionary* identifiers_;
 }
@@ -75,7 +75,7 @@ static NSString* const k__sponsor           = @"sponsor";
     if (self == nil) {
         return self;
     }
-
+    
     bridge_ = bridge;
     isAdLoaded_ = NO;
     adId_ = [adId copy];
@@ -86,7 +86,7 @@ static NSString* const k__sponsor           = @"sponsor";
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                               prefix:k__tag
                                                 adId:adId_];
-
+    
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -116,7 +116,7 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (NSString* _Nonnull)k__destroyInternalAd {
     return
-        [NSString stringWithFormat:@"%@_destroyInternalAd_%@", k__tag, adId_];
+    [NSString stringWithFormat:@"%@_destroyInternalAd_%@", k__tag, adId_];
 }
 
 - (NSString* _Nonnull)k__onLoaded {
@@ -155,8 +155,9 @@ static NSString* const k__sponsor           = @"sponsor";
     }
     isAdLoaded_ = NO;
     FBNativeAd* nativeAd =
-        [[[FBNativeAd alloc] initWithPlacementID:adId_] autorelease];
+    [[[FBNativeAd alloc] initWithPlacementID:adId_] autorelease];
     [nativeAd setDelegate:self];
+    [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
     nativeAd_ = [nativeAd retain];
     return YES;
 }
@@ -176,14 +177,14 @@ static NSString* const k__sponsor           = @"sponsor";
 - (void)createView {
     NSAssert(nativeAdView_ == nil, @"");
     EEFacebookNativeAdView* adView =
-        [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
-            firstObject];
+    [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
+     firstObject];
     [adView setHidden:YES];
     [adView adchoicesView].corner = UIRectCornerTopRight;
-
+    
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [[rootView view] addSubview:adView];
-
+    
     nativeAdView_ = [adView retain];
 }
 
@@ -205,7 +206,7 @@ static NSString* const k__sponsor           = @"sponsor";
     if (nativeAd_ == nil) {
         return;
     }
-    [nativeAd_ loadAdWithMediaCachePolicy:FBNativeAdsCachePolicyAll];
+    [nativeAd_ loadAd];
 }
 
 - (CGPoint)getPosition {
@@ -235,52 +236,54 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)nativeAdDidLoad:(FBNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    nativeAd_ = nativeAd;
-    if (nativeAd_ && nativeAd_.isAdValid) {
-        [nativeAd_ unregisterView];
-
-        // adchoices view
-        [nativeAdView_ adchoicesView].nativeAd = nativeAd_;
-
-        // ad body view
-        [nativeAdView_ bodyLabel].text = nativeAd_.bodyText;
-
-        // ad call to action button
-        [[nativeAdView_ callToActionButton] setTitle:nativeAd_.callToAction
-                                            forState:UIControlStateNormal];
-
-        // ad social context label
-        [nativeAdView_ socialContextLabel].text = nativeAd_.socialContext;
-
-        // ad sponsored view
-        [nativeAdView_ sponsorLabel].text = nativeAd_.sponsoredTranslation;
-
-        // ad title view
-        [nativeAdView_ titleLabel].text = nativeAd_.advertiserName;
-
-        // media view
-        if ([nativeAdView_ mediaView]) {
-            [nativeAd_
-                registerViewForInteraction:nativeAdView_
-                                 mediaView:[nativeAdView_ mediaView]
-                             iconImageView:[nativeAdView_ iconImage]
-                            viewController:[EEUtils
-                                               getCurrentRootViewController]
-                            clickableViews:@[
-                                [nativeAdView_ callToActionButton],
-                                [nativeAdView_ mediaView]
-                            ]];
-
-            [[nativeAdView_ mediaView] setDelegate:self];
-        }
-
-        isAdLoaded_ = YES;
-        [bridge_ callCpp:[self k__onLoaded]];
+    NSAssert(nativeAd == nativeAd_, @"");
+    
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
+    [nativeAd unregisterView];
+    
+    if ([nativeAdView_ callToActionButton]) {
+        [nativeAd
+         registerViewForInteraction:nativeAdView_
+         withViewController:rootView
+         withClickableViews:@[[nativeAdView_ callToActionButton]]];
     }
-}
-
-- (void)nativeAdDidDownloadMedia:(FBNativeAd*)nativeAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    // cover image
+    [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
+        [[nativeAdView_ coverImage] setImage:image];
+    }];
+    
+    // ad icon
+    [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
+        [[nativeAdView_ iconImage] setImage:image];
+        [nativeAd registerViewForInteraction:nativeAdView_
+                          withViewController:rootView];
+    }];
+    
+    // adchoices view
+    [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
+    
+    // ad body view
+    [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
+    
+    // ad call to action button
+    [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
+                                        forState:UIControlStateNormal];
+    
+    // ad social context label
+    [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
+    
+    // ad sponsored view
+    [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
+    
+    // ad title view
+    [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+    
+    // ad media view
+    [[nativeAdView_ mediaView] setNativeAd:nativeAd];
+    [[nativeAdView_ mediaView] setDelegate:self];
+    
+    isAdLoaded_ = YES;
+    [bridge_ callCpp:[self k__onLoaded]];
 }
 
 - (void)nativeAdWillLogImpression:(FBNativeAd*)nativeAd {
@@ -307,3 +310,4 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAdView_ coverImage] setHidden:[identifiers_ objectForKey:k__media]];
 }
 @end
+

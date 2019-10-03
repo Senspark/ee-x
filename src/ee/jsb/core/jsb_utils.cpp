@@ -27,12 +27,22 @@
 namespace ee {
 namespace core {
 namespace {
+constexpr cocos2d::Scheduler* getScheduler(cocos2d::Scheduler* scheduler) {
+    return scheduler;
+}
+
+constexpr cocos2d::Scheduler* getScheduler(const std::shared_ptr<cocos2d::Scheduler>& scheduler) {
+    // Version 2.1.3
+    return scheduler.get();
+}
+
 /// Gets the cocos2d-x scheduler base on the current engine version.
 cocos2d::Scheduler* getScheduler() {
 #if COCOS_CREATOR_VERSION == 1
     return cocos2d::Director::getInstance()->getScheduler();
 #else
-    return cocos2d::Application::getInstance()->getScheduler();
+    auto&& scheduler = cocos2d::Application::getInstance()->getScheduler();
+    return getScheduler(scheduler);
 #endif
 }
 } // namespace

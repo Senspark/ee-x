@@ -1,10 +1,13 @@
 package com.ee.notification;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -62,20 +65,33 @@ public class NotificationUtils {
      * @param body        The body of the notification.
      * @param clickIntent The intent will be fired when the user clicks on the notification.
      */
+
+    /** NotificationCompat.Builder deprecated in Android O
+      https://stackoverflow.com/questions/45462666/notificationcompat-builder-deprecated-in-android-o **/
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
         String channelId = context.getPackageName() + "_notification";
+        String channelName = "My Background Service";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert mNotificationManager != null;
+            mNotificationManager.createNotificationChannel(chan);
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
         builder
-            .setOngoing(false)
-            .setAutoCancel(true)
-            .setContentIntent(clickIntent)
-            .setContentText(body)
-            .setContentTitle(title)
-            .setDefaults(android.app.Notification.DEFAULT_ALL)
-            .setSmallIcon(getNotificationIcon(context))
-            .setTicker(ticker);
-
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setContentIntent(clickIntent)
+                .setContentText(body)
+                .setContentTitle(title)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(getNotificationIcon(context))
+                .setTicker(ticker);
         return builder.build();
     }
 

@@ -11,7 +11,6 @@
 #include "AppLovin.hpp"
 #include "CrashlyticsAgent.hpp"
 #include "FacebookAds.hpp"
-#include "Notification.hpp"
 #include "IronSource.hpp"
 #include "MultiNativeAdTestScene.hpp"
 #include "NotificationAgent.hpp"
@@ -27,14 +26,18 @@
 
 #include <cocos2d.h>
 
-namespace eetest {
-namespace {
+namespace eetest
+{
+namespace
+{
 const auto DesignResolution = cocos2d::Size(480, 320);
 } // namespace
 
-namespace {
-void testMultiAds() {
-    static ee::MultiRewardedVideo* ads;
+namespace
+{
+void testMultiAds()
+{
+    static ee::MultiRewardedVideo *ads;
     ee::runOnUiThread([] {
         static auto temp = ee::MultiRewardedVideo();
         ads = &temp;
@@ -65,7 +68,8 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {}
 
-void AppDelegate::initGLContextAttrs() {
+void AppDelegate::initGLContextAttrs()
+{
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 16, 8};
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -74,14 +78,16 @@ void AppDelegate::initGLContextAttrs() {
     cocos2d::GLView::setGLContextAttrs(glContextAttrs);
 }
 
-bool AppDelegate::applicationDidFinishLaunching() {
+bool AppDelegate::applicationDidFinishLaunching()
+{
     cocos2d::log(__PRETTY_FUNCTION__);
 
     auto director = cocos2d::Director::getInstance();
     auto glView = director->getOpenGLView();
-    if (glView == nullptr) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) ||                               \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) ||                                 \
+    if (glView == nullptr)
+    {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) ||   \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         glView = cocos2d::GLViewImpl::createWithRect(
             "HelloCpp", cocos2d::Rect(0, 0, DesignResolution.width,
@@ -100,11 +106,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
                                  : ResolutionPolicy::FIXED_HEIGHT);
     glView->setDesignResolutionSize(DesignResolution.width,
                                     DesignResolution.height, resolutionPolicy);
-    auto&& frameSize = glView->getFrameSize();
+    auto &&frameSize = glView->getFrameSize();
     getLogger().info(cocos2d::StringUtils::format(
         "frameSize = %f %f", frameSize.width, frameSize.height));
 
-    auto&& winSize = director->getWinSize();
+    auto &&winSize = director->getWinSize();
     getLogger().info(cocos2d::StringUtils::format(
         "winSize = %f %f", winSize.width, winSize.height));
 
@@ -164,7 +170,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     return true;
 }
 
-void AppDelegate::applicationDidEnterBackground() {
+void AppDelegate::applicationDidEnterBackground()
+{
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->stopAnimation();
 #ifndef EE_X_DESKTOP
@@ -172,7 +179,8 @@ void AppDelegate::applicationDidEnterBackground() {
 #endif // EE_X_DESKTOP
 }
 
-void AppDelegate::applicationWillEnterForeground() {
+void AppDelegate::applicationWillEnterForeground()
+{
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->startAnimation();
 #ifndef EE_X_DESKTOP

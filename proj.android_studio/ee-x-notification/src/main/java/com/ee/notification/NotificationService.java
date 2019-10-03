@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
 
@@ -39,7 +38,7 @@ public class NotificationService extends Service {
             Class clazz = Class.forName(className);
             PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz, tag);
             Notification notification =
-                NotificationUtils.buildNotification(this, ticker, title, body, tag.toString(), clickIntent);
+                NotificationUtils.buildNotification(this, ticker, title, body,  clickIntent);
             startForeground(tag, notification);
             NotificationUtils.showNotification(this, notification, tag);
             stopForeground(false);

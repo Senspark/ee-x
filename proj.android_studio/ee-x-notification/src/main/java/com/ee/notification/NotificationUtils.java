@@ -65,20 +65,20 @@ public class NotificationUtils {
      * @param body        The body of the notification.
      * @param clickIntent The intent will be fired when the user clicks on the notification.
      */
+
+    /** NotificationCompat.Builder deprecated in Android O
+      https://stackoverflow.com/questions/45462666/notificationcompat-builder-deprecated-in-android-o **/
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
         String channelId = context.getPackageName() + "_notification";
-        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
         String channelName = "My Background Service";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+            NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
             chan.setLightColor(Color.BLUE);
             chan.setLockscreenVisibility(android.app.Notification.VISIBILITY_PRIVATE);
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             assert mNotificationManager != null;
             mNotificationManager.createNotificationChannel(chan);
-            String name = "snap map fake location ";
-            int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, chan.getId());
             builder
                     .setChannelId(chan.getId())
@@ -92,8 +92,7 @@ public class NotificationUtils {
                     .setSmallIcon(getNotificationIcon(context))
                     .setTicker(ticker);
             return builder.build();
-        }
-        else{
+        } else {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
             builder
                     .setOngoing(false)
@@ -107,7 +106,6 @@ public class NotificationUtils {
                     .setTicker(ticker);
             return builder.build();
         }
-
     }
 
     /**

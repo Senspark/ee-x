@@ -75,37 +75,26 @@ public class NotificationUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
             chan.setLightColor(Color.BLUE);
-            chan.setLockscreenVisibility(android.app.Notification.VISIBILITY_PRIVATE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             assert mNotificationManager != null;
             mNotificationManager.createNotificationChannel(chan);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, chan.getId());
-            builder
-                    .setChannelId(chan.getId())
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .setContentIntent(clickIntent)
-                    .setContentText(body)
-                    .setContentTitle(title)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setSmallIcon(getNotificationIcon(context))
-                    .setTicker(ticker);
-            return builder.build();
-        } else {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
-            builder
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .setContentIntent(clickIntent)
-                    .setContentText(body)
-                    .setContentTitle(title)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .setDefaults(android.app.Notification.DEFAULT_ALL)
-                    .setSmallIcon(getNotificationIcon(context))
-                    .setTicker(ticker);
-            return builder.build();
+
         }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+        builder
+                .setChannelId(channelId)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setContentIntent(clickIntent)
+                .setContentText(body)
+                .setContentTitle(title)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(getNotificationIcon(context))
+                .setTicker(ticker);
+        return builder.build();
     }
 
     /**

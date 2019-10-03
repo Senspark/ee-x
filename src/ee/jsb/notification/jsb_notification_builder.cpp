@@ -8,90 +8,70 @@
 #include "ee/jsb/notification/jsb_notification_builder.hpp"
 
 #include "ee/Notification.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
-namespace ee
-{
-namespace core
-{
+using Self = ee::NotificationBuilder;
+
+namespace ee {
+namespace core {
 template <>
-NotificationBuilder get_value(const se::Value &value)
-{
-    return *static_cast<NotificationBuilder *>(
-        value.toObject()->getPrivateData());
+Self get_value(const se::Value& value) {
+    return *static_cast<Self*>(value.toObject()->getPrivateData());
 }
 
 template <>
-void set_value(se::Value &value, NotificationBuilder &input)
-{
+void set_value(se::Value& value, Self& input) {
     set_value_from_pointer(value, &input);
 }
 } // namespace core
 
-namespace notification
-{
+namespace notification {
+namespace {
+se::Class* clazz = nullptr;
 
-se::Class *__jsb_NotificationBuilder_class = nullptr;
+// clang-format off
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto finalize    = &core::makeFinalize<Self>;
+constexpr auto setBody     = &core::makeInstanceMethod<&Self::setBody>;
+constexpr auto setDelay    = &core::makeInstanceMethod<&Self::setDelay>;
+constexpr auto setInterval = &core::makeInstanceMethod<&Self::setInterval>;
+constexpr auto setTag      = &core::makeInstanceMethod<&Self::setTag>;
+constexpr auto setTicker   = &core::makeInstanceMethod<&Self::setTicker>;
+constexpr auto setTitle    = &core::makeInstanceMethod<&Self::setTitle>;
+// clang-format on
 
-const auto jsb_NotificationBuilder_finalize =
-    &core::jsb_finalize<NotificationBuilder>;
-const auto jsb_NotificationBuilder_constructor =
-    &core::jsb_constructor<NotificationBuilder>;
-const auto jsb_NotificationBuilder_setTicker = &core::jsb_accessor_set<
-    NotificationBuilder, &NotificationBuilder::setTicker, const std::string &>;
-const auto jsb_NotificationBuilder_setTitle =
-    &core::jsb_accessor_set<NotificationBuilder, &NotificationBuilder::setTitle,
-                            const std::string &>;
-const auto jsb_NotificationBuilder_setBody =
-    &core::jsb_accessor_set<NotificationBuilder, &NotificationBuilder::setBody,
-                            const std::string &>;
-const auto jsb_NotificationBuilder_setInterval =
-    &core::jsb_accessor_set<NotificationBuilder,
-                            &NotificationBuilder::setInterval, int>;
-const auto jsb_NotificationBuilder_setDelay =
-    &core::jsb_accessor_set<NotificationBuilder,
-                            &NotificationBuilder::setDelay, int>;
-const auto jsb_NotificationBuilder_setTag =
-    &core::jsb_accessor_set<NotificationBuilder, &NotificationBuilder::setTag,
-                            int>;
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FUNC(setBody)
+SE_BIND_FUNC(setDelay)
+SE_BIND_FUNC(setInterval)
+SE_BIND_FUNC(setTag)
+SE_BIND_FUNC(setTicker)
+SE_BIND_FUNC(setTitle)
+} // namespace
 
-SE_BIND_FINALIZE_FUNC(jsb_NotificationBuilder_finalize)
-SE_BIND_CTOR(jsb_NotificationBuilder_constructor,
-             __jsb_NotificationBuilder_class, jsb_NotificationBuilder_finalize)
-SE_BIND_FUNC(jsb_NotificationBuilder_setTicker)
-SE_BIND_FUNC(jsb_NotificationBuilder_setTitle)
-SE_BIND_FUNC(jsb_NotificationBuilder_setDelay)
-SE_BIND_FUNC(jsb_NotificationBuilder_setBody)
-SE_BIND_FUNC(jsb_NotificationBuilder_setInterval)
-SE_BIND_FUNC(jsb_NotificationBuilder_setTag)
-
-bool register_notification_builder_manual(se::Object *globalObj)
-{
-    se::Object *eeObj = nullptr;
-    se::Object *notificationObj = nullptr;
+bool register_notification_builder_manual(se::Object* globalObj) {
+    se::Object* eeObj = nullptr;
+    se::Object* notificationObj = nullptr;
     core::getOrCreatePlainObject_r("ee", globalObj, &eeObj);
     core::getOrCreatePlainObject_r("notification", eeObj, &notificationObj);
 
-    auto cls =
-        se::Class::create("NotificationBuilder", notificationObj, nullptr,
-                          _SE(jsb_NotificationBuilder_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_NotificationBuilder_finalize));
+    auto cls = se::Class::create("NotificationBuilder", notificationObj, nullptr,
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("setTicker", _SE(jsb_NotificationBuilder_setTicker));
-    cls->defineFunction("setTitle", _SE(jsb_NotificationBuilder_setTitle));
-    cls->defineFunction("setDelay", _SE(jsb_NotificationBuilder_setDelay));
-    cls->defineFunction("setBody", _SE(jsb_NotificationBuilder_setBody));
-    cls->defineFunction("setInterval",
-                        _SE(jsb_NotificationBuilder_setInterval));
-    cls->defineFunction("setTag", _SE(jsb_NotificationBuilder_setTag));
+    EE_JSB_DEFINE_FUNCTION(cls, setBody);
+    EE_JSB_DEFINE_FUNCTION(cls, setDelay);
+    EE_JSB_DEFINE_FUNCTION(cls, setInterval);
+    EE_JSB_DEFINE_FUNCTION(cls, setTag);
+    EE_JSB_DEFINE_FUNCTION(cls, setTicker);
+    EE_JSB_DEFINE_FUNCTION(cls, setTitle);
 
     cls->install();
 
-    JSBClassType::registerClass<NotificationBuilder>(cls);
-
-    __jsb_NotificationBuilder_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

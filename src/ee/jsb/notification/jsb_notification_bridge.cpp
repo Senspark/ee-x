@@ -7,31 +7,30 @@
 #include "ee/jsb/notification/jsb_notification_bridge.hpp"
 
 #include "ee/Notification.hpp"
-
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 
+using Self = ee::Notification;
+
 namespace ee {
 namespace notification {
+namespace {
+se::Class *clazz = nullptr;
 
-se::Class* __jsb_Notification_class = nullptr;
+// clang-format off
+constexpr auto constructor = &core::makeConstructor<Self>;
+constexpr auto finalize    = &core::makeFinalize<Self>;
+constexpr auto schedule    = &core::makeInstanceMethod<&Self::schedule>;
+constexpr auto unschedule  = &core::makeInstanceMethod<&Self::unschedule>;
+constexpr auto clearAll    = &core::makeInstanceMethod<&Self::clearAll>;
+// clang-format on
 
-const auto jsb_Notification_finalize = &core::jsb_finalize<Notification>;
-const auto jsb_Notification_constructor = &core::jsb_constructor<Notification>;
-const auto jsb_Notification_schedule =
-    &core::jsb_method_call<Notification, &Notification::schedule,
-                           NotificationBuilder>;
-const auto jsb_Notification_unschedule =
-    &core::jsb_method_call<Notification, &Notification::unschedule, int>;
-const auto jsb_Notification_clearAll =
-    &core::jsb_method_call<Notification, &Notification::clearAll>;
-
-SE_BIND_FINALIZE_FUNC(jsb_Notification_finalize)
-SE_BIND_CTOR(jsb_Notification_constructor, __jsb_Notification_class,
-             jsb_Notification_finalize)
-SE_BIND_FUNC(jsb_Notification_schedule)
-SE_BIND_FUNC(jsb_Notification_unschedule)
-SE_BIND_FUNC(jsb_Notification_clearAll)
+SE_BIND_FINALIZE_FUNC(finalize)
+SE_BIND_CTOR(constructor, clazz, finalize)
+SE_BIND_FUNC(schedule)
+SE_BIND_FUNC(unschedule)
+SE_BIND_FUNC(clearAll)
+} // namespace
 
 bool register_notification_bridge_manual(se::Object* globalObj) {
     se::Object* eeObj = nullptr;
@@ -40,18 +39,17 @@ bool register_notification_bridge_manual(se::Object* globalObj) {
     core::getOrCreatePlainObject_r("notification", eeObj, &notificationObj);
 
     auto cls = se::Class::create("Notification", notificationObj, nullptr,
-                                 _SE(jsb_Notification_constructor));
-    cls->defineFinalizeFunction(_SE(jsb_Notification_finalize));
+                                 _SE(constructor));
+    cls->defineFinalizeFunction(_SE(finalize));
 
-    cls->defineFunction("schedule", _SE(jsb_Notification_schedule));
-    cls->defineFunction("unschedule", _SE(jsb_Notification_unschedule));
-    cls->defineFunction("clearAll", _SE(jsb_Notification_clearAll));
+    EE_JSB_DEFINE_FUNCTION(cls, schedule);
+    EE_JSB_DEFINE_FUNCTION(cls, unschedule);
+    EE_JSB_DEFINE_FUNCTION(cls, clearAll);
 
     cls->install();
 
-    JSBClassType::registerClass<Notification>(cls);
-
-    __jsb_Notification_class = cls;
+    JSBClassType::registerClass<Self>(cls);
+    clazz = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

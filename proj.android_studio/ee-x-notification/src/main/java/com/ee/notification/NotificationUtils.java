@@ -79,12 +79,10 @@ public class NotificationUtils {
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             assert mNotificationManager != null;
             mNotificationManager.createNotificationChannel(chan);
-
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
         builder
-                .setChannelId(channelId)
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentIntent(clickIntent)

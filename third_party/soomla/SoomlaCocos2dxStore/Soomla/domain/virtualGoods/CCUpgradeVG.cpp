@@ -85,7 +85,8 @@ ValueMap CCUpgradeVG::toValueMap() {
 
 bool CCUpgradeVG::canBuy() {
     CCError* error = nullptr;
-    const char* goodItemId = getGoodItemId().c_str();
+    auto copy = getGoodItemId(); // Copy to retain c_str().
+    const char* goodItemId = copy.c_str();
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, &error));
     if ((error != nullptr) || (good == nullptr)) {

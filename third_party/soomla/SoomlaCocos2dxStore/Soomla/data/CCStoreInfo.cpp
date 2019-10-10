@@ -392,13 +392,7 @@ void CCStoreInfo::updateAggregatedLists() {
 
         CCUpgradeVG* upgradeVG = dynamic_cast<CCUpgradeVG*>(vi);
         if (upgradeVG != nullptr) {
-            auto& upgrades = getGoodsUpgrades().at(upgradeVG->getGoodItemId());
-
-            if (getGoodsUpgrades().find(upgradeVG->getGoodItemId()) ==
-                std::end(getGoodsUpgrades())) {
-                getGoodsUpgrades().emplace(upgradeVG->getGoodItemId(),
-                                           cocos2d::Vector<CCUpgradeVG*>());
-            }
+            auto&& upgrades = getGoodsUpgrades()[upgradeVG->getGoodItemId()];
             upgrades.pushBack(upgradeVG);
         }
         CCPurchaseType* purchaseType = vi->getPurchaseType();

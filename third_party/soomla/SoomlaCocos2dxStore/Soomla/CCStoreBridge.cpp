@@ -72,7 +72,7 @@ bool CCStoreBridge::init() {
                                    CCSingleUseVG::createWithValueMap);
     domainFactory->registerCreator(
         CCStoreConsts::JSON_JSON_TYPE_UPGRADE_VG,
-        CCUpgradeVG::CCLifetimeVG::createWithValueMap);
+        CCUpgradeVG::CCUpgradeVG::createWithValueMap);
 
     domainFactory->registerCreator(CCStoreConsts::JSON_JSON_TYPE_ITEM,
                                    &CCVirtualItemReward::createWithValueMap);

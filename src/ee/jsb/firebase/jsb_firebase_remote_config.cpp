@@ -23,7 +23,10 @@ using Self = RemoteConfig;
 constexpr auto constructor      = &core::makeConstructor<Self>;
 constexpr auto finalize         = &core::makeFinalize<Self>;
 constexpr auto initialize       = &core::makeMethod<&Self::initialize>;
+constexpr auto activateFetched  = &core::makeMethod<&Self::activateFetched>;
+constexpr auto fetchOnly        = &core::makeMethod<&Self::fetchOnly>;
 constexpr auto fetch            = &core::makeMethod<&Self::fetch>;
+constexpr auto getInfo          = &core::makeMethod<&Self::getInfo>;
 constexpr auto getInfoJsb       = &core::makeMethod<&Self::getInfoJsb>;
 constexpr auto setDefaultBool   = &core::makeMethod<&Self::setDefaultBool>;
 constexpr auto setDefaultLong   = &core::makeMethod<&Self::setDefaultLong>;
@@ -39,7 +42,10 @@ constexpr auto getString        = &core::makeMethod<&Self::getString>;
 SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
+SE_BIND_FUNC(activateFetched)
+SE_BIND_FUNC(fetchOnly)
 SE_BIND_FUNC(fetch)
+SE_BIND_FUNC(getInfo)
 SE_BIND_FUNC(getInfoJsb)
 SE_BIND_FUNC(setDefaultBool)
 SE_BIND_FUNC(setDefaultLong)
@@ -59,7 +65,10 @@ bool register_firebase_remote_config_manual(se::Object* global) {
     cls->defineFinalizeFunction(_SE(finalize));
 
     EE_JSB_DEFINE_FUNCTION(cls, initialize);
+    EE_JSB_DEFINE_FUNCTION(cls, activateFetched);
+    EE_JSB_DEFINE_FUNCTION(cls, fetchOnly);
     EE_JSB_DEFINE_FUNCTION(cls, fetch);
+    EE_JSB_DEFINE_FUNCTION(cls, getInfo);
     EE_JSB_DEFINE_FUNCTION(cls, getInfoJsb);
     EE_JSB_DEFINE_FUNCTION(cls, setDefaultBool);
     EE_JSB_DEFINE_FUNCTION(cls, setDefaultLong);

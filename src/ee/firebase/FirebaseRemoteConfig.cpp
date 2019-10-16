@@ -66,6 +66,33 @@ bool Self::initialize() {
     return true;
 }
 
+bool Self::activateFetched() {
+    if (not initialized_) {
+        return false;
+    }
+
+#if defined(EE_X_MOBILE)
+    return ::firebase::remote_config::ActivateFetched();
+#else // EE_X_MOBILE
+    return false;
+#endif // EE_X_MOBILE
+}
+
+void Self::fetchOnly(const std::function<void()>& callback) {
+    auto guard = std::make_shared<core::ScopeGuard>(callback);
+    if (not initialized_) {
+        return;
+    }
+
+#if defined(EE_X_MOBILE)
+    fetchScheduler_->push(
+        ::firebase::remote_config::Fetch(),
+        [callback, guard](const ::firebase::Future<void>& future) {
+            // Handled by scope guard.
+        });
+#endif // EE_X_MOBILE
+}
+
 void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
     auto guard = std::make_shared<core::ScopeGuard>(std::bind(callback, false));
     if (not initialized_) {
@@ -133,7 +160,7 @@ ConfigInfo Self::getInfo() const {
     result.fetchTime = 0;
     result.throttledEndTime = 0;
     result.lastFetchStatus = LastFetchStatus::Success;
-    result.LastFetchFailureReason = FetchFailureReason::Error;
+    result.lastFetchFailureReason = FetchFailureReason::Error;
 #endif // EE_X_MOBILE
     return result;
 }

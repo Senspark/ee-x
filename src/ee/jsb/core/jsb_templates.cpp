@@ -227,8 +227,12 @@ void set_value(se::Value& value, std::int32_t& input) {
 
 template <>
 void set_value(se::Value& value, std::int64_t& input) {
-    auto temp = static_cast<std::int32_t>(input);
-    value.setInt32(temp);
+    value.setInt32(static_cast<double>(input));
+}
+
+template <>
+void set_value(se::Value& value, std::uint64_t& input) {
+    value.setNumber(static_cast<double>(input));
 }
 
 template <>

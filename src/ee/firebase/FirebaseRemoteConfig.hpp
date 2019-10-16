@@ -78,6 +78,12 @@ public:
     /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
+    /// Applies the most recently fetched data, so that its value can be accessed.
+    bool activateFetched();
+
+    /// Only fetches (activate fetch must be called manually).
+    void fetchOnly(const std::function<void()>& callback);
+
     void fetch(bool devModeEnabled, const FetchCallback& callback);
 
     /// Returns information about the last fetch request, in the form of a

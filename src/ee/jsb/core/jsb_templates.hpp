@@ -38,7 +38,7 @@ template <typename T>
 T get_value(const se::Value& value);
 
 /// Converts between se::Value and normal value.
-template <typename T>
+template <class T>
 void set_value(se::Value& value, T input);
 
 template <typename T>
@@ -538,8 +538,8 @@ template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
     }
 
 template <typename InstanceType, auto MemberPtr, typename ReturnType>
-[[deprecated("Use makeInstanceProperty")]] bool jsb_propterty_get(
-    se::State& s) { //
+[[deprecated("Use makeInstanceProperty")]] //
+bool jsb_propterty_get(se::State& s) { //
     return makeInstanceProperty<MemberPtr>(s);
 }
 

@@ -12,6 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-
-    implementation 'com.unity3d.ads:unity-ads:3.1.0'
+    implementation 'com.unity3d.ads:unity-ads:3.2.0'
 }

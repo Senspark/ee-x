@@ -12,4 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
+    implementation 'com.google.android.gms:play-services-ads:18.2.0'
 }

@@ -18,8 +18,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-
-    implementation('com.vungle:publisher-sdk-android:6.3.24@aar') {
-        transitive=true
-    }
+    implementation 'com.vungle:publisher-sdk-android:6.4.11'
 }

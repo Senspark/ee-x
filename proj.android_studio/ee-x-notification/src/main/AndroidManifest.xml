@@ -5,4 +5,5 @@
     <application>
         <service android:name="com.ee.notification.NotificationService"/>
     </application>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 </manifest>

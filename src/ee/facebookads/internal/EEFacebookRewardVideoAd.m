@@ -12,11 +12,7 @@
 #import "ee/core/internal/EEUtils.h"
 #import "ee/facebookads/internal/EEFacebookRewardVideoAd.h"
 
-#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
-#import <ISFacebookAdapter/FBRewardedVideoAd.h>
-#else // EE_X_USE_IRON_SOURCE_MEDIATION
 #import <FBAudienceNetwork/FBRewardedVideoAd.h>
-#endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
 @interface EEFacebookRewardVideoAd () <FBRewardedVideoAdDelegate>
 @end

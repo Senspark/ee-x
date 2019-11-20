@@ -514,6 +514,9 @@ LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_jsb_firebase_remote_config_static
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/jsb_firebase_remote_config.cpp
+LOCAL_SRC_FILES += $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/JsbFirebaseConfigInfo.cpp
+LOCAL_SRC_FILES += $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/JsbFirebaseFetchFailureReason.cpp
+LOCAL_SRC_FILES += $(EE_X_ROOT_DIR)/src/ee/jsb/firebase/JsbFirebaseLastFetchStatus.cpp
 LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_static
 include $(BUILD_STATIC_LIBRARY)

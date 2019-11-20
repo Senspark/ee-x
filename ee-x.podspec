@@ -479,13 +479,19 @@ Pod::Spec.new do |spec|
       'src/ee/cocos/*.{hpp,cpp,frag,vert}'
     s.public_header_files = 
       'src/ee/cocos/*.hpp'
-    s.xcconfig =  {
+    s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../cocos2d ',
-        '${PODS_ROOT}/../../cocos2d/cocos ',
-        '${PODS_ROOT}/../../cocos2d/cocos/editor-support ',
-        '${PODS_ROOT}/../../cocos2d/external ',
+        '${PODS_ROOT}/../../cocos2d',
+        '${PODS_ROOT}/../../cocos2d/cocos',
+        '${PODS_ROOT}/../../cocos2d/cocos/editor-support',
+        '${PODS_ROOT}/../../cocos2d/external',
         '${PODS_ROOT}/../../cocos2d/extensions'
+      ].join(' ')
+    }
+    s.osx.xcconfig = {
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../cocos2d/external/mac/include/glfw3', # Cocos Creator
+        '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac' # Cocos2d-x
       ].join(' ')
     }
   end

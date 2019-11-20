@@ -90,7 +90,7 @@ static NSString* TAG = @"SOOMLA SoomlaStore";
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
         [StoreEventHandling postBillingSupported];
         if (!verifications) {
-            verifications = [NSMutableArray array];
+            verifications = [[NSMutableArray alloc] init];
         }
         [self retryUnfinishedTransactions];
     } else {

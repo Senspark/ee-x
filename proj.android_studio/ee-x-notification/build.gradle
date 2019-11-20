@@ -12,5 +12,4 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation "androidx.core:core:1.0.0"
 }

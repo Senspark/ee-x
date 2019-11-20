@@ -8,15 +8,10 @@
 
 #import "ee/facebookads/EEFacebookNativeAdView.h"
 
-#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
-#import <ISFacebookAdapter/FBAdChoicesView.h>
-#import <ISFacebookAdapter/FBMediaView.h>
-#import <ISFacebookAdapter/FBNativeAd.h>
-#else // EE_X_USE_IRON_SOURCE_MEDIATION
 #import <FBAudienceNetwork/FBAdChoicesView.h>
 #import <FBAudienceNetwork/FBMediaView.h>
 #import <FBAudienceNetwork/FBNativeAd.h>
-#endif // EE_X_USE_IRON_SOURCE_MEDIATION
+#import <FBAudienceNetwork/FBAdIconView.h>
 
 #import "ee/ads/internal/EEAdViewHelper.h"
 #import "ee/core/EEIMessageBridge.h"
@@ -157,7 +152,7 @@ static NSString* const k__sponsor           = @"sponsor";
     FBNativeAd* nativeAd =
     [[[FBNativeAd alloc] initWithPlacementID:adId_] autorelease];
     [nativeAd setDelegate:self];
-    [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
+//    [nativeAd setMediaCachePolicy:FBNativeAdsCachePolicyAll];
     nativeAd_ = [nativeAd retain];
     return YES;
 }
@@ -206,7 +201,7 @@ static NSString* const k__sponsor           = @"sponsor";
     if (nativeAd_ == nil) {
         return;
     }
-    [nativeAd_ loadAd];
+    [nativeAd_ loadAdWithMediaCachePolicy:FBNativeAdsCachePolicyAll];
 }
 
 - (CGPoint)getPosition {
@@ -243,27 +238,30 @@ static NSString* const k__sponsor           = @"sponsor";
     
     if ([nativeAdView_ callToActionButton]) {
         [nativeAd
-         registerViewForInteraction:nativeAdView_
-         withViewController:rootView
-         withClickableViews:@[[nativeAdView_ callToActionButton]]];
+            registerViewForInteraction:nativeAdView_
+                             mediaView:nativeAdView_.mediaView
+                              iconView:nativeAdView_.iconView
+                        viewController:rootView
+                        clickableViews:@[[nativeAdView_ callToActionButton]]];
     }
+    
     // cover image
-    [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
-        [[nativeAdView_ coverImage] setImage:image];
-    }];
+//    [[nativeAd coverImage] loadImageAsyncWithBlock:^(UIImage* image) {
+//        [[nativeAdView_ coverImage] setImage:image];
+//    }];
     
     // ad icon
-    [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
-        [[nativeAdView_ iconImage] setImage:image];
-        [nativeAd registerViewForInteraction:nativeAdView_
-                          withViewController:rootView];
-    }];
+//    [[nativeAd icon] loadImageAsyncWithBlock:^(UIImage* image) {
+//        [[nativeAdView_ iconImage] setImage:image];
+//        [nativeAd registerViewForInteraction:nativeAdView_
+//                          withViewController:rootView];
+//    }];
     
     // adchoices view
     [[nativeAdView_ adchoicesView] setNativeAd:nativeAd];
     
     // ad body view
-    [[nativeAdView_ bodyLabel] setText:[nativeAd body]];
+    [[nativeAdView_ bodyLabel] setText:[nativeAd bodyText]];
     
     // ad call to action button
     [[nativeAdView_ callToActionButton] setTitle:[nativeAd callToAction]
@@ -273,14 +271,14 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAdView_ socialContextLabel] setText:[nativeAd socialContext]];
     
     // ad sponsored view
-    [[nativeAdView_ sponsorLabel] setText:@"Sponsored"];
+    [[nativeAdView_ sponsorLabel] setText:[nativeAd sponsoredTranslation]];
     
     // ad title view
-    [[nativeAdView_ titleLabel] setText:[nativeAd title]];
+    [[nativeAdView_ titleLabel] setText:[nativeAd headline]];
     
     // ad media view
-    [[nativeAdView_ mediaView] setNativeAd:nativeAd];
     [[nativeAdView_ mediaView] setDelegate:self];
+    [[nativeAdView_ iconView] setDelegate:self];
     
     isAdLoaded_ = YES;
     [bridge_ callCpp:[self k__onLoaded]];
@@ -307,7 +305,7 @@ static NSString* const k__sponsor           = @"sponsor";
 - (void)mediaViewDidLoad:(FBMediaView*)mediaView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     // hidden cover image when media did load.
-    [[nativeAdView_ coverImage] setHidden:[identifiers_ objectForKey:k__media]];
+//    [[nativeAdView_ coverImage] setHidden:[identifiers_ objectForKey:k__media]];
 }
 @end
 

@@ -3,7 +3,7 @@
 //
 //
 
-#include "ee/facebook/internal/FacebookBridge.hpp"
+#include "ee/facebook/FacebookBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
 

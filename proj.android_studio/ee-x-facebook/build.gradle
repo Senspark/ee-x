@@ -12,6 +12,6 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api 'com.facebook.android:facebook-share:4.30.0'
-    api 'com.facebook.android:facebook-login:4.30.0'
+    api 'com.facebook.android:facebook-share:5.8.0'
+    api 'com.facebook.android:facebook-login:5.8.0'
 }

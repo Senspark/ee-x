@@ -11,10 +11,12 @@
 #include "EESpineFactory.hpp"
 #include "EESpineMacro.hpp"
 
-#ifdef EE_SPINE_RUNTIME_V3
+// #ifdef EE_SPINE_RUNTIME_V3
 #include <spine/Cocos2dAttachmentLoader.h>
-#endif // EE_SPINE_RUNTIME_V3
+// #endif // EE_SPINE_RUNTIME_V3
 
+
+#include <spine/AttachmentLoader.h>
 #include <spine/SkeletonAnimation.h>
 
 namespace ee {

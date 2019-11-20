@@ -40,10 +40,12 @@ class RequestContent;
 class GraphRequest;
 } // namespace facebook
 
+using Facebook = facebook::Bridge;
 using IFacebook = facebook::IBridge;
 using IFacebookAccessToken = facebook::IAccessToken;
 using IFacebookLoginDelegate = facebook::ILoginDelegate;
 using IFacebookRequestDelegate = facebook::IRequestDelegate;
+using IFacebookGraphDelegate = facebook::IGraphDelegate;
 using IFacebookShareDelegate = facebook::IShareDelegate;
 using FacebookRequestContent = facebook::RequestContent;
 using FacebookGraphRequest = facebook::GraphRequest;

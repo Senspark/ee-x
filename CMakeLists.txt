@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 
 include_directories(
     src/ee/firebase
+    third_party/nlohmann/include/ee
     third_party/firebase_cpp_sdk/include
 )
 
@@ -22,6 +23,7 @@ include(src/ee/ironsource/CMakeLists.txt)
 include(src/ee/notification/CMakeLists.txt)
 include(src/ee/unityads/CMakeLists.txt)
 include(src/ee/vungle/CMakeLists.txt)
+include(src/ee/campaignreceiver/CMakeLists.txt)
 
 set(LIB_SRC
    jni/cpp/ee/core/JniUtils.cpp
@@ -42,6 +44,7 @@ set(LIB_SRC
    ${EE_X_NOTIFICATION_SRC}
    ${EE_X_UNITY_ADS_SRC}
    ${EE_X_VUNGLE_SRC}
+   ${EE_X_CAMPRECEIVER_SRC}
 )
 
 set(LIB_HEADERS
@@ -88,6 +91,7 @@ set(LIB_HEADERS
     ${EE_X_NOTIFICATION_HEADERS}
     ${EE_X_UNITY_ADS_HEADERS}
     ${EE_X_VUNGLE_HEADERS}
+    ${EE_X_CAMPRECEIVER_HEADERS}
 )
 
 add_subdirectory(src/ee/cocos)
@@ -98,7 +102,8 @@ add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC
   src
   jni/cpp
-  third_party/nlohmann/include
+  third_party
+  third_party/nlohmann/include/ee
   third_party/firebase_cpp_sdk/include
 )
 

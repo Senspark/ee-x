@@ -23,6 +23,7 @@ set(EE_X_SOOMLA_STORE_SRC
     Soomla/PurchaseTypes/CCPurchaseWithMarket.cpp
     Soomla/PurchaseTypes/CCPurchaseType.cpp
     Soomla/PurchaseTypes/CCPurchaseWithVirtualItem.cpp
+    Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.cpp
     Soomla/CCStoreBridge.cpp
     Soomla/CCSoomlaStore.cpp
     Soomla/CCStoreInventory.cpp
@@ -32,6 +33,7 @@ set(EE_X_SOOMLA_STORE_SRC
     Soomla/CCStoreConsts.cpp
     Soomla/rewards/CCVirtualItemReward.cpp
     Soomla/CCStoreEventDispatcher.cpp
+    Soomla/StoreEventListener.cpp
     Soomla/data/CCVirtualItemStorage.cpp
     Soomla/data/CCVirtualGoodsStorage.cpp
     Soomla/data/CCStoreInfo.cpp
@@ -56,6 +58,7 @@ set(EE_X_SOOMLA_STORE_HEADERS
     Soomla/NativeImpl/CCNativeStoreBridge.h
     Soomla/NativeImpl/CCNativeSoomlaStore.h
     Soomla/NativeImpl/CCNativeVirtualCurrencyStorage.h
+    Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h
     Soomla/PurchaseTypes/CCPurchaseWithMarket.h
     Soomla/PurchaseTypes/CCPurchaseWithVirtualItem.h
     Soomla/PurchaseTypes/CCPurchaseType.h
@@ -69,6 +72,7 @@ set(EE_X_SOOMLA_STORE_HEADERS
     Soomla/CCStoreAssets.h
     Soomla/CCStoreInventory.h
     Soomla/CCStoreEventDispatcher.h
+    Soomla/StoreEventListener.h
     Soomla/CCStoreConsts.h
     Soomla/data/CCVirtualCurrencyStorage.h
     Soomla/data/CCVirtualItemStorage.h

@@ -114,8 +114,9 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/*.{h,hpp}'
 
     s.dependency 'ee-x/core'
-    s.dependency 'FBSDKLoginKit', '4.44.1'
-    s.dependency 'FBSDKShareKit', '4.44.1'
+    s.dependency 'FBSDKCoreKit', '5.10.0'
+    s.dependency 'FBSDKLoginKit', '5.10.0'
+    s.dependency 'FBSDKShareKit', '5.10.0'
   end
 
   spec.subspec 'notification' do |s|
@@ -769,6 +770,14 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/vungle'
   end
-
 end
 
+#  post_install do |installer_representation|
+#    installer_representation.project.targets.each do |target|
+#      if target.name == "FBSDKShareKit"
+#        target.build_configurations.each do |config|
+#          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'BUCK']
+#        end
+#      end
+#    end
+#  end

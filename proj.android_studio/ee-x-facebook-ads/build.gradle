@@ -14,5 +14,5 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
-    api 'com.facebook.android:audience-network-sdk:5.3.1'
+    api 'com.facebook.android:audience-network-sdk:5.6.0'
 }

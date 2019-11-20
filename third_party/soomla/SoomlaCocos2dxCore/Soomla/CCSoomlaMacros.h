@@ -19,16 +19,22 @@
 
 #include "cocos2d.h"
 
+
+#ifndef CC_SYNTHESIZE
 #define CC_SYNTHESIZE(varType, varName, funName)\
 protected: varType varName;\
 public: virtual varType get##funName(void) const { return varName; }\
 public: virtual void set##funName(varType var){ varName = var; }
+#endif
 
+#ifndef CC_SYNTHESIZE_PASS_BY_REF
 #define CC_SYNTHESIZE_PASS_BY_REF(varType, varName, funName)\
 protected: varType varName;\
 public: virtual const varType& get##funName(void) const { return varName; }\
 public: virtual void set##funName(const varType& var){ varName = var; }
+#endif
 
+#ifndef CC_SYNTHESIZE_RETAIN
 #define CC_SYNTHESIZE_RETAIN(varType, varName, funName)    \
 private: varType varName; \
 public: virtual varType get##funName(void) const { return varName; } \
@@ -41,14 +47,35 @@ CC_SAFE_RELEASE(varName); \
 varName = var; \
 } \
 }
+#endif
 
+#ifndef CC_SAFE_DELETE
 #define CC_SAFE_DELETE(p)           do { delete (p); (p) = nullptr; } while(0)
+#endif
+
+#ifndef CC_SAFE_DELETE_ARRAY
 #define CC_SAFE_DELETE_ARRAY(p)     do { if(p) { delete[] (p); (p) = nullptr; } } while(0)
+#endif
+
+#ifndef CC_SAFE_FREE
 #define CC_SAFE_FREE(p)             do { if(p) { free(p); (p) = nullptr; } } while(0)
+#endif
+
+#ifndef CC_SAFE_RELEASE
 #define CC_SAFE_RELEASE(p)          do { if(p) { (p)->release(); } } while(0)
+#endif
+
+#ifndef CC_SAFE_RELEASE_NULL
 #define CC_SAFE_RELEASE_NULL(p)     do { if(p) { (p)->release(); (p) = nullptr; } } while(0)
+#endif
+
+#ifndef CC_SAFE_RETAIN
 #define CC_SAFE_RETAIN(p)           do { if(p) { (p)->retain(); } } while(0)
+#endif
+
+#ifndef CC_BREAK_IF
 #define CC_BREAK_IF(cond)           if(cond) break
+#endif
 
 #define SL_SYNTHESIZE_RETAIN_WITH_DICT(varType, varName, funName, jsonKey)    \
 CC_SYNTHESIZE_RETAIN(varType, varName, funName); \

@@ -7,8 +7,8 @@ include_directories(
 
 set(EE_X_FACEBOOK_SRC
   src/ee/facebook/FacebookGraphRequest.cpp
+  src/ee/facebook/FacebookBridge.cpp
   src/ee/facebook/internal/FacebookShareDelegate.cpp
-  src/ee/facebook/internal/FacebookBridge.cpp
   src/ee/facebook/internal/FacebookLoginDelegate.cpp
   src/ee/facebook/internal/FacebookRequestDelegate.cpp
   src/ee/facebook/internal/FacebookAccessToken.cpp
@@ -21,7 +21,7 @@ set(EE_X_FACEBOOK_HEADERS
   src/ee/facebook/internal/FacebookRequestDelegate.hpp
   src/ee/facebook/internal/FacebookAccessToken.hpp
   src/ee/facebook/internal/FacebookShareDelegate.hpp
-  src/ee/facebook/internal/FacebookBridge.hpp
+  src/ee/facebook/FacebookBridge.hpp
   src/ee/facebook/internal/FacebookLoginDelegate.hpp
   src/ee/facebook/FacebookGraphRequest.hpp
   src/ee/facebook/FacebookRequestContent.hpp

@@ -17,14 +17,14 @@
 
 - (BOOL)isLoggedIn;
 - (void)logIn:(NSArray* _Nonnull)permissions
-      handler:(FBSDKLoginManagerRequestTokenHandler _Nonnull)handler;
+      handler:(FBSDKLoginManagerLoginResultBlock _Nonnull)handler;
 - (void)logOut;
 
 - (FBSDKAccessToken* _Nullable)getAccessToken;
 
 - (void)graphRequest:(NSString* _Nonnull)path
           parameters:(NSDictionary* _Nullable)parameters
-             handler:(FBSDKGraphRequestHandler _Nonnull)handler;
+             handler:(FBSDKGraphRequestBlock _Nonnull)handler;
 
 - (void)sendRequest:(FBSDKGameRequestActionType)actionType
              filter:(FBSDKGameRequestFilter)filter

@@ -5,8 +5,8 @@
 
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
+#import "ee/core/internal/EEUtils.h"
 #import "ee/facebook/EEFacebook.h"
 #import "ee/facebook/internal/EEFacebookRequestDelegate.h"
 #import "ee/facebook/internal/EEFacebookShareDelegate.h"
@@ -202,8 +202,15 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
     NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
     NSArray* permissions = [dict objectForKey:@"permissions"];
     int tag = [[dict objectForKey:@"tag"] intValue];
-    FBSDKLoginManagerRequestTokenHandler handler = ^(
-        FBSDKLoginManagerLoginResult* result, NSError* error) {
+
+    if ([FBSDKAccessToken currentAccessToken]) {
+        // do something when already logged in
+        return @"";
+    }
+
+    FBSDKLoginManagerLoginResultBlock block = ^(
+        FBSDKLoginManagerLoginResult* _Nullable result,
+        NSError* _Nullable error) {
         if (error != nil) {
             [bridge_ callCpp:[self k__onLoginFailure:tag]
                      message:[error localizedDescription]];
@@ -214,18 +221,19 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
                      message:[self convertAccessTokenToString:[result token]]];
         }
     };
-    [self logIn:permissions handler:handler];
+
+    [self logIn:permissions handler:block];
     return @"";
 }
 
 - (void)logIn:(NSArray* _Nonnull)permissions
-      handler:(FBSDKLoginManagerRequestTokenHandler _Nonnull)handler {
+      handler:(FBSDKLoginManagerLoginResultBlock _Nonnull)handler {
     FBSDKLoginManager* loginManager =
         [[[FBSDKLoginManager alloc] init] autorelease];
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [loginManager logInWithReadPermissions:permissions
-                        fromViewController:rootView
-                                   handler:handler];
+    [loginManager logInWithPermissions:permissions
+                    fromViewController:rootView
+                               handler:handler];
 }
 
 - (void)logOut {
@@ -253,7 +261,8 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
     int tag = [[dict objectForKey:@"tag"] intValue];
     NSString* path = [dict objectForKey:@"path"];
     NSDictionary* parameters = [dict objectForKey:@"parameters"];
-    FBSDKGraphRequestHandler handler =
+
+    FBSDKGraphRequestBlock handler =
         ^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
             if (error != nil) {
                 [bridge_ callCpp:[self k__onGraphFailure:tag]
@@ -269,15 +278,12 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
 
 - (void)graphRequest:(NSString* _Nonnull)path
           parameters:(NSDictionary* _Nullable)parameters
-             handler:(FBSDKGraphRequestHandler _Nonnull)handler {
+             handler:(FBSDKGraphRequestBlock _Nonnull)handler {
     FBSDKGraphRequest* request =
         [[[FBSDKGraphRequest alloc] initWithGraphPath:path
                                            parameters:parameters] autorelease];
 
-    FBSDKGraphRequestConnection* connection =
-        [[[FBSDKGraphRequestConnection alloc] init] autorelease];
-    [connection addRequest:request completionHandler:handler];
-    [connection start];
+    [request startWithCompletionHandler:handler];
 }
 
 - (NSString* _Nonnull)sendRequest:(NSString* _Nonnull)message_ {

@@ -29,6 +29,15 @@ void Self::schedule(const NotificationBuilder& builder) {
     bridge_.call("__notification_schedule", json.dump());
 }
 
+void Self::schedule(const std::string &msg, int tag, int delay, int interval) {
+    nlohmann::json json;
+    json["body"] = msg;
+    json["delay"] = delay;
+    json["interval"] = interval;
+    json["tag"] = tag;
+    bridge_.call("__notification_schedule_no_builder", json.dump());
+}
+
 void Self::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;

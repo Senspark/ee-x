@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
-
 import com.ee.core.Logger;
 
 /**
@@ -39,23 +38,16 @@ public class NotificationService extends Service {
             PendingIntent clickIntent = NotificationUtils.createClickIntent(this, clazz, tag);
             Notification notification =
                 NotificationUtils.buildNotification(this, ticker, title, body, clickIntent);
-            startForeground(tag, notification);
             NotificationUtils.showNotification(this, notification, tag);
-            stopForeground(false);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             // Invalid notification (no valid small icon).
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        _logger.debug("onDestroy");
-        stopForeground(true);
-        super.onDestroy();
     }
 }

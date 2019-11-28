@@ -19,9 +19,12 @@ import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.DisplayCutout;
+import android.view.Surface;
 import android.view.View;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
@@ -35,6 +38,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.instantapps.InstantApps;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Locale;
@@ -258,7 +263,12 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Activity activity = PluginManager.getInstance().getActivity();
-                Map<String, Object> dict = getSafeInset(activity);
+                SafeInset inset = getSafeInset(activity);
+                Map<String, Object> dict = new HashMap<>();
+                dict.put("left", inset.left);
+                dict.put("right", inset.right);
+                dict.put("top", inset.top);
+                dict.put("bottom", inset.bottom);
                 return JsonUtils.convertDictionaryToString(dict);
             }
         }, k__getSafeInset);
@@ -447,24 +457,107 @@ public class Utils {
         return info != null && info.isConnectedOrConnecting();
     }
 
+    private static class SafeInset {
+        public int left;
+        public int right;
+        public int top;
+        public int bottom;
+    }
+
+    private static void calculateSafeInset(Activity activity, int notchSize, SafeInset inset) {
+        // https://stackoverflow.com/questions/3663665/how-can-i-get-the-current-screen-orientation
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                inset.top = notchSize;
+                break;
+            case Surface.ROTATION_90:
+                inset.left = notchSize;
+                break;
+            case Surface.ROTATION_180:
+                inset.bottom = notchSize;
+                break;
+            case Surface.ROTATION_270:
+                inset.right = notchSize;
+                break;
+        }
+    }
+
+    private static boolean getSafeInset_Huawei(Activity activity, SafeInset inset)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Class<?> class_HwNotchSizeUtil;
+        try {
+            ClassLoader classLoader = activity.getClassLoader();
+            class_HwNotchSizeUtil = classLoader.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+            Method method_hasNotchInScreen = class_HwNotchSizeUtil.getMethod("hasNotchInScreen");
+            boolean hasFeature = (boolean) method_hasNotchInScreen.invoke(class_HwNotchSizeUtil);
+            if (!hasFeature) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        Method method_getNotchSize = class_HwNotchSizeUtil.getMethod("getNotchSize");
+        int[] size = (int[]) method_getNotchSize.invoke(class_HwNotchSizeUtil);
+        int notchWidth = size[0];
+        int notchHeight = size[1];
+        calculateSafeInset(activity, notchHeight, inset);
+        return true;
+    }
+
+    private static boolean getSafeInset_Oppo(Activity activity, SafeInset inset)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+        if (!activity.getPackageManager().hasSystemFeature("com.oppo.feature.screen.heteromorphism")) {
+            return false;
+        }
+        @SuppressLint("PrivateApi")
+        Class<?> cls = Class.forName("android.os.SystemProperties");
+        Method hideMethod = cls.getMethod("get", String.class);
+        Object object = cls.newInstance();
+        String value = (String) hideMethod.invoke(object, "ro.oppo.screen.heteromorphism");
+
+        // [378,0:702,80]
+        String[] texts = value.split("[,:]");
+        int[] values = new int[texts.length];
+        try {
+            for (int i = 0; i < texts.length; ++i) {
+                values[i] = Integer.parseInt(texts[i]);
+            }
+        } catch (NumberFormatException e) {
+            values = null;
+        }
+        if (values != null && values.length == 4) {
+            int notchHeight = values[3];
+            calculateSafeInset(activity, notchHeight, inset);
+        }
+        return true;
+    }
+
     @SuppressWarnings("WeakerAccess")
-    public static Map<String, Object> getSafeInset(@NonNull Activity activity) {
-        Map<String, Object> result = new HashMap<>();
+    public static SafeInset getSafeInset(@NonNull Activity activity) {
+        SafeInset inset = new SafeInset();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            result.put("left", 0);
-            result.put("right", 0);
-            result.put("top", 0);
-            result.put("bottom", 0);
+            try {
+                // https://stackoverflow.com/questions/51743622/how-to-handle-notchdisplay-cutout-in-android-api-lower-than-28
+                if (getSafeInset_Oppo(activity, inset)) {
+                    return inset;
+                }
+                if (getSafeInset_Huawei(activity, inset)) {
+                    return inset;
+                }
+            } catch (Exception ex) {
+                _logger.error("getSafeInset", ex);
+            }
         } else {
             View decorView = activity.getWindow().getDecorView();
             WindowInsets insets = decorView.getRootWindowInsets();
             DisplayCutout cutout = insets.getDisplayCutout();
-            result.put("left", cutout.getSafeInsetLeft());
-            result.put("right", cutout.getSafeInsetRight());
-            result.put("top", cutout.getSafeInsetTop());
-            result.put("bottom", cutout.getSafeInsetBottom());
+            inset.left = cutout.getSafeInsetLeft();
+            inset.right = cutout.getSafeInsetRight();
+            inset.top = cutout.getSafeInsetTop();
+            inset.bottom = cutout.getSafeInsetBottom();
         }
-        return result;
+        return inset;
     }
 
     @SuppressLint("HardwareIds")

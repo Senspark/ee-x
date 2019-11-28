@@ -13,11 +13,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.view.DisplayCutout;
+import android.view.View;
+import android.view.WindowInsets;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
@@ -32,6 +36,7 @@ import com.google.android.gms.instantapps.InstantApps;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -59,6 +64,7 @@ public class Utils {
     private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
     private static final String k__isInstantApp                  = "Utils_isInstantApp";
     private static final String k__showInstallPrompt             = "Utils_showInstallPrompt";
+    private static final String k__getSafeInset                  = "Utils_getSafeInset";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -246,6 +252,16 @@ public class Utils {
                 return "";
             }
         }, k__showInstallPrompt);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Activity activity = PluginManager.getInstance().getActivity();
+                Map<String, Object> dict = getSafeInset(activity);
+                return JsonUtils.convertDictionaryToString(dict);
+            }
+        }, k__getSafeInset);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -429,6 +445,26 @@ public class Utils {
         assert connectivityManager != null;
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         return info != null && info.isConnectedOrConnecting();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static Map<String, Object> getSafeInset(@NonNull Activity activity) {
+        Map<String, Object> result = new HashMap<>();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            result.put("left", 0);
+            result.put("right", 0);
+            result.put("top", 0);
+            result.put("bottom", 0);
+        } else {
+            View decorView = activity.getWindow().getDecorView();
+            WindowInsets insets = decorView.getRootWindowInsets();
+            DisplayCutout cutout = insets.getDisplayCutout();
+            result.put("left", cutout.getSafeInsetLeft());
+            result.put("right", cutout.getSafeInsetRight());
+            result.put("top", cutout.getSafeInsetTop());
+            result.put("bottom", cutout.getSafeInsetBottom());
+        }
+        return result;
     }
 
     @SuppressLint("HardwareIds")

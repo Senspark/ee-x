@@ -122,7 +122,7 @@ constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
 constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
 constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
-
+constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
 // clang-format on
 } // namespace
 
@@ -287,6 +287,27 @@ void showInstallPrompt(const std::string& url, const std::string& referrer) {
     json["referrer"] = referrer;
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showInstallPrompt, json.dump());
+}
+
+SafeInset getSafeInset() {
+    SafeInset result;
+#ifdef EE_X_ANDROID
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__getSafeInset);
+    auto json = nlohmann::json::parse(response);
+
+    result.left = json["left"];
+    result.right = json["right"];
+    result.top = json["top"];
+    result.bottom = json["bottom"];
+#else // EE_X_ANDROID
+    // TODO.
+    result.left = 0;
+    result.right = 0;
+    result.top = 0;
+    result.bottom = 0;
+#endif // EE_X_ANDROID
+    return result;
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {

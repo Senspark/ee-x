@@ -95,6 +95,23 @@ void runOnUiThreadDelayed(const std::function<void()>& func, float delay);
 bool isInstantApp();
 
 void showInstallPrompt(const std::string& url, const std::string& referrer);
+
+/// https://developer.android.com/reference/android/view/DisplayCutout
+struct SafeInset {
+    /// The inset from the left which avoids the display cutout in pixels.
+    int left;
+
+    /// The inset from the right which avoids the display cutout in pixels.
+    int right;
+
+    /// The inset from the top which avoids the display cutout in pixels.
+    int top;
+
+    /// The inset from the bottom which avoids the display cutout in pixels.
+    int bottom;
+};
+
+SafeInset getSafeInset();
 } // namespace core
 
 using core::format;
@@ -112,6 +129,9 @@ using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
 using core::sendMail;
 using core::testConnection;
+using core::getSafeInset;
+
+using core::SafeInset;
 } // namespace ee
 
 #endif /* EE_X_UTILS_HPP */

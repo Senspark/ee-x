@@ -180,7 +180,7 @@ public class Notification implements PluginProtocol {
             className = activity.getClass().getName();
         }
 
-        Intent intent = new Intent(_context, NotificationService.class);
+        Intent intent = new Intent(_context, NotificationReceiver.class);
         intent.putExtra("ticker", ticker);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
@@ -198,7 +198,7 @@ public class Notification implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void unschedule(@NonNull Integer tag) {
         _logger.debug("unschedule: tag = " + tag);
-        Intent intent = new Intent(_context, NotificationService.class);
+        Intent intent = new Intent(_context, NotificationReceiver.class);
         NotificationUtils.unscheduleAlarm(_context, intent, tag);
     }
 

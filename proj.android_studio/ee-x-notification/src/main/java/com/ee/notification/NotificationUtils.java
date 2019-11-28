@@ -1,17 +1,14 @@
 package com.ee.notification;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.ee.core.Logger;
 
 /**
@@ -70,28 +67,27 @@ public class NotificationUtils {
       https://stackoverflow.com/questions/45462666/notificationcompat-builder-deprecated-in-android-o **/
     static android.app.Notification buildNotification(Context context, String ticker, String title,
                                                       String body, PendingIntent clickIntent) {
+
+        // https://developer.android.com/training/notify-user/build-notification
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
         String channelId = context.getPackageName() + "_notification";
         String channelName = "My Background Service";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
-            chan.setLightColor(Color.BLUE);
-            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            assert mNotificationManager != null;
+            NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager mNotificationManager = context.getSystemService(NotificationManager.class);
             mNotificationManager.createNotificationChannel(chan);
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
         builder
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setContentIntent(clickIntent)
+                .setSmallIcon(getNotificationIcon(context))
                 .setContentText(body)
                 .setContentTitle(title)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(getNotificationIcon(context))
-                .setTicker(ticker);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // Android 7.1 and lower
+                .setContentIntent(clickIntent)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setAutoCancel(true);
         return builder.build();
     }
 
@@ -100,23 +96,22 @@ public class NotificationUtils {
      * -lollipop
      */
     private static int getNotificationIcon(Context context) {
-        boolean useWhiteIcon =
-            (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        // https://lolsborn.com/2007/11/27/accessing-android-resources-by-name-at-runtime/
-        String resourceName = useWhiteIcon ? "icon_silhouette" : "ic_launcher";
-        int id =
-            context.getResources().getIdentifier(resourceName, "mipmap", context.getPackageName());
-        if (id == 0) {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        String resourceName = useWhiteIcon ? "ic_notification" : "ic_launcher";
+        String defType = useWhiteIcon ? "drawable" : "mipmap";
+        int resID = context.getResources().getIdentifier(resourceName , defType ,
+                context.getPackageName()) ;
+        if (resID == 0) {
             _logger.error("Could not find resource id for icon name: " + resourceName);
         }
-        return id;
+        return resID;
     }
 
     /**
      * Creates a pending intent that will be fired when the user clicks on the notification.
      *
      * @param context  The context.
-     * @param activity The activity will be opened when the notification is clicked.
+     * @param activityClass The activity will be opened when the notification is clicked.
      */
     static PendingIntent createClickIntent(Context context, Class activityClass, int requestCode) {
         // Use FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP
@@ -153,23 +148,14 @@ public class NotificationUtils {
      */
     static void scheduleAlarm(Context context, Intent intent, int requestCode, int flags, int delay,
                               int interval) {
-        PendingIntent pendingIntent = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            pendingIntent = PendingIntent.getForegroundService(context, requestCode, intent, flags);
-        } else {
-            pendingIntent = PendingIntent.getService(context, requestCode, intent, flags);
-        }
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long intervalInMilliseconds = (long) interval * 1000;
         long delayInMilliseconds = (long) delay * 1000;
         long currentTime = System.currentTimeMillis();
         long triggerTime = currentTime + delayInMilliseconds;
-        if (interval == 0) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
-        } else {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds,
-                pendingIntent);
-        }
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds,
+                alarmIntent);
     }
 
     /**
@@ -187,16 +173,12 @@ public class NotificationUtils {
      *                    of the pending intent.
      */
     static void unscheduleAlarm(Context context, Intent intent, int requestCode) {
-        PendingIntent pendingIntent = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            pendingIntent = PendingIntent.getForegroundService(context, requestCode, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-        } else {
-            pendingIntent = PendingIntent.getService(context, requestCode, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        if (pendingIntent != null) {
+            pendingIntent.cancel();
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            manager.cancel(pendingIntent);
         }
-        pendingIntent.cancel();
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        manager.cancel(pendingIntent);
     }
 }

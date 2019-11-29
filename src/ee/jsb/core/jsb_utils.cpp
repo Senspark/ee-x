@@ -82,6 +82,7 @@ constexpr auto jsb_isApplicationInstalled        = &makeMethod<&isApplicationIns
 constexpr auto jsb_openApplication               = &makeMethod<&openApplication>;
 constexpr auto jsb_sendMail                      = &makeMethod<&sendMail>;
 constexpr auto jsb_isTablet                      = &makeMethod<&isTablet>;
+constexpr auto jsb_testConnection                = &makeMethod<&testConnection>;
 constexpr auto jsb_getDeviceId                   = &makeMethod<&getDeviceId>;
 constexpr auto jsb_getSafeInset                  = &makeMethod<&getSafeInset>;
 // clang-format on
@@ -94,28 +95,25 @@ SE_BIND_FUNC(jsb_isApplicationInstalled)
 SE_BIND_FUNC(jsb_openApplication)
 SE_BIND_FUNC(jsb_sendMail)
 SE_BIND_FUNC(jsb_isTablet)
+SE_BIND_FUNC(jsb_testConnection)
 SE_BIND_FUNC(jsb_getDeviceId)
 SE_BIND_FUNC(jsb_getSafeInset)
 } // namespace
 
-bool register_utils_manual(se::Object* globalObj) {
-    se::Object* eeObj = nullptr;
-    se::Object* coreObj = nullptr;
-    getOrCreatePlainObject_r("ee", globalObj, &eeObj);
-    getOrCreatePlainObject_r("core", eeObj, &coreObj);
+bool register_utils_manual(se::Object* global) {
+    auto scope = core::getPath(global, "ee/core");
 
-    coreObj->defineFunction("getSHA1CertificateFingerprint",
-                            _SE(jsb_getSHA1CertificateFingerprint));
-    coreObj->defineFunction("getVersionName", _SE(jsb_getVersionName));
-    coreObj->defineFunction("getVersionCode", _SE(jsb_getVersionCode));
-    coreObj->defineFunction("getLanguageCode", _SE(jsb_getLanguageCode));
-    coreObj->defineFunction("isApplicationInstalled",
-                            _SE(jsb_isApplicationInstalled));
-    coreObj->defineFunction("openApplication", _SE(jsb_openApplication));
-    coreObj->defineFunction("sendMail", _SE(jsb_sendMail));
-    coreObj->defineFunction("isTablet", _SE(jsb_isTablet));
-    coreObj->defineFunction("getDeviceId", _SE(jsb_getDeviceId));
-    coreObj->defineFunction("getSafeInset", _SE(jsb_getSafeInset));
+    scope->defineFunction("getSHA1CertificateFingerprint", _SE(jsb_getSHA1CertificateFingerprint));
+    scope->defineFunction("getVersionName", _SE(jsb_getVersionName));
+    scope->defineFunction("getVersionCode", _SE(jsb_getVersionCode));
+    scope->defineFunction("getLanguageCode", _SE(jsb_getLanguageCode));
+    scope->defineFunction("isApplicationInstalled", _SE(jsb_isApplicationInstalled));
+    scope->defineFunction("openApplication", _SE(jsb_openApplication));
+    scope->defineFunction("sendMail", _SE(jsb_sendMail));
+    scope->defineFunction("isTablet", _SE(jsb_isTablet));
+    scope->defineFunction("testConnection", _SE(jsb_testConnection));
+    scope->defineFunction("getDeviceId", _SE(jsb_getDeviceId));
+    scope->defineFunction("getSafeInset", _SE(jsb_getSafeInset));
     return true;
 }
 } // namespace core

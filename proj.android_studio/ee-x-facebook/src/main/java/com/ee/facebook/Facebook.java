@@ -95,7 +95,8 @@ public class Facebook implements PluginProtocol {
                     dict.put("name", currentProfile.getName());
                     dict.put("picture", currentProfile.getProfilePictureUri(128, 128).toString());
                 }
-                _bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
+                // FIXME: may cause java.lang.UnsatisfiedLinkError if C++ library has not loaded yet.
+                // _bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
             }
         };
         registerHandlers();

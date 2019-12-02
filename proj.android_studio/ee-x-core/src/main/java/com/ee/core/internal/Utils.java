@@ -552,10 +552,14 @@ public class Utils {
             View decorView = activity.getWindow().getDecorView();
             WindowInsets insets = decorView.getRootWindowInsets();
             DisplayCutout cutout = insets.getDisplayCutout();
-            inset.left = cutout.getSafeInsetLeft();
-            inset.right = cutout.getSafeInsetRight();
-            inset.top = cutout.getSafeInsetTop();
-            inset.bottom = cutout.getSafeInsetBottom();
+            if (cutout == null) {
+                // Doesn't have cutout.
+            } else {
+                inset.left = cutout.getSafeInsetLeft();
+                inset.right = cutout.getSafeInsetRight();
+                inset.top = cutout.getSafeInsetTop();
+                inset.bottom = cutout.getSafeInsetBottom();
+            }
         }
         return inset;
     }

@@ -26,8 +26,7 @@
 
 namespace ee {
 namespace core {
-template <>
-void set_value(se::Value& value, SafeInset& input) {
+void set_value_impl(se::Value& value, SafeInset& input) {
     auto item = nlohmann::json::object();
     item["left"] = input.left;
     item["right"] = input.right;
@@ -35,6 +34,16 @@ void set_value(se::Value& value, SafeInset& input) {
     item["bottom"] = input.bottom;
     auto&& obj = se::Object::createJSONObject(item.dump());
     value.setObject(obj);
+}
+
+template <>
+void set_value(se::Value& value, SafeInset& input) {
+    set_value_impl(value, input);
+}
+
+template <>
+void set_value(se::Value& value, SafeInset input) {
+    set_value_impl(value, input);
 }
 
 namespace {
@@ -73,6 +82,15 @@ std::string getLanguageCode() {
     return cocos2d::Application::getInstance()->getCurrentLanguageCode();
 }
 
+void getSafeInsetAsync(const std::function<void(const SafeInset& inset)>& callback) {
+    runOnUiThread([callback] {
+        auto inset = getSafeInset();
+        runOnCocosThread([callback, inset] {
+            callback(inset);
+        });
+    });
+}
+
 // clang-format off
 constexpr auto jsb_getSHA1CertificateFingerprint = &makeMethod<&getSHA1CertificateFingerprint>;
 constexpr auto jsb_getVersionName                = &makeMethod<&getVersionName>;
@@ -85,6 +103,7 @@ constexpr auto jsb_isTablet                      = &makeMethod<&isTablet>;
 constexpr auto jsb_testConnection                = &makeMethod<&testConnection>;
 constexpr auto jsb_getDeviceId                   = &makeMethod<&getDeviceId>;
 constexpr auto jsb_getSafeInset                  = &makeMethod<&getSafeInset>;
+constexpr auto jsb_getSafeInsetAsync             = &makeMethod<&getSafeInsetAsync>;
 // clang-format on
 
 SE_BIND_FUNC(jsb_getSHA1CertificateFingerprint)
@@ -98,6 +117,7 @@ SE_BIND_FUNC(jsb_isTablet)
 SE_BIND_FUNC(jsb_testConnection)
 SE_BIND_FUNC(jsb_getDeviceId)
 SE_BIND_FUNC(jsb_getSafeInset)
+SE_BIND_FUNC(jsb_getSafeInsetAsync)
 } // namespace
 
 bool register_utils_manual(se::Object* global) {
@@ -114,6 +134,7 @@ bool register_utils_manual(se::Object* global) {
     scope->defineFunction("testConnection", _SE(jsb_testConnection));
     scope->defineFunction("getDeviceId", _SE(jsb_getDeviceId));
     scope->defineFunction("getSafeInset", _SE(jsb_getSafeInset));
+    scope->defineFunction("getSafeInsetAsync", _SE(jsb_getSafeInsetAsync));
     return true;
 }
 } // namespace core

@@ -12,16 +12,18 @@
 #import "ee/admob/internal/EEAdMobBannerAd.h"
 #import "ee/admob/internal/EEAdMobInterstitialAd.h"
 #import "ee/admob/internal/EEAdMobNativeAd.h"
+#import "ee/admob/internal/EEAdMobRewardedVideo.h"
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 
-@interface EEAdMob () <GADRewardBasedVideoAdDelegate> {
+@interface EEAdMob () {
     id<EEIMessageBridge> bridge_;
     NSMutableArray<NSString*>* testDevices_;
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
+    NSMutableDictionary<NSString*, EEAdMobRewardedVideo*>* rewardVideoAds_;
 }
 
 @end
@@ -43,18 +45,9 @@ static NSString* const k__destroyNativeAd           = @"AdMob_destroyNativeAd";
 static NSString* const k__createInterstitialAd      = @"AdMob_createInterstitialAd";
 static NSString* const k__destroyInterstitialAd     = @"AdMob_destroyInterstitialAd";
 
-static NSString* const k__hasRewardedVideo          = @"AdMob_hasRewardedVideo";
-static NSString* const k__loadRewardedVideo         = @"AdMob_loadRewardedVideo";
-static NSString* const k__showRewardedVideo         = @"AdMob_showRewardedVideo";
+static NSString* const k__createRewardVideoAd       = @"AdMob_createRewardVideoAd";
+static NSString* const k__destroyRewardVideoAd      = @"AdMob_destroyRewardVideoAd";
 
-static NSString* const k__onRewarded                = @"AdMob_onRewarded";
-static NSString* const k__onFailedToLoad            = @"AdMob_onFailedToLoad";
-static NSString* const k__onLoaded                  = @"AdMob_onLoaded";
-static NSString* const k__onOpened                  = @"AdMob_onOpened";
-static NSString* const k__onClosed                  = @"AdMob_onClosed";
-// clang-format on
-
-// clang-format off
 static NSString* const k__ad_id                 = @"ad_id";
 static NSString* const k__ad_size               = @"ad_size";
 static NSString* const k__layout_name           = @"layout_name";
@@ -70,7 +63,7 @@ static NSString* const k__layout_name           = @"layout_name";
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
-    [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
+    rewardVideoAds_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;
 }
@@ -85,6 +78,8 @@ static NSString* const k__layout_name           = @"layout_name";
     nativeAds_ = nil;
     [interstitialAds_ release];
     interstitialAds_ = nil;
+    [rewardVideoAds_ release];
+    rewardVideoAds_ = nil;
     [super dealloc];
 }
 
@@ -160,22 +155,18 @@ static NSString* const k__layout_name           = @"layout_name";
                             toString:[self destroyInterstitialAd:placementId]];
                     }];
 
-    [bridge_ registerHandler:k__hasRewardedVideo
+    [bridge_ registerHandler:k__createRewardVideoAd
                     callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasRewardedVideo]];
+                        NSString* placementId = message;
+                        return [EEUtils
+                            toString:[self createRewardVideoAd:placementId]];
                     }];
 
-    [bridge_ registerHandler:k__loadRewardedVideo
+    [bridge_ registerHandler:k__destroyRewardVideoAd
                     callback:^(NSString* message) {
-                        NSString* adId = message;
-                        [self loadRewardedVideo:adId];
-                        return @"";
-                    }];
-
-    [bridge_ registerHandler:k__showRewardedVideo
-                    callback:^(NSString* message) {
-                        [self showRewardedVideo];
-                        return @"";
+                        NSString* placementId = message;
+                        return [EEUtils
+                            toString:[self destroyRewardVideoAd:placementId]];
                     }];
 }
 
@@ -186,13 +177,10 @@ static NSString* const k__layout_name           = @"layout_name";
     [bridge_ deregisterHandler:k__destroyBannerAd];
     [bridge_ deregisterHandler:k__createInterstitialAd];
     [bridge_ deregisterHandler:k__destroyInterstitialAd];
-    [bridge_ deregisterHandler:k__hasRewardedVideo];
-    [bridge_ deregisterHandler:k__loadRewardedVideo];
-    [bridge_ deregisterHandler:k__showRewardedVideo];
 }
 
 - (void)initialize:(NSString* _Nonnull)applicationId {
-    [GADMobileAds configureWithApplicationID:applicationId];
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 }
 
 - (NSString* _Nonnull)getEmulatorTestDeviceHash {
@@ -201,6 +189,8 @@ static NSString* const k__layout_name           = @"layout_name";
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {
     [testDevices_ addObject:hash];
+    GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers =
+        testDevices_;
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size {
@@ -274,6 +264,28 @@ static NSString* const k__layout_name           = @"layout_name";
     return YES;
 }
 
+- (BOOL)createRewardVideoAd:(NSString* _Nonnull)adId {
+    if ([interstitialAds_ objectForKey:adId] != nil) {
+        return NO;
+    }
+    EEAdMobRewardedVideo* ad = [[[EEAdMobRewardedVideo alloc]
+        initWithBridge:bridge_
+                  adId:adId
+           testDevices:testDevices_] autorelease];
+    [rewardVideoAds_ setObject:ad forKey:adId];
+    return YES;
+}
+
+- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)adId {
+    if ([rewardVideoAds_ objectForKey:adId] == nil) {
+        return NO;
+    }
+    EEAdMobRewardedVideo* ad = [rewardVideoAds_ objectForKey:adId];
+    [ad destroy];
+    [rewardVideoAds_ removeObjectForKey:adId];
+    return YES;
+}
+
 - (bool)hasRewardedVideo {
     return [[GADRewardBasedVideoAd sharedInstance] isReady];
 }
@@ -288,44 +300,6 @@ static NSString* const k__layout_name           = @"layout_name";
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [[GADRewardBasedVideoAd sharedInstance]
         presentFromRootViewController:rootView];
-}
-
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
-    didRewardUserWithReward:(GADAdReward*)reward {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onRewarded];
-}
-
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
-    didFailToLoadWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    [bridge_ callCpp:k__onFailedToLoad message:[error description]];
-}
-
-- (void)rewardBasedVideoAdDidReceiveAd:
-    (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onLoaded];
-}
-
-- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onOpened];
-}
-
-- (void)rewardBasedVideoAdDidStartPlaying:
-    (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onClosed];
-}
-
-- (void)rewardBasedVideoAdWillLeaveApplication:
-    (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end

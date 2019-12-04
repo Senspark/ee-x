@@ -29,12 +29,26 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(const Logger& logger, AdMob* plugin,
+    explicit RewardedVideo(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
                            const std::string& adId);
+    bool createInternalAd();
+    bool destroyInternalAd();
 
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+    void onFailedToShow();
+    void onReward();
+    void onClosed();
 private:
     friend AdMob;
+    
+    /// Whether the ad is in loading progress.
+    bool loading_;
+    bool rewarded_;
+    
+    bool errored_;
 
+    IMessageBridge& bridge_;
     const Logger& logger_;
     AdMob* plugin_;
     std::string adId_;

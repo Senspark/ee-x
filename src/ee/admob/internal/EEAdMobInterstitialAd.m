@@ -143,7 +143,6 @@
         return;
     }
     GADRequest* request = [GADRequest request];
-    [request setTestDevices:testDevices_];
     [interstitialAd_ loadRequest:request];
 }
 

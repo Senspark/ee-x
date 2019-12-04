@@ -3,8 +3,8 @@ package com.ee.admob;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import androidx.annotation.NonNull;
-
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
@@ -15,10 +15,8 @@ import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
-
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.Map;
  * Created by Zinge on 10/13/17.
  */
 
-public class AdMob implements PluginProtocol, RewardedVideoAdListener {
+public class AdMob implements PluginProtocol {
     private static final String k__initialize                = "AdMob_initialize";
     private static final String k__getEmulatorTestDeviceHash = "AdMob_getEmulatorTestDeviceHash";
     private static final String k__addTestDevice             = "AdMob_addTestDevice";
@@ -38,30 +36,21 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     private static final String k__destroyNativeAd           = "AdMob_destroyNativeAd";
     private static final String k__createInterstitialAd      = "AdMob_createInterstitialAd";
     private static final String k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
-    private static final String k__hasRewardedVideo          = "AdMob_hasRewardedVideo";
-    private static final String k__loadRewardedVideo         = "AdMob_loadRewardedVideo";
-    private static final String k__showRewardedVideo         = "AdMob_showRewardedVideo";
-    private static final String k__onRewarded                = "AdMob_onRewarded";
-    private static final String k__onFailedToLoad            = "AdMob_onFailedToLoad";
-    private static final String k__onRewardedVideoCompleted  = "AdMob_onRewardedVideoCompleted";
-    private static final String k__onLoaded                  = "AdMob_onLoaded";
-    private static final String k__onOpened                  = "AdMob_onOpened";
-    private static final String k__onClosed                  = "AdMob_onClosed";
+    private static final String k__createRewardVideoAd       = "AdMob_createRewardVideoAd";
+    private static final String k__destroyRewardVideoAd      = "AdMob_destroyRewardVideoAd";
 
     private static final String k__ad_id       = "ad_id";
     private static final String k__ad_size     = "ad_size";
     private static final String k__layout_name = "layout_name";
     private static final String k__identifiers = "identifiers";
 
-    private static final Logger _logger = new Logger(AdMob.class.getName());
-
     private Context                          _context;
     private Activity                         _activity;
-    private RewardedVideoAd                  _rewardedVideoAd;
     private List<String>                     _testDevices;
     private Map<String, AdMobBannerAd>       _bannerAds;
     private Map<String, AdMobNativeAd>       _nativeAds;
     private Map<String, AdMobInterstitialAd> _interstitialAds;
+    private Map<String, AdMobRewardVideoAd>  _rewardVideoAds;
     private IMessageBridge                   _bridge;
 
 
@@ -75,10 +64,8 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
+        _rewardVideoAds = new HashMap<>();
         _bridge = MessageBridge.getInstance();
-
-        _rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(_context);
-        _rewardedVideoAd.setRewardedVideoAdListener(this);
 
         registerHandlers();
     }
@@ -110,7 +97,6 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onResume() {
-        _rewardedVideoAd.resume(_context);
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).onResume();
         }
@@ -118,7 +104,6 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
 
     @Override
     public void onPause() {
-        _rewardedVideoAd.pause(_context);
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).onPause();
         }
@@ -142,8 +127,6 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         Utils.checkMainThread();
         deregisterHandlers();
 
-        _rewardedVideoAd.destroy(_context);
-
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).destroy();
         }
@@ -161,6 +144,10 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         }
         _interstitialAds.clear();
         _interstitialAds = null;
+
+        _rewardVideoAds.clear();
+        _rewardVideoAds = null;
+
         _bridge = null;
 
         _context = null;
@@ -282,32 +269,25 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         }, k__destroyInterstitialAd);
 
         _bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedVideo());
+                String placementId = message;
+                return Utils.toString(createRewardedAd(placementId));
             }
-        }, k__hasRewardedVideo);
+        }, k__createRewardVideoAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String adId = message;
-                loadRewardedVideo(adId);
-                return "";
+                String placementId = message;
+                return Utils.toString(destroyRewardedAd(placementId));
             }
-        }, k__loadRewardedVideo);
+        }, k__destroyRewardVideoAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                showRewardedVideo();
-                return "";
-            }
-        }, k__showRewardedVideo);
     }
 
     private void deregisterHandlers() {
@@ -322,14 +302,18 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
         _bridge.deregisterHandler(k__destroyNativeAd);
         _bridge.deregisterHandler(k__createInterstitialAd);
         _bridge.deregisterHandler(k__destroyInterstitialAd);
-        _bridge.deregisterHandler(k__hasRewardedVideo);
-        _bridge.deregisterHandler(k__loadRewardedVideo);
-        _bridge.deregisterHandler(k__showRewardedVideo);
+        _bridge.deregisterHandler(k__createRewardVideoAd);
+        _bridge.deregisterHandler(k__destroyRewardVideoAd);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String applicationId) {
-        MobileAds.initialize(_context, applicationId);
+        MobileAds.initialize(_context, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                // onInitializationComplete
+            }
+        });
     }
 
     @NonNull
@@ -409,75 +393,25 @@ public class AdMob implements PluginProtocol, RewardedVideoAdListener {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean hasRewardedVideo() {
+    public boolean createRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        return _rewardedVideoAd.isLoaded();
+        if (_rewardVideoAds.containsKey(adId)) {
+            return false;
+        }
+        AdMobRewardVideoAd ad = new AdMobRewardVideoAd(_activity, _context, adId, _testDevices);
+        _rewardVideoAds.put(adId, ad);
+        return true;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void loadRewardedVideo(@NonNull String adId) {
+    public boolean destroyRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        AdRequest request = new AdRequest.Builder().build();
-        _rewardedVideoAd.loadAd(adId, request);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void showRewardedVideo() {
-        Utils.checkMainThread();
-        _rewardedVideoAd.show();
-    }
-
-    @Override
-    public void onRewardedVideoAdLoaded() {
-        _logger.info("onRewardedVideoAdLoaded");
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onLoaded);
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-        _logger.info("onRewardedVideoAdOpened");
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onOpened);
-    }
-
-    @Override
-    public void onRewardedVideoStarted() {
-        _logger.info("onRewardedVideoStarted");
-        Utils.checkMainThread();
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-        _logger.info("onRewardedVideoAdClosed");
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onClosed);
-    }
-
-    @Override
-    public void onRewarded(RewardItem rewardItem) {
-        _logger.info("onRewarded");
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onRewarded);
-    }
-
-    @Override
-    public void onRewardedVideoAdLeftApplication() {
-        _logger.info("onRewardedVideoAdLeftApplication");
-        Utils.checkMainThread();
-    }
-
-    @Override
-    public void onRewardedVideoAdFailedToLoad(int errorCode) {
-        _logger.info("onRewardedVideoAdFailedToLoad: code = " + errorCode);
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onFailedToLoad, String.valueOf(errorCode));
-    }
-
-    @Override
-    public void onRewardedVideoCompleted() {
-        _logger.info("onRewardedVideoCompleted");
-        Utils.checkMainThread();
-        _bridge.callCpp(k__onRewardedVideoCompleted);
+        if (!_rewardVideoAds.containsKey(adId)) {
+            return false;
+        }
+        AdMobRewardVideoAd ad = _rewardVideoAds.get(adId);
+        ad.destroy();
+        _rewardVideoAds.remove(adId);
+        return true;
     }
 }

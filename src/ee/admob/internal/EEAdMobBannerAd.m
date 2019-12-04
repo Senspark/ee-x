@@ -145,7 +145,6 @@
         return;
     }
     GADRequest* request = [GADRequest request];
-    [request setTestDevices:testDevices_];
     [bannerView_ loadRequest:request];
 }
 

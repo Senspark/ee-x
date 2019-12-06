@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 
+import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
@@ -150,9 +151,33 @@ public class AppsFlyer implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String devKey) {
         Utils.checkMainThread();
-        _tracker.init(devKey, null, _context.getApplicationContext());
+        AppsFlyerConversionListener listener = new AppsFlyerConversionListener() {
+            @Override
+            public void onConversionDataSuccess(Map<String, Object> conversionData) {
+                for (String key : conversionData.keySet()) {
+                    _logger.debug("onConversionDataSuccess: " + key + " = " + conversionData.get(key));
+                }
+            }
+
+            @Override
+            public void onConversionDataFail(String errorMessage) {
+                _logger.debug("onConversionDataFail: " + errorMessage);
+            }
+
+            @Override
+            public void onAppOpenAttribution(Map<String, String> conversionData) {
+                for (String key : conversionData.keySet()) {
+                    _logger.debug("onAppOpenAttribution: " + key + " = " + conversionData.get(key));
+                }
+            }
+
+            @Override
+            public void onAttributionFailure(String errorMessage) {
+                _logger.debug("onAttributionFailure: " + errorMessage);
+            }
+        };
+        _tracker.init(devKey, listener, _context.getApplicationContext());
         _tracker.setCollectAndroidID(true);
-        _tracker.setDeviceTrackingDisabled(false);
     }
 
     @SuppressWarnings("WeakerAccess")

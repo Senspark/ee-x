@@ -1,4 +1,5 @@
 // https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
+// https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
 
 apply plugin: 'com.android.library'
 
@@ -14,6 +15,6 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.appsflyer:af-android-sdk:4.8.6@aar'
-    implementation 'com.android.installreferrer:installreferrer:1.0'
+    implementation 'com.appsflyer:af-android-sdk:5.0.0'
+    implementation 'com.android.installreferrer:installreferrer:1.1'
 }

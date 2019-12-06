@@ -177,7 +177,6 @@ public class AppsFlyer implements PluginProtocol {
             }
         };
         _tracker.init(devKey, listener, _context.getApplicationContext());
-        _tracker.setCollectAndroidID(true);
     }
 
     @SuppressWarnings("WeakerAccess")

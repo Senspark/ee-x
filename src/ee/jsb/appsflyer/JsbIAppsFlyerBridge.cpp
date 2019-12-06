@@ -22,10 +22,9 @@ using Self = IBridge;
 // clang-format off
 constexpr auto finalize              = &core::makeFinalize<Self>;
 constexpr auto initialize            = &core::makeInstanceMethodOnUiThread<&Self::initialize>;
-constexpr auto startTracking         = &core::makeMethod<&Self::startTracking>;
+constexpr auto startTracking         = &core::makeInstanceMethodOnUiThread<&Self::startTracking>;
 constexpr auto getDeviceId           = &core::makeMethod<&Self::getDeviceId>;
-constexpr auto setDebugEnabled       = &core::makeMethod<&Self::setDebugEnabled>;
-constexpr auto setStopTracking       = &core::makeMethod<&Self::setStopTracking>;
+constexpr auto setDebugEnabled       = &core::makeInstanceMethodOnUiThread<&Self::setDebugEnabled>;
 constexpr auto trackEvent            = &core::makeMethod<&Self::trackEvent>;
 // clang-format on
 
@@ -34,7 +33,6 @@ SE_BIND_FUNC(initialize);
 SE_BIND_FUNC(startTracking);
 SE_BIND_FUNC(getDeviceId);
 SE_BIND_FUNC(setDebugEnabled);
-SE_BIND_FUNC(setStopTracking);
 SE_BIND_FUNC(trackEvent);
 } // namespace
 
@@ -52,7 +50,6 @@ bool registerJsbIBridge(se::Object* global) {
     EE_JSB_DEFINE_FUNCTION(cls, startTracking);
     EE_JSB_DEFINE_FUNCTION(cls, getDeviceId);
     EE_JSB_DEFINE_FUNCTION(cls, setDebugEnabled);
-    EE_JSB_DEFINE_FUNCTION(cls, setStopTracking);
     EE_JSB_DEFINE_FUNCTION(cls, trackEvent);
 
     cls->install();

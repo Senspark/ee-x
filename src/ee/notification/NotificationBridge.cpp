@@ -35,7 +35,7 @@ void Self::schedule(const std::string &msg, int tag, int delay, int interval) {
     json["delay"] = delay;
     json["interval"] = interval;
     json["tag"] = tag;
-    bridge_.call("__notification_schedule_no_builder", json.dump());
+    bridge_.call("__notification_schedule", json.dump());
 }
 
 void Self::unschedule(int tag) {

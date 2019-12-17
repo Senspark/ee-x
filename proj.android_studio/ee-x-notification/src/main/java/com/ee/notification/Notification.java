@@ -24,7 +24,6 @@ import java.util.Map;
 
 public class Notification implements PluginProtocol {
     private static final String k__notification_schedule            = "__notification_schedule";
-    private static final String k__notification_schedule_no_builder = "__notification_schedule_no_builder";
     private static final String k__notification_unschedule_all      = "__notification_unschedule_all";
     private static final String k__notification_unschedule          = "__notification_unschedule";
     private static final String k__notification_clear_all           = "__notification_clear_all";
@@ -95,8 +94,11 @@ public class Notification implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
                 assert dict != null;
 
-                String ticker = (String) dict.get("ticker");
                 String title = (String) dict.get("title");
+                if (title == null) {
+                    title = getAppName();
+                }
+                String ticker = (String) dict.get("ticker");
                 String body = (String) dict.get("body");
                 Integer delay = (Integer) dict.get("delay");
                 Integer interval = (Integer) dict.get("interval");
@@ -106,25 +108,6 @@ public class Notification implements PluginProtocol {
                 return DictionaryUtils.emptyResult();
             }
         }, k__notification_schedule);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
-
-                String title = getAppName();
-                String ticker = (String) dict.get("body");
-                String body = (String) dict.get("body");
-                Integer delay = (Integer) dict.get("delay");
-                Integer interval = (Integer) dict.get("interval");
-                Integer tag = (Integer) dict.get("tag");
-
-                schedule(ticker, title, body, delay, interval, tag);
-                return DictionaryUtils.emptyResult();
-            }
-        }, k__notification_schedule_no_builder);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -163,7 +146,6 @@ public class Notification implements PluginProtocol {
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__notification_schedule);
-        bridge.deregisterHandler(k__notification_schedule_no_builder);
         bridge.deregisterHandler(k__notification_unschedule_all);
         bridge.deregisterHandler(k__notification_unschedule);
     }

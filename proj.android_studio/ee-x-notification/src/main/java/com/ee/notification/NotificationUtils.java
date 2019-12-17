@@ -1,6 +1,7 @@
 package com.ee.notification;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import com.ee.core.Logger;
 
 /**
@@ -18,78 +18,6 @@ import com.ee.core.Logger;
 public class NotificationUtils {
     private static final Logger _logger = new Logger(NotificationUtils.class.getName());
 
-    /**
-     * Shows the given notification with a generated id.
-     *
-     * @param context      The context to get the notification manager from.
-     * @param notification The notification to be displayed.
-     */
-    static void showNotification(Context context, android.app.Notification notification) {
-        // Pick an id that probably won't overlap anything.
-        int notificationId = (int) System.currentTimeMillis();
-
-        showNotification(context, notification, notificationId);
-    }
-
-    /**
-     * Shows the given notification.
-     *
-     * @param context        The context to get the notification manager from.
-     * @param notification   The notification to be displayed.
-     * @param notificationId The unique ID of the notification.
-     */
-    static void showNotification(Context context, android.app.Notification notification,
-                                 int notificationId) {
-        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-        try {
-            manager.notify(notificationId, notification);
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-
-            // Some phones throw an exception for unapproved vibration.
-            // Disable vibration.
-            notification.defaults =
-                android.app.Notification.DEFAULT_LIGHTS | android.app.Notification.DEFAULT_SOUND;
-
-            manager.notify(notificationId, notification);
-        }
-    }
-
-    /**
-     * Builds a notification with the specified parameters.
-     *
-     * @param title       The title of the notification.
-     * @param body        The body of the notification.
-     * @param clickIntent The intent will be fired when the user clicks on the notification.
-     */
-
-    /** NotificationCompat.Builder deprecated in Android O
-      https://stackoverflow.com/questions/45462666/notificationcompat-builder-deprecated-in-android-o **/
-    static android.app.Notification buildNotification(Context context, String ticker, String title,
-                                                      String body, PendingIntent clickIntent) {
-
-        // https://developer.android.com/training/notify-user/build-notification
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        String channelId = context.getPackageName() + "_notification";
-        String channelName = "My Background Service";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager mNotificationManager = context.getSystemService(NotificationManager.class);
-            mNotificationManager.createNotificationChannel(chan);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
-        builder
-                .setSmallIcon(getNotificationIcon(context))
-                .setContentText(body)
-                .setContentTitle(title)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // Android 7.1 and lower
-                .setContentIntent(clickIntent)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setAutoCancel(true);
-        return builder.build();
-    }
 
     /**
      * http://stackoverflow.com/questions/28387602/notification-bar-icon-turns-white-in-android-5
@@ -154,8 +82,12 @@ public class NotificationUtils {
         long triggerTime = currentTime + delayInMilliseconds;
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds,
-                alarmIntent);
+        if (interval == 0) {
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, triggerTime, alarmIntent);
+        } else {
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds,
+                    alarmIntent);
+        }
     }
 
     /**
@@ -180,5 +112,32 @@ public class NotificationUtils {
             AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(pendingIntent);
         }
+    }
+
+
+    static void showNotification(Context context, String ticker, String title, String body,
+                                 PendingIntent clickIntent, int tag) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "ee_x_channel_id_01";
+        String channelName = "ee_x_channel_name";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName,
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId);
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(getNotificationIcon(context))
+                .setTicker(ticker)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setContentIntent(clickIntent);
+
+        notificationManager.notify(tag, notificationBuilder.build());
     }
 }

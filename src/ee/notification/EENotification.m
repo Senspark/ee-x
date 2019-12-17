@@ -19,7 +19,6 @@
 
 // clang-format off
 NSString* const k__notification_schedule            = @"__notification_schedule";
-NSString* const k__notification_schedule_no_builder = @"__notification_schedule_no_builder";
 NSString* const k__notification_unschedule          = @"__notification_unschedule";
 NSString* const k__notification_unschedule_all      = @"__notification_unschedule_all";
 NSString* const k__notification_clear_all           = @"__notification_clear_all";
@@ -61,44 +60,29 @@ NSString* const k__notification_clear_all           = @"__notification_clear_all
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__notification_schedule
-                    callback:^(NSString* msg) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:msg];
-                        NSString* title = [dict objectForKey:@"title"];
-                        NSString* body = [dict objectForKey:@"body"];
-                        NSNumber* delay = [dict objectForKey:@"delay"];
-                        NSNumber* interval = [dict objectForKey:@"interval"];
-                        NSNumber* tag = [dict objectForKey:@"tag"];
+    [bridge_
+        registerHandler:k__notification_schedule
+               callback:^(NSString* msg) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:msg];
+                   NSString* title = [dict objectForKey:@"title"];
+                   if (title == nil) {
+                       title = [[NSBundle mainBundle]
+                           objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                   }
+                   NSString* body = [dict objectForKey:@"body"];
+                   NSNumber* delay = [dict objectForKey:@"delay"];
+                   NSNumber* interval = [dict objectForKey:@"interval"];
+                   NSNumber* tag = [dict objectForKey:@"tag"];
 
-                        [self schedule:title
-                                  body:body
-                                 delay:(NSTimeInterval)[delay intValue]
-                              interval:[EENotification
-                                           parseInterval:[interval intValue]]
-                                   tag:tag];
-                        return @"";
-                    }];
-
-    [bridge_ registerHandler:k__notification_schedule_no_builder
-                    callback:^(NSString* msg) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:msg];
-                        NSString* title = [[NSBundle mainBundle]
-                            objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-                        NSString* body = [dict objectForKey:@"body"];
-                        NSNumber* delay = [dict objectForKey:@"delay"];
-                        NSNumber* interval = [dict objectForKey:@"interval"];
-                        NSNumber* tag = [dict objectForKey:@"tag"];
-
-                        [self schedule:title
-                                  body:body
-                                 delay:(NSTimeInterval)[delay intValue]
-                              interval:[EENotification
-                                           parseInterval:[interval intValue]]
-                                   tag:tag];
-                        return @"";
-                    }];
+                   [self schedule:title
+                             body:body
+                            delay:(NSTimeInterval)[delay intValue]
+                         interval:[EENotification
+                                      parseInterval:[interval intValue]]
+                              tag:tag];
+                   return @"";
+               }];
 
     [bridge_ registerHandler:k__notification_unschedule_all
                     callback:^(NSString* msg) {

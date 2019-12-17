@@ -1,6 +1,5 @@
 package com.ee.notification;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,9 +16,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         try {
             Class clazz = Class.forName(className);
             PendingIntent clickIntent = NotificationUtils.createClickIntent(context, clazz, tag);
-            Notification notification =
-                    NotificationUtils.buildNotification(context, ticker, title, body, clickIntent);
-            NotificationUtils.showNotification(context, notification, tag);
+            NotificationUtils.showNotification(context, ticker, title, body, clickIntent, tag);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {

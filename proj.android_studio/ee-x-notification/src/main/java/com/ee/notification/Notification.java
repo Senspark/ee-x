@@ -95,7 +95,7 @@ public class Notification implements PluginProtocol {
                 assert dict != null;
 
                 String title = (String) dict.get("title");
-                if (title == null) {
+                if (title.equals("")) {
                     title = getAppName();
                 }
                 String ticker = (String) dict.get("ticker");

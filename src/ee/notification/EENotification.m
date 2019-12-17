@@ -66,7 +66,7 @@ NSString* const k__notification_clear_all           = @"__notification_clear_all
                    NSDictionary* dict =
                        [EEJsonUtils convertStringToDictionary:msg];
                    NSString* title = [dict objectForKey:@"title"];
-                   if (title == nil) {
+                   if ([title isEqualToString:@""]) {
                        title = [[NSBundle mainBundle]
                            objectForInfoDictionaryKey:@"CFBundleDisplayName"];
                    }

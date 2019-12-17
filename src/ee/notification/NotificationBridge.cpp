@@ -6,8 +6,8 @@
 //
 //
 
-#include "ee/notification/NotificationBridge.hpp"
 #include "ee/core/MessageBridge.hpp"
+#include "ee/notification/NotificationBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -29,13 +29,13 @@ void Self::schedule(const NotificationBuilder& builder) {
     bridge_.call("__notification_schedule", json.dump());
 }
 
-void Self::schedule(const std::string &msg, int tag, int delay, int interval) {
-    nlohmann::json json;
-    json["body"] = msg;
-    json["delay"] = delay;
-    json["interval"] = interval;
-    json["tag"] = tag;
-    bridge_.call("__notification_schedule", json.dump());
+void Self::schedule(const std::string& msg, int tag, int delay, int interval) {
+    auto builder = NotificationBuilder();
+    builder.setBody(msg);
+    builder.setDelay(delay);
+    builder.setInterval(interval);
+    builder.setTag(tag);
+    schedule(builder);
 }
 
 void Self::unschedule(int tag) {

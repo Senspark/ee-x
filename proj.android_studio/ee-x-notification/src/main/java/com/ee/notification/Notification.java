@@ -95,9 +95,6 @@ public class Notification implements PluginProtocol {
                 assert dict != null;
 
                 String title = (String) dict.get("title");
-                if (title.equals("")) {
-                    title = getAppName();
-                }
                 String ticker = (String) dict.get("ticker");
                 String body = (String) dict.get("body");
                 Integer delay = (Integer) dict.get("delay");
@@ -189,16 +186,5 @@ public class Notification implements PluginProtocol {
         NotificationManager manager =
             (NotificationManager) _context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
-    }
-
-    private String getAppName() {
-        final PackageManager pm = _context.getPackageManager();
-        ApplicationInfo ai;
-        try {
-            ai = pm.getApplicationInfo( _context.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException e) {
-            ai = null;
-        }
-        return (String) (ai != null ? pm.getApplicationLabel(ai) : "");
     }
 }

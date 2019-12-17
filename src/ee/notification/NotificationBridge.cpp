@@ -6,8 +6,10 @@
 //
 //
 
-#include "ee/core/MessageBridge.hpp"
 #include "ee/notification/NotificationBridge.hpp"
+
+#include "ee/core/MessageBridge.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 
 #include <ee/nlohmann/json.hpp>
@@ -21,7 +23,8 @@ Self::Notification()
 
 void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
-    json["title"] = builder.title_;
+    json["title"] =
+        builder.title_.empty() ? core::getApplicationName() : builder.title_;
     json["body"] = builder.body_;
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;

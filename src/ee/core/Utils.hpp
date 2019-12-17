@@ -95,9 +95,13 @@ void runOnUiThreadDelayed(const std::function<void()>& func, float delay);
 bool isInstantApp();
 
 void showInstallPrompt(const std::string& url, const std::string& referrer);
+
+/// Gets the name of the application.
+std::string getApplicationName();
 } // namespace core
 
 using core::format;
+using core::getApplicationName;
 using core::getDeviceId;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionCode;

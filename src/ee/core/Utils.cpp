@@ -122,6 +122,7 @@ constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
 constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
 constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
 constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
+constexpr auto k__getApplicationName            = "Utils_getApplicationName";
 constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
 // clang-format on
 } // namespace
@@ -287,6 +288,11 @@ void showInstallPrompt(const std::string& url, const std::string& referrer) {
     json["referrer"] = referrer;
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showInstallPrompt, json.dump());
+}
+
+std::string getApplicationName() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getApplicationName);
 }
 
 SafeInset getSafeInset() {

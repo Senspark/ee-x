@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -16,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-
 import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -69,6 +69,7 @@ public class Utils {
     private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
     private static final String k__isInstantApp                  = "Utils_isInstantApp";
     private static final String k__showInstallPrompt             = "Utils_showInstallPrompt";
+    private static final String k__getApplicationName            = "Utils_getApplicationName";
     private static final String k__getSafeInset                  = "Utils_getSafeInset";
 
     public static FrameLayout getRootView(Activity activity) {
@@ -257,6 +258,15 @@ public class Utils {
                 return "";
             }
         }, k__showInstallPrompt);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                return getApplicationnName(context);
+            }
+        }, k__getApplicationName);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -572,6 +582,16 @@ public class Utils {
                 MessageBridge.getInstance().callCpp(tag, s);
             }
         })).execute();
+    }
+
+    private static String getApplicationnName(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo ai = pm.getApplicationInfo( context.getPackageName(), 0);
+            return (String) pm.getApplicationLabel(ai);
+        } catch (final PackageManager.NameNotFoundException e) {
+            return "";
+        }
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {

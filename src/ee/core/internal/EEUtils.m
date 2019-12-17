@@ -71,6 +71,7 @@ static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
 static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadDelayed";
 static NSString* const k__isInstantApp                  = @"Utils_isInstantApp";
 static NSString* const k__showInstallPrompt             = @"Utils_showInstallPrompt";
+static NSString* const k__getApplicationName            = @"Utils_getApplicationName";
 // clang-format on
 
 + (void)registerHandlers {
@@ -171,6 +172,10 @@ static NSString* const k__showInstallPrompt             = @"Utils_showInstallPro
     [bridge registerHandler:k__showInstallPrompt
                    callback:^(NSString* message) {
                        return @"";
+                   }];
+    [bridge registerHandler:k__getApplicationName
+                   callback:^(NSString* message) {
+                       return [self getApplicationName];
                    }];
 }
 
@@ -278,6 +283,12 @@ static NSString* const k__showInstallPrompt             = @"Utils_showInstallPro
     }
     return @"";
 #endif // TARGET_OS_IOS
+}
+
++ (NSString* _Nonnull)getApplicationName {
+    NSString* appName = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+    return appName;
 }
 
 - (void)functionCallback:(NSString*)callbackTag {

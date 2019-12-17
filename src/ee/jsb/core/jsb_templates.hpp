@@ -395,6 +395,23 @@ bool makeInstanceMethod(se::State& state) {
     return false;
 }
 
+template <auto F1, auto F2>
+bool makeInstanceMethod(se::State& state) {
+    constexpr auto Arity1 = FunctionArity<F1>;
+    constexpr auto Arity2 = FunctionArity<F2>;
+    static_assert(Arity1 != Arity2, "Multiple overload functions must have different argument count.");
+    auto&& args = state.args();
+    if (Arity1 == args.size()) {
+        return makeInstanceMethod<F1>(state);
+    }
+    if (Arity2 == args.size()) {
+        return makeInstanceMethod<F2>(state);
+    }
+    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu or %zu.",
+                    args.size(), Arity1, Arity2);
+    return false;
+}
+
 template <auto Function>
 bool makeMethod(se::State& state) {
     if constexpr (std::is_member_function_pointer_v<decltype(Function)>) {

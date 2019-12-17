@@ -37,12 +37,6 @@ public:
     /// disable.
     void analyticsCollectionEnabled(bool enabled);
 
-    /// Sets the minimum engagement time required before starting a session.
-    /// @note The default value is 10000 (10 seconds).
-    /// @param[in] milliseconds The minimum engagement time required to start a
-    /// new session.
-    void setMinimumSessionDuration(std::int64_t milliseconds);
-
     /// @brief Sets the duration of inactivity that terminates the current
     /// session.
     ///

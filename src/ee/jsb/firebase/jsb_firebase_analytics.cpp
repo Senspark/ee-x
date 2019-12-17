@@ -24,7 +24,6 @@ constexpr auto finalize                   = &core::makeFinalize<Self>;
 constexpr auto constructor                = &core::makeConstructor<Self>;
 constexpr auto initialize                 = &core::makeMethod<&Self::initialize>;
 constexpr auto analyticsCollectionEnabled = &core::makeMethod<&Self::analyticsCollectionEnabled>;
-constexpr auto setMinimumSessionDuration  = &core::makeMethod<&Self::setMinimumSessionDuration>;
 constexpr auto setSessionTimeoutDuration  = &core::makeMethod<&Self::setSessionTimeoutDuration>;
 constexpr auto setUserId                  = &core::makeMethod<&Self::setUserId>;
 constexpr auto logEvent                   = &core::makeMethod<&Self::logEvent>;
@@ -34,7 +33,6 @@ SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize)
 SE_BIND_FUNC(initialize)
 SE_BIND_FUNC(analyticsCollectionEnabled)
-SE_BIND_FUNC(setMinimumSessionDuration)
 SE_BIND_FUNC(setSessionTimeoutDuration)
 SE_BIND_FUNC(setUserId)
 SE_BIND_FUNC(logEvent)
@@ -52,7 +50,6 @@ bool register_firebase_analytics_manual(se::Object* globalObj) {
 
     EE_JSB_DEFINE_FUNCTION(cls, initialize);
     EE_JSB_DEFINE_FUNCTION(cls, analyticsCollectionEnabled);
-    EE_JSB_DEFINE_FUNCTION(cls, setMinimumSessionDuration);
     EE_JSB_DEFINE_FUNCTION(cls, setSessionTimeoutDuration);
     EE_JSB_DEFINE_FUNCTION(cls, setUserId);
     EE_JSB_DEFINE_FUNCTION(cls, logEvent);

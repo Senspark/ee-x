@@ -1,20 +1,17 @@
 //
-//  jsb_facebook_bridge_impl.cpp
-//  ee-x
-//
-//  Created by senspark-dev on 12/13/18.
+//  Created by eps on 12/6/19.
 //
 
-#include "ee/jsb/facebook/jsb_facebook_bridge_impl.hpp"
+#include "ee/jsb/tenjin/JsbTenjinBridge.hpp"
 
-#include "ee/facebook/FacebookBridge.hpp"
+#include "ee/tenjin/internal/TenjinBridge.hpp"
+#include "ee/jsb/tenjin/JsbITenjinBridge.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/facebook/jsb_ifacebook_bridge.hpp"
 
 namespace ee {
-namespace facebook {
+namespace tenjin {
 namespace {
 se::Class* clazz = nullptr;
 
@@ -29,15 +26,11 @@ SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize)
 } // namespace
 
-bool register_facebook_bridge_impl_manual(se::Object* globalObject) {
-    se::Object* eeObj = nullptr;
-    se::Object* facebookObj = nullptr;
+bool registerJsbBridge(se::Object* global) {
+    auto tenjin_ = core::getPath(global, "ee/tenjin");
 
-    core::getOrCreatePlainObject_r("ee", globalObject, &eeObj);
-    core::getOrCreatePlainObject_r("facebook", eeObj, &facebookObj);
-
-    auto cls = se::Class::create("Bridge", facebookObj,
-                                 getIFacebookBridgeClass()->getProto(),
+    auto cls = se::Class::create("Bridge", tenjin_,
+                                 getIBridgeClass()->getProto(),
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
     cls->install();
@@ -48,5 +41,5 @@ bool register_facebook_bridge_impl_manual(se::Object* globalObject) {
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-} // namespace facebook
+} // namespace tenjin
 } // namespace ee

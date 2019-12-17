@@ -21,6 +21,7 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -99,6 +100,19 @@ public class Facebook implements PluginProtocol {
                 // _bridge.callCpp(k__onProfileChanged, JsonUtils.convertDictionaryToString(dict));
             }
         };
+
+        // com.facebook.UserSettingsManager: Please set a value for AutoLogAppEventsEnabled.
+        // Set the flag to TRUE if you want to collect app install, app launch and in-app purchase events automatically.
+        // To request user consent before collecting data, set the flag value to FALSE, then change to TRUE once user consent is received.
+        // Learn more: https://developers.facebook.com/docs/app-events/getting-started-app-events-android#disable-auto-events.
+        FacebookSdk.setAutoLogAppEventsEnabled(true);
+
+        // com.facebook.UserSettingsManager: You haven't set a value for AdvertiserIDCollectionEnabled.
+        // Set the flag to TRUE if you want to collect Advertiser ID for better advertising and analytics results.
+        // To request user consent before collecting data, set the flag value to FALSE, then change to TRUE once user consent is received.
+        // Learn more: https://developers.facebook.com/docs/app-events/getting-started-app-events-android#disable-auto-events.
+        FacebookSdk.setAdvertiserIDCollectionEnabled(true);
+
         registerHandlers();
     }
 

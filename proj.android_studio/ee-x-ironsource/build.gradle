@@ -16,5 +16,11 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.ironsource.sdk:mediationsdk:6.10.1'
+    implementation 'com.ironsource.sdk:mediationsdk:6.11.1'
+
+    if (rootProject.ext.useIronsourceMediation) {
+        implementation 'com.ironsource.adapters:facebookadapter:4.3.8@jar'
+        implementation('com.ironsource.adapters:unityadsadapter:4.1.6@jar')
+        implementation 'com.ironsource.adapters:admobadapter:4.3.6@jar'
+    }
 }

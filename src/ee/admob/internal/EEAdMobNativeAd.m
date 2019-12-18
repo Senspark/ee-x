@@ -23,7 +23,6 @@
     GADUnifiedNativeAdView* nativeAdView_;
     NSString* layoutName_;
     BOOL isAdLoaded_;
-    NSArray<NSString*>* testDevices_;
     EEAdViewHelper* helper_;
 }
 
@@ -34,8 +33,7 @@
 - (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                        layout:(NSString* _Nonnull)layoutName
-                   testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+                        layout:(NSString* _Nonnull)layoutName {
     self = [super init];
     if (self == nil) {
         return self;
@@ -45,7 +43,6 @@
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
-    testDevices_ = [testDevices retain];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                               prefix:@"AdMobNativeAd"
                                                 adId:adId];
@@ -70,8 +67,6 @@
     adTypes_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
-    [testDevices_ release];
-    testDevices_ = nil;
     [super dealloc];
 }
 
@@ -160,7 +155,6 @@
     }
     isAdLoaded_ = NO;
     GADRequest* request = [GADRequest request];
-    [request setTestDevices:testDevices_];
     [adLoader_ loadRequest:request];
 }
 

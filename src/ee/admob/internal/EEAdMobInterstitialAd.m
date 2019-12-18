@@ -18,7 +18,6 @@
     id<EEIMessageBridge> bridge_;
     NSString* adId_;
     GADInterstitial* interstitialAd_;
-    NSArray<NSString*>* testDevices_;
     EEInterstitialAdHelper* helper_;
 }
 
@@ -27,8 +26,7 @@
 @implementation EEAdMobInterstitialAd
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
-                         adId:(NSString* _Nonnull)adId
-                  testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+                         adId:(NSString* _Nonnull)adId {
     self = [super init];
     if (self == nil) {
         return self;
@@ -36,7 +34,6 @@
     bridge_ = bridge;
     adId_ = [adId copy];
     interstitialAd_ = nil;
-    testDevices_ = [testDevices retain];
     helper_ =
         [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
                                                 prefix:@"AdMobInterstitialAd"
@@ -54,8 +51,6 @@
     helper_ = nil;
     [adId_ release];
     adId_ = nil;
-    [testDevices_ release];
-    testDevices_ = nil;
     [super dealloc];
 }
 
@@ -143,7 +138,6 @@
         return;
     }
     GADRequest* request = [GADRequest request];
-    [request setTestDevices:testDevices_];
     [interstitialAd_ loadRequest:request];
 }
 
@@ -190,7 +184,6 @@
     NSAssert(interstitialAd_ == ad, @"");
     [bridge_ callCpp:[self k__onClosed]];
 }
-
 
 /// Tells the delegate that a user click will open another app
 /// (such as the App Store), backgrounding the current app.

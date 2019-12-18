@@ -26,6 +26,9 @@
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)adId;
 - (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId;
 
+- (BOOL)createRewardVideoAd:(NSString* _Nonnull)adId;
+- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)adId;
+
 - (void)loadRewardedVideo:(NSString* _Nonnull)adId;
 - (bool)hasRewardedVideo;
 - (void)showRewardedVideo;

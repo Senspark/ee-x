@@ -2,7 +2,7 @@
 //  EEAdMobInterstitialAd.h
 //  ee_x
 //
-//  Created by Zinge on 10/12/17.
+//  Created by KietLe on 12/04/19.
 //
 //
 
@@ -10,7 +10,7 @@
 
 @protocol EEIMessageBridge;
 
-@interface EEAdMobInterstitialAd : NSObject <EEIInterstitialAd>
+@interface EEAdMobRewardedVideo : NSObject
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId;

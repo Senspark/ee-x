@@ -16,8 +16,7 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
-                         size:(GADAdSize)adSize
-                  testDevices:(NSArray<NSString*>* _Nullable)testDevices;
+                         size:(GADAdSize)adSize;
 
 - (void)destroy;
 

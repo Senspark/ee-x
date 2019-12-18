@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
@@ -20,8 +22,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
-import java.util.List;
-
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -35,7 +35,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
     private boolean        _isAdLoaded;
     private String         _adId;
     private AdSize         _adSize;
-    private List<String>   _testDevices;
     private AdViewHelper   _helper;
     private boolean        _customSize;
     private IMessageBridge _bridge;
@@ -53,7 +52,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         return AdSize.BANNER;
     }
 
-    AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize, @NonNull List<String> testDevices) {
+    AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         Utils.checkMainThread();
         _isAdLoaded = false;
         _context = context;
@@ -61,7 +60,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         _adId = adId;
         _adSize = adSize;
         _adView = null;
-        _testDevices = testDevices;
         _customSize = false;
         _helper = new AdViewHelper("AdMobBannerAd", _adId);
         _bridge = MessageBridge.getInstance();
@@ -97,7 +95,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         _context = null;
         _adId = null;
         _adSize = null;
-        _testDevices = null;
         _helper = null;
         _bridge = null;
     }
@@ -190,9 +187,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         }
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
-        for (String hash : _testDevices) {
-            builder.addTestDevice(hash);
-        }
         _adView.loadAd(builder.build());
     }
 

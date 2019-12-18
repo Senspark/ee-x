@@ -10,12 +10,12 @@ import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
+import com.ee.facebook.ads.BuildConfig;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AudienceNetworkAds;
 import java.util.HashMap;
 import java.util.Map;
-import static com.ee.facebook.ads.BuildConfig.DEBUG;
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -38,8 +38,6 @@ public class FacebookAds implements PluginProtocol {
     private static final String k__layout_name = "layout_name";
     private static final String k__identifiers = "identifiers";
 
-    private static final Logger _logger = new Logger(FacebookAds.class.getName());
-
     private Context                             _context;
     private Activity                            _activity;
     private Map<String, FacebookBannerAd>       _bannerAds;
@@ -58,7 +56,7 @@ public class FacebookAds implements PluginProtocol {
         _rewardVideoAds = new HashMap<>();
 
         if (!AudienceNetworkAds.isInitialized(context)) {
-            if (DEBUG) {
+            if (BuildConfig.DEBUG) {
                 AdSettings.setDebugBuild(true);
             }
 

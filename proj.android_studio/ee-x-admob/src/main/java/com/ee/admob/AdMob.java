@@ -15,6 +15,7 @@ import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import java.util.ArrayList;
@@ -323,6 +324,9 @@ public class AdMob implements PluginProtocol {
 
     public void addTestDevice(@NonNull String hash) {
         _testDevices.add(hash);
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
+        MobileAds.setRequestConfiguration(configuration);
     }
 
     @SuppressWarnings("WeakerAccess")

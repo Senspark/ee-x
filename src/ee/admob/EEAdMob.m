@@ -198,10 +198,8 @@ static NSString* const k__layout_name           = @"layout_name";
         return NO;
     }
     EEAdMobBannerAd* ad =
-        [[[EEAdMobBannerAd alloc] initWithBridge:bridge_
-                                            adId:adId
-                                            size:size
-                                     testDevices:testDevices_] autorelease];
+        [[[EEAdMobBannerAd alloc] initWithBridge:bridge_ adId:adId size:size]
+            autorelease];
     [bannerAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -226,8 +224,7 @@ static NSString* const k__layout_name           = @"layout_name";
         [[[EEAdMobNativeAd alloc] initWithBridge:bridge_
                                             adId:adId
                                            types:@[type]
-                                          layout:layoutName
-                                     testDevices:testDevices_] autorelease];
+                                          layout:layoutName] autorelease];
     [nativeAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -246,10 +243,9 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEAdMobInterstitialAd* ad = [[[EEAdMobInterstitialAd alloc]
-        initWithBridge:bridge_
-                  adId:adId
-           testDevices:testDevices_] autorelease];
+    EEAdMobInterstitialAd* ad =
+        [[[EEAdMobInterstitialAd alloc] initWithBridge:bridge_ adId:adId]
+            autorelease];
     [interstitialAds_ setObject:ad forKey:adId];
     return YES;
 }
@@ -268,10 +264,9 @@ static NSString* const k__layout_name           = @"layout_name";
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEAdMobRewardedVideo* ad = [[[EEAdMobRewardedVideo alloc]
-        initWithBridge:bridge_
-                  adId:adId
-           testDevices:testDevices_] autorelease];
+    EEAdMobRewardedVideo* ad =
+        [[[EEAdMobRewardedVideo alloc] initWithBridge:bridge_ adId:adId]
+            autorelease];
     [rewardVideoAds_ setObject:ad forKey:adId];
     return YES;
 }

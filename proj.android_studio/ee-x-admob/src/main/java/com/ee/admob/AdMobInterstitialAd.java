@@ -1,6 +1,7 @@
 package com.ee.admob;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.ee.ads.InterstitialAdHelper;
@@ -14,8 +15,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
-import java.util.List;
-
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -26,17 +25,15 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     private Context              _context;
     private InterstitialAd       _interstitialAd;
     private String               _adId;
-    private List<String>         _testDevices;
     private InterstitialAdHelper _helper;
     private IMessageBridge       _bridge;
 
 
-    AdMobInterstitialAd(@NonNull Context context, @NonNull String adId, @NonNull List<String> testDevices) {
+    AdMobInterstitialAd(@NonNull Context context, @NonNull String adId) {
         Utils.checkMainThread();
         _context = context;
         _adId = adId;
         _interstitialAd = null;
-        _testDevices = testDevices;
         _helper = new InterstitialAdHelper("AdMobInterstitialAd", adId);
         _bridge = MessageBridge.getInstance();
         registerHandlers();
@@ -50,7 +47,6 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
         _helper = null;
         _context = null;
         _adId = null;
-        _testDevices = null;
         _helper = null;
         _bridge = null;
     }
@@ -140,9 +136,6 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
         }
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
-        for (String hash : _testDevices) {
-            builder.addTestDevice(hash);
-        }
         _interstitialAd.loadAd(builder.build());
     }
 

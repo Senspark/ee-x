@@ -3,9 +3,9 @@ package com.ee.admob;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
-import com.ee.core.Logger;
+
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.IMessageBridge;
@@ -18,6 +18,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -324,8 +325,7 @@ public class AdMob implements PluginProtocol {
 
     public void addTestDevice(@NonNull String hash) {
         _testDevices.add(hash);
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
+        RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
         MobileAds.setRequestConfiguration(configuration);
     }
 
@@ -335,7 +335,7 @@ public class AdMob implements PluginProtocol {
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
-        AdMobBannerAd ad = new AdMobBannerAd(_context, _activity, adId, size, _testDevices);
+        AdMobBannerAd ad = new AdMobBannerAd(_context, _activity, adId, size);
         _bannerAds.put(adId, ad);
         return true;
     }
@@ -357,7 +357,7 @@ public class AdMob implements PluginProtocol {
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        AdMobNativeAd ad = new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers, _testDevices);
+        AdMobNativeAd ad = new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers);
         _nativeAds.put(adId, ad);
         return true;
     }
@@ -379,7 +379,7 @@ public class AdMob implements PluginProtocol {
         if (_interstitialAds.containsKey(adId)) {
             return false;
         }
-        AdMobInterstitialAd ad = new AdMobInterstitialAd(_context, adId, _testDevices);
+        AdMobInterstitialAd ad = new AdMobInterstitialAd(_context, adId);
         _interstitialAds.put(adId, ad);
         return true;
     }
@@ -402,7 +402,7 @@ public class AdMob implements PluginProtocol {
         if (_rewardVideoAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardVideoAd ad = new AdMobRewardVideoAd(_activity, _context, adId, _testDevices);
+        AdMobRewardVideoAd ad = new AdMobRewardVideoAd(_activity, _context, adId);
         _rewardVideoAds.put(adId, ad);
         return true;
     }

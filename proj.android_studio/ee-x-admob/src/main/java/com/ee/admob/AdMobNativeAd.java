@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,11 +61,10 @@ class AdMobNativeAd extends AdListener implements IAdView {
     private boolean             _isAdLoaded;
     private AdLoader            _adLoader;
     private FrameLayout         _nativeAdPlaceholder;
-    private List<String>        _testDevices;
     private AdViewHelper        _helper;
     private IMessageBridge      _bridge;
 
-    public AdMobNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers, @NonNull List<String> testDevices) {
+    public AdMobNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -71,7 +72,6 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _layoutName = layoutName;
         _identifiers = identifiers;
         _isAdLoaded = false;
-        _testDevices = testDevices;
         _helper = new AdViewHelper("AdMobNativeAd", adId);
         _bridge = MessageBridge.getInstance();
 
@@ -101,7 +101,6 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _identifiers = null;
         _adId = null;
         _context = null;
-        _testDevices = null;
         _helper = null;
         _bridge = null;
     }
@@ -217,9 +216,6 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _logger.info("load");
         _isAdLoaded = false;
         AdRequest.Builder builder = new AdRequest.Builder();
-        for (String hash : _testDevices) {
-            builder.addTestDevice(hash);
-        }
         _adLoader.loadAd(builder.build());
     }
 

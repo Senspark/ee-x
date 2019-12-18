@@ -15,8 +15,7 @@
 - (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
-                        layout:(NSString* _Nonnull)layoutName
-                   testDevices:(NSArray<NSString*>* _Nullable)testDevices;
+                        layout:(NSString* _Nonnull)layoutName;
 
 - (void)destroy;
 

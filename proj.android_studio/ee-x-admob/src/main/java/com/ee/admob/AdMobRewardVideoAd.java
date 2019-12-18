@@ -2,8 +2,7 @@ package com.ee.admob;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Debug;
-import android.util.Log;
+
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -14,7 +13,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import java.util.List;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -28,7 +27,6 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
     private Activity       _activity;
     private RewardedAd     _rewardedVideoAd;
     private String         _adId;
-    private List<String>   _testDevices;
     private IMessageBridge _bridge;
 
     private String kCreateInternalAd() {
@@ -72,12 +70,11 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
     }
 
 
-    public AdMobRewardVideoAd(@NonNull Activity activity, @NonNull Context context, @NonNull String placementId,  @NonNull List<String> testDevices) {
+    public AdMobRewardVideoAd(@NonNull Activity activity, @NonNull Context context, @NonNull String placementId) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
         _adId = placementId;
-        _testDevices = testDevices;
         _bridge = MessageBridge.getInstance();
 
         registerHandlers();
@@ -90,7 +87,6 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
         destroyInternalAd();
         _context = null;
         _adId = null;
-        _testDevices = null;
         _bridge = null;
     }
 
@@ -182,9 +178,6 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
         }
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
-        for (String hash : _testDevices) {
-            builder.addTestDevice(hash);
-        }
 
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override

@@ -17,7 +17,6 @@
     id<EEIMessageBridge> bridge_;
     NSString* adId_;
     GADRewardedAd* rewardedAd_;
-    NSArray<NSString*>* testDevices_;
 }
 
 @end
@@ -25,8 +24,7 @@
 @implementation EEAdMobRewardedVideo
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
-                         adId:(NSString* _Nonnull)adId
-                  testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+                         adId:(NSString* _Nonnull)adId {
     self = [super init];
     if (self == nil) {
         return self;
@@ -34,7 +32,6 @@
     bridge_ = bridge;
     adId_ = [adId copy];
     rewardedAd_ = nil;
-    testDevices_ = [testDevices retain];
 
     [self registerHandlers];
     return self;
@@ -47,8 +44,6 @@
 - (void)dealloc {
     [adId_ release];
     adId_ = nil;
-    [testDevices_ release];
-    testDevices_ = nil;
     [super dealloc];
 }
 

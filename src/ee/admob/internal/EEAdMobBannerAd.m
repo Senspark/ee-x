@@ -20,7 +20,6 @@
     GADBannerView* bannerView_;
     GADAdSize adSize_;
     NSString* adId_;
-    NSArray<NSString*>* testDevices_;
     EEAdViewHelper* helper_;
 }
 
@@ -46,8 +45,7 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
-                         size:(GADAdSize)adSize
-                  testDevices:(NSArray<NSString*>* _Nullable)testDevices {
+                         size:(GADAdSize)adSize {
     self = [super init];
     if (self == nil) {
         return self;
@@ -57,7 +55,6 @@
     bannerView_ = nil;
     adId_ = [adId copy];
     adSize_ = adSize;
-    testDevices_ = [testDevices retain];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                               prefix:@"AdMobBannerAd"
                                                 adId:adId];
@@ -77,8 +74,6 @@
     helper_ = nil;
     [adId_ release];
     adId_ = nil;
-    [testDevices_ release];
-    testDevices_ = nil;
     [super dealloc];
 }
 

@@ -23,6 +23,10 @@ enum class BannerAdSize {
 
     /// kFBAdSizeHeight250Rectangle or AdSize.RECTANGLE_HEIGHT_250.
     RectangleHeight250,
+
+    /// kFBAdSize320x50
+    Size320x50,
+
 };
 } // namespace facebook
 

@@ -40,6 +40,9 @@
     if (index == 3) {
         return kFBAdSizeHeight250Rectangle;
     }
+    if (index == 4) {
+    return kFBAdSize320x50;
+    }
     NSAssert(NO, @"");
     return kFBAdSize320x50;
 }

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.library'
 
+repositories {
+    maven {
+        url "https://dl.bintray.com/ironsource-mobile/android-adapters"
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -10,7 +16,21 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'com.unity3d.ads') {
+            details.useVersion "3.2.0"
+        }
+    }
+}
+
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.unity3d.ads:unity-ads:3.2.0'
+
+    if (rootProject.ext.useIronsourceMediation) {
+        // Ironsource adapter include unity sdk 3.2.0
+        implementation('com.ironsource.adapters:unityadsadapter:4.1.6@jar')
+    } else {
+        implementation 'com.unity3d.ads:unity-ads:3.4.0'
+    }
 }

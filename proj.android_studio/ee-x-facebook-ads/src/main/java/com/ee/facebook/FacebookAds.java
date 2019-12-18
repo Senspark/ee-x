@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
-
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
@@ -13,10 +12,10 @@ import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
-
 import com.facebook.ads.AudienceNetworkAds;
 import java.util.HashMap;
 import java.util.Map;
+import static com.ee.facebook.ads.BuildConfig.DEBUG;
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -58,8 +57,14 @@ public class FacebookAds implements PluginProtocol {
         _interstitialAds = new HashMap<>();
         _rewardVideoAds = new HashMap<>();
 
-        AudienceNetworkAds.initialize(context);
-        AudienceNetworkAds.isInAdsProcess(context);
+        if (!AudienceNetworkAds.isInitialized(context)) {
+            if (DEBUG) {
+                AdSettings.setDebugBuild(true);
+            }
+
+            AudienceNetworkAds.initialize(context);
+            AudienceNetworkAds.isInAdsProcess(context);
+        }
 
         registerHandlers();
     }

@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -31,6 +32,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.instantapps.InstantApps;
 
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.security.MessageDigest;
 import java.util.Locale;
 import java.util.Map;
@@ -221,7 +223,7 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
-                return Utils.toString(com.google.android.gms.common.wrappers.InstantApps.isInstantApp(context));
+                return Utils.toString(isInstantApp(context));
             }
         }, k__isInstantApp);
 
@@ -233,8 +235,7 @@ public class Utils {
                 String url = (String) dict.get("url");
                 String referrer = (String) dict.get("referrer");
 
-                boolean isInstantApp = com.google.android.gms.common.wrappers.InstantApps
-                        .isInstantApp(PluginManager.getInstance().getContext());
+                boolean isInstantApp = isInstantApp(PluginManager.getInstance().getContext());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE);
 
                 Activity activity = PluginManager.getInstance().getActivity();
@@ -439,6 +440,10 @@ public class Utils {
                 MessageBridge.getInstance().callCpp(tag, s);
             }
         })).execute();
+    }
+
+    private static boolean isInstantApp(@NonNull Context context) {
+        return com.google.android.gms.common.wrappers.InstantApps.isInstantApp(context);
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {

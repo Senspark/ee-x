@@ -44,16 +44,8 @@ constexpr auto k__destroyNativeAd           = "AdMob_destroyNativeAd";
 constexpr auto k__createInterstitialAd      = "AdMob_createInterstitialAd";
 constexpr auto k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
 
-constexpr auto k__hasRewardedVideo          = "AdMob_hasRewardedVideo";
-constexpr auto k__loadRewardedVideo         = "AdMob_loadRewardedVideo";
-constexpr auto k__showRewardedVideo         = "AdMob_showRewardedVideo";
-
-constexpr auto k__onRewarded                = "AdMob_onRewarded";
-constexpr auto k__onFailedToLoad            = "AdMob_onFailedToLoad";
-constexpr auto k__onRewardedVideoCompleted  = "AdMob_onRewardedVideoCompleted";
-constexpr auto k__onLoaded                  = "AdMob_onLoaded";
-constexpr auto k__onOpened                  = "AdMob_onOpened";
-constexpr auto k__onClosed                  = "AdMob_onClosed";
+constexpr auto k__createRewardVideoAd       = "AdMob_createRewardVideoAd";
+constexpr auto k__destroyRewardVideoAd      = "AdMob_destroyRewardVideoAd";
 // clang-format on
 } // namespace
 
@@ -74,49 +66,10 @@ Self::AdMob(const Logger& logger)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
-    rewarded_ = false;
-
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onReward();
-            return "";
-        },
-        k__onRewarded);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onFailedToLoad(message);
-            return "";
-        },
-        k__onFailedToLoad);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onLoaded();
-            return "";
-        },
-        k__onLoaded);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onOpened();
-            return "";
-        },
-        k__onOpened);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onClosed();
-            return "";
-        },
-        k__onClosed);
-    bridge_.registerHandler([this](const std::string& message) { return ""; },
-                            k__onRewardedVideoCompleted);
 }
 
 Self::~AdMob() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onRewarded);
-    bridge_.deregisterHandler(k__onFailedToLoad);
-    bridge_.deregisterHandler(k__onLoaded);
-    bridge_.deregisterHandler(k__onOpened);
-    bridge_.deregisterHandler(k__onClosed);
 }
 
 void Self::initialize(const std::string& applicationId) {
@@ -193,75 +146,24 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
 std::shared_ptr<IRewardedVideo>
 Self::createRewardedVideo(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedVideos_.count(adId) != 0) {
+    auto response = bridge_.call(k__createRewardVideoAd, adId);
+    if (not core::toBool(response)) {
         return core::makeShared<NullRewardedVideo>(logger_);
     }
-    auto result = new RewardedVideo(logger_, this, adId);
+
+    auto result = new RewardedVideo(bridge_, logger_, this, adId);
     rewardedVideos_[adId] = result;
     return std::shared_ptr<IRewardedVideo>(result);
 }
 
 bool Self::destroyRewardedVideo(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedVideos_.count(adId) == 0) {
-        return false;
+    if (rewardedVideos_.count(adId) != 0) {
+        rewardedVideos_.erase(adId);
     }
-    rewardedVideos_.erase(adId);
-    return true;
-}
 
-bool Self::hasRewardedVideo() const {
-    auto response = bridge_.call(k__hasRewardedVideo);
+    auto&& response = bridge_.call(k__destroyRewardVideoAd, adId);
     return core::toBool(response);
-}
-
-void Self::loadRewardedVideo(const std::string& adId) {
-    if (loading_) {
-        return;
-    }
-    loading_ = true;
-    currentId_ = adId;
-    bridge_.call(k__loadRewardedVideo, adId);
-}
-
-bool Self::showRewardedVideo() {
-    if (not hasRewardedVideo()) {
-        return false;
-    }
-    rewarded_ = false;
-    bridge_.call(k__showRewardedVideo);
-    return true;
-}
-
-void Self::onLoaded() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    loading_ = false;
-}
-
-void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
-    loading_ = false;
-}
-
-void Self::onReward() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    rewarded_ = true;
-}
-
-void Self::onOpened() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    rewarded_ = false;
-}
-
-void Self::onClosed() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-    if (rewardedVideos_.count(currentId_)) {
-        currentId_.clear();
-        auto successful = mediation.finishRewardedVideo(rewarded_);
-        assert(successful);
-        return;
-    }
 }
 } // namespace admob
 } // namespace ee

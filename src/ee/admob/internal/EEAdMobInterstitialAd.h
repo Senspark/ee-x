@@ -13,8 +13,7 @@
 @interface EEAdMobInterstitialAd : NSObject <EEIInterstitialAd>
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
-                         adId:(NSString* _Nonnull)adId
-                  testDevices:(NSArray<NSString*>* _Nullable)testDevices;
+                         adId:(NSString* _Nonnull)adId;
 
 - (void)destroy;
 

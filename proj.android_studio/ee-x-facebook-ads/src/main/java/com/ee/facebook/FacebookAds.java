@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
-
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
+import com.ee.facebook.ads.BuildConfig;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
-
 import com.facebook.ads.AudienceNetworkAds;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +38,6 @@ public class FacebookAds implements PluginProtocol {
     private static final String k__layout_name = "layout_name";
     private static final String k__identifiers = "identifiers";
 
-    private static final Logger _logger = new Logger(FacebookAds.class.getName());
-
     private Context                             _context;
     private Activity                            _activity;
     private Map<String, FacebookBannerAd>       _bannerAds;
@@ -58,8 +55,14 @@ public class FacebookAds implements PluginProtocol {
         _interstitialAds = new HashMap<>();
         _rewardVideoAds = new HashMap<>();
 
-        AudienceNetworkAds.initialize(context);
-        AudienceNetworkAds.isInAdsProcess(context);
+        if (!AudienceNetworkAds.isInitialized(context)) {
+            if (BuildConfig.DEBUG) {
+                AdSettings.setDebugBuild(true);
+            }
+
+            AudienceNetworkAds.initialize(context);
+            AudienceNetworkAds.isInAdsProcess(context);
+        }
 
         registerHandlers();
     }

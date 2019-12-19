@@ -20,7 +20,9 @@ se::Class *clazz = nullptr;
 // clang-format off
 constexpr auto constructor = &core::makeConstructor<Self>;
 constexpr auto finalize    = &core::makeFinalize<Self>;
-constexpr auto schedule    = &core::makeInstanceMethod<&Self::schedule>;
+constexpr auto schedule    = &core::makeInstanceMethod<
+                                 static_cast<void (Self::*)(const NotificationBuilder&)>(&Self::schedule),
+                                 static_cast<void (Self::*)(const std::string&, int, int, int)>(&Self::schedule)>;
 constexpr auto unschedule  = &core::makeInstanceMethod<&Self::unschedule>;
 constexpr auto clearAll    = &core::makeInstanceMethod<&Self::clearAll>;
 // clang-format on

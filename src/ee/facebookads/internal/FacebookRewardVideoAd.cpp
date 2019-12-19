@@ -135,10 +135,9 @@ bool Self::show() {
 
     auto&& mediation = ads::MediationManager::getInstance();
     auto successful = mediation.startRewardedVideo([this](bool rewarded) { //
-        this->setResult(rewarded);
-
         this->destroyInternalVideo();
         this->createInternalVideo();
+        this->setResult(rewarded);
     });
     assert(successful);
     return true;

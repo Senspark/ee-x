@@ -97,6 +97,20 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+##########
+# TENJIN #
+##########
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS := -std=c++17
+LOCAL_MODULE := ee_x_tenjin_static
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/tenjin -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
 #######
 # ADS #
 #######
@@ -328,6 +342,7 @@ include $(BUILD_STATIC_LIBRARY)
 ############
 # JSB_CORE #
 ############
+
 include $(CLEAR_VARS)
 
 LOCAL_CPP_FEATURES := exceptions
@@ -346,6 +361,38 @@ LOCAL_EXPORT_C_INCLUDES += $(COCOS2D_ROOT_DIR)/external/android/$(TARGET_ARCH_AB
 LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/jsb_core.cpp
 LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/core -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
+include $(BUILD_STATIC_LIBRARY)
+
+##################
+# JSB_APPS_FLYER #
+##################
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_jsb_apps_flyer_static
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/JsbAppsFlyer.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/appsflyer -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
+LOCAL_STATIC_LIBRARIES += ee_x_apps_flyer_static
+
+include $(BUILD_STATIC_LIBRARY)
+
+##############
+# JSB_TENJIN #
+##############
+
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS := -std=c++17
+LOCAL_MODULE := ee_x_jsb_tenjin_static
+LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/jsb/JsbTenjin.cpp
+LOCAL_SRC_FILES += ${shell find $(EE_X_ROOT_DIR)/src/ee/jsb/tenjin -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_jsb_core_static
+LOCAL_STATIC_LIBRARIES += ee_x_tenjin_static
+
 include $(BUILD_STATIC_LIBRARY)
 
 ###########

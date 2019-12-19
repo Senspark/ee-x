@@ -24,6 +24,8 @@ public:
     /// Schedules a notification.
     void schedule(const NotificationBuilder& builder);
 
+    void schedule(const std::string& msg, int tag, int delay, int interval);
+
     /// Unschedules notifications whose the specified tag.
     void unschedule(int tag);
 

@@ -5,8 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
-
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
 import com.ee.core.PluginProtocol;
@@ -14,7 +15,6 @@ import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
-
 import java.util.Locale;
 import java.util.Map;
 
@@ -23,10 +23,10 @@ import java.util.Map;
  */
 
 public class Notification implements PluginProtocol {
-    private static final String k__notification_schedule       = "__notification_schedule";
-    private static final String k__notification_unschedule_all = "__notification_unschedule_all";
-    private static final String k__notification_unschedule     = "__notification_unschedule";
-    private static final String k__notification_clear_all      = "__notification_clear_all";
+    private static final String k__notification_schedule            = "__notification_schedule";
+    private static final String k__notification_unschedule_all      = "__notification_unschedule_all";
+    private static final String k__notification_unschedule          = "__notification_unschedule";
+    private static final String k__notification_clear_all           = "__notification_clear_all";
 
     private static final Logger _logger = new Logger(Notification.class.getName());
 
@@ -94,8 +94,8 @@ public class Notification implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
                 assert dict != null;
 
-                String ticker = (String) dict.get("ticker");
                 String title = (String) dict.get("title");
+                String ticker = (String) dict.get("ticker");
                 String body = (String) dict.get("body");
                 Integer delay = (Integer) dict.get("delay");
                 Integer interval = (Integer) dict.get("interval");
@@ -159,7 +159,7 @@ public class Notification implements PluginProtocol {
             className = activity.getClass().getName();
         }
 
-        Intent intent = new Intent(_context, NotificationService.class);
+        Intent intent = new Intent(_context, NotificationReceiver.class);
         intent.putExtra("ticker", ticker);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
@@ -177,7 +177,7 @@ public class Notification implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void unschedule(@NonNull Integer tag) {
         _logger.debug("unschedule: tag = " + tag);
-        Intent intent = new Intent(_context, NotificationService.class);
+        Intent intent = new Intent(_context, NotificationReceiver.class);
         NotificationUtils.unscheduleAlarm(_context, intent, tag);
     }
 

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -16,9 +17,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.DisplayCutout;
+import android.view.Surface;
+import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.ee.core.Logger;
@@ -28,12 +34,12 @@ import com.ee.core.PluginManager;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-
 import com.google.android.gms.instantapps.InstantApps;
-
 import java.io.IOException;
-import java.lang.annotation.Target;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -61,6 +67,8 @@ public class Utils {
     private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
     private static final String k__isInstantApp                  = "Utils_isInstantApp";
     private static final String k__showInstallPrompt             = "Utils_showInstallPrompt";
+    private static final String k__getApplicationName            = "Utils_getApplicationName";
+    private static final String k__getSafeInset                  = "Utils_getSafeInset";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -247,6 +255,30 @@ public class Utils {
                 return "";
             }
         }, k__showInstallPrompt);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Context context = PluginManager.getInstance().getContext();
+                return getApplicationnName(context);
+            }
+        }, k__getApplicationName);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Activity activity = PluginManager.getInstance().getActivity();
+                SafeInset inset = getSafeInset(activity);
+                Map<String, Object> dict = new HashMap<>();
+                dict.put("left", inset.left);
+                dict.put("right", inset.right);
+                dict.put("top", inset.top);
+                dict.put("bottom", inset.bottom);
+                return JsonUtils.convertDictionaryToString(dict);
+            }
+        }, k__getSafeInset);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -432,6 +464,113 @@ public class Utils {
         return info != null && info.isConnectedOrConnecting();
     }
 
+    private static class SafeInset {
+        public int left;
+        public int right;
+        public int top;
+        public int bottom;
+    }
+
+    private static void calculateSafeInset(Activity activity, int notchSize, SafeInset inset) {
+        // https://stackoverflow.com/questions/3663665/how-can-i-get-the-current-screen-orientation
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                inset.top = notchSize;
+                break;
+            case Surface.ROTATION_90:
+                inset.left = notchSize;
+                break;
+            case Surface.ROTATION_180:
+                inset.bottom = notchSize;
+                break;
+            case Surface.ROTATION_270:
+                inset.right = notchSize;
+                break;
+        }
+    }
+
+    private static boolean getSafeInset_Huawei(Activity activity, SafeInset inset)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Class<?> class_HwNotchSizeUtil;
+        try {
+            ClassLoader classLoader = activity.getClassLoader();
+            class_HwNotchSizeUtil = classLoader.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+            Method method_hasNotchInScreen = class_HwNotchSizeUtil.getMethod("hasNotchInScreen");
+            boolean hasFeature = (boolean) method_hasNotchInScreen.invoke(class_HwNotchSizeUtil);
+            if (!hasFeature) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        Method method_getNotchSize = class_HwNotchSizeUtil.getMethod("getNotchSize");
+        int[] size = (int[]) method_getNotchSize.invoke(class_HwNotchSizeUtil);
+        int notchWidth = size[0];
+        int notchHeight = size[1];
+        calculateSafeInset(activity, notchHeight, inset);
+        return true;
+    }
+
+    private static boolean getSafeInset_Oppo(Activity activity, SafeInset inset)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+        if (!activity.getPackageManager().hasSystemFeature("com.oppo.feature.screen.heteromorphism")) {
+            return false;
+        }
+        @SuppressLint("PrivateApi")
+        Class<?> cls = Class.forName("android.os.SystemProperties");
+        Method hideMethod = cls.getMethod("get", String.class);
+        Object object = cls.newInstance();
+        String value = (String) hideMethod.invoke(object, "ro.oppo.screen.heteromorphism");
+
+        // [378,0:702,80]
+        String[] texts = value.split("[,:]");
+        int[] values = new int[texts.length];
+        try {
+            for (int i = 0; i < texts.length; ++i) {
+                values[i] = Integer.parseInt(texts[i]);
+            }
+        } catch (NumberFormatException e) {
+            values = null;
+        }
+        if (values != null && values.length == 4) {
+            int notchHeight = values[3];
+            calculateSafeInset(activity, notchHeight, inset);
+        }
+        return true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static SafeInset getSafeInset(@NonNull Activity activity) {
+        SafeInset inset = new SafeInset();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            try {
+                // https://stackoverflow.com/questions/51743622/how-to-handle-notchdisplay-cutout-in-android-api-lower-than-28
+                if (getSafeInset_Oppo(activity, inset)) {
+                    return inset;
+                }
+                if (getSafeInset_Huawei(activity, inset)) {
+                    return inset;
+                }
+            } catch (Exception ex) {
+                _logger.error("getSafeInset", ex);
+            }
+        } else {
+            View decorView = activity.getWindow().getDecorView();
+            WindowInsets insets = decorView.getRootWindowInsets();
+            DisplayCutout cutout = insets.getDisplayCutout();
+            if (cutout == null) {
+                // Doesn't have cutout.
+            } else {
+                inset.left = cutout.getSafeInsetLeft();
+                inset.right = cutout.getSafeInsetRight();
+                inset.top = cutout.getSafeInsetTop();
+                inset.bottom = cutout.getSafeInsetBottom();
+            }
+        }
+        return inset;
+    }
+
     @SuppressLint("HardwareIds")
     private static void getDeviceId(@NonNull Context context, @NonNull final String tag) {
         (new GetGAIDTask(context, new GetGAIDListener() {
@@ -444,6 +583,16 @@ public class Utils {
 
     private static boolean isInstantApp(@NonNull Context context) {
         return com.google.android.gms.common.wrappers.InstantApps.isInstantApp(context);
+    }
+
+    private static String getApplicationnName(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo ai = pm.getApplicationInfo( context.getPackageName(), 0);
+            return (String) pm.getApplicationLabel(ai);
+        } catch (final PackageManager.NameNotFoundException e) {
+            return "";
+        }
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {

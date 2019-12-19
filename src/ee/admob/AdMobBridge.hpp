@@ -69,21 +69,9 @@ private:
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
-
     bool destroyRewardedVideo(const std::string& adId);
-    bool hasRewardedVideo() const;
-    void loadRewardedVideo(const std::string& adId);
-    bool showRewardedVideo();
-
-    void onLoaded();
-    void onFailedToLoad(const std::string& message);
-    void onReward();
-    void onOpened();
-    void onClosed();
 
     bool loading_;
-    bool rewarded_;
-    std::string currentId_;
 
     IMessageBridge& bridge_;
     const Logger& logger_;

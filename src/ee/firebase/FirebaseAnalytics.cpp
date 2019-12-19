@@ -45,7 +45,6 @@ bool Self::initialize() {
 
     ::firebase::analytics::Initialize(*app);
     analyticsCollectionEnabled(true);
-    setMinimumSessionDuration(10000);
     setSessionTimeoutDuration(1800000);
 #endif // defined(EE_X_MOBILE)
 
@@ -59,15 +58,6 @@ void Self::analyticsCollectionEnabled(bool enabled) {
     }
 #ifdef EE_X_MOBILE
     ::firebase::analytics::SetAnalyticsCollectionEnabled(enabled);
-#endif // EE_X_MOBILE
-}
-
-void Self::setMinimumSessionDuration(std::int64_t milliseconds) {
-    if (not initialized_) {
-        return;
-    }
-#ifdef EE_X_MOBILE
-    ::firebase::analytics::SetMinimumSessionDuration(milliseconds);
 #endif // EE_X_MOBILE
 }
 

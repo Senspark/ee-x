@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.games.AchievementsClient;
 import com.google.android.gms.games.AnnotatedData;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.achievement.Achievement;
 import com.google.android.gms.games.achievement.AchievementBuffer;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -125,8 +126,8 @@ public class Play implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 boolean silentSignIn = (boolean) dict.get(k_silent_sign_in);
-                signin(silentSignIn);
-                return null;
+                signIn(silentSignIn);
+                return "";
             }
         }, k_signin);
 
@@ -134,8 +135,8 @@ public class Play implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                signout();
-                return null;
+                signOut();
+                return "";
             }
         }, k_signout);
 
@@ -144,7 +145,7 @@ public class Play implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 showAchievements();
-                return null;
+                return "";
             }
         }, k_showAchievements);
 
@@ -156,8 +157,7 @@ public class Play implements PluginProtocol {
                 String achievementId = (String) dict.get(k_achievementId);
                 double increment = (double) dict.get(k_increment);
                 incrementAchievement(achievementId, increment);
-
-                return null;
+                return "";
             }
         }, k_increaseAchievement);
 
@@ -168,8 +168,7 @@ public class Play implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 String achievementId = (String) dict.get(k_achievementId);
                 unlockAchievement(achievementId);
-
-                return null;
+                return "";
             }
         }, k_unlockAchievement);
 
@@ -180,8 +179,7 @@ public class Play implements PluginProtocol {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 String leaderboardId = (String) dict.get(k_leaderboardId);
                 showLeaderboard(leaderboardId);
-
-                return null;
+                return "";
             }
         }, k_showLeaderboard);
 
@@ -190,7 +188,7 @@ public class Play implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 showAllLeaderboards();
-                return null;
+                return "";
             }
         }, k_showAllLeaderboards);
 
@@ -202,7 +200,7 @@ public class Play implements PluginProtocol {
                 String leaderboardId = (String) dict.get(k_leaderboardId);
                 Long score = (Long) dict.get(k_score);
                 submitScore(leaderboardId, score);
-                return null;
+                return "";
             }
         }, k_submitScore);
     }
@@ -225,7 +223,7 @@ public class Play implements PluginProtocol {
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
             Boolean success = responseCode == Activity.RESULT_OK;
-            MessageBridge.getInstance().callCpp(k_onSignedIn, success.toString());
+            MessageBridge.getInstance().callCpp(k_onSignedIn, Utils.toString(success));
             return true;
         }
         return false;
@@ -249,18 +247,17 @@ public class Play implements PluginProtocol {
 
     }
 
-    private void signin(boolean silentSignIn) {
-        _logger.debug("signin " + silentSignIn);
+    private void signIn(boolean silentSignIn) {
+        _logger.debug("signIn " + silentSignIn);
         if (silentSignIn) {
             signInSilently();
         } else {
-            this.startSignInIntent();
+            startSignInIntent();
         }
     }
 
     private void signInSilently() {
         _logger.debug("signInSliently");
-
         _signinClient.silentSignIn().addOnCompleteListener(_activity,
                 new OnCompleteListener<GoogleSignInAccount>() {
             @Override
@@ -279,7 +276,7 @@ public class Play implements PluginProtocol {
         _activity.startActivityForResult(_signinClient.getSignInIntent(), RC_SIGN_IN);
     }
 
-    private void signout() {
+    private void signOut() {
         _signinClient.signOut().addOnCompleteListener(_activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -291,15 +288,14 @@ public class Play implements PluginProtocol {
     private void showAchievements() {
         if (!isSignedIn()) {
             return;
-        } else {
-            Games.getAchievementsClient(_activity,
-                    GoogleSignIn.getLastSignedInAccount(_activity)).getAchievementsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
-                @Override
-                public void onSuccess(Intent intent) {
-                    _activity.startActivityForResult(intent, RC_ACHIEVEMENT_UI);
-                }
-            });
         }
+
+        getAchievementsClient().getAchievementsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
+            @Override
+            public void onSuccess(Intent intent) {
+                _activity.startActivityForResult(intent, RC_ACHIEVEMENT_UI);
+            }
+        });
     }
 
     // Load all achievements and check increment
@@ -310,8 +306,7 @@ public class Play implements PluginProtocol {
             return;
         }
 
-        final AchievementsClient client = Games.getAchievementsClient(_activity,
-                GoogleSignIn.getLastSignedInAccount(_activity));
+        final AchievementsClient client = getAchievementsClient();
         client.load(true).addOnCompleteListener(new OnCompleteListener<AnnotatedData<AchievementBuffer>>() {
             @Override
             public void onComplete(@NonNull Task<AnnotatedData<AchievementBuffer>> task) {
@@ -342,50 +337,53 @@ public class Play implements PluginProtocol {
     private void unlockAchievement(String achievementId) {
         if (!isSignedIn()) {
             return;
-        } else {
-            Games.getAchievementsClient(_activity,
-                    GoogleSignIn.getLastSignedInAccount(_activity)).unlock(achievementId);
         }
+
+        getAchievementsClient().unlock(achievementId);
 
     }
 
     private void showLeaderboard(String leaderBoardId) {
         if (!isSignedIn()) {
             return;
-        } else {
-            Games.getLeaderboardsClient(_activity,
-                    GoogleSignIn.getLastSignedInAccount(_activity)).getLeaderboardIntent(leaderBoardId).addOnSuccessListener(new OnSuccessListener<Intent>() {
-                @Override
-                public void onSuccess(Intent intent) {
-                    _activity.startActivityForResult(intent, RC_LEADER_BOARD_UI);
-                }
-            });
         }
+
+        getLeaderboardsClient().getLeaderboardIntent(leaderBoardId).addOnSuccessListener(new OnSuccessListener<Intent>() {
+            @Override
+            public void onSuccess(Intent intent) {
+                _activity.startActivityForResult(intent, RC_LEADER_BOARD_UI);
+            }
+        });
     }
 
     private void showAllLeaderboards() {
         if (!isSignedIn()) {
             return;
-        } else {
-            Games.getLeaderboardsClient(_activity,
-                    GoogleSignIn.getLastSignedInAccount(_activity)).getAllLeaderboardsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
-                @Override
-                public void onSuccess(Intent intent) {
-                    _activity.startActivityForResult(intent, RC_LEADER_BOARD_UI);
-                }
-            });
         }
+
+        getLeaderboardsClient().getAllLeaderboardsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
+            @Override
+            public void onSuccess(Intent intent) {
+                _activity.startActivityForResult(intent, RC_LEADER_BOARD_UI);
+            }
+        });
     }
 
-    private void submitScore(String leaderboard_name, long score) {
+    private void submitScore(String leaderboardName, long score) {
         if (!isSignedIn()) {
             return;
         }
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(_activity);
-        if (account == null) {
-            return;
-        }
 
-        Games.getLeaderboardsClient(_activity, account).submitScore(leaderboard_name, score);
+        getLeaderboardsClient().submitScore(leaderboardName, score);
+    }
+
+    private AchievementsClient getAchievementsClient() {
+        return Games.getAchievementsClient(_activity,
+                GoogleSignIn.getLastSignedInAccount(_activity));
+    }
+
+    private LeaderboardsClient getLeaderboardsClient() {
+        return Games.getLeaderboardsClient(_activity,
+                GoogleSignIn.getLastSignedInAccount(_activity));
     }
 }

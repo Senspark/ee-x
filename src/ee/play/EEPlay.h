@@ -11,11 +11,11 @@
 
 @interface EEPlay : NSObject <EEIPlugin>
 
-- (void)signin;
+- (void)signIn;
 
 - (BOOL)isSignedIn;
 
-- (void)signout;
+- (void)signOut;
 
 - (void)showAchievements;
 

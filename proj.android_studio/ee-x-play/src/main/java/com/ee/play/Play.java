@@ -289,7 +289,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         getAchievementsClient().getAchievementsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
             @Override
             public void onSuccess(Intent intent) {
@@ -305,7 +304,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         final AchievementsClient client = getAchievementsClient();
         client.load(true).addOnCompleteListener(new OnCompleteListener<AnnotatedData<AchievementBuffer>>() {
             @Override
@@ -338,7 +336,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         getAchievementsClient().unlock(achievementId);
 
     }
@@ -347,7 +344,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         getLeaderboardsClient().getLeaderboardIntent(leaderBoardId).addOnSuccessListener(new OnSuccessListener<Intent>() {
             @Override
             public void onSuccess(Intent intent) {
@@ -360,7 +356,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         getLeaderboardsClient().getAllLeaderboardsIntent().addOnSuccessListener(new OnSuccessListener<Intent>() {
             @Override
             public void onSuccess(Intent intent) {
@@ -373,7 +368,6 @@ public class Play implements PluginProtocol {
         if (!isSignedIn()) {
             return;
         }
-
         getLeaderboardsClient().submitScore(leaderboardName, score);
     }
 

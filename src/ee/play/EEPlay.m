@@ -59,13 +59,13 @@ static NSString* const k__score         = @"score";
                          tag:k__isSignedIn];
 
     [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self signin];
+        [self signIn];
         return @"";
     }
                          tag:k__signin];
 
     [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self signout];
+        [self signOut];
         return @"";
     }
                          tag:k__signout];
@@ -135,7 +135,7 @@ static NSString* const k__score         = @"score";
     return [GKLocalPlayer localPlayer].isAuthenticated;
 }
 
-- (void)signin {
+- (void)signIn {
     GKLocalPlayer* player = [GKLocalPlayer localPlayer];
 
     void (^authBlock)(UIViewController*, NSError*) =
@@ -158,13 +158,13 @@ static NSString* const k__score         = @"score";
     [player setAuthenticateHandler:authBlock];
 }
 
-- (void)signout {
+- (void)signOut {
 }
 
 #pragma mark Achievement
 - (void)showAchievements {
     if (![self isSignedIn]) {
-        [self signin];
+        [self signIn];
         return;
     }
 
@@ -212,7 +212,7 @@ static NSString* const k__score         = @"score";
 #pragma mark Leaderboard
 - (void)showLeaderboard:(NSString*)leaderboardId {
     if (![self isSignedIn]) {
-        [self signin];
+        [self signIn];
         return;
     }
     if (leaderboardId == nil || leaderboardId.length == 0) {
@@ -234,7 +234,7 @@ static NSString* const k__score         = @"score";
 
 - (void)showAllLeaderboards {
     if (![self isSignedIn]) {
-        [self signin];
+        [self signIn];
         return;
     }
     UIViewController* rootViewController =

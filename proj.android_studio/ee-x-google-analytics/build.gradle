@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api "com.google.android.gms:play-services-analytics:16.0.8"
+    api "com.google.android.gms:play-services-analytics:17.0.0"
 }

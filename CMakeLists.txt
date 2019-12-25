@@ -24,6 +24,8 @@ include(src/ee/notification/CMakeLists.txt)
 include(src/ee/unityads/CMakeLists.txt)
 include(src/ee/vungle/CMakeLists.txt)
 include(src/ee/campaignreceiver/CMakeLists.txt)
+include(src/ee/tenjin/CMakeLists.txt)
+include(src/ee/appsflyer/CMakeLists.txt)
 
 set(LIB_SRC
    jni/cpp/ee/core/JniUtils.cpp
@@ -45,6 +47,8 @@ set(LIB_SRC
    ${EE_X_UNITY_ADS_SRC}
    ${EE_X_VUNGLE_SRC}
    ${EE_X_CAMPRECEIVER_SRC}
+   ${EE_X_TENJIN_SRC}
+   ${EE_X_APPSFLYER_SRC}
 )
 
 set(LIB_HEADERS
@@ -78,6 +82,12 @@ set(LIB_HEADERS
     src/ee/NotificationFwd.hpp
     src/ee/FirebaseFwd.hpp
     src/ee/Facebook.hpp
+    src/ee/Tenjin.hpp
+    src/ee/TenjinFwd.hpp
+    src/ee/AppsFlyer.hpp
+    src/ee/AppLovinFwd.hpp
+    src/ee/AppsFlyer.hpp
+    src/ee/AppsFlyerFwd.hpp
     ${EE_X_ADMOB_HEADERS}
     ${EE_X_ADS_HEADERS}
     ${EE_X_APPLOVIN_HEADERS}
@@ -92,6 +102,8 @@ set(LIB_HEADERS
     ${EE_X_UNITY_ADS_HEADERS}
     ${EE_X_VUNGLE_HEADERS}
     ${EE_X_CAMPRECEIVER_HEADERS}
+    ${EE_X_TENJIN_HEADERS}
+    ${EE_X_APPSFLYER_HEADERS}
 )
 
 add_subdirectory(src/ee/cocos)

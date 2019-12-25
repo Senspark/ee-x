@@ -149,9 +149,9 @@ static NSString* const k__score         = @"score";
             }
 
             if ([[GKLocalPlayer localPlayer] isAuthenticated]) {
-                [_bridge callCpp:k_onSignedIn message:@"true"];
+                [_bridge callCpp:k_onSignedIn message:[EEUtils toString:YES]];
             } else {
-                [_bridge callCpp:k_onSignedIn message:@"false"];
+                [_bridge callCpp:k_onSignedIn message:[EEUtils toString:NO]];
             }
         };
 
@@ -168,13 +168,13 @@ static NSString* const k__score         = @"score";
         return;
     }
 
-    UIViewController* rootViewController =
-        [EEUtils getCurrentRootViewController];
     GKGameCenterViewController* viewController =
-        [[GKGameCenterViewController alloc] init];
+        [[[GKGameCenterViewController alloc] init] autorelease];
     viewController.viewState = GKGameCenterViewControllerStateAchievements;
     viewController.gameCenterDelegate = self;
 
+    UIViewController* rootViewController =
+        [EEUtils getCurrentRootViewController];
     [rootViewController presentViewController:viewController
                                      animated:YES
                                    completion:nil];
@@ -188,11 +188,12 @@ static NSString* const k__score         = @"score";
     if (![self isSignedIn]) {
         return;
     }
-    if (percent > 100.0f)
+    if (percent > 100.0f) {
         percent = 100.0f;
+    }
 
     GKAchievement* achievement =
-        [[GKAchievement alloc] initWithIdentifier:achievementId];
+        [[[GKAchievement alloc] initWithIdentifier:achievementId] autorelease];
     if (achievement) {
         achievement.percentComplete = percent;
         [GKAchievement reportAchievements:@[achievement]
@@ -221,7 +222,7 @@ static NSString* const k__score         = @"score";
     UIViewController* rootViewController =
         [EEUtils getCurrentRootViewController];
     GKGameCenterViewController* viewController =
-        [[GKGameCenterViewController alloc] init];
+        [[[GKGameCenterViewController alloc] init] autorelease];
     viewController.viewState = GKGameCenterViewControllerStateLeaderboards;
     viewController.gameCenterDelegate = self;
     viewController.leaderboardIdentifier = leaderboardId;
@@ -239,7 +240,7 @@ static NSString* const k__score         = @"score";
     UIViewController* rootViewController =
         [EEUtils getCurrentRootViewController];
     GKGameCenterViewController* viewController =
-        [[GKGameCenterViewController alloc] init];
+        [[[GKGameCenterViewController alloc] init] autorelease];
     viewController.viewState = GKGameCenterViewControllerStateLeaderboards;
     viewController.gameCenterDelegate = self;
 
@@ -252,8 +253,8 @@ static NSString* const k__score         = @"score";
     if (![self isSignedIn]) {
         return;
     }
-    GKScore* gkscore =
-        [[GKScore alloc] initWithLeaderboardIdentifier:leaderboardId];
+    GKScore* gkscore = [[[GKScore alloc]
+        initWithLeaderboardIdentifier:leaderboardId] autorelease];
     gkscore.value = score;
     NSArray* scoreArr = @[gkscore];
     [GKScore reportScores:scoreArr

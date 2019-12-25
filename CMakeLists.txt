@@ -26,6 +26,7 @@ include(src/ee/vungle/CMakeLists.txt)
 include(src/ee/campaignreceiver/CMakeLists.txt)
 include(src/ee/tenjin/CMakeLists.txt)
 include(src/ee/appsflyer/CMakeLists.txt)
+include(src/ee/play/CMakeLists.txt)
 
 set(LIB_SRC
    jni/cpp/ee/core/JniUtils.cpp
@@ -49,6 +50,7 @@ set(LIB_SRC
    ${EE_X_CAMPRECEIVER_SRC}
    ${EE_X_TENJIN_SRC}
    ${EE_X_APPSFLYER_SRC}
+   ${EE_X_PLAY_SRC}
 )
 
 set(LIB_HEADERS
@@ -88,6 +90,8 @@ set(LIB_HEADERS
     src/ee/AppLovinFwd.hpp
     src/ee/AppsFlyer.hpp
     src/ee/AppsFlyerFwd.hpp
+    src/ee/Play.hpp
+    src/ee/PlayFwd.hpp
     ${EE_X_ADMOB_HEADERS}
     ${EE_X_ADS_HEADERS}
     ${EE_X_APPLOVIN_HEADERS}
@@ -104,6 +108,7 @@ set(LIB_HEADERS
     ${EE_X_CAMPRECEIVER_HEADERS}
     ${EE_X_TENJIN_HEADERS}
     ${EE_X_APPSFLYER_HEADERS}
+    ${EE_X_PLAY_HEADERS}
 )
 
 add_subdirectory(src/ee/cocos)

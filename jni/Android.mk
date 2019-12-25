@@ -111,6 +111,19 @@ LOCAL_STATIC_LIBRARIES := ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)
 
+##############################
+# Google Play Games Services #
+##############################
+include $(CLEAR_VARS)
+
+LOCAL_CPP_FEATURES := exceptions
+LOCAL_CPPFLAGS += -std=c++1z
+LOCAL_MODULE := ee_x_play
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/play -name "*.cpp" -print}
+LOCAL_STATIC_LIBRARIES := ee_x_core_static
+
+include $(BUILD_STATIC_LIBRARY)
+
 #######
 # ADS #
 #######

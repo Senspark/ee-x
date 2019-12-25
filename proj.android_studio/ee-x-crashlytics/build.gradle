@@ -6,12 +6,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 
 dependencies {
     api project(':ee-x-core')
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
     api 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

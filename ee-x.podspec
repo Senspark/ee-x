@@ -457,6 +457,20 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
   end
+  
+  spec.subspec 'play' do |s|
+    s.source_files =
+      'src/ee/Play.hpp',
+      'src/ee/PlayFwd.hpp',
+      'src/ee/play/*'
+
+    s.public_header_files =
+      'src/ee/Play.hpp',
+      'src/ee/PlayFwd.hpp',
+      'src/ee/play/*.{h,hpp}'
+
+    s.dependency 'ee-x/core'
+  end
 
   spec.subspec 'appsflyer' do |s|
     s.source_files =

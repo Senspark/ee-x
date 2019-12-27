@@ -524,7 +524,7 @@ public class StoreInfo {
      *
      * @return a <code>JSONObject</code> representation of <code>StoreInfo</code>.
      */
-    public static JSONObject toJSONObject() {
+    public static synchronized JSONObject toJSONObject() {
 
         JSONArray currencies = new JSONArray();
         for (VirtualCurrency c : mCurrencies) {
@@ -652,7 +652,7 @@ public class StoreInfo {
      *
      * @param virtualItem the virtual item that replaces the old one if exists.
      */
-    public static void replaceVirtualItem(VirtualItem virtualItem) {
+    public synchronized static void replaceVirtualItem(VirtualItem virtualItem) {
         mVirtualItems.put(virtualItem.getItemId(), virtualItem);
 
         if (virtualItem instanceof VirtualCurrency) {

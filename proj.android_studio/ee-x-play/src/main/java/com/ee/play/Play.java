@@ -198,7 +198,7 @@ public class Play implements PluginProtocol {
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 String leaderboardId = (String) dict.get(k_leaderboardId);
-                Long score = (Long) dict.get(k_score);
+                Long score = Long.valueOf(dict.get(k_score).toString());
                 submitScore(leaderboardId, score);
                 return "";
             }

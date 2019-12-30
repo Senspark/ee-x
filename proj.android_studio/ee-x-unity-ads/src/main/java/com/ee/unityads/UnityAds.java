@@ -203,6 +203,7 @@ public class UnityAds implements PluginProtocol {
             }
         };
         com.unity3d.ads.UnityAds.initialize(activity, gameId, testModeEnabled);
+        com.unity3d.ads.UnityAds.addListener(_listener);
         _initialized = true;
     }
 

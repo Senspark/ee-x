@@ -32,6 +32,7 @@ public class UnityAds implements PluginProtocol {
 
     private Activity _activity;
     private boolean  _initialized;
+    private IUnityAdsListener _listener;
 
     @SuppressWarnings("unused")
     public UnityAds() {
@@ -82,7 +83,7 @@ public class UnityAds implements PluginProtocol {
         if (!_initialized) {
             return;
         }
-        com.unity3d.ads.UnityAds.setListener(null);
+        com.unity3d.ads.UnityAds.removeListener(_listener);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class UnityAds implements PluginProtocol {
         if (_initialized) {
             return;
         }
-        com.unity3d.ads.UnityAds.initialize(activity, gameId, new IUnityAdsListener() {
+        _listener = new IUnityAdsListener() {
             public void onUnityAdsReady(String placementId) {
                 _logger.info("onUnityAdsReady: " + placementId);
                 Utils.checkMainThread();
@@ -180,7 +181,7 @@ public class UnityAds implements PluginProtocol {
                 Utils.checkMainThread();
 
                 MessageBridge bridge = MessageBridge.getInstance();
-                if (finishState == FinishState.SKIPPED) {
+                if (finishState == FinishState.ERROR) {
                     bridge.callCpp(k__onError, placementId);
                     return;
                 }
@@ -200,7 +201,8 @@ public class UnityAds implements PluginProtocol {
                 _logger.info("onUnityAdsError: " + s + " error = " + unityAdsError);
                 Utils.checkMainThread();
             }
-        }, testModeEnabled);
+        };
+        com.unity3d.ads.UnityAds.initialize(activity, gameId, testModeEnabled);
         _initialized = true;
     }
 

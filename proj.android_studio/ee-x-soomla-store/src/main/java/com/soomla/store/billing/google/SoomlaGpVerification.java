@@ -82,6 +82,7 @@ public class SoomlaGpVerification {
             throws IOException, NoSuchAlgorithmException, KeyManagementException {
         // https://stackoverflow.com/questions/1201048/allowing-java-to-use-an-untrusted-certificate-for-ssl-https-connection
         // https://www.stubbornjava.com/posts/okhttpclient-trust-all-ssl-certificates
+        /* Already have own SSL certificate.
         TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] chain, String authType) {
@@ -101,6 +102,7 @@ public class SoomlaGpVerification {
         SSLContext sslContext = SSLContext.getInstance("SSL");
         sslContext.init(null, trustAllCerts, new SecureRandom());
         SSLSocketFactory factory = sslContext.getSocketFactory();
+         */
 
         String verifyUrl = getVerifyUrl();
 
@@ -110,7 +112,8 @@ public class SoomlaGpVerification {
                         MediaType.parse("application/json;charset=utf-8"), //
                         jsonObject.toString())) //
                 .build();
-        OkHttpClient.Builder builder = new OkHttpClient.Builder() //
+        OkHttpClient.Builder builder = new OkHttpClient.Builder(); //
+                /*
                 .sslSocketFactory(factory, (X509TrustManager) trustAllCerts[0])
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
@@ -118,6 +121,7 @@ public class SoomlaGpVerification {
                         return true;
                     }
                 });
+                */
         OkHttpClient client = builder.build();
         return client.newCall(request).execute();
     }

@@ -17,11 +17,11 @@ public:
     Recorder();
     ~Recorder();
 
-    void startScreenRecording();
-    void stopScreenRecording();
-    void cancelScreenRecording();
+    void startRecording();
+    void stopRecording();
+    void cancelRecording();
 
-    std::string getScreenRecordingUrl() const;
+    std::string getRecordingUrl() const;
     bool checkRecordingPermission() const;
 
 private:

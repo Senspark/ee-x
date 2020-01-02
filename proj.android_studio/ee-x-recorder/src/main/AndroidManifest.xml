@@ -1,5 +1,18 @@
-<manifest
-	package="com.ee.recorder"
-	xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ee.recorder">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- FIXME: for android 10 -->
+    <!-- uses-permission android:name="android.permission.FOREGROUND_SERVICE" /-->
+
+    <application>
+        <!-- https://stackoverflow.com/questions/57026489/mediaprojection-service-type-not-recognized-in-android-q -->
+        <service
+            android:name="com.hbisoft.hbrecorder.ScreenRecordService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            tools:targetApi="q" />
+    </application>
 </manifest>

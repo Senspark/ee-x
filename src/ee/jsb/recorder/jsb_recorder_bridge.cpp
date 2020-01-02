@@ -20,19 +20,19 @@ using Self = Recorder;
 // clang-format off
 constexpr auto constructor              = &core::makeConstructor<Self>;
 constexpr auto finalize                 = &core::makeFinalize<Self>;
-constexpr auto startScreenRecording     = &core::makeMethod<&Self::startScreenRecording>;
-constexpr auto stopScreenRecording      = &core::makeMethod<&Self::stopScreenRecording>;
-constexpr auto cancelScreenRecording    = &core::makeMethod<&Self::cancelScreenRecording>;
-constexpr auto getScreenRecordingUrl    = &core::makeMethod<&Self::getScreenRecordingUrl>;
+constexpr auto startRecording           = &core::makeMethod<&Self::startRecording>;
+constexpr auto stopRecording            = &core::makeMethod<&Self::stopRecording>;
+constexpr auto cancelRecording          = &core::makeMethod<&Self::cancelRecording>;
+constexpr auto getRecordingUrl          = &core::makeMethod<&Self::getRecordingUrl>;
 constexpr auto checkRecordingPermission = &core::makeMethod<&Self::checkRecordingPermission>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)
 SE_BIND_CTOR(constructor, clazz, finalize)
-SE_BIND_FUNC(startScreenRecording)
-SE_BIND_FUNC(stopScreenRecording)
-SE_BIND_FUNC(cancelScreenRecording)
-SE_BIND_FUNC(getScreenRecordingUrl)
+SE_BIND_FUNC(startRecording)
+SE_BIND_FUNC(stopRecording)
+SE_BIND_FUNC(cancelRecording)
+SE_BIND_FUNC(getRecordingUrl)
 SE_BIND_FUNC(checkRecordingPermission)
 } // namespace
 
@@ -46,10 +46,10 @@ bool register_recorder_bridge_manual(se::Object* globalObj) {
         se::Class::create("Recorder", recorderObj, nullptr, _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
 
-    EE_JSB_DEFINE_FUNCTION(cls, startScreenRecording);
-    EE_JSB_DEFINE_FUNCTION(cls, stopScreenRecording);
-    EE_JSB_DEFINE_FUNCTION(cls, cancelScreenRecording);
-    EE_JSB_DEFINE_FUNCTION(cls, getScreenRecordingUrl);
+    EE_JSB_DEFINE_FUNCTION(cls, startRecording);
+    EE_JSB_DEFINE_FUNCTION(cls, stopRecording);
+    EE_JSB_DEFINE_FUNCTION(cls, cancelRecording);
+    EE_JSB_DEFINE_FUNCTION(cls, getRecordingUrl);
     EE_JSB_DEFINE_FUNCTION(cls, checkRecordingPermission);
 
     cls->install();

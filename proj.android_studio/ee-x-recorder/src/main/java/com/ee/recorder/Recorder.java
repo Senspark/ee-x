@@ -11,12 +11,12 @@ import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
-import android.os.Environment;
+import android.util.DisplayMetrics;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import android.util.DisplayMetrics;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -24,45 +24,43 @@ import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Recorder implements PluginProtocol {
-    private static final String k__startScreenRecording = "Recorder_startScreenRecording";
-    private static final String k__stopScreenRecording = "Recorder_stopScreenRecording";
-    private static final String k__cancelScreenRecording = "Recorder_cancelScreenRecording";
-    private static final String k__getScreenRecordingUrl = "Recorder_getScreenRecordingUrl";
+    private static final String k__startRecording = "Recorder_startRecording";
+    private static final String k__stopRecording = "Recorder_stopRecording";
+    private static final String k__cancelRecording = "Recorder_cancelRecording";
+    private static final String k__getRecordingUrl = "Recorder_getRecordingUrl";
     private static final String k__checkRecordingPermission = "Recorder_checkRecordingPermission";
 
     private static final Logger _logger = new Logger(Recorder.class.getName());
 
     private static final int PERMISSION_CODE = 1;
-    private static final int DISPLAY_WIDTH = 480;
-    private static final int DISPLAY_HEIGHT = 640;
 
     private Activity _activity;
-    private MediaRecorder _mediaRecorder;
-    private String _recordedFilePath = "";
-    private int _screenDensity;
-    private MediaProjectionManager _projectionManager;
-    private MediaProjection _mediaProjection;
-    private VirtualDisplay _virtualDisplay;
-    private MediaProjection.Callback _mediaProjectionCallback;
-
     private boolean _hasRecordingPermission;
+    private boolean _isRecording;
+    private String _filePath;
+    private int _screenWidth;
+    private int _screenHeight;
+    private int _screenDensity;
+    private MediaRecorder _mediaRecorder;
+    private MediaProjection _mediaProjection;
+    private MediaProjectionManager _mediaProjectionManager;
+    private VirtualDisplay _virtualDisplay;
 
     public Recorder() {
         Utils.checkMainThread();
         _activity = null;
         _hasRecordingPermission = false;
+        _isRecording = false;
+        _mediaRecorder = new MediaRecorder();
         registerHandlers();
     }
 
@@ -75,21 +73,17 @@ public class Recorder implements PluginProtocol {
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
-        _mediaRecorder = new MediaRecorder();
 
         DisplayMetrics metrics = new DisplayMetrics();
-        _activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        _activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
         _screenDensity = metrics.densityDpi;
+        _screenWidth = metrics.widthPixels / 2;
+        _screenHeight = metrics.heightPixels / 2;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            _projectionManager = (MediaProjectionManager) _activity.getSystemService(Context
-                    .MEDIA_PROJECTION_SERVICE);
-
-            _mediaProjectionCallback = new MediaProjection.Callback() {
-                public void onStop() {
-                    //
-                }
-            };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            _mediaProjectionManager = (MediaProjectionManager) _activity.getSystemService(
+                Context.MEDIA_PROJECTION_SERVICE);
         }
     }
 
@@ -111,9 +105,11 @@ public class Recorder implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        if (_mediaProjection != null) {
-            _mediaProjection.stop();
-            _mediaProjection = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (_mediaProjection != null) {
+                _mediaProjection.stop();
+                _mediaProjection = null;
+            }
         }
         _activity = null;
     }
@@ -136,28 +132,28 @@ public class Recorder implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                startScreenRecording();
+                startRecording();
                 return "";
             }
-        }, k__startScreenRecording);
+        }, k__startRecording);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                stopRecordScreen();
+                stopRecording();
                 return "";
             }
-        }, k__stopScreenRecording);
+        }, k__stopRecording);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                cancelScreenRecording();
+                cancelRecording();
                 return "";
             }
-        }, k__cancelScreenRecording);
+        }, k__cancelRecording);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -171,163 +167,57 @@ public class Recorder implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return getScreenRecordingUrl();
+                return getRecordingUrl();
             }
-        }, k__getScreenRecordingUrl);
+        }, k__getRecordingUrl);
     }
 
     private void deregisterHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.deregisterHandler(k__startScreenRecording);
-        bridge.deregisterHandler(k__stopScreenRecording);
-        bridge.deregisterHandler(k__cancelScreenRecording);
+        bridge.deregisterHandler(k__startRecording);
+        bridge.deregisterHandler(k__stopRecording);
+        bridge.deregisterHandler(k__cancelRecording);
         bridge.deregisterHandler(k__checkRecordingPermission);
-        bridge.deregisterHandler(k__getScreenRecordingUrl);
+        bridge.deregisterHandler(k__getRecordingUrl);
     }
 
     @Override
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        if (!_hasRecordingPermission) {
+        if (requestCode != PERMISSION_CODE || responseCode != Activity.RESULT_OK) {
             return false;
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return false;
         }
-        if (requestCode != PERMISSION_CODE || responseCode != RESULT_OK) {
-            return false;
-        }
-        initRecorder();
-        prepareRecorder();
-
-        _mediaProjection = _projectionManager.getMediaProjection(responseCode, data);
-        _mediaProjection.registerCallback(_mediaProjectionCallback, null);
-        _virtualDisplay = createVirtualDisplay();
-        _mediaRecorder.start();
+        _mediaProjection = _mediaProjectionManager.getMediaProjection(responseCode, data);
+        _startRecording();
         return true;
     }
 
-    private void stopScreenSharing() {
-        if (_virtualDisplay == null) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
-        }
-        _virtualDisplay.release();
-    }
-
-    private void startScreenRecording() {
+    @SuppressWarnings("WeakerAccess")
+    public void startRecording() {
         if (!_hasRecordingPermission) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             return;
         }
         if (_mediaProjection == null) {
-            _activity.startActivityForResult(_projectionManager.createScreenCaptureIntent(),
-                    PERMISSION_CODE);
+            _activity.startActivityForResult(_mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
             return;
         }
-
-        _mediaRecorder.reset();
-        _recordedFilePath = "";
-
-        initRecorder();
-        prepareRecorder();
-
-        _virtualDisplay = createVirtualDisplay();
-        _mediaRecorder.start();
-        _logger.debug("startScreenRecording");
-    }
-
-    private void stopRecordScreen() {
-        if (!_hasRecordingPermission
-                || _recordedFilePath.equals("")) {
-            return;
-        }
-        _mediaRecorder.stop();
-        _mediaRecorder.reset();
-
-        stopScreenSharing();
-        _logger.debug("stopRecordScreen");
-    }
-
-    private void cancelScreenRecording() {
-        if (!_hasRecordingPermission) {
+        if (_isRecording) {
             return;
         }
         _mediaRecorder.reset();
-        stopScreenSharing();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public String getScreenRecordingUrl() {
-        return _recordedFilePath;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean checkRecordingPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-                || _activity == null) {
-            return false;
-        }
-
-        if (_hasRecordingPermission) {
-            return true;
-        }
-
-        if (ContextCompat.checkSelfPermission(_activity, Manifest.permission
-                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat
-                .checkSelfPermission(_activity, Manifest.permission.RECORD_AUDIO) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(_activity, new String[]{Manifest.permission
-                    .WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, PERMISSION_CODE);
-        } else {
-            _hasRecordingPermission = true;
-        }
-        return _hasRecordingPermission;
-    }
-
-    private void prepareRecorder() {
-        try {
-            _logger.debug("prepareRecorder");
-            _mediaRecorder.prepare();
-            _logger.debug("prepareRecorder end");
-        } catch (IllegalStateException | IOException e) {
-            e.printStackTrace();
-            _logger.debug("prepareRecorder error");
-        }
-    }
-
-    private String getFilePath() {
-        final String directory = Environment.getExternalStorageDirectory() + File.separator +
-                "Recordings";
-        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return null;
-        }
-        final File folder = new File(directory);
-        boolean success = true;
-        if (!folder.exists()) {
-            success = folder.mkdir();
-        }
-        String filePath;
-        if (success) {
-            String videoName = ("capture_" + getCurSysDate() + ".mp4");
-            filePath = directory + File.separator + videoName;
-        } else {
-            return null;
-        }
-        return filePath;
-    }
-
-    private String getCurSysDate() {
-        return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
+        _startRecording();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void initRecorder() {
-        _logger.debug("initRecorder");
+    private void _startRecording() {
+        _filePath = generateFilePath();
 
         _mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         _mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
@@ -336,17 +226,93 @@ public class Recorder implements PluginProtocol {
         _mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         _mediaRecorder.setVideoEncodingBitRate(512 * 1000);
         _mediaRecorder.setVideoFrameRate(30);
-        _mediaRecorder.setVideoSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        _mediaRecorder.setVideoSize(_screenWidth, _screenHeight);
         _mediaRecorder.setCaptureRate(30);
+        _mediaRecorder.setOutputFile(_filePath);
+        try {
+            _mediaRecorder.prepare();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
-        _recordedFilePath = getFilePath();
-        _mediaRecorder.setOutputFile(_recordedFilePath);
+        _virtualDisplay = createVirtualDisplay(_mediaProjection,
+            _screenWidth, _screenHeight, _screenDensity, _mediaRecorder);
+
+        _mediaRecorder.start();
+        _isRecording = true;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private VirtualDisplay createVirtualDisplay() {
-        return _mediaProjection.createVirtualDisplay("AppActivity", DISPLAY_WIDTH,
-                DISPLAY_HEIGHT, _screenDensity, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                _mediaRecorder.getSurface(), null, null);
+    @SuppressWarnings("WeakerAccess")
+    public void stopRecording() {
+        if (!_isRecording) {
+            return;
+        }
+        _mediaRecorder.stop();
+        _stopRecording();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("WeakerAccess")
+    public void cancelRecording() {
+        if (!_isRecording) {
+            return;
+        }
+        _stopRecording();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void _stopRecording() {
+        _mediaRecorder.reset();
+        _virtualDisplay.release();
+        _isRecording = false;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public String getRecordingUrl() {
+        return _filePath;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean checkRecordingPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            return false;
+        }
+        if (_hasRecordingPermission) {
+            return true;
+        }
+        String[] permissions = new String[]{
+            // https://stackoverflow.com/questions/35129243/write-external-storage-permission
+            // Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO};
+        boolean needRequestPermissions = false;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(_activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                needRequestPermissions = true;
+                break;
+            }
+        }
+        if (needRequestPermissions) {
+            ActivityCompat.requestPermissions(_activity, permissions, PERMISSION_CODE);
+        } else {
+            _hasRecordingPermission = true;
+        }
+        return _hasRecordingPermission;
+    }
+
+    private String generateFilePath() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
+        Date curDate = new Date(System.currentTimeMillis());
+        String curTime = formatter.format(curDate).replace(" ", "");
+        return String.format("%s/capture_%s.mp4", _activity.getApplicationInfo().dataDir, curTime);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private VirtualDisplay createVirtualDisplay(MediaProjection projection,
+                                                int width, int height, int density, MediaRecorder recorder) {
+        return projection.createVirtualDisplay("Recorder",
+            width, height, density, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            recorder.getSurface(), null, null);
     }
 }

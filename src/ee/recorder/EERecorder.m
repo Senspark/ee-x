@@ -3,13 +3,14 @@
 //
 //
 
+#import "ee/recorder/EERecorder.h"
+
+#import <ReplayKit/ReplayKit.h>
+
 #import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEDictionaryUtils.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/recorder/EERecorder.h"
-
-#import <ReplayKit/ReplayKit.h>
 
 @interface EERecorder () <RPScreenRecorderDelegate,
                           RPPreviewViewControllerDelegate> {
@@ -22,10 +23,10 @@
 @implementation EERecorder
 
 // clang-format off
-NSString* const k__startScreenRecording     = @"Recorder_startScreenRecording";
-NSString* const k__stopScreenRecording      = @"Recorder_stopScreenRecording";
-NSString* const k__cancelScreenRecording    = @"Recorder_cancelScreenRecording";
-NSString* const k__getScreenRecordingUrl    = @"Recorder_getScreenRecordingUrl";
+NSString* const k__startRecording           = @"Recorder_startRecording";
+NSString* const k__stopRecording            = @"Recorder_stopRecording";
+NSString* const k__cancelRecording          = @"Recorder_cancelRecording";
+NSString* const k__getRecordingUrl          = @"Recorder_getRecordingUrl";
 NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermission";
 // clang-format on
 
@@ -49,27 +50,27 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__startScreenRecording
+    [bridge_ registerHandler:k__startRecording
                     callback:^(NSString* message) {
-                        [self startScreenRecording];
+                        [self startRecording];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__stopScreenRecording
+    [bridge_ registerHandler:k__stopRecording
                     callback:^(NSString* message) {
-                        [self stopScreenRecording];
+                        [self stopRecording];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__cancelScreenRecording
+    [bridge_ registerHandler:k__cancelRecording
                     callback:^(NSString* message) {
-                        [self cancelScreenRecording];
+                        [self cancelRecording];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__getScreenRecordingUrl
+    [bridge_ registerHandler:k__getRecordingUrl
                     callback:^(NSString* message) {
-                        return [self getScreenRecordingUrl];
+                        return [self getRecordingUrl];
                     }];
 
     [bridge_ registerHandler:k__checkRecordingPermission
@@ -80,30 +81,30 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
 }
 
 - (void)deregisterHandlers {
-    [bridge_ deregisterHandler:k__startScreenRecording];
-    [bridge_ deregisterHandler:k__stopScreenRecording];
-    [bridge_ deregisterHandler:k__cancelScreenRecording];
-    [bridge_ deregisterHandler:k__getScreenRecordingUrl];
+    [bridge_ deregisterHandler:k__startRecording];
+    [bridge_ deregisterHandler:k__stopRecording];
+    [bridge_ deregisterHandler:k__cancelRecording];
+    [bridge_ deregisterHandler:k__getRecordingUrl];
     [bridge_ deregisterHandler:k__checkRecordingPermission];
 }
 
-- (void)startScreenRecording {
+- (void)startRecording {
     [recorder_
         startRecordingWithMicrophoneEnabled:YES
                                     handler:^(NSError* error) {
                                         if (error != nil) {
-                                            NSLog(@"startScreenRecording: %@",
+                                            NSLog(@"startRecording: %@",
                                                   [error localizedDescription]);
                                         }
                                     }];
 }
 
-- (void)stopScreenRecording {
+- (void)stopRecording {
     [recorder_ stopRecordingWithHandler:^(
                    RPPreviewViewController* previewViewController,
                    NSError* error) {
         if (error != nil) {
-            NSLog(@"stopScreenRecording: %@", [error localizedDescription]);
+            NSLog(@"stopRecording: %@", [error localizedDescription]);
         }
 
         if (previewViewController != nil) {
@@ -119,12 +120,12 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
     }];
 }
 
-- (void)cancelScreenRecording {
+- (void)cancelRecording {
     [recorder_
         stopRecordingWithHandler:^(
             RPPreviewViewController* previewViewController, NSError* error) {
             if (error != nil) {
-                NSLog(@"cancelRecordScreen: %@", [error localizedDescription]);
+                NSLog(@"cancelRecording: %@", [error localizedDescription]);
             }
         }];
 }

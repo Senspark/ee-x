@@ -14,5 +14,7 @@ dependencies {
     api project(':ee-x-core')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
-    implementation 'com.android.installreferrer:installreferrer:1.1'
+
+    // https://stackoverflow.com/questions/59263642/install-referrer-library-v1-1-adds-permissions
+    implementation 'com.android.installreferrer:installreferrer:1.0'
 }

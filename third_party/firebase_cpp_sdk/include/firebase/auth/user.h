@@ -33,6 +33,8 @@ namespace auth {
 class Auth;
 struct AuthData;
 
+class FederatedAuthProvider;
+
 /// @brief Interface implemented by each identity provider.
 class UserInfoInterface {
  public:
@@ -99,7 +101,7 @@ struct SignInResult {
   User* user;
 
   /// Identity-provider specific information for the user, if the provider is
-  /// one of Facebook, Github, Google, or Twitter.
+  /// one of Facebook, GitHub, Google, or Twitter.
   AdditionalUserInfo info;
 
   /// Metadata associated with the Firebase user.
@@ -140,15 +142,6 @@ class User : public UserInfoInterface {
   /// other reason.
   Future<std::string> GetToken(bool force_refresh);
 
-#if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
-  /// A "thread safer" version of GetToken.
-  /// If called by two threads simultaneously, GetToken can return the same
-  /// pending Future twice. This creates problems if both threads try to set
-  /// the OnCompletion callback, unaware that there's another copy.
-  /// GetTokenThreadSafe returns a proxy to the Future if it's still pending,
-  /// allowing each proxy to have their own callback.
-  Future<std::string> GetTokenThreadSafe(bool force_refresh);
-#endif  // defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
 
   /// Get results of the most recent call to @ref GetToken.
   Future<std::string> GetTokenLastResult() const;
@@ -213,6 +206,18 @@ class User : public UserInfoInterface {
   /// Get results of the most recent call to @ref ReauthenticateAndRetrieveData.
   Future<SignInResult> ReauthenticateAndRetrieveDataLastResult() const;
 
+  /// @brief Re-authenticates the user with a federated auth provider.
+  ///
+  /// @param[in] provider Contains information on the auth provider to
+  /// authenticate with.
+  /// @return A Future<SignInResult> with the result of the re-authentication
+  /// request.
+  /// @note: This operation is supported only on iOS and Android platforms. On
+  /// non-mobile platforms this method will return a Future with a preset error
+  /// code: kAuthErrorUnimplemented.
+  Future<SignInResult> ReauthenticateWithProvider(
+      FederatedAuthProvider* provider) const;
+
   /// Initiates email verification for the user.
   Future<void> SendEmailVerification();
 
@@ -249,6 +254,18 @@ class User : public UserInfoInterface {
   /// Get results of the most recent call to
   /// @ref LinkAndRetrieveDataWithCredential.
   Future<SignInResult> LinkAndRetrieveDataWithCredentialLastResult() const;
+
+  /// Links this user with a federated auth provider.
+  ///
+  /// @param[in] provider Contains information on the auth provider to link
+  /// with.
+  /// @return A Future<SignInResult> with the user data result of the link
+  /// request.
+  ///
+  /// @note: This operation is supported only on iOS and Android platforms. On
+  /// non-mobile platforms this method will return a Future with a preset error
+  /// code: kAuthErrorUnimplemented.
+  Future<SignInResult> LinkWithProvider(FederatedAuthProvider* provider) const;
 
   /// Unlinks the current user from the provider specified.
   /// Status will be an error if the user is not linked to the given provider.
@@ -333,6 +350,7 @@ class User : public UserInfoInterface {
   /// @cond FIREBASE_APP_INTERNAL
   friend class IdTokenRefreshThread;
   friend class IdTokenRefreshListener;
+  friend class Auth;
   Future<std::string> GetTokenInternal(const bool force_refresh,
                                        const int future_identifier);
   /// @endcond

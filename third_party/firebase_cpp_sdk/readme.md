@@ -87,73 +87,73 @@ distributed as part of the core Firebase
 |--------------------------|---------------------------------------------------|
 | Firebase AdMob           | libfirebase_admob.a                               |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-ads:17.2.1           |
+|                          | com.google.firebase:firebase-ads:18.3.0           |
 |                          | (Maven package)                                   |
-|                          | com.google.android.gms:play-services-measurement-sdk-api:16.5.0 |
+|                          | com.google.android.gms:play-services-measurement-sdk-api:17.2.1 |
 |                          | (Maven package)                                   |
 | Firebase Analytics       | libfirebase_analytics.a                           |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
 | Firebase Authentication  | libfirebase_auth.a                                |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-auth:17.0.0          |
+|                          | com.google.firebase:firebase-auth:19.2.0          |
 |                          | (Maven package)                                   |
 | Firebase Dynamic Links   | libfirebase_dynamic_links.a                       |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-dynamic-links:17.0.0 |
+|                          | com.google.firebase:firebase-dynamic-links:19.0.0 |
 |                          | (Maven package)                                   |
 | Firebase Functions       | libfirebase_functions                             |
 |                          | libfirebase_auth.a (optional)                     |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-functions:17.0.0     |
+|                          | com.google.firebase:firebase-functions:19.0.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-auth:17.0.0          |
+|                          | com.google.firebase:firebase-auth:19.2.0          |
 |                          | (Maven package)                                   |
 | Firebase Instance ID     | libfirebase_instance_id.a                         |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-iid:18.0.0           |
+|                          | com.google.firebase:firebase-iid:20.0.2           |
 |                          | (Maven package)                                   |
 | Firebase Messaging       | libfirebase_messaging.a                           |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-messaging:18.0.0     |
+|                          | com.google.firebase:firebase-messaging:20.1.0     |
 |                          | (Maven package)                                   |
 |                          | libmessaging_java.jar (Android service)           |
 | Firebase Realtime Database | libfirebase_database.a                          |
 |                          | libfirebase_auth.a                                |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-database:17.0.0      |
+|                          | com.google.firebase:firebase-database:19.2.0      |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-auth:17.0.0          |
+|                          | com.google.firebase:firebase-auth:19.2.0          |
 |                          | (Maven package)                                   |
 | Firebase Remote Config   | libfirebase_remote_config.a                       |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-config:17.0.0        |
+|                          | com.google.firebase:firebase-config:19.0.4        |
 |                          | (Maven package)                                   |
 | Firebase Storage         | libfirebase_storage.a                             |
 |                          | libfirebase_auth.a                                |
 |                          | libfirebase_app.a                                 |
-|                          | com.google.firebase:firebase-analytics:16.5.0     |
+|                          | com.google.firebase:firebase-analytics:17.2.1     |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-storage:17.0.0       |
+|                          | com.google.firebase:firebase-storage:19.1.0       |
 |                          | (Maven package)                                   |
-|                          | com.google.firebase:firebase-auth:17.0.0          |
+|                          | com.google.firebase:firebase-auth:19.2.0          |
 |                          | (Maven package)                                   |
 
 Important: Each version of the Firebase C++ SDK supports specific Firebase
@@ -171,41 +171,40 @@ their preferred build environment.
 |------------------------------|----------------------------------------------|
 | Firebase AdMob               | firebase_admob.framework                     |
 |                              | firebase.framework                           |
-|                              | Firebase/AdMob Cocoapod (6.1.0)              |
-|                              | Firebase/Analytics Cocoapod (6.1.0)          |
+|                              | Firebase/AdMob Cocoapod (6.13.0)             |
 | Firebase Analytics           | firebase_analytics.framework                 |
 |                              | firebase.framework                           |
-|                              | Firebase/Analytics Cocoapod (6.1.0)          |
+|                              | Firebase/Analytics Cocoapod (6.13.0)         |
 | Firebase Authentication      | firebase_auth.framework                      |
 |                              | firebase.framework                           |
-|                              | Firebase/Auth Cocoapod (6.1.0)               |
+|                              | Firebase/Auth Cocoapod (6.13.0)              |
 | Firebase Dynamic Links       | firebase_dynamic_links.framework             |
 |                              | firebase.framework                           |
-|                              | Firebase/DynamicLinks Cocoapod (6.1.0)       |
+|                              | Firebase/DynamicLinks Cocoapod (6.13.0)      |
 | Firebase Functions           | firebase_functions.framework                 |
 |                              | firebase_auth.framework (optional)           |
 |                              | firebase.framework                           |
-|                              | Firebase/Functions Cocoapod (6.1.0)          |
-|                              | Firebase/Auth Cocoapod (6.1.0)               |
+|                              | Firebase/Functions Cocoapod (6.13.0)         |
+|                              | Firebase/Auth Cocoapod (6.13.0)              |
 | Firebase Instance ID         | firebase_instance_id.framework               |
 |                              | firebase.framework                           |
-|                              | FirebaseInstanceID Cocoapod (4.1.0)          |
+|                              | FirebaseInstanceID Cocoapod (4.2.7)          |
 | Firebase Cloud Messaging     | firebase_messaging.framework                 |
 |                              | firebase.framework                           |
-|                              | Firebase/Messaging Cocoapod (6.1.0)          |
+|                              | Firebase/Messaging Cocoapod (6.13.0)         |
 | Firebase Realtime Database   | firebase_database.framework                  |
 |                              | firebase_auth.framework                      |
 |                              | firebase.framework                           |
-|                              | Firebase/Database Cocoapod (6.1.0)           |
-|                              | Firebase/Auth Cocoapod (6.1.0)               |
+|                              | Firebase/Database Cocoapod (6.13.0)          |
+|                              | Firebase/Auth Cocoapod (6.13.0)              |
 | Firebase Remote Config       | firebase_remote_config.framework             |
 |                              | firebase.framework                           |
-|                              | Firebase/RemoteConfig Cocoapod (6.1.0)       |
+|                              | Firebase/RemoteConfig Cocoapod (6.13.0)      |
 | Firebase Storage             | firebase_storage.framework                   |
 |                              | firebase_auth.framework                      |
 |                              | firebase.framework                           |
-|                              | Firebase/Storage Cocoapod (6.1.0)            |
-|                              | Firebase/Auth Cocoapod (6.1.0)               |
+|                              | Firebase/Storage Cocoapod (6.13.0)           |
+|                              | Firebase/Auth Cocoapod (6.13.0)              |
 
 Important: Each version of the Firebase C++ SDK supports a specific version of
 the Firebase iOS SDK. Please ensure that you reference the Cocoapod versions
@@ -221,41 +220,40 @@ required for each SDK feature.
 |------------------------------|--------------------------------------------|
 | Firebase AdMob               | libfirebase_admob.a                        |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/AdMob Cocoapod (6.1.0)            |
-|                              | Firebase/Analytics Cocoapod (6.1.0)        |
+|                              | Firebase/AdMob Cocoapod (6.13.0)           |
 | Firebase Analytics           | libfirebase_analytics.a                    |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/Analytics Cocoapod (6.1.0)        |
+|                              | Firebase/Analytics Cocoapod (6.13.0)       |
 | Firebase Authentication      | libfirebase_auth.a                         |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/Auth Cocoapod (6.1.0)             |
+|                              | Firebase/Auth Cocoapod (6.13.0)            |
 | Firebase Dynamic Links       | libfirebase_dynamic_links.a                |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/DynamicLinks Cocoapod (6.1.0)     |
+|                              | Firebase/DynamicLinks Cocoapod (6.13.0)    |
 | Firebase Functions           | libfirebase_functions.a                    |
 |                              | libfirebase_app.a                          |
 |                              | libfirebase_auth.a (optional)              |
-|                              | Firebase/Functions Cocoapod (6.1.0)        |
-|                              | Firebase/Auth Cocoapod (6.1.0)             |
+|                              | Firebase/Functions Cocoapod (6.13.0)       |
+|                              | Firebase/Auth Cocoapod (6.13.0)            |
 | Firebase Instance ID         | libfirebase_instance_id.a                  |
 |                              | libfirebase_app.a                          |
-|                              | FirebaseInstanceID Cocoapod (4.1.0)        |
+|                              | FirebaseInstanceID Cocoapod (4.2.7)        |
 | Firebase Cloud Messaging     | libfirebase_messaging.a                    |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/CloudMessaging Cocoapod (6.1.0)   |
+|                              | Firebase/CloudMessaging Cocoapod (6.13.0)  |
 | Firebase Realtime Database   | libfirebase_database.a                     |
 |                              | libfirebase_app.a                          |
 |                              | libfirebase_auth.a                         |
-|                              | Firebase/Database Cocoapod (6.1.0)         |
-|                              | Firebase/Auth Cocoapod (6.1.0)             |
+|                              | Firebase/Database Cocoapod (6.13.0)        |
+|                              | Firebase/Auth Cocoapod (6.13.0)            |
 | Firebase Remote Config       | libfirebase_remote_config.a                |
 |                              | libfirebase_app.a                          |
-|                              | Firebase/RemoteConfig Cocoapod (6.1.0)     |
+|                              | Firebase/RemoteConfig Cocoapod (6.13.0)    |
 | Firebase Storage             | libfirebase_storage.a                      |
 |                              | libfirebase_app.a                          |
 |                              | libfirebase_auth.a                         |
-|                              | Firebase/Storage Cocoapod (6.1.0)          |
-|                              | Firebase/Auth Cocoapod (6.1.0)             |
+|                              | Firebase/Storage Cocoapod (6.13.0)         |
+|                              | Firebase/Auth Cocoapod (6.13.0)            |
 
 Important: Each version of the Firebase C++ SDK supports a specific version of
 the Firebase iOS SDK. Please ensure that you reference the Cocoapod versions
@@ -331,10 +329,11 @@ library dependencies. Frameworks are also provided for convenience.
 | Firebase Cloud Messaging (stub) | firebase_messaging.framework             |
 |                                 | firebase.framework                       |
 
-The provided libraries have been tested using Xcode 9.4.1. When building C++
-desktop apps on OS X, you will need to link the `pthread` system library, as
-well as the `CoreFoundation`, `Foundation`, `GSS`, and `Security` OS X system
-frameworks (consult your compiler documentation for more information).
+The provided libraries have been tested using Xcode 10.1. When building C++
+desktop apps on OS X, you will need to link the `gssapi_krb5` and `pthread`
+system libraries, as well as the `CoreFoundation`, `Foundation`, `GSS`, and
+`Security` OS X system frameworks (consult your compiler documentation for more
+information).
 
 #### Windows libraries
 
@@ -523,6 +522,152 @@ code.
 
 Release Notes
 -------------
+
+### 6.9.0
+  - Overview
+    - Updated dependencies, added support for Apple Sign-in to Auth,
+      support for signing-in using a 3rd party web providers and
+      configuration of BigQuery export in Messaging.
+  - Changes
+    - Auth: Added API for invoking Auth SignInWithProvider and User
+      LinkWithProvider and ReauthenticateWithProvider for sign in with
+      third party auth providers.
+    - Auth: Added constant kProviderId strings to auth provider classes.
+    - Auth (iOS): Added support for linking Apple Sign-in credentials.
+    - Messaging (Android): Added the option to enable or disable message
+      delivery metrics export to BigQuery. This functionality is currently only
+      available on Android. Stubs are provided on iOS for cross platform
+      compatibility.
+
+### 6.8.0
+  - Overview
+    - Updated dependencies, added compiler/stdlib check, fixed issue in Admob
+      and fixed resource generation issue with python3.
+  - Changes
+    - App (Linux): Added compiler/stdlib check to ensure both the developer's
+      executable and firebase library are compiled with the same compiler and
+      stdlib.
+    - Admob (Android): Fixed a potentially non thread safe operation in the
+      destruction of BannerViews.
+    - General: Fixed an issue where resource generation from
+      google-services.json would fail if python3 was used to execute the
+      resource generation script.
+
+### 6.7.0
+  - Overview
+    - Updated dependencies, fixed issues in Analytics, Database, Storage, and
+      App.
+  - Changes
+    - App: Added noexcept to move constructors to ensure STL uses move where
+      possible.
+    - Storage (iOS/Android): Fixed an issue where Storage::GetReferenceFromUrl
+      would return an invalid StorageReference.
+    - Database: Fixed an issue causing timestamps to not be populated correctly
+      when using DatabaseReference::UpdateChildren().
+    - Database (Desktop): Fixed an issue preventing listener events from being
+      triggered after DatabaseReference::UpdateChildren() is called.
+    - Database (Desktop): Functions that take const char* parameters will now
+      fail gracefully if passed a null pointer.
+    - Database (Desktop): Fixed an issue causing
+      DatabaseReference::RunTransaction() to fail due to datastale when the
+      location previously stored a vector with more than 10 items or a map
+      with integer keys.
+    - App (Windows): Fixed bug where literal value 0 will call string
+      constructor for Variant class.
+    - Storage (Desktop): Changed url() to return the empty string if the Storage
+      instance was created with the default (null) URL.
+    - App: Added small string optimisation for variant.
+    - App: Reduced number of new/delete for variant if copying same type
+    - App: Ensure map sort order for variant is consistent.
+    - Database (Desktop): Fixed an issue that could result in an incorrect
+      snapshot being passed to listeners under specific circumstances.
+    - Analytics (iOS): Fixed the racy behavior of
+      `analytics::GetAnalyticsInstanceId()` after calling
+      `analytics::ResetAnalyticsData()`.
+    - Database (Desktop): Fixed ordering issue of children when using OrderBy on
+      double or int64 types with large values
+
+### 6.6.1
+  - Overview
+    - Fixed an issue with Future having an undefined reference.
+  - Changes
+    - General: Fixed a potential undefined reference in Future::OnCompletion.
+
+### 6.6.0
+  - Overview
+    - Update dependencies, fixed issues in Auth, Database and RemoteConfig
+  - Changes
+    - Auth (Android): Fixed assert when not using default app instance.
+    - Auth (Desktop): Fixed not loading provider list from cached user data.
+    - Database (Desktop): Fixed a crash that could occur when trying to keep a
+      location in the database synced when you do not have permission.
+    - Database (Desktop): Queries on locations in the database with query rules
+      now function properly, instead of always returning "Permission denied".
+    - Database (Desktop): Fixed the map-to-vector conversion when firing events
+      that have maps containing enitrely integer keys.
+    - Remote Config (Android): Fixed a bug when passing a Variant of type Blob
+      to SetDefaults() on Android.
+
+### 6.5.0
+  - Overview
+    - Updated dependencies, and improved logging for Auth and Database.
+  - Changes
+    - Auth (Linux): Improved error logging if libsecret (required for login
+      persistence) is not installed on Linux.
+    - Database: The database now supports setting the log level independently of
+      the system level logger.
+
+### 6.4.0
+  - Overview
+    - Updated dependencies, fixed issues with Futures and Auth persistence, and
+      fixed a crash in Database.
+  - Changes
+    - General: Fixed an issue causing Futures to clear their data
+      even if a reference was still being held.
+    - Auth (Desktop): Fixed an issue with updated user info not being persisted.
+    - Database (Desktop): Fixed a crash when saving a ServerTimestamp during
+      a transaction.
+
+### 6.3.0
+  - Overview
+    - Bug fixes.
+  - Changes
+    - General (iOS/Android): Fixed a bug that allows custom firebase::App
+      instances to be created after the app has been restarted.
+    - Auth (desktop): Changed destruction behavior. Instead of waiting for all
+      async operations to finish, now Auth will cancel all async operations and
+      quit. For callbacks that are already running, this will protect against
+      cases where auth instances might not exist anymore.
+    - Auth (iOS): Fixed an exception in firebase::auth::VerifyPhoneNumber.
+    - Auth (iOS): Stopped Auth from hanging on destruction if any local futures
+      remain in scope.
+    - Database (desktop): Fixed an issue that could cause a crash when updating
+      the descendant of a location with a listener attached.
+
+### 6.2.2
+  - Overview
+    - Bug fixes.
+  - Changes
+    - Auth (desktop): After loading a persisted user data, ensure token is
+      not expired.
+    - Auth (desktop): Ensure Database, Storage and Functions do not use an
+      expired token after it's loaded from persistent storage.
+    - Database (desktop): Fixed DatabaseReference::RunTransaction() sending
+      invalid data to the server which causes error message "Error on
+      incoming message" and freeze.
+
+### 6.2.0
+  - Overview
+    - Added support for custom domains to Dynamic Links, and fixed issues in
+      Database and Instance ID.
+  - Changes
+    - General: Added a way to configure SDK-wide log verbosity.
+    - Instance ID (Android): Fixed a crash when destroying InstanceID objects.
+    - Dynamic Links: Added support for custom domains.
+    - Database: Added a way to configure log verbosity of Realtime Database
+      instances.
+
+
 ### 6.1.0
   - Overview
     - Added Auth credential persistence on Desktop, fixed issues in Auth and

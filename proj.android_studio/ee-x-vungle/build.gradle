@@ -18,5 +18,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
+
+    // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
     implementation 'com.vungle:publisher-sdk-android:6.4.11'
 }

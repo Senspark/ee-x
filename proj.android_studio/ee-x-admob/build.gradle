@@ -1,9 +1,5 @@
 apply plugin: 'com.android.library'
 
-repositories {
-    maven { url "http://dl.bintray.com/ironsource-mobile/android-adapters" }
-}
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -19,9 +15,15 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
 
+    // https://bintray.com/google/mobile-ads-adapters-android
     if (rootProject.ext.useAdmobMediation) {
+        // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
         implementation 'com.google.ads.mediation:facebook:5.6.0.0'
-        implementation 'com.google.ads.mediation:ironsource:6.10.0.0'
+
+        // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
+        implementation 'com.google.ads.mediation:ironsource:6.11.0.0'
+
+        // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
         if (rootProject.ext.useIronsourceMediation) {
             implementation('com.google.ads.mediation:unity:3.3.0.0', {
                 exclude group: 'com.unity3d.ads'

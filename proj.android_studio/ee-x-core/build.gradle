@@ -21,6 +21,7 @@ dependencies {
     // implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
 
     // Fallback to 2.9.x
+    // https://github.com/FasterXML/jackson/wiki/Jackson-Releases
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.10'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.10'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.10'

@@ -20,7 +20,9 @@ dependencies {
 
     if (rootProject.ext.useIronsourceMediation) {
         implementation 'com.ironsource.adapters:facebookadapter:4.3.8@jar'
-        implementation('com.ironsource.adapters:unityadsadapter:4.1.6@jar')
+
+        // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
+        implementation 'com.ironsource.adapters:unityadsadapter:4.1.7@jar'
         implementation 'com.ironsource.adapters:admobadapter:4.3.6@jar'
     }
 }

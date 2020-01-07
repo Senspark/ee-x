@@ -12,6 +12,8 @@ android {
 
 dependencies {
     api project(':ee-x-core')
+
+    // https://github.com/facebook/facebook-android-sdk/blob/master/CHANGELOG.md
     api 'com.facebook.android:facebook-share:5.8.0'
     api 'com.facebook.android:facebook-login:5.8.0'
 }

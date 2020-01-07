@@ -7,10 +7,10 @@
 
 @interface EERecorder : NSObject <EEIPlugin>
 
-- (void)startScreenRecording;
-- (void)stopScreenRecording;
-- (void)cancelScreenRecording;
-- (NSString* _Nonnull)getScreenRecordingUrl;
+- (void)startRecording;
+- (void)stopRecording;
+- (void)cancelRecording;
+- (NSString* _Nonnull)getRecordingUrl;
 - (BOOL)checkRecordingPermission;
 
 @end

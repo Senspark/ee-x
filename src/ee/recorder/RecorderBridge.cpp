@@ -11,10 +11,10 @@ namespace ee {
 namespace recorder {
 namespace {
 // clang-format off
-constexpr auto k__startScreenRecording     = "Recorder_startScreenRecording";
-constexpr auto k__stopScreenRecording      = "Recorder_stopScreenRecording";
-constexpr auto k__cancelScreenRecording    = "Recorder_cancelScreenRecording";
-constexpr auto k__getScreenRecordingUrl    = "Recorder_getScreenRecordingUrl";
+constexpr auto k__startRecording           = "Recorder_startRecording";
+constexpr auto k__stopRecording            = "Recorder_stopRecording";
+constexpr auto k__cancelRecording          = "Recorder_cancelRecording";
+constexpr auto k__getRecordingUrl          = "Recorder_getRecordingUrl";
 constexpr auto k__checkRecordingPermission = "Recorder_checkRecordingPermission";
 // clang-format on
 } // namespace
@@ -30,20 +30,20 @@ Self::~Recorder() {
     //
 }
 
-void Self::startScreenRecording() {
-    bridge_.call(k__startScreenRecording);
+void Self::startRecording() {
+    bridge_.call(k__startRecording);
 }
 
-void Self::stopScreenRecording() {
-    bridge_.call(k__stopScreenRecording);
+void Self::stopRecording() {
+    bridge_.call(k__stopRecording);
 }
 
-void Self::cancelScreenRecording() {
-    bridge_.call(k__cancelScreenRecording);
+void Self::cancelRecording() {
+    bridge_.call(k__cancelRecording);
 }
 
-std::string Self::getScreenRecordingUrl() const {
-    return bridge_.call(k__getScreenRecordingUrl);
+std::string Self::getRecordingUrl() const {
+    return bridge_.call(k__getRecordingUrl);
 }
 
 bool Self::checkRecordingPermission() const {

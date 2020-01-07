@@ -26,9 +26,7 @@
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
 
-#if !defined(DOXYGEN) && !defined(SWIG)
 FIREBASE_APP_REGISTER_CALLBACKS_REFERENCE(analytics)
-#endif  // !defined(DOXYGEN) && !defined(SWIG)
 
 /// @brief Namespace that encompasses all Firebase APIs.
 namespace firebase {

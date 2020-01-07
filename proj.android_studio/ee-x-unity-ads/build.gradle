@@ -20,9 +20,9 @@ dependencies {
     api project(':ee-x-core')
 
     if (rootProject.ext.useIronsourceMediation) {
-        // Ironsource adapter include unity sdk 3.2.0
-        implementation('com.ironsource.adapters:unityadsadapter:4.1.6@jar')
+        // Included in ironsource mediation library.
     } else {
+        // https://github.com/Unity-Technologies/unity-ads-android/releases
         implementation 'com.unity3d.ads:unity-ads:3.4.0'
     }
 }

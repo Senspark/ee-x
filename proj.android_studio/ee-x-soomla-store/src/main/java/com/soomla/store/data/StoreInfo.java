@@ -76,20 +76,22 @@ public class StoreInfo {
      * in {@link IStoreAssets#getVersion()}.
      */
     public static void setStoreAssets(IStoreAssets storeAssets) {
-        try {
-            validateStoreAssets(storeAssets);
-            mCurrentAssetsVersion = storeAssets.getVersion();
+        synchronized (StoreInfo.class) {
+            try {
+                validateStoreAssets(storeAssets);
+                mCurrentAssetsVersion = storeAssets.getVersion();
 
-            //checkAndResetMetadata();
+                //checkAndResetMetadata();
 
-            // we always initialize from the database, unless this is the first time the game is
-            // loaded - in that case we initialize with setStoreAssets.
-            // BUT we don't need to load from DB if metadata was reset.
-            if (!loadFromDB()) {
-                initializeWithStoreAssets(storeAssets);
+                // we always initialize from the database, unless this is the first time the game is
+                // loaded - in that case we initialize with setStoreAssets.
+                // BUT we don't need to load from DB if metadata was reset.
+                if (!loadFromDB()) {
+                    initializeWithStoreAssets(storeAssets);
+                }
+            } catch (IllegalArgumentException invalidStoreAssetsException) {
+                SoomlaUtils.LogError(TAG, invalidStoreAssetsException.getMessage());
             }
-        } catch (IllegalArgumentException invalidStoreAssetsException) {
-            SoomlaUtils.LogError(TAG, invalidStoreAssetsException.getMessage());
         }
     }
 
@@ -135,41 +137,42 @@ public class StoreInfo {
      * @return success
      */
     public static boolean loadFromDB() {
-        checkAndResetMetadata();
+        synchronized (StoreInfo.class) {
+            checkAndResetMetadata();
 
-        String key = keyMetaStoreInfo();
-        String val = KeyValueStorage.getValue(key);
+            String key = keyMetaStoreInfo();
+            String val = KeyValueStorage.getValue(key);
 
-        if (val == null || TextUtils.isEmpty(val)) {
-            SoomlaUtils.LogDebug(TAG, "store json is not in DB yet.");
+            if (val == null || TextUtils.isEmpty(val)) {
+                SoomlaUtils.LogDebug(TAG, "store json is not in DB yet.");
+                return false;
+            }
+
+            // This is done in case old versions of the DB exist (especially from
+            // Cocos2dx) which used jsonType instead of className
+            if (val.contains("jsonType")) {
+                SoomlaUtils.LogDebug(TAG, "the StoreInfo JSON is from an older version. " +
+                        "we need to delete and let it be recreated.");
+                KeyValueStorage.deleteKeyValue(key);
+                return false;
+            }
+
+            SoomlaUtils.LogDebug(TAG, "the metadata-economy json (from DB) is " + val);
+
+            try {
+                fromJSONObject(new JSONObject(val));
+
+                // everything went well... StoreInfo is initialized from the local DB.
+                // it's ok to return now.
+
+                return true;
+            } catch (JSONException e) {
+                SoomlaUtils.LogDebug(TAG, "Can't parse metadata json. Going to return false and make "
+                        + "StoreInfo load from static data: " + val);
+            }
+
             return false;
         }
-
-        // This is done in case old versions of the DB exist (especially from
-        // Cocos2dx) which used jsonType instead of className
-        if (val.contains("jsonType")) {
-            SoomlaUtils.LogDebug(TAG, "the StoreInfo JSON is from an older version. " +
-                    "we need to delete and let it be recreated.");
-            KeyValueStorage.deleteKeyValue(key);
-            return false;
-        }
-
-        SoomlaUtils.LogDebug(TAG, "the metadata-economy json (from DB) is " + val);
-
-        try {
-            fromJSONObject(new JSONObject(val));
-
-            // everything went well... StoreInfo is initialized from the local DB.
-            // it's ok to return now.
-
-            return true;
-        } catch (JSONException e) {
-            SoomlaUtils.LogDebug(TAG, "Can't parse metadata json. Going to return false and make "
-                    + "StoreInfo load from static data: " + val);
-        }
-
-        return false;
-
     }
 
     /**
@@ -180,7 +183,9 @@ public class StoreInfo {
      * <code>goodItemId</code>, otherwise false.
      */
     public static boolean hasUpgrades(String goodItemId) {
-        return mGoodsUpgrades.containsKey(goodItemId);
+        synchronized (mGoodsUpgrades) {
+            return mGoodsUpgrades.containsKey(goodItemId);
+        }
     }
 
     /**
@@ -205,12 +210,14 @@ public class StoreInfo {
      *                                      <code>itemId</code> was found.
      */
     public static VirtualItem getVirtualItem(String itemId) throws VirtualItemNotFoundException {
-        VirtualItem item = mVirtualItems.get(itemId);
-        if (item == null) {
-            throw new VirtualItemNotFoundException("itemId", itemId);
-        }
+        synchronized (mVirtualItems) {
+            VirtualItem item = mVirtualItems.get(itemId);
+            if (item == null) {
+                throw new VirtualItemNotFoundException("itemId", itemId);
+            }
 
-        return item;
+            return item;
+        }
     }
 
     /**
@@ -225,12 +232,14 @@ public class StoreInfo {
      */
     public static PurchasableVirtualItem getPurchasableItem(String productId)
             throws VirtualItemNotFoundException {
-        PurchasableVirtualItem item = mPurchasableItems.get(productId);
-        if (item == null) {
-            throw new VirtualItemNotFoundException("productId", productId);
-        }
+        synchronized (mPurchasableItems) {
+            PurchasableVirtualItem item = mPurchasableItems.get(productId);
+            if (item == null) {
+                throw new VirtualItemNotFoundException("productId", productId);
+            }
 
-        return item;
+            return item;
+        }
     }
 
     /**
@@ -243,12 +252,14 @@ public class StoreInfo {
      */
     public static VirtualCategory getCategory(String goodItemId)
             throws VirtualItemNotFoundException {
-        VirtualCategory item = mGoodsCategories.get(goodItemId);
-        if (item == null) {
-            throw new VirtualItemNotFoundException("goodItemId", goodItemId);
-        }
+        synchronized (mGoodsCategories) {
+            VirtualCategory item = mGoodsCategories.get(goodItemId);
+            if (item == null) {
+                throw new VirtualItemNotFoundException("goodItemId", goodItemId);
+            }
 
-        return item;
+            return item;
+        }
     }
 
     /**
@@ -260,15 +271,17 @@ public class StoreInfo {
      * null if it has no upgrades.
      */
     public static UpgradeVG getGoodFirstUpgrade(String goodItemId) {
-        List<UpgradeVG> upgrades = mGoodsUpgrades.get(goodItemId);
-        if (upgrades != null) {
-            for (UpgradeVG upgradeVG : upgrades) {
-                if (TextUtils.isEmpty(upgradeVG.getPrevItemId())) {
-                    return upgradeVG;
+        synchronized (mGoodsUpgrades) {
+            List<UpgradeVG> upgrades = mGoodsUpgrades.get(goodItemId);
+            if (upgrades != null) {
+                for (UpgradeVG upgradeVG : upgrades) {
+                    if (TextUtils.isEmpty(upgradeVG.getPrevItemId())) {
+                        return upgradeVG;
+                    }
                 }
             }
+            return null;
         }
-        return null;
     }
 
     /**
@@ -280,15 +293,17 @@ public class StoreInfo {
      * if there are no upgrades.
      */
     public static UpgradeVG getGoodLastUpgrade(String goodItemId) {
-        List<UpgradeVG> upgrades = mGoodsUpgrades.get(goodItemId);
-        if (upgrades != null) {
-            for (UpgradeVG upgradeVG : upgrades) {
-                if (TextUtils.isEmpty(upgradeVG.getNextItemId())) {
-                    return upgradeVG;
+        synchronized (mGoodsUpgrades) {
+            List<UpgradeVG> upgrades = mGoodsUpgrades.get(goodItemId);
+            if (upgrades != null) {
+                for (UpgradeVG upgradeVG : upgrades) {
+                    if (TextUtils.isEmpty(upgradeVG.getNextItemId())) {
+                        return upgradeVG;
+                    }
                 }
             }
+            return null;
         }
-        return null;
     }
 
     /**
@@ -300,30 +315,32 @@ public class StoreInfo {
      * @return list of all UpgradeVGs for the virtual good with the given <code>goodItemId</code>
      */
     public static List<UpgradeVG> getGoodUpgrades(String goodItemId) {
-        if (mGoodsUpgrades == null) {
-            return new LinkedList<UpgradeVG>();
+        synchronized (mGoodsUpgrades) {
+            if (mGoodsUpgrades == null) {
+                return new LinkedList<>();
+            }
+            return mGoodsUpgrades.get(goodItemId);
         }
-        return mGoodsUpgrades.get(goodItemId);
     }
 
-    public static List<VirtualCurrency> getCurrencies() {
+    public static synchronized List<VirtualCurrency> getCurrencies() {
         return mCurrencies;
     }
 
-    public static List<VirtualCurrencyPack> getCurrencyPacks() {
+    public static synchronized List<VirtualCurrencyPack> getCurrencyPacks() {
         return mCurrencyPacks;
     }
 
-    public static List<VirtualGood> getGoods() {
+    public static synchronized List<VirtualGood> getGoods() {
         return mGoods;
     }
 
-    public static List<VirtualCategory> getCategories() {
+    public static synchronized List<VirtualCategory> getCategories() {
         return mCategories;
     }
 
-    public static List<String> getAllProductIds() {
-        return new ArrayList<String>(mPurchasableItems.keySet());
+    public static synchronized List<String> getAllProductIds() {
+        return new ArrayList<>(mPurchasableItems.keySet());
     }
 
 
@@ -524,67 +541,68 @@ public class StoreInfo {
      *
      * @return a <code>JSONObject</code> representation of <code>StoreInfo</code>.
      */
-    public static synchronized JSONObject toJSONObject() {
-
-        JSONArray currencies = new JSONArray();
-        for (VirtualCurrency c : mCurrencies) {
-            currencies.put(c.toJSONObject());
-        }
-
-        JSONArray currencyPacks = new JSONArray();
-        for (VirtualCurrencyPack pack : mCurrencyPacks) {
-            currencyPacks.put(pack.toJSONObject());
-        }
-
-        JSONObject goods = new JSONObject();
-        JSONArray suGoods = new JSONArray();
-        JSONArray ltGoods = new JSONArray();
-        JSONArray eqGoods = new JSONArray();
-        JSONArray paGoods = new JSONArray();
-        JSONArray upGoods = new JSONArray();
-        for (VirtualGood good : mGoods) {
-            if (good instanceof SingleUseVG) {
-                suGoods.put(good.toJSONObject());
-            } else if (good instanceof UpgradeVG) {
-                upGoods.put(good.toJSONObject());
-            } else if (good instanceof EquippableVG) {
-                eqGoods.put(good.toJSONObject());
-            } else if (good instanceof SingleUsePackVG) {
-                paGoods.put(good.toJSONObject());
-            } else if (good instanceof LifetimeVG) {
-                ltGoods.put(good.toJSONObject());
+    public static JSONObject toJSONObject() {
+        synchronized (StoreInfo.class) {
+            JSONArray currencies = new JSONArray();
+            for (VirtualCurrency c : mCurrencies) {
+                currencies.put(c.toJSONObject());
             }
+
+            JSONArray currencyPacks = new JSONArray();
+            for (VirtualCurrencyPack pack : mCurrencyPacks) {
+                currencyPacks.put(pack.toJSONObject());
+            }
+
+            JSONObject goods = new JSONObject();
+            JSONArray suGoods = new JSONArray();
+            JSONArray ltGoods = new JSONArray();
+            JSONArray eqGoods = new JSONArray();
+            JSONArray paGoods = new JSONArray();
+            JSONArray upGoods = new JSONArray();
+            for (VirtualGood good : mGoods) {
+                if (good instanceof SingleUseVG) {
+                    suGoods.put(good.toJSONObject());
+                } else if (good instanceof UpgradeVG) {
+                    upGoods.put(good.toJSONObject());
+                } else if (good instanceof EquippableVG) {
+                    eqGoods.put(good.toJSONObject());
+                } else if (good instanceof SingleUsePackVG) {
+                    paGoods.put(good.toJSONObject());
+                } else if (good instanceof LifetimeVG) {
+                    ltGoods.put(good.toJSONObject());
+                }
+            }
+
+
+            JSONArray categories = new JSONArray();
+            for (VirtualCategory cat : mCategories) {
+                categories.put(cat.toJSONObject());
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                goods.put(StoreJSONConsts.STORE_GOODS_SU, suGoods);
+                goods.put(StoreJSONConsts.STORE_GOODS_LT, ltGoods);
+                goods.put(StoreJSONConsts.STORE_GOODS_EQ, eqGoods);
+                goods.put(StoreJSONConsts.STORE_GOODS_PA, paGoods);
+                goods.put(StoreJSONConsts.STORE_GOODS_UP, upGoods);
+
+                jsonObject.put(StoreJSONConsts.STORE_CATEGORIES, categories);
+                jsonObject.put(StoreJSONConsts.STORE_CURRENCIES, currencies);
+                jsonObject.put(StoreJSONConsts.STORE_GOODS, goods);
+                jsonObject.put(StoreJSONConsts.STORE_CURRENCYPACKS, currencyPacks);
+            } catch (JSONException e) {
+                SoomlaUtils.LogError(TAG, "An error occurred while generating JSON object.");
+            }
+
+            return jsonObject;
         }
-
-
-        JSONArray categories = new JSONArray();
-        for (VirtualCategory cat : mCategories) {
-            categories.put(cat.toJSONObject());
-        }
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            goods.put(StoreJSONConsts.STORE_GOODS_SU, suGoods);
-            goods.put(StoreJSONConsts.STORE_GOODS_LT, ltGoods);
-            goods.put(StoreJSONConsts.STORE_GOODS_EQ, eqGoods);
-            goods.put(StoreJSONConsts.STORE_GOODS_PA, paGoods);
-            goods.put(StoreJSONConsts.STORE_GOODS_UP, upGoods);
-
-            jsonObject.put(StoreJSONConsts.STORE_CATEGORIES, categories);
-            jsonObject.put(StoreJSONConsts.STORE_CURRENCIES, currencies);
-            jsonObject.put(StoreJSONConsts.STORE_GOODS, goods);
-            jsonObject.put(StoreJSONConsts.STORE_CURRENCYPACKS, currencyPacks);
-        } catch (JSONException e) {
-            SoomlaUtils.LogError(TAG, "An error occurred while generating JSON object.");
-        }
-
-        return jsonObject;
     }
 
     /**
      * Saves the store's metadata in the database as JSON.
      */
-    public static void save() {
+    public static synchronized void save() {
         String store_json = toJSONObject().toString();
         SoomlaUtils.LogDebug(TAG, "saving StoreInfo to DB. json is: " + store_json);
         String key = keyMetaStoreInfo();
@@ -596,7 +614,7 @@ public class StoreInfo {
      *
      * @param virtualItem the virtual item to replace.
      */
-    public static void save(VirtualItem virtualItem) { save(virtualItem, true); }
+    public static synchronized void save(VirtualItem virtualItem) { save(virtualItem, true); }
 
     /**
      * Replaces the given virtual item, and then saves the store's metadata
@@ -605,7 +623,7 @@ public class StoreInfo {
      * @param virtualItem the virtual item to replace.
      * @param saveToDB should the store's metadata be saved.
      */
-    public static void save(VirtualItem virtualItem, boolean saveToDB) {
+    public static synchronized void save(VirtualItem virtualItem, boolean saveToDB) {
         replaceVirtualItem(virtualItem);
 
         if (saveToDB) {
@@ -618,7 +636,7 @@ public class StoreInfo {
      *
      * @param virtualItems the virtual items to replace.
      */
-    public static void save(List<VirtualItem> virtualItems) {
+    public static synchronized void save(List<VirtualItem> virtualItems) {
         save(virtualItems, true);
     }
 
@@ -629,7 +647,7 @@ public class StoreInfo {
      * @param virtualItems the virtual items to replace.
      * @param saveToDB should the store's metadata be saved.
      */
-    public static void save(List<VirtualItem> virtualItems, boolean saveToDB) {
+    public static synchronized void save(List<VirtualItem> virtualItems, boolean saveToDB) {
         if ((virtualItems == null) || virtualItems.isEmpty()) {
             return;
         }
@@ -652,61 +670,63 @@ public class StoreInfo {
      *
      * @param virtualItem the virtual item that replaces the old one if exists.
      */
-    public synchronized static void replaceVirtualItem(VirtualItem virtualItem) {
-        mVirtualItems.put(virtualItem.getItemId(), virtualItem);
+    public static void replaceVirtualItem(VirtualItem virtualItem) {
+        synchronized (StoreInfo.class) {
+            mVirtualItems.put(virtualItem.getItemId(), virtualItem);
 
-        if (virtualItem instanceof VirtualCurrency) {
-            for (int i = 0; i < mCurrencies.size(); i++) {
-                if (mCurrencies.get(i).getItemId().equals(virtualItem.getItemId())) {
-                    mCurrencies.remove(i);
-                    break;
+            if (virtualItem instanceof VirtualCurrency) {
+                for (int i = 0; i < mCurrencies.size(); i++) {
+                    if (mCurrencies.get(i).getItemId().equals(virtualItem.getItemId())) {
+                        mCurrencies.remove(i);
+                        break;
+                    }
                 }
-            }
-            mCurrencies.add((VirtualCurrency) virtualItem);
-        }
-
-        if (virtualItem instanceof VirtualCurrencyPack) {
-            VirtualCurrencyPack vcp = (VirtualCurrencyPack) virtualItem;
-            PurchaseType purchaseType = vcp.getPurchaseType();
-            if (purchaseType instanceof PurchaseWithMarket) {
-                mPurchasableItems.put(((PurchaseWithMarket) purchaseType).getMarketItem()
-                        .getProductId(), vcp);
+                mCurrencies.add((VirtualCurrency) virtualItem);
             }
 
-            for (int i = 0; i < mCurrencyPacks.size(); i++) {
-                if (mCurrencyPacks.get(i).getItemId().equals(vcp.getItemId())) {
-                    mCurrencyPacks.remove(i);
-                    break;
+            if (virtualItem instanceof VirtualCurrencyPack) {
+                VirtualCurrencyPack vcp = (VirtualCurrencyPack) virtualItem;
+                PurchaseType purchaseType = vcp.getPurchaseType();
+                if (purchaseType instanceof PurchaseWithMarket) {
+                    mPurchasableItems.put(((PurchaseWithMarket) purchaseType).getMarketItem()
+                            .getProductId(), vcp);
                 }
-            }
-            mCurrencyPacks.add(vcp);
-        }
 
-        if (virtualItem instanceof VirtualGood) {
-            VirtualGood vg = (VirtualGood) virtualItem;
-
-            if (vg instanceof UpgradeVG) {
-                List<UpgradeVG> upgrades = mGoodsUpgrades.get(((UpgradeVG) vg).getGoodItemId());
-                if (upgrades == null) {
-                    upgrades = new ArrayList<UpgradeVG>();
-                    mGoodsUpgrades.put(((UpgradeVG) vg).getGoodItemId(), upgrades);
+                for (int i = 0; i < mCurrencyPacks.size(); i++) {
+                    if (mCurrencyPacks.get(i).getItemId().equals(vcp.getItemId())) {
+                        mCurrencyPacks.remove(i);
+                        break;
+                    }
                 }
-                upgrades.add((UpgradeVG) vg);
+                mCurrencyPacks.add(vcp);
             }
 
-            PurchaseType purchaseType = vg.getPurchaseType();
-            if (purchaseType instanceof PurchaseWithMarket) {
-                mPurchasableItems.put(((PurchaseWithMarket) purchaseType).getMarketItem()
-                        .getProductId(), vg);
-            }
+            if (virtualItem instanceof VirtualGood) {
+                VirtualGood vg = (VirtualGood) virtualItem;
 
-            for (int i = 0; i < mGoods.size(); i++) {
-                if (mGoods.get(i).getItemId().equals(vg.getItemId())) {
-                    mGoods.remove(i);
-                    break;
+                if (vg instanceof UpgradeVG) {
+                    List<UpgradeVG> upgrades = mGoodsUpgrades.get(((UpgradeVG) vg).getGoodItemId());
+                    if (upgrades == null) {
+                        upgrades = new ArrayList<UpgradeVG>();
+                        mGoodsUpgrades.put(((UpgradeVG) vg).getGoodItemId(), upgrades);
+                    }
+                    upgrades.add((UpgradeVG) vg);
                 }
+
+                PurchaseType purchaseType = vg.getPurchaseType();
+                if (purchaseType instanceof PurchaseWithMarket) {
+                    mPurchasableItems.put(((PurchaseWithMarket) purchaseType).getMarketItem()
+                            .getProductId(), vg);
+                }
+
+                for (int i = 0; i < mGoods.size(); i++) {
+                    if (mGoods.get(i).getItemId().equals(vg.getItemId())) {
+                        mGoods.remove(i);
+                        break;
+                    }
+                }
+                mGoods.add(vg);
             }
-            mGoods.add(vg);
         }
     }
 
@@ -813,7 +833,7 @@ public class StoreInfo {
      * We just need to set the balances of the lifetime items instead of the non-consumables.
      */
     private static void nonConsBalancesToLTVGs() {
-        for(VirtualGood good : mGoods) {
+        for (VirtualGood good : mGoods) {
             if ((good instanceof LifetimeVG) && good.getPurchaseType() instanceof PurchaseWithMarket) {
                 String keyNonConsExist = DB_NONCONSUMABLE_KEY_PREFIX + good.getItemId() + ".exists";
                 if (KeyValueStorage.getValue(keyNonConsExist) != null) {

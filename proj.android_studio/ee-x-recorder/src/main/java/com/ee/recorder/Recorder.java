@@ -45,6 +45,7 @@ public class Recorder implements PluginProtocol {
 
     private Activity _activity;
     private boolean _hasRecordingPermission;
+    private boolean _isRecordAudioEnabled; // Record audio from mic.
     private boolean _isRecording;
     private String _filePath;
     private int _screenWidth;
@@ -197,7 +198,7 @@ public class Recorder implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void startRecording() {
-        if (!_hasRecordingPermission) {
+        if (!hasRecordingPermission()) {
             return;
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
@@ -219,16 +220,24 @@ public class Recorder implements PluginProtocol {
     private void _startRecording() {
         _filePath = generateFilePath();
 
-        _mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        // https://developer.android.com/reference/android/media/MediaRecorder
+        if (_isRecordAudioEnabled) {
+            _mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        }
         _mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+
         _mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+        if (_isRecordAudioEnabled) {
+            _mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        }
         _mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        _mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         _mediaRecorder.setVideoEncodingBitRate(512 * 1000);
         _mediaRecorder.setVideoFrameRate(30);
         _mediaRecorder.setVideoSize(_screenWidth, _screenHeight);
         _mediaRecorder.setCaptureRate(30);
         _mediaRecorder.setOutputFile(_filePath);
+
         try {
             _mediaRecorder.prepare();
         } catch (IOException ex) {
@@ -242,20 +251,25 @@ public class Recorder implements PluginProtocol {
         _isRecording = true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressWarnings("WeakerAccess")
     public void stopRecording() {
         if (!_isRecording) {
             return;
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            return;
+        }
         _mediaRecorder.stop();
-        _stopRecording();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressWarnings("WeakerAccess")
     public void cancelRecording() {
         if (!_isRecording) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             return;
         }
         _stopRecording();
@@ -273,11 +287,22 @@ public class Recorder implements PluginProtocol {
         return _filePath;
     }
 
+    private boolean hasRecordingPermission() {
+        if (!_isRecordAudioEnabled) {
+            return true;
+        }
+        return _hasRecordingPermission;
+    }
+
     @SuppressWarnings("WeakerAccess")
     public boolean checkRecordingPermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
             Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             return false;
+        }
+        if (!_isRecordAudioEnabled) {
+            // No permission required.
+            return true;
         }
         if (_hasRecordingPermission) {
             return true;

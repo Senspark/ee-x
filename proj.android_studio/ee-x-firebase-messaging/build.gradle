@@ -12,5 +12,5 @@ android {
 
 dependencies {
     api project(':ee-x-firebase-core')
-    api "com.google.firebase:firebase-messaging:20.0.0"
+    api "com.google.firebase:firebase-messaging:20.1.0"
 }

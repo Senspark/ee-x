@@ -7,11 +7,11 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'io.fabric.tools:gradle:1.25.1'
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'io.fabric.tools:gradle:1.31.1'
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 }
 
@@ -31,10 +31,9 @@ allprojects {
 }
 
 ext {
-    compileSdkVersion = 27
-    buildToolsVersion = '27.0.3'
-    targetSdkVersion = 27
-    supportLibraryVersion = '27.1.1'
-    firebaseVersion = '15.0.2'
-    playservicesLibraryVersion = '15.0.1'
+    compileSdkVersion = 29
+    buildToolsVersion = '29.0.2'
+    targetSdkVersion = 29
+    useAdmobMediation = true
+    useIronsourceMediation = true
 }

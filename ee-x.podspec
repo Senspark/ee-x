@@ -4,7 +4,7 @@ Pod::Spec.new do |spec|
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
 
-  spec.homepage       = 'https://github.com/enrevol/ee-x'
+  spec.homepage       = 'https://github.com/Senspark/ee-x'
 
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   spec.osx.deployment_target = '10.8'
 
   spec.source = {
-    :git => 'https://github.com/enrevol/ee-x.git',
+    :git => 'https://github.com/Senspark/ee-x.git',
     :branch => 'master'
   }
 

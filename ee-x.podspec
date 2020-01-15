@@ -39,8 +39,7 @@ Pod::Spec.new do |spec|
 
     s.public_header_files =
       'src/ee/Macro.hpp',
-      'src/ee/Core.hpp',
-      'src/ee/CoreFwd.hpp',
+      'src/ee/Core{,Fwd}.hpp',
       'src/ee/core/*.{h,hpp}'
     
     s.exclude_files =
@@ -85,7 +84,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook' do |s|
     s.source_files =
-      'src/ee/Facebook*',
+      'src/ee/Facebook{,Fwd}.*',
       'src/ee/facebook/**/*'
 
     s.private_header_files =
@@ -100,7 +99,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'notification' do |s|
     s.source_files =
       'src/ee/Notification*',
-      'src/ee/notification/*.'
+      'src/ee/notification/**/*'
 
     s.platform = :ios
     s.dependency 'ee-x/core'

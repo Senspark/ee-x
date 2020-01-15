@@ -683,7 +683,6 @@ Pod::Spec.new do |spec|
     }
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
-      'src/ee/jsb/facebookads/*.{h,hpp}'
   end
 
   spec.subspec 'jsb-facebook-ads' do |s|

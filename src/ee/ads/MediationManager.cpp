@@ -7,12 +7,13 @@
 //
 //
 
+#include "ee/ads/MediationManager.hpp"
+
 #include <mutex>
 
 #include "ee/Core.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
 namespace ads {

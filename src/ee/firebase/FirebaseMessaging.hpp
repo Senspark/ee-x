@@ -14,7 +14,7 @@
 #include <memory>
 #include <string>
 
-#include "ee/Macro.hpp"
+#include <ee/Macro.hpp>
 
 #if defined(EE_X_MOBILE)
 namespace firebase {

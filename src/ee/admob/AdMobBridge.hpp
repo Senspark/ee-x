@@ -14,11 +14,6 @@
 #include <unordered_map>
 
 #include "ee/AdMobFwd.hpp"
-#include "ee/CoreFwd.hpp"
-#include "ee/admob/AdMobBannerAdSize.hpp"
-#include "ee/ads/IAdView.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace admob {

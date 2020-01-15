@@ -11,10 +11,7 @@
 
 #include <map>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/UnityAdsFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace unityads {

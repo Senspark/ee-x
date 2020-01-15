@@ -9,6 +9,8 @@
 #ifndef EE_X_ADS_HPP
 #define EE_X_ADS_HPP
 
+#include <ee/Core.hpp>
+
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"

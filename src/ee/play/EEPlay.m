@@ -7,12 +7,12 @@
 
 #import "ee/play/EEPlay.h"
 
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
-
 #import <GameKit/GameKit.h>
+
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EEPlay () <GKGameCenterControllerDelegate> {
     EEMessageBridge* _bridge;

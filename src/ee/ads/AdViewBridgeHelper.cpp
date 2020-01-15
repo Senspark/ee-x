@@ -6,15 +6,16 @@
 //
 //
 
-#include "ee/ads/internal/AdViewBridgeHelper.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/core/MessageBridge.hpp"
+#include "ee/ads/AdViewBridgeHelper.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/MessageBridge.hpp>
+#include <ee/core/Utils.hpp>
+
 namespace ee {
 namespace ads {
-using Self = AdViewBridgeHelper;
+    using Self = AdViewBridgeHelper;
 
 Self::AdViewBridgeHelper(IMessageBridge& bridge, const AdViewHelper& helper)
     : bridge_(bridge)

@@ -13,10 +13,11 @@
 #import <FBAudienceNetwork/FBNativeAd.h>
 #import <FBAudienceNetwork/FBAdIconView.h>
 
-#import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/EEIMessageBridge.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
+#import <ee/ads/EEAdViewHelper.h>
+#import <ee/core/EEIMessageBridge.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
+
 #import "ee/facebookads/internal/EEFacebookNativeAd.h"
 
 @interface EEFacebookNativeAd () <FBNativeAdDelegate, FBMediaViewDelegate> {

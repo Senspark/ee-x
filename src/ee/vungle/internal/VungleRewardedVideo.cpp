@@ -6,12 +6,14 @@
 //
 //
 
+#include "ee/vungle/internal/VungleRewardedVideo.hpp"
+
 #include <cassert>
 
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/core/Logger.hpp"
+#include <ee/ads/MediationManager.hpp>
+#include <ee/core/Logger.hpp>
+
 #include "ee/vungle/VungleBridge.hpp"
-#include "ee/vungle/internal/VungleRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {

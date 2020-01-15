@@ -9,8 +9,9 @@
 #ifndef EE_X_IRON_SOURCE_INTERSTITIAL_AD_HPP
 #define EE_X_IRON_SOURCE_INTERSTITIAL_AD_HPP
 
+#include <ee/ads/IInterstitialAd.hpp>
+
 #include "ee/IronSourceFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ironsource {

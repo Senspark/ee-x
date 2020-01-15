@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/ads/internal/EEIInterstitialAd.h"
+#import <ee/ads/EEIInterstitialAd.h>
 
 @protocol EEIMessageBridge;
 

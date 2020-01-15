@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_FWD_HPP_
 #define EE_X_FIREBASE_FWD_HPP_
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace firebase {
 class App;

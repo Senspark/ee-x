@@ -9,6 +9,8 @@
 #ifndef EE_X_PLAY_HEADER_HPP_
 #define EE_X_PLAY_HEADER_HPP_
 
+#include <ee/Core.hpp>
+
 #include "ee/PlayFwd.hpp"
 #include "ee/play/PlayBridge.hpp"
 

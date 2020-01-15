@@ -6,16 +6,18 @@
 //
 //
 
-#include <cassert>
-
-#include "ee/core/internal/ScopeGuard.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
-#include "ee/firebase/FirebaseScheduler.hpp"
 #include "ee/firebase/FirebaseStorage.hpp"
+
+#include <cassert>
 
 #if defined(EE_X_MOBILE)
 #include <firebase/storage.h>
 #endif // EE_X_MOBILE
+
+#include <ee/core/internal/ScopeGuard.hpp>
+#include <ee/firebase/FirebaseScheduler.hpp>
+
+#include "ee/firebase/FirebaseApp.hpp"
 
 namespace ee {
 namespace firebase {

@@ -9,9 +9,11 @@
 #include "ee/firebase/FirebaseApp.hpp"
 
 #if defined(EE_X_IOS)
-#import "ee/core/internal/EEUtils.h"
 #import <UIKit/UIViewController.h>
+
 #include <firebase/app.h>
+
+#import <ee/core/internal/EEUtils.h>
 #endif // EE_X_MOBILE
 
 namespace ee {

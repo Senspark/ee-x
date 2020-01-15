@@ -6,7 +6,8 @@
 //
 
 #include "ee/facebook/internal/FacebookShareDelegate.hpp"
-#include "ee/core/IMessageBridge.hpp"
+
+#include <ee/core/IMessageBridge.hpp>
 
 namespace ee {
 namespace facebook {

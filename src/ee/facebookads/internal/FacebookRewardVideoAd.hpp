@@ -9,8 +9,9 @@
 #ifndef EE_X_FACEBOOK_REWARDED_VIDEO_HPP
 #define EE_X_FACEBOOK_REWARDED_VIDEO_HPP
 
+#include <ee/ads/IRewardedVideo.hpp>
+
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace facebook {

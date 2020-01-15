@@ -12,6 +12,8 @@
 #include <map>
 #include <string>
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace google {
 class Analytics;

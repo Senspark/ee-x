@@ -6,15 +6,17 @@
 //
 //
 
-#include <cassert>
-
-#include "ee/core/Logger.hpp"
-#include "ee/core/IMessageBridge.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/facebookads/FacebookAdsBridge.hpp"
 #include "ee/facebookads/internal/FacebookNativeAd.hpp"
 
+#include <cassert>
+
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
+
+#include "ee/facebookads/FacebookAdsBridge.hpp"
 
 namespace ee {
 namespace facebook {

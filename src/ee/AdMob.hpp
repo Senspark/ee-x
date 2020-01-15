@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_HPP
 #define EE_X_ADMOB_HPP
 
+#include <ee/Ads.hpp>
+
 #ifdef __cplusplus
 #include "ee/AdMobFwd.hpp"
 #include "ee/admob/AdMobBannerAdSize.hpp"

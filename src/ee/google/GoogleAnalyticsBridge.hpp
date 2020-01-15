@@ -9,7 +9,7 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_BRIDGE_HPP
 #define EE_X_GOOGLE_ANALYTICS_BRIDGE_HPP
 
-#include <memory>
+#include <string>
 
 #include "ee/GoogleAnalyticsFwd.hpp"
 

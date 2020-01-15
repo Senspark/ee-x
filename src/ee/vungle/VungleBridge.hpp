@@ -3,9 +3,7 @@
 
 #include <map>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/VungleFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {

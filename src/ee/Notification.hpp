@@ -6,8 +6,10 @@
 //
 //
 
-#ifndef EE_X_NOTIFICATION_HEADER_HPP_
-#define EE_X_NOTIFICATION_HEADER_HPP_
+#ifndef EE_X_NOTIFICATION_HEADER_HPP
+#define EE_X_NOTIFICATION_HEADER_HPP
+
+#include <ee/Core.hpp>
 
 #include "ee/NotificationFwd.hpp"
 #include "ee/notification/NotificationBridge.hpp"

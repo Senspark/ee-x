@@ -9,14 +9,18 @@
 #ifndef EE_X_ADS_MEDIATION_MANAGER_HPP
 #define EE_X_ADS_MEDIATION_MANAGER_HPP
 
-#include "ee/AdsFwd.hpp"
-#include "ee/core/internal/SpinLock.hpp"
 #include <functional>
+
+#include <ee/core/internal/SpinLock.hpp>
+
+#include "ee/AdsFwd.hpp"
+
 namespace ee {
 namespace ads {
 /// Fix issue where AdMob consumes other ads' callbacks.
-    using OnInterstitialCloseCallback = std::function<void()>;
-     using OnVideoCloseCallback = std::function<void(bool rewarded)>;
+using OnInterstitialCloseCallback = std::function<void()>;
+using OnVideoCloseCallback = std::function<void(bool rewarded)>;
+
 class MediationManager {
 private:
     using Self = MediationManager;

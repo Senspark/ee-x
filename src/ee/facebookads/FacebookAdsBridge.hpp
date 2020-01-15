@@ -14,12 +14,7 @@
 #include <memory>
 #include <string>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/IAdView.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
-#include "ee/facebookads/FacebookBannerAdSize.hpp"
 
 namespace ee {
 namespace facebook {

@@ -9,8 +9,9 @@
 #ifndef EE_X_FACEBOOK_INTERSTITIAL_AD_HPP
 #define EE_X_FACEBOOK_INTERSTITIAL_AD_HPP
 
+#include <ee/ads/IInterstitialAd.hpp>
+
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace facebook {

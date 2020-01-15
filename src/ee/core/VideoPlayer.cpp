@@ -6,10 +6,11 @@
 //
 
 #include "ee/core/VideoPlayer.hpp"
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include "ee/core/MessageBridge.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {

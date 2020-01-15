@@ -6,11 +6,12 @@
 //
 //
 
+#include "ee/core/MessageBridge.hpp"
+
 #include <cassert>
 #include <map>
 #include <mutex>
 
-#include "ee/core/MessageBridge.hpp"
 #include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {

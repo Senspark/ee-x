@@ -13,6 +13,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <ee/Macro.hpp>
+
 namespace ee {
 namespace firebase {
 using TrackingDict = std::unordered_map<std::string, std::string>;

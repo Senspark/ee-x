@@ -9,9 +9,10 @@
 #ifndef EE_X_ADMOB_REWARDED_VIDEO_HPP
 #define EE_X_ADMOB_REWARDED_VIDEO_HPP
 
-#include "ee/CoreFwd.hpp"
+#include <ee/CoreFwd.hpp>
+#include <ee/ads/IRewardedVideo.hpp>
+
 #include "ee/AdMobFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace admob {

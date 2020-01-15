@@ -6,12 +6,13 @@
 //
 //
 
+#import "ee/admob/internal/EEAdMobRewardedVideo.h"
+
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-#import "ee/admob/internal/EEAdMobRewardedVideo.h"
-#import "ee/core/EEIMessageBridge.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
+#import <ee/core/EEIMessageBridge.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EEAdMobRewardedVideo () <GADRewardedAdDelegate> {
     id<EEIMessageBridge> bridge_;

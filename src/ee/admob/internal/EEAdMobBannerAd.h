@@ -6,7 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEIAdView.h"
+#import <GoogleMobileAds/GADAdSize.h>
+
+#import <ee/ads/EEIAdView.h>
 
 @protocol EEIMessageBridge;
 

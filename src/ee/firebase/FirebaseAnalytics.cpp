@@ -7,12 +7,13 @@
 //
 
 #include "ee/firebase/FirebaseAnalytics.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <firebase/analytics.h>
 #include <firebase/analytics/parameter_names.h>
 #endif // EE_X_MOBILE
+
+#include <ee/firebase/FirebaseApp.hpp>
 
 namespace ee {
 namespace firebase {

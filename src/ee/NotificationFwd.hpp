@@ -9,6 +9,8 @@
 #ifndef EE_X_NOTIFICATION_FWD_HPP_
 #define EE_X_NOTIFICATION_FWD_HPP_
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace notification {
 class Notification;

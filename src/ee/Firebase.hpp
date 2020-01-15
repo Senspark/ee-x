@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_HPP_
 #define EE_X_FIREBASE_HPP_
 
+#include <ee/Core.hpp>
+
 #include "ee/FirebaseFwd.hpp"
 
 #if __has_include("ee/firebase/FirebaseApp.hpp")

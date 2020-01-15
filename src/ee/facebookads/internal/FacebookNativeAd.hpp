@@ -9,10 +9,11 @@
 #ifndef EE_X_FACEBOOK_NATIVE_AD_HPP
 #define EE_X_FACEBOOK_NATIVE_AD_HPP
 
+#include <ee/ads/AdViewBridgeHelper.hpp>
+#include <ee/ads/AdViewHelper.hpp>
+#include <ee/ads/IAdView.hpp>
+
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/ads/IAdView.hpp"
-#include "ee/ads/internal/AdViewBridgeHelper.hpp"
-#include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace facebook {

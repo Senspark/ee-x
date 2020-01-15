@@ -7,11 +7,12 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/core/LogLevel.hpp"
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/PluginManager.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/core/internal/SharedPtrUtils.hpp"
+#include <ee/core/LogLevel.hpp>
+#include <ee/core/MessageBridge.hpp>
+#include <ee/core/PluginManager.hpp>
+#include <ee/core/Utils.hpp>
+#include <ee/core/internal/SharedPtrUtils.hpp>
+
 #include "ee/facebook/FacebookGraphRequest.hpp"
 #include "ee/facebook/FacebookRequestContent.hpp"
 #include "ee/facebook/internal/FacebookAccessToken.hpp"

@@ -5,11 +5,10 @@
 
 #include "ee/play/PlayBridge.hpp"
 
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
-
 #include <ee/nlohmann/json.hpp>
-#include <ee/cocos/EEDataHandler.hpp>
+
+#include <ee/core/MessageBridge.hpp>
+#include <ee/core/Utils.hpp>
 
 namespace ee {
 namespace play {

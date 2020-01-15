@@ -6,10 +6,11 @@
 //
 //
 
+#include "ee/core/Metrics.hpp"
+
 #include <cassert>
 
 #include "ee/core/MessageBridge.hpp"
-#include "ee/core/Metrics.hpp"
 
 namespace ee {
 namespace core {

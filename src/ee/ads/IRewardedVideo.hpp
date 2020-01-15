@@ -13,7 +13,6 @@
 #include <string>
 
 #include "ee/AdsFwd.hpp"
-#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace ads {

@@ -1,4 +1,4 @@
-#import "ee/core/EEIPlugin.h"
+#import <ee/core/EEIPlugin.h>
 
 @interface EEVungle : NSObject <EEIPlugin>
 

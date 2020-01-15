@@ -9,10 +9,10 @@
 #import <TwitterKit/TWTRKit.h>
 #import <UIKit/UIKit.h>
 
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EETwitter () <TWTRComposerViewControllerDelegate> {
     EEMessageBridge* bridge_;

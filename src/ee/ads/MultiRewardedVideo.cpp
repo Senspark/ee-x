@@ -7,7 +7,8 @@
 //
 
 #include "ee/ads/MultiRewardedVideo.hpp"
-#include "ee/core/Logger.hpp"
+
+#include <ee/core/Logger.hpp>
 
 namespace ee {
 namespace ads {

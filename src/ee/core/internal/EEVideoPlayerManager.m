@@ -6,9 +6,10 @@
 //
 
 #import "ee/core/internal/EEVideoPlayerManager.h"
+
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEVideoPlayer.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/core/EEMessageBridge.h"
 
 @implementation EEVideoPlayerManager {
     EEMessageBridge* bridge_;

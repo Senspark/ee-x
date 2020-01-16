@@ -33,6 +33,7 @@ import java.util.Locale;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Recorder implements PluginProtocol {
+    private static final String k__isSupported = "Recorder_isSupported";
     private static final String k__startRecording = "Recorder_startRecording";
     private static final String k__stopRecording = "Recorder_stopRecording";
     private static final String k__cancelRecording = "Recorder_cancelRecording";
@@ -133,6 +134,14 @@ public class Recorder implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                return Utils.toString(isSupported());
+            }
+        }, k__isSupported);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
                 startRecording();
                 return "";
             }
@@ -194,6 +203,10 @@ public class Recorder implements PluginProtocol {
         _mediaProjection = _mediaProjectionManager.getMediaProjection(responseCode, data);
         _startRecording();
         return true;
+    }
+
+    public boolean isSupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @SuppressWarnings("WeakerAccess")

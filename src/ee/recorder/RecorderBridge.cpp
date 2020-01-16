@@ -12,6 +12,7 @@ namespace ee {
 namespace recorder {
 namespace {
 // clang-format off
+constexpr auto k__isSupported              = "Recorder_isSupported";
 constexpr auto k__startRecording           = "Recorder_startRecording";
 constexpr auto k__stopRecording            = "Recorder_stopRecording";
 constexpr auto k__cancelRecording          = "Recorder_cancelRecording";
@@ -29,6 +30,11 @@ Self::Recorder()
 
 Self::~Recorder() {
     //
+}
+
+bool Self::isSupported() const {
+    auto&& response = bridge_.call(k__isSupported);
+    return core::toBool(response);
 }
 
 void Self::startRecording() {

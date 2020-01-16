@@ -7,6 +7,7 @@
 
 @interface EERecorder : NSObject <EEIPlugin>
 
+- (BOOL)isSupported;
 - (void)startRecording;
 - (void)stopRecording;
 - (void)cancelRecording;

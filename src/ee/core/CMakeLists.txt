@@ -13,17 +13,17 @@ include_directories(
 set(EE_X_CORE_SRC
   src/ee/core/Logger.cpp
   src/ee/core/LogLevel.cpp
+  src/ee/core/MessageBridge.cpp
   src/ee/core/Metrics.cpp
   src/ee/core/Utils.cpp
-  src/ee/core/MessageBridge.cpp
 )
 
 set(EE_X_CORE_HEADERS
   src/ee/core/Logger.hpp
   src/ee/core/LogLevel.hpp
+  src/ee/core/MessageBridge.hpp
   src/ee/core/Metrics.hpp
   src/ee/core/Utils.hpp
-  src/ee/core/MessageBridge.hpp
   src/ee/core/internal/ScopeGuard.hpp
   src/ee/core/internal/SpinLock.hpp
 )

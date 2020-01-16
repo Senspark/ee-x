@@ -6,12 +6,14 @@
 //
 //
 
+#include "ee/unityads/internal/UnityInterstitialAd.hpp"
+
 #include <cassert>
 
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/core/Logger.hpp"
+#include <ee/ads/MediationManager.hpp>
+#include <ee/core/Logger.hpp>
+
 #include "ee/unityads/UnityAdsBridge.hpp"
-#include "ee/unityads/internal/UnityInterstitialAd.hpp"
 
 namespace ee {
 namespace unityads {

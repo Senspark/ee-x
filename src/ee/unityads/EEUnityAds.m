@@ -7,13 +7,17 @@
 //
 
 #import "ee/unityads/EEUnityAds.h"
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
 
-//#import "ISUnityAdsAdapter/UnityAds.h"
+#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
+#import <ISUnityAdsAdapter/UnityAds.h>
+#else // EE_X_USE_IRON_SOURCE_MEDIATION
 #import <UnityAds/UnityAds.h>
+#endif // EE_X_USE_IRON_SOURCE_MEDIATION
+
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EEUnityAds () <UnityAdsDelegate> {
     BOOL initialized_;
@@ -95,7 +99,8 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (initialized_) {
         return;
     }
-    [UnityAds initialize:gameId delegate:self testMode:testModeEnabled];
+    [UnityAds initialize:gameId testMode:testModeEnabled];
+    [UnityAds addDelegate:self];
     initialized_ = YES;
 }
 
@@ -103,7 +108,7 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (!initialized_) {
         return;
     }
-    [UnityAds setDelegate:nil];
+    [UnityAds removeDelegate:self];
 }
 
 - (void)setDebugMode:(BOOL)enabled {

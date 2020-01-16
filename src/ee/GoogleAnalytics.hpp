@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_HPP
 #define EE_X_GOOGLE_ANALYTICS_HPP
 
+#include <ee/Core.hpp>
+
 #ifdef __cplusplus
 #include "ee/GoogleAnalyticsFwd.hpp"
 #include "ee/google/GoogleAnalyticsBridge.hpp"

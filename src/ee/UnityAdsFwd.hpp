@@ -9,6 +9,8 @@
 #ifndef EE_X_UNITY_ADS_FWD_HPP
 #define EE_X_UNITY_ADS_FWD_HPP
 
+#include <ee/AdsFwd.hpp>
+
 namespace ee {
 namespace unityads {
 class UnityAds;

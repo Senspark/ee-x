@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/core/EEIPlugin.h"
+#import <ee/core/EEIPlugin.h>
 
 @interface EECrashlytics : NSObject <EEIPlugin>
 

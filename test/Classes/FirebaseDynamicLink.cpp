@@ -6,10 +6,11 @@
 //
 
 #include "FirebaseDynamicLink.hpp"
-#include "FunctionLogger.hpp"
-#include "Utils.hpp"
 
 #include <ee/Firebase.hpp>
+
+#include "FunctionLogger.hpp"
+#include "Utils.hpp"
 
 namespace eetest {
 using Self = FirebaseDynamicLink;

@@ -4,7 +4,7 @@ Pod::Spec.new do |spec|
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
 
-  spec.homepage       = 'https://github.com/enrevol/ee-x'
+  spec.homepage       = 'https://github.com/Senspark/ee-x'
 
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   spec.osx.deployment_target = '10.8'
 
   spec.source = {
-    :git => 'https://github.com/enrevol/ee-x.git',
+    :git => 'https://github.com/Senspark/ee-x.git',
     :branch => 'master'
   }
 
@@ -39,8 +39,7 @@ Pod::Spec.new do |spec|
 
     s.public_header_files =
       'src/ee/Macro.hpp',
-      'src/ee/Core.hpp',
-      'src/ee/CoreFwd.hpp',
+      'src/ee/Core{,Fwd}.hpp',
       'src/ee/core/*.{h,hpp}'
     
     s.exclude_files =
@@ -55,14 +54,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'crashlytics' do |s|
     s.source_files =
-      'src/ee/Crashlytics.hpp',
-      'src/ee/CrashlyticsFwd.hpp',
-      'src/ee/crashlytics/*.{cpp,h,hpp,m}'
-
-    s.public_header_files =
-      'src/ee/Crashlytics.hpp',
-      'src/ee/CrashlyticsFwd.hpp',
-      'src/ee/crashlytics/CrashlyticsBridge.hpp'
+      'src/ee/Crashlytics*',
+      'src/ee/crashlytics/**/*'
 
     s.exclude_files =
       'src/ee/crashlytics/CMakeLists.txt'
@@ -74,28 +67,16 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'campaign-receiver' do |s|
     s.source_files =
-      'src/ee/CampaignReceiver.hpp',
-      'src/ee/CampaignReceiverFwd.hpp',
-      'src/ee/campaignreceiver/*'
-
-    s.public_header_files =
-      'src/ee/CampaignReceiver.hpp',
-      'src/ee/CampaignReceiverFwd.hpp',
-      'src/ee/campaignreceiver/*.{h,hpp}'
+      'src/ee/CampaignReceiver*',
+      'src/ee/campaignreceiver/**/*'
 
     s.dependency 'ee-x/core'
   end
 
   spec.subspec 'twitter' do |s|
     s.source_files =
-      'src/ee/Twitter.hpp',
-      'src/ee/TwitterFwd.hpp',
-      'src/ee/twitter/*.{cpp,h,hpp,m}'
-
-    s.public_header_files =
-      'src/ee/Twitter.hpp',
-      'src/ee/TwitterFwd.hpp',
-      'src/ee/twitter/*.{h,hpp}'
+      'src/ee/Twitter*',
+      'src/ee/twitter/*'
 
     s.dependency 'ee-x/core'
     s.dependency 'TwitterKit'
@@ -103,56 +84,47 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook' do |s|
     s.source_files =
-      'src/ee/Facebook.hpp',
-      'src/ee/FacebookFwd.hpp',
-      'src/ee/facebook/*',
+      'src/ee/Facebook{,Fwd}.*',
+      'src/ee/facebook/**/*'
+
+    s.private_header_files =
       'src/ee/facebook/internal/*'
 
-    s.public_header_files =
-      'src/ee/Facebook.hpp',
-      'src/ee/FacebookFwd.hpp',
-      'src/ee/facebook/*.{h,hpp}'
+    s.exclude_files =
+      'src/ee/facebook/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
-    s.dependency 'FBSDKCoreKit', '5.10.0'
-    s.dependency 'FBSDKLoginKit', '5.10.0'
-    s.dependency 'FBSDKShareKit', '5.10.0'
+    s.dependency 'FBSDKCoreKit'
+    s.dependency 'FBSDKLoginKit'
+    s.dependency 'FBSDKShareKit'
   end
 
   spec.subspec 'notification' do |s|
-    s.platform = :ios
-
     s.source_files =
-      'src/ee/Notification.hpp',
-      'src/ee/NotificationFwd.hpp',
-      'src/ee/notification/*.{cpp,h,hpp,m}'
+      'src/ee/Notification*',
+      'src/ee/notification/**/*'
 
-    s.public_header_files =
-      'src/ee/Notification.hpp',
-      'src/ee/NotificationFwd.hpp',
-      'src/ee/notification/NotificationBridge.hpp',
-      'src/ee/notification/NotificationBuilder.hpp'
+    s.exclude_files =
+      'src/ee/notification/CMakeLists.txt'
 
+    s.platform = :ios
     s.dependency 'ee-x/core'
   end
 
-    spec.subspec 'google-analytics' do |s|
+  spec.subspec 'google-analytics' do |s|
     s.source_files =
-      'src/ee/GoogleAnalytics.hpp',
-      'src/ee/GoogleAnalyticsFwd.hpp',
-      'src/ee/google/*',
+      'src/ee/GoogleAnalytics*',
+      'src/ee/google/**/*'
+
+    s.private_header_files =
       'src/ee/google/internal/*'
 
-    s.public_header_files =
-      'src/ee/GoogleAnalytics.hpp',
-      'src/ee/GoogleAnalyticsFwd.hpp',
-      'src/ee/google/*.{h,hpp}'
-    
     s.exclude_files =
       'src/ee/google/CMakeLists.txt'
-    
+
+    s.platform = :ios
     s.dependency 'ee-x/core'
-    s.ios.dependency 'GoogleAnalytics'
+    s.dependency 'GoogleAnalytics'
   end
 
   spec.subspec 'firebase-headers' do |s|
@@ -164,16 +136,10 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-core' do |s|
     s.source_files =
-      'src/ee/Firebase.hpp',
-      'src/ee/FirebaseFwd.hpp',
+      'src/ee/Firebase*',
       'src/ee/firebase/FirebaseApp.*',
       'src/ee/firebase/FirebaseScheduler.hpp',
       'src/ee/firebase/FirebaseScheduler_inl.hpp'
-
-    s.public_header_files =
-      'src/ee/Firebase.hpp',
-      'src/ee/FirebaseFwd.hpp',
-      'src/ee/firebase/FirebaseApp.hpp'
 
     s.exclude_files =
       'src/ee/firebase/CMakeLists.txt'
@@ -181,7 +147,7 @@ Pod::Spec.new do |spec|
     s.ios.vendored_library =  'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
     s.ios.dependency 'ee-x/firebase-headers'
-    s.ios.dependency 'Firebase/Core', '6.3.0'
+    s.ios.dependency 'Firebase/Core'
   end
 
   spec.subspec 'firebase-analytics' do |s|
@@ -196,7 +162,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseDynamicLink.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/DynamicLinks', '6.3.0'
+    s.ios.dependency 'Firebase/DynamicLinks'
   end
 
   spec.subspec 'firebase-messaging' do |s|
@@ -204,7 +170,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseMessaging.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Messaging', '6.3.0'
+    s.ios.dependency 'Firebase/Messaging'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
@@ -212,7 +178,7 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseRemoteConfig.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/RemoteConfig', '6.3.0'
+    s.ios.dependency 'Firebase/RemoteConfig'
   end
 
   spec.subspec 'firebase-storage' do |s|
@@ -220,29 +186,25 @@ Pod::Spec.new do |spec|
     s.public_header_files = 'src/ee/firebase/FirebaseStorage.hpp'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Storage', '6.3.0'
+    s.ios.dependency 'Firebase/Storage'
   end
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files =
         'src/ee/firebase/FirebasePerformance*',
         'src/ee/firebase/internal/EEFirebasePerformance*'
-    s.public_header_files = 'src/ee/firebase/FirebasePerformance*.hpp'
+    s.private_header_files = 'src/ee/firebase/internal/*'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/Performance'
   end
 
   spec.subspec 'ads' do |s|
     s.source_files =
-      'src/ee/Ads.hpp',
-      'src/ee/AdsFwd.hpp',
-      'src/ee/ads/*',
-      'src/ee/ads/internal/*'
-
-    s.public_header_files =
-      'src/ee/Ads.hpp',
-      'src/ee/AdsFwd.hpp',
+      'src/ee/Ads*',
       'src/ee/ads/*'
+
+    s.private_header_files =
+      'src/ee/ads/internal/*'
 
     s.exclude_files =
       'src/ee/ads/CMakeLists.txt'
@@ -259,47 +221,29 @@ Pod::Spec.new do |spec|
     }
   end
 
-  spec.subspec 'admob-base' do |s|
+  spec.subspec 'admob' do |s|
     s.source_files =
-      'src/ee/AdMob.hpp',
-      'src/ee/AdMobFwd.hpp',
-      'src/ee/admob/*',
+      'src/ee/AdMob*',
+      'src/ee/admob/**/*'
+
+    s.private_header_files =
       'src/ee/admob/internal/*'
 
-    s.public_header_files =
-      'src/ee/AdMob.hpp',
-      'src/ee/AdMobFwd.hpp',
-      'src/ee/admob/*.{h,hpp}'
-    
     s.exclude_files =
       'src/ee/admob/CMakeLists.txt'
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
-  end
-  
-  spec.subspec 'admob' do |s|
-    s.dependency 'ee-x/admob-base'
     s.dependency 'Google-Mobile-Ads-SDK'
-  end
-  
-  spec.subspec 'admob-mediation' do |s|
-    s.dependency 'ee-x/admob-base'
-    s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceAdMobAdapter'
   end
 
   spec.subspec 'applovin-base' do |s|
     s.source_files =
-      'src/ee/AppLovin.hpp',
-      'src/ee/AppLovinFwd.hpp',
-      'src/ee/applovin/*',
-      'src/ee/applovin/internal/*'
+      'src/ee/AppLovin*',
+      'src/ee/applovin/**/*'
 
-    s.public_header_files =
-      'src/ee/AppLovin.hpp',
-      'src/ee/AppLovinFwd.hpp',
-      'src/ee/applovin/*.{h,hpp}'
+    s.private_header_files =
+      'src/ee/applovin/internal/*'
     
     s.exclude_files =
       'src/ee/applovin/CMakeLists.txt'
@@ -315,79 +259,51 @@ Pod::Spec.new do |spec|
   spec.subspec 'applovin-mediation' do |s|
     s.dependency 'ee-x/applovin-base'
     s.dependency 'ee-x/ironsource-mediation-base'
+
+    # AppLovinSDK is included in IronSourceAppLovinAdapter.
     s.dependency 'IronSourceAppLovinAdapter'
   end
 
-  spec.subspec 'facebook-ads-base' do |s|
+  spec.subspec 'facebook-ads' do |s|
     s.source_files =
-      'src/ee/FacebookAds.hpp',
-      'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebookads/*',
-      'src/ee/facebookads/internal/*'
+      'src/ee/FacebookAds*',
+      'src/ee/facebookads/**/*'
 
-    s.public_header_files =
-      'src/ee/FacebookAds.hpp',
-      'src/ee/FacebookAdsFwd.hpp',
-      'src/ee/facebookads/*.{h,hpp}'
+    s.private_header_files =
+      'src/ee/facebookads/internal/*'
 
     s.exclude_files =
       'src/ee/facebookads/CMakeLists.txt'
       
     s.dependency 'ee-x/ads'
-  end
-
-  spec.subspec 'facebook-ads' do |s|
-    s.dependency 'ee-x/facebook-ads-base'
-    s.dependency 'FBAudienceNetwork' #, '5.1.1'
-    s.dependency 'GoogleMobileAdsMediationFacebook'
- end
-
-  spec.subspec 'facebook-ads-mediation' do |s|
-    s.public_header_files = 'third_party/facebook-ads-mediation/FBAudienceNetwork/*'
-    s.header_mappings_dir = 'third_party/facebook-ads-mediation'
-    s.dependency 'ee-x/facebook-ads-base'
-    s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceFacebookAdapter'
+    s.dependency 'FBAudienceNetwork'
   end
 
   spec.subspec 'ironsource' do |s|
     s.source_files =
-      'src/ee/IronSource.hpp',
-      'src/ee/IronSourceFwd.hpp',
-      'src/ee/ironsource/*.{h,m,hpp,cpp}',
-      'src/ee/ironsource/internal/*.{hpp,cpp}'
+      'src/ee/IronSource*',
+      'src/ee/ironsource/**/*'
 
-    s.public_header_files =
-      'src/ee/IronSource.hpp',
-      'src/ee/IronSourceFwd.hpp',
-      'src/ee/ironsource/*.{h,hpp}'
+    s.private_header_files =
+      'src/ee/ironsource/internal/*'
+
+    s.exclude_files =
+      'src/ee/ironsource/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK', '6.8.3.0'
-  end
-
-  spec.subspec 'ironsource-mediation' do |s|
-    s.dependency 'ee-x/ironsource'
-    s.dependency 'ee-x/ironsource-mediation-base'
-    s.dependency 'IronSourceAppLovinAdapter'
-    s.dependency 'IronSourceFacebookAdapter'
-    s.dependency 'IronSourceUnityAdsAdapter'
-    s.dependency 'IronSourceVungleAdapter'
-    s.dependency 'IronSourceAdColonyAdapter'
-    s.dependency 'IronSourceAdMobAdapter'
+    s.dependency 'IronSourceSDK'
   end
 
   spec.subspec 'unity-ads-base' do |s|
     s.source_files =
-      'src/ee/UnityAds.hpp',
-      'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/*.{h,hpp,m,cpp}',
-      'src/ee/unityads/internal/*.{hpp,cpp}'
+      'src/ee/UnityAds*',
+      'src/ee/unityads/**/*'
 
-    s.public_header_files =
-      'src/ee/UnityAds.hpp',
-      'src/ee/UnityAdsFwd.hpp',
-      'src/ee/unityads/*.{h,hpp}'
+    s.private_header_files =
+      'src/ee/unityads/internal/*'
+
+    s.exclude_files =
+      'src/ee/unityads/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
@@ -400,89 +316,67 @@ Pod::Spec.new do |spec|
   spec.subspec 'unity-ads-mediation' do |s|
     s.dependency 'ee-x/unity-ads-base'
     s.dependency 'ee-x/ironsource-mediation-base'
+
+    # UnityAds is included in IronSourceUnityAdsAdapter.
     s.dependency 'IronSourceUnityAdsAdapter'
   end
 
   spec.subspec 'vungle-base' do |s|
     s.source_files =
-      'src/ee/Vungle.hpp',
-      'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/*.{h,m,hpp,cpp}',
-      'src/ee/vungle/internal/*.{hpp,cpp}'
+      'src/ee/Vungle*',
+      'src/ee/vungle/**/*'
 
-    s.public_header_files =
-      'src/ee/Vungle.hpp',
-      'src/ee/VungleFwd.hpp',
-      'src/ee/vungle/*.{h,hpp}'
+    s.private_header_files =
+      'src/ee/vungle/internal/*'
+
+    s.exclude_files =
+      'src/ee/vungle/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
 
   spec.subspec 'vungle' do |s|
     s.dependency 'ee-x/vungle-base'
-    s.dependency 'VungleSDK-iOS', '6.2.0'
-    s.dependency 'GoogleMobileAdsMediationVungle'
+    s.dependency 'VungleSDK-iOS'
   end
 
   spec.subspec 'vungle-mediation' do |s|
     s.dependency 'ee-x/vungle-base'
     s.dependency 'ee-x/ironsource-mediation-base'
+
+    # VungleSDK-iOS is included in IronSourceVungleAdapter.
     s.dependency 'IronSourceVungleAdapter'
   end
 
   spec.subspec 'recorder' do |s|
     s.source_files =
-      'src/ee/Recorder.hpp',
-      'src/ee/RecorderFwd.hpp',
+      'src/ee/Recorder*',
       'src/ee/recorder/*'
-
-    s.public_header_files =
-      'src/ee/Recorder.hpp',
-      'src/ee/RecorderFwd.hpp',
-      'src/ee/recorder/*.{h,hpp}'
-
-    s.dependency 'ee-x/core'
-  end
-
-  spec.subspec 'game-center' do |s|
-    s.source_files =
-      'src/ee/GameCenter.hpp',
-      'src/ee/GameCenterFwd.hpp',
-      'src/ee/gamecenter/*'
-
-    s.public_header_files =
-      'src/ee/GameCenter.hpp',
-      'src/ee/GameCenterFwd.hpp',
-      'src/ee/gamecenter/*.{h,hpp}'
 
     s.dependency 'ee-x/core'
   end
   
   spec.subspec 'play' do |s|
     s.source_files =
-      'src/ee/Play.hpp',
-      'src/ee/PlayFwd.hpp',
+      'src/ee/Play*',
       'src/ee/play/*'
 
-    s.public_header_files =
-      'src/ee/Play.hpp',
-      'src/ee/PlayFwd.hpp',
-      'src/ee/play/*.{h,hpp}'
+    s.exclude_files =
+      'src/ee/play/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
   end
 
   spec.subspec 'appsflyer' do |s|
     s.source_files =
-      'src/ee/AppsFlyer.hpp',
-      'src/ee/AppsFlyerFwd.hpp',
-      'src/ee/appsflyer/*',
+      'src/ee/AppsFlyer*',
+      'src/ee/appsflyer/**/*'
+
+    s.private_header_files =
       'src/ee/appsflyer/internal/*'
 
-    s.public_header_files =
-      'src/ee/AppsFlyer.hpp',
-      'src/ee/AppsFlyerFwd.hpp',
-      'src/ee/appsflyer/*.{h,hpp}'
+    s.exclude_files =
+      'src/ee/appsflyer/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
@@ -491,8 +385,10 @@ Pod::Spec.new do |spec|
   spec.subspec 'cocos' do |s|
     s.source_files = 
       'src/ee/cocos/*.{hpp,cpp,frag,vert}'
+
     s.public_header_files = 
       'src/ee/cocos/*.hpp'
+
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
@@ -502,6 +398,7 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../cocos2d/extensions'
       ].join(' ')
     }
+
     s.osx.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d/external/mac/include/glfw3', # Cocos Creator
@@ -512,14 +409,9 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-core' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_core.hpp',
-      'src/ee/jsb/jsb_core.cpp',
+      'src/ee/jsb/jsb_core*',
       'src/ee/jsb/jsb_fwd.hpp',
       'src/ee/jsb/core/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_fwd.hpp',
-      'src/ee/jsb/jsb_core.hpp',
-      'src/ee/jsb/core/*.{h,hpp}'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
@@ -529,6 +421,7 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../../cocos2d-x/external/sources'
       ].join(' ')
     }
+
     s.osx.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../../cocos2d-x/external/mac/include/v8'
@@ -546,12 +439,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-ads' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_ads.hpp',
-      'src/ee/jsb/jsb_ads.cpp',
+      'src/ee/jsb/jsb_ads*',
       'src/ee/jsb/ads/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_ads.hpp',
-      'src/ee/jsb/ads/*.{h,hpp}'
 
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/ads'
@@ -559,12 +448,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-admob' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_admob.hpp',
-      'src/ee/jsb/jsb_admob.cpp',
+      'src/ee/jsb/jsb_admob*',
       'src/ee/jsb/admob/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_admob.hpp',
-      'src/ee/jsb/admob/*.{h,hpp}'
 
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/admob'
@@ -572,12 +457,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-crashlytics' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_crashlytics.hpp',
-      'src/ee/jsb/jsb_crashlytics.cpp',
+      'src/ee/jsb/jsb_crashlytics*',
       'src/ee/jsb/crashlytics/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_crashlytics.hpp',
-      'src/ee/jsb/crashlytics/*.{h,hpp}'
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/crashlytics'
@@ -585,12 +466,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jsb-google-analytics' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_google_analytics.hpp',
-      'src/ee/jsb/jsb_google_analytics.cpp',
+      'src/ee/jsb/jsb_google_analytics*',
       'src/ee/jsb/google/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_google_analytics.hpp',
-      'src/ee/jsb/google/*.{h,hpp}'
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/google-analytics'
@@ -598,15 +475,11 @@ Pod::Spec.new do |spec|
   
   spec.subspec 'jsb-soomla-store' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_soomla.hpp',
-      'src/ee/jsb/jsb_soomla.cpp',
+      'src/ee/jsb/jsb_soomla*',
       'src/ee/jsb/soomla/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_soomla.hpp',
-      'src/ee/jsb/soomla/*.{h,hpp}'
-
-    s.dependency 'ee-x/soomla-cocos2dx-store'
+    
     s.dependency 'ee-x/jsb-core'
+    s.dependency 'ee-x/soomla-cocos2dx-store'
   end
 
   spec.subspec 'keeva' do |s|
@@ -616,25 +489,17 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'soomla-ios-core' do |s|
-    s.header_mappings_dir = 
-      'third_party/soomla/SoomlaiOSCore'
-    s.public_header_files = 
-      'third_party/soomla/SoomlaiOSCore/**/*.h'
-    s.source_files  = 
-      'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
-
+    s.header_mappings_dir = 'third_party/soomla/SoomlaiOSCore'
+    s.public_header_files = 'third_party/soomla/SoomlaiOSCore/**/*.h'
+    s.source_files = 'third_party/soomla/SoomlaiOSCore/**/*.{h,m}'
     s.dependency 'ee-x/keeva'
   end
 
   spec.subspec 'soomla-cocos2dx-core' do |s|
-    s.header_mappings_dir = 
-      'third_party/soomla/SoomlaCocos2dxCore'
-    s.public_header_files = 
-      'third_party/soomla/SoomlaCocos2dxCore/**/*.h'
-    s.source_files  = 
-      'third_party/soomla/SoomlaCocos2dxCore/**/*.{h,mm,cpp}'
-    s.exclude_files =
-      'third_party/soomla/SoomlaCocos2dxCore/Soomla/jsb/*'
+    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxCore'
+    s.source_files = 'third_party/soomla/SoomlaCocos2dxCore/**/*.{h,mm,cpp}'
+    s.public_header_files = 'third_party/soomla/SoomlaCocos2dxCore/**/*.h'
+    s.exclude_files = 'third_party/soomla/SoomlaCocos2dxCore/Soomla/jsb/*'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
@@ -643,7 +508,7 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../../cocos2d-x',
         '${PODS_ROOT}/../../../cocos2d-x/cocos',
         "${PODS_ROOT}/Headers/Public/#{spec.name}/Soomla/**"
-        ].join(' ')
+      ].join(' ')
     }
     
     s.dependency 'ee-x/keeva'
@@ -653,61 +518,35 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'soomla-ios-store' do |s| 
-    s.header_mappings_dir = 
-      'third_party/soomla/SoomlaiOSStore'
-    s.source_files  = 
-      'third_party/soomla/SoomlaiOSStore', 
-      'third_party/soomla/SoomlaiOSStore/**/*.{h,m}'
-    s.public_header_files  = 
-      'third_party/soomla/SoomlaiOSStore', 
-      'third_party/soomla/SoomlaiOSStore/**/*.h'
-
+    s.header_mappings_dir = 'third_party/soomla/SoomlaiOSStore'
+    s.source_files = 'third_party/soomla/SoomlaiOSStore/**/*.{h,m}'
+    s.public_header_files = 'third_party/soomla/SoomlaiOSStore/**/*.h'
     s.dependency 'ee-x/keeva'
     s.dependency 'ee-x/soomla-ios-core'
   end
 
   spec.subspec 'soomla-cocos2dx-store' do |s| 
-    s.header_mappings_dir = 
-      'third_party/soomla/SoomlaCocos2dxStore'
-    s.source_files = 
-      'third_party/soomla/SoomlaCocos2dxStore/**/*.{h,mm,cpp}'
-    s.public_header_files = 
-      'third_party/soomla/SoomlaCocos2dxStore/**/*.h'
-    s.xcconfig = {
-      'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../cocos2d',
-        '${PODS_ROOT}/../../cocos2d/cocos',
-        '${PODS_ROOT}/../../../cocos2d-x',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos',
-        ].join(' ')
-    }
+    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxStore'
+    s.source_files = 'third_party/soomla/SoomlaCocos2dxStore/**/*.{h,mm,cpp}'
+    s.public_header_files = 'third_party/soomla/SoomlaCocos2dxStore/**/*.h'
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
-      'src/ee/jsb/facebookads/*.{h,hpp}'
   end
 
   spec.subspec 'jsb-facebook-ads' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_facebook_ads.hpp',
-      'src/ee/jsb/jsb_facebook_ads.cpp',
+      'src/ee/jsb/jsb_facebook_ads*',
       'src/ee/jsb/facebookads/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_facebook_ads.hpp',
-      'src/ee/jsb/facebookads/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/facebook-ads'
   end
 
   spec.subspec 'jsb-facebook' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_facebook.hpp',
-      'src/ee/jsb/jsb_facebook.cpp',
+      'src/ee/jsb/jsb_facebook*',
       'src/ee/jsb/facebook/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_facebook.hpp',
-      'src/ee/jsb/facebook/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/facebook'
   end
@@ -716,10 +555,7 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/jsb/jsb_firebase*',
       'src/ee/jsb/firebase/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_firebase*.hpp',
-      'src/ee/jsb/firebase/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/firebase-analytics'
     s.dependency 'ee-x/firebase-performance'
@@ -727,15 +563,10 @@ Pod::Spec.new do |spec|
   end
   
   spec.subspec 'jsb-notification' do |s|
-    s.platform = :ios
     s.source_files =
-      'src/ee/jsb/jsb_notification.hpp',
-      'src/ee/jsb/jsb_notification.cpp',
+      'src/ee/jsb/jsb_notification*',
       'src/ee/jsb/notification/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_notification.hpp',
-      'src/ee/jsb/notification/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/notification'
   end
@@ -744,9 +575,6 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/jsb/jsb_recorder.*',
       'src/ee/jsb/recorder/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_recorder.hpp',
-      'src/ee/jsb/recorder/*.hpp'
 
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/recorder'
@@ -754,39 +582,27 @@ Pod::Spec.new do |spec|
   
   spec.subspec 'jsb-unity-ads' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_unity_ads.hpp',
-      'src/ee/jsb/jsb_unity_ads.cpp',
+      'src/ee/jsb/jsb_unity_ads*',
       'src/ee/jsb/unityads/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_unity_ads.hpp',
-      'src/ee/jsb/unityads/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/unity-ads'
   end
 
   spec.subspec 'jsb-ironsource' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_ironsource.hpp',
-      'src/ee/jsb/jsb_ironsource.cpp',
+      'src/ee/jsb/jsb_ironsource*',
       'src/ee/jsb/ironsource/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_ironsource.hpp',
-      'src/ee/jsb/ironsource/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/ironsource'
   end
 
   spec.subspec 'jsb-vungle' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_vungle.hpp',
-      'src/ee/jsb/jsb_vungle.cpp',
+      'src/ee/jsb/jsb_vungle*',
       'src/ee/jsb/vungle/*'
-    s.public_header_files =
-      'src/ee/jsb/jsb_vungle.hpp',
-      'src/ee/jsb/vungle/*.{h,hpp}'
-    
+
     s.dependency 'ee-x/jsb-ads'
     s.dependency 'ee-x/vungle'
   end

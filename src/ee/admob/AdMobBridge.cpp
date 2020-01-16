@@ -10,19 +10,20 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/ads/MediationManager.hpp>
+#include <ee/ads/NullAdView.hpp>
+#include <ee/ads/NullInterstitialAd.hpp>
+#include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/core/Logger.hpp>
+#include <ee/core/MessageBridge.hpp>
+#include <ee/core/Utils.hpp>
+#include <ee/core/internal/SharedPtrUtils.hpp>
+
 #include "ee/admob/AdMobNativeAdLayout.hpp"
 #include "ee/admob/internal/AdMobBannerAd.hpp"
 #include "ee/admob/internal/AdMobInterstitialAd.hpp"
 #include "ee/admob/internal/AdMobNativeAd.hpp"
 #include "ee/admob/internal/AdMobRewardedVideo.hpp"
-#include "ee/ads/NullAdView.hpp"
-#include "ee/ads/NullInterstitialAd.hpp"
-#include "ee/ads/NullRewardedVideo.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/core/internal/SharedPtrUtils.hpp"
 
 namespace ee {
 namespace admob {

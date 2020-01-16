@@ -6,13 +6,14 @@
 //
 //
 
-#include "ee/core/Logger.hpp"
 #include "ee/firebase/FirebaseDynamicLink.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <firebase/dynamic_links.h>
 #endif // EE_X_MOBILE
+
+#include <ee/core/Logger.hpp>
+#include <ee/firebase/FirebaseApp.hpp>
 
 namespace ee {
 namespace firebase {

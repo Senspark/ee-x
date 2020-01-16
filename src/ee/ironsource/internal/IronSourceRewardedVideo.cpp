@@ -6,12 +6,14 @@
 //
 //
 
+#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
+
 #include <cassert>
 
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/core/Logger.hpp"
+#include <ee/ads/MediationManager.hpp>
+#include <ee/core/Logger.hpp>
+
 #include "ee/ironsource/IronSourceBridge.hpp"
-#include "ee/ironsource/internal/IronSourceRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {

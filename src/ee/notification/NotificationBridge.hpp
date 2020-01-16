@@ -11,12 +11,10 @@
 
 #include <string>
 
-#include "ee/CoreFwd.hpp"
+#include "ee/NotificationFwd.hpp"
 
 namespace ee {
 namespace notification {
-class NotificationBuilder;
-
 class Notification final {
 public:
     Notification();

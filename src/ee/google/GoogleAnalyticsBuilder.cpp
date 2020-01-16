@@ -6,10 +6,12 @@
 //
 //
 
+#include "ee/google/GoogleAnalyticsBuilder.hpp"
+
 #include <cassert>
 
-#include "ee/core/Utils.hpp"
-#include "ee/google/GoogleAnalyticsBuilder.hpp"
+#include <ee/core/Utils.hpp>
+
 #include "ee/google/GoogleAnalyticsEventBuilder.hpp"
 #include "ee/google/GoogleAnalyticsExceptionBuilder.hpp"
 #include "ee/google/GoogleAnalyticsProduct.hpp"

@@ -6,12 +6,7 @@
 //
 //
 
-#import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/ads/internal/EEIAdView.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/EEIMessageBridge.h"
-#import "ee/core/internal/EEMetrics.h"
-#import "ee/core/internal/EEUtils.h"
+#import "ee/ads/EEAdViewHelper.h"
 
 #import <TargetConditionals.h>
 
@@ -22,6 +17,13 @@
 #import <AppKit/NSView.h>
 #define EE_AD_VIEW NSView
 #endif // TARGET_OS_IOS
+
+#import <ee/core/EEIMessageBridge.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMetrics.h>
+#import <ee/core/internal/EEUtils.h>
+
+#import "ee/ads/EEIAdView.h"
 
 @interface EEAdViewHelper () {
     id<EEIMessageBridge> bridge_;

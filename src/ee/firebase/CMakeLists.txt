@@ -20,6 +20,7 @@ set(EE_X_FIREBASE_SRC
 
 set(EE_X_FIREBASE_HEADERS
     src/ee/firebase/FirebaseAnalytics.hpp
+    src/ee/firebase/FirebaseApp.hpp
     src/ee/firebase/FirebaseDynamicLink.hpp
     src/ee/firebase/FirebaseMessaging.hpp
     src/ee/firebase/FirebasePerformanceBridge.hpp
@@ -28,6 +29,5 @@ set(EE_X_FIREBASE_HEADERS
     src/ee/firebase/FirebaseScheduler.hpp
     src/ee/firebase/FirebaseScheduler_inl.hpp
     src/ee/firebase/FirebaseStorage.hpp
-    src/ee/firebase/FirebaseApp.hpp
 )
 

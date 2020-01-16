@@ -6,6 +6,8 @@
 //
 //
 
+#import "ee/core/internal/EEMetrics.h"
+
 #import <TargetConditionals.h>
 
 #if TARGET_OS_IOS
@@ -15,7 +17,6 @@
 #endif // TARGET_OS_IOS
 
 #import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEMetrics.h"
 
 @implementation EEMetrics
 

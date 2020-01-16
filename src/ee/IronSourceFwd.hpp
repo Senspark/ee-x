@@ -1,6 +1,8 @@
 #ifndef EE_X_IRON_SOURCE_FWD_HPP
 #define EE_X_IRON_SOURCE_FWD_HPP
 
+#include <ee/AdsFwd.hpp>
+
 namespace ee {
 namespace ironsource {
 class IronSource;

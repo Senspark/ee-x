@@ -9,6 +9,8 @@
 #ifndef EE_X_CRASHLYTICS_FWD_HPP_
 #define EE_X_CRASHLYTICS_FWD_HPP_
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace crashlytics {
 class Crashlytics;

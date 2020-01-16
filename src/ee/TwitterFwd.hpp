@@ -6,6 +6,8 @@
 #ifndef EE_X_TWITTER_FWD_HPP
 #define EE_X_TWITTER_FWD_HPP
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace twitter {
 class Twitter;

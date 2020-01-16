@@ -29,8 +29,6 @@ enum class BannerAdSize {
 
 };
 } // namespace facebook
-
-using FacebookBannerAdSize = facebook::BannerAdSize;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_BANNER_AD_SIZE_HPP */

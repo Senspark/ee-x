@@ -14,7 +14,6 @@
 #include <memory>
 #include <string>
 
-#include <ee/Macro.hpp>
 #include <ee/CoreFwd.hpp>
 
 #if defined(EE_X_MOBILE)

@@ -2,11 +2,10 @@
 #define EE_X_IRON_SOURCE_BRIDGE_HPP
 
 #include <map>
+#include <memory>
+#include <string>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/IronSourceFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace ironsource {

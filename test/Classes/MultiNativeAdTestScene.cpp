@@ -7,13 +7,14 @@
 //
 
 #include "MultiNativeAdTestScene.hpp"
-#include "AdMob.hpp"
-#include "FacebookAds.hpp"
+
+#include <cocos2d.h>
 
 #include <ee/Ads.hpp>
 #include <ee/Core.hpp>
 
-#include <cocos2d.h>
+#include "AdMob.hpp"
+#include "FacebookAds.hpp"
 
 namespace eetest {
 NativeAdTestScene* createMultiNativeAdTestScene() {

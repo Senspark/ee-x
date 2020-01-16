@@ -4,8 +4,9 @@
 //
 
 #include "ee/recorder/RecorderBridge.hpp"
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
+
+#include <ee/core/MessageBridge.hpp>
+#include <ee/core/Utils.hpp>
 
 namespace ee {
 namespace recorder {

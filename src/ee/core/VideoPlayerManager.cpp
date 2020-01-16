@@ -6,6 +6,7 @@
 //
 
 #include "ee/core/VideoPlayerManager.hpp"
+
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/MessageBridge.hpp"
 

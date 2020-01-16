@@ -9,8 +9,9 @@
 #ifndef EE_X_APP_LOVIN_REWARDED_VIDEO_HPP
 #define EE_X_APP_LOVIN_REWARDED_VIDEO_HPP
 
+#include <ee/ads/IRewardedVideo.hpp>
+
 #include "ee/AppLovinFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace applovin {

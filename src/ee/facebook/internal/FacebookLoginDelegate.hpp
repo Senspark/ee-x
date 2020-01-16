@@ -10,7 +10,6 @@
 
 #include <memory>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/facebook/IFacebookDelegate.hpp"
 
 namespace ee {

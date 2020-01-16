@@ -7,10 +7,11 @@
 //
 
 #include "ee/crashlytics/CrashlyticsBridge.hpp"
-#include "ee/core/LogLevel.hpp"
-#include "ee/core/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/core/LogLevel.hpp>
+#include <ee/core/MessageBridge.hpp>
 
 namespace ee {
 namespace crashlytics {

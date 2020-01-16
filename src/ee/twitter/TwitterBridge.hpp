@@ -9,7 +9,7 @@
 #include <functional>
 #include <string>
 
-#include "ee/core/LogLevel.hpp"
+#include "ee/TwitterFwd.hpp"
 
 namespace ee {
 namespace twitter {

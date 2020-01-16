@@ -6,7 +6,7 @@
 //
 //
 
-#include "NotificationBuilder.hpp"
+#include "ee/notification/NotificationBuilder.hpp"
 
 namespace ee {
 namespace notification {

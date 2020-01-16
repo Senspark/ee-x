@@ -6,8 +6,9 @@
 //
 
 #import "ee/facebook/internal/EEFacebookShareDelegate.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/EEIMessageBridge.h"
+
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/EEIMessageBridge.h>
 
 @implementation EEFacebookShareDelegate {
     int tag_;

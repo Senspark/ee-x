@@ -10,8 +10,9 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/IMessageBridge.hpp>
+
 #include "ee/admob/AdMobBridge.hpp"
-#include "ee/core/IMessageBridge.hpp"
 
 namespace ee {
 namespace admob {

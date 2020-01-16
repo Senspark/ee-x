@@ -7,12 +7,11 @@
 //
 
 #include "FacebookAds.hpp"
-#include "Utils.hpp"
-
-#include <ee/Core.hpp>
 
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
+
+#include "Utils.hpp"
 
 namespace eetest {
 ee::FacebookAds* getFacebookAds() {

@@ -9,10 +9,12 @@
 #ifndef EE_X_PLAY_FWD_HPP_
 #define EE_X_PLAY_FWD_HPP_
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace play {
 class Play;
-} // namespace notification
+} // namespace play
 
 using play::Play;
 } // namespace ee

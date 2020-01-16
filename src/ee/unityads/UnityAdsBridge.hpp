@@ -10,11 +10,10 @@
 #define EE_X_UNITY_ADS_BRIDGE_HPP
 
 #include <map>
+#include <memory>
+#include <string>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/UnityAdsFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace unityads {

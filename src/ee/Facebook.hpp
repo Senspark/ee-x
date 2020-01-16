@@ -6,6 +6,8 @@
 #ifndef EE_X_FACEBOOK_HEADER_HPP_
 #define EE_X_FACEBOOK_HEADER_HPP_
 
+#include <ee/Core.hpp>
+
 #ifdef __cplusplus
 #include "ee/FacebookFwd.hpp"
 #include "ee/facebook/FacebookGraphRequest.hpp"

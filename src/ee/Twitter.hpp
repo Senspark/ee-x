@@ -6,6 +6,8 @@
 #ifndef EE_X_TWITTER_HPP
 #define EE_X_TWITTER_HPP
 
+#include <ee/Core.hpp>
+
 #ifdef __cplusplus
 #include "ee/TwitterFwd.hpp"
 #include "ee/twitter/TwitterBridge.hpp"

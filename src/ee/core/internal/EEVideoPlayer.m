@@ -5,13 +5,14 @@
 //  Created by eps on 1/30/18.
 //
 
+#import "ee/core/internal/EEVideoPlayer.h"
+
 #import <MediaPlayer/MediaPlayer.h>
 
-#import "ee/core/internal/EEVideoPlayer.h"
+#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMetrics.h"
-#import "ee/core/EEMessageBridge.h"
 
 @interface EEVideoPlayer ()
 #if TARGET_OS_IOS

@@ -13,7 +13,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/core/LogLevel.hpp"
+#include "ee/CrashlyticsFwd.hpp"
 
 namespace ee {
 namespace crashlytics {

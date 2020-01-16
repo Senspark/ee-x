@@ -6,15 +6,16 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
 #import "ee/vungle/EEVungle.h"
 
+#import <UIKit/UIKit.h>
+
 #import <VungleSDK/VungleSDK.h>
+
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EEVungle () <VungleSDKDelegate> {
     BOOL initialized_;

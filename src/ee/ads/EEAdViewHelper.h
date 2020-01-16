@@ -24,7 +24,7 @@
 
 @interface EEAdViewHelper : NSObject
 
-- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                        prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId;
 

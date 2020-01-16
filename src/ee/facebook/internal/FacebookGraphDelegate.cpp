@@ -6,9 +6,10 @@
 //
 
 #include "ee/facebook/internal/FacebookGraphDelegate.hpp"
-#include "ee/core/IMessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/core/IMessageBridge.hpp>
 
 namespace ee {
 namespace facebook {

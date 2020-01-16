@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace facebook {
 class IBridge;

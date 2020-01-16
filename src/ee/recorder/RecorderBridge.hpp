@@ -8,7 +8,7 @@
 
 #include <string>
 
-#include "ee/core/LogLevel.hpp"
+#include "ee/RecorderFwd.hpp"
 
 namespace ee {
 namespace recorder {

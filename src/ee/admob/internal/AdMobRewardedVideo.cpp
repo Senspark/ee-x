@@ -6,15 +6,16 @@
 //
 //
 
+#include "ee/admob/internal/AdMobRewardedVideo.hpp"
+
 #include <cassert>
 
-#include "AdMobRewardedVideo.hpp"
+#include <ee/ads/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
+
 #include "ee/admob/AdMobBridge.hpp"
-#include "ee/admob/internal/AdMobRewardedVideo.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
-#include "ee/core/IMessageBridge.hpp"
-#include "ee/core/Logger.hpp"
-#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace admob {

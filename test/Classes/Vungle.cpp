@@ -7,12 +7,13 @@
 //
 
 #include "Vungle.hpp"
-#include "FunctionLogger.hpp"
-#include "Utils.hpp"
+
+#include <platform/CCPlatformConfig.h>
 
 #include <ee/Core.hpp>
 
-#include <platform/CCPlatformConfig.h>
+#include "FunctionLogger.hpp"
+#include "Utils.hpp"
 
 namespace eetest {
 ee::Vungle* getVungle() {
@@ -22,7 +23,7 @@ ee::Vungle* getVungle() {
         // Initialize Vungle on the main thread.
         ee::runOnUiThreadAndWait([] {
             FunctionLogger logger("Initialize Vungle");
-            plugin.initialize(getVungleGameId(), "");
+            plugin.initialize(getVungleGameId());
         });
         initialized = true;
     }

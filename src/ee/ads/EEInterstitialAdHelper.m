@@ -6,10 +6,12 @@
 //
 //
 
-#import "ee/ads/internal/EEInterstitialAdHelper.h"
-#import "ee/ads/internal/EEIInterstitialAd.h"
-#import "ee/core/EEIMessageBridge.h"
-#import "ee/core/internal/EEUtils.h"
+#import "ee/ads/EEInterstitialAdHelper.h"
+
+#import <ee/core/EEIMessageBridge.h>
+#import <ee/core/internal/EEUtils.h>
+
+#import "ee/ads/EEIInterstitialAd.h"
 
 @interface EEInterstitialAdHelper () {
     id<EEIMessageBridge> bridge_;

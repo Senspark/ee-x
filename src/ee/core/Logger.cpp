@@ -7,6 +7,7 @@
 //
 
 #include "ee/core/Logger.hpp"
+
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Utils.hpp"
 

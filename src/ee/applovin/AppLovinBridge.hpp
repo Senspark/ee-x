@@ -9,9 +9,9 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
+#include <string>
+
 #include "ee/AppLovinFwd.hpp"
-#include "ee/CoreFwd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
 
 namespace ee {
 namespace applovin {

@@ -9,6 +9,8 @@
 #ifndef EE_X_CRASHLYTICS_HEADER_HPP_
 #define EE_X_CRASHLYTICS_HEADER_HPP_
 
+#include <ee/Core.hpp>
+
 #include "ee/CrashlyticsFwd.hpp"
 #include "ee/crashlytics/CrashlyticsBridge.hpp"
 

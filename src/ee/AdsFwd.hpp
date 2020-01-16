@@ -9,6 +9,8 @@
 #ifndef EE_X_ADS_FWD_HPP
 #define EE_X_ADS_FWD_HPP
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace ads {
 class IAdView;

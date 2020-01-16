@@ -15,7 +15,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/Macro.hpp"
+#include <ee/Macro.hpp>
 
 #if defined(EE_X_MOBILE)
 namespace firebase {

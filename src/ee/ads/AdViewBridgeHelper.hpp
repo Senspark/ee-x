@@ -9,14 +9,12 @@
 #ifndef EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 #define EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 
-#include "ee/CoreFwd.hpp"
+#include "ee/AdsFwd.hpp"
+#include "ee/ads/AdViewHelper.hpp"
 #include "ee/ads/IAdView.hpp"
-#include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace ads {
-class AdViewHelper;
-
 class AdViewBridgeHelper : public IAdView {
 public:
     explicit AdViewBridgeHelper(IMessageBridge& bridge,

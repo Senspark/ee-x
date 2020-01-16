@@ -22,12 +22,12 @@ dependencies {
 
     if (rootProject.ext.useIronsourceMediation) {
         // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-        implementation 'com.ironsource.adapters:facebookadapter:4.3.8@jar'
+        implementation 'com.ironsource.adapters:facebookadapter:4.3.8'
 
         // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-        implementation 'com.ironsource.adapters:unityadsadapter:4.1.7@jar'
+        implementation 'com.ironsource.adapters:unityadsadapter:4.1.7'
 
         // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-        implementation 'com.ironsource.adapters:admobadapter:4.3.6@jar'
+        implementation 'com.ironsource.adapters:admobadapter:4.3.6'
     }
 }

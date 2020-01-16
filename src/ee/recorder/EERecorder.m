@@ -7,10 +7,10 @@
 
 #import <ReplayKit/ReplayKit.h>
 
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
 
 @interface EERecorder () <RPScreenRecorderDelegate,
                           RPPreviewViewControllerDelegate> {
@@ -134,7 +134,7 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
     return [recorder_ isAvailable];
 }
 
-- (NSString*)getScreenRecordingUrl {
+- (NSString*)getRecordingUrl {
     return @"";
 }
 

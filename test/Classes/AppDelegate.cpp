@@ -7,6 +7,13 @@
 //
 
 #include "AppDelegate.hpp"
+
+#include <cocos2d.h>
+
+#include <ee/Ads.hpp>
+#include <ee/Core.hpp>
+#include <ee/Macro.hpp>
+
 #include "AdMob.hpp"
 #include "AppLovin.hpp"
 #include "CrashlyticsAgent.hpp"
@@ -19,12 +26,6 @@
 #include "Vungle.hpp"
 #include "VideoPlayerTestScene.hpp"
 #include "TwitterShareTestScene.hpp"
-
-#include <ee/Ads.hpp>
-#include <ee/Core.hpp>
-#include <ee/Macro.hpp>
-
-#include <cocos2d.h>
 
 namespace eetest {
 namespace {

@@ -7,9 +7,8 @@
 //
 
 #include "AppLovin.hpp"
-#include "Utils.hpp"
 
-#include <ee/Core.hpp>
+#include "Utils.hpp"
 
 namespace eetest {
 ee::AppLovin* getAppLovin() {

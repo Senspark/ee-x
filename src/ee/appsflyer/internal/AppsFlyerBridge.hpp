@@ -8,7 +8,6 @@
 #ifndef EE_X_APPS_FLYER_BRIDGE_HPP
 #define EE_X_APPS_FLYER_BRIDGE_HPP
 
-#include "ee/CoreFwd.hpp"
 #include "ee/appsflyer/IAppsFlyerBridge.hpp"
 
 namespace ee {

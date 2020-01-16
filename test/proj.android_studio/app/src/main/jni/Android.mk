@@ -6,11 +6,12 @@ include $(CLEAR_VARS)
 
 $(call import-add-path, $(PROJECT_DIR))
 $(call import-add-path, $(PROJECT_DIR)/cocos2d)
-# $(call import-add-path, $(PROJECT_DIR)/cocos2d/cocos)
-# $(call import-add-path, $(PROJECT_DIR)/cocos2d/external)
+$(call import-add-path, $(PROJECT_DIR)/cocos2d/cocos)
+$(call import-add-path, $(PROJECT_DIR)/cocos2d/external)
+$(call import-add-path, $(PROJECT_DIR)/cocos2d/extensions)
 
-LOCAL_MODULE := ee_x_test_android_shared
-LOCAL_MODULE_FILENAME := lib_ee_x_test
+LOCAL_MODULE := ee_x_test
+LOCAL_MODULE_FILENAME := libee_x_test
 LOCAL_CPPFLAGS := -std=c++1z
 
 LOCAL_SRC_FILES := cpp/main.cpp
@@ -18,7 +19,7 @@ LOCAL_SRC_FILES += ${shell find $(PROJECT_DIR)/Classes -name "*.cpp" -print}
 
 LOCAL_C_INCLUDES := ${shell find $(PROJECT_DIR)/Classes -type d -print}
 
-LOCAL_STATIC_LIBRARIES := cocos2dx_static
+LOCAL_STATIC_LIBRARIES := cc_static
 LOCAL_STATIC_LIBRARIES += ee_x_admob_static
 LOCAL_STATIC_LIBRARIES += ee_x_applovin_static
 LOCAL_STATIC_LIBRARIES += ee_x_crashlytics_static
@@ -38,4 +39,4 @@ LOCAL_STATIC_LIBRARIES += ee_x_twitter_static
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module, ../jni)
-$(call import-module, cocos/prebuilt-mk)
+$(call import-module, cocos)

@@ -7,12 +7,11 @@
 //
 
 #include "IronSource.hpp"
-#include "FunctionLogger.hpp"
-#include "Utils.hpp"
-
-#include <ee/Core.hpp>
 
 #include <platform/CCPlatformConfig.h>
+
+#include "FunctionLogger.hpp"
+#include "Utils.hpp"
 
 namespace eetest {
 ee::IronSource* getIronSource() {

@@ -7,11 +7,12 @@
 //
 
 #include "ee/firebase/FirebaseMessaging.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <firebase/messaging.h>
 #endif // EE_X_MOBILE
+
+#include <ee/firebase/FirebaseApp.hpp>
 
 namespace ee {
 namespace firebase {

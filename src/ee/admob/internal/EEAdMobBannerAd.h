@@ -6,7 +6,9 @@
 //
 //
 
-#import "ee/ads/internal/EEIAdView.h"
+#import <GoogleMobileAds/GADAdSize.h>
+
+#import <ee/ads/EEIAdView.h>
 
 @protocol EEIMessageBridge;
 
@@ -14,7 +16,7 @@
 
 + (GADAdSize)adSizeFor:(int)index;
 
-- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(GADAdSize)adSize;
 

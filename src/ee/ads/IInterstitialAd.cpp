@@ -7,7 +7,8 @@
 //
 
 #include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/internal/MediationManager.hpp"
+
+#include "ee/ads/MediationManager.hpp"
 
 namespace ee {
 namespace ads {

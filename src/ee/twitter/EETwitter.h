@@ -3,7 +3,7 @@
 //
 //
 
-#import "ee/core/EEIPlugin.h"
+#import <ee/core/EEIPlugin.h>
 
 @interface EETwitter : NSObject <EEIPlugin>
 

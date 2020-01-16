@@ -8,9 +8,9 @@
 #ifndef EE_X_VIDEO_PLAYER_TEST_SCENE_HPP
 #define EE_X_VIDEO_PLAYER_TEST_SCENE_HPP
 
-#include <ee/CoreFwd.hpp>
-
 #include <cocos2d.h>
+
+#include <ee/CoreFwd.hpp>
 
 namespace eetest {
 class VideoPlayerTestScene : public cocos2d::Scene {

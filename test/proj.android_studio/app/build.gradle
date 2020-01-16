@@ -4,7 +4,7 @@ apply plugin: 'io.fabric'
 /// Modify this variable to build the desired architectures.
 String[] architectures = [
         'armeabi-v7a',
-        'x86'
+        // 'arm64-v8'
 ]
 
 android {
@@ -13,7 +13,7 @@ android {
     flavorDimensions 'screenSize'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         applicationId 'com.ee.test.android'
@@ -26,15 +26,16 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                targets '_ee_x_test'
+                targets 'ee_x_test'
                 arguments 'APP_STL=c++_static'
                 arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                arguments 'APP_PLATFORM=android-14'
+                arguments 'APP_PLATFORM=android-16'
                 arguments 'APP_LDFLAGS=-latomic'
                 arguments '-j' + Runtime.runtime.availableProcessors()
                 cppFlags '-frtti'
                 cppFlags '-fexceptions'
                 cppFlags '-fsigned-char'
+                cppFlags '-std=c++17'
                 cppFlags '-U__SSE__'
                 cppFlags '-Wno-extern-c-compat'
             }
@@ -122,26 +123,13 @@ dependencies {
 
     implementation project(':ee-x-admob')
     implementation project(':ee-x-game-center')
-    // implementation project(':ee-x-applovin')
-    // implementation project(':ee-x-facebook-ads')
-    // implementation project(':ee-x-ironsource')
-    // implementation project(':ee-x-unity-ads')
-    // implementation project(':ee-x-vungle')
+    implementation project(':ee-x-applovin')
+    implementation project(':ee-x-facebook-ads')
+    implementation project(':ee-x-ironsource')
+    implementation project(':ee-x-unity-ads')
+    implementation project(':ee-x-vungle')
 
-    implementation project(':ee-x-applovin-mediation')
-    implementation project(':ee-x-facebook-ads-mediation')
-    implementation project(':ee-x-ironsource-mediation')
-    implementation project(':ee-x-unity-ads-mediation')
-    implementation project(':ee-x-vungle-mediation')
-
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
-    implementation "com.android.support:cardview-v7:${rootProject.ext.supportLibraryVersion}"
-    implementation "com.android.support:customtabs:${rootProject.ext.supportLibraryVersion}"
-    implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibraryVersion}"
-    implementation "com.android.support:support-v4:${rootProject.ext.supportLibraryVersion}"
-
-    implementation 'com.google.firebase:firebase-core:16.0.4'
-    implementation 'com.google.android.gms:play-services-base:16.0.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

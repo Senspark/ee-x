@@ -9,8 +9,9 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/core/IMessageBridge.hpp"
-#include "ee/core/internal/SharedPtrUtils.hpp"
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/core/internal/SharedPtrUtils.hpp>
+
 #include "ee/facebook/internal/FacebookAccessToken.hpp"
 
 namespace ee {

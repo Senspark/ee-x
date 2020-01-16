@@ -9,8 +9,11 @@
 #ifndef EE_X_UNITY_INTERSTITIAL_AD_HPP
 #define EE_X_UNITY_INTERSTITIAL_AD_HPP
 
+#include <string>
+
+#include <ee/ads/IInterstitialAd.hpp>
+
 #include "ee/UnityAdsFwd.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace unityads {

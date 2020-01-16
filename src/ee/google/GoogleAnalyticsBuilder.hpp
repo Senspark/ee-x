@@ -9,6 +9,7 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_BUILDER_HPP
 #define EE_X_GOOGLE_ANALYTICS_BUILDER_HPP
 
+#include <map>
 #include <vector>
 
 #include "ee/GoogleAnalyticsFwd.hpp"

@@ -9,9 +9,9 @@
 #ifndef EE_X_TEST_NATIVE_ADS_TEST_SCENE_HPP
 #define EE_X_TEST_NATIVE_ADS_TEST_SCENE_HPP
 
-#include <ee/AdsFwd.hpp>
-
 #include <cocos2d.h>
+
+#include <ee/AdsFwd.hpp>
 
 namespace eetest {
 class NativeAdTestScene : public cocos2d::Scene {

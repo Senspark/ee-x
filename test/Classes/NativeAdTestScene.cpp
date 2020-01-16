@@ -8,11 +8,10 @@
 
 #include "NativeAdTestScene.hpp"
 
-#include <ee/Ads.hpp>
-#include <ee/Core.hpp>
-
 #include <cocos2d.h>
 #include <ui/CocosGUI.h>
+
+#include <ee/Ads.hpp>
 
 namespace eetest {
 using Self = NativeAdTestScene;

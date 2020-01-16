@@ -9,6 +9,7 @@
 #define TwitterShareTestScene_hpp
 
 #include <cocos2d.h>
+
 #include <ee/TwitterFwd.hpp>
 
 namespace eetest {

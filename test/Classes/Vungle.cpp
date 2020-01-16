@@ -7,12 +7,13 @@
 //
 
 #include "Vungle.hpp"
-#include "FunctionLogger.hpp"
-#include "Utils.hpp"
+
+#include <platform/CCPlatformConfig.h>
 
 #include <ee/Core.hpp>
 
-#include <platform/CCPlatformConfig.h>
+#include "FunctionLogger.hpp"
+#include "Utils.hpp"
 
 namespace eetest {
 ee::Vungle* getVungle() {

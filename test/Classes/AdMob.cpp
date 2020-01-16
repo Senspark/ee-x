@@ -7,13 +7,14 @@
 //
 
 #include "AdMob.hpp"
-#include "Utils.hpp"
-
-#include <ee/Core.hpp>
 
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 #include <platform/CCPlatformConfig.h>
+
+#include <ee/Core.hpp>
+
+#include "Utils.hpp"
 
 namespace eetest {
 ee::AdMob* getAdMob() {

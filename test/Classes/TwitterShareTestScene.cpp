@@ -7,11 +7,10 @@
 
 #include "TwitterShareTestScene.hpp"
 
-#include <ee/Core.hpp>
-#include <ee/Twitter.hpp>
-
 #include <cocos2d.h>
 #include <ui/CocosGUI.h>
+
+#include <ee/Twitter.hpp>
 
 namespace {
 constexpr auto k__failed            = 0;

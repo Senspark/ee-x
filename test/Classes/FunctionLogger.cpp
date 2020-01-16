@@ -7,6 +7,7 @@
 //
 
 #include "FunctionLogger.hpp"
+
 #include "Utils.hpp"
 
 namespace eetest {

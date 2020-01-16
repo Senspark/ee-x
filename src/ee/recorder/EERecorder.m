@@ -23,12 +23,11 @@
 @implementation EERecorder
 
 // clang-format off
-NSString* const k__isSupported              = @"Recorder_isSupported";
-NSString* const k__startRecording           = @"Recorder_startRecording";
-NSString* const k__stopRecording            = @"Recorder_stopRecording";
-NSString* const k__cancelRecording          = @"Recorder_cancelRecording";
-NSString* const k__getRecordingUrl          = @"Recorder_getRecordingUrl";
-NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermission";
+NSString* const k__isSupported     = @"Recorder_isSupported";
+NSString* const k__startRecording  = @"Recorder_startRecording";
+NSString* const k__stopRecording   = @"Recorder_stopRecording";
+NSString* const k__cancelRecording = @"Recorder_cancelRecording";
+NSString* const k__getRecordingUrl = @"Recorder_getRecordingUrl";
 // clang-format on
 
 - (id)init {
@@ -78,12 +77,6 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
                     callback:^(NSString* message) {
                         return [self getRecordingUrl];
                     }];
-
-    [bridge_ registerHandler:k__checkRecordingPermission
-                    callback:^(NSString* message) {
-                        return
-                            [EEUtils toString:[self checkRecordingPermission]];
-                    }];
 }
 
 - (void)deregisterHandlers {
@@ -92,11 +85,10 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
     [bridge_ deregisterHandler:k__stopRecording];
     [bridge_ deregisterHandler:k__cancelRecording];
     [bridge_ deregisterHandler:k__getRecordingUrl];
-    [bridge_ deregisterHandler:k__checkRecordingPermission];
 }
 
 - (BOOL)isSupported {
-    return YES;
+    return [recorder_ isAvailable];
 }
 
 - (void)startRecording {
@@ -139,10 +131,6 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
                 NSLog(@"cancelRecording: %@", [error localizedDescription]);
             }
         }];
-}
-
-- (BOOL)checkRecordingPermission {
-    return [recorder_ isAvailable];
 }
 
 - (NSString*)getRecordingUrl {

@@ -1,10 +1,8 @@
 package com.ee.recorder;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
@@ -15,8 +13,6 @@ import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -38,15 +34,12 @@ public class Recorder implements PluginProtocol {
     private static final String k__stopRecording = "Recorder_stopRecording";
     private static final String k__cancelRecording = "Recorder_cancelRecording";
     private static final String k__getRecordingUrl = "Recorder_getRecordingUrl";
-    private static final String k__checkRecordingPermission = "Recorder_checkRecordingPermission";
 
     private static final Logger _logger = new Logger(Recorder.class.getName());
 
     private static final int PERMISSION_CODE = 1;
 
     private Activity _activity;
-    private boolean _hasRecordingPermission;
-    private boolean _isRecordAudioEnabled; // Record audio from mic.
     private boolean _isRecording;
     private String _filePath;
     private int _screenWidth;
@@ -60,7 +53,6 @@ public class Recorder implements PluginProtocol {
     public Recorder() {
         Utils.checkMainThread();
         _activity = null;
-        _hasRecordingPermission = false;
         _isRecording = false;
         _mediaRecorder = new MediaRecorder();
         registerHandlers();
@@ -82,8 +74,7 @@ public class Recorder implements PluginProtocol {
         _screenWidth = metrics.widthPixels / 2;
         _screenHeight = metrics.heightPixels / 2;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        if (isSupported()) {
             _mediaProjectionManager = (MediaProjectionManager) _activity.getSystemService(
                 Context.MEDIA_PROJECTION_SERVICE);
         }
@@ -107,7 +98,7 @@ public class Recorder implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (isSupported()) {
             if (_mediaProjection != null) {
                 _mediaProjection.stop();
                 _mediaProjection = null;
@@ -169,14 +160,6 @@ public class Recorder implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(checkRecordingPermission());
-            }
-        }, k__checkRecordingPermission);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
                 return getRecordingUrl();
             }
         }, k__getRecordingUrl);
@@ -188,7 +171,6 @@ public class Recorder implements PluginProtocol {
         bridge.deregisterHandler(k__startRecording);
         bridge.deregisterHandler(k__stopRecording);
         bridge.deregisterHandler(k__cancelRecording);
-        bridge.deregisterHandler(k__checkRecordingPermission);
         bridge.deregisterHandler(k__getRecordingUrl);
     }
 
@@ -197,7 +179,7 @@ public class Recorder implements PluginProtocol {
         if (requestCode != PERMISSION_CODE || responseCode != Activity.RESULT_OK) {
             return false;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (!isSupported()) {
             return false;
         }
         _mediaProjection = _mediaProjectionManager.getMediaProjection(responseCode, data);
@@ -211,11 +193,7 @@ public class Recorder implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void startRecording() {
-        if (!hasRecordingPermission()) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (!isSupported()) {
             return;
         }
         if (_mediaProjection == null) {
@@ -233,17 +211,12 @@ public class Recorder implements PluginProtocol {
     private void _startRecording() {
         _filePath = generateFilePath();
 
+        // Initialization order.
         // https://developer.android.com/reference/android/media/MediaRecorder
-        if (_isRecordAudioEnabled) {
-            _mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        }
         _mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
 
         _mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
-        if (_isRecordAudioEnabled) {
-            _mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        }
         _mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         _mediaRecorder.setVideoEncodingBitRate(512 * 1000);
         _mediaRecorder.setVideoFrameRate(30);
@@ -269,8 +242,7 @@ public class Recorder implements PluginProtocol {
         if (!_isRecording) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (!isSupported()) {
             return;
         }
         _mediaRecorder.stop();
@@ -281,8 +253,7 @@ public class Recorder implements PluginProtocol {
         if (!_isRecording) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (!isSupported()) {
             return;
         }
         _stopRecording();
@@ -298,45 +269,6 @@ public class Recorder implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public String getRecordingUrl() {
         return _filePath;
-    }
-
-    private boolean hasRecordingPermission() {
-        if (!_isRecordAudioEnabled) {
-            return true;
-        }
-        return _hasRecordingPermission;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean checkRecordingPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            return false;
-        }
-        if (!_isRecordAudioEnabled) {
-            // No permission required.
-            return true;
-        }
-        if (_hasRecordingPermission) {
-            return true;
-        }
-        String[] permissions = new String[]{
-            // https://stackoverflow.com/questions/35129243/write-external-storage-permission
-            // Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECORD_AUDIO};
-        boolean needRequestPermissions = false;
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(_activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                needRequestPermissions = true;
-                break;
-            }
-        }
-        if (needRequestPermissions) {
-            ActivityCompat.requestPermissions(_activity, permissions, PERMISSION_CODE);
-        } else {
-            _hasRecordingPermission = true;
-        }
-        return _hasRecordingPermission;
     }
 
     private String generateFilePath() {

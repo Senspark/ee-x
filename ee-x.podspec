@@ -90,6 +90,9 @@ Pod::Spec.new do |spec|
     s.private_header_files =
       'src/ee/facebook/internal/*'
 
+    s.exclude_files =
+      'src/ee/facebook/CMakeLists.txt'
+
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKCoreKit'
     s.dependency 'FBSDKLoginKit'
@@ -100,6 +103,9 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Notification*',
       'src/ee/notification/**/*'
+
+    s.exclude_files =
+      'src/ee/notification/CMakeLists.txt'
 
     s.platform = :ios
     s.dependency 'ee-x/core'
@@ -281,6 +287,9 @@ Pod::Spec.new do |spec|
     s.private_header_files =
       'src/ee/ironsource/internal/*'
 
+    s.exclude_files =
+      'src/ee/ironsource/CMakeLists.txt'
+
     s.dependency 'ee-x/ads'
     s.dependency 'IronSourceSDK'
   end
@@ -292,6 +301,9 @@ Pod::Spec.new do |spec|
 
     s.private_header_files =
       'src/ee/unityads/internal/*'
+
+    s.exclude_files =
+      'src/ee/unityads/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
@@ -316,6 +328,9 @@ Pod::Spec.new do |spec|
 
     s.private_header_files =
       'src/ee/vungle/internal/*'
+
+    s.exclude_files =
+      'src/ee/vungle/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
@@ -346,6 +361,9 @@ Pod::Spec.new do |spec|
       'src/ee/Play*',
       'src/ee/play/*'
 
+    s.exclude_files =
+      'src/ee/play/CMakeLists.txt'
+
     s.dependency 'ee-x/core'
   end
 
@@ -356,6 +374,9 @@ Pod::Spec.new do |spec|
 
     s.private_header_files =
       'src/ee/appsflyer/internal/*'
+
+    s.exclude_files =
+      'src/ee/appsflyer/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'

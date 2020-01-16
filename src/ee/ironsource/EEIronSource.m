@@ -8,8 +8,9 @@
 
 #import "ee/ironsource/EEIronSource.h"
 
-#import <IronSource/IronSource.h>
 #import <UIKit/UIKit.h>
+
+#import <IronSource/IronSource.h>
 
 #import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>

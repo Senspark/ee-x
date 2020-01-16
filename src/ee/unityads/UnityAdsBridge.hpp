@@ -10,6 +10,8 @@
 #define EE_X_UNITY_ADS_BRIDGE_HPP
 
 #include <map>
+#include <memory>
+#include <string>
 
 #include "ee/UnityAdsFwd.hpp"
 

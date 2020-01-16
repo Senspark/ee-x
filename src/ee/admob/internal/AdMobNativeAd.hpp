@@ -9,7 +9,6 @@
 #ifndef EE_X_ADMOB_NATIVE_AD_HPP
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
-#include <ee/CoreFwd.hpp>
 #include <ee/ads/AdViewBridgeHelper.hpp>
 #include <ee/ads/AdViewHelper.hpp>
 #include <ee/ads/IAdView.hpp>

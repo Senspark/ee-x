@@ -10,7 +10,6 @@
 #define EE_X_I_AD_VIEW_HPP
 
 #include <functional>
-#include <string>
 #include <utility>
 
 #include "ee/AdsFwd.hpp"

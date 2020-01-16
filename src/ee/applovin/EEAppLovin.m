@@ -8,11 +8,6 @@
 
 #import "ee/applovin/EEAppLovin.h"
 
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
-
 #ifdef EE_X_USE_IRON_SOURCE_MEDIATION
 #import <ISAppLovinAdapter/ALIncentivizedInterstitialAd.h>
 #import <ISAppLovinAdapter/ALSdk.h>
@@ -22,6 +17,11 @@
 #import <AppLovinSDK/ALInterstitialAd.h>
 #import <AppLovinSDK/ALSdk.h>
 #endif // EE_X_USE_IRON_SOURCE_MEDIATION
+
+#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEUtils.h>
 
 // clang-format off
 static NSString* const k__initialize               = @"AppLovin_initialize";

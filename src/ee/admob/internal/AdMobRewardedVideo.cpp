@@ -6,7 +6,7 @@
 //
 //
 
-#include "AdMobRewardedVideo.hpp"
+#include "ee/admob/internal/AdMobRewardedVideo.hpp"
 
 #include <cassert>
 
@@ -16,7 +16,6 @@
 #include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
-#include "ee/admob/internal/AdMobRewardedVideo.hpp"
 
 namespace ee {
 namespace admob {

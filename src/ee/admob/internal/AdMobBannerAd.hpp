@@ -9,9 +9,9 @@
 #ifndef EE_X_ADMOB_BANNER_AD_HPP
 #define EE_X_ADMOB_BANNER_AD_HPP
 
-#include <ee/ads/IAdView.hpp>
 #include <ee/ads/AdViewBridgeHelper.hpp>
 #include <ee/ads/AdViewHelper.hpp>
+#include <ee/ads/IAdView.hpp>
 
 #include "ee/AdMobFwd.hpp"
 

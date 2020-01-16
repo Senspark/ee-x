@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_INTERSTITIAL_AD_HPP
 #define EE_X_ADMOB_INTERSTITIAL_AD_HPP
 
+#include <string>
+
 #include <ee/ads/IInterstitialAd.hpp>
 
 #include "ee/AdMobFwd.hpp"

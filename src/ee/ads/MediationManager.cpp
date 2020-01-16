@@ -11,7 +11,6 @@
 
 #include <mutex>
 
-#include "ee/Core.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
 #include "ee/ads/IRewardedVideo.hpp"
 

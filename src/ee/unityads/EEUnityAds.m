@@ -8,9 +8,11 @@
 
 #import "ee/unityads/EEUnityAds.h"
 
-// FIXME.
-//#import "ISUnityAdsAdapter/UnityAds.h"
+#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
+#import <ISUnityAdsAdapter/UnityAds.h>
+#else // EE_X_USE_IRON_SOURCE_MEDIATION
 #import <UnityAds/UnityAds.h>
+#endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
 #import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>

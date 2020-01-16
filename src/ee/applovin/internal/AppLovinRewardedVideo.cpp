@@ -7,6 +7,7 @@
 //
 
 #include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
+
 #include "ee/applovin/AppLovinBridge.hpp"
 
 namespace ee {

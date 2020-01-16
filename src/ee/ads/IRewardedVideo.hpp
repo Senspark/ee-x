@@ -10,7 +10,6 @@
 #define EE_X_I_REWARDED_VIDEO_HPP
 
 #include <functional>
-#include <string>
 
 #include "ee/AdsFwd.hpp"
 

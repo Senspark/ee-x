@@ -99,7 +99,8 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (initialized_) {
         return;
     }
-    [UnityAds initialize:gameId delegate:self testMode:testModeEnabled];
+    [UnityAds initialize:gameId testMode:testModeEnabled];
+    [UnityAds addDelegate:self];
     initialized_ = YES;
 }
 
@@ -107,7 +108,7 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     if (!initialized_) {
         return;
     }
-    [UnityAds setDelegate:nil];
+    [UnityAds removeDelegate:self];
 }
 
 - (void)setDebugMode:(BOOL)enabled {

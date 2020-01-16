@@ -246,7 +246,7 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 }
 
 - (void)setTestAdsEnabled:(BOOL)enabled {
-    [[sdk_ settings] setIsTestAdsEnabled:enabled];
+    // Removed.
 }
 
 - (void)setVerboseLogging:(BOOL)enabled {
@@ -306,10 +306,6 @@ static NSString* const k__onUserRewardVerified     = @"AppLovin_onUserRewardVeri
 - (void)rewardValidationRequestForAd:(ALAd*)ad
                     didFailWithError:(NSInteger)responseCode {
     NSLog(@"%s: code = %ld", __PRETTY_FUNCTION__, responseCode);
-}
-
-- (void)userDeclinedToViewAd:(ALAd*)ad {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end

@@ -22,7 +22,7 @@ ee::Vungle* getVungle() {
         // Initialize Vungle on the main thread.
         ee::runOnUiThreadAndWait([] {
             FunctionLogger logger("Initialize Vungle");
-            plugin.initialize(getVungleGameId(), "");
+            plugin.initialize(getVungleGameId());
         });
         initialized = true;
     }

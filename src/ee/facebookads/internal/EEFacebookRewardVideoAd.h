@@ -10,7 +10,7 @@
 
 @interface EEFacebookRewardVideoAd : NSObject
 
-- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                   placementId:(NSString* _Nonnull)placementId;
 
 - (void)destroy;

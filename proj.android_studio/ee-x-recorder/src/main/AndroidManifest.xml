@@ -2,13 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ee.recorder">
 
-    <!-- FIXME: for android 10 -->
-    <!-- uses-permission android:name="android.permission.FOREGROUND_SERVICE" /-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application>
         <!-- https://stackoverflow.com/questions/57026489/mediaprojection-service-type-not-recognized-in-android-q -->
         <service
-            android:name="com.hbisoft.hbrecorder.ScreenRecordService"
+            android:name=".RecordService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"

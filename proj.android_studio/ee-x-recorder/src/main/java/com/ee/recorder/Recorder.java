@@ -1,18 +1,15 @@
 package com.ee.recorder;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.MediaRecorder;
-import android.media.projection.MediaProjection;
+import android.content.ServiceConnection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
-import android.util.DisplayMetrics;
+import android.os.IBinder;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -20,7 +17,6 @@ import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -40,22 +36,18 @@ public class Recorder implements PluginProtocol {
     private static final int PERMISSION_CODE = 1;
 
     private Activity _activity;
-    private boolean _isRecording;
-    private String _filePath;
-    private int _screenWidth;
-    private int _screenHeight;
-    private int _screenDensity;
-    private MediaRecorder _mediaRecorder;
-    private MediaProjection _mediaProjection;
+    private RecordService _recordService;
+    private ServiceConnection _serviceConnection;
     private MediaProjectionManager _mediaProjectionManager;
-    private VirtualDisplay _virtualDisplay;
+    private String _filePath;
 
-    public Recorder() {
+    public Recorder(Context context) {
         Utils.checkMainThread();
         _activity = null;
-        _isRecording = false;
-        _mediaRecorder = new MediaRecorder();
         registerHandlers();
+        if (isSupported()) {
+            _mediaProjectionManager = (MediaProjectionManager) context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        }
     }
 
     @NonNull
@@ -67,16 +59,21 @@ public class Recorder implements PluginProtocol {
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        _activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        _screenDensity = metrics.densityDpi;
-        _screenWidth = metrics.widthPixels / 2;
-        _screenHeight = metrics.heightPixels / 2;
-
         if (isSupported()) {
-            _mediaProjectionManager = (MediaProjectionManager) _activity.getSystemService(
-                Context.MEDIA_PROJECTION_SERVICE);
+            Intent service = new Intent(_activity, RecordService.class);
+            _serviceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    RecordService.ServiceBinder binder = (RecordService.ServiceBinder) service;
+                    _recordService = binder.getServiceSystem();
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    _recordService = null;
+                }
+            };
+            _activity.bindService(service, _serviceConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -98,13 +95,10 @@ public class Recorder implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        if (isSupported()) {
-            if (_mediaProjection != null) {
-                _mediaProjection.stop();
-                _mediaProjection = null;
-            }
-        }
         _activity = null;
+        if (isSupported()) {
+            _serviceConnection = null;
+        }
     }
 
     @Override
@@ -182,8 +176,14 @@ public class Recorder implements PluginProtocol {
         if (!isSupported()) {
             return false;
         }
-        _mediaProjection = _mediaProjectionManager.getMediaProjection(responseCode, data);
-        _startRecording();
+        _filePath = generateFilePath();
+
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_START);
+        intent.putExtra("responseCode", responseCode);
+        intent.putExtra("data", data);
+        intent.putExtra("path", _filePath);
+        _activity.startService(intent);
         return true;
     }
 
@@ -196,74 +196,27 @@ public class Recorder implements PluginProtocol {
         if (!isSupported()) {
             return;
         }
-        if (_mediaProjection == null) {
-            _activity.startActivityForResult(_mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
-            return;
-        }
-        if (_isRecording) {
-            return;
-        }
-        _mediaRecorder.reset();
-        _startRecording();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void _startRecording() {
-        _filePath = generateFilePath();
-
-        // Initialization order.
-        // https://developer.android.com/reference/android/media/MediaRecorder
-        _mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-
-        _mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-        _mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        _mediaRecorder.setVideoEncodingBitRate(512 * 1000);
-        _mediaRecorder.setVideoFrameRate(30);
-        _mediaRecorder.setVideoSize(_screenWidth, _screenHeight);
-        _mediaRecorder.setCaptureRate(30);
-        _mediaRecorder.setOutputFile(_filePath);
-
-        try {
-            _mediaRecorder.prepare();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        _virtualDisplay = createVirtualDisplay(_mediaProjection,
-            _screenWidth, _screenHeight, _screenDensity, _mediaRecorder);
-
-        _mediaRecorder.start();
-        _isRecording = true;
+        _activity.startActivityForResult(_mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void stopRecording() {
-        if (!_isRecording) {
-            return;
-        }
         if (!isSupported()) {
             return;
         }
-        _mediaRecorder.stop();
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_STOP);
+        _activity.startService(intent);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void cancelRecording() {
-        if (!_isRecording) {
-            return;
-        }
         if (!isSupported()) {
             return;
         }
-        _stopRecording();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void _stopRecording() {
-        _mediaRecorder.reset();
-        _virtualDisplay.release();
-        _isRecording = false;
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_CANCEL);
+        _activity.startService(intent);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -276,13 +229,5 @@ public class Recorder implements PluginProtocol {
         Date curDate = new Date(System.currentTimeMillis());
         String curTime = formatter.format(curDate).replace(" ", "");
         return String.format("%s/capture_%s.mp4", _activity.getApplicationInfo().dataDir, curTime);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private VirtualDisplay createVirtualDisplay(MediaProjection projection,
-                                                int width, int height, int density, MediaRecorder recorder) {
-        return projection.createVirtualDisplay("Recorder",
-            width, height, density, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-            recorder.getSurface(), null, null);
     }
 }

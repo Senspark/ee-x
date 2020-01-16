@@ -145,11 +145,11 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
     // [tracker_ trackAppLaunch];
 }
 
-- (void)onConversionDataReceived:(NSDictionary*)installData {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, installData);
+- (void)onConversionDataSuccess:(NSDictionary*)conversionInfo {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, conversionInfo);
 }
 
-- (void)onConversionDataRequestFailure:(NSError*)error {
+- (void)onConversionDataFail:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
 }
 

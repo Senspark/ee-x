@@ -134,7 +134,7 @@ NSString* const k__checkRecordingPermission = @"Recorder_checkRecordingPermissio
     return [recorder_ isAvailable];
 }
 
-- (NSString*)getScreenRecordingUrl {
+- (NSString*)getRecordingUrl {
     return @"";
 }
 

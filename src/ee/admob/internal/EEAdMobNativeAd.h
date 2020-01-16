@@ -14,7 +14,7 @@
 
 @interface EEAdMobNativeAd : NSObject <EEIAdView>
 
-- (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
+- (id _Nullable)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                         layout:(NSString* _Nonnull)layoutName;

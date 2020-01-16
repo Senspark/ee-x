@@ -1,22 +1,15 @@
 package com.ee.recorder;
 
-import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.MediaRecorder;
-import android.media.projection.MediaProjection;
+import android.content.ServiceConnection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
-import android.util.DisplayMetrics;
+import android.os.IBinder;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -24,7 +17,6 @@ import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,36 +25,29 @@ import java.util.Locale;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class Recorder implements PluginProtocol {
+    private static final String k__isSupported = "Recorder_isSupported";
     private static final String k__startRecording = "Recorder_startRecording";
     private static final String k__stopRecording = "Recorder_stopRecording";
     private static final String k__cancelRecording = "Recorder_cancelRecording";
     private static final String k__getRecordingUrl = "Recorder_getRecordingUrl";
-    private static final String k__checkRecordingPermission = "Recorder_checkRecordingPermission";
 
     private static final Logger _logger = new Logger(Recorder.class.getName());
 
     private static final int PERMISSION_CODE = 1;
 
     private Activity _activity;
-    private boolean _hasRecordingPermission;
-    private boolean _isRecordAudioEnabled; // Record audio from mic.
-    private boolean _isRecording;
-    private String _filePath;
-    private int _screenWidth;
-    private int _screenHeight;
-    private int _screenDensity;
-    private MediaRecorder _mediaRecorder;
-    private MediaProjection _mediaProjection;
+    private RecordService _recordService;
+    private ServiceConnection _serviceConnection;
     private MediaProjectionManager _mediaProjectionManager;
-    private VirtualDisplay _virtualDisplay;
+    private String _filePath;
 
-    public Recorder() {
+    public Recorder(Context context) {
         Utils.checkMainThread();
         _activity = null;
-        _hasRecordingPermission = false;
-        _isRecording = false;
-        _mediaRecorder = new MediaRecorder();
         registerHandlers();
+        if (isSupported()) {
+            _mediaProjectionManager = (MediaProjectionManager) context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        }
     }
 
     @NonNull
@@ -74,17 +59,21 @@ public class Recorder implements PluginProtocol {
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;
+        if (isSupported()) {
+            Intent service = new Intent(_activity, RecordService.class);
+            _serviceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    RecordService.ServiceBinder binder = (RecordService.ServiceBinder) service;
+                    _recordService = binder.getServiceSystem();
+                }
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        _activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        _screenDensity = metrics.densityDpi;
-        _screenWidth = metrics.widthPixels / 2;
-        _screenHeight = metrics.heightPixels / 2;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            _mediaProjectionManager = (MediaProjectionManager) _activity.getSystemService(
-                Context.MEDIA_PROJECTION_SERVICE);
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    _recordService = null;
+                }
+            };
+            _activity.bindService(service, _serviceConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -106,13 +95,10 @@ public class Recorder implements PluginProtocol {
 
     @Override
     public void onDestroy() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (_mediaProjection != null) {
-                _mediaProjection.stop();
-                _mediaProjection = null;
-            }
-        }
         _activity = null;
+        if (isSupported()) {
+            _serviceConnection = null;
+        }
     }
 
     @Override
@@ -128,6 +114,14 @@ public class Recorder implements PluginProtocol {
 
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                return Utils.toString(isSupported());
+            }
+        }, k__isSupported);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -160,14 +154,6 @@ public class Recorder implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(checkRecordingPermission());
-            }
-        }, k__checkRecordingPermission);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
                 return getRecordingUrl();
             }
         }, k__getRecordingUrl);
@@ -179,7 +165,6 @@ public class Recorder implements PluginProtocol {
         bridge.deregisterHandler(k__startRecording);
         bridge.deregisterHandler(k__stopRecording);
         bridge.deregisterHandler(k__cancelRecording);
-        bridge.deregisterHandler(k__checkRecordingPermission);
         bridge.deregisterHandler(k__getRecordingUrl);
     }
 
@@ -188,98 +173,50 @@ public class Recorder implements PluginProtocol {
         if (requestCode != PERMISSION_CODE || responseCode != Activity.RESULT_OK) {
             return false;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (!isSupported()) {
             return false;
         }
-        _mediaProjection = _mediaProjectionManager.getMediaProjection(responseCode, data);
-        _startRecording();
+        _filePath = generateFilePath();
+
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_START);
+        intent.putExtra("responseCode", responseCode);
+        intent.putExtra("data", data);
+        intent.putExtra("path", _filePath);
+        _activity.startService(intent);
         return true;
+    }
+
+    public boolean isSupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @SuppressWarnings("WeakerAccess")
     public void startRecording() {
-        if (!hasRecordingPermission()) {
+        if (!isSupported()) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            return;
-        }
-        if (_mediaProjection == null) {
-            _activity.startActivityForResult(_mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
-            return;
-        }
-        if (_isRecording) {
-            return;
-        }
-        _mediaRecorder.reset();
-        _startRecording();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void _startRecording() {
-        _filePath = generateFilePath();
-
-        // https://developer.android.com/reference/android/media/MediaRecorder
-        if (_isRecordAudioEnabled) {
-            _mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        }
-        _mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-
-        _mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-        if (_isRecordAudioEnabled) {
-            _mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        }
-        _mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        _mediaRecorder.setVideoEncodingBitRate(512 * 1000);
-        _mediaRecorder.setVideoFrameRate(30);
-        _mediaRecorder.setVideoSize(_screenWidth, _screenHeight);
-        _mediaRecorder.setCaptureRate(30);
-        _mediaRecorder.setOutputFile(_filePath);
-
-        try {
-            _mediaRecorder.prepare();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        _virtualDisplay = createVirtualDisplay(_mediaProjection,
-            _screenWidth, _screenHeight, _screenDensity, _mediaRecorder);
-
-        _mediaRecorder.start();
-        _isRecording = true;
+        _activity.startActivityForResult(_mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void stopRecording() {
-        if (!_isRecording) {
+        if (!isSupported()) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            return;
-        }
-        _mediaRecorder.stop();
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_STOP);
+        _activity.startService(intent);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void cancelRecording() {
-        if (!_isRecording) {
+        if (!isSupported()) {
             return;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            return;
-        }
-        _stopRecording();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void _stopRecording() {
-        _mediaRecorder.reset();
-        _virtualDisplay.release();
-        _isRecording = false;
+        Intent intent = new Intent(_activity, RecordService.class);
+        intent.setAction(RecordService.ACTION_CANCEL);
+        _activity.startService(intent);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -287,57 +224,10 @@ public class Recorder implements PluginProtocol {
         return _filePath;
     }
 
-    private boolean hasRecordingPermission() {
-        if (!_isRecordAudioEnabled) {
-            return true;
-        }
-        return _hasRecordingPermission;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean checkRecordingPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ||
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            return false;
-        }
-        if (!_isRecordAudioEnabled) {
-            // No permission required.
-            return true;
-        }
-        if (_hasRecordingPermission) {
-            return true;
-        }
-        String[] permissions = new String[]{
-            // https://stackoverflow.com/questions/35129243/write-external-storage-permission
-            // Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECORD_AUDIO};
-        boolean needRequestPermissions = false;
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(_activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                needRequestPermissions = true;
-                break;
-            }
-        }
-        if (needRequestPermissions) {
-            ActivityCompat.requestPermissions(_activity, permissions, PERMISSION_CODE);
-        } else {
-            _hasRecordingPermission = true;
-        }
-        return _hasRecordingPermission;
-    }
-
     private String generateFilePath() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         String curTime = formatter.format(curDate).replace(" ", "");
         return String.format("%s/capture_%s.mp4", _activity.getApplicationInfo().dataDir, curTime);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private VirtualDisplay createVirtualDisplay(MediaProjection projection,
-                                                int width, int height, int density, MediaRecorder recorder) {
-        return projection.createVirtualDisplay("Recorder",
-            width, height, density, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-            recorder.getSurface(), null, null);
     }
 }

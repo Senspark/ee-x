@@ -17,6 +17,9 @@ public:
     Recorder();
     ~Recorder();
 
+    /// Checks whether recorder is supported on the current device.
+    bool isSupported() const;
+
     void startRecording();
     void stopRecording();
     void cancelRecording();

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		062C6393216F640D0079C553 /* TwitterShareTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */; };
 		1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */; };
+		4B120C1C23D0780900528149 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B120C1723D077FD00528149 /* libcocos2d iOS.a */; };
+		4B120C1F23D0781000528149 /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B120C1523D077FD00528149 /* libcocos2d Mac.a */; };
 		6F2580241ECBFC9A00B910F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580231ECBFC9A00B910F9 /* main.mm */; };
 		6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
 		6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
@@ -46,12 +48,53 @@
 		F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4B120C1423D077FD00528149 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1551A33F158F2AB200E66CFE;
+			remoteInfo = "libcocos2d Mac";
+		};
+		4B120C1623D077FD00528149 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A07A4D641783777C0073F6A7;
+			remoteInfo = "libcocos2d iOS";
+		};
+		4B120C1823D077FD00528149 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 507B40FD1C31BDD30067B53E;
+			remoteInfo = "libcocos2d tvOS";
+		};
+		4B120C1A23D0780600528149 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A07A4C241783777C0073F6A7;
+			remoteInfo = "libcocos2d iOS";
+		};
+		4B120C1D23D0780D00528149 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1551A33E158F2AB200E66CFE;
+			remoteInfo = "libcocos2d Mac";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TwitterShareTestScene.cpp; sourceTree = "<group>"; };
 		062C6392216F640D0079C553 /* TwitterShareTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TwitterShareTestScene.hpp; sourceTree = "<group>"; };
 		1A9EE02AF42BD8282D9A8F6F /* Pods-common-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* ee_x_test_mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ee_x_test_mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2ED7E810414428AC01BFBD /* Pods-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
+		4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
+		4B1D9CA923D16F3A00F86027 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.0.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
+		4B1D9CAC23D16F5800F86027 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
 		5087E76F17EB910900C73F5D /* ee_x_test_desktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ee_x_test_desktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_test_desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56E1D5E9DC05F65C76588FC1 /* Pods-ee_x_test_desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.debug.xcconfig"; sourceTree = "<group>"; };
@@ -114,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B120C1C23D0780900528149 /* libcocos2d iOS.a in Frameworks */,
 				F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B120C1F23D0781000528149 /* libcocos2d Mac.a in Frameworks */,
 				1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,9 +193,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				6F25804B1ECC4E7200B910F9 /* main */,
@@ -166,6 +212,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B1D9CAC23D16F5800F86027 /* OpenAL.framework */,
+				4B1D9CA923D16F3A00F86027 /* libiconv.tbd */,
 				6D25545ECF195B5DA0EB9CB5 /* libPods-ee_x_test_desktop.a */,
 				85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */,
 				52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */,
@@ -223,6 +271,16 @@
 			);
 			name = Classes;
 			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		4B120C0F23D077FD00528149 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B120C1523D077FD00528149 /* libcocos2d Mac.a */,
+				4B120C1723D077FD00528149 /* libcocos2d iOS.a */,
+				4B120C1923D077FD00528149 /* libcocos2d tvOS.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		503AE10617EB990700D1A890 /* mac */ = {
@@ -293,11 +351,12 @@
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 				C016B096895296658D09BD50 /* [CP] Copy Pods Resources */,
-				10DE774AF14F03B1B51C7BE9 /* [CP] Embed Pods Frameworks */,
+				CF3DEE6FBAF527776D4C6673 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4B120C1B23D0780600528149 /* PBXTargetDependency */,
 			);
 			name = ee_x_test_mobile;
 			productName = iphone;
@@ -316,6 +375,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4B120C1E23D0780D00528149 /* PBXTargetDependency */,
 			);
 			name = ee_x_test_desktop;
 			productName = iphone;
@@ -397,9 +457,15 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4B120C0F23D077FD00528149 /* Products */;
+					ProjectRef = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* ee_x_test_mobile */,
@@ -407,6 +473,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4B120C1523D077FD00528149 /* libcocos2d Mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d Mac.a";
+			remoteRef = 4B120C1423D077FD00528149 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4B120C1723D077FD00528149 /* libcocos2d iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d iOS.a";
+			remoteRef = 4B120C1623D077FD00528149 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4B120C1923D077FD00528149 /* libcocos2d tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d tvOS.a";
+			remoteRef = 4B120C1823D077FD00528149 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -433,26 +523,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		10DE774AF14F03B1B51C7BE9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh",
-				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
-				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7972B1E67F2A6BB2D98900DC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,6 +589,26 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CF3DEE6FBAF527776D4C6673 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -565,6 +655,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4B120C1B23D0780600528149 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcocos2d iOS";
+			targetProxy = 4B120C1A23D0780600528149 /* PBXContainerItemProxy */;
+		};
+		4B120C1E23D0780D00528149 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcocos2d Mac";
+			targetProxy = 4B120C1D23D0780D00528149 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

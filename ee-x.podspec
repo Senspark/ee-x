@@ -17,14 +17,17 @@ Pod::Spec.new do |spec|
     :branch => 'master'
   }
 
-  spec.frameworks  = 'Foundation'
+  spec.framework = 'Foundation'
 
   spec.requires_arc = false
 
   spec.header_mappings_dir = 'src'
 
   spec.subspec 'json' do |s|
-    s.source_files = 'third_party/nlohmann/include/**/*'
+    # Don't use source_files: all dirs may be included in header map.
+    # s.source_files = 'third_party/nlohmann/include/**/*'
+    s.preserve_path = 'third_party/nlohmann/include'
+    s.public_header_files = 'third_party/nlohmann/include/**/*'
     s.header_mappings_dir = 'third_party/nlohmann/include'
   end
 
@@ -253,6 +256,9 @@ Pod::Spec.new do |spec|
         '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac' # Cocos2d-x
       ].join(' ')
     }
+
+    s.ios.library = 'iconv'
+    s.ios.framework = 'OpenAL'
   end
 
   spec.subspec 'facebook' do |s|
@@ -273,7 +279,11 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-headers' do |s|
-    s.source_files = 'third_party/firebase_cpp_sdk/include/**/*'
+    # Don't use source_files: all dirs may be included in header map.
+    # Conflict google_play_services/availability.h and macOS Availability.h
+    # s.source_files = 'third_party/firebase_cpp_sdk/include/**/*'
+    s.preserve_path = 'third_party/firebase_cpp_sdk/include'
+    s.public_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
     s.header_mappings_dir = 'third_party/firebase_cpp_sdk/include'
     s.platform = :ios
   end
@@ -281,7 +291,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-core' do |s|
     s.source_files =
       'src/ee/Firebase*',
-      'src/ee/firebase/core/*',
+      'src/ee/firebase/core/*'
 
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
@@ -397,33 +407,32 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jansson' do |s| 
     s.source_files = 'third_party/jansson/*'
-    s.header_mappings_dir = 'third_party/jansson'
+    s.header_mappings_dir = 'third_party'
   end
 
   spec.subspec 'keeva' do |s|
     s.source_files = 'third_party/keeva/*'
-    s.header_mappings_dir = 'third_party/keeva'
+    s.header_mappings_dir = 'third_party'
   end
 
   spec.subspec 'soomla-ios-core' do |s|
     s.source_files = 'third_party/soomla/SoomlaiOSCore/**/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaiOSCore'
+    s.header_mappings_dir = 'third_party/soomla'
     s.dependency 'ee-x/keeva'
   end
 
   spec.subspec 'soomla-cocos2dx-core' do |s|
     s.source_files = 'third_party/soomla/SoomlaCocos2dxCore/**/*'
     s.exclude_files = 'third_party/soomla/SoomlaCocos2dxCore/Soomla/jsb/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxCore'
+    s.header_mappings_dir = 'third_party/soomla'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '$(inherited)',
         '${PODS_ROOT}/../../cocos2d',
         '${PODS_ROOT}/../../cocos2d/cocos',
         '${PODS_ROOT}/../../../cocos2d-x',
         '${PODS_ROOT}/../../../cocos2d-x/cocos',
-        "${PODS_ROOT}/Headers/Public/#{spec.name}/Soomla/**"
+        "${PODS_ROOT}/Headers/Public/#{spec.name}/SoomlaCocos2dxCore/Soomla/**"
       ].join(' ')
     }
     
@@ -435,14 +444,14 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-ios-store' do |s| 
     s.source_files = 'third_party/soomla/SoomlaiOSStore/**/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaiOSStore'
+    s.header_mappings_dir = 'third_party/soomla'
     s.dependency 'ee-x/keeva'
     s.dependency 'ee-x/soomla-ios-core'
   end
 
   spec.subspec 'soomla-cocos2dx-store' do |s| 
     s.source_files = 'third_party/soomla/SoomlaCocos2dxStore/**/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxStore'
+    s.header_mappings_dir = 'third_party/soomla'
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
   end
@@ -455,7 +464,6 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
-        '$(inherited)',
         '${PODS_ROOT}/../../../cocos2d-x',
         '${PODS_ROOT}/../../../cocos2d-x/cocos',
         '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support',

@@ -45,6 +45,9 @@ public:
     /// Removes an observer whose the specified key.
     /// @param[in] key The observer's key.
     virtual bool removeObserver(const std::string& key) = 0;
+
+    /// Get supported languages
+    virtual std::vector<Language> getSupportedLanguages() const = 0;
 };
 } // namespace language
 } // namespace ee

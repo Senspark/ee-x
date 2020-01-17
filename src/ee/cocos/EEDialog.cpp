@@ -23,8 +23,8 @@ const std::size_t Dialog::TopLevel = 123456;
 Dialog::Dialog()
     : dialogLevel_(0)
     , isActive_(false)
-    , transitionAction_(nullptr) {
-}
+    , transitionAction_(nullptr)
+    , ignoreTouchOutside_(false) {}
 
 Dialog::~Dialog() = default;
 
@@ -109,6 +109,14 @@ bool Dialog::isActive() const noexcept {
     return isActive_;
 }
 
+void Dialog::setIgnoreTouchOutside(bool ignore) {
+    ignoreTouchOutside_ = ignore;
+}
+
+bool Dialog::isIgnoreTouchOutside() noexcept {
+    return ignoreTouchOutside_;
+}
+
 bool Dialog::hitTest(const cocos2d::Point& pt, const cocos2d::Camera* camera,
                      cocos2d::Vec3* p) const {
     // Swallow all touches.
@@ -144,7 +152,7 @@ void Dialog::invokeCallbacks(std::vector<CallbackInfo>& callbacks) {
 }
 
 void Dialog::onClickedOutside() {
-    if (isActive()) {
+    if (isActive() && !isIgnoreTouchOutside()) {
         hide();
     }
 }

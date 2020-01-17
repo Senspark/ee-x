@@ -83,5 +83,9 @@ void Self::loadLanguage(const Language& language,
         dictionaries_[language].emplace(key, std::move(formatter));
     }
 }
+
+std::vector<Language> Self::getSupportedLanguages() const {
+    return std::vector<Language>();
+}
 } // namespace language
 } // namespace ee

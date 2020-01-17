@@ -14,7 +14,7 @@
 #include <future>
 #include <string>
 
-#include "ee/core/LogLevel.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {

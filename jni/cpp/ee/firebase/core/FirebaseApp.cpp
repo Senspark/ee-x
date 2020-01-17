@@ -6,12 +6,13 @@
 //
 //
 
+#include "ee/firebase/core/FirebaseApp.hpp"
+
 #include <mutex>
 
-#include "ee/core/JniUtils.hpp"
-#include "ee/firebase/FirebaseApp.hpp"
-
 #include <firebase/app.h>
+
+#include "ee/core/JniUtils.hpp"
 
 namespace ee {
 namespace firebase {

@@ -6,10 +6,11 @@
 //
 //
 
+#include "ee/core/Utils.hpp"
+
 #include <android/log.h>
 
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {

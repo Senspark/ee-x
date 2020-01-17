@@ -6,9 +6,10 @@
 //
 //
 
+#include "ee/core/internal/MessageBridge.hpp"
+
 #include "ee/core/JniUtils.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
 

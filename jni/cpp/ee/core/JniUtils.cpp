@@ -6,16 +6,17 @@
 //
 //
 
+#include "ee/core/JniUtils.hpp"
+
 #include <cassert>
 #include <codecvt>
 #include <locale>
 #include <pthread.h>
 
-#include "ee/core/JniUtils.hpp"
 #include "ee/core/Logger.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
-#include "ee/core/Utils.hpp"
 
 namespace ee {
 namespace core {

@@ -13,7 +13,7 @@ android {
     flavorDimensions 'screenSize'
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         applicationId 'com.ee.test.android'
@@ -110,24 +110,28 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libcocos2dx')
-    implementation project(':ee-x-ads')
-    implementation project(':ee-x-apps-flyer')
-    implementation project(':ee-x-crashlytics')
-    implementation project(':ee-x-google-analytics')
-    implementation project(':ee-x-firebase-analytics')
-    implementation project(':ee-x-firebase-dynamic-link')
-    implementation project(':ee-x-firebase-messaging')
-    implementation project(':ee-x-firebase-remote-config')
-    implementation project(':ee-x-firebase-storage')
-    implementation project(':ee-x-notification')
-
     implementation project(':ee-x-admob')
-    implementation project(':ee-x-game-center')
     implementation project(':ee-x-applovin')
     implementation project(':ee-x-facebook-ads')
     implementation project(':ee-x-ironsource')
     implementation project(':ee-x-unity-ads')
     implementation project(':ee-x-vungle')
+    implementation project(':ee-x-apps-flyer')
+    implementation project(':ee-x-campaign-receiver')
+    implementation project(':ee-x-crashlytics')
+    implementation project(':ee-x-facebook')
+    implementation project(':ee-x-firebase-analytics')
+    implementation project(':ee-x-firebase-dynamic-link')
+    implementation project(':ee-x-firebase-messaging')
+    implementation project(':ee-x-firebase-performance')
+    implementation project(':ee-x-firebase-remote-config')
+    implementation project(':ee-x-firebase-storage')
+    implementation project(':ee-x-google-analytics')
+    implementation project(':ee-x-notification')
+    implementation project(':ee-x-play')
+    implementation project(':ee-x-recorder')
+    implementation project(':ee-x-tenjin')
+    implementation project(':ee-x-twitter')
 
     implementation 'androidx.multidex:multidex:2.0.1'
 }

@@ -272,7 +272,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_core_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/jni/cpp/ee/firebase/FirebaseApp.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/core -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_app_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -281,7 +281,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_analytics_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseAnalytics.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/analytics -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -290,7 +290,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_dynamic_link_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseDynamicLink.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/dynamiclink -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_dynamic_link_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -299,7 +299,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_messaging_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseMessaging.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/messaging -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -308,7 +308,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_remote_config_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseRemoteConfig.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/remoteconfig -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -317,7 +317,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_storage_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebaseStorage.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/storage -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage_prebuilt
 include $(BUILD_STATIC_LIBRARY)
@@ -326,8 +326,7 @@ include $(CLEAR_VARS)
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS += -std=c++1z
 LOCAL_MODULE := ee_x_firebase_performance_static
-LOCAL_SRC_FILES := $(EE_X_ROOT_DIR)/src/ee/firebase/FirebasePerformanceBridge.cpp
-LOCAL_SRC_FILES += $(EE_X_ROOT_DIR)/src/ee/firebase/FirebasePerformanceTrace.cpp
+LOCAL_SRC_FILES := ${shell find $(EE_X_ROOT_DIR)/src/ee/firebase/performance -name "*.cpp" -print}
 LOCAL_STATIC_LIBRARIES := ee_x_firebase_core_static
 include $(BUILD_STATIC_LIBRARY)
 

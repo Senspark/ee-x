@@ -9,13 +9,13 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
-#import <ee/core/EEMessageBridge.h>
+#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEUtils.h>
 
-#import "ee/facebook/internal/EEFacebookRequestDelegate.h"
-#import "ee/facebook/internal/EEFacebookShareDelegate.h"
+#import "ee/facebook/private/EEFacebookRequestDelegate.h"
+#import "ee/facebook/private/EEFacebookShareDelegate.h"
 
 @implementation EEFacebook {
     id<EEIMessageBridge> bridge_;

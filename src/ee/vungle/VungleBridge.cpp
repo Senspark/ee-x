@@ -2,14 +2,14 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/MediationManager.hpp>
 #include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/MessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
 
-#include "ee/vungle/internal/VungleRewardedVideo.hpp"
+#include "ee/vungle/private/VungleRewardedVideo.hpp"
 
 namespace ee {
 namespace vungle {

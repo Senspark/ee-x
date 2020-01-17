@@ -12,13 +12,13 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/MediationManager.hpp>
 #include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/MessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 
-#include "ee/applovin/internal/AppLovinRewardedVideo.hpp"
+#include "ee/applovin/private/AppLovinRewardedVideo.hpp"
 
 namespace ee {
 namespace applovin {

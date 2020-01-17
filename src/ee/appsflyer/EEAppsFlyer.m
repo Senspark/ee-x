@@ -9,8 +9,8 @@
 
 #import <AppsFlyerLib/AppsFlyerTracker.h>
 
-#import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 // clang-format off

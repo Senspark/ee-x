@@ -10,6 +10,8 @@
 
 #include <string>
 
+#include "ee/FacebookFwd.hpp"
+
 namespace ee {
 namespace facebook {
 class IAccessToken {

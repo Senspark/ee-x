@@ -9,7 +9,7 @@
 
 #import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
-#import "ee/core/internal/EEVideoPlayerManager.h"
+#import "ee/core/private/EEVideoPlayerManager.h"
 
 @interface EEPluginManager () {
     NSMutableDictionary<NSString*, id<EEIPlugin>>* plugins_;

@@ -7,7 +7,9 @@
 //
 
 #include "ee/google/GoogleAnalyticsProduct.hpp"
-#include "ee/core/Utils.hpp"
+
+#include <ee/core/Utils.hpp>
+
 #include "ee/google/internal/GoogleAnalyticsParameter.hpp"
 
 namespace ee {

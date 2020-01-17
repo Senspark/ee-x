@@ -9,10 +9,9 @@
 #ifndef EE_X_CAMPAIGN_RECEIVER_BRIDGE_HPP
 #define EE_X_CAMPAIGN_RECEIVER_BRIDGE_HPP
 
-#include <map>
+#include <functional>
 
 #include "ee/CampaignReceiverFwd.hpp"
-#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace campaignreceiver {

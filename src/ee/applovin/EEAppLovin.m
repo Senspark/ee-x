@@ -18,9 +18,9 @@
 #import <AppLovinSDK/ALSdk.h>
 #endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
-#import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>
 #import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 // clang-format off

@@ -6,8 +6,10 @@
 //
 //
 
-#ifndef EE_X_CampaignReceiver_HPP
-#define EE_X_CampaignReceiver_HPP
+#ifndef EE_X_CAMPAIGN_RECEIVER_HPP
+#define EE_X_CAMPAIGN_RECEIVER_HPP
+
+#include <ee/Core.hpp>
 
 #ifdef __cplusplus
 #include "ee/CampaignReceiverFwd.hpp"
@@ -18,4 +20,4 @@
 #import "ee/campaignreceiver/EECampaignReceiver.h"
 #endif // __OBJC__
 
-#endif /* EE_X_CampaignReceiver_HPP */
+#endif /* EE_X_CAMPAIGN_RECEIVER_HPP */

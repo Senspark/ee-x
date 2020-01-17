@@ -10,8 +10,8 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/MessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/notification/NotificationBuilder.hpp"
 

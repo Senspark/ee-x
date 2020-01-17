@@ -22,7 +22,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/core/MessageBridge.hpp"
+#include "ee/core/internal/MessageBridge.hpp"
 #include "ee/core/internal/SpinLock.hpp"
 
 namespace ee {

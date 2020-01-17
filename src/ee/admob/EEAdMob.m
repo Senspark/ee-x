@@ -10,14 +10,14 @@
 
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
-#import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
-#import "ee/admob/internal/EEAdMobBannerAd.h"
-#import "ee/admob/internal/EEAdMobInterstitialAd.h"
-#import "ee/admob/internal/EEAdMobNativeAd.h"
-#import "ee/admob/internal/EEAdMobRewardedVideo.h"
+#import "ee/admob/private/EEAdMobBannerAd.h"
+#import "ee/admob/private/EEAdMobInterstitialAd.h"
+#import "ee/admob/private/EEAdMobNativeAd.h"
+#import "ee/admob/private/EEAdMobRewardedVideo.h"
 
 @interface EEAdMob () {
     id<EEIMessageBridge> bridge_;

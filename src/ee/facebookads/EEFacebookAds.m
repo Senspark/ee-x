@@ -11,15 +11,15 @@
 #import <FBAudienceNetwork/FBAdSize.h>
 #import <FBAudienceNetwork/FBAdSettings.h>
 
-#import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>
 #import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
-#import "ee/facebookads/internal/EEFacebookBannerAd.h"
-#import "ee/facebookads/internal/EEFacebookInterstitialAd.h"
-#import "ee/facebookads/internal/EEFacebookNativeAd.h"
-#import "ee/facebookads/internal/EEFacebookRewardVideoAd.h"
+#import "ee/facebookads/private/EEFacebookBannerAd.h"
+#import "ee/facebookads/private/EEFacebookInterstitialAd.h"
+#import "ee/facebookads/private/EEFacebookNativeAd.h"
+#import "ee/facebookads/private/EEFacebookRewardVideoAd.h"
 
 @interface EEFacebookAds () {
     id<EEIMessageBridge> bridge_;

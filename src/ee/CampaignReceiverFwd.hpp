@@ -6,8 +6,10 @@
 //
 //
 
-#ifndef EE_X_CampaignReceiverFWD_HPP
-#define EE_X_CampaignReceiverFWD_HPP
+#ifndef EE_X_CAMPAIGN_RECEIVER_FWD_HPP
+#define EE_X_CAMPAIGN_RECEIVER_FWD_HPP
+
+#include <ee/CoreFwd.hpp>
 
 namespace ee {
 namespace campaignreceiver {
@@ -17,4 +19,4 @@ class CampaignReceiver;
 using campaignreceiver::CampaignReceiver;
 } // namespace ee
 
-#endif /* EE_X_CampaignReceiverFWD_HPP */
+#endif /* EE_X_CAMPAIGN_RECEIVER_FWD_HPP */

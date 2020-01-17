@@ -6,8 +6,8 @@
 //
 //
 
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/MessageBridge.hpp"
+#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/internal/MessageBridge.hpp"
 
 @implementation EEMessageBridge (Cpp)
 

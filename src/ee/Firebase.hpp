@@ -13,33 +13,33 @@
 
 #include "ee/FirebaseFwd.hpp"
 
-#if __has_include("ee/firebase/FirebaseApp.hpp")
-#include "ee/firebase/FirebaseApp.hpp"
+#if __has_include("ee/firebase/core/FirebaseApp.hpp")
+#include "ee/firebase/core/FirebaseApp.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseAnalytics.hpp")
-#include "ee/firebase/FirebaseAnalytics.hpp"
+#if __has_include("ee/firebase/analytics/FirebaseAnalytics.hpp")
+#include "ee/firebase/analytics/FirebaseAnalytics.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseRemoteConfig.hpp")
-#include "ee/firebase/FirebaseRemoteConfig.hpp"
+#if __has_include("ee/firebase/remoteconfig/FirebaseRemoteConfig.hpp")
+#include "ee/firebase/remoteconfig/FirebaseRemoteConfig.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseStorage.hpp")
-#include "ee/firebase/FirebaseStorage.hpp"
+#if __has_include("ee/firebase/storage/FirebaseStorage.hpp")
+#include "ee/firebase/storage/FirebaseStorage.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseMessaging.hpp")
-#include "ee/firebase/FirebaseMessaging.hpp"
+#if __has_include("ee/firebase/messaging/FirebaseMessaging.hpp")
+#include "ee/firebase/messaging/FirebaseMessaging.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseDynamicLink.hpp")
-#include "ee/firebase/FirebaseDynamicLink.hpp"
+#if __has_include("ee/firebase/dynamiclink/FirebaseDynamicLink.hpp")
+#include "ee/firebase/dynamiclink/FirebaseDynamicLink.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebasePerformanceBridge.hpp")
-#include "ee/firebase/FirebasePerformanceBridge.hpp"
-#include "ee/firebase/FirebasePerformanceTrace.hpp"
+#if __has_include("ee/firebase/performance/FirebasePerformanceBridge.hpp")
+#include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
+#include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
 #endif
 
 #endif /* EE_X_FIREBASE_HPP_ */

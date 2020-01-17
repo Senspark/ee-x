@@ -7,6 +7,7 @@
 //
 
 #include "ee/google/GoogleAnalyticsScreenViewBuilder.hpp"
+
 #include "ee/google/internal/GoogleAnalyticsParameter.hpp"
 
 namespace ee {

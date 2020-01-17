@@ -7,10 +7,11 @@
 //
 
 #import "ee/campaignreceiver/EECampaignReceiver.h"
-#import "ee/core/EEMessageBridge.h"
-#import "ee/core/internal/EEDictionaryUtils.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
+
+#import <ee/core/internal/EEDictionaryUtils.h>
+#import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EECampaignReceiver () {
 }
@@ -20,7 +21,7 @@
 @implementation EECampaignReceiver
 
 // clang-format off
-static NSString* const k__onReceivedLink            = @"CampaignReceiver_onReceivedLink";
+static NSString* const k__onReceivedLink = @"CampaignReceiver_onReceivedLink";
 // clang-format on
 
 - (id)init {

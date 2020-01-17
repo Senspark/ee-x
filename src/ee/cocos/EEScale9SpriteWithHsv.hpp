@@ -9,10 +9,10 @@
 #ifndef EE_LIBRARY_SCALE9SPRITE_WITH_HSV_HPP_
 #define EE_LIBRARY_SCALE9SPRITE_WITH_HSV_HPP_
 
-#include "EEForward.hpp"
-#include "EEHsvProtocol.hpp"
-
 #include <ui/UIScale9Sprite.h>
+
+#include "ee/cocos/EEForward.hpp"
+#include "ee/cocos/EEHsvProtocol.hpp"
 
 namespace ee {
 class Scale9SpriteWithHsv : public cocos2d::ui::Scale9Sprite,

@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEContinuousAction.hpp"
+#include "ee/cocos/EEContinuousAction.hpp"
 
 namespace ee {
 ContinuousAction& ContinuousAction::addAction(const TailAction& tailAction) {

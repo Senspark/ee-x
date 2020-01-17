@@ -6,9 +6,7 @@
 //
 //
 
-#include "EESceneSwitcher.hpp"
-#include "EEManagedScene.hpp"
-#include "EEImageBuilder.hpp"
+#include "ee/cocos/EESceneSwitcher.hpp"
 
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
@@ -16,6 +14,9 @@
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <renderer/CCTextureCache.h>
+
+#include "ee/cocos/EEManagedScene.hpp"
+#include "ee/cocos/EEImageBuilder.hpp"
 
 namespace ee {
 using Self = SceneSwitcher;

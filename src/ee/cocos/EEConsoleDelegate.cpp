@@ -4,13 +4,14 @@
 //
 //  Created by Zinge on 4/10/17.
 //
+
 //
+#include "ee/cocos/EEConsoleDelegate.hpp"
 
 #include <sstream>
 
-#include "EEConsoleDelegate.hpp"
-#include "EEConsole.hpp"
-#include "EECommandPool.hpp"
+#include "ee/cocos/EECommandPool.hpp"
+#include "ee/cocos/EEConsole.hpp"
 
 namespace ee {
 namespace detail {

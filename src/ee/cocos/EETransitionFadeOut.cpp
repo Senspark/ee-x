@@ -6,7 +6,7 @@
 //
 //
 
-#include "EETransitionFadeOut.hpp"
+#include "ee/cocos/EETransitionFadeOut.hpp"
 
 #include <cocos2d.h>
 

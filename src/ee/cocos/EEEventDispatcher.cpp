@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEEventDispatcher.hpp"
+#include "ee/cocos/EEEventDispatcher.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>

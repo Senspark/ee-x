@@ -13,11 +13,11 @@
 #include <memory>
 #include <vector>
 
-#include "EECocos2dxFwd.hpp"
-
 #include <2d/CCAction.h>
 #include <base/CCRefPtr.h>
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace dialog {

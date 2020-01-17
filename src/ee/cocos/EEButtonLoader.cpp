@@ -6,8 +6,9 @@
 //
 //
 
-#include "EEButtonLoader.hpp"
-#include "EEButton.hpp"
+#include "ee/cocos/EEButtonLoader.hpp"
+
+#include "ee/cocos/EEButton.hpp"
 
 namespace ee {
 namespace property {

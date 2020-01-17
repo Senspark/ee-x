@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEImage.hpp"
+#include "ee/cocos/EEImage.hpp"
 
 NS_EE_BEGIN
 namespace image {

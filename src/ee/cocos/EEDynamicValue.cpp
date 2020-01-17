@@ -6,10 +6,11 @@
 //
 //
 
-#include "EEDynamicValue.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEDynamicValue.hpp"
 
 #include <base/ccRandom.h>
+
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 template <class T> using Self = DynamicValue<T>;

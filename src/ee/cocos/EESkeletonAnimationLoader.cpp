@@ -6,11 +6,12 @@
 //
 //
 
-#include "EESkeletonAnimationLoader.hpp"
-#include "EESpineFactory.hpp"
-#include "EESpineMacro.hpp"
+#include "ee/cocos/EESkeletonAnimationLoader.hpp"
 
 #include <spine/SkeletonAnimation.h>
+
+#include "ee/cocos/EESpineFactory.hpp"
+#include "ee/cocos/EESpineMacro.hpp"
 
 NS_EE_BEGIN
 namespace property {

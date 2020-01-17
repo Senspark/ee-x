@@ -14,8 +14,8 @@
 #include <string>
 #include <vector>
 
-#include "EECocos2dxFwd.hpp"
-#include "EEILanguageSwitcher.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEILanguageSwitcher.hpp"
 
 namespace ee {
 namespace language {

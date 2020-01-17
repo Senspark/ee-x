@@ -6,10 +6,11 @@
 //
 //
 
-#include "EEShaderManager.hpp"
-#include "EEShader.hpp"
+#include "ee/cocos/EEShaderManager.hpp"
 
 #include <platform/CCPlatformMacros.h>
+
+#include "ee/cocos/EEShader.hpp"
 
 namespace ee {
 ShaderManager& ShaderManager::getInstance() {

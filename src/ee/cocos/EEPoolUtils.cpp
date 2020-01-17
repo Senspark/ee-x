@@ -6,12 +6,13 @@
 //
 //
 
-#include "EEPoolUtils.hpp"
-#include "EEPool.hpp"
-#include "EEAction.hpp"
+#include "ee/cocos/EEPoolUtils.hpp"
 
 #include <2d/CCParticleSystemQuad.h>
 #include <2d/CCSpriteFrameCache.h>
+
+#include "ee/cocos/EEPool.hpp"
+#include "ee/cocos/EEAction.hpp"
 
 namespace ee {
 namespace detail {

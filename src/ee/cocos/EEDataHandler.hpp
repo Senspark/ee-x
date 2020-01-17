@@ -9,10 +9,10 @@
 #ifndef EE_LIBRARY_DATA_HANDLER_HPP_
 #define EE_LIBRARY_DATA_HANDLER_HPP_
 
-#include "EEForward.hpp"
-#include "EEDataUtils.hpp"
-#include "EEDataInfo.hpp"
-#include "EEDataTraits.hpp"
+#include "ee/cocos/EEDataInfo.hpp"
+#include "ee/cocos/EEDataTraits.hpp"
+#include "ee/cocos/EEDataUtils.hpp"
+#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 class DataHandler final {

@@ -13,7 +13,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "EEMacro.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 using DataStorage = std::unordered_map<std::string, std::string>;

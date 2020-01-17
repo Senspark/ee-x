@@ -9,10 +9,10 @@
 #ifndef EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_
 #define EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_
 
-#include "EEMacro.hpp"
-#include "EECocos2dxFwd.hpp"
-
 #include <base/CCEventListenerKeyboard.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

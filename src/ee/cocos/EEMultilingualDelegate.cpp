@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEMultilingualDelegate.hpp"
+#include "ee/cocos/EEMultilingualDelegate.hpp"
 
 #include <2d/CCNode.h>
 #include <base/CCValue.h>

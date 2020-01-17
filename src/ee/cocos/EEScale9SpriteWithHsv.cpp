@@ -6,11 +6,12 @@
 //
 //
 
-#include "EEScale9SpriteWithHsv.hpp"
-#include "EEShaderUtils.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEScale9SpriteWithHsv.hpp"
 
 #include <cocos2d.h> // For COCOS2D_VERSION
+
+#include "ee/cocos/EEShaderUtils.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 using Self = Scale9SpriteWithHsv;

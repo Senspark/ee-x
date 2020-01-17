@@ -6,12 +6,13 @@
 //
 //
 
-#include "EESpriteWithHsv.hpp"
-#include "EEShaderUtils.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EESpriteWithHsv.hpp"
 
 #include <cocos2d.h>
 #include <renderer/CCGLProgramState.h>
+
+#include "ee/cocos/EEShaderUtils.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 using Self = SpriteWithHsv;

@@ -6,14 +6,15 @@
 //
 //
 
-#include "EEButton.hpp"
-#include "EEUtils.hpp"
-#include "EEDialogComponent.hpp"
-#include "EEScale9SpriteWithHsv.hpp"
+#include "ee/cocos/EEButton.hpp"
 
 #include <2d/CCActionInterval.h>
 #include <2d/CCLabel.h>
 #include <base/CCRefPtr.h>
+
+#include "ee/cocos/EEDialogComponent.hpp"
+#include "ee/cocos/EEScale9SpriteWithHsv.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

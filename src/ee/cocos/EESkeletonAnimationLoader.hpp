@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_
 #define EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_
 
-#include "EENodeV3Loader.hpp"
+#include "ee/cocos/EENodeV3Loader.hpp"
 
 NS_EE_BEGIN
 class SkeletonAnimationLoader : public NodeV3Loader {

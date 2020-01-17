@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEClippingRectangleNodeLoader.hpp"
+#include "ee/cocos/EEClippingRectangleNodeLoader.hpp"
 
 #include <2d/CCClippingRectangleNode.h>
 

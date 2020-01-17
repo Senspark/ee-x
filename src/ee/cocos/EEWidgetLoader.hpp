@@ -8,8 +8,8 @@
 #ifndef EE_LIBRARY_WIDGET_LOADER_HPP
 #define EE_LIBRARY_WIDGET_LOADER_HPP
 
-#include "EEForward.hpp"
-#include "EEUiWidgetLoader.hpp"
+#include "ee/cocos/EEForward.hpp"
+#include "ee/cocos/EEUiWidgetLoader.hpp"
 
 namespace ee {
 namespace ui {

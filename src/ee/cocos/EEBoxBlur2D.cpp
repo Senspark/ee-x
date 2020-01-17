@@ -9,9 +9,9 @@
 #include <cassert>
 #include <cstring>
 
-#include "EEImage.hpp"
-
 #include <platform/CCImage.h>
+
+#include "ee/cocos/EEImage.hpp"
 
 NS_EE_BEGIN
 namespace image {

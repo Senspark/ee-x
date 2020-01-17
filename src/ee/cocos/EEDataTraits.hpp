@@ -13,8 +13,8 @@
 #include <string>
 #include <type_traits>
 
-#include "EEForward.hpp"
-#include "EEDataMeta.hpp"
+#include "ee/cocos/EEDataMeta.hpp"
+#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 /// Deserialize/serialize arithmetic types:

@@ -6,8 +6,9 @@
 //
 //
 
-#include "EEDialogGuard.hpp"
-#include "EEDialog.hpp"
+#include "ee/cocos/EEDialogGuard.hpp"
+
+#include "ee/cocos/EEDialog.hpp"
 
 namespace ee {
 namespace dialog {

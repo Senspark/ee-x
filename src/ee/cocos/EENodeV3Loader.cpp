@@ -6,7 +6,7 @@
 //
 //
 
-#include "EENodeV3Loader.hpp"
+#include "ee/cocos/EENodeV3Loader.hpp"
 
 NS_EE_BEGIN
 using Self = NodeV3Loader;

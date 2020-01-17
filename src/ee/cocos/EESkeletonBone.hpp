@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_SKELETON_BONE_HPP_
 #define EE_LIBRARY_SKELETON_BONE_HPP_
 
-#include "EECocos2dxFwd.hpp"
-
 #include <2d/CCNode.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 class SkeletonBone : public cocos2d::Node {

@@ -6,7 +6,7 @@
 //
 //
 
-#include "EELanguage.hpp"
+#include "ee/cocos/EELanguage.hpp"
 
 namespace ee {
 namespace language {

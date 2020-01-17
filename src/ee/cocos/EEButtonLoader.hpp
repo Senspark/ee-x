@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_BUTTON_LOADER_HPP_
 #define EE_LIBRARY_BUTTON_LOADER_HPP_
 
-#include "EEUiButtonLoader.hpp"
+#include "ee/cocos/EEUiButtonLoader.hpp"
 
 namespace ee {
 class ButtonLoader : public UiButtonLoader {

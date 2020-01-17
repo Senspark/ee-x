@@ -12,7 +12,7 @@
 #include <functional>
 #include <vector>
 
-#include "EEMacro.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 class CheckBox;

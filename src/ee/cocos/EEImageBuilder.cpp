@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEImageBuilder.hpp"
+#include "ee/cocos/EEImageBuilder.hpp"
 
 namespace ee {
 ImageBuilder::ImageBuilder() {

@@ -6,10 +6,11 @@
 //
 //
 
-#include "EEUiWidgetLoader.hpp"
-#include "EEUiWidgetCallback.hpp"
+#include "ee/cocos/EEUiWidgetLoader.hpp"
 
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EEUiWidgetCallback.hpp"
 
 NS_EE_BEGIN
 namespace property {

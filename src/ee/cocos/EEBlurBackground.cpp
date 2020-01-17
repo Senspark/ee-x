@@ -6,12 +6,13 @@
 //
 //
 
-#include "EEBlurBackground.hpp"
-#include "EEShaderUtils.hpp"
+#include "ee/cocos/EEBlurBackground.hpp"
 
 #include <2d/CCRenderTexture.h>
 #include <base/CCDirector.h>
 #include <renderer/CCRenderer.h>
+
+#include "ee/cocos/EEShaderUtils.hpp"
 
 namespace ee {
 using Self = BlurBackground;

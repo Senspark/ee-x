@@ -6,13 +6,14 @@
 //
 //
 
-#include "EEManagedScene.hpp"
-#include "EEImageBuilder.hpp"
-#include "EESpineFactory.hpp"
+#include "ee/cocos/EEManagedScene.hpp"
 
 #include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
 #include <renderer/CCTextureCache.h>
+
+#include "ee/cocos/EEImageBuilder.hpp"
+#include "ee/cocos/EESpineFactory.hpp"
 
 namespace ee {
 using Self = ManagedScene;

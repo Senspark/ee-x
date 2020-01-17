@@ -16,8 +16,8 @@
 
 #include <platform/CCPlatformMacros.h> // CC_SAFE_DELETE
 
-#include "EECocos2dxFwd.hpp"
-#include "EEMacro.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 /// Reference guard.

@@ -6,7 +6,7 @@
 //
 //
 
-#include "EECrytography.hpp"
+#include "ee/cocos/EECrytography.hpp"
 
 namespace ee {
 namespace detail {

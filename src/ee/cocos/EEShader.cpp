@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEShader.hpp"
+#include "ee/cocos/EEShader.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>

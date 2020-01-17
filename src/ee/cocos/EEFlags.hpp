@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_FLAGS_HPP_
 #define EE_LIBRARY_FLAGS_HPP_
 
-#include "EEMacro.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 #define EE_ENABLE_BITWISE_OPERATORS_FOR_ENUM(EnumType)                         \
     namespace ee::detail {                                                     \

@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_SHADER_UTILS_HPP
 #define EE_LIBRARY_SHADER_UTILS_HPP
 
-#include "EECocos2dxFwd.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 /// Creates a shear matrix.

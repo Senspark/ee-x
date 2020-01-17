@@ -9,10 +9,10 @@
 #ifndef EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_
 #define EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_
 
-#include "EEMacro.hpp"
-
 #include <GUI/CCControlExtension/CCControl.h>
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

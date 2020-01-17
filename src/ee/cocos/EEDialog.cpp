@@ -6,12 +6,13 @@
 //
 //
 
-#include "EEDialog.hpp"
-#include "EEDialogManager.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEDialog.hpp"
 
 #include <2d/CCAction.h>
 #include <base/CCDirector.h>
+
+#include "ee/cocos/EEDialogManager.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 namespace dialog {

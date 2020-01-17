@@ -6,15 +6,16 @@
 //
 //
 
+#include "ee/cocos/EEDataHandler.hpp"
+
 #include <cassert>
 #include <limits>
 #include <map>
 #include <unordered_set>
 
-#include "EEDataHandler.hpp"
-#include "EEDataUtils.hpp"
-
 #include <base/ccMacros.h>
+
+#include "ee/cocos/EEDataUtils.hpp"
 
 namespace ee {
 namespace {

@@ -6,15 +6,16 @@
 //
 //
 
-#include "EEDialogUtils.hpp"
-#include "EEDialog.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEDialogUtils.hpp"
 
 #include <2d/CCActionEase.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCSprite.h>
 #include <base/CCDirector.h>
+
+#include "ee/cocos/EEDialog.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 NS_EE_BEGIN
 Dialog* addHorizontalTransition(Dialog* dialog, float duration, float rate) {

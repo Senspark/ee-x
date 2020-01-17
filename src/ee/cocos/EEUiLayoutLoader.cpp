@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEUiLayoutLoader.hpp"
+#include "ee/cocos/EEUiLayoutLoader.hpp"
 
 #include <ui/UILayout.h>
 

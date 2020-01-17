@@ -12,11 +12,11 @@
 #include <array>
 #include <functional>
 
-#include "EEMacro.hpp"
-#include "EECocos2dxFwd.hpp"
-#include "EEForward.hpp"
-
 #include <ui/UIButton.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEForward.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

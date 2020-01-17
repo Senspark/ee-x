@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEBackButtonListener.hpp"
+#include "ee/cocos/EEBackButtonListener.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>

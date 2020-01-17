@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEBackButtonComponent.hpp"
+#include "ee/cocos/EEBackButtonComponent.hpp"
 
 #include <cocos2d.h>
 

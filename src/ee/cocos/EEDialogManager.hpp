@@ -13,9 +13,9 @@
 #include <vector>
 #include <map>
 
-#include "EECocos2dxFwd.hpp"
-
 #include <base/CCRefPtr.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace dialog {

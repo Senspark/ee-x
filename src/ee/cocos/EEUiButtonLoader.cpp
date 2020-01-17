@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEUiButtonLoader.hpp"
+#include "ee/cocos/EEUiButtonLoader.hpp"
 
 #include <2d/CCLabel.h>
 #include <2d/CCSpriteFrameCache.h>

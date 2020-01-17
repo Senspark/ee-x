@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEUiTextLoader.hpp"
+#include "ee/cocos/EEUiTextLoader.hpp"
 
 #include <2d/CCLabel.h>
 #include <ui/UIText.h>

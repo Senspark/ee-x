@@ -6,8 +6,9 @@
 //
 //
 
-#include "EESkeletonBoneLoader.hpp"
-#include "EESkeletonBone.hpp"
+#include "ee/cocos/EESkeletonBoneLoader.hpp"
+
+#include "ee/cocos/EESkeletonBone.hpp"
 
 NS_EE_BEGIN
 namespace property {

@@ -6,11 +6,12 @@
 //
 //
 
-#include "EEClippingRectangleNode.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEClippingRectangleNode.hpp"
 
 #include <base/CCDirector.h>
 #include <renderer/CCRenderer.h>
+
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 using Self = ClippingRectangleNode;

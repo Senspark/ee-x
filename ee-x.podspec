@@ -41,7 +41,10 @@ Pod::Spec.new do |spec|
       'src/ee/core/private/**'
     
     s.exclude_files =
-      'src/ee/core/CMakeLists.txt'
+      'src/ee/core/Android.mk',
+      'src/ee/core/CMakeLists.txt',
+      'src/ee/core/**/*Android*',
+      'src/ee/core/**/Jni*'
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
@@ -292,6 +295,9 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Firebase*',
       'src/ee/firebase/core/*'
+
+    s.exclude_files =
+      'src/ee/firebase/**/*Android*'
 
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'

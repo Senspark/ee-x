@@ -4,7 +4,7 @@
 
 #include "ee/jsb/tenjin/JsbTenjinBridge.hpp"
 
-#include "ee/tenjin/internal/TenjinBridge.hpp"
+#include "ee/tenjin/private/TenjinBridge.hpp"
 #include "ee/jsb/tenjin/JsbITenjinBridge.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"

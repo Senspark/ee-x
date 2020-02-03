@@ -9,7 +9,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/firebase/FirebaseRemoteConfig.hpp"
+#include "ee/firebase/remoteconfig/FirebaseRemoteConfig.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 

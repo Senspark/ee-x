@@ -7,7 +7,7 @@
 
 #include "ee/jsb/firebase/JsbFirebasePerformance.hpp"
 
-#include "ee/firebase/FirebasePerformanceBridge.hpp"
+#include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"
 

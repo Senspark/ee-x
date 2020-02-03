@@ -7,7 +7,7 @@
 
 #include "ee/jsb/firebase/JsbFirebasePerformanceTrace.hpp"
 
-#include "ee/firebase/FirebasePerformanceTrace.hpp"
+#include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
 #include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"

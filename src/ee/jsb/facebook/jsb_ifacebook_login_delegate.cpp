@@ -7,7 +7,7 @@
 
 #include "ee/jsb/facebook/jsb_ifacebook_login_delegate.hpp"
 
-#include "ee/facebook/internal/FacebookLoginDelegate.hpp"
+#include "ee/facebook/private/FacebookLoginDelegate.hpp"
 #include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"

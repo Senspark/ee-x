@@ -7,7 +7,7 @@
 
 #include "ee/jsb/facebook/jsb_facebook_bridge_impl.hpp"
 
-#include "ee/facebook/FacebookBridge.hpp"
+#include "ee/facebook/private/FacebookBridge.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"
 #include "ee/jsb/core/jsb_templates.hpp"

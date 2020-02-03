@@ -7,7 +7,7 @@
 
 #include "ee/jsb/facebook/jsb_ifacebook_graph_delegate.hpp"
 
-#include "ee/facebook/internal/FacebookGraphDelegate.hpp"
+#include "ee/facebook/private/FacebookGraphDelegate.hpp"
 #include "ee/jsb/core/SharedPtrHandler.hpp"
 #include "ee/jsb/core/jsb_core_common.hpp"
 #include "ee/jsb/core/jsb_logger.hpp"

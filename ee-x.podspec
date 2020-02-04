@@ -412,13 +412,13 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'jansson' do |s| 
-    s.source_files = 'third_party/jansson/*'
-    s.header_mappings_dir = 'third_party'
+    s.source_files = 'third_party/jansson/src/**/*'
+    s.header_mappings_dir = 'third_party/jansson/src'
   end
 
   spec.subspec 'keeva' do |s|
-    s.source_files = 'third_party/keeva/*'
-    s.header_mappings_dir = 'third_party'
+    s.source_files = 'third_party/keeva/src/**/*'
+    s.header_mappings_dir = 'third_party/keeva/src'
   end
 
   spec.subspec 'soomla-ios-core' do |s|
@@ -429,16 +429,15 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-cocos2dx-core' do |s|
     s.source_files = 'third_party/soomla/SoomlaCocos2dxCore/**/*'
-    s.exclude_files = 'third_party/soomla/SoomlaCocos2dxCore/Soomla/jsb/*'
-    s.header_mappings_dir = 'third_party/soomla'
+    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxCore'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
         '${PODS_ROOT}/../../cocos2d/cocos',
         '${PODS_ROOT}/../../../cocos2d-x',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos',
-        "${PODS_ROOT}/Headers/Public/#{spec.name}/SoomlaCocos2dxCore/Soomla/**"
+        '${PODS_ROOT}/../../../cocos2d-x/cocos' #,
+        #"${PODS_ROOT}/Headers/Public/#{spec.name}/SoomlaCocos2dxCore/Soomla/**"
       ].join(' ')
     }
     
@@ -457,7 +456,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-cocos2dx-store' do |s| 
     s.source_files = 'third_party/soomla/SoomlaCocos2dxStore/**/*'
-    s.header_mappings_dir = 'third_party/soomla'
+    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxStore'
     s.dependency 'ee-x/soomla-cocos2dx-core'
     s.dependency 'ee-x/soomla-ios-store'
   end

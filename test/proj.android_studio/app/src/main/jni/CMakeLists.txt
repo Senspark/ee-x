@@ -33,16 +33,17 @@ target_link_libraries(${PROJECT_NAME}
     ee_x_app_lovin
     ee_x_apps_flyer
     ee_x_campaign_receiver
+    ee_x_cocos
     ee_x_crashlytics
     ee_x_facebook
     ee_x_facebook_ads
     ee_x_firebase_analytics
-    ee_x_firebase_core
     ee_x_firebase_dynamic_link
     ee_x_firebase_messaging
     ee_x_firebase_performance
     ee_x_firebase_remote_config
     ee_x_firebase_storage
+    ee_x_google_analytics
     ee_x_iron_source
     ee_x_notification
     ee_x_play

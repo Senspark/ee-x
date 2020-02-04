@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include <jansson.h>
+#include <ee/jansson/jansson.h>
 
 #include <cocos2d.h>
 

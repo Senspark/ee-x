@@ -1,21 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 
-# project(ee_x_vungle)
+project(ee_x_vungle)
+add_library(${PROJECT_NAME} "")
 
-include_directories(
-  third_party/nlohmann/include
-  src/ee/vungle/internal
-  src/ee/vungle
-)
+execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
-set(EE_X_VUNGLE_SRC
-  src/ee/vungle/VungleBridge.cpp
-  src/ee/vungle/internal/VungleRewardedVideo.cpp
-)
-
-set(EE_X_VUNGLE_HEADERS
-  src/ee/vungle/VungleBridge.hpp
-  src/ee/vungle/internal/VungleRewardedVideo.hpp
-)
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+target_link_libraries(${PROJECT_NAME} ee_x_ads)

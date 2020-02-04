@@ -1,21 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 
-# project(ee_x_iron_source)
+project(ee_x_iron_source)
+add_library(${PROJECT_NAME} "")
 
-include_directories(
-  third_party/nlohmann/include
-  src/ee/iron_source/internal
-  src/ee/iron_source
-)
+execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
-set(EE_X_IRON_SOURCE_SRC
-  src/ee/iron_source/IronSourceBridge.cpp
-  src/ee/iron_source/internal/IronSourceInterstitialAd.cpp
-  src/ee/iron_source/internal/IronSourceRewardedVideo.cpp
-)
-
-set(EE_X_IRON_SOURCE_HEADERS
-  src/ee/iron_source/IronSourceBridge.hpp
-  src/ee/iron_source/internal/IronSourceInterstitialAd.hpp
-  src/ee/iron_source/internal/IronSourceRewardedVideo.hpp
-)
+target_link_libraries(${PROJECT_NAME} ee_x_ads)

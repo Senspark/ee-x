@@ -1,19 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 
-# project(ee_x_campaignreceiver)
+project(ee_x_campaign_receiver)
+add_library(${PROJECT_NAME} "")
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
+execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
-include_directories(
-  src/ee/campaign_receiver
-)
-
-set(EE_X_CAMPRECEIVER_SRC
-  src/ee/campaign_receiver/CampaignReceiverBridge.cpp
-)
-
-set(EE_X_CAMPRECEIVER_HEADERS
-  src/ee/campaign_receiver/CampaignReceiverBridge.hpp
-)
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+target_link_libraries(${PROJECT_NAME} ee_x_core)

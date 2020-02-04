@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+/// Used to switch between ndkBuild and cmake.
+def USE_CMAKE = true
+
 /// Modify this variable to build the desired architectures.
 String[] architectures = [
         'armeabi-v7a',
@@ -10,7 +13,6 @@ String[] architectures = [
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-    flavorDimensions 'screenSize'
 
     defaultConfig {
         minSdkVersion 17
@@ -25,26 +27,48 @@ android {
         manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
 
         externalNativeBuild {
-            ndkBuild {
-                targets 'ee_x_test'
-                arguments 'APP_STL=c++_static'
-                arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                arguments 'APP_PLATFORM=android-16'
-                arguments 'APP_LDFLAGS=-latomic'
-                arguments '-j' + Runtime.runtime.availableProcessors()
-                cppFlags '-frtti'
-                cppFlags '-fexceptions'
-                cppFlags '-fsigned-char'
-                cppFlags '-std=c++17'
-                cppFlags '-U__SSE__'
-                cppFlags '-Wno-extern-c-compat'
+            if (USE_CMAKE) {
+                cmake {
+                    targets 'ee_x_test'
+                    arguments '-DANDROID_STL=c++_static'
+                    arguments '-DANDROID_TOOLCHAIN=clang'
+                    cppFlags '-frtti'
+                    cppFlags '-fexceptions'
+                    cppFlags '-fsigned-char'
+                    cppFlags '-std=c++17'
+                    cppFlags '-U__SSE__'
+                    cppFlags '-Wno-extern-c-compat'
+                    abiFilters.addAll(architectures)
+                }
+            } else {
+                ndkBuild {
+                    targets 'ee_x_test'
+                    arguments 'APP_STL=c++_static'
+                    arguments 'NDK_TOOLCHAIN_VERSION=clang'
+                    arguments 'APP_PLATFORM=android-16'
+                    arguments 'APP_LDFLAGS=-latomic'
+                    arguments '-j' + Runtime.runtime.availableProcessors()
+                    cppFlags '-frtti'
+                    cppFlags '-fexceptions'
+                    cppFlags '-fsigned-char'
+                    cppFlags '-std=c++17'
+                    cppFlags '-U__SSE__'
+                    cppFlags '-Wno-extern-c-compat'
+                    abiFilters.addAll(architectures)
+                }
             }
         }
     }
 
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
+        if (USE_CMAKE) {
+            cmake {
+                path 'src/main/jni/CMakeLists.txt'
+            }
+        } else {
+            ndkBuild {
+                path 'src/main/jni/Android.mk'
+            }
         }
     }
 
@@ -72,9 +96,13 @@ android {
             jniDebuggable false
 
             externalNativeBuild {
-                ndkBuild {
-                    arguments "NDK_OUT=$projectDir/src/main/obj/release"
-                    cppFlags '-DNDEBUG'
+                if (USE_CMAKE) {
+                    // TODO.
+                } else {
+                    ndkBuild {
+                        arguments "NDK_OUT=$projectDir/src/main/obj/release"
+                        cppFlags '-DNDEBUG'
+                    }
                 }
             }
         }
@@ -83,9 +111,13 @@ android {
             jniDebuggable true
 
             externalNativeBuild {
-                ndkBuild {
-                    arguments "NDK_OUT=$projectDir/src/main/obj/debug"
-                    cppFlags '-DCOCOS2D_DEBUG=1'
+                if (USE_CMAKE) {
+                    // TODO.
+                } else {
+                    ndkBuild {
+                        arguments "NDK_OUT=$projectDir/src/main/obj/debug"
+                        cppFlags '-DCOCOS2D_DEBUG=1'
+                    }
                 }
             }
         }

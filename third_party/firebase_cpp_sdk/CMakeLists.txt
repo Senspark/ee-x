@@ -27,7 +27,7 @@ if(ANDROID)
   string(REPLACE "_" ";" SPLIT_STL ${ANDROID_STL})
   list(GET SPLIT_STL 0 STL_DIR)
   set(FIREBASE_SDK_LIBDIR
-      "${FIREBASE_CPP_SDK_DIR}/libs/android/${ANDROID_ABI}/${STL_DIR}")
+      "${FIREBASE_CPP_SDK_DIR}/libs/android/${ANDROID_ABI}")
 elseif(APPLE)
   set(FIREBASE_SDK_LIBDIR ${FIREBASE_CPP_SDK_DIR}/libs/darwin/universal)
 elseif(MSVC)

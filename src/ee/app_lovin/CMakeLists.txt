@@ -1,21 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 
-# project(ee_x_app_lovin)
+project(ee_x_app_lovin)
+add_library(${PROJECT_NAME} "")
 
-include_directories(
-  src/ee/app_lovin
-  src/ee/app_lovin/internal
-  third_party/nlohmann/include
-)
+execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
-set(EE_X_APPLOVIN_SRC
-  src/ee/app_lovin/AppLovinBridge.cpp
-  src/ee/app_lovin/internal/AppLovinRewardedVideo.cpp
-)
-
-set(EE_X_APPLOVIN_HEADERS
-  src/ee/app_lovin/AppLovinBridge.hpp
-  src/ee/app_lovin/internal/AppLovinRewardedVideo.hpp
-)
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+target_link_libraries(${PROJECT_NAME} ee_x_ads)

@@ -31,7 +31,7 @@ SE_BIND_CTOR(constructor, clazz, finalize)
 bool registerJsbBridge(se::Object* global) {
     auto scope = core::getPath(global, "ee");
     auto parent = getIFacebookBridgeClass()->getProto();
-    auto cls = se::Class::create("IFacebook", scope, parent, _SE(constructor));
+    auto cls = se::Class::create("Facebook", scope, parent, _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
     cls->install();
 

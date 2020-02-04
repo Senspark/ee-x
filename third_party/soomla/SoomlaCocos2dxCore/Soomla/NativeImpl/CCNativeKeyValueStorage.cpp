@@ -14,10 +14,11 @@
  limitations under the License.
  */
 
-#include "CCError.h"
-#include "CCNativeKeyValueStorage.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/NativeImpl/CCNativeKeyValueStorage.h"
+
+#include "Soomla/CCError.h"
+#include "Soomla/CCNdkBridge.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 namespace soomla {
 

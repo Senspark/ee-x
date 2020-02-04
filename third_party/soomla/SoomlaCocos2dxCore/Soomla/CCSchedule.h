@@ -17,9 +17,9 @@
 #ifndef __CCSchedule_H_
 #define __CCSchedule_H_
 
-#include "CCCoreConsts.h"
-#include "CCDomain.h"
-#include "CCSoomlaMacros.h"
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/domain/CCDomain.h"
 
 namespace soomla {
 class CCSchedule : public CCDomain {

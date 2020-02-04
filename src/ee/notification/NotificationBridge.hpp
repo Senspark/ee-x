@@ -15,9 +15,9 @@
 
 namespace ee {
 namespace notification {
-class Notification final {
+class Bridge final {
 public:
-    Notification();
+    Bridge();
     
     /// Schedules a notification.
     void schedule(const NotificationBuilder& builder);

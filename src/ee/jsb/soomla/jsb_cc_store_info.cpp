@@ -7,12 +7,11 @@
 
 #include "ee/jsb/soomla/jsb_cc_store_info.hpp"
 
-#include "Soomla/Cocos2dxCore.h"
-#include "Soomla/data/CCStoreInfo.h"
-#include "Soomla/domain/CCPurchasableVirtualItem.h"
+#include <Soomla/Cocos2dxCore.h>
+#include <Soomla/data/CCStoreInfo.h>
+#include <Soomla/domain/CCPurchasableVirtualItem.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace soomla {
 std::vector<se::Object*> __jsb__s_storeObjArchive;

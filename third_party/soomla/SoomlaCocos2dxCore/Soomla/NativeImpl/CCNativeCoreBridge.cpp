@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCNativeCoreBridge.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/NativeImpl/CCNativeCoreBridge.h"
+
+#include "Soomla/CCNdkBridge.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 USING_NS_CC;
 

@@ -5,7 +5,7 @@
 //  Created by Kiet Le on 9/19/18.
 //
 
-#include "CCVirtualCurrencyBuilder.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyBuilder.h"
 
 namespace soomla {
 

@@ -17,9 +17,11 @@
 #ifndef __CCJsonHelper_H_
 #define __CCJsonHelper_H_
 
-#include "cocos2d.h"
-#include "jansson.h"
 #include <iostream>
+
+#include <jansson.h>
+
+#include <cocos2d.h>
 
 /** \class CCJsonHelper
     \brief A helper class to generate CCObjects from JSON objects and vice

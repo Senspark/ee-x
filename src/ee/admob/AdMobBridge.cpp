@@ -27,7 +27,7 @@
 
 namespace ee {
 namespace admob {
-using Self = AdMob;
+using Self = Bridge;
 
 namespace {
 // clang-format off
@@ -59,17 +59,17 @@ constexpr auto k__identifiers           = "identifiers";
 // clang-format on
 } // namespace
 
-Self::AdMob()
+Self::Bridge()
     : Self(Logger::getSystemLogger()) {}
 
-Self::AdMob(const Logger& logger)
+Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loading_ = false;
 }
 
-Self::~AdMob() {
+Self::~Bridge() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 

@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCError.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/CCError.h"
+
+#include "Soomla/CCSoomlaUtils.h"
 
 USING_NS_CC;
 

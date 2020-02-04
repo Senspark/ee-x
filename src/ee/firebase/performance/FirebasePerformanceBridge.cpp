@@ -14,7 +14,8 @@
 
 namespace ee {
 namespace firebase {
-using Self = Performance;
+namespace performance {
+using Self = Bridge;
 
 namespace {
 // clang-format off
@@ -36,22 +37,23 @@ bool Self::isDataCollectionEnabled() {
     return core::toBool(response);
 }
 
-std::shared_ptr<PerformanceTrace> Self::startTrace(const std::string& name) {
+std::shared_ptr<Trace> Self::startTrace(const std::string& name) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__startTrace, name);
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<PerformanceTrace>(new PerformanceTrace(this, name));
+    return std::shared_ptr<Trace>(new Trace(this, name));
 }
 
-std::shared_ptr<PerformanceTrace> Self::newTrace(const std::string& name) {
+std::shared_ptr<Trace> Self::newTrace(const std::string& name) {
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__newTrace, name);
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<PerformanceTrace>(new PerformanceTrace(this, name));
+    return std::shared_ptr<Trace>(new Trace(this, name));
 }
+} // namespace performance
 } // namespace firebase
 } // namespace ee

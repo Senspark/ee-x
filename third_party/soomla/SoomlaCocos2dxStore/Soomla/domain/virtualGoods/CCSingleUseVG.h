@@ -17,9 +17,7 @@
 #ifndef __CCSingleUseVG_H_
 #define __CCSingleUseVG_H_
 
-#include <iostream>
-
-#include "CCVirtualGood.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 /**

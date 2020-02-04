@@ -8,12 +8,10 @@
 #ifndef JSB_CC_STORE_ASSETS_BUILDER_HPP
 #define JSB_CC_STORE_ASSETS_BUILDER_HPP
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace soomla {
-
 bool register_cc_store_assets_builder_manual(se::Object* object);
-
 } // namespace soomla
 
 #endif /* JSB_CC_STORE_ASSETS_BUILDER_HPP */

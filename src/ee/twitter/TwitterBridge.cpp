@@ -29,9 +29,9 @@ constexpr auto k__succeeded         = 1;
 // clang-format on
 } // namespace
 
-using Self = Twitter;
+using Self = Bridge;
 
-Self::Twitter()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -53,7 +53,7 @@ Self::Twitter()
         k__onCancel);
 }
 
-Self::~Twitter() {
+Self::~Bridge() {
     bridge_.deregisterHandler(k__onSuccess);
     bridge_.deregisterHandler(k__onFailure);
     bridge_.deregisterHandler(k__onCancel);

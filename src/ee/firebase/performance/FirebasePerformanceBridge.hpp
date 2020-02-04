@@ -5,8 +5,8 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/8/19.
 //
 
-#ifndef EE_X_FIREBASE_PERFORMANCE_HPP
-#define EE_X_FIREBASE_PERFORMANCE_HPP
+#ifndef EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
+#define EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
 
 #include <memory>
 #include <string>
@@ -20,10 +20,11 @@
 
 namespace ee {
 namespace firebase {
-class Performance final {
+namespace performance {
+class Bridge final {
 public:
-    Performance() = default;
-    ~Performance() = default;
+    Bridge() = default;
+    ~Bridge() = default;
 
     /// @property dataCollectionEnabled
     /// @see
@@ -35,14 +36,15 @@ public:
     /// FirebasePerformance. The trace will automatically be started on a
     /// successful creation of the instance. The |name| of the trace cannot be
     /// an empty string.
-    std::shared_ptr<PerformanceTrace> startTrace(const std::string& name);
+    std::shared_ptr<Trace> startTrace(const std::string& name);
 
     /// Creates an instance of FIRTrace. This API does not start the trace. To
     /// start the trace, use the -start API on the returned |FIRTrace| object.
     /// The |name| cannot be an empty string.
-    std::shared_ptr<PerformanceTrace> newTrace(const std::string& name);
+    std::shared_ptr<Trace> newTrace(const std::string& name);
 };
+} // namespace performance
 } // namespace firebase
 } // namespace ee
 
-#endif /* EE_X_FIREBASE_PERFORMANCE_HPP */
+#endif /* EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP */

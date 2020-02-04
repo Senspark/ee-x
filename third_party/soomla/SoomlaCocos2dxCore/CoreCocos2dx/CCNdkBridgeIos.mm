@@ -1,6 +1,6 @@
 
 
-#include "CCJsonHelper.h"
+#include "Soomla/CCJsonHelper.h"
 #include "CCNdkBridgeIos.h"
 #include "CCSoomlaEventDispatcher.h"
 #include "NdkGlue.h"

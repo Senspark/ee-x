@@ -12,13 +12,13 @@
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
-namespace unityads {
-class UnityAds;
+namespace unity_ads {
+class Bridge;
 class InterstitialAd;
 class RewardedVideo;
-} // namespace unityads
+} // namespace unity_ads
 
-using unityads::UnityAds;
+using UnityAds = unity_ads::Bridge;
 } // namespace ee
 
 #endif /* EE_X_UNITY_ADS_FWD_HPP */

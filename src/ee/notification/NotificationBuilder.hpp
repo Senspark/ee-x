@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "ee/NotificationFwd.hpp"
+
 namespace ee {
 namespace notification {
 class Notification;
@@ -45,7 +47,7 @@ public:
     NotificationBuilder& setTag(int tag);
 
 private:
-    friend Notification;
+    friend Bridge;
 
     std::string ticker_;
     std::string title_;

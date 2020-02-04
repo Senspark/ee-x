@@ -17,9 +17,10 @@
 #ifndef __CCRandomReward_H_
 #define __CCRandomReward_H_
 
-#include "CCAggregateReward.h"
-#include "CCSoomlaMacros.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/rewards/CCAggregateReward.h"
 
 namespace soomla {
 class CCRandomReward : public CCAggregateReward {

@@ -13,11 +13,11 @@
 
 #ifdef __cplusplus
 #include "ee/CampaignReceiverFwd.hpp"
-#include "ee/campaignreceiver/CampaignReceiverBridge.hpp"
+#include "ee/campaign_receiver/CampaignReceiverBridge.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/campaignreceiver/EECampaignReceiver.h"
+#import "ee/campaign_receiver/EECampaignReceiver.h"
 #endif // __OBJC__
 
 #endif /* EE_X_CAMPAIGN_RECEIVER_HPP */

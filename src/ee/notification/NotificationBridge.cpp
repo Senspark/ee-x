@@ -17,9 +17,9 @@
 
 namespace ee {
 namespace notification {
-using Self = Notification;
+using Self = Bridge;
 
-Self::Notification()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {}
 
 void Self::schedule(const NotificationBuilder& builder) {

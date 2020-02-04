@@ -19,7 +19,7 @@
 #ifndef __CCVirtualCurrency_H__
 #define __CCVirtualCurrency_H__
 
-#include "CCVirtualItem.h"
+#include "Soomla/domain/CCVirtualItem.h"
 
 namespace soomla {
 

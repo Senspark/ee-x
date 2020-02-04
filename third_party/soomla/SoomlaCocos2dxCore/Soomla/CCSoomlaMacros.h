@@ -17,7 +17,7 @@
 #ifndef __CCSoomlaMacros_h
 #define __CCSoomlaMacros_h
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 
 #ifndef CC_SYNTHESIZE

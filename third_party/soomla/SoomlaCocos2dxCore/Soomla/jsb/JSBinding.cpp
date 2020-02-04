@@ -3,7 +3,7 @@
 #include "JSBinding.h"
 #include "CCError.h"
 #include "jansson.h"
-#include "CCJsonHelper.h"
+#include "Soomla/CCJsonHelper.h"
 #include "CCNdkBridge.h"
 
 USING_NS_CC;

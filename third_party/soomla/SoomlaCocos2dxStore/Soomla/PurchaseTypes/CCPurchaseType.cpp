@@ -14,11 +14,9 @@
  limitations under the License.
  */
 
-#include "CCPurchaseType.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/PurchaseTypes/CCPurchaseType.h"
 
 namespace soomla {
-
 bool CCPurchaseType::init() {
     return true;
 }

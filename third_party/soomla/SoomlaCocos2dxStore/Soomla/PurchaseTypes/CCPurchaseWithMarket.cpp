@@ -14,11 +14,13 @@
  limitations under the License.
  */
 
-#include "CCPurchaseWithMarket.h"
-#include "CCSoomlaStore.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreEventDispatcher.h"
-#include "CCStoreInfo.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
+
+#include <Soomla/CCSoomlaUtils.h>
+#include <Soomla/CCStoreEventDispatcher.h>
+
+#include "Soomla/CCSoomlaStore.h"
+#include "Soomla/data/CCStoreInfo.h"
 
 namespace soomla {
 

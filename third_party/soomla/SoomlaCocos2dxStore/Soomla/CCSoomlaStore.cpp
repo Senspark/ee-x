@@ -14,13 +14,15 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCNativeSoomlaStore.h"
-#include "CCSoomlaStore.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreBridge.h"
-#include "CCStoreEventDispatcher.h"
-#include "CCStoreInfo.h"
+#include "Soomla/CCSoomlaStore.h"
+
+#include <Soomla/CCJsonHelper.h>
+#include <Soomla/CCSoomlaUtils.h>
+
+#include "Soomla/CCStoreBridge.h"
+#include "Soomla/CCStoreEventDispatcher.h"
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/NativeImpl/CCNativeSoomlaStore.h"
 
 namespace soomla {
 #define TAG "SOOMLA SoomlaStore"

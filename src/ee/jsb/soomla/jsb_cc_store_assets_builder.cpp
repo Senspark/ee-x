@@ -10,8 +10,7 @@
 #include <Soomla/CCStoreAssetsBuilder.h>
 #include <Soomla/Cocos2dxCore.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace soomla {
 namespace {

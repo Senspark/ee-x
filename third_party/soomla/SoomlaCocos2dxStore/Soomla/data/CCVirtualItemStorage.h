@@ -17,9 +17,11 @@
 #ifndef __CCVirtualItemStorage_H__
 #define __CCVirtualItemStorage_H__
 
-#include "CCError.h"
-#include "CCVirtualItem.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include <Soomla/CCError.h>
+
+#include <Soomla/domain/CCVirtualItem.h>
 
 namespace soomla {
 /**

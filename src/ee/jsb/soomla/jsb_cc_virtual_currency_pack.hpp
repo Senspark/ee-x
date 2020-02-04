@@ -8,12 +8,10 @@
 #ifndef JSB_CC_VIRTUAL_CURRENCY_PACK_HPP
 #define JSB_CC_VIRTUAL_CURRENCY_PACK_HPP
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace soomla {
-
 bool register_cc_virtual_currency_pack_manual(se::Object* object);
-
 } // namespace soomla
 
 #endif /* JSB_CC_VIRTUAL_CURRENCY_PACK_HPP */

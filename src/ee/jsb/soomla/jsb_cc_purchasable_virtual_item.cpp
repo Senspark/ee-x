@@ -4,13 +4,14 @@
 //
 //  Created by Nguyen Van Quynh on 9/18/18.
 //
+
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
 
-#include "Soomla/domain/CCPurchasableVirtualItem.h"
-#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include <Soomla/domain/CCPurchasableVirtualItem.h>
+#include <Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
+
 #include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
 
 namespace ee {

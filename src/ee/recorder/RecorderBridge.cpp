@@ -21,14 +21,14 @@ constexpr auto k__checkRecordingPermission = "Recorder_checkRecordingPermission"
 // clang-format on
 } // namespace
 
-using Self = Recorder;
+using Self = Bridge;
 
-Self::Recorder()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
     //
 }
 
-Self::~Recorder() {
+Self::~Bridge() {
     //
 }
 

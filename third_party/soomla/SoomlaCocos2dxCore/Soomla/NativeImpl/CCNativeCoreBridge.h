@@ -17,7 +17,7 @@
 #ifndef __CCNativeCoreBridge_H_
 #define __CCNativeCoreBridge_H_
 
-#include "CCCoreBridge.h"
+#include "Soomla/CCCoreBridge.h"
 
 namespace soomla {
 

@@ -14,10 +14,11 @@
  limitations under the License.
  */
 
-#include "CCCoreBridge.h"
-#include "CCNdkBridge.h"
-#include "CCSoomla.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/CCSoomla.h"
+
+#include "Soomla/CCCoreBridge.h"
+#include "Soomla/CCNdkBridge.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 namespace soomla {
 

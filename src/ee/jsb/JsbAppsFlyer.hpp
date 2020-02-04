@@ -8,12 +8,12 @@
 #ifndef EE_X_JSB_APPS_FLYER_HPP
 #define EE_X_JSB_APPS_FLYER_HPP
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace ee {
-namespace appsflyer {
+namespace apps_flyer {
 bool registerJsb(se::Object* global);
-} // namespace appsflyer
+} // namespace apps_flyer
 } // namespace ee
 
 #endif /* EE_X_JSB_APPS_FLYER_HPP */

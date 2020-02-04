@@ -3,8 +3,9 @@
 #ifndef __CCStoreBridge_H_
 #define __CCStoreBridge_H_
 
-#include "CCStoreAssets.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCStoreAssets.h"
 
 namespace soomla {
 

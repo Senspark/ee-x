@@ -7,13 +7,10 @@
 
 #include "ee/jsb/google/jsb_google_analytics_event_builder.hpp"
 
-#include "ee/GoogleAnalytics.hpp"
-
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/GoogleAnalytics.hpp>
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
-
 namespace core {
 template <>
 GoogleEventBuilder get_value(const se::Value& value) {

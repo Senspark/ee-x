@@ -17,7 +17,7 @@
 #ifndef __CCNativeVirtualGoodsStorage_H_
 #define __CCNativeVirtualGoodsStorage_H_
 
-#include "CCVirtualGoodsStorage.h"
+#include "Soomla/data/CCVirtualGoodsStorage.h"
 
 namespace soomla {
 /**

@@ -17,19 +17,19 @@
 #ifndef __Cocos2dxCore_H
 #define __Cocos2dxCore_H
 
-#include "CCCoreEventDispatcher.h"
-#include "CCSoomla.h"
-#include "CCCoreBridge.h"
-#include "CCError.h"
-#include "CCSoomlaEventDispatcher.h"
-#include "CCSoomlaEntity.h"
-#include "CCReward.h"
-#include "CCRandomReward.h"
-#include "CCBadgeReward.h"
-#include "CCSequenceReward.h"
-#include "CCSchedule.h"
-#include "CCSoomlaUtils.h"
-#include "CCKeyValueStorage.h"
-#include "CCRewardStorage.h"
+#include "Soomla/CCCoreBridge.h"
+#include "Soomla/CCCoreEventDispatcher.h"
+#include "Soomla/CCError.h"
+#include "Soomla/CCSchedule.h"
+#include "Soomla/CCSoomla.h"
+#include "Soomla/CCSoomlaEventDispatcher.h"
+#include "Soomla/CCSoomlaUtils.h"
+#include "Soomla/data/CCKeyValueStorage.h"
+#include "Soomla/data/CCRewardStorage.h"
+#include "Soomla/domain/CCSoomlaEntity.h"
+#include "Soomla/rewards/CCBadgeReward.h"
+#include "Soomla/rewards/CCRandomReward.h"
+#include "Soomla/rewards/CCReward.h"
+#include "Soomla/rewards/CCSequenceReward.h"
 
 #endif

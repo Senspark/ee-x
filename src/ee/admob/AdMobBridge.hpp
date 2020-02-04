@@ -17,13 +17,13 @@
 
 namespace ee {
 namespace admob {
-class AdMob final {
+class Bridge final {
 public:
-    AdMob();
-    ~AdMob();
+    Bridge();
+    ~Bridge();
     
     /// Constructs an AdMob bridge with a custom logger.
-    explicit AdMob(const Logger& logger);
+    explicit Bridge(const Logger& logger);
 
     /// Optional.
     /// Calls this method for faster ads loading.

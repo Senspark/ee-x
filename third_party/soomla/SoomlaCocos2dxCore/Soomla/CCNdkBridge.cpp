@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/CCNdkBridge.h"
+
+#include "Soomla/CCJsonHelper.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 USING_NS_CC;
 

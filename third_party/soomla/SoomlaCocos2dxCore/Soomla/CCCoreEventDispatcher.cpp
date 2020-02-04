@@ -14,10 +14,11 @@
  limitations under the License.
  */
 
-#include "CCCoreConsts.h"
-#include "CCCoreEventDispatcher.h"
-#include "CCDomainFactory.h"
-#include "CCSoomlaEventDispatcher.h"
+#include "Soomla/CCCoreEventDispatcher.h"
+
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCDomainFactory.h"
+#include "Soomla/CCSoomlaEventDispatcher.h"
 
 #if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1

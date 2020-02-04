@@ -17,10 +17,10 @@
 #ifndef __CCVirtualGoodsStorage_H__
 #define __CCVirtualGoodsStorage_H__
 
-#include "CCEquippableVG.h"
-#include "CCUpgradeVG.h"
-#include "CCVirtualGood.h"
-#include "CCVirtualItemStorage.h"
+#include "Soomla/data/CCVirtualItemStorage.h"
+#include "Soomla/domain/virtualGoods/CCEquippableVG.h"
+#include "Soomla/domain/virtualGoods/CCUpgradeVG.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 /**

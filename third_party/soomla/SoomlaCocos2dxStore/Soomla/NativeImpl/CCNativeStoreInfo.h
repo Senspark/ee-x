@@ -17,7 +17,7 @@
 #ifndef __CCNativeStoreInfo_H_
 #define __CCNativeStoreInfo_H_
 
-#include "CCStoreInfo.h"
+#include "Soomla/data/CCStoreInfo.h"
 
 namespace soomla {
     /**

@@ -13,12 +13,12 @@ abstract_target 'common' do
     
     target 'ee_x_test_mobile' do
         pod_ee_x('admob')
-        pod_ee_x('applovin')
+        pod_ee_x('app-lovin')
         pod_ee_x('facebook-ads')
-        pod_ee_x('ironsource')
+        pod_ee_x('iron-source')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
-        pod_ee_x('appsflyer')
+        pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')
         pod_ee_x('crashlytics')
         pod_ee_x('facebook')

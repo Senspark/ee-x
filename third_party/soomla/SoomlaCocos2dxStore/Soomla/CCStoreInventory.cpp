@@ -14,13 +14,15 @@
  limitations under the License.
  */
 
-#include "CCPurchasableVirtualItem.h"
-#include "CCSoomlaEventDispatcher.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreInfo.h"
-#include "CCStoreInventory.h"
-#include "CCVirtualCurrencyStorage.h"
-#include "CCVirtualGoodsStorage.h"
+#include "Soomla/CCStoreInventory.h"
+
+#include <Soomla/CCSoomlaEventDispatcher.h>
+#include <Soomla/CCSoomlaUtils.h>
+
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/data/CCVirtualCurrencyStorage.h"
+#include "Soomla/data/CCVirtualGoodsStorage.h"
+#include "Soomla/domain/CCPurchasableVirtualItem.h"
 
 namespace soomla {
 #define TAG "SOOMLA StoreInventory"

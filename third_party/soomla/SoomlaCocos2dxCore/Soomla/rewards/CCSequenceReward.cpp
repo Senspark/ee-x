@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCRewardStorage.h"
-#include "CCSequenceReward.h"
+#include "Soomla/rewards/CCSequenceReward.h"
+
+#include "Soomla/data/CCRewardStorage.h"
 
 soomla::CCSequenceReward*
 soomla::CCSequenceReward::create(const std::string& id, const std::string& name,

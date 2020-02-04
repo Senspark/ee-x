@@ -17,10 +17,11 @@
 #ifndef __CCCoreBridge_H_
 #define __CCCoreBridge_H_
 
-#include "cocos2d.h"
-#include "CCError.h"
-#include "CCReward.h"
-#include "CCSequenceReward.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCError.h"
+#include "Soomla/rewards/CCReward.h"
+#include "Soomla/rewards/CCSequenceReward.h"
 
 namespace soomla {
 

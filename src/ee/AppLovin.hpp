@@ -13,7 +13,7 @@
 
 #ifdef __cplusplus
 #include "ee/AppLovinFwd.hpp"
-#include "ee/applovin/AppLovinBridge.hpp"
+#include "ee/app_lovin/AppLovinBridge.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__

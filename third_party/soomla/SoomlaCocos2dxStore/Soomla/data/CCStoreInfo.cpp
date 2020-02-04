@@ -14,22 +14,25 @@
  limitations under the License.
  */
 
-#include "../domain/CCMarketItem.h"
-#include "../domain/virtualCurrencies/CCVirtualCurrency.h"
-#include "../domain/virtualCurrencies/CCVirtualCurrencyPack.h"
-#include "../domain/virtualGoods/CCEquippableVG.h"
-#include "../domain/virtualGoods/CCSingleUsePackVG.h"
-#include "../domain/virtualGoods/CCSingleUseVG.h"
-#include "CCDomainFactory.h"
-#include "CCDomainHelper.h"
-#include "CCJsonHelper.h"
-#include "CCKeyValueStorage.h"
-#include "CCNativeStoreInfo.h"
-#include "CCPurchaseWithMarket.h"
-#include "CCSoomlaEventDispatcher.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreInfo.h"
+#include "Soomla/data/CCStoreInfo.h"
+
 #include <set>
+
+#include <Soomla/CCDomainFactory.h>
+#include <Soomla/CCDomainHelper.h>
+#include <Soomla/CCJsonHelper.h>
+#include <Soomla/CCSoomlaEventDispatcher.h>
+#include <Soomla/CCSoomlaUtils.h>
+#include <Soomla/data/CCKeyValueStorage.h>
+
+#include "Soomla/domain/CCMarketItem.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include "Soomla/domain/virtualGoods/CCEquippableVG.h"
+#include "Soomla/domain/virtualGoods/CCSingleUsePackVG.h"
+#include "Soomla/domain/virtualGoods/CCSingleUseVG.h"
+#include "Soomla/NativeImpl/CCNativeStoreInfo.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 
 namespace soomla {
 

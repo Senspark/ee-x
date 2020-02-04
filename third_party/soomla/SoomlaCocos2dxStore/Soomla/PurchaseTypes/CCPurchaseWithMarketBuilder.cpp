@@ -5,8 +5,9 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#include "CCPurchaseWithMarket.h"
-#include "CCPurchaseWithMarketBuilder.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h"
+
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 
 namespace soomla {
 

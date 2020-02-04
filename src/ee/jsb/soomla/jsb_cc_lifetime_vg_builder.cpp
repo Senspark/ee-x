@@ -9,9 +9,7 @@
 
 #include <Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/soomla/jsb_cc_purchase_with_market_builder.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
 namespace core {

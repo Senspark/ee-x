@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-#include "CCDomainHelper.h"
+#include "Soomla/CCDomainHelper.h"
 
-#include "CCCoreConsts.h"
-#include "CCDomainFactory.h"
-#include "CCJsonHelper.h"
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCDomainFactory.h"
+#include "Soomla/CCJsonHelper.h"
 
 using namespace soomla;
 using namespace cocos2d;

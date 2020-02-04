@@ -7,14 +7,12 @@
 
 #include "ee/jsb/soomla/jsb_cc_purchase_with_market.hpp"
 
-#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
+#include <Soomla/PurchaseTypes/CCPurchaseWithMarket.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
 namespace core {
-
 template <>
 void set_value(se::Value& value, soomla::CCPurchaseWithMarket* input) {
     set_value_from_pointer(value, input);

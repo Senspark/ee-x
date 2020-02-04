@@ -17,7 +17,7 @@
 #ifndef __CCKeyValueStorage_H
 #define __CCKeyValueStorage_H
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 #define DB_KEY_PRFIX "soomla."
 

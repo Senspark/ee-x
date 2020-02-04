@@ -5,11 +5,11 @@
 
 namespace ee {
 namespace vungle {
-class Vungle;
+class Bridge;
 class RewardedVideo;
 } // namespace vungle
 
-using vungle::Vungle;
+using Vungle = vungle::Bridge;
 } // namespace ee
 
 #endif /* EE_X_VUNGLE_FWD_HPP */

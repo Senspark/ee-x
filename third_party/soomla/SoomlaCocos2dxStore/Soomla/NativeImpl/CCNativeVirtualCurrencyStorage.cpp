@@ -14,13 +14,14 @@
  limitations under the License.
  */
 
-#include "CCNativeVirtualCurrencyStorage.h"
+#include "Soomla/NativeImpl/CCNativeVirtualCurrencyStorage.h"
 
-#include "CCNativeVirtualGoodsStorage.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreInfo.h"
-#include "CCUpgradeVG.h"
+#include <Soomla/CCNdkBridge.h>
+#include <Soomla/CCSoomlaUtils.h>
+
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/domain/virtualGoods/CCUpgradeVG.h"
+#include "Soomla/NativeImpl/CCNativeVirtualGoodsStorage.h"
 
 namespace soomla {
 #define TAG "SOOMLA NativeVirtualCurrencyStorage"

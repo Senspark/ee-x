@@ -17,9 +17,9 @@
 #ifndef __CCBridgelessKeyValueStorage_H
 #define __CCBridgelessKeyValueStorage_H
 
-#include "CCKeyValueStorage.h"
 #include <set>
 
+#include "Soomla/data/CCKeyValueStorage.h"
 
 namespace soomla {
 

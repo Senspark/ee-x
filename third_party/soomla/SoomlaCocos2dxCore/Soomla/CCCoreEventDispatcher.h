@@ -17,8 +17,9 @@
 #ifndef __CCCoreEventDispatcher_H_
 #define __CCCoreEventDispatcher_H_
 
-#include "CCReward.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/rewards/CCReward.h"
 
 namespace soomla {
 

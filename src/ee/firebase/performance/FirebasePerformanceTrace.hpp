@@ -15,9 +15,10 @@
 
 namespace ee {
 namespace firebase {
-class PerformanceTrace {
+namespace performance {
+class Trace {
 public:
-    ~PerformanceTrace() = default;
+    ~Trace() = default;
 
     void start();
 
@@ -29,15 +30,16 @@ public:
     std::int64_t getLongMetric(const std::string& metricName);
     
 protected:
-    friend Performance;
+    friend Bridge;
     
 private:
-    explicit PerformanceTrace(Performance* plugin, const std::string& name);
+    explicit Trace(Bridge* plugin, const std::string& name);
     
 private:
-    Performance* plugin_;
+    Bridge* plugin_;
     std::string name_;
 };
+} // namespace performance
 } // namespace firebase
 } // namespace ee
 

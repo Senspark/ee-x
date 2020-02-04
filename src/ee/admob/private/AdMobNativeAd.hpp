@@ -53,10 +53,10 @@ public:
     virtual void setVisible(bool visible) override;
 
 protected:
-    friend AdMob;
+    friend Bridge;
 
     explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
-                      AdMob* plugin, const std::string& adId);
+                      Bridge* plugin, const std::string& adId);
 
 private:
     void onLoaded();
@@ -67,7 +67,7 @@ private:
     std::string adId_;
     IMessageBridge& bridge_;
     const Logger& logger_;
-    AdMob* plugin_;
+    Bridge* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;
 };

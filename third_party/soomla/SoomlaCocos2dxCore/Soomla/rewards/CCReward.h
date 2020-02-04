@@ -17,12 +17,13 @@
 #ifndef __CCReward_H_
 #define __CCReward_H_
 
-#include "CCCoreConsts.h"
-#include "CCDomain.h"
-#include "CCSchedule.h"
-#include "CCSoomlaEntity.h"
-#include "CCSoomlaMacros.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCSchedule.h"
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/domain/CCDomain.h"
+#include "Soomla/domain/CCSoomlaEntity.h"
 
 namespace soomla {
 class CCReward : public CCSoomlaEntity {

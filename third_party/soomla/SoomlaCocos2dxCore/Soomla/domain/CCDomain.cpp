@@ -14,10 +14,11 @@
  limitations under the License.
  */
 
-#include "CCCoreConsts.h"
-#include "CCDomain.h"
-#include "CCDomainHelper.h"
-#include "CCJsonHelper.h"
+#include "Soomla/domain/CCDomain.h"
+
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCDomainHelper.h"
+#include "Soomla/CCJsonHelper.h"
 
 cocos2d::Vector<soomla::CCDomain*> soomla::CCDomain::getDomainsFromDictArray(
     const cocos2d::ValueVector& dictArray) {

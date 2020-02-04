@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCMarketItem.h"
-#include "CCJsonHelper.h"
+#include "Soomla/domain/CCMarketItem.h"
+
+#include <Soomla/CCJsonHelper.h>
 
 USING_NS_CC;
 

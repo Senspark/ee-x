@@ -8,12 +8,10 @@
 #ifndef JSB_CC_SOOMLA_HPP
 #define JSB_CC_SOOMLA_HPP
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace soomla {
-
 bool register_cc_soomla_manual(se::Object* object);
-
 } // namespace soomla
 
 #endif // JSB_CC_SOOMLA_HPP

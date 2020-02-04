@@ -8,7 +8,7 @@
 #ifndef CCVirtualItemBuilder_hpp
 #define CCVirtualItemBuilder_hpp
 
-#include "CCVirtualItem.h"
+#include "Soomla/domain/CCVirtualItem.h"
 
 namespace soomla {
 

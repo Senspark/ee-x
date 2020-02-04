@@ -9,7 +9,7 @@
 #ifndef EE_X_FIREBASE_APP_HPP_
 #define EE_X_FIREBASE_APP_HPP_
 
-#include <ee/FirebaseFwd.hpp>
+#include "ee/FirebaseFwd.hpp"
 
 #if defined(EE_X_ANDROID)
 #include <jni.h>

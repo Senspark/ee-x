@@ -17,8 +17,9 @@
 #ifndef __CCDomainFactory_H_
 #define __CCDomainFactory_H_
 
-#include "CCDomain.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/domain/CCDomain.h"
 
 namespace soomla {
 class CCDomainFactory {

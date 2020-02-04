@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCBadgeReward.h"
-#include "CCJsonHelper.h"
+#include "Soomla/rewards/CCBadgeReward.h"
+
+#include "Soomla/CCJsonHelper.h"
 
 soomla::CCBadgeReward*
 soomla::CCBadgeReward::create(const std::string& id, const std::string& name,

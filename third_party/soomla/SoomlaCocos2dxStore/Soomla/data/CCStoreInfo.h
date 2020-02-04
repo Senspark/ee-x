@@ -17,14 +17,17 @@
 #ifndef __CCStoreInfo_H_
 #define __CCStoreInfo_H_
 
-#include "../domain/CCVirtualCategory.h"
-#include "../domain/CCVirtualItem.h"
-#include "../domain/virtualGoods/CCUpgradeVG.h"
-#include "CCError.h"
-#include "CCStoreAssets.h"
-#include "CCVirtualCurrency.h"
-#include "CCVirtualCurrencyPack.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include <Soomla/CCError.h>
+
+#include "Soomla/domain/CCVirtualCategory.h"
+#include "Soomla/domain/CCVirtualItem.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include "Soomla/domain/virtualGoods/CCUpgradeVG.h"
+
+#include "Soomla/CCStoreAssets.h"
 
 namespace soomla {
 /**

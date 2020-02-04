@@ -14,12 +14,14 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCSingleUsePackVG.h"
-#include "CCSingleUseVG.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreInfo.h"
-#include "CCVirtualGoodsStorage.h"
+#include "Soomla/domain/virtualGoods/CCSingleUsePackVG.h"
+
+#include <Soomla/CCJsonHelper.h>
+#include <Soomla/CCSoomlaUtils.h>
+
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/data/CCVirtualGoodsStorage.h"
+#include "Soomla/domain/virtualGoods/CCSingleUseVG.h"
 
 namespace soomla {
 USING_NS_CC;

@@ -13,7 +13,7 @@
 
 namespace ee {
 namespace vungle {
-using Self = Vungle;
+using Self = Bridge;
 
 namespace {
 // clang-format off
@@ -27,10 +27,10 @@ constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
 // clang-format on
 } // namespace
 
-Self::Vungle()
+Self::Bridge()
     : Self(Logger::getSystemLogger()) {}
 
-Self::Vungle(const Logger& logger)
+Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);
@@ -56,7 +56,7 @@ Self::Vungle(const Logger& logger)
         k__onUnavailable);
 }
 
-Self::~Vungle() {
+Self::~Bridge() {
     logger_.debug(__PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onStart);
     bridge_.deregisterHandler(k__onEnd);

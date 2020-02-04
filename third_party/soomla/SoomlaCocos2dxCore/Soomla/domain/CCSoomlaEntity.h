@@ -17,10 +17,11 @@
 #ifndef __CCSoomlaEntity_H_
 #define __CCSoomlaEntity_H_
 
-#include "CCCoreConsts.h"
-#include "CCDomain.h"
-#include "CCSoomlaMacros.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/domain/CCDomain.h"
 
 namespace soomla {
 class CCSoomlaEntity : public CCDomain {

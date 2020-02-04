@@ -83,28 +83,28 @@ Pod::Spec.new do |spec|
     s.dependency 'Google-Mobile-Ads-SDK'
   end
 
-  spec.subspec 'applovin-base' do |s|
+  spec.subspec 'app-lovin-base' do |s|
     s.source_files =
       'src/ee/AppLovin*',
-      'src/ee/applovin/**/*'
+      'src/ee/app_lovin/**/*'
 
     s.private_header_files =
-      'src/ee/applovin/private/*'
+      'src/ee/app_lovin/private/*'
     
     s.exclude_files =
-      'src/ee/applovin/CMakeLists.txt'
+      'src/ee/app_lovin/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
 
-  spec.subspec 'applovin' do |s|
-    s.dependency 'ee-x/applovin-base'
+  spec.subspec 'app-lovin' do |s|
+    s.dependency 'ee-x/app-lovin-base'
     s.dependency 'AppLovinSDK'
   end
 
-  spec.subspec 'applovin-mediation' do |s|
-    s.dependency 'ee-x/applovin-base'
-    s.dependency 'ee-x/ironsource-mediation-base'
+  spec.subspec 'app-lovin-mediation' do |s|
+    s.dependency 'ee-x/app-lovin-base'
+    s.dependency 'ee-x/iron-source-mediation-base'
 
     # AppLovinSDK is included in IronSourceAppLovinAdapter.
     s.dependency 'IronSourceAppLovinAdapter'
@@ -113,19 +113,19 @@ Pod::Spec.new do |spec|
   spec.subspec 'facebook-ads' do |s|
     s.source_files =
       'src/ee/FacebookAds*',
-      'src/ee/facebookads/**/*'
+      'src/ee/facebook_ads/**/*'
 
     s.private_header_files =
-      'src/ee/facebookads/private/*'
+      'src/ee/facebook_ads/private/*'
 
     s.exclude_files =
-      'src/ee/facebookads/CMakeLists.txt'
+      'src/ee/facebook_ads/CMakeLists.txt'
       
     s.dependency 'ee-x/ads'
     s.dependency 'FBAudienceNetwork'
   end
 
-  spec.subspec 'ironsource-mediation-base' do |s|
+  spec.subspec 'iron-source-mediation-base' do |s|
     s.preserve_path = 'dummy_path'
     s.xcconfig = {
       'GCC_PREPROCESSOR_DEFINITIONS' => [
@@ -134,16 +134,16 @@ Pod::Spec.new do |spec|
     }
   end
 
-  spec.subspec 'ironsource' do |s|
+  spec.subspec 'iron-source' do |s|
     s.source_files =
       'src/ee/IronSource*',
-      'src/ee/ironsource/**/*'
+      'src/ee/iron_source/**/*'
 
     s.private_header_files =
-      'src/ee/ironsource/private/*'
+      'src/ee/iron_source/private/*'
 
     s.exclude_files =
-      'src/ee/ironsource/CMakeLists.txt'
+      'src/ee/iron_source/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
     s.dependency 'IronSourceSDK'
@@ -152,13 +152,13 @@ Pod::Spec.new do |spec|
   spec.subspec 'unity-ads-base' do |s|
     s.source_files =
       'src/ee/UnityAds*',
-      'src/ee/unityads/**/*'
+      'src/ee/unity_ads/**/*'
 
     s.private_header_files =
-      'src/ee/unityads/private/*'
+      'src/ee/unity_ads/private/*'
 
     s.exclude_files =
-      'src/ee/unityads/CMakeLists.txt'
+      'src/ee/unity_ads/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
   end
@@ -170,7 +170,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'unity-ads-mediation' do |s|
     s.dependency 'ee-x/unity-ads-base'
-    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'ee-x/iron-source-mediation-base'
 
     # UnityAds is included in IronSourceUnityAdsAdapter.
     s.dependency 'IronSourceUnityAdsAdapter'
@@ -197,22 +197,22 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'vungle-mediation' do |s|
     s.dependency 'ee-x/vungle-base'
-    s.dependency 'ee-x/ironsource-mediation-base'
+    s.dependency 'ee-x/iron-source-mediation-base'
 
     # VungleSDK-iOS is included in IronSourceVungleAdapter.
     s.dependency 'IronSourceVungleAdapter'
   end
 
-  spec.subspec 'appsflyer' do |s|
+  spec.subspec 'apps-flyer' do |s|
     s.source_files =
       'src/ee/AppsFlyer*',
-      'src/ee/appsflyer/**/*'
+      'src/ee/apps_flyer/**/*'
 
     s.private_header_files =
-      'src/ee/appsflyer/private/*'
+      'src/ee/apps_flyer/private/*'
 
     s.exclude_files =
-      'src/ee/appsflyer/CMakeLists.txt'
+      'src/ee/apps_flyer/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
@@ -221,10 +221,10 @@ Pod::Spec.new do |spec|
   spec.subspec 'campaign-receiver' do |s|
     s.source_files =
       'src/ee/CampaignReceiver*',
-      'src/ee/campaignreceiver/**/*'
+      'src/ee/campaign_receiver/**/*'
 
     s.exclude_files =
-      'src/ee/campaignreceiver/CMakeLists.txt'
+      'src/ee/campaign_receiver/CMakeLists.txt'
 
     s.dependency 'ee-x/core'
   end
@@ -312,7 +312,7 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-dynamic-link' do |s|
-    s.source_files = 'src/ee/firebase/dynamiclink/*'
+    s.source_files = 'src/ee/firebase/dynamic_link/*'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/DynamicLinks'
@@ -326,7 +326,7 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-remote-config' do |s|
-    s.source_files = 'src/ee/firebase/remoteconfig/*'
+    s.source_files = 'src/ee/firebase/remote_config/*'
     s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
     s.ios.dependency 'Firebase/RemoteConfig'
@@ -504,25 +504,25 @@ Pod::Spec.new do |spec|
   spec.subspec 'jsb-facebook-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_facebook_ads*',
-      'src/ee/jsb/facebookads/*'
+      'src/ee/jsb/facebook_ads/*'
 
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/facebook-ads'
   end
 
-  spec.subspec 'jsb-ironsource' do |s|
+  spec.subspec 'jsb-iron-source' do |s|
     s.source_files =
-      'src/ee/jsb/jsb_ironsource*',
-      'src/ee/jsb/ironsource/*'
+      'src/ee/jsb/jsb_iron_source*',
+      'src/ee/jsb/iron_source/*'
 
     s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/ironsource'
+    s.dependency 'ee-x/iron-source'
   end
 
   spec.subspec 'jsb-unity-ads' do |s|
     s.source_files =
       'src/ee/jsb/jsb_unity_ads*',
-      'src/ee/jsb/unityads/*'
+      'src/ee/jsb/unity_ads/*'
 
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/unity-ads'

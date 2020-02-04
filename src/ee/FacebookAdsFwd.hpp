@@ -12,20 +12,20 @@
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
-namespace facebook {
+namespace facebook_ads {
 enum class BannerAdSize;
 
-class FacebookAds;
+class Bridge;
 class BannerAd;
 class NativeAd;
 class NativeAdLayout;
 class InterstitialAd;
 class RewardedVideo;
-} // namespace facebook
+} // namespace facebook_ads
 
-using facebook::FacebookAds;
-using FacebookBannerAdSize = facebook::BannerAdSize;
-using FacebookNativeAdLayout = facebook::NativeAdLayout;
+using FacebookAds = facebook_ads::Bridge;
+using FacebookBannerAdSize = facebook_ads::BannerAdSize;
+using FacebookNativeAdLayout = facebook_ads::NativeAdLayout;
 } // namespace ee
 
 #endif /* EE_X_FACEBOOK_ADS_FWD_HPP_ */

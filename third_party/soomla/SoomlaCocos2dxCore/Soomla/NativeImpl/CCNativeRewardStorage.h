@@ -17,7 +17,7 @@
 #ifndef __CCNativeRewardStorage_H__
 #define __CCNativeRewardStorage_H__
 
-#include "CCRewardStorage.h"
+#include "Soomla/data/CCRewardStorage.h"
 
 namespace soomla {
 class CCNativeRewardStorage : public CCRewardStorage {

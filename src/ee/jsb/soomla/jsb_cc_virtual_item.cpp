@@ -7,14 +7,13 @@
 
 #include "ee/jsb/soomla/jsb_cc_virtual_item.hpp"
 
-#include "Soomla/domain/CCPurchasableVirtualItem.h"
-#include "Soomla/domain/CCVirtualItem.h"
-#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include <Soomla/domain/CCPurchasableVirtualItem.h>
+#include <Soomla/domain/CCVirtualItem.h>
+#include <Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
+
 #include "ee/jsb/soomla/jsb_cc_purchasable_virtual_item.hpp"
-#include "ee/jsb/soomla/jsb_cc_virtual_currency_pack.hpp"
 
 namespace ee {
 namespace core {

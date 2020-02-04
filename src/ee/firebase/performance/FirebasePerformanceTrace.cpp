@@ -14,7 +14,8 @@
 
 namespace ee {
 namespace firebase {
-using Self = PerformanceTrace;
+namespace performance {
+using Self = Trace;
 
 namespace {
 // clang-format off
@@ -45,7 +46,7 @@ std::string k__putMetric(const std::string& name) {
 }
 } // namespace
 
-Self::PerformanceTrace(Performance* plugin, const std::string& name) {
+Self::Trace(Bridge* plugin, const std::string& name) {
     plugin_ = plugin;
     name_ = name;
 }
@@ -82,5 +83,6 @@ std::int64_t Self::getLongMetric(const std::string& metricName) {
     auto response = bridge.call(k__getLongMetric(name_), metricName);
     return std::stoll(response);
 }
+} // namespace performance
 } // namespace firebase
 } // namespace ee

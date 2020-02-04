@@ -6,33 +6,63 @@
 //
 //
 
-#ifndef EE_X_FIREBASE_FWD_HPP_
-#define EE_X_FIREBASE_FWD_HPP_
+#ifndef EE_X_FIREBASE_FWD_HPP
+#define EE_X_FIREBASE_FWD_HPP
 
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
 namespace firebase {
 class App;
-class Analytics;
-class RemoteConfig;
-class Storage;
-class Messaging;
+
+#if defined(EE_X_MOBILE)
+template <class T>
+class Scheduler;
+#endif // EE_X_MOBILE
+
+namespace analytics {
+class Bridge;
+} // namespace analytics
+
+namespace dynamic_link {
+class Bridge;
+} // namespace dynamic_link
+
+namespace messaging {
+class Notification;
 class Message;
-class DynamicLink;
-class Performance;
-class PerformanceTrace;
+class Bridge;
+} // namespace messaging
+
+namespace performance {
+class Bridge;
+class Trace;
+} // namespace performance
+
+namespace remote_config {
+enum class LastFetchStatus;
+enum class FetchFailureReason;
+struct ConfigInfo;
+class Bridge;
+} // namespace remote_config
+
+namespace storage {
+class Bridge;
+} // namespace storage
 } // namespace firebase
 
-using FirebaseDynamicLink = firebase::DynamicLink;
 using FirebaseApp = firebase::App;
-using FirebaseAnalytics = firebase::Analytics;
-using FirebaseRemoteConfig = firebase::RemoteConfig;
-using FirebaseStorage = firebase::Storage;
-using FirebaseMessaging = firebase::Messaging;
-using FirebasePerformance = firebase::Performance;
-using FirebasePerformanceTrace = firebase::PerformanceTrace;
-using firebase::Message;
+using FirebaseAnalytics = firebase::analytics::Bridge;
+using FirebaseDynamicLink = firebase::dynamic_link::Bridge;
+using FirebaseMessaging = firebase::messaging::Bridge;
+using firebase::messaging::Message;
+using FirebasePerformance = firebase::performance::Bridge;
+using FirebasePerformanceTrace = firebase::performance::Trace;
+using FirebaseLastFetchStatus = firebase::remote_config::LastFetchStatus;
+using FirebaseFetchFailureReason = firebase::remote_config::FetchFailureReason;
+using FirebaseConfigInfo = firebase::remote_config::ConfigInfo;
+using FirebaseRemoteConfig = firebase::remote_config::Bridge;
+using FirebaseStorage = firebase::storage::Bridge;
 } // namespace ee
 
-#endif /* EE_X_FIREBASE_FWD_HPP_ */
+#endif /* EE_X_FIREBASE_FWD_HPP */

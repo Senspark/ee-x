@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCAggregateReward.h"
-#include "CCJsonHelper.h"
+#include "Soomla/rewards/CCAggregateReward.h"
+
+#include "Soomla/CCJsonHelper.h"
 
 bool soomla::CCAggregateReward::init(const std::string& id,
                                      const std::string& name,

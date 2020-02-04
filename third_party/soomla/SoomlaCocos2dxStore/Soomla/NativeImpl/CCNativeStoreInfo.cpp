@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCNativeStoreInfo.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/NativeImpl/CCNativeStoreInfo.h"
+
+#include <Soomla/CCNdkBridge.h>
+#include <Soomla/CCSoomlaUtils.h>
 
 namespace soomla {
     #define TAG "SOOMLA NativeStoreInfo"

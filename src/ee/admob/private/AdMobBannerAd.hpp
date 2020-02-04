@@ -53,9 +53,9 @@ public:
     virtual void setVisible(bool visible) override;
 
 protected:
-    friend AdMob;
+    friend Bridge;
 
-    explicit BannerAd(IMessageBridge& bridge, AdMob* plugin,
+    explicit BannerAd(IMessageBridge& bridge, Bridge* plugin,
                       const std::string& adId);
 
 private:
@@ -66,7 +66,7 @@ private:
     bool loading_;
     std::string adId_;
     IMessageBridge& bridge_;
-    AdMob* plugin_;
+    Bridge* plugin_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;
 };

@@ -8,13 +8,10 @@
 
 #include "ee/jsb/google/jsb_google_analytics_bridge.hpp"
 
-#include "ee/GoogleAnalytics.hpp"
-
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/GoogleAnalytics.hpp>
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
-
 namespace google {
 
 se::Class* __jsb_GoogleAnalytics_class = nullptr;

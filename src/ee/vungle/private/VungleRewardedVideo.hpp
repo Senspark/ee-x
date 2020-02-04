@@ -31,14 +31,14 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(const Logger& logger, Vungle* plugin,
+    explicit RewardedVideo(const Logger& logger, Bridge* plugin,
                            const std::string& placementId);
 
 private:
-    friend Vungle;
+    friend Bridge;
 
     const Logger& logger_;
-    Vungle* plugin_;
+    Bridge* plugin_;
     std::string placementId_;
 };
 } // namespace vungle

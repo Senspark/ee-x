@@ -8,12 +8,10 @@
 #ifndef jsb_cc_purchase_with_market_hpp
 #define jsb_cc_purchase_with_market_hpp
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace soomla {
-
 bool register_cc_purchase_with_market_manual(se::Object* object);
-
 } // namespace soomla
 
 #endif /* jsb_cc_purchase_with_market_hpp */

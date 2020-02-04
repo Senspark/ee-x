@@ -13,7 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#include "CCBridgelessKeyValueStorage.h"
+
+#include "Soomla/data/CCBridgelessKeyValueStorage.h"
 
 #if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1
@@ -22,7 +23,7 @@
 #endif
 
 #if COCOSCREATOR_VERSION == 2
-#include "CCNativeKeyValueStorage.h"
+#include "Soomla/data/CCKeyValueStorage.h"
 #elif COCOSCREATOR_VERSION == 1
 #include "base/CCUserDefault.h"
 #endif

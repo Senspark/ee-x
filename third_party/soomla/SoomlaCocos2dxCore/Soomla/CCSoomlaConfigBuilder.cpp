@@ -14,9 +14,11 @@
  limitations under the License.
  */
 
-#include "CCSoomlaConfigBuilder.h"
+#include "Soomla/CCSoomlaConfigBuilder.h"
+
 #include <string>
-#include "CCJsonHelper.h"
+
+#include "Soomla/CCJsonHelper.h"
 
 using namespace soomla;
 

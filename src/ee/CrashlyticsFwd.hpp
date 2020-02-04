@@ -13,10 +13,10 @@
 
 namespace ee {
 namespace crashlytics {
-class Crashlytics;
+class Bridge;
 } // namespace crashlytics
 
-using crashlytics::Crashlytics;
+using Crashlytics = crashlytics::Bridge;
 } // namespace ee
 
 #endif /* EE_X_CRASHLYTICS_FWD_HPP_ */

@@ -7,12 +7,12 @@
 
 namespace ee {
 namespace vungle {
-class Vungle final {
+class Bridge final {
 public:
-    Vungle();
-    ~Vungle();
+    Bridge();
+    ~Bridge();
 
-    explicit Vungle(const Logger& logger);
+    explicit Bridge(const Logger& logger);
 
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);

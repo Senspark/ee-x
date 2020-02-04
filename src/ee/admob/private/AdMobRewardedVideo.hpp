@@ -31,7 +31,7 @@ public:
     virtual bool show() override;
 
 protected:
-    explicit RewardedVideo(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
+    explicit RewardedVideo(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
                            const std::string& adId);
     bool createInternalAd();
     bool destroyInternalAd();
@@ -42,7 +42,7 @@ protected:
     void onReward();
     void onClosed();
 private:
-    friend AdMob;
+    friend Bridge;
     
     /// Whether the ad is in loading progress.
     bool loading_;
@@ -52,7 +52,7 @@ private:
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    AdMob* plugin_;
+    Bridge* plugin_;
     std::string adId_;
 };
 } // namespace admob

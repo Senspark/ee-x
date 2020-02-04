@@ -9,7 +9,7 @@
 #ifndef EE_X_FIREBASE_SCHEDULER_HPP_
 #define EE_X_FIREBASE_SCHEDULER_HPP_
 
-#include <ee/FirebaseFwd.hpp>
+#include "ee/FirebaseFwd.hpp"
 
 #if defined(EE_X_MOBILE)
 #include <cstddef>

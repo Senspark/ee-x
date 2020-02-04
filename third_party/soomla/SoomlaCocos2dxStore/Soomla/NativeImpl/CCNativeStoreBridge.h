@@ -17,7 +17,7 @@
 #ifndef __CCNativeStoreBridge_H_
 #define __CCNativeStoreBridge_H_
 
-#include "CCStoreBridge.h"
+#include "Soomla/CCStoreBridge.h"
 
 namespace soomla {
 

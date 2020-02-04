@@ -35,7 +35,7 @@ public:
     Self& setStore(const std::string& id);
 
 protected:
-    friend AdMob;
+    friend Bridge;
 
     std::unordered_map<std::string, std::string> params_;
 };

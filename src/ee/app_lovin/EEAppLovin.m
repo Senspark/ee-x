@@ -6,7 +6,7 @@
 //
 //
 
-#import "ee/app)lovin/EEAppLovin.h"
+#import "ee/app_lovin/EEAppLovin.h"
 
 #ifdef EE_X_USE_IRON_SOURCE_MEDIATION
 #import <ISAppLovinAdapter/ALIncentivizedInterstitialAd.h>

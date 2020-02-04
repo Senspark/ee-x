@@ -3,20 +3,8 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := jansson_static
-LOCAL_MODULE_FILENAME := libjansson
-
-LOCAL_SRC_FILES := \
-    dump.c \
-    error.c \
-    hashtable.c \
-    load.c \
-    memory.c \
-    pack_unpack.c \
-    strbuffer.c \
-    strconv.c \
-    utf.c \
-    value.c
-
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_SRC_FILES := ${shell find $(LOCAL_PATH) -name "*.cpp" -print}
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/src
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/src
 
 include $(BUILD_STATIC_LIBRARY)

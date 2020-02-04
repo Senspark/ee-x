@@ -4,8 +4,7 @@ include $(CLEAR_VARS)
 
 COCOS2D_JAVASCRIPT = $(filter %-DCOCOS2D_JAVASCRIPT=1,$(APP_CPPFLAGS))
 
-LOCAL_MODULE := cocos2dx_soomla_common_static
-LOCAL_MODULE_FILENAME := libcocos2dxsoomlacommon
+LOCAL_MODULE := soomla_cocos2dx_core_static
 
 LOCAL_SRC_FILES := ${shell find $(LOCAL_PATH)/Soomla -name "*.cpp" -print}
 

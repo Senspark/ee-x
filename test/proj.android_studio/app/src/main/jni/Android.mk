@@ -20,7 +20,7 @@ LOCAL_SRC_FILES += ${shell find $(PROJECT_DIR)/Classes -name "*.cpp" -print}
 LOCAL_C_INCLUDES := ${shell find $(PROJECT_DIR)/Classes -type d -print}
 
 LOCAL_STATIC_LIBRARIES := cc_static
-LOCAL_STATIC_LIBRARIES += cocos2dx_store_static
+LOCAL_STATIC_LIBRARIES += soomla_cocos2dx_store_static
 LOCAL_STATIC_LIBRARIES += ee_x_admob_static
 LOCAL_STATIC_LIBRARIES += ee_x_app_lovin_static
 LOCAL_STATIC_LIBRARIES += ee_x_apps_flyer_static
@@ -32,6 +32,7 @@ LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_dynamic_link_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging_static
+LOCAL_STATIC_LIBRARIES += ee_x_firebase_performance_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config_static
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage_static
 LOCAL_STATIC_LIBRARIES += ee_x_google_analytics_static

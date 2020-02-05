@@ -433,11 +433,13 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
+        # For cocos2d-x
         '${PODS_ROOT}/../../cocos2d',
         '${PODS_ROOT}/../../cocos2d/cocos',
+
+        # For cocos creator.
         '${PODS_ROOT}/../../../cocos2d-x',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos' #,
-        #"${PODS_ROOT}/Headers/Public/#{spec.name}/SoomlaCocos2dxCore/Soomla/**"
+        '${PODS_ROOT}/../../../cocos2d-x/cocos'
       ].join(' ')
     }
     

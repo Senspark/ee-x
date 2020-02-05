@@ -2,9 +2,6 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-EE_X_ROOT_DIR = $(LOCAL_PATH)/../../../
-COCOS2D_ROOT_DIR = $(LOCAL_PATH)/../../../../../cocos2d
-
 COCOS2D_JAVASCRIPT = $(filter %-DCOCOS2D_JAVASCRIPT=1,$(APP_CPPFLAGS))
 
 LOCAL_MODULE := soomla_cocos2dx_store_static

@@ -7,7 +7,7 @@ def USE_CMAKE = true
 /// Modify this variable to build the desired architectures.
 String[] architectures = [
         'armeabi-v7a',
-        // 'arm64-v8'
+        // 'arm64-v8a'
 ]
 
 android {
@@ -27,35 +27,36 @@ android {
         manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
 
         externalNativeBuild {
-            if (USE_CMAKE) {
-                cmake {
-                    targets 'ee_x_test'
-                    arguments '-DANDROID_STL=c++_static'
-                    arguments '-DANDROID_TOOLCHAIN=clang'
-                    cppFlags '-frtti'
-                    cppFlags '-fexceptions'
-                    cppFlags '-fsigned-char'
-                    cppFlags '-std=c++17'
-                    cppFlags '-U__SSE__'
-                    cppFlags '-Wno-extern-c-compat'
-                    abiFilters.addAll(architectures)
-                }
-            } else {
-                ndkBuild {
-                    targets 'ee_x_test'
-                    arguments 'APP_STL=c++_static'
-                    arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                    arguments 'APP_PLATFORM=android-16'
-                    arguments 'APP_LDFLAGS=-latomic'
-                    arguments '-j' + Runtime.runtime.availableProcessors()
-                    cppFlags '-frtti'
-                    cppFlags '-fexceptions'
-                    cppFlags '-fsigned-char'
-                    cppFlags '-std=c++17'
-                    cppFlags '-U__SSE__'
-                    cppFlags '-Wno-extern-c-compat'
-                    abiFilters.addAll(architectures)
-                }
+            cmake {
+                targets 'ee_x_test'
+                arguments '-DANDROID_STL=c++_static'
+                arguments '-DANDROID_TOOLCHAIN=clang'
+                arguments '-DBUILD_EDITOR_COCOSBUILDER=OFF'
+                arguments '-DBUILD_EDITOR_COCOSTUDIO=OFF'
+                arguments '-DBUILD_EDITOR_SPINE=OFF'
+                arguments '-DBUILD_EXTENSIONS=OFF'
+                cppFlags '-frtti'
+                cppFlags '-fexceptions'
+                cppFlags '-fsigned-char'
+                cppFlags '-std=c++17'
+                cppFlags '-U__SSE__'
+                cppFlags '-Wno-extern-c-compat'
+                abiFilters.addAll(architectures)
+            }
+            ndkBuild {
+                targets 'ee_x_test'
+                arguments 'APP_STL=c++_static'
+                arguments 'NDK_TOOLCHAIN_VERSION=clang'
+                arguments 'APP_PLATFORM=android-16'
+                arguments 'APP_LDFLAGS=-latomic'
+                arguments '-j' + Runtime.runtime.availableProcessors()
+                cppFlags '-frtti'
+                cppFlags '-fexceptions'
+                cppFlags '-fsigned-char'
+                cppFlags '-std=c++17'
+                cppFlags '-U__SSE__'
+                cppFlags '-Wno-extern-c-compat'
+                abiFilters.addAll(architectures)
             }
         }
     }
@@ -96,13 +97,11 @@ android {
             jniDebuggable false
 
             externalNativeBuild {
-                if (USE_CMAKE) {
-                    // TODO.
-                } else {
-                    ndkBuild {
-                        arguments "NDK_OUT=$projectDir/src/main/obj/release"
-                        cppFlags '-DNDEBUG'
-                    }
+                cmake {
+                    cppFlags '-DNDEBUG'
+                }
+                ndkBuild {
+                    cppFlags '-DNDEBUG'
                 }
             }
         }
@@ -111,13 +110,11 @@ android {
             jniDebuggable true
 
             externalNativeBuild {
-                if (USE_CMAKE) {
-                    // TODO.
-                } else {
-                    ndkBuild {
-                        arguments "NDK_OUT=$projectDir/src/main/obj/debug"
-                        cppFlags '-DCOCOS2D_DEBUG=1'
-                    }
+                cmake {
+                    cppFlags '-DCOCOS2D_DEBUG=1'
+                }
+                ndkBuild {
+                    cppFlags '-DCOCOS2D_DEBUG=1'
                 }
             }
         }

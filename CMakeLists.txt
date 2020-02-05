@@ -28,14 +28,7 @@ add_subdirectory(src/ee/tenjin)
 add_subdirectory(src/ee/twitter)
 add_subdirectory(src/ee/unity_ads)
 add_subdirectory(src/ee/vungle)
-
 add_subdirectory(third_party/firebase_cpp_sdk)
 add_subdirectory(third_party/jansson)
 add_subdirectory(third_party/soomla/SoomlaCocos2dxCore)
 add_subdirectory(third_party/soomla/SoomlaCocos2dxStore)
-
-# set_target_properties(${PROJECT_NAME}
-#   PROPERTIES
-#   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-#   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-# )

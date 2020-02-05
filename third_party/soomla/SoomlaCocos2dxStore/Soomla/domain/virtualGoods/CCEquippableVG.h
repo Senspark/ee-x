@@ -17,7 +17,7 @@
 #ifndef __CCEquippableVG_H_
 #define __CCEquippableVG_H_
 
-#include "CCLifetimeVG.h"
+#include "Soomla/domain/virtualGoods/CCLifetimeVG.h"
 
 namespace soomla {
 /**

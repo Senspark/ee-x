@@ -17,7 +17,7 @@
 #ifndef __CCVirtualCurrencyStorage_H__
 #define __CCVirtualCurrencyStorage_H__
 
-#include "CCVirtualItemStorage.h"
+#include "Soomla/data/CCVirtualItemStorage.h"
 
 namespace soomla {
 /**

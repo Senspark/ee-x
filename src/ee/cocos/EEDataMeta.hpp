@@ -11,8 +11,8 @@
 
 #include <type_traits>
 
-#include "EEForward.hpp"
-#include "EEMeta.hpp"
+#include "ee/cocos/EEForward.hpp"
+#include "ee/cocos/EEMeta.hpp"
 
 namespace ee {
 namespace detail {

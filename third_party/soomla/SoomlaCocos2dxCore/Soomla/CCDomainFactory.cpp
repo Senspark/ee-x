@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCCoreConsts.h"
-#include "CCDomainFactory.h"
-#include "CCJsonHelper.h"
+#include "Soomla/CCDomainFactory.h"
+
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/CCJsonHelper.h"
 
 USING_NS_CC;
 

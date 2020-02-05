@@ -15,10 +15,10 @@ namespace ee {
 namespace play {
 using LoginResultCallback = std::function<void(bool success)>;
 
-class Play final {
+class Bridge final {
 public:
-    Play();
-    ~Play();
+    Bridge();
+    ~Bridge();
 
     bool isSignedIn();
     void signin(bool silentSignIn = false);
@@ -41,7 +41,7 @@ private:
     IMessageBridge& bridge_;
     LoginResultCallback callback_{nullptr};
 };
-} // namespace game
+} // namespace play
 } // namespace ee
 
 #endif /* EE_X_PLAY_BRIDGE_HPP */

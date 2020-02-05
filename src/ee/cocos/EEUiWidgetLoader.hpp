@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_UI_WIDGET_LOADER_HPP_
 #define EE_LIBRARY_UI_WIDGET_LOADER_HPP_
 
-#include "EEMacro.hpp"
-#include "EECocos2dxFwd.hpp"
-#include "EENodeV3Loader.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEMacro.hpp"
+#include "ee/cocos/EENodeV3Loader.hpp"
 
 NS_EE_BEGIN
 /// Cocosbuilder loader for @c cocos2d::ui::Widget.

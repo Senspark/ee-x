@@ -5,7 +5,7 @@
 //  Created by Le Van Kiet on 9/12/18.
 //
 
-#include "CCStoreAssetsBuilder.h"
+#include "Soomla/CCStoreAssetsBuilder.h"
 
 namespace soomla {
 

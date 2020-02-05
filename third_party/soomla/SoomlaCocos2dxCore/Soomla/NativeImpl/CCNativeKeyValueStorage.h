@@ -17,7 +17,7 @@
 #ifndef __CCNativeKeyValueStorage_H__
 #define __CCNativeKeyValueStorage_H__
 
-#include "CCKeyValueStorage.h"
+#include "Soomla/data/CCKeyValueStorage.h"
 
 namespace soomla {
 

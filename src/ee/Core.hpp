@@ -13,7 +13,6 @@
 #include "ee/CoreFwd.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/MessageBridge.hpp"
 #include "ee/core/Metrics.hpp"
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/Utils.hpp"

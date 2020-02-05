@@ -12,10 +12,10 @@
 
 namespace ee {
 namespace recorder {
-class Recorder final {
+class Bridge final {
 public:
-    Recorder();
-    ~Recorder();
+    Bridge();
+    ~Bridge();
 
     /// Checks whether recorder is supported on the current device.
     bool isSupported() const;

@@ -17,9 +17,10 @@
 #ifndef __CCBadgeReward_H_
 #define __CCBadgeReward_H_
 
-#include "CCReward.h"
-#include "CCSoomlaMacros.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/rewards/CCReward.h"
 
 namespace soomla {
 class CCBadgeReward : public CCReward {

@@ -14,13 +14,14 @@
  limitations under the License.
  */
 
-#include "CCPurchasableVirtualItem.h"
-#include "CCPurchaseWithVirtualItem.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreEventDispatcher.h"
-#include "CCStoreInfo.h"
-#include "CCVirtualCurrencyStorage.h"
-#include "CCVirtualGoodsStorage.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithVirtualItem.h"
+
+#include <Soomla/CCSoomlaUtils.h>
+#include <Soomla/CCStoreEventDispatcher.h>
+
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/data/CCVirtualCurrencyStorage.h"
+#include "Soomla/data/CCVirtualGoodsStorage.h"
 
 namespace soomla {
 USING_NS_CC;

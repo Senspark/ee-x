@@ -1,17 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 
-# project(ee_x_play)
+project(ee_x_play)
+add_library(${PROJECT_NAME} "")
 
-include_directories(
-  src/ee/play
-)
+execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
-set(EE_X_PLAY_SRC
-  src/ee/play/PlayBridge.cpp
-)
-
-set(EE_X_PLAY_HEADERS
-  src/ee/play/PlayBridge.hpp
-)
-
-# add_library(${PROJECT_NAME} ${LIB_SRC} ${LIB_HEADERS})
+target_link_libraries(${PROJECT_NAME} ee_x_ads)

@@ -17,7 +17,7 @@
 #ifndef COCOS2DXCORE_ССSOOMLACONFIGBUILDER_H
 #define COCOS2DXCORE_ССSOOMLACONFIGBUILDER_H
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 namespace soomla {
 class CCSoomlaConfigBuilder : public cocos2d::Ref {

@@ -6,12 +6,12 @@
 //
 //
 
+#include "ee/cocos/EECrytography.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cstdint>
 #include <numeric>
-
-#include "EECrytography.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

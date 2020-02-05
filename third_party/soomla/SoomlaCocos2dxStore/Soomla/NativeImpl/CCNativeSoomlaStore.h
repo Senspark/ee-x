@@ -17,7 +17,7 @@
 #ifndef __CCNativeSoomlaStore_H_
 #define __CCNativeSoomlaStore_H_
 
-#include "CCSoomlaStore.h"
+#include "Soomla/CCSoomlaStore.h"
 
 namespace soomla {
 

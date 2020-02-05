@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCReward.h"
-#include "CCRewardStorage.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/rewards/CCReward.h"
+
+#include "Soomla/CCSoomlaUtils.h"
+#include "Soomla/data/CCRewardStorage.h"
 
 #define TAG "SOOMLA Reward"
 

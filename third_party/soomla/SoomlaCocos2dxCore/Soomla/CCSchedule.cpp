@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCSchedule.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/CCSchedule.h"
+
+#include "Soomla/CCJsonHelper.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 #define TAG "SOOMLA Schedule"
 

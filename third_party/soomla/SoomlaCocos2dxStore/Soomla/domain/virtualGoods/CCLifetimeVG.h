@@ -17,7 +17,7 @@
 #ifndef __CCLifetimeVG_H_
 #define __CCLifetimeVG_H_
 
-#include "CCVirtualGood.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 /**

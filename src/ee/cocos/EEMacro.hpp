@@ -11,7 +11,7 @@
 
 #ifndef NS_EE
 #define NS_EE ee
-#endif
+#endif // NS_EE
 
 #define NS_EE_BEGIN namespace NS_EE {
 #define NS_EE_END }
@@ -53,10 +53,10 @@
 #define COUNT_ARGS_MSC(...) COUNT_ARGS_HELPER __VA_ARGS__
 #define COUNT_ARGS(...)                                                        \
     COUNT_ARGS_MSC((0, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
-#else
+#else // defined(_MSC_VER)
 #define COUNT_ARGS(...)                                                        \
     COUNT_ARGS_HELPER(0, ##__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-#endif
+#endif // defined(_MSC_VER)
 
 /// Gets the first argument.
 #define GET_FIRST_ARG_HELPER(arg, ...) arg
@@ -74,7 +74,7 @@
 #define FUNCTION_SIGNATURE __FUNCSIG__
 #elif defined(__clang__) || defined(__GNUC__)
 #define FUNCTION_SIGNATURE __PRETTY_FUNCTION__
-#endif
+#endif // defined(_MSC_VER)
 
 /// Simple function logging.
 #define LOG_FUNC() CCLOG("%s.", FUNCTION_SIGNATURE)

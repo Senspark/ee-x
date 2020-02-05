@@ -6,11 +6,9 @@
 //
 //
 
-#include <iomanip>
+#include "ee/cocos/EEShaderUtils.hpp"
 
-#include "EEShaderManager.hpp"
-#include "EEShaderUtils.hpp"
-#include "EEUtils.hpp"
+#include <iomanip>
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -20,6 +18,9 @@
 #include <deprecated/CCString.h> // cocos2d::StringUtils::format (cocos2d-x 3.10)
 #include <renderer/CCGLProgram.h>
 #include <renderer/CCGLProgramCache.h>
+
+#include "ee/cocos/EEShaderManager.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 namespace constants {

@@ -11,7 +11,7 @@
 
 #include <cstddef>
 
-#include "EEDialogGuard.hpp"
+#include "ee/cocos/EEDialogGuard.hpp"
 
 namespace ee {
 namespace dialog {

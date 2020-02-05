@@ -7,11 +7,9 @@
 
 #include "ee/jsb/soomla/jsb_store_event_listener.hpp"
 
-#include "Soomla/StoreEventListener.h"
+#include <Soomla/StoreEventListener.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
-#include "ee/jsb/soomla/jsb_cc_soomla.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace soomla {
 namespace {

@@ -18,8 +18,9 @@
 #ifndef __CCDomainHelper_H_
 #define __CCDomainHelper_H_
 
-#include "CCDomain.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/domain/CCDomain.h"
 
 namespace soomla {
 class CCDomainHelper {

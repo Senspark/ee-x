@@ -5,8 +5,9 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#include "CCLifetimeVG.h"
-#include "CCLifetimeVGBuilder.h"
+#include "Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h"
+
+#include "Soomla/domain/virtualGoods/CCLifetimeVG.h"
 
 namespace soomla {
 

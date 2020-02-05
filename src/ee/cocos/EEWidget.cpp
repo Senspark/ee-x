@@ -5,8 +5,9 @@
 //  Created by eps on 6/4/18.
 //
 
-#include "EEUtils.hpp"
-#include "EEWidget.hpp"
+#include "ee/cocos/EEWidget.hpp"
+
+#include "ee/cocos/EEUtils.hpp"
 
 #ifndef NDEBUG
 #include <2d/CCDrawNode.h>

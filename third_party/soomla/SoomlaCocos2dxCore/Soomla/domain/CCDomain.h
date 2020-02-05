@@ -17,7 +17,7 @@
 #ifndef __CCDomain_H_
 #define __CCDomain_H_
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 namespace soomla {
 class CCDomain : public cocos2d::Ref {

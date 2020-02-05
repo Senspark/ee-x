@@ -6,11 +6,12 @@
 //
 //
 
-#include "EEAction.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEAction.hpp"
 
 #include <2d/CCActionInstant.h>
 #include <base/CCRefPtr.h>
+
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 namespace {

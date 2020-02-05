@@ -12,7 +12,7 @@
 #include <cstddef>
 #include <vector>
 
-#include "EECocos2dxFwd.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace dialog {

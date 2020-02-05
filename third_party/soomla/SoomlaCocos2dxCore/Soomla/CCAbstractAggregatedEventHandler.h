@@ -17,7 +17,7 @@
 #ifndef __CCAbstractAggregatedEventHandler_H_
 #define __CCAbstractAggregatedEventHandler_H_
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 namespace soomla {
 

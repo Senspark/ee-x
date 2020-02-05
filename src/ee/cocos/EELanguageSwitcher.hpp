@@ -14,8 +14,8 @@
 #include <string>
 #include <vector>
 
-#include "EECocos2dxFwd.hpp"
-#include "EEILanguageSwitcher.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEILanguageSwitcher.hpp"
 
 namespace ee {
 namespace language {
@@ -51,6 +51,8 @@ public:
     /// @param[in] language The language to load.
     /// @param[in] map The map which contains the language dictionary.
     void loadLanguage(const Language& language, const cocos2d::ValueMap& map);
+
+    std::vector<Language> getSupportedLanguages() const override;
 
 private:
     std::unique_ptr<Language> currentLanguage_;

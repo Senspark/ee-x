@@ -17,13 +17,16 @@
 #ifndef __CCStoreInventory_H_
 #define __CCStoreInventory_H_
 
-#include "CCEquippableVG.h"
-#include "CCError.h"
-#include "CCUpgradeVG.h"
-#include "CCVirtualCurrency.h"
-#include "CCVirtualGood.h"
-#include "cocos2d.h"
 #include <set>
+
+#include <cocos2d.h>
+
+#include <Soomla/CCError.h>
+
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
+#include "Soomla/domain/virtualGoods/CCEquippableVG.h"
+#include "Soomla/domain/virtualGoods/CCUpgradeVG.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 /** @class CCStoreInventory

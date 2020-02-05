@@ -17,12 +17,12 @@
 #ifndef __CCStoreAssets_H_
 #define __CCStoreAssets_H_
 
+#include <cocos2d.h>
 
-#include "cocos2d.h"
-#include "CCVirtualCurrency.h"
-#include "CCVirtualGood.h"
-#include "CCVirtualCurrencyPack.h"
-#include "CCVirtualCategory.h"
+#include "Soomla/domain/CCVirtualCategory.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 	/** @class CCStoreAssets

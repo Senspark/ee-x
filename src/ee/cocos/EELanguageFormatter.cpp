@@ -6,7 +6,7 @@
 //
 //
 
-#include "EELanguageFormatter.hpp"
+#include "ee/cocos/EELanguageFormatter.hpp"
 
 #include <platform/CCPlatformMacros.h>
 

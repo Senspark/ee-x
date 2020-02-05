@@ -13,10 +13,10 @@
 
 namespace ee {
 namespace play {
-class Play;
+class Bridge;
 } // namespace play
 
-using play::Play;
+using Play = play::Bridge;
 } // namespace ee
 
 #endif /* EE_X_PLAY_FWD_HPP_ */

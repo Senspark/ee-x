@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCVirtualCategory.h"
+#include "Soomla/domain/CCVirtualCategory.h"
+
+#include <Soomla/CCJsonHelper.h>
 
 USING_NS_CC;
 

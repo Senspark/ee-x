@@ -1,9 +1,10 @@
+#include "Soomla/rewards/CCVirtualItemReward.h"
 
-#include "CCJsonHelper.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreConsts.h"
-#include "CCStoreInventory.h"
-#include "CCVirtualItemReward.h"
+#include <Soomla/CCJsonHelper.h>
+#include <Soomla/CCSoomlaUtils.h>
+#include "Soomla/CCStoreConsts.h"
+
+#include "Soomla/CCStoreInventory.h"
 
 #define TAG "SOOMLA VirtualItemReward"
 

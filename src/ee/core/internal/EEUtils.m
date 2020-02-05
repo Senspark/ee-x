@@ -8,9 +8,9 @@
 
 #import "ee/core/internal/EEUtils.h"
 
-#import "ee/core/EEMessageBridge.h"
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEReachability.h"
+#import "ee/core/internal/EEMessageBridge.h"
+#import "ee/core/private/EEReachability.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>

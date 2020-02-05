@@ -7,8 +7,8 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/MessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 
 namespace ee {
 namespace play {
@@ -38,9 +38,9 @@ constexpr auto k_score                 = "score";
 // clang-format on
 } // namespace
 
-using Self = Play;
+using Self = Bridge;
 
-Self::Play()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -50,7 +50,7 @@ Self::Play()
         k_onSignedIn);
 }
 
-Self::~Play() {
+Self::~Bridge() {
     bridge_.deregisterHandler(k_onSignedIn);
 }
 

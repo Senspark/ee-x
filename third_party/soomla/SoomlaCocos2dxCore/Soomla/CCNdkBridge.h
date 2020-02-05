@@ -17,8 +17,9 @@
 #ifndef __CCNdkBridge_H_
 #define __CCNdkBridge_H_
 
-#include "CCError.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCError.h"
 
 namespace soomla {
 /** \class CCNdkBridge

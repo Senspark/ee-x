@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
+#include "Soomla/CCJsonHelper.h"
 
 USING_NS_CC;
 using namespace std;

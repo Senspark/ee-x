@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_SKELETON_BONE_LOADER_HPP_
 #define EE_LIBRARY_SKELETON_BONE_LOADER_HPP_
 
-#include "EENodeV3Loader.hpp"
+#include "ee/cocos/EENodeV3Loader.hpp"
 
 namespace ee {
 class SkeletonBoneLoader : public NodeV3Loader {

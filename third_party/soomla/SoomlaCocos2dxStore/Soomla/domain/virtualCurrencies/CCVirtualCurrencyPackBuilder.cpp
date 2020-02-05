@@ -5,7 +5,7 @@
 //  Created by Nguyen Van Quynh on 9/14/18.
 //
 
-#include "CCVirtualCurrencyPackBuilder.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPackBuilder.h"
 
 namespace soomla {
 

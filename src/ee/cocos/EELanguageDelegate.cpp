@@ -6,11 +6,11 @@
 //
 //
 
-#include "EELanguageDelegate.hpp"
+#include "ee/cocos/EELanguageDelegate.hpp"
 
-#include "EEILanguageSwitcher.hpp"
-#include "EELanguage.hpp"
-#include "EELanguageFormatter.hpp"
+#include "ee/cocos/EEILanguageSwitcher.hpp"
+#include "ee/cocos/EELanguage.hpp"
+#include "ee/cocos/EELanguageFormatter.hpp"
 
 namespace ee {
 namespace language {

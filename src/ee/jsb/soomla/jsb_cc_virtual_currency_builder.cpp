@@ -7,10 +7,9 @@
 
 #include "ee/jsb/soomla/jsb_cc_virtual_currency_pack_builder.hpp"
 
-#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyBuilder.h"
+#include <Soomla/domain/virtualCurrencies/CCVirtualCurrencyBuilder.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
 namespace core {

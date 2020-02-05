@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-#include "EECocos2dxFwd.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 class Shader;

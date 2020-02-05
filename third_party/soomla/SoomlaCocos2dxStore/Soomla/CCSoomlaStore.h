@@ -17,9 +17,11 @@
 #ifndef __CCSoomlaStore_H_
 #define __CCSoomlaStore_H_
 
-#include "CCError.h"
-#include "CCStoreAssets.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include <Soomla/CCError.h>
+
+#include "Soomla/CCStoreAssets.h"
 
 namespace soomla {
 /**

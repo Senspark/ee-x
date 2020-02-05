@@ -4,11 +4,10 @@
 
 #include "ee/jsb/tenjin/JsbTenjinBridge.hpp"
 
-#include "ee/tenjin/internal/TenjinBridge.hpp"
+#include <ee/jsb/JsbCore.hpp>
+#include <ee/tenjin/private/TenjinBridge.hpp>
+
 #include "ee/jsb/tenjin/JsbITenjinBridge.hpp"
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_logger.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
 
 namespace ee {
 namespace tenjin {
@@ -27,11 +26,9 @@ SE_BIND_CTOR(constructor, clazz, finalize)
 } // namespace
 
 bool registerJsbBridge(se::Object* global) {
-    auto tenjin_ = core::getPath(global, "ee/tenjin");
-
-    auto cls = se::Class::create("Bridge", tenjin_,
-                                 getIBridgeClass()->getProto(),
-                                 _SE(constructor));
+    auto scope = core::getPath(global, "ee");
+    auto parent = getIBridgeClass()->getProto();
+    auto cls = se::Class::create("Tenjin", scope, parent, _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));
     cls->install();
 

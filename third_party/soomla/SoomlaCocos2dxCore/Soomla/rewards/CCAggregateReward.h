@@ -17,10 +17,11 @@
 #ifndef __CCAggregateReward_H_
 #define __CCAggregateReward_H_
 
-#include "cocos2d.h"
-#include "CCSoomlaMacros.h"
-#include "CCCoreConsts.h"
-#include "CCReward.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/CCCoreConsts.h"
+#include "Soomla/rewards/CCReward.h"
 
 namespace soomla {
     class CCAggregateReward : public CCReward {

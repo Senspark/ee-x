@@ -6,8 +6,7 @@
 //
 //
 
-#include "EEPreferences.hpp"
-#include "EEDataHandler.hpp"
+#include "ee/cocos/EEPreferences.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>
@@ -16,6 +15,8 @@
 #include <json/document.h>
 #include <json/stringbuffer.h>
 #include <json/writer.h>
+
+#include "ee/cocos/EEDataHandler.hpp"
 
 NS_EE_BEGIN
 namespace {

@@ -17,8 +17,8 @@
 #ifndef __CCPurchaseWithMarket_H_
 #define __CCPurchaseWithMarket_H_
 
-#include "../domain/CCMarketItem.h"
-#include "CCPurchaseType.h"
+#include "Soomla/domain/CCMarketItem.h"
+#include "Soomla/PurchaseTypes/CCPurchaseType.h"
 
 namespace soomla {
 /**

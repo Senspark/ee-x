@@ -6,10 +6,10 @@
 //
 //
 
+#include "ee/cocos/EEDataTraits.hpp"
+
 #include <sstream>
 #include <stdexcept>
-
-#include "EEDataTraits.hpp"
 
 namespace ee {
 template <> bool DataTraits<bool>::load(const std::string& value) {

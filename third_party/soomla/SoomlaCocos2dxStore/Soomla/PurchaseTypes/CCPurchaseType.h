@@ -19,9 +19,10 @@
 #ifndef __CCPurchaseType__
 #define __CCPurchaseType__
 
-#include "CCError.h"
-#include "cocos2d.h"
-#include "CCSoomlaMacros.h"
+#include <cocos2d.h>
+
+#include <Soomla/CCError.h>
+#include <Soomla/CCSoomlaMacros.h>
 
 namespace soomla {
 /**

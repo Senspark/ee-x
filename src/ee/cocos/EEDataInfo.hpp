@@ -13,9 +13,9 @@
 #include <tuple>
 #include <type_traits>
 
-#include "EEUtils.hpp"
-#include "EEDataMeta.hpp"
-#include "EEDataUtils.hpp"
+#include "ee/cocos/EEDataMeta.hpp"
+#include "ee/cocos/EEDataUtils.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 /// @param Keys The format types.

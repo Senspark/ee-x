@@ -9,14 +9,16 @@
 #ifndef EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP
 #define EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP
 
-#include "EECocos2dxFwd.hpp"
-#include "EEForward.hpp"
-#include "EELanguageDelegate.hpp"
+// Must included first.
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 #include <platform/CCPlatformDefine.h> // CC_DLL
 
 #include <cocosbuilder/CCBMemberVariableAssigner.h>
 #include <cocosbuilder/CCNodeLoaderListener.h>
+
+#include "ee/cocos/EEForward.hpp"
+#include "ee/cocos/EELanguageDelegate.hpp"
 
 namespace ee {
 /// = LanguageDelegate + CocosBuilder.

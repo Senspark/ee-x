@@ -2,13 +2,14 @@
 #ifndef __CCStoreEventDispatcher_H_
 #define __CCStoreEventDispatcher_H_
 
-#include "CCEquippableVG.h"
-#include "CCPurchasableVirtualItem.h"
-#include "CCUpgradeVG.h"
-#include "CCVirtualCurrency.h"
-#include "CCVirtualGood.h"
-#include "CCMarketItem.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/domain/CCMarketItem.h"
+#include "Soomla/domain/CCPurchasableVirtualItem.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
+#include "Soomla/domain/virtualGoods/CCEquippableVG.h"
+#include "Soomla/domain/virtualGoods/CCUpgradeVG.h"
+#include "Soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
 class CCStoreEventDispatcher : public cocos2d::Ref {

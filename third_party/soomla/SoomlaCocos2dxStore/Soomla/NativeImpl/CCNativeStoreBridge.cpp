@@ -14,9 +14,10 @@
  limitations under the License.
  */
 
-#include "CCNativeStoreBridge.h"
-#include "CCNdkBridge.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/NativeImpl/CCNativeStoreBridge.h"
+
+#include <Soomla/CCNdkBridge.h>
+#include <Soomla/CCSoomlaUtils.h>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"

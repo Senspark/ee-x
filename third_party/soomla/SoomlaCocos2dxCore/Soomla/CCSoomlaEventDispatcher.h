@@ -17,7 +17,7 @@
 #ifndef __CCEventDispatcher_H_
 #define __CCEventDispatcher_H_
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 
 namespace soomla {
 

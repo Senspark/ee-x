@@ -2,9 +2,10 @@
 #ifndef __CCVirtualItemReward_H_
 #define __CCVirtualItemReward_H_
 
-#include "CCCoreConsts.h"
-#include "CCReward.h"
-#include "CCStoreConsts.h"
+#include <Soomla/CCCoreConsts.h>
+#include <Soomla/rewards/CCReward.h>
+
+#include "Soomla/CCStoreConsts.h"
 
 namespace soomla {
 /**

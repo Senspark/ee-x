@@ -6,8 +6,9 @@
 //
 //
 
-#include "EESpriteWithHsvLoader.hpp"
-#include "EESpriteWithHsv.hpp"
+#include "ee/cocos/EESpriteWithHsvLoader.hpp"
+
+#include "ee/cocos/EESpriteWithHsv.hpp"
 
 NS_EE_BEGIN
 namespace property {

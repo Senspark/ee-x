@@ -17,9 +17,10 @@
 #ifndef COCOS2DXSTORE_CCSOOMLASTORECONFIGBUILDER_H
 #define COCOS2DXSTORE_CCSOOMLASTORECONFIGBUILDER_H
 
-#include "CCSoomlaConfigBuilder.h"
-#include "CCSoomlaStoreGpConfigBuilder.h"
-#include "CCSoomlaStoreIosConfigBuilder.h"
+#include <Soomla/CCSoomlaConfigBuilder.h>
+
+#include "Soomla/config/CCSoomlaStoreGpConfigBuilder.h"
+#include "Soomla/config/CCSoomlaStoreIosConfigBuilder.h"
 
 namespace soomla {
 class CCSoomlaStoreConfigBuilder : public CCSoomlaConfigBuilder {

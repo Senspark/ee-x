@@ -13,11 +13,11 @@
 #include <memory>
 #include <vector>
 
-#include "EECocos2dxFwd.hpp"
-
 #include <2d/CCAction.h>
 #include <base/CCRefPtr.h>
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace dialog {
@@ -84,6 +84,12 @@ public:
     /// Checks whether the user can interact with this dialog.
     bool isActive() const noexcept;
 
+    /// Sets whether this dialog should ignore outside touch to autohide
+    virtual void setIgnoreTouchOutside(bool ignore);
+    
+    /// Checks whether the dialog is ignoring outside touch or not
+    bool isIgnoreTouchOutside() noexcept;
+    
     /// Adds a callback that will invoked when the dialog is about to show.
     /// @param[in] callback The callback.
     /// @param[in] priority The priority of the callback.
@@ -154,6 +160,7 @@ private:
 
     std::size_t dialogLevel_;
     bool isActive_;
+    bool ignoreTouchOutside_;
 
     cocos2d::Node* transitionAction_;
 

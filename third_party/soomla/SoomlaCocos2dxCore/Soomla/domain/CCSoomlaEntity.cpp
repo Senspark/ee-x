@@ -14,10 +14,11 @@
  limitations under the License.
  */
 
-#include "CCDomainFactory.h"
-#include "CCJsonHelper.h"
-#include "CCSoomlaEntity.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/domain/CCSoomlaEntity.h"
+
+#include "Soomla/CCDomainFactory.h"
+#include "Soomla/CCJsonHelper.h"
+#include "Soomla/CCSoomlaUtils.h"
 
 namespace soomla {
 

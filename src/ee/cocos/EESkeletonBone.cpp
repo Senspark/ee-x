@@ -6,10 +6,11 @@
 //
 //
 
-#include "EESkeletonBone.hpp"
-#include "EESpineMacro.hpp"
+#include "ee/cocos/EESkeletonBone.hpp"
 
 #include <spine/SkeletonAnimation.h>
+
+#include "ee/cocos/EESpineMacro.hpp"
 
 namespace ee {
 using Self = SkeletonBone;

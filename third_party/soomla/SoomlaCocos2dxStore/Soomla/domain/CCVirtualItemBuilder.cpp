@@ -5,7 +5,7 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#include "CCVirtualItemBuilder.h"
+#include "Soomla/domain/CCVirtualItemBuilder.h"
 
 namespace soomla {
 

@@ -14,14 +14,14 @@
  limitations under the License.
  */
 
-#include "CCReward.h"
-
 #ifndef __CCSequenceReward_H_
 #define __CCSequenceReward_H_
 
-#include "CCAggregateReward.h"
-#include "CCSoomlaMacros.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include "Soomla/CCSoomlaMacros.h"
+#include "Soomla/rewards/CCAggregateReward.h"
+#include "Soomla/rewards/CCReward.h"
 
 namespace soomla {
 class CCSequenceReward : public CCAggregateReward {

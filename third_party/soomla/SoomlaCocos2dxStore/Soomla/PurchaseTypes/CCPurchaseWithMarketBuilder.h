@@ -8,7 +8,7 @@
 #ifndef CCPurchaseWithMarketBuilder_hpp
 #define CCPurchaseWithMarketBuilder_hpp
 
-#include "CCPurchaseType.h"
+#include "Soomla/PurchaseTypes/CCPurchaseType.h"
 
 namespace soomla {
 

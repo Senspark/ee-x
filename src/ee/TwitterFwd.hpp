@@ -10,10 +10,10 @@
 
 namespace ee {
 namespace twitter {
-class Twitter;
+class Bridge;
 } // namespace twitter
 
-using twitter::Twitter;
+using Twitter = twitter::Bridge;
 } // namespace ee
 
 #endif /* EE_X_TWITTER_FWD_HPP */

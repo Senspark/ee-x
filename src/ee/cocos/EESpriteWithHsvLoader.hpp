@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_SPRITE_WITH_HSV_LOADER_HPP_
 #define EE_LIBRARY_SPRITE_WITH_HSV_LOADER_HPP_
 
-#include "EEMacro.hpp"
-
 #include <cocosbuilder/CCSpriteLoader.h>
+
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 class SpriteWithHsvLoader : public cocosbuilder::SpriteLoader {

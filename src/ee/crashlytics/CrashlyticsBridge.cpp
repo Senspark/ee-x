@@ -11,11 +11,11 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/core/LogLevel.hpp>
-#include <ee/core/MessageBridge.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 
 namespace ee {
 namespace crashlytics {
-using Self = Crashlytics;
+using Self = Bridge;
 
 namespace {
 // clang-format off
@@ -37,7 +37,7 @@ constexpr auto k__crashlytics_track_invite         = "__crashlytics_track_invite
 // clang-format on
 } // namespace
 
-Self::Crashlytics()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {}
 
 void Crashlytics::causeCrash() const {

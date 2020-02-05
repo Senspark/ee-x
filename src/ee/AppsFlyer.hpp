@@ -12,11 +12,11 @@
 
 #ifdef __cplusplus
 #include "ee/AppsFlyerFwd.hpp"
-#include "ee/appsflyer/IAppsFlyerBridge.hpp"
+#include "ee/apps_flyer/IAppsFlyerBridge.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/appsflyer/EEAppsFlyer.h"
+#import "ee/apps_flyer/EEAppsFlyer.h"
 #endif // __OBJC__
 
 #endif /* EE_X_APPS_FLYER_HPP */

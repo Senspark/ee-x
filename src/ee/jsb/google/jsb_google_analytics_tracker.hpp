@@ -5,10 +5,10 @@
 //  Created by Nguyen Van Quynh on 8/23/18.
 //
 
-#ifndef JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
-#define JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
+#ifndef EE_X_JSB_GOOGLE_ANALYTICS_TRACKER_HPP
+#define EE_X_JSB_GOOGLE_ANALYTICS_TRACKER_HPP
 
-#include "ee/jsb/jsb_fwd.hpp"
+#include <ee/jsb/JsbCoreFwd.hpp>
 
 namespace ee {
 namespace google {
@@ -16,4 +16,4 @@ bool register_google_tracker_manual(se::Object* object);
 } // namespace google
 } // namespace ee
 
-#endif // JSB_GOOGLE_ANALYTICS_TRACKER_HPP__
+#endif // EE_X_JSB_GOOGLE_ANALYTICS_TRACKER_HPP

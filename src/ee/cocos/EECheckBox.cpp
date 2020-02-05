@@ -6,9 +6,9 @@
 //
 //
 
-#include <algorithm>
+#include "ee/cocos/EECheckBox.hpp"
 
-#include "EECheckBox.hpp"
+#include <algorithm>
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

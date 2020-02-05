@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_EVENT_LISTENER_HPP_
 #define EE_LIBRARY_EVENT_LISTENER_HPP_
 
-#include "EEMacro.hpp"
-
 #include <base/CCEventListener.h>
+
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

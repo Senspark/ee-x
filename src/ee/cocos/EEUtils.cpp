@@ -6,8 +6,7 @@
 //
 //
 
-#include "EEUtils.hpp"
-#include "EEImage.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 #include <2d/CCNode.h>
 #include <2d/CCRenderTexture.h>
@@ -25,6 +24,8 @@
 #include <renderer/CCCustomCommand.h>
 #include <renderer/CCRenderer.h>
 #include <renderer/CCTextureCache.h>
+
+#include "ee/cocos/EEImage.hpp"
 
 NS_EE_BEGIN
 UniqueListener make_unique_listener(cocos2d::EventListener* listener) {

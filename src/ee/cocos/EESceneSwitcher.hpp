@@ -11,9 +11,9 @@
 
 #include <queue>
 
-#include "EECocos2dxFwd.hpp"
-
 #include <2d/CCTransition.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 class ImageBuilder;

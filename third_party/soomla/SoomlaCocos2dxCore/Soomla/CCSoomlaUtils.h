@@ -20,7 +20,7 @@
 #define __CCSoomlaUtils_H_
 
 
-#include "CCError.h"
+#include "Soomla/CCError.h"
 
 #ifndef SOOMLA_DEBUG
 #define SOOMLA_DEBUG false

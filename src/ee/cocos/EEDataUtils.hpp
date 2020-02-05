@@ -12,7 +12,7 @@
 #include <cstddef>
 #include <string>
 
-#include "EEDataMeta.hpp"
+#include "ee/cocos/EEDataMeta.hpp"
 
 namespace ee {
 namespace detail {

@@ -16,8 +16,9 @@
 
 
 
-#include "CCSoomlaUtils.h"
-#include "cocos2d.h"
+#include "Soomla/CCSoomlaUtils.h"
+
+#include <cocos2d.h>
 
 namespace soomla {
     void CCSoomlaUtils::logDebug(const std::string& tag, const std::string& message) {

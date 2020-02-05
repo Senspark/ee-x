@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_TRANSITION_FADE_OUT_HPP_
 #define EE_LIBRARY_TRANSITION_FADE_OUT_HPP_
 
-#include "EECocos2dxFwd.hpp"
-
 #include <2d/CCTransition.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 class TransitionFadeOut : public cocos2d::TransitionScene {

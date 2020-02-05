@@ -1,13 +1,13 @@
+#include "Soomla/CCStoreEventDispatcher.h"
 
+#include <Soomla/CCError.h>
+#include <Soomla/CCNdkBridge.h>
+#include <Soomla/CCSoomlaEventDispatcher.h>
+#include <Soomla/CCSoomlaUtils.h>
 
-#include "CCError.h"
-#include "CCNdkBridge.h"
-#include "CCPurchaseWithMarket.h"
-#include "CCSoomlaEventDispatcher.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreEventDispatcher.h"
-#include "CCStoreInfo.h"
-#include "CCStoreInventory.h"
+#include "Soomla/CCStoreInventory.h"
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 
 #if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1

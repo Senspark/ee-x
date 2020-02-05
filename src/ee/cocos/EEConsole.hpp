@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_CONSOLE_HPP_
 #define EE_LIBRARY_CONSOLE_HPP_
 
-#include "EECocos2dxFwd.hpp"
-
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace detail {

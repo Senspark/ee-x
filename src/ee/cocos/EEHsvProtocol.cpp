@@ -6,8 +6,9 @@
 //
 //
 
-#include "EEHsvProtocol.hpp"
-#include "EEShaderUtils.hpp"
+#include "ee/cocos/EEHsvProtocol.hpp"
+
+#include "ee/cocos/EEShaderUtils.hpp"
 
 namespace ee {
 HsvProtocol::HsvProtocol() {

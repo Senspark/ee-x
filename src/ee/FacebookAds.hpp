@@ -13,13 +13,13 @@
 
 #ifdef __cplusplus
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/facebookads/FacebookAdsBridge.hpp"
-#include "ee/facebookads/FacebookBannerAdSize.hpp"
-#include "ee/facebookads/FacebookNativeAdLayout.hpp"
+#include "ee/facebook_ads/FacebookAdsBridge.hpp"
+#include "ee/facebook_ads/FacebookBannerAdSize.hpp"
+#include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/facebookads/EEFacebookAds.h"
+#import "ee/facebook_ads/EEFacebookAds.h"
 #endif // __OBJC__
 
 #endif /* EE_X_FACEBOOK_ADS_HPP */

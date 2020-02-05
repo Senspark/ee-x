@@ -14,11 +14,12 @@
  limitations under the License.
  */
 
-#include "CCPurchasableVirtualItem.h"
+#include "Soomla/domain/CCPurchasableVirtualItem.h"
 
-#include "../PurchaseTypes/CCPurchaseWithMarket.h"
-#include "../PurchaseTypes/CCPurchaseWithVirtualItem.h"
-#include "CCJsonHelper.h"
+#include <Soomla/CCJsonHelper.h>
+
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
+#include "Soomla/PurchaseTypes/CCPurchaseWithVirtualItem.h"
 
 namespace soomla {
 

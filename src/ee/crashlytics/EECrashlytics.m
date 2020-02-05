@@ -11,9 +11,9 @@
 #import <Crashlytics/Crashlytics.h>
 #import <Fabric/Fabric.h>
 
-#import <ee/core/EEMessageBridge.h>
 #import <ee/core/internal/EEDictionaryUtils.h>
 #import <ee/core/internal/EEJsonUtils.h>
+#import <ee/core/internal/EEMessageBridge.h>
 
 #undef CLS_LOG
 #ifdef __OBJC__

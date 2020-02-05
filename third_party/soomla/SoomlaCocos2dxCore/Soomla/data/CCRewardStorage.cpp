@@ -14,11 +14,13 @@
  limitations under the License.
  */
 
-#include "CCCoreEventDispatcher.h"
-#include "CCKeyValueStorage.h"
-#include "CCNativeRewardStorage.h"
-#include "CCReward.h"
-#include "CCSequenceReward.h"
+#include "Soomla/data/CCRewardStorage.h"
+
+#include "Soomla/CCCoreEventDispatcher.h"
+#include "Soomla/data/CCKeyValueStorage.h"
+#include "Soomla/NativeImpl/CCNativeRewardStorage.h"
+#include "Soomla/rewards/CCReward.h"
+#include "Soomla/rewards/CCSequenceReward.h"
 
 #define TAG "SOOMLA RewardStorage"
 

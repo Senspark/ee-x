@@ -11,7 +11,7 @@
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/ads/MediationManager.hpp"
+#include "ee/ads/internal/MediationManager.hpp"
 
 namespace ee {
 namespace ads {

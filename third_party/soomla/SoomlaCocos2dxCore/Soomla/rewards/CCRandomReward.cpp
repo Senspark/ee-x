@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#include "CCRandomReward.h"
+#include "Soomla/rewards/CCRandomReward.h"
 
 soomla::CCRandomReward*
 soomla::CCRandomReward::create(const std::string& id, const std::string& name,

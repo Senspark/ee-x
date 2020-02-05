@@ -10,10 +10,10 @@
 
 namespace ee {
 namespace recorder {
-class Recorder;
+class Bridge;
 } // namespace recorder
 
-using recorder::Recorder;
+using Recorder = recorder::Bridge;
 } // namespace ee
 
 #endif /* EE_X_RECORDER_FWD_HPP */

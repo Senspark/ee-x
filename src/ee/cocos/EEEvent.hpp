@@ -11,9 +11,9 @@
 
 #include <functional>
 
-#include "EEMacro.hpp"
-
 #include <base/CCEventCustom.h>
+
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

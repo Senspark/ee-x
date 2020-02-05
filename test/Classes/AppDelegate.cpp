@@ -13,6 +13,7 @@
 #include <ee/Ads.hpp>
 #include <ee/Core.hpp>
 #include <ee/Macro.hpp>
+#include <ee/cocos/EEHeader.hpp>
 
 #include "AdMob.hpp"
 #include "AppLovin.hpp"

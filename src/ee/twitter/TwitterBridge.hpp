@@ -15,10 +15,10 @@ namespace ee {
 namespace twitter {
 using ShareResultCallback = std::function<void(int result)>;
 
-class Twitter final {
+class Bridge final {
 public:
-    Twitter();
-    ~Twitter();
+    Bridge();
+    ~Bridge();
 
     void setShareResultCallback(const ShareResultCallback& callback);
     void initialize(const std::string& key, const std::string& secret);

@@ -424,8 +424,6 @@ public abstract class IabHelper {
             final Handler handler = new Handler(Looper.getMainLooper());
             for (final OnIabSetupFinishedListener listener : mSetupFinishedListeners) {
                 handler.post(new Runnable() {
-
-
                     @Override
                     public void run() {
                         listener.onIabSetupFinished(new IabResult(IabResult.BILLING_RESPONSE_RESULT_OK, "Setup successful."));
@@ -447,8 +445,6 @@ public abstract class IabHelper {
             final Handler handler = new Handler(Looper.getMainLooper());
             for (final OnIabSetupFinishedListener listener : mSetupFinishedListeners) {
                 handler.post(new Runnable() {
-
-
                     @Override
                     public void run() {
                         listener.onIabSetupFinished(result);

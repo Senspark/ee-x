@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-#include "CCJsonHelper.h"
-#include "CCSoomlaEventDispatcher.h"
+#include "Soomla/CCSoomlaEventDispatcher.h"
+
+#include "Soomla/CCJsonHelper.h"
 
 #ifdef COCOS2D_JAVASCRIPT
 #include "JSBinding.h"

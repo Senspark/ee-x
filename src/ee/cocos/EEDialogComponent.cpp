@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEDialogComponent.hpp"
+#include "ee/cocos/EEDialogComponent.hpp"
 
 #include <2d/CCNode.h>
 

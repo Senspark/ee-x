@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_SPRITE_WITH_HSV_HPP_
 #define EE_LIBRARY_SPRITE_WITH_HSV_HPP_
 
-#include "EEHsvProtocol.hpp"
-
 #include <2d/CCSprite.h>
+
+#include "ee/cocos/EEHsvProtocol.hpp"
 
 namespace ee {
 class SpriteWithHsvLoader;

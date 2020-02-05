@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include "EEMacro.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 /// Generates SHA-1 hashed string.

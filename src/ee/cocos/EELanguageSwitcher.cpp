@@ -6,13 +6,13 @@
 //
 //
 
-#include "EELanguageSwitcher.hpp"
+#include "ee/cocos/EELanguageSwitcher.hpp"
 
 #include <base/CCValue.h>
 
-#include "EELanguage.hpp"
-#include "EELanguageDelegate.hpp"
-#include "EELanguageFormatter.hpp"
+#include "ee/cocos/EELanguage.hpp"
+#include "ee/cocos/EELanguageDelegate.hpp"
+#include "ee/cocos/EELanguageFormatter.hpp"
 
 namespace ee {
 namespace language {
@@ -82,6 +82,10 @@ void Self::loadLanguage(const Language& language,
         auto formatter = Formatter(text);
         dictionaries_[language].emplace(key, std::move(formatter));
     }
+}
+
+std::vector<Language> Self::getSupportedLanguages() const {
+    return std::vector<Language>();
 }
 } // namespace language
 } // namespace ee

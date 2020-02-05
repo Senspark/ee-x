@@ -13,8 +13,6 @@
 
 #include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
 
-#include "ee/jsb/core/jsb_utils.hpp"
-
 namespace ee {
 namespace core {
 template <class T>

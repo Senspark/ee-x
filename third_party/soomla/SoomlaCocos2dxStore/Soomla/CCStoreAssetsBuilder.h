@@ -8,7 +8,7 @@
 #ifndef CCStoreAssetsBuilder_h
 #define CCStoreAssetsBuilder_h
 
-#include "CCStoreAssets.h"
+#include "Soomla/CCStoreAssets.h"
 
 namespace soomla {
 

@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEUiCheckBoxLoader.hpp"
+#include "ee/cocos/EEUiCheckBoxLoader.hpp"
 
 #include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>

@@ -6,10 +6,10 @@
 //
 //
 
+#include "ee/cocos/EEImage.hpp"
+
 #include <cassert>
 #include <cstring>
-
-#include "EEImage.hpp"
 
 #include <platform/CCImage.h>
 

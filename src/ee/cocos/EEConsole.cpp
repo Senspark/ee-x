@@ -6,15 +6,16 @@
 //
 //
 
-#include "EEConsole.hpp"
-#include "EEConsoleDelegate.hpp"
-#include "EECommandPool.hpp"
-#include "EEDialogComponent.hpp"
+#include "ee/cocos/EEConsole.hpp"
 
 #include <2d/CCLayer.h>
 #include <2d/CCSprite.h>
 #include <base/CCDirector.h>
 #include <ui/UIEditBox/UIEditBox.h>
+
+#include "ee/cocos/EECommandPool.hpp"
+#include "ee/cocos/EEConsoleDelegate.hpp"
+#include "ee/cocos/EEDialogComponent.hpp"
 
 namespace ee {
 Console* Console::create() {

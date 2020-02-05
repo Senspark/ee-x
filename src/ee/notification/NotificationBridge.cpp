@@ -10,16 +10,16 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/MessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/notification/NotificationBuilder.hpp"
 
 namespace ee {
 namespace notification {
-using Self = Notification;
+using Self = Bridge;
 
-Self::Notification()
+Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {}
 
 void Self::schedule(const NotificationBuilder& builder) {

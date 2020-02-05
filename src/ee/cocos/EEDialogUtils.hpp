@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_DIALOG_UTILS_HPP_
 #define EE_LIBRARY_DIALOG_UTILS_HPP_
 
-#include "EEMacro.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 namespace dialog {

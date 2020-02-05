@@ -17,10 +17,11 @@
 #ifndef __CCMarketItem_H_
 #define __CCMarketItem_H_
 
-#include "CCDomain.h"
-#include "CCSoomlaMacros.h"
-#include "CCStoreConsts.h"
-#include "cocos2d.h"
+#include <cocos2d.h>
+
+#include <Soomla/CCSoomlaMacros.h>
+#include "Soomla/CCStoreConsts.h"
+#include <Soomla/domain/CCDomain.h>
 
 namespace soomla {
 /**

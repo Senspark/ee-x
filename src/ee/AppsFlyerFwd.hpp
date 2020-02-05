@@ -11,11 +11,11 @@
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
-namespace appsflyer {
+namespace apps_flyer {
 class IBridge;
-} // namespace appsflyer
+} // namespace apps_flyer
 
-using IAppsFlyer = appsflyer::IBridge;
+using IAppsFlyer = apps_flyer::IBridge;
 } // namespace ee
 
 #endif /* EE_X_APPS_FLYER_FWD_HPP */

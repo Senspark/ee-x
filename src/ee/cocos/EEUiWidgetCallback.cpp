@@ -6,7 +6,7 @@
 //
 //
 
-#include "EEUiWidgetCallback.hpp"
+#include "ee/cocos/EEUiWidgetCallback.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

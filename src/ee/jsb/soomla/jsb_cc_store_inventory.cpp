@@ -7,12 +7,9 @@
 
 #include "ee/jsb/soomla/jsb_cc_store_inventory.hpp"
 
-#include <unordered_map>
-
 #include <Soomla/CCStoreInventory.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
 namespace core {

@@ -14,14 +14,15 @@
  limitations under the License.
  */
 
-#include "CCBadgeReward.h"
-#include "CCCoreBridge.h"
-#include "CCCoreEventDispatcher.h"
-#include "CCDomainFactory.h"
-#include "CCNativeCoreBridge.h"
-#include "CCRandomReward.h"
-#include "CCSequenceReward.h"
-#include "CCSoomlaUtils.h"
+#include "Soomla/CCCoreBridge.h"
+
+#include "Soomla/CCCoreEventDispatcher.h"
+#include "Soomla/CCDomainFactory.h"
+#include "Soomla/CCSoomlaUtils.h"
+#include "Soomla/NativeImpl/CCNativeCoreBridge.h"
+#include "Soomla/rewards/CCBadgeReward.h"
+#include "Soomla/rewards/CCRandomReward.h"
+#include "Soomla/rewards/CCSequenceReward.h"
 
 using namespace cocos2d;
 

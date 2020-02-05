@@ -8,8 +8,8 @@
 #ifndef CCLifetimeVGBuilder_hpp
 #define CCLifetimeVGBuilder_hpp
 
-#include "../../PurchaseTypes/CCPurchaseType.h"
-#include "../CCVirtualItem.h"
+#include "Soomla/domain/CCVirtualItem.h"
+#include "Soomla/PurchaseTypes/CCPurchaseType.h"
 
 namespace soomla {
 

@@ -14,7 +14,7 @@
 #include <tuple>
 #include <vector>
 
-#include "EEForward.hpp"
+#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 namespace detail {

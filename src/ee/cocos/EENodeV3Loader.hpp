@@ -9,9 +9,9 @@
 #ifndef EE_LIBRARY_NODE_V3_LOADER_HPP_
 #define EE_LIBRARY_NODE_V3_LOADER_HPP_
 
-#include "EEMacro.hpp"
-
 #include <cocosbuilder/CCNodeLoader.h>
+
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 /// Cocosbuilder loader for @c cocos2d::Node with color and opacity.

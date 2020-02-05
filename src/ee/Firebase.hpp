@@ -6,40 +6,40 @@
 //
 //
 
-#ifndef EE_X_FIREBASE_HPP_
-#define EE_X_FIREBASE_HPP_
+#ifndef EE_X_FIREBASE_HPP
+#define EE_X_FIREBASE_HPP
 
 #include <ee/Core.hpp>
 
 #include "ee/FirebaseFwd.hpp"
 
-#if __has_include("ee/firebase/FirebaseApp.hpp")
-#include "ee/firebase/FirebaseApp.hpp"
+#if __has_include("ee/firebase/core/FirebaseApp.hpp")
+#include "ee/firebase/core/FirebaseApp.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseAnalytics.hpp")
-#include "ee/firebase/FirebaseAnalytics.hpp"
+#if __has_include("ee/firebase/analytics/FirebaseAnalyticsBridge.hpp")
+#include "ee/firebase/analytics/FirebaseAnalyticsBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseRemoteConfig.hpp")
-#include "ee/firebase/FirebaseRemoteConfig.hpp"
+#if __has_include("ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp")
+#include "ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseStorage.hpp")
-#include "ee/firebase/FirebaseStorage.hpp"
+#if __has_include("ee/firebase/messaging/FirebaseMessagingBridge.hpp")
+#include "ee/firebase/messaging/FirebaseMessagingBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseMessaging.hpp")
-#include "ee/firebase/FirebaseMessaging.hpp"
+#if __has_include("ee/firebase/performance/FirebasePerformanceBridge.hpp")
+#include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
+#include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebaseDynamicLink.hpp")
-#include "ee/firebase/FirebaseDynamicLink.hpp"
+#if __has_include("ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp")
+#include "ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/FirebasePerformanceBridge.hpp")
-#include "ee/firebase/FirebasePerformanceBridge.hpp"
-#include "ee/firebase/FirebasePerformanceTrace.hpp"
+#if __has_include("ee/firebase/storage/FirebaseStorageBridge.hpp")
+#include "ee/firebase/storage/FirebaseStorageBridge.hpp"
 #endif
 
-#endif /* EE_X_FIREBASE_HPP_ */
+#endif /* EE_X_FIREBASE_HPP */

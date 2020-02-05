@@ -6,15 +6,17 @@
 //
 //
 
-#ifndef EE_X_CampaignReceiverFWD_HPP
-#define EE_X_CampaignReceiverFWD_HPP
+#ifndef EE_X_CAMPAIGN_RECEIVER_FWD_HPP
+#define EE_X_CAMPAIGN_RECEIVER_FWD_HPP
+
+#include <ee/CoreFwd.hpp>
 
 namespace ee {
-namespace campaignreceiver {
-class CampaignReceiver;
-} // namespace campaignreceiver
+namespace campaign_receiver {
+class Bridge;
+} // namespace campaign_receiver
 
-using campaignreceiver::CampaignReceiver;
+using CampaignReceiver = campaign_receiver::Bridge;
 } // namespace ee
 
-#endif /* EE_X_CampaignReceiverFWD_HPP */
+#endif /* EE_X_CAMPAIGN_RECEIVER_FWD_HPP */

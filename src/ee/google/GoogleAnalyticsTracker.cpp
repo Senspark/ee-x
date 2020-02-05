@@ -7,12 +7,14 @@
 //
 
 #include "ee/google/GoogleAnalyticsTracker.hpp"
-#include "ee/core/MessageBridge.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/google/GoogleAnalyticsBridge.hpp"
-#include "ee/google/internal/GoogleAnalyticsParameter.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
+
+#include "ee/google/GoogleAnalyticsBridge.hpp"
+#include "ee/google/internal/GoogleAnalyticsParameter.hpp"
 
 namespace ee {
 namespace google {

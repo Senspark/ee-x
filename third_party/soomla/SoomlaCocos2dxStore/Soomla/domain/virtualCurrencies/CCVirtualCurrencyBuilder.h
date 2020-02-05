@@ -8,7 +8,7 @@
 #ifndef CCVirtualCurrencyBuilder_hpp
 #define CCVirtualCurrencyBuilder_hpp
 
-#include "CCVirtualCurrency.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
 
 namespace soomla {
 

@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+/// Used to switch between ndkBuild and cmake.
+def USE_CMAKE = true
+
 /// Modify this variable to build the desired architectures.
 String[] architectures = [
         'armeabi-v7a',
@@ -10,10 +13,9 @@ String[] architectures = [
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-    flavorDimensions 'screenSize'
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         applicationId 'com.ee.test.android'
@@ -25,26 +27,48 @@ android {
         manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
 
         externalNativeBuild {
-            ndkBuild {
-                targets 'ee_x_test'
-                arguments 'APP_STL=c++_static'
-                arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                arguments 'APP_PLATFORM=android-16'
-                arguments 'APP_LDFLAGS=-latomic'
-                arguments '-j' + Runtime.runtime.availableProcessors()
-                cppFlags '-frtti'
-                cppFlags '-fexceptions'
-                cppFlags '-fsigned-char'
-                cppFlags '-std=c++17'
-                cppFlags '-U__SSE__'
-                cppFlags '-Wno-extern-c-compat'
+            if (USE_CMAKE) {
+                cmake {
+                    targets 'ee_x_test'
+                    arguments '-DANDROID_STL=c++_static'
+                    arguments '-DANDROID_TOOLCHAIN=clang'
+                    cppFlags '-frtti'
+                    cppFlags '-fexceptions'
+                    cppFlags '-fsigned-char'
+                    cppFlags '-std=c++17'
+                    cppFlags '-U__SSE__'
+                    cppFlags '-Wno-extern-c-compat'
+                    abiFilters.addAll(architectures)
+                }
+            } else {
+                ndkBuild {
+                    targets 'ee_x_test'
+                    arguments 'APP_STL=c++_static'
+                    arguments 'NDK_TOOLCHAIN_VERSION=clang'
+                    arguments 'APP_PLATFORM=android-16'
+                    arguments 'APP_LDFLAGS=-latomic'
+                    arguments '-j' + Runtime.runtime.availableProcessors()
+                    cppFlags '-frtti'
+                    cppFlags '-fexceptions'
+                    cppFlags '-fsigned-char'
+                    cppFlags '-std=c++17'
+                    cppFlags '-U__SSE__'
+                    cppFlags '-Wno-extern-c-compat'
+                    abiFilters.addAll(architectures)
+                }
             }
         }
     }
 
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
+        if (USE_CMAKE) {
+            cmake {
+                path 'src/main/jni/CMakeLists.txt'
+            }
+        } else {
+            ndkBuild {
+                path 'src/main/jni/Android.mk'
+            }
         }
     }
 
@@ -72,9 +96,13 @@ android {
             jniDebuggable false
 
             externalNativeBuild {
-                ndkBuild {
-                    arguments "NDK_OUT=$projectDir/src/main/obj/release"
-                    cppFlags '-DNDEBUG'
+                if (USE_CMAKE) {
+                    // TODO.
+                } else {
+                    ndkBuild {
+                        arguments "NDK_OUT=$projectDir/src/main/obj/release"
+                        cppFlags '-DNDEBUG'
+                    }
                 }
             }
         }
@@ -83,9 +111,13 @@ android {
             jniDebuggable true
 
             externalNativeBuild {
-                ndkBuild {
-                    arguments "NDK_OUT=$projectDir/src/main/obj/debug"
-                    cppFlags '-DCOCOS2D_DEBUG=1'
+                if (USE_CMAKE) {
+                    // TODO.
+                } else {
+                    ndkBuild {
+                        arguments "NDK_OUT=$projectDir/src/main/obj/debug"
+                        cppFlags '-DCOCOS2D_DEBUG=1'
+                    }
                 }
             }
         }
@@ -110,24 +142,28 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libcocos2dx')
-    implementation project(':ee-x-ads')
+    implementation project(':ee-x-admob')
+    implementation project(':ee-x-app-lovin')
+    implementation project(':ee-x-facebook-ads')
+    implementation project(':ee-x-iron-source')
+    implementation project(':ee-x-unity-ads')
+    implementation project(':ee-x-vungle')
     implementation project(':ee-x-apps-flyer')
+    implementation project(':ee-x-campaign-receiver')
     implementation project(':ee-x-crashlytics')
-    implementation project(':ee-x-google-analytics')
+    implementation project(':ee-x-facebook')
     implementation project(':ee-x-firebase-analytics')
     implementation project(':ee-x-firebase-dynamic-link')
     implementation project(':ee-x-firebase-messaging')
+    implementation project(':ee-x-firebase-performance')
     implementation project(':ee-x-firebase-remote-config')
     implementation project(':ee-x-firebase-storage')
+    implementation project(':ee-x-google-analytics')
     implementation project(':ee-x-notification')
-
-    implementation project(':ee-x-admob')
-    implementation project(':ee-x-game-center')
-    implementation project(':ee-x-applovin')
-    implementation project(':ee-x-facebook-ads')
-    implementation project(':ee-x-ironsource')
-    implementation project(':ee-x-unity-ads')
-    implementation project(':ee-x-vungle')
+    implementation project(':ee-x-play')
+    implementation project(':ee-x-recorder')
+    implementation project(':ee-x-tenjin')
+    implementation project(':ee-x-twitter')
 
     implementation 'androidx.multidex:multidex:2.0.1'
 }

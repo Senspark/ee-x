@@ -12,10 +12,10 @@
 #include <memory>
 #include <vector>
 
-#include "EEEvent.hpp"
-#include "EEEventInfo.hpp"
-#include "EEEventListener.hpp"
-#include "EEUtils.hpp"
+#include "ee/cocos/EEEvent.hpp"
+#include "ee/cocos/EEEventInfo.hpp"
+#include "ee/cocos/EEEventListener.hpp"
+#include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
 class EventDispatcher {

@@ -17,9 +17,9 @@
 
 namespace ee {
 namespace crashlytics {
-class Crashlytics final {
+class Bridge final {
 public:
-    Crashlytics();
+    Bridge();
     
     /// Causes a crash.
     void causeCrash() const;

@@ -5,9 +5,9 @@
 //  Created by eps on 6/4/18.
 //
 
-#include "EEWidgetLoader.hpp"
+#include "ee/cocos/EEWidgetLoader.hpp"
 
-#include "EEWidget.hpp"
+#include "ee/cocos/EEWidget.hpp"
 
 namespace ee {
 namespace ui {

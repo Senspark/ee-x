@@ -12,8 +12,8 @@
 #include <tuple>
 #include <type_traits>
 
-#include "EEMacro.hpp"
-#include "EECocos2dxFwd.hpp"
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEMacro.hpp"
 
 NS_EE_BEGIN
 /// Generic template loader for cocosbuilder.

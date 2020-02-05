@@ -6,13 +6,13 @@
 //
 //
 
+#include "Soomla/StoreEventListener.h"
+
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "StoreEventListener.h"
-
-#include <Cocos2dxStore.h>
+#include "Soomla/Cocos2dxStore.h"
 
 #if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1

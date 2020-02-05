@@ -7,14 +7,12 @@
 
 #include "ee/jsb/soomla/jsb_cc_soomla_store.hpp"
 
-#include "Soomla/Cocos2dxStore.h"
+#include <Soomla/Cocos2dxStore.h>
 
-#include "ee/jsb/core/jsb_core_common.hpp"
-#include "ee/jsb/core/jsb_templates.hpp"
+#include <ee/jsb/JsbCore.hpp>
 
 namespace ee {
 namespace core {
-
 template <>
 soomla::CCStoreAssets* get_value(const se::Value& value) {
     return static_cast<soomla::CCStoreAssets*>(

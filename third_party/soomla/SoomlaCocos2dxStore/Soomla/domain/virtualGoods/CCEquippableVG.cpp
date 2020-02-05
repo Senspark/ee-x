@@ -14,12 +14,14 @@
  limitations under the License.
  */
 
-#include "CCEquippableVG.h"
-#include "CCJsonHelper.h"
-#include "CCSoomlaUtils.h"
-#include "CCStoreInfo.h"
-#include "CCVirtualCategory.h"
-#include "CCVirtualGoodsStorage.h"
+#include "Soomla/domain/virtualGoods/CCEquippableVG.h"
+
+#include <Soomla/CCJsonHelper.h>
+#include <Soomla/CCSoomlaUtils.h>
+
+#include "Soomla/data/CCStoreInfo.h"
+#include "Soomla/data/CCVirtualGoodsStorage.h"
+#include "Soomla/domain/CCVirtualCategory.h"
 
 #define EQUIPPING_MODEL_LOCAL "local"
 #define EQUIPPING_MODEL_CATEGORY "category"

@@ -9,11 +9,11 @@
 #ifndef EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_
 #define EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_
 
-#include "EEMacro.hpp"
-#include "EECocos2dxFwd.hpp"
-#include "EEUiWidgetLoader.hpp"
-
 #include <ui/UIWidget.h>
+
+#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/EEMacro.hpp"
+#include "ee/cocos/EEUiWidgetLoader.hpp"
 
 NS_EE_BEGIN
 /// Cocosbuilder loader for @c cocos2d::ui::CheckBox.

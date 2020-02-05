@@ -34,7 +34,7 @@
  Gregory Petrosyan
  */
 
-#include "EECrytography.hpp"
+#include "ee/cocos/EECrytography.hpp"
 
 NS_EE_BEGIN
 NS_DETAIL_BEGIN

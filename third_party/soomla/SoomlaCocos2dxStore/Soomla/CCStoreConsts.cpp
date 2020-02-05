@@ -16,7 +16,7 @@
 
 //  Created by Igor Yegoroff on 5/17/13.
 
-#include "CCStoreConsts.h"
+#include "Soomla/CCStoreConsts.h"
 
 namespace soomla {
 

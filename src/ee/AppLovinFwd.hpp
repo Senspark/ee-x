@@ -12,12 +12,12 @@
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
-namespace applovin {
-class AppLovin;
+namespace app_lovin {
+class Bridge;
 class RewardedVideo;
-} // namespace applovin
+} // namespace app_lovin
 
-using applovin::AppLovin;
+using AppLovin = app_lovin::Bridge;
 } // namespace ee
 
 #endif /* EE_X_APP_LOVIN_FWD_HPP */

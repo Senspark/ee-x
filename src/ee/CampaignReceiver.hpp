@@ -6,16 +6,18 @@
 //
 //
 
-#ifndef EE_X_CampaignReceiver_HPP
-#define EE_X_CampaignReceiver_HPP
+#ifndef EE_X_CAMPAIGN_RECEIVER_HPP
+#define EE_X_CAMPAIGN_RECEIVER_HPP
+
+#include <ee/Core.hpp>
 
 #ifdef __cplusplus
 #include "ee/CampaignReceiverFwd.hpp"
-#include "ee/campaignreceiver/CampaignReceiverBridge.hpp"
+#include "ee/campaign_receiver/CampaignReceiverBridge.hpp"
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/campaignreceiver/EECampaignReceiver.h"
+#import "ee/campaign_receiver/EECampaignReceiver.h"
 #endif // __OBJC__
 
-#endif /* EE_X_CampaignReceiver_HPP */
+#endif /* EE_X_CAMPAIGN_RECEIVER_HPP */

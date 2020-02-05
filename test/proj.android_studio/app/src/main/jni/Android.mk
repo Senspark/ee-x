@@ -48,4 +48,4 @@ LOCAL_STATIC_LIBRARIES += ee_x_vungle_static
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module, cocos) # Must be placed before ../jni so modules-get-list can work properly.
-$(call import-module, ../jni)
+$(call import-module, ..)

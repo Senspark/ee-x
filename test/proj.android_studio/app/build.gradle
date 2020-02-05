@@ -100,7 +100,6 @@ android {
                     // TODO.
                 } else {
                     ndkBuild {
-                        arguments "NDK_OUT=$projectDir/src/main/obj/release"
                         cppFlags '-DNDEBUG'
                     }
                 }
@@ -115,7 +114,6 @@ android {
                     // TODO.
                 } else {
                     ndkBuild {
-                        arguments "NDK_OUT=$projectDir/src/main/obj/debug"
                         cppFlags '-DCOCOS2D_DEBUG=1'
                     }
                 }

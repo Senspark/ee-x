@@ -9,6 +9,7 @@
 #include "ee/firebase/core/FirebaseApp.hpp"
 
 #if defined(EE_X_IOS)
+#import <FIRApp.h>
 #import <UIKit/UIViewController.h>
 
 #include <firebase/app.h>
@@ -27,6 +28,8 @@ void Self::initialize() {
     }
 
 #if defined(EE_X_IOS)
+    [FIRApp configure];
+
     auto options = ::firebase::AppOptions();
     auto app = ::firebase::App::Create(options);
     static_cast<void>(app);

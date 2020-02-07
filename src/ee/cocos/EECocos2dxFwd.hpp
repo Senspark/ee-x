@@ -145,6 +145,11 @@ class GLProgram;
 class GLProgramState;
 
 struct Uniform;
+
+namespace extension {
+class ControlButton;
+class ScrollView;
+} // namespace extension
 } // namespace cocos2d
 
 namespace cocos2d {

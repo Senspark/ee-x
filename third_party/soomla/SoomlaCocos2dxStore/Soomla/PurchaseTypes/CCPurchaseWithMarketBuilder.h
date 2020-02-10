@@ -5,32 +5,32 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#ifndef CCPurchaseWithMarketBuilder_hpp
-#define CCPurchaseWithMarketBuilder_hpp
+#ifndef SOOMLA_PURCHASE_WITH_MARKET_BUILDER_HPP
+#define SOOMLA_PURCHASE_WITH_MARKET_BUILDER_HPP
 
-#include "Soomla/PurchaseTypes/CCPurchaseType.h"
+#include <optional>
+#include <string>
+
+#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 
 namespace soomla {
-
-class CCPurchaseWithMarketBuilder {
+class PurchaseWithMarketBuilder {
 private:
-    using Self = CCPurchaseWithMarketBuilder;
+    using Self = PurchaseWithMarketBuilder;
 
 public:
-    CCPurchaseWithMarketBuilder();
-    ~CCPurchaseWithMarketBuilder();
-
     Self& setProductId(const std::string& productId);
-
     Self& setPrice(float price);
 
-    CCPurchaseType* build();
+    CCPurchaseWithMarket* build() const;
     
 private:
-    std::unique_ptr<std::string> productId_;
-    std::unique_ptr<float> price_;
+    std::optional<std::string> productId_;
+    float price_; // Optional.
 };
 
+// Backward compatibility.
+using CCPurchaseWithMarketBuilder = PurchaseWithMarketBuilder;
 } // namespace soomla
 
 #endif /* CCPurchaseWithMarketBuilder_hpp */

@@ -5,35 +5,24 @@
 //  Created by Kiet Le on 9/19/18.
 //
 
-#ifndef CCVirtualCurrencyBuilder_hpp
-#define CCVirtualCurrencyBuilder_hpp
+#ifndef SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP
+#define SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP
 
+#include "Soomla/domain/CCVirtualItemBuilder.h"
 #include "Soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
 
 namespace soomla {
-
-class CCVirtualCurrencyBuilder {
+class VirtualCurrencyBuilder
+    : public VirtualItemBuilder<VirtualCurrencyBuilder> {
 private:
-    using Self = CCVirtualCurrencyBuilder;
+    using Self = VirtualCurrencyBuilder;
 
 public:
-    CCVirtualCurrencyBuilder();
-    ~CCVirtualCurrencyBuilder();
-
-    Self& setName(const std::string& name);
-
-    Self& setDescription(const std::string& description);
-
-    Self& setItemId(const std::string& itemId);
-
-    CCVirtualItem* build();
-
-protected:
-    std::unique_ptr<std::string> name_;
-    std::unique_ptr<std::string> description_;
-    std::unique_ptr<std::string> itemId_;
+    virtual CCVirtualCurrency* build() const override;
 };
 
+/// Backward compatibility.
+using CCVirtualCurrencyBuilder = VirtualCurrencyBuilder;
 } // namespace soomla
 
-#endif /* CCVirtualCurrencyBuilder_hpp */
+#endif /* SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP */

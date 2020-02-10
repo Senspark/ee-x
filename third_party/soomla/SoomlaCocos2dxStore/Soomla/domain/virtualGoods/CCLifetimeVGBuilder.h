@@ -5,39 +5,24 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#ifndef CCLifetimeVGBuilder_hpp
-#define CCLifetimeVGBuilder_hpp
+#ifndef SOOMLA_LIFETIME_VG_BUILDER_HPP
+#define SOOMLA_LIFETIME_VG_BUILDER_HPP
 
-#include "Soomla/domain/CCVirtualItem.h"
-#include "Soomla/PurchaseTypes/CCPurchaseType.h"
+#include "Soomla/domain/CCPurchasableVirtualItemBuilder.h"
+#include "Soomla/domain/virtualGoods/CCLifetimeVG.h"
 
 namespace soomla {
-
-class CCLifetimeVGBuilder {
+class LifetimeVGBuilder
+    : public PurchasableVirtualItemBuilder<LifetimeVGBuilder> {
 private:
-    using Self = CCLifetimeVGBuilder;
+    using Self = LifetimeVGBuilder;
 
 public:
-    CCLifetimeVGBuilder();
-    ~CCLifetimeVGBuilder();
-
-    Self& setPurchaseType(CCPurchaseType* type);
-
-    Self& setName(const std::string& name);
-
-    Self& setDescription(const std::string& description);
-
-    Self& setItemId(const std::string& itemId);
-
-    CCVirtualItem* build();
-
-private:
-    cocos2d::RefPtr<CCPurchaseType> type_;
-    std::unique_ptr<std::string> name_;
-    std::unique_ptr<std::string> description_;
-    std::unique_ptr<std::string> itemId_;
+    virtual CCLifetimeVG* build() const override;
 };
 
+// Backward compatibility.
+using CCLifetimeVGBuilder = LifetimeVGBuilder;
 } // namespace soomla
 
-#endif /* CCLifetimeVGBuilder_hpp */
+#endif /* SOOMLA_LIFETIME_VG_BUILDER_HPP */

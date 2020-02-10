@@ -67,25 +67,34 @@ private:
 #endif
 };
 
+#if COCOSCREATOR_VERSION == 2
+using EventType = cocos2d::CustomEvent;
+#else // COCOSCREATOR_VERSION == 2
+using EventType = cocos2d::EventCustom*; // Note: pointer.
+#endif // COCOSCREATOR_VERSION == 2
+
+namespace {
+decltype(auto) getUserData(EventType event) {
+#if COCOSCREATOR_VERSION == 2
+    return *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
+#else // COCOSCREATOR_VERSION == 2
+    return *static_cast<cocos2d::ValueMap*>(event->getUserData());
+#endif // COCOSCREATOR_VERSION == 2
+}
+} // namespace
+
 class StoreEventListener::Impl {
 public:
     void addListener(
         const std::string& eventName,
-#if COCOSCREATOR_VERSION == 2
-        const std::function<void(cocos2d::CustomEvent event)>& callback);
-#elif COCOSCREATOR_VERSION == 1
-        const std::function<void(cocos2d::EventCustom* event)>& callback);
-#endif
+        const std::function<void(EventType event)>& callback);
+
     std::unordered_map<std::string, EventListenerProxy> listeners_;
 };
 
 void StoreEventListener::Impl::addListener(
     const std::string& eventName,
-#if COCOSCREATOR_VERSION == 2
-    const std::function<void(cocos2d::CustomEvent)>& callback) {
-#elif COCOSCREATOR_VERSION == 1
-    const std::function<void(cocos2d::EventCustom*)>& callback) {
-#endif
+    const std::function<void(EventType)>& callback) {
     bool inserted =
         listeners_
             .emplace(std::piecewise_construct, std::forward_as_tuple(eventName),
@@ -103,18 +112,8 @@ void StoreEventListener::setCurrencyBalanceChangedCallback(
     const CurrencyBalanceChangedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& valueMap =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_CURRENCY)
                     .asValueMap();
@@ -135,18 +134,8 @@ void StoreEventListener::setGoodBalanceChangedCallback(
     const GoodBalanceChangedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_GOOD_BALANCE_CHANGED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& valueMap =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_GOOD).asValueMap();
             auto itemID =
@@ -164,18 +153,8 @@ void StoreEventListener::setGoodUpgradeCallback(
     const GoodUpgradeCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_GOOD_UPGRADE,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& vmGood =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_GOOD).asValueMap();
             auto& vmUpgrade =
@@ -194,18 +173,8 @@ void StoreEventListener::setItemPurchasedCallback(
     const ItemPurchasedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_ITEM_PURCHASED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& purchasable =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_PURCHASABLE)
                     .asValueMap();
@@ -223,18 +192,8 @@ void StoreEventListener::setMarketPurchaseStartedCallback(
     const MarketPurchaseStartedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& valueMap =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_PURCHASABLE)
                     .asValueMap();
@@ -248,18 +207,8 @@ void StoreEventListener::setMarketPurchaseCallback(
     const MarketPurchaseCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_PURCHASE,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& purchasable =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_PURCHASABLE)
                     .asValueMap();
@@ -287,18 +236,8 @@ void StoreEventListener::setMarketPurchaseCanceledCallback(
     const MarketPurchaseCanceledCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& valueMap =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_PURCHASABLE)
                     .asValueMap();
@@ -319,18 +258,8 @@ void StoreEventListener::setMarketItemsRefreshedCallback(
     const MarketItemsRefreshedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto& array =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_MARKET_ITEMS)
                     .asValueVector();
@@ -355,18 +284,8 @@ void StoreEventListener::setMarketItemsRefreshFailedCallback(
     const MarketItemsRefreshFailedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto errorMessage =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_ERROR_MESSAGE)
                     .asString();
@@ -384,18 +303,8 @@ void StoreEventListener::setRestoreTransactionFinishedCallback(
     const RestoreTransactionFinishedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto succeeded =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_SUCCESS).asBool();
             callback(succeeded);
@@ -406,18 +315,8 @@ void StoreEventListener::setUnexpectedStoreErrorCallback(
     const UnexpectedStoreErrorCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR,
-#if COCOSCREATOR_VERSION == 2
-        [callback](cocos2d::CustomEvent event)
-#elif COCOSCREATOR_VERSION == 1
-        [callback](cocos2d::EventCustom* event)
-#endif
-        {
-            auto&& dict =
-#if COCOSCREATOR_VERSION == 2
-                *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#elif COCOSCREATOR_VERSION == 1
-                *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif
+        [callback](EventType event) {
+            auto&& dict = getUserData(event);
             auto errorCode =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_ERROR_CODE).asInt();
             callback(errorCode);

@@ -7,40 +7,10 @@
 
 #include "Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h"
 
-#include "Soomla/domain/virtualGoods/CCLifetimeVG.h"
-
 namespace soomla {
+using Self = LifetimeVGBuilder;
 
-using Self = CCLifetimeVGBuilder;
-
-Self::CCLifetimeVGBuilder() {}
-Self::~CCLifetimeVGBuilder() {}
-
-Self& Self::setPurchaseType(CCPurchaseType* type) {
-    type_ = cocos2d::RefPtr<CCPurchaseType>{type};
-    return *this;
-}
-
-Self& Self::setName(const std::string& name) {
-    name_ = std::make_unique<std::string>(name);
-    return *this;
-}
-
-Self& Self::setDescription(const std::string& description) {
-    description_ = std::make_unique<std::string>(description);
-    return *this;
-}
-
-Self& Self::setItemId(const std::string& itemId) {
-    itemId_ = std::make_unique<std::string>(itemId);
-    return *this;
-}
-
-CCVirtualItem* Self::build() {
-    CC_ASSERT(name_);
-    CC_ASSERT(description_);
-    CC_ASSERT(itemId_);
-    CC_ASSERT(type_);
-    return CCLifetimeVG::create(*name_, *description_, *itemId_, type_);
+CCLifetimeVG* Self::build() const {
+    return CCLifetimeVG::create(name_, description_, *itemId_, type_);
 }
 } // namespace soomla

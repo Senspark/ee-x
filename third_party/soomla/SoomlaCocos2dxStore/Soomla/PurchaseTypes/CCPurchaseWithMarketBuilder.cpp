@@ -7,28 +7,20 @@
 
 #include "Soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h"
 
-#include "Soomla/PurchaseTypes/CCPurchaseWithMarket.h"
-
 namespace soomla {
-
-using Self = CCPurchaseWithMarketBuilder;
-
-Self::CCPurchaseWithMarketBuilder() {}
-Self::~CCPurchaseWithMarketBuilder() {}
+using Self = PurchaseWithMarketBuilder;
 
 Self& Self::setProductId(const std::string& productId) {
-    productId_ = std::make_unique<std::string>(productId);
+    productId_ = productId;
     return *this;
 }
 
 Self& Self::setPrice(float price) {
-    price_ = std::make_unique<float>(price);
+    price_ = price;
     return *this;
 }
 
-CCPurchaseType* Self::build() {
-    CC_ASSERT(productId_);
-    CC_ASSERT(price_);
-    return CCPurchaseWithMarket::create(*productId_, *price_);
+CCPurchaseWithMarket* Self::build() const {
+    return CCPurchaseWithMarket::create(*productId_, price_);
 }
 } // namespace soomla

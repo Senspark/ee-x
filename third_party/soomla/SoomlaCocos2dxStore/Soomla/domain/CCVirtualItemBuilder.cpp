@@ -7,30 +7,35 @@
 
 #include "Soomla/domain/CCVirtualItemBuilder.h"
 
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyBuilder.h"
+#include "Soomla/domain/virtualCurrencies/CCVirtualCurrencyPackBuilder.h"
+#include "Soomla/domain/virtualGoods/CCLifetimeVGBuilder.h"
+#include "Soomla/domain/virtualGoods/CCSingleUseVGBuilder.h"
+
 namespace soomla {
+template <class T>
+using Self = VirtualItemBuilder<T>;
 
-using Self = CCVirtualItemBuilder;
-
-Self::CCVirtualItemBuilder() {}
-
-Self::~CCVirtualItemBuilder() {}
-
-CCVirtualItem* Self::build() {
-    return virtualItem_.get();
+template <class T>
+T& Self<T>::setName(const std::string& name) {
+    name_ = name;
+    return static_cast<T&>(*this);
 }
 
-Self& Self::setName(const std::string& name) {
-    virtualItem_->name_ = std::make_unique<std::string>(name);
-    return *this;
+template <class T>
+T& Self<T>::setDescription(const std::string& description) {
+    description_ = description;
+    return static_cast<T&>(*this);
 }
 
-Self& Self::setDescription(const std::string& description) {
-    virtualItem_->description_ = std::make_unique<std::string>(description);
-    return *this;
+template <class T>
+T& Self<T>::setItemId(const std::string& itemId) {
+    itemId_ = itemId;
+    return static_cast<T&>(*this);
 }
 
-Self& Self::setItemId(const std::string& itemId) {
-    virtualItem_->itemId_ = std::make_unique<std::string>(itemId);
-    return *this;
-}
+template class VirtualItemBuilder<VirtualCurrencyBuilder>;
+template class VirtualItemBuilder<VirtualCurrencyPackBuilder>;
+template class VirtualItemBuilder<LifetimeVGBuilder>;
+template class VirtualItemBuilder<SingleUseVGBuilder>;
 } // namespace soomla

@@ -52,7 +52,7 @@ CCPurchasableVirtualItem::~CCPurchasableVirtualItem() {
 }
 
 ValueMap CCPurchasableVirtualItem::toValueMap() {
-    auto&& map = CCVirtualItem::toValueMap();
+    auto map = CCVirtualItem::toValueMap();
     putPurchaseTypeToValueMap(map);
     return map;
 }

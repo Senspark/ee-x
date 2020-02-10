@@ -5,41 +5,35 @@
 //  Created by Le Van Kiet on 9/14/18.
 //
 
-#ifndef CCVirtualItemBuilder_hpp
-#define CCVirtualItemBuilder_hpp
+#ifndef SOOMLA_VIRTUAL_ITEM_BUILDER_HPP
+#define SOOMLA_VIRTUAL_ITEM_BUILDER_HPP
+
+#include <optional>
+#include <string>
 
 #include "Soomla/domain/CCVirtualItem.h"
 
 namespace soomla {
-
-class CCVirtualItemBuilder {
+template <class T>
+class VirtualItemBuilder {
 private:
-    using Self = CCVirtualItemBuilder;
+    using Self = VirtualItemBuilder;
 
 public:
-    class VirtualItem : public CCVirtualItem {
-    public:
-        std::unique_ptr<std::string> name_;
-        std::unique_ptr<std::string> description_;
-        std::unique_ptr<std::string> itemId_;
-    };
+    VirtualItemBuilder() = default;
+    ~VirtualItemBuilder() = default;
 
-public:
-    CCVirtualItemBuilder();
-    ~CCVirtualItemBuilder();
+    T& setName(const std::string& name);
+    T& setDescription(const std::string& description);
+    T& setItemId(const std::string& itemId);
 
-    Self& setName(const std::string& name);
+    virtual CCVirtualItem* build() const = 0;
 
-    Self& setDescription(const std::string& description);
-
-    Self& setItemId(const std::string& itemId);
-
-    CCVirtualItem* build();
-
-private:
-    std::unique_ptr<VirtualItem> virtualItem_;
+protected:
+    std::string name_; // Optional.
+    std::string description_; // Optional.
+    std::optional<std::string> itemId_;
 };
-
 } // namespace soomla
 
-#endif /* CCVirtualItemBuilder_hpp */
+#endif /* SOOMLA_VIRTUAL_ITEM_BUILDER_HPP */

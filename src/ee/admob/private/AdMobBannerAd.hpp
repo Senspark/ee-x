@@ -64,9 +64,9 @@ private:
     void onClicked();
 
     bool loading_;
-    std::string adId_;
     IMessageBridge& bridge_;
     Bridge* plugin_;
+    std::string adId_;
     ads::AdViewHelper helper_;
     ads::AdViewBridgeHelper bridgeHelper_;
 };

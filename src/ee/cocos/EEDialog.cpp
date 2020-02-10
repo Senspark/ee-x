@@ -24,8 +24,8 @@ const std::size_t Dialog::TopLevel = 123456;
 Dialog::Dialog()
     : dialogLevel_(0)
     , isActive_(false)
-    , transitionAction_(nullptr)
-    , ignoreTouchOutside_(false) {}
+    , ignoreTouchOutside_(false)
+    , transitionAction_(nullptr) {}
 
 Dialog::~Dialog() = default;
 

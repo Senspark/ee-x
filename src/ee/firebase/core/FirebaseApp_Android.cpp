@@ -41,6 +41,7 @@ void Self::initialize() {
     auto options = ::firebase::AppOptions();
     JNIEnv* env = core::JniUtils::getEnv();
     auto app = ::firebase::App::Create(options, env, getWindowContext());
+    static_cast<void>(app); // Silence warning.
 
     initialized = true;
 }

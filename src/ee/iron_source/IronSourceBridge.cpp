@@ -47,8 +47,8 @@ Self::Bridge()
 
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , _closeTimeout(0.0f)
-    , logger_(logger) {
+    , logger_(logger)
+    , _closeTimeout(0.0f) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     rewarded_ = false;
 

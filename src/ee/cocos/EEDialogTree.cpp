@@ -224,7 +224,7 @@ void DialogTree::pushDialogImmediately(Dialog* dialog, std::size_t level) {
         processCommandQueue();
     });
 
-    sequence->then([this, dialog, unlocker] {
+    sequence->then([dialog, unlocker] {
         dialog->onDialogDidShow();
         unlocker->invoke();
         dialog->setActive(true);

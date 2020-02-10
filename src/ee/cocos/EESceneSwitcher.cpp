@@ -179,7 +179,7 @@ void SceneSwitcher::onPhaseBegan(Phase phase) {
             scheduleSignal();
         }
         loadNextImage();
-        inActions_.pushBack(cocos2d::CallFunc::create([this, phase] {
+        inActions_.pushBack(cocos2d::CallFunc::create([this] {
             inActionsDone_ = true;
             checkEndInPhase();
         }));

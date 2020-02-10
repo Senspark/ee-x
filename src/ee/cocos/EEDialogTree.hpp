@@ -16,9 +16,10 @@
 
 namespace ee {
 namespace dialog {
+struct Command;
+struct Guard;
+
 class Dialog;
-class Command;
-class Guard;
 
 class DialogTree {
 private:

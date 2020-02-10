@@ -36,8 +36,8 @@ auto k__onClicked(const std::string& id) {
 Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
     : Super()
     , bridge_(bridge)
-    , adId_(adId)
     , plugin_(plugin)
+    , adId_(adId)
     , helper_("AdMobBannerAd", adId)
     , bridgeHelper_(bridge, helper_) {
     loading_ = false;

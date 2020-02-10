@@ -22,8 +22,9 @@ namespace dialog {
 enum class CommandType;
 
 class Dialog;
-class Command;
-class Guard;
+struct Command;
+struct Guard;
+
 class DialogManager;
 class DialogTree;
 } // namespace dialog

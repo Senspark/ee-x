@@ -69,7 +69,7 @@ private:
 
 #if COCOSCREATOR_VERSION == 2
 using EventType = cocos2d::CustomEvent;
-#else // COCOSCREATOR_VERSION == 2
+#else  // COCOSCREATOR_VERSION == 2
 using EventType = cocos2d::EventCustom*; // Note: pointer.
 #endif // COCOSCREATOR_VERSION == 2
 
@@ -77,17 +77,35 @@ namespace {
 decltype(auto) getUserData(EventType event) {
 #if COCOSCREATOR_VERSION == 2
     return *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#else // COCOSCREATOR_VERSION == 2
+#else  // COCOSCREATOR_VERSION == 2
     return *static_cast<cocos2d::ValueMap*>(event->getUserData());
 #endif // COCOSCREATOR_VERSION == 2
+}
+
+template <class Function, class... Args>
+void invokeCallback(Function&& f, Args&&... args) {
+    std::invoke(f, std::forward<Args>(args)...);
+}
+
+/// All finished events have to use this invoke method.
+/// Fix issue: label with black square texts.
+template <class Function, class... Args>
+void invokeCallbackDelayed(Function&& f, Args&&... args) {
+    static int counter;
+    static auto target = &counter;
+    auto key = "__soomla_dispatch" + std::to_string(counter++);
+    cocos2d::Director::getInstance()->getScheduler()->schedule(
+        [=](float delta) { //
+            std::invoke(f, args...);
+        },
+        target, 0, 0, 0, false, key);
 }
 } // namespace
 
 class StoreEventListener::Impl {
 public:
-    void addListener(
-        const std::string& eventName,
-        const std::function<void(EventType event)>& callback);
+    void addListener(const std::string& eventName,
+                     const std::function<void(EventType event)>& callback);
 
     std::unordered_map<std::string, EventListenerProxy> listeners_;
 };
@@ -125,8 +143,8 @@ void StoreEventListener::setCurrencyBalanceChangedCallback(
             auto amountAdded =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_AMOUNT_ADDED)
                     .asInt();
-
-            callback(currency->getItemId(), balance, amountAdded);
+            invokeCallback(callback, currency->getItemId(), balance,
+                           amountAdded);
         });
 }
 
@@ -145,15 +163,14 @@ void StoreEventListener::setGoodBalanceChangedCallback(
             auto amountAdded =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_AMOUNT_ADDED)
                     .asInt();
-            callback(itemID, balance, amountAdded);
+            invokeCallback(callback, itemID, balance, amountAdded);
         });
 }
 
 void StoreEventListener::setGoodUpgradeCallback(
     const GoodUpgradeCallback& callback) {
     impl_->addListener(
-        soomla::CCStoreConsts::EVENT_GOOD_UPGRADE,
-        [callback](EventType event) {
+        soomla::CCStoreConsts::EVENT_GOOD_UPGRADE, [callback](EventType event) {
             auto&& dict = getUserData(event);
             auto& vmGood =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_GOOD).asValueMap();
@@ -165,7 +182,7 @@ void StoreEventListener::setGoodUpgradeCallback(
             auto upgradeID =
                 vmUpgrade.at(soomla::CCCoreConsts::JSON_ITEM_ITEM_ID)
                     .asString();
-            callback(goodID, upgradeID);
+            invokeCallback(callback, goodID, upgradeID);
         });
 }
 
@@ -184,7 +201,7 @@ void StoreEventListener::setItemPurchasedCallback(
             auto payload =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_DEVELOPERPAYLOAD)
                     .asString();
-            callback(itemID, payload);
+            invokeCallback(callback, itemID, payload);
         });
 }
 
@@ -199,7 +216,7 @@ void StoreEventListener::setMarketPurchaseStartedCallback(
                     .asValueMap();
             auto itemID =
                 valueMap.at(soomla::CCCoreConsts::JSON_ITEM_ITEM_ID).asString();
-            callback(itemID);
+            invokeCallback(callback, itemID);
         });
 }
 
@@ -228,7 +245,7 @@ void StoreEventListener::setMarketPurchaseCallback(
                 info.emplace(elm.first, elm.second.asString());
             }
 
-            callback(itemID, payload, info);
+            invokeCallbackDelayed(callback, itemID, payload, info);
         });
 }
 
@@ -243,7 +260,7 @@ void StoreEventListener::setMarketPurchaseCanceledCallback(
                     .asValueMap();
             auto itemID =
                 valueMap.at(soomla::CCCoreConsts::JSON_ITEM_ITEM_ID).asString();
-            callback(itemID);
+            invokeCallbackDelayed(callback, itemID);
         });
 }
 
@@ -251,7 +268,9 @@ void StoreEventListener::setMarketItemsRefreshStartedCallback(
     const MarketItemsRefreshStartedCallback& callback) {
     impl_->addListener(
         soomla::CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_STARTED,
-        std::bind(callback));
+        [callback](EventType event) { //
+            invokeCallback(callback);
+        });
 }
 
 void StoreEventListener::setMarketItemsRefreshedCallback(
@@ -276,7 +295,7 @@ void StoreEventListener::setMarketItemsRefreshedCallback(
                 marketItemIds.emplace_back(productID);
             }
 
-            callback(marketItemIds);
+            invokeCallbackDelayed(callback, marketItemIds);
         });
 }
 
@@ -289,14 +308,16 @@ void StoreEventListener::setMarketItemsRefreshFailedCallback(
             auto errorMessage =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_ERROR_MESSAGE)
                     .asString();
-            callback(errorMessage);
+            invokeCallbackDelayed(callback, errorMessage);
         });
 }
 
 void StoreEventListener::setRestoreTransactionStartedCallback(
     const RestoreTransactionStartedCallback& callback) {
     impl_->addListener(soomla::CCStoreConsts::EVENT_RESTORE_TRANSACTION_STARTED,
-                       std::bind(callback));
+                       [callback](EventType event) { //
+                           invokeCallback(callback);
+                       });
 }
 
 void StoreEventListener::setRestoreTransactionFinishedCallback(
@@ -307,7 +328,7 @@ void StoreEventListener::setRestoreTransactionFinishedCallback(
             auto&& dict = getUserData(event);
             auto succeeded =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_SUCCESS).asBool();
-            callback(succeeded);
+            invokeCallbackDelayed(callback, succeeded);
         });
 }
 
@@ -319,7 +340,7 @@ void StoreEventListener::setUnexpectedStoreErrorCallback(
             auto&& dict = getUserData(event);
             auto errorCode =
                 dict.at(soomla::CCStoreConsts::DICT_ELEMENT_ERROR_CODE).asInt();
-            callback(errorCode);
+            invokeCallbackDelayed(callback, errorCode);
         });
 }
 

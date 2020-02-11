@@ -421,15 +421,15 @@ Pod::Spec.new do |spec|
     s.header_mappings_dir = 'third_party/keeva/src'
   end
 
-  spec.subspec 'soomla-ios-core' do |s|
-    s.source_files = 'third_party/soomla/SoomlaiOSCore/**/*'
-    s.header_mappings_dir = 'third_party/soomla'
+  spec.subspec 'soomla-core-ios' do |s|
+    s.source_files = 'third_party/soomla/core/src/ios/**/*'
+    s.header_mappings_dir = 'third_party/soomla/core/src'
     s.dependency 'ee-x/keeva'
   end
 
-  spec.subspec 'soomla-cocos2dx-core' do |s|
-    s.source_files = 'third_party/soomla/SoomlaCocos2dxCore/**/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxCore'
+  spec.subspec 'soomla-core' do |s|
+    s.source_files = 'third_party/soomla/core/src/soomla/**/*'
+    s.header_mappings_dir = 'third_party/soomla/core/src'
 
     s.xcconfig = {
       'HEADER_SEARCH_PATHS' => [
@@ -445,22 +445,22 @@ Pod::Spec.new do |spec|
     
     s.dependency 'ee-x/json'
     s.dependency 'ee-x/jansson'
-    s.dependency 'ee-x/keeva'
-    s.dependency 'ee-x/soomla-ios-core'
   end
 
-  spec.subspec 'soomla-ios-store' do |s| 
-    s.source_files = 'third_party/soomla/SoomlaiOSStore/**/*'
-    s.header_mappings_dir = 'third_party/soomla'
-    s.dependency 'ee-x/keeva'
-    s.dependency 'ee-x/soomla-ios-core'
+  spec.subspec 'soomla-store-ios' do |s| 
+    s.source_files = 'third_party/soomla/store/src/ios/**/*'
+    s.header_mappings_dir = 'third_party/soomla/store/src'
+    s.dependency 'ee-x/soomla-core-ios'
   end
 
-  spec.subspec 'soomla-cocos2dx-store' do |s| 
-    s.source_files = 'third_party/soomla/SoomlaCocos2dxStore/**/*'
-    s.header_mappings_dir = 'third_party/soomla/SoomlaCocos2dxStore'
-    s.dependency 'ee-x/soomla-cocos2dx-core'
-    s.dependency 'ee-x/soomla-ios-store'
+  spec.subspec 'soomla-store' do |s| 
+    s.source_files = 'third_party/soomla/store/src/soomla/**/*'
+    s.header_mappings_dir = 'third_party/soomla/store/src'
+    s.xcconfig = {
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17' # For std::optional.
+    }
+    s.dependency 'ee-x/soomla-core'
+    s.ios.dependency 'ee-x/soomla-store-ios'
   end
 
   spec.subspec 'jsb-core' do |s|

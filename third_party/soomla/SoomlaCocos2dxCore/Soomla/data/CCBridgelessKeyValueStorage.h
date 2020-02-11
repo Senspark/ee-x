@@ -37,6 +37,7 @@ public:
     virtual void setValue(const std::string& key,
                           const std::string& val) override;
     virtual std::vector<std::string> getEncryptedKeys() const override;
+    virtual void deleteKeyValue(const std::string& key);
     virtual void purge() override;
 
 protected:

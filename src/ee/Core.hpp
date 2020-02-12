@@ -11,10 +11,12 @@
 
 #ifdef __cplusplus
 #include "ee/CoreFwd.hpp"
+#include "ee/core/IService.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/Metrics.hpp"
 #include "ee/core/PluginManager.hpp"
+#include "ee/core/ServiceLocator.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/VideoPlayerManager.hpp"

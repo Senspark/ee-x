@@ -17,8 +17,10 @@ struct LogLevel;
 class Logger;
 class Metrics;
 class IMessageBridge;
+class IService;
 class MessageBridge;
 class PluginManager;
+class ServiceLocator;
 class SpinLock;
 class VideoPlayer;
 class VideoPlayerManager;
@@ -28,12 +30,14 @@ class JniUtils;
 #endif // EE_X_ANDROID
 } // namespace core
 
-using core::LogLevel;
-using core::Logger;
-using core::Metrics;
 using core::IMessageBridge;
+using core::IService;
+using core::Logger;
+using core::LogLevel;
 using core::MessageBridge;
+using core::Metrics;
 using core::PluginManager;
+using core::ServiceLocator;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
 

@@ -10,6 +10,8 @@
 
 #include <mutex>
 
+#include <jni.h>
+
 #include <firebase/app.h>
 
 #include "ee/core/JniUtils.hpp"
@@ -30,6 +32,13 @@ JNIEXPORT void JNICALL Java_com_ee_firebase_core_Firebase_setActivity(
 }
 } // extern "C"
 
+namespace {
+jobject getWindowContext() {
+    std::lock_guard<std::mutex> guard(global_activity_mutex);
+    return global_activity;
+}
+} // namespace
+
 using Self = App;
 
 void Self::initialize() {
@@ -44,11 +53,6 @@ void Self::initialize() {
     static_cast<void>(app); // Silence warning.
 
     initialized = true;
-}
-
-WindowContext Self::getWindowContext() {
-    std::lock_guard<std::mutex> guard(global_activity_mutex);
-    return global_activity;
 }
 } // namespace firebase
 } // namespace ee

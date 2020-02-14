@@ -10,12 +10,9 @@
 
 #if defined(EE_X_IOS)
 #import <FIRApp.h>
-#import <UIKit/UIViewController.h>
 
 #include <firebase/app.h>
-
-#import <ee/core/internal/EEUtils.h>
-#endif // EE_X_MOBILE
+#endif // EE_X_IOS
 
 namespace ee {
 namespace firebase {
@@ -37,15 +34,5 @@ void Self::initialize() {
 
     initialized = true;
 }
-
-#if defined(EE_X_OSX)
-WindowContext Self::getWindowContext() {
-    return nil;
-}
-#elif defined(EE_X_IOS)
-WindowContext Self::getWindowContext() {
-    return [[EEUtils getCurrentRootViewController] view];
-}
-#endif // EE_X_OSX
 } // namespace firebase
 } // namespace ee

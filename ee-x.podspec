@@ -264,6 +264,17 @@ Pod::Spec.new do |spec|
     s.ios.framework = 'OpenAL'
   end
 
+  spec.subspec 'cocos-coroutine' do |s|
+    s.source_files =
+      'src/ee/cocos-coroutine/*'
+    
+    s.xcconfig = {
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
+    }
+
+    s.dependency 'ee-x/coroutine'
+  end
+
   spec.subspec 'coroutine' do |s|
     s.source_files =
       'src/ee/Coroutine*',

@@ -47,7 +47,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/Jni*'
 
     s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a'
     }
 
     s.dependency 'ee-x/json'
@@ -264,6 +264,18 @@ Pod::Spec.new do |spec|
     s.ios.framework = 'OpenAL'
   end
 
+  spec.subspec 'coroutine' do |s|
+    s.source_files =
+      'src/ee/Coroutine*',
+      'src/ee/coroutine/*'
+
+    s.xcconfig = {
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
+    }
+
+    s.dependency 'ee-x/core'
+  end
+
   spec.subspec 'facebook' do |s|
     s.source_files =
       'src/ee/Facebook{,Fwd}.*',
@@ -457,7 +469,7 @@ Pod::Spec.new do |spec|
     s.source_files = 'third_party/soomla/store/src/soomla/**/*'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17' # For std::optional.
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a' # For std::optional.
     }
     s.dependency 'ee-x/soomla-core'
     s.ios.dependency 'ee-x/soomla-store-ios'

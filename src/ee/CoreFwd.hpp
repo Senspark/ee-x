@@ -25,6 +25,12 @@ class SpinLock;
 class VideoPlayer;
 class VideoPlayerManager;
 
+template <class Observer>
+class IObserverManager;
+
+template <class Observer>
+class ObserverManager;
+
 #if defined(EE_X_ANDROID)
 class JniUtils;
 #endif // EE_X_ANDROID
@@ -40,6 +46,9 @@ using core::PluginManager;
 using core::ServiceLocator;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
+
+using core::IObserverManager;
+using core::ObserverManager;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

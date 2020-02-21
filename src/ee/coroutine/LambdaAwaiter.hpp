@@ -3,6 +3,7 @@
 
 #include <experimental/coroutine>
 #include <functional>
+#include <vector>
 
 #include "ee/CoroutineFwd.hpp"
 
@@ -16,14 +17,32 @@ public:
 
     explicit LambdaAwaiter(const Function& f)
         : f_(f)
+        , invoked_(false)
         , ready_(false) {}
 
+    LambdaAwaiter(const LambdaAwaiter&) = delete;
+
+    LambdaAwaiter(LambdaAwaiter&& other)
+        : f_(std::exchange(other.f_, nullptr))
+        , invoked_(std::exchange(other.invoked_, false))
+        , ready_(std::exchange(other.ready_, false))
+        , result_(std::exchange(other.result_, Result()))
+        , handles_(std::exchange(other.handles_, {})) {}
+
     void await_suspend(std::experimental::coroutine_handle<> handle) {
-        f_([this, handle](Result result) mutable {
-            ready_ = true;
-            result_ = result;
-            handle.resume();
-        });
+        handles_.push_back(handle);
+        if (invoked_) {
+            // Waiting.
+        } else {
+            invoked_ = true;
+            f_([this, handle](Result result) mutable {
+                ready_ = true;
+                result_ = result;
+                for (auto&& handle : handles_) {
+                    handle.resume();
+                }
+            });
+        }
     }
 
     bool await_ready() { //
@@ -36,8 +55,10 @@ public:
 
 private:
     Function f_;
+    bool invoked_;
     bool ready_;
     Result result_;
+    std::vector<std::experimental::coroutine_handle<>> handles_;
 };
 
 template <>
@@ -47,13 +68,36 @@ struct LambdaAwaiter<void> {
 
     explicit LambdaAwaiter(const Function& f)
         : f_(f)
+        , invoked_(false)
         , ready_(false) {}
 
+    LambdaAwaiter(const LambdaAwaiter&) = delete;
+
+    LambdaAwaiter(LambdaAwaiter&& other)
+        : f_(std::exchange(other.f_, nullptr))
+        , invoked_(std::exchange(other.invoked_, false))
+        , ready_(std::exchange(other.ready_, false))
+        , handles_(std::exchange(other.handles_, {})) {
+        int x = 1;
+    }
+
+    ~LambdaAwaiter() { //
+        int x = 1;
+    }
+
     void await_suspend(std::experimental::coroutine_handle<> handle) {
-        f_([this, handle]() mutable {
-            ready_ = true;
-            handle.resume();
-        });
+        handles_.push_back(handle);
+        if (invoked_) {
+            // Waiting.
+        } else {
+            invoked_ = true;
+            f_([this]() mutable {
+                ready_ = true;
+                for (auto&& handle : handles_) {
+                    handle.resume();
+                }
+            });
+        }
     }
 
     bool await_ready() { //
@@ -64,7 +108,9 @@ struct LambdaAwaiter<void> {
 
 private:
     Function f_;
+    bool invoked_;
     bool ready_;
+    std::vector<std::experimental::coroutine_handle<>> handles_;
 };
 } // namespace coroutine
 } // namespace ee

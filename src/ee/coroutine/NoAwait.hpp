@@ -31,17 +31,14 @@ struct CompleteAsynchronously {
     };
 };
 
-template <class T>
-CompleteAsynchronously NoAwait(T task) {
-    if constexpr (std::is_invocable_v<T>) {
-        co_await task();
-    } else {
-        co_await task;
-    }
+template <class T, class = std::enable_if_t<std::is_invocable_v<T>>>
+CompleteAsynchronously
+noAwait(T lambda) /** Must copy lambda, don't use T&& */ {
+    co_await lambda();
 }
 } // namespace coroutine
 
-using coroutine::NoAwait;
+using coroutine::noAwait;
 } // namespace ee
 
 #endif // EE_X_NO_AWAIT_HPP

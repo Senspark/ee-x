@@ -70,7 +70,7 @@ struct Task {
     Task(const Task&) = delete;
 
     Task(Task&& other)
-        : coro_(other.coro_) {
+        : coro_(std::exchange(other.coro_, nullptr)) {
         other.coro_ = nullptr;
     }
 
@@ -146,9 +146,7 @@ struct Task<void> {
     Task(const Task&) = delete;
 
     Task(Task&& other)
-        : coro_(other.coro_) {
-        other.coro_ = nullptr;
-    }
+        : coro_(std::exchange(other.coro_, nullptr)) {}
 
     ~Task() {
         if (coro_) { //

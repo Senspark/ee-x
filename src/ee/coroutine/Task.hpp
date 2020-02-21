@@ -13,7 +13,7 @@ template <class T>
 struct Task {
     struct promise_type {
         std::variant<std::monostate, T, std::exception_ptr> result_;
-        std::experimental::coroutine_handle<void> waiter_;
+        std::experimental::coroutine_handle<> waiter_;
 
         auto get_return_object() { //
             return Task(this);
@@ -31,8 +31,8 @@ struct Task {
                     return false;
                 }
 
-                void await_suspend(
-                    std::experimental::coroutine_handle<void> caller) {
+                void
+                await_suspend(std::experimental::coroutine_handle<> caller) {
                     me_->waiter_.resume();
                 }
 
@@ -93,7 +93,7 @@ template <>
 struct Task<void> {
     struct promise_type {
         std::variant<std::monostate, std::exception_ptr> result_;
-        std::experimental::coroutine_handle<void> waiter_;
+        std::experimental::coroutine_handle<> waiter_;
 
         auto get_return_object() { //
             return Task(this);
@@ -111,8 +111,8 @@ struct Task<void> {
                     return false;
                 }
 
-                void await_suspend(
-                    std::experimental::coroutine_handle<void> caller) {
+                void
+                await_suspend(std::experimental::coroutine_handle<> caller) {
                     me_->waiter_.resume();
                 }
 

@@ -1,4 +1,4 @@
-#include "ee/cocos-coroutine/Delay.hpp"
+#include "ee/cocos_coroutine/Delay.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>

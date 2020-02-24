@@ -146,6 +146,9 @@ cocos2d::ValueMap CCNdkBridge::callNative(const cocos2d::ValueMap& params,
         }
     }
 
+    if (retParams.isNull()) {
+        return cocos2d::ValueMapNull; // macOS.
+    }
     return retParams.asValueMap();
 }
 }

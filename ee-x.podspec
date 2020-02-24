@@ -266,7 +266,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cocos-coroutine' do |s|
     s.source_files =
-      'src/ee/cocos-coroutine/*'
+      'src/ee/cocos_coroutine/*'
     
     s.xcconfig = {
       'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'

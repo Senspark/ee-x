@@ -1,6 +1,8 @@
 #ifndef EE_X_COROUTINE_FWD_HPP
 #define EE_X_COROUTINE_FWD_HPP
 
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace coroutine {
 template <class T = void>

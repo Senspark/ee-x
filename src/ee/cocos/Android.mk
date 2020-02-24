@@ -15,6 +15,6 @@ else
 	LOCAL_STATIC_LIBRARIES := cc_static
 endif
 
-LOCAL_STATIC_LIBRARIES := ee_x_core_static
+LOCAL_STATIC_LIBRARIES += ee_x_core_static
 
 include $(BUILD_STATIC_LIBRARY)

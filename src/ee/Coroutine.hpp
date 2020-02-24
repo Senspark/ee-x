@@ -8,7 +8,7 @@
 #include "ee/coroutine/NoAwait.hpp"
 #include "ee/coroutine/Task.hpp"
 
-#if __has_include("ee/cocos-coroutine/Delay.hpp")
+#if __has_include("ee/cocos_coroutine/Delay.hpp")
 #include "ee/cocos_coroutine/Delay.hpp"
 #endif
 

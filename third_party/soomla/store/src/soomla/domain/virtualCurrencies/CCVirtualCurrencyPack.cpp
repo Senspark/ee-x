@@ -14,7 +14,6 @@
  limitations under the License.
  */
 
-
 #include "soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
 
 #include <soomla/CCJsonHelper.h>
@@ -84,16 +83,16 @@ const char* CCVirtualCurrencyPack::getType() const {
 }
 
 int CCVirtualCurrencyPack::give(int amount, bool notify, CCError** error) {
-    const char* currencyId = getCurrencyItemId().c_str();
+    auto&& currencyId = getCurrencyItemId();
     CCVirtualCurrency* currency = dynamic_cast<CCVirtualCurrency*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(currencyId, error));
 
     if (currency == nullptr) {
-        CCSoomlaUtils::logError(TAG, StringUtils::format(
-                                         "VirtualCurrency with itemId: %s "
-                                         "doesn't exist! Can't give this pack.",
-                                         currencyId)
-                                         .c_str());
+        CCSoomlaUtils::logError(
+            TAG, StringUtils::format("VirtualCurrency with itemId: %s "
+                                     "doesn't exist! Can't give this pack.",
+                                     currencyId.c_str())
+                     .c_str());
         return 0;
     }
 
@@ -102,16 +101,16 @@ int CCVirtualCurrencyPack::give(int amount, bool notify, CCError** error) {
 }
 
 int CCVirtualCurrencyPack::take(int amount, bool notify, CCError** error) {
-    const char* currencyId = getCurrencyItemId().c_str();
+    auto&& currencyId = getCurrencyItemId();
     CCVirtualCurrency* currency = dynamic_cast<CCVirtualCurrency*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(currencyId, error));
 
     if (currency == nullptr) {
-        CCSoomlaUtils::logError(TAG, StringUtils::format(
-                                         "VirtualCurrency with itemId: %s "
-                                         "doesn't exist! Can't take this pack.",
-                                         currencyId)
-                                         .c_str());
+        CCSoomlaUtils::logError(
+            TAG, StringUtils::format("VirtualCurrency with itemId: %s "
+                                     "doesn't exist! Can't take this pack.",
+                                     currencyId.c_str())
+                     .c_str());
         return 0;
     }
 

@@ -32,12 +32,12 @@ public:
     virtual ~CCVirtualCurrencyStorage();
 
 protected:
-    virtual const char* keyBalance(const char* itemId) const;
+    virtual std::string keyBalance(const std::string& itemId) const;
     virtual void postBalanceChangeEvent(CCVirtualItem* item, int balance,
                                         int amountAdded);
 
 private:
-    static const char* keyCurrencyBalance(const char* itemId);
+    static std::string keyCurrencyBalance(const std::string& itemId);
 };
 } // namespace soomla
 #endif // __CCVirtualCurrencyStorage_H__

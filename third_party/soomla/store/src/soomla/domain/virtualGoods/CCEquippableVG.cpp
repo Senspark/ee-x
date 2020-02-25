@@ -130,7 +130,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
     if (CCVirtualGoodsStorage::getInstance()->getBalance(this) > 0) {
         EquippingModel equippingModel = (EquippingModel)getEquippingModel();
         if (equippingModel == kCategory) {
-            const char* itemId = getItemId().c_str();
+            auto&& itemId = getItemId();
             CCVirtualCategory* category =
                 CCStoreInfo::sharedStoreInfo()->getCategoryForVirtualGood(
                     itemId, error);
@@ -140,14 +140,14 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
                              "Tried to unequip all other category VirtualGoods "
                              "but there was no associated category. virtual "
                              "good itemId: %s",
-                             itemId)
+                             itemId.c_str())
                              .c_str());
                 return;
             }
 
             auto& goodItemIds = category->getGoodItemIds();
             for (auto goodItemIdStr : goodItemIds) {
-                const char* goodItemId = goodItemIdStr.c_str();
+                auto&& goodItemId = goodItemIdStr;
                 CCEquippableVG* equippableVG = dynamic_cast<CCEquippableVG*>(
                     CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId,
                                                                     error));
@@ -157,7 +157,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
                         StringUtils::format(
                             "On equip, couldn't find one of the itemIds in the "
                             "category. Continuing to the next one. itemId: %s",
-                            goodItemId)
+                            goodItemId.c_str())
                             .c_str());
                 } else if (equippableVG != this) {
                     equippableVG->unequip(notify, error);

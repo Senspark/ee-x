@@ -39,7 +39,8 @@ public:
      @param good `CCVirtualGood` to remove upgrade from.
      @param error Gets A `CCError` for error checking.
      */
-    virtual void removeUpgrades(CCVirtualGood* good, CCError** error = nullptr) {
+    virtual void removeUpgrades(CCVirtualGood* good,
+                                CCError** error = nullptr) {
         removeUpgrades(good, true, error);
     }
     /**
@@ -125,7 +126,7 @@ public:
                          CCError** error = nullptr);
 
 protected:
-    virtual const char* keyBalance(const char* itemId) const;
+    virtual std::string keyBalance(const std::string& itemId) const;
     virtual void postBalanceChangeEvent(CCVirtualItem* item, int balance,
                                         int amountAdded);
 
@@ -133,9 +134,9 @@ private:
     void equipPriv(CCEquippableVG* good, bool equip, bool notify,
                    CCError** error = nullptr);
 
-    static const char* keyGoodBalance(const char* itemId);
-    static const char* keyGoodEquipped(const char* itemId);
-    static const char* keyGoodUpgrade(const char* itemId);
+    static std::string keyGoodBalance(const std::string& itemId);
+    static std::string keyGoodEquipped(const std::string& itemId);
+    static std::string keyGoodUpgrade(const std::string& itemId);
 };
 } // namespace soomla
 

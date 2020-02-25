@@ -49,7 +49,7 @@ bool CCPurchaseWithVirtualItem::init(const std::string& itemId,
 
 void CCPurchaseWithVirtualItem::buy(const std::string& payload,
                                     CCError** error) {
-    const char* associatedItemId = getAssociatedItemId().c_str();
+    auto&& associatedItemId = getAssociatedItemId();
     CCPurchasableVirtualItem* associatedItem =
         dynamic_cast<CCPurchasableVirtualItem*>(
             CCStoreInfo::sharedStoreInfo()->getItemByItemId(associatedItemId,
@@ -58,17 +58,17 @@ void CCPurchaseWithVirtualItem::buy(const std::string& payload,
         CCSoomlaUtils::logError(
             TAG, StringUtils::format(
                      "Trying to buy an non-existing associated item: %s",
-                     associatedItemId)
+                     associatedItemId.c_str())
                      .c_str());
         return;
     }
 
-    const char* targetItemId = getItemId().c_str();
+    auto&& targetItemId = getItemId();
     int amount = getAmount();
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("Trying to buy a %s with %d pieces of %s",
                                  associatedItem->getName().c_str(), amount,
-                                 targetItemId)
+                                 targetItemId.c_str())
                  .c_str());
 
     CCVirtualItem* item =
@@ -76,7 +76,7 @@ void CCPurchaseWithVirtualItem::buy(const std::string& payload,
     if (item == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Target virtual item %s doesn't exist !",
-                                     targetItemId)
+                                     targetItemId.c_str())
                      .c_str());
         return;
     }
@@ -104,7 +104,7 @@ void CCPurchaseWithVirtualItem::buy(const std::string& payload,
 }
 
 bool CCPurchaseWithVirtualItem::canAfford(CCError** error) {
-    const char* associatedItemId = getAssociatedItemId().c_str();
+    auto&& associatedItemId = getAssociatedItemId();
     CCPurchasableVirtualItem* associatedItem =
         dynamic_cast<CCPurchasableVirtualItem*>(
             CCStoreInfo::sharedStoreInfo()->getItemByItemId(associatedItemId,
@@ -113,25 +113,26 @@ bool CCPurchaseWithVirtualItem::canAfford(CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format(
                      "Trying to buy an non-existing associated item: %s",
-                     associatedItemId)
+                     associatedItemId.c_str())
                      .c_str());
         return false;
     }
 
-    const char* targetItemId = getItemId().c_str();
+    auto&& targetItemId = getItemId();
     int amount = getAmount();
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format(
-                 "Checking affordability of %s with %d pieces of %s",
-                 associatedItem->getName().c_str(), amount, targetItemId)
-                 .c_str());
+        TAG,
+        StringUtils::format("Checking affordability of %s with %d pieces of %s",
+                            associatedItem->getName().c_str(), amount,
+                            targetItemId.c_str())
+            .c_str());
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(targetItemId, error);
     if (item == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Target virtual item %s doesn't exist !",
-                                     targetItemId)
+                                     targetItemId.c_str())
                      .c_str());
         return false;
     }

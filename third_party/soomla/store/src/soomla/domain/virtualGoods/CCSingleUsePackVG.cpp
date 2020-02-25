@@ -84,7 +84,7 @@ const char* CCSingleUsePackVG::getType() const {
 }
 
 int CCSingleUsePackVG::give(int amount, bool notify, CCError** error) {
-    const char* goodItemId = getGoodItemId().c_str();
+    auto&& goodItemId = getGoodItemId();
     CCSingleUseVG* good = dynamic_cast<CCSingleUseVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
@@ -92,7 +92,7 @@ int CCSingleUsePackVG::give(int amount, bool notify, CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't give this pack.",
-                                     goodItemId)
+                                     goodItemId.c_str())
                      .c_str());
         return 0;
     }
@@ -102,7 +102,7 @@ int CCSingleUsePackVG::give(int amount, bool notify, CCError** error) {
 }
 
 int CCSingleUsePackVG::take(int amount, bool notify, CCError** error) {
-    const char* goodItemId = getGoodItemId().c_str();
+    auto&& goodItemId = getGoodItemId();
     CCSingleUseVG* good = dynamic_cast<CCSingleUseVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
 
@@ -110,7 +110,7 @@ int CCSingleUsePackVG::take(int amount, bool notify, CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't take this pack.",
-                                     goodItemId)
+                                     goodItemId.c_str())
                      .c_str());
         return 0;
     }

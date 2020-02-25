@@ -106,7 +106,7 @@ public:
                        CCError** error = nullptr);
 
 protected:
-    virtual const char* keyBalance(const char* itemId) const = 0;
+    virtual std::string keyBalance(const std::string& itemId) const = 0;
     virtual void postBalanceChangeEvent(CCVirtualItem* item, int balance,
                                         int amountAdded) = 0;
 };

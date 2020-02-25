@@ -45,7 +45,8 @@ CCVirtualCurrencyStorage::CCVirtualCurrencyStorage() {}
 
 CCVirtualCurrencyStorage::~CCVirtualCurrencyStorage() {}
 
-const char* CCVirtualCurrencyStorage::keyBalance(const char* itemId) const {
+std::string
+CCVirtualCurrencyStorage::keyBalance(const std::string& itemId) const {
     return keyCurrencyBalance(itemId);
 }
 
@@ -67,7 +68,8 @@ void CCVirtualCurrencyStorage::postBalanceChangeEvent(CCVirtualItem* item,
         virtualCurrency, balance, amountAdded);
 }
 
-const char* CCVirtualCurrencyStorage::keyCurrencyBalance(const char* itemId) {
-    return StringUtils::format("currency.%s.balance", itemId).c_str();
+std::string
+CCVirtualCurrencyStorage::keyCurrencyBalance(const std::string& itemId) {
+    return StringUtils::format("currency.%s.balance", itemId.c_str());
 }
 } // namespace soomla

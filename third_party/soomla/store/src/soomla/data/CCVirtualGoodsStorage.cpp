@@ -20,8 +20,8 @@
 #include <soomla/data/CCKeyValueStorage.h>
 
 #include "soomla/CCStoreEventDispatcher.h"
-#include "soomla/data/CCStoreInfo.h"
 #include "soomla/NativeImpl/CCNativeVirtualGoodsStorage.h"
+#include "soomla/data/CCStoreInfo.h"
 
 namespace soomla {
 #define TAG "SOOMLA VirtualGoodsStorage"
@@ -49,8 +49,8 @@ CCVirtualGoodsStorage::~CCVirtualGoodsStorage() {}
 
 void CCVirtualGoodsStorage::removeUpgrades(CCVirtualGood* good, bool notify,
                                            CCError** error) {
-    const char* itemId = good->getId().c_str();
-    const char* key = keyGoodUpgrade(itemId);
+    auto&& itemId = good->getId();
+    auto&& key = keyGoodUpgrade(itemId);
 
     CCKeyValueStorage::getInstance()->deleteKeyValue(key);
 
@@ -68,9 +68,9 @@ void CCVirtualGoodsStorage::assignCurrentUpgrade(CCVirtualGood* good,
         return;
     }
 
-    const char* itemId = good->getId().c_str();
-    const char* key = keyGoodUpgrade(itemId);
-    const char* upItemId = upgradeVG->getId().c_str();
+    auto&& itemId = good->getId();
+    auto&& key = keyGoodUpgrade(itemId);
+    auto&& upItemId = upgradeVG->getId();
 
     CCKeyValueStorage::getInstance()->setValue(key, upItemId);
 
@@ -81,8 +81,8 @@ void CCVirtualGoodsStorage::assignCurrentUpgrade(CCVirtualGood* good,
 
 CCUpgradeVG* CCVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
                                                       CCError** error) {
-    const char* itemId = good->getId().c_str();
-    const char* key = keyGoodUpgrade(itemId);
+    auto&& itemId = good->getId();
+    auto&& key = keyGoodUpgrade(itemId);
 
     const auto& upItemId = CCKeyValueStorage::getInstance()->getValue(key);
 
@@ -90,7 +90,7 @@ CCUpgradeVG* CCVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
         CCSoomlaUtils::logDebug(
             TAG, StringUtils::format("You tried to fetch the current upgrade "
                                      "of %s but there's not upgrade to it.",
-                                     itemId)
+                                     itemId.c_str())
                      .c_str());
         return nullptr;
     }
@@ -113,8 +113,8 @@ CCUpgradeVG* CCVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
 }
 
 bool CCVirtualGoodsStorage::isEquipped(CCEquippableVG* good, CCError** error) {
-    const char* itemId = good->getId().c_str();
-    const char* key = keyGoodEquipped(itemId);
+    auto&& itemId = good->getId();
+    auto&& key = keyGoodEquipped(itemId);
     const auto& val = CCKeyValueStorage::getInstance()->getValue(key);
 
     return (val.length() > 0);
@@ -140,8 +140,8 @@ void CCVirtualGoodsStorage::unequip(CCEquippableVG* good, bool notify,
 
 void CCVirtualGoodsStorage::equipPriv(CCEquippableVG* good, bool equip,
                                       bool notify, CCError** error) {
-    const char* itemId = good->getId().c_str();
-    const char* key = keyGoodEquipped(itemId);
+    auto&& itemId = good->getId();
+    auto&& key = keyGoodEquipped(itemId);
 
     if (equip) {
         CCKeyValueStorage::getInstance()->setValue(key, "yes");
@@ -156,7 +156,7 @@ void CCVirtualGoodsStorage::equipPriv(CCEquippableVG* good, bool equip,
     }
 }
 
-const char* CCVirtualGoodsStorage::keyBalance(const char* itemId) const {
+std::string CCVirtualGoodsStorage::keyBalance(const std::string& itemId) const {
     return keyGoodBalance(itemId);
 }
 
@@ -177,15 +177,15 @@ void CCVirtualGoodsStorage::postBalanceChangeEvent(CCVirtualItem* item,
                                                                 amountAdded);
 }
 
-const char* CCVirtualGoodsStorage::keyGoodBalance(const char* itemId) {
-    return StringUtils::format("good.%s.balance", itemId).c_str();
+std::string CCVirtualGoodsStorage::keyGoodBalance(const std::string& itemId) {
+    return StringUtils::format("good.%s.balance", itemId.c_str());
 }
 
-const char* CCVirtualGoodsStorage::keyGoodEquipped(const char* itemId) {
-    return StringUtils::format("good.%s.equipped", itemId).c_str();
+std::string CCVirtualGoodsStorage::keyGoodEquipped(const std::string& itemId) {
+    return StringUtils::format("good.%s.equipped", itemId.c_str());
 }
 
-const char* CCVirtualGoodsStorage::keyGoodUpgrade(const char* itemId) {
-    return StringUtils::format("good.%s.currentUpgrade", itemId).c_str();
+std::string CCVirtualGoodsStorage::keyGoodUpgrade(const std::string& itemId) {
+    return StringUtils::format("good.%s.currentUpgrade", itemId.c_str());
 }
 } // namespace soomla

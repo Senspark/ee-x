@@ -26,8 +26,8 @@ USING_NS_CC;
 #define TAG "SOOMLA VirtualItemStorage"
 
 int CCVirtualItemStorage::getBalance(CCVirtualItem* item, CCError** error) {
-    const char* itemId = item->getId().c_str();
-    const char* key = keyBalance(itemId);
+    auto&& itemId = item->getId();
+    auto&& key = keyBalance(itemId);
     const auto& val = CCKeyValueStorage::getInstance()->getValue(key);
 
     int balance = 0;
@@ -37,7 +37,7 @@ int CCVirtualItemStorage::getBalance(CCVirtualItem* item, CCError** error) {
 
     CCSoomlaUtils::logDebug(
         TAG,
-        StringUtils::format("the balance for %s is %d", itemId, balance)
+        StringUtils::format("the balance for %s is %d", itemId.c_str(), balance)
             .c_str());
 
     return balance;
@@ -50,11 +50,10 @@ int CCVirtualItemStorage::setBalance(CCVirtualItem* item, int balance,
         return balance;
     }
 
-    const char* itemId = item->getId().c_str();
+    auto&& itemId = item->getId();
 
-    const char* balanceStr =
-        StringUtils::format("%d", balance).c_str();
-    const char* key = keyBalance(itemId);
+    auto&& balanceStr = StringUtils::format("%d", balance);
+    auto&& key = keyBalance(itemId);
 
     CCKeyValueStorage::getInstance()->setValue(key, balanceStr);
 
@@ -67,16 +66,15 @@ int CCVirtualItemStorage::setBalance(CCVirtualItem* item, int balance,
 
 int CCVirtualItemStorage::add(CCVirtualItem* item, int amount, bool notify,
                               CCError** error) {
-    const char* itemId = item->getId().c_str();
+    auto&& itemId = item->getId();
     int balance = getBalance(item);
     if (balance < 0) { /* in case the user "adds" a negative value */
         balance = 0;
         amount = 0;
     }
 
-    const char* balanceStr =
-        StringUtils::format("%d", balance + amount).c_str();
-    const char* key = keyBalance(itemId);
+    auto&& balanceStr = StringUtils::format("%d", balance + amount);
+    auto&& key = keyBalance(itemId);
 
     CCKeyValueStorage::getInstance()->setValue(key, balanceStr);
 
@@ -89,16 +87,15 @@ int CCVirtualItemStorage::add(CCVirtualItem* item, int amount, bool notify,
 
 int CCVirtualItemStorage::remove(CCVirtualItem* item, int amount, bool notify,
                                  CCError** error) {
-    const char* itemId = item->getId().c_str();
+    auto&& itemId = item->getId();
     int balance = getBalance(item) - amount;
     if (balance < 0) {
         balance = 0;
         amount = 0;
     }
 
-    const char* balanceStr =
-        StringUtils::format("%d", balance).c_str();
-    const char* key = keyBalance(itemId);
+    auto&& balanceStr = StringUtils::format("%d", balance).c_str();
+    auto&& key = keyBalance(itemId);
 
     CCKeyValueStorage::getInstance()->setValue(key, balanceStr);
 

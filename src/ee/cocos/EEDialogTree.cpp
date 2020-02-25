@@ -225,9 +225,14 @@ void DialogTree::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     });
 
     sequence->then([dialog, unlocker] {
-        dialog->onDialogDidShow();
-        unlocker->invoke();
+        // End showing.
         dialog->setActive(true);
+        
+        // Invoke callbacks.
+        dialog->onDialogDidShow();
+        
+        // Always unlock last.
+        unlocker->invoke();
     });
 
     dialog->transitionAction_->stopAllActions();
@@ -239,9 +244,14 @@ void DialogTree::popDialogImmediately(Dialog* dialog) {
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     dialog->getDialogLevel());
 
-    dialog->setActive(false);
+    // Always lock first.
     lock(dialog);
+    
+    // Invoke callbacks.
     dialog->onDialogWillHide();
+    
+    // Begin hiding.
+    dialog->setActive(false);
 
     auto sequence = Sequence::create();
     for (auto&& action : dialog->hidingTransitions_) {

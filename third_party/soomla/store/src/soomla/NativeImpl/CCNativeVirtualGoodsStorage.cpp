@@ -37,8 +37,7 @@ int CCNativeVirtualGoodsStorage::getBalance(CCVirtualItem* item,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling getBalance with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::getBalance";
     params["itemId"] = itemId;
@@ -56,8 +55,7 @@ int CCNativeVirtualGoodsStorage::setBalance(CCVirtualItem* item, int balance,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling setBalance with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::setBalance";
     params["itemId"] = itemId;
@@ -77,8 +75,7 @@ int CCNativeVirtualGoodsStorage::add(CCVirtualItem* item, int amount,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling add with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::add";
     params["itemId"] = itemId;
@@ -98,8 +95,7 @@ int CCNativeVirtualGoodsStorage::remove(CCVirtualItem* item, int amount,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling remove with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::remove";
     params["itemId"] = itemId;
@@ -120,8 +116,7 @@ void CCNativeVirtualGoodsStorage::removeUpgrades(CCVirtualGood* good,
     CCSoomlaUtils::logDebug(
         TAG,
         StringUtils::format("SOOMLA/COCOS2DX Calling removeUpgrades with: %s",
-                            itemId.c_str())
-            .c_str());
+                            itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::removeUpgrades";
@@ -140,8 +135,7 @@ void CCNativeVirtualGoodsStorage::assignCurrentUpgrade(CCVirtualGood* good,
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "SOOMLA/COCOS2DX Calling assignCurrentUpgrade with: %s",
-                 itemId.c_str())
-                 .c_str());
+                 itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::assignCurrentUpgrade";
@@ -158,8 +152,7 @@ CCUpgradeVG* CCNativeVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "SOOMLA/COCOS2DX Calling getCurrentUpgrade with: %s",
-                 itemId.c_str())
-                 .c_str());
+                 itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::getCurrentUpgrade";
@@ -169,7 +162,7 @@ CCUpgradeVG* CCNativeVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
     if (retParams.count("return")) {
         return dynamic_cast<CCUpgradeVG*>(
             CCStoreInfo::sharedStoreInfo()->getItemByItemId(
-                retParams.at("return").asString().c_str(), error));
+                retParams.at("return").asString(), error));
     }
     return nullptr;
 }
@@ -180,8 +173,7 @@ bool CCNativeVirtualGoodsStorage::isEquipped(CCEquippableVG* good,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling isEquipped with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::isEquipped";
@@ -200,8 +192,7 @@ void CCNativeVirtualGoodsStorage::equip(CCEquippableVG* good, bool notify,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling equip with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::equip";
@@ -216,8 +207,7 @@ void CCNativeVirtualGoodsStorage::unequip(CCEquippableVG* good, bool notify,
 
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling unequip with: %s",
-                                 itemId.c_str())
-                 .c_str());
+                                 itemId.c_str()));
 
     ValueMap params;
     params["method"] = "CCNativeVirtualGoodsStorage::unequip";

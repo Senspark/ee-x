@@ -19,9 +19,9 @@
 #include <soomla/CCNdkBridge.h>
 #include <soomla/CCSoomlaUtils.h>
 
+#include "soomla/NativeImpl/CCNativeVirtualGoodsStorage.h"
 #include "soomla/data/CCStoreInfo.h"
 #include "soomla/domain/virtualGoods/CCUpgradeVG.h"
-#include "soomla/NativeImpl/CCNativeVirtualGoodsStorage.h"
 
 namespace soomla {
 #define TAG "SOOMLA NativeVirtualCurrencyStorage"
@@ -35,9 +35,8 @@ CCNativeVirtualCurrencyStorage::~CCNativeVirtualCurrencyStorage() {}
 int CCNativeVirtualCurrencyStorage::getBalance(CCVirtualItem* item,
                                                CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format(
-                 "SOOMLA/COCOS2DX Calling getBalance with: %s", item->getId().c_str())
-                 .c_str());
+        TAG, StringUtils::format("SOOMLA/COCOS2DX Calling getBalance with: %s",
+                                 item->getId().c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualCurrencyStorage::getBalance";
     params["itemId"] = item->getId();
@@ -52,17 +51,16 @@ int CCNativeVirtualCurrencyStorage::getBalance(CCVirtualItem* item,
 int CCNativeVirtualCurrencyStorage::setBalance(CCVirtualItem* item, int balance,
                                                bool notify, CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format(
-                 "SOOMLA/COCOS2DX Calling setBalance with: %s", item->getId().c_str())
-                 .c_str());
+        TAG, StringUtils::format("SOOMLA/COCOS2DX Calling setBalance with: %s",
+                                 item->getId().c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualCurrencyStorage::setBalance";
     params["itemId"] = item->getId();
     params["balance"] = balance;
     params["notify"] = notify;
-    
+
     auto&& retParams = CCNdkBridge::callNative(params, error);
-    
+
     if (retParams.count("return")) {
         return retParams.at("return").asInt();
     }
@@ -73,8 +71,7 @@ int CCNativeVirtualCurrencyStorage::add(CCVirtualItem* item, int amount,
                                         bool notify, CCError** error) {
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("SOOMLA/COCOS2DX Calling add with: %s",
-                                        item->getId().c_str())
-                 .c_str());
+                                 item->getId().c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualCurrencyStorage::add";
     params["itemId"] = item->getId();
@@ -90,16 +87,15 @@ int CCNativeVirtualCurrencyStorage::add(CCVirtualItem* item, int amount,
 
 int CCNativeVirtualCurrencyStorage::remove(CCVirtualItem* item, int amount,
                                            bool notify, CCError** error) {
-    CCSoomlaUtils::logDebug(TAG, StringUtils::format(
-                                     "SOOMLA/COCOS2DX Calling remove with: %s",
-                                     item->getId().c_str())
-                                     .c_str());
+    CCSoomlaUtils::logDebug(
+        TAG, StringUtils::format("SOOMLA/COCOS2DX Calling remove with: %s",
+                                 item->getId().c_str()));
     ValueMap params;
     params["method"] = "CCNativeVirtualCurrencyStorage::remove";
     params["itemId"] = item->getId();
     params["amount"] = amount;
     params["notify"] = notify;
-    
+
     auto&& retParams = CCNdkBridge::callNative(params, error);
     if (retParams.count("return")) {
         return retParams.at("return").asInt();

@@ -59,8 +59,7 @@ void CCVirtualCurrencyStorage::postBalanceChangeEvent(CCVirtualItem* item,
             TAG, StringUtils::format(
                      "Trying to post currency balance changed with a non "
                      "VirtualCurrency item %s",
-                     item->getId().c_str())
-                     .c_str());
+                     item->getId().c_str()));
         return;
     }
 

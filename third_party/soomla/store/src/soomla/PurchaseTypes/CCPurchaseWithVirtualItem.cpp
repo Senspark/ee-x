@@ -58,8 +58,7 @@ void CCPurchaseWithVirtualItem::buy(const std::string& payload,
         CCSoomlaUtils::logError(
             TAG, StringUtils::format(
                      "Trying to buy an non-existing associated item: %s",
-                     associatedItemId.c_str())
-                     .c_str());
+                     associatedItemId.c_str()));
         return;
     }
 
@@ -68,16 +67,14 @@ void CCPurchaseWithVirtualItem::buy(const std::string& payload,
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("Trying to buy a %s with %d pieces of %s",
                                  associatedItem->getName().c_str(), amount,
-                                 targetItemId.c_str())
-                 .c_str());
+                                 targetItemId.c_str()));
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(targetItemId, error);
     if (item == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Target virtual item %s doesn't exist !",
-                                     targetItemId.c_str())
-                     .c_str());
+                                     targetItemId.c_str()));
         return;
     }
 
@@ -113,8 +110,7 @@ bool CCPurchaseWithVirtualItem::canAfford(CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format(
                      "Trying to buy an non-existing associated item: %s",
-                     associatedItemId.c_str())
-                     .c_str());
+                     associatedItemId.c_str()));
         return false;
     }
 
@@ -124,16 +120,14 @@ bool CCPurchaseWithVirtualItem::canAfford(CCError** error) {
         TAG,
         StringUtils::format("Checking affordability of %s with %d pieces of %s",
                             associatedItem->getName().c_str(), amount,
-                            targetItemId.c_str())
-            .c_str());
+                            targetItemId.c_str()));
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(targetItemId, error);
     if (item == nullptr) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Target virtual item %s doesn't exist !",
-                                     targetItemId.c_str())
-                     .c_str());
+                                     targetItemId.c_str()));
         return false;
     }
 

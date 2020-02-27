@@ -93,7 +93,7 @@ int CCSingleUsePackVG::give(int amount, bool notify, CCError** error) {
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't give this pack.",
                                      goodItemId.c_str())
-                     .c_str());
+                     );
         return 0;
     }
 
@@ -111,7 +111,7 @@ int CCSingleUsePackVG::take(int amount, bool notify, CCError** error) {
             TAG, StringUtils::format("SingleUseVG with itemId: %s doesn't "
                                      "exist! Can't take this pack.",
                                      goodItemId.c_str())
-                     .c_str());
+                     );
         return 0;
     }
 

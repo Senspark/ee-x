@@ -216,7 +216,7 @@ public:
                                          int balance, int amountAdded);
     void refreshOnGoodBalanceChanged(CCVirtualGood* good, int balance,
                                      int amountAdded);
-    void updateLocalBalance(const char* itemId, int balance);
+    void updateLocalBalance(const std::string& itemId, int balance);
 
 private:
     class CCLocalUpgrade : public cocos2d::Ref {

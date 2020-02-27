@@ -37,10 +37,10 @@ public:
 
 private:
     void setTimesGiven(CCReward* reward, bool up, bool notify);
-    std::string&& keyRewards(const std::string& rewardId, const std::string& postfix);
-    std::string&& keyRewardIdxSeqGiven(const std::string& rewardId);
-    std::string&& keyRewardTimesGiven(const std::string& rewardId);
-    std::string&& keyRewardLastGiven(const std::string& rewardId);
+    std::string keyRewards(const std::string& rewardId, const std::string& postfix);
+    std::string keyRewardIdxSeqGiven(const std::string& rewardId);
+    std::string keyRewardTimesGiven(const std::string& rewardId);
+    std::string keyRewardLastGiven(const std::string& rewardId);
 };
 } // namespace soomla
 

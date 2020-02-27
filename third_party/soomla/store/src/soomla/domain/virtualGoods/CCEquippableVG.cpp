@@ -140,8 +140,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
                              "Tried to unequip all other category VirtualGoods "
                              "but there was no associated category. virtual "
                              "good itemId: %s",
-                             itemId.c_str())
-                             .c_str());
+                             itemId.c_str()));
                 return;
             }
 
@@ -157,8 +156,7 @@ void CCEquippableVG::equip(bool notify, CCError** error) {
                         StringUtils::format(
                             "On equip, couldn't find one of the itemIds in the "
                             "category. Continuing to the next one. itemId: %s",
-                            goodItemId.c_str())
-                            .c_str());
+                            goodItemId.c_str()));
                 } else if (equippableVG != this) {
                     equippableVG->unequip(notify, error);
                 }

@@ -91,8 +91,7 @@ int CCVirtualCurrencyPack::give(int amount, bool notify, CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("VirtualCurrency with itemId: %s "
                                      "doesn't exist! Can't give this pack.",
-                                     currencyId.c_str())
-                     .c_str());
+                                     currencyId.c_str()));
         return 0;
     }
 
@@ -109,8 +108,7 @@ int CCVirtualCurrencyPack::take(int amount, bool notify, CCError** error) {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("VirtualCurrency with itemId: %s "
                                      "doesn't exist! Can't take this pack.",
-                                     currencyId.c_str())
-                     .c_str());
+                                     currencyId.c_str()));
         return 0;
     }
 

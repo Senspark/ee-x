@@ -1,8 +1,8 @@
 #include "soomla/rewards/CCVirtualItemReward.h"
 
+#include "soomla/CCStoreConsts.h"
 #include <soomla/CCJsonHelper.h>
 #include <soomla/CCSoomlaUtils.h>
-#include "soomla/CCStoreConsts.h"
 
 #include "soomla/CCStoreInventory.h"
 
@@ -57,14 +57,14 @@ const char* soomla::CCVirtualItemReward::getType() const {
 
 bool soomla::CCVirtualItemReward::takeInner() {
     CCError* error = nullptr;
-    char const* itemId = this->getAssociatedItemId().c_str();
+    auto&& itemId = this->getAssociatedItemId();
     CCStoreInventory::sharedStoreInventory()->takeItem(
         itemId, this->getAmount(), &error);
     if (error) {
         CCSoomlaUtils::logError(
-            TAG, cocos2d::StringUtils::format(
-                     "(take) Couldn't find associated itemId: %s", itemId)
-                     .c_str());
+            TAG,
+            cocos2d::StringUtils::format(
+                "(take) Couldn't find associated itemId: %s", itemId.c_str()));
         CCSoomlaUtils::logError(TAG, error->getInfo());
         return false;
     }
@@ -73,14 +73,14 @@ bool soomla::CCVirtualItemReward::takeInner() {
 
 bool soomla::CCVirtualItemReward::giveInner() {
     CCError* error = nullptr;
-    char const* itemId = this->getAssociatedItemId().c_str();
+    auto&& itemId = this->getAssociatedItemId();
     CCStoreInventory::sharedStoreInventory()->giveItem(
         itemId, this->getAmount(), &error);
     if (error) {
         CCSoomlaUtils::logError(
-            TAG, cocos2d::StringUtils::format(
-                     "(give) Couldn't find associated itemId: %s", itemId)
-                     .c_str());
+            TAG,
+            cocos2d::StringUtils::format(
+                "(give) Couldn't find associated itemId: %s", itemId.c_str()));
         CCSoomlaUtils::logError(TAG, error->getInfo());
         return false;
     }

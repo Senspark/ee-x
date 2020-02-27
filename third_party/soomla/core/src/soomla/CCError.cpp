@@ -66,7 +66,7 @@ void CCError::tryFillError(soomla::CCError **error, const cocos2d::Value &value,
             if (tag == nullptr) {
                 tag = TAG;
             }
-            CCSoomlaUtils::logError(tag, errorStr.c_str());
+            CCSoomlaUtils::logError(tag, errorStr);
         }
     }
 }

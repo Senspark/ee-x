@@ -29,7 +29,7 @@ bool soomla::CCReward::init(const std::string& id, const std::string& name,
 
     if (ret) {
         setSchedule(schedule != nullptr ? schedule
-                                     : CCSchedule::createAnyTimeOnce());
+                                        : CCSchedule::createAnyTimeOnce());
         addReward(this);
         return true;
     }
@@ -72,8 +72,7 @@ bool soomla::CCReward::take() {
     if (!CCRewardStorage::getInstance()->isRewardGiven(this)) {
         CCSoomlaUtils::logDebug(
             TAG, cocos2d::StringUtils::format("Reward not given. id: %s",
-                                              getId().c_str())
-                     .c_str());
+                                              getId().c_str()));
         return false;
     }
 
@@ -91,8 +90,7 @@ bool soomla::CCReward::give() {
         CCSoomlaUtils::logDebug(
             TAG, cocos2d::StringUtils::format(
                      "(Give) Reward is not approved by Schedule. id: %s",
-                     getId().c_str())
-                     .c_str());
+                     getId().c_str()));
         return false;
     }
 

@@ -138,7 +138,7 @@ void CCBridgelessKeyValueStorage::loadStoredKeys() {
     std::stringstream ss(joinedKeys);
     std::string item;
     while (std::getline(ss, item, '#')) {
-        addStoredKeys(item.c_str());
+        addStoredKeys(item);
     }
 }
 } // namespace soomla

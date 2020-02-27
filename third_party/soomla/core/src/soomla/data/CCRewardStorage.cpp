@@ -17,8 +17,8 @@
 #include "soomla/data/CCRewardStorage.h"
 
 #include "soomla/CCCoreEventDispatcher.h"
-#include "soomla/data/CCKeyValueStorage.h"
 #include "soomla/NativeImpl/CCNativeRewardStorage.h"
+#include "soomla/data/CCKeyValueStorage.h"
 #include "soomla/rewards/CCReward.h"
 #include "soomla/rewards/CCSequenceReward.h"
 
@@ -78,8 +78,8 @@ int CCRewardStorage::getLastSeqIdxGiven(CCSequenceReward* sequenceReward) {
 void CCRewardStorage::setLastSeqIdxGiven(CCSequenceReward* sequenceReward,
                                          unsigned int idx) {
     auto&& key = keyRewardIdxSeqGiven(sequenceReward->getId());
-    CCKeyValueStorage::getInstance()->setValue(
-        key, StringUtils::format("%d", idx).c_str());
+    CCKeyValueStorage::getInstance()->setValue(key,
+                                               StringUtils::format("%d", idx));
 }
 
 void CCRewardStorage::setTimesGiven(CCReward* reward, bool up, bool notify) {
@@ -89,10 +89,10 @@ void CCRewardStorage::setTimesGiven(CCReward* reward, bool up, bool notify) {
 
     auto&& key = keyRewardTimesGiven(reward->getId());
     CCKeyValueStorage::getInstance()->setValue(
-        key, StringUtils::format("%d", total).c_str());
+        key, StringUtils::format("%d", total));
 
     if (up) {
-        key = keyRewardLastGiven(reward->getId().c_str());
+        key = keyRewardLastGiven(reward->getId());
 
         time_t currentTime;
         time(&currentTime);
@@ -111,23 +111,21 @@ void CCRewardStorage::setTimesGiven(CCReward* reward, bool up, bool notify) {
     }
 }
 
-std::string&& CCRewardStorage::keyRewards(const std::string& rewardId,
-                                          const std::string& postfix) {
-    return std::move(StringUtils::format("%srewards.%s.%s", DB_KEY_PRFIX,
-                                         rewardId.c_str(), postfix.c_str()));
+std::string CCRewardStorage::keyRewards(const std::string& rewardId,
+                                        const std::string& postfix) {
+    return StringUtils::format("%srewards.%s.%s", DB_KEY_PRFIX,
+                               rewardId.c_str(), postfix.c_str());
 }
 
-std::string&&
-CCRewardStorage::keyRewardIdxSeqGiven(const std::string& rewardId) {
-    return std::move(keyRewards(rewardId, "seq.id"));
+std::string CCRewardStorage::keyRewardIdxSeqGiven(const std::string& rewardId) {
+    return keyRewards(rewardId, "seq.id");
 }
 
-std::string&&
-CCRewardStorage::keyRewardTimesGiven(const std::string& rewardId) {
-    return std::move(keyRewards(rewardId, "timesGiven"));
+std::string CCRewardStorage::keyRewardTimesGiven(const std::string& rewardId) {
+    return keyRewards(rewardId, "timesGiven");
 }
 
-std::string&& CCRewardStorage::keyRewardLastGiven(const std::string& rewardId) {
-    return std::move(keyRewards(rewardId, "lastGiven"));
+std::string CCRewardStorage::keyRewardLastGiven(const std::string& rewardId) {
+    return keyRewards(rewardId, "lastGiven");
 }
 } // namespace soomla

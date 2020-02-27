@@ -35,10 +35,8 @@ int CCVirtualItemStorage::getBalance(CCVirtualItem* item, CCError** error) {
         balance = std::stoi(val);
     }
 
-    CCSoomlaUtils::logDebug(
-        TAG,
-        StringUtils::format("the balance for %s is %d", itemId.c_str(), balance)
-            .c_str());
+    CCSoomlaUtils::logDebug(TAG, StringUtils::format("the balance for %s is %d",
+                                                     itemId.c_str(), balance));
 
     return balance;
 }
@@ -94,7 +92,7 @@ int CCVirtualItemStorage::remove(CCVirtualItem* item, int amount, bool notify,
         amount = 0;
     }
 
-    auto&& balanceStr = StringUtils::format("%d", balance).c_str();
+    auto&& balanceStr = StringUtils::format("%d", balance);
     auto&& key = keyBalance(itemId);
 
     CCKeyValueStorage::getInstance()->setValue(key, balanceStr);

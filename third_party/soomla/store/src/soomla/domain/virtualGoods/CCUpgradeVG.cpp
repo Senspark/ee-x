@@ -92,8 +92,7 @@ bool CCUpgradeVG::canBuy() {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("VirtualGood with itemId: %s doesn't "
                                      "exist! Returning false (can't buy).",
-                                     goodItemId.c_str())
-                     .c_str());
+                                     goodItemId.c_str()));
         if (error != nullptr) {
             CCSoomlaUtils::logException(TAG, error);
         }
@@ -114,8 +113,7 @@ int CCUpgradeVG::give(int amount, bool notify, CCError** error) {
     auto&& goodItemId = getGoodItemId();
     CCSoomlaUtils::logDebug(TAG, StringUtils::format("Assigning %s to: %s",
                                                      getName().c_str(),
-                                                     goodItemId.c_str())
-                                     .c_str());
+                                                     goodItemId.c_str()));
 
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
@@ -125,8 +123,7 @@ int CCUpgradeVG::give(int amount, bool notify, CCError** error) {
             TAG,
             StringUtils::format(
                 "VirtualGood with itemId: %s doesn't exist! Can't upgrade.",
-                goodItemId.c_str())
-                .c_str());
+                goodItemId.c_str()));
         return 0;
     }
 
@@ -146,8 +143,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
             TAG,
             StringUtils::format(
                 "VirtualGood with itemId: %s doesn't exist! Can't downgrade.",
-                goodItemId.c_str())
-                .c_str());
+                goodItemId.c_str()));
         return 0;
     }
 
@@ -160,8 +156,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
             TAG, StringUtils::format(
                      "You can't take an upgrade that's not currently assigned. "
                      "The UpgradeVG %s is not assigned to the VirtualGood: %s",
-                     getName().c_str(), good->getName().c_str())
-                     .c_str());
+                     getName().c_str(), good->getName().c_str()));
         return 0;
     }
 
@@ -176,8 +171,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
             CCSoomlaUtils::logError(
                 TAG, StringUtils::format("Previous UpgradeVG with itemId: %s "
                                          "doesn't exist! Can't downgrade.",
-                                         prevItemId.c_str())
-                         .c_str());
+                                         prevItemId.c_str()));
             return 0;
         }
 
@@ -185,8 +179,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
         CCSoomlaUtils::logDebug(
             TAG, StringUtils::format("Downgrading %s to: %s",
                                      good->getName().c_str(),
-                                     prevUpgradeVG->getName().c_str())
-                     .c_str());
+                                     prevUpgradeVG->getName().c_str()));
 
         CCVirtualGoodsStorage::getInstance()->assignCurrentUpgrade(
             good, prevUpgradeVG, notify, error);
@@ -196,8 +189,7 @@ int CCUpgradeVG::take(int amount, bool notify, CCError** error) {
     else {
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Downgrading %s to NO-UPGRADE",
-                                     good->getName().c_str())
-                     .c_str());
+                                     good->getName().c_str()));
         CCVirtualGoodsStorage::getInstance()->removeUpgrades(good, notify,
                                                              error);
     }

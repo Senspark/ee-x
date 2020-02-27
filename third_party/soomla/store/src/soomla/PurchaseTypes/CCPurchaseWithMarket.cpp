@@ -28,10 +28,8 @@ namespace soomla {
 
 CCPurchaseWithMarket* CCPurchaseWithMarket::create(const std::string& productId,
                                                    double price) {
-    return createWithMarketItem(
-        CCMarketItem::create(productId, price));
+    return createWithMarketItem(CCMarketItem::create(productId, price));
 }
-
 
 CCPurchaseWithMarket*
 CCPurchaseWithMarket::createWithMarketItem(CCMarketItem* marketItem) {
@@ -59,15 +57,14 @@ void CCPurchaseWithMarket::buy(const std::string& payload, CCError** error) {
     CCSoomlaUtils::logDebug(TAG,
                             cocos2d::StringUtils::format(
                                 "Starting in-app purchase for productId: %s",
-                                getMarketItem()->getProductId().c_str())
-                                .c_str());
+                                getMarketItem()->getProductId().c_str()));
 
     CCPurchasableVirtualItem* pvi = dynamic_cast<CCPurchasableVirtualItem*>(
-        CCStoreInfo::sharedStoreInfo()->getItemByItemId(
-            getAssociatedItemId().c_str(), error));
+        CCStoreInfo::sharedStoreInfo()->getItemByItemId(getAssociatedItemId(),
+                                                        error));
     CCStoreEventDispatcher::getInstance()->onItemPurchaseStarted(pvi, true);
-    CCSoomlaStore::getInstance()->buyMarketItem(
-        getMarketItem()->getProductId(), payload, error);
+    CCSoomlaStore::getInstance()->buyMarketItem(getMarketItem()->getProductId(),
+                                                payload, error);
 }
 
 CCPurchaseWithMarket::~CCPurchaseWithMarket() {

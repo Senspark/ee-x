@@ -21,8 +21,8 @@
 
 #include "soomla/CCStoreBridge.h"
 #include "soomla/CCStoreEventDispatcher.h"
-#include "soomla/data/CCStoreInfo.h"
 #include "soomla/NativeImpl/CCNativeSoomlaStore.h"
+#include "soomla/data/CCStoreInfo.h"
 
 namespace soomla {
 #define TAG "SOOMLA SoomlaStore"
@@ -82,7 +82,7 @@ void CCSoomlaStore::buyMarketItem(const std::string& productId,
                                   const std::string& payload, CCError** error) {
     CCPurchasableVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getPurchasableItemWithProductId(
-            productId.c_str(), error);
+            productId, error);
     if (item == nullptr) {
         return;
     }
@@ -92,13 +92,12 @@ void CCSoomlaStore::buyMarketItem(const std::string& productId,
 
     // in the editor we just give the item... no real market.
     // simulate onMarketPurchase event
-    CCStoreEventDispatcher::getInstance()->onMarketPurchase(
-        item, payload, ValueMapNull);
+    CCStoreEventDispatcher::getInstance()->onMarketPurchase(item, payload,
+                                                            ValueMapNull);
 
     item->give(1);
 
     // complete purchasing routine
-    CCStoreEventDispatcher::getInstance()->onItemPurchased(
-        item, payload);
+    CCStoreEventDispatcher::getInstance()->onItemPurchased(item, payload);
 }
 } // namespace soomla

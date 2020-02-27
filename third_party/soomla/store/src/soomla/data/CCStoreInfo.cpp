@@ -25,14 +25,14 @@
 #include <soomla/CCSoomlaUtils.h>
 #include <soomla/data/CCKeyValueStorage.h>
 
+#include "soomla/NativeImpl/CCNativeStoreInfo.h"
+#include "soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 #include "soomla/domain/CCMarketItem.h"
 #include "soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
 #include "soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h"
 #include "soomla/domain/virtualGoods/CCEquippableVG.h"
 #include "soomla/domain/virtualGoods/CCSingleUsePackVG.h"
 #include "soomla/domain/virtualGoods/CCSingleUseVG.h"
-#include "soomla/NativeImpl/CCNativeStoreInfo.h"
-#include "soomla/PurchaseTypes/CCPurchaseWithMarket.h"
 
 namespace soomla {
 
@@ -141,9 +141,8 @@ CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId) {
 CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId,
                                             CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format(
-                 "Trying to fetch an item with itemId: %s", itemId.c_str())
-                 .c_str());
+        TAG, StringUtils::format("Trying to fetch an item with itemId: %s",
+                                 itemId.c_str()));
 
     CCVirtualItem* item = getVirtualItems().at(itemId);
     if (item != nullptr) {
@@ -163,8 +162,7 @@ CCStoreInfo::getPurchasableItemWithProductId(const std::string& productId,
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "Trying to fetch a purchasable item with productId: %s",
-                 productId.c_str())
-                 .c_str());
+                 productId.c_str()));
 
     CCPurchasableVirtualItem* item = getPurchasableItems().at(productId);
     if (item != nullptr) {
@@ -185,8 +183,7 @@ CCStoreInfo::getCategoryForVirtualGood(const std::string& goodItemId,
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "Trying to fetch a category for a good with itemId: %s",
-                 goodItemId.c_str())
-                 .c_str());
+                 goodItemId.c_str()));
 
     CCVirtualCategory* category = getGoodsCategories().at(goodItemId);
     if (category != nullptr) {
@@ -205,8 +202,7 @@ CCStoreInfo::getFirstUpgradeForVirtualGood(const std::string& goodItemId) {
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "Trying to fetch first upgrade of a good with itemId: %s",
-                 goodItemId.c_str())
-                 .c_str());
+                 goodItemId.c_str()));
 
     if (getGoodsUpgrades().find(goodItemId) != getGoodsUpgrades().end()) {
         auto&& upgrades = getGoodsUpgrades().at(goodItemId);
@@ -224,8 +220,7 @@ CCStoreInfo::getLastUpgradeForVirtualGood(const std::string& goodItemId) {
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "Trying to fetch last upgrade of a good with itemId: %s",
-                 goodItemId.c_str())
-                 .c_str());
+                 goodItemId.c_str()));
 
     if (getGoodsUpgrades().find(goodItemId) != getGoodsUpgrades().end()) {
         auto&& upgrades = getGoodsUpgrades().at(goodItemId);
@@ -244,8 +239,7 @@ CCStoreInfo::getUpgradesForVirtualGood(const std::string& goodItemId) {
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format(
                  "Trying to fetch upgrades of a good with itemId: %s",
-                 goodItemId.c_str())
-                 .c_str());
+                 goodItemId.c_str()));
 
     return getGoodsUpgrades().at(goodItemId);
 }
@@ -279,9 +273,8 @@ void CCStoreInfo::save() {
         json_dumps(CCJsonHelper::getJsonFromValue(Value(storeDict)),
                    JSON_COMPACT | JSON_ENSURE_ASCII);
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("saving StoreInfo to DB. json is: %s",
-                                        jsonString)
-                 .c_str());
+        TAG,
+        StringUtils::format("saving StoreInfo to DB. json is: %s", jsonString));
     CCKeyValueStorage::getInstance()->setValue(KEY_META_STORE_INFO, jsonString);
 }
 
@@ -359,9 +352,8 @@ void CCStoreInfo::initializeFromDB() {
     }
 
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format(
-                 "the metadata-economy json (from DB) is %s", val.c_str())
-                 .c_str());
+        TAG, StringUtils::format("the metadata-economy json (from DB) is %s",
+                                 val.c_str()));
 
     json_error_t error;
     json_t* storeJson = json_loads(val.c_str(), 0, &error);

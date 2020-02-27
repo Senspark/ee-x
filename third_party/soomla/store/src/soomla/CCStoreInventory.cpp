@@ -54,8 +54,7 @@ bool CCStoreInventory::init() {
 
 bool CCStoreInventory::canAfford(const std::string& itemId, CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG,
-        StringUtils::format("Checking can afford: %s", itemId.c_str()).c_str());
+        TAG, StringUtils::format("Checking can afford: %s", itemId.c_str()));
 
     CCPurchasableVirtualItem* pvi = dynamic_cast<CCPurchasableVirtualItem*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
@@ -68,8 +67,8 @@ void CCStoreInventory::buyItem(const std::string& itemId, CCError** error) {
 
 void CCStoreInventory::buyItem(const std::string& itemId,
                                const std::string& payload, CCError** error) {
-    CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("Buying: %s", itemId.c_str()).c_str());
+    CCSoomlaUtils::logDebug(TAG,
+                            StringUtils::format("Buying: %s", itemId.c_str()));
 
     CCPurchasableVirtualItem* pvi = dynamic_cast<CCPurchasableVirtualItem*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
@@ -95,8 +94,7 @@ int CCStoreInventory::getItemBalance(const std::string& itemId,
 void CCStoreInventory::giveItem(const std::string& itemId, int amount,
                                 CCError** error) {
     CCSoomlaUtils::logDebug(TAG, StringUtils::format("Giving: %d pieces of: %s",
-                                                     amount, itemId.c_str())
-                                     .c_str());
+                                                     amount, itemId.c_str()));
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error);
@@ -108,8 +106,7 @@ void CCStoreInventory::giveItem(const std::string& itemId, int amount,
 void CCStoreInventory::takeItem(const std::string& itemId, int amount,
                                 CCError** error) {
     CCSoomlaUtils::logDebug(TAG, StringUtils::format("Taking: %d pieces of: %s",
-                                                     amount, itemId.c_str())
-                                     .c_str());
+                                                     amount, itemId.c_str()));
 
     CCVirtualItem* item =
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error);
@@ -121,7 +118,7 @@ void CCStoreInventory::takeItem(const std::string& itemId, int amount,
 void CCStoreInventory::equipVirtualGood(const std::string& itemId,
                                         CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("Equipping: %s", itemId.c_str()).c_str());
+        TAG, StringUtils::format("Equipping: %s", itemId.c_str()));
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
@@ -133,7 +130,7 @@ void CCStoreInventory::equipVirtualGood(const std::string& itemId,
 void CCStoreInventory::unEquipVirtualGood(const std::string& itemId,
                                           CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("UnEquipping: %s", itemId.c_str()).c_str());
+        TAG, StringUtils::format("UnEquipping: %s", itemId.c_str()));
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
@@ -145,8 +142,7 @@ void CCStoreInventory::unEquipVirtualGood(const std::string& itemId,
 bool CCStoreInventory::isVirtualGoodEquipped(const std::string& itemId,
                                              CCError** error) {
     CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("Checking if %s is equipped", itemId.c_str())
-                 .c_str());
+        TAG, StringUtils::format("Checking if %s is equipped", itemId.c_str()));
 
     CCEquippableVG* good = dynamic_cast<CCEquippableVG*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(itemId, error));
@@ -161,8 +157,7 @@ int CCStoreInventory::getGoodUpgradeLevel(const std::string& goodItemId,
                                           CCError** error) {
     CCSoomlaUtils::logDebug(
         TAG,
-        StringUtils::format("Checking %s upgrade level", goodItemId.c_str())
-            .c_str());
+        StringUtils::format("Checking %s upgrade level", goodItemId.c_str()));
 
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
@@ -184,7 +179,7 @@ int CCStoreInventory::getGoodUpgradeLevel(const std::string& goodItemId,
     while (first->getItemId().compare(upgradeVG->getItemId())) {
         first = dynamic_cast<CCUpgradeVG*>(
             CCStoreInfo::sharedStoreInfo()->getItemByItemId(
-                first->getNextItemId().c_str(), error));
+                first->getNextItemId(), error));
         level++;
     }
 
@@ -196,8 +191,7 @@ CCStoreInventory::getGoodCurrentUpgrade(const std::string& goodItemId,
                                         CCError** error) {
     CCSoomlaUtils::logDebug(
         TAG,
-        StringUtils::format("Checking %s current upgrade", goodItemId.c_str())
-            .c_str());
+        StringUtils::format("Checking %s current upgrade", goodItemId.c_str()));
 
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
@@ -215,9 +209,8 @@ CCStoreInventory::getGoodCurrentUpgrade(const std::string& goodItemId,
 
 void CCStoreInventory::upgradeGood(const std::string& goodItemId,
                                    CCError** error) {
-    CCSoomlaUtils::logDebug(
-        TAG, StringUtils::format("Upgrading Good with: %s", goodItemId.c_str())
-                 .c_str());
+    CCSoomlaUtils::logDebug(TAG, StringUtils::format("Upgrading Good with: %s",
+                                                     goodItemId.c_str()));
     CCVirtualGood* good = dynamic_cast<CCVirtualGood*>(
         CCStoreInfo::sharedStoreInfo()->getItemByItemId(goodItemId, error));
     if (good == nullptr) {
@@ -233,8 +226,7 @@ void CCStoreInventory::upgradeGood(const std::string& goodItemId,
             return;
         }
         CCUpgradeVG* vgu = dynamic_cast<CCUpgradeVG*>(
-            CCStoreInfo::sharedStoreInfo()->getItemByItemId(nextItemId.c_str(),
-                                                            error));
+            CCStoreInfo::sharedStoreInfo()->getItemByItemId(nextItemId, error));
         if (vgu != nullptr) {
             vgu->buy("");
         }
@@ -252,8 +244,7 @@ void CCStoreInventory::removeGoodUpgrades(const std::string& goodItemId,
                                           CCError** error) {
     CCSoomlaUtils::logDebug(
         TAG, StringUtils::format("Removing Good Upgrades for: %s",
-                                 goodItemId.c_str())
-                 .c_str());
+                                 goodItemId.c_str()));
 
     auto& upgrades =
         CCStoreInfo::sharedStoreInfo()->getUpgradesForVirtualGood(goodItemId);
@@ -284,7 +275,7 @@ void CCStoreInventory::refreshLocalInventory() {
         CCUpgradeVG* upgrade =
             CCVirtualGoodsStorage::getInstance()->getCurrentUpgrade(item);
         if (upgrade != nullptr) {
-            int upgradeLevel = getGoodUpgradeLevel(item->getItemId().c_str());
+            int upgradeLevel = getGoodUpgradeLevel(item->getItemId());
             CCLocalUpgrade* localUpgrade = CCLocalUpgrade::create();
             localUpgrade->setItemId(upgrade->getItemId());
             localUpgrade->setLevel(upgradeLevel);
@@ -330,16 +321,17 @@ void CCStoreInventory::refreshOnGoodUnEquipped(CCEquippableVG* equippable) {
 
 void CCStoreInventory::refreshOnCurrencyBalanceChanged(
     CCVirtualCurrency* virtualCurrency, int balance, int amountAdded) {
-    updateLocalBalance(virtualCurrency->getItemId().c_str(), balance);
+    updateLocalBalance(virtualCurrency->getItemId(), balance);
 }
 
 void CCStoreInventory::refreshOnGoodBalanceChanged(CCVirtualGood* good,
                                                    int balance,
                                                    int amountAdded) {
-    updateLocalBalance(good->getItemId().c_str(), balance);
+    updateLocalBalance(good->getItemId(), balance);
 }
 
-void CCStoreInventory::updateLocalBalance(const char* itemId, int balance) {
+void CCStoreInventory::updateLocalBalance(const std::string& itemId,
+                                          int balance) {
     if (mLocalItemBalances.count(itemId)) {
         mLocalItemBalances[itemId] = balance;
     } else {

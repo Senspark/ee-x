@@ -90,8 +90,7 @@ CCUpgradeVG* CCVirtualGoodsStorage::getCurrentUpgrade(CCVirtualGood* good,
         CCSoomlaUtils::logDebug(
             TAG, StringUtils::format("You tried to fetch the current upgrade "
                                      "of %s but there's not upgrade to it.",
-                                     itemId.c_str())
-                     .c_str());
+                                     itemId.c_str()));
         return nullptr;
     }
 
@@ -168,8 +167,7 @@ void CCVirtualGoodsStorage::postBalanceChangeEvent(CCVirtualItem* item,
         CCSoomlaUtils::logError(
             TAG, StringUtils::format("Trying to post good balance changed "
                                      "with a non VirtualGood item %s",
-                                     item->getId().c_str())
-                     .c_str());
+                                     item->getId().c_str()));
         return;
     }
 

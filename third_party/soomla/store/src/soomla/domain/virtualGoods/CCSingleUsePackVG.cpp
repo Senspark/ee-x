@@ -71,7 +71,7 @@ bool CCSingleUsePackVG::initWithValueMap(const cocos2d::ValueMap& map) {
 }
 
 cocos2d::ValueMap CCSingleUsePackVG::toValueMap() {
-    auto&& map = CCVirtualGood::toValueMap();
+    auto map = CCVirtualGood::toValueMap();
 
     putGoodItemIdToValueMap(map);
     putGoodAmountToValueMap(map);

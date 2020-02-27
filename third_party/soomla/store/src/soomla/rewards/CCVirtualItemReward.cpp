@@ -45,7 +45,7 @@ bool soomla::CCVirtualItemReward::initWithValueMap(
 }
 
 cocos2d::ValueMap soomla::CCVirtualItemReward::toValueMap() {
-    auto&& map = CCReward::toValueMap();
+    auto map = CCReward::toValueMap();
     putAmountToValueMap(map);
     putAssociatedItemIdToValueMap(map);
     return map;

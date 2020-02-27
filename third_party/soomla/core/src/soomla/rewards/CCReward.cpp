@@ -57,7 +57,7 @@ bool soomla::CCReward::initWithValueMap(const cocos2d::ValueMap& map) {
 }
 
 cocos2d::ValueMap soomla::CCReward::toValueMap() {
-    auto&& map = CCSoomlaEntity::toValueMap();
+    auto map = CCSoomlaEntity::toValueMap();
     if (mSchedule) {
         map[CCCoreConsts::JSON_SCHEDULE] = mSchedule->toValueMap();
     }

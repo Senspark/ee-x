@@ -77,13 +77,7 @@ struct LambdaAwaiter<void> {
         : f_(std::exchange(other.f_, nullptr))
         , invoked_(std::exchange(other.invoked_, false))
         , ready_(std::exchange(other.ready_, false))
-        , handles_(std::exchange(other.handles_, {})) {
-        int x = 1;
-    }
-
-    ~LambdaAwaiter() { //
-        int x = 1;
-    }
+        , handles_(std::exchange(other.handles_, {})) {}
 
     void await_suspend(std::experimental::coroutine_handle<> handle) {
         handles_.push_back(handle);

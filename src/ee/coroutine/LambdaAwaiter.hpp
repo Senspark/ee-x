@@ -35,7 +35,7 @@ public:
             // Waiting.
         } else {
             invoked_ = true;
-            f_([this, handle](Result result) mutable {
+            f_([this](Result result) mutable {
                 ready_ = true;
                 result_ = result;
                 for (auto&& handle : handles_) {

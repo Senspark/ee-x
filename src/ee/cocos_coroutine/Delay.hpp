@@ -6,8 +6,14 @@
 namespace ee {
 namespace coroutine {
 struct Delay {
+private:
+    using Self = Delay;
+
 public:
     explicit Delay(float duration);
+    
+    Delay(const Self&) = delete;
+    Self& operator=(const Self&) = delete;
 
     void await_suspend(std::experimental::coroutine_handle<> handle);
     bool await_ready();

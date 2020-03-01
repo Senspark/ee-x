@@ -8,7 +8,8 @@ namespace coroutine {
 using Self = Delay;
 
 Self::Delay(float duration)
-    : duration_(duration) {
+    : duration_(duration)
+    , ready_(false) {
     CC_ASSERT(duration_ >= 0);
 }
 

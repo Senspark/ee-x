@@ -8,7 +8,7 @@ abstract_target 'common' do
     # pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-lite'
 	  platform :ios, '9.0'
     
-    pod_ee_x('soomla-cocos2dx-store')
+    pod_ee_x('soomla-store')
     pod_ee_x('cocos')
     
     target 'ee_x_test_mobile' do

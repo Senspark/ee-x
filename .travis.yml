@@ -12,7 +12,7 @@ matrix:
       osx_image: xcode9.3
 
       cache:
-        - cocoapods        
+        - cocoapods
 
       install:
         - gem install cocoapods
@@ -43,9 +43,9 @@ matrix:
         # # https://github.com/travis-ci/travis-ci/issues/6555
         # http://stackoverflow.com/questions/43872206/travis-for-android-licence-issues
         licenses:
-          - 'android-sdk-preview-license-.+'
-          - 'android-sdk-license-.+'
-          - 'google-gdk-license-.+'
+          - "android-sdk-preview-license-.+"
+          - "android-sdk-license-.+"
+          - "google-gdk-license-.+"
 
       before_cache:
         - rm -f  ${HOME}/.gradle/caches/modules-2/modules-2.lock
@@ -55,7 +55,7 @@ matrix:
         directories:
           - ${HOME}/.gradle/caches
           - ${HOME}/.gradle/wrapper
-          - ${HOME}/.android/build-cache        
+          - ${HOME}/.android/build-cache
 
       install:
         - travis_retry sudo apt-get install p7zip-full

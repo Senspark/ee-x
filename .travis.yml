@@ -59,6 +59,7 @@ matrix:
         # https://stackoverflow.com/questions/47782349/ndk-cmake-and-android-in-travisci
         - echo y | sdkmanager "ndk-bundle"
         - echo y | sdkmanager "cmake;3.10.2.4988404"
+        - travis_retry sudo apt-get install unzip
         - travis_retry bash test/download_deps.sh
 
       script:

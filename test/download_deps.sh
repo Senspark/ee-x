@@ -1,7 +1,5 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# git clone --progress --verbose https://github.com/Senspark/cocos2d-x-lite $DIR/cocos2d
-# bash test/cocos2d/prebuilt/libs/android/extract_libs.sh
-
-# Use direct repo
-git clone --progress --verbose https://github.com/cocos2d/cocos2d-x $DIR/cocos2d
+wget https://digitalocean.cocos2d-x.org/Cocos2D-X/cocos2d-x-3.17.2.zip -O cocos2d.zip
+chmod a+x cocos2d.zip
+unzip ./cocos2d.zip -d ./deps 2>&1 >/dev/null
+mv ./deps/cocos2d-x-3.17.2 ./test/cocos2d

@@ -17,7 +17,7 @@ matrix:
       install:
         - gem install cocoapods
         - pod repo update
-        - pod install --project-directory=test/proj.ios_mac --verbose
+        - pod install --project-directory=test/proj.ios_mac
 
       script:
         - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO -arch armv7s -arch arm64 -arch x86_64

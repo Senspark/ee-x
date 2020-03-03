@@ -70,14 +70,14 @@
 			remoteGlobalIDString = 507B40FD1C31BDD30067B53E;
 			remoteInfo = "libcocos2d tvOS";
 		};
-		4B120C1A23D0780600528149 /* PBXContainerItemProxy */ = {
+		4B120C1D23D0780D00528149 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = A07A4C241783777C0073F6A7;
-			remoteInfo = "libcocos2d iOS";
+			remoteGlobalIDString = 1551A33E158F2AB200E66CFE;
+			remoteInfo = "libcocos2d Mac";
 		};
-		4B120C1D23D0780D00528149 /* PBXContainerItemProxy */ = {
+		4B25376E240D1FC900EC1B6C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
 			proxyType = 1;
@@ -193,7 +193,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */,
@@ -356,7 +356,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4B120C1B23D0780600528149 /* PBXTargetDependency */,
+				4B25376F240D1FC900EC1B6C /* PBXTargetDependency */,
 			);
 			name = ee_x_test_mobile;
 			productName = iphone;
@@ -457,7 +457,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -566,23 +566,23 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
+				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.11.4/AppLovinSDKResources.bundle",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 				"${PODS_ROOT}/../../../res/stars_3_5.png",
 				"${PODS_ROOT}/../../../res/stars_4.png",
 				"${PODS_ROOT}/../../../res/stars_4_5.png",
 				"${PODS_ROOT}/../../../res/stars_5.png",
-				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.11.1/AppLovinSDKResources.bundle",
-				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
-				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_5.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -657,15 +657,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4B120C1B23D0780600528149 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "libcocos2d iOS";
-			targetProxy = 4B120C1A23D0780600528149 /* PBXContainerItemProxy */;
-		};
 		4B120C1E23D0780D00528149 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "libcocos2d Mac";
 			targetProxy = 4B120C1D23D0780D00528149 /* PBXContainerItemProxy */;
+		};
+		4B25376F240D1FC900EC1B6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcocos2d Mac";
+			targetProxy = 4B25376E240D1FC900EC1B6C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

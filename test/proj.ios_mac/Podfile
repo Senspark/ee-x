@@ -6,12 +6,12 @@ end
 
 abstract_target 'common' do
     # pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-lite'
-	  platform :ios, '9.0'
-    
     pod_ee_x('soomla-store')
     pod_ee_x('cocos')
     
     target 'ee_x_test_mobile' do
+        platform :ios, '12.0'
+
         pod_ee_x('admob')
         pod_ee_x('app-lovin')
         pod_ee_x('facebook-ads')
@@ -41,6 +41,8 @@ abstract_target 'common' do
     end
 
     target 'ee_x_test_desktop' do
+        platform :osx, '10.14'
+
         pod_ee_x('ads')
         pod_ee_x('crashlytics')
         pod_ee_x('firebase-analytics')

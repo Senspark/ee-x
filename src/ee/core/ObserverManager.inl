@@ -3,18 +3,28 @@ namespace core {
 #define Self ObserverManager
 
 template <class Observer>
-bool Self<Observer>::addObserver(const std::string& key,
-                                 const Observer& observer) {
-    if (observers_.count(key) != 0) {
-        return false;
+Self<Observer>::Self()
+    : counter_(0) {}
+
+template <class Observer>
+Self<Observer>::~Self() {
+    if (observers_.empty()) {
+        // OK.
+    } else {
+        // Leak.
     }
-    observers_.emplace(key, observer);
+}
+
+template <class Observer>
+int Self<Observer>::addObserver(const Observer& observer) {
+    auto id = counter_++;
+    observers_.emplace(id, observer);
     return true;
 }
 
 template <class Observer>
-bool Self<Observer>::removeObserver(const std::string& key) {
-    auto iter = observers_.find(key);
+bool Self<Observer>::removeObserver(int id) {
+    auto iter = observers_.find(id);
     if (iter == observers_.cend()) {
         return false;
     }

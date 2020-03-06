@@ -15,12 +15,12 @@ public:
 
     virtual ~IObserverManager() = default;
 
-    /// Adds an observer with the specified key.
-    virtual bool addObserver(const std::string& key,
-                             const Observer& observer) = 0;
+    /// Adds an observer.
+    /// @returns Observer's ID.
+    virtual int addObserver(const Observer& observer) = 0;
 
-    /// Removes an observer with the specified key.
-    virtual bool removeObserver(const std::string& key) = 0;
+    /// Removes an observer with the specified ID.
+    virtual bool removeObserver(int id) = 0;
 
     /// Dispatches an event.
     virtual void dispatchEvent(const Dispatcher& dispatcher) = 0;

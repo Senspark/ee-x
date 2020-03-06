@@ -20,10 +20,16 @@ class IMessageBridge;
 class IService;
 class MessageBridge;
 class PluginManager;
+class ScopeGuard;
 class ServiceLocator;
 class SpinLock;
 class VideoPlayer;
 class VideoPlayerManager;
+
+class ObserverHandle;
+
+template <class Observer>
+class ObserverBinder;
 
 template <class Observer>
 class IObserverManager;
@@ -46,6 +52,9 @@ using core::PluginManager;
 using core::ServiceLocator;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
+
+using core::ObserverBinder;
+using core::ObserverHandle;
 
 using core::IObserverManager;
 using core::ObserverManager;

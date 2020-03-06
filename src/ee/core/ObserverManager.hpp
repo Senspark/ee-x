@@ -13,15 +13,18 @@ class ObserverManager : public virtual IObserverManager<Observer> {
 public:
     using typename IObserverManager<Observer>::Dispatcher;
 
-    virtual bool addObserver(const std::string& key,
-                             const Observer& observer) override;
+    ObserverManager();
+    virtual ~ObserverManager() override;
 
-    virtual bool removeObserver(const std::string& key) override;
+    virtual int addObserver(const Observer& observer) override;
+
+    virtual bool removeObserver(int id) override;
 
     virtual void dispatchEvent(const Dispatcher& dispatcher) override;
 
 private:
-    std::unordered_map<std::string, Observer> observers_;
+    int counter_;
+    std::unordered_map<int, Observer> observers_;
 };
 } // namespace core
 } // namespace ee

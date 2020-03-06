@@ -19,7 +19,7 @@ template <class Observer>
 int Self<Observer>::addObserver(const Observer& observer) {
     auto id = counter_++;
     observers_.emplace(id, observer);
-    return true;
+    return id;
 }
 
 template <class Observer>

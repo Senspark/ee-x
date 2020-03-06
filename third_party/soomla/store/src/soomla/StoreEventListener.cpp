@@ -26,6 +26,9 @@
 
 namespace soomla {
 class EventListenerProxy final {
+private:
+    using Self = EventListenerProxy;
+
 public:
 #if COCOSCREATOR_VERSION == 2
     EventListenerProxy(
@@ -39,6 +42,17 @@ public:
         cocos2d::EventDispatcher::removeCustomEventListener(eventName_,
                                                             wrapped_);
     }
+
+    EventListenerProxy(Self&& other)
+        : wrapped_(std::exchange(other.wrapped_, 0))
+        , eventName_(std::exchange(other.eventName_, "")) {}
+
+    Self& operator=(Self&& other) {
+        wrapped_ = std::exchange(other.wrapped_, 0);
+        eventName_ = std::exchange(other.eventName_, "");
+        return *this;
+    }
+
 #elif COCOSCREATOR_VERSION == 1
     EventListenerProxy(
         const std::string& eventName,
@@ -53,14 +67,22 @@ public:
             ->getEventDispatcher()
             ->removeEventListener(wrapped_);
     }
+
+    EventListenerProxy(Self&& other)
+        : wrapped_(std::exchange(other.wrapped_, nullptr)) {}
+
+    Self& operator=(Self&& other) {
+        wrapped_ = std::exchange(other.wrapped_, nullptr);
+        return *this;
+    }
 #endif
 
-    EventListenerProxy(const EventListenerProxy&) = delete;
-    EventListenerProxy& operator=(const EventListenerProxy&) = delete;
+    EventListenerProxy(const Self&) = delete;
+    EventListenerProxy& operator=(const Self&) = delete;
 
 private:
 #if COCOSCREATOR_VERSION == 2
-    uint32_t wrapped_;
+    std::uint32_t wrapped_;
     std::string eventName_;
 #elif COCOSCREATOR_VERSION == 1
     cocos2d::EventListener* wrapped_;

@@ -6,6 +6,8 @@
 #include <experimental/coroutine>
 #include <mutex> // for std::adopt_lock_t
 
+#include "ee/CoroutineFwd.hpp"
+
 /// https://github.com/lewissbaker/cppcoro/blob/master/include/cppcoro/async_mutex.hpp
 namespace cppcoro {
 class async_mutex_lock;

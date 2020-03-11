@@ -6,17 +6,37 @@
 #include <vector>
 
 #include "ee/CoroutineFwd.hpp"
+#include "ee/coroutine/IsAwaitable.hpp"
+#include "ee/coroutine/NoAwait.hpp"
+#include "ee/coroutine/Task.hpp"
 
 namespace ee {
 namespace coroutine {
+namespace detail {
+template <class Resolve, class Function, class Callable>
+Function makeFunction(const Callable& callable) {
+    if constexpr (IsAwaitableV<
+                      std::invoke_result_t<Callable, const Resolve&>>) {
+        return [callable](const Resolve& resolve) {
+            noAwait([callable, resolve]() -> Task<> { //
+                co_await callable(resolve);
+            });
+        };
+    }
+    // Normal callable.
+    return callable;
+}
+} // namespace detail
+
 template <class Result>
 struct LambdaAwaiter {
 public:
     using Resolve = std::function<void(Result result)>;
     using Function = std::function<void(const Resolve& resolve)>;
 
-    explicit LambdaAwaiter(const Function& f)
-        : f_(f)
+    template <class Callable>
+    explicit LambdaAwaiter(const Callable& callable)
+        : f_(detail::makeFunction<Resolve, Function>(callable))
         , invoked_(false)
         , ready_(false) {}
 
@@ -66,8 +86,9 @@ struct LambdaAwaiter<void> {
     using Resolve = std::function<void()>;
     using Function = std::function<void(const Resolve& resolve)>;
 
-    explicit LambdaAwaiter(const Function& f)
-        : f_(f)
+    template <class Callable>
+    explicit LambdaAwaiter(const Callable& callable)
+        : f_(detail::makeFunction<Resolve, Function>(callable))
         , invoked_(false)
         , ready_(false) {}
 

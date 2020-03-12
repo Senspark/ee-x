@@ -21,6 +21,10 @@
 #include "ee/firebase/analytics/FirebaseAnalyticsBridge.hpp"
 #endif
 
+#if __has_include("ee/firebase/crashlytics/FirebaseCrashlyticsBridge.hpp")
+#include "ee/firebase/crashlytics/FirebaseCrashlyticsBridge.hpp"
+#endif
+
 #if __has_include("ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp")
 #include "ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp"
 #endif

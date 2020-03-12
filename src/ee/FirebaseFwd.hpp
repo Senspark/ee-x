@@ -24,6 +24,10 @@ namespace analytics {
 class Bridge;
 } // namespace analytics
 
+namespace crashlytics {
+class Bridge;
+} // namespace crashlytics
+
 namespace dynamic_link {
 class Bridge;
 } // namespace dynamic_link
@@ -53,6 +57,7 @@ class Bridge;
 
 using FirebaseApp = firebase::App;
 using FirebaseAnalytics = firebase::analytics::Bridge;
+using FirebaseCrashlytics = firebase::crashlytics::Bridge;
 using FirebaseDynamicLink = firebase::dynamic_link::Bridge;
 using FirebaseMessaging = firebase::messaging::Bridge;
 using firebase::messaging::Message;

@@ -8,10 +8,8 @@
 
 #include "ee/firebase/analytics/FirebaseAnalyticsBridge.hpp"
 
-#if defined(EE_X_MOBILE)
 #include <firebase/analytics.h>
 #include <firebase/analytics/parameter_names.h>
-#endif // EE_X_MOBILE
 
 #include <ee/firebase/core/FirebaseApp.hpp>
 
@@ -26,9 +24,7 @@ Self::Bridge() {
 
 Self::~Bridge() {
     if (initialized_) {
-#if defined(EE_X_MOBILE)
         ::firebase::analytics::Terminate();
-#endif // EE_X_MOBILE
     }
 }
 
@@ -39,7 +35,6 @@ bool Self::initialize() {
 
     App::initialize();
 
-#if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {
         return false;
@@ -48,7 +43,6 @@ bool Self::initialize() {
     ::firebase::analytics::Initialize(*app);
     analyticsCollectionEnabled(true);
     setSessionTimeoutDuration(1800000);
-#endif // defined(EE_X_MOBILE)
 
     initialized_ = true;
     return true;
@@ -58,27 +52,21 @@ void Self::analyticsCollectionEnabled(bool enabled) {
     if (not initialized_) {
         return;
     }
-#ifdef EE_X_MOBILE
     ::firebase::analytics::SetAnalyticsCollectionEnabled(enabled);
-#endif // EE_X_MOBILE
 }
 
 void Self::setSessionTimeoutDuration(std::int64_t milliseconds) {
     if (not initialized_) {
         return;
     }
-#ifdef EE_X_MOBILE
     ::firebase::analytics::SetSessionTimeoutDuration(milliseconds);
-#endif // EE_X_MOBILE
 }
 
 void Self::setUserId(const std::string& userId) {
     if (not initialized_) {
         return;
     }
-#ifdef EE_X_MOBILE
     ::firebase::analytics::SetUserId(userId.c_str());
-#endif // EE_X_MOBILE
 }
 
 void Self::setUserProperty(const std::string& name,
@@ -86,16 +74,13 @@ void Self::setUserProperty(const std::string& name,
     if (not initialized_) {
         return;
     }
-#if defined(EE_X_MOBILE)
     ::firebase::analytics::SetUserProperty(name.c_str(), property.c_str());
-#endif // EE_X_MOBILE
 }
 
 void Self::logEvent(const std::string& name, const TrackingDict& dict) {
     if (not initialized_) {
         return;
     }
-#ifdef EE_X_MOBILE
     if (dict.empty()) {
         ::firebase::analytics::LogEvent(name.c_str());
     } else {
@@ -110,8 +95,6 @@ void Self::logEvent(const std::string& name, const TrackingDict& dict) {
         ::firebase::analytics::LogEvent(name.c_str(), parameters.get(),
                                         dict.size());
     }
-
-#endif // EE_X_MOBILE
 }
 } // namespace analytics
 } // namespace firebase

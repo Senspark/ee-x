@@ -10,9 +10,7 @@
 
 #include <cassert>
 
-#if defined(EE_X_MOBILE)
 #include <firebase/storage.h>
-#endif // EE_X_MOBILE
 
 #include <ee/core/internal/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseApp.hpp>
@@ -26,12 +24,9 @@ using Self = Bridge;
 Self::Bridge() {
     initialized_ = false;
     fetching_ = false;
-
-#if defined(EE_X_MOBILE)
     storage_ = nullptr;
     metadataScheduler_ = nullptr;
     bytesScheduler_ = nullptr;
-#endif // EE_X_MOBILE
 }
 
 Self::~Bridge() {}
@@ -43,7 +38,6 @@ bool Self::initialize() {
 
     App::initialize();
 
-#if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {
         return false;
@@ -59,7 +53,6 @@ bool Self::initialize() {
     metadataScheduler_ =
         std::make_unique<Scheduler<::firebase::storage::Metadata>>();
     bytesScheduler_ = std::make_unique<Scheduler<std::size_t>>();
-#endif // EE_X_MOBILE
 
     initialized_ = true;
     fetching_ = false;
@@ -70,60 +63,42 @@ double Self::getMaxDownloadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
-#if defined(EE_X_MOBILE)
     return storage_->max_download_retry_time();
-#else  // EE_X_MOBILE
-    return -1;
-#endif // EE_X_MOBILE
 }
 
 double Self::getMaxUploadRetryTime() const {
     if (not initialized_) {
         return -1;
     }
-#if defined(EE_X_MOBILE)
     return storage_->max_upload_retry_time();
-#else  // EE_X_MOBILE
-    return -1;
-#endif // EE_X_MOBILE
 }
 
 double Self::getMaxOperationRetryTime() const {
     if (not initialized_) {
         return -1;
     }
-#if defined(EE_X_MOBILE)
     return storage_->max_operation_retry_time();
-#else  // EE_X_MOBILE
-    return -1;
-#endif // EE_X_MOBILE
 }
 
 void Self::setMaxDownloadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
-#if defined(EE_X_MOBILE)
     storage_->set_max_download_retry_time(seconds);
-#endif // EE_X_MOBILE
 }
 
 void Self::setMaxOperationRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
-#if defined(EE_X_MOBILE)
     storage_->set_max_operation_retry_time(seconds);
-#endif // EE_X_MOBILE
 }
 
 void Self::setMaxUploadRetryTime(double seconds) {
     if (not initialized_) {
         return;
     }
-#if defined(EE_X_MOBILE)
     storage_->set_max_upload_retry_time(seconds);
-#endif // EE_X_MOBILE
 }
 
 void Self::getHash(const std::string& filePath, const HashCallback& callback) {
@@ -132,7 +107,6 @@ void Self::getHash(const std::string& filePath, const HashCallback& callback) {
     if (not initialized_) {
         return;
     }
-#if defined(EE_X_MOBILE)
     auto file = storage_->GetReference(filePath.c_str());
     if (not file.is_valid()) {
         return;
@@ -152,7 +126,6 @@ void Self::getHash(const std::string& filePath, const HashCallback& callback) {
             // MD5 is not supported yet, use updated_time.
             callback(true, std::to_string(metadata->updated_time()));
         });
-#endif // EE_X_MOBILE
 }
 
 void Self::getData(const std::string& filePath, const DataCallback& callback) {
@@ -161,8 +134,6 @@ void Self::getData(const std::string& filePath, const DataCallback& callback) {
     if (not initialized_) {
         return;
     }
-
-#if defined(EE_X_MOBILE)
     auto file = storage_->GetReference(filePath.c_str());
     if (not file.is_valid()) {
         return;
@@ -183,7 +154,6 @@ void Self::getData(const std::string& filePath, const DataCallback& callback) {
             assert(*bytes <= max_file_size_in_bytes);
             callback(true, std::string(std::addressof(buffer_.at(0)), *bytes));
         });
-#endif // EE_X_MOBILE
 }
 } // namespace storage
 } // namespace firebase

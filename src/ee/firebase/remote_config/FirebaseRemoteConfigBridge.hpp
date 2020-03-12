@@ -16,11 +16,9 @@
 
 #include <ee/FirebaseFwd.hpp>
 
-#if defined(EE_X_MOBILE)
 namespace firebase {
 class Variant;
 } // namespace firebase
-#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
@@ -73,7 +71,8 @@ public:
     /// @return True if successfully initialized, false otherwise.
     bool initialize();
 
-    /// Applies the most recently fetched data, so that its value can be accessed.
+    /// Applies the most recently fetched data, so that its value can be
+    /// accessed.
     bool activateFetched();
 
     /// Only fetches (activate fetch must be called manually).
@@ -120,12 +119,8 @@ private:
     bool initialized_;
     bool defaultsDirty_;
 
-#if defined(EE_X_MOBILE)
     std::map<std::string, ::firebase::Variant> defaults_;
     std::unique_ptr<Scheduler<void>> fetchScheduler_;
-#else  // EE_X_MOBILE
-    std::map<std::string, std::string> defaults_;
-#endif // EE_X_MOBILE
 };
 } // namespace remote_config
 } // namespace firebase

@@ -8,16 +8,13 @@
 
 #include "ee/firebase/messaging/FirebaseMessagingBridge.hpp"
 
-#if defined(EE_X_MOBILE)
 #include <firebase/messaging.h>
-#endif // EE_X_MOBILE
 
 #include <ee/firebase/core/FirebaseApp.hpp>
 
 namespace ee {
 namespace firebase {
 namespace messaging {
-#if defined(EE_X_MOBILE)
 namespace {
 class Listener : public ::firebase::messaging::Listener {
 private:
@@ -47,14 +44,11 @@ private:
     TokenCallback tokenCallback_;
 };
 } // namespace
-#endif // EE_X_MOBILE
 
-#if defined(EE_X_MOBILE)
 Notification::Notification(const ::firebase::messaging::Notification& other) {
     title = other.title;
     body = other.body;
 }
-#endif // EE_X_MOBILE
 
 Message::Message(const Message& other) {
     copy(other);
@@ -67,7 +61,6 @@ Message& Message::operator=(const Message& other) {
     return *this;
 }
 
-#if defined(EE_X_MOBILE)
 Message::Message(const ::firebase::messaging::Message& other) {
     from = other.from;
     data = other.data;
@@ -82,7 +75,6 @@ Message::Message(const ::firebase::messaging::Message& other) {
     }
     notificationOpened = other.notification_opened;
 }
-#endif // EE_X_MOBILE
 
 void Message::copy(const Message& other) {
     from = other.from;
@@ -108,9 +100,7 @@ Self::Bridge() {
 
 Self::~Bridge() {
     if (initialized_) {
-#if defined(EE_X_MOBILE)
         ::firebase::messaging::Terminate();
-#endif // EE_X_MOBILE
     }
 }
 
@@ -121,7 +111,6 @@ bool Self::initialize() {
 
     App::initialize();
 
-#if defined(EE_X_MOBILE)
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {
         return false;
@@ -135,7 +124,6 @@ bool Self::initialize() {
     if (initResult != ::firebase::InitResult::kInitResultSuccess) {
         return false;
     }
-#endif // EE_X_MOBILE
 
     initialized_ = true;
     return true;
@@ -154,7 +142,6 @@ void Self::setTokenCallback(const TokenCallback& callback) {
     tokenCallback_ = callback;
 }
 
-#if defined(EE_X_MOBILE)
 void Self::onMessage(const ::firebase::messaging::Message& message) {
     if (messageCallback_) {
         messageCallback_(Message(message));
@@ -166,21 +153,16 @@ void Self::onTokenReceived(const std::string& token) {
         tokenCallback_(token);
     }
 }
-#endif // EE_X_MOBILE
 
 void Self::subscribe(const std::string& topic) {
     if (initialized_) {
-#if defined(EE_X_MOBILE)
         ::firebase::messaging::Subscribe(topic.c_str());
-#endif // EE_X_MOBILE
     }
 }
 
 void Self::unsubscribe(const std::string& topic) {
     if (initialized_) {
-#if defined(EE_X_MOBILE)
         ::firebase::messaging::Unsubscribe(topic.c_str());
-#endif // EE_X_MOBILE
     }
 }
 } // namespace messaging

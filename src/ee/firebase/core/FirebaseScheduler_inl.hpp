@@ -10,7 +10,6 @@
 #error "This file must be only included by FirebaseScheduler.hpp"
 #endif // EE_X_FIREBASE_SCHEDULER_HPP_
 
-#if defined(EE_X_MOBILE)
 #include <firebase/future.h>
 
 namespace ee {
@@ -67,5 +66,3 @@ void Scheduler<T>::onCompletion(const FutureType& future, void* userData) {
 }
 } // namespace firebase
 } // namespace ee
-
-#endif // EE_X_MOBILE

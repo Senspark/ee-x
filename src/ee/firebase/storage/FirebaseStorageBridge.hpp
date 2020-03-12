@@ -16,14 +16,12 @@
 
 #include <ee/FirebaseFwd.hpp>
 
-#if defined(EE_X_MOBILE)
 namespace firebase {
 namespace storage {
 class Storage;
 class Metadata;
 } // namespace storage
 } // namespace firebase
-#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
@@ -81,7 +79,6 @@ private:
     bool initialized_;
     bool fetching_;
 
-#if defined(EE_X_MOBILE)
     ::firebase::storage::Storage* storage_;
 
     std::unique_ptr<Scheduler<::firebase::storage::Metadata>>
@@ -89,7 +86,6 @@ private:
     std::unique_ptr<Scheduler<std::size_t>> bytesScheduler_;
 
     std::array<char, max_file_size_in_bytes> buffer_;
-#endif // EE_X_MOBILE
 };
 } // namespace storage
 } // namespace firebase

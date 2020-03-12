@@ -16,7 +16,6 @@
 
 #include <ee/FirebaseFwd.hpp>
 
-#if defined(EE_X_MOBILE)
 namespace firebase {
 namespace messaging {
 struct Message;
@@ -24,7 +23,6 @@ struct Notification;
 class Listener;
 } // namespace messaging
 } // namespace firebase
-#endif // EE_X_MOBILE
 
 namespace ee {
 namespace firebase {
@@ -39,9 +37,7 @@ public:
     Notification(const Notification&) = default;
     Notification& operator=(const Notification&) = default;
 
-#if defined(EE_X_MOBILE)
     explicit Notification(const ::firebase::messaging::Notification& other);
-#endif // EE_X_MOBILE
 
     /// Indicates notification title. This field is not visible on iOS phones
     /// and tablets.
@@ -60,26 +56,24 @@ public:
     Message(const Message& other);
     Message& operator=(const Message& other);
 
-#if defined(EE_X_MOBILE)
     Message(const ::firebase::messaging::Message& other);
-#endif // EE_X_MOBILE
 
     /// Authenticated ID of the sender. This is a project number in most cases.
     std::string from;
-    
+
     /// This parameter specifies the recipient of a message.
     std::string to;
-    
+
     /// Binary payload. This field is currently unused.
     std::string rawData;
-    
+
     /// Equivalent with a content-type.
     /// This field is only used for downstream messages received through
     std::string messageType;
-    
+
     /// Error code.
     std::string error;
-    
+
     /// Human readable details about the error.
     std::string errorDescription;
 
@@ -152,12 +146,10 @@ private:
     MessageCallback messageCallback_;
     TokenCallback tokenCallback_;
 
-#if defined(EE_X_MOBILE)
     void onMessage(const ::firebase::messaging::Message& message);
     void onTokenReceived(const std::string& token);
 
     std::unique_ptr<::firebase::messaging::Listener> listener_;
-#endif // EE_X_MOBILE
 };
 } // namespace messaging
 } // namespace firebase

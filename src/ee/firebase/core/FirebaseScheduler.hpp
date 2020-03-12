@@ -9,13 +9,12 @@
 #ifndef EE_X_FIREBASE_SCHEDULER_HPP_
 #define EE_X_FIREBASE_SCHEDULER_HPP_
 
-#include "ee/FirebaseFwd.hpp"
-
-#if defined(EE_X_MOBILE)
 #include <cstddef>
 #include <functional>
 #include <map>
 #include <set>
+
+#include "ee/FirebaseFwd.hpp"
 
 namespace firebase {
 template <class ResultType>
@@ -44,8 +43,6 @@ private:
 };
 } // namespace firebase
 } // namespace ee
-
-#endif // EE_X_MOBILE
 
 #include "ee/firebase/core/FirebaseScheduler_inl.hpp"
 

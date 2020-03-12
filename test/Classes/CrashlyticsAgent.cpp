@@ -10,8 +10,6 @@
 
 #include <ee/Crashlytics.hpp>
 
-const CrashlyticsAgent::CustomAttributesType CrashlyticsAgent::EmptyAttributes = std::unordered_map<std::string, std::string>();
-
 CrashlyticsAgent* CrashlyticsAgent::getInstance() {
     static CrashlyticsAgent sharedInstance;
     return &sharedInstance;

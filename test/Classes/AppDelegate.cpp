@@ -121,16 +121,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->logDebug("debug_message");
     CrashlyticsAgent::getInstance()->logInfo("info_message");
     CrashlyticsAgent::getInstance()->logError("error_message");
-    CrashlyticsAgent::getInstance()->trackLevelStart("level_test");
-    CrashlyticsAgent::getInstance()->trackLevelEnd("level_test", 100, true);
-    CrashlyticsAgent::getInstance()->trackPurchase(
-        100.f, "USD", true, "Item Test", "Test Type", "TEST_ID");
-
-    CrashlyticsAgent::CustomAttributesType attrs;
-    attrs["title"] = "Beautiful in white";
-    attrs["singer"] = "Westlife";
-    CrashlyticsAgent::getInstance()->trackCustomEvent("PlaySong", attrs);
-    CrashlyticsAgent::getInstance()->trackInvite("Twitter");
 
     getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
     ee::runOnUiThreadAndWait([] {

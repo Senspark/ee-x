@@ -6,6 +6,7 @@
 #include "ee/CoroutineFwd.hpp"
 #include "ee/coroutine/AsyncMutex.hpp"
 #include "ee/coroutine/LambdaAwaiter.hpp"
+#include "ee/coroutine/MakeAwaiter.hpp"
 #include "ee/coroutine/NoAwait.hpp"
 #include "ee/coroutine/SwitchToUiThread.hpp"
 #include "ee/coroutine/Task.hpp"

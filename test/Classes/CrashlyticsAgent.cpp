@@ -40,23 +40,3 @@ void CrashlyticsAgent::logInfo(const std::string& message) {
 void CrashlyticsAgent::logError(const std::string& message) {
     protocol_->log(ee::LogLevel::Error, "your_log_tag", message);
 }
-
-void CrashlyticsAgent::trackLevelStart(const std::string &name, const CustomAttributesType& attrs) {
-    protocol_->trackLevelStart(name, attrs);
-}
-
-void CrashlyticsAgent::trackLevelEnd(const std::string &name, int score, bool success, const CustomAttributesType& attrs) {
-    protocol_->trackLevelEnd(name, score, success, attrs);
-}
-
-void CrashlyticsAgent::trackPurchase(float price, const std::string &currency, bool success, const std::string &itemName, const std::string &itemType, const std::string &itemId, const CustomAttributesType& attrs) {
-    protocol_->trackPurchase(price, currency, success, itemName, itemType, itemId, attrs);
-}
-
-void CrashlyticsAgent::trackCustomEvent(const std::string &name, const CustomAttributesType& attrs) {
-    protocol_->trackCustomEvent(name, attrs);
-}
-
-void CrashlyticsAgent::trackInvite(const std::string &method, const CustomAttributesType& attrs) {
-    protocol_->trackInvite(method, attrs);
-}

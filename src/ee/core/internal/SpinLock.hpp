@@ -24,11 +24,11 @@ public:
     SpinLock& operator=(const SpinLock&) = delete;
 
     void lock() {
-        while (locked_.test_and_set(std::memory_order::memory_order_acquire)) {
+        while (locked_.test_and_set(std::memory_order_acquire)) {
         }
     }
 
-    void unlock() { locked_.clear(std::memory_order::memory_order_release); }
+    void unlock() { locked_.clear(std::memory_order_release); }
 
 private:
     std::atomic_flag locked_ = ATOMIC_FLAG_INIT;

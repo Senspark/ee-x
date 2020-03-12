@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 COCOS2D_JAVASCRIPT = $(filter %-DCOCOS2D_JAVASCRIPT=1,$(APP_CPPFLAGS))
 
-LOCAL_MODULE := soomla_core_static
+LOCAL_MODULE := soomla_core
 
 LOCAL_SRC_FILES := ${shell find $(LOCAL_PATH)/src -name "*.cpp" -print}
 
@@ -19,6 +19,6 @@ else
 	LOCAL_STATIC_LIBRARIES := cc_static
 endif
 
-LOCAL_STATIC_LIBRARIES += jansson_static
+LOCAL_STATIC_LIBRARIES += jansson
 
 include $(BUILD_STATIC_LIBRARY)

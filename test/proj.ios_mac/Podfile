@@ -8,7 +8,7 @@ abstract_target 'common' do
     # pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-lite'
 	  platform :ios, '9.0'
     
-    pod_ee_x('soomla-cocos2dx-store')
+    pod_ee_x('soomla-store')
     pod_ee_x('cocos')
     
     target 'ee_x_test_mobile' do
@@ -42,11 +42,5 @@ abstract_target 'common' do
 
     target 'ee_x_test_desktop' do
         pod_ee_x('ads')
-        pod_ee_x('crashlytics')
-        pod_ee_x('firebase-analytics')
-        pod_ee_x('firebase-dynamic-link')
-        pod_ee_x('firebase-messaging')
-        pod_ee_x('firebase-remote-config')
-        pod_ee_x('firebase-storage')
     end
 end

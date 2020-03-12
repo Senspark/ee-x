@@ -38,7 +38,7 @@ android {
                 cppFlags '-frtti'
                 cppFlags '-fexceptions'
                 cppFlags '-fsigned-char'
-                cppFlags '-std=c++17'
+                cppFlags '-std=c++2a'
                 cppFlags '-U__SSE__'
                 cppFlags '-Wno-extern-c-compat'
                 abiFilters.addAll(architectures)
@@ -53,7 +53,7 @@ android {
                 cppFlags '-frtti'
                 cppFlags '-fexceptions'
                 cppFlags '-fsigned-char'
-                cppFlags '-std=c++17'
+                cppFlags '-std=c++2a'
                 cppFlags '-U__SSE__'
                 cppFlags '-Wno-extern-c-compat'
                 abiFilters.addAll(architectures)

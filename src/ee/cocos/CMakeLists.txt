@@ -8,7 +8,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmain -Wmissing-braces -Wmissing-include-di
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wreturn-type -Waddress -Wmissing-declarations -Wmissing-field-initializers")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-function -Wunused-label -Wuninitialized")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 
 execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)

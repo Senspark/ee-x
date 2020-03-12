@@ -322,51 +322,57 @@ Pod::Spec.new do |spec|
     s.exclude_files =
       'src/ee/firebase/**/*Android*'
 
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
-    s.ios.dependency 'ee-x/firebase-headers'
-    s.ios.dependency 'Firebase/Core'
+    s.dependency 'ee-x/firebase-headers'
+    s.dependency 'Firebase/Core'
   end
 
   spec.subspec 'firebase-analytics' do |s|
     s.source_files = 'src/ee/firebase/analytics/*'
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
     s.dependency 'ee-x/firebase-core'
+  end
+
+  spec.subspec 'firebase-crashlytics' do |s|
+    s.source_files = 'src/ee/firebase/crashlytics/**/*'
+    s.dependency 'ee-x-/firebase-core'
+    s.dependency 'Firebase/Crashlytics'
   end
 
   spec.subspec 'firebase-dynamic-link' do |s|
     s.source_files = 'src/ee/firebase/dynamic_link/*'
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/DynamicLinks'
+    s.dependency 'Firebase/DynamicLinks'
   end
 
   spec.subspec 'firebase-messaging' do |s|
     s.source_files = 'src/ee/firebase/messaging/*'
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Messaging'
+    s.dependency 'Firebase/Messaging'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
     s.source_files = 'src/ee/firebase/remote_config/*'
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/RemoteConfig'
+    s.dependency 'Firebase/RemoteConfig'
   end
 
   spec.subspec 'firebase-storage' do |s|
     s.source_files = 'src/ee/firebase/storage/*'
-    s.ios.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
+    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Storage'
+    s.dependency 'Firebase/Storage'
   end
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ee/firebase/performance/**/*'
     s.private_header_files = 'src/ee/firebase/performance/private/*'
     s.dependency 'ee-x/firebase-core'
-    s.ios.dependency 'Firebase/Performance'
+    s.dependency 'Firebase/Performance'
   end
 
   spec.subspec 'google-analytics' do |s|

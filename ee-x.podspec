@@ -336,7 +336,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
-    s.dependency 'ee-x-/firebase-core'
+    s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Crashlytics'
   end
 

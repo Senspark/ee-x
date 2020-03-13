@@ -10,7 +10,7 @@
 
 @end
 
-@interface EEFirebaseCrashlytics
+@implementation EEFirebaseCrashlytics
 
 static NSString* const kLog = @"FirebaseCrashlytics_log";
 

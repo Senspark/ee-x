@@ -5,14 +5,4 @@
 
     <!-- These permissions are strongly recommended and will result in higher performance -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <application>
-        <activity
-            android:name="com.applovin.adview.AppLovinInterstitialActivity"
-            android:configChanges="orientation|screenSize" />
-
-        <activity
-            android:name="com.applovin.adview.AppLovinConfirmationActivity"
-            android:configChanges="orientation|screenSize" />
-    </application>
 </manifest>

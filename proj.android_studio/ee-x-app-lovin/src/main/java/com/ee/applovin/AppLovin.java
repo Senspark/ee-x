@@ -306,7 +306,7 @@ public class AppLovin implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void setTestAdEnabled(boolean enabled) {
         Utils.checkMainThread();
-        _sdk.getSettings().setTestAdsEnabled(enabled);
+        // Removed.
     }
 
     @SuppressWarnings("WeakerAccess")

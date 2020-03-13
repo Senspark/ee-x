@@ -18,4 +18,7 @@ dependencies {
 
     // Add the Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+
+    // Add the Firebase Crashlytics NDK dependency.
+    implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.0-beta01'
 }

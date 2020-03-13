@@ -12,7 +12,7 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
-    api 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
 
     // https://bintray.com/google/mobile-ads-adapters-android
@@ -25,11 +25,11 @@ dependencies {
 
         // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
         if (rootProject.ext.useIronsourceMediation) {
-            implementation('com.google.ads.mediation:unity:3.3.0.0', {
+            implementation('com.google.ads.mediation:unity:3.4.0.0', {
                 exclude group: 'com.unity3d.ads'
             })
         } else {
-            implementation 'com.google.ads.mediation:unity:3.3.0.0'
+            implementation 'com.google.ads.mediation:unity:3.4.0.0'
         }
     }
 }

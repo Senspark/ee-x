@@ -28,6 +28,6 @@ dependencies {
         implementation 'com.ironsource.adapters:unityadsadapter:4.1.7'
 
         // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-        implementation 'com.ironsource.adapters:admobadapter:4.3.6'
+        implementation 'com.ironsource.adapters:admobadapter:4.3.7'
     }
 }

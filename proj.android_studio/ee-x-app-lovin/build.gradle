@@ -14,5 +14,8 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'com.applovin:applovin-sdk:7.7.0'
+
+    // https://dash.applovin.com/docs/integration#androidIntegration
+    // https://bintray.com/applovin/Android/sdk_android
+    implementation 'com.applovin:applovin-sdk:9.11.5'
 }

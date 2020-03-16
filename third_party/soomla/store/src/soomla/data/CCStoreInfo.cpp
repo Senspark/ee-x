@@ -144,9 +144,9 @@ CCVirtualItem* CCStoreInfo::getItemByItemId(const std::string& itemId,
         TAG, StringUtils::format("Trying to fetch an item with itemId: %s",
                                  itemId.c_str()));
 
-    CCVirtualItem* item = getVirtualItems().at(itemId);
-    if (item != nullptr) {
-        return item;
+    auto iter = getVirtualItems().find(itemId);
+    if (iter != getVirtualItems().cend()) {
+        return iter->second;
     }
 
     CCError::tryFillError(
@@ -164,9 +164,9 @@ CCStoreInfo::getPurchasableItemWithProductId(const std::string& productId,
                  "Trying to fetch a purchasable item with productId: %s",
                  productId.c_str()));
 
-    CCPurchasableVirtualItem* item = getPurchasableItems().at(productId);
-    if (item != nullptr) {
-        return item;
+    auto iter = getPurchasableItems().find(productId);
+    if (iter != getPurchasableItems().cend()) {
+        return iter->second;
     }
 
     CCError::tryFillError(
@@ -185,9 +185,9 @@ CCStoreInfo::getCategoryForVirtualGood(const std::string& goodItemId,
                  "Trying to fetch a category for a good with itemId: %s",
                  goodItemId.c_str()));
 
-    CCVirtualCategory* category = getGoodsCategories().at(goodItemId);
-    if (category != nullptr) {
-        return category;
+    auto iter = getGoodsCategories().find(goodItemId);
+    if (iter != getGoodsCategories().cend()) {
+        return iter->second;
     }
 
     CCError::tryFillError(error, Value(StringUtils::format(

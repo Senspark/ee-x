@@ -12,28 +12,33 @@ namespace ee {
 namespace core {
 namespace detail {
 class ServiceLocatorImpl {
+private:
+    template <class Service>
+    static constexpr bool IsService = std::is_base_of_v<IService, Service>;
+
 public:
-    template <class Service, class T>
-    void provide(std::unique_ptr<T> service) {
+    template <class Service, class T,
+              class = std::enable_if_t<IsService<Service>>>
+    void provide(const std::shared_ptr<T>& service) {
         auto&& currentService = getService<Service>();
         if (currentService) {
             currentService->destroy();
             services_.erase(currentService.get());
         }
-        currentService = std::move(service);
+        currentService = service;
         services_.insert(currentService.get());
     }
 
-    template <class Service>
-    const std::unique_ptr<Service>& resolve() {
+    template <class Service, class = std::enable_if_t<IsService<Service>>>
+    const std::shared_ptr<Service>& resolve() {
         auto&& service = getService<Service>();
         return service;
     }
 
 private:
     template <class Service>
-    std::unique_ptr<Service>& getService() {
-        static std::unique_ptr<Service> service;
+    std::shared_ptr<Service>& getService() {
+        static std::shared_ptr<Service> service;
         return service;
     }
 
@@ -46,13 +51,13 @@ public:
     /// Registers a service.
     /// @note register is a keyword.
     template <class Service, class T>
-    static void provide(std::unique_ptr<T> service) {
-        impl_.provide<Service>(std::move(service));
+    static void provide(const std::shared_ptr<T>& service) {
+        impl_.provide<Service>(service);
     }
 
     /// Resolves the specified service.
     template <class Service>
-    static const std::unique_ptr<Service>& resolve() {
+    static const std::shared_ptr<Service>& resolve() {
         return impl_.resolve<Service>();
     }
 

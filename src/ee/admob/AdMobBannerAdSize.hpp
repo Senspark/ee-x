@@ -23,6 +23,10 @@ enum class BannerAdSize {
     /// kGADAdSizeSmartBannerPortrait or kGADAdSizeSmartBannerLandscape
     /// Spans the full width of the application.
     Smart,
+    
+    /// kGADAdSizeMediumRectangle.
+    /// Typically 300x250.
+    MediumReactangle,
 };
 } // namespace admob
 } // namespace ee

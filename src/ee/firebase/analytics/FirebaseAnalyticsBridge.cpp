@@ -78,7 +78,7 @@ void Self::setUserProperty(const std::string& name,
 }
 
 void Self::setCurrentScreeen(const std::string& screenName,
-                             std::optional<std::string> screenClass) {
+                             const std::optional<std::string>& screenClass) {
     if (not initialized_) {
         return;
     }

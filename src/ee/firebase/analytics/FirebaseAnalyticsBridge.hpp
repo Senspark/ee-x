@@ -76,7 +76,7 @@ public:
     /// name of the current Activity. On iOS, the default is the class name of
     /// the current UIViewController. Limited to 100 characters.
     void setCurrentScreeen(const std::string& screenName,
-                           std::optional<std::string> screenClass);
+                           const std::optional<std::string>& screenClass);
 
     /// Log an event with with associated parameters.
     /// @param[in] name Name of the event to log. Should contain 1 to 32

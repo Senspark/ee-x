@@ -10,6 +10,7 @@
 #define EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <unordered_map>
 

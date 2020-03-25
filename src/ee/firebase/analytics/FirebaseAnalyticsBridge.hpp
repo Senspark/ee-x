@@ -69,14 +69,14 @@ public:
     /// your app where users spend their time and how they interact with your
     /// app.
     ///
-    /// @param screen_name The name of the current screen. Set to nullptr to
+    /// @param screenName The name of the current screen. Set to nullptr to
     /// clear the current screen name. Limited to 100 characters.
-    /// @param screen_class The name of the screen class. If you specify nullptr
+    /// @param screenClass The name of the screen class. If you specify nullptr
     /// for this, it will use the default. On Android, the default is the class
     /// name of the current Activity. On iOS, the default is the class name of
     /// the current UIViewController. Limited to 100 characters.
-    void setCurrentScreeen(const std::string& name,
-                           std::optional<std::string> clazz);
+    void setCurrentScreeen(const std::string& screenName,
+                           std::optional<std::string> screenClass);
 
     /// Log an event with with associated parameters.
     /// @param[in] name Name of the event to log. Should contain 1 to 32

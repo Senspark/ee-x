@@ -77,13 +77,14 @@ void Self::setUserProperty(const std::string& name,
     ::firebase::analytics::SetUserProperty(name.c_str(), property.c_str());
 }
 
-void Self::setCurrentScreeen(const std::string& name,
-                             std::optional<std::string> clazz) {
+void Self::setCurrentScreeen(const std::string& screenName,
+                             std::optional<std::string> screenClass) {
     if (not initialized_) {
         return;
     }
     ::firebase::analytics::SetCurrentScreen(
-        name.c_str(), clazz.has_value() ? clazz->c_str() : nullptr);
+        screenName.c_str(),
+        screenClass.has_value() ? screenClass->c_str() : nullptr);
 }
 
 void Self::logEvent(const std::string& name, const TrackingDict& dict) {

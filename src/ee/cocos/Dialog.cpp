@@ -6,30 +6,31 @@
 //
 //
 
-#include "ee/cocos/EEDialog.hpp"
+#include "ee/cocos/Dialog.hpp"
 
 #include <2d/CCAction.h>
 #include <base/CCDirector.h>
 
 #include "ee/cocos/EEDialogManager.hpp"
 #include "ee/cocos/EEUtils.hpp"
+#include "ee/cocos/IDialogManager.hpp"
 
 namespace ee {
-namespace dialog {
+namespace cocos {
 using Self = Dialog;
 
-const int Dialog::ContainerLocalZOrder = 123456;
-const std::size_t Dialog::TopLevel = 123456;
+const int Self::ContainerLocalZOrder = 123456;
+const std::size_t Self::TopLevel = 123456;
 
-Dialog::Dialog()
+Self::Dialog()
     : dialogLevel_(0)
     , isActive_(false)
     , ignoreTouchOutside_(false)
     , transitionAction_(nullptr) {}
 
-Dialog::~Dialog() = default;
+Self::~Dialog() = default;
 
-bool Dialog::init() {
+bool Self::init() {
     if (not Super::init()) {
         return false;
     }
@@ -43,108 +44,112 @@ bool Dialog::init() {
     return true;
 }
 
-void Dialog::onEnter() {
+void Self::onEnter() {
     Super::onEnter();
 }
 
-void Dialog::onExit() {
+void Self::onExit() {
     Super::onExit();
 }
 
-const cocos2d::Node* Dialog::getContainer() const {
+const cocos2d::Node* Self::getContainer() const {
     return getParent();
 }
 
-cocos2d::Node* Dialog::getContainer() {
+cocos2d::Node* Self::getContainer() {
     return getParent();
 }
 
-void Dialog::show(std::size_t level) {
+void Self::show(std::size_t level) {
     if (getContainer() == nullptr) {
         auto container = cocos2d::Node::create();
         container->setContentSize(_director->getWinSize());
         container->addChild(this);
     }
-
     dialogLevel_ = level;
-    DialogManager::getInstance()->pushDialog(this, level);
+
+    CC_ASSERT(manager_ == nullptr);
+    manager_ = LegacyDialogManager::getInstance();
+    manager_->pushDialog(this, level);
 }
 
-void Dialog::hide() {
-    DialogManager::getInstance()->popDialog(this);
+void Self::hide() {
+    CC_ASSERT(manager_ != nullptr);
+    manager_->popDialog(this);
+    manager_.reset();
 }
 
-Dialog* Dialog::addDialogWillShowCallback(const TransitionCallback& callback,
-                                          int priority) {
+Self* Self::addDialogWillShowCallback(const TransitionCallback& callback,
+                                      int priority) {
     dialogWillShowCallbacks_.emplace_back(callback, priority);
     return this;
 }
 
-Dialog* Dialog::addDialogDidShowCallback(const TransitionCallback& callback,
-                                         int priority) {
+Self* Self::addDialogDidShowCallback(const TransitionCallback& callback,
+                                     int priority) {
     dialogDidShowCallbacks_.emplace_back(callback, priority);
     return this;
 }
 
-Dialog* Dialog::addDialogWillHideCallback(const TransitionCallback& callback,
-                                          int priority) {
+Self* Self::addDialogWillHideCallback(const TransitionCallback& callback,
+                                      int priority) {
     dialogWillHideCallbacks_.emplace_back(callback, priority);
     return this;
 }
 
-Dialog* Dialog::addDialogDidHideCallback(const TransitionCallback& callback,
-                                         int priority) {
+Self* Self::addDialogDidHideCallback(const TransitionCallback& callback,
+                                     int priority) {
     dialogDidHideCallbacks_.emplace_back(callback, priority);
     return this;
 }
 
-std::size_t Dialog::getDialogLevel() const noexcept {
+std::size_t Self::getDialogLevel() const noexcept {
     return dialogLevel_;
 }
 
-void Dialog::setActive(bool active) {
+void Self::setActive(bool active) {
     isActive_ = active;
 }
 
-bool Dialog::isActive() const noexcept {
+bool Self::isActive() const noexcept {
     return isActive_;
 }
 
-void Dialog::setIgnoreTouchOutside(bool ignore) {
+void Self::setIgnoreTouchOutside(bool ignore) {
     ignoreTouchOutside_ = ignore;
 }
 
-bool Dialog::isIgnoreTouchOutside() noexcept {
+bool Self::isIgnoreTouchOutside() noexcept {
     return ignoreTouchOutside_;
 }
 
-bool Dialog::hitTest(const cocos2d::Point& pt, const cocos2d::Camera* camera,
-                     cocos2d::Vec3* p) const {
+bool Self::hitTest(const cocos2d::Point& pt, const cocos2d::Camera* camera,
+                   cocos2d::Vec3* p) const {
     // Swallow all touches.
     return true;
 }
 
-void Dialog::onDialogWillShow() {
+void Self::onDialogWillShow() {
     LOG_FUNC_FORMAT("dialog = %p", this);
     invokeCallbacks(dialogWillShowCallbacks_);
 }
 
-void Dialog::onDialogDidShow() {
+void Self::onDialogDidShow() {
     LOG_FUNC_FORMAT("dialog = %p", this);
     invokeCallbacks(dialogDidShowCallbacks_);
 }
 
-void Dialog::onDialogWillHide() {
+void Self::onDialogWillHide() {
     LOG_FUNC_FORMAT("dialog = %p", this);
     invokeCallbacks(dialogWillHideCallbacks_);
 }
 
-void Dialog::onDialogDidHide() {
+void Self::onDialogDidHide() {
     LOG_FUNC_FORMAT("dialog = %p", this);
     invokeCallbacks(dialogDidHideCallbacks_);
 }
 
-void Dialog::invokeCallbacks(std::vector<CallbackInfo>& callbacks) {
+void Self::invokeCallbacks(std::vector<CallbackInfo>& callbacks) {
     std::stable_sort(callbacks.begin(), callbacks.end(), Compare2nd<>());
     RefGuard guard(this);
     for (auto&& info : callbacks) {
@@ -152,7 +157,7 @@ void Dialog::invokeCallbacks(std::vector<CallbackInfo>& callbacks) {
     }
 }
 
-void Dialog::onClickedOutside() {
+void Self::onClickedOutside() {
     if (isActive() && !isIgnoreTouchOutside()) {
         hide();
     }
@@ -166,14 +171,14 @@ void Self::onPressed() {
     }
 }
 
-Dialog* Dialog::addShowingTransition(const TransitionType& transition) {
+Self* Self::addShowingTransition(const TransitionType& transition) {
     showingTransitions_.emplace_back(transition);
     return this;
 }
 
-Dialog* Dialog::addHidingTransition(const TransitionType& transition) {
+Self* Self::addHidingTransition(const TransitionType& transition) {
     hidingTransitions_.emplace_back(transition);
     return this;
 }
-} // namespace dialog
+} // namespace cocos
 } // namespace ee

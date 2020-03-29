@@ -11,18 +11,19 @@
 #include <2d/CCNode.h>
 
 namespace ee {
-namespace dialog {
-const std::string DialogComponent::DefaultName =
-    "___ee_library_dialog_component_";
+namespace cocos {
+using Self = DialogComponent;
 
-DialogComponent* DialogComponent::create() {
+const std::string Self::DefaultName = "_ee_x_dialog_component_";
+
+Self* Self::create() {
     auto result = new Self();
     result->init();
     result->autorelease();
     return result;
 }
 
-bool DialogComponent::init() {
+bool Self::init() {
     if (not Super::init()) {
         return false;
     }
@@ -30,28 +31,26 @@ bool DialogComponent::init() {
     return true;
 }
 
-DialogComponent*
-DialogComponent::setPauseCallback(const PauseCallback& callback) {
+Self* Self::setPauseCallback(const PauseCallback& callback) {
     pauseCallback_ = callback;
     return this;
 }
 
-DialogComponent*
-DialogComponent::setResumeCallback(const ResumeCallback& callback) {
+Self* Self::setResumeCallback(const ResumeCallback& callback) {
     resumeCallback_ = callback;
     return this;
 }
 
-void DialogComponent::resume(Dialog* dialog) {
+void Self::resume(Dialog* dialog) {
     if (resumeCallback_) {
         resumeCallback_(dialog);
     }
 }
 
-void DialogComponent::pause(Dialog* dialog) {
+void Self::pause(Dialog* dialog) {
     if (pauseCallback_) {
         pauseCallback_(dialog);
     }
 }
-} // namespace dialog
+} // namespace cocos
 } // namespace ee

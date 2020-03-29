@@ -244,6 +244,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cocos' do |s|
     s.source_files =
+      'src/ee/Cocos*',
       'src/ee/cocos/*'
 
     s.xcconfig = {

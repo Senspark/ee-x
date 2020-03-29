@@ -9,15 +9,9 @@
 #ifndef EE_LIBRARY_DIALOG_UTILS_HPP_
 #define EE_LIBRARY_DIALOG_UTILS_HPP_
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-namespace dialog {
-class Dialog;
-} // namespace dialog
-
-using dialog::Dialog;
-
+namespace ee {
 /// Adds a transition action for the specified dialog that:
 ///
 /// - Blurs the background when the dialog is about to show with the specified
@@ -44,6 +38,6 @@ Dialog* addBlurBackground(Dialog* dialog, float duration = 0.8f,
 ///                     cocos2d::EaseElasticIn.
 Dialog* addHorizontalTransition(Dialog* dialog, float duration = 0.8f,
                                 float rate = 0.8f);
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_DIALOG_UTILS_HPP_ */

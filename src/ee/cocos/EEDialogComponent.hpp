@@ -11,10 +11,10 @@
 
 #include <2d/CCComponent.h>
 
-namespace ee {
-namespace dialog {
-class Dialog;
+#include "ee/CocosFwd.hpp"
 
+namespace ee {
+namespace cocos {
 /// DialogManager will pause and resume children nodes when any dialog is pushed
 /// or popped.
 ///
@@ -59,9 +59,7 @@ private:
     ResumeCallback resumeCallback_;
     PauseCallback pauseCallback_;
 };
-} // namespace dialog
-
-using dialog::DialogComponent;
+} // namespace cocos
 } // namespace ee
 
 #endif /* EE_LIBRARY_DIALOG_COMPONENT_HPP_ */

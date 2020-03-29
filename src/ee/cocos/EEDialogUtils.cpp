@@ -14,7 +14,7 @@
 #include <2d/CCSprite.h>
 #include <base/CCDirector.h>
 
-#include "ee/cocos/EEDialog.hpp"
+#include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/EEUtils.hpp"
 
 NS_EE_BEGIN

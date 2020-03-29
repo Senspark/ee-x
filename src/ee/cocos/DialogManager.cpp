@@ -6,19 +6,19 @@
 //
 //
 
-#include "ee/cocos/EEDialogTree.hpp"
+#include "ee/cocos/DialogManager.hpp"
 
 #include <2d/CCScene.h>
 
+#include "ee/cocos/Dialog.hpp"
+#include "ee/cocos/DialogCommand.hpp"
 #include "ee/cocos/EEAction.hpp"
-#include "ee/cocos/EEDialog.hpp"
-#include "ee/cocos/EEDialogCommand.hpp"
 #include "ee/cocos/EEDialogComponent.hpp"
 #include "ee/cocos/EEScopeGuard.hpp"
 #include "ee/cocos/EEUtils.hpp"
 
 namespace ee {
-namespace dialog {
+namespace cocos {
 namespace {
 void pauseAllDialog(cocos2d::Node* node, Dialog* dialog) {
     doRecursively(node, [dialog](cocos2d::Node* currentNode) {
@@ -47,29 +47,31 @@ void resumeAllDialog(cocos2d::Node* node, Dialog* dialog) {
 }
 } // namespace
 
-DialogTree::DialogTree(cocos2d::Scene* scene)
-    : scene_(scene) {
+using Self = DialogManager;
+
+Self::DialogManager(cocos2d::Node* root)
+    : root_(root) {
     currentLevel_ = 0;
     lockingDialog_ = nullptr;
 }
 
-DialogTree::~DialogTree() = default;
+Self::~DialogManager() = default;
 
-void DialogTree::pushDialog(Dialog* dialog) {
+void Self::pushDialog(Dialog* dialog) {
     pushDialog(dialog, Dialog::TopLevel);
 }
 
-void DialogTree::pushDialog(Dialog* dialog, std::size_t level) {
+void Self::pushDialog(Dialog* dialog, std::size_t level) {
     CC_ASSERT(dialog != nullptr);
     CC_ASSERT(dialog->getContainer() != nullptr);
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     level);
 
-    pushCommand(Command(CommandType::Push, dialog, level));
+    pushCommand(DialogCommand(DialogCommandType::Push, dialog, level));
     processCommandQueue();
 }
 
-void DialogTree::popDialog(Dialog* dialog) {
+void Self::popDialog(Dialog* dialog) {
     CC_ASSERT(dialog != nullptr);
     CC_ASSERT(dialog->getContainer() != nullptr);
 
@@ -77,15 +79,15 @@ void DialogTree::popDialog(Dialog* dialog) {
     LOG_FUNC_FORMAT("sceen = %p dialog = %p level = %zu", scene_, dialog,
                     level);
 
-    pushCommand(Command(CommandType::Pop, dialog, level));
+    pushCommand(DialogCommand(DialogCommandType::Pop, dialog, level));
     processCommandQueue();
 }
 
-void DialogTree::popDialog() {
+void Self::popDialog() {
     popDialog(getTopDialog());
 }
 
-Dialog* DialogTree::getDialog(std::size_t level) {
+Dialog* Self::getDialog(std::size_t level) const {
     if (dialogStack_.empty()) {
         return nullptr;
     }
@@ -96,49 +98,49 @@ Dialog* DialogTree::getDialog(std::size_t level) {
     return dialogStack_.at(level - 1).dialog;
 }
 
-Dialog* DialogTree::getTopDialog() {
+Dialog* Self::getTopDialog() const {
     return getDialog(Dialog::TopLevel);
 }
 
-std::size_t DialogTree::getLevel() const {
+std::size_t Self::getLevel() const {
     return dialogStack_.size();
 }
 
-void DialogTree::reset() {
+void Self::reset() {
     currentLevel_ = 0;
-    scene_ = nullptr;
+    root_ = nullptr;
     lockingDialog_ = nullptr;
     commandQueue_.clear();
     dialogStack_.clear();
 }
 
-cocos2d::Node* DialogTree::getRunningNode() {
+cocos2d::Node* Self::getRunningNode() const {
     auto dialog = getTopDialog();
     if (dialog != nullptr) {
         return dialog->getParent();
     }
-    return scene_;
+    return root_;
 }
 
-bool DialogTree::isLocked() const {
+bool Self::isLocked() const {
     return lockingDialog_ != nullptr;
 }
 
-void DialogTree::lock(const Dialog* dialog) {
+void Self::lock(const Dialog* dialog) {
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == nullptr);
     lockingDialog_ = dialog;
 }
 
-void DialogTree::unlock(const Dialog* dialog) {
+void Self::unlock(const Dialog* dialog) {
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == dialog);
     lockingDialog_ = nullptr;
 }
 
-bool DialogTree::processCommandQueue() {
+bool Self::processCommandQueue() {
     if (isLocked()) {
         return false;
     }
@@ -153,18 +155,18 @@ bool DialogTree::processCommandQueue() {
     return false;
 }
 
-bool DialogTree::processCommand(const Command& command) {
-    if (command.type == CommandType::Push) {
+bool Self::processCommand(const DialogCommand& command) {
+    if (command.type == DialogCommandType::Push) {
         return processPushCommand(command.dialog, command.level);
     }
-    if (command.type == CommandType::Pop) {
+    if (command.type == DialogCommandType::Pop) {
         return processPopCommand(command.dialog, command.level);
     }
     CC_ASSERT(false);
     return false;
 }
 
-bool DialogTree::processPushCommand(Dialog* dialog, std::size_t level) {
+bool Self::processPushCommand(Dialog* dialog, std::size_t level) {
     if (level == Dialog::TopLevel || level == currentLevel_ + 1) {
         pushDialogImmediately(dialog, level);
         return true;
@@ -172,11 +174,11 @@ bool DialogTree::processPushCommand(Dialog* dialog, std::size_t level) {
     return false;
 }
 
-bool DialogTree::processPopCommand(Dialog* dialog, std::size_t level) {
+bool Self::processPopCommand(Dialog* dialog, std::size_t level) {
     if (level == Dialog::TopLevel || level == currentLevel_) {
         if (dialog != getTopDialog()) {
             // Attempted to pop not the top dialog!!!
-//            CC_ASSERT(false);
+            //            CC_ASSERT(false);
             return false;
         }
         popDialogImmediately(dialog);
@@ -185,11 +187,11 @@ bool DialogTree::processPopCommand(Dialog* dialog, std::size_t level) {
     return false;
 }
 
-bool DialogTree::pushCommand(const Command& command) {
+bool Self::pushCommand(const DialogCommand& command) {
     for (auto&& cmd : commandQueue_) {
         if (cmd.type == command.type && cmd.dialog == command.dialog) {
             // Command alreay exists!!!.
-//            CC_ASSERT(false);
+            //            CC_ASSERT(false);
             return false;
         }
     }
@@ -197,7 +199,7 @@ bool DialogTree::pushCommand(const Command& command) {
     return true;
 }
 
-void DialogTree::pushDialogImmediately(Dialog* dialog, std::size_t level) {
+void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     level);
 
@@ -227,10 +229,10 @@ void DialogTree::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     sequence->then([dialog, unlocker] {
         // End showing.
         dialog->setActive(true);
-        
+
         // Invoke callbacks.
         dialog->onDialogDidShow();
-        
+
         // Always unlock last.
         unlocker->invoke();
     });
@@ -239,17 +241,17 @@ void DialogTree::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     dialog->transitionAction_->runAction(sequence);
 }
 
-void DialogTree::popDialogImmediately(Dialog* dialog) {
+void Self::popDialogImmediately(Dialog* dialog) {
     CC_ASSERT(dialog == getTopDialog());
     LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
                     dialog->getDialogLevel());
 
     // Always lock first.
     lock(dialog);
-    
+
     // Invoke callbacks.
     dialog->onDialogWillHide();
-    
+
     // Begin hiding.
     dialog->setActive(false);
 
@@ -291,5 +293,5 @@ void DialogTree::popDialogImmediately(Dialog* dialog) {
     dialog->transitionAction_->stopAllActions();
     dialog->transitionAction_->runAction(sequence);
 }
-} // namespace dialog
+} // namespace cocos
 } // namespace ee

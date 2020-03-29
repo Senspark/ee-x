@@ -6,62 +6,40 @@
 //
 //
 
-#ifndef EE_LIBRARY_DIALOG_TREE_HPP
-#define EE_LIBRARY_DIALOG_TREE_HPP
+#ifndef EE_X_DIALOG_MANAGER_HPP
+#define EE_X_DIALOG_MANAGER_HPP
 
 #include <cstddef>
 #include <vector>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/IDialogManager.hpp"
 
 namespace ee {
-namespace dialog {
-struct Command;
-struct Guard;
-
-class Dialog;
-
-class DialogTree {
+namespace cocos {
+class DialogManager : public IDialogManager {
 private:
-    using Self = DialogTree;
+    using Self = DialogManager;
 
 public:
-    explicit DialogTree(cocos2d::Scene* scene);
-    ~DialogTree();
+    explicit DialogManager(cocos2d::Node* root);
+    virtual ~DialogManager() override;
 
-    /// Pushes the specified dialog to the top level.
-    /// @param[in] dialog The dialog to be pushed.
-    void pushDialog(Dialog* dialog);
+    virtual void pushDialog(Dialog* dialog) override;
+    virtual void pushDialog(Dialog* dialog, std::size_t level) override;
 
-    /// Pushes the specified dialog to the specified level.
-    /// @param[in] dialog The dialog to be pushed.
-    /// @param[in] level The dialog level.
-    void pushDialog(Dialog* dialog, std::size_t level);
+    virtual void popDialog(Dialog* dialog) override;
+    virtual void popDialog() override;
 
-    /// Pops the specified dialog.
-    /// @param[in] dialog The dialog to be popped.
-    void popDialog(Dialog* dialog);
+    virtual Dialog* getDialog(std::size_t level) const override;
+    virtual Dialog* getTopDialog() const override;
 
-    /// Pops the top dialog.
-    void popDialog();
-
-    /// Gets the dialog whose the specified level.
-    /// @param[in] level The desired level.
-    /// @return The dialog whose the specified level if exists, nullptr
-    /// otherwise.
-    Dialog* getDialog(std::size_t level);
-
-    /// Gets the top dialog.
-    Dialog* getTopDialog();
-
-    /// Gets the dialog level.
-    std::size_t getLevel() const;
+    virtual std::size_t getLevel() const override;
 
 private:
     /// Resets the dialog tree.
     void reset();
 
-    cocos2d::Node* getRunningNode();
+    cocos2d::Node* getRunningNode() const;
 
     /// Checks whether there is a locking dialog.
     bool isLocked() const;
@@ -81,7 +59,7 @@ private:
     /// Processes the specified command.
     /// @param command The command to be processed.
     /// @return Whether the command was executed.
-    bool processCommand(const Command& command);
+    bool processCommand(const DialogCommand& command);
 
     /// Processes a push command.
     /// @param[in] dialog The dialog to be pushed.
@@ -98,7 +76,7 @@ private:
     /// Pushes a command to the command queue.
     /// @param[in] command The command to be pushed.
     /// @return Whether the command was pushed.
-    bool pushCommand(const Command& command);
+    bool pushCommand(const DialogCommand& command);
 
     void pushDialogImmediately(Dialog* dialog, std::size_t level);
 
@@ -106,15 +84,15 @@ private:
 
     std::size_t currentLevel_;
 
-    cocos2d::Scene* scene_;
+    cocos2d::Node* root_;
 
     const Dialog* lockingDialog_;
 
-    std::vector<Command> commandQueue_;
+    std::vector<DialogCommand> commandQueue_;
 
-    std::vector<Guard> dialogStack_;
+    std::vector<DialogGuard> dialogStack_;
 };
-} // namespace
+} // namespace cocos
 } // namespace ee
 
-#endif /* EE_LIBRARY_DIALOG_TREE_HPP */
+#endif /* EE_X_DIALOG_MANAGER_HPP */

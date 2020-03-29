@@ -6,73 +6,23 @@
 //
 //
 
-#ifndef EE_LIBRARY_DIALOG_MANAGER_HPP_
-#define EE_LIBRARY_DIALOG_MANAGER_HPP_
+#ifndef EE_X_LEGACY_DIALOG_MANAGER_HPP
+#define EE_X_LEGACY_DIALOG_MANAGER_HPP
 
-#include <memory>
-#include <vector>
-#include <map>
-
-#include <base/CCRefPtr.h>
-
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
-namespace dialog {
-enum class CommandType;
-
-class Dialog;
-struct Command;
-struct Guard;
-
-class DialogManager;
-class DialogTree;
-} // namespace dialog
-
-using dialog::DialogManager;
-
-namespace dialog {
-/// Dialog manager manages the dialogs in the scene.
-class DialogManager {
-private:
-    using Self = DialogManager;
-
+namespace cocos {
+class LegacyDialogManager {
 public:
-    static Self* getInstance();
+    static const std::shared_ptr<IDialogManager>& getInstance();
 
-    /// @see DialogTree::pushDialog.
-    void pushDialog(Dialog* dialog);
-
-    /// @see DialogTree::pushDialog.
-    void pushDialog(Dialog* dialog, std::size_t level);
-
-    /// @see DialogTree::popDialog.
-    void popDialog(Dialog* dialog);
-
-    /// @see DialogTree::popDialog.
-    void popDialog();
-
-    /// @see DialogTree::getDialog.
-    Dialog* getDialog(std::size_t level);
-
-    /// @see DialogTree::getTopDialog.
-    Dialog* getTopDialog();
-
-    std::size_t getTopDialogLevel();
-
-private:
-    DialogManager();
-    ~DialogManager();
-
-    void updateTree();
-
-    std::unique_ptr<DialogTree>& getTree(cocos2d::Scene* scene);
-    std::unique_ptr<DialogTree>& getCurrentTree();
-
-    std::map<cocos2d::RefPtr<cocos2d::Scene>, std::unique_ptr<DialogTree>>
-        trees_;
+    static const std::shared_ptr<IDialogManager>&
+    getManager(cocos2d::Scene* scene);
 };
-} // namespace dialog.
+} // namespace cocos
+
+using DialogManager = cocos::LegacyDialogManager;
 } // namespace ee
 
-#endif /* EE_LIBRARY_DIALOG_MANAGER_HPP_ */
+#endif /* EE_X_LEGACY_DIALOG_MANAGER_HPP */

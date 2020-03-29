@@ -8,80 +8,70 @@
 
 #include "ee/cocos/EEDialogManager.hpp"
 
+#include <2d/CCTransition.h>
 #include <base/CCDirector.h>
-#include <base/CCScheduler.h>
 
-#include "ee/cocos/EEDialogTree.hpp"
+#include "ee/cocos/DialogManager.hpp"
 
 namespace ee {
-namespace dialog {
-DialogManager* DialogManager::getInstance() {
-    static Self sharedInstance;
-    return &sharedInstance;
-}
+namespace cocos {
+class TreeComponent final : public cocos2d::Component {
+private:
+    using Self = TreeComponent;
+    using Super = cocos2d::Component;
 
-DialogManager::DialogManager() {
-    cocos2d::Director::getInstance()->getScheduler()->schedule(
-        std::bind(&Self::updateTree, this), this, 0.0f, false, "___update");
-}
+public:
+    static const std::string Name;
 
-DialogManager::~DialogManager() {
-    cocos2d::Director::getInstance()->getScheduler()->unschedule("___update",
-                                                                 this);
-}
+    CREATE_FUNC(Self);
 
-void DialogManager::pushDialog(Dialog* dialog) {
-    getCurrentTree()->pushDialog(dialog);
-}
-
-void DialogManager::pushDialog(Dialog* dialog, std::size_t level) {
-    getCurrentTree()->pushDialog(dialog, level);
-}
-
-void DialogManager::popDialog(Dialog* dialog) {
-    getCurrentTree()->popDialog(dialog);
-}
-
-void DialogManager::popDialog() {
-    getCurrentTree()->popDialog();
-}
-
-Dialog* DialogManager::getDialog(std::size_t level) {
-    return getCurrentTree()->getDialog(level);
-}
-
-Dialog* DialogManager::getTopDialog() {
-    return getCurrentTree()->getTopDialog();
-}
-
-std::size_t DialogManager::getTopDialogLevel() {
-    return getCurrentTree()->getLevel();
-}
-
-void DialogManager::updateTree() {
-    for (auto iter = trees_.cbegin(); iter != trees_.cend();) {
-        auto&& scene = iter->first;
-        if (scene->getReferenceCount() == 1) {
-            // Already released.
-            iter = trees_.erase(iter);
-        } else {
-            ++iter;
-        }
+    const std::shared_ptr<IDialogManager>& getManager() const { //
+        return manager_;
     }
-}
 
-std::unique_ptr<DialogTree>& DialogManager::getTree(cocos2d::Scene* scene) {
-    auto iter = trees_.find(scene);
-    if (iter == trees_.cend()) {
-        // Lazy instantiate.
-        iter = trees_.emplace(scene, std::make_unique<DialogTree>(scene)).first;
+private:
+    TreeComponent() { //
+        setName(Name);
     }
-    return iter->second;
-}
 
-std::unique_ptr<DialogTree>& DialogManager::getCurrentTree() {
+    virtual void onAdd() override {
+        Super::onAdd();
+        manager_ = std::make_shared<DialogManager>(getOwner());
+    }
+
+    virtual void onRemove() override {
+        Super::onRemove();
+        manager_.reset();
+    }
+
+    std::shared_ptr<IDialogManager> manager_;
+};
+
+const std::string TreeComponent::Name = "_ee_x_tree_component_";
+
+namespace {
+auto getCurrentScene() {
     auto currentScene = cocos2d::Director::getInstance()->getRunningScene();
-    return getTree(currentScene);
+    return currentScene;
 }
-} // namespace dialog
-} // namespac ee
+} // namespace
+
+using Self = LegacyDialogManager;
+
+const std::shared_ptr<IDialogManager>& Self::getInstance() {
+    auto currentScene = getCurrentScene();
+    CC_ASSERT(dynamic_cast<cocos2d::TransitionScene*>(currentScene) == nullptr);
+    return getManager(currentScene);
+}
+
+const std::shared_ptr<IDialogManager>& Self::getManager(cocos2d::Scene* scene) {
+    auto component = scene->getComponent(TreeComponent::Name);
+    if (component == nullptr) {
+        component = TreeComponent::create();
+        scene->addComponent(component);
+    }
+    auto treeComponent = dynamic_cast<TreeComponent*>(component);
+    return treeComponent->getManager();
+}
+} // namespace cocos
+} // namespace ee

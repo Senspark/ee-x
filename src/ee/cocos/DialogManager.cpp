@@ -67,7 +67,8 @@ void Self::pushDialog(Dialog* dialog) {
 void Self::pushDialog(Dialog* dialog, std::size_t level) {
     CC_ASSERT(dialog != nullptr);
     CC_ASSERT(dialog->getContainer() != nullptr);
-    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog, level);
+    logger_.debug("%s: scene = %p dialog = %p level = %zu", __PRETTY_FUNCTION__,
+                  root_, dialog, level);
     pushCommand(DialogCommand(DialogCommandType::Push, dialog, level));
     processCommandQueue();
 }
@@ -77,7 +78,8 @@ void Self::popDialog(Dialog* dialog) {
     CC_ASSERT(dialog->getContainer() != nullptr);
 
     auto level = dialog->getDialogLevel();
-    logger_.debug("sceen = %p dialog = %p level = %zu", root_, dialog, level);
+    logger_.debug("%s: scene = %p dialog = %p level = %zu", __PRETTY_FUNCTION__,
+                  root_, dialog, level);
 
     pushCommand(DialogCommand(DialogCommandType::Pop, dialog, level));
     processCommandQueue();
@@ -127,15 +129,15 @@ bool Self::isLocked() const {
 }
 
 void Self::lock(const Dialog* dialog) {
-    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog,
-                  dialog->getDialogLevel());
+    logger_.debug("%s: scene = %p dialog = %p level = %zu", __PRETTY_FUNCTION__,
+                  root_, dialog, dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == nullptr);
     lockingDialog_ = dialog;
 }
 
 void Self::unlock(const Dialog* dialog) {
-    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog,
-                  dialog->getDialogLevel());
+    logger_.debug("%s: scene = %p dialog = %p level = %zu", __PRETTY_FUNCTION__,
+                  root_, dialog, dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == dialog);
     lockingDialog_ = nullptr;
 }
@@ -200,7 +202,8 @@ bool Self::pushCommand(const DialogCommand& command) {
 }
 
 void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
-    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog, level);
+    logger_.debug("%s: scene = %p dialog = %p level = %zu", __PRETTY_FUNCTION__,
+                  root_, dialog, level);
 
     lock(dialog);
     dialog->onDialogWillShow();
@@ -219,16 +222,11 @@ void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     }
 
     auto unlocker = std::make_shared<ScopeGuard>([this, dialog] {
-        logger_.debug("unlocker: scene = %p dialog = %p level = %zu", root_,
-                      dialog, dialog->getDialogLevel());
         unlock(dialog);
         processCommandQueue();
     });
 
     sequence->then([dialog, unlocker] {
-        // End showing.
-        dialog->setActive(true);
-
         // Invoke callbacks.
         dialog->onDialogDidShow();
 
@@ -251,17 +249,12 @@ void Self::popDialogImmediately(Dialog* dialog) {
     // Invoke callbacks.
     dialog->onDialogWillHide();
 
-    // Begin hiding.
-    dialog->setActive(false);
-
     auto sequence = Sequence::create();
     for (auto&& action : dialog->hidingTransitions_) {
         sequence->then(cocos2d::TargetedAction::create(dialog, action));
     }
 
     auto unlocker = std::make_shared<ScopeGuard>([this, dialog] {
-        logger_.debug("unlocker: scene = %p dialog = %p level = %zu", root_,
-                      dialog, dialog->getDialogLevel());
         unlock(dialog);
         processCommandQueue();
     });

@@ -27,6 +27,7 @@ const std::size_t Self::TopLevel = 123456;
 Self::Dialog()
     : dialogLevel_(0)
     , isActive_(false)
+    , isLocked_(false)
     , ignoreTouchOutside_(false)
     , transitionAction_(nullptr)
     , logger_(Logger::getSystemLogger()) {}
@@ -42,7 +43,6 @@ bool Self::init() {
     transitionAction_->setVisible(false);
     addProtectedChild(transitionAction_);
 
-    setActive(false);
     addClickEventListener(CC_CALLBACK_0(Self::onPressed, this));
     return true;
 }
@@ -64,6 +64,22 @@ cocos2d::Node* Self::getContainer() {
 }
 
 void Self::show(std::size_t level) {
+    if (isActive_) {
+        // No effect.
+        logger_.warn("%s: attempted to show an active dialog = %p",
+                     __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+        return;
+    }
+    if (isLocked_) {
+        // No effect.
+        logger_.warn("%s: attempted to show a locked dialog = %p",
+                     __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+        return;
+    }
+    isLocked_ = true;
+
     if (getContainer() == nullptr) {
         auto container = cocos2d::Node::create();
         container->setContentSize(_director->getWinSize());
@@ -77,6 +93,22 @@ void Self::show(std::size_t level) {
 }
 
 void Self::hide() {
+    if (not isActive_) {
+        // No effect.
+        logger_.warn("%s: attempted to hide an inactive dialog = %p",
+                     __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+        return;
+    }
+    if (isLocked_) {
+        // No effect.
+        logger_.warn("%s: attempted to hide a locked dialog = %p",
+                     __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+        return;
+    }
+    isLocked_ = true;
+
     CC_ASSERT(manager_ != nullptr);
     manager_->popDialog(this);
     manager_.reset();
@@ -110,12 +142,12 @@ std::size_t Self::getDialogLevel() const noexcept {
     return dialogLevel_;
 }
 
-void Self::setActive(bool active) {
-    isActive_ = active;
-}
-
 bool Self::isActive() const noexcept {
     return isActive_;
+}
+
+bool Self::isLocked() const noexcept {
+    return isLocked_;
 }
 
 void Self::setIgnoreTouchOutside(bool ignore) {
@@ -133,22 +165,46 @@ bool Self::hitTest(const cocos2d::Point& pt, const cocos2d::Camera* camera,
 }
 
 void Self::onDialogWillShow() {
-    logger_.debug("dialog = %p", this);
+    if (not isLocked_) {
+        logger_.error("%s: expected to be locked: dialog = %p",
+                      __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+    }
+    logger_.debug("%s: dialog = %p", __PRETTY_FUNCTION__, this);
     invokeCallbacks(dialogWillShowCallbacks_);
 }
 
 void Self::onDialogDidShow() {
-    logger_.debug("dialog = %p", this);
+    if (not isLocked_) {
+        logger_.error("%s: expected to be locked: dialog = %p",
+                      __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+    }
+    logger_.debug("%s: dialog = %p", __PRETTY_FUNCTION__, this);
+    isActive_ = true;
+    isLocked_ = false;
     invokeCallbacks(dialogDidShowCallbacks_);
 }
 
 void Self::onDialogWillHide() {
-    logger_.debug("dialog = %p", this);
+    if (not isLocked_) {
+        logger_.error("%s: expected to be locked: dialog = %p",
+                      __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+    }
+    logger_.debug("%s: dialog = %p", __PRETTY_FUNCTION__, this);
     invokeCallbacks(dialogWillHideCallbacks_);
+    isActive_ = false;
 }
 
 void Self::onDialogDidHide() {
-    logger_.debug("dialog = %p", this);
+    if (not isLocked_) {
+        logger_.error("%s: expected to be locked: dialog = %p",
+                      __PRETTY_FUNCTION__, this);
+        CC_ASSERT(false);
+    }
+    logger_.debug("%s: dialog = %p", __PRETTY_FUNCTION__, this);
+    isLocked_ = false;
     invokeCallbacks(dialogDidHideCallbacks_);
 }
 

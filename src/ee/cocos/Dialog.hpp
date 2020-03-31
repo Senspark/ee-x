@@ -26,17 +26,23 @@ namespace cocos {
 /// - Inactive (isActive() returns false).
 ///
 /// When show() is called.
+/// - Locked (isLocked() returns true).
+/// - ... waiting for processing queue.
 /// - onDialogWillShow is called.
 ///   - invoke all callbacks in addDialogWillShowCallback() (can be overridden).
 /// - onDialogDidShow is called.
-///   - invoke all callbacks in addDialogDidShowCallback() (can be overridden).
+/// - Unlocked (isLocked() returns false).
 /// - Active (isActive() returns true).
+///   - invoke all callbacks in addDialogDidShowCallback() (can be overridden).
 ///
 /// When hide() is called.
-/// - Inactive (isActive() returns false).
+/// - Locked (isLocked() returns true).
+/// - ... waiting for processing queue.
 /// - onDialogWillHide is called.
 ///   - invoke all callbacks in addDialogWillHideCallback() (can be overridden).
-/// - onDialogDidHidee is called.
+/// - Unlocked (isLocked() returns false).
+/// - Inactive (isActive() returns false).
+/// - onDialogDidHide is called.
 ///   - invoke all callbacks in addDialogDidHideCallback() (can be overridden).
 class Dialog : public cocos2d::ui::Widget {
 private:
@@ -69,12 +75,11 @@ public:
     /// Retrieves this dialog's container (const version).
     virtual const cocos2d::Node* getContainer() const;
 
-    /// Sets whether this dialog is active.
-    /// @param[in] active Whether this dialog is active.
-    virtual void setActive(bool active);
-
     /// Checks whether the user can interact with this dialog.
     bool isActive() const noexcept;
+
+    /// Checks whether this dialog is locked, i.e. is waiting for hiding/showing.
+    bool isLocked() const noexcept;
 
     /// Sets whether this dialog should ignore outside touch to autohide
     virtual void setIgnoreTouchOutside(bool ignore);
@@ -151,6 +156,7 @@ private:
 
     std::size_t dialogLevel_;
     bool isActive_;
+    bool isLocked_;
     bool ignoreTouchOutside_;
 
     cocos2d::Node* transitionAction_;

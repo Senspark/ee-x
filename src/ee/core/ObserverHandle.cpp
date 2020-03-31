@@ -1,6 +1,6 @@
 #include "ee/core/ObserverHandle.hpp"
 
-#include "ee/core/internal/ScopeGuard.hpp"
+#include "ee/core/ScopeGuard.hpp"
 
 namespace ee {
 namespace core {

@@ -14,7 +14,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/internal/ScopeGuard.hpp>
+#include <ee/core/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseApp.hpp>
 #include <ee/firebase/core/FirebaseScheduler.hpp>
 
@@ -66,7 +66,7 @@ bool Self::activateFetched() {
 }
 
 void Self::fetchOnly(const std::function<void()>& callback) {
-    auto guard = std::make_shared<core::ScopeGuard>(callback);
+    auto guard = std::make_shared<ScopeGuard>(callback);
     if (not initialized_) {
         return;
     }
@@ -78,7 +78,7 @@ void Self::fetchOnly(const std::function<void()>& callback) {
 }
 
 void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
-    auto guard = std::make_shared<core::ScopeGuard>(std::bind(callback, false));
+    auto guard = std::make_shared<ScopeGuard>(std::bind(callback, false));
     if (not initialized_) {
         return;
     }

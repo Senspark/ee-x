@@ -17,7 +17,6 @@
 #include "ee/cocos/EEAction.hpp"
 #include "ee/cocos/EEContinuousAction.hpp"
 #include "ee/cocos/EECrytography.hpp"
-#include "ee/cocos/EEScopeGuard.hpp"
 
 #include "ee/cocos/EEButton.hpp"
 #include "ee/cocos/EECheckBox.hpp"

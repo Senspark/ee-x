@@ -11,12 +11,12 @@
 #include <2d/CCScene.h>
 
 #include <ee/core/Logger.hpp>
+#include <ee/core/ScopeGuard.hpp>
 
 #include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/DialogCommand.hpp"
 #include "ee/cocos/EEAction.hpp"
 #include "ee/cocos/EEDialogComponent.hpp"
-#include "ee/cocos/EEScopeGuard.hpp"
 #include "ee/cocos/EEUtils.hpp"
 
 namespace ee {

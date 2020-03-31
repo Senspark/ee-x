@@ -49,6 +49,7 @@ using core::LogLevel;
 using core::MessageBridge;
 using core::Metrics;
 using core::PluginManager;
+using core::ScopeGuard;
 using core::ServiceLocator;
 using core::VideoPlayer;
 using core::VideoPlayerManager;

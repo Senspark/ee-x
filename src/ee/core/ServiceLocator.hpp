@@ -5,7 +5,6 @@
 #include <string>
 #include <unordered_set>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/core/IService.hpp"
 
 namespace ee {

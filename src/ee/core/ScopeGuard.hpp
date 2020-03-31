@@ -11,6 +11,8 @@
 
 #include <functional>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 /// http://stackoverflow.com/questions/10270328/the-simplest-and-neatest-c11-scopeguard
@@ -45,7 +47,9 @@ public:
         dismiss();
     }
 
-    void dismiss() noexcept { f_ = nullptr; }
+    void dismiss() noexcept { //
+        f_ = nullptr;
+    }
 
 private:
     std::function<void()> f_;

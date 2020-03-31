@@ -12,7 +12,7 @@
 
 #include <firebase/storage.h>
 
-#include <ee/core/internal/ScopeGuard.hpp>
+#include <ee/core/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseApp.hpp>
 #include <ee/firebase/core/FirebaseScheduler.hpp>
 
@@ -102,8 +102,7 @@ void Self::setMaxUploadRetryTime(double seconds) {
 }
 
 void Self::getHash(const std::string& filePath, const HashCallback& callback) {
-    auto guard =
-        std::make_shared<core::ScopeGuard>(std::bind(callback, false, ""));
+    auto guard = std::make_shared<ScopeGuard>(std::bind(callback, false, ""));
     if (not initialized_) {
         return;
     }
@@ -129,8 +128,7 @@ void Self::getHash(const std::string& filePath, const HashCallback& callback) {
 }
 
 void Self::getData(const std::string& filePath, const DataCallback& callback) {
-    auto guard =
-        std::make_shared<core::ScopeGuard>(std::bind(callback, false, ""));
+    auto guard = std::make_shared<ScopeGuard>(std::bind(callback, false, ""));
     if (not initialized_) {
         return;
     }

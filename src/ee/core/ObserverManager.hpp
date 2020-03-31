@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 
-#include "ee/CoreFwd.hpp"
 #include "ee/core/IObserverManager.hpp"
 
 namespace ee {

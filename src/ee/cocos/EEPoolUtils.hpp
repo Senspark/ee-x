@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_PARTICLE_POOL_HPP
 #define EE_LIBRARY_PARTICLE_POOL_HPP
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 /// Pre-allocates particles.

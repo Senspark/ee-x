@@ -11,7 +11,7 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 class SkeletonAnimationLoader : public NodeV3Loader {
 private:
     using Super = NodeV3Loader;
@@ -48,6 +48,6 @@ private:
     std::string atlasFile_;
     std::string animationName_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_ */

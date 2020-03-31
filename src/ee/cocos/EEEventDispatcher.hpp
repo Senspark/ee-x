@@ -20,12 +20,14 @@
 namespace ee {
 class EventDispatcher {
 private:
-    template <class T> struct is_event_info {
+    template <class T>
+    struct is_event_info {
         static constexpr bool value =
             std::is_base_of<detail::EventInfoBase, T>::value;
     };
 
-    template <class... Args> struct is_dispatchable {
+    template <class... Args>
+    struct is_dispatchable {
         template <std::size_t Id, class... Ts>
         static constexpr bool value(EventInfo<Id, Ts...>) {
             return (sizeof...(Ts) == sizeof...(Args)) &&
@@ -33,7 +35,8 @@ private:
         }
     };
 
-    template <class EventType, class Callable> struct can_be_dispatched {
+    template <class EventType, class Callable>
+    struct can_be_dispatched {
         static constexpr bool value =
             std::is_convertible<Callable,
                                 typename EventType::CallbackType>::value;

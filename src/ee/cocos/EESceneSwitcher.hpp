@@ -13,11 +13,9 @@
 
 #include <2d/CCTransition.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
-class ImageBuilder;
-
 /// Layout:
 /// - out-scene on exit transition did start.
 /// - pre-phase actions.
@@ -77,7 +75,7 @@ public:
 
 protected:
     enum class Phase { None, Pre, In, Post };
-    
+
     SceneSwitcher();
 
     virtual bool init() override;

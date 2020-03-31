@@ -11,9 +11,9 @@
 
 #include <ui/UIEditBox/UIEditBox.h>
 
-namespace ee {
-class Console;
+#include <ee/CocosFwd.hpp>
 
+namespace ee {
 namespace detail {
 class ConsoleDelegate : public cocos2d::ui::EditBoxDelegate {
 public:

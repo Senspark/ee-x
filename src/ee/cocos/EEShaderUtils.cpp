@@ -294,10 +294,13 @@ void main() {
 
     auto result = cocos2d::StringUtils::format(f2, blurTexCoords, blurTexCoords,
                                                body.c_str());
+    /*
+     For debug shader.
     LOG_FUNC_FORMAT(
         "vertical = %s radius = %zu sampling = %s sigma = %f frag = %s",
         isVertical ? "true" : "false", blurRadius,
         useLinearSampling ? "true" : "false", sigma, result.c_str());
+     */
 
     return result;
 }
@@ -368,9 +371,12 @@ void main() {
     auto result = cocos2d::StringUtils::format(f2, blurTexCoords, blurTexCoords,
                                                body.c_str());
 
+    /*
+     For debug shader.
     LOG_FUNC_FORMAT("radius = %zu sampling = %s sigma = %f frag = %s",
                     blurRadius, useLinearSampling ? "true" : "false", sigma,
                     result.c_str());
+     */
 
     return result;
 }

@@ -11,10 +11,9 @@
 
 #include <2d/CCScene.h>
 
-namespace ee {
-class SceneSwitcher;
-class ImageBuilder;
+#include "ee/CocosFwd.hpp"
 
+namespace ee {
 class ManagedScene : public cocos2d::Scene {
 private:
     using Self = ManagedScene;
@@ -27,7 +26,7 @@ public:
 
 protected:
     ManagedScene();
-    
+
     virtual bool init() override;
 
     virtual void onEnter() override;

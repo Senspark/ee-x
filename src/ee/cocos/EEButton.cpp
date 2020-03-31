@@ -16,9 +16,9 @@
 #include "ee/cocos/EEScale9SpriteWithHsv.hpp"
 #include "ee/cocos/EEUtils.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
-auto ButtonEx::getDefaultHitTester() -> const HitTester & {
+namespace ee {
+namespace detail {
+auto ButtonEx::getDefaultHitTester() -> const HitTester& {
     static const HitTester checker = [](cocos2d::Touch* touch, Button* button) {
         // Retrieve world position.
         auto&& position = touch->getLocation();
@@ -42,8 +42,7 @@ ButtonEx::ButtonEx()
     , zoomingAction_(nullptr)
     , currentTouch_(nullptr)
     , currentEvent_(nullptr)
-    , container_(nullptr) {
-}
+    , container_(nullptr) {}
 
 ButtonEx::~ButtonEx() = default;
 
@@ -459,5 +458,5 @@ void ButtonEx::setBrightness(float brightness) {
     getRendererNormal()->setBrightness(brightness_);
     getRendererClicked()->setBrightness(brightness_);
 }
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee

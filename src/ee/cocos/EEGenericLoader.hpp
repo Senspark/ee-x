@@ -12,10 +12,9 @@
 #include <tuple>
 #include <type_traits>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Generic template loader for cocosbuilder.
 ///
 /// Simple loader:
@@ -90,6 +89,6 @@ private:
 
     Constructor callback_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_GENERIC_LOADER_HPP_ */

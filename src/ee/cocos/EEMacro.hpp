@@ -9,19 +9,6 @@
 #ifndef EE_LIBRARY_MACRO_HPP_
 #define EE_LIBRARY_MACRO_HPP_
 
-#ifndef NS_EE
-#define NS_EE ee
-#endif // NS_EE
-
-#define NS_EE_BEGIN namespace NS_EE {
-#define NS_EE_END }
-
-#define NS_DETAIL_BEGIN namespace detail {
-#define NS_DETAIL_END }
-
-#define NS_ANONYMOUS_BEGIN namespace {
-#define NS_ANONYMOUS_END }
-
 // cocosbuilder member variable assigner glue weak.
 #define CCB_MEMBERVARIABLEASSIGNER_GLUE_WEAK_EX(variableName)                  \
     CCB_MEMBERVARIABLEASSIGNER_GLUE_WEAK(                                      \
@@ -68,36 +55,5 @@
 
 /// Gets overloading function name.
 #define GET_FUNCTION(name, arity) STRCAT(name, arity)
-
-#if defined(_MSC_VER) || defined(__clang__) || defined(__GNUC__)
-#if defined(_MSC_VER)
-#define FUNCTION_SIGNATURE __FUNCSIG__
-#elif defined(__clang__) || defined(__GNUC__)
-#define FUNCTION_SIGNATURE __PRETTY_FUNCTION__
-#endif // defined(_MSC_VER)
-
-/// Simple function logging.
-#define LOG_FUNC() CCLOG("%s.", FUNCTION_SIGNATURE)
-
-/// Simple function logging with format.
-#define LOG_FUNC_FORMAT(format, ...)                                           \
-    CCLOG("%s: " format ".", FUNCTION_SIGNATURE, ##__VA_ARGS__)
-
-/// Full function logging.
-#define LOG_FULL()                                                             \
-    CCLOG("file = %s\nline = %d\nfunc = %s.", __FILE__, __LINE__,              \
-          FUNCTION_SIGNATURE)
-
-/// Full function loggin with format.
-#define LOG_FULL_FORMAT(format, ...)                                           \
-    CCLOG("file = %s\nline = %d\nfunc = %s\n" format ".", __FILE__, __LINE__,  \
-          FUNCTION_SIGNATURE, ##__VA_ARGS__)
-
-#else
-#define LOG_FUNC()
-#define LOG_FUNC_FORMAT(format, ...)
-#define LOG_FULL()
-#define LOG_FULL_FORMAT(format, ...)
-#endif
 
 #endif // EE_LIBRARY_MACRO_HPP_

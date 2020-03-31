@@ -13,7 +13,7 @@
 #include "ee/cocos/EESpineFactory.hpp"
 #include "ee/cocos/EESpineMacro.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr const char* data_file = "dataFile";
 constexpr const char* atlas_file = "atlasFile";
@@ -102,4 +102,4 @@ void SkeletonAnimationLoader::onHandlePropTypeFloatScale(
                                       reader);
 }
 
-NS_EE_END
+} // namespace ee

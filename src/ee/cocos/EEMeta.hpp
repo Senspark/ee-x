@@ -9,12 +9,16 @@
 #ifndef EE_LIBRARY_META_HPP
 #define EE_LIBRARY_META_HPP
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace detail {
-template <class... Args> using void_t = void;
+template <class... Args>
+using void_t = void;
 
 /// https://stackoverflow.com/questions/39727409/how-to-simplify-complicated-sfinae-syntax-in-pre-c11-c11-14-and-17
-template <long N> struct requires_enum {
+template <long N>
+struct requires_enum {
     enum class type { none, all };
 };
 

@@ -10,7 +10,7 @@
 
 #include "ee/cocos/EESkeletonBone.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr auto bone_name = "bone|boneList";
 } // namespace property
@@ -32,4 +32,4 @@ void SkeletonBoneLoader::onHandlePropTypeString(
     }
     Super::onHandlePropTypeString(node, parent, propertyName, string, reader);
 }
-NS_EE_END
+} // namespace ee

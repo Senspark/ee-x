@@ -11,8 +11,8 @@
 #include <2d/CCParticleSystemQuad.h>
 #include <2d/CCSpriteFrameCache.h>
 
-#include "ee/cocos/EEPool.hpp"
 #include "ee/cocos/EEAction.hpp"
+#include "ee/cocos/EEPool.hpp"
 
 namespace ee {
 namespace detail {
@@ -65,10 +65,11 @@ ParticlePool& getPool(const std::string& plistName) {
         auto destructor = [](cocos2d::ParticleSystemQuad* instance) {
             instance->resetSystem();
         };
-        iter =
-            pools.emplace(std::piecewise_construct,
-                          std::forward_as_tuple(plistName),
-                          std::forward_as_tuple(constructor, destructor)).first;
+        iter = pools
+                   .emplace(std::piecewise_construct,
+                            std::forward_as_tuple(plistName),
+                            std::forward_as_tuple(constructor, destructor))
+                   .first;
     }
     return iter->second;
 }
@@ -92,4 +93,4 @@ cocos2d::ParticleSystem* createParticle(const std::string& plistName,
     particle->setTextureWithRect(frame->getTexture(), frame->getRect());
     return particle;
 }
-} // namespacve ee
+} // namespace ee

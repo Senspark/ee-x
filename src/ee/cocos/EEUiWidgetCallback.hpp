@@ -12,10 +12,10 @@
 #include <GUI/CCControlExtension/CCControl.h>
 #include <ui/UIWidget.h>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 struct DummyRef : public cocos2d::Ref {
     void dummyFunction(cocos2d::Ref*) {}
     void dummyFunction(cocos2d::Ref*, cocos2d::extension::Control::EventType) {}
@@ -77,7 +77,7 @@ private:
         CCB_SELECTORRESOLVER_CCBUTTON_CLICK(this, str.c_str(),                 \
                                             CC_CALLBACK_1(function, this));    \
     }
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee
 
 #endif /* EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_ */

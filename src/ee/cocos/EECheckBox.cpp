@@ -10,8 +10,8 @@
 
 #include <algorithm>
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 bool CheckBoxBase::isChecked() const noexcept {
     return isChecked_;
 }
@@ -38,7 +38,7 @@ void CheckBoxBase::setOnStateChangedCallback(
     const StateChangedCallback& callback) {
     onStateChangedCallback_ = callback;
 }
-NS_DETAIL_END
+} // namespace detail
 
 void CheckAllBox::addCheckBox(CheckBox* checkBox) {
     checkBoxes_.push_back(checkBox);
@@ -90,4 +90,4 @@ void CheckBox::setChecked(bool checked) {
         checkAllBox_->updateState();
     }
 }
-NS_EE_END
+} // namespace ee

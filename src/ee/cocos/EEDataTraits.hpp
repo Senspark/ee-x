@@ -14,7 +14,6 @@
 #include <type_traits>
 
 #include "ee/cocos/EEDataMeta.hpp"
-#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 /// Deserialize/serialize arithmetic types:
@@ -35,7 +34,8 @@ struct DataTraits<T, std::enable_if_t<std::is_arithmetic<T>::value>> {
 };
 
 /// Deserialize/serialize string type.
-template <> struct DataTraits<std::string> {
+template <>
+struct DataTraits<std::string> {
     static const std::string& store(const std::string& value);
     static const std::string& load(const std::string& value);
 };
@@ -57,12 +57,14 @@ public:
 };
 
 namespace detail {
-template <class T> struct is_duration : std::false_type {};
+template <class T>
+struct is_duration : std::false_type {};
 
 template <class Rep, class Period>
 struct is_duration<std::chrono::duration<Rep, Period>> : std::true_type {};
 
-template <class T> constexpr bool is_duration_v = is_duration<T>::value;
+template <class T>
+constexpr bool is_duration_v = is_duration<T>::value;
 } // namespace detail
 
 /// Deserialize/serialize duration types.

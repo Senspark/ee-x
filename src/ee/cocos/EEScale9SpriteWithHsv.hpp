@@ -11,7 +11,6 @@
 
 #include <ui/UIScale9Sprite.h>
 
-#include "ee/cocos/EEForward.hpp"
 #include "ee/cocos/EEHsvProtocol.hpp"
 
 namespace ee {

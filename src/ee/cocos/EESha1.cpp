@@ -36,9 +36,9 @@
 
 #include "ee/cocos/EECrytography.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
-NS_ANONYMOUS_BEGIN
+namespace ee {
+namespace detail {
+namespace {
 /// Rotate an integer value to left.
 std::uint32_t rol(const std::uint32_t value,
                   const std::uint32_t steps) noexcept {
@@ -104,7 +104,7 @@ void innerHash(std::uint32_t* result, std::uint32_t* w) {
     result[3] += d;
     result[4] += e;
 }
-NS_ANONYMOUS_END
+} // namespace
 
 /// @param src points to any kind of data to be hashed.
 /// @param byteLength is the number of bytes to hash from the src pointer.
@@ -187,7 +187,7 @@ void convertByteToHexString(const unsigned char* hash, char* hexString) {
     }
     hexString[40] = 0;
 }
-NS_DETAIL_END
+} // namespace detail
 
 std::string generateSha1(const std::string& input) {
     unsigned char hash[20];
@@ -196,4 +196,4 @@ std::string generateSha1(const std::string& input) {
     detail::convertByteToHexString(hash, hexString);
     return hexString;
 }
-NS_EE_END
+} // namespace ee

@@ -14,7 +14,7 @@
 #include <renderer/CCTextureCache.h>
 #include <ui/UIButton.h>
 
-NS_EE_BEGIN
+namespace ee {
 using Self = UiButtonLoader;
 
 namespace property {
@@ -224,4 +224,4 @@ void UiButtonLoader::onHandlePropTypeColor3(cocos2d::Node* node,
     }
     Super::onHandlePropTypeColor3(node, parent, propertyName, color3B, reader);
 }
-NS_EE_END
+} // namespace ee

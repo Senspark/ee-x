@@ -11,7 +11,7 @@
 #include <2d/CCLabel.h>
 #include <ui/UIText.h>
 
-NS_EE_BEGIN
+namespace ee {
 using Self = UiTextLoader;
 
 namespace property {
@@ -234,4 +234,4 @@ void UiTextLoader::onHandlePropTypeSize(cocos2d::Node* node,
     }
     Super::onHandlePropTypeSize(node, parent, propertyName, size, reader);
 }
-NS_EE_END
+} // namespace ee

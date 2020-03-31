@@ -12,6 +12,8 @@
 #include <functional>
 #include <vector>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 class ContinuousAction {
 public:

@@ -17,7 +17,7 @@
 #include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/EEUtils.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 Dialog* addHorizontalTransition(Dialog* dialog, float duration, float rate) {
     auto&& winSize = cocos2d::Director::getInstance()->getWinSize();
 
@@ -67,4 +67,4 @@ Dialog* addBlurBackground(Dialog* dialog, float duration, float scale,
 
     return dialog;
 }
-NS_EE_END
+} // namespace ee

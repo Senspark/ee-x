@@ -11,11 +11,10 @@
 #include <functional>
 #include <string>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace language {
-class Language;
-class Formatter;
-
 class ISwitcher {
 public:
     using Observer = std::function<void(const Language& language)>;

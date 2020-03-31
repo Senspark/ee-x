@@ -91,6 +91,8 @@ private:
     std::vector<DialogCommand> commandQueue_;
 
     std::vector<DialogGuard> dialogStack_;
+    
+    Logger& logger_;
 };
 } // namespace cocos
 } // namespace ee

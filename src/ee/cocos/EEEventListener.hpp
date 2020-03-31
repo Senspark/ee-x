@@ -11,10 +11,10 @@
 
 #include <base/CCEventListener.h>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 /// Variadic arguments (custom) event listener.
 template <class... Args>
 class EventListener final : public cocos2d::EventListener {
@@ -56,7 +56,7 @@ private:
 
     CallbackType onCustomEvent_;
 };
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee
 
 #endif /* EE_LIBRARY_EVENT_LISTENER_HPP_ */

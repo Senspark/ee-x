@@ -15,8 +15,8 @@
 #include <base/CCEventDispatcher.h>
 #include <renderer/CCTextureCache.h>
 
-#include "ee/cocos/EEManagedScene.hpp"
 #include "ee/cocos/EEImageBuilder.hpp"
+#include "ee/cocos/EEManagedScene.hpp"
 
 namespace ee {
 using Self = SceneSwitcher;

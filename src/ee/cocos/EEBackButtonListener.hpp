@@ -11,11 +11,10 @@
 
 #include <base/CCEventListenerKeyboard.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 class BackButtonListenerBase {
 protected:
     BackButtonListenerBase() = default;
@@ -54,7 +53,7 @@ protected:
 private:
     cocos2d::EventListenerKeyboard* listener_;
 };
-NS_DETAIL_END
+} // namespace detail
 
 /// Back button listener (only works on Android).
 ///
@@ -63,11 +62,12 @@ NS_DETAIL_END
 template <class T>
 class[[deprecated]] BackButtonListener : public detail::BackButtonListenerBase {
 protected:
-    BackButtonListener() : BackButtonListenerBase() {
+    BackButtonListener()
+        : BackButtonListenerBase() {
         registerListener(getInstance());
     }
 
-    virtual ~BackButtonListener() {
+    virtual ~BackButtonListener() { //
         unregisterListener();
     }
 
@@ -80,17 +80,17 @@ private:
     ///
     /// Since dynamic_cast won't work in constructor,
     /// static_cast is used.
-    T* getInstance() {
+    T* getInstance() { //
         return static_cast<T*>(this);
     }
 
     /// Retrieves the subclass instance (const).
     ///
     /// Subclass should be inherits from @c cocos2d::Node.
-    const T* getInstance() const {
+    const T* getInstance() const { //
         return static_cast<const T*>(this);
     }
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_ */

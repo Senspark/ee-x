@@ -11,9 +11,9 @@
 
 #include <string>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Generates SHA-1 hashed string.
 /// @param input is the string to be hashed.
 /// @return SHA-1 hashed hexadecimal string.
@@ -25,6 +25,6 @@ std::string generateSha1(const std::string& input);
 std::string generateCrc(const std::string& input);
 
 std::string generateMd5(const std::string& input);
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_CRYTOGRAPHY_HPP_ */

@@ -11,7 +11,7 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 class ClippingRectangleNodeLoader : public NodeV3Loader {
 private:
     using Super = NodeV3Loader;
@@ -35,6 +35,6 @@ protected:
                                       cocos2d::Size size,
                                       cocosbuilder::CCBReader* reader) override;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_CLIPPING_RECTANGLE_NODE_LOADER_HPP_ */

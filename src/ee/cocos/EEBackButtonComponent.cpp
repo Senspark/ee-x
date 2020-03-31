@@ -10,7 +10,7 @@
 
 #include <cocos2d.h>
 
-NS_EE_BEGIN
+namespace ee {
 using Self = BackButtonComponent;
 
 Self::BackButtonComponent()
@@ -71,4 +71,4 @@ void BackButtonComponent::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode,
         }
     }
 }
-NS_EE_END
+} // namespace ee

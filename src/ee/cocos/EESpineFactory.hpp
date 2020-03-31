@@ -10,16 +10,14 @@
 #define EE_LIBRARY_SPINE_FACTORY_HPP_
 
 #include <functional>
-#include <string>
 #include <map>
+#include <string>
 #include <unordered_map>
+
+#include "ee/CocosFwd.hpp"
 
 struct spAtlas;
 struct spSkeletonData;
-
-namespace spine {
-class SkeletonAnimation;
-} // namespace spine
 
 namespace ee {
 namespace detail {

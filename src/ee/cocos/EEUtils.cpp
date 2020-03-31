@@ -27,7 +27,7 @@
 
 #include "ee/cocos/EEImage.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 UniqueListener make_unique_listener(cocos2d::EventListener* listener) {
     auto deleter = [](cocos2d::EventListener* lst) {
         cocos2d::Director::getInstance()
@@ -212,7 +212,6 @@ cocos2d::Sprite* captureBlurredScreenInPoints(float scale, int blurRadius,
 cocos2d::Sprite*
 createSpriteFromImage(cocos2d::Image* image,
                       const std::function<void(cocos2d::Image*)>& processor) {
-
     if (processor) {
         processor(image);
     }
@@ -252,8 +251,8 @@ void downloadImage(
     request->setRequestType(cocos2d::network::HttpRequest::Type::GET);
 
     auto callback = [imageUrl, afterDownloaded](
-        cocos2d::network::HttpClient* client,
-        cocos2d::network::HttpResponse* response) {
+                        cocos2d::network::HttpClient* client,
+                        cocos2d::network::HttpResponse* response) {
         cocos2d::Image* image = nullptr;
         do {
             CC_BREAK_IF(response == nullptr || response->isSucceed() == false);
@@ -305,4 +304,4 @@ void downloadImage(
     // Release resources.
     request->release();
 }
-NS_EE_END
+} // namespace ee

@@ -8,8 +8,8 @@
 
 #include "ee/cocos/EEUiWidgetCallback.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 UiWidgetCallback* UiWidgetCallback::getInstance() {
     static Self sharedInstance;
     return &sharedInstance;
@@ -25,12 +25,12 @@ void UiWidgetCallback::setActiveTouchCallback(const TouchCallback& callback) {
     clickCallback_ = nullptr;
 }
 
-auto UiWidgetCallback::getActiveTouchCallback() const -> const TouchCallback & {
+auto UiWidgetCallback::getActiveTouchCallback() const -> const TouchCallback& {
     return touchCallback_;
 }
 
-auto UiWidgetCallback::getActiveClickCallback() const -> const ClickCallback & {
+auto UiWidgetCallback::getActiveClickCallback() const -> const ClickCallback& {
     return clickCallback_;
 }
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee

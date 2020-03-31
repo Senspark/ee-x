@@ -12,11 +12,9 @@
 #include <map>
 #include <string>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
-class Shader;
-
 class ShaderManager final {
 private:
     using Self = ShaderManager;

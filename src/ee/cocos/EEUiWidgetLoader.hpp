@@ -9,11 +9,9 @@
 #ifndef EE_LIBRARY_UI_WIDGET_LOADER_HPP_
 #define EE_LIBRARY_UI_WIDGET_LOADER_HPP_
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
 #include "ee/cocos/EENodeV3Loader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Widget.
 ///
 /// Usage:
@@ -49,6 +47,6 @@ protected:
                                    const char* propertyName, int integerLabeled,
                                    cocosbuilder::CCBReader* reader) override;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_UI_WIDGET_LOADER_HPP_ */

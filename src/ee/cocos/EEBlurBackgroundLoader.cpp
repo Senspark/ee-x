@@ -11,7 +11,7 @@
 #include "EEBlurBackgroundLoader.hpp"
 #include "EEBlurBackground.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr const char* render_scale = "renderScale";
 constexpr const char* sigma = "sigma";
@@ -50,6 +50,6 @@ void BlurBackgroundLoader::onHandlePropTypeInteger(
     return NodeV3Loader::onHandlePropTypeInteger(node, parent, propertyName,
                                                  integer, reader);
 }
-NS_EE_END
+}
 
 */

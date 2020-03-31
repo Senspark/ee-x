@@ -11,9 +11,9 @@
 
 #include <cocosbuilder/CCNodeLoader.h>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Cocosbuilder loader for @c cocos2d::Node with color and opacity.
 ///
 /// Usage:
@@ -30,7 +30,7 @@ public:
 
 protected:
     NodeV3Loader();
-    
+
     virtual cocos2d::Node* createNode(cocos2d::Node* parent,
                                       cocosbuilder::CCBReader* reader) override;
 
@@ -58,6 +58,6 @@ protected:
 private:
     bool localZOrderOverridden_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_NODE_V3_LOADER_HPP_ */

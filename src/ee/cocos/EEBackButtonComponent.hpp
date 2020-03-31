@@ -11,10 +11,9 @@
 
 #include <2d/CCComponent.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 class BackButtonComponent : public cocos2d::Component {
 private:
     using Self = BackButtonComponent;
@@ -30,7 +29,7 @@ public:
 
 protected:
     BackButtonComponent();
-    
+
     virtual bool initWithCallback(const BackButtonCallback& callback);
 
 private:
@@ -42,6 +41,6 @@ private:
 
     BackButtonCallback callback_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_BACK_BUTTON_COMPONENT_HPP_ */

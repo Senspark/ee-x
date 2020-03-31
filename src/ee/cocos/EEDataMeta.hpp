@@ -11,17 +11,18 @@
 
 #include <type_traits>
 
-#include "ee/cocos/EEForward.hpp"
 #include "ee/cocos/EEMeta.hpp"
 
 namespace ee {
 namespace detail {
-template <class T> struct is_data_traits : std::false_type {};
+template <class T>
+struct is_data_traits : std::false_type {};
 
 template <class Value>
 struct is_data_traits<DataTraits<Value, void>> : std::true_type {};
 
-template <class T> constexpr bool is_data_traits_v = is_data_traits<T>::value;
+template <class T>
+constexpr bool is_data_traits_v = is_data_traits<T>::value;
 
 /// Checks whether the specified traits type can store the specified value type
 /// to std::string.
@@ -59,15 +60,18 @@ constexpr bool is_traits_v = (is_data_traits_v<Traits> ||
                                can_load_v<Traits, Value>));
 
 /// Checks whether the specified type is a DataInfo.
-template <class T> struct is_data_info : std::false_type {};
+template <class T>
+struct is_data_info : std::false_type {};
 
 template <std::size_t DataId, class Value, class... Keys>
 struct is_data_info<DataInfo<DataId, Value, Keys...>> : std::true_type {};
 
-template <class T> constexpr bool is_data_info_v = is_data_info<T>::value;
+template <class T>
+constexpr bool is_data_info_v = is_data_info<T>::value;
 
 /// Checks whether it is possible to convert/construct from Args to Keys.
-template <class Formatter, class... Args> struct is_formattable;
+template <class Formatter, class... Args>
+struct is_formattable;
 
 template <class... Keys, class... Args>
 struct is_formattable<DataFormat<Keys...>, Args...> {
@@ -84,15 +88,18 @@ template <class Formatter, class... Args>
 constexpr bool is_formattable_v = is_formattable<Formatter, Args...>::value;
 
 /// Gets the last type in a parameter pack.
-template <class... Args> struct last {
+template <class... Args>
+struct last {
     using type =
         std::tuple_element_t<(sizeof...(Args)) - 1, std::tuple<Args...>>;
 };
 
-template <class... Args> using last_t = typename last<Args...>::type;
+template <class... Args>
+using last_t = typename last<Args...>::type;
 
 /// Gets all types except the last type in a parameter pack.
-template <class... Args> struct exclude_last;
+template <class... Args>
+struct exclude_last;
 
 template <std::size_t... Is, class... Ts>
 struct exclude_last<std::index_sequence<Is...>, Ts...> {
@@ -105,7 +112,8 @@ using exclude_last_t =
     typename exclude_last<std::make_index_sequence<(sizeof...(Args)) - 1>,
                           Args...>::type;
 
-template <class Value, class... Args> struct get_traits {
+template <class Value, class... Args>
+struct get_traits {
     using type = std::conditional_t<
         sizeof...(Args) == 0, DataTraits<Value>,
         std::conditional_t<is_traits_v<last_t<Args...>, Value>, last_t<Args...>,
@@ -115,7 +123,8 @@ template <class Value, class... Args> struct get_traits {
 template <class Value, class... Args>
 using get_traits_t = typename get_traits<Value, Args...>::type;
 
-template <class Value, class... Args> struct get_format {
+template <class Value, class... Args>
+struct get_format {
     using type = std::conditional_t<
         sizeof...(Args) == 0, DataFormat<>,
         std::conditional_t<is_traits_v<last_t<Args...>, Value>,

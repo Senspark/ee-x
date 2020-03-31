@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_SHADER_HPP
 #define EE_LIBRARY_SHADER_HPP
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 /// Wraps a shader and automatically rebinds when the renderer is recreated on

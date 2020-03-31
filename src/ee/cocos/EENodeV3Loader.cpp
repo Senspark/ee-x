@@ -8,7 +8,7 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 using Self = NodeV3Loader;
 
 namespace property {
@@ -84,4 +84,4 @@ void NodeV3Loader::onHandlePropTypeInteger(cocos2d::Node* node,
     }
     Super::onHandlePropTypeInteger(node, parent, propertyName, integer, reader);
 }
-NS_EE_END
+} // namespace ee

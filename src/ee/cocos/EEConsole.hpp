@@ -11,7 +11,7 @@
 
 #include <ui/UIWidget.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 namespace detail {

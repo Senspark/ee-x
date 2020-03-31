@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace language {
 class Formatter {

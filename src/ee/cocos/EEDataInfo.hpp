@@ -19,7 +19,8 @@
 
 namespace ee {
 /// @param Keys The format types.
-template <class... Keys> struct DataFormat {
+template <class... Keys>
+struct DataFormat {
 public:
     using KeyTypes = std::tuple<Keys...>;
 
@@ -83,8 +84,8 @@ public:
     enum { Id = DataId };
 
     using FormatType::createKey;
-    using TraitsType::store;
     using TraitsType::load;
+    using TraitsType::store;
 
     template <class ValueT, class... KeysT>
     static decltype(auto) set(ValueT&& value, KeysT&&... keys) {
@@ -92,7 +93,8 @@ public:
                                std::forward<KeysT>(keys)...);
     }
 
-    template <class... KeysT> static decltype(auto) get(KeysT&&... keys) {
+    template <class... KeysT>
+    static decltype(auto) get(KeysT&&... keys) {
         return ::ee::get<Self>(std::forward<KeysT>(keys)...);
     }
 

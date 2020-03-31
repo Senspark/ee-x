@@ -12,12 +12,10 @@
 #include <functional>
 #include <vector>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-class CheckBox;
-
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 class CheckBoxBase {
 public:
     using StateChangedCallback = std::function<void(bool checked)>;
@@ -41,7 +39,7 @@ private:
 
     StateChangedCallback onStateChangedCallback_;
 };
-NS_DETAIL_END
+} // namespace detail
 
 class CheckAllBox : public detail::CheckBoxBase {
 public:
@@ -79,6 +77,6 @@ private:
 
     CheckAllBox* checkAllBox_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_CHECK_BOX_HPP_ */

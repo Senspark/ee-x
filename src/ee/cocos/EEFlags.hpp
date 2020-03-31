@@ -9,22 +9,22 @@
 #ifndef EE_LIBRARY_FLAGS_HPP_
 #define EE_LIBRARY_FLAGS_HPP_
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
 #define EE_ENABLE_BITWISE_OPERATORS_FOR_ENUM(EnumType)                         \
     namespace ee::detail {                                                     \
-        template <>                                                            \
-        struct has_bitwise_operators<EnumType> : public std::true_type {};     \
+    template <>                                                                \
+    struct has_bitwise_operators<EnumType> : public std::true_type {};         \
     } // namespace ee::detail
 
 #define EE_ENABLE_ARITHMETIC_OPERATORS_FOR_ENUM(EnumType)                      \
     namespace ee::detail {                                                     \
-        template <>                                                            \
-        struct has_arithmetic_operators<EnumType> : public std::true_type {};  \
+    template <>                                                                \
+    struct has_arithmetic_operators<EnumType> : public std::true_type {};      \
     } // namespace ee::detail
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 template <class EnumType>
 constexpr std::enable_if_t<std::is_enum<EnumType>::value,
                            std::underlying_type_t<EnumType>>
@@ -32,9 +32,11 @@ convert_enum_to_underlying_type(EnumType value) noexcept {
     return static_cast<std::underlying_type_t<EnumType>>(value);
 }
 
-template <class T> struct has_bitwise_operators : public std::false_type {};
+template <class T>
+struct has_bitwise_operators : public std::false_type {};
 
-template <class T> struct has_arithmetic_operators : public std::false_type {};
+template <class T>
+struct has_arithmetic_operators : public std::false_type {};
 
 template <class EnumType, class T>
 using enable_if_enum_has_bitwise_operators = std::enable_if_t<
@@ -57,8 +59,8 @@ template <class EnumType, class UnaryOp>
 constexpr EnumType apply_unary_operator(EnumType value, UnaryOp op) noexcept {
     return static_cast<EnumType>(op(convert_enum_to_underlying_type(value)));
 }
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee
 
 /// Bitwise OR operator.
 template <class EnumType>

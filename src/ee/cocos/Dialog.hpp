@@ -163,6 +163,7 @@ private:
     std::vector<CallbackInfo> dialogWillHideCallbacks_;
     std::vector<CallbackInfo> dialogDidHideCallbacks_;
 
+    Logger& logger_;
     std::shared_ptr<IDialogManager> manager_;
 };
 } // namespace cocos

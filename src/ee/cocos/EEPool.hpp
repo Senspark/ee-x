@@ -15,6 +15,8 @@
 
 #include <base/CCRefPtr.h>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 /// Be careful with objects that are not added to scene.
 /// They will be leaked (issue #14050).
@@ -23,7 +25,8 @@ namespace ee {
 /// because there is a circular reference.
 /// Workaround: loaded_node->setUserObject(nullptr) (must do for all children)
 /// to remove the CCBAnimationManager.
-template <class T> class Pool final {
+template <class T>
+class Pool final {
 public:
     using value_type = T;
     using pointer = T*;

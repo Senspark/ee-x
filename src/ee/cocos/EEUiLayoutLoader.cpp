@@ -10,7 +10,7 @@
 
 #include <ui/UILayout.h>
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr const char* background_color = "backgroundColor";
 constexpr const char* background_color_opacity = "backgroundColorOpacity";
@@ -49,4 +49,4 @@ void UiLayoutLoader::onHandlePropTypeByte(cocos2d::Node* node,
     }
     Super::onHandlePropTypeByte(node, parent, propertyName, byte, reader);
 }
-NS_EE_END
+} // namespace ee

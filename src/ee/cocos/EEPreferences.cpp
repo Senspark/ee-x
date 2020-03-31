@@ -18,7 +18,7 @@
 
 #include "ee/cocos/EEDataHandler.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace {
 void writeData(const DataStorage& data, const std::string& filePath) {
     auto fileUtils = cocos2d::FileUtils::getInstance();
@@ -133,7 +133,6 @@ void Preferences::save(const std::string& key, const std::string& value,
 
 bool Preferences::load(const std::string& key, std::string& value,
                        Encryption mode) {
-
     if (mode == Encryption::Value || mode == Encryption::KeyValue) {
         if (not load(key, value, Encryption::None)) {
             return false;
@@ -188,4 +187,4 @@ bool Preferences::merge(DataStorage& data) {
     data.clear();
     return true;
 }
-NS_EE_END
+} // namespace ee

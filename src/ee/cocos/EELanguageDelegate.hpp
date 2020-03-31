@@ -13,11 +13,10 @@
 #include <string>
 #include <vector>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace language {
-class Language;
-class ISwitcher;
-
 class Delegate {
 private:
     using Self = Delegate;

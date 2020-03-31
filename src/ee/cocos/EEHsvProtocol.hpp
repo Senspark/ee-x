@@ -11,9 +11,7 @@
 
 #include <math/Mat4.h>
 
-namespace cocos2d {
-class GLProgram;
-} // namespace cocos2d
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 class HsvProtocol {

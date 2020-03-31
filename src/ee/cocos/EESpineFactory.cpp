@@ -10,8 +10,8 @@
 
 #include <cassert>
 
-#include <spine/Cocos2dAttachmentLoader.h>
 #include <spine/AttachmentLoader.h>
+#include <spine/Cocos2dAttachmentLoader.h>
 #include <spine/SkeletonAnimation.h>
 
 #include "ee/cocos/EESpineMacro.hpp"
@@ -26,12 +26,13 @@ struct SpineData {
     spSkeletonData* data;
     spAttachmentLoader* loader;
 };
-} // namespace
+} // namespace detail
 
 namespace {
 const detail::SpineAtlasDeleter& getAtlasDeleter() {
-    static detail::SpineAtlasDeleter deleter =
-        [](spAtlas* atlas) { spAtlas_dispose(atlas); };
+    static detail::SpineAtlasDeleter deleter = [](spAtlas* atlas) {
+        spAtlas_dispose(atlas);
+    };
     return deleter;
 }
 
@@ -85,11 +86,11 @@ spSkeletonData* SpineFactory::getSkeletonData(const std::string& dataName,
 
         spSkeletonJson_dispose(json);
 
-        iter =
-            cachedSkeletonData_.emplace(std::piecewise_construct,
-                                        std::forward_as_tuple(dataName, scale),
-                                        std::forward_as_tuple(std::move(ptr)))
-                .first;
+        iter = cachedSkeletonData_
+                   .emplace(std::piecewise_construct,
+                            std::forward_as_tuple(dataName, scale),
+                            std::forward_as_tuple(std::move(ptr)))
+                   .first;
     }
     return iter->second->data;
 }

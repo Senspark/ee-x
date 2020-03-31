@@ -13,12 +13,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 using DataStorage = std::unordered_map<std::string, std::string>;
-
-class DataHandler;
 
 class Preferences {
 private:
@@ -113,6 +111,6 @@ private:
 
     std::unique_ptr<DataHandler> handler_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_PREFERENCES_HPP_ */

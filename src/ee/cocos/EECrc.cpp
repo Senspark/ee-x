@@ -13,9 +13,9 @@
 #include <cstdint>
 #include <numeric>
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
-NS_ANONYMOUS_BEGIN
+namespace ee {
+namespace detail {
+namespace {
 std::array<std::uint_fast32_t, 256> generate_crc_lookup_table() noexcept {
     auto const reversed_polynomial = std::uint_fast32_t{0xEDB88320uL};
 
@@ -24,12 +24,10 @@ std::array<std::uint_fast32_t, 256> generate_crc_lookup_table() noexcept {
     struct byte_checksum {
         std::uint_fast32_t operator()() noexcept {
             auto checksum = static_cast<std::uint_fast32_t>(n++);
-
             for (auto i = 0; i < 8; ++i) {
                 checksum = (checksum >> 1) ^
                            ((checksum & 0x1u) ? reversed_polynomial : 0);
             }
-
             return checksum;
         }
 
@@ -41,7 +39,7 @@ std::array<std::uint_fast32_t, 256> generate_crc_lookup_table() noexcept {
 
     return table;
 }
-NS_ANONYMOUS_END
+} // namespace
 
 // Calculates the CRC for any sequence of values. (You could use type traits and
 // a
@@ -63,7 +61,7 @@ std::uint_fast32_t crc(InputIterator first, InputIterator last) {
                    return table[(checksum ^ value) & 0xFFu] ^ (checksum >> 8);
                });
 }
-NS_DETAIL_END
+} // namespace detail
 
 std::string generateCrc(const std::string& input) {
     auto output = detail::crc(input.begin(), input.end());
@@ -77,4 +75,4 @@ std::string generateCrc(const std::string& input) {
     std::reverse(result.begin(), result.end());
     return result;
 }
-NS_EE_END
+} // namespace ee

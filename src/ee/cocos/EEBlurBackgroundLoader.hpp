@@ -13,7 +13,7 @@
 
 #include "EENodeV3Loader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 class BlurBackgroundLoader : public NodeV3Loader {
 public:
     CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(BlurBackgroundLoader, loader);
@@ -32,7 +32,7 @@ protected:
                             const char* propertyName, int integer,
                             cocosbuilder::CCBReader* reader) override;
 };
-NS_EE_END
+}
 
 */
 

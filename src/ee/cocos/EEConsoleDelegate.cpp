@@ -4,8 +4,8 @@
 //
 //  Created by Zinge on 4/10/17.
 //
-
 //
+
 #include "ee/cocos/EEConsoleDelegate.hpp"
 
 #include <sstream>
@@ -16,8 +16,7 @@
 namespace ee {
 namespace detail {
 ConsoleDelegate::ConsoleDelegate(Console* console)
-    : console_(console) {
-}
+    : console_(console) {}
 
 void ConsoleDelegate::editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) {
     //

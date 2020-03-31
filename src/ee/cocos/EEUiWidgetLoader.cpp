@@ -12,7 +12,7 @@
 
 #include "ee/cocos/EEUiWidgetCallback.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr auto enabled = "enabled";
 constexpr auto bright = "bright";
@@ -122,4 +122,4 @@ void UiWidgetLoader::onHandlePropTypeIntegerLabeled(
     return Super::onHandlePropTypeIntegerLabeled(node, parent, propertyName,
                                                  integerLabeled, reader);
 }
-NS_EE_END
+} // namespace ee

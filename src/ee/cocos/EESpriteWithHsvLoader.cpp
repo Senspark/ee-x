@@ -10,7 +10,7 @@
 
 #include "ee/cocos/EESpriteWithHsv.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr const char* hue = "hue";
 constexpr const char* saturation = "saturation";
@@ -53,4 +53,4 @@ void SpriteWithHsvLoader::onHandlePropTypeFloat(
     SpriteLoader::onHandlePropTypeFloat(node, parent, propertyName, floatValue,
                                         reader);
 }
-NS_EE_END
+} // namespace ee

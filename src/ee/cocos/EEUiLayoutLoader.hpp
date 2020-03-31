@@ -9,10 +9,9 @@
 #ifndef EE_LIBRARY_UI_LAYOUT_LOADER_HPP_
 #define EE_LIBRARY_UI_LAYOUT_LOADER_HPP_
 
-#include "ee/cocos/EEMacro.hpp"
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Layout.
 ///
 /// Usage:
@@ -42,6 +41,6 @@ protected:
                                       unsigned char byte,
                                       cocosbuilder::CCBReader* reader) override;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_UI_LAYOUT_LOADER_HPP_ */

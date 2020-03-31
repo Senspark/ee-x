@@ -9,14 +9,10 @@
 #define EE_LIBRARY_WIDGET_HPP
 
 // Must be included first.
-#include "ee/cocos/EECocos2dxFwd.hpp"
-
-#include <platform/CCPlatformConfig.h> // CC_DLL
+#include "ee/CocosFwd.hpp"
 
 #include <cocosbuilder/CCNodeLoaderListener.h>
 #include <ui/UIWidget.h>
-
-#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 namespace ui {

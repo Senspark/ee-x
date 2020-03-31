@@ -76,8 +76,9 @@ void getAndSet(const typename DataType::SetterType& setter, Keys&&... keys) {
 
 template <class DataType, class Traits = typename DataType::TraitsType,
           class Formatter = typename DataType::FormatType, class Function,
-          class... Keys, class = std::enable_if_t<std::is_same<
-                             bool, typename DataType::ValueType>::value>>
+          class... Keys,
+          class = std::enable_if_t<
+              std::is_same<bool, typename DataType::ValueType>::value>>
 void getAndSetIf(bool conditionalValue, Function&& setter, Keys&&... keys) {
     auto current = get<DataType, Traits>(keys...);
     if (current == conditionalValue) {
@@ -87,7 +88,8 @@ void getAndSetIf(bool conditionalValue, Function&& setter, Keys&&... keys) {
     }
 }
 
-template <class DataType, class... Keys> void remove(Keys&&... keys) {
+template <class DataType, class... Keys>
+void remove(Keys&&... keys) {
     detail::remove0(DataType::Id,
                     DataType::createKey(std::forward<Keys>(keys)...));
 }
@@ -97,7 +99,8 @@ public:
     explicit Increment(std::size_t times = 1)
         : times_(times) {}
 
-    template <class T> void operator()(T& value) const {
+    template <class T>
+    void operator()(T& value) const {
         for (std::size_t i = 0; i < times_; ++i) {
             ++value;
         }
@@ -112,7 +115,8 @@ public:
     explicit Decrement(std::size_t times = 1)
         : times_(times) {}
 
-    template <class T> void operator()(T& value) const {
+    template <class T>
+    void operator()(T& value) const {
         for (std::size_t i = 0; i < times_; ++i) {
             --value;
         }

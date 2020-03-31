@@ -14,7 +14,7 @@
 #include <tuple>
 #include <vector>
 
-#include "ee/cocos/EEForward.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 namespace detail {
@@ -28,7 +28,8 @@ public:
 };
 } // namespace detail
 
-template <class... Args> class CommandPool : public detail::CommandPoolBase {
+template <class... Args>
+class CommandPool : public detail::CommandPoolBase {
 private:
     using Self = CommandPool;
     using Super = detail::CommandPoolBase;
@@ -107,7 +108,6 @@ private:
 
     std::vector<Command> commands_;
 };
-
 } // namespace ee
 
 #endif /* EE_LIBRARY_COMMAND_POOL_HPP_ */

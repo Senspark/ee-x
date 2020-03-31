@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace language {
 class Language {

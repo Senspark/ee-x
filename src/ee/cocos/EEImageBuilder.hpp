@@ -13,10 +13,9 @@
 
 #include <platform/CCGL.h>
 
-namespace ee {
-class SceneSwitcher;
-class ManagedScene;
+#include "ee/CocosFwd.hpp"
 
+namespace ee {
 class ImageBuilder {
 private:
     using Self = ImageBuilder;

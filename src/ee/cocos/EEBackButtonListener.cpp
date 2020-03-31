@@ -11,8 +11,8 @@
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 void BackButtonListenerBase::registerListener(cocos2d::Node* node) {
     CC_ASSERT(listener_ == nullptr);
 
@@ -47,5 +47,5 @@ void BackButtonListenerBase::onKeyReleased(
         }
     }
 }
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee

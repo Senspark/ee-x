@@ -11,7 +11,7 @@
 
 #include <2d/CCNode.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 class BlurBackground : public cocos2d::Node {

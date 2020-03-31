@@ -7,6 +7,8 @@
 
 #include <platform/CCPlatformDefine.h> // For CC_DLL
 
+#include <ee/CoreFwd.hpp>
+
 enum class ResolutionPolicy;
 
 namespace cocos2d {
@@ -273,6 +275,12 @@ class WidgetLoader;
 
 using ui::Widget;
 using ui::WidgetLoader;
+
+class ImageBuilder;
+class ManagedScene;
+class SceneSwitcher;
+
+class Shader;
 
 class SkeletonAnimationLoader;
 class SkeletonBone;

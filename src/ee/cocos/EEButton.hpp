@@ -14,18 +14,10 @@
 
 #include <ui/UIButton.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEForward.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
-class ButtonEx;
-NS_DETAIL_END
-
-using Button = detail::ButtonEx;
-
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 /// Improved button class for @c cocos2d::ui::Button:
 ///
 /// - Correct hit test.
@@ -215,7 +207,7 @@ private:
 
     cocos2d::ui::Widget* container_;
 };
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee
 
 #endif /* EE_LIBRARY_BUTTON_HPP_ */

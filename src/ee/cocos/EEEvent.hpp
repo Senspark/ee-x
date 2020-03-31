@@ -13,12 +13,13 @@
 
 #include <base/CCEventCustom.h>
 
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
-NS_DETAIL_BEGIN
+namespace ee {
+namespace detail {
 /// Variadic arguments (custom) event.
-template <class... Args> class Event final : public cocos2d::EventCustom {
+template <class... Args>
+class Event final : public cocos2d::EventCustom {
 public:
     using ArgTypes = std::tuple<Args...>;
     using CallbackType = std::function<void(Args...)>;
@@ -27,7 +28,8 @@ public:
     using EventCustom::EventCustom;
 
     /// Assigns the event data to invoke later.
-    template <class... Ts> void setData(Ts&&... args) {
+    template <class... Ts>
+    void setData(Ts&&... args) {
         invoker_ = [&](const CallbackType& callback) {
             callback(std::forward<Ts>(args)...);
         };
@@ -39,7 +41,7 @@ public:
 private:
     InvokerType invoker_;
 };
-NS_DETAIL_END
-NS_EE_END
+} // namespace detail
+} // namespace ee
 
 #endif /* EE_LIBRARY_EVENT_HPP_ */

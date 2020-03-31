@@ -11,12 +11,11 @@
 
 #include <type_traits>
 
-namespace cocos2d {
-class Ref;
-} // namespace cocos2d
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
-template <class ValueT> class LazyPtr final {
+template <class ValueT>
+class LazyPtr final {
 private:
     using Value = ValueT;
     using Pointer = Value*;
@@ -56,11 +55,13 @@ private:
 
 using LazyGuard = LazyPtr<cocos2d::Ref>;
 
-template <class T> auto makeLazyGuard(T&& instance) {
+template <class T>
+auto makeLazyGuard(T&& instance) {
     return LazyGuard(instance);
 }
 
-template <class T> auto makeLazyHolder(T&& instance) {
+template <class T>
+auto makeLazyHolder(T&& instance) {
     using Tp = LazyPtr<std::remove_pointer_t<std::decay_t<T>>>;
     return Tp(std::forward<T>(instance));
 }

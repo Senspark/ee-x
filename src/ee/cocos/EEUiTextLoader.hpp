@@ -9,10 +9,9 @@
 #ifndef EE_LIBRARY_UI_TEXT_LOADER_HPP_
 #define EE_LIBRARY_UI_TEXT_LOADER_HPP_
 
-#include "ee/cocos/EEMacro.hpp"
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Text.
 ///
 /// Usage:
@@ -29,7 +28,7 @@ public:
 
 protected:
     UiTextLoader();
-    
+
     virtual cocos2d::Node* createNode(cocos2d::Node* parent,
                                       cocosbuilder::CCBReader* reader) override;
 
@@ -98,6 +97,6 @@ private:
     cocos2d::Color3B outlineColor_;
     int outlineSize_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_UI_TEXT_LOADER_HPP_ */

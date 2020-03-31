@@ -12,7 +12,8 @@
 #include <stdexcept>
 
 namespace ee {
-template <> bool DataTraits<bool>::load(const std::string& value) {
+template <>
+bool DataTraits<bool>::load(const std::string& value) {
     if (value == "1") {
         return true;
     }
@@ -22,15 +23,18 @@ template <> bool DataTraits<bool>::load(const std::string& value) {
     throw std::invalid_argument("DataTraits<bool>");
 }
 
-template <> int DataTraits<int>::load(const std::string& value) {
+template <>
+int DataTraits<int>::load(const std::string& value) {
     return std::stoi(value);
 }
 
-template <> long DataTraits<long>::load(const std::string& value) {
+template <>
+long DataTraits<long>::load(const std::string& value) {
     return std::stol(value);
 }
 
-template <> long long DataTraits<long long>::load(const std::string& value) {
+template <>
+long long DataTraits<long long>::load(const std::string& value) {
     return std::stoll(value);
 }
 
@@ -54,11 +58,13 @@ DataTraits<unsigned long long>::load(const std::string& value) {
     return std::stoull(value);
 }
 
-template <> float DataTraits<float>::load(const std::string& value) {
+template <>
+float DataTraits<float>::load(const std::string& value) {
     return std::stof(value);
 }
 
-template <> double DataTraits<double>::load(const std::string& value) {
+template <>
+double DataTraits<double>::load(const std::string& value) {
     return std::stod(value);
 }
 

@@ -10,7 +10,7 @@
 
 #include <2d/CCClippingRectangleNode.h>
 
-NS_EE_BEGIN
+namespace ee {
 namespace property {
 constexpr auto content_size = "contentSize";
 constexpr auto clipping_enabled = "clippingEnabled";
@@ -43,4 +43,4 @@ void ClippingRectangleNodeLoader::onHandlePropTypeSize(
     }
     Super::onHandlePropTypeSize(node, parent, propertyName, size, reader);
 }
-NS_EE_END
+} // namespace ee

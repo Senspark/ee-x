@@ -13,9 +13,9 @@
 
 #include <platform/CCImage.h>
 
-NS_EE_BEGIN
+namespace ee {
 namespace image {
-NS_ANONYMOUS_BEGIN
+namespace {
 void internalTentBlur1D(ChannelType* pixels, SizeType width, SizeType height,
                         SizeType range, SizeType iterations) {
     auto kernelSize = range * 2 + 1;
@@ -140,7 +140,7 @@ void internalTentBlur1D(ChannelType* pixels, SizeType width, SizeType height,
     delete[] prefixSumG;
     delete[] prefixSumB;
 }
-NS_ANONYMOUS_END
+} // namespace
 
 void tentBlur1D(cocos2d::Image* image, SizeType range, SizeType iterations) {
     auto pixels = image->getData();
@@ -161,4 +161,4 @@ void tentBlur1D(cocos2d::Image* image, SizeType range, SizeType iterations) {
     delete[] buffer;
 }
 } // namespace image.
-NS_EE_END
+} // namespace ee

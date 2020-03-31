@@ -70,7 +70,7 @@ void Self::initShader() {
     customState_ = createHsvProgramState();
     setGLProgramState(customState_);
 }
-    
+
 void Self::setGLProgramState(cocos2d::GLProgramState* glProgramState) {
 #if COCOS2D_VERSION >= 0x00031400
     if (glProgramState != customState_) {
@@ -79,7 +79,6 @@ void Self::setGLProgramState(cocos2d::GLProgramState* glProgramState) {
 #endif // COCOS2D_VERSION >= 0x00031400
     Super::setGLProgramState(glProgramState);
 }
-
 
 void Self::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform,
                 std::uint32_t flags) {

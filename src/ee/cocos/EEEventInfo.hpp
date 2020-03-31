@@ -13,6 +13,8 @@
 #include <string>
 #include <tuple>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace detail {
 class EventInfoBase {};

@@ -11,10 +11,9 @@
 
 #include <cstdint>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace image {
 using SizeType = std::uint_fast32_t;
 using PixelType = std::uint32_t;
@@ -43,6 +42,6 @@ using image::boxBlur1D;
 using image::boxBlur2D;
 
 using image::tentBlur1D;
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_IMAGE_HPP_ */

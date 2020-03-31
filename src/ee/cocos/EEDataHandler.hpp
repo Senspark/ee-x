@@ -12,7 +12,6 @@
 #include "ee/cocos/EEDataInfo.hpp"
 #include "ee/cocos/EEDataTraits.hpp"
 #include "ee/cocos/EEDataUtils.hpp"
-#include "ee/cocos/EEForward.hpp"
 
 namespace ee {
 class DataHandler final {
@@ -60,9 +59,9 @@ public:
 
     template <class DataType, class... Keys>
     [[deprecated]] decltype(auto)
-    getAndSet(const typename DataType::SetterType& f, Keys&&... keys) {
-        return ::ee::getAndSet<DataType>(f, std::forward<Keys>(keys)...);
-    }
+        getAndSet(const typename DataType::SetterType& f, Keys&&... keys) {
+            return ::ee::getAndSet<DataType>(f, std::forward<Keys>(keys)...);
+        }
 
     template <class DataType, class... Keys>
     [[deprecated]] decltype(auto) remove(Keys&&... keys) {

@@ -6,16 +6,16 @@
 //
 //
 
+#include <platform/CCImage.h>
+
 #include <cassert>
 #include <cstring>
 
-#include <platform/CCImage.h>
-
 #include "ee/cocos/EEImage.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace image {
-NS_ANONYMOUS_BEGIN
+namespace {
 void internalBoxBlur2D(ChannelType* pixels, SizeType width, SizeType height,
                        SizeType range) {
     auto kernelSize = range * 2 + 1;
@@ -221,7 +221,7 @@ void internalBoxBlur2D(ChannelType* pixels, SizeType width, SizeType height,
     delete[] horiPrefixSumB;
     delete[] buffer;
 }
-NS_ANONYMOUS_END
+} // namespace
 
 void boxBlur2D(cocos2d::Image* image, SizeType range) {
     auto pixels = image->getData();
@@ -230,4 +230,4 @@ void boxBlur2D(cocos2d::Image* image, SizeType range) {
     internalBoxBlur2D(pixels, width, height, range);
 }
 } // namespace image.
-NS_EE_END
+} // namespace ee

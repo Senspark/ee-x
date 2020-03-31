@@ -13,7 +13,7 @@
 #include <renderer/CCTextureCache.h>
 #include <ui/UICheckBox.h>
 
-NS_EE_BEGIN
+namespace ee {
 using Self = UiCheckBoxLoader;
 
 namespace property {
@@ -179,4 +179,4 @@ void UiCheckBoxLoader::onHandlePropTypeSpriteFrame(
     Super::onHandlePropTypeSpriteFrame(node, parent, propertyName, spriteFrame,
                                        reader);
 }
-NS_EE_END
+} // namespace ee

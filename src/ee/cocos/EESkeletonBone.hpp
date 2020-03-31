@@ -11,7 +11,7 @@
 
 #include <2d/CCNode.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/CocosFwd.hpp"
 
 namespace ee {
 class SkeletonBone : public cocos2d::Node {
@@ -27,7 +27,7 @@ public:
 
 protected:
     SkeletonBone();
-    
+
     virtual bool init() override;
 
     virtual void onEnter() override;

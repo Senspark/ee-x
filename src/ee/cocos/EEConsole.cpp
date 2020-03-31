@@ -27,8 +27,7 @@ Console* Console::create() {
 
 Console::Console()
     : editBox_(nullptr)
-    , editBoxDelegate_(nullptr) {
-}
+    , editBoxDelegate_(nullptr) {}
 
 Console::~Console() = default;
 

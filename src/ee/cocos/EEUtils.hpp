@@ -16,10 +16,9 @@
 
 #include <platform/CCPlatformMacros.h> // CC_SAFE_DELETE
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
+#include "ee/CocosFwd.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Reference guard.
 ///
 /// Automatically retains instance on constructor
@@ -34,14 +33,16 @@ NS_EE_BEGIN
 using RefGuard = cocos2d::RefPtr<cocos2d::Ref>;
 
 /// @see @c RefGuard.
-template <class T> auto make_ref_guard(T&& instance) {
+template <class T>
+auto make_ref_guard(T&& instance) {
     return RefGuard(instance);
 }
 
 template <class T>
 using Holder = cocos2d::RefPtr<std::remove_pointer_t<std::decay_t<T>>>;
 
-template <class T> auto make_holder(T&& instance) {
+template <class T>
+auto make_holder(T&& instance) {
     return Holder<T>(std::forward<T>(instance));
 }
 
@@ -62,7 +63,8 @@ template <class T> auto make_holder(T&& instance) {
 ///              std::setw(2), minutes, ":",
 ///              std::setw(2), seconds);
 /// @endcode
-template <class... Args> std::string toString(Args&&... args) {
+template <class... Args>
+std::string toString(Args&&... args) {
     static std::stringstream ss;
     ss.str(std::string());
     ss.clear();
@@ -134,7 +136,8 @@ UniqueListener make_unique_listener(cocos2d::EventListener* listener);
 /// bit_cast.
 ///
 /// https://gist.github.com/socantre/3472964
-template <class Dest, class Source> inline Dest bit_cast(const Source& source) {
+template <class Dest, class Source>
+inline Dest bit_cast(const Source& source) {
     static_assert(sizeof(Dest) == sizeof(Source),
                   "size of destination and source objects must be equal.");
 
@@ -174,7 +177,8 @@ template <class Dest, class Source> inline Dest bit_cast(const Source& source) {
 /// 1 3 5
 /// 5 3 1
 /// @endcode
-template <class Comparator = std::less<>> struct Compare1st {
+template <class Comparator = std::less<>>
+struct Compare1st {
     template <class T>
     bool operator()(const T& lhs, const T& rhs) const
         noexcept(noexcept(Comparator()(lhs.first, rhs.first))) {
@@ -184,7 +188,8 @@ template <class Comparator = std::less<>> struct Compare1st {
 
 /// Comparator to compare @c second in @c std::pair<>.
 /// @see @c Compare1st.
-template <class Comparator = std::less<>> struct Compare2nd {
+template <class Comparator = std::less<>>
+struct Compare2nd {
     template <class T>
     bool operator()(const T& lhs, const T& rhs) const
         noexcept(noexcept(Comparator()(lhs.second, rhs.second))) {
@@ -278,6 +283,6 @@ cocos2d::Sprite* createSpriteFromImage(
 void downloadImage(
     const std::string& imageUrl,
     const std::function<void(cocos2d::Texture2D*)>& afterDownloaded);
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_UTILS_HPP_ */

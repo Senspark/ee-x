@@ -11,6 +11,8 @@
 
 #include <functional>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 /// http://stackoverflow.com/questions/10270328/the-simplest-and-neatest-c11-scopeguard
 class ScopeGuard {

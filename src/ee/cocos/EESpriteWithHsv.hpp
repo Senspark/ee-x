@@ -14,8 +14,6 @@
 #include "ee/cocos/EEHsvProtocol.hpp"
 
 namespace ee {
-class SpriteWithHsvLoader;
-
 class SpriteWithHsv : public cocos2d::Sprite, public HsvProtocol {
 private:
     using Self = SpriteWithHsv;

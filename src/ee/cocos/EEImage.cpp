@@ -8,9 +8,9 @@
 
 #include "ee/cocos/EEImage.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 namespace image {
-NS_ANONYMOUS_BEGIN
+namespace {
 void internalTranspose(SizeType rowBegin, SizeType rowEnd, SizeType colBegin,
                        SizeType colEnd, PixelType* src, PixelType* dst,
                        SizeType srcWidth, SizeType srcHeight) noexcept {
@@ -36,11 +36,11 @@ void internalTranspose(SizeType rowBegin, SizeType rowEnd, SizeType colBegin,
                           src, dst, srcWidth, srcHeight);
     }
 }
-NS_ANONYMOUS_END
+} // namespace
 
 void transpose(PixelType* src, PixelType* dst, SizeType srcWidth,
                SizeType srcHeight) noexcept {
     internalTranspose(0, srcHeight, 0, srcWidth, src, dst, srcWidth, srcHeight);
 }
 } // namespace image
-NS_EE_END
+} // namespace ee

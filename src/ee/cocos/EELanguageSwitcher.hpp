@@ -14,13 +14,10 @@
 #include <string>
 #include <vector>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
 #include "ee/cocos/EEILanguageSwitcher.hpp"
 
 namespace ee {
 namespace language {
-class Formatter;
-
 class Switcher : public ISwitcher {
 private:
     using Self = Switcher;

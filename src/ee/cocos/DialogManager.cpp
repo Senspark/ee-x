@@ -10,6 +10,8 @@
 
 #include <2d/CCScene.h>
 
+#include <ee/core/Logger.hpp>
+
 #include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/DialogCommand.hpp"
 #include "ee/cocos/EEAction.hpp"
@@ -50,7 +52,8 @@ void resumeAllDialog(cocos2d::Node* node, Dialog* dialog) {
 using Self = DialogManager;
 
 Self::DialogManager(cocos2d::Node* root)
-    : root_(root) {
+    : root_(root)
+    , logger_(Logger::getSystemLogger()) {
     currentLevel_ = 0;
     lockingDialog_ = nullptr;
 }
@@ -64,9 +67,7 @@ void Self::pushDialog(Dialog* dialog) {
 void Self::pushDialog(Dialog* dialog, std::size_t level) {
     CC_ASSERT(dialog != nullptr);
     CC_ASSERT(dialog->getContainer() != nullptr);
-    LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
-                    level);
-
+    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog, level);
     pushCommand(DialogCommand(DialogCommandType::Push, dialog, level));
     processCommandQueue();
 }
@@ -76,8 +77,7 @@ void Self::popDialog(Dialog* dialog) {
     CC_ASSERT(dialog->getContainer() != nullptr);
 
     auto level = dialog->getDialogLevel();
-    LOG_FUNC_FORMAT("sceen = %p dialog = %p level = %zu", scene_, dialog,
-                    level);
+    logger_.debug("sceen = %p dialog = %p level = %zu", root_, dialog, level);
 
     pushCommand(DialogCommand(DialogCommandType::Pop, dialog, level));
     processCommandQueue();
@@ -127,15 +127,15 @@ bool Self::isLocked() const {
 }
 
 void Self::lock(const Dialog* dialog) {
-    LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
-                    dialog->getDialogLevel());
+    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog,
+                  dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == nullptr);
     lockingDialog_ = dialog;
 }
 
 void Self::unlock(const Dialog* dialog) {
-    LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
-                    dialog->getDialogLevel());
+    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog,
+                  dialog->getDialogLevel());
     CC_ASSERT(lockingDialog_ == dialog);
     lockingDialog_ = nullptr;
 }
@@ -200,8 +200,7 @@ bool Self::pushCommand(const DialogCommand& command) {
 }
 
 void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
-    LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
-                    level);
+    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog, level);
 
     lock(dialog);
     dialog->onDialogWillShow();
@@ -220,8 +219,8 @@ void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
     }
 
     auto unlocker = std::make_shared<ScopeGuard>([this, dialog] {
-        LOG_FUNC_FORMAT("unlocker: scene = %p dialog = %p level = %zu", scene_,
-                        dialog, dialog->getDialogLevel());
+        logger_.debug("unlocker: scene = %p dialog = %p level = %zu", root_,
+                      dialog, dialog->getDialogLevel());
         unlock(dialog);
         processCommandQueue();
     });
@@ -243,8 +242,8 @@ void Self::pushDialogImmediately(Dialog* dialog, std::size_t level) {
 
 void Self::popDialogImmediately(Dialog* dialog) {
     CC_ASSERT(dialog == getTopDialog());
-    LOG_FUNC_FORMAT("scene = %p dialog = %p level = %zu", scene_, dialog,
-                    dialog->getDialogLevel());
+    logger_.debug("scene = %p dialog = %p level = %zu", root_, dialog,
+                  dialog->getDialogLevel());
 
     // Always lock first.
     lock(dialog);
@@ -261,8 +260,8 @@ void Self::popDialogImmediately(Dialog* dialog) {
     }
 
     auto unlocker = std::make_shared<ScopeGuard>([this, dialog] {
-        LOG_FUNC_FORMAT("unlocker: scene = %p dialog = %p level = %zu", scene_,
-                        dialog, dialog->getDialogLevel());
+        logger_.debug("unlocker: scene = %p dialog = %p level = %zu", root_,
+                      dialog, dialog->getDialogLevel());
         unlock(dialog);
         processCommandQueue();
     });

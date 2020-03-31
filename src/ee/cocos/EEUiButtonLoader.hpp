@@ -11,11 +11,9 @@
 
 #include <ui/UIWidget.h>
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
-#include "ee/cocos/EEMacro.hpp"
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
-NS_EE_BEGIN
+namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Button.
 ///
 /// Simple example.
@@ -52,7 +50,7 @@ public:
 
 protected:
     UiButtonLoader();
-    
+
     virtual cocos2d::Node* createNode(cocos2d::Node* parent,
                                       cocosbuilder::CCBReader* reader) override;
 
@@ -106,6 +104,6 @@ private:
     std::string spriteFrameName_;
     cocos2d::ui::Widget::TextureResType textureResType_;
 };
-NS_EE_END
+} // namespace ee
 
 #endif /* EE_LIBRARY_UI_BUTTON_LOADER_HPP_ */

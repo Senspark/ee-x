@@ -12,16 +12,21 @@
 #include <cstdint>
 #include <memory>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
 namespace detail {
-template <class T, std::size_t Size = sizeof(T)> struct dynamic_value_storage;
+template <class T, std::size_t Size = sizeof(T)>
+struct dynamic_value_storage;
 
-template <class T> struct dynamic_value_storage<T, 4> {
+template <class T>
+struct dynamic_value_storage<T, 4> {
     using value_type = T;
     using storage_type = std::uint32_t;
 };
 
-template <class T> struct dynamic_value_storage<T, 8> {
+template <class T>
+struct dynamic_value_storage<T, 8> {
     using value_type = T;
     using storage_type = std::uint64_t;
 };
@@ -30,7 +35,8 @@ template <class T> struct dynamic_value_storage<T, 8> {
 /// Utility class to store a value that dynamically changes.
 ///
 /// Used for anticheating.
-template <class T> class DynamicValue final {
+template <class T>
+class DynamicValue final {
 private:
     using Self = DynamicValue;
 

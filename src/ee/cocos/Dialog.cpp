@@ -11,6 +11,8 @@
 #include <2d/CCAction.h>
 #include <base/CCDirector.h>
 
+#include <ee/core/Logger.hpp>
+
 #include "ee/cocos/EEDialogManager.hpp"
 #include "ee/cocos/EEUtils.hpp"
 #include "ee/cocos/IDialogManager.hpp"
@@ -26,7 +28,8 @@ Self::Dialog()
     : dialogLevel_(0)
     , isActive_(false)
     , ignoreTouchOutside_(false)
-    , transitionAction_(nullptr) {}
+    , transitionAction_(nullptr)
+    , logger_(Logger::getSystemLogger()) {}
 
 Self::~Dialog() = default;
 
@@ -130,22 +133,22 @@ bool Self::hitTest(const cocos2d::Point& pt, const cocos2d::Camera* camera,
 }
 
 void Self::onDialogWillShow() {
-    LOG_FUNC_FORMAT("dialog = %p", this);
+    logger_.debug("dialog = %p", this);
     invokeCallbacks(dialogWillShowCallbacks_);
 }
 
 void Self::onDialogDidShow() {
-    LOG_FUNC_FORMAT("dialog = %p", this);
+    logger_.debug("dialog = %p", this);
     invokeCallbacks(dialogDidShowCallbacks_);
 }
 
 void Self::onDialogWillHide() {
-    LOG_FUNC_FORMAT("dialog = %p", this);
+    logger_.debug("dialog = %p", this);
     invokeCallbacks(dialogWillHideCallbacks_);
 }
 
 void Self::onDialogDidHide() {
-    LOG_FUNC_FORMAT("dialog = %p", this);
+    logger_.debug("dialog = %p", this);
     invokeCallbacks(dialogDidHideCallbacks_);
 }
 

@@ -49,6 +49,9 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (index == 2) {
             return AdSize.SMART_BANNER;
         }
+        if (index == 3) {
+            return AdSize.MEDIUM_RECTANGLE;
+        }
         return AdSize.BANNER;
     }
 

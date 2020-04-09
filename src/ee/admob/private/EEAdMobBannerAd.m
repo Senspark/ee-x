@@ -41,6 +41,9 @@
         }
         return kGADAdSizeSmartBannerPortrait;
     }
+    if (index == 3) {
+        return kGADAdSizeMediumRectangle;
+    }
     return kGADAdSizeInvalid;
 }
 

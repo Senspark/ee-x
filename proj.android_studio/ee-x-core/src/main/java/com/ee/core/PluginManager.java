@@ -6,7 +6,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ee.core.internal.Metrics;
 import com.ee.core.internal.Utils;
 
 import java.lang.reflect.Constructor;
@@ -40,7 +39,6 @@ public class PluginManager {
     public void initializePlugins(Context context) {
         _context = context;
         Utils.registerHandlers();
-        Metrics.registerHandlers();
     }
 
     public Context getContext() {

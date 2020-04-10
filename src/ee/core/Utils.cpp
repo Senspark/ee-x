@@ -124,6 +124,7 @@ constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
 constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
 constexpr auto k__getApplicationName            = "Utils_getApplicationName";
 constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
+constexpr auto k__getDensity                    = "Utils_getDensity";
 // clang-format on
 } // namespace
 
@@ -314,6 +315,12 @@ SafeInset getSafeInset() {
     result.bottom = 0;
 #endif // EE_X_ANDROID
     return result;
+}
+
+float getDensity() {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__getDensity);
+    return std::stof(response);
 }
 
 _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {

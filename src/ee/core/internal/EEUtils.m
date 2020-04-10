@@ -8,12 +8,20 @@
 
 #import "ee/core/internal/EEUtils.h"
 
+#import <TargetConditionals.h>
+
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/private/EEReachability.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
+#endif // TARGET_OS_IOS
+
+#if TARGET_OS_IOS
+#import <UIKit/UIScreen.h>
+#else // TARGET_OS_IOS
+#import <AppKit/NSScreen.h>
 #endif // TARGET_OS_IOS
 
 @implementation EEUtils
@@ -72,6 +80,7 @@ static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadD
 static NSString* const k__isInstantApp                  = @"Utils_isInstantApp";
 static NSString* const k__showInstallPrompt             = @"Utils_showInstallPrompt";
 static NSString* const k__getApplicationName            = @"Utils_getApplicationName";
+static NSString* const k__getDensity                    = @"Utils_getDensity";
 // clang-format on
 
 + (void)registerHandlers {
@@ -176,6 +185,11 @@ static NSString* const k__getApplicationName            = @"Utils_getApplication
     [bridge registerHandler:k__getApplicationName
                    callback:^(NSString* message) {
                        return [self getApplicationName];
+                   }];
+    [bridge registerHandler:k__getDensity
+                   callback:^(NSString* message) {
+                       CGFloat density = [self getDensity];
+                       return [NSString stringWithFormat:@"%f", density];
                    }];
 }
 
@@ -289,6 +303,26 @@ static NSString* const k__getApplicationName            = @"Utils_getApplication
     NSString* appName = [[NSBundle mainBundle]
         objectForInfoDictionaryKey:@"CFBundleDisplayName"];
     return appName;
+}
+
++ (CGFloat)getDensity {
+    CGFloat density = 1.0f;
+#if TARGET_OS_IOS
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        density = [[UIScreen mainScreen] scale];
+    }
+#else  // TARGET_OS_IOS
+    if ([[NSScreen mainScreen]
+            respondsToSelector:@selector(backingScaleFactor)]) {
+        for (NSScreen* screen in [NSScreen screens]) {
+            CGFloat scale = [screen backingScaleFactor];
+            if (scale > density) {
+                density = scale;
+            }
+        }
+    }
+#endif // TARGET_OS_IOS
+    return density;
 }
 
 - (void)functionCallback:(NSString*)callbackTag {

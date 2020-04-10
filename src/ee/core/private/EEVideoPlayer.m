@@ -11,7 +11,6 @@
 
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEVideoPlayer ()
@@ -215,7 +214,7 @@
 
 - (void)setPosition:(CGPoint)position {
     #if TARGET_OS_IOS
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [[[self moviePlayer] view] setFrame:frame];
@@ -224,7 +223,7 @@
 
 - (void)setSize:(CGSize)size {
     #if TARGET_OS_IOS
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [[[self moviePlayer] view] setFrame:frame];

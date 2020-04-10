@@ -7,6 +7,8 @@
 
 #include "ee/cocos/EEMacro.hpp"
 
+#include "ee/cocos/Metrics.hpp"
+
 #include "ee/cocos/EEDynamicValue.hpp"
 #include "ee/cocos/EEFlags.hpp"
 #include "ee/cocos/EEGenericLoader.hpp"
@@ -26,9 +28,9 @@
 #include "ee/cocos/EETransitionFadeOut.hpp"
 
 #include "ee/cocos/Dialog.hpp"
-#include "ee/cocos/IDialogManager.hpp"
 #include "ee/cocos/EEDialogComponent.hpp"
 #include "ee/cocos/EEDialogUtils.hpp"
+#include "ee/cocos/IDialogManager.hpp"
 
 #include "ee/cocos/EEBackButtonComponent.hpp"
 

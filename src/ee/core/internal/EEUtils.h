@@ -49,4 +49,6 @@
 
 + (NSString* _Nonnull)getDeviceId;
 
++ (CGFloat)getDensity;
+
 @end

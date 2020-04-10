@@ -115,11 +115,16 @@ struct SafeInset {
 };
 
 SafeInset getSafeInset();
+
+/// Gets the screen density, i.e. pixel to dp ratio.
+float getDensity();
 } // namespace core
 
 using core::format;
 using core::getApplicationName;
+using core::getDensity;
 using core::getDeviceId;
+using core::getSafeInset;
 using core::getSHA1CertificateFingerprint;
 using core::getVersionCode;
 using core::getVersionName;
@@ -133,7 +138,6 @@ using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
 using core::sendMail;
 using core::testConnection;
-using core::getSafeInset;
 
 using core::SafeInset;
 } // namespace ee

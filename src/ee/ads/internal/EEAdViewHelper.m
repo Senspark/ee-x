@@ -20,7 +20,6 @@
 
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMetrics.h>
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/ads/internal/EEIAdView.h"
@@ -154,26 +153,26 @@
 }
 
 + (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGPoint position = [view frame].origin;
     return CGPointMake(position.x * scale, position.y * scale);
 }
 
 + (void)setPosition:(CGPoint)position for:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [view setFrame:frame];
 }
 
 + (CGSize)getSize:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGSize size = [view frame].size;
     return CGSizeMake(size.width * scale, size.height * scale);
 }
 
 + (void)setSize:(CGSize)size for:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEMetrics getDensity];
+    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [view setFrame:frame];

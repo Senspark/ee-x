@@ -7,7 +7,6 @@
 //
 #import "ee/core/EEPluginManager.h"
 
-#import "ee/core/internal/EEMetrics.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/private/EEVideoPlayerManager.h"
 
@@ -45,7 +44,6 @@
 
 - (void)initializePlugins {
     [EEUtils registerHandlers];
-    [EEMetrics registerHandlers];
     [EEVideoPlayerManager registerHandlers];
 }
 

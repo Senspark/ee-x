@@ -15,7 +15,6 @@ namespace ee {
 namespace core {
 struct LogLevel;
 class Logger;
-class Metrics;
 class IMessageBridge;
 class IService;
 class MessageBridge;
@@ -47,7 +46,6 @@ using core::IService;
 using core::Logger;
 using core::LogLevel;
 using core::MessageBridge;
-using core::Metrics;
 using core::PluginManager;
 using core::ScopeGuard;
 using core::ServiceLocator;

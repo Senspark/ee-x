@@ -311,10 +311,13 @@ class Dialog;
 class DialogComponent;
 class DialogManager;
 class IDialogManager;
+
+class Metrics;
 } // namespace cocos
 
 using cocos::Dialog;
 using cocos::DialogComponent;
+using cocos::Metrics;
 } // namespace ee
 
 #endif // EE_X_COCOS_FWD_HPP

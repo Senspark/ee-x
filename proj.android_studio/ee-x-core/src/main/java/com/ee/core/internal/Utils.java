@@ -69,6 +69,7 @@ public class Utils {
     private static final String k__showInstallPrompt             = "Utils_showInstallPrompt";
     private static final String k__getApplicationName            = "Utils_getApplicationName";
     private static final String k__getSafeInset                  = "Utils_getSafeInset";
+    private static final String k__getDensity                    = "Utils_getDensity";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -261,7 +262,7 @@ public class Utils {
             @Override
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
-                return getApplicationnName(context);
+                return getApplicationName(context);
             }
         }, k__getApplicationName);
 
@@ -279,6 +280,15 @@ public class Utils {
                 return JsonUtils.convertDictionaryToString(dict);
             }
         }, k__getSafeInset);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                double density = getDensity();
+                return String.valueOf(density);
+            }
+        }, k__getDensity);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -422,7 +432,7 @@ public class Utils {
         // If XLarge, checks if the Generalized Density is at least MDPI
         // (160dpi)
         if (xlarge) {
-            int densityDpi = Metrics.getDensityDpi();
+            int densityDpi = getDensityDpi();
 
             // MDPI=160, DEFAULT=160, DENSITY_HIGH=240, DENSITY_MEDIUM=160,
             // DENSITY_TV=213, DENSITY_XHIGH=320
@@ -571,6 +581,22 @@ public class Utils {
         return inset;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    public static double getDensity() {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        return metrics.density;
+    }
+
+    public static int getDensityDpi() {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        return metrics.densityDpi;
+    }
+
+    /// https://stackoverflow.com/questions/4605527/converting-pixels-to-dp
+    public static double convertDpToPixel(double dp) {
+        return dp * getDensity();
+    }
+
     @SuppressLint("HardwareIds")
     private static void getDeviceId(@NonNull Context context, @NonNull final String tag) {
         (new GetGAIDTask(context, new GetGAIDListener() {
@@ -585,7 +611,7 @@ public class Utils {
         return com.google.android.gms.common.wrappers.InstantApps.isInstantApp(context);
     }
 
-    private static String getApplicationnName(Context context) {
+    private static String getApplicationName(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
             ApplicationInfo ai = pm.getApplicationInfo( context.getPackageName(), 0);

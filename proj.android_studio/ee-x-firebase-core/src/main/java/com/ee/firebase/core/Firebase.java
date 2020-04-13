@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
+import com.google.firebase.FirebaseApp;
 
 /**
  * Created by Zinge on 7/4/16.
@@ -16,8 +17,9 @@ public class Firebase implements PluginProtocol {
 
     private native void setActivity(Object activity);
 
-    public Firebase() {
+    public Firebase(Context context) {
         _logger.debug("constructor begin.");
+        FirebaseApp.initializeApp(context);
         _logger.debug("constructor end.");
     }
 

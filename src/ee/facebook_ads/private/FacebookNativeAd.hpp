@@ -12,12 +12,13 @@
 #include <ee/ads/IAdView.hpp>
 #include <ee/ads/internal/AdViewBridgeHelper.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {
-class NativeAd : public IAdView {
+class NativeAd : public IAdView, public ObserverManager<IAdViewObserver> {
 private:
     using Self = NativeAd;
     using Super = IAdView;

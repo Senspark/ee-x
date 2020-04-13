@@ -195,8 +195,6 @@
     NSAssert(bannerView_ == bannerView, @"");
 }
 
-/// Tells the delegate that a user click will open another app
-/// (such as the App Store), backgrounding the current app.
 - (void)adViewWillLeaveApplication:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(bannerView_ == bannerView, @"");

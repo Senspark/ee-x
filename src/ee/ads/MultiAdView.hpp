@@ -14,11 +14,13 @@
 #include <utility>
 #include <vector>
 
+#include <ee/core/ObserverManager.hpp>
+
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView {
+class MultiAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 private:
     using Self = MultiAdView;
 
@@ -55,8 +57,6 @@ public:
 
     /// @see Super.
     virtual void setVisible(bool visible) override;
-    
-    virtual void setOnClickedCallback(const OnClickedCallback& callback) override;
 
 private:
     std::shared_ptr<IAdView> activeItem_;
@@ -82,6 +82,8 @@ private:
     std::vector<std::shared_ptr<IAdView>> items_;
 
     std::set<std::shared_ptr<IAdView>> loadedItems_;
+
+    std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace ads
 } // namespace ee

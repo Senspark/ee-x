@@ -11,25 +11,5 @@
 namespace ee {
 namespace ads {
 using Self = IAdView;
-
-void Self::setLoadCallback(const AdViewCallback& callback) {
-    callback_ = callback;
-}
-
-void Self::setLoadResult(bool result) {
-    if (callback_) {
-        callback_(result);
-    }
-}
-
-void Self::setOnClickedCallback(const OnClickedCallback& callback) {
-    onClickCallback_ = callback;
-}
-
-void Self::performClick() {
-    if (onClickCallback_) {
-        onClickCallback_();
-    }
-}
 } // namespace ads
 } // namespace ee

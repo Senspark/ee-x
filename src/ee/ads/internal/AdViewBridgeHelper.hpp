@@ -9,13 +9,16 @@
 #ifndef EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 #define EE_X_AD_VIEW_BRIDGE_HELPER_HPP
 
+#include <ee/core/ObserverManager.hpp>
+
 #include "ee/AdsFwd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/internal/AdViewHelper.hpp"
 
 namespace ee {
 namespace ads {
-class AdViewBridgeHelper : public IAdView {
+class AdViewBridgeHelper : public IAdView,
+                           public ObserverManager<IAdViewObserver> {
 public:
     explicit AdViewBridgeHelper(IMessageBridge& bridge,
                                 const AdViewHelper& helper);

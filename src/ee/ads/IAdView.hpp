@@ -12,14 +12,19 @@
 #include <functional>
 #include <utility>
 
+#include <ee/core/IObserverManager.hpp>
+
 #include "ee/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {
-using AdViewCallback = std::function<void(bool result)>;
-using OnClickedCallback = std::function<void()>;
+struct IAdViewObserver {
+    std::function<void()> onLoaded;
+    std::function<void()> onFailedToLoad;
+    std::function<void()> onClicked;
+};
 
-class IAdView {
+class IAdView : public virtual ee::IObserverManager<IAdViewObserver> {
 public:
     IAdView() = default;
 
@@ -50,17 +55,6 @@ public:
     /// Sets this ad view's visibility.
     /// @param[in] visible Whether this ad view is visible.
     virtual void setVisible(bool visible) = 0;
-
-    void setLoadCallback(const AdViewCallback& callback);
-    virtual void setOnClickedCallback(const OnClickedCallback& callback);
-
-protected:
-    void setLoadResult(bool result);
-    void performClick();
-
-private:
-    AdViewCallback callback_{nullptr};
-    OnClickedCallback onClickCallback_{nullptr};
 };
 } // namespace ads
 } // namespace ee

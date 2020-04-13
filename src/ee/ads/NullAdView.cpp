@@ -26,7 +26,11 @@ bool Self::isLoaded() const {
 }
 
 void Self::load() {
-    setLoadResult(false);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onFailedToLoad) {
+            observer.onFailedToLoad();
+        }
+    });
 }
 
 std::pair<float, float> Self::getAnchor() const {

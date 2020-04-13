@@ -46,8 +46,8 @@ auto k__onClicked(const std::string& id) {
 }
 } // namespace
 
-Self::NativeAd(IMessageBridge& bridge, const Logger& logger,
-               Bridge* plugin, const std::string& adId)
+Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
+               const std::string& adId)
     : Super()
     , adId_(adId)
     , bridge_(bridge)
@@ -152,18 +152,30 @@ void Self::onLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     assert(loading_);
     loading_ = false;
-    setLoadResult(true);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onLoaded) {
+            observer.onLoaded();
+        }
+    });
 }
 
 void Self::onFailedToLoad(const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     assert(loading_);
     loading_ = false;
-    setLoadResult(false);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onFailedToLoad) {
+            observer.onFailedToLoad();
+        }
+    });
 }
 
 void Self::onClicked() {
-    performClick();
+    dispatchEvent([](auto&& observer) {
+        if (observer.onClicked) {
+            observer.onClicked();
+        }
+    });
 }
 } // namespace facebook_ads
 } // namespace ee

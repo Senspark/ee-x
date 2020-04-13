@@ -13,6 +13,8 @@
 
 namespace ee {
 namespace ads {
+struct IAdViewObserver;
+
 class IAdView;
 class IInterstitialAd;
 class IRewardedVideo;
@@ -27,6 +29,8 @@ class NullRewardedVideo;
 
 class MediationManager;
 } // namespace ads
+
+using ads::IAdViewObserver;
 
 using ads::IAdView;
 using ads::IInterstitialAd;

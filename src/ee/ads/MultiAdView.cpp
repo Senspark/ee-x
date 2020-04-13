@@ -8,6 +8,8 @@
 
 #include "ee/ads/MultiAdView.hpp"
 
+#include <ee/core/ObserverHandle.hpp>
+
 namespace ee {
 namespace ads {
 using Self = MultiAdView;
@@ -19,36 +21,67 @@ Self::MultiAdView() {
     visible_ = false;
     useCustomSize_ = false;
     new_ = false;
+    handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiAdView() {}
+Self::~MultiAdView() {
+    handle_->clear();
+}
 
 Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
     items_.push_back(item);
-    item->setLoadCallback([this, item](bool result) {
-        if (result) {
-            bool displayed = false;
-            if (visible_) {
-                /*
-                 Uncomment to display loaded item immediately.
-                if (not new_) {
-                    // Hide old item.
-                    if (activeItem_) {
-                        activeItem_->setVisible(false);
+    (*handle_) //
+        .bind(*item)
+        .addObserver({
+            .onLoaded =
+                [this, item] {
+                    bool displayed = false;
+                    if (visible_) {
+                        /*
+                         Uncomment to display loaded item immediately.
+                        if (not new_) {
+                            // Hide old item.
+                            if (activeItem_) {
+                                activeItem_->setVisible(false);
+                            }
+                            // Display new item.
+                            activeItem_ = item;
+                            activeItem_->setVisible(true);
+                            displayed = true;
+                            new_ = true;
+                        }
+                         */
                     }
-                    // Display new item.
-                    activeItem_ = item;
-                    activeItem_->setVisible(true);
-                    displayed = true;
-                    new_ = true;
-                }
-                 */
-            }
-            if (not displayed) {
-                loadedItems_.insert(item);
-            }
-        }
-    });
+                    if (not displayed) {
+                        loadedItems_.insert(item);
+                    }
+
+                    // Propagation.
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onLoaded) {
+                            observer.onLoaded();
+                        }
+                    });
+                },
+            .onFailedToLoad =
+                [this] {
+                    // Propagation.
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onFailedToLoad) {
+                            observer.onFailedToLoad();
+                        }
+                    });
+                },
+            .onClicked =
+                [this] {
+                    // Propagation.
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onClicked) {
+                            observer.onClicked();
+                        }
+                    });
+                },
+        });
     return *this;
 }
 
@@ -136,12 +169,6 @@ void Self::setVisible(bool visible) {
         if (activeItem_) {
             activeItem_->setVisible(true);
         }
-    }
-}
-
-void Self::setOnClickedCallback(const OnClickedCallback& callback) {
-    for (auto&& item : items_) {
-        item->setOnClickedCallback(callback);
     }
 }
 } // namespace ads

@@ -9,11 +9,13 @@
 #ifndef EE_X_NULL_AD_VIEW_HPP
 #define EE_X_NULL_AD_VIEW_HPP
 
+#include <ee/core/ObserverManager.hpp>
+
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class NullAdView : public IAdView {
+class NullAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     NullAdView();
 

@@ -11,8 +11,8 @@
 #import <FBAudienceNetwork/FBAdView.h>
 
 #import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEIMessageBridge.h"
+#import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEUtils.h"
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
@@ -114,8 +114,9 @@
                                         adSize:adSize_
                             rootViewController:rootView] autorelease];
     [adView setDelegate:self];
+
     [[rootView view] addSubview:adView];
-    adView_ = adView;
+    adView_ = [adView retain];
     return YES;
 }
 
@@ -124,7 +125,9 @@
         return NO;
     }
     isLoaded_ = NO;
+    [adView_ setDelegate:nil];
     [adView_ removeFromSuperview];
+    [adView_ release];
     adView_ = nil;
     return YES;
 }

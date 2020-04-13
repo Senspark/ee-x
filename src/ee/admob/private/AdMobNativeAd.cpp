@@ -124,7 +124,11 @@ void Self::onLoaded() {
     // Auto refresh customized in server.
     // assert(loading_);
     loading_ = false;
-    setLoadResult(true);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onLoaded) {
+            observer.onLoaded();
+        }
+    });
 }
 
 void Self::onFailedToLoad(const std::string& message) {
@@ -133,11 +137,19 @@ void Self::onFailedToLoad(const std::string& message) {
     // Auto refresh customized in server.
     // assert(loading_);
     loading_ = false;
-    setLoadResult(false);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onFailedToLoad) {
+            observer.onFailedToLoad();
+        }
+    });
 }
 
 void Self::onClicked() {
-    performClick();
+    dispatchEvent([](auto&& observer) {
+        if (observer.onClicked) {
+            observer.onClicked();
+        }
+    });
 }
 } // namespace admob
 } // namespace ee

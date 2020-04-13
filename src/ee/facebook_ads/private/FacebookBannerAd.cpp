@@ -34,8 +34,7 @@ auto k__onClicked(const std::string& id) {
 }
 } // namespace
 
-Self::BannerAd(IMessageBridge& bridge, Bridge* plugin,
-               const std::string& adId)
+Self::BannerAd(IMessageBridge& bridge, Bridge* plugin, const std::string& adId)
     : Super()
     , adId_(adId)
     , bridge_(bridge)
@@ -117,18 +116,30 @@ void Self::onLoaded() {
     // Facebook banner is auto-loading.
     // assert(loading_);
     loading_ = false;
-    setLoadResult(true);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onLoaded) {
+            observer.onLoaded();
+        }
+    });
 }
 
 void Self::onFailedToLoad(const std::string& message) {
     // Facebook banner is auto-loading.
     // assert(loading_);
     loading_ = false;
-    setLoadResult(false);
+    dispatchEvent([](auto&& observer) {
+        if (observer.onFailedToLoad) {
+            observer.onFailedToLoad();
+        }
+    });
 }
 
 void Self::onClicked() {
-    performClick();
+    dispatchEvent([](auto&& observer) {
+        if (observer.onClicked) {
+            observer.onClicked();
+        }
+    });
 }
 } // namespace facebook_ads
 } // namespace ee

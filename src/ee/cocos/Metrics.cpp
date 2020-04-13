@@ -36,7 +36,7 @@ float getPixelToPointRatio() {
     case ResolutionPolicy::FIXED_WIDTH:
         return frameSize.width / winSize.width;
     case ResolutionPolicy::FIXED_HEIGHT:
-        return frameSize.height / frameSize.height;
+        return frameSize.height / winSize.height;
     }
     // Unsupported resolution policy.
     CC_ASSERT(false);

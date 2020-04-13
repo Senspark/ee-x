@@ -242,6 +242,11 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     @Override
+    public boolean isVisible() {
+        return AdViewHelper.isVisible(_nativeAdPlaceholder);
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         AdViewHelper.setVisible(visible, _nativeAdPlaceholder);
     }

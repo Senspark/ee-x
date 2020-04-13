@@ -41,6 +41,10 @@ std::string Self::k__setSize() const {
     return prefix_ + "_setSize_" + adId_;
 }
 
+std::string Self::k__isVisible() const {
+    return prefix_ + "_isVisible_" + adId_;
+}
+
 std::string Self::k__setVisible() const {
     return prefix_ + "_setVisible_" + adId_;
 }

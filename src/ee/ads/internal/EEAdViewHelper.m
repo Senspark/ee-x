@@ -178,6 +178,10 @@
     [view setFrame:frame];
 }
 
++ (BOOL)isVisible:(EE_AD_VIEW* _Nonnull)view {
+    return [view isHidden];
+}
+
 + (void)setVisible:(BOOL)visible for:(EE_AD_VIEW* _Nonnull)view {
     [view setHidden:!visible];
 }

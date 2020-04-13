@@ -144,6 +144,10 @@ void Self::setSize(int width, int height) {
     bridgeHelper_.setSize(width, height);
 }
 
+bool Self::isVisible() const {
+    return bridgeHelper_.isVisible();
+}
+
 void Self::setVisible(bool visible) {
     bridgeHelper_.setVisible(visible);
 }

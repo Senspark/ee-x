@@ -33,12 +33,18 @@ public:
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
 
+    /// Attempts to load this ad view.
     virtual void load() = 0;
 
+    /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;
 
+    /// Sets the anchor of this ad view.
+    /// @param x The horizontal anchor.
+    /// @param y The vertical anchor.
     virtual void setAnchor(float x, float y) = 0;
 
+    /// Gets the position in pixels.
     virtual std::pair<int, int> getPosition() const = 0;
 
     /// Moves this ad view to the specified position.
@@ -50,7 +56,11 @@ public:
     /// @return A pair of width and height in pixels.
     virtual std::pair<int, int> getSize() const = 0;
 
+    /// Sets the size in pixels.
     virtual void setSize(int width, int height) = 0;
+
+    /// Checks whether this ad is visible.
+    virtual bool isVisible() const = 0;
 
     /// Sets this ad view's visibility.
     /// @param[in] visible Whether this ad view is visible.

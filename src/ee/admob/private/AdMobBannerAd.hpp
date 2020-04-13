@@ -26,31 +26,19 @@ private:
 public:
     virtual ~BannerAd() override;
 
-    /// @see Super.
     virtual bool isLoaded() const override;
-
-    /// @see Super.
     virtual void load() override;
 
-    /// @see Super.
     virtual std::pair<float, float> getAnchor() const override;
-
-    /// @see Super.
     virtual void setAnchor(float x, float y) override;
 
-    /// @see Super.
     virtual std::pair<int, int> getPosition() const override;
-
-    /// @see Super.
     virtual void setPosition(int x, int y) override;
 
-    /// @see Super.
     virtual std::pair<int, int> getSize() const override;
-
-    /// @see Super.
     virtual void setSize(int width, int height) override;
 
-    /// @see Super.
+    virtual bool isVisible() const override;
     virtual void setVisible(bool visible) override;
 
 protected:

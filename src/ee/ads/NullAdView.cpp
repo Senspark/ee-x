@@ -13,16 +13,18 @@ namespace ads {
 using Self = NullAdView;
 
 Self::NullAdView() {
+    loaded_ = false;
     positionX_ = 0;
     positionY_ = 0;
     anchorX_ = 0.0f;
     anchorY_ = 0.0f;
     width_ = 0;
     height_ = 0;
+    visible_ = false;
 }
 
 bool Self::isLoaded() const {
-    return false;
+    return loaded_;
 }
 
 void Self::load() {
@@ -63,9 +65,12 @@ void Self::setSize(int width, int height) {
     positionY_ = positionY_ - static_cast<int>((height - height_) * anchorY_);
 }
 
+bool Self::isVisible() const {
+    return visible_;
+}
+
 void Self::setVisible(bool visible) {
-    // No op.
-    static_cast<void>(visible);
+    visible_ = visible;
 }
 } // namespace ads
 } // namespace ee

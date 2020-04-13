@@ -15,7 +15,7 @@
 
 namespace ee {
 namespace ads {
-    using Self = AdViewBridgeHelper;
+using Self = AdViewBridgeHelper;
 
 Self::AdViewBridgeHelper(IMessageBridge& bridge, const AdViewHelper& helper)
     : bridge_(bridge)
@@ -105,6 +105,11 @@ void Self::setSize(int width, int height) {
     json["width"] = width;
     json["height"] = height;
     bridge_.call(helper_.k__setSize(), json.dump());
+}
+
+bool Self::isVisible() const {
+    auto response = bridge_.call(helper_.k__isVisible());
+    return core::toBool(response);
 }
 
 void Self::setVisible(bool visible) {

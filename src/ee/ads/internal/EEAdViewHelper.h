@@ -33,8 +33,11 @@
 
 + (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view;
 + (void)setPosition:(CGPoint)position for:(EE_AD_VIEW* _Nonnull)view;
+
 + (CGSize)getSize:(EE_AD_VIEW* _Nonnull)view;
 + (void)setSize:(CGSize)size for:(EE_AD_VIEW* _Nonnull)view;
+
++ (BOOL)isVisible:(EE_AD_VIEW* _Nonnull)view;
 + (void)setVisible:(BOOL)visible for:(EE_AD_VIEW* _Nonnull)view;
 
 @end

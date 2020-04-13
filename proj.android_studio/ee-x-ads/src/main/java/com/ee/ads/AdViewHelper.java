@@ -57,6 +57,11 @@ public class AdViewHelper {
     }
 
     @NonNull
+    private String k__isVisible() {
+        return _prefix + "_isVisible_" + _adId;
+    }
+
+    @NonNull
     private String k__setVisible() {
         return _prefix + "_setVisible_" + _adId;
     }
@@ -137,6 +142,14 @@ public class AdViewHelper {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                return Utils.toString(adView.isVisible());
+            }
+        }, k__isVisible());
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
                 adView.setVisible(Utils.toBoolean(message));
                 return "";
             }
@@ -189,6 +202,11 @@ public class AdViewHelper {
         params.width = size.x;
         params.height = size.y;
         view.setLayoutParams(params);
+    }
+
+    public static boolean isVisible(@NonNull View view) {
+        Utils.checkMainThread();
+        return view.getVisibility() == View.VISIBLE;
     }
 
     public static void setVisible(boolean visible, @NonNull View view) {

@@ -207,6 +207,11 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     @Override
+    public boolean isVisible() {
+        return AdViewHelper.isVisible(_adView);
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         AdViewHelper.setVisible(visible, _adView);
         if (visible) {

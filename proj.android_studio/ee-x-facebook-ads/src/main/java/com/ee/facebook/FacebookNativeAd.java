@@ -278,6 +278,11 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     @Override
+    public boolean isVisible() {
+        return AdViewHelper.isVisible(_nativeAdView);
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         AdViewHelper.setVisible(visible, _nativeAdView);
     }

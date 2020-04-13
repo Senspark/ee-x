@@ -18,5 +18,7 @@ public interface IAdView {
 
     void setSize(@NonNull Point size);
 
+    boolean isVisible();
+
     void setVisible(boolean visible);
 }

@@ -131,8 +131,9 @@
 
     nativeAdPlaceholder_ = [view retain];
 
-    NSArray* nibObjects =
-        [[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil];
+    NSArray* nibObjects = [[NSBundle mainBundle] loadNibNamed:layoutName_
+                                                        owner:nil
+                                                      options:nil];
     [self setAdView:[nibObjects firstObject]];
 }
 
@@ -173,6 +174,10 @@
 
 - (void)setSize:(CGSize)size {
     [EEAdViewHelper setSize:size for:nativeAdPlaceholder_];
+}
+
+- (BOOL)isVisible {
+    return [EEAdViewHelper isVisible:nativeAdPlaceholder_];
 }
 
 - (void)setVisible:(BOOL)visible {

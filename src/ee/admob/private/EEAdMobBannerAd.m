@@ -163,6 +163,10 @@
     [EEAdViewHelper setSize:size for:bannerView_];
 }
 
+- (BOOL)isVisible {
+    return [EEAdViewHelper isVisible:bannerView_];
+}
+
 - (void)setVisible:(BOOL)visible {
     [EEAdViewHelper setVisible:visible for:bannerView_];
 }

@@ -23,6 +23,7 @@ public:
     std::string k__setPosition() const;
     std::string k__getSize() const;
     std::string k__setSize() const;
+    std::string k__isVisible() const;
     std::string k__setVisible() const;
 
 private:

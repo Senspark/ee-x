@@ -30,6 +30,7 @@ Self::~MultiAdView() {
 
 Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
     items_.push_back(item);
+    item->setVisible(visible_);
     (*handle_) //
         .bind(*item)
         .addObserver({
@@ -146,6 +147,10 @@ void Self::setSize(int width, int height) {
     for (auto&& item : items_) {
         item->setSize(width, height);
     }
+}
+
+bool Self::isVisible() const {
+    return visible_;
 }
 
 void Self::setVisible(bool visible) {

@@ -10,10 +10,10 @@
 
 #import <FBAudienceNetwork/FBAdView.h>
 
-#import "ee/ads/internal/EEAdViewHelper.h"
-#import "ee/core/internal/EEIMessageBridge.h"
-#import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEUtils.h"
+#import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEViewHelper.h>
+#import <ee/core/internal/EEIMessageBridge.h>
+#import <ee/core/internal/EEUtils.h>
 
 @interface EEFacebookBannerAd () <FBAdViewDelegate> {
     id<EEIMessageBridge> bridge_;
@@ -22,6 +22,7 @@
     FBAdSize adSize_;
     BOOL isLoaded_;
     EEAdViewHelper* helper_;
+    EEViewHelper* viewHelper_;
 }
 
 @end
@@ -62,6 +63,7 @@
     adSize_ = adSize;
     adView_ = nil;
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                                view:self
                                               prefix:@"FacebookBannerAd"
                                                 adId:adId_];
 
@@ -96,7 +98,7 @@
 }
 
 - (void)registerHandlers {
-    [helper_ registerHandlers:self];
+    [helper_ registerHandlers];
 }
 
 - (void)deregisterhandlers {
@@ -117,6 +119,7 @@
 
     [[rootView view] addSubview:adView];
     adView_ = [adView retain];
+    viewHelper_ = [[EEViewHelper alloc] initWithView:adView_];
     return YES;
 }
 
@@ -125,6 +128,8 @@
         return NO;
     }
     isLoaded_ = NO;
+    [viewHelper_ release];
+    viewHelper_ = nil;
     [adView_ setDelegate:nil];
     [adView_ removeFromSuperview];
     [adView_ release];
@@ -144,23 +149,23 @@
 }
 
 - (CGPoint)getPosition {
-    return [EEAdViewHelper getPosition:adView_];
+    return [viewHelper_ getPosition];
 }
 
 - (void)setPosition:(CGPoint)position {
-    [EEAdViewHelper setPosition:position for:adView_];
+    [viewHelper_ setPosition:position];
 }
 
 - (CGSize)getSize {
-    return [EEAdViewHelper getSize:adView_];
+    return [viewHelper_ getSize];
 }
 
 - (void)setSize:(CGSize)size {
-    [EEAdViewHelper setSize:size for:adView_];
+    [viewHelper_ setSize:size];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [EEAdViewHelper setVisible:visible for:adView_];
+    [viewHelper_ setVisible:visible];
 }
 
 - (void)adViewDidClick:(FBAdView*)adView {

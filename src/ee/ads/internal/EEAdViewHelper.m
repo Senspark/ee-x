@@ -8,16 +8,6 @@
 
 #import "ee/ads/internal/EEAdViewHelper.h"
 
-#import <TargetConditionals.h>
-
-#if TARGET_OS_IOS
-#import <UIKit/UIView.h>
-#define EE_AD_VIEW UIView
-#else // TARGET_OS_IOS
-#import <AppKit/NSView.h>
-#define EE_AD_VIEW NSView
-#endif // TARGET_OS_IOS
-
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEUtils.h>
@@ -28,13 +18,15 @@
     id<EEIMessageBridge> bridge_;
     NSString* prefix_;
     NSString* adId_;
+    id<EEIAdView> view_;
 }
 
 @end
 
 @implementation EEAdViewHelper
 
-- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
+                         view:(id<EEIAdView> _Nonnull)view
                        prefix:(NSString* _Nonnull)prefix
                          adId:(NSString* _Nonnull)adId {
     self = [super init];
@@ -42,6 +34,7 @@
         return self;
     }
     bridge_ = bridge;
+    view_ = view;
     prefix_ = [prefix copy];
     adId_ = [adId copy];
     return self;
@@ -83,21 +76,21 @@
     return [NSString stringWithFormat:@"%@_setVisible_%@", prefix_, adId_];
 }
 
-- (void)registerHandlers:(id<EEIAdView> _Nonnull)adView {
+- (void)registerHandlers {
     [bridge_ registerHandler:[self k__isLoaded]
                     callback:^(NSString* message) {
-                        return [EEUtils toString:[adView isLoaded]];
+                        return [EEUtils toString:[view_ isLoaded]];
                     }];
 
     [bridge_ registerHandler:[self k__load]
                     callback:^(NSString* message) {
-                        [adView load];
+                        [view_ load];
                         return @"";
                     }];
 
     [bridge_ registerHandler:[self k__getPosition]
                     callback:^(NSString* message) {
-                        CGPoint position = [adView getPosition];
+                        CGPoint position = [view_ getPosition];
                         NSMutableDictionary* dict =
                             [NSMutableDictionary dictionary];
                         [dict setValue:@(position.x) forKey:@"x"];
@@ -111,13 +104,13 @@
                             [EEJsonUtils convertStringToDictionary:message];
                         int x = [dict[@"x"] intValue];
                         int y = [dict[@"y"] intValue];
-                        [adView setPosition:CGPointMake(x, y)];
+                        [view_ setPosition:CGPointMake(x, y)];
                         return @"";
                     }];
 
     [bridge_ registerHandler:[self k__getSize]
                     callback:^(NSString* message) {
-                        CGSize size = [adView getSize];
+                        CGSize size = [view_ getSize];
                         NSMutableDictionary* dict =
                             [NSMutableDictionary dictionary];
                         [dict setValue:@(size.width) forKey:@"width"];
@@ -131,13 +124,13 @@
                             [EEJsonUtils convertStringToDictionary:message];
                         int width = [dict[@"width"] intValue];
                         int height = [dict[@"height"] intValue];
-                        [adView setSize:CGSizeMake(width, height)];
+                        [view_ setSize:CGSizeMake(width, height)];
                         return @"";
                     }];
 
     [bridge_ registerHandler:[self k__setVisible]
                     callback:^(NSString* message) {
-                        [adView setVisible:[EEUtils toBool:message]];
+                        [view_ setVisible:[EEUtils toBool:message]];
                         return @"";
                     }];
 }
@@ -152,40 +145,4 @@
     [bridge_ deregisterHandler:[self k__setVisible]];
 }
 
-+ (CGPoint)getPosition:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEUtils getDensity];
-    CGPoint position = [view frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
-}
-
-+ (void)setPosition:(CGPoint)position for:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEUtils getDensity];
-    CGRect frame = [view frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
-    [view setFrame:frame];
-}
-
-+ (CGSize)getSize:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEUtils getDensity];
-    CGSize size = [view frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
-}
-
-+ (void)setSize:(CGSize)size for:(EE_AD_VIEW* _Nonnull)view {
-    CGFloat scale = [EEUtils getDensity];
-    CGRect frame = [view frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
-    [view setFrame:frame];
-}
-
-+ (BOOL)isVisible:(EE_AD_VIEW* _Nonnull)view {
-    return [view isHidden];
-}
-
-+ (void)setVisible:(BOOL)visible for:(EE_AD_VIEW* _Nonnull)view {
-    [view setHidden:!visible];
-}
-
 @end
-
-#undef EE_AD_VIEW

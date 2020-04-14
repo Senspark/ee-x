@@ -11,6 +11,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
@@ -25,6 +26,7 @@
     NSString* layoutName_;
     BOOL isAdLoaded_;
     EEAdViewHelper* helper_;
+    EEViewHelper* viewHelper_;
 }
 
 @end
@@ -45,6 +47,7 @@
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                                view:self
                                               prefix:@"AdMobNativeAd"
                                                 adId:adId];
     [self createInternalAd];
@@ -84,7 +87,7 @@
 }
 
 - (void)registerHandlers {
-    [helper_ registerHandlers:self];
+    [helper_ registerHandlers];
 }
 
 - (void)deregisterHandlers {
@@ -130,15 +133,17 @@
     [[rootView view] addSubview:view];
 
     nativeAdPlaceholder_ = [view retain];
+    viewHelper_ = [[EEViewHelper alloc] initWithView:nativeAdPlaceholder_];
 
-    NSArray* nibObjects = [[NSBundle mainBundle] loadNibNamed:layoutName_
-                                                        owner:nil
-                                                      options:nil];
+    NSArray* nibObjects =
+        [[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil];
     [self setAdView:[nibObjects firstObject]];
 }
 
 - (void)destroyView {
     NSAssert(nativeAdPlaceholder_ != nil, @"");
+    [viewHelper_ release];
+    viewHelper_ = nil;
     [nativeAdPlaceholder_ removeFromSuperview];
     [nativeAdPlaceholder_ release];
     nativeAdPlaceholder_ = nil;
@@ -161,27 +166,27 @@
 }
 
 - (CGPoint)getPosition {
-    return [EEAdViewHelper getPosition:nativeAdPlaceholder_];
+    return [viewHelper_ getPosition];
 }
 
 - (void)setPosition:(CGPoint)position {
-    [EEAdViewHelper setPosition:position for:nativeAdPlaceholder_];
+    [viewHelper_ setPosition:position];
 }
 
 - (CGSize)getSize {
-    return [EEAdViewHelper getSize:nativeAdPlaceholder_];
+    return [viewHelper_ getSize];
 }
 
 - (void)setSize:(CGSize)size {
-    [EEAdViewHelper setSize:size for:nativeAdPlaceholder_];
+    [viewHelper_ setSize:size];
 }
 
 - (BOOL)isVisible {
-    return [EEAdViewHelper isVisible:nativeAdPlaceholder_];
+    return [viewHelper_ isVisible];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [EEAdViewHelper setVisible:visible for:nativeAdPlaceholder_];
+    [viewHelper_ setVisible:visible];
     if (visible) {
         for (UIView* subView in [nativeAdView_ subviews]) {
             [subView setNeedsDisplay];

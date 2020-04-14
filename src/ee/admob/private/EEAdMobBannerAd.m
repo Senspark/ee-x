@@ -11,8 +11,8 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
-#import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEUtils.h>
 
 @interface EEAdMobBannerAd () <GADBannerViewDelegate> {
@@ -22,6 +22,7 @@
     GADAdSize adSize_;
     NSString* adId_;
     EEAdViewHelper* helper_;
+    EEViewHelper* viewHelper_;
 }
 
 @end
@@ -60,6 +61,7 @@
     adId_ = [adId copy];
     adSize_ = adSize;
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
+                                                view:self
                                               prefix:@"AdMobBannerAd"
                                                 adId:adId];
 
@@ -94,7 +96,7 @@
 }
 
 - (void)registerHandlers {
-    [helper_ registerHandlers:self];
+    [helper_ registerHandlers];
 }
 
 - (void)deregisterhandlers {
@@ -117,6 +119,7 @@
     [[rootView view] addSubview:bannerView];
 
     bannerView_ = [bannerView retain];
+    viewHelper_ = [[EEViewHelper alloc] initWithView:bannerView_];
     return YES;
 }
 
@@ -125,6 +128,8 @@
         return NO;
     }
     isLoaded_ = NO;
+    [viewHelper_ release];
+    viewHelper_ = nil;
     [bannerView_ setDelegate:nil];
     [bannerView_ removeFromSuperview];
     [bannerView_ release];
@@ -148,27 +153,27 @@
 }
 
 - (CGPoint)getPosition {
-    return [EEAdViewHelper getPosition:bannerView_];
+    return [viewHelper_ getPosition];
 }
 
 - (void)setPosition:(CGPoint)position {
-    [EEAdViewHelper setPosition:position for:bannerView_];
+    [viewHelper_ setPosition:position];
 }
 
 - (CGSize)getSize {
-    return [EEAdViewHelper getSize:bannerView_];
+    return [viewHelper_ getSize];
 }
 
 - (void)setSize:(CGSize)size {
-    [EEAdViewHelper setSize:size for:bannerView_];
+    [viewHelper_ setSize:size];
 }
 
 - (BOOL)isVisible {
-    return [EEAdViewHelper isVisible:bannerView_];
+    return [viewHelper_ isVisible];
 }
 
 - (void)setVisible:(BOOL)visible {
-    [EEAdViewHelper setVisible:visible for:bannerView_];
+    [viewHelper_ setVisible:visible];
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView*)bannerView {

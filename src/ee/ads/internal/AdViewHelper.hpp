@@ -11,32 +11,30 @@
 
 #include <string>
 
-#include <ee/core/ObserverManager.hpp>
-
-#include "ee/ads/IAdView.hpp"
+#include "ee/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {
-class AdViewHelper : public IAdView, public ObserverManager<IAdViewObserver> {
+class AdViewHelper {
 public:
     explicit AdViewHelper(IMessageBridge& bridge,    //
                           const std::string& prefix, //
                           const std::string& adId);
 
-    virtual bool isLoaded() const override;
-    virtual void load() override;
+    bool isLoaded() const;
+    void load();
 
-    virtual std::pair<float, float> getAnchor() const override;
-    virtual void setAnchor(float x, float y) override;
+    std::pair<float, float> getAnchor() const;
+    void setAnchor(float x, float y);
 
-    virtual std::pair<int, int> getPosition() const override;
-    virtual void setPosition(int x, int y) override;
+    std::pair<int, int> getPosition() const;
+    void setPosition(int x, int y);
 
-    virtual std::pair<int, int> getSize() const override;
-    virtual void setSize(int width, int height) override;
+    std::pair<int, int> getSize() const;
+    void setSize(int width, int height);
 
-    virtual bool isVisible() const override;
-    virtual void setVisible(bool visible) override;
+    bool isVisible() const;
+    void setVisible(bool visible);
 
 private:
     std::string k__isLoaded() const;

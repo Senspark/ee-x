@@ -66,6 +66,7 @@
                                                 view:self
                                               prefix:@"FacebookBannerAd"
                                                 adId:adId_];
+    viewHelper_ = nil;
 
     [self createInternalAd];
     [self registerHandlers];

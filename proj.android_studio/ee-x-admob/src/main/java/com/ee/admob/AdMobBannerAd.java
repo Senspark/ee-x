@@ -4,18 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.view.Gravity;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.view.Gravity;
-import android.widget.FrameLayout;
-
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
-import com.ee.core.MessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -29,15 +29,16 @@ import com.google.android.gms.ads.AdView;
 class AdMobBannerAd extends AdListener implements IAdView {
     private static final Logger _logger = new Logger(AdMobBannerAd.class.getName());
 
-    private Context        _context;
-    private Activity       _activity;
-    private AdView         _adView;
-    private boolean        _isAdLoaded;
-    private String         _adId;
-    private AdSize         _adSize;
-    private AdViewHelper   _helper;
-    private boolean        _customSize;
+    private Context _context;
+    private Activity _activity;
     private IMessageBridge _bridge;
+    private AdView _adView;
+    private boolean _isAdLoaded;
+    private String _adId;
+    private AdSize _adSize;
+    private AdViewHelper _helper;
+    private ViewHelper _viewHelper;
+    private boolean _customSize;
 
     static AdSize adSizeFor(int index) {
         if (index == 0) {
@@ -60,12 +61,14 @@ class AdMobBannerAd extends AdListener implements IAdView {
         _isAdLoaded = false;
         _context = context;
         _activity = activity;
+        _bridge = MessageBridge.getInstance();
         _adId = adId;
         _adSize = adSize;
         _adView = null;
         _customSize = false;
-        _helper = new AdViewHelper("AdMobBannerAd", _adId);
-        _bridge = MessageBridge.getInstance();
+        _helper = new AdViewHelper(_bridge, this, "AdMobBannerAd", _adId);
+        _viewHelper = null;
+
         createInternalAd();
         registerHandlers();
     }
@@ -117,10 +120,9 @@ class AdMobBannerAd extends AdListener implements IAdView {
         return "AdMobBannerAd_onClicked_" + _adId;
     }
 
-
     private void registerHandlers() {
         Utils.checkMainThread();
-        _helper.registerHandlers(this);
+        _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
@@ -144,6 +146,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
         _adView.setLayoutParams(params);
+        _viewHelper = new ViewHelper(_adView);
 
         if (_activity != null) {
             addToActivity(_activity);
@@ -161,6 +164,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (_activity != null) {
             removeFromActivity(_activity);
         }
+        _viewHelper = null;
         _adView.destroy();
         _adView = null;
         return true;
@@ -196,19 +200,19 @@ class AdMobBannerAd extends AdListener implements IAdView {
     @NonNull
     @Override
     public Point getPosition() {
-        return AdViewHelper.getPosition(_adView);
+        return _viewHelper.getPosition();
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        AdViewHelper.setPosition(position, _adView);
+        _viewHelper.setPosition(position);
     }
 
     @NonNull
     @Override
     public Point getSize() {
         if (_customSize) {
-            return AdViewHelper.getSize(_adView);
+            return _viewHelper.getSize();
         }
         int width = _adSize.getWidthInPixels(_context);
         int height = _adSize.getHeightInPixels(_context);
@@ -217,18 +221,18 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     @Override
     public void setSize(@NonNull Point size) {
-        AdViewHelper.setSize(size, _adView);
+        _viewHelper.setSize(size);
         _customSize = true;
     }
 
     @Override
     public boolean isVisible() {
-        return AdViewHelper.isVisible(_adView);
+        return _viewHelper.isVisible();
     }
 
     @Override
     public void setVisible(boolean visible) {
-        AdViewHelper.setVisible(visible, _adView);
+        _viewHelper.setVisible(visible);
         if (visible) {
             // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
             // -refresh-or-sign-in-to-google-plus

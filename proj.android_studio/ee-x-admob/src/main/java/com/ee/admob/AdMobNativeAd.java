@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +14,15 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
-import com.ee.core.MessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -43,37 +43,39 @@ import java.util.Map;
 class AdMobNativeAd extends AdListener implements IAdView {
     private static final Logger _logger = new Logger(AdMobNativeAd.class.getName());
 
-    private static final String k__body           = "body";
+    private static final String k__body = "body";
     private static final String k__call_to_action = "call_to_action";
-    private static final String k__headline       = "headline";
-    private static final String k__icon           = "icon";
-    private static final String k__image          = "image";
-    private static final String k__media          = "media";
-    private static final String k__price          = "price";
-    private static final String k__star_rating    = "star_rating";
-    private static final String k__store          = "store";
+    private static final String k__headline = "headline";
+    private static final String k__icon = "icon";
+    private static final String k__image = "image";
+    private static final String k__media = "media";
+    private static final String k__price = "price";
+    private static final String k__star_rating = "star_rating";
+    private static final String k__store = "store";
 
-    private Context             _context;
-    private Activity            _activity;
-    private String              _adId;
-    private String              _layoutName;
+    private Context _context;
+    private Activity _activity;
+    private IMessageBridge _bridge;
+    private String _adId;
+    private String _layoutName;
     private Map<String, String> _identifiers;
-    private boolean             _isAdLoaded;
-    private AdLoader            _adLoader;
-    private FrameLayout         _nativeAdPlaceholder;
-    private AdViewHelper        _helper;
-    private IMessageBridge      _bridge;
+    private boolean _isAdLoaded;
+    private AdLoader _adLoader;
+    private FrameLayout _nativeAdPlaceholder;
+    private AdViewHelper _helper;
+    private ViewHelper _viewHelper;
 
     public AdMobNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
+        _bridge = MessageBridge.getInstance();
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
         _isAdLoaded = false;
-        _helper = new AdViewHelper("AdMobNativeAd", adId);
-        _bridge = MessageBridge.getInstance();
+        _helper = new AdViewHelper(_bridge, this, "AdMobNativeAd", adId);
+        _viewHelper = null;
 
         createInternalAd();
         createView();
@@ -119,7 +121,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     private void registerHandlers() {
         Utils.checkMainThread();
-        _helper.registerHandlers(this);
+        _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
@@ -171,6 +173,8 @@ class AdMobNativeAd extends AdListener implements IAdView {
         layout.setLayoutParams(params);
 
         _nativeAdPlaceholder = layout;
+        _viewHelper = new ViewHelper(_nativeAdPlaceholder);
+
         if (_activity != null) {
             addToActivity(_activity);
         }
@@ -179,21 +183,15 @@ class AdMobNativeAd extends AdListener implements IAdView {
     private void destroyView() {
         Utils.checkMainThread();
         assert _nativeAdPlaceholder != null;
-        removeFromActivity(_activity);
+        if (_activity != null) {
+            removeFromActivity(_activity);
+        }
+        _viewHelper = null;
         _nativeAdPlaceholder = null;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        /*
-          Cocos2d-x issue.
-        // FIXME: 11/23/17 quickfix bug onCreate again
-        if(_nativeAdPlaceholder.getParent() != null)
-        {
-            ((FrameLayout)_nativeAdPlaceholder.getParent()).removeView(_nativeAdPlaceholder);
-        }
-        // end quickfix bug onCreate again
-        */
         rootView.addView(_nativeAdPlaceholder);
     }
 
@@ -222,33 +220,33 @@ class AdMobNativeAd extends AdListener implements IAdView {
     @NonNull
     @Override
     public Point getPosition() {
-        return AdViewHelper.getPosition(_nativeAdPlaceholder);
+        return _viewHelper.getPosition();
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        AdViewHelper.setPosition(position, _nativeAdPlaceholder);
+        _viewHelper.setPosition(position);
     }
 
     @NonNull
     @Override
     public Point getSize() {
-        return AdViewHelper.getSize(_nativeAdPlaceholder);
+        return _viewHelper.getSize();
     }
 
     @Override
     public void setSize(@NonNull Point size) {
-        AdViewHelper.setSize(size, _nativeAdPlaceholder);
+        _viewHelper.setSize(size);
     }
 
     @Override
     public boolean isVisible() {
-        return AdViewHelper.isVisible(_nativeAdPlaceholder);
+        return _viewHelper.isVisible();
     }
 
     @Override
     public void setVisible(boolean visible) {
-        AdViewHelper.setVisible(visible, _nativeAdPlaceholder);
+        _viewHelper.setVisible(visible);
     }
 
     private int getIdentifier(@NonNull String identifier) {

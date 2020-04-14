@@ -50,6 +50,8 @@
                                                 view:self
                                               prefix:@"AdMobNativeAd"
                                                 adId:adId];
+    viewHelper_ = nil;
+
     [self createInternalAd];
     [self createView];
     [self registerHandlers];

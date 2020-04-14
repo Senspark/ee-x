@@ -64,6 +64,7 @@
                                                 view:self
                                               prefix:@"AdMobBannerAd"
                                                 adId:adId];
+    viewHelper_ = nil;
 
     [self createInternalAd];
     [self registerHandlers];

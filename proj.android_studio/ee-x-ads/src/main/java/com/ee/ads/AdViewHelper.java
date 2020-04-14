@@ -1,12 +1,11 @@
 package com.ee.ads;
 
-import android.graphics.Point;
 import androidx.annotation.NonNull;
-import android.view.View;
-import android.widget.FrameLayout;
 
+import android.graphics.Point;
+
+import com.ee.core.IMessageBridge;
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 
@@ -18,10 +17,17 @@ import java.util.Map;
  */
 
 public class AdViewHelper {
+    private IMessageBridge _bridge;
+    private IAdView _view;
     private String _prefix;
     private String _adId;
 
-    public AdViewHelper(String prefix, String adId) {
+    public AdViewHelper(@NonNull IMessageBridge bridge,
+                        @NonNull IAdView view,
+                        @NonNull String prefix,
+                        @NonNull String adId) {
+        _bridge = bridge;
+        _view = view;
         _prefix = prefix;
         _adId = adId;
     }
@@ -66,32 +72,30 @@ public class AdViewHelper {
         return _prefix + "_setVisible_" + _adId;
     }
 
-    public void registerHandlers(final IAdView adView) {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+    public void registerHandlers() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return adView.isLoaded() ? "true" : "false";
+                return Utils.toString(_view.isLoaded());
             }
         }, k__isLoaded());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                adView.load();
+                _view.load();
                 return "";
             }
         }, k__load());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("ConstantConditions")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                Point position = adView.getPosition();
+                Point position = _view.getPosition();
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("x", position.x);
                 dict.put("y", position.y);
@@ -99,7 +103,7 @@ public class AdViewHelper {
             }
         }, k__getPosition());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("ConstantConditions")
             @NonNull
             @Override
@@ -107,17 +111,17 @@ public class AdViewHelper {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 int x = (Integer) dict.get("x");
                 int y = (Integer) dict.get("y");
-                adView.setPosition(new Point(x, y));
+                _view.setPosition(new Point(x, y));
                 return "";
             }
         }, k__setPosition());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("ConstantConditions")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                Point size = adView.getSize();
+                Point size = _view.getSize();
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("width", size.x);
                 dict.put("height", size.y);
@@ -125,7 +129,7 @@ public class AdViewHelper {
             }
         }, k__getSize());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("ConstantConditions")
             @NonNull
             @Override
@@ -133,90 +137,45 @@ public class AdViewHelper {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
                 int x = (Integer) dict.get("width");
                 int y = (Integer) dict.get("height");
-                adView.setSize(new Point(x, y));
+                _view.setSize(new Point(x, y));
                 return "";
             }
         }, k__setSize());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(adView.isVisible());
+                return Utils.toString(_view.isVisible());
             }
         }, k__isVisible());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                adView.setVisible(Utils.toBoolean(message));
+                return Utils.toString(_view.isVisible());
+            }
+        }, k__isVisible());
+
+        _bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                _view.setVisible(Utils.toBoolean(message));
                 return "";
             }
         }, k__setVisible());
     }
 
     public void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__isLoaded());
-        bridge.deregisterHandler(k__load());
-        bridge.deregisterHandler(k__getPosition());
-        bridge.deregisterHandler(k__setPosition());
-        bridge.deregisterHandler(k__getSize());
-        bridge.deregisterHandler(k__setSize());
-        bridge.deregisterHandler(k__setVisible());
-    }
-
-    @NonNull
-    public static Point getPosition(@NonNull View view) {
-        Utils.checkMainThread();
-        /*
-        int p[] = new int[2];
-        view.getLocationInWindow(p);
-        return new Point(p[0], p[1]);
-        */
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        return new Point(params.leftMargin, params.topMargin);
-    }
-
-    public static void setPosition(@NonNull Point position, @NonNull View view) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        params.leftMargin = position.x;
-        params.topMargin = position.y;
-        view.setLayoutParams(params);
-    }
-
-    @NonNull
-    public static Point getSize(@NonNull View view) {
-        Utils.checkMainThread();
-        // return new Point(view.getWidth(), view.getHeight());
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        return new Point(params.width, params.height);
-    }
-
-    public static void setSize(@NonNull Point size, @NonNull View view) {
-        Utils.checkMainThread();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        params.width = size.x;
-        params.height = size.y;
-        view.setLayoutParams(params);
-    }
-
-    public static boolean isVisible(@NonNull View view) {
-        Utils.checkMainThread();
-        return view.getVisibility() == View.VISIBLE;
-    }
-
-    public static void setVisible(boolean visible, @NonNull View view) {
-        Utils.checkMainThread();
-        if (visible) {
-            view.setVisibility(View.VISIBLE);
-        } else {
-            // View.INVISIBLE doesn't trigger a view redraw.
-            // Production: load and then call setVisible(true) doesn't show the native ad.
-            view.setVisibility(View.GONE);
-        }
+        _bridge.deregisterHandler(k__isLoaded());
+        _bridge.deregisterHandler(k__load());
+        _bridge.deregisterHandler(k__getPosition());
+        _bridge.deregisterHandler(k__setPosition());
+        _bridge.deregisterHandler(k__getSize());
+        _bridge.deregisterHandler(k__setSize());
+        _bridge.deregisterHandler(k__isVisible());
+        _bridge.deregisterHandler(k__setVisible());
     }
 }

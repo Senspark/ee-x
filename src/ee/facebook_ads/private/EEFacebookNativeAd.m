@@ -85,6 +85,7 @@ static NSString* const k__sponsor           = @"sponsor";
                                                 view:self
                                               prefix:k__tag
                                                 adId:adId_];
+    viewHelper_ = nil;
 
     [self createInternalAd];
     [self createView];

@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,27 +13,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
+import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
-import com.ee.core.Logger;
 import com.ee.core.internal.Utils;
-import com.ee.facebook.ads.R;
 import com.facebook.ads.Ad;
-import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
-import com.facebook.ads.AdIconView;
-import com.facebook.ads.AdListener;
 import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdListener;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,33 +39,34 @@ import java.util.Map;
  */
 
 class FacebookNativeAd implements NativeAdListener, IAdView {
-    private static final String k__ad_choices     = "ad_choices";
-    private static final String k__body           = "body";
+    private static final String k__ad_choices = "ad_choices";
+    private static final String k__body = "body";
     private static final String k__call_to_action = "call_to_action";
-    private static final String k__icon           = "icon";
-    private static final String k__media          = "media";
+    private static final String k__icon = "icon";
+    private static final String k__media = "media";
     private static final String k__social_context = "social_context";
-    private static final String k__title          = "title";
-    private static final String k__cover          = "cover";
+    private static final String k__title = "title";
+    private static final String k__cover = "cover";
 
     private static final String k__tag = "FacebookNativeAd";
 
     private static final Logger _logger = new Logger(FacebookNativeAd.class.getName());
 
-    private NativeAd            _nativeAd;
-    private View                _nativeAdView;
-    private boolean             _isAdLoaded;
-    private Context             _context;
-    private Activity            _activity;
-    private String              _adId;
-    private String              _layoutName;
+    private IMessageBridge _bridge;
+    private NativeAd _nativeAd;
+    private View _nativeAdView;
+    private boolean _isAdLoaded;
+    private Context _context;
+    private Activity _activity;
+    private String _adId;
+    private String _layoutName;
     private Map<String, String> _identifiers;
-    private AdViewHelper        _helper;
-    private IMessageBridge      _bridge;
-
+    private AdViewHelper _helper;
+    private ViewHelper _viewHelper;
 
     public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
+        _bridge = MessageBridge.getInstance();
         _context = context;
         _activity = activity;
         _adId = adId;
@@ -79,8 +75,8 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         _nativeAd = null;
         _nativeAdView = null;
         _isAdLoaded = false;
-        _helper = new AdViewHelper(k__tag, adId);
-        _bridge = MessageBridge.getInstance();
+        _helper = new AdViewHelper(_bridge, this, k__tag, adId);
+        _viewHelper = null;
 
         createInternalAd();
         createView();
@@ -139,7 +135,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     private void registerHandlers() {
         Utils.checkMainThread();
-        _helper.registerHandlers(this);
+        _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -201,6 +197,8 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         nativeAdView.setLayoutParams(params);
 
         _nativeAdView = nativeAdView;
+        _viewHelper = new ViewHelper(_nativeAdView);
+
         if (_activity != null) {
             addToActivity(_activity);
         }
@@ -208,29 +206,21 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     private void destroyView() {
         Utils.checkMainThread();
-        removeFromActivity(_activity);
+        if (_activity != null) {
+            removeFromActivity(_activity);
+        }
+        _viewHelper = null;
         _nativeAdView = null;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        /*
-        Cocos2d-x issue.
-        // FIXME: 11/23/17 quickfix bug onCreate again
-        if(_nativeAdView.getParent() != null)
-        {
-            ((FrameLayout)_nativeAdView.getParent()).removeView(_nativeAdView);
-        }
-        // end quickfix bug onCreate again
-        */
         rootView.addView(_nativeAdView);
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
-        if (activity != null) {
-            FrameLayout rootView = Utils.getRootView(activity);
-            rootView.removeView(_nativeAdView);
-        }
+        FrameLayout rootView = Utils.getRootView(activity);
+        rootView.removeView(_nativeAdView);
     }
 
     @Override
@@ -258,33 +248,33 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     @NonNull
     @Override
     public Point getPosition() {
-        return AdViewHelper.getPosition(_nativeAdView);
+        return _viewHelper.getPosition();
     }
 
     @Override
     public void setPosition(@NonNull Point position) {
-        AdViewHelper.setPosition(position, _nativeAdView);
+        _viewHelper.setPosition(position);
     }
 
     @NonNull
     @Override
     public Point getSize() {
-        return AdViewHelper.getSize(_nativeAdView);
+        return _viewHelper.getSize();
     }
 
     @Override
     public void setSize(@NonNull Point size) {
-        AdViewHelper.setSize(size, _nativeAdView);
+        _viewHelper.setSize(size);
     }
 
     @Override
     public boolean isVisible() {
-        return AdViewHelper.isVisible(_nativeAdView);
+        return _viewHelper.isVisible();
     }
 
     @Override
     public void setVisible(boolean visible) {
-        AdViewHelper.setVisible(visible, _nativeAdView);
+        _viewHelper.setVisible(visible);
     }
 
     private int getIdentifier(@NonNull String identifier) {

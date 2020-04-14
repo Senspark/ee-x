@@ -73,9 +73,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
-        _isAdLoaded = false;
         _helper = new AdViewHelper(_bridge, this, "AdMobNativeAd", adId);
-        _viewHelper = null;
 
         createInternalAd();
         createView();
@@ -97,14 +95,14 @@ class AdMobNativeAd extends AdListener implements IAdView {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroyInternalAd();
         destroyView();
+        destroyInternalAd();
+        _context = null;
+        _bridge = null;
+        _adId = null;
         _layoutName = null;
         _identifiers = null;
-        _adId = null;
-        _context = null;
         _helper = null;
-        _bridge = null;
     }
 
     private String kOnLoaded() {

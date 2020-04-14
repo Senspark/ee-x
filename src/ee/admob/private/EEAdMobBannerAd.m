@@ -56,15 +56,12 @@
         return self;
     }
     bridge_ = bridge;
-    isLoaded_ = NO;
-    bannerView_ = nil;
     adId_ = [adId copy];
     adSize_ = adSize;
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
                                               prefix:@"AdMobBannerAd"
                                                 adId:adId];
-    viewHelper_ = nil;
 
     [self createInternalAd];
     [self registerHandlers];
@@ -74,13 +71,14 @@
 - (void)destroy {
     [self deregisterhandlers];
     [self destroyInternalAd];
+
+    [adId_ release];
+    adId_ = nil;
+    [helper_ release];
+    helper_ = nil;
 }
 
 - (void)dealloc {
-    [helper_ release];
-    helper_ = nil;
-    [adId_ release];
-    adId_ = nil;
     [super dealloc];
 }
 

@@ -42,7 +42,6 @@
         return self;
     }
     bridge_ = bridge;
-    isAdLoaded_ = NO;
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
@@ -50,7 +49,6 @@
                                                 view:self
                                               prefix:@"AdMobNativeAd"
                                                 adId:adId];
-    viewHelper_ = nil;
 
     [self createInternalAd];
     [self createView];
@@ -60,19 +58,20 @@
 
 - (void)destroy {
     [self deregisterHandlers];
-    [self destroyInternalAd];
     [self destroyView];
-}
+    [self destroyInternalAd];
 
-- (void)dealloc {
-    [helper_ release];
-    helper_ = nil;
     [adId_ release];
     adId_ = nil;
     [adTypes_ release];
     adTypes_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
+    [helper_ release];
+    helper_ = nil;
+}
+
+- (void)dealloc {
     [super dealloc];
 }
 

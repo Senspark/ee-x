@@ -58,16 +58,12 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         Utils.checkMainThread();
-        _isAdLoaded = false;
         _context = context;
         _activity = activity;
         _bridge = MessageBridge.getInstance();
         _adId = adId;
         _adSize = adSize;
-        _adView = null;
-        _customSize = false;
         _helper = new AdViewHelper(_bridge, this, "AdMobBannerAd", _adId);
-        _viewHelper = null;
 
         createInternalAd();
         registerHandlers();
@@ -99,10 +95,10 @@ class AdMobBannerAd extends AdListener implements IAdView {
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
+        _bridge = null;
         _adId = null;
         _adSize = null;
         _helper = null;
-        _bridge = null;
     }
 
     @NonNull

@@ -75,17 +75,13 @@ static NSString* const k__sponsor           = @"sponsor";
     }
 
     bridge_ = bridge;
-    isAdLoaded_ = NO;
     adId_ = [adId copy];
     layoutName_ = [layoutName copy];
-    nativeAd_ = nil;
-    nativeAdView_ = nil;
     identifiers_ = [identifiers copy];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
                                               prefix:k__tag
                                                 adId:adId_];
-    viewHelper_ = nil;
 
     [self createInternalAd];
     [self createView];
@@ -95,18 +91,20 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)destroy {
     [self deregisterhandlers];
-    [self destroyInternalAd];
     [self destroyView];
-}
+    [self destroyInternalAd];
 
-- (void)dealloc {
-    [helper_ release];
-    helper_ = nil;
     [adId_ release];
     adId_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
     [identifiers_ release];
+    identifiers_ = nil;
+    [helper_ release];
+    helper_ = nil;
+}
+
+- (void)dealloc {
     [super dealloc];
 }
 

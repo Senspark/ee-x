@@ -58,15 +58,12 @@
     }
 
     bridge_ = bridge;
-    isLoaded_ = NO;
     adId_ = [adId copy];
     adSize_ = adSize;
-    adView_ = nil;
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
                                               prefix:@"FacebookBannerAd"
                                                 adId:adId_];
-    viewHelper_ = nil;
 
     [self createInternalAd];
     [self registerHandlers];
@@ -76,13 +73,14 @@
 - (void)destroy {
     [self deregisterhandlers];
     [self destroyInternalAd];
+
+    [adId_ release];
+    adId_ = nil;
+    [helper_ release];
+    helper_ = nil;
 }
 
 - (void)dealloc {
-    [helper_ release];
-    helper_ = nil;
-    [adId_ release];
-    adId_ = nil;
     [super dealloc];
 }
 

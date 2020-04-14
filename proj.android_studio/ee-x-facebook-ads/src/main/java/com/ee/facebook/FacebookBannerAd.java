@@ -63,13 +63,9 @@ class FacebookBannerAd implements AdListener, IAdView {
         _context = context;
         _activity = activity;
         _bridge = MessageBridge.getInstance();
-        _isAdLoaded = false;
         _adId = adId;
         _adSize = adSize;
-        _adView = null;
-        _customSize = false;
         _helper = new AdViewHelper(_bridge, this, "FacebookBannerAd", _adId);
-        _viewHelper = null;
 
         createInternalAd();
         registerHandlers();
@@ -90,11 +86,11 @@ class FacebookBannerAd implements AdListener, IAdView {
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
-        _helper = null;
         _context = null;
+        _bridge = null;
         _adId = null;
         _adSize = null;
-        _bridge = null;
+        _helper = null;
     }
 
     @NonNull

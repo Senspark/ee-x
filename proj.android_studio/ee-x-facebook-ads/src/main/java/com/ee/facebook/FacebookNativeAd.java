@@ -66,17 +66,13 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
-        _bridge = MessageBridge.getInstance();
         _context = context;
         _activity = activity;
+        _bridge = MessageBridge.getInstance();
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
-        _nativeAd = null;
-        _nativeAdView = null;
-        _isAdLoaded = false;
         _helper = new AdViewHelper(_bridge, this, k__tag, adId);
-        _viewHelper = null;
 
         createInternalAd();
         createView();
@@ -98,14 +94,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
-        destroyInternalAd();
         destroyView();
+        destroyInternalAd();
+        _context = null;
+        _bridge = null;
         _adId = null;
         _layoutName = null;
         _identifiers = null;
         _helper = null;
-        _context = null;
-        _bridge = null;
     }
 
     @NonNull

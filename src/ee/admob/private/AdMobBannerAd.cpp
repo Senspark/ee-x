@@ -38,8 +38,7 @@ Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
     , bridge_(bridge)
     , plugin_(plugin)
     , adId_(adId)
-    , helper_("AdMobBannerAd", adId)
-    , bridgeHelper_(bridge, helper_) {
+    , helper_(bridge, "AdMobBannerAd", adId) {
     loading_ = false;
 
     bridge_.registerHandler(
@@ -71,7 +70,7 @@ Self::~BannerAd() {
 }
 
 bool Self::isLoaded() const {
-    return bridgeHelper_.isLoaded();
+    return helper_.isLoaded();
 }
 
 void Self::load() {
@@ -79,39 +78,39 @@ void Self::load() {
         return;
     }
     loading_ = true;
-    bridgeHelper_.load();
+    helper_.load();
 }
 
 std::pair<float, float> Self::getAnchor() const {
-    return bridgeHelper_.getAnchor();
+    return helper_.getAnchor();
 }
 
 void Self::setAnchor(float x, float y) {
-    bridgeHelper_.setAnchor(x, y);
+    helper_.setAnchor(x, y);
 }
 
 std::pair<int, int> Self::getPosition() const {
-    return bridgeHelper_.getPosition();
+    return helper_.getPosition();
 }
 
 void Self::setPosition(int x, int y) {
-    bridgeHelper_.setPosition(x, y);
+    helper_.setPosition(x, y);
 }
 
 std::pair<int, int> Self::getSize() const {
-    return bridgeHelper_.getSize();
+    return helper_.getSize();
 }
 
 void Self::setSize(int width, int height) {
-    bridgeHelper_.setSize(width, height);
+    helper_.setSize(width, height);
 }
 
 bool Self::isVisible() const {
-    return bridgeHelper_.isVisible();
+    return helper_.isVisible();
 }
 
 void Self::setVisible(bool visible) {
-    bridgeHelper_.setVisible(visible);
+    helper_.setVisible(visible);
 }
 
 void Self::onLoaded() {

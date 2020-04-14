@@ -10,7 +10,6 @@
 #define EE_X_ADMOB_BANNER_AD_HPP
 
 #include <ee/ads/IAdView.hpp>
-#include <ee/ads/internal/AdViewBridgeHelper.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
 #include <ee/core/ObserverManager.hpp>
 
@@ -57,7 +56,6 @@ private:
     Bridge* plugin_;
     std::string adId_;
     ads::AdViewHelper helper_;
-    ads::AdViewBridgeHelper bridgeHelper_;
 };
 } // namespace admob
 } // namespace ee

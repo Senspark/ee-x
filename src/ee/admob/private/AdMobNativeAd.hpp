@@ -10,7 +10,6 @@
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
 #include <ee/ads/IAdView.hpp>
-#include <ee/ads/internal/AdViewBridgeHelper.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
 #include <ee/core/ObserverManager.hpp>
 
@@ -58,7 +57,6 @@ private:
     const Logger& logger_;
     Bridge* plugin_;
     ads::AdViewHelper helper_;
-    ads::AdViewBridgeHelper bridgeHelper_;
 };
 } // namespace admob
 } // namespace ee

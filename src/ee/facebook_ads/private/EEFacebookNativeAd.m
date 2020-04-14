@@ -227,6 +227,10 @@ static NSString* const k__sponsor           = @"sponsor";
     [viewHelper_ setSize:size];
 }
 
+- (BOOL)isVisible {
+    return [viewHelper_ isVisible];
+}
+
 - (void)setVisible:(BOOL)visible {
     [viewHelper_ setVisible:visible];
     if (visible) {

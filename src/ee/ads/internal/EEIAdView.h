@@ -17,6 +17,7 @@
 - (void)setPosition:(CGPoint)position;
 - (CGSize)getSize;
 - (void)setSize:(CGSize)size;
+- (BOOL)isVisible;
 - (void)setVisible:(BOOL)visible;
 
 @end

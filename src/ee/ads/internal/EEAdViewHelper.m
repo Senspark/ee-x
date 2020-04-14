@@ -72,6 +72,10 @@
     return [NSString stringWithFormat:@"%@_setSize_%@", prefix_, adId_];
 }
 
+- (NSString* _Nonnull)k__isVisible {
+    return [NSString stringWithFormat:@"%@_isVisible_%@", prefix_, adId_];
+}
+
 - (NSString* _Nonnull)k__setVisible {
     return [NSString stringWithFormat:@"%@_setVisible_%@", prefix_, adId_];
 }
@@ -128,6 +132,11 @@
                         return @"";
                     }];
 
+    [bridge_ registerHandler:[self k__isVisible]
+                    callback:^(NSString* message) {
+                        return [EEUtils toString:[view_ isVisible]];
+                    }];
+
     [bridge_ registerHandler:[self k__setVisible]
                     callback:^(NSString* message) {
                         [view_ setVisible:[EEUtils toBool:message]];
@@ -142,6 +151,7 @@
     [bridge_ deregisterHandler:[self k__setPosition]];
     [bridge_ deregisterHandler:[self k__getSize]];
     [bridge_ deregisterHandler:[self k__setSize]];
+    [bridge_ deregisterHandler:[self k__isVisible]];
     [bridge_ deregisterHandler:[self k__setVisible]];
 }
 

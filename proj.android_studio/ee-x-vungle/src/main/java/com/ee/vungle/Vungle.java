@@ -179,7 +179,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(VungleException throwable) {
                 _logger.info("vunglePub.init onFailure");
                 _initializing = false;
             }
@@ -207,7 +207,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(String placementReferenceId, Throwable throwable) {
+            public void onError(String placementReferenceId, VungleException throwable) {
                 _logger.info("onUnableToPlayAd: " + placementReferenceId);
                 MessageBridge bridge = MessageBridge.getInstance();
                 bridge.callCpp(k__onUnavailable);
@@ -231,7 +231,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(String placementReferenceId, Throwable throwable) {
+            public void onError(String placementReferenceId, VungleException throwable) {
                 _logger.info("onAdLoadError: " + placementReferenceId + " reason: " + throwable.getMessage());
             }
         };

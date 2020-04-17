@@ -19,10 +19,10 @@ Task<T> Self<T>::process(const Processor& processor) {
             [this, processor](auto&& resolve) {
                 processing_ = true;
                 resolve_ = [this, resolve](T result) {
-                    processing_ = false;
-                    awaiter_.reset();
-                    resolve_ = nullptr;
                     resolve(result);
+                    resolve_ = nullptr;
+                    awaiter_.reset();
+                    processing_ = false;
                 };
                 processor();
             });

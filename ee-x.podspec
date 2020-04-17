@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
 
-  spec.ios.deployment_target = '9.0'
+  spec.ios.deployment_target = '12.0'
   spec.osx.deployment_target = '10.8'
 
   spec.source = {

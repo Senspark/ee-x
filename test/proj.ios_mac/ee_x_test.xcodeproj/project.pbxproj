@@ -41,6 +41,7 @@
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD0A589120ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
+		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
@@ -144,6 +145,7 @@
 		9AD6A2AA09F9B4B017CDA4D4 /* Pods-ee_x_test_desktop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_desktop.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_desktop/Pods-ee_x_test_desktop.release.xcconfig"; sourceTree = "<group>"; };
 		AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseDynamicLink.cpp; sourceTree = "<group>"; };
 		AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FirebaseDynamicLink.hpp; sourceTree = "<group>"; };
+		AD18E4062449C177002C7EEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "ios/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		AD56EF792021647A00DC9B56 /* videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = videos; sourceTree = "<group>"; };
 		AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerTestScene.cpp; sourceTree = "<group>"; };
 		AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerTestScene.hpp; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 		080E96DDFE201D6D7F000001 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				AD18E4062449C177002C7EEB /* GoogleService-Info.plist */,
 				6F2580221ECBFBAC00B910F9 /* Info.plist */,
 				6F5B40CE1E8E346600137F30 /* src */,
 			);
@@ -193,7 +196,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */,
@@ -456,7 +459,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -507,6 +510,7 @@
 				6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */,
 				6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */,
 				6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */,
+				AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

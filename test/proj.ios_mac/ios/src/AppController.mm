@@ -54,7 +54,7 @@ static eetest::AppDelegate s_sharedApplication;
 
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager initializePlugins];
-    [manager addPlugin:@"Crashlytics"];
+    [manager addPlugin:@"FirebaseCrashlytics"];
     [manager addPlugin:@"Notification"];
     [manager addPlugin:@"AdMob"];
     [manager addPlugin:@"AppLovin"];

@@ -113,7 +113,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CrashlyticsAgent::getInstance()->initialize();
     CrashlyticsAgent::getInstance()->logDebug("debug_message");
     CrashlyticsAgent::getInstance()->logInfo("info_message");
-    CrashlyticsAgent::getInstance()->logError("error_message");
 
     getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
     ee::runOnUiThreadAndWait([] {

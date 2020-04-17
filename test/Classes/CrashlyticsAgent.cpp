@@ -8,7 +8,9 @@
 
 #include "CrashlyticsAgent.hpp"
 
-#include <ee/Crashlytics.hpp>
+#include <cocos2d.h>
+
+#include <ee/Firebase.hpp>
 
 CrashlyticsAgent* CrashlyticsAgent::getInstance() {
     static CrashlyticsAgent sharedInstance;
@@ -16,25 +18,19 @@ CrashlyticsAgent* CrashlyticsAgent::getInstance() {
 }
 
 void CrashlyticsAgent::initialize() {
-    protocol_ = std::make_unique<ee::Crashlytics>();
+    plugin_ = std::make_unique<ee::FirebaseCrashlytics>();
 }
 
-void CrashlyticsAgent::causeCrash() {
-    protocol_->causeCrash();
-}
-
-void CrashlyticsAgent::causeException() {
-    protocol_->causeException();
+void CrashlyticsAgent::log(const std::string& message) {
+    plugin_->log(message);
 }
 
 void CrashlyticsAgent::logDebug(const std::string& message) {
-    protocol_->log(ee::LogLevel::Debug, "your_log_tag", message);
+    log(message);
+    CCLOG("%s", message.c_str());
 }
 
 void CrashlyticsAgent::logInfo(const std::string& message) {
-    protocol_->log(ee::LogLevel::Info, "your_log_tag", message);
-}
-
-void CrashlyticsAgent::logError(const std::string& message) {
-    protocol_->log(ee::LogLevel::Error, "your_log_tag", message);
+    log(message);
+    cocos2d::log("%s", message.c_str());
 }

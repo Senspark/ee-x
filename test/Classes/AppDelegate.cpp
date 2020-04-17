@@ -141,8 +141,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     cocos2d::log("Create scene");
     // director->runWithScene(VideoPlayerTestScene::create());
-    // director->runWithScene(createMultiNativeAdTestScene());
-    director->runWithScene(TwitterShareTestScene::create());
+    director->runWithScene(createMultiNativeAdTestScene());
+    
+    // Deprecated.
+    // director->runWithScene(TwitterShareTestScene::create());
 
     return true;
 }

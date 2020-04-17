@@ -14,20 +14,18 @@
 #import <FBAudienceNetwork/FBNativeAd.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/facebook_ads/EEFacebookNativeAdView.h"
 
-@interface EEFacebookNativeAd () <FBNativeAdDelegate, FBMediaViewDelegate> {
+@interface EEFacebookNativeAd () <FBNativeAdDelegate, FBMediaViewDelegate>
+@end
+
+@implementation EEFacebookNativeAd {
     id<EEIMessageBridge> bridge_;
-
-    /// Internal Facebook ad.
-    FBNativeAd* nativeAd_;
-
-    /// Loaded from xib.
-    EEFacebookNativeAdView* nativeAdView_;
 
     /// Ad ID Unit.
     NSString* adId_;
@@ -35,23 +33,25 @@
     /// Layout name (xib).
     NSString* layoutName_;
 
-    /// Whether the ad is loaded.
-    BOOL isAdLoaded_;
+    /// Identifiers
+    NSDictionary* identifiers_;
+
+    EEMessageHelper* messageHelper_;
 
     /// Common helper.
     EEAdViewHelper* helper_;
 
     EEViewHelper* viewHelper_;
 
-    /// Identifiers
-    NSDictionary* identifiers_;
+    /// Whether the ad is loaded.
+    BOOL isLoaded_;
+
+    /// Internal Facebook ad.
+    FBNativeAd* nativeAd_;
+
+    /// Loaded from xib.
+    EEFacebookNativeAdView* nativeAdView_;
 }
-
-@end
-
-@implementation EEFacebookNativeAd
-
-static NSString* const k__tag = @"FacebookNativeAd";
 
 // clang-format off
 static NSString* const k__ad_choices        = @"ad_choices";
@@ -73,16 +73,15 @@ static NSString* const k__sponsor           = @"sponsor";
     if (self == nil) {
         return self;
     }
-
     bridge_ = bridge;
     adId_ = [adId copy];
     layoutName_ = [layoutName copy];
     identifiers_ = [identifiers copy];
+    messageHelper_ =
+        [[EEMessageHelper alloc] initWithPrefix:@"FacebookNativeAd" adId:adId];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
-                                              prefix:k__tag
-                                                adId:adId_];
-
+                                              helper:messageHelper_];
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -100,6 +99,8 @@ static NSString* const k__sponsor           = @"sponsor";
     layoutName_ = nil;
     [identifiers_ release];
     identifiers_ = nil;
+    [messageHelper_ release];
+    messageHelper_ = nil;
     [helper_ release];
     helper_ = nil;
 }
@@ -108,34 +109,13 @@ static NSString* const k__sponsor           = @"sponsor";
     [super dealloc];
 }
 
-- (NSString* _Nonnull)k__createInternalAd {
-    return [NSString stringWithFormat:@"%@_createInternalAd_%@", k__tag, adId_];
-}
-
-- (NSString* _Nonnull)k__destroyInternalAd {
-    return
-        [NSString stringWithFormat:@"%@_destroyInternalAd_%@", k__tag, adId_];
-}
-
-- (NSString* _Nonnull)k__onLoaded {
-    return [NSString stringWithFormat:@"%@_onLoaded_%@", k__tag, adId_];
-}
-
-- (NSString* _Nonnull)k__onFailedToLoad {
-    return [NSString stringWithFormat:@"%@_onFailedToLoad_%@", k__tag, adId_];
-}
-
-- (NSString* _Nonnull)k__onClicked {
-    return [NSString stringWithFormat:@"%@_onClicked_%@", k__tag, adId_];
-}
-
 - (void)registerHandlers {
     [helper_ registerHandlers];
-    [bridge_ registerHandler:[self k__createInternalAd]
+    [bridge_ registerHandler:[messageHelper_ createInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self createInternalAd]];
                     }];
-    [bridge_ registerHandler:[self k__destroyInternalAd]
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self destroyInternalAd]];
                     }];
@@ -143,15 +123,15 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)deregisterhandlers {
     [helper_ deregisterHandlers];
-    [bridge_ deregisterHandler:[self k__createInternalAd]];
-    [bridge_ deregisterHandler:[self k__destroyInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ createInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
     if (nativeAd_ != nil) {
         return NO;
     }
-    isAdLoaded_ = NO;
+    isLoaded_ = NO;
     FBNativeAd* nativeAd =
         [[[FBNativeAd alloc] initWithPlacementID:adId_] autorelease];
     [nativeAd setDelegate:self];
@@ -164,7 +144,7 @@ static NSString* const k__sponsor           = @"sponsor";
     if (nativeAd_ == nil) {
         return NO;
     }
-    isAdLoaded_ = NO;
+    isLoaded_ = NO;
     [nativeAd_ setDelegate:nil];
     [nativeAd_ unregisterView];
     [nativeAd_ release];
@@ -200,7 +180,7 @@ static NSString* const k__sponsor           = @"sponsor";
     if (nativeAd_ == nil) {
         return NO;
     }
-    return isAdLoaded_;
+    return isLoaded_;
 }
 
 - (void)load {
@@ -243,10 +223,10 @@ static NSString* const k__sponsor           = @"sponsor";
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(nativeAd == nativeAd_, @"");
 
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [nativeAd unregisterView];
 
     if ([nativeAdView_ callToActionButton]) {
+        UIViewController* rootView = [EEUtils getCurrentRootViewController];
         [nativeAd
             registerViewForInteraction:nativeAdView_
                              mediaView:nativeAdView_.mediaView
@@ -290,8 +270,8 @@ static NSString* const k__sponsor           = @"sponsor";
     [[nativeAdView_ mediaView] setDelegate:self];
     [[nativeAdView_ iconView] setDelegate:self];
 
-    isAdLoaded_ = YES;
-    [bridge_ callCpp:[self k__onLoaded]];
+    isLoaded_ = YES;
+    [bridge_ callCpp:[messageHelper_ onLoaded]];
 }
 
 - (void)nativeAdWillLogImpression:(FBNativeAd*)nativeAd {
@@ -300,12 +280,13 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)nativeAdDidClick:(FBNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:[self k__onClicked]];
+    [bridge_ callCpp:[messageHelper_ onClicked]];
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd*)nativeAd {

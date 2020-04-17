@@ -15,7 +15,7 @@ namespace ee {
 namespace unity_ads {
 class Bridge;
 class InterstitialAd;
-class RewardedVideo;
+class RewardedAd;
 } // namespace unity_ads
 
 using UnityAds = unity_ads::Bridge;

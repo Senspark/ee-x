@@ -6,8 +6,8 @@
 namespace ee {
 namespace iron_source {
 class Bridge;
-class RewardedVideo;
 class InterstitialAd;
+class RewardedAd;
 } // namespace iron_source
 
 using IronSource = iron_source::Bridge;

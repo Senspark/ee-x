@@ -10,8 +10,7 @@
 
 #include <cassert>
 
-#include <ee/nlohmann/json.hpp>
-
+#include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/IMessageBridge.hpp>
@@ -22,67 +21,44 @@ namespace ee {
 namespace facebook_ads {
 using Self = NativeAd;
 
-namespace {
-const std::string k__tag = "FacebookNativeAd";
-
-auto k__createInternalAd(const std::string& id) {
-    return k__tag + "_createInternalAd_" + id;
-}
-
-auto k__destroyInternalAd(const std::string& id) {
-    return k__tag + "_destroyInternalAd_" + id;
-}
-
-auto k__onLoaded(const std::string& id) {
-    return k__tag + "_onLoaded_" + id;
-}
-
-auto k__onFailedToLoad(const std::string& id) {
-    return k__tag + "_onFailedToLoad_" + id;
-}
-
-auto k__onClicked(const std::string& id) {
-    return k__tag + "_onClicked_" + id;
-}
-} // namespace
-
 Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
                const std::string& adId)
-    : Super()
-    , adId_(adId)
-    , bridge_(bridge)
+    : bridge_(bridge)
     , logger_(logger)
     , plugin_(plugin)
-    , helper_(bridge, "FacebookNativeAd", adId) {
+    , adId_(adId)
+    , messageHelper_("FacebookNativeAd", adId)
+    , helper_(bridge, messageHelper_) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     attempted_ = false;
-    loading_ = false;
+    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
-        k__onLoaded(adId_));
+        messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
         },
-        k__onFailedToLoad(adId_));
+        messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
             onClicked();
             return "";
         },
-        k__onClicked(adId_));
+        messageHelper_.onClicked());
 }
 
 Self::~NativeAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onLoaded(adId_));
-    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
-    bridge_.deregisterHandler(k__onClicked(adId_));
+
+    bridge_.deregisterHandler(messageHelper_.onLoaded());
+    bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
+    bridge_.deregisterHandler(messageHelper_.onClosed());
 
     bool succeeded = plugin_->destroyNativeAd(adId_);
     assert(succeeded);
@@ -90,13 +66,13 @@ Self::~NativeAd() {
 
 bool Self::createInternalAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto response = bridge_.call(k__createInternalAd(adId_));
+    auto response = bridge_.call(messageHelper_.createInternalAd());
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto response = bridge_.call(k__destroyInternalAd(adId_));
+    auto response = bridge_.call(messageHelper_.destroyInternalAd());
     return core::toBool(response);
 }
 
@@ -104,19 +80,18 @@ bool Self::isLoaded() const {
     return helper_.isLoaded();
 }
 
-void Self::load() {
+Task<bool> Self::load() {
     logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                  core::toString(loading_).c_str());
-    if (loading_) {
-        return;
-    }
-    if (attempted_) {
-        destroyInternalAd();
-        createInternalAd();
-    }
-    loading_ = true;
-    attempted_ = true;
-    helper_.load();
+                  core::toString(loader_->isProcessing()).c_str());
+    auto result = co_await loader_->process([this] {
+        if (attempted_) {
+            destroyInternalAd();
+            createInternalAd();
+        }
+        attempted_ = true;
+        helper_.load();
+    });
+    co_return result;
 }
 
 std::pair<float, float> Self::getAnchor() const {
@@ -152,9 +127,13 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    assert(loading_);
-    loading_ = false;
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str());
+    if (loader_->isProcessing()) {
+        loader_->resolve(true);
+    } else {
+        assert(false);
+    }
     dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
@@ -163,17 +142,18 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
-    assert(loading_);
-    loading_ = false;
-    dispatchEvent([](auto&& observer) {
-        if (observer.onFailedToLoad) {
-            observer.onFailedToLoad();
-        }
-    });
+    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(loader_->isProcessing()).c_str());
+    if (loader_->isProcessing()) {
+        loader_->resolve(false);
+    } else {
+        assert(false);
+    }
 }
 
 void Self::onClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();

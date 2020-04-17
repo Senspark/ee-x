@@ -17,21 +17,19 @@ namespace ee {
 namespace ads {
 using Self = AdViewHelper;
 
-Self::AdViewHelper(IMessageBridge& bridge, const std::string& prefix,
-                   const std::string& adId)
+Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper)
     : bridge_(bridge)
-    , prefix_(prefix)
-    , adId_(adId)
+    , helper_(helper)
     , anchorX_(0.0f)
     , anchorY_(0.0f) {}
 
 bool Self::isLoaded() const {
-    auto response = bridge_.call(k__isLoaded());
+    auto response = bridge_.call(helper_.isLoaded());
     return core::toBool(response);
 }
 
 void Self::load() {
-    auto response = bridge_.call(k__load());
+    auto response = bridge_.call(helper_.load());
 }
 
 std::pair<float, float> Self::getAnchor() const {
@@ -69,7 +67,7 @@ void Self::setPosition(int x, int y) {
 }
 
 std::pair<int, int> Self::getPositionTopLeft() const {
-    auto response = bridge_.call(k__getPosition());
+    auto response = bridge_.call(helper_.getPosition());
     auto json = nlohmann::json::parse(response);
     auto x = json["x"].get<int>();
     auto y = json["y"].get<int>();
@@ -80,11 +78,11 @@ void Self::setPositionTopLeft(int x, int y) {
     nlohmann::json json;
     json["x"] = x;
     json["y"] = y;
-    bridge_.call(k__setPosition(), json.dump());
+    bridge_.call(helper_.setPosition(), json.dump());
 }
 
 std::pair<int, int> Self::getSize() const {
-    auto response = bridge_.call(k__getSize());
+    auto response = bridge_.call(helper_.getSize());
     auto json = nlohmann::json::parse(response);
     auto width = json["width"].get<int>();
     auto height = json["height"].get<int>();
@@ -105,48 +103,16 @@ void Self::setSize(int width, int height) {
     nlohmann::json json;
     json["width"] = width;
     json["height"] = height;
-    bridge_.call(k__setSize(), json.dump());
+    bridge_.call(helper_.setSize(), json.dump());
 }
 
 bool Self::isVisible() const {
-    auto response = bridge_.call(k__isVisible());
+    auto response = bridge_.call(helper_.isVisible());
     return core::toBool(response);
 }
 
 void Self::setVisible(bool visible) {
-    bridge_.call(k__setVisible(), core::toString(visible));
-}
-
-std::string Self::k__isLoaded() const {
-    return prefix_ + "_isLoaded_" + adId_;
-}
-
-std::string Self::k__load() const {
-    return prefix_ + "_load_" + adId_;
-}
-
-std::string Self::k__getPosition() const {
-    return prefix_ + "_getPosition_" + adId_;
-}
-
-std::string Self::k__setPosition() const {
-    return prefix_ + "_setPosition_" + adId_;
-}
-
-std::string Self::k__getSize() const {
-    return prefix_ + "_getSize_" + adId_;
-}
-
-std::string Self::k__setSize() const {
-    return prefix_ + "_setSize_" + adId_;
-}
-
-std::string Self::k__isVisible() const {
-    return prefix_ + "_isVisible_" + adId_;
-}
-
-std::string Self::k__setVisible() const {
-    return prefix_ + "_setVisible_" + adId_;
+    bridge_.call(helper_.setVisible(), core::toString(visible));
 }
 } // namespace ads
 } // namespace ee

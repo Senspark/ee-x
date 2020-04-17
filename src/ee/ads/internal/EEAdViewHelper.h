@@ -12,16 +12,15 @@
 @protocol EEIAdView;
 @protocol EEIMessageBridge;
 
+@class EEMessageHelper;
+
 @interface EEAdViewHelper : NSObject
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          view:(id<EEIAdView> _Nonnull)view
-                       prefix:(NSString* _Nonnull)prefix
-                         adId:(NSString* _Nonnull)adId;
+                       helper:(EEMessageHelper* _Nonnull)helper;
 
 - (void)registerHandlers;
 - (void)deregisterHandlers;
 
 @end
-
-#undef EE_AD_VIEW

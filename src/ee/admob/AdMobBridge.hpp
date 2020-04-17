@@ -21,7 +21,7 @@ class Bridge final {
 public:
     Bridge();
     ~Bridge();
-    
+
     /// Constructs an AdMob bridge with a custom logger.
     explicit Bridge(const Logger& logger);
 
@@ -52,25 +52,21 @@ public:
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId);
 
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& adId);
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
     friend BannerAd;
     friend NativeAd;
     friend InterstitialAd;
-    friend RewardedVideo;
+    friend RewardedAd;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
-    bool destroyRewardedVideo(const std::string& adId);
-
-    bool loading_;
+    bool destroyRewardedAd(const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
 };
 } // namespace admob
 } // namespace ee

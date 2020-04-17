@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
@@ -35,6 +36,8 @@ import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 10/16/17.
@@ -59,13 +62,15 @@ class AdMobNativeAd extends AdListener implements IAdView {
     private String _adId;
     private String _layoutName;
     private Map<String, String> _identifiers;
-    private boolean _isAdLoaded;
-    private AdLoader _adLoader;
-    private FrameLayout _nativeAdPlaceholder;
+    private MessageHelper _messageHelper;
     private AdViewHelper _helper;
     private ViewHelper _viewHelper;
+    private boolean _isLoaded;
+    private AdLoader _ad;
+    private FrameLayout _view;
 
-    public AdMobNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    AdMobNativeAd(@NonNull Context context, @Nullable Activity activity,
+                  @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -73,7 +78,8 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
-        _helper = new AdViewHelper(_bridge, this, "AdMobNativeAd", adId);
+        _messageHelper = new MessageHelper("AdMobNativeAd", adId);
+        _helper = new AdViewHelper(_bridge, this, _messageHelper);
 
         createInternalAd();
         createView();
@@ -91,8 +97,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _activity = null;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void destroy() {
+    void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
         destroyView();
@@ -102,19 +107,8 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _adId = null;
         _layoutName = null;
         _identifiers = null;
+        _messageHelper = null;
         _helper = null;
-    }
-
-    private String kOnLoaded() {
-        return "AdMobNativeAd_onLoaded_" + _adId;
-    }
-
-    private String kOnFailedToLoad() {
-        return "AdMobNativeAd_onFailedToLoad_" + _adId;
-    }
-
-    private String kOnClicked() {
-        return "AdMobNativeAd_onClicked_" + _adId;
     }
 
     private void registerHandlers() {
@@ -127,51 +121,50 @@ class AdMobNativeAd extends AdListener implements IAdView {
         _helper.deregisterHandlers();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public boolean createInternalAd() {
-        if (_adLoader != null) {
+    private boolean createInternalAd() {
+        if (_ad != null) {
             return false;
         }
-        _isAdLoaded = false;
-        _adLoader = new AdLoader.Builder(_context, _adId).forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-            @Override
-            public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAppInstallAd) {
-                _logger.info("onAppInstallAdLoaded");
-                int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
-                UnifiedNativeAdView adView = (UnifiedNativeAdView) LayoutInflater.from(_context).inflate(layoutId, null, false);
-                populateUnifiedNativeAdView(nativeAppInstallAd, adView);
-                _nativeAdPlaceholder.removeAllViews();
+        _isLoaded = false;
+        _ad = new AdLoader.Builder(_context, _adId)
+            .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                @Override
+                public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAppInstallAd) {
+                    _logger.info("onAppInstallAdLoaded");
+                    int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
+                    UnifiedNativeAdView adView = (UnifiedNativeAdView) LayoutInflater.from(_context).inflate(layoutId, null, false);
+                    populateUnifiedNativeAdView(nativeAppInstallAd, adView);
+                    _view.removeAllViews();
 
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                _nativeAdPlaceholder.addView(adView, params);
+                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    _view.addView(adView, params);
 
-                _isAdLoaded = true;
-                _bridge.callCpp(kOnLoaded());
-            }
-        }).withAdListener(this).build();
+                    _isLoaded = true;
+                    _bridge.callCpp(_messageHelper.onLoaded());
+                }
+            }).withAdListener(this).build();
         return true;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public boolean destroyInternalAd() {
-        if (_adLoader == null) {
+    private boolean destroyInternalAd() {
+        if (_ad == null) {
             return false;
         }
-        _isAdLoaded = false;
-        _adLoader = null;
+        _isLoaded = false;
+        _ad = null;
         return true;
     }
 
     private void createView() {
-        assert _nativeAdPlaceholder == null;
+        assertThat(_view).isNull();
         FrameLayout layout = new FrameLayout(_context);
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
         layout.setLayoutParams(params);
 
-        _nativeAdPlaceholder = layout;
-        _viewHelper = new ViewHelper(_nativeAdPlaceholder);
+        _view = layout;
+        _viewHelper = new ViewHelper(_view);
 
         if (_activity != null) {
             addToActivity(_activity);
@@ -180,39 +173,37 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     private void destroyView() {
         Utils.checkMainThread();
-        assert _nativeAdPlaceholder != null;
+        assertThat(_view).isNotNull();
         if (_activity != null) {
             removeFromActivity(_activity);
         }
         _viewHelper = null;
-        _nativeAdPlaceholder = null;
+        _view = null;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.addView(_nativeAdPlaceholder);
+        rootView.addView(_view);
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_nativeAdPlaceholder);
+        rootView.removeView(_view);
     }
 
     @Override
     public boolean isLoaded() {
         Utils.checkMainThread();
-        return _adLoader != null && _isAdLoaded;
+        assertThat(_ad).isNotNull();
+        return _isLoaded;
     }
 
     @Override
     public void load() {
-        if (_adLoader == null) {
-            return;
-        }
+        assertThat(_ad).isNotNull();
         _logger.info("load");
-        _isAdLoaded = false;
         AdRequest.Builder builder = new AdRequest.Builder();
-        _adLoader.loadAd(builder.build());
+        _ad.loadAd(builder.build());
     }
 
     @NonNull
@@ -421,14 +412,14 @@ class AdMobNativeAd extends AdListener implements IAdView {
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-        _bridge.callCpp(kOnFailedToLoad(), String.valueOf(errorCode));
+        _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnClicked());
+        _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
@@ -441,7 +432,11 @@ class AdMobNativeAd extends AdListener implements IAdView {
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        _isAdLoaded = true;
+        // There is one important difference between the way AdListener objects work with native ads
+        // and the way they work with banners and interstitials. Because the AdLoader has its own
+        // format-specific listeners (i.e., UnifiedNativeAd.OnUnifiedNativeAdLoadedListener) to use
+        // when an ad has loaded, the onAdLoaded() method from AdListener is not called when a
+        // native ad loads successfully.
     }
 
     @Override

@@ -6,11 +6,9 @@
 //
 //
 
-#import <ee/ads/internal/EEIInterstitialAd.h>
-
 @protocol EEIMessageBridge;
 
-@interface EEAdMobRewardedVideo : NSObject
+@interface EEAdMobRewardedAd : NSObject
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          adId:(NSString* _Nonnull)adId;

@@ -12,6 +12,7 @@
 #include <functional>
 #include <utility>
 
+#include <ee/CoroutineFwd.hpp>
 #include <ee/core/IObserverManager.hpp>
 
 #include "ee/AdsFwd.hpp"
@@ -19,22 +20,22 @@
 namespace ee {
 namespace ads {
 struct IAdViewObserver {
+    /// Occurs when this ad is loaded.
     std::function<void()> onLoaded;
-    std::function<void()> onFailedToLoad;
+
+    /// Occurs when the user clicks this ad.
     std::function<void()> onClicked;
 };
 
-class IAdView : public virtual ee::IObserverManager<IAdViewObserver> {
+class IAdView : public virtual IObserverManager<IAdViewObserver> {
 public:
-    IAdView() = default;
-
     virtual ~IAdView() = default;
 
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
 
     /// Attempts to load this ad view.
-    virtual void load() = 0;
+    virtual Task<bool> load() = 0;
 
     /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;

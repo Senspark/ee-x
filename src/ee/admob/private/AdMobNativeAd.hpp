@@ -17,16 +17,12 @@
 
 namespace ee {
 namespace admob {
-class NativeAd : public IAdView, public ObserverManager<IAdViewObserver> {
-private:
-    using Self = NativeAd;
-    using Super = IAdView;
-
+class NativeAd final : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     virtual ~NativeAd() override;
 
     virtual bool isLoaded() const override;
-    virtual void load() override;
+    virtual Task<bool> load() override;
 
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
@@ -40,23 +36,24 @@ public:
     virtual bool isVisible() const override;
     virtual void setVisible(bool visible) override;
 
-protected:
+private:
     friend Bridge;
 
     explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
                       Bridge* plugin, const std::string& adId);
 
-private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onClicked();
 
-    bool loading_;
-    std::string adId_;
     IMessageBridge& bridge_;
     const Logger& logger_;
     Bridge* plugin_;
+    std::string adId_;
+    ads::MessageHelper messageHelper_;
     ads::AdViewHelper helper_;
+
+    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
 };
 } // namespace admob
 } // namespace ee

@@ -19,52 +19,47 @@ public:
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);
 
-    /// Creates a rewarded vided with the specifie placement ID.
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& placementId);
+    void setCloseTimeOut(float timeOut);
 
     /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::string& placementId);
+    createInterstitialAd(const std::string& adId);
 
-    void setCloseTimeout(float timeout);
+    /// Creates a rewarded vided with the specifie placement ID.
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
-    friend RewardedVideo;
     friend InterstitialAd;
+    friend RewardedAd;
 
-    bool destroyRewardedVideo(const std::string& placementId);
-    bool destroyInterstitialAd(const std::string& placementId);
+    bool destroyInterstitialAd(const std::string& adId);
+    bool destroyRewardedAd(const std::string& adId);
 
-    bool hasRewardedVideo() const;
-    bool showRewardedVideo(const std::string& placementId);
+    bool hasInterstitialAd() const;
+    void loadInterstitialAd();
+    void showInterstitialAd(const std::string& adId);
 
-    void loadInterstitial();
-    bool hasInterstitial() const;
-    bool showInterstitial(const std::string& placementId);
+    bool hasRewardedAd() const;
+    void showRewardedAd(const std::string& adId);
 
-    void onRewarded(const std::string& placementId);
-    void onFailed();
-    void onOpened();
-    void onClosed();
-    void onRewardClicked();
-    void doRewardAndFinishAds();
+    void onInterstitialAdLoaded();
+    void onInterstitialAdFailedToLoad(const std::string& message);
+    void onInterstitialAdFailedToShow(const std::string& message);
+    void onInterstitialAdClicked();
+    void onInterstitialAdClosed();
 
-    void onInterstitialOpened();
-    void onInterstitialFailed();
-    void onInterstitialClosed();
-    void onInterstitialClicked();
+    void onRewardedAdFailedToShow(const std::string& message);
+    void onRewardedAdClicked();
+    void onRewardedAdClosed(bool rewarded);
+
+    void onMediationAdClosed(bool rewarded);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
-    std::map<std::string, InterstitialAd*> interstitialAds_;
-    std::string placementId_;
 
-    std::unique_ptr<core::SpinLock> handlerLock_;
-
-    float _closeTimeout{1};
-    bool rewarded_{false};
+    /// Share the same ad instance.
+    std::weak_ptr<InterstitialAd> interstitialAd_;
+    std::weak_ptr<RewardedAd> rewardedAd_;
 };
 } // namespace iron_source
 } // namespace ee

@@ -8,17 +8,11 @@
 
 @protocol EEIMessageBridge;
 
-@interface EEFacebookRewardVideoAd : NSObject
+@interface EEFacebookRewardedAd : NSObject
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
-                  placementId:(NSString* _Nonnull)placementId;
+                         adId:(NSString* _Nonnull)adId;
 
 - (void)destroy;
-
-- (BOOL)hasRewardVideo;
-
-- (void)loadRewardedVideo;
-
-- (BOOL)showRewardVideo;
 
 @end

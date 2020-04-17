@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
@@ -24,6 +25,8 @@ import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/9/17.
  */
@@ -34,13 +37,14 @@ class FacebookBannerAd implements AdListener, IAdView {
     private Context _context;
     private Activity _activity;
     private IMessageBridge _bridge;
-    private AdView _adView;
-    private boolean _isAdLoaded;
     private String _adId;
     private AdSize _adSize;
+    private MessageHelper _messageHelper;
     private AdViewHelper _helper;
     private ViewHelper _viewHelper;
     private boolean _customSize;
+    private boolean _isLoaded;
+    private AdView _ad;
 
     static AdSize adSizeFor(int index) {
         if (index == 0) {
@@ -65,7 +69,8 @@ class FacebookBannerAd implements AdListener, IAdView {
         _bridge = MessageBridge.getInstance();
         _adId = adId;
         _adSize = adSize;
-        _helper = new AdViewHelper(_bridge, this, "FacebookBannerAd", _adId);
+        _messageHelper = new MessageHelper("FacebookBannerAd", adId);
+        _helper = new AdViewHelper(_bridge, this, _messageHelper);
 
         createInternalAd();
         registerHandlers();
@@ -90,22 +95,8 @@ class FacebookBannerAd implements AdListener, IAdView {
         _bridge = null;
         _adId = null;
         _adSize = null;
+        _messageHelper = null;
         _helper = null;
-    }
-
-    @NonNull
-    private String kOnLoaded() {
-        return "FacebookBannerAd_onLoaded_" + _adId;
-    }
-
-    @NonNull
-    private String kOnFailedToLoad() {
-        return "FacebookBannerAd_onFailedToLoad_" + _adId;
-    }
-
-    @NonNull
-    private String kOnClicked() {
-        return "FacebookBannerAd_onClicked_" + _adId;
     }
 
     private void registerHandlers() {
@@ -120,19 +111,19 @@ class FacebookBannerAd implements AdListener, IAdView {
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_adView != null) {
+        if (_ad != null) {
             return false;
         }
         _customSize = false;
-        _isAdLoaded = false;
-        AdView adView = new AdView(_context, _adId, _adSize);
-        adView.setAdListener(this);
-        _adView = adView;
+        _isLoaded = false;
+        _ad = new AdView(_context, _adId, _adSize);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
-        _adView.setLayoutParams(params);
-        _viewHelper = new ViewHelper(_adView);
+        _ad.setLayoutParams(params);
+        _viewHelper = new ViewHelper(_ad);
 
         if (_activity != null) {
             addToActivity(_activity);
@@ -142,43 +133,42 @@ class FacebookBannerAd implements AdListener, IAdView {
 
     private boolean destroyInternalAd() {
         Utils.checkMainThread();
-        if (_adView == null) {
+        if (_ad == null) {
             return false;
         }
         _customSize = false;
-        _isAdLoaded = false;
+        _isLoaded = false;
         if (_activity != null) {
             removeFromActivity(_activity);
         }
         _viewHelper = null;
-        _adView.destroy();
-        _adView = null;
+        _ad.destroy();
+        _ad = null;
         return true;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.addView(_adView);
+        rootView.addView(_ad);
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_adView);
+        rootView.removeView(_ad);
     }
 
     @Override
     public boolean isLoaded() {
         Utils.checkMainThread();
-        return _adView != null && _isAdLoaded;
+        assertThat(_ad).isNotNull();
+        return _isLoaded;
     }
 
     @Override
     public void load() {
         Utils.checkMainThread();
-        if (_adView == null) {
-            return;
-        }
-        _adView.loadAd();
+        assertThat(_ad).isNotNull();
+        _ad.loadAd(_ad.buildLoadAdConfig().withAdListener(this).build());
     }
 
     @NonNull
@@ -218,7 +208,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void setVisible(boolean visible) {
         _viewHelper.setVisible(visible);
         if (visible) {
-            _adView.setBackgroundColor(Color.BLACK);
+            _ad.setBackgroundColor(Color.BLACK);
         }
     }
 
@@ -226,22 +216,22 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(_messageHelper.onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        _isAdLoaded = true;
-        _bridge.callCpp(kOnLoaded());
+        _isLoaded = true;
+        _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnClicked());
+        _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override

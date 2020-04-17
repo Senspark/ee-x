@@ -4,10 +4,8 @@
 
 - (void)initialize:(NSString* _Nonnull)gameId;
 
-- (void)loadVideoAd:(NSString* _Nonnull)placementId;
-
-- (BOOL)hasRewardedVideo:(NSString* _Nonnull)placementId;
-
-- (BOOL)showRewardedVideo:(NSString* _Nonnull)placementId;
+- (BOOL)hasRewardedAd:(NSString* _Nonnull)adId;
+- (void)loadRewardedAd:(NSString* _Nonnull)adId;
+- (void)showRewardedAd:(NSString* _Nonnull)adId;
 
 @end

@@ -70,13 +70,13 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
         _placementId = placementId;
 
         createInternalVideo();
-
         registerHandlers();
     }
 
     void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        destroyInternalVideo();
 
         _context = null;
         _placementId = null;

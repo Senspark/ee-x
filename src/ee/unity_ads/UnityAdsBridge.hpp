@@ -21,7 +21,7 @@ class Bridge final {
 public:
     Bridge();
     ~Bridge();
-    
+
     explicit Bridge(const Logger& logger);
 
     /// Initializes Unity Ads.
@@ -32,36 +32,41 @@ public:
     /// Sets debug mode enabled.
     void setDebugModeEnabled(bool enabled);
 
-    /// Creates a rewarded video with the specified placement ID.
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& placementId);
-
     /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::string& placementId);
+    createInterstitialAd(const std::string& adId);
+
+    /// Creates a rewarded video with the specified placement ID.
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
-    friend RewardedVideo;
     friend InterstitialAd;
+    friend RewardedAd;
 
-    bool destroyRewardedVideo(const std::string& placementId);
-    bool destroyInterstitialAd(const std::string& placementId);
+    bool destroyInterstitialAd(const std::string& adId);
+    bool destroyRewardedAd(const std::string& adId);
 
-    bool isRewardedVideoReady(const std::string& placementId) const;
-    bool showRewardedVideo(const std::string& placementId);
+    bool hasRewardedAd(const std::string& adId) const;
+    void showRewardedAd(const std::string& adId);
 
-    void onError(const std::string& placementId);
-    void onSkipped(const std::string& placementId);
-    void onFinished(const std::string& placementId);
-    void finish(const std::string& placementId, bool result);
+    void onFailedToShow(const std::string& adId, const std::string& message);
+    void onClosed(const std::string& adId, bool rewarded);
 
-    bool errored_;
-    bool displayed_;
+    void onMediationAdFailedToShow(const std::string& adId,
+                                   const std::string& message);
+    void onMediationAdClosed(const std::string& adId, bool rewarded);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
-    std::map<std::string, InterstitialAd*> interstitialAds_;
+
+    bool displaying_;
+
+    /// Currently displaying ad ID.
+    std::string adId_;
+
+    /// Unity only has rewarded ads.
+    std::map<std::string, std::weak_ptr<InterstitialAd>> interstitialAds_;
+    std::map<std::string, std::weak_ptr<RewardedAd>> rewardedAds_;
 };
 } // namespace unity_ads
 } // namespace ee

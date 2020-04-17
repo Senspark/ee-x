@@ -9,6 +9,7 @@
 #include "ee/ads/MultiAdView.hpp"
 
 #include <ee/core/ObserverHandle.hpp>
+#include <ee/coroutine/Task.hpp>
 
 namespace ee {
 namespace ads {
@@ -64,15 +65,6 @@ Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
                         }
                     });
                 },
-            .onFailedToLoad =
-                [this] {
-                    // Propagation.
-                    dispatchEvent([](auto&& observer) {
-                        if (observer.onFailedToLoad) {
-                            observer.onFailedToLoad();
-                        }
-                    });
-                },
             .onClicked =
                 [this] {
                     // Propagation.
@@ -90,7 +82,8 @@ bool Self::isLoaded() const {
     return not loadedItems_.empty();
 }
 
-void Self::load() {
+Task<bool> Self::load() {
+    bool result = false;
     for (auto&& item : items_) {
         if (item == activeItem_ && visible_) {
             // Ignore displaying item.
@@ -98,9 +91,12 @@ void Self::load() {
         }
         if (loadedItems_.count(item) == 0) {
             // Force old views to load.
-            item->load();
+            if (co_await item->load()) {
+                result = true;
+            }
         }
     }
+    co_return result;
 }
 
 std::pair<float, float> Self::getAnchor() const {

@@ -12,31 +12,35 @@
 #include <string>
 
 #include <ee/ads/IInterstitialAd.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {
-class InterstitialAd : public IInterstitialAd {
+class InterstitialAd : public IInterstitialAd,
+                       public ee::ObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 
     virtual bool isLoaded() const override;
-
-    virtual void load() override;
-
-    virtual bool show() override;
-
-protected:
-    explicit InterstitialAd(const Logger& logger, Bridge* plugin,
-                            const std::string& placementId);
+    virtual Task<bool> load() override;
+    virtual Task<bool> show() override;
 
 private:
     friend Bridge;
 
+    explicit InterstitialAd(const Logger& logger, Bridge* plugin,
+                            const std::string& adId);
+
+    void onFailedToShow(const std::string& message);
+    void onClosed();
+
     const Logger& logger_;
     Bridge* plugin_;
-    std::string placementId_;
+    std::string adId_;
+
+    std::unique_ptr<ads::AsyncHelper<bool>> displayer_;
 };
 } // namespace unity_ads
 } // namespace ee

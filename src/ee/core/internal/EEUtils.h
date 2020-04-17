@@ -32,7 +32,9 @@
 + (BOOL)toBool:(NSString* _Nonnull)value;
 
 + (BOOL)isMainThread;
-+ (BOOL)runOnMainThread;
++ (BOOL)runOnMainThread:(void (^_Nonnull)(void))callback;
++ (void)runOnMainThreadDelayed:(float)seconds
+                      callback:(void (^_Nonnull)(void))callback;
 
 + (NSString* _Nonnull)getVersionName;
 + (NSString* _Nonnull)getVersionCode;

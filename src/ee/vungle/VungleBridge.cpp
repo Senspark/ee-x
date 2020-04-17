@@ -2,14 +2,14 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/NullRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
 
-#include "ee/vungle/private/VungleRewardedVideo.hpp"
+#include "ee/vungle/private/VungleRewardedAd.hpp"
 
 namespace ee {
 namespace vungle {
@@ -17,13 +17,18 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize        = "Vungle_initialize";
-constexpr auto k__hasRewardedVideo  = "Vungle_hasRewardedVideo";
-constexpr auto k__showRewardedVideo = "Vungle_showRewardedVideo";
-constexpr auto k__loadVideoAd       = "Vungle_loadVideoAd";
-constexpr auto k__onStart           = "Vungle_onStart";
-constexpr auto k__onEnd             = "Vungle_onEnd";
-constexpr auto k__onUnavailable     = "Vungle_onUnavailable";
+const std::string kPrefix    = "Vungle";
+
+const auto k__initialize     = kPrefix + "_initialize";
+
+const auto k__hasRewardedAd  = kPrefix + "_hasRewardedAd";
+const auto k__loadRewardedAd = kPrefix + "_loadRewardedAd";
+const auto k__showRewardedAd = kPrefix + "_showRewardedAd";
+
+const auto k__onLoaded       = kPrefix + "_onLoaded";
+const auto k__onFailedToLoad = kPrefix + "_onFailedToLoad";
+const auto k__onFailedToShow = kPrefix + "_onFailedToShow";
+const auto k__onClosed       = kPrefix + "_onClosed";
 // clang-format on
 } // namespace
 
@@ -34,109 +39,142 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);
-    errored_ = false;
-
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onStart();
+            auto json = nlohmann::json::parse(message);
+            onLoaded(json["ad_id"]);
             return "";
         },
-        k__onStart);
+        k__onLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onEnd(core::toBool(message));
+            auto json = nlohmann::json::parse(message);
+            onFailedToLoad(json["ad_id"], json["message"]);
             return "";
         },
-        k__onEnd);
+        k__onFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onUnavailable();
+            auto json = nlohmann::json::parse(message);
+            onFailedToShow(json["ad_id"], json["message"]);
             return "";
         },
-        k__onUnavailable);
+        k__onFailedToShow);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onClosed(json["ad_id"], json["rewarded"]);
+            return "";
+        },
+        k__onClosed);
 }
 
 Self::~Bridge() {
     logger_.debug(__PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onStart);
-    bridge_.deregisterHandler(k__onEnd);
-    bridge_.deregisterHandler(k__onUnavailable);
+    bridge_.deregisterHandler(k__onLoaded);
+    bridge_.deregisterHandler(k__onFailedToLoad);
+    bridge_.deregisterHandler(k__onFailedToShow);
+    bridge_.deregisterHandler(k__onClosed);
 }
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-
     nlohmann::json json;
     json["gameId"] = gameId;
     bridge_.call(k__initialize, json.dump());
 }
 
-void Self::initialize(const std::string& gameId,
-                      const std::string& placementId) {
+void Self::initialize(const std::string& gameId, const std::string& adId) {
     initialize(gameId);
 }
 
-std::shared_ptr<IRewardedVideo>
-Self::createRewardedVideo(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (rewardedVideos_.count(placementId) != 0) {
-        return core::makeShared<NullRewardedVideo>(logger_);
+std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = rewardedAds_.find(adId);
+    if (iter == rewardedAds_.cend()) {
+        auto ad =
+            std::shared_ptr<RewardedAd>(new RewardedAd(logger_, this, adId));
+        iter = rewardedAds_.emplace(adId, ad).first;
     }
-    auto result = new RewardedVideo(logger_, this, placementId);
-    rewardedVideos_[placementId] = result;
-    return std::shared_ptr<IRewardedVideo>(result);
+    return iter->second.lock();
 }
 
-bool Self::destroyRewardedVideo(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (rewardedVideos_.count(placementId) == 0) {
+bool Self::destroyRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = rewardedAds_.find(adId);
+    if (iter == rewardedAds_.cend()) {
         return false;
     }
-    rewardedVideos_.erase(placementId);
+    rewardedAds_.erase(iter);
     return true;
 }
 
-void Self::loadVideoAd(const std::string& placementId) const {
-    logger_.debug("%s: load placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    bridge_.call(k__loadVideoAd, placementId);
-}
-
-bool Self::hasRewardedVideo(const std::string& placementId) const {
-    auto result = bridge_.call(k__hasRewardedVideo, placementId);
+bool Self::hasRewardedAd(const std::string& adId) const {
+    auto result = bridge_.call(k__hasRewardedAd, adId);
     return core::toBool(result);
 }
 
-bool Self::showRewardedVideo(const std::string& placementId) {
-    if (not hasRewardedVideo(placementId)) {
-        return false;
-    }
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    errored_ = false;
-    auto response = bridge_.call(k__showRewardedVideo, placementId);
-    return not errored_ && core::toBool(response);
+void Self::loadRewardedAd(const std::string& adId) const {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    bridge_.call(k__loadRewardedAd, adId);
 }
 
-void Self::onStart() {
+void Self::showRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    bridge_.call(k__showRewardedAd, adId);
+}
+
+void Self::onLoaded(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
+    auto iter = rewardedAds_.find(adId);
+    if (iter != rewardedAds_.cend()) {
+        iter->second.lock()->onLoaded();
+    } else {
+        // Mediation.
+        assert(false);
+    }
 }
 
-void Self::onEnd(bool wasSuccessfulView) {
+void Self::onFailedToLoad(const std::string& adId, const std::string& message) {
+    logger_.debug(__PRETTY_FUNCTION__);
+    auto iter = rewardedAds_.find(adId);
+    if (iter != rewardedAds_.cend()) {
+        iter->second.lock()->onFailedToLoad(message);
+    } else {
+        // Mediation.
+        assert(false);
+    }
+}
+
+void Self::onFailedToShow(const std::string& adId, const std::string& message) {
+    logger_.debug(__PRETTY_FUNCTION__);
+    auto iter = rewardedAds_.find(adId);
+    if (iter != rewardedAds_.cend()) {
+        iter->second.lock()->onFailedToShow(message);
+    } else {
+        // Mediation.
+        assert(false);
+    }
+}
+
+void Self::onClosed(const std::string& adId, bool rewarded) {
+    logger_.debug(__PRETTY_FUNCTION__);
+    auto iter = rewardedAds_.find(adId);
+    if (iter != rewardedAds_.cend()) {
+        iter->second.lock()->onClosed(rewarded);
+    } else {
+        // Mediation.
+        assert(false);
+        onMediationAdClosed(adId, rewarded);
+    }
+}
+
+void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
     logger_.debug("%s: %s", __PRETTY_FUNCTION__,
-                  core::toString(wasSuccessfulView).c_str());
+                  core::toString(rewarded).c_str());
     auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.finishRewardedVideo(wasSuccessfulView);
+    auto successful = mediation.finishRewardedVideo(rewarded);
     assert(successful);
-}
-
-void Self::onUnavailable() {
-    logger_.debug(__PRETTY_FUNCTION__);
-    if (not errored_) {
-        errored_ = true;
-    }
 }
 } // namespace vungle
 } // namespace ee

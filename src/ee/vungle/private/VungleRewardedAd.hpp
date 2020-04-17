@@ -1,0 +1,51 @@
+//
+//  VungleRewardedVideo.hpp
+//  ee_x
+//
+//  Created by Zinge on 10/10/17.
+//
+//
+
+#ifndef EE_X_VUNGLE_REWARDED_AD_HPP
+#define EE_X_VUNGLE_REWARDED_AD_HPP
+
+#include <string>
+
+#include <ee/ads/IRewardedAd.hpp>
+#include <ee/core/ObserverManager.hpp>
+
+#include "ee/VungleFwd.hpp"
+
+namespace ee {
+namespace vungle {
+class RewardedAd : public IRewardedVideo,
+                   public ObserverManager<IRewardedAdObserver> {
+public:
+    virtual ~RewardedAd() override;
+
+    virtual bool isLoaded() const override;
+    virtual Task<bool> load() override;
+    virtual Task<IRewardedAdResult> show() override;
+
+private:
+    friend Bridge;
+
+    explicit RewardedAd(const Logger& logger, Bridge* plugin,
+                        const std::string& adId);
+
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+    void onFailedToShow(const std::string& message);
+    void onClosed(bool rewarded);
+
+    const Logger& logger_;
+    Bridge* plugin_;
+    std::string adId_;
+
+    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
+    std::unique_ptr<ads::AsyncHelper<IRewardedAdResult>> displayer_;
+};
+} // namespace vungle
+} // namespace ee
+
+#endif /* EE_X_VUNGLE_REWARDED_AD_HPP */

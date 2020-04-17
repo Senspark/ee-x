@@ -11,23 +11,24 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
-@interface EEAdMobBannerAd () <GADBannerViewDelegate> {
-    id<EEIMessageBridge> bridge_;
-    BOOL isLoaded_;
-    GADBannerView* bannerView_;
-    GADAdSize adSize_;
-    NSString* adId_;
-    EEAdViewHelper* helper_;
-    EEViewHelper* viewHelper_;
-}
-
+@interface EEAdMobBannerAd () <GADBannerViewDelegate>
 @end
 
-@implementation EEAdMobBannerAd
+@implementation EEAdMobBannerAd {
+    id<EEIMessageBridge> bridge_;
+    NSString* adId_;
+    GADAdSize adSize_;
+    EEMessageHelper* messageHelper_;
+    EEAdViewHelper* helper_;
+    EEViewHelper* viewHelper_;
+    BOOL isLoaded_;
+    GADBannerView* ad_;
+}
 
 + (GADAdSize)adSizeFor:(int)index {
     if (index == 0) {
@@ -58,11 +59,11 @@
     bridge_ = bridge;
     adId_ = [adId copy];
     adSize_ = adSize;
+    messageHelper_ =
+        [[EEMessageHelper alloc] initWithPrefix:@"AdMobBannerAd" adId:adId];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
-                                              prefix:@"AdMobBannerAd"
-                                                adId:adId];
-
+                                              helper:messageHelper_];
     [self createInternalAd];
     [self registerHandlers];
     return self;
@@ -74,24 +75,14 @@
 
     [adId_ release];
     adId_ = nil;
+    [messageHelper_ release];
+    messageHelper_ = nil;
     [helper_ release];
     helper_ = nil;
 }
 
 - (void)dealloc {
     [super dealloc];
-}
-
-- (NSString* _Nonnull)k__onLoaded {
-    return [@"AdMobBannerAd_onLoaded_" stringByAppendingString:adId_];
-}
-
-- (NSString* _Nonnull)k__onFailedToLoad {
-    return [@"AdMobBannerAd_onFailedToLoad_" stringByAppendingString:adId_];
-}
-
-- (NSString* _Nonnull)k__onClicked {
-    return [@"AdMobBannerAd_onClicked_" stringByAppendingString:adId_];
 }
 
 - (void)registerHandlers {
@@ -103,52 +94,48 @@
 }
 
 - (BOOL)createInternalAd {
-    if (bannerView_ != nil) {
+    if (ad_ != nil) {
         return NO;
     }
     isLoaded_ = NO;
 
-    GADBannerView* bannerView =
+    GADBannerView* ad =
         [[[GADBannerView alloc] initWithAdSize:adSize_] autorelease];
-    [bannerView setAdUnitID:adId_];
-    [bannerView setDelegate:self];
+    [ad setAdUnitID:adId_];
+    [ad setDelegate:self];
 
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [bannerView setRootViewController:rootView];
-    [[rootView view] addSubview:bannerView];
+    [ad setRootViewController:rootView];
+    [[rootView view] addSubview:ad];
 
-    bannerView_ = [bannerView retain];
-    viewHelper_ = [[EEViewHelper alloc] initWithView:bannerView_];
+    ad_ = [ad retain];
+    viewHelper_ = [[EEViewHelper alloc] initWithView:ad_];
     return YES;
 }
 
 - (BOOL)destroyInternalAd {
-    if (bannerView_ == nil) {
+    if (ad_ == nil) {
         return NO;
     }
     isLoaded_ = NO;
     [viewHelper_ release];
     viewHelper_ = nil;
-    [bannerView_ setDelegate:nil];
-    [bannerView_ removeFromSuperview];
-    [bannerView_ release];
-    bannerView_ = nil;
+    [ad_ setDelegate:nil];
+    [ad_ removeFromSuperview];
+    [ad_ release];
+    ad_ = nil;
     return YES;
 }
 
 - (BOOL)isLoaded {
-    if (bannerView_ == nil) {
-        return NO;
-    }
+    NSAssert(ad_ != nil, @"");
     return isLoaded_;
 }
 
 - (void)load {
-    if (bannerView_ == nil) {
-        return;
-    }
+    NSAssert(ad_ != nil, @"");
     GADRequest* request = [GADRequest request];
-    [bannerView_ loadRequest:request];
+    [ad_ loadRequest:request];
 }
 
 - (CGPoint)getPosition {
@@ -177,36 +164,38 @@
 
 - (void)adViewDidReceiveAd:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(bannerView_ == bannerView, @"");
-    [bridge_ callCpp:[self k__onLoaded]];
+    NSAssert(ad_ == bannerView, @"");
+    isLoaded_ = YES;
+    [bridge_ callCpp:[messageHelper_ onLoaded]];
 }
 
 - (void)adView:(GADBannerView*)bannerView
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    NSAssert(bannerView_ == bannerView, @"");
-    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
+    NSAssert(ad_ == bannerView, @"");
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(bannerView_ == bannerView, @"");
+    NSAssert(ad_ == bannerView, @"");
 }
 
 - (void)adViewWillDismissScreen:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(bannerView_ == bannerView, @"");
+    NSAssert(ad_ == bannerView, @"");
 }
 
 - (void)adViewDidDismissScreen:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(bannerView_ == bannerView, @"");
+    NSAssert(ad_ == bannerView, @"");
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView*)bannerView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(bannerView_ == bannerView, @"");
-    [bridge_ callCpp:[self k__onClicked]];
+    NSAssert(ad_ == bannerView, @"");
+    [bridge_ callCpp:[messageHelper_ onClicked]];
 }
 
 @end

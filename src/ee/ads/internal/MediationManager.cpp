@@ -12,7 +12,7 @@
 #include <mutex>
 
 #include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
+#include "ee/ads/IRewardedAd.hpp"
 
 namespace ee {
 namespace ads {

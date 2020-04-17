@@ -17,43 +17,42 @@
 #import "ee/admob/private/EEAdMobBannerAd.h"
 #import "ee/admob/private/EEAdMobInterstitialAd.h"
 #import "ee/admob/private/EEAdMobNativeAd.h"
-#import "ee/admob/private/EEAdMobRewardedVideo.h"
+#import "ee/admob/private/EEAdMobRewardedAd.h"
 
-@interface EEAdMob () {
-    id<EEIMessageBridge> bridge_;
-    NSMutableArray<NSString*>* testDevices_;
-    NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
-    NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
-    NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
-    NSMutableDictionary<NSString*, EEAdMobRewardedVideo*>* rewardVideoAds_;
-}
-
-@end
-
-@implementation EEAdMob
+#define kPrefix @"AdMob"
 
 // clang-format off
-static NSString* const k__initialize                = @"AdMob_initialize";
+static NSString* const k__initialize                = kPrefix "_initialize";
+static NSString* const k__getEmulatorTestDeviceHash = kPrefix "_getEmulatorTestDeviceHash";
+static NSString* const k__addTestDevice             = kPrefix "_addTestDevice";
 
-static NSString* const k__getEmulatorTestDeviceHash = @"AdMob_getEmulatorTestDeviceHash";
-static NSString* const k__addTestDevice             = @"AdMob_addTestDevice";
+static NSString* const k__createBannerAd            = kPrefix "_createBannerAd";
+static NSString* const k__destroyBannerAd           = kPrefix "_destroyBannerAd";
 
-static NSString* const k__createBannerAd            = @"AdMob_createBannerAd";
-static NSString* const k__destroyBannerAd           = @"AdMob_destroyBannerAd";
+static NSString* const k__createNativeAd            = kPrefix "_createNativeAd";
+static NSString* const k__destroyNativeAd           = kPrefix "_destroyNativeAd";
 
-static NSString* const k__createNativeAd            = @"AdMob_createNativeAd";
-static NSString* const k__destroyNativeAd           = @"AdMob_destroyNativeAd";
+static NSString* const k__createInterstitialAd      = kPrefix "_createInterstitialAd";
+static NSString* const k__destroyInterstitialAd     = kPrefix "_destroyInterstitialAd";
 
-static NSString* const k__createInterstitialAd      = @"AdMob_createInterstitialAd";
-static NSString* const k__destroyInterstitialAd     = @"AdMob_destroyInterstitialAd";
-
-static NSString* const k__createRewardVideoAd       = @"AdMob_createRewardVideoAd";
-static NSString* const k__destroyRewardVideoAd      = @"AdMob_destroyRewardVideoAd";
+static NSString* const k__createRewardedAd          = kPrefix "_createRewardedAd";
+static NSString* const k__destroyRewardedAd         = kPrefix "_destroyRewardedAd";
 
 static NSString* const k__ad_id                 = @"ad_id";
 static NSString* const k__ad_size               = @"ad_size";
 static NSString* const k__layout_name           = @"layout_name";
 // clang-format on
+
+#undef kPrefix
+
+@implementation EEAdMob {
+    id<EEIMessageBridge> bridge_;
+    NSMutableArray<NSString*>* testDevices_;
+    NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
+    NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
+    NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
+    NSMutableDictionary<NSString*, EEAdMobRewardedAd*>* rewardedAds_;
+}
 
 - (id)init {
     self = [super init];
@@ -65,7 +64,7 @@ static NSString* const k__layout_name           = @"layout_name";
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
-    rewardVideoAds_ = [[NSMutableDictionary alloc] init];
+    rewardedAds_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;
 }
@@ -80,8 +79,8 @@ static NSString* const k__layout_name           = @"layout_name";
     nativeAds_ = nil;
     [interstitialAds_ release];
     interstitialAds_ = nil;
-    [rewardVideoAds_ release];
-    rewardVideoAds_ = nil;
+    [rewardedAds_ release];
+    rewardedAds_ = nil;
     [super dealloc];
 }
 
@@ -157,28 +156,33 @@ static NSString* const k__layout_name           = @"layout_name";
                             toString:[self destroyInterstitialAd:placementId]];
                     }];
 
-    [bridge_ registerHandler:k__createRewardVideoAd
+    [bridge_ registerHandler:k__createRewardedAd
                     callback:^(NSString* message) {
                         NSString* placementId = message;
                         return [EEUtils
-                            toString:[self createRewardVideoAd:placementId]];
+                            toString:[self createRewardedAd:placementId]];
                     }];
 
-    [bridge_ registerHandler:k__destroyRewardVideoAd
+    [bridge_ registerHandler:k__destroyRewardedAd
                     callback:^(NSString* message) {
                         NSString* placementId = message;
                         return [EEUtils
-                            toString:[self destroyRewardVideoAd:placementId]];
+                            toString:[self destroyRewardedAd:placementId]];
                     }];
 }
 
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:k__initialize];
+    [bridge_ deregisterHandler:k__getEmulatorTestDeviceHash];
     [bridge_ deregisterHandler:k__addTestDevice];
     [bridge_ deregisterHandler:k__createBannerAd];
     [bridge_ deregisterHandler:k__destroyBannerAd];
+    [bridge_ deregisterHandler:k__createNativeAd];
+    [bridge_ deregisterHandler:k__destroyNativeAd];
     [bridge_ deregisterHandler:k__createInterstitialAd];
     [bridge_ deregisterHandler:k__destroyInterstitialAd];
+    [bridge_ deregisterHandler:k__createRewardedAd];
+    [bridge_ deregisterHandler:k__destroyRewardedAd];
 }
 
 - (void)initialize:(NSString* _Nonnull)applicationId {
@@ -262,41 +266,25 @@ static NSString* const k__layout_name           = @"layout_name";
     return YES;
 }
 
-- (BOOL)createRewardVideoAd:(NSString* _Nonnull)adId {
+- (BOOL)createRewardedAd:(NSString* _Nonnull)adId {
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEAdMobRewardedVideo* ad =
-        [[[EEAdMobRewardedVideo alloc] initWithBridge:bridge_ adId:adId]
+    EEAdMobRewardedAd* ad =
+        [[[EEAdMobRewardedAd alloc] initWithBridge:bridge_ adId:adId]
             autorelease];
-    [rewardVideoAds_ setObject:ad forKey:adId];
+    [rewardedAds_ setObject:ad forKey:adId];
     return YES;
 }
 
-- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)adId {
-    if ([rewardVideoAds_ objectForKey:adId] == nil) {
+- (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId {
+    if ([rewardedAds_ objectForKey:adId] == nil) {
         return NO;
     }
-    EEAdMobRewardedVideo* ad = [rewardVideoAds_ objectForKey:adId];
+    EEAdMobRewardedAd* ad = [rewardedAds_ objectForKey:adId];
     [ad destroy];
-    [rewardVideoAds_ removeObjectForKey:adId];
+    [rewardedAds_ removeObjectForKey:adId];
     return YES;
-}
-
-- (bool)hasRewardedVideo {
-    return [[GADRewardBasedVideoAd sharedInstance] isReady];
-}
-
-- (void)loadRewardedVideo:(NSString* _Nonnull)adId {
-    GADRequest* request = [GADRequest request];
-    [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
-                                           withAdUnitID:adId];
-}
-
-- (void)showRewardedVideo {
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [[GADRewardBasedVideoAd sharedInstance]
-        presentFromRootViewController:rootView];
 }
 
 @end

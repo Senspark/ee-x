@@ -12,7 +12,7 @@
 
 #include <ee/ads/NullAdView.hpp>
 #include <ee/ads/NullInterstitialAd.hpp>
-#include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/NullRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
@@ -23,7 +23,7 @@
 #include "ee/admob/private/AdMobBannerAd.hpp"
 #include "ee/admob/private/AdMobInterstitialAd.hpp"
 #include "ee/admob/private/AdMobNativeAd.hpp"
-#include "ee/admob/private/AdMobRewardedVideo.hpp"
+#include "ee/admob/private/AdMobRewardedAd.hpp"
 
 namespace ee {
 namespace admob {
@@ -31,22 +31,24 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize                = "AdMob_initialize";
+const std::string kPrefix               = "AdMob";
+
+const auto k__initialize                = kPrefix + "_initialize";
     
-constexpr auto k__getEmulatorTestDeviceHash = "AdMob_getEmulatorTestDeviceHash";
-constexpr auto k__addTestDevice             = "AdMob_addTestDevice";
+const auto k__getEmulatorTestDeviceHash = kPrefix + "_getEmulatorTestDeviceHash";
+const auto k__addTestDevice             = kPrefix + "_addTestDevice";
     
-constexpr auto k__createBannerAd            = "AdMob_createBannerAd";
-constexpr auto k__destroyBannerAd           = "AdMob_destroyBannerAd";
+const auto k__createBannerAd            = kPrefix + "_createBannerAd";
+const auto k__destroyBannerAd           = kPrefix + "_destroyBannerAd";
 
-constexpr auto k__createNativeAd            = "AdMob_createNativeAd";
-constexpr auto k__destroyNativeAd           = "AdMob_destroyNativeAd";
+const auto k__createNativeAd            = kPrefix + "_createNativeAd";
+const auto k__destroyNativeAd           = kPrefix + "_destroyNativeAd";
 
-constexpr auto k__createInterstitialAd      = "AdMob_createInterstitialAd";
-constexpr auto k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
+const auto k__createInterstitialAd      = kPrefix + "_createInterstitialAd";
+const auto k__destroyInterstitialAd     = kPrefix + "_destroyInterstitialAd";
 
-constexpr auto k__createRewardVideoAd       = "AdMob_createRewardVideoAd";
-constexpr auto k__destroyRewardVideoAd      = "AdMob_destroyRewardVideoAd";
+const auto k__createRewardedAd          = kPrefix + "_createRewardedAd";
+const auto k__destroyRewardedAd         = kPrefix + "_destroyRewardedAd";
 // clang-format on
 } // namespace
 
@@ -66,7 +68,6 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    loading_ = false;
 }
 
 Self::~Bridge() {
@@ -96,7 +97,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::shared_ptr<IAdView>(new BannerAd(bridge_, this, adId));
+    return std::shared_ptr<IAdView>(new BannerAd(bridge_, logger_, this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
@@ -144,26 +145,19 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     return core::toBool(response);
 }
 
-std::shared_ptr<IRewardedVideo>
-Self::createRewardedVideo(const std::string& adId) {
+std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto response = bridge_.call(k__createRewardVideoAd, adId);
+    auto response = bridge_.call(k__createRewardedAd, adId);
     if (not core::toBool(response)) {
-        return core::makeShared<NullRewardedVideo>(logger_);
+        return core::makeShared<NullRewardedAd>();
     }
-
-    auto result = new RewardedVideo(bridge_, logger_, this, adId);
-    rewardedVideos_[adId] = result;
-    return std::shared_ptr<IRewardedVideo>(result);
+    return std::shared_ptr<IRewardedAd>(
+        new RewardedAd(bridge_, logger_, this, adId));
 }
 
-bool Self::destroyRewardedVideo(const std::string& adId) {
+bool Self::destroyRewardedAd(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedVideos_.count(adId) != 0) {
-        rewardedVideos_.erase(adId);
-    }
-
-    auto&& response = bridge_.call(k__destroyRewardVideoAd, adId);
+    auto&& response = bridge_.call(k__destroyRewardedAd, adId);
     return core::toBool(response);
 }
 } // namespace admob

@@ -5,16 +5,15 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/ads/NullInterstitialAd.hpp>
-#include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/NullRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
-#include <ee/core/internal/SpinLock.hpp>
 
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
-#include "ee/iron_source/private/IronSourceRewardedVideo.hpp"
+#include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
 namespace ee {
 namespace iron_source {
@@ -22,23 +21,24 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__initialize        = "IronSource_initialize";
-constexpr auto k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
-constexpr auto k__showRewardedVideo = "IronSource_showRewardedVideo";
-    
-constexpr auto k__loadInterstitial  = "IronSource_loadInterstitial";
-constexpr auto k__hasInterstitial   = "IronSource_hasInterstitial";
-constexpr auto k__showInterstitial  = "IronSource_showInterstitial";
-constexpr auto k__onRewarded        = "IronSource_onRewarded";
-constexpr auto k__onFailed          = "IronSource_onFailed";
-constexpr auto k__onOpened          = "IronSource_onOpened";
-constexpr auto k__onClosed          = "IronSource_onClosed";
-constexpr auto k__onRewardClicked   = "IronSource_onRewardClicked";
-    
-constexpr auto k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
-constexpr auto k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
-constexpr auto k__onInterstitialClosed  = "IronSource_onInterstitialClosed";
-constexpr auto k__onInterstitialClicked = "IronSource_onInterstitialClicked";
+const std::string kPrefix                  = "IronSource";
+
+const auto k__initialize                   = kPrefix + "_initialize";
+
+const auto k__hasInterstitialAd            = kPrefix + "_hasInterstitialAd";
+const auto k__loadInterstitialAd           = kPrefix + "_loadInterstitialAd";
+const auto k__showInterstitialAd           = kPrefix + "_showInterstitialAd";
+
+const auto k__hasRewardedAd                = kPrefix + "_hasRewardedAd";
+const auto k__showRewardedAd               = kPrefix + "_showRewardedAd";
+
+const auto k__onInterstitialAdLoaded       = kPrefix + "_onInterstitialAdLoaded";
+const auto k__onInterstitialAdFailedToLoad = kPrefix + "_onInterstitialAdFailedToLoad";
+const auto k__onInterstitialAdClicked      = kPrefix + "_onInterstitialAdClicked";
+const auto k__onInterstitialAdClosed       = kPrefix + "_onInterstitialAdClosed";
+
+const auto k__onRewardedAdClicked = kPrefix + "_onRewardedAdClicked";
+const auto k__onRewardedAdClosed  = kPrefix + "_onRewardedAdClosed";
 // clang-format on
 } // namespace
 
@@ -47,86 +47,58 @@ Self::Bridge()
 
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , logger_(logger)
-    , _closeTimeout(0.0f) {
+    , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    rewarded_ = false;
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onRewarded(message);
+            onInterstitialAdLoaded();
             return "";
         },
-        k__onRewarded);
+        k__onInterstitialAdLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailed();
+            onInterstitialAdFailedToLoad(message);
             return "";
         },
-        k__onFailed);
+        k__onInterstitialAdFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onOpened();
+            onInterstitialAdClicked();
             return "";
         },
-        k__onOpened);
+        k__onInterstitialAdClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClosed();
+            onInterstitialAdClosed();
             return "";
         },
-        k__onClosed);
+        k__onInterstitialAdClosed);
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onRewardClicked();
+            onRewardedAdClicked();
             return "";
         },
-        k__onRewardClicked);
-
+        k__onRewardedAdClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onInterstitialOpened();
+            onRewardedAdClosed(core::toBool(message));
             return "";
         },
-        k__onInterstitialOpened);
-
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onInterstitialFailed();
-            return "";
-        },
-        k__onInterstitialFailed);
-
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onInterstitialClosed();
-            return "";
-        },
-        k__onInterstitialClosed);
-
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onInterstitialClicked();
-            return "";
-        },
-        k__onInterstitialClicked);
-
-    handlerLock_ = std::make_unique<core::SpinLock>();
+        k__onRewardedAdClosed);
 }
 
 Self::~Bridge() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onRewarded);
-    bridge_.deregisterHandler(k__onFailed);
-    bridge_.deregisterHandler(k__onOpened);
-    bridge_.deregisterHandler(k__onClosed);
-    bridge_.deregisterHandler(k__onRewardClicked);
 
-    bridge_.deregisterHandler(k__onInterstitialOpened);
-    bridge_.deregisterHandler(k__onInterstitialFailed);
-    bridge_.deregisterHandler(k__onInterstitialClosed);
-    bridge_.deregisterHandler(k__onInterstitialClicked);
+    bridge_.deregisterHandler(k__onInterstitialAdLoaded);
+    bridge_.deregisterHandler(k__onInterstitialAdFailedToLoad);
+    bridge_.deregisterHandler(k__onInterstitialAdClicked);
+    bridge_.deregisterHandler(k__onInterstitialAdClosed);
+
+    bridge_.deregisterHandler(k__onRewardedAdClicked);
+    bridge_.deregisterHandler(k__onRewardedAdClosed);
 }
 
 void Self::initialize(const std::string& gameId) {
@@ -134,170 +106,157 @@ void Self::initialize(const std::string& gameId) {
     bridge_.call(k__initialize, gameId);
 }
 
-std::shared_ptr<IRewardedVideo>
-Self::createRewardedVideo(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (rewardedVideos_.count(placementId) != 0) {
-        return core::makeShared<NullRewardedVideo>(logger_);
-    }
-    auto result = new RewardedVideo(logger_, this, placementId);
-    rewardedVideos_[placementId] = result;
-    return std::shared_ptr<IRewardedVideo>(result);
-}
-
-bool Self::destroyRewardedVideo(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (rewardedVideos_.count(placementId) == 0) {
-        return false;
-    }
-    rewardedVideos_.erase(placementId);
-    return true;
+void Self::setCloseTimeOut(float timeOut) {
+    // Already managed in iOS/Android.
 }
 
 std::shared_ptr<IInterstitialAd>
-Self::createInterstitialAd(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (interstitialAds_.count(placementId) != 0) {
-        return core::makeShared<NullInterstitialAd>();
+Self::createInterstitialAd(const std::string& adId) {
+    // adId has no usage at the moment since all ads share the same instance.
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (not interstitialAd_.expired()) {
+        return interstitialAd_.lock();
     }
-    auto result = new InterstitialAd(logger_, this, placementId);
-    interstitialAds_[placementId] = result;
-    return std::shared_ptr<IInterstitialAd>(result);
+    auto result = std::shared_ptr<InterstitialAd>(
+        new InterstitialAd(logger_, this, adId));
+    interstitialAd_ = result;
+    return result;
 }
 
-bool Self::destroyInterstitialAd(const std::string& placementId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    if (interstitialAds_.count(placementId) == 0) {
+bool Self::destroyInterstitialAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (interstitialAd_.expired()) {
         return false;
     }
-    interstitialAds_.erase(placementId);
     return true;
 }
 
-void Self::loadInterstitial() {
-    bridge_.call(k__loadInterstitial);
+std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+    // adId has no usage at the moment since all ads share the smae instance.
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (not rewardedAd_.expired()) {
+        return rewardedAd_.lock();
+    }
+    auto result =
+        std::shared_ptr<RewardedAd>(new RewardedAd(logger_, this, adId));
+    rewardedAd_ = result;
+    return result;
 }
 
-bool Self::hasInterstitial() const {
-    auto response = bridge_.call(k__hasInterstitial);
+bool Self::destroyRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (rewardedAd_.expired()) {
+        return false;
+    }
+    return true;
+}
+
+bool Self::hasInterstitialAd() const {
+    auto response = bridge_.call(k__hasInterstitialAd);
     return core::toBool(response);
 }
 
-bool Self::showInterstitial(const std::string& placementId) {
-    if (not hasInterstitial()) {
-        return false;
-    }
-    placementId_ = placementId;
-    rewarded_ = false;
-    bridge_.call(k__showInterstitial, placementId);
-    return true;
+void Self::loadInterstitialAd() {
+    bridge_.call(k__loadInterstitialAd);
 }
 
-bool Self::hasRewardedVideo() const {
-    auto response = bridge_.call(k__hasRewardedVideo);
+void Self::showInterstitialAd(const std::string& adId) {
+    bridge_.call(k__showInterstitialAd, adId);
+}
+
+bool Self::hasRewardedAd() const {
+    auto response = bridge_.call(k__hasRewardedAd);
     return core::toBool(response);
 }
 
-bool Self::showRewardedVideo(const std::string& placementId) {
-    if (not hasRewardedVideo()) {
-        return false;
-    }
-    rewarded_ = false;
-    placementId_ = placementId;
-    bridge_.call(k__showRewardedVideo, placementId);
-    return true;
+void Self::showRewardedAd(const std::string& adId) {
+    bridge_.call(k__showRewardedAd, adId);
 }
 
-void Self::onRewarded(const std::string& placementId) {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__,
-                  placementId.c_str());
-    rewarded_ = true;
-}
+#pragma mark - Interstitial Ad Callbacks.
 
-void Self::onFailed() {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
+void Self::onInterstitialAdLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-
-    rewarded_ = false;
-    doRewardAndFinishAds();
-}
-
-void Self::onOpened() {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    rewarded_ = false;
-}
-
-void Self::onClosed() {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-
-    // wait for reward
-    // if out of time just callback failed
-    ee::core::runOnUiThreadDelayed(
-        [this] {
-            std::lock_guard<core::SpinLock> guard(*handlerLock_);
-            doRewardAndFinishAds();
-        },
-        _closeTimeout);
-}
-
-void Self::onRewardClicked() {
-    auto ite = rewardedVideos_.find(placementId_);
-    if (ite != rewardedVideos_.end()) {
-        ite->second->doOnClicked();
+    auto ad = interstitialAd_.lock();
+    if (ad) {
+        ad->onLoaded();
+    } else {
+        assert(false);
     }
 }
 
-void Self::doRewardAndFinishAds() {
+void Self::onInterstitialAdFailedToLoad(const std::string& message) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    auto ad = interstitialAd_.lock();
+    if (ad) {
+        ad->onFailedToLoad(message);
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onInterstitialAdClicked() {
+    auto ad = interstitialAd_.lock();
+    if (ad) {
+        ad->onClicked();
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onInterstitialAdClosed() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    auto ad = interstitialAd_.lock();
+    if (ad) {
+        ad->onClosed();
+    } else {
+        assert(false);
+        onMediationAdClosed(false);
+    }
+}
+
+#pragma mark - Rewarded Ad Callbacks.
+
+void Self::onRewardedAdFailedToShow(const std::string& message) {
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onFailedToShow(message);
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onRewardedAdClicked() {
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onClicked();
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onRewardedAdClosed(bool rewarded) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onClosed(rewarded);
+    } else {
+        assert(false);
+        onMediationAdClosed(rewarded);
+    }
+}
+
+#pragma mark - Mediation Ad Callbacks.
+
+void Self::onMediationAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
 
     // Other mediation network.
     auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded_);
+    auto wasRewardedVideo = mediation.finishRewardedVideo(false);
 
     assert(wasInterstitialAd || wasRewardedVideo);
-}
-
-#pragma mark - For Interstitial
-
-void Self::onInterstitialOpened() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-}
-
-void Self::onInterstitialFailed() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    onInterstitialClosed();
-}
-
-void Self::onInterstitialClosed() {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    //    auto&& mediation = ads::MediationManager::getInstance();
-    //
-    //    auto successful = mediation.finishInterstitialAd();
-    //    assert(successful);
-    doRewardAndFinishAds();
-}
-
-void Self::onInterstitialClicked() {
-    auto iter = interstitialAds_.find(placementId_);
-    if (iter != interstitialAds_.cend()) {
-        iter->second->doOnClicked();
-    }
-}
-
-#pragma mark - Config
-
-void Self::setCloseTimeout(float timeout) {
-    std::lock_guard<core::SpinLock> guard(*handlerLock_);
-    _closeTimeout = timeout < 1 ? 1 : timeout;
 }
 } // namespace iron_source
 } // namespace ee

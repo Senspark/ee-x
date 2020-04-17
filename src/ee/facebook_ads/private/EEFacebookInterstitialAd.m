@@ -10,36 +10,37 @@
 
 #import <FBAudienceNetwork/FBInterstitialAd.h>
 
+#import <ee/ads/internal/EEInterstitialAdHelper.h>
+#import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEUtils.h>
 
-#import "ee/ads/internal/EEInterstitialAdHelper.h"
-
-@interface EEFacebookInterstitialAd () <FBInterstitialAdDelegate> {
-    id<EEIMessageBridge> bridge_;
-    NSString* placementId_;
-    FBInterstitialAd* interstitialAd_;
-    EEInterstitialAdHelper* helper_;
-}
-
+@interface EEFacebookInterstitialAd () <FBInterstitialAdDelegate>
 @end
 
-@implementation EEFacebookInterstitialAd
+@implementation EEFacebookInterstitialAd {
+    id<EEIMessageBridge> bridge_;
+    NSString* adId_;
+    EEMessageHelper* messageHelper_;
+    EEInterstitialAdHelper* helper_;
+    FBInterstitialAd* ad_;
+}
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
-                  placementId:(NSString* _Nonnull)placementId {
+                         adId:(NSString* _Nonnull)adId {
     self = [super init];
     if (self == nil) {
         return self;
     }
     bridge_ = bridge;
-    placementId_ = [placementId copy];
-    interstitialAd_ = nil;
-    helper_ =
-        [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
-                                                prefix:@"FacebookInterstitialAd"
-                                                  adId:placementId];
+    adId_ = [adId copy];
+    messageHelper_ =
+        [[EEMessageHelper alloc] initWithPrefix:@"FacebookInterstitialAd"
+                                           adId:adId];
+    helper_ = [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
+                                                          ad:self
+                                                      helper:messageHelper_];
     [self createInternalAd];
     [self registerHandlers];
     return self;
@@ -48,52 +49,26 @@
 - (void)destroy {
     [self deregisterHandlers];
     [self destroyInternalAd];
+
+    [adId_ release];
+    adId_ = nil;
+    [messageHelper_ release];
+    messageHelper_ = nil;
+    [helper_ release];
+    helper_ = nil;
 }
 
 - (void)dealloc {
-    [placementId_ release];
-    placementId_ = nil;
     [super dealloc];
 }
 
-- (NSString*)k__createInternalAd {
-    return [@"FacebookInterstitialAd_createInternalAd_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__destroyInternalAd {
-    return [@"FacebookInterstitialAd_destroyInternalAd_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__onLoaded {
-    return [@"FacebookInterstitialAd_onLoaded_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__onFailedToLoad {
-    return [@"FacebookInterstitialAd_onFailedToLoad_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__onClosed {
-    return [@"FacebookInterstitialAd_onClosed_"
-        stringByAppendingString:placementId_];
-}
-
-- (NSString*)k__onClicked {
-    return [@"FacebookInterstitialAd_onClicked_"
-            stringByAppendingString:placementId_];
-}
-
 - (void)registerHandlers {
-    [helper_ registerHandlers:self];
-    [bridge_ registerHandler:[self k__createInternalAd]
+    [helper_ registerHandlers];
+    [bridge_ registerHandler:[messageHelper_ createInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self createInternalAd]];
                     }];
-
-    [bridge_ registerHandler:[self k__destroyInternalAd]
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self destroyInternalAd]];
                     }];
@@ -101,90 +76,86 @@
 
 - (void)deregisterHandlers {
     [helper_ deregisterHandlers];
-    [bridge_ deregisterHandler:[self k__createInternalAd]];
-    [bridge_ deregisterHandler:[self k__destroyInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ createInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
-    if (interstitialAd_ != nil) {
+    if (ad_ != nil) {
         return NO;
     }
-    FBInterstitialAd* interstitialAd = [[[FBInterstitialAd alloc]
-        initWithPlacementID:placementId_] autorelease];
-    [interstitialAd setDelegate:self];
-    interstitialAd_ = [interstitialAd retain];
+    ad_ = [[FBInterstitialAd alloc] initWithPlacementID:adId_];
+    [ad_ setDelegate:self];
     return YES;
 }
 
 - (BOOL)destroyInternalAd {
-    if (interstitialAd_ == nil) {
+    if (ad_ == nil) {
         return NO;
     }
-    [interstitialAd_ setDelegate:nil];
-    [interstitialAd_ release];
-    interstitialAd_ = nil;
+    [ad_ setDelegate:nil];
+    [ad_ release];
+    ad_ = nil;
     return YES;
 }
 
 - (BOOL)isLoaded {
-    if (interstitialAd_ == nil) {
-        return NO;
-    }
-    return [interstitialAd_ isAdValid];
+    NSAssert(ad_ != nil, @"");
+    return [ad_ isAdValid];
 }
 
 - (void)load {
-    if (interstitialAd_ == nil) {
-        return;
-    }
-    [interstitialAd_ loadAd];
+    NSAssert(ad_ != nil, @"");
+    [ad_ loadAd];
 }
 
-- (BOOL)show {
-    if (interstitialAd_ == nil) {
-        return NO;
-    }
-    if (![interstitialAd_ isAdValid]) {
-        return NO;
-    }
-
+- (void)show {
+    NSAssert(ad_ != nil, @"");
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    return [interstitialAd_ showAdFromRootViewController:rootView];
+    BOOL result = [ad_ showAdFromRootViewController:rootView];
+    if (result) {
+        // OK.
+    } else {
+        // FIXME: handle result.
+    }
 }
 
 - (void)interstitialAdDidClick:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd == interstitialAd_, @"");
-    [bridge_ callCpp:[self k__onClicked]];
+    NSAssert(ad_ == interstitialAd, @"");
+    [bridge_ callCpp:[messageHelper_ onClicked]];
 }
 
 - (void)interstitialAdDidClose:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd == interstitialAd_, @"");
-    [bridge_ callCpp:[self k__onClosed]];
+    NSAssert(ad_ == interstitialAd, @"");
+    [bridge_ callCpp:[messageHelper_ onClosed]];
 }
 
 - (void)interstitialAdWillClose:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd == interstitialAd_, @"");
+    NSAssert(ad_ == interstitialAd, @"");
 }
 
 - (void)interstitialAdDidLoad:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd == interstitialAd_, @"");
-    [bridge_ callCpp:[self k__onLoaded]];
+    NSAssert(ad_ == interstitialAd, @"");
+    [bridge_ callCpp:[messageHelper_ onLoaded]];
 }
 
 - (void)interstitialAd:(FBInterstitialAd*)interstitialAd
       didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    NSAssert(interstitialAd == interstitialAd_, @"");
-    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
+    NSAssert(ad_ == interstitialAd, @"");
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)interstitialAdWillLogImpression:(FBInterstitialAd*)interstitialAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd == interstitialAd_, @"");
+    NSAssert(ad_ == interstitialAd, @"");
 }
 
 @end
+
+#undef kPrefix

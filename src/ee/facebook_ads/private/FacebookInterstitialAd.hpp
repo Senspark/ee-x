@@ -12,25 +12,27 @@
 #include <string>
 
 #include <ee/ads/IInterstitialAd.hpp>
+#include <ee/ads/internal/MessageHelper.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {
-class InterstitialAd : public IInterstitialAd {
+class InterstitialAd : public IInterstitialAd,
+                       public ObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 
     virtual bool isLoaded() const override;
+    virtual Task<bool> load() override;
+    virtual Task<bool> show() override;
 
-    virtual void load() override;
+private:
+    friend Bridge;
 
-    virtual bool show() override;
-
-protected:
     explicit InterstitialAd(IMessageBridge& bridge, const Logger& logger,
-                            Bridge* plugin,
-                            const std::string& placementId);
+                            Bridge* plugin, const std::string& adId);
 
     bool createInternalAd();
     bool destroyInternalAd();
@@ -40,16 +42,14 @@ protected:
     void onClosed();
     void onClicked();
 
-private:
-    friend Bridge;
-
-    /// Whether the ad is in loading progress.
-    bool loading_;
-
     IMessageBridge& bridge_;
     const Logger& logger_;
     Bridge* plugin_;
-    std::string placementId_;
+    std::string adId_;
+    ads::MessageHelper messageHelper_;
+
+    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
+    std::unique_ptr<ads::AsyncHelper<bool>> displayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

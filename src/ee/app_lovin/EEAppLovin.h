@@ -17,10 +17,11 @@
 - (void)setMuted:(BOOL)enabled;
 
 - (BOOL)hasInterstitialAd;
+- (void)loadInterstitialAd;
 - (void)showInterstitialAd;
 
-- (void)loadRewardedVideo;
-- (BOOL)hasRewardedVideo;
-- (void)showRewardedVideo;
+- (BOOL)hasRewardedAd;
+- (void)loadRewardedAd;
+- (void)showRewardedAd;
 
 @end

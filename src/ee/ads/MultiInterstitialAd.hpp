@@ -12,11 +12,14 @@
 #include <memory>
 #include <vector>
 
+#include <ee/core/ObserverManager.hpp>
+
 #include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {
-class MultiInterstitialAd : public IInterstitialAd {
+class MultiInterstitialAd : public IInterstitialAd,
+                            public ObserverManager<IInterstitialAdObserver> {
 private:
     using Self = MultiInterstitialAd;
     using Super = IInterstitialAd;
@@ -27,22 +30,13 @@ public:
 
     Self& addItem(const std::shared_ptr<IInterstitialAd>& item);
 
-    /// @see Super.
     virtual bool isLoaded() const override;
-
-    /// @see Super.
-    virtual void load() override;
-
-    /// @see Super.
-    virtual bool show() override;
-    
-    virtual void setOnClickedCallback(const OnClickedCallback& callback) override;
+    virtual Task<bool> load() override;
+    virtual Task<bool> show() override;
 
 private:
-    void assignCallbacks();
-    void clearCallbacks();
-
     std::vector<std::shared_ptr<IInterstitialAd>> items_;
+    std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace ads
 } // namespace ee

@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_BANNER_AD_SIZE_HPP
 #define EE_X_ADMOB_BANNER_AD_SIZE_HPP
 
+#include "ee/AdMobFwd.hpp"
+
 namespace ee {
 namespace admob {
 enum class BannerAdSize {
@@ -23,7 +25,7 @@ enum class BannerAdSize {
     /// kGADAdSizeSmartBannerPortrait or kGADAdSizeSmartBannerLandscape
     /// Spans the full width of the application.
     Smart,
-    
+
     /// kGADAdSizeMediumRectangle.
     /// Typically 300x250.
     MediumReactangle,

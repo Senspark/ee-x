@@ -13,36 +13,53 @@
 
 namespace ee {
 namespace ads {
+enum class IRewardedAdResult;
+
 struct IAdViewObserver;
+struct IInterstitialAdObserver;
+struct IRewardedAdObserver;
 
 class IAdView;
 class IInterstitialAd;
-class IRewardedVideo;
+class IRewardedAd;
 
 class MultiAdView;
 class MultiInterstitialAd;
-class MultiRewardedVideo;
+class MultiRewardedAd;
 
 class NullAdView;
 class NullInterstitialAd;
-class NullRewardedVideo;
+class NullRewardedAd;
+
+class MessageHelper;
+
+template <class Result>
+class AsyncHelper;
 
 class MediationManager;
 } // namespace ads
 
+using ads::IRewardedAdResult;
+
 using ads::IAdViewObserver;
+using ads::IInterstitialAdObserver;
+using ads::IRewardedAdObserver;
 
 using ads::IAdView;
 using ads::IInterstitialAd;
-using ads::IRewardedVideo;
+using ads::IRewardedAd;
 
 using ads::MultiAdView;
 using ads::MultiInterstitialAd;
-using ads::MultiRewardedVideo;
+using ads::MultiRewardedAd;
 
 using ads::NullAdView;
 using ads::NullInterstitialAd;
-using ads::NullRewardedVideo;
+using ads::NullRewardedAd;
+
+using IRewardedVideo [[deprecated]] = IRewardedAd;
+using MultiRewardedVideo [[deprecated]] = MultiRewardedAd;
+using NullRewardedVideo [[deprecated]] = NullRewardedAd;
 } // namespace ee
 
 #endif /* EE_X_ADS_FWD_HPP */

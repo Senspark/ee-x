@@ -13,6 +13,7 @@ android {
 dependencies {
     api 'androidx.annotation:annotation:1.1.0'
     api 'androidx.core:core:1.1.0'
+    api 'com.google.truth:truth:1.0.1'
 
     // 2.10.x has issue with Android 4.3 (crash on Samsung Galaxy S3 in prelaunch report):
     // Could not find class 'java.beans.Transient', referenced from method com.fasterxml.jackson.databind.ext.Java7SupportImpl.<init>

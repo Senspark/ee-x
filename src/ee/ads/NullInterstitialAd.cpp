@@ -8,6 +8,8 @@
 
 #include "ee/ads/NullInterstitialAd.hpp"
 
+#include <ee/coroutine/Task.hpp>
+
 namespace ee {
 namespace ads {
 using Self = NullInterstitialAd;
@@ -16,12 +18,12 @@ bool Self::isLoaded() const {
     return false;
 }
 
-void Self::load() {
-    // No op.
+Task<bool> Self::load() {
+    co_return false;
 }
 
-bool Self::show() {
-    return false;
+Task<bool> Self::show() {
+    co_return false;
 }
 } // namespace ads
 } // namespace ee

@@ -6,7 +6,7 @@
 namespace ee {
 namespace vungle {
 class Bridge;
-class RewardedVideo;
+class RewardedAd;
 } // namespace vungle
 
 using Vungle = vungle::Bridge;

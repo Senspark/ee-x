@@ -13,7 +13,7 @@
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled;
 - (void)setDebugMode:(BOOL)enabled;
 
-- (BOOL)isRewardedVideoReady:(NSString* _Nonnull)placementId;
-- (void)showRewardedVideo:(NSString* _Nonnull)placementId;
+- (BOOL)hasRewardedAd:(NSString* _Nonnull)adId;
+- (void)showRewardedAd:(NSString* _Nonnull)adId;
 
 @end

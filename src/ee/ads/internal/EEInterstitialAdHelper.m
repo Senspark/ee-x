@@ -12,73 +12,60 @@
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/ads/internal/EEIInterstitialAd.h"
+#import "ee/ads/internal/EEMessageHelper.h"
 
 @interface EEInterstitialAdHelper () {
     id<EEIMessageBridge> bridge_;
-    NSString* prefix_;
-    NSString* adId_;
+    id<EEIInterstitialAd> ad_;
+    EEMessageHelper* helper_;
 }
 
 @end
 
 @implementation EEInterstitialAdHelper
 
-- (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
-                       prefix:(NSString* _Nonnull)prefix
-                         adId:(NSString* _Nonnull)adId {
+- (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
+                           ad:(id<EEIInterstitialAd> _Nonnull)ad
+                       helper:(EEMessageHelper* _Nonnull)helper {
     self = [super init];
     if (self == nil) {
         return self;
     }
     bridge_ = bridge;
-    prefix_ = [prefix copy];
-    adId_ = [adId copy];
+    ad_ = ad;
+    helper_ = [helper retain];
     return self;
 }
 
 - (void)dealloc {
-    [prefix_ release];
-    prefix_ = nil;
-    [adId_ release];
-    adId_ = nil;
+    [helper_ release];
+    helper_ = nil;
     [super dealloc];
 }
 
-- (NSString*)k__isLoaded {
-    return [NSString stringWithFormat:@"%@_isLoaded_%@", prefix_, adId_];
-}
-
-- (NSString*)k__load {
-    return [NSString stringWithFormat:@"%@_load_%@", prefix_, adId_];
-}
-
-- (NSString*)k__show {
-    return [NSString stringWithFormat:@"%@_show_%@", prefix_, adId_];
-}
-
-- (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad {
-    [bridge_ registerHandler:[self k__isLoaded]
+- (void)registerHandlers {
+    [bridge_ registerHandler:[helper_ isLoaded]
                     callback:^(NSString* message) {
-                        return [EEUtils toString:[ad isLoaded]];
+                        return [EEUtils toString:[ad_ isLoaded]];
                     }];
 
-    [bridge_ registerHandler:[self k__load]
+    [bridge_ registerHandler:[helper_ load]
                     callback:^(NSString* message) {
-                        [ad load];
+                        [ad_ load];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:[self k__show]
+    [bridge_ registerHandler:[helper_ show]
                     callback:^(NSString* message) {
-                        [ad show];
+                        [ad_ show];
                         return @"";
                     }];
 }
 
 - (void)deregisterHandlers {
-    [bridge_ deregisterHandler:[self k__isLoaded]];
-    [bridge_ deregisterHandler:[self k__load]];
-    [bridge_ deregisterHandler:[self k__show]];
+    [bridge_ deregisterHandler:[helper_ isLoaded]];
+    [bridge_ deregisterHandler:[helper_ load]];
+    [bridge_ deregisterHandler:[helper_ show]];
 }
 
 @end

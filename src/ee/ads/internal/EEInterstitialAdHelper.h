@@ -12,13 +12,15 @@
 @protocol EEIInterstitialAd;
 @protocol EEIMessageBridge;
 
+@class EEMessageHelper;
+
 @interface EEInterstitialAdHelper : NSObject
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
-                       prefix:(NSString* _Nonnull)prefix
-                         adId:(NSString* _Nonnull)adId;
+                           ad:(id<EEIInterstitialAd> _Nonnull)ad
+                       helper:(EEMessageHelper* _Nonnull)helper;
 
-- (void)registerHandlers:(id<EEIInterstitialAd> _Nonnull)ad;
+- (void)registerHandlers;
 - (void)deregisterHandlers;
 
 @end

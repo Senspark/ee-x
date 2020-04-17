@@ -17,49 +17,51 @@
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
-@interface EEIronSource () <ISRewardedVideoDelegate, ISInterstitialDelegate> {
-    BOOL initialized_;
-    id<EEIMessageBridge> bridge_;
-}
-
-@end
-
-@implementation EEIronSource
+#define kPrefix @"IronSource"
 
 // clang-format off
-static NSString* const k__initialize        = @"IronSource_initialize";
-static NSString* const k__hasRewardedVideo  = @"IronSource_hasRewardedVideo";
-static NSString* const k__showRewardedVideo = @"IronSource_showRewardedVideo";
+static NSString* const k__initialize         = kPrefix "_initialize";
 
-static NSString* const k__loadInterstitial  = @"IronSource_loadInterstitial";
-static NSString* const k__hasInterstitial   = @"IronSource_hasInterstitial";
-static NSString* const k__showInterstitial  = @"IronSource_showInterstitial";
+static NSString* const k__loadInterstitialAd = kPrefix "_loadInterstitialAd";
+static NSString* const k__hasInterstitialAd  = kPrefix "_hasInterstitialAd";
+static NSString* const k__showInterstitialAd = kPrefix "_showInterstitialAd";
 
-static NSString* const k__onRewarded = @"IronSource_onRewarded";
-static NSString* const k__onFailed   = @"IronSource_onFailed";
-static NSString* const k__onOpened   = @"IronSource_onOpened";
-static NSString* const k__onClosed   = @"IronSource_onClosed";
-static NSString* const k__onRewardClicked   = @"IronSource_onRewardClicked";
+static NSString* const k__hasRewardedAd      = kPrefix "_hasRewardedAd";
+static NSString* const k__showRewardedAd     = kPrefix "_showRewardedAd";
 
-static NSString* const k__onInterstitialFailed  = @"IronSource_onInterstitialFailed";
-static NSString* const k__onInterstitialOpened  = @"IronSource_onInterstitialOpened";
-static NSString* const k__onInterstitialClosed  = @"IronSource_onInterstitialClosed";
-static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialClicked";
+static NSString* const k__onInterstitialAdLoaded       = kPrefix "_onInterstitialAdLoaded";
+static NSString* const k__onInterstitialAdFailedToLoad = kPrefix "_onInterstitialAdFailedToLoad";
+static NSString* const k__onInterstitialAdFailedToShow = kPrefix "_onInterstitialAdFailedToShow";
+static NSString* const k__onInterstitialAdClicked      = kPrefix "_onInterstitialAdClicked";
+static NSString* const k__onInterstitialAdClosed       = kPrefix "_onInterstitialAdClosed";
+
+static NSString* const k__onRewardedAdFailedToShow = kPrefix "_onRewardedAdFailedToShow";
+static NSString* const k__onRewardedAdClicked      = kPrefix "_onRewardedAdClicked";
+static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClosed";
 // clang-format on
+
+#undef kPrefix
+
+@interface EEIronSource () <ISRewardedVideoDelegate, ISInterstitialDelegate>
+@end
+
+@implementation EEIronSource {
+    id<EEIMessageBridge> bridge_;
+    BOOL initialized_;
+    BOOL rewarded_;
+}
 
 - (id)init {
     self = [super init];
     if (self == nil) {
         return self;
     }
-    initialized_ = NO;
     bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
-    [self deregisterHandlers];
     [self destroy];
     [super dealloc];
 }
@@ -72,73 +74,134 @@ static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialCli
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__hasRewardedVideo
+    [bridge_ registerHandler:k__hasInterstitialAd
                     callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasRewardedVideo]];
+                        return [EEUtils toString:[self hasInterstitialAd]];
                     }];
 
-    [bridge_ registerHandler:k__showRewardedVideo
+    [bridge_ registerHandler:k__loadInterstitialAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        [self showRewardedVideo:placementId];
+                        [self loadInterstitialAd];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__loadInterstitial
+    [bridge_ registerHandler:k__showInterstitialAd
                     callback:^(NSString* message) {
-                        [self loadInterstitial];
+                        NSString* adId = message;
+                        [self showInterstitialAd:adId];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__hasInterstitial
+    [bridge_ registerHandler:k__hasRewardedAd
                     callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasInterstitial]];
+                        return [EEUtils toString:[self hasRewardedAd]];
                     }];
 
-    [bridge_ registerHandler:k__showInterstitial
+    [bridge_ registerHandler:k__showRewardedAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        [self showInterstitial:placementId];
+                        NSString* adId = message;
+                        [self showRewardedAd:adId];
                         return @"";
                     }];
 }
 
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:k__initialize];
-    [bridge_ deregisterHandler:k__hasRewardedVideo];
-    [bridge_ deregisterHandler:k__showRewardedVideo];
-    [bridge_ deregisterHandler:k__hasInterstitial];
-    [bridge_ deregisterHandler:k__showInterstitial];
+    [bridge_ deregisterHandler:k__hasInterstitialAd];
+    [bridge_ deregisterHandler:k__showInterstitialAd];
+    [bridge_ deregisterHandler:k__hasRewardedAd];
+    [bridge_ deregisterHandler:k__showRewardedAd];
 }
-#pragma mark - Init
+
+#pragma mark - Initialization
+
 - (void)initialize:(NSString*)gameId {
     if (initialized_) {
         return;
     }
     [IronSource initWithAppKey:gameId
                        adUnits:@[IS_REWARDED_VIDEO, IS_INTERSTITIAL]];
-    [IronSource setRewardedVideoDelegate:self];
+    [IronSource shouldTrackReachability:YES];
     [IronSource setInterstitialDelegate:self];
-
+    [IronSource setRewardedVideoDelegate:self];
     [IronSource setUserId:[IronSource advertiserId]];
     initialized_ = YES;
 }
 
 - (void)destroy {
+    [self deregisterHandlers];
     if (!initialized_) {
         return;
     }
+    [IronSource setInterstitialDelegate:nil];
     [IronSource setRewardedVideoDelegate:nil];
 }
-#pragma mark - Video
-- (BOOL)hasRewardedVideo {
+
+#pragma mark - Interstitial Ad
+
+- (BOOL)hasInterstitialAd {
+    return [IronSource hasInterstitial];
+}
+
+- (void)loadInterstitialAd {
+    [IronSource loadInterstitial];
+}
+
+- (void)showInterstitialAd:(NSString* _Nonnull)adId {
+    UIViewController* rootView = [EEUtils getCurrentRootViewController];
+    [IronSource showInterstitialWithViewController:rootView placement:adId];
+}
+
+- (void)interstitialDidLoad {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialAdLoaded];
+}
+
+- (void)interstitialDidFailToLoadWithError:(NSError*)error {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialAdFailedToLoad
+             message:[error description]];
+}
+
+- (void)interstitialDidOpen {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)interstitialDidClose {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialAdClosed];
+}
+
+- (void)interstitialDidShow {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)interstitialDidFailToShowWithError:(NSError*)error {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialAdFailedToShow
+             message:[error description]];
+}
+
+- (void)didClickInterstitial {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [bridge_ callCpp:k__onInterstitialAdClicked];
+}
+
+#pragma mark - Rewarded Ad
+
+- (BOOL)hasRewardedAd {
     return [IronSource hasRewardedVideo];
 }
 
-- (void)showRewardedVideo:(NSString* _Nonnull)placementId {
+- (void)showRewardedAd:(NSString* _Nonnull)adId {
+    rewarded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [IronSource showRewardedVideoWithViewController:rootView
-                                          placement:placementId];
+    [IronSource showRewardedVideoWithViewController:rootView placement:adId];
+}
+
+- (void)handleRewardedAdResult {
+    [bridge_ callCpp:k__onRewardedAdClosed
+             message:[EEUtils toString:rewarded_]];
 }
 
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available {
@@ -147,22 +210,31 @@ static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialCli
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
-    [bridge_ callCpp:k__onRewarded message:[placementInfo placementName]];
+    rewarded_ = YES;
 }
 
 - (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onFailed];
+    [bridge_ callCpp:k__onRewardedAdFailedToShow message:[error description]];
 }
 
 - (void)rewardedVideoDidOpen {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onOpened];
 }
 
 - (void)rewardedVideoDidClose {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onClosed];
+    // Note: The didReceiveReward and rewardedVideoDidClose events are
+    // asynchronous.
+    if (rewarded_) {
+        // Already has result.
+        [self handleRewardedAdResult];
+    } else {
+        [EEUtils runOnMainThreadDelayed:1.0f
+                               callback:^{
+                                   [self handleRewardedAdResult];
+                               }];
+    }
 }
 
 - (void)rewardedVideoDidStart {
@@ -175,52 +247,7 @@ static NSString* const k__onInterstitialClicked = @"IronSource_onInterstitialCli
 
 - (void)didClickRewardedVideo:(ISPlacementInfo*)placementInfo {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [placementInfo placementName]);
-    [bridge_ callCpp:k__onRewardClicked];
-}
-#pragma mark - Interstitial
-- (void)loadInterstitial {
-    [IronSource loadInterstitial];
+    [bridge_ callCpp:k__onRewardedAdClicked];
 }
 
-- (BOOL)hasInterstitial {
-    return [IronSource hasInterstitial];
-}
-
-- (void)showInterstitial:(NSString* _Nonnull)placementId {
-    UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [IronSource showInterstitialWithViewController:rootView
-                                         placement:placementId];
-}
-
-- (void)interstitialDidLoad {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialDidFailToLoadWithError:(NSError*)error {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialDidOpen {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialOpened];
-}
-
-- (void)interstitialDidClose {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialClosed];
-}
-
-- (void)interstitialDidShow {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)interstitialDidFailToShowWithError:(NSError*)error {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialFailed];
-}
-
-- (void)didClickInterstitial {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialClicked];
-}
 @end

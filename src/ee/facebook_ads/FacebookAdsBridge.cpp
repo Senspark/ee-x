@@ -12,7 +12,7 @@
 
 #include <ee/ads/NullAdView.hpp>
 #include <ee/ads/NullInterstitialAd.hpp>
-#include <ee/ads/NullRewardedVideo.hpp>
+#include <ee/ads/NullRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/Logger.hpp>
@@ -24,7 +24,7 @@
 #include "ee/facebook_ads/private/FacebookBannerAd.hpp"
 #include "ee/facebook_ads/private/FacebookInterstitialAd.hpp"
 #include "ee/facebook_ads/private/FacebookNativeAd.hpp"
-#include "ee/facebook_ads/private/FacebookRewardVideoAd.hpp"
+#include "ee/facebook_ads/private/FacebookRewardedAd.hpp"
 
 namespace ee {
 namespace facebook_ads {
@@ -32,21 +32,23 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__getTestDeviceHash     = "FacebookAds_getTestDeviceHash";
-constexpr auto k__addTestDevice         = "FacebookAds_addTestDevice";
-constexpr auto k__clearTestDevices      = "FacebookAds_clearTestDevices";
+const std::string kPrefix           = "FacebookAds";
 
-constexpr auto k__createBannerAd        = "FacebookAds_createBannerAd";
-constexpr auto k__destroyBannerAd       = "FacebookAds_destroyBannerAd";
+const auto k__getTestDeviceHash     = kPrefix + "_getTestDeviceHash";
+const auto k__addTestDevice         = kPrefix + "_addTestDevice";
+const auto k__clearTestDevices      = kPrefix + "_clearTestDevices";
 
-constexpr auto k__createNativeAd        = "FacebookAds_createNativeAd";
-constexpr auto k__destroyNativeAd       = "FacebookAds_destroyNativeAd";
+const auto k__createBannerAd        = kPrefix + "_createBannerAd";
+const auto k__destroyBannerAd       = kPrefix + "_destroyBannerAd";
 
-constexpr auto k__createInterstitialAd  = "FacebookAds_createInterstitialAd";
-constexpr auto k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
+const auto k__createNativeAd        = kPrefix + "_createNativeAd";
+const auto k__destroyNativeAd       = kPrefix + "_destroyNativeAd";
+
+const auto k__createInterstitialAd  = kPrefix + "_createInterstitialAd";
+const auto k__destroyInterstitialAd = kPrefix + "_destroyInterstitialAd";
     
-constexpr auto k__createRewardVideoAd   = "FacebookAds_createRewardVideoAd";
-constexpr auto k__destroyRewardVideoAd  = "FacebookAds_destroyRewardVideoAd";
+const auto k__createRewardedAd      = kPrefix + "_createRewardedAd";
+const auto k__destroyRewardedAd     = kPrefix + "_destroyRewardedAd";
 } // namespace
 
 namespace {
@@ -63,9 +65,13 @@ Self::Bridge()
 
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {}
+    , logger_(logger) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+}
 
-Self::~Bridge() {}
+Self::~Bridge() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+}
 
 std::string Self::getTestDeviceHash() const {
     return bridge_.call(k__getTestDeviceHash);
@@ -81,17 +87,20 @@ void Self::clearTestDevices() {
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                               BannerAdSize adSize) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
+
     auto response = bridge_.call(k__createBannerAd, json.dump());
     if (not core::toBool(response)) {
         return core::makeShared<NullAdView>();
     }
-    return std::shared_ptr<IAdView>(new BannerAd(bridge_, this, adId));
+    return std::shared_ptr<IAdView>(new BannerAd(bridge_, logger_, this, adId));
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = bridge_.call(k__destroyBannerAd, adId);
     return core::toBool(response);
 }
@@ -99,10 +108,12 @@ bool Self::destroyBannerAd(const std::string& adId) {
 std::shared_ptr<IAdView>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__layout_name] = layoutName;
     json[k__identifiers] = identifiers.params_;
+
     auto response = bridge_.call(k__createNativeAd, json.dump());
     if (not core::toBool(response)) {
         return core::makeShared<NullAdView>();
@@ -111,37 +122,41 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = bridge_.call(k__destroyNativeAd, adId);
     return core::toBool(response);
 }
 
 std::shared_ptr<IInterstitialAd>
-Self::createInterstitialAd(const std::string& placementId) {
-    auto response = bridge_.call(k__createInterstitialAd, placementId);
+Self::createInterstitialAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto response = bridge_.call(k__createInterstitialAd, adId);
     if (not core::toBool(response)) {
         return core::makeShared<NullInterstitialAd>();
     }
     return std::shared_ptr<IInterstitialAd>(
-        new InterstitialAd(bridge_, logger_, this, placementId));
+        new InterstitialAd(bridge_, logger_, this, adId));
 }
 
-bool Self::destroyInterstitialAd(const std::string& placementId) {
-    auto&& response = bridge_.call(k__destroyInterstitialAd, placementId);
+bool Self::destroyInterstitialAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto&& response = bridge_.call(k__destroyInterstitialAd, adId);
     return core::toBool(response);
 }
 
-std::shared_ptr<IRewardedVideo>
-Self::createRewardedVideo(const std::string& placementId) {
-    auto response = bridge_.call(k__createRewardVideoAd, placementId);
+std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto response = bridge_.call(k__createRewardedAd, adId);
     if (not core::toBool(response)) {
-        return core::makeShared<NullRewardedVideo>(logger_);
+        return core::makeShared<NullRewardedAd>();
     }
-    return std::shared_ptr<IRewardedVideo>(
-        new RewardedVideo(bridge_, logger_, placementId));
+    return std::shared_ptr<IRewardedAd>(
+        new RewardedAd(bridge_, logger_, this, adId));
 }
 
-bool Self::destroyRewardVideoAd(const std::string& placementId) {
-    auto&& response = bridge_.call(k__destroyRewardVideoAd, placementId);
+bool Self::destroyRewardedAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto&& response = bridge_.call(k__destroyRewardedAd, adId);
     return core::toBool(response);
 }
 } // namespace facebook_ads

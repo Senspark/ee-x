@@ -14,7 +14,7 @@
 namespace eetest {
 ee::AdMob* getAdMob();
 
-std::string getAdMobRewardedVideoId();
+std::string getAdMobRewardedAdId();
 std::string getAdMobNativeAdId();
 
 std::shared_ptr<ee::IAdView> createAdMobNativeAd();

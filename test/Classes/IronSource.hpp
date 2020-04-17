@@ -15,9 +15,9 @@ namespace eetest {
 ee::IronSource* getIronSource();
 
 std::string getIronSourceGameId();
-std::string getIronSourceRewardedVideoId();
+std::string getIronSourceRewardedAdId();
 
-void testIronSourceRewardedVideo();
+void testIronSourceRewardedAd();
 } // namespace eetest
 
 #endif /* EE_X_TEST_IRON_SOURCE_HPP */

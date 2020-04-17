@@ -7,7 +7,7 @@
 
 #include "VideoPlayerTestScene.hpp"
 
-#include <ee/Core.hpp>
+#include <ee/Cocos.hpp>
 
 namespace eetest {
 using Self = VideoPlayerTestScene;

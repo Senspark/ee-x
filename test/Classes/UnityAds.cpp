@@ -10,7 +10,7 @@
 
 #include <platform/CCPlatformConfig.h>
 
-#include <ee/Core.hpp>
+#include <ee/Coroutine.hpp>
 
 #include "FunctionLogger.hpp"
 #include "Utils.hpp"
@@ -46,7 +46,7 @@ std::string getUnityInterstitialAdId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::string getUnityRewardedVideoId() {
+std::string getUnityRewardedAdId() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     return "rewardedVideoZone";
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -54,19 +54,12 @@ std::string getUnityRewardedVideoId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-void testUnityAdsRewardedVideo() {
-    auto rewardedVideo =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
-            FunctionLogger logger("Create Unity Ads rewarded video");
-            return getUnityAds()->createRewardedVideo(
-                getUnityRewardedVideoId());
+void testUnityAdsRewardedAd() {
+    auto rewardedAd =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
+            FunctionLogger logger("Create Unity Ads rewarded ad");
+            return getUnityAds()->createRewardedAd(getUnityRewardedAdId());
         });
-
-    rewardedVideo->setResultCallback([](bool result) {
-        FunctionLogger logger("Unity Ads rewarded video callback");
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
 
     auto interstitialAd =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IInterstitialAd>>(
@@ -76,20 +69,22 @@ void testUnityAdsRewardedVideo() {
                     getUnityInterstitialAdId());
             });
 
-    interstitialAd->setResultCallback([] {
-        FunctionLogger logger("Unity Ads interstitial ad callback");
-        logCurrentThread();
-    });
-
     float delay = 0.0f;
-    scheduleOnce(delay += 5.0f, [rewardedVideo] {
-        FunctionLogger logger("Show UnityAds rewarded video");
-        rewardedVideo->show();
+    scheduleOnce(delay += 5.0f, [rewardedAd] {
+        ee::runOnUiThread(ee::makeAwaiter([rewardedAd]() -> ee::Task<> {
+            FunctionLogger logger("Show UnityAds rewarded ad");
+            auto result = co_await rewardedAd->show();
+            logCurrentThread();
+            getLogger().info("Result = %d", static_cast<int>(result));
+        }));
     });
 
     scheduleOnce(delay += 2.0f, [interstitialAd] {
-        FunctionLogger logger("Show UnityAds interstitial ad");
-        interstitialAd->show();
+        ee::runOnUiThread(ee::makeAwaiter([interstitialAd]() -> ee::Task<> {
+            FunctionLogger logger("Show UnityAds interstitial ad");
+            co_await interstitialAd->show();
+            logCurrentThread();
+        }));
     });
 }
 } // namespace eetest

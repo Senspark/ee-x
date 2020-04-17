@@ -11,9 +11,8 @@
 #include <cocos2d.h>
 
 #include <ee/Ads.hpp>
-#include <ee/Core.hpp>
-#include <ee/Macro.hpp>
-#include <ee/cocos/EEHeader.hpp>
+#include <ee/Cocos.hpp>
+#include <ee/Coroutine.hpp>
 
 #include "AdMob.hpp"
 #include "AppLovin.hpp"
@@ -22,11 +21,11 @@
 #include "IronSource.hpp"
 #include "MultiNativeAdTestScene.hpp"
 #include "NotificationAgent.hpp"
+#include "TwitterShareTestScene.hpp"
 #include "UnityAds.hpp"
 #include "Utils.hpp"
-#include "Vungle.hpp"
 #include "VideoPlayerTestScene.hpp"
-#include "TwitterShareTestScene.hpp"
+#include "Vungle.hpp"
 
 namespace eetest {
 namespace {
@@ -35,29 +34,24 @@ const auto DesignResolution = cocos2d::Size(480, 320);
 
 namespace {
 void testMultiAds() {
-    static ee::MultiRewardedVideo* ads;
-    ee::runOnUiThread([] {
-        static auto temp = ee::MultiRewardedVideo();
-        ads = &temp;
+    auto ad = std::make_shared<ee::MultiRewardedAd>();
 
+    ee::runOnUiThread([ad] {
         // ads.addItem(getAppLovin()->createRewardedVideo());
-        ads->addItem(getIronSource()->createRewardedVideo(
-            getIronSourceRewardedVideoId()));
+        ad->addItem(
+            getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
         // ads.addItem(getUnityAds()->createRewardedVideo(getUnityRewardedVideoId()));
         // ads.addItem(getVungle()->createRewardedVideo());
-
-        ads->setResultCallback([](bool result) {
-            logCurrentThread();
-            getLogger().info("Result = ", result ? "succeeded" : "failed");
-        });
     });
 
-    scheduleForever(2.0f, 3.0f, [] {
+    scheduleForever(2.0f, 3.0f, [ad] {
         logCurrentThread();
-        ee::runOnUiThread([] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
             logCurrentThread();
-            ads->show();
-        });
+            auto result = co_await ad->show();
+            logCurrentThread();
+            getLogger().info("Result = %d", static_cast<int>(result));
+        }));
     });
 }
 } // namespace
@@ -109,7 +103,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     getLogger().info(cocos2d::StringUtils::format(
         "winSize = %f %f", winSize.width, winSize.height));
 
-    ee::Metrics::initialize(frameSize.height / winSize.height);
     constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);
     auto dp = metrics.toDip();

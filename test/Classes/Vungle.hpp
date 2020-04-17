@@ -15,9 +15,9 @@ namespace eetest {
 ee::Vungle* getVungle();
 
 std::string getVungleGameId();
-std::string getVungleRewardedVideoId();
+std::string getVungleRewardedAdId();
 
-void testVungleRewardedVideo();
+void testVungleRewardedAd();
 } // namespace eetest
 
 #endif /* EE_X_TEST_VUNGLE_HPP */

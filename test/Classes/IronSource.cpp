@@ -10,6 +10,8 @@
 
 #include <platform/CCPlatformConfig.h>
 
+#include <ee/Coroutine.hpp>
+
 #include "FunctionLogger.hpp"
 #include "Utils.hpp"
 
@@ -35,24 +37,24 @@ std::string getIronSourceGameId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::string getIronSourceRewardedVideoId() {
+std::string getIronSourceRewardedAdId() {
     return "DefaultRewardedVideo";
 }
 
-void testIronSourceRewardedVideo() {
-    auto rewardedVideo =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
-            FunctionLogger logger("Create ironSource rewarded video");
-            return getIronSource()->createRewardedVideo(
-                getIronSourceRewardedVideoId());
+void testIronSourceRewardedAd() {
+    auto ad =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
+            FunctionLogger logger("Create ironSource rewarded ad");
+            return getIronSource()->createRewardedAd(
+                getIronSourceRewardedAdId());
         });
 
     float delay = 0.0f;
-    scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {
-        ee::runOnUiThread([rewardedVideo] {
-            FunctionLogger logger("Show ironSource rewarded video");
-            rewardedVideo->show();
-        });
+    scheduleForever(delay += 5.0f, 5.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            FunctionLogger logger("Show ironSource rewarded ad");
+            co_await ad->show();
+        }));
     });
 }
 } // namespace eetest

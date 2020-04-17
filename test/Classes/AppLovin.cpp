@@ -8,6 +8,8 @@
 
 #include "AppLovin.hpp"
 
+#include <ee/Coroutine.hpp>
+
 #include "Utils.hpp"
 
 namespace eetest {
@@ -27,20 +29,26 @@ ee::AppLovin* getAppLovin() {
 }
 
 void testAppLovinRewardedVideo() {
-    auto rewardedVideo = getAppLovin()->createRewardedVideo();
-    rewardedVideo->setResultCallback([](bool result) {
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
+    auto ad =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] { //
+            return getAppLovin()->createRewardedAd();
+        });
 
     float delay = 0.0f;
-    scheduleForever(delay += 1.0f, 3.0f, [rewardedVideo] {
-        getLogger().info("Load AppLovin rewarded video");
-        rewardedVideo->load();
+    scheduleForever(delay += 1.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            getLogger().info("Load AppLovin rewarded ad");
+            co_await ad->load();
+        }));
     });
-    scheduleForever(delay += 1.0f, 3.0f, [rewardedVideo] {
-        getLogger().info("Show AppLovin rewarded video");
-        rewardedVideo->show();
+
+    scheduleForever(delay += 1.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            getLogger().info("Show AppLovin rewarded ad");
+            auto result = co_await ad->show();
+            logCurrentThread();
+            getLogger().info("Result = %d", static_cast<int>(result));
+        }));
     });
 }
 } // namespace eetest

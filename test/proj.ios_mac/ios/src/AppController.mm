@@ -6,13 +6,16 @@
 //
 //
 
-#import <ee/Core.hpp>
-
 #import "AppController.h"
-#import "AppDelegate.hpp"
-#import "RootViewController.h"
+
+#import <FIRApp.h>
 
 #import <cocos2d.h>
+
+#import <ee/Core.hpp>
+
+#import "AppDelegate.hpp"
+#import "RootViewController.h"
 
 @implementation AppController
 
@@ -51,6 +54,8 @@ static eetest::AppDelegate s_sharedApplication;
     auto glview = cocos2d::GLViewImpl::createWithEAGLView(
         (__bridge void*)[_viewController view]);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
+
+    [FIRApp configure];
 
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager initializePlugins];

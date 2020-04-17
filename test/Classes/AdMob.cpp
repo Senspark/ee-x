@@ -22,6 +22,7 @@ ee::AdMob* getAdMob() {
     static bool initialized = false;
     if (not initialized) {
         ee::runOnUiThreadAndWait([] {
+            plugin.initialize(getAdMobApplicationTestId());
             plugin.addTestDevice(plugin.getEmulatorTestDeviceHash());
             plugin.addTestDevice(
                 "930A5959F4325BAA45E24449B03CB221"); // BlueStacks
@@ -33,7 +34,55 @@ ee::AdMob* getAdMob() {
     return &plugin;
 }
 
-std::string getAdMobRewardedAdId() {
+std::string getAdMobApplicationTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544~3347511713";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544~1458002511";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobBannerAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/6300978111";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2934735716";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobNativeAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2247696110";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/3986624511";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobNativeAdVideoTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/1044960115";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2521693316";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobInterstitialAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/1033173712";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/4411468910";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobInterstitialAdVideoTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/8691691433";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/5135589807";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobRewardedAdTestId() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     return "ca-app-pub-3940256099942544/5224354917";
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -41,16 +90,9 @@ std::string getAdMobRewardedAdId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::string getAdMobNativeAdId() {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "ca-app-pub-2101587572072038/1175956700";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "ca-app-pub-3940256099942544/2247696110";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-}
-
 std::shared_ptr<ee::IAdView> createAdMobNativeAd() {
-    return getAdMob()->createNativeAd(getAdMobNativeAdId(), "admob_native_spin",
+    return getAdMob()->createNativeAd(getAdMobNativeAdTestId(),
+                                      "admob_native_spin",
                                       ee::AdMobNativeAdLayout()
                                           .setBody("ad_body")
                                           .setCallToAction("ad_call_to_action")
@@ -71,9 +113,8 @@ void testAdMobBannerAd() {
 
     auto ad = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
         getLogger().info("Create AdMob banner ad begin");
-        auto ad =
-            getAdMob()->createBannerAd("ca-app-pub-3940256099942544/6300978111",
-                                       ee::AdMobBannerAdSize::Normal);
+        auto ad = getAdMob()->createBannerAd(getAdMobBannerAdTestId(),
+                                             ee::AdMobBannerAdSize::Normal);
         ee::noAwait([ad]() -> ee::Task<> { //
             co_await ad->load();
         });
@@ -220,7 +261,7 @@ void testAdMobInterstitial() {
             [] {
                 getLogger().info("Create AdMob interstitial ad begin");
                 auto ad = getAdMob()->createInterstitialAd(
-                    "ca-app-pub-3940256099942544/1033173712");
+                    getAdMobInterstitialAdTestId());
                 getLogger().info("Create AdMob interstitial ad end");
                 return ad;
             });
@@ -243,7 +284,7 @@ void testAdMobRewardedVideo() {
     auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
             getLogger().info("Create AdMob rewarded ad begin");
-            auto ad = getAdMob()->createRewardedAd(getAdMobRewardedAdId());
+            auto ad = getAdMob()->createRewardedAd(getAdMobRewardedAdTestId());
             getLogger().info("Create AdMob rewarded ad end");
             return ad;
         });

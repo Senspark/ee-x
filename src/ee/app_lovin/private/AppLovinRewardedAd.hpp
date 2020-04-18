@@ -31,6 +31,7 @@ private:
     friend Bridge;
 
     explicit RewardedAd(
+        const Logger& logger,
         const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
         Bridge* plugin);
 
@@ -39,6 +40,7 @@ private:
     void onClicked();
     void onClosed(bool rewarded);
 
+    const Logger& logger_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> displayer_;
     Bridge* plugin_;
 

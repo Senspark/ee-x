@@ -12,6 +12,7 @@
 
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
 #include <ee/coroutine/Task.hpp>
 
 #include "ee/unity_ads/UnityAdsBridge.hpp"
@@ -33,9 +34,8 @@ Self::InterstitialAd(const Logger& logger,
 Self::~InterstitialAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s: begin", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_->destroyInterstitialAd(adId_);
-    logger_.debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {
@@ -60,6 +60,9 @@ Task<bool> Self::show() {
 }
 
 void Self::onFailedToShow(const std::string& message) {
+    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(false);
     } else {
@@ -68,6 +71,8 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClosed() {
+    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(true);
     } else {

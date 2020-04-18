@@ -12,6 +12,7 @@
 
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
 
 #include "ee/iron_source/IronSourceBridge.hpp"
 
@@ -32,9 +33,8 @@ Self::InterstitialAd(const Logger& logger,
 Self::~InterstitialAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s: begin", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_->destroyInterstitialAd(adId_);
-    logger_.debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {
@@ -42,6 +42,8 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str());
     auto result = co_await loader_->process(
         [this] { //
             plugin_->loadInterstitialAd();
@@ -65,6 +67,8 @@ Task<bool> Self::show() {
 }
 
 void Self::onLoaded() {
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
@@ -78,6 +82,9 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
+    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
@@ -86,6 +93,9 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
+    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(false);
     } else {
@@ -102,7 +112,8 @@ void Self::onClicked() {
 }
 
 void Self::onClosed() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(true);
     } else {

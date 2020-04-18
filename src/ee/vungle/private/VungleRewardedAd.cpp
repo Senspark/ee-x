@@ -12,6 +12,7 @@
 
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
 #include <ee/coroutine/Task.hpp>
 
 #include "ee/vungle/VungleBridge.hpp"
@@ -35,9 +36,8 @@ Self::RewardedAd(
 Self::~RewardedAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s: begin", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedAd(adId_);
-    logger_.debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {
@@ -45,6 +45,8 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str());
     auto result = co_await loader_->process(
         [this] { //
             plugin_->loadRewardedAd(adId_);
@@ -56,6 +58,7 @@ Task<bool> Self::load() {
 }
 
 Task<IRewardedAdResult> Self::show() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd(adId_);
@@ -67,6 +70,8 @@ Task<IRewardedAdResult> Self::show() {
 }
 
 void Self::onLoaded() {
+    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
@@ -80,6 +85,9 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
+    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
@@ -88,6 +96,9 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
+    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(IRewardedAdResult::Failed);
     } else {
@@ -96,7 +107,9 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(rewarded).c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);

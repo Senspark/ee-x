@@ -98,8 +98,14 @@ Task<bool> Self::load() {
         [this] { //
             bridge_.call(messageHelper_.load());
         },
-        [](bool result) {
-            // OK.
+        [this](bool result) {
+            if (result) {
+                // OK.
+            } else {
+                // Reinitialize internal ad if it was failed to load.
+                destroyInternalAd();
+                createInternalAd();
+            }
         });
     co_return result;
 }
@@ -140,11 +146,6 @@ void Self::onFailedToLoad(const std::string& message) {
     logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
                   message.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-
-    // Reinitialize internal ad if it was failed to load.
-    destroyInternalAd();
-    createInternalAd();
-
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
@@ -162,7 +163,9 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(rewarded).c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);

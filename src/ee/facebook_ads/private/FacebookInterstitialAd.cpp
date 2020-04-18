@@ -153,7 +153,8 @@ void Self::onClicked() {
 }
 
 void Self::onClosed() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(true);
     } else {

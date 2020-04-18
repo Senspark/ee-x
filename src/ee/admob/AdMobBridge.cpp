@@ -90,7 +90,8 @@ void Self::addTestDevice(const std::string& hash) {
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                               BannerAdSize adSize) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
+                  static_cast<int>(adSize));
     auto iter = bannerAds_.find(adId);
     if (iter != bannerAds_.cend()) {
         return iter->second;

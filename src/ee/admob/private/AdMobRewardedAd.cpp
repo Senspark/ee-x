@@ -159,7 +159,9 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(rewarded).c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);

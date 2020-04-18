@@ -230,8 +230,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
     if (rewardedAd_) {
         return rewardedAd_;
     }
-    auto ad =
-        std::shared_ptr<RewardedAd>(new RewardedAd(rewardedAdDisplayer_, this));
+    auto ad = std::shared_ptr<RewardedAd>(
+        new RewardedAd(logger_, rewardedAdDisplayer_, this));
     rewardedAd_ = ad;
     return ad;
 }

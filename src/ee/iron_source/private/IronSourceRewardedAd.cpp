@@ -12,6 +12,7 @@
 
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
 #include <ee/coroutine/Task.hpp>
 
 #include "ee/iron_source/IronSourceBridge.hpp"
@@ -34,9 +35,8 @@ Self::RewardedAd(
 Self::~RewardedAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s: begin", __PRETTY_FUNCTION__);
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedAd(adId_);
-    logger_.debug("%s: end", __PRETTY_FUNCTION__);
 }
 
 bool Self::isLoaded() const {
@@ -49,6 +49,7 @@ Task<bool> Self::load() {
 }
 
 Task<IRewardedAdResult> Self::show() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd(adId_);
@@ -60,6 +61,9 @@ Task<IRewardedAdResult> Self::show() {
 }
 
 void Self::onFailedToShow(const std::string& message) {
+    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(IRewardedAdResult::Failed);
     } else {
@@ -68,6 +72,7 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
@@ -76,7 +81,9 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(rewarded).c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);

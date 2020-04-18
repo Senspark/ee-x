@@ -83,14 +83,18 @@ bool Self::isLoaded() const {
 Task<bool> Self::load() {
     logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process([this] {
-        if (attempted_) {
-            destroyInternalAd();
-            createInternalAd();
-        }
-        attempted_ = true;
-        helper_.load();
-    });
+    auto result = co_await loader_->process(
+        [this] {
+            if (attempted_) {
+                destroyInternalAd();
+                createInternalAd();
+            }
+            attempted_ = true;
+            helper_.load();
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 

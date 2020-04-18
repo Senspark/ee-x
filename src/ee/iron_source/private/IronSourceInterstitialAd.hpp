@@ -30,8 +30,10 @@ public:
 private:
     friend Bridge;
 
-    explicit InterstitialAd(const Logger& logger, Bridge* plugin,
-                            const std::string& adId);
+    explicit InterstitialAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        Bridge* plugin, const std::string& adId);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);
@@ -40,11 +42,11 @@ private:
     void onClosed();
 
     const Logger& logger_;
+    std::shared_ptr<ads::IAsyncHelper<bool>> displayer_;
     Bridge* plugin_;
     std::string adId_;
 
-    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
-    std::unique_ptr<ads::AsyncHelper<bool>> displayer_;
+    std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace iron_source
 } // namespace ee

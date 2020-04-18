@@ -1,21 +1,22 @@
 #ifndef EE_X_ASYNC_HELPER_HPP
 #define EE_X_ASYNC_HELPER_HPP
 
-#include <functional>
-#include <memory>
-
-#include <ee/CoroutineFwd.hpp>
+#include "ee/ads/internal/IAsyncHelper.hpp"
 
 namespace ee {
 namespace ads {
 template <class Result>
-class AsyncHelper {
+class AsyncHelper : public IAsyncHelper<Result> {
 public:
-    using Processor = std::function<void()>;
+    using typename IAsyncHelper<Result>::Processor;
+    using typename IAsyncHelper<Result>::Finalizer;
 
-    bool isProcessing() const;
-    Task<Result> process(const Processor& processor);
-    void resolve(Result result);
+    virtual bool isProcessing() const override;
+
+    virtual Task<Result> process(const Processor& processor,
+                                 const Finalizer& finalizer) override;
+
+    virtual void resolve(Result result) override;
 
 private:
     bool processing_;

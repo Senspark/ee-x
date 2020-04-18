@@ -9,7 +9,6 @@
 #include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
 
 #include "ee/app_lovin/AppLovinBridge.hpp"
 
@@ -17,10 +16,12 @@ namespace ee {
 namespace app_lovin {
 using Self = RewardedAd;
 
-Self::RewardedAd(AppLovin* plugin)
-    : plugin_(plugin) {
+Self::RewardedAd(
+    const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+    AppLovin* plugin)
+    : displayer_(displayer)
+    , plugin_(plugin) {
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
-    displayer_ = std::make_unique<ads::AsyncHelper<IRewardedAdResult>>();
 }
 
 Self::~RewardedAd() {
@@ -32,22 +33,24 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    auto result = co_await loader_->process([this] { //
-        plugin_->loadRewardedAd();
-    });
+    auto result = co_await loader_->process(
+        [this] { //
+            plugin_->loadRewardedAd();
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 
 Task<IRewardedAdResult> Self::show() {
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startRewardedVideo([this](bool rewarded) {
-            displayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                         : IRewardedAdResult::Canceled);
+    auto result = co_await displayer_->process(
+        [this] { //
+            plugin_->showRewardedAd();
+        },
+        [](IRewardedAdResult result) {
+            // OK.
         });
-        assert(successful);
-        plugin_->showRewardedAd();
-    });
     co_return result;
 }
 
@@ -81,9 +84,12 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded);
-    assert(wasRewardedVideo);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                     : IRewardedAdResult::Canceled);
+    } else {
+        assert(false);
+    }
 }
 } // namespace app_lovin
 } // namespace ee

@@ -61,7 +61,10 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    RewardedAd* rewardedAd_;
+    /// Share the same instance.
+    std::weak_ptr<RewardedAd> rewardedAd_;
+
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace app_lovin
 } // namespace ee

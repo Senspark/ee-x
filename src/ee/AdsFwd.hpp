@@ -34,6 +34,9 @@ class NullRewardedAd;
 class MessageHelper;
 
 template <class Result>
+class IAsyncHelper;
+
+template <class Result>
 class AsyncHelper;
 
 class MediationManager;

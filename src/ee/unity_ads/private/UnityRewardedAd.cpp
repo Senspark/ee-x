@@ -10,9 +10,9 @@
 
 #include <cassert>
 
-#include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/coroutine/Task.hpp>
 
 #include "ee/unity_ads/UnityAdsBridge.hpp"
 
@@ -20,8 +20,12 @@ namespace ee {
 namespace unity_ads {
 using Self = RewardedAd;
 
-Self::RewardedAd(const Logger& logger, Bridge* plugin, const std::string& adId)
+Self::RewardedAd(
+    const Logger& logger,
+    const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+    Bridge* plugin, const std::string& adId)
     : logger_(logger)
+    , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
@@ -44,15 +48,13 @@ Task<bool> Self::load() {
 
 Task<IRewardedAdResult> Self::show() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startRewardedVideo([this](bool rewarded) {
-            displayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                         : IRewardedAdResult::Canceled);
+    auto result = co_await displayer_->process(
+        [this] { //
+            plugin_->showRewardedAd(adId_);
+        },
+        [](IRewardedAdResult result) {
+            // OK.
         });
-        assert(successful);
-        plugin_->showRewardedAd(adId_);
-    });
     co_return result;
 }
 
@@ -65,14 +67,12 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClosed(bool rewarded) {
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Other mediation network.
-    // Not sure interstitial ad or rewarded video so check both.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(false);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                     : IRewardedAdResult::Canceled);
+    } else {
+        assert(false);
+    }
 }
 } // namespace unity_ads
 } // namespace ee

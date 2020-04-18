@@ -11,7 +11,6 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 
 #include "ee/iron_source/IronSourceBridge.hpp"
@@ -20,9 +19,11 @@ namespace ee {
 namespace iron_source {
 using Self = InterstitialAd;
 
-Self::InterstitialAd(const Logger& logger, Bridge* plugin,
-                     const std::string& adId)
+Self::InterstitialAd(const Logger& logger,
+                     const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+                     Bridge* plugin, const std::string& adId)
     : logger_(logger)
+    , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId) {
     logger_.debug(__PRETTY_FUNCTION__);
@@ -39,22 +40,25 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    auto result = co_await loader_->process([this] { //
-        plugin_->loadInterstitialAd();
-    });
+    auto result = co_await loader_->process(
+        [this] { //
+            plugin_->loadInterstitialAd();
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 
 Task<bool> Self::show() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startInterstitialAd([this] { //
-            displayer_->resolve(true);
+    auto result = co_await displayer_->process(
+        [this] { //
+            plugin_->showInterstitialAd(adId_);
+        },
+        [](bool result) {
+            // OK
         });
-        assert(successful);
-        plugin_->showInterstitialAd(adId_);
-    });
     co_return result;
 }
 
@@ -97,13 +101,11 @@ void Self::onClicked() {
 
 void Self::onClosed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Other mediation network.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(false);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(true);
+    } else {
+        assert(false);
+    }
 }
 } // namespace iron_source
 } // namespace ee

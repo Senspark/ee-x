@@ -11,7 +11,6 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/IMessageBridge.hpp>
@@ -22,16 +21,18 @@ namespace ee {
 namespace admob {
 using Self = RewardedAd;
 
-Self::RewardedAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
-                 const std::string& adId)
+Self::RewardedAd(
+    IMessageBridge& bridge, const Logger& logger,
+    const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+    AdMob* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
+    , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId)
     , messageHelper_("AdMobRewardedAd", adId) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
-    displayer_ = std::make_unique<ads::AsyncHelper<IRewardedAdResult>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -91,25 +92,30 @@ bool Self::isLoaded() const {
 Task<bool> Self::load() {
     logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process([this] { //
-        bridge_.call(messageHelper_.load());
-    });
+    auto result = co_await loader_->process(
+        [this] { //
+            bridge_.call(messageHelper_.load());
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 
 Task<IRewardedAdResult> Self::show() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startRewardedVideo([this](bool rewarded) {
-            destroyInternalAd();
-            createInternalAd();
-            displayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                         : IRewardedAdResult::Canceled);
+    auto result = co_await displayer_->process(
+        [this] { //
+            bridge_.call(messageHelper_.show());
+        },
+        [this](IRewardedAdResult result) {
+            if (result == IRewardedAdResult::Failed) {
+                // Failed.
+            } else {
+                destroyInternalAd();
+                createInternalAd();
+            }
         });
-        assert(successful);
-        bridge_.call(messageHelper_.show());
-    });
     co_return result;
 }
 
@@ -152,9 +158,12 @@ void Self::onFailedToShow(const std::string& message) {
 
 void Self::onClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.finishRewardedVideo(rewarded);
-    assert(successful);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                     : IRewardedAdResult::Canceled);
+    } else {
+        assert(false);
+    }
 }
 } // namespace admob
 } // namespace ee

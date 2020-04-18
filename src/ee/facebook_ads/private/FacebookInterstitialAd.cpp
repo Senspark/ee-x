@@ -11,7 +11,6 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/IMessageBridge.hpp>
@@ -23,15 +22,16 @@ namespace facebook_ads {
 using Self = InterstitialAd;
 
 Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
+                     const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
                      Bridge* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
+    , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId)
     , messageHelper_("FacebookInterstitialAd", adId) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
-    displayer_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -90,24 +90,28 @@ bool Self::isLoaded() const {
 Task<bool> Self::load() {
     logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process([this] { //
-        bridge_.call(messageHelper_.load());
-    });
+    auto result = co_await loader_->process(
+        [this] { //
+            bridge_.call(messageHelper_.load());
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 
 Task<bool> Self::show() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startInterstitialAd([this]() {
-            destroyInternalAd();
-            createInternalAd();
-            displayer_->resolve(true);
+    auto result = co_await displayer_->process(
+        [this] { //
+            bridge_.call(messageHelper_.show());
+        },
+        [this](bool result) {
+            if (result) {
+                destroyInternalAd();
+                createInternalAd();
+            }
         });
-        assert(successful);
-        bridge_.call(messageHelper_.show());
-    });
     co_return result;
 }
 
@@ -148,9 +152,11 @@ void Self::onClicked() {
 
 void Self::onClosed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.finishInterstitialAd();
-    assert(successful);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(true);
+    } else {
+        assert(false);
+    }
 }
 } // namespace facebook_ads
 } // namespace ee

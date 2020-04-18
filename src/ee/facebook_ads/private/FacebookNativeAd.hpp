@@ -60,7 +60,7 @@ private:
     /// Facebook native ads can not be loaded twice.
     bool attempted_;
 
-    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
+    std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace facebook_ads
 } // namespace ee

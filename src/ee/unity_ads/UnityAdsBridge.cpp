@@ -12,13 +12,11 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/NullInterstitialAd.hpp>
-#include <ee/ads/NullRewardedAd.hpp>
+#include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
-#include <ee/core/internal/SharedPtrUtils.hpp>
 
 #include "ee/unity_ads/private/UnityInterstitialAd.hpp"
 #include "ee/unity_ads/private/UnityRewardedAd.hpp"
@@ -55,6 +53,10 @@ Self::Bridge(const Logger& logger)
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     displaying_ = false;
+
+    auto&& mediation = ads::MediationManager::getInstance();
+    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
+    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -97,7 +99,7 @@ Self::createInterstitialAd(const std::string& adId) {
     auto iter = interstitialAds_.find(adId);
     if (iter == interstitialAds_.cend()) {
         auto ad = std::shared_ptr<InterstitialAd>(
-            new InterstitialAd(logger_, this, adId));
+            new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId));
         iter = interstitialAds_.emplace(adId, ad).first;
     }
     return iter->second.lock();
@@ -117,8 +119,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter == rewardedAds_.cend()) {
-        auto ad =
-            std::shared_ptr<RewardedAd>(new RewardedAd(logger_, this, adId));
+        auto ad = std::shared_ptr<RewardedAd>(
+            new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
         iter = rewardedAds_.emplace(adId, ad).first;
     }
     return iter->second.lock();
@@ -191,14 +193,16 @@ void Self::onMediationAdFailedToShow(const std::string& adId,
 }
 
 void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Other mediation network.
-    // Not sure interstitial ad or rewarded video so check both.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    if (interstitialAdDisplayer_->isProcessing()) {
+        interstitialAdDisplayer_->resolve(true);
+        return;
+    }
+    if (rewardedAdDisplayer_->isProcessing()) {
+        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                               : IRewardedAdResult::Canceled);
+        return;
+    }
+    assert(false);
 }
 } // namespace unity_ads
 } // namespace ee

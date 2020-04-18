@@ -53,7 +53,7 @@ private:
     ads::MessageHelper messageHelper_;
     ads::AdViewHelper helper_;
 
-    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
+    std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace facebook_ads
 } // namespace ee

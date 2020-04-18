@@ -2,12 +2,11 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/NullRewardedAd.hpp>
+#include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
-#include <ee/core/internal/SharedPtrUtils.hpp>
 
 #include "ee/vungle/private/VungleRewardedAd.hpp"
 
@@ -39,6 +38,9 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);
+    auto&& mediation = ads::MediationManager::getInstance();
+    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
@@ -92,8 +94,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter == rewardedAds_.cend()) {
-        auto ad =
-            std::shared_ptr<RewardedAd>(new RewardedAd(logger_, this, adId));
+        auto ad = std::shared_ptr<RewardedAd>(
+            new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
         iter = rewardedAds_.emplace(adId, ad).first;
     }
     return iter->second.lock();
@@ -172,9 +174,12 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
 void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
     logger_.debug("%s: %s", __PRETTY_FUNCTION__,
                   core::toString(rewarded).c_str());
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.finishRewardedVideo(rewarded);
-    assert(successful);
+    if (rewardedAdDisplayer_->isProcessing()) {
+        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                               : IRewardedAdResult::Canceled);
+        return;
+    }
+    assert(false);
 }
 } // namespace vungle
 } // namespace ee

@@ -70,6 +70,14 @@ private:
 
     IMessageBridge& bridge_;
     const Logger& logger_;
+
+    std::map<std::string, std::weak_ptr<IAdView>> bannerAds_;
+    std::map<std::string, std::weak_ptr<IAdView>> nativeAds_;
+    std::map<std::string, std::weak_ptr<IInterstitialAd>> interstitialAds_;
+    std::map<std::string, std::weak_ptr<IRewardedAd>> rewardedAds_;
+
+    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

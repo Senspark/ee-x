@@ -11,7 +11,6 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/coroutine/Task.hpp>
 
@@ -21,13 +20,16 @@ namespace ee {
 namespace vungle {
 using Self = RewardedAd;
 
-Self::RewardedAd(const Logger& logger, Bridge* plugin, const std::string& adId)
+Self::RewardedAd(
+    const Logger& logger,
+    const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+    Bridge* plugin, const std::string& adId)
     : logger_(logger)
+    , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
-    displayer_ = std::make_unique<ads::AsyncHelper<IRewardedAdResult>>();
 }
 
 Self::~RewardedAd() {
@@ -41,22 +43,24 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    auto result = co_await loader_->process([this] { //
-        plugin_->loadRewardedAd(adId_);
-    });
+    auto result = co_await loader_->process(
+        [this] { //
+            plugin_->loadRewardedAd(adId_);
+        },
+        [](bool result) {
+            // OK.
+        });
     co_return result;
 }
 
 Task<IRewardedAdResult> Self::show() {
-    auto result = co_await displayer_->process([this] {
-        auto&& mediation = ads::MediationManager::getInstance();
-        auto successful = mediation.startRewardedVideo([this](bool rewarded) {
-            displayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                         : IRewardedAdResult::Canceled);
+    auto result = co_await displayer_->process(
+        [this] { //
+            plugin_->showRewardedAd(adId_);
+        },
+        [](IRewardedAdResult result) {
+            // OK.
         });
-        assert(successful);
-        plugin_->showRewardedAd(adId_);
-    });
     co_return result;
 }
 
@@ -91,13 +95,12 @@ void Self::onFailedToShow(const std::string& message) {
 
 void Self::onClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Other mediation network.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(rewarded);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                     : IRewardedAdResult::Canceled);
+    } else {
+        assert(false);
+    }
 }
 } // namespace vungle
 } // namespace ee

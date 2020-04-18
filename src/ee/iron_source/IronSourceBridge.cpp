@@ -4,13 +4,11 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/ads/NullInterstitialAd.hpp>
-#include <ee/ads/NullRewardedAd.hpp>
+#include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
-#include <ee/core/internal/SharedPtrUtils.hpp>
 
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
@@ -49,6 +47,9 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    auto&& mediation = ads::MediationManager::getInstance();
+    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
+    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -118,7 +119,7 @@ Self::createInterstitialAd(const std::string& adId) {
         return interstitialAd_.lock();
     }
     auto result = std::shared_ptr<InterstitialAd>(
-        new InterstitialAd(logger_, this, adId));
+        new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId));
     interstitialAd_ = result;
     return result;
 }
@@ -132,13 +133,13 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
-    // adId has no usage at the moment since all ads share the smae instance.
+    // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (not rewardedAd_.expired()) {
         return rewardedAd_.lock();
     }
-    auto result =
-        std::shared_ptr<RewardedAd>(new RewardedAd(logger_, this, adId));
+    auto result = std::shared_ptr<RewardedAd>(
+        new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
     rewardedAd_ = result;
     return result;
 }
@@ -250,13 +251,16 @@ void Self::onRewardedAdClosed(bool rewarded) {
 
 void Self::onMediationAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto&& mediation = ads::MediationManager::getInstance();
-
-    // Other mediation network.
-    auto wasInterstitialAd = mediation.setInterstitialAdDone();
-    auto wasRewardedVideo = mediation.finishRewardedVideo(false);
-
-    assert(wasInterstitialAd || wasRewardedVideo);
+    if (interstitialAdDisplayer_->isProcessing()) {
+        interstitialAdDisplayer_->resolve(true);
+        return;
+    }
+    if (rewardedAdDisplayer_->isProcessing()) {
+        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
+                                               : IRewardedAdResult::Canceled);
+        return;
+    }
+    assert(false);
 }
 } // namespace iron_source
 } // namespace ee

@@ -36,13 +36,15 @@ private:
     void onFailedToLoad(const std::string& adId, const std::string& message);
     void onFailedToShow(const std::string& adId, const std::string& message);
     void onClosed(const std::string& adId, bool rewarded);
-    
+
     void onMediationAdClosed(const std::string& adId, bool rewarded);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
 
     std::map<std::string, std::weak_ptr<RewardedAd>> rewardedAds_;
+
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace vungle
 } // namespace ee

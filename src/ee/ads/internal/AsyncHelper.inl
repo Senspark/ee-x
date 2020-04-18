@@ -11,14 +11,16 @@ bool Self<T>::isProcessing() const {
 }
 
 template <class T>
-Task<T> Self<T>::process(const Processor& processor) {
+Task<T> Self<T>::process(const Processor& processor,
+                         const Finalizer& finalizer) {
     if (processing_) {
         // Waiting.
     } else {
         awaiter_ = std::make_unique<LambdaAwaiter<T>>(
-            [this, processor](auto&& resolve) {
+            [this, processor, finalizer](auto&& resolve) {
                 processing_ = true;
-                resolve_ = [this, resolve](T result) {
+                resolve_ = [this, resolve, finalizer](T result) {
+                    finalizer(result);
                     resolve(result);
                     resolve_ = nullptr;
                     awaiter_.reset();

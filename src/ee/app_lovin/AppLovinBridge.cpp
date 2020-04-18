@@ -10,9 +10,7 @@
 
 #include <cassert>
 
-#include <ee/nlohmann/json.hpp>
-
-#include <ee/ads/NullRewardedAd.hpp>
+#include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
@@ -131,7 +129,8 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    rewardedAd_ = nullptr;
+    auto&& mediation = ads::MediationManager::getInstance();
+    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -228,20 +227,20 @@ void Self::showInterstitialAd() {
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ != nullptr) {
-        return std::make_shared<NullRewardedAd>();
+    if (not rewardedAd_.expired()) {
+        return rewardedAd_.lock();
     }
-    auto result = new RewardedAd(this);
+    auto result =
+        std::shared_ptr<RewardedAd>(new RewardedAd(rewardedAdDisplayer_, this));
     rewardedAd_ = result;
-    return std::shared_ptr<IRewardedAd>(result);
+    return result;
 }
 
 bool Self::destroyRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ == nullptr) {
+    if (rewardedAd_.expired()) {
         return false;
     }
-    rewardedAd_ = nullptr;
     return true;
 }
 
@@ -281,8 +280,9 @@ void Self::onInterstitialAdClosed() {
 
 void Self::onRewardedAdLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ != nullptr) {
-        rewardedAd_->onLoaded();
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onLoaded();
     } else {
         assert(false);
     }
@@ -290,8 +290,9 @@ void Self::onRewardedAdLoaded() {
 
 void Self::onRewardedAdFailedToLoad(const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
-    if (rewardedAd_ != nullptr) {
-        rewardedAd_->onFailedToLoad(message);
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onFailedToLoad(message);
     } else {
         assert(false);
     }
@@ -299,8 +300,9 @@ void Self::onRewardedAdFailedToLoad(const std::string& message) {
 
 void Self::onRewardedAdClicked() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ != nullptr) {
-        rewardedAd_->onClicked();
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onClicked();
     } else {
         assert(false);
     }
@@ -308,8 +310,9 @@ void Self::onRewardedAdClicked() {
 
 void Self::onRewardedAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ != nullptr) {
-        rewardedAd_->onClosed(rewarded);
+    auto ad = rewardedAd_.lock();
+    if (ad) {
+        ad->onClosed(rewarded);
     } else {
         assert(false);
     }

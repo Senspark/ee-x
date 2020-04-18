@@ -30,18 +30,19 @@ public:
 private:
     friend Bridge;
 
-    explicit RewardedAd(const Logger& logger, Bridge* plugin,
-                        const std::string& adId);
+    explicit RewardedAd(
+        const Logger& logger,
+        std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        Bridge* plugin, const std::string& adId);
 
     void onFailedToShow(const std::string& message);
     void onClicked();
     void onClosed(bool rewarded);
 
     const Logger& logger_;
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;
-
-    std::unique_ptr<ads::AsyncHelper<IRewardedAdResult>> displayer_;
 };
 } // namespace iron_source
 } // namespace ee

@@ -28,17 +28,19 @@ public:
 private:
     friend Bridge;
 
-    explicit RewardedAd(Bridge* plugin);
+    explicit RewardedAd(
+        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        Bridge* plugin);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onClicked();
     void onClosed(bool rewarded);
 
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> displayer_;
     Bridge* plugin_;
 
-    std::unique_ptr<ads::AsyncHelper<bool>> loader_;
-    std::unique_ptr<ads::AsyncHelper<IRewardedAdResult>> displayer_;
+    std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace app_lovin
 } // namespace ee

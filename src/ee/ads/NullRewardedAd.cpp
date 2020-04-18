@@ -14,6 +14,8 @@ namespace ee {
 namespace ads {
 using Self = NullRewardedAd;
 
+void Self::destroy() {}
+
 bool Self::isLoaded() const {
     return false;
 }

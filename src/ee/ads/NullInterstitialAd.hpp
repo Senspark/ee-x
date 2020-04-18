@@ -18,6 +18,8 @@ namespace ads {
 class NullInterstitialAd : public IInterstitialAd,
                            public ObserverManager<IInterstitialAdObserver> {
 public:
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
     virtual Task<bool> show() override;

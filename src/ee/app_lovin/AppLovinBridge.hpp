@@ -62,7 +62,7 @@ private:
     const Logger& logger_;
 
     /// Share the same instance.
-    std::weak_ptr<RewardedAd> rewardedAd_;
+    std::shared_ptr<RewardedAd> rewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

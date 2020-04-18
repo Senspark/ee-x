@@ -24,7 +24,9 @@ Self::RewardedAd(
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 }
 
-Self::~RewardedAd() {
+Self::~RewardedAd() {}
+
+void Self::destroy() {
     plugin_->destroyRewardedAd();
 }
 

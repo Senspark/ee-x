@@ -50,7 +50,9 @@ Self::BannerAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
         messageHelper_.onClicked());
 }
 
-Self::~BannerAd() {
+Self::~BannerAd() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());

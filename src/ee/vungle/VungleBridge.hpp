@@ -42,7 +42,7 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    std::map<std::string, std::weak_ptr<RewardedAd>> rewardedAds_;
+    std::map<std::string, std::shared_ptr<RewardedAd>> rewardedAds_;
 
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

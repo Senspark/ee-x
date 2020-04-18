@@ -30,6 +30,8 @@ public:
 
     Self& addItem(const std::shared_ptr<IInterstitialAd>& item);
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
     virtual Task<bool> show() override;

@@ -31,7 +31,9 @@ Self::RewardedAd(
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
 }
 
-Self::~RewardedAd() {
+Self::~RewardedAd() {}
+
+void Self::destroy() {
     logger_.debug("%s: begin", __PRETTY_FUNCTION__);
     plugin_->destroyRewardedAd(adId_);
     logger_.debug("%s: end", __PRETTY_FUNCTION__);

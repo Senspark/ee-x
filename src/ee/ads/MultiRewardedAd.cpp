@@ -48,6 +48,14 @@ Self& Self::addItem(const std::shared_ptr<IRewardedAd>& item) {
     return *this;
 }
 
+void Self::destroy() {
+    for (auto&& item : items_) {
+        item->destroy();
+    }
+    items_.clear();
+    handle_->clear();
+}
+
 bool Self::isLoaded() const {
     for (auto&& item : items_) {
         if (item->isLoaded()) {

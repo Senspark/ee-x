@@ -25,6 +25,8 @@ Self::NullAdView() {
     visible_ = false;
 }
 
+void Self::destroy() {}
+
 bool Self::isLoaded() const {
     return loaded_;
 }

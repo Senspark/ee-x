@@ -21,6 +21,8 @@ class BannerAd : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     virtual ~BannerAd() override;
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
 

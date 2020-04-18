@@ -18,6 +18,7 @@ namespace ads {
 class NullAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     NullAdView();
+    virtual void destroy() override;
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;

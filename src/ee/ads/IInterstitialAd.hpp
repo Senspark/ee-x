@@ -31,6 +31,9 @@ class IInterstitialAd
 public:
     virtual ~IInterstitialAd() = default;
 
+    /// Destroys this ad.
+    virtual void destroy() = 0;
+
     /// Checks whether this ad is loaded.
     virtual bool isLoaded() const = 0;
 

@@ -24,6 +24,8 @@ class RewardedAd : public IRewardedAd,
 public:
     virtual ~RewardedAd() override;
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
     virtual Task<IRewardedAdResult> show() override;

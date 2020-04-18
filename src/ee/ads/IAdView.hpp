@@ -31,6 +31,9 @@ class IAdView : public virtual IObserverManager<IAdViewObserver> {
 public:
     virtual ~IAdView() = default;
 
+    /// Destroys this ad.
+    virtual void destroy() = 0;
+
     /// Checks whether this ad view is loaded.
     virtual bool isLoaded() const = 0;
 

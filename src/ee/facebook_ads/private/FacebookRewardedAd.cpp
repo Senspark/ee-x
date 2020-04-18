@@ -60,7 +60,9 @@ Self::RewardedAd(
         messageHelper_.onClosed());
 }
 
-Self::~RewardedAd() {
+Self::~RewardedAd() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());

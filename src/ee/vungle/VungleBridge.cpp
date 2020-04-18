@@ -93,12 +93,13 @@ void Self::initialize(const std::string& gameId, const std::string& adId) {
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
-    if (iter == rewardedAds_.cend()) {
-        auto ad = std::shared_ptr<RewardedAd>(
-            new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
-        iter = rewardedAds_.emplace(adId, ad).first;
+    if (iter != rewardedAds_.cend()) {
+        return iter->second;
     }
-    return iter->second.lock();
+    auto ad = std::shared_ptr<RewardedAd>(
+        new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
+    rewardedAds_.emplace(adId, ad);
+    return ad;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
@@ -130,7 +131,7 @@ void Self::onLoaded(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.lock()->onLoaded();
+        iter->second->onLoaded();
     } else {
         // Mediation.
         assert(false);
@@ -141,7 +142,7 @@ void Self::onFailedToLoad(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.lock()->onFailedToLoad(message);
+        iter->second->onFailedToLoad(message);
     } else {
         // Mediation.
         assert(false);
@@ -152,7 +153,7 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.lock()->onFailedToShow(message);
+        iter->second->onFailedToShow(message);
     } else {
         // Mediation.
         assert(false);
@@ -163,7 +164,7 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.lock()->onClosed(rewarded);
+        iter->second->onClosed(rewarded);
     } else {
         // Mediation.
         assert(false);

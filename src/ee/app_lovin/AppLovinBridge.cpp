@@ -227,20 +227,21 @@ void Self::showInterstitialAd() {
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (not rewardedAd_.expired()) {
-        return rewardedAd_.lock();
+    if (rewardedAd_) {
+        return rewardedAd_;
     }
-    auto result =
+    auto ad =
         std::shared_ptr<RewardedAd>(new RewardedAd(rewardedAdDisplayer_, this));
-    rewardedAd_ = result;
-    return result;
+    rewardedAd_ = ad;
+    return ad;
 }
 
 bool Self::destroyRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_.expired()) {
+    if (rewardedAd_ == nullptr) {
         return false;
     }
+    rewardedAd_.reset();
     return true;
 }
 
@@ -280,9 +281,8 @@ void Self::onInterstitialAdClosed() {
 
 void Self::onRewardedAdLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onLoaded();
+    if (rewardedAd_) {
+        rewardedAd_->onLoaded();
     } else {
         assert(false);
     }
@@ -290,9 +290,8 @@ void Self::onRewardedAdLoaded() {
 
 void Self::onRewardedAdFailedToLoad(const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onFailedToLoad(message);
+    if (rewardedAd_) {
+        rewardedAd_->onFailedToLoad(message);
     } else {
         assert(false);
     }
@@ -300,9 +299,8 @@ void Self::onRewardedAdFailedToLoad(const std::string& message) {
 
 void Self::onRewardedAdClicked() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onClicked();
+    if (rewardedAd_) {
+        rewardedAd_->onClicked();
     } else {
         assert(false);
     }
@@ -310,9 +308,8 @@ void Self::onRewardedAdClicked() {
 
 void Self::onRewardedAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onClosed(rewarded);
+    if (rewardedAd_) {
+        rewardedAd_->onClosed(rewarded);
     } else {
         assert(false);
     }

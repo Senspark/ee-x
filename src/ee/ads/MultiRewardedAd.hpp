@@ -29,6 +29,8 @@ public:
 
     Self& addItem(const std::shared_ptr<IRewardedAd>& item);
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
     virtual Task<IRewardedAdResult> show() override;

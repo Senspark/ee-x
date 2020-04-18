@@ -19,10 +19,6 @@ Self::MultiInterstitialAd() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiInterstitialAd() {
-    handle_->clear();
-}
-
 Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
     items_.push_back(item);
     (*handle_).bind(*item).addObserver({
@@ -46,6 +42,14 @@ Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
             },
     });
     return *this;
+}
+
+void Self::destroy() {
+    for (auto&& item : items_) {
+        item->destroy();
+    }
+    items_.clear();
+    handle_->clear();
 }
 
 bool Self::isLoaded() const {

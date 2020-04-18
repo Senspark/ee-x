@@ -59,7 +59,9 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
         messageHelper_.onClosed());
 }
 
-Self::~InterstitialAd() {
+Self::~InterstitialAd() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());

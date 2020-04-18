@@ -25,9 +25,7 @@ Self::MultiAdView() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiAdView() {
-    handle_->clear();
-}
+Self::~MultiAdView() {}
 
 Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
     items_.push_back(item);
@@ -76,6 +74,14 @@ Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
                 },
         });
     return *this;
+}
+
+void Self::destroy() {
+    for (auto&& item : items_) {
+        item->destroy();
+    }
+    items_.clear();
+    handle_->clear();
 }
 
 bool Self::isLoaded() const {

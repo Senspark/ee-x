@@ -49,9 +49,13 @@ public:
                                             const std::string& layoutName,
                                             const NativeAdLayout& identifiers);
 
+    /// Creates an interstitial ad.
+    /// @param[in] adId The ad unit ID.
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId);
 
+    /// Creates an rewarded ad.
+    /// @param[in] adId The ad unit ID.
     std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
@@ -68,10 +72,10 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    std::map<std::string, std::weak_ptr<IAdView>> bannerAds_;
-    std::map<std::string, std::weak_ptr<IAdView>> nativeAds_;
-    std::map<std::string, std::weak_ptr<IInterstitialAd>> interstitialAds_;
-    std::map<std::string, std::weak_ptr<IRewardedAd>> rewardedAds_;
+    std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
+    std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
+    std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
+    std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
 
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;

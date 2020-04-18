@@ -21,6 +21,8 @@ class NativeAd : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     virtual ~NativeAd() override;
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
 

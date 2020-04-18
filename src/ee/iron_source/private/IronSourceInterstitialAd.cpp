@@ -29,7 +29,9 @@ Self::InterstitialAd(const Logger& logger,
     logger_.debug(__PRETTY_FUNCTION__);
 }
 
-Self::~InterstitialAd() {
+Self::~InterstitialAd() {}
+
+void Self::destroy() {
     logger_.debug("%s: begin", __PRETTY_FUNCTION__);
     plugin_->destroyInterstitialAd(adId_);
     logger_.debug("%s: end", __PRETTY_FUNCTION__);

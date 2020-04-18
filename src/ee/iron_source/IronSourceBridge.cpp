@@ -115,40 +115,42 @@ std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (not interstitialAd_.expired()) {
-        return interstitialAd_.lock();
+    if (interstitialAd_) {
+        return interstitialAd_;
     }
-    auto result = std::shared_ptr<InterstitialAd>(
+    auto ad = std::shared_ptr<InterstitialAd>(
         new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId));
-    interstitialAd_ = result;
-    return result;
+    interstitialAd_ = ad;
+    return ad;
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (interstitialAd_.expired()) {
+    if (interstitialAd_ == nullptr) {
         return false;
     }
+    interstitialAd_.reset();
     return true;
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (not rewardedAd_.expired()) {
-        return rewardedAd_.lock();
+    if (rewardedAd_) {
+        return rewardedAd_;
     }
-    auto result = std::shared_ptr<RewardedAd>(
+    auto ad = std::shared_ptr<RewardedAd>(
         new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
-    rewardedAd_ = result;
-    return result;
+    rewardedAd_ = ad;
+    return ad;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedAd_.expired()) {
+    if (rewardedAd_ == nullptr) {
         return false;
     }
+    rewardedAd_.reset();
     return true;
 }
 
@@ -178,9 +180,8 @@ void Self::showRewardedAd(const std::string& adId) {
 
 void Self::onInterstitialAdLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = interstitialAd_.lock();
-    if (ad) {
-        ad->onLoaded();
+    if (interstitialAd_) {
+        interstitialAd_->onLoaded();
     } else {
         assert(false);
     }
@@ -188,18 +189,16 @@ void Self::onInterstitialAdLoaded() {
 
 void Self::onInterstitialAdFailedToLoad(const std::string& message) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = interstitialAd_.lock();
-    if (ad) {
-        ad->onFailedToLoad(message);
+    if (interstitialAd_) {
+        interstitialAd_->onFailedToLoad(message);
     } else {
         assert(false);
     }
 }
 
 void Self::onInterstitialAdClicked() {
-    auto ad = interstitialAd_.lock();
-    if (ad) {
-        ad->onClicked();
+    if (interstitialAd_) {
+        interstitialAd_->onClicked();
     } else {
         assert(false);
     }
@@ -207,9 +206,8 @@ void Self::onInterstitialAdClicked() {
 
 void Self::onInterstitialAdClosed() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = interstitialAd_.lock();
-    if (ad) {
-        ad->onClosed();
+    if (interstitialAd_) {
+        interstitialAd_->onClosed();
     } else {
         assert(false);
         onMediationAdClosed(false);
@@ -219,18 +217,16 @@ void Self::onInterstitialAdClosed() {
 #pragma mark - Rewarded Ad Callbacks.
 
 void Self::onRewardedAdFailedToShow(const std::string& message) {
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onFailedToShow(message);
+    if (rewardedAd_) {
+        rewardedAd_->onFailedToShow(message);
     } else {
         assert(false);
     }
 }
 
 void Self::onRewardedAdClicked() {
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onClicked();
+    if (rewardedAd_) {
+        rewardedAd_->onClicked();
     } else {
         assert(false);
     }
@@ -238,9 +234,8 @@ void Self::onRewardedAdClicked() {
 
 void Self::onRewardedAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    auto ad = rewardedAd_.lock();
-    if (ad) {
-        ad->onClosed(rewarded);
+    if (rewardedAd_) {
+        rewardedAd_->onClosed(rewarded);
     } else {
         assert(false);
         onMediationAdClosed(rewarded);

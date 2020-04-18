@@ -58,9 +58,9 @@ private:
     const Logger& logger_;
 
     /// Share the same ad instance.
-    std::weak_ptr<InterstitialAd> interstitialAd_;
-    std::weak_ptr<RewardedAd> rewardedAd_;
-    
+    std::shared_ptr<InterstitialAd> interstitialAd_;
+    std::shared_ptr<RewardedAd> rewardedAd_;
+
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

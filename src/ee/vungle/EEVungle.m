@@ -166,10 +166,13 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
                  message:[EEJsonUtils convertDictionaryToString:@{
                      @"ad_id": adId,
                  }]];
-    } else {
-        NSAssert(adId == nil, @"");
-        NSAssert(error != nil, @"");
+        return;
     }
+    if (error != nil) {
+        NSAssert(adId == nil, @"");
+        return;
+    }
+    // Mediation ???
 }
 
 - (void)vungleWillShowAdForPlacementID:(nullable NSString*)adId {

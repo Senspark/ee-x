@@ -31,6 +31,8 @@ class NullAdView;
 class NullInterstitialAd;
 class NullRewardedAd;
 
+class GuardedAdView;
+class GuardedInterstitialAd;
 class GuardedRewardedAd;
 
 class MessageHelper;

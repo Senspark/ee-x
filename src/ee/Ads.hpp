@@ -11,6 +11,8 @@
 
 #include <ee/Core.hpp>
 
+#include "ee/ads/GuardedAdView.hpp"
+#include "ee/ads/GuardedInterstitialAd.hpp"
 #include "ee/ads/GuardedRewardedAd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"

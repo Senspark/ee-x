@@ -88,6 +88,7 @@ public class UnityAds implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
         if (!_initialized) {
             return;
         }
@@ -105,7 +106,6 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
@@ -154,7 +154,6 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__setDebugModeEnabled);
         _bridge.deregisterHandler(k__hasRewardedAd);

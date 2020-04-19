@@ -10,6 +10,8 @@
 
 @interface EEAppLovin : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)key;
 
 - (void)setTestAdsEnabled:(BOOL)enabled;

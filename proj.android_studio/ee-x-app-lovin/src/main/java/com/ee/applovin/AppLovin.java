@@ -210,6 +210,8 @@ public class AppLovin implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _context = null;
+        _bridge = null;
         if (!_initialized) {
             return;
         }
@@ -321,8 +323,6 @@ public class AppLovin implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__setTestAdsEnabled);
         _bridge.deregisterHandler(k__setVerboseLogging);
@@ -390,10 +390,9 @@ public class AppLovin implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean showInterstitialAd() {
+    public void showInterstitialAd() {
         Utils.checkMainThread();
         _interstitialAd.show();
-        return true;
     }
 
     @SuppressWarnings("WeakerAccess")

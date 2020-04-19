@@ -42,6 +42,7 @@ public class Vungle implements PluginProtocol {
     private Context _context;
     private IMessageBridge _bridge;
     private boolean _initializing;
+    private boolean _initialized;
 
     private PlayAdCallback _playAdCallback;
     private LoadAdCallback _loadAdCallback;
@@ -91,6 +92,14 @@ public class Vungle implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _context = null;
+        _bridge = null;
+        if (!_initialized) {
+            return;
+        }
+        _playAdCallback = null;
+        _loadAdCallback = null;
+        _initCallback = null;
     }
 
     @Override
@@ -104,8 +113,6 @@ public class Vungle implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
@@ -161,6 +168,9 @@ public class Vungle implements PluginProtocol {
         if (_initializing) {
             return;
         }
+        if (_initialized) {
+            return;
+        }
 
         _initializing = true;
         _initCallback = new InitCallback() {
@@ -168,6 +178,7 @@ public class Vungle implements PluginProtocol {
             public void onSuccess() {
                 _logger.info("vunglePub.init onSuccess");
                 _initializing = false;
+                _initialized = true;
             }
 
             @Override
@@ -229,10 +240,10 @@ public class Vungle implements PluginProtocol {
     }
 
     private boolean hasRewardedAd(String adId) {
+        Utils.checkMainThread();
         if (!com.vungle.warren.Vungle.isInitialized()) {
             return false;
         }
-        Utils.checkMainThread();
         return com.vungle.warren.Vungle.canPlayAd(adId);
     }
 

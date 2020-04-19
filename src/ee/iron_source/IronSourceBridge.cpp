@@ -90,7 +90,9 @@ Self::Bridge(const Logger& logger)
         k__onRewardedAdClosed);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     bridge_.deregisterHandler(k__onInterstitialAdLoaded);
@@ -104,7 +106,9 @@ Self::~Bridge() {
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    bridge_.call(k__initialize, gameId);
+    runOnUiThread([this, gameId] { //
+        bridge_.call(k__initialize, gameId);
+    });
 }
 
 void Self::setCloseTimeOut(float timeOut) {
@@ -155,25 +159,33 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasInterstitialAd() const {
+    assert(isMainThread());
     auto response = bridge_.call(k__hasInterstitialAd);
     return core::toBool(response);
 }
 
 void Self::loadInterstitialAd() {
-    bridge_.call(k__loadInterstitialAd);
+    runOnUiThread([this] { //
+        bridge_.call(k__loadInterstitialAd);
+    });
 }
 
 void Self::showInterstitialAd(const std::string& adId) {
-    bridge_.call(k__showInterstitialAd, adId);
+    runOnUiThread([this, adId] { //
+        bridge_.call(k__showInterstitialAd, adId);
+    });
 }
 
 bool Self::hasRewardedAd() const {
+    assert(isMainThread());
     auto response = bridge_.call(k__hasRewardedAd);
     return core::toBool(response);
 }
 
 void Self::showRewardedAd(const std::string& adId) {
-    bridge_.call(k__showRewardedAd, adId);
+    runOnUiThread([this, adId] { //
+        bridge_.call(k__showRewardedAd, adId);
+    });
 }
 
 #pragma mark - Interstitial Ad Callbacks.

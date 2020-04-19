@@ -71,7 +71,9 @@ Self::Bridge(const Logger& logger)
         k__onClosed);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onLoaded);
     bridge_.deregisterHandler(k__onFailedToLoad);
@@ -81,9 +83,11 @@ Self::~Bridge() {
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    nlohmann::json json;
-    json["gameId"] = gameId;
-    bridge_.call(k__initialize, json.dump());
+    runOnUiThread([this, gameId] {
+        nlohmann::json json;
+        json["gameId"] = gameId;
+        bridge_.call(k__initialize, json.dump());
+    });
 }
 
 void Self::initialize(const std::string& gameId, const std::string& adId) {
@@ -113,18 +117,23 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasRewardedAd(const std::string& adId) const {
+    assert(isMainThread());
     auto result = bridge_.call(k__hasRewardedAd, adId);
     return core::toBool(result);
 }
 
 void Self::loadRewardedAd(const std::string& adId) const {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    bridge_.call(k__loadRewardedAd, adId);
+    runOnUiThread([this, adId] { //
+        bridge_.call(k__loadRewardedAd, adId);
+    });
 }
 
 void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    bridge_.call(k__showRewardedAd, adId);
+    runOnUiThread([this, adId] { //
+        bridge_.call(k__showRewardedAd, adId);
+    });
 }
 
 void Self::onLoaded(const std::string& adId) {

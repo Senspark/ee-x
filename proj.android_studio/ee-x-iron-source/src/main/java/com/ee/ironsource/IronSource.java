@@ -96,6 +96,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
         if (!_initialized) {
             return;
         }
@@ -205,12 +206,14 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     @SuppressWarnings("WeakerAccess")
     public void loadInterstitialAd() {
+        Utils.checkMainThread();
         _logger.debug("loadInterstitialAd");
         com.ironsource.mediationsdk.IronSource.loadInterstitial();
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasInterstitialAd() {
+        Utils.checkMainThread();
         boolean value = com.ironsource.mediationsdk.IronSource.isInterstitialReady();
         _logger.debug("hasInterstitialAd " + value);
         return value;
@@ -218,6 +221,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     @SuppressWarnings("WeakerAccess")
     public boolean showInterstitialAd(@NonNull String adId) {
+        Utils.checkMainThread();
         _logger.debug("showInterstitialAd");
         com.ironsource.mediationsdk.IronSource.showInterstitial(adId);
         return true;
@@ -233,6 +237,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedAd(@NonNull String adId) {
+        Utils.checkMainThread();
         _logger.debug("showRewardedAd");
         _rewarded = false;
         com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId);

@@ -74,7 +74,9 @@ Self::Bridge(const Logger& logger)
         k__onClosed);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);
     bridge_.deregisterHandler(k__onFailedToShow);
     bridge_.deregisterHandler(k__onClosed);
@@ -83,14 +85,18 @@ Self::~Bridge() {
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
                   gameId.c_str(), core::toString(testModeEnabled).c_str());
-    nlohmann::json json;
-    json[k__gameId] = gameId;
-    json[k__testModeEnabled] = core::toString(testModeEnabled);
-    bridge_.call(k__initialize, json.dump());
+    runOnUiThread([this, gameId, testModeEnabled] {
+        nlohmann::json json;
+        json[k__gameId] = gameId;
+        json[k__testModeEnabled] = core::toString(testModeEnabled);
+        bridge_.call(k__initialize, json.dump());
+    });
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
+    runOnUiThread([this, enabled] {
+        bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
+    });
 }
 
 std::shared_ptr<IInterstitialAd>
@@ -139,6 +145,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasRewardedAd(const std::string& adId) const {
+    assert(isMainThread());
     auto response = bridge_.call(k__hasRewardedAd, adId);
     return core::toBool(response);
 }
@@ -147,7 +154,9 @@ void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     adId_ = adId;
     displaying_ = true;
-    bridge_.call(k__showRewardedAd, adId);
+    runOnUiThread([this, adId] { //
+        bridge_.call(k__showRewardedAd, adId);
+    });
 }
 
 void Self::onFailedToShow(const std::string& adId, const std::string& message) {

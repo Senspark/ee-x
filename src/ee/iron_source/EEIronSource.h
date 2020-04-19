@@ -2,6 +2,8 @@
 
 @interface EEIronSource : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)gameId;
 
 - (BOOL)hasInterstitialAd;

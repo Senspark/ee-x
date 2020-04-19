@@ -182,7 +182,9 @@ Self::Bridge(const Logger& logger)
         k__onRewardedAdClosed);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
     bridge_.deregisterHandler(k__onInterstitialAdLoaded);
@@ -197,32 +199,45 @@ Self::~Bridge() {
 
 void Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    bridge_.call(k__initialize, key);
+    runOnUiThread([this, key] { //
+        bridge_.call(k__initialize, key);
+    });
 }
 
 void Self::setTestAdsEnabled(bool enabled) {
-    bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
+    });
 }
 
 void Self::setVerboseLogging(bool enabled) {
-    bridge_.call(k__setVerboseLogging, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setVerboseLogging, core::toString(enabled));
+    });
 }
 
 void Self::setMuted(bool enabled) {
-    bridge_.call(k__setMuted, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setMuted, core::toString(enabled));
+    });
 }
 
 bool Self::hasInterstitialAd() const {
+    assert(isMainThread());
     auto result = bridge_.call(k__hasInterstitialAd);
     return core::toBool(result);
 }
 
 void Self::loadInterstitialAd() {
-    bridge_.call(k__loadInterstitialAd);
+    runOnUiThread([this] { //
+        bridge_.call(k__loadInterstitialAd);
+    });
 }
 
 void Self::showInterstitialAd() {
-    bridge_.call(k__showInterstitialAd);
+    runOnUiThread([this] { //
+        bridge_.call(k__showInterstitialAd);
+    });
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
@@ -246,17 +261,22 @@ bool Self::destroyRewardedAd() {
 }
 
 bool Self::hasRewardedAd() const {
+    assert(isMainThread());
     auto result = bridge_.call(k__hasRewardedAd);
     return core::toBool(result);
 }
 
 void Self::loadRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.call(k__loadRewardedAd);
+    runOnUiThread([this] { //
+        bridge_.call(k__loadRewardedAd);
+    });
 }
 
 void Self::showRewardedAd() {
-    bridge_.call(k__showRewardedAd);
+    runOnUiThread([this] { //
+        bridge_.call(k__showRewardedAd);
+    });
 }
 
 void Self::onInterstitialAdLoaded() {

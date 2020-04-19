@@ -2,6 +2,8 @@
 
 @interface EEVungle : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)gameId;
 
 - (BOOL)hasRewardedAd:(NSString* _Nonnull)adId;

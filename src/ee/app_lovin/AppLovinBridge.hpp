@@ -22,6 +22,8 @@ public:
 
     explicit Bridge(const Logger& logger);
 
+    void destroy();
+
     void initialize(const std::string& key);
 
     /// Disabled by default.

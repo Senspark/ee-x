@@ -10,6 +10,8 @@
 
 @interface EEUnityAds : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled;
 - (void)setDebugMode:(BOOL)enabled;
 

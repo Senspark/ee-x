@@ -24,6 +24,8 @@ public:
 
     explicit Bridge(const Logger& logger);
 
+    void destroy();
+
     /// Initializes Unity Ads.
     /// @param[in] gameId Unity Ads game ID.
     /// @param[in] testModeEnabled Whether test mode is enabled.
@@ -67,7 +69,7 @@ private:
     /// Unity only has rewarded ads.
     std::map<std::string, std::shared_ptr<InterstitialAd>> interstitialAds_;
     std::map<std::string, std::shared_ptr<RewardedAd>> rewardedAds_;
-    
+
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

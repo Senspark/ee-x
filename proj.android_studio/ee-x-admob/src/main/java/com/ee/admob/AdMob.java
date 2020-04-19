@@ -169,8 +169,6 @@ public class AdMob implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
@@ -292,12 +290,9 @@ public class AdMob implements PluginProtocol {
                 return Utils.toString(destroyRewardedAd(placementId));
             }
         }, k__destroyRewardedAd);
-
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
         _bridge.deregisterHandler(k__addTestDevice);
@@ -313,6 +308,7 @@ public class AdMob implements PluginProtocol {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String applicationId) {
+        Utils.checkMainThread();
         MobileAds.initialize(_context, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -327,6 +323,7 @@ public class AdMob implements PluginProtocol {
     }
 
     public void addTestDevice(@NonNull String hash) {
+        Utils.checkMainThread();
         _testDevices.add(hash);
         RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
         MobileAds.setRequestConfiguration(configuration);

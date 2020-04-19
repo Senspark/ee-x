@@ -55,6 +55,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (id)init {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -70,6 +71,11 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (void)dealloc {
+    [super dealloc];
+}
+
+- (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
     [testDevices_ release];
     testDevices_ = nil;
@@ -81,7 +87,6 @@ static NSString* const k__layout_name           = @"layout_name";
     interstitialAds_ = nil;
     [rewardedAds_ release];
     rewardedAds_ = nil;
-    [super dealloc];
 }
 
 - (void)registerHandlers {
@@ -186,6 +191,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (void)initialize:(NSString* _Nonnull)applicationId {
+    NSAssert([EEUtils isMainThread], @"");
     [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 }
 
@@ -194,12 +200,14 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {
+    NSAssert([EEUtils isMainThread], @"");
     [testDevices_ addObject:hash];
     GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers =
         testDevices_;
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size {
+    NSAssert([EEUtils isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -211,6 +219,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -223,6 +232,7 @@ static NSString* const k__layout_name           = @"layout_name";
 - (BOOL)createNativeAd:(NSString* _Nonnull)adId
                   type:(GADAdLoaderAdType _Nonnull)type
                 layout:(NSString* _Nonnull)layoutName {
+    NSAssert([EEUtils isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -236,6 +246,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)destroyNativeAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -246,6 +257,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -257,6 +269,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([interstitialAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -267,6 +280,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)createRewardedAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -278,6 +292,7 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([rewardedAds_ objectForKey:adId] == nil) {
         return NO;
     }

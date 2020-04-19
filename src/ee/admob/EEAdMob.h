@@ -12,6 +12,8 @@
 
 @interface EEAdMob : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)applicationId;
 
 - (NSString* _Nonnull)getEmulatorTestDeviceHash;

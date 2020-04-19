@@ -14,6 +14,8 @@ public:
 
     explicit Bridge(const Logger& logger);
 
+    void destroy();
+
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);
 

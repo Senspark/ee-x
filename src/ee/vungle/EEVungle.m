@@ -45,6 +45,7 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 }
 
 - (id)init {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -59,8 +60,18 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 }
 
 - (void)dealloc {
-    [self destroy];
     [super dealloc];
+}
+
+- (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
+    [self deregisterHandlers];
+    [loadingAdIds_ release];
+    loadingAdIds_ = nil;
+    if (!initialized_) {
+        return;
+    }
+    [sdk_ setDelegate:nil];
 }
 
 - (void)registerHandlers {
@@ -99,6 +110,7 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 }
 
 - (void)initialize:(NSString*)gameId {
+    NSAssert([EEUtils isMainThread], @"");
     if (initialized_) {
         return;
     }
@@ -112,21 +124,13 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
     initialized_ = YES;
 }
 
-- (void)destroy {
-    [self deregisterHandlers];
-    [loadingAdIds_ release];
-    loadingAdIds_ = nil;
-    if (!initialized_) {
-        return;
-    }
-    [sdk_ setDelegate:nil];
-}
-
 - (BOOL)hasRewardedAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     return [sdk_ isAdCachedForPlacementID:adId];
 }
 
 - (void)loadRewardedAd:(NSString*)adId {
+    NSAssert([EEUtils isMainThread], @"");
     NSError* error = nil;
     [sdk_ loadPlacementWithID:adId error:&error];
     if (error != nil) {
@@ -141,6 +145,7 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 }
 
 - (void)showRewardedAd:(NSString*)adId {
+    NSAssert([EEUtils isMainThread], @"");
     UIViewController* view = [EEUtils getCurrentRootViewController];
     NSError* error = nil;
     [sdk_ playAd:view options:nil placementID:adId error:&error];

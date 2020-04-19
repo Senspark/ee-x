@@ -56,7 +56,6 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
@@ -77,7 +76,6 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
         _bridge.deregisterHandler(_messageHelper.createInternalAd());
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd());
@@ -122,6 +120,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
 
     @Override
     public void show() {
+        Utils.checkMainThread();
         assertThat(_ad).isNotNull();
         _ad.show();
     }

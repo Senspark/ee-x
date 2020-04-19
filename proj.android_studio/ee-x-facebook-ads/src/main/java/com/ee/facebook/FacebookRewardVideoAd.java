@@ -1,6 +1,7 @@
 package com.ee.facebook;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
@@ -83,8 +84,6 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
@@ -95,7 +94,6 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
                 return "";
             }
         }, k__loadRewardedVideo());
-
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -133,7 +131,6 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.deregisterHandler(k__hasRewardedVideo());
@@ -141,14 +138,14 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
         bridge.deregisterHandler(k__showRewardedVideo());
     }
 
-    private void createInternalVideo()
-    {
+    private void createInternalVideo() {
+        Utils.checkMainThread();
         _rewardedVideoAd = new RewardedVideoAd(_context, _placementId);
         _rewardedVideoAd.setAdListener(this);
     }
 
-    private void destroyInternalVideo()
-    {
+    private void destroyInternalVideo() {
+        Utils.checkMainThread();
         if (_rewardedVideoAd != null) {
             _rewardedVideoAd.setAdListener(null);
             _rewardedVideoAd.destroy();
@@ -157,14 +154,17 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
     }
 
     private boolean hasRewardVideo() {
+        Utils.checkMainThread();
         return _rewardedVideoAd.isAdLoaded();
     }
 
     private void loadRewardedVideo() {
+        Utils.checkMainThread();
         _rewardedVideoAd.loadAd();
     }
 
     private boolean showRewardVideo() {
+        Utils.checkMainThread();
         return _rewardedVideoAd.show();
     }
 
@@ -189,8 +189,8 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
     @Override
     public void onError(Ad ad, AdError adError) {
         MessageBridge bridge = MessageBridge.getInstance();
-        
-        if(adError.getErrorCode() != AdError.INTERNAL_ERROR_CODE) {
+
+        if (adError.getErrorCode() != AdError.INTERNAL_ERROR_CODE) {
             bridge.callCpp(k__onFailedToLoad());
         }
     }
@@ -203,6 +203,5 @@ class FacebookRewardVideoAd implements RewardedVideoAdListener {
 
     @Override
     public void onLoggingImpression(Ad ad) {
-
     }
 }

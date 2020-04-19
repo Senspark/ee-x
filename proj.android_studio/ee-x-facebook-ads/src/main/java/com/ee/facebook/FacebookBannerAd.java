@@ -100,12 +100,10 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
     }
 
@@ -188,6 +186,7 @@ class FacebookBannerAd implements AdListener, IAdView {
         if (_customSize) {
             return _viewHelper.getSize();
         }
+        Utils.checkMainThread();
         int width = getWidthInPixels(_adSize);
         int height = getHeightInPixels(_adSize);
         return new Point(width, height);

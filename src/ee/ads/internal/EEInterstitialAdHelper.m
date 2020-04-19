@@ -14,15 +14,11 @@
 #import "ee/ads/internal/EEIInterstitialAd.h"
 #import "ee/ads/internal/EEMessageHelper.h"
 
-@interface EEInterstitialAdHelper () {
+@implementation EEInterstitialAdHelper {
     id<EEIMessageBridge> bridge_;
     id<EEIInterstitialAd> ad_;
     EEMessageHelper* helper_;
 }
-
-@end
-
-@implementation EEInterstitialAdHelper
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                            ad:(id<EEIInterstitialAd> _Nonnull)ad

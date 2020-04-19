@@ -56,7 +56,6 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
@@ -77,7 +76,6 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
         _bridge.deregisterHandler(_messageHelper.createInternalAd());
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd());

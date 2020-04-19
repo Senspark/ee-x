@@ -112,16 +112,15 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
     }
 
     private boolean createInternalAd() {
+        Utils.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -147,6 +146,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private boolean destroyInternalAd() {
+        Utils.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -156,6 +156,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private void createView() {
+        Utils.checkMainThread();
         assertThat(_view).isNull();
         FrameLayout layout = new FrameLayout(_context);
 
@@ -200,6 +201,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     @Override
     public void load() {
+        Utils.checkMainThread();
         assertThat(_ad).isNotNull();
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();

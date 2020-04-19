@@ -108,12 +108,10 @@ class AdMobBannerAd extends AdListener implements IAdView {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
     }
 
@@ -202,6 +200,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (_customSize) {
             return _viewHelper.getSize();
         }
+        Utils.checkMainThread();
         int width = _adSize.getWidthInPixels(_context);
         int height = _adSize.getHeightInPixels(_context);
         return new Point(width, height);

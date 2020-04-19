@@ -29,6 +29,7 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -47,6 +48,7 @@
 }
 
 - (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
     [self destroyInternalAd];
 
@@ -81,6 +83,7 @@
 }
 
 - (BOOL)createInternalAd {
+    NSAssert([EEUtils isMainThread], @"");
     if (ad_ != nil) {
         return NO;
     }
@@ -90,6 +93,7 @@
 }
 
 - (BOOL)destroyInternalAd {
+    NSAssert([EEUtils isMainThread], @"");
     if (ad_ == nil) {
         return NO;
     }
@@ -100,16 +104,19 @@
 }
 
 - (BOOL)isLoaded {
+    NSAssert([EEUtils isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     return [ad_ isAdValid];
 }
 
 - (void)load {
+    NSAssert([EEUtils isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     [ad_ loadAd];
 }
 
 - (void)show {
+    NSAssert([EEUtils isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     BOOL result = [ad_ showAdFromRootViewController:rootView];

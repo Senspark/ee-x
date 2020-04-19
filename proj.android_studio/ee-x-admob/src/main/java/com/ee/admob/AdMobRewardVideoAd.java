@@ -57,8 +57,6 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
@@ -103,8 +101,6 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-
         _bridge.deregisterHandler(_messageHelper.createInternalAd());
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd());
         _bridge.deregisterHandler(_messageHelper.isLoaded());

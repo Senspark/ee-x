@@ -24,23 +24,24 @@ Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper)
     , anchorY_(0.0f) {}
 
 bool Self::isLoaded() const {
+    assert(isMainThread());
     auto response = bridge_.call(helper_.isLoaded());
     return core::toBool(response);
 }
 
 void Self::load() {
-    auto response = bridge_.call(helper_.load());
+    assert(isMainThread());
+    bridge_.call(helper_.load());
 }
 
 std::pair<float, float> Self::getAnchor() const {
-    return std::tie(anchorX_, anchorY_);
+    return std::pair(anchorX_, anchorY_);
 }
 
 void Self::setAnchor(float x, float y) {
-    int width, height;
-    std::tie(width, height) = getSize();
-    int positionX, positionY;
-    std::tie(positionX, positionY) = getPositionTopLeft();
+    assert(isMainThread());
+    auto [width, height] = getSize();
+    auto [positionX, positionY] = getPositionTopLeft();
     setPositionTopLeft(positionX - static_cast<int>((x - anchorX_) * width),
                        positionY - static_cast<int>((y - anchorY_) * height));
     anchorX_ = x;
@@ -48,33 +49,32 @@ void Self::setAnchor(float x, float y) {
 }
 
 std::pair<int, int> Self::getPosition() const {
-    int width, height;
-    std::tie(width, height) = getSize();
-    float anchorX, anchorY;
-    std::tie(anchorX, anchorY) = getAnchor();
-    int x, y;
-    std::tie(x, y) = getPositionTopLeft();
-    return std::make_pair(x + anchorX * width, y + anchorY * height);
+    assert(isMainThread());
+    auto [width, height] = getSize();
+    auto [anchorX, anchorY] = getAnchor();
+    auto [x, y] = getPositionTopLeft();
+    return std::pair(x + anchorX * width, y + anchorY * height);
 }
 
 void Self::setPosition(int x, int y) {
-    int width, height;
-    std::tie(width, height) = getSize();
-    float anchorX, anchorY;
-    std::tie(anchorX, anchorY) = getAnchor();
+    assert(isMainThread());
+    auto [width, height] = getSize();
+    auto [anchorX, anchorY] = getAnchor();
     setPositionTopLeft(x - static_cast<int>(anchorX * width),
                        y - static_cast<int>(anchorY * height));
 }
 
 std::pair<int, int> Self::getPositionTopLeft() const {
+    assert(isMainThread());
     auto response = bridge_.call(helper_.getPosition());
     auto json = nlohmann::json::parse(response);
     auto x = json["x"].get<int>();
     auto y = json["y"].get<int>();
-    return std::make_pair(x, y);
+    return std::pair(x, y);
 }
 
 void Self::setPositionTopLeft(int x, int y) {
+    assert(isMainThread());
     nlohmann::json json;
     json["x"] = x;
     json["y"] = y;
@@ -82,6 +82,7 @@ void Self::setPositionTopLeft(int x, int y) {
 }
 
 std::pair<int, int> Self::getSize() const {
+    assert(isMainThread());
     auto response = bridge_.call(helper_.getSize());
     auto json = nlohmann::json::parse(response);
     auto width = json["width"].get<int>();
@@ -90,12 +91,10 @@ std::pair<int, int> Self::getSize() const {
 }
 
 void Self::setSize(int width, int height) {
-    int currentWidth, currentHeight;
-    std::tie(currentWidth, currentHeight) = getSize();
-    float anchorX, anchorY;
-    std::tie(anchorX, anchorY) = getAnchor();
-    int x, y;
-    std::tie(x, y) = getPositionTopLeft();
+    assert(isMainThread());
+    auto [currentWidth, currentHeight] = getSize();
+    auto [anchorX, anchorY] = getAnchor();
+    auto [x, y] = getPositionTopLeft();
     setPositionTopLeft(
         x - static_cast<int>((width - currentWidth) * anchorX),
         y - static_cast<int>((height - currentHeight) * anchorY));
@@ -107,11 +106,13 @@ void Self::setSize(int width, int height) {
 }
 
 bool Self::isVisible() const {
+    assert(isMainThread());
     auto response = bridge_.call(helper_.isVisible());
     return core::toBool(response);
 }
 
 void Self::setVisible(bool visible) {
+    assert(isMainThread());
     bridge_.call(helper_.setVisible(), core::toString(visible));
 }
 } // namespace ads

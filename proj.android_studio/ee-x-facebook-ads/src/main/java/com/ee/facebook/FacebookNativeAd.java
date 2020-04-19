@@ -110,7 +110,6 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
@@ -131,7 +130,6 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
 
         _bridge.deregisterHandler(_messageHelper.createInternalAd());

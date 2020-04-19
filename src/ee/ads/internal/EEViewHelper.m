@@ -10,15 +10,12 @@
 #define EE_VIEW NSView
 #endif // TARGET_OS_IOS
 
-@interface EEViewHelper () {
+@implementation EEViewHelper {
     EE_VIEW* view_;
 }
 
-@end
-
-@implementation EEViewHelper
-
 - (id _Nonnull)initWithView:(EE_VIEW* _Nonnull)view {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -28,12 +25,14 @@
 }
 
 - (CGPoint)getPosition {
+    NSAssert([EEUtils isMainThread], @"");
     CGFloat scale = [EEUtils getDensity];
     CGPoint position = [view_ frame].origin;
     return CGPointMake(position.x * scale, position.y * scale);
 }
 
 - (void)setPosition:(CGPoint)position {
+    NSAssert([EEUtils isMainThread], @"");
     CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view_ frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
@@ -41,12 +40,14 @@
 }
 
 - (CGSize)getSize {
+    NSAssert([EEUtils isMainThread], @"");
     CGFloat scale = [EEUtils getDensity];
     CGSize size = [view_ frame].size;
     return CGSizeMake(size.width * scale, size.height * scale);
 }
 
 - (void)setSize:(CGSize)size {
+    NSAssert([EEUtils isMainThread], @"");
     CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view_ frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
@@ -54,10 +55,12 @@
 }
 
 - (BOOL)isVisible {
+    NSAssert([EEUtils isMainThread], @"");
     return [view_ isHidden];
 }
 
 - (void)setVisible:(BOOL)visible {
+    NSAssert([EEUtils isMainThread], @"");
     [view_ setHidden:!visible];
 }
 

@@ -27,7 +27,7 @@ std::shared_ptr<ee::IAdView> createAdMobNativeAd();
 void testAdMobBannerAd();
 void testAdMobNativeAd();
 void testAdMobInterstitial();
-void testAdMobRewardedVideo();
+void testAdMobRewardedAd();
 } // namespace eetest
 
 #endif /* EE_X_TEST_ADMOB_HPP */

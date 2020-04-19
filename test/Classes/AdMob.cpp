@@ -280,13 +280,13 @@ void testAdMobInterstitial() {
     });
 }
 
-void testAdMobRewardedVideo() {
+void testAdMobRewardedAd() {
     auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
             getLogger().info("Create AdMob rewarded ad begin");
             auto ad = getAdMob()->createRewardedAd(getAdMobRewardedAdTestId());
             getLogger().info("Create AdMob rewarded ad end");
-            return ad;
+            return std::make_shared<ee::GuardedRewardedAd>(ad);
         });
 
     scheduleForever(1.0f, 3.0f, [ad] {

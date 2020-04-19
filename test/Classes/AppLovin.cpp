@@ -28,10 +28,11 @@ ee::AppLovin* getAppLovin() {
     return &plugin;
 }
 
-void testAppLovinRewardedVideo() {
+void testAppLovinRewardedAd() {
     auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] { //
-            return getAppLovin()->createRewardedAd();
+            return std::make_shared<ee::GuardedRewardedAd>(
+                getAppLovin()->createRewardedAd());
         });
 
     float delay = 0.0f;

@@ -47,7 +47,8 @@ void testVungleRewardedAd() {
     auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
             FunctionLogger logger("Create Vungle rewarded ad");
-            return getVungle()->createRewardedAd(getVungleRewardedAdId());
+            return std::make_shared<ee::GuardedRewardedAd>(
+                getVungle()->createRewardedAd(getVungleRewardedAdId()));
         });
 
     float delay = 0.0f;

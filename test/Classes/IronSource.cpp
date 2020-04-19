@@ -45,8 +45,8 @@ void testIronSourceRewardedAd() {
     auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
             FunctionLogger logger("Create ironSource rewarded ad");
-            return getIronSource()->createRewardedAd(
-                getIronSourceRewardedAdId());
+            return std::make_shared<ee::GuardedRewardedAd>(
+                getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
         });
 
     float delay = 0.0f;

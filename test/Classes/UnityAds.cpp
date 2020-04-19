@@ -58,7 +58,8 @@ void testUnityAdsRewardedAd() {
     auto rewardedAd =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
             FunctionLogger logger("Create Unity Ads rewarded ad");
-            return getUnityAds()->createRewardedAd(getUnityRewardedAdId());
+            return std::make_shared<ee::GuardedRewardedAd>(
+                getUnityAds()->createRewardedAd(getUnityRewardedAdId()));
         });
 
     auto interstitialAd =

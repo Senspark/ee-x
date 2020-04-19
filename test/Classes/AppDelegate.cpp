@@ -37,11 +37,14 @@ void testMultiAds() {
     auto ad = std::make_shared<ee::MultiRewardedAd>();
 
     ee::runOnUiThread([ad] {
-        // ads.addItem(getAppLovin()->createRewardedVideo());
-        ad->addItem(
-            getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
-        // ads.addItem(getUnityAds()->createRewardedVideo(getUnityRewardedVideoId()));
-        // ads.addItem(getVungle()->createRewardedVideo());
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getAppLovin()->createRewardedAd()));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getUnityAds()->createRewardedAd(getUnityRewardedAdId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getVungle()->createRewardedAd(getVungleRewardedAdId())));
     });
 
     scheduleForever(2.0f, 3.0f, [ad] {
@@ -130,19 +133,19 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testAdMobBannerAd();
     // testAdMobNativeAd();
     // testAdMobInterstitial();
-    // testAdMobRewardedVideo();
+    // testAdMobRewardedAd();
     // testAppLovin();
-    // testUnityAdsRewardedVideo();
-    // testIronSourceRewardedVideo();
+    // testUnityAdsRewardedAd();
+    // testIronSourceRewardedAd();
     // testVungle();
-    // testMultiAds();
+    testMultiAds();
     // testFacebookInterstitialAd();
     // testFacebookNativeAd();
 
     cocos2d::log("Create scene");
     // director->runWithScene(VideoPlayerTestScene::create());
-    director->runWithScene(createMultiNativeAdTestScene());
-    
+    // director->runWithScene(createMultiNativeAdTestScene());
+
     // Deprecated.
     // director->runWithScene(TwitterShareTestScene::create());
 

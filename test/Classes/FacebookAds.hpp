@@ -15,13 +15,10 @@ namespace eetest {
 ee::FacebookAds* getFacebookAds();
 
 std::string getFacebookInterstitialAdId();
-
 std::shared_ptr<ee::IAdView> createFacebookNativeAd();
-
 std::shared_ptr<ee::IInterstitialAd> createFacebookInterstitialAd();
 
 void testFacebookNativeAd();
-
 void testFacebookInterstitialAd();
 } // namespace eetest
 

@@ -43,6 +43,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/9/17.
  */
@@ -81,7 +83,7 @@ public class Utils {
             for (StackTraceElement e : getCurrentStackTrace()) {
                 _logger.warn(e.toString());
             }
-            assert false;
+            assertThat(false).isTrue();
         }
     }
 
@@ -92,7 +94,7 @@ public class Utils {
 
     @NonNull
     public static Boolean toBoolean(@NonNull String value) {
-        assert "true".equals(value) || "false".equals(value);
+        assertThat(value).isAnyOf("true", "false");
         return "true".equals(value);
     }
 
@@ -198,7 +200,7 @@ public class Utils {
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 String recipient = (String) dict.get("recipient");
                 String subject = (String) dict.get("subject");
                 String body = (String) dict.get("body");

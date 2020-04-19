@@ -17,6 +17,8 @@ import com.facebook.ads.AudienceNetworkAds;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
@@ -189,7 +191,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 Integer adSizeIndex = (Integer) dict.get(k__ad_size);
@@ -213,7 +215,7 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 String layoutName = (String) dict.get(k__layout_name);

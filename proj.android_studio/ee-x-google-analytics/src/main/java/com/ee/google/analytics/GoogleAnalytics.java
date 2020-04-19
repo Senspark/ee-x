@@ -3,14 +3,15 @@ package com.ee.google.analytics;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.ecommerce.Product;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.truth.Truth.assertThat;
 
 
 /**
@@ -196,7 +199,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackEvent(dict));
             }
         }, k__testTrackEvent);
@@ -206,7 +209,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackException(dict));
             }
         }, k__testTrackException);
@@ -216,7 +219,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackScreenView(dict));
             }
         }, k__testTrackScreenView);
@@ -226,7 +229,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackSocial(dict));
             }
         }, k__testTrackSocial);
@@ -236,7 +239,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackTiming(dict));
             }
         }, k__testTrackTiming);
@@ -246,7 +249,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testCustomDimensionAndMetric(dict));
             }
         }, k__testCustomDimensionAndMetric);
@@ -256,7 +259,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackEcommerceAction(dict));
             }
         }, k__testTrackEcommerceAction);
@@ -266,7 +269,7 @@ public class GoogleAnalytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 return Utils.toString(testTrackEcommerceImpression(dict));
             }
         }, k__testTrackEcommerceImpression);

@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -204,7 +206,7 @@ public class AdMob implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 Integer adSizeIndex = (Integer) dict.get(k__ad_size);
@@ -228,7 +230,7 @@ public class AdMob implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 String layoutName = (String) dict.get(k__layout_name);

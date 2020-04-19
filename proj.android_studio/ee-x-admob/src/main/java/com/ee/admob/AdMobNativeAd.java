@@ -92,7 +92,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     void onDestroy(@NonNull Activity activity) {
-        assert _activity == activity;
+        assertThat(_activity).isEqualTo(activity);
         removeFromActivity(activity);
         _activity = null;
     }

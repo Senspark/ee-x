@@ -21,6 +21,8 @@ import com.vungle.warren.PlayAdCallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
@@ -110,7 +112,7 @@ public class Vungle implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 String gameId = (String) dict.get("gameId");
                 initialize(gameId);
                 return "";

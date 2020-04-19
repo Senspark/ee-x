@@ -47,6 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
@@ -251,7 +253,7 @@ public class Facebook implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 Integer tag = (Integer) dict.get("tag");
                 String url = (String) dict.get("url");
                 shareLinkContent(url, new FacebookShareDelegate(_bridge, tag));
@@ -264,7 +266,7 @@ public class Facebook implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 Integer tag = (Integer) dict.get("tag");
                 String url = (String) dict.get("url");
                 sharePhotoContent(url, new FacebookShareDelegate(_bridge, tag));
@@ -277,7 +279,7 @@ public class Facebook implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 Integer tag = (Integer) dict.get("tag");
                 String url = (String) dict.get("url");
                 shareVideoContent(url, new FacebookShareDelegate(_bridge, tag));

@@ -15,6 +15,8 @@ import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.InterstitialListener;
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
@@ -117,7 +119,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                assert _activity != null;
+                assertThat(_activity).isNotNull();
                 String gameId = message;
                 initialize(_activity, gameId);
                 return "";

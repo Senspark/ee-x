@@ -2,14 +2,16 @@ package com.ee.google.analytics;
 
 import androidx.annotation.NonNull;
 
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
-import com.google.android.gms.analytics.*;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 10/25/17.
@@ -58,7 +60,7 @@ public class GoogleAnalyticsTracker {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 String key = (String) dict.get(k__key);
                 String value = (String) dict.get(k__value);
                 setParameter(key, value);
@@ -80,7 +82,7 @@ public class GoogleAnalyticsTracker {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> rawDict = JsonUtils.convertStringToDictionary(message);
-                assert rawDict != null;
+                assertThat(rawDict).isNotNull();
 
                 Map<String, String> dict = new HashMap<>();
                 for (String key : rawDict.keySet()) {

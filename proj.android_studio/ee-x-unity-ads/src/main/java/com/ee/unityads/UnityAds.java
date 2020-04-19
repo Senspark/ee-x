@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds.FinishState;
@@ -111,11 +111,11 @@ public class UnityAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String gameId = (String) dict.get(k__gameId);
                 boolean testModeEnabled = Utils.toBoolean((String) dict.get(k__testModeEnabled));
-                assert _activity != null;
+                assertThat(_activity).isNotNull();
                 initialize(_activity, gameId, testModeEnabled);
                 return "";
             }
@@ -145,7 +145,7 @@ public class UnityAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                assert _activity != null;
+                assertThat(_activity).isNotNull();
                 String adId = message;
                 showRewardedAd(_activity, adId);
                 return "";

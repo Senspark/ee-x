@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 6/1/16.
  */
@@ -52,7 +54,7 @@ public class DictionaryUtils {
 
         Map<String, Object> result = new HashMap<>();
         for (Object key : input.keySet()) {
-            assert (key instanceof String);
+            assertThat(key).isInstanceOf(String.class);
             result.put((String) key, input.get(key));
         }
         return result;

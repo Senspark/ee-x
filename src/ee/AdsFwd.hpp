@@ -31,6 +31,8 @@ class NullAdView;
 class NullInterstitialAd;
 class NullRewardedAd;
 
+class GuardedRewardedAd;
+
 class MessageHelper;
 
 template <class Result>
@@ -59,6 +61,8 @@ using ads::MultiRewardedAd;
 using ads::NullAdView;
 using ads::NullInterstitialAd;
 using ads::NullRewardedAd;
+
+using ads::GuardedRewardedAd;
 
 using IRewardedVideo [[deprecated]] = IRewardedAd;
 using MultiRewardedVideo [[deprecated]] = MultiRewardedAd;

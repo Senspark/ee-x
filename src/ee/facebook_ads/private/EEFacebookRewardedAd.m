@@ -137,7 +137,7 @@
     if (result) {
         // OK.
     } else {
-        // FIXME: handle result.
+        [bridge_ callCpp:[messageHelper_ onFailedToShow]];
     }
 }
 

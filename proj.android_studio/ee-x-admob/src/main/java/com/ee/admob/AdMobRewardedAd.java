@@ -23,8 +23,8 @@ import static com.google.common.truth.Truth.assertThat;
  * Created by KietLe on 12/03/19.
  */
 
-class AdMobRewardVideoAd extends RewardedAdCallback {
-    private static final Logger _logger = new Logger(AdMobRewardVideoAd.class.getName());
+class AdMobRewardedAd extends RewardedAdCallback {
+    private static final Logger _logger = new Logger(AdMobRewardedAd.class.getName());
 
     private Context _context;
     private Activity _activity;
@@ -34,7 +34,7 @@ class AdMobRewardVideoAd extends RewardedAdCallback {
     private boolean _rewarded;
     private RewardedAd _ad;
 
-    AdMobRewardVideoAd(@NonNull Activity activity, @NonNull Context context, @NonNull String adId) {
+    AdMobRewardedAd(@NonNull Activity activity, @NonNull Context context, @NonNull String adId) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;

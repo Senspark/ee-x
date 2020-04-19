@@ -66,8 +66,8 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     private NativeAd _ad;
     private View _view;
 
-    public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
-                            @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
+                     @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         _context = context;
         _activity = activity;

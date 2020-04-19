@@ -61,7 +61,7 @@ public class AdMob implements PluginProtocol {
     private Map<String, AdMobBannerAd> _bannerAds;
     private Map<String, AdMobNativeAd> _nativeAds;
     private Map<String, AdMobInterstitialAd> _interstitialAds;
-    private Map<String, AdMobRewardVideoAd> _rewardedAds;
+    private Map<String, AdMobRewardedAd> _rewardedAds;
 
     public AdMob(Context context) {
         Utils.checkMainThread();
@@ -402,7 +402,7 @@ public class AdMob implements PluginProtocol {
         if (_rewardedAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardVideoAd ad = new AdMobRewardVideoAd(_activity, _context, adId);
+        AdMobRewardedAd ad = new AdMobRewardedAd(_activity, _context, adId);
         _rewardedAds.put(adId, ad);
         return true;
     }
@@ -413,7 +413,7 @@ public class AdMob implements PluginProtocol {
         if (!_rewardedAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardVideoAd ad = _rewardedAds.get(adId);
+        AdMobRewardedAd ad = _rewardedAds.get(adId);
         ad.destroy();
         _rewardedAds.remove(adId);
         return true;

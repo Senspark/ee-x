@@ -49,7 +49,7 @@ public class FacebookAds implements PluginProtocol {
     private Map<String, FacebookBannerAd> _bannerAds;
     private Map<String, FacebookNativeAd> _nativeAds;
     private Map<String, FacebookInterstitialAd> _interstitialAds;
-    private Map<String, FacebookRewardVideoAd> _rewardVideoAds;
+    private Map<String, FacebookRewardedAd> _rewardVideoAds;
 
     public FacebookAds(Context context) {
         Utils.checkMainThread();
@@ -392,7 +392,7 @@ public class FacebookAds implements PluginProtocol {
         if (_rewardVideoAds.containsKey(placementId)) {
             return false;
         }
-        FacebookRewardVideoAd ad = new FacebookRewardVideoAd(_context, placementId);
+        FacebookRewardedAd ad = new FacebookRewardedAd(_context, placementId);
         _rewardVideoAds.put(placementId, ad);
         return true;
     }
@@ -403,7 +403,7 @@ public class FacebookAds implements PluginProtocol {
         if (!_rewardVideoAds.containsKey(placementId)) {
             return false;
         }
-        FacebookRewardVideoAd ad = _rewardVideoAds.get(placementId);
+        FacebookRewardedAd ad = _rewardVideoAds.get(placementId);
         ad.destroy();
         _rewardVideoAds.remove(placementId);
         return true;

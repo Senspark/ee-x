@@ -169,7 +169,8 @@
        didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(ad_ == rewardedVideoAd, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)rewardedVideoAdVideoComplete:(FBRewardedVideoAd*)rewardedVideoAd {

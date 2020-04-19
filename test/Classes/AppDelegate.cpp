@@ -99,19 +99,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glView->setDesignResolutionSize(DesignResolution.width,
                                     DesignResolution.height, resolutionPolicy);
     auto&& frameSize = glView->getFrameSize();
-    getLogger().info(cocos2d::StringUtils::format(
-        "frameSize = %f %f", frameSize.width, frameSize.height));
+    getLogger().info("frameSize = %f %f", frameSize.width, frameSize.height);
 
     auto&& winSize = director->getWinSize();
-    getLogger().info(cocos2d::StringUtils::format(
-        "winSize = %f %f", winSize.width, winSize.height));
+    getLogger().info("winSize = %f %f", winSize.width, winSize.height);
 
     constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);
     auto dp = metrics.toDip();
     auto pixels = metrics.toPixel();
-    getLogger().info(cocos2d::StringUtils::format("%f pt = %f pixels = %f dp",
-                                                  points, pixels, dp));
+    getLogger().info("%f pt = %f pixels = %f dp", points, pixels, dp);
+
+    ee::Logger::setSystemLogger(getLogger());
 
     CrashlyticsAgent::getInstance()->initialize();
     CrashlyticsAgent::getInstance()->logDebug("debug_message");

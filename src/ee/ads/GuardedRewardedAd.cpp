@@ -5,6 +5,7 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/SpinLock.hpp>
+#include <ee/coroutine/SwitchToUiThread.hpp>
 #include <ee/coroutine/Task.hpp>
 
 namespace ee {
@@ -75,6 +76,7 @@ Task<bool> Self::load() {
     }
     loading_ = true;
     lock.unlock();
+    co_await SwitchToUiThread();
     auto result = co_await ad_->load();
     lock.lock();
     loading_ = false;
@@ -99,6 +101,7 @@ Task<IRewardedAdResult> Self::show() {
     }
     displaying_ = true;
     lock.unlock();
+    co_await SwitchToUiThread();
     auto result = co_await ad_->show();
     lock.lock();
     displaying_ = false;

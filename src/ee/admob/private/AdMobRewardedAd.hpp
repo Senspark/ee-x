@@ -13,14 +13,14 @@
 
 #include <ee/ads/IRewardedAd.hpp>
 #include <ee/ads/internal/MessageHelper.hpp>
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
 class RewardedAd final : public IRewardedAd,
-                         public ObserverManager<IRewardedAdObserver> {
+                         public SafeObserverManager<IRewardedAdObserver> {
 public:
     virtual ~RewardedAd() override;
 

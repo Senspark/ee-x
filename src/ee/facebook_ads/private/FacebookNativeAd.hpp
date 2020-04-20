@@ -11,13 +11,13 @@
 
 #include <ee/ads/IAdView.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {
-class NativeAd : public IAdView, public ObserverManager<IAdViewObserver> {
+class NativeAd : public IAdView, public SafeObserverManager<IAdViewObserver> {
 public:
     virtual ~NativeAd() override;
 

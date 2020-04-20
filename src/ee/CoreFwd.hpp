@@ -36,6 +36,9 @@ class IObserverManager;
 template <class Observer>
 class ObserverManager;
 
+template <class Observer>
+class SafeObserverManager;
+
 #if defined(EE_X_ANDROID)
 class JniUtils;
 #endif // EE_X_ANDROID
@@ -58,6 +61,7 @@ using core::ObserverHandle;
 
 using core::IObserverManager;
 using core::ObserverManager;
+using core::SafeObserverManager;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

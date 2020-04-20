@@ -12,14 +12,14 @@
 #include <string>
 
 #include <ee/ads/IRewardedAd.hpp>
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/VungleFwd.hpp"
 
 namespace ee {
 namespace vungle {
 class RewardedAd : public IRewardedAd,
-                   public ObserverManager<IRewardedAdObserver> {
+                   public SafeObserverManager<IRewardedAdObserver> {
 public:
     virtual ~RewardedAd() override;
 

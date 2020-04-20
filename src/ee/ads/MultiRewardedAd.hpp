@@ -12,14 +12,14 @@
 #include <memory>
 #include <vector>
 
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IRewardedAd.hpp"
 
 namespace ee {
 namespace ads {
 class MultiRewardedAd : public IRewardedAd,
-                        public ObserverManager<IRewardedAdObserver> {
+                        public SafeObserverManager<IRewardedAdObserver> {
 private:
     using Self = MultiRewardedAd;
 

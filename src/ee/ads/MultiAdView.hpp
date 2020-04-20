@@ -14,13 +14,14 @@
 #include <utility>
 #include <vector>
 
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class MultiAdView : public IAdView,
+                    public SafeObserverManager<IAdViewObserver> {
 private:
     using Self = MultiAdView;
 

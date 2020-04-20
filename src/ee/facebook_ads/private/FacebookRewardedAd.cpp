@@ -30,7 +30,7 @@ Self::RewardedAd(
     , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId)
-    , messageHelper_("FacebookAdsRewardedAd", adId) {
+    , messageHelper_("FacebookRewardedAd", adId) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 

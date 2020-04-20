@@ -1,6 +1,10 @@
 #include "ee/ads/GuardedAdView.hpp"
 
+#include <mutex>
+
 #include <ee/core/ObserverHandle.hpp>
+#include <ee/core/SpinLock.hpp>
+#include <ee/core/Utils.hpp>
 #include <ee/coroutine/Task.hpp>
 
 namespace ee {
@@ -16,7 +20,9 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     handle_->bind(*ad_).addObserver({
         .onLoaded =
             [this] {
+                std::unique_lock<SpinLock> lock(*lock_);
                 loaded_ = true;
+                lock.unlock();
 
                 // Propagation.
                 dispatchEvent([](auto&& observer) {
@@ -35,6 +41,8 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
                 });
             },
     });
+
+    lock_ = std::make_unique<SpinLock>();
 }
 
 Self::~GuardedAdView() {}
@@ -45,20 +53,27 @@ void Self::destroy() {
 }
 
 bool Self::isLoaded() const {
+    std::scoped_lock<SpinLock> lock(*lock_);
     return loaded_;
 }
 
 Task<bool> Self::load() {
+    std::unique_lock<SpinLock> lock(*lock_);
     if (loaded_) {
+        lock.unlock();
         co_return true;
     }
     if (loading_) {
         // Waiting.
+        lock.unlock();
         co_return co_await ad_->load();
     }
     loading_ = true;
+    lock.unlock();
     auto result = co_await ad_->load();
+    lock.lock();
     loading_ = false;
+    lock.unlock();
     co_return result;
 }
 
@@ -67,7 +82,9 @@ std::pair<float, float> Self::getAnchor() const {
 }
 
 void Self::setAnchor(float x, float y) {
-    ad_->setAnchor(x, y);
+    runOnUiThread([this, x, y] { //
+        ad_->setAnchor(x, y);
+    });
 }
 
 std::pair<int, int> Self::getPosition() const {
@@ -75,7 +92,9 @@ std::pair<int, int> Self::getPosition() const {
 }
 
 void Self::setPosition(int x, int y) {
-    ad_->setPosition(x, y);
+    runOnUiThread([this, x, y] { //
+        ad_->setPosition(x, y);
+    });
 }
 
 std::pair<int, int> Self::getSize() const {
@@ -83,16 +102,23 @@ std::pair<int, int> Self::getSize() const {
 }
 
 void Self::setSize(int width, int height) {
-    ad_->setSize(width, height);
+    runOnUiThread([this, width, height] { //
+        ad_->setSize(width, height);
+    });
 }
 
 bool Self::isVisible() const {
+    std::scoped_lock<SpinLock> lock(*lock_);
     return visible_;
 }
 
 void Self::setVisible(bool visible) {
-    ad_->setVisible(visible);
-    visible_ = visible;
+    runOnUiThread([this, visible] { //
+        ad_->setVisible(visible);
+
+        std::scoped_lock<SpinLock> lock(*lock_);
+        visible_ = visible;
+    });
 }
 } // namespace ads
 } // namespace ee

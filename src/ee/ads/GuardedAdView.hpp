@@ -1,13 +1,14 @@
 #ifndef EE_X_GUARDED_AD_VIEW_HPP
 #define EE_X_GUARDED_AD_VIEW_HPP
 
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class GuardedAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class GuardedAdView : public IAdView,
+                      public SafeObserverManager<IAdViewObserver> {
 public:
     explicit GuardedAdView(const std::shared_ptr<IAdView>& ad);
     virtual ~GuardedAdView() override;
@@ -36,6 +37,7 @@ private:
     bool loaded_;
     bool visible_;
     std::unique_ptr<ObserverHandle> handle_;
+    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

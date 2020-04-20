@@ -26,6 +26,7 @@ private:
     bool loaded_;
     bool displaying_;
     std::unique_ptr<ObserverHandle> handle_;
+    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

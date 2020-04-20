@@ -49,6 +49,7 @@ using core::MessageBridge;
 using core::PluginManager;
 using core::ScopeGuard;
 using core::ServiceLocator;
+using core::SpinLock;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
 

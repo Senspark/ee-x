@@ -20,6 +20,7 @@
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/ScopeGuard.hpp"
 #include "ee/core/ServiceLocator.hpp"
+#include "ee/core/SpinLock.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/VideoPlayerManager.hpp"

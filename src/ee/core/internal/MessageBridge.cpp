@@ -12,7 +12,7 @@
 #include <map>
 #include <mutex>
 
-#include "ee/core/internal/SpinLock.hpp"
+#include "ee/core/SpinLock.hpp"
 
 namespace ee {
 namespace core {

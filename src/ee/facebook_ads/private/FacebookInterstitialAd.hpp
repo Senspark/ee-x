@@ -43,6 +43,7 @@ private:
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);
+    void onFailedToShow(const std::string& message);
     void onClosed();
     void onClicked();
 

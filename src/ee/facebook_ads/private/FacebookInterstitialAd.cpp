@@ -47,6 +47,12 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
+            onFailedToShow(message);
+            return "";
+        },
+        messageHelper_.onFailedToShow());
+    bridge_.registerHandler(
+        [this](const std::string& message) {
             onClicked();
             return "";
         },
@@ -66,6 +72,7 @@ void Self::destroy() {
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
     bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
+    bridge_.deregisterHandler(messageHelper_.onFailedToShow());
     bridge_.deregisterHandler(messageHelper_.onClicked());
     bridge_.deregisterHandler(messageHelper_.onClosed());
 
@@ -138,6 +145,17 @@ void Self::onFailedToLoad(const std::string& message) {
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onFailedToShow(const std::string& message) {
+    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
+                  message.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(false);
     } else {
         assert(false);
     }

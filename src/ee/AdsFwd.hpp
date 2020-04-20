@@ -64,6 +64,8 @@ using ads::NullAdView;
 using ads::NullInterstitialAd;
 using ads::NullRewardedAd;
 
+using ads::GuardedAdView;
+using ads::GuardedInterstitialAd;
 using ads::GuardedRewardedAd;
 
 using IRewardedVideo [[deprecated]] = IRewardedAd;

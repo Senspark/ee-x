@@ -9,7 +9,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/internal/IMessageBridge.hpp>
+#include <ee/core/IMessageBridge.hpp>
 
 namespace ee {
 namespace facebook {

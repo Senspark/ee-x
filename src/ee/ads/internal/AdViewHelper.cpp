@@ -10,8 +10,8 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/IMessageBridge.hpp>
 
 namespace ee {
 namespace ads {

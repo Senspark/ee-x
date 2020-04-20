@@ -9,9 +9,9 @@
 #include "ee/facebook_ads/private/FacebookBannerAd.hpp"
 
 #include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/IMessageBridge.hpp>
 
 #include "ee/facebook_ads/FacebookAdsBridge.hpp"
 

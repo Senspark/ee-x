@@ -9,9 +9,9 @@
 #include "ee/admob/private/AdMobNativeAd.hpp"
 
 #include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/IMessageBridge.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
 

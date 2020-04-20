@@ -21,17 +21,12 @@ class IMessageBridge {
 public:
     virtual ~IMessageBridge() = default;
 
-    /// Calls a handler from other platforms without a message.
-    /// @param tag The unique tag of the handler.
-    /// @return Reply message from other platforms.
-    virtual std::string call(const std::string& tag) = 0;
-
     /// Calls a handler from other platforms with a message.
     /// @param tag The unique tag of the handler.
     /// @param message The message.
     /// @return Reply message from other platforms.
     virtual std::string call(const std::string& tag,
-                             const std::string& message) = 0;
+                             const std::string& message = "") = 0;
 
     /// Calls a handler from C++ with a message.
     /// @warning This method should not be called manually.

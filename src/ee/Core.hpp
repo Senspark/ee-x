@@ -11,6 +11,7 @@
 
 #ifdef __cplusplus
 #include "ee/CoreFwd.hpp"
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/IService.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Logger.hpp"

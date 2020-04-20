@@ -38,6 +38,8 @@ void testMultiAds() {
 
     ee::runOnUiThread([ad] {
         ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getAdMob()->createRewardedAd(getAdMobRewardedAdTestId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
             getAppLovin()->createRewardedAd()));
         ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
             getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));

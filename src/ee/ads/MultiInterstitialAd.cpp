@@ -19,6 +19,8 @@ Self::MultiInterstitialAd() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
+Self::~MultiInterstitialAd() {}
+
 Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
     items_.push_back(item);
     (*handle_).bind(*item).addObserver({

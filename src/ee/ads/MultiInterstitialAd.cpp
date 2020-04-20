@@ -9,6 +9,7 @@
 #include "ee/ads/MultiInterstitialAd.hpp"
 
 #include <ee/core/ObserverHandle.hpp>
+#include <ee/coroutine/NoAwait.hpp>
 #include <ee/coroutine/Task.hpp>
 
 namespace ee {
@@ -86,7 +87,10 @@ Task<bool> Self::show() {
             }
         }
         if (not item->isLoaded()) {
-            item->load();
+            noAwait([item]() -> Task<> { //
+                // Load in background.
+                co_await item->load();
+            });
         }
     }
     co_return displayed;

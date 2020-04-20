@@ -30,6 +30,7 @@ public class UnityAds implements PluginProtocol {
     private static final String k__hasRewardedAd = kPrefix + "_hasRewardedAd";
     private static final String k__showRewardedAd = kPrefix + "_showRewardedAd";
 
+    private static final String k__onLoaded = kPrefix + "_onLoaded";
     private static final String k__onFailedToShow = kPrefix + "_onFailedToShow";
     private static final String k__onClosed = kPrefix + "_onClosed";
 
@@ -173,6 +174,7 @@ public class UnityAds implements PluginProtocol {
             public void onUnityAdsReady(String adId) {
                 _logger.info("onUnityAdsReady: " + adId);
                 Utils.checkMainThread();
+                _bridge.callCpp(k__onLoaded, adId);
             }
 
             @Override

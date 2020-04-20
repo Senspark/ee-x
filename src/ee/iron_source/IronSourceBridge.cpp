@@ -32,11 +32,14 @@ const auto k__showRewardedAd               = kPrefix + "_showRewardedAd";
 
 const auto k__onInterstitialAdLoaded       = kPrefix + "_onInterstitialAdLoaded";
 const auto k__onInterstitialAdFailedToLoad = kPrefix + "_onInterstitialAdFailedToLoad";
+const auto k__onInterstitialAdFailedToShow = kPrefix + "_onInterstitialAdFailedToShow";
 const auto k__onInterstitialAdClicked      = kPrefix + "_onInterstitialAdClicked";
 const auto k__onInterstitialAdClosed       = kPrefix + "_onInterstitialAdClosed";
 
-const auto k__onRewardedAdClicked = kPrefix + "_onRewardedAdClicked";
-const auto k__onRewardedAdClosed  = kPrefix + "_onRewardedAdClosed";
+const auto k__onRewardedAdLoaded       = kPrefix + "_onRewardedAdLoaded";
+const auto k__onRewardedAdFailedToShow = kPrefix + "_onRewardedAdFailedToShow";
+const auto k__onRewardedAdClicked      = kPrefix + "_onRewardedAdClicked";
+const auto k__onRewardedAdClosed       = kPrefix + "_onRewardedAdClosed";
 // clang-format on
 } // namespace
 
@@ -65,6 +68,12 @@ Self::Bridge(const Logger& logger)
         k__onInterstitialAdFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
+            onInterstitialAdFailedToShow(message);
+            return "";
+        },
+        k__onInterstitialAdFailedToShow);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
             onInterstitialAdClicked();
             return "";
         },
@@ -76,6 +85,18 @@ Self::Bridge(const Logger& logger)
         },
         k__onInterstitialAdClosed);
 
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onRewardedAdLoaded();
+            return "";
+        },
+        k__onRewardedAdLoaded);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onRewardedAdFailedToShow(message);
+            return "";
+        },
+        k__onRewardedAdFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedAdClicked();
@@ -97,9 +118,12 @@ void Self::destroy() {
 
     bridge_.deregisterHandler(k__onInterstitialAdLoaded);
     bridge_.deregisterHandler(k__onInterstitialAdFailedToLoad);
+    bridge_.deregisterHandler(k__onRewardedAdFailedToShow);
     bridge_.deregisterHandler(k__onInterstitialAdClicked);
     bridge_.deregisterHandler(k__onInterstitialAdClosed);
 
+    bridge_.deregisterHandler(k__onRewardedAdLoaded);
+    bridge_.deregisterHandler(k__onRewardedAdFailedToShow);
     bridge_.deregisterHandler(k__onRewardedAdClicked);
     bridge_.deregisterHandler(k__onRewardedAdClosed);
 }
@@ -208,6 +232,14 @@ void Self::onInterstitialAdFailedToLoad(const std::string& message) {
     }
 }
 
+void Self::onInterstitialAdFailedToShow(const std::string& message) {
+    if (interstitialAd_) {
+        interstitialAd_->onFailedToShow(message);
+    } else {
+        assert(false);
+    }
+}
+
 void Self::onInterstitialAdClicked() {
     if (interstitialAd_) {
         interstitialAd_->onClicked();
@@ -227,6 +259,14 @@ void Self::onInterstitialAdClosed() {
 }
 
 #pragma mark - Rewarded Ad Callbacks.
+
+void Self::onRewardedAdLoaded() {
+    if (rewardedAd_) {
+        rewardedAd_->onLoaded();
+    } else {
+        assert(false);
+    }
+}
 
 void Self::onRewardedAdFailedToShow(const std::string& message) {
     if (rewardedAd_) {

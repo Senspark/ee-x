@@ -28,6 +28,7 @@ static NSString* const k__setDebugModeEnabled = kPrefix "_setDebugModeEnabled";
 static NSString* const k__hasRewardedAd       = kPrefix "_hasRewardedAd";
 static NSString* const k__showRewardedAd      = kPrefix "_showRewardedAd";
 
+static NSString* const k__onLoaded            = kPrefix "_onLoaded";
 static NSString* const k__onFailedToShow      = kPrefix "_onFailedToShow";
 static NSString* const k__onClosed            = kPrefix "_onClosed";
 // clang-format on
@@ -147,6 +148,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 
 - (void)unityAdsReady:(NSString*)adId {
     NSLog(@"%s: adId = %@", __PRETTY_FUNCTION__, adId);
+    [bridge_ callCpp:k__onFailedToShow message:adId];
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {

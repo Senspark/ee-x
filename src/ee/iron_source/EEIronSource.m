@@ -35,6 +35,7 @@ static NSString* const k__onInterstitialAdFailedToShow = kPrefix "_onInterstitia
 static NSString* const k__onInterstitialAdClicked      = kPrefix "_onInterstitialAdClicked";
 static NSString* const k__onInterstitialAdClosed       = kPrefix "_onInterstitialAdClosed";
 
+static NSString* const k__onRewardedAdLoaded       = kPrefix "_onRewardedAdLoaded";
 static NSString* const k__onRewardedAdFailedToShow = kPrefix "_onRewardedAdFailedToShow";
 static NSString* const k__onRewardedAdClicked      = kPrefix "_onRewardedAdClicked";
 static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClosed";
@@ -213,6 +214,9 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available {
     NSLog(@"%s: %d", __PRETTY_FUNCTION__, (int)available);
+    if (available) {
+        [bridge_ callCpp:k__onRewardedAdLoaded];
+    }
 }
 
 - (void)didReceiveRewardForPlacement:(ISPlacementInfo*)placementInfo {

@@ -38,6 +38,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     private static final String k__onInterstitialAdClicked = kPrefix + "_onInterstitialAdClicked";
     private static final String k__onInterstitialAdClosed = kPrefix + "_onInterstitialAdClosed";
 
+    private static final String k__onRewardedAdLoaded = kPrefix + "_onRewardedAdLoaded";
     private static final String k__onRewardedAdFailedToShow = kPrefix + "_onRewardedAdFailedToShow";
     private static final String k__onRewardedAdClicked = kPrefix + "_onRewardedAdClicked";
     private static final String k__onRewardedAdClosed = kPrefix + "_onRewardedAdClosed";
@@ -290,6 +291,9 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onRewardedVideoAvailabilityChanged(boolean available) {
         _logger.info("onRewardedVideoAvailabilityChanged: " + available);
+        if (available) {
+            _bridge.callCpp(k__onRewardedAdLoaded);
+        }
     }
 
     @Override
@@ -301,7 +305,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
-        _bridge.callCpp(k__onRewardedAdFailedToShow);
+        _bridge.callCpp(k__onRewardedAdFailedToShow, ironSourceError.getErrorMessage());
     }
 
     @Override

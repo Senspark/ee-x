@@ -59,6 +59,15 @@ Task<bool> Self::show() {
     co_return result;
 }
 
+void Self::onLoaded() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    dispatchEvent([&](auto&& observer) {
+        if (observer.onLoaded) {
+            observer.onLoaded();
+        }
+    });
+}
+
 void Self::onFailedToShow(const std::string& message) {
     logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
                   message.c_str(),

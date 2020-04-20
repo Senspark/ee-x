@@ -51,6 +51,7 @@ private:
     bool hasRewardedAd(const std::string& adId) const;
     void showRewardedAd(const std::string& adId);
 
+    void onLoaded(const std::string& adId);
     void onFailedToShow(const std::string& adId, const std::string& message);
     void onClosed(const std::string& adId, bool rewarded);
 

@@ -37,6 +37,7 @@ private:
         const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
 
+    void onLoaded();
     void onFailedToShow(const std::string& message);
     void onClosed(bool rewarded);
 

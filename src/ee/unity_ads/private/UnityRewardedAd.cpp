@@ -48,6 +48,15 @@ Task<bool> Self::load() {
     co_return false;
 }
 
+void Self::onLoaded() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    dispatchEvent([&](auto&& observer) {
+        if (observer.onLoaded) {
+            observer.onLoaded();
+        }
+    });
+}
+
 Task<IRewardedAdResult> Self::show() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto result = co_await displayer_->process(

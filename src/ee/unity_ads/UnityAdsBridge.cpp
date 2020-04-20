@@ -33,6 +33,7 @@ const auto k__initialize          = kPrefix + "_initialize";
 const auto k__setDebugModeEnabled = kPrefix + "_setDebugModeEnabled";
 const auto k__hasRewardedAd       = kPrefix + "_hasRewardedAd";
 const auto k__showRewardedAd      = kPrefix + "_showRewardedAd";
+const auto k__onLoaded            = kPrefix + "_onLoaded";
 const auto k__onFailedToShow      = kPrefix + "_onFailedToShow";
 const auto k__onClosed            = kPrefix + "_onClosed";
 // clang-format on
@@ -60,6 +61,12 @@ Self::Bridge(const Logger& logger)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
+            onLoaded(message);
+            return "";
+        },
+        k__onLoaded);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onFailedToShow(json["ad_id"], json["message"]);
             return "";
@@ -78,6 +85,7 @@ Self::~Bridge() {}
 
 void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);
+    bridge_.deregisterHandler(k__onLoaded);
     bridge_.deregisterHandler(k__onFailedToShow);
     bridge_.deregisterHandler(k__onClosed);
 }
@@ -157,6 +165,21 @@ void Self::showRewardedAd(const std::string& adId) {
     runOnUiThread([this, adId] { //
         bridge_.call(k__showRewardedAd, adId);
     });
+}
+
+void Self::onLoaded(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (auto iter = interstitialAds_.find(adId);
+        iter != interstitialAds_.cend()) {
+        iter->second->onLoaded();
+        return;
+    }
+    if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
+        iter->second->onLoaded();
+        return;
+    }
+    // Mediation.
+    assert(false);
 }
 
 void Self::onFailedToShow(const std::string& adId, const std::string& message) {

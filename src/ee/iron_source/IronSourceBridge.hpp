@@ -50,6 +50,7 @@ private:
     void onInterstitialAdClicked();
     void onInterstitialAdClosed();
 
+    void onRewardedAdLoaded();
     void onRewardedAdFailedToShow(const std::string& message);
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);

@@ -64,6 +64,9 @@ Task<bool> Self::load() {
         lock.unlock();
         co_return true;
     }
+    lock.unlock();
+    co_await SwitchToUiThread();
+    lock.lock();
     if (loading_) {
         // Waiting.
         lock.unlock();
@@ -71,7 +74,6 @@ Task<bool> Self::load() {
     }
     loading_ = true;
     lock.unlock();
-    co_await SwitchToUiThread();
     auto result = co_await ad_->load();
     lock.lock();
     loading_ = false;

@@ -179,7 +179,7 @@ void Self::onLoaded(const std::string& adId) {
         return;
     }
     // Mediation.
-    assert(false);
+    logger_.error("%s: unexpected adId = %s", adId.c_str());
 }
 
 void Self::onFailedToShow(const std::string& adId, const std::string& message) {

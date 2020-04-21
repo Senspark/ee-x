@@ -35,7 +35,7 @@ Self::RewardedAd(
 Self::~RewardedAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     plugin_->destroyRewardedAd(adId_);
 }
 
@@ -49,7 +49,9 @@ Task<bool> Self::load() {
 }
 
 Task<IRewardedAdResult> Self::show() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd(adId_);
@@ -61,7 +63,7 @@ Task<IRewardedAdResult> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([&](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
@@ -70,8 +72,8 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
+    logger_.debug("%s: adId = %s message = %s displaying = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(IRewardedAdResult::Failed);
@@ -81,7 +83,7 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClicked() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
@@ -90,7 +92,8 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s rewarded = %s displaying = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(rewarded).c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {

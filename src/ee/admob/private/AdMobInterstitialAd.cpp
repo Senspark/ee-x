@@ -30,7 +30,7 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
     , plugin_(plugin)
     , adId_(adId)
     , messageHelper_("AdMobInterstitialAd", adId) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
@@ -68,7 +68,7 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
 Self::~InterstitialAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
     bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
@@ -81,13 +81,13 @@ void Self::destroy() {
 }
 
 bool Self::createInternalAd() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     auto response = bridge_.call(messageHelper_.createInternalAd());
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     auto response = bridge_.call(messageHelper_.destroyInternalAd());
     return core::toBool(response);
 }
@@ -98,7 +98,8 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     auto result = co_await loader_->process(
         [this] { //
@@ -111,7 +112,9 @@ Task<bool> Self::load() {
 }
 
 Task<bool> Self::show() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
             bridge_.call(messageHelper_.show());
@@ -126,7 +129,8 @@ Task<bool> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
@@ -141,8 +145,8 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
+    logger_.debug("%s: adId = %s message = %s loading = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
@@ -152,8 +156,8 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
+    logger_.debug("%s: adId = %s message = %s displaying = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(false);
@@ -163,7 +167,7 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClicked() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
@@ -172,7 +176,8 @@ void Self::onClicked() {
 }
 
 void Self::onClosed() {
-    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(true);

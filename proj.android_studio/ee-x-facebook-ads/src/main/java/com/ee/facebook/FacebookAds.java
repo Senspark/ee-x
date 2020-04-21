@@ -27,17 +27,17 @@ import static com.google.common.truth.Truth.assertThat;
  */
 public class FacebookAds implements PluginProtocol {
     private static final String kPrefix = "FacebookAds";
-    private static final String k__getTestDeviceHash = kPrefix + "getTestDeviceHash";
-    private static final String k__addTestDevice = kPrefix + "addTestDevice";
-    private static final String k__clearTestDevices = kPrefix + "clearTestDevices";
-    private static final String k__createBannerAd = kPrefix + "createBannerAd";
-    private static final String k__destroyBannerAd = kPrefix + "destroyBannerAd";
-    private static final String k__createNativeAd = kPrefix + "createNativeAd";
-    private static final String k__destroyNativeAd = kPrefix + "destroyNativeAd";
-    private static final String k__createInterstitialAd = kPrefix + "createInterstitialAd";
-    private static final String k__destroyInterstitialAd = kPrefix + "destroyInterstitialAd";
-    private static final String k__createRewardedAd = kPrefix + "createRewardedAd";
-    private static final String k__destroyRewardedAd = kPrefix + "destroyRewardedAd";
+    private static final String k__getTestDeviceHash = kPrefix + "_getTestDeviceHash";
+    private static final String k__addTestDevice = kPrefix + "_addTestDevice";
+    private static final String k__clearTestDevices = kPrefix + "_clearTestDevices";
+    private static final String k__createBannerAd = kPrefix + "_createBannerAd";
+    private static final String k__destroyBannerAd = kPrefix + "_destroyBannerAd";
+    private static final String k__createNativeAd = kPrefix + "_createNativeAd";
+    private static final String k__destroyNativeAd = kPrefix + "_destroyNativeAd";
+    private static final String k__createInterstitialAd = kPrefix + "_createInterstitialAd";
+    private static final String k__destroyInterstitialAd = kPrefix + "_destroyInterstitialAd";
+    private static final String k__createRewardedAd = kPrefix + "_createRewardedAd";
+    private static final String k__destroyRewardedAd = kPrefix + "_destroyRewardedAd";
 
     private static final String k__ad_id = "ad_id";
     private static final String k__ad_size = "ad_size";

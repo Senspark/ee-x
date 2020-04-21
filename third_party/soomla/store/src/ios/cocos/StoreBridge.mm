@@ -166,7 +166,8 @@
             VERIFY_ON_ITUNES_FAILURE = [parameters[@"verifyOnServerFailure"] boolValue];
             NSString* url = parameters[@"verifyServer"];
             if (url != nil && url.length != 0) {
-                VERIFY_URL = url;
+                [VERIFY_URL release];
+                VERIFY_URL = [url copy];
             }
             LogDebug(@"SOOMLA SoomlaStoreBridge",
                     ([NSString stringWithFormat:@"Setting iOS verifyOnServerFailure to: %@", VERIFY_ON_ITUNES_FAILURE ?@"true":@"false"]));

@@ -69,6 +69,7 @@ Task<bool> Self::load() {
         lock.unlock();
         co_return false;
     }
+    co_await SwitchToUiThread();
     if (loading_) {
         // Waiting.
         lock.unlock();
@@ -76,7 +77,6 @@ Task<bool> Self::load() {
     }
     loading_ = true;
     lock.unlock();
-    co_await SwitchToUiThread();
     auto result = co_await ad_->load();
     lock.lock();
     loading_ = false;
@@ -94,6 +94,7 @@ Task<IRewardedAdResult> Self::show() {
         lock.unlock();
         co_return IRewardedAdResult::Failed;
     }
+    co_await SwitchToUiThread();
     if (displaying_) {
         // Waiting.
         lock.unlock();
@@ -101,7 +102,6 @@ Task<IRewardedAdResult> Self::show() {
     }
     displaying_ = true;
     lock.unlock();
-    co_await SwitchToUiThread();
     auto result = co_await ad_->show();
     lock.lock();
     displaying_ = false;

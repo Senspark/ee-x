@@ -105,7 +105,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_ad == null) {
+        if (_ad != null) {
             return false;
         }
         _ad = new RewardedVideoAd(_context, _adId);

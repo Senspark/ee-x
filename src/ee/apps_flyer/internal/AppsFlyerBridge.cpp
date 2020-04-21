@@ -24,12 +24,14 @@ std::unique_ptr<IAppsFlyer> PluginManager::createPlugin() {
 namespace apps_flyer {
 namespace {
 // clang-format off
-constexpr auto kInitialize      = "AppsFlyerInitialize";
-constexpr auto kStartTracking   = "AppsFlyerStartTracking";
-constexpr auto kGetDeviceId     = "AppsFlyerGetDeviceId";
-constexpr auto kSetDebugEnabled = "AppsFlyerSetDebugEnabled";
-constexpr auto kSetStopTracking = "AppsFlyerSetStopTracking";
-constexpr auto kTrackEvent      = "AppsFlyerTrackEvent";
+const std::string kPrefix = "AppsFlyer";
+
+const auto kInitialize      = kPrefix + "Initialize";
+const auto kStartTracking   = kPrefix + "StartTracking";
+const auto kGetDeviceId     = kPrefix + "GetDeviceId";
+const auto kSetDebugEnabled = kPrefix + "SetDebugEnabled";
+const auto kSetStopTracking = kPrefix + "SetStopTracking";
+const auto kTrackEvent      = kPrefix + "TrackEvent";
 // clang-format on
 } // namespace
 
@@ -45,14 +47,16 @@ Self::~Bridge() {
 }
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {
+    runOnUiThread([this, devKey, appId] {
 #ifdef EE_X_ANDROID
-    bridge_.call(kInitialize, devKey);
+        bridge_.call(kInitialize, devKey);
 #else  // EE_X_ANDROID
-    nlohmann::json json;
-    json["devKey"] = devKey;
-    json["appId"] = appId;
-    bridge_.call(kInitialize, json.dump());
+        nlohmann::json json;
+        json["devKey"] = devKey;
+        json["appId"] = appId;
+        bridge_.call(kInitialize, json.dump());
 #endif // EE_X_ANDROID
+    });
 }
 
 void Self::startTracking() {

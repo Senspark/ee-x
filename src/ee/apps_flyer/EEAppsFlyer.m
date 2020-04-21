@@ -13,23 +13,26 @@
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
+#define kPrefix @"AppsFlyer"
+
 // clang-format off
-static NSString* const kInitialize      = @"AppsFlyerInitialize";
-static NSString* const kStartTracking   = @"AppsFlyerStartTracking";
-static NSString* const kGetDeviceId     = @"AppsFlyerGetDeviceId";
-static NSString* const kSetDebugEnabled = @"AppsFlyerSetDebugEnabled";
-static NSString* const kSetStopTracking = @"AppsFlyerSetStopTracking";
-static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
+static NSString* const kInitialize      = kPrefix "Initialize";
+static NSString* const kStartTracking   = kPrefix "StartTracking";
+static NSString* const kGetDeviceId     = kPrefix "GetDeviceId";
+static NSString* const kSetDebugEnabled = kPrefix "SetDebugEnabled";
+static NSString* const kSetStopTracking = kPrefix "SetStopTracking";
+static NSString* const kTrackEvent      = kPrefix "TrackEvent";
 // clang-format on
 
-@interface EEAppsFlyer () <AppsFlyerTrackerDelegate> {
+#undef kPrefix
+
+@interface EEAppsFlyer () <AppsFlyerTrackerDelegate>
+@end
+
+@implementation EEAppsFlyer {
     id<EEIMessageBridge> bridge_;
     AppsFlyerTracker* tracker_;
 }
-
-@end
-
-@implementation EEAppsFlyer
 
 - (id)init {
     self = [super init];
@@ -48,12 +51,17 @@ static NSString* const kTrackEvent      = @"AppsFlyerTrackEvent";
 }
 
 - (void)dealloc {
+    [super dealloc];
+}
+
+- (void)destroy {
     [self deregisterHandlers];
     [[NSNotificationCenter defaultCenter]
         removeObserver:self
                   name:UIApplicationDidBecomeActiveNotification
                 object:nil];
-    [super dealloc];
+    bridge_ = nil;
+    tracker_ = nil;
 }
 
 - (void)registerHandlers {

@@ -4,33 +4,35 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 
 import java.util.Map;
 
 public class AppsFlyer implements PluginProtocol {
-    private static final String kInitialize      = "AppsFlyerInitialize";
-    private static final String kStartTracking   = "AppsFlyerStartTracking";
-    private static final String kGetDeviceId     = "AppsFlyerGetDeviceId";
-    private static final String kSetDebugEnabled = "AppsFlyerSetDebugEnabled";
-    private static final String kSetStopTracking = "AppsFlyerSetStopTracking";
-    private static final String kTrackEvent      = "AppsFlyerTrackEvent";
+    private static final String kPrefix = "AppsFlyer";
+    private static final String kInitialize = kPrefix + "Initialize";
+    private static final String kStartTracking = kPrefix + "StartTracking";
+    private static final String kGetDeviceId = kPrefix + "GetDeviceId";
+    private static final String kSetDebugEnabled = kPrefix + "SetDebugEnabled";
+    private static final String kSetStopTracking = kPrefix + "SetStopTracking";
+    private static final String kTrackEvent = kPrefix + "TrackEvent";
 
     private static final Logger _logger = new Logger(AppsFlyer.class.getName());
 
-    private Context        _context;
+    private Context _context;
     private IMessageBridge _bridge;
-    private AppsFlyerLib   _tracker;
+    private AppsFlyerLib _tracker;
 
     public AppsFlyer(Context context) {
         _logger.debug("constructor begin: context = " + context);
@@ -74,6 +76,10 @@ public class AppsFlyer implements PluginProtocol {
 
     @Override
     public void destroy() {
+        deregisterHandlers();
+        _context = null;
+        _bridge = null;
+        _tracker = null;
     }
 
     @Override
@@ -139,7 +145,6 @@ public class AppsFlyer implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _bridge.deregisterHandler(kInitialize);
         _bridge.deregisterHandler(kStartTracking);
         _bridge.deregisterHandler(kGetDeviceId);

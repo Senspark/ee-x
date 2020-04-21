@@ -11,6 +11,7 @@
 #include <cassert>
 #include <mutex>
 
+#include "ee/core/Logger.hpp"
 #include "ee/core/SpinLock.hpp"
 
 namespace ee {
@@ -22,7 +23,8 @@ Self& Self::getInstance() {
     return sharedInstance;
 }
 
-Self::MessageBridge() {
+Self::MessageBridge()
+    : logger_(Logger::getSystemLogger()) {
     handlerLock_ = std::make_unique<SpinLock>();
 }
 
@@ -62,6 +64,8 @@ MessageHandler Self::findHandler(const std::string& tag) {
     std::scoped_lock<SpinLock> lock(*handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
+        logger_.error("%s: tag %s doesn't exist!", __PRETTY_FUNCTION__,
+                      tag.c_str());
         return nullptr;
     }
     return iter->second;

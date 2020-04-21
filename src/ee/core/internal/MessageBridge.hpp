@@ -42,6 +42,8 @@ private:
 
     MessageHandler findHandler(const std::string& tag);
 
+    const Logger& logger_;
+
     std::unique_ptr<SpinLock> handlerLock_;
 
     /// Registered handlers.

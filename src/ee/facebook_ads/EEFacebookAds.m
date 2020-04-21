@@ -8,8 +8,8 @@
 
 #import "ee/facebook_ads/EEFacebookAds.h"
 
-#import <FBAudienceNetwork/FBAdSize.h>
 #import <FBAudienceNetwork/FBAdSettings.h>
+#import <FBAudienceNetwork/FBAdSize.h>
 
 #import <ee/core/internal/EEDictionaryUtils.h>
 #import <ee/core/internal/EEJsonUtils.h>
@@ -19,36 +19,26 @@
 #import "ee/facebook_ads/private/EEFacebookBannerAd.h"
 #import "ee/facebook_ads/private/EEFacebookInterstitialAd.h"
 #import "ee/facebook_ads/private/EEFacebookNativeAd.h"
-#import "ee/facebook_ads/private/EEFacebookRewardVideoAd.h"
+#import "ee/facebook_ads/private/EEFacebookRewardedAd.h"
 
-@interface EEFacebookAds () {
-    id<EEIMessageBridge> bridge_;
-    NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
-    NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
-    NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
-    NSMutableDictionary<NSString*, EEFacebookRewardVideoAd*>* rewardVideoAds_;
-}
-
-@end
-
-@implementation EEFacebookAds
+#define kPrefix @"FacebookAds"
 
 // clang-format off
-static NSString* const k__getTestDeviceHash     = @"FacebookAds_getTestDeviceHash";
-static NSString* const k__addTestDevice         = @"FacebookAds_addTestDevice";
-static NSString* const k__clearTestDevices      = @"FacebookAds_clearTestDevices";
+static NSString* const k__getTestDeviceHash     = kPrefix "_getTestDeviceHash";
+static NSString* const k__addTestDevice         = kPrefix "_addTestDevice";
+static NSString* const k__clearTestDevices      = kPrefix "_clearTestDevices";
 
-static NSString* const k__createBannerAd        = @"FacebookAds_createBannerAd";
-static NSString* const k__destroyBannerAd       = @"FacebookAds_destroyBannerAd";
+static NSString* const k__createBannerAd        = kPrefix "_createBannerAd";
+static NSString* const k__destroyBannerAd       = kPrefix "_destroyBannerAd";
 
-static NSString* const k__createNativeAd        = @"FacebookAds_createNativeAd";
-static NSString* const k__destroyNativeAd       = @"FacebookAds_destroyNativeAd";
+static NSString* const k__createNativeAd        = kPrefix "_createNativeAd";
+static NSString* const k__destroyNativeAd       = kPrefix "_destroyNativeAd";
 
-static NSString* const k__createInterstitialAd  = @"FacebookAds_createInterstitialAd";
-static NSString* const k__destroyInterstitialAd = @"FacebookAds_destroyInterstitialAd";
+static NSString* const k__createInterstitialAd  = kPrefix "_createInterstitialAd";
+static NSString* const k__destroyInterstitialAd = kPrefix "_destroyInterstitialAd";
 
-static NSString* const k__createRewardVideoAd   = @"FacebookAds_createRewardVideoAd";
-static NSString* const k__destroyRewardVideoAd  = @"FacebookAds_destroyRewardVideoAd";
+static NSString* const k__createRewardedAd      = kPrefix "_createRewardedAd";
+static NSString* const k__destroyRewardedAd     = kPrefix "_destroyRewardedAd";
 // clang-format on
 
 // clang-format off
@@ -58,7 +48,18 @@ static NSString* const k__layout_name           = @"layout_name";
 static NSString* const k__identifiers           = @"identifiers";
 // clang-format on
 
+#undef kPrefix
+
+@implementation EEFacebookAds {
+    id<EEIMessageBridge> bridge_;
+    NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
+    NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
+    NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
+    NSMutableDictionary<NSString*, EEFacebookRewardedAd*>* rewardedAds_;
+}
+
 - (id)init {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -67,11 +68,17 @@ static NSString* const k__identifiers           = @"identifiers";
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
+    rewardedAds_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
+    [super dealloc];
+}
+
+- (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
     [bannerAds_ release];
     bannerAds_ = nil;
@@ -79,7 +86,8 @@ static NSString* const k__identifiers           = @"identifiers";
     nativeAds_ = nil;
     [interstitialAds_ release];
     interstitialAds_ = nil;
-    [super dealloc];
+    [rewardedAds_ release];
+    rewardedAds_ = nil;
 }
 
 - (void)registerHandlers {
@@ -127,43 +135,42 @@ static NSString* const k__identifiers           = @"identifiers";
                    NSString* adId = dict[k__ad_id];
                    NSString* layoutName = dict[k__layout_name];
                    NSDictionary* identifiers = dict[k__identifiers];
-                   return [EEUtils
-                       toString:[self createNativeAd:adId layout:layoutName identifiers: identifiers]];
+                   return [EEUtils toString:[self createNativeAd:adId
+                                                          layout:layoutName
+                                                     identifiers:identifiers]];
                }];
 
     [bridge_ registerHandler:k__destroyNativeAd
-                   callback:^(NSString* message) {
-                       NSString* adId = message;
-                       return [EEUtils toString:[self destroyNativeAd:adId]];
-                   }];
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return [EEUtils toString:[self destroyNativeAd:adId]];
+                    }];
 
     [bridge_ registerHandler:k__createInterstitialAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                           toString:[self createInterstitialAd:placementId]];
-                   }];
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return
+                            [EEUtils toString:[self createInterstitialAd:adId]];
+                    }];
 
-    [bridge_ registerHandler:k__destroyInterstitialAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                           toString:[self destroyInterstitialAd:placementId]];
-                   }];
-    
-    [bridge_ registerHandler:k__createRewardVideoAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                               toString:[self createRewardVideoAd:placementId]];
-                   }];
-    
-    [bridge_ registerHandler:k__destroyRewardVideoAd
-                   callback:^(NSString* message) {
-                       NSString* placementId = message;
-                       return [EEUtils
-                               toString:[self destroyRewardVideoAd:placementId]];
-                   }];
+    [bridge_
+        registerHandler:k__destroyInterstitialAd
+               callback:^(NSString* message) {
+                   NSString* adId = message;
+                   return [EEUtils toString:[self destroyInterstitialAd:adId]];
+               }];
+
+    [bridge_ registerHandler:k__createRewardedAd
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return [EEUtils toString:[self createRewardedAd:adId]];
+                    }];
+
+    [bridge_ registerHandler:k__destroyRewardedAd
+                    callback:^(NSString* message) {
+                        NSString* adId = message;
+                        return [EEUtils toString:[self destroyRewardedAd:adId]];
+                    }];
 }
 
 - (void)deregisterHandlers {
@@ -179,9 +186,9 @@ static NSString* const k__identifiers           = @"identifiers";
 
     [bridge_ deregisterHandler:k__createInterstitialAd];
     [bridge_ deregisterHandler:k__destroyInterstitialAd];
-    
-    [bridge_ deregisterHandler:k__createRewardVideoAd];
-    [bridge_ deregisterHandler:k__destroyRewardVideoAd];
+
+    [bridge_ deregisterHandler:k__createRewardedAd];
+    [bridge_ deregisterHandler:k__destroyRewardedAd];
 }
 
 - (NSString* _Nonnull)getTestDeviceHash {
@@ -189,14 +196,17 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {
+    NSAssert([EEUtils isMainThread], @"");
     [FBAdSettings addTestDevice:hash];
 }
 
 - (void)clearTestDevices {
+    NSAssert([EEUtils isMainThread], @"");
     [FBAdSettings clearTestDevices];
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size {
+    NSAssert([EEUtils isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -208,6 +218,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -220,6 +231,7 @@ static NSString* const k__identifiers           = @"identifiers";
 - (BOOL)createNativeAd:(NSString*)adId
                 layout:(NSString*)layout
            identifiers:(NSDictionary* _Nonnull)identifiers {
+    NSAssert([EEUtils isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -233,6 +245,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyNativeAd:(NSString*)adId {
+    NSAssert([EEUtils isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -242,45 +255,50 @@ static NSString* const k__identifiers           = @"identifiers";
     return YES;
 }
 
-- (BOOL)createInterstitialAd:(NSString* _Nonnull)placementId {
-    if ([interstitialAds_ objectForKey:placementId] != nil) {
+- (BOOL)createInterstitialAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEFacebookInterstitialAd* ad = [[[EEFacebookInterstitialAd alloc]
-        initWithBridge:bridge_
-           placementId:placementId] autorelease];
-    [interstitialAds_ setObject:ad forKey:placementId];
+    EEFacebookInterstitialAd* ad =
+        [[[EEFacebookInterstitialAd alloc] initWithBridge:bridge_ adId:adId]
+            autorelease];
+    [interstitialAds_ setObject:ad forKey:adId];
     return YES;
 }
 
-- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)placementId {
-    if ([interstitialAds_ objectForKey:placementId] == nil) {
+- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if ([interstitialAds_ objectForKey:adId] == nil) {
         return NO;
     }
-    EEFacebookInterstitialAd* ad = [interstitialAds_ objectForKey:placementId];
+    EEFacebookInterstitialAd* ad = [interstitialAds_ objectForKey:adId];
     [ad destroy];
-    [interstitialAds_ removeObjectForKey:placementId];
+    [interstitialAds_ removeObjectForKey:adId];
     return YES;
 }
 
-- (BOOL)createRewardVideoAd:(NSString* _Nonnull)placementId {
-    if ([rewardVideoAds_ objectForKey:placementId] != nil) {
+- (BOOL)createRewardedAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if ([rewardedAds_ objectForKey:adId] != nil) {
         return NO;
     }
-    EEFacebookRewardVideoAd* ad = [[[EEFacebookRewardVideoAd alloc]
-        initWithBridge:bridge_
-           placementId:placementId] autorelease];
-    [rewardVideoAds_ setObject:ad forKey:placementId];
+    EEFacebookRewardedAd* ad =
+        [[[EEFacebookRewardedAd alloc] initWithBridge:bridge_ adId:adId]
+            autorelease];
+    [rewardedAds_ setObject:ad forKey:adId];
     return YES;
 }
 
-- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)placementId {
-    if ([rewardVideoAds_ objectForKey:placementId] == nil) {
+- (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if ([rewardedAds_ objectForKey:adId] == nil) {
         return NO;
     }
-    EEFacebookRewardVideoAd* ad = [rewardVideoAds_ objectForKey:placementId];
+    EEFacebookRewardedAd* ad = [rewardedAds_ objectForKey:adId];
     [ad destroy];
-    [rewardVideoAds_ removeObjectForKey:placementId];
+    [rewardedAds_ removeObjectForKey:adId];
     return YES;
 }
+
 @end

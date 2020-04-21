@@ -7,6 +7,7 @@
 
 #include "TwitterShareTestScene.hpp"
 
+/*
 #include <cocos2d.h>
 #include <ui/CocosGUI.h>
 
@@ -89,6 +90,5 @@ void Self::doShareSuccess(int result) {
         lb->setString("Twitter Cancelled");
     }
 }
-
-
 } // namespace eetest
+ */

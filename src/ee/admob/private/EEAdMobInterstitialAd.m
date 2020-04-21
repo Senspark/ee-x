@@ -11,90 +11,66 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import <ee/ads/internal/EEInterstitialAdHelper.h>
+#import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEUtils.h>
 
-@interface EEAdMobInterstitialAd () <GADInterstitialDelegate> {
-    id<EEIMessageBridge> bridge_;
-    NSString* adId_;
-    GADInterstitial* interstitialAd_;
-    EEInterstitialAdHelper* helper_;
-}
-
+@interface EEAdMobInterstitialAd () <GADInterstitialDelegate>
 @end
 
-@implementation EEAdMobInterstitialAd
+@implementation EEAdMobInterstitialAd {
+    id<EEIMessageBridge> bridge_;
+    NSString* adId_;
+    EEMessageHelper* messageHelper_;
+    EEInterstitialAdHelper* helper_;
+    GADInterstitial* ad_;
+}
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
     }
     bridge_ = bridge;
     adId_ = [adId copy];
-    interstitialAd_ = nil;
-    helper_ =
-        [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
-                                                prefix:@"AdMobInterstitialAd"
-                                                  adId:adId_];
+    messageHelper_ =
+        [[EEMessageHelper alloc] initWithPrefix:@"AdMobInterstitialAd"
+                                           adId:adId];
+    helper_ = [[EEInterstitialAdHelper alloc] initWithBridge:bridge_
+                                                          ad:self
+                                                      helper:messageHelper_];
+    [self createInternalAd];
     [self registerHandlers];
     return self;
 }
 
 - (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
+    [self destroyInternalAd];
+
+    [adId_ release];
+    adId_ = nil;
+    [messageHelper_ release];
+    messageHelper_ = nil;
+    [helper_ release];
+    helper_ = nil;
 }
 
 - (void)dealloc {
-    [helper_ release];
-    helper_ = nil;
-    [adId_ release];
-    adId_ = nil;
     [super dealloc];
 }
 
-- (NSString*)k__createInternalAd {
-    return [@"AdMobInterstitialAd_createInternalAd_"
-        stringByAppendingString:adId_];
-}
-
-- (NSString*)k__destroyInternalAd {
-    return [@"AdMobInterstitialAd_destroyInternalAd_"
-        stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onLoaded {
-    return [@"AdMobInterstitialAd_onLoaded_" stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onFailedToLoad {
-    return
-        [@"AdMobInterstitialAd_onFailedToLoad_" stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onFailedToShow {
-    return
-        [@"AdMobInterstitialAd_onFailedToShow_" stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onClosed {
-    return [@"AdMobInterstitialAd_onClosed_" stringByAppendingString:adId_];
-}
-
-- (NSString* _Nonnull)k__onClicked {
-    return [@"AdMobInterstitialAd_onClicked_" stringByAppendingString:adId_];
-}
-
 - (void)registerHandlers {
-    [helper_ registerHandlers:self];
-    [bridge_ registerHandler:[self k__createInternalAd]
+    [helper_ registerHandlers];
+    [bridge_ registerHandler:[messageHelper_ createInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self createInternalAd]];
                     }];
-
-    [bridge_ registerHandler:[self k__destroyInternalAd]
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[self destroyInternalAd]];
                     }];
@@ -102,96 +78,93 @@
 
 - (void)deregisterHandlers {
     [helper_ deregisterHandlers];
-    [bridge_ deregisterHandler:[self k__createInternalAd]];
-    [bridge_ deregisterHandler:[self k__destroyInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ createInternalAd]];
+    [bridge_ deregisterHandler:[messageHelper_ destroyInternalAd]];
 }
 
 - (BOOL)createInternalAd {
-    if (interstitialAd_ != nil) {
+    NSAssert([EEUtils isMainThread], @"");
+    if (ad_ != nil) {
         return NO;
     }
-    GADInterstitial* interstitialAd =
-        [[[GADInterstitial alloc] initWithAdUnitID:adId_] autorelease];
-    [interstitialAd setDelegate:self];
-    interstitialAd_ = [interstitialAd retain];
+    ad_ = [[GADInterstitial alloc] initWithAdUnitID:adId_];
+    [ad_ setDelegate:self];
     return YES;
 }
 
 - (BOOL)destroyInternalAd {
-    if (interstitialAd_ == nil) {
+    NSAssert([EEUtils isMainThread], @"");
+    if (ad_ == nil) {
         return NO;
     }
-    [interstitialAd_ setDelegate:nil];
-    [interstitialAd_ release];
-    interstitialAd_ = nil;
+    [ad_ setDelegate:nil];
+    [ad_ release];
+    ad_ = nil;
     return YES;
 }
 
 - (BOOL)isLoaded {
-    if (interstitialAd_ == nil) {
-        return NO;
-    }
-    return [interstitialAd_ isReady];
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(ad_ != nil, @"");
+    return [ad_ isReady];
 }
 
 - (void)load {
-    if (interstitialAd_ == nil) {
-        return;
-    }
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(ad_ != nil, @"");
     GADRequest* request = [GADRequest request];
-    [interstitialAd_ loadRequest:request];
+    [ad_ loadRequest:request];
 }
 
-- (BOOL)show {
-    if (interstitialAd_ == nil) {
-        return NO;
-    }
+- (void)show {
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(ad_ != nil, @"");
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [interstitialAd_ presentFromRootViewController:rootView];
-    return YES;
+    [ad_ presentFromRootViewController:rootView];
 }
 
 - (void)interstitialDidReceiveAd:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
-    [bridge_ callCpp:[self k__onLoaded]];
+    NSAssert(ad_ == ad, @"");
+    [bridge_ callCpp:[messageHelper_ onLoaded]];
 }
 
 - (void)interstitial:(GADInterstitial*)ad
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    NSAssert(interstitialAd_ == ad, @"");
-    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
+    NSAssert(ad_ == ad, @"");
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
+    NSAssert(ad_ == ad, @"");
 }
 
 - (void)interstitialDidFailToPresentScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
-    [bridge_ callCpp:[self k__onFailedToShow]];
+    NSAssert(ad_ == ad, @"");
+    [bridge_ callCpp:[messageHelper_ onFailedToShow]];
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
+    NSAssert(ad_ == ad, @"");
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
-    [bridge_ callCpp:[self k__onClosed]];
+    NSAssert(ad_ == ad, @"");
+    [bridge_ callCpp:[messageHelper_ onClosed]];
 }
 
 /// Tells the delegate that a user click will open another app
 /// (such as the App Store), backgrounding the current app.
 - (void)interstitialWillLeaveApplication:(GADInterstitial*)ad {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(interstitialAd_ == ad, @"");
-    [bridge_ callCpp:[self k__onClicked]];
+    NSAssert(ad_ == ad, @"");
+    [bridge_ callCpp:[messageHelper_ onClicked]];
 }
 
 @end

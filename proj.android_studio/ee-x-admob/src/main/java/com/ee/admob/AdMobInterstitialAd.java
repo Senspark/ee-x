@@ -4,8 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.IInterstitialAd;
+import com.ee.ads.InterstitialAdHelper;
+import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -15,6 +16,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/13/17.
  */
@@ -22,58 +25,39 @@ import com.google.android.gms.ads.InterstitialAd;
 class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     private static final Logger _logger = new Logger(AdMobInterstitialAd.class.getName());
 
-    private Context              _context;
-    private InterstitialAd       _interstitialAd;
-    private String               _adId;
+    private Context _context;
+    private IMessageBridge _bridge;
+    private String _adId;
+    private MessageHelper _messageHelper;
     private InterstitialAdHelper _helper;
-    private IMessageBridge       _bridge;
-
+    private InterstitialAd _ad;
 
     AdMobInterstitialAd(@NonNull Context context, @NonNull String adId) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
-        _adId = adId;
-        _interstitialAd = null;
-        _helper = new InterstitialAdHelper("AdMobInterstitialAd", adId);
         _bridge = MessageBridge.getInstance();
+        _adId = adId;
+        _messageHelper = new MessageHelper("AdMobInterstitialAd", adId);
+        _helper = new InterstitialAdHelper(_bridge, this, _messageHelper);
+        createInternalAd();
         registerHandlers();
     }
 
     void destroy() {
-        _logger.info("destroy: id = " + _adId);
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
-        _helper = null;
         _context = null;
-        _adId = null;
-        _helper = null;
         _bridge = null;
-    }
-
-    private String kCreateInternalAd() {
-        return "AdMobInterstitialAd_createInternalAd_" + _adId;
-    }
-
-    private String kDestroyInternalAd() {
-        return "AdMobInterstitialAd_destroyInternalAd_" + _adId;
-    }
-
-    private String kOnLoaded() {
-        return "AdMobInterstitialAd_onLoaded_" + _adId;
-    }
-
-    private String kOnFailedToLoad() {
-        return "AdMobInterstitialAd_onFailedToLoad_" + _adId;
-    }
-
-    private String kOnClosed() {
-        return "AdMobInterstitialAd_onClosed_" + _adId;
+        _adId = null;
+        _messageHelper = null;
+        _helper = null;
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-        _helper.registerHandlers(this);
+        _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -81,7 +65,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
             public String handle(@NonNull String message) {
                 return Utils.toString(createInternalAd());
             }
-        }, kCreateInternalAd());
+        }, _messageHelper.createInternalAd());
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -89,83 +73,78 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
             public String handle(@NonNull String message) {
                 return Utils.toString(destroyInternalAd());
             }
-        }, kDestroyInternalAd());
+        }, _messageHelper.destroyInternalAd());
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
-
-        _bridge.deregisterHandler(kCreateInternalAd());
-        _bridge.deregisterHandler(kDestroyInternalAd());
+        _bridge.deregisterHandler(_messageHelper.createInternalAd());
+        _bridge.deregisterHandler(_messageHelper.destroyInternalAd());
     }
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_interstitialAd != null) {
+        if (_ad != null) {
             return false;
         }
-        InterstitialAd interstitialAd = new InterstitialAd(_context);
-        interstitialAd.setAdUnitId(_adId);
-        interstitialAd.setAdListener(this);
-        _interstitialAd = interstitialAd;
+        _ad = new InterstitialAd(_context);
+        _ad.setAdUnitId(_adId);
+        _ad.setAdListener(this);
         return true;
     }
 
     private boolean destroyInternalAd() {
         Utils.checkMainThread();
-        if (_interstitialAd == null) {
+        if (_ad == null) {
             return false;
         }
-        _interstitialAd.setAdListener(null);
-        _interstitialAd = null;
+        _ad.setAdListener(null);
+        _ad = null;
         return true;
     }
 
     @Override
     public boolean isLoaded() {
         Utils.checkMainThread();
-        return _interstitialAd != null && _interstitialAd.isLoaded();
+        assertThat(_ad).isNotNull();
+        return _ad.isLoaded();
     }
 
     @Override
     public void load() {
         Utils.checkMainThread();
-        if (_interstitialAd == null) {
-            return;
-        }
         _logger.info("load");
+        assertThat(_ad).isNotNull();
         AdRequest.Builder builder = new AdRequest.Builder();
-        _interstitialAd.loadAd(builder.build());
+        _ad.loadAd(builder.build());
     }
 
     @Override
-    public boolean show() {
-        if (_interstitialAd == null) {
-            return false;
-        }
-        _interstitialAd.show();
-        return true;
+    public void show() {
+        Utils.checkMainThread();
+        assertThat(_ad).isNotNull();
+        _ad.show();
     }
 
     @Override
     public void onAdClosed() {
         _logger.info("onAdClosed");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnClosed());
+        _bridge.callCpp(_messageHelper.onClosed());
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-        _bridge.callCpp(kOnFailedToLoad(), String.valueOf(errorCode));
+        _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
         Utils.checkMainThread();
+        _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
@@ -178,13 +157,15 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnLoaded());
+        _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override
     public void onAdClicked() {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
+        // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
+        // Use onAdLeftApplication instead.
     }
 
     @Override

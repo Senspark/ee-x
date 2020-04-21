@@ -9,17 +9,20 @@
 #ifndef EE_X_NULL_INTERSTITIAL_AD_HPP
 #define EE_X_NULL_INTERSTITIAL_AD_HPP
 
+#include <ee/core/ObserverManager.hpp>
+
 #include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {
-class NullInterstitialAd : public IInterstitialAd {
+class NullInterstitialAd : public IInterstitialAd,
+                           public ObserverManager<IInterstitialAdObserver> {
 public:
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
-
-    virtual void load() override;
-
-    virtual bool show() override;
+    virtual Task<bool> load() override;
+    virtual Task<bool> show() override;
 };
 } // namespace ads
 } // namespace ee

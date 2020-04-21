@@ -11,9 +11,8 @@
 #include <cocos2d.h>
 
 #include <ee/Ads.hpp>
-#include <ee/Core.hpp>
-#include <ee/Macro.hpp>
-#include <ee/cocos/EEHeader.hpp>
+#include <ee/Cocos.hpp>
+#include <ee/Coroutine.hpp>
 
 #include "AdMob.hpp"
 #include "AppLovin.hpp"
@@ -22,11 +21,11 @@
 #include "IronSource.hpp"
 #include "MultiNativeAdTestScene.hpp"
 #include "NotificationAgent.hpp"
+#include "TwitterShareTestScene.hpp"
 #include "UnityAds.hpp"
 #include "Utils.hpp"
-#include "Vungle.hpp"
 #include "VideoPlayerTestScene.hpp"
-#include "TwitterShareTestScene.hpp"
+#include "Vungle.hpp"
 
 namespace eetest {
 namespace {
@@ -35,29 +34,43 @@ const auto DesignResolution = cocos2d::Size(480, 320);
 
 namespace {
 void testMultiAds() {
-    static ee::MultiRewardedVideo* ads;
-    ee::runOnUiThread([] {
-        static auto temp = ee::MultiRewardedVideo();
-        ads = &temp;
+    auto ad = std::make_shared<ee::MultiRewardedAd>();
 
-        // ads.addItem(getAppLovin()->createRewardedVideo());
-        ads->addItem(getIronSource()->createRewardedVideo(
-            getIronSourceRewardedVideoId()));
-        // ads.addItem(getUnityAds()->createRewardedVideo(getUnityRewardedVideoId()));
-        // ads.addItem(getVungle()->createRewardedVideo());
-
-        ads->setResultCallback([](bool result) {
-            logCurrentThread();
-            getLogger().info("Result = ", result ? "succeeded" : "failed");
-        });
+    ee::runOnUiThread([ad] {
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getAdMob()->createRewardedAd(getAdMobRewardedAdTestId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getAppLovin()->createRewardedAd()));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getUnityAds()->createRewardedAd(getUnityRewardedAdId())));
+        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+            getVungle()->createRewardedAd(getVungleRewardedAdId())));
     });
 
-    scheduleForever(2.0f, 3.0f, [] {
+    scheduleForever(1.0f, 3.0f, [ad] {
         logCurrentThread();
-        ee::runOnUiThread([] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
             logCurrentThread();
-            ads->show();
-        });
+            getLogger().info("Load rewarded ad");
+            auto result = co_await ad->load();
+            logCurrentThread();
+            getLogger().info("Load rewarded ad: result = %d",
+                             static_cast<int>(result));
+        }));
+    });
+
+    scheduleForever(2.0f, 3.0f, [ad] {
+        logCurrentThread();
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            logCurrentThread();
+            getLogger().info("Show rewarded ad");
+            auto result = co_await ad->show();
+            logCurrentThread();
+            getLogger().info("Show rewarded ad result = %d",
+                             static_cast<int>(result));
+        }));
     });
 }
 } // namespace
@@ -102,25 +115,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glView->setDesignResolutionSize(DesignResolution.width,
                                     DesignResolution.height, resolutionPolicy);
     auto&& frameSize = glView->getFrameSize();
-    getLogger().info(cocos2d::StringUtils::format(
-        "frameSize = %f %f", frameSize.width, frameSize.height));
+    getLogger().info("frameSize = %f %f", frameSize.width, frameSize.height);
 
     auto&& winSize = director->getWinSize();
-    getLogger().info(cocos2d::StringUtils::format(
-        "winSize = %f %f", winSize.width, winSize.height));
+    getLogger().info("winSize = %f %f", winSize.width, winSize.height);
 
-    ee::Metrics::initialize(frameSize.height / winSize.height);
     constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);
     auto dp = metrics.toDip();
     auto pixels = metrics.toPixel();
-    getLogger().info(cocos2d::StringUtils::format("%f pt = %f pixels = %f dp",
-                                                  points, pixels, dp));
+    getLogger().info("%f pt = %f pixels = %f dp", points, pixels, dp);
+
+    ee::Logger::setSystemLogger(getLogger());
 
     CrashlyticsAgent::getInstance()->initialize();
     CrashlyticsAgent::getInstance()->logDebug("debug_message");
     CrashlyticsAgent::getInstance()->logInfo("info_message");
-    CrashlyticsAgent::getInstance()->logError("error_message");
 
     getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
     ee::runOnUiThreadAndWait([] {
@@ -138,19 +148,21 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testAdMobBannerAd();
     // testAdMobNativeAd();
     // testAdMobInterstitial();
-    // testAdMobRewardedVideo();
+    // testAdMobRewardedAd();
     // testAppLovin();
-    // testUnityAdsRewardedVideo();
-    // testIronSourceRewardedVideo();
+    // testUnityAdsRewardedAd();
+    // testIronSourceRewardedAd();
     // testVungle();
-    // testMultiAds();
+    testMultiAds();
     // testFacebookInterstitialAd();
     // testFacebookNativeAd();
 
     cocos2d::log("Create scene");
     // director->runWithScene(VideoPlayerTestScene::create());
     // director->runWithScene(createMultiNativeAdTestScene());
-    director->runWithScene(TwitterShareTestScene::create());
+
+    // Deprecated.
+    // director->runWithScene(TwitterShareTestScene::create());
 
     return true;
 }

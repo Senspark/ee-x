@@ -11,15 +11,13 @@
 
 #include <string>
 
-#include "ee/AdsFwd.hpp"
+#include "ee/ads/internal/MessageHelper.hpp"
 
 namespace ee {
 namespace ads {
 class AdViewHelper {
 public:
-    explicit AdViewHelper(IMessageBridge& bridge,    //
-                          const std::string& prefix, //
-                          const std::string& adId);
+    explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper);
 
     bool isLoaded() const;
     void load();
@@ -37,22 +35,11 @@ public:
     void setVisible(bool visible);
 
 private:
-    std::string k__isLoaded() const;
-    std::string k__load() const;
-    std::string k__getPosition() const;
-    std::string k__setPosition() const;
-    std::string k__getSize() const;
-    std::string k__setSize() const;
-    std::string k__isVisible() const;
-    std::string k__setVisible() const;
-
     std::pair<int, int> getPositionTopLeft() const;
-
     void setPositionTopLeft(int x, int y);
 
     IMessageBridge& bridge_;
-    std::string prefix_;
-    std::string adId_;
+    MessageHelper helper_;
 
     float anchorX_;
     float anchorY_;

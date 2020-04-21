@@ -8,9 +8,10 @@
 
 #include "ee/admob/private/AdMobBannerAd.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
-#include <ee/core/internal/IMessageBridge.hpp>
+#include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Logger.hpp>
+#include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
 
@@ -18,67 +19,66 @@ namespace ee {
 namespace admob {
 using Self = BannerAd;
 
-namespace {
-auto k__onLoaded(const std::string& id) {
-    return "AdMobBannerAd_onLoaded_" + id;
-}
-
-auto k__onFailedToLoad(const std::string& id) {
-    return "AdMobBannerAd_onFailedToLoad_" + id;
-}
-
-auto k__onClicked(const std::string& id) {
-    return "AdMobBannerAd_onClicked_" + id;
-}
-
-} // namespace
-
-Self::BannerAd(IMessageBridge& bridge, AdMob* plugin, const std::string& adId)
-    : Super()
-    , bridge_(bridge)
+Self::BannerAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
+               const std::string& adId)
+    : bridge_(bridge)
+    , logger_(logger)
     , plugin_(plugin)
     , adId_(adId)
-    , helper_(bridge, "AdMobBannerAd", adId) {
-    loading_ = false;
+    , messageHelper_("AdMobBannerAd", adId)
+    , helper_(bridge, messageHelper_) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
             onLoaded();
             return "";
         },
-        k__onLoaded(adId_));
+        messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) {
             onFailedToLoad(message);
             return "";
         },
-        k__onFailedToLoad(adId_));
+        messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
             onClicked();
             return "";
         },
-        k__onClicked(adId_));
+        messageHelper_.onClicked());
 }
 
-Self::~BannerAd() {
+Self::~BannerAd() {}
+
+void Self::destroy() {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+
+    bridge_.deregisterHandler(messageHelper_.onLoaded());
+    bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
+    bridge_.deregisterHandler(messageHelper_.onClicked());
+
     bool succeeded = plugin_->destroyBannerAd(adId_);
     assert(succeeded);
-    bridge_.deregisterHandler(k__onLoaded(adId_));
-    bridge_.deregisterHandler(k__onFailedToLoad(adId_));
-    bridge_.deregisterHandler(k__onClicked(adId_));
 }
 
 bool Self::isLoaded() const {
     return helper_.isLoaded();
 }
 
-void Self::load() {
-    if (loading_) {
-        return;
-    }
-    loading_ = true;
-    helper_.load();
+Task<bool> Self::load() {
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
+                  core::toString(loader_->isProcessing()).c_str());
+    auto result = co_await loader_->process(
+        [this] { //
+            helper_.load();
+        },
+        [](bool result) {
+            // OK.
+        });
+    co_return result;
 }
 
 std::pair<float, float> Self::getAnchor() const {
@@ -114,9 +114,14 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    // AdMob banner is auto-loading.
-    // assert(loading_);
-    loading_ = false;
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
+                  core::toString(loader_->isProcessing()).c_str());
+    if (loader_->isProcessing()) {
+        loader_->resolve(true);
+    } else {
+        // Note: AdMob banner is auto-loading.
+    }
     dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
@@ -125,17 +130,21 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    // AdMob banner is auto-loading.
-    // assert(loading_);
-    loading_ = false;
-    dispatchEvent([](auto&& observer) {
-        if (observer.onFailedToLoad) {
-            observer.onFailedToLoad();
-        }
-    });
+    logger_.debug("%s: adId = %s loading = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(loader_->isProcessing()).c_str(),
+                  message.c_str());
+    if (loader_->isProcessing()) {
+        loader_->resolve(false);
+    } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+    }
 }
 
 void Self::onClicked() {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();

@@ -2,6 +2,7 @@ package com.ee.ironsource;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
@@ -14,40 +15,44 @@ import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.InterstitialListener;
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class IronSource implements PluginProtocol, RewardedVideoListener, InterstitialListener {
-    private static final String k__initialize        = "IronSource_initialize";
-    private static final String k__hasRewardedVideo  = "IronSource_hasRewardedVideo";
-    private static final String k__showRewardedVideo = "IronSource_showRewardedVideo";
+    private static final String kPrefix = "IronSource";
 
-    private static final String k__loadInterstitial = "IronSource_loadInterstitial";
-    private static final String k__hasInterstitial  = "IronSource_hasInterstitial";
-    private static final String k__showInterstitial = "IronSource_showInterstitial";
+    private static final String k__initialize = kPrefix + "_initialize";
 
-    private static final String k__onRewarded      = "IronSource_onRewarded";
-    private static final String k__onFailed        = "IronSource_onFailed";
-    private static final String k__onOpened        = "IronSource_onOpened";
-    private static final String k__onClosed        = "IronSource_onClosed";
-    private static final String k__onRewardClicked = "IronSource_onRewardClicked";
+    private static final String k__loadInterstitialAd = kPrefix + "_loadInterstitialAd";
+    private static final String k__hasInterstitialAd = kPrefix + "_hasInterstitialAd";
+    private static final String k__showInterstitialAd = kPrefix + "_showInterstitialAd";
 
-    private static final String k__onInterstitialFailed  = "IronSource_onInterstitialFailed";
-    private static final String k__onInterstitialOpened  = "IronSource_onInterstitialOpened";
-    private static final String k__onInterstitialClosed  = "IronSource_onInterstitialClosed";
-    private static final String k__onInterstitialClicked = "IronSource_onInterstitialClicked";
+    private static final String k__hasRewardedAd = kPrefix + "_hasRewardedAd";
+    private static final String k__showRewardedAd = kPrefix + "_showRewardedAd";
+
+    private static final String k__onInterstitialAdLoaded = kPrefix + "_onInterstitialAdLoaded";
+    private static final String k__onInterstitialAdFailedToLoad = kPrefix + "_onInterstitialAdFailedToLoad";
+    private static final String k__onInterstitialAdFailedToShow = kPrefix + "_onInterstitialAdFailedToShow";
+    private static final String k__onInterstitialAdClicked = kPrefix + "_onInterstitialAdClicked";
+    private static final String k__onInterstitialAdClosed = kPrefix + "_onInterstitialAdClosed";
+
+    private static final String k__onRewardedAdLoaded = kPrefix + "_onRewardedAdLoaded";
+    private static final String k__onRewardedAdFailedToShow = kPrefix + "_onRewardedAdFailedToShow";
+    private static final String k__onRewardedAdClicked = kPrefix + "_onRewardedAdClicked";
+    private static final String k__onRewardedAdClosed = kPrefix + "_onRewardedAdClosed";
 
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _activity;
-    private boolean  _initialized;
     private MessageBridge _bridge;
+    private boolean _initialized;
+    private boolean _rewarded;
 
     public IronSource() {
         Utils.checkMainThread();
         _logger.debug("constructor begin.");
-        _activity = null;
-        _initialized = false;
         _bridge = MessageBridge.getInstance();
         registerHandlers();
         _logger.debug("constructor end.");
@@ -82,7 +87,6 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     public void onPause() {
         Utils.checkMainThread();
         com.ironsource.mediationsdk.IronSource.onPause(_activity);
-        Utils.checkMainThread();
     }
 
     @Override
@@ -93,9 +97,11 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
         if (!_initialized) {
             return;
         }
+        com.ironsource.mediationsdk.IronSource.setInterstitialListener(null);
         com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null);
     }
 
@@ -115,7 +121,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                assert _activity != null;
+                assertThat(_activity).isNotNull();
                 String gameId = message;
                 initialize(_activity, gameId);
                 return "";
@@ -127,82 +133,142 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedVideo());
-            }
-        }, k__hasRewardedVideo);
-
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String placementId = message;
-                showRewardedVideo(placementId);
+                loadInterstitialAd();
                 return "";
             }
-        }, k__showRewardedVideo);
+        }, k__loadInterstitialAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(hasInterstitial());
+                return Utils.toString(hasInterstitialAd());
             }
-        }, k__hasInterstitial);
+        }, k__hasInterstitialAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                showInterstitial(placementId);
+                String adId = message;
+                showInterstitialAd(adId);
                 return "";
             }
-        }, k__showInterstitial);
+        }, k__showInterstitialAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                loadInterstitial();
+                return Utils.toString(hasRewardedAd());
+            }
+        }, k__hasRewardedAd);
+
+        _bridge.registerHandler(new MessageHandler() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                String adId = message;
+                showRewardedAd(adId);
                 return "";
             }
-        }, k__loadInterstitial);
+        }, k__showRewardedAd);
     }
 
     private void deregisterHandlers() {
         _bridge.deregisterHandler(k__initialize);
-        _bridge.deregisterHandler(k__hasRewardedVideo);
-        _bridge.deregisterHandler(k__showRewardedVideo);
 
-        _bridge.deregisterHandler(k__loadInterstitial);
-        _bridge.deregisterHandler(k__hasInterstitial);
-        _bridge.deregisterHandler(k__showInterstitial);
+        _bridge.deregisterHandler(k__loadInterstitialAd);
+        _bridge.deregisterHandler(k__hasInterstitialAd);
+        _bridge.deregisterHandler(k__showInterstitialAd);
+
+        _bridge.deregisterHandler(k__hasRewardedAd);
+        _bridge.deregisterHandler(k__showRewardedAd);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void initialize(@NonNull Activity activity, @NonNull String gameId) {
+        Utils.checkMainThread();
+        if (_initialized) {
+            return;
+        }
+        com.ironsource.mediationsdk.IronSource.init(activity, gameId,
+            com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO,
+            com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL);
+        com.ironsource.mediationsdk.IronSource.shouldTrackNetworkState(activity, true);
+        com.ironsource.mediationsdk.IronSource.setInterstitialListener(this);
+        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this);
+        _initialized = true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void loadInterstitialAd() {
+        Utils.checkMainThread();
+        _logger.debug("loadInterstitialAd");
+        com.ironsource.mediationsdk.IronSource.loadInterstitial();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean hasInterstitialAd() {
+        Utils.checkMainThread();
+        boolean value = com.ironsource.mediationsdk.IronSource.isInterstitialReady();
+        _logger.debug("hasInterstitialAd " + value);
+        return value;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean showInterstitialAd(@NonNull String adId) {
+        Utils.checkMainThread();
+        _logger.debug("showInterstitialAd");
+        com.ironsource.mediationsdk.IronSource.showInterstitial(adId);
+        return true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public boolean hasRewardedAd() {
+        Utils.checkMainThread();
+        boolean value = com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
+        _logger.debug("hasRewardedAd " + value);
+        return value;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void showRewardedAd(@NonNull String adId) {
+        Utils.checkMainThread();
+        _logger.debug("showRewardedAd");
+        _rewarded = false;
+        com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId);
+    }
+
+    private void handleRewardedAdResult() {
+        _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded));
     }
 
     @Override
     public void onInterstitialAdReady() {
         _logger.debug("onInterstitialAdReady");
+        _bridge.callCpp(k__onInterstitialAdLoaded);
     }
 
     @Override
     public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
         _logger.debug("onInterstitialAdLoadFailed");
+        _bridge.callCpp(k__onInterstitialAdFailedToLoad, ironSourceError.getErrorMessage());
     }
 
     @Override
     public void onInterstitialAdOpened() {
         _logger.debug("onInterstitialAdOpened");
-        _bridge.callCpp(k__onInterstitialOpened);
     }
 
     @Override
     public void onInterstitialAdClosed() {
         _logger.debug("onInterstitialAdClosed");
-        _bridge.callCpp(k__onInterstitialClosed);
+        _bridge.callCpp(k__onInterstitialAdClosed);
     }
 
     @Override
@@ -213,51 +279,61 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onInterstitialAdShowFailed");
-        _bridge.callCpp(k__onInterstitialFailed);
+        _bridge.callCpp(k__onInterstitialAdFailedToShow, ironSourceError.getErrorMessage());
     }
 
     @Override
     public void onInterstitialAdClicked() {
         _logger.debug("onInterstitialAdClicked");
-        _bridge.callCpp(k__onInterstitialClicked);
+        _bridge.callCpp(k__onInterstitialAdClicked);
     }
 
     @Override
     public void onRewardedVideoAvailabilityChanged(boolean available) {
         _logger.info("onRewardedVideoAvailabilityChanged: " + available);
+        if (available) {
+            _bridge.callCpp(k__onRewardedAdLoaded);
+        }
     }
 
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
         _logger.debug("onRewardedVideoAdRewarded: " + placement.getPlacementName());
-        _bridge.callCpp(k__onRewarded, placement.getPlacementName());
+        _rewarded = true;
     }
 
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
         _logger.debug("onRewardedVideoAdShowFailed: " + ironSourceError.getErrorMessage());
-
-        _bridge.callCpp(k__onFailed);
+        _bridge.callCpp(k__onRewardedAdFailedToShow, ironSourceError.getErrorMessage());
     }
 
     @Override
     public void onRewardedVideoAdClicked(Placement placement) {
         _logger.debug("onRewardedVideoAdClicked");
-
-        _bridge.callCpp(k__onRewardClicked);
+        _bridge.callCpp(k__onRewardedAdClicked);
     }
 
     @Override
     public void onRewardedVideoAdOpened() {
         _logger.debug("onRewardedVideoAdOpened");
-        _bridge.callCpp(k__onOpened);
     }
 
     @Override
     public void onRewardedVideoAdClosed() {
         _logger.debug("onRewardedVideoAdClosed");
-
-        _bridge.callCpp(k__onClosed);
+        if (_rewarded) {
+            handleRewardedAdResult();
+        } else {
+            // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
+            // asynchronous.
+            Utils.runOnUiThreadDelayed(1.0f, new Runnable() {
+                @Override
+                public void run() {
+                    handleRewardedAdResult();
+                }
+            });
+        }
     }
 
     @Override
@@ -268,54 +344,5 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     @Override
     public void onRewardedVideoAdEnded() {
         _logger.debug("onRewardedVideoAdEnded");
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void initialize(@NonNull Activity activity, @NonNull String gameId) {
-        Utils.checkMainThread();
-        if (_initialized) {
-            return;
-        }
-
-        com.ironsource.mediationsdk.IronSource.setInterstitialListener(this);
-
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this);
-
-        com.ironsource.mediationsdk.IronSource.init(activity, gameId, com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO, com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL);
-
-        _initialized = true;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasRewardedVideo() {
-        Utils.checkMainThread();
-        boolean value = com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
-        _logger.debug("hasRewardedVideo " + value);
-        return value;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void showRewardedVideo(@NonNull String placementId) {
-        _logger.debug("showRewardedVideo");
-        com.ironsource.mediationsdk.IronSource.showRewardedVideo(placementId);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void loadInterstitial() {
-        _logger.debug("loadInterstitial");
-        com.ironsource.mediationsdk.IronSource.loadInterstitial();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean hasInterstitial() {
-        boolean value = com.ironsource.mediationsdk.IronSource.isInterstitialReady();
-        _logger.debug("hasInterstitial " + value);
-        return value;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void showInterstitial(@NonNull String placementId) {
-        _logger.debug("showInterstitial");
-        com.ironsource.mediationsdk.IronSource.showInterstitial();
     }
 }

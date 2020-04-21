@@ -10,15 +10,12 @@
 
 #include <cassert>
 
-#include <ee/nlohmann/json.hpp>
-
-#include <ee/ads/NullRewardedVideo.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
-#include "ee/app_lovin/private/AppLovinRewardedVideo.hpp"
+#include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
 namespace ee {
 namespace app_lovin {
@@ -98,20 +95,30 @@ enum class Error {
 
 namespace {
 // clang-format off
-constexpr auto k__initialize               = "AppLovin_initialize";
-constexpr auto k__setTestAdsEnabled        = "AppLovin_setTestAdsEnabled";
-constexpr auto k__setVerboseLogging        = "AppLovin_setVerboseLogging";
-constexpr auto k__setMuted                 = "AppLovin_setMuted";
-constexpr auto k__hasInterstitialAd        = "AppLovin_hasInterstitialAd";
-constexpr auto k__showInterstitialAd       = "AppLovin_showInterstitialAd";
-constexpr auto k__loadRewardedVideo        = "AppLovin_loadRewardedVideo";
-constexpr auto k__hasRewardedVideo         = "AppLovin_hasRewardedVideo";
-constexpr auto k__showRewardedVideo        = "AppLovin_showRewardedVideo";
-constexpr auto k__onInterstitialAdHidden   = "AppLovin_onInterstitialAdHidden";
-constexpr auto k__onRewardedVideoFailed    = "AppLovin_onRewardedVideoFailed";
-constexpr auto k__onRewardedVideoDisplayed = "AppLovin_onRewardedVideoDisplayed";
-constexpr auto k__onRewardedVideoHidden    = "AppLovin_onRewardedVideoHidden";
-constexpr auto k__onUserRewardVerified     = "AppLovin_onUserRewardVerified";
+const std::string kPrefix        = "AppLovin";
+
+const auto k__initialize         = kPrefix + "_initialize";
+const auto k__setTestAdsEnabled  = kPrefix + "_setTestAdsEnabled";
+const auto k__setVerboseLogging  = kPrefix + "_setVerboseLogging";
+const auto k__setMuted           = kPrefix + "_setMuted";
+
+const auto k__hasInterstitialAd  = kPrefix + "_hasInterstitialAd";
+const auto k__loadInterstitialAd = kPrefix + "_loadInterstitialAd";
+const auto k__showInterstitialAd = kPrefix + "_showInterstitialAd";
+
+const auto k__hasRewardedAd      = kPrefix + "_hasRewardedAd";
+const auto k__loadRewardedAd     = kPrefix + "_loadRewardedAd";
+const auto k__showRewardedAd     = kPrefix + "_showRewardedAd";
+
+const auto k__onInterstitialAdLoaded       = kPrefix + "_onInterstitialAdLoaded";
+const auto k__onInterstitialAdFailedToLoad = kPrefix + "_onInterstitialAdFailedToLoad";
+const auto k__onInterstitialAdClicked      = kPrefix + "_onInterstitialAdClicked";
+const auto k__onInterstitialAdClosed       = kPrefix + "_onInterstitialAdClosed";
+
+const auto k__onRewardedAdLoaded       = kPrefix + "_onRewardedAdLoaded";
+const auto k__onRewardedAdFailedToLoad = kPrefix + "_onRewardedAdFailedToLoad";
+const auto k__onRewardedAdClicked      = kPrefix + "_onRewardedAdClicked";
+const auto k__onRewardedAdClosed       = kPrefix + "_onRewardedAdClosed";
 // clang-format on
 } // namespace
 
@@ -122,154 +129,210 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    verified_ = false;
-    errored_ = false;
-    rewardedVideo_ = nullptr;
+    auto&& mediation = ads::MediationManager::getInstance();
+    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onInterstitialAdHidden();
+            onInterstitialAdLoaded();
             return "";
         },
-        k__onInterstitialAdHidden);
+        k__onInterstitialAdLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onRewardedVideoFailed(std::stoi(message));
+            onInterstitialAdFailedToLoad(message);
             return "";
         },
-        k__onRewardedVideoFailed);
+        k__onInterstitialAdFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onRewardedVideoDisplayed();
+            onInterstitialAdClicked();
             return "";
         },
-        k__onRewardedVideoDisplayed);
+        k__onInterstitialAdClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onRewardedVideoHidden();
+            onInterstitialAdClosed();
             return "";
         },
-        k__onRewardedVideoHidden);
+        k__onInterstitialAdClosed);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onUserRewardVerified();
+            onRewardedAdLoaded();
             return "";
         },
-        k__onUserRewardVerified);
+        k__onRewardedAdLoaded);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onRewardedAdFailedToLoad(message);
+            return "";
+        },
+        k__onRewardedAdFailedToLoad);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onRewardedAdClicked();
+            return "";
+        },
+        k__onRewardedAdClicked);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onRewardedAdClosed(core::toBool(message));
+            return "";
+        },
+        k__onRewardedAdClosed);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onInterstitialAdHidden);
-    bridge_.deregisterHandler(k__onRewardedVideoFailed);
+
+    bridge_.deregisterHandler(k__onInterstitialAdLoaded);
+    bridge_.deregisterHandler(k__onInterstitialAdFailedToLoad);
+    bridge_.deregisterHandler(k__onInterstitialAdClicked);
+    bridge_.deregisterHandler(k__onInterstitialAdClosed);
+    bridge_.deregisterHandler(k__onRewardedAdLoaded);
+    bridge_.deregisterHandler(k__onRewardedAdFailedToLoad);
+    bridge_.deregisterHandler(k__onRewardedAdClicked);
+    bridge_.deregisterHandler(k__onRewardedAdClosed);
 }
 
 void Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    bridge_.call(k__initialize, key);
+    runOnUiThread([this, key] { //
+        bridge_.call(k__initialize, key);
+    });
 }
 
 void Self::setTestAdsEnabled(bool enabled) {
-    bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
+    });
 }
 
 void Self::setVerboseLogging(bool enabled) {
-    bridge_.call(k__setVerboseLogging, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setVerboseLogging, core::toString(enabled));
+    });
 }
 
 void Self::setMuted(bool enabled) {
-    bridge_.call(k__setMuted, core::toString(enabled));
+    runOnUiThread([this, enabled] { //
+        bridge_.call(k__setMuted, core::toString(enabled));
+    });
 }
 
 bool Self::hasInterstitialAd() const {
+    assert(isMainThread());
     auto result = bridge_.call(k__hasInterstitialAd);
     return core::toBool(result);
 }
 
-bool Self::showInterstitialAd() {
-    if (not hasInterstitialAd()) {
+void Self::loadInterstitialAd() {
+    runOnUiThread([this] { //
+        bridge_.call(k__loadInterstitialAd);
+    });
+}
+
+void Self::showInterstitialAd() {
+    runOnUiThread([this] { //
+        bridge_.call(k__showInterstitialAd);
+    });
+}
+
+std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (rewardedAd_) {
+        return rewardedAd_;
+    }
+    auto ad = std::shared_ptr<RewardedAd>(
+        new RewardedAd(logger_, rewardedAdDisplayer_, this));
+    rewardedAd_ = ad;
+    return ad;
+}
+
+bool Self::destroyRewardedAd() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (rewardedAd_ == nullptr) {
         return false;
     }
-    bridge_.call(k__showInterstitialAd);
+    rewardedAd_.reset();
     return true;
 }
 
-std::shared_ptr<IRewardedVideo> Self::createRewardedVideo() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedVideo_ != nullptr) {
-        return std::make_shared<NullRewardedVideo>(logger_);
-    }
-    auto result = new RewardedVideo(logger_, this);
-    rewardedVideo_ = result;
-    return std::shared_ptr<IRewardedVideo>(result);
-}
-
-bool Self::destroyRewardedVideo() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedVideo_ == nullptr) {
-        return false;
-    }
-    rewardedVideo_ = nullptr;
-    return true;
-}
-
-void Self::loadRewardedVideo() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.call(k__loadRewardedVideo);
-}
-
-bool Self::hasRewardedVideo() const {
-    auto result = bridge_.call(k__hasRewardedVideo);
+bool Self::hasRewardedAd() const {
+    assert(isMainThread());
+    auto result = bridge_.call(k__hasRewardedAd);
     return core::toBool(result);
 }
 
-bool Self::showRewardedVideo() {
-    if (not hasRewardedVideo()) {
-        return false;
+void Self::loadRewardedAd() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    runOnUiThread([this] { //
+        bridge_.call(k__loadRewardedAd);
+    });
+}
+
+void Self::showRewardedAd() {
+    runOnUiThread([this] { //
+        bridge_.call(k__showRewardedAd);
+    });
+}
+
+void Self::onInterstitialAdLoaded() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    // TODO.
+}
+
+void Self::onInterstitialAdFailedToLoad(const std::string& message) {
+    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
+    // TODO.
+}
+
+void Self::onInterstitialAdClicked() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    // TODO.
+}
+
+void Self::onInterstitialAdClosed() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    // TODO.
+}
+
+void Self::onRewardedAdLoaded() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (rewardedAd_) {
+        rewardedAd_->onLoaded();
+    } else {
+        assert(false);
     }
-    verified_ = false;
-    errored_ = false;
-    bridge_.call(k__showRewardedVideo);
-
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto successful = mediation.startRewardedVideo(
-        [this](bool rewarded) { this->rewardedVideo_->setResult(rewarded); });
-    assert(successful);
-    return not errored_;
 }
 
-void Self::onInterstitialAdHidden() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-}
-
-void Self::onRewardedVideoFailed(int errorCode) {
-    logger_.debug("%s: errorCode = %d", __PRETTY_FUNCTION__, errorCode);
-    if (not errored_) {
-        errored_ = true;
+void Self::onRewardedAdFailedToLoad(const std::string& message) {
+    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
+    if (rewardedAd_) {
+        rewardedAd_->onFailedToLoad(message);
+    } else {
+        assert(false);
     }
 }
 
-void Self::onRewardedVideoDisplayed() {
+void Self::onRewardedAdClicked() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-}
-
-void Self::onRewardedVideoHidden() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    assert(rewardedVideo_ != nullptr);
-
-    auto&& mediation = ads::MediationManager::getInstance();
-    auto result = false;
-    if (verified_ && not errored_) {
-        result = true;
+    if (rewardedAd_) {
+        rewardedAd_->onClicked();
+    } else {
+        assert(false);
     }
-
-    auto wasRewardedVideo = mediation.finishRewardedVideo(result);
-    assert(wasRewardedVideo);
 }
 
-void Self::onUserRewardVerified() {
+void Self::onRewardedAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    verified_ = true;
+    if (rewardedAd_) {
+        rewardedAd_->onClosed(rewarded);
+    } else {
+        assert(false);
+    }
 }
 } // namespace app_lovin
 } // namespace ee

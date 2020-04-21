@@ -9,10 +9,10 @@
 #include "ee/core/internal/MessageBridge.hpp"
 
 #include <cassert>
-#include <map>
 #include <mutex>
 
-#include "ee/core/internal/SpinLock.hpp"
+#include "ee/core/Logger.hpp"
+#include "ee/core/SpinLock.hpp"
 
 namespace ee {
 namespace core {
@@ -23,15 +23,12 @@ Self& Self::getInstance() {
     return sharedInstance;
 }
 
-Self::MessageBridge() {
+Self::MessageBridge()
+    : logger_(Logger::getSystemLogger()) {
     handlerLock_ = std::make_unique<SpinLock>();
 }
 
 Self::~MessageBridge() {}
-
-std::string Self::call(const std::string& tag) {
-    return call(tag, "");
-}
 
 std::string Self::callCpp(const std::string& tag, const std::string& message) {
     auto handler = findHandler(tag);
@@ -44,7 +41,7 @@ std::string Self::callCpp(const std::string& tag, const std::string& message) {
 
 bool Self::registerHandler(const MessageHandler& handler,
                            const std::string& tag) {
-    std::lock_guard<SpinLock> guard(*handlerLock_);
+    std::scoped_lock<SpinLock> lock(*handlerLock_);
     if (handlers_.count(tag) > 0) {
         assert(false);
         return false;
@@ -54,7 +51,7 @@ bool Self::registerHandler(const MessageHandler& handler,
 }
 
 bool Self::deregisterHandler(const std::string& tag) {
-    std::lock_guard<SpinLock> guard(*handlerLock_);
+    std::scoped_lock<SpinLock> lock(*handlerLock_);
     if (handlers_.count(tag) == 0) {
         assert(false);
         return false;
@@ -64,9 +61,11 @@ bool Self::deregisterHandler(const std::string& tag) {
 }
 
 MessageHandler Self::findHandler(const std::string& tag) {
-    std::lock_guard<SpinLock> guard(*handlerLock_);
+    std::scoped_lock<SpinLock> lock(*handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
+        logger_.error("%s: tag %s doesn't exist!", __PRETTY_FUNCTION__,
+                      tag.c_str());
         return nullptr;
     }
     return iter->second;

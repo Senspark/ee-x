@@ -19,8 +19,10 @@ class Bridge final {
 public:
     Bridge();
     ~Bridge();
-    
+
     explicit Bridge(const Logger& logger);
+
+    void destroy();
 
     void initialize(const std::string& key);
 
@@ -33,30 +35,38 @@ public:
     /// Disabled by default.
     void setMuted(bool enabled);
 
-    std::shared_ptr<IRewardedVideo> createRewardedVideo();
+    std::shared_ptr<IRewardedAd> createRewardedAd();
 
 private:
-    friend RewardedVideo;
+    friend RewardedAd;
+
+    bool destroyRewardedAd();
 
     bool hasInterstitialAd() const;
-    bool showInterstitialAd();
+    void loadInterstitialAd();
+    void showInterstitialAd();
 
-    bool destroyRewardedVideo();
-    void loadRewardedVideo();
-    bool hasRewardedVideo() const;
-    bool showRewardedVideo();
+    bool hasRewardedAd() const;
+    void loadRewardedAd();
+    void showRewardedAd();
 
-    void onInterstitialAdHidden();
-    void onRewardedVideoFailed(int errorCode);
-    void onRewardedVideoDisplayed();
-    void onRewardedVideoHidden();
-    void onUserRewardVerified();
+    void onInterstitialAdLoaded();
+    void onInterstitialAdFailedToLoad(const std::string& message);
+    void onInterstitialAdClicked();
+    void onInterstitialAdClosed();
 
-    bool verified_;
-    bool errored_;
-    RewardedVideo* rewardedVideo_;
+    void onRewardedAdLoaded();
+    void onRewardedAdFailedToLoad(const std::string& message);
+    void onRewardedAdClicked();
+    void onRewardedAdClosed(bool rewarded);
+
     IMessageBridge& bridge_;
     const Logger& logger_;
+
+    /// Share the same instance.
+    std::shared_ptr<RewardedAd> rewardedAd_;
+
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace app_lovin
 } // namespace ee

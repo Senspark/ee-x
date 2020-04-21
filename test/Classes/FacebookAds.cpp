@@ -11,6 +11,8 @@
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 
+#include <ee/Coroutine.hpp>
+
 #include "Utils.hpp"
 
 namespace eetest {
@@ -61,79 +63,80 @@ void testFacebookNativeAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    auto nativeAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
-            getLogger().info("Create Facebook native ad");
-            auto ad = createFacebookNativeAd();
-            ad->setVisible(true);
-            return ad;
-        });
+    auto ad = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+        getLogger().info("Create Facebook native ad");
+        auto ad = createFacebookNativeAd();
+        ad->setVisible(true);
+        return ad;
+    });
 
     float delay = 0.0f;
-    scheduleForever(delay += 1.0f, 5.0f, [nativeAd] {
-        ee::runOnUiThread([nativeAd] { nativeAd->load(); });
+    scheduleForever(delay += 1.0f, 5.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> { //
+            co_await ad->load();
+        }));
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size / 4");
-            nativeAd->setAnchor(0.5f, 0.5f);
-            nativeAd->setPosition(screenWidth / 2, screenHeight / 2);
-            nativeAd->setSize(screenWidth / 4, screenHeight / 4);
+            ad->setAnchor(0.5f, 0.5f);
+            ad->setPosition(screenWidth / 2, screenHeight / 2);
+            ad->setSize(screenWidth / 4, screenHeight / 4);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [nativeAd] {
-        ee::runOnUiThread([nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [ad] {
+        ee::runOnUiThread([ad] {
             getLogger().info("Move to top-left");
-            nativeAd->setAnchor(0, 0);
-            nativeAd->setPosition(0, 0);
+            ad->setAnchor(0, 0);
+            ad->setPosition(0, 0);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, nativeAd] {
-        ee::runOnUiThread([screenWidth, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, ad] {
+        ee::runOnUiThread([screenWidth, ad] {
             getLogger().info("Move to top-right");
-            nativeAd->setAnchor(1, 0);
-            nativeAd->setPosition(screenWidth, 0);
+            ad->setAnchor(1, 0);
+            ad->setPosition(screenWidth, 0);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to bottom-right");
-            nativeAd->setAnchor(1, 1);
-            nativeAd->setPosition(screenWidth, screenHeight);
+            ad->setAnchor(1, 1);
+            ad->setPosition(screenWidth, screenHeight);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenHeight, nativeAd] {
-        ee::runOnUiThread([screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenHeight, ad] {
+        ee::runOnUiThread([screenHeight, ad] {
             getLogger().info("Move to bottom-left");
-            nativeAd->setAnchor(0, 1);
-            nativeAd->setPosition(0, screenHeight);
+            ad->setAnchor(0, 1);
+            ad->setPosition(0, screenHeight);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to center");
-            nativeAd->setAnchor(0.5f, 0.5f);
-            nativeAd->setPosition(screenWidth / 2, screenHeight / 2);
+            ad->setAnchor(0.5f, 0.5f);
+            ad->setPosition(screenWidth / 2, screenHeight / 2);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size");
-            nativeAd->setSize(screenWidth, screenHeight);
+            ad->setSize(screenWidth, screenHeight);
         });
     });
 
-    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size / 2");
-            nativeAd->setSize(screenWidth / 2, screenHeight / 2);
+            ad->setSize(screenWidth / 2, screenHeight / 2);
         });
     });
 }

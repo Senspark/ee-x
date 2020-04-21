@@ -2,6 +2,7 @@ package com.ee.ads;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
@@ -11,63 +12,49 @@ import com.ee.core.internal.Utils;
  */
 
 public class InterstitialAdHelper {
-    private String _prefix;
-    private String _adId;
+    private IMessageBridge _bridge;
+    private IInterstitialAd _ad;
+    private MessageHelper _helper;
 
-    public InterstitialAdHelper(String prefix, String adId) {
-        _prefix = prefix;
-        _adId = adId;
+    public InterstitialAdHelper(@NonNull IMessageBridge bridge,
+                                @NonNull IInterstitialAd ad,
+                                @NonNull MessageHelper helper) {
+        _bridge = bridge;
+        _ad = ad;
+        _helper = helper;
     }
 
-    @NonNull
-    private String k__isLoaded() {
-        return _prefix + "_isLoaded_" + _adId;
-    }
-
-    @NonNull
-    private String k__load() {
-        return _prefix + "_load_" + _adId;
-    }
-
-    @NonNull
-    private String k__show() {
-        return _prefix + "_show_" + _adId;
-    }
-
-    public void registerHandlers(final IInterstitialAd ad) {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+    public void registerHandlers() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(ad.isLoaded());
+                return Utils.toString(_ad.isLoaded());
             }
-        }, k__isLoaded());
+        }, _helper.isLoaded());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                ad.load();
+                _ad.load();
                 return "";
             }
-        }, k__load());
+        }, _helper.load());
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(ad.show());
+                _ad.show();
+                return "";
             }
-        }, k__show());
+        }, _helper.show());
     }
 
     public void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__isLoaded());
-        bridge.deregisterHandler(k__load());
-        bridge.deregisterHandler(k__show());
+        _bridge.deregisterHandler(_helper.isLoaded());
+        _bridge.deregisterHandler(_helper.load());
+        _bridge.deregisterHandler(_helper.show());
     }
 }

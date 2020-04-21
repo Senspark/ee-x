@@ -9,5 +9,5 @@ public interface IInterstitialAd {
 
     void load();
 
-    boolean show();
+    void show();
 }

@@ -6,7 +6,7 @@ end
 
 abstract_target 'common' do
     # pod 'cocos2d-x', :git => 'https://github.com/Senspark/cocos2d-x-lite'
-	  platform :ios, '9.0'
+	  platform :ios, '12.0'
     
     pod_ee_x('soomla-store')
     pod_ee_x('cocos')
@@ -14,15 +14,16 @@ abstract_target 'common' do
     target 'ee_x_test_mobile' do
         pod_ee_x('admob')
         pod_ee_x('app-lovin')
+        pod_ee_x('coroutine')
         pod_ee_x('facebook-ads')
         pod_ee_x('iron-source')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
         pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')
-        pod_ee_x('crashlytics')
         pod_ee_x('facebook')
         pod_ee_x('firebase-analytics')
+        pod_ee_x('firebase-crashlytics')
         pod_ee_x('firebase-dynamic-link')
         pod_ee_x('firebase-messaging')
         pod_ee_x('firebase-performance')
@@ -33,7 +34,6 @@ abstract_target 'common' do
         pod_ee_x('play')
         pod_ee_x('recorder')
         pod_ee_x('tenjin')
-        pod_ee_x('twitter')
         
         pod 'FBSDKCoreKit', :modular_headers => true
         pod 'FBSDKLoginKit', :modular_headers => true

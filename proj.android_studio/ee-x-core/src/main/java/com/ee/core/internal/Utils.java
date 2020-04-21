@@ -17,15 +17,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowInsets;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
@@ -35,6 +34,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.instantapps.InstantApps;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,6 +42,8 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 10/9/17.
@@ -52,24 +54,24 @@ public class Utils {
 
     private static final Logger _logger = new Logger(Utils.class.getName());
 
-    private static final String k__isMainThread                  = "Utils_isMainThread";
-    private static final String k__runOnUiThread                 = "Utils_runOnUiThread";
-    private static final String k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
+    private static final String k__isMainThread = "Utils_isMainThread";
+    private static final String k__runOnUiThread = "Utils_runOnUiThread";
+    private static final String k__runOnUiThreadCallback = "Utils_runOnUiThreadCallback";
     private static final String k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFingerprint";
-    private static final String k__getVersionName                = "Utils_getVersionName";
-    private static final String k__getVersionCode                = "Utils_getVersionCode";
-    private static final String k__isApplicationInstalled        = "Utils_isApplicationInstalled";
-    private static final String k__openApplication               = "Utils_openApplication";
-    private static final String k__sendMail                      = "Utils_sendMail";
-    private static final String k__isTablet                      = "Utils_isTablet";
-    private static final String k__testConnection                = "Utils_testConnection";
-    private static final String k__getDeviceId                   = "Utils_getDeviceId";
-    private static final String k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
-    private static final String k__isInstantApp                  = "Utils_isInstantApp";
-    private static final String k__showInstallPrompt             = "Utils_showInstallPrompt";
-    private static final String k__getApplicationName            = "Utils_getApplicationName";
-    private static final String k__getSafeInset                  = "Utils_getSafeInset";
-    private static final String k__getDensity                    = "Utils_getDensity";
+    private static final String k__getVersionName = "Utils_getVersionName";
+    private static final String k__getVersionCode = "Utils_getVersionCode";
+    private static final String k__isApplicationInstalled = "Utils_isApplicationInstalled";
+    private static final String k__openApplication = "Utils_openApplication";
+    private static final String k__sendMail = "Utils_sendMail";
+    private static final String k__isTablet = "Utils_isTablet";
+    private static final String k__testConnection = "Utils_testConnection";
+    private static final String k__getDeviceId = "Utils_getDeviceId";
+    private static final String k__runOnUiThreadDelayed = "Utils_runOnUiThreadDelayed";
+    private static final String k__isInstantApp = "Utils_isInstantApp";
+    private static final String k__showInstallPrompt = "Utils_showInstallPrompt";
+    private static final String k__getApplicationName = "Utils_getApplicationName";
+    private static final String k__getSafeInset = "Utils_getSafeInset";
+    private static final String k__getDensity = "Utils_getDensity";
 
     public static FrameLayout getRootView(Activity activity) {
         return (FrameLayout) activity.findViewById(android.R.id.content).getRootView();
@@ -81,7 +83,7 @@ public class Utils {
             for (StackTraceElement e : getCurrentStackTrace()) {
                 _logger.warn(e.toString());
             }
-            assert false;
+            assertThat(false).isTrue();
         }
     }
 
@@ -92,7 +94,7 @@ public class Utils {
 
     @NonNull
     public static Boolean toBoolean(@NonNull String value) {
-        assert "true".equals(value) || "false".equals(value);
+        assertThat(value).isAnyOf("true", "false");
         return "true".equals(value);
     }
 
@@ -117,9 +119,31 @@ public class Utils {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                return Utils.toString(Utils.runOnUiThread());
+                return Utils.toString(Utils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        signalMainThread();
+                    }
+                }));
             }
         }, k__runOnUiThread);
+
+        bridge.registerHandler(new MessageHandler() {
+            @NonNull
+            @Override
+            public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                final String tag = (String) dict.get("callback_id");
+                float delay = ((Double) dict.get("delay_time")).floatValue();
+                Utils.runOnUiThreadDelayed(delay, new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageBridge.getInstance().callCpp(tag);
+                    }
+                });
+                return "";
+            }
+        }, k__runOnUiThreadDelayed);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -176,7 +200,7 @@ public class Utils {
             public String handle(@NonNull String message) {
                 Context context = PluginManager.getInstance().getContext();
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
                 String recipient = (String) dict.get("recipient");
                 String subject = (String) dict.get("subject");
                 String body = (String) dict.get("body");
@@ -213,19 +237,6 @@ public class Utils {
                 return "";
             }
         }, k__getDeviceId);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                String callbackTag = (String) dict.get("callback_id");
-                float delayTime = ((Double) dict.get("delay_time")).floatValue();
-                Utils.runOnUiThreadDelayed(callbackTag, delayTime);
-
-                return "";
-            }
-        }, k__runOnUiThreadDelayed);
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -302,22 +313,26 @@ public class Utils {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean runOnUiThread() {
+    public static boolean runOnUiThread(Runnable callback) {
         if (isMainThread()) {
-            signalMainThread();
+            callback.run();
             return true;
         }
         Handler handler = new Handler(Looper.getMainLooper());
-        boolean result = handler.post(new Runnable() {
-            @Override
-            public void run() {
-                signalMainThread();
-            }
-        });
+        boolean result = handler.post(callback);
         if (!result) {
             _logger.error("runOnUiThread: failed to post the runnable");
         }
         return false;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static void runOnUiThreadDelayed(float seconds, Runnable callback) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        boolean result = handler.postDelayed(callback, (long) seconds * 1000);
+        if (!result) {
+            _logger.error("runOnUiThread: failed to post the runnable");
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -401,12 +416,12 @@ public class Utils {
 
     @SuppressWarnings("WeakerAccess")
     public static boolean sendMail(@NonNull Context context, @NonNull String recipient, @NonNull String subject,
-            @NonNull String body) {
+                                   @NonNull String body) {
         Intent intent = new Intent(Intent.ACTION_SEND) //
-                .setType("message/rfc822") //
-                .putExtra(Intent.EXTRA_EMAIL, new String[] {recipient}) //
-                .putExtra(Intent.EXTRA_SUBJECT, subject) //
-                .putExtra(Intent.EXTRA_TEXT, body);
+            .setType("message/rfc822") //
+            .putExtra(Intent.EXTRA_EMAIL, new String[]{recipient}) //
+            .putExtra(Intent.EXTRA_SUBJECT, subject) //
+            .putExtra(Intent.EXTRA_TEXT, body);
         try {
             // Fix Calling startActivity() from outside of an Activity  context requires the
             // FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
@@ -427,7 +442,7 @@ public class Utils {
         // considered a Tablet
         int screenLayout = Resources.getSystem().getConfiguration().screenLayout;
         boolean xlarge = ((screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                          Configuration.SCREENLAYOUT_SIZE_LARGE);
+            Configuration.SCREENLAYOUT_SIZE_LARGE);
 
         // If XLarge, checks if the Generalized Density is at least MDPI
         // (160dpi)
@@ -448,21 +463,6 @@ public class Utils {
 
         // No, this is not a tablet!
         return false;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public static void runOnUiThreadDelayed(final String callbackTag, float delay) {
-        long delayMilis = (long) delay*1000;
-        Handler handler = new Handler(Looper.getMainLooper());
-        boolean result = handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MessageBridge.getInstance().callCpp(callbackTag);
-            }
-        }, delayMilis);
-        if (!result) {
-            _logger.error("runOnUiThread: failed to post the runnable");
-        }
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -501,7 +501,7 @@ public class Utils {
     }
 
     private static boolean getSafeInset_Huawei(Activity activity, SafeInset inset)
-            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Class<?> class_HwNotchSizeUtil;
         try {
             ClassLoader classLoader = activity.getClassLoader();
@@ -523,7 +523,7 @@ public class Utils {
     }
 
     private static boolean getSafeInset_Oppo(Activity activity, SafeInset inset)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
         if (!activity.getPackageManager().hasSystemFeature("com.oppo.feature.screen.heteromorphism")) {
             return false;
         }
@@ -614,7 +614,7 @@ public class Utils {
     private static String getApplicationName(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
-            ApplicationInfo ai = pm.getApplicationInfo( context.getPackageName(), 0);
+            ApplicationInfo ai = pm.getApplicationInfo(context.getPackageName(), 0);
             return (String) pm.getApplicationLabel(ai);
         } catch (final PackageManager.NameNotFoundException e) {
             return "";
@@ -622,7 +622,7 @@ public class Utils {
     }
 
     private static class GetGAIDTask extends AsyncTask<String, Integer, String> {
-        private Context         _context;
+        private Context _context;
         private GetGAIDListener _listener;
 
         GetGAIDTask(Context context, GetGAIDListener listener) {
@@ -635,7 +635,7 @@ public class Utils {
             String gaId = "";
             try {
                 AdvertisingIdClient.Info adInfo = AdvertisingIdClient
-                        .getAdvertisingIdInfo(_context.getApplicationContext());
+                    .getAdvertisingIdInfo(_context.getApplicationContext());
                 // check if user has opted out of tracking
                 if (adInfo.isLimitAdTrackingEnabled()) {
                     return gaId;

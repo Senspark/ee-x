@@ -2,44 +2,53 @@ package com.ee.unityads;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class UnityAds implements PluginProtocol {
-    private static final String k__initialize           = "UnityAds_initialize";
-    private static final String k__setDebugModeEnabled  = "UnityAds_setDebugModeEnabled";
-    private static final String k__isRewardedVideoReady = "UnityAds_isRewardedVideoReady";
-    private static final String k__showRewardedVideo    = "UnityAds_showRewardedVideo";
-    private static final String k__onError              = "UnityAds_onError";
-    private static final String k__onSkipped            = "UnityAds_onSkipped";
-    private static final String k__onFinished           = "UnityAds_onFinished";
+import static com.google.common.truth.Truth.assertThat;
 
-    private static final String k__gameId          = "gameId";
+public class UnityAds implements PluginProtocol {
+    private static final String kPrefix = "UnityAds";
+
+    private static final String k__initialize = kPrefix + "_initialize";
+    private static final String k__setDebugModeEnabled = kPrefix + "_setDebugModeEnabled";
+
+    private static final String k__hasRewardedAd = kPrefix + "_hasRewardedAd";
+    private static final String k__showRewardedAd = kPrefix + "_showRewardedAd";
+
+    private static final String k__onLoaded = kPrefix + "_onLoaded";
+    private static final String k__onFailedToShow = kPrefix + "_onFailedToShow";
+    private static final String k__onClosed = kPrefix + "_onClosed";
+
+    private static final String k__gameId = "gameId";
     private static final String k__testModeEnabled = "testModeEnabled";
 
     private static final Logger _logger = new Logger(UnityAds.class.getName());
 
     private Activity _activity;
-    private boolean  _initialized;
+    private IMessageBridge _bridge;
+    private boolean _initialized;
     private IUnityAdsListener _listener;
 
     @SuppressWarnings("unused")
     public UnityAds() {
         Utils.checkMainThread();
         _logger.debug("constructor begin.");
-        _activity = null;
-        _initialized = false;
+        _bridge = MessageBridge.getInstance();
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -80,6 +89,7 @@ public class UnityAds implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
         if (!_initialized) {
             return;
         }
@@ -97,25 +107,22 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String gameId = (String) dict.get(k__gameId);
                 boolean testModeEnabled = Utils.toBoolean((String) dict.get(k__testModeEnabled));
-                assert _activity != null;
+                assertThat(_activity).isNotNull();
                 initialize(_activity, gameId, testModeEnabled);
                 return "";
             }
         }, k__initialize);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -124,37 +131,34 @@ public class UnityAds implements PluginProtocol {
             }
         }, k__setDebugModeEnabled);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(isRewardedVideoReady(placementId));
+                String adId = message;
+                return Utils.toString(hasRewardedAd(adId));
             }
-        }, k__isRewardedVideoReady);
+        }, k__hasRewardedAd);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                assert _activity != null;
-                String placementId = message;
-                showRewardedVideo(_activity, placementId);
+                assertThat(_activity).isNotNull();
+                String adId = message;
+                showRewardedAd(_activity, adId);
                 return "";
             }
-        }, k__showRewardedVideo);
+        }, k__showRewardedAd);
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__initialize);
-        bridge.deregisterHandler(k__setDebugModeEnabled);
-        bridge.deregisterHandler(k__isRewardedVideoReady);
-        bridge.deregisterHandler(k__showRewardedVideo);
+        _bridge.deregisterHandler(k__initialize);
+        _bridge.deregisterHandler(k__setDebugModeEnabled);
+        _bridge.deregisterHandler(k__hasRewardedAd);
+        _bridge.deregisterHandler(k__showRewardedAd);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -163,37 +167,48 @@ public class UnityAds implements PluginProtocol {
         if (_initialized) {
             return;
         }
+        if (!com.unity3d.ads.UnityAds.isSupported()) {
+            return;
+        }
         _listener = new IUnityAdsListener() {
-            public void onUnityAdsReady(String placementId) {
-                _logger.info("onUnityAdsReady: " + placementId);
+            public void onUnityAdsReady(String adId) {
+                _logger.info("onUnityAdsReady: " + adId);
+                Utils.checkMainThread();
+                _bridge.callCpp(k__onLoaded, adId);
+            }
+
+            @Override
+            public void onUnityAdsStart(String adId) {
+                _logger.info("onUnityAdsStart: " + adId);
                 Utils.checkMainThread();
             }
 
             @Override
-            public void onUnityAdsStart(String placementId) {
-                _logger.info("onUnityAdsStart: " + placementId);
+            public void onUnityAdsFinish(String adId, FinishState state) {
+                _logger.info("onUnityAdsFinish: " + adId + " state = " + state);
                 Utils.checkMainThread();
-            }
-
-            @Override
-            public void onUnityAdsFinish(String placementId, FinishState finishState) {
-                _logger.info("onUnityAdsFinish: " + placementId + " state = " + finishState);
-                Utils.checkMainThread();
-
-                MessageBridge bridge = MessageBridge.getInstance();
-                if (finishState == FinishState.ERROR) {
-                    bridge.callCpp(k__onError, placementId);
+                if (state == FinishState.ERROR) {
+                    Map<String, Object> dict = new HashMap<>();
+                    dict.put("ad_id", adId);
+                    dict.put("message", "");
+                    _bridge.callCpp(k__onFailedToShow, JsonUtils.convertDictionaryToString(dict));
                     return;
                 }
-                if (finishState == FinishState.SKIPPED) {
-                    bridge.callCpp(k__onSkipped, placementId);
+                if (state == FinishState.SKIPPED) {
+                    Map<String, Object> dict = new HashMap<>();
+                    dict.put("ad_id", adId);
+                    dict.put("rewarded", false);
+                    _bridge.callCpp(k__onClosed, JsonUtils.convertDictionaryToString(dict));
                     return;
                 }
-                if (finishState == FinishState.COMPLETED) {
-                    bridge.callCpp(k__onFinished, placementId);
+                if (state == FinishState.COMPLETED) {
+                    Map<String, Object> dict = new HashMap<>();
+                    dict.put("ad_id", adId);
+                    dict.put("rewarded", true);
+                    _bridge.callCpp(k__onClosed, JsonUtils.convertDictionaryToString(dict));
                     return;
                 }
-                assert false;
+                assertThat(false).isTrue();
             }
 
             @Override
@@ -210,18 +225,28 @@ public class UnityAds implements PluginProtocol {
     @SuppressWarnings({"unused", "WeakerAccess"})
     public void setDebugModeEnabled(boolean enabled) {
         Utils.checkMainThread();
+        if (!_initialized) {
+            return;
+        }
         com.unity3d.ads.UnityAds.setDebugMode(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean isRewardedVideoReady(@NonNull String placementId) {
+    public boolean hasRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        return com.unity3d.ads.UnityAds.isReady(placementId);
+        if (!_initialized) {
+            return false;
+        }
+        return com.unity3d.ads.UnityAds.isReady(adId);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void showRewardedVideo(@NonNull Activity activity, @NonNull String placementId) {
+    public void showRewardedAd(@NonNull Activity activity, @NonNull String adId) {
         Utils.checkMainThread();
-        com.unity3d.ads.UnityAds.show(activity, placementId);
+        if (!_initialized) {
+            // FIXME: handle error.
+            return;
+        }
+        com.unity3d.ads.UnityAds.show(activity, adId);
     }
 }

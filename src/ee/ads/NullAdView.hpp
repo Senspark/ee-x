@@ -18,9 +18,10 @@ namespace ads {
 class NullAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     NullAdView();
+    virtual void destroy() override;
 
     virtual bool isLoaded() const override;
-    virtual void load() override;
+    virtual Task<bool> load() override;
 
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;

@@ -11,8 +11,7 @@
 
 #include <mutex>
 
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
+#include "ee/ads/internal/AsyncHelper.hpp"
 
 namespace ee {
 namespace ads {
@@ -24,100 +23,20 @@ Self& Self::getInstance() {
 }
 
 Self::MediationManager() {
-    interstitialAdDestroyed_ = false;
-    rewardedVideoDestroyed_ = false;
+    interstitialAdDisplayer_ = std::make_shared<AsyncHelper<bool>>();
+    rewardedAdDisplayer_ = std::make_shared<AsyncHelper<IRewardedAdResult>>();
 }
 
 Self::~MediationManager() {}
 
-bool Self::startInterstitialAd(const OnInterstitialCloseCallback& callback) {
-    return registerInterstitialAd(callback);
+const std::shared_ptr<IAsyncHelper<bool>>&
+Self::getInterstitialAdDisplayer() const {
+    return interstitialAdDisplayer_;
 }
 
-bool Self::finishInterstitialAd() {
-    return deregisterInterstitialAd(false);
-}
-
-bool Self::destroyInterstitialAd() {
-    return deregisterInterstitialAd(true);
-}
-
-bool Self::registerInterstitialAd(const OnInterstitialCloseCallback& callback) {
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onInterstitialCloseCallback != nullptr) {
-        return false;
-    }
-
-    _onInterstitialCloseCallback = callback;
-    interstitialAdDestroyed_ = false;
-    return true;
-}
-
-bool Self::deregisterInterstitialAd(bool destroyed) {
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onInterstitialCloseCallback == nullptr) {
-        if (interstitialAdDestroyed_) {
-            return true;
-        }
-        return false;
-    }
-
-    _onInterstitialCloseCallback();
-    _onInterstitialCloseCallback = nullptr;
-    interstitialAdDestroyed_ = destroyed;
-    return true;
-}
-
-bool Self::setInterstitialAdDone() {
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onInterstitialCloseCallback == nullptr) {
-        if (interstitialAdDestroyed_) {
-            return true;
-        }
-        return false;
-    }
-
-    _onInterstitialCloseCallback();
-    _onInterstitialCloseCallback = nullptr;
-    return true;
-}
-
-bool Self::startRewardedVideo(const OnVideoCloseCallback& callback) {
-    return registerRewardedVideo(callback);
-}
-
-bool Self::finishRewardedVideo(bool rewarded) {
-    return deregisterRewardedVideo(false, rewarded);
-}
-
-bool Self::destroyRewardedVideo() {
-    return deregisterRewardedVideo(true, false);
-}
-
-bool Self::registerRewardedVideo(const OnVideoCloseCallback& callback) {
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onVideoCloseCallback != nullptr) {
-        return false;
-    }
-    _onVideoCloseCallback = callback;
-    rewardedVideoDestroyed_ = false;
-    return true;
-}
-
-bool Self::deregisterRewardedVideo(bool destroyed, bool rewarded) {
-    std::lock_guard<core::SpinLock> guard(locker_);
-    if (_onVideoCloseCallback == nullptr) {
-        if (rewardedVideoDestroyed_) {
-            return true;
-        }
-        return false;
-    }
-
-    _onVideoCloseCallback(rewarded);
-    _onVideoCloseCallback = nullptr;
-
-    rewardedVideoDestroyed_ = destroyed;
-    return true;
+const std::shared_ptr<IAsyncHelper<IRewardedAdResult>>&
+Self::getRewardedAdDisplayer() const {
+    return rewardedAdDisplayer_;
 }
 } // namespace ads
 } // namespace ee

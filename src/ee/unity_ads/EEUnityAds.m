@@ -19,40 +19,53 @@
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
-@interface EEUnityAds () <UnityAdsDelegate> {
-    BOOL initialized_;
-    id<EEIMessageBridge> bridge_;
-}
-
-@end
-
-@implementation EEUnityAds
+#define kPrefix @"UnityAds"
 
 // clang-format off
-static NSString* const k__initialize           = @"UnityAds_initialize";
-static NSString* const k__setDebugModeEnabled  = @"UnityAds_setDebugModeEnabled";
-static NSString* const k__isRewardedVideoReady = @"UnityAds_isRewardedVideoReady";
-static NSString* const k__showRewardedVideo    = @"UnityAds_showRewardedVideo";
-static NSString* const k__onError              = @"UnityAds_onError";
-static NSString* const k__onSkipped            = @"UnityAds_onSkipped";
-static NSString* const k__onFinished           = @"UnityAds_onFinished";
+static NSString* const k__initialize          = kPrefix "_initialize";
+static NSString* const k__setDebugModeEnabled = kPrefix "_setDebugModeEnabled";
+
+static NSString* const k__hasRewardedAd       = kPrefix "_hasRewardedAd";
+static NSString* const k__showRewardedAd      = kPrefix "_showRewardedAd";
+
+static NSString* const k__onLoaded            = kPrefix "_onLoaded";
+static NSString* const k__onFailedToShow      = kPrefix "_onFailedToShow";
+static NSString* const k__onClosed            = kPrefix "_onClosed";
 // clang-format on
 
+#undef kPrefix
+
+@interface EEUnityAds () <UnityAdsDelegate>
+@end
+
+@implementation EEUnityAds {
+    id<EEIMessageBridge> bridge_;
+    BOOL initialized_;
+    BOOL displayed_;
+}
+
 - (id)init {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
     }
-    initialized_ = NO;
     bridge_ = [EEMessageBridge getInstance];
     [self registerHandlers];
     return self;
 }
 
 - (void)dealloc {
-    [self deregisterHandlers];
-    [self destroy];
     [super dealloc];
+}
+
+- (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
+    [self deregisterHandlers];
+    if (!initialized_) {
+        return;
+    }
+    [UnityAds removeDelegate:self];
 }
 
 - (void)registerHandlers {
@@ -73,17 +86,16 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
                         return @"";
                     }];
 
-    [bridge_ registerHandler:k__isRewardedVideoReady
+    [bridge_ registerHandler:k__hasRewardedAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self isRewardedVideoReady:placementId]];
+                        NSString* adId = message;
+                        return [EEUtils toString:[self hasRewardedAd:adId]];
                     }];
 
-    [bridge_ registerHandler:k__showRewardedVideo
+    [bridge_ registerHandler:k__showRewardedAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        [self showRewardedVideo:placementId];
+                        NSString* adId = message;
+                        [self showRewardedAd:adId];
                         return @"";
                     }];
 }
@@ -91,12 +103,16 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
 - (void)deregisterHandlers {
     [bridge_ deregisterHandler:k__initialize];
     [bridge_ deregisterHandler:k__setDebugModeEnabled];
-    [bridge_ deregisterHandler:k__isRewardedVideoReady];
-    [bridge_ deregisterHandler:k__showRewardedVideo];
+    [bridge_ deregisterHandler:k__hasRewardedAd];
+    [bridge_ deregisterHandler:k__showRewardedAd];
 }
 
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled {
+    NSAssert([EEUtils isMainThread], @"");
     if (initialized_) {
+        return;
+    }
+    if (![UnityAds isSupported]) {
         return;
     }
     [UnityAds initialize:gameId testMode:testModeEnabled];
@@ -104,53 +120,70 @@ static NSString* const k__onFinished           = @"UnityAds_onFinished";
     initialized_ = YES;
 }
 
-- (void)destroy {
+- (void)setDebugMode:(BOOL)enabled {
+    NSAssert([EEUtils isMainThread], @"");
     if (!initialized_) {
         return;
     }
-    [UnityAds removeDelegate:self];
-}
-
-- (void)setDebugMode:(BOOL)enabled {
     [UnityAds setDebugMode:enabled];
 }
 
-- (BOOL)isRewardedVideoReady:(NSString*)placementId {
-    return [UnityAds isReady:placementId];
+- (BOOL)hasRewardedAd:(NSString*)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if (!initialized_) {
+        return NO;
+    }
+    return [UnityAds isReady:adId];
 }
 
-- (void)showRewardedVideo:(NSString*)placementId {
+- (void)showRewardedAd:(NSString*)adId {
+    NSAssert([EEUtils isMainThread], @"");
+    if (!initialized_) {
+        // FIXME: handle error.
+        return;
+    }
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-    [UnityAds show:rootView placementId:placementId];
+    [UnityAds show:rootView placementId:adId];
 }
 
-- (void)unityAdsReady:(NSString*)placementId {
-    NSLog(@"%s: placementId = %@", __PRETTY_FUNCTION__, placementId);
+- (void)unityAdsReady:(NSString*)adId {
+    NSLog(@"%s: adId = %@", __PRETTY_FUNCTION__, adId);
+    [bridge_ callCpp:k__onLoaded message:adId];
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {
     NSLog(@"%s: error %d message %@", __PRETTY_FUNCTION__, (int)error, message);
 }
 
-- (void)unityAdsDidStart:(NSString*)placementId {
-    NSLog(@"%s: placementId = %@", __PRETTY_FUNCTION__, placementId);
+- (void)unityAdsDidStart:(NSString*)adId {
+    NSLog(@"%s: adId = %@", __PRETTY_FUNCTION__, adId);
 }
 
-- (void)unityAdsDidFinish:(NSString*)placementId
+- (void)unityAdsDidFinish:(NSString*)adId
           withFinishState:(UnityAdsFinishState)state {
-    NSLog(@"%s: placementId = %@ state = %d", __PRETTY_FUNCTION__, placementId,
-          (int)state);
-
+    NSLog(@"%s: adId = %@ state = %d", __PRETTY_FUNCTION__, adId, (int)state);
     if (state == kUnityAdsFinishStateError) {
-        [bridge_ callCpp:k__onError message:placementId];
+        [bridge_ callCpp:k__onFailedToShow
+                 message:[EEJsonUtils convertObjectToString:@{
+                     @"ad_id": adId,
+                     @"message": @"",
+                 }]];
         return;
     }
     if (state == kUnityAdsFinishStateSkipped) {
-        [bridge_ callCpp:k__onSkipped message:placementId];
+        [bridge_ callCpp:k__onClosed
+                 message:[EEJsonUtils convertObjectToString:@{
+                     @"ad_id": adId,
+                     @"rewarded": @(NO),
+                 }]];
         return;
     }
     if (state == kUnityAdsFinishStateCompleted) {
-        [bridge_ callCpp:k__onFinished message:placementId];
+        [bridge_ callCpp:k__onClosed
+                 message:[EEJsonUtils convertObjectToString:@{
+                     @"ad_id": adId,
+                     @"rewarded": @(YES),
+                 }]];
         return;
     }
     NSAssert(NO, @"");

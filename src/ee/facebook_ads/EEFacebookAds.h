@@ -14,6 +14,8 @@ typedef struct FBAdSize FBAdSize;
 
 @interface EEFacebookAds : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (NSString* _Nonnull)getTestDeviceHash;
 - (void)addTestDevice:(NSString* _Nonnull)hash;
 - (void)clearTestDevices;
@@ -26,7 +28,10 @@ typedef struct FBAdSize FBAdSize;
            identifiers:(NSDictionary* _Nonnull)identifiers;
 - (BOOL)destroyNativeAd:(NSString* _Nonnull)adId;
 
-- (BOOL)createInterstitialAd:(NSString* _Nonnull)placementId;
-- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)placementId;
+- (BOOL)createInterstitialAd:(NSString* _Nonnull)adId;
+- (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId;
+
+- (BOOL)createRewardedAd:(NSString* _Nonnull)adId;
+- (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId;
 
 @end

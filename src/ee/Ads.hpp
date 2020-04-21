@@ -11,14 +11,17 @@
 
 #include <ee/Core.hpp>
 
+#include "ee/ads/GuardedAdView.hpp"
+#include "ee/ads/GuardedInterstitialAd.hpp"
+#include "ee/ads/GuardedRewardedAd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedVideo.hpp"
+#include "ee/ads/IRewardedAd.hpp"
 #include "ee/ads/MultiAdView.hpp"
 #include "ee/ads/MultiInterstitialAd.hpp"
-#include "ee/ads/MultiRewardedVideo.hpp"
+#include "ee/ads/MultiRewardedAd.hpp"
 #include "ee/ads/NullAdView.hpp"
 #include "ee/ads/NullInterstitialAd.hpp"
-#include "ee/ads/NullRewardedVideo.hpp"
+#include "ee/ads/NullRewardedAd.hpp"
 
 #endif /* EE_X_ADS_HPP */

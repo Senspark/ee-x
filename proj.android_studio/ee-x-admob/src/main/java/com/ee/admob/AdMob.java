@@ -6,11 +6,11 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.ee.core.PluginProtocol;
-import com.ee.core.internal.JsonUtils;
 import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
+import com.ee.core.PluginProtocol;
+import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -24,51 +24,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/13/17.
  */
 
 public class AdMob implements PluginProtocol {
-    private static final String k__initialize                = "AdMob_initialize";
-    private static final String k__getEmulatorTestDeviceHash = "AdMob_getEmulatorTestDeviceHash";
-    private static final String k__addTestDevice             = "AdMob_addTestDevice";
-    private static final String k__createBannerAd            = "AdMob_createBannerAd";
-    private static final String k__destroyBannerAd           = "AdMob_destroyBannerAd";
-    private static final String k__createNativeAd            = "AdMob_createNativeAd";
-    private static final String k__destroyNativeAd           = "AdMob_destroyNativeAd";
-    private static final String k__createInterstitialAd      = "AdMob_createInterstitialAd";
-    private static final String k__destroyInterstitialAd     = "AdMob_destroyInterstitialAd";
-    private static final String k__createRewardVideoAd       = "AdMob_createRewardVideoAd";
-    private static final String k__destroyRewardVideoAd      = "AdMob_destroyRewardVideoAd";
+    private static final String kPrefix = "AdMob";
 
-    private static final String k__ad_id       = "ad_id";
-    private static final String k__ad_size     = "ad_size";
+    private static final String k__initialize = kPrefix + "_initialize";
+    private static final String k__getEmulatorTestDeviceHash = kPrefix + "_getEmulatorTestDeviceHash";
+    private static final String k__addTestDevice = kPrefix + "_addTestDevice";
+
+    private static final String k__createBannerAd = kPrefix + "_createBannerAd";
+    private static final String k__destroyBannerAd = kPrefix + "_destroyBannerAd";
+
+    private static final String k__createNativeAd = kPrefix + "_createNativeAd";
+    private static final String k__destroyNativeAd = kPrefix + "_destroyNativeAd";
+
+    private static final String k__createInterstitialAd = kPrefix + "_createInterstitialAd";
+    private static final String k__destroyInterstitialAd = kPrefix + "_destroyInterstitialAd";
+
+    private static final String k__createRewardedAd = kPrefix + "_createRewardedAd";
+    private static final String k__destroyRewardedAd = kPrefix + "_destroyRewardedAd";
+
+    private static final String k__ad_id = "ad_id";
+    private static final String k__ad_size = "ad_size";
     private static final String k__layout_name = "layout_name";
     private static final String k__identifiers = "identifiers";
 
-    private Context                          _context;
-    private Activity                         _activity;
-    private List<String>                     _testDevices;
-    private Map<String, AdMobBannerAd>       _bannerAds;
-    private Map<String, AdMobNativeAd>       _nativeAds;
+    private Context _context;
+    private Activity _activity;
+    private IMessageBridge _bridge;
+    private List<String> _testDevices;
+    private Map<String, AdMobBannerAd> _bannerAds;
+    private Map<String, AdMobNativeAd> _nativeAds;
     private Map<String, AdMobInterstitialAd> _interstitialAds;
-    private Map<String, AdMobRewardVideoAd>  _rewardVideoAds;
-    private IMessageBridge                   _bridge;
-
+    private Map<String, AdMobRewardedAd> _rewardedAds;
 
     public AdMob(Context context) {
         Utils.checkMainThread();
         _context = context;
         _activity = null;
-        _bannerAds = null;
-
+        _bridge = MessageBridge.getInstance();
         _testDevices = new ArrayList<>();
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
-        _rewardVideoAds = new HashMap<>();
-        _bridge = MessageBridge.getInstance();
-
+        _rewardedAds = new HashMap<>();
         registerHandlers();
     }
 
@@ -147,11 +151,10 @@ public class AdMob implements PluginProtocol {
         _interstitialAds.clear();
         _interstitialAds = null;
 
-        _rewardVideoAds.clear();
-        _rewardVideoAds = null;
+        _rewardedAds.clear();
+        _rewardedAds = null;
 
         _bridge = null;
-
         _context = null;
     }
 
@@ -166,8 +169,6 @@ public class AdMob implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
@@ -203,7 +204,7 @@ public class AdMob implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 Integer adSizeIndex = (Integer) dict.get(k__ad_size);
@@ -227,7 +228,7 @@ public class AdMob implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
+                assertThat(dict).isNotNull();
 
                 String adId = (String) dict.get(k__ad_id);
                 String layoutName = (String) dict.get(k__layout_name);
@@ -255,8 +256,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(createInterstitialAd(adId));
             }
         }, k__createInterstitialAd);
 
@@ -265,8 +266,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyInterstitialAd(adId));
             }
         }, k__destroyInterstitialAd);
 
@@ -275,26 +276,23 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(createRewardedAd(adId));
             }
-        }, k__createRewardVideoAd);
+        }, k__createRewardedAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyRewardedAd(adId));
             }
-        }, k__destroyRewardVideoAd);
-
+        }, k__destroyRewardedAd);
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
         _bridge.deregisterHandler(k__addTestDevice);
@@ -304,12 +302,13 @@ public class AdMob implements PluginProtocol {
         _bridge.deregisterHandler(k__destroyNativeAd);
         _bridge.deregisterHandler(k__createInterstitialAd);
         _bridge.deregisterHandler(k__destroyInterstitialAd);
-        _bridge.deregisterHandler(k__createRewardVideoAd);
-        _bridge.deregisterHandler(k__destroyRewardVideoAd);
+        _bridge.deregisterHandler(k__createRewardedAd);
+        _bridge.deregisterHandler(k__destroyRewardedAd);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String applicationId) {
+        Utils.checkMainThread();
         MobileAds.initialize(_context, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -324,6 +323,7 @@ public class AdMob implements PluginProtocol {
     }
 
     public void addTestDevice(@NonNull String hash) {
+        Utils.checkMainThread();
         _testDevices.add(hash);
         RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
         MobileAds.setRequestConfiguration(configuration);
@@ -399,23 +399,23 @@ public class AdMob implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public boolean createRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (_rewardVideoAds.containsKey(adId)) {
+        if (_rewardedAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardVideoAd ad = new AdMobRewardVideoAd(_activity, _context, adId);
-        _rewardVideoAds.put(adId, ad);
+        AdMobRewardedAd ad = new AdMobRewardedAd(_activity, _context, adId);
+        _rewardedAds.put(adId, ad);
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (!_rewardVideoAds.containsKey(adId)) {
+        if (!_rewardedAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardVideoAd ad = _rewardVideoAds.get(adId);
+        AdMobRewardedAd ad = _rewardedAds.get(adId);
         ad.destroy();
-        _rewardVideoAds.remove(adId);
+        _rewardedAds.remove(adId);
         return true;
     }
 }

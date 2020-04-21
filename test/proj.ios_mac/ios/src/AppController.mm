@@ -6,13 +6,16 @@
 //
 //
 
-#import <ee/Core.hpp>
-
 #import "AppController.h"
-#import "AppDelegate.hpp"
-#import "RootViewController.h"
+
+#import <FIRApp.h>
 
 #import <cocos2d.h>
+
+#import <ee/Core.hpp>
+
+#import "AppDelegate.hpp"
+#import "RootViewController.h"
 
 @implementation AppController
 
@@ -52,9 +55,11 @@ static eetest::AppDelegate s_sharedApplication;
         (__bridge void*)[_viewController view]);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
 
+    [FIRApp configure];
+
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager initializePlugins];
-    [manager addPlugin:@"Crashlytics"];
+    [manager addPlugin:@"FirebaseCrashlytics"];
     [manager addPlugin:@"Notification"];
     [manager addPlugin:@"AdMob"];
     [manager addPlugin:@"AppLovin"];

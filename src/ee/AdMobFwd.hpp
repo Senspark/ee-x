@@ -20,7 +20,7 @@ class BannerAd;
 class NativeAd;
 class NativeAdLayout;
 class InterstitialAd;
-class RewardedVideo;
+class RewardedAd;
 } // namespace admob
 
 using AdMob = admob::Bridge;

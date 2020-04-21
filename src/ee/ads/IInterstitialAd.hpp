@@ -11,38 +11,37 @@
 
 #include <functional>
 
+#include <ee/CoroutineFwd.hpp>
+#include <ee/core/IObserverManager.hpp>
+
 #include "ee/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {
-using InterstitialAdCallback = std::function<void()>;
-using OnClickedCallback = std::function<void()>;
+struct IInterstitialAdObserver {
+    /// Occurs when this ad is loaded.
+    std::function<void()> onLoaded;
 
-class IInterstitialAd {
+    /// Occurs when the user clicks this ad.
+    std::function<void()> onClicked;
+};
+
+class IInterstitialAd
+    : public virtual IObserverManager<IInterstitialAdObserver> {
 public:
-    IInterstitialAd();
-    virtual ~IInterstitialAd();
+    virtual ~IInterstitialAd() = default;
 
+    /// Destroys this ad.
+    virtual void destroy() = 0;
+
+    /// Checks whether this ad is loaded.
     virtual bool isLoaded() const = 0;
 
-    virtual void load() = 0;
+    /// Attempts to load this ad.
+    virtual Task<bool> load() = 0;
 
-    virtual bool show() = 0;
-
-    void setResultCallback(const InterstitialAdCallback& callback);
-    virtual void setOnClickedCallback(const OnClickedCallback& callback);
-    void doOnClicked();
-    
-protected:
-    friend MediationManager;
-
-    void setDone();
-    void performClick();
-
-private:
-    InterstitialAdCallback callback_;
-    OnClickedCallback onClickCallback_;
-
+    /// Attempts to show this ad.
+    virtual Task<bool> show() = 0;
 };
 } // namespace ads
 } // namespace ee

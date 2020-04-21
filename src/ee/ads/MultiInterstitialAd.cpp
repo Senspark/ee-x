@@ -8,17 +8,51 @@
 
 #include "ee/ads/MultiInterstitialAd.hpp"
 
+#include <ee/core/ObserverHandle.hpp>
+#include <ee/coroutine/NoAwait.hpp>
+#include <ee/coroutine/Task.hpp>
+
 namespace ee {
 namespace ads {
 using Self = MultiInterstitialAd;
 
-Self::MultiInterstitialAd() {}
+Self::MultiInterstitialAd() {
+    handle_ = std::make_unique<ObserverHandle>();
+}
 
 Self::~MultiInterstitialAd() {}
 
 Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
     items_.push_back(item);
+    (*handle_).bind(*item).addObserver({
+        .onLoaded =
+            [this] {
+                // Propagation.
+                dispatchEvent([](auto&& observer) {
+                    if (observer.onLoaded) {
+                        observer.onLoaded();
+                    }
+                });
+            },
+        .onClicked =
+            [this] {
+                // Propagation.
+                dispatchEvent([](auto&& observer) {
+                    if (observer.onClicked) {
+                        observer.onClicked();
+                    }
+                });
+            },
+    });
     return *this;
+}
+
+void Self::destroy() {
+    for (auto&& item : items_) {
+        item->destroy();
+    }
+    items_.clear();
+    handle_->clear();
 }
 
 bool Self::isLoaded() const {
@@ -30,58 +64,36 @@ bool Self::isLoaded() const {
     return false;
 }
 
-void Self::load() {
+Task<bool> Self::load() {
+    bool result = false;
     for (auto&& item : items_) {
-        if (not item->isLoaded()) {
-            item->load();
+        if (item->isLoaded()) {
+            continue;
+        }
+        if (co_await item->load()) {
+            result = true;
         }
     }
+    co_return result;
 }
 
-bool Self::show() {
+Task<bool> Self::show() {
     bool displayed = false;
-
-    // Assign callbacks for all items (fix AdMob mediation consumes callback
-    // from other ads).
-    assignCallbacks();
-
     for (auto&& item : items_) {
         if (not displayed) {
-            if (item->show()) {
+            if (co_await item->show()) {
                 displayed = true;
                 continue;
             }
         }
         if (not item->isLoaded()) {
-            item->load();
+            noAwait([item]() -> Task<> { //
+                // Load in background.
+                co_await item->load();
+            });
         }
     }
-
-    if (not displayed) {
-        clearCallbacks();
-    }
-    return displayed;
-}
-
-void Self::assignCallbacks() {
-    for (auto&& item : items_) {
-        item->setResultCallback([this] {
-            setDone();
-            clearCallbacks();
-        });
-    }
-}
-
-void Self::clearCallbacks() {
-    for (auto&& item : items_) {
-        item->setResultCallback(nullptr);
-    }
-}
-
-void Self::setOnClickedCallback(const OnClickedCallback& callback) {
-    for (auto&& item : items_) {
-        item->setOnClickedCallback(callback);
-    }
+    co_return displayed;
 }
 } // namespace ads
 } // namespace ee

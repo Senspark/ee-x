@@ -12,7 +12,7 @@
 #include <platform/CCGLView.h>
 #include <platform/CCPlatformConfig.h>
 
-#include <ee/Core.hpp>
+#include <ee/Coroutine.hpp>
 
 #include "Utils.hpp"
 
@@ -22,6 +22,7 @@ ee::AdMob* getAdMob() {
     static bool initialized = false;
     if (not initialized) {
         ee::runOnUiThreadAndWait([] {
+            plugin.initialize(getAdMobApplicationTestId());
             plugin.addTestDevice(plugin.getEmulatorTestDeviceHash());
             plugin.addTestDevice(
                 "930A5959F4325BAA45E24449B03CB221"); // BlueStacks
@@ -33,7 +34,55 @@ ee::AdMob* getAdMob() {
     return &plugin;
 }
 
-std::string getAdMobRewardedVideoId() {
+std::string getAdMobApplicationTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544~3347511713";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544~1458002511";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobBannerAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/6300978111";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2934735716";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobNativeAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2247696110";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/3986624511";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobNativeAdVideoTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/1044960115";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/2521693316";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobInterstitialAdTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/1033173712";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/4411468910";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobInterstitialAdVideoTestId() {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/8691691433";
+#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    return "ca-app-pub-3940256099942544/5135589807";
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+}
+
+std::string getAdMobRewardedAdTestId() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     return "ca-app-pub-3940256099942544/5224354917";
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -41,16 +90,9 @@ std::string getAdMobRewardedVideoId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::string getAdMobNativeAdId() {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "ca-app-pub-2101587572072038/1175956700";
-#else  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    return "ca-app-pub-3940256099942544/2247696110";
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-}
-
 std::shared_ptr<ee::IAdView> createAdMobNativeAd() {
-    return getAdMob()->createNativeAd(getAdMobNativeAdId(), "admob_native_spin",
+    return getAdMob()->createNativeAd(getAdMobNativeAdTestId(),
+                                      "admob_native_spin",
                                       ee::AdMobNativeAdLayout()
                                           .setBody("ad_body")
                                           .setCallToAction("ad_call_to_action")
@@ -69,62 +111,58 @@ void testAdMobBannerAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    auto bannerAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
-            getLogger().info("Create AdMob banner ad begin");
-            auto ad = getAdMob()->createBannerAd(
-                "ca-app-pub-3940256099942544/6300978111",
-                ee::AdMobBannerAdSize::Normal);
-            ad->load();
-            ad->setVisible(false);
-            getLogger().info("Create AdMob banner ad end");
-            return ad;
+    auto ad = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+        getLogger().info("Create AdMob banner ad begin");
+        auto ad = getAdMob()->createBannerAd(getAdMobBannerAdTestId(),
+                                             ee::AdMobBannerAdSize::Normal);
+        ee::noAwait([ad]() -> ee::Task<> { //
+            co_await ad->load();
         });
+        ad->setVisible(false);
+        getLogger().info("Create AdMob banner ad end");
+        return ad;
+    });
 
     float delay = 0.0f;
-    scheduleOnce(delay += 2.0f, [screenWidth, screenHeight, bannerAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, bannerAd] {
+    scheduleOnce(delay += 2.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("show");
-            bannerAd->setVisible(true);
+            ad->setVisible(true);
 
-            int width, height;
-            std::tie(width, height) = bannerAd->getSize();
-            bannerAd->setPosition((screenWidth - width) / 2,
-                                  (screenHeight - height) / 2);
+            auto [width, height] = ad->getSize();
+            ad->setPosition((screenWidth - width) / 2,
+                            (screenHeight - height) / 2);
         });
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, bannerAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, bannerAd] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to top-left");
-            bannerAd->setPosition(0, 0);
+            ad->setPosition(0, 0);
         });
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, bannerAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, bannerAd] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to top-right");
-            int width, height;
-            std::tie(width, height) = bannerAd->getSize();
-            bannerAd->setPosition(screenWidth - width, 0);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(screenWidth - width, 0);
         });
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, bannerAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, bannerAd] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to bottom-right");
-            int width, height;
-            std::tie(width, height) = bannerAd->getSize();
-            bannerAd->setPosition(screenWidth - width, screenHeight - height);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(screenWidth - width, screenHeight - height);
         });
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, bannerAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, bannerAd] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to bottom-left");
-            int width, height;
-            std::tie(width, height) = bannerAd->getSize();
-            bannerAd->setPosition(0, screenHeight - height);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(0, screenHeight - height);
         });
     });
 }
@@ -135,140 +173,134 @@ void testAdMobNativeAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    auto nativeAd =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
-            getLogger().info("Create AdMob native ad begin");
-            auto ad = createAdMobNativeAd();
-            ad->setVisible(true);
-            ad->setSize(600, 100);
-            getLogger().info("Create AdMob native ad end");
-            return ad;
-        });
+    auto ad = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
+        getLogger().info("Create AdMob native ad begin");
+        auto ad = createAdMobNativeAd();
+        ad->setVisible(true);
+        ad->setSize(600, 100);
+        getLogger().info("Create AdMob native ad end");
+        return ad;
+    });
 
     float delay = 0.0f;
-    scheduleForever(delay + 1.0f, 4.0f, [nativeAd] {
-        ee::runOnUiThread([nativeAd] {
+    scheduleForever(delay + 1.0f, 4.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
             getLogger().info("Load AdMob native ad");
-            nativeAd->load();
-        });
+            co_await ad->load();
+        }));
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size / 4");
-            nativeAd->setPosition(3 * screenWidth / 8, 3 * screenHeight / 8);
-            nativeAd->setSize(screenWidth / 4, screenHeight / 4);
+            ad->setPosition(3 * screenWidth / 8, 3 * screenHeight / 8);
+            ad->setSize(screenWidth / 4, screenHeight / 4);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [nativeAd] {
-        ee::runOnUiThread([nativeAd] {
+    scheduleOnce(delay += 1.0f, [ad] {
+        ee::runOnUiThread([ad] {
             getLogger().info("Move to top-left");
-            nativeAd->setPosition(0, 0);
+            ad->setPosition(0, 0);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, nativeAd] {
-        ee::runOnUiThread([screenWidth, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, ad] {
+        ee::runOnUiThread([screenWidth, ad] {
             getLogger().info("Move to top-right");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(screenWidth - width, 0);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(screenWidth - width, 0);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to bottom-right");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(screenWidth - width, screenHeight - height);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(screenWidth - width, screenHeight - height);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenHeight, nativeAd] {
-        ee::runOnUiThread([screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenHeight, ad] {
+        ee::runOnUiThread([screenHeight, ad] {
             getLogger().info("Move to bottom-left");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition(0, screenHeight - height);
+            auto [width, height] = ad->getSize();
+            ad->setPosition(0, screenHeight - height);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Move to center");
-            int width, height;
-            std::tie(width, height) = nativeAd->getSize();
-            nativeAd->setPosition((screenWidth - width) / 2,
-                                  (screenHeight - height) / 2);
+            auto [width, height] = ad->getSize();
+            ad->setPosition((screenWidth - width) / 2,
+                            (screenHeight - height) / 2);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size");
-            nativeAd->setPosition(0, 0);
-            nativeAd->setSize(screenWidth, screenHeight);
+            ad->setPosition(0, 0);
+            ad->setSize(screenWidth, screenHeight);
         });
     });
 
-    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, nativeAd] {
-        ee::runOnUiThread([screenWidth, screenHeight, nativeAd] {
+    scheduleOnce(delay += 1.0f, [screenWidth, screenHeight, ad] {
+        ee::runOnUiThread([screenWidth, screenHeight, ad] {
             getLogger().info("Resize = screen size / 2");
-            nativeAd->setPosition(screenWidth / 4, screenHeight / 4);
-            nativeAd->setSize(screenWidth / 2, screenHeight / 2);
+            ad->setPosition(screenWidth / 4, screenHeight / 4);
+            ad->setSize(screenWidth / 2, screenHeight / 2);
         });
     });
 }
 
 void testAdMobInterstitial() {
-    auto interstitialAd =
+    auto ad =
         ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IInterstitialAd>>(
             [] {
                 getLogger().info("Create AdMob interstitial ad begin");
                 auto ad = getAdMob()->createInterstitialAd(
-                    "ca-app-pub-3940256099942544/1033173712");
+                    getAdMobInterstitialAdTestId());
                 getLogger().info("Create AdMob interstitial ad end");
                 return ad;
             });
 
-    scheduleForever(1.0f, 3.0f, [interstitialAd] {
-        ee::runOnUiThread([interstitialAd] {
+    scheduleForever(1.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
             getLogger().info("Load AdMob interstitial ad");
-            interstitialAd->load();
-        });
+            co_await ad->load();
+        }));
     });
-    scheduleForever(2.0f, 3.0f, [interstitialAd] {
-        ee::runOnUiThread([interstitialAd] {
+    scheduleForever(2.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
             getLogger().info("Show AdMob interstitial ad");
-            interstitialAd->show();
-        });
+            co_await ad->show();
+        }));
     });
 }
 
-void testAdMobRewardedVideo() {
-    auto rewardedVideo =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
-            getLogger().info("Create AdMob rewarded video begin");
-            auto ad =
-                getAdMob()->createRewardedVideo(getAdMobRewardedVideoId());
-            getLogger().info("Create AdMob rewarded video end");
-            return ad;
+void testAdMobRewardedAd() {
+    auto ad =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
+            getLogger().info("Create AdMob rewarded ad begin");
+            auto ad = getAdMob()->createRewardedAd(getAdMobRewardedAdTestId());
+            getLogger().info("Create AdMob rewarded ad end");
+            return std::make_shared<ee::GuardedRewardedAd>(ad);
         });
 
-    scheduleForever(1.0f, 3.0f, [rewardedVideo] {
-        ee::runOnUiThread([rewardedVideo] {
-            getLogger().info("Load AdMob rewarded video");
-            rewardedVideo->load();
-        });
+    scheduleForever(1.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            getLogger().info("Load AdMob rewarded ad");
+            co_await ad->load();
+        }));
     });
 
-    scheduleForever(2.0f, 3.0f, [rewardedVideo] {
-        ee::runOnUiThread([rewardedVideo] {
-            getLogger().info("Show AdMob rewarded video");
-            rewardedVideo->show();
-        });
+    scheduleForever(2.0f, 3.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            getLogger().info("Show AdMob rewarded ad");
+            co_await ad->show();
+        }));
     });
 }
 } // namespace eetest

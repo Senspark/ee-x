@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
@@ -21,6 +22,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 10/13/17.
@@ -32,13 +35,14 @@ class AdMobBannerAd extends AdListener implements IAdView {
     private Context _context;
     private Activity _activity;
     private IMessageBridge _bridge;
-    private AdView _adView;
-    private boolean _isAdLoaded;
     private String _adId;
     private AdSize _adSize;
     private AdViewHelper _helper;
+    private MessageHelper _messageHelper;
     private ViewHelper _viewHelper;
     private boolean _customSize;
+    private boolean _isLoaded;
+    private AdView _ad;
 
     static AdSize adSizeFor(int index) {
         if (index == 0) {
@@ -57,13 +61,15 @@ class AdMobBannerAd extends AdListener implements IAdView {
     }
 
     AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = MessageBridge.getInstance();
         _adId = adId;
         _adSize = adSize;
-        _helper = new AdViewHelper(_bridge, this, "AdMobBannerAd", _adId);
+        _messageHelper = new MessageHelper("AdMobBannerAd", adId);
+        _helper = new AdViewHelper(_bridge, this, _messageHelper);
 
         createInternalAd();
         registerHandlers();
@@ -76,21 +82,22 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     void onResume() {
         Utils.checkMainThread();
-        _adView.resume();
+        _ad.resume();
     }
 
     void onPause() {
         Utils.checkMainThread();
-        _adView.pause();
+        _ad.pause();
     }
 
     void onDestroy(@NonNull Activity activity) {
-        assert _activity == activity;
+        assertThat(_activity).isEqualTo(activity);
         removeFromActivity(activity);
         _activity = null;
     }
 
     void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
@@ -98,51 +105,37 @@ class AdMobBannerAd extends AdListener implements IAdView {
         _bridge = null;
         _adId = null;
         _adSize = null;
+        _messageHelper = null;
         _helper = null;
     }
 
-    @NonNull
-    private String kOnLoaded() {
-        return "AdMobBannerAd_onLoaded_" + _adId;
-    }
-
-    @NonNull
-    private String kOnFailedToLoad() {
-        return "AdMobBannerAd_onFailedToLoad_" + _adId;
-    }
-
-    @NonNull
-    private String kOnClicked() {
-        return "AdMobBannerAd_onClicked_" + _adId;
-    }
-
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
     }
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_adView != null) {
+        if (_ad != null) {
             return false;
         }
         _customSize = false;
-        _isAdLoaded = false;
-        AdView adView = new AdView(_context);
-        adView.setAdSize(_adSize);
-        adView.setAdListener(this);
-        adView.setAdUnitId(_adId);
-        _adView = adView;
+        _isLoaded = false;
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        _ad = new AdView(_context);
+        _ad.setAdSize(_adSize);
+        _ad.setAdListener(this);
+        _ad.setAdUnitId(_adId);
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
-        _adView.setLayoutParams(params);
-        _viewHelper = new ViewHelper(_adView);
+        _ad.setLayoutParams(params);
+        _viewHelper = new ViewHelper(_ad);
 
         if (_activity != null) {
             addToActivity(_activity);
@@ -152,45 +145,44 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     private boolean destroyInternalAd() {
         Utils.checkMainThread();
-        if (_adView == null) {
+        if (_ad == null) {
             return false;
         }
         _customSize = false;
-        _isAdLoaded = false;
+        _isLoaded = false;
         if (_activity != null) {
             removeFromActivity(_activity);
         }
         _viewHelper = null;
-        _adView.destroy();
-        _adView = null;
+        _ad.destroy();
+        _ad = null;
         return true;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.addView(_adView);
+        rootView.addView(_ad);
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_adView);
+        rootView.removeView(_ad);
     }
 
     @Override
     public boolean isLoaded() {
         Utils.checkMainThread();
-        return _adView != null && _isAdLoaded;
+        assertThat(_adId).isNotNull();
+        return _isLoaded;
     }
 
     @Override
     public void load() {
         Utils.checkMainThread();
-        if (_adView == null) {
-            return;
-        }
+        assertThat(_adId).isNotNull();
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
-        _adView.loadAd(builder.build());
+        _ad.loadAd(builder.build());
     }
 
     @NonNull
@@ -210,6 +202,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (_customSize) {
             return _viewHelper.getSize();
         }
+        Utils.checkMainThread();
         int width = _adSize.getWidthInPixels(_context);
         int height = _adSize.getHeightInPixels(_context);
         return new Point(width, height);
@@ -232,7 +225,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (visible) {
             // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
             // -refresh-or-sign-in-to-google-plus
-            _adView.setBackgroundColor(Color.BLACK);
+            _ad.setBackgroundColor(Color.BLACK);
         }
     }
 
@@ -246,14 +239,14 @@ class AdMobBannerAd extends AdListener implements IAdView {
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
         Utils.checkMainThread();
-        _bridge.callCpp(kOnFailedToLoad(), String.valueOf(errorCode));
+        _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnClicked());
+        _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
@@ -266,8 +259,8 @@ class AdMobBannerAd extends AdListener implements IAdView {
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        _isAdLoaded = true;
-        _bridge.callCpp(kOnLoaded());
+        _isLoaded = true;
+        _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override

@@ -8,6 +8,9 @@
 #ifndef TwitterShareTestScene_hpp
 #define TwitterShareTestScene_hpp
 
+/*
+ Deprecated.
+ 
 #include <cocos2d.h>
 
 #include <ee/TwitterFwd.hpp>
@@ -34,5 +37,6 @@ private:
     void doShareSuccess(int result);
 };
 } // namespace eetest
+ */
 
 #endif /* TwitterShareTestScene_hpp */

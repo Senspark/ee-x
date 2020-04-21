@@ -2,12 +2,15 @@
 
 @interface EEIronSource : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)gameId;
 
-- (BOOL)hasRewardedVideo;
-- (void)showRewardedVideo:(NSString* _Nonnull)placementId;
+- (BOOL)hasInterstitialAd;
+- (void)loadInterstitialAd;
+- (void)showInterstitialAd:(NSString* _Nonnull)adId;
 
-- (BOOL)hasInterstitial;
-- (void)showInterstitial:(NSString* _Nonnull)placementId;
+- (BOOL)hasRewardedAd;
+- (void)showRewardedAd:(NSString* _Nonnull)adId;
 
 @end

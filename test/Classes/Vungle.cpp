@@ -10,7 +10,7 @@
 
 #include <platform/CCPlatformConfig.h>
 
-#include <ee/Core.hpp>
+#include <ee/Coroutine.hpp>
 
 #include "FunctionLogger.hpp"
 #include "Utils.hpp"
@@ -38,29 +38,27 @@ std::string getVungleGameId() {
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 }
 
-std::string getVungleRewardedVideoId() {
+std::string getVungleRewardedAdId() {
     return "rewarded";
 }
 
-void testVungleRewardedVideo() {
+void testVungleRewardedAd() {
     // Create a Vungle rewarded video on the main thread.
-    auto rewardedVideo =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedVideo>>([] {
-            FunctionLogger logger("Create Vungle rewarded video");
-            return getVungle()->createRewardedVideo(getVungleRewardedVideoId());
+    auto ad =
+        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
+            FunctionLogger logger("Create Vungle rewarded ad");
+            return std::make_shared<ee::GuardedRewardedAd>(
+                getVungle()->createRewardedAd(getVungleRewardedAdId()));
         });
 
-    // Set the result callback.
-    rewardedVideo->setResultCallback([](bool result) {
-        FunctionLogger logger("Vungle rewarded video callback");
-        logCurrentThread();
-        getLogger().info("Result = ", result ? "succeeded" : "failed");
-    });
-
     float delay = 0.0f;
-    scheduleForever(delay += 5.0f, 5.0f, [rewardedVideo] {
-        FunctionLogger logger("Show Vungle rewarded video");
-        rewardedVideo->show();
+    scheduleForever(delay += 5.0f, 5.0f, [ad] {
+        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
+            FunctionLogger logger("Show Vungle rewarded ad");
+            auto result = co_await ad->show();
+            logCurrentThread();
+            getLogger().info("Result = %d", static_cast<int>(result));
+        }));
     });
 }
 } // namespace eetest

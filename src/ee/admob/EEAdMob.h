@@ -12,6 +12,8 @@
 
 @interface EEAdMob : NSObject <EEIPlugin>
 
+- (void)destroy;
+
 - (void)initialize:(NSString* _Nonnull)applicationId;
 
 - (NSString* _Nonnull)getEmulatorTestDeviceHash;
@@ -28,11 +30,7 @@
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)adId;
 - (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId;
 
-- (BOOL)createRewardVideoAd:(NSString* _Nonnull)adId;
-- (BOOL)destroyRewardVideoAd:(NSString* _Nonnull)adId;
-
-- (void)loadRewardedVideo:(NSString* _Nonnull)adId;
-- (bool)hasRewardedVideo;
-- (void)showRewardedVideo;
+- (BOOL)createRewardedAd:(NSString* _Nonnull)adId;
+- (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId;
 
 @end

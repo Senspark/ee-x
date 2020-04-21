@@ -9,9 +9,9 @@
 #ifndef EE_X_CORE_MESSAGE_BRIDGE_HPP_
 #define EE_X_CORE_MESSAGE_BRIDGE_HPP_
 
-#include <map>
+#include <unordered_map>
 
-#include "ee/core/internal/IMessageBridge.hpp"
+#include "ee/core/IMessageBridge.hpp"
 
 namespace ee {
 namespace core {
@@ -22,22 +22,15 @@ private:
 public:
     static MessageBridge& getInstance();
 
-    /// @see Super.
-    virtual std::string call(const std::string& tag) override;
-
-    /// @see Super.
     virtual std::string call(const std::string& tag,
-                             const std::string& message) override;
+                             const std::string& message = "") override;
 
-    /// @see Super.
     virtual std::string callCpp(const std::string& tag,
                                 const std::string& message) override;
 
-    /// @see Super.
     virtual bool registerHandler(const MessageHandler& handler,
                                  const std::string& tag) override;
 
-    /// @see Super.
     virtual bool deregisterHandler(const std::string& tag) override;
 
 private:
@@ -49,10 +42,12 @@ private:
 
     MessageHandler findHandler(const std::string& tag);
 
+    const Logger& logger_;
+
     std::unique_ptr<SpinLock> handlerLock_;
 
     /// Registered handlers.
-    std::map<std::string, MessageHandler> handlers_;
+    std::unordered_map<std::string, MessageHandler> handlers_;
 };
 } // namespace core
 } // namespace ee

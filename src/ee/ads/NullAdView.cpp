@@ -8,6 +8,8 @@
 
 #include "ee/ads/NullAdView.hpp"
 
+#include <ee/coroutine/Task.hpp>
+
 namespace ee {
 namespace ads {
 using Self = NullAdView;
@@ -23,16 +25,14 @@ Self::NullAdView() {
     visible_ = false;
 }
 
+void Self::destroy() {}
+
 bool Self::isLoaded() const {
     return loaded_;
 }
 
-void Self::load() {
-    dispatchEvent([](auto&& observer) {
-        if (observer.onFailedToLoad) {
-            observer.onFailedToLoad();
-        }
-    });
+Task<bool> Self::load() {
+    co_return false;
 }
 
 std::pair<float, float> Self::getAnchor() const {

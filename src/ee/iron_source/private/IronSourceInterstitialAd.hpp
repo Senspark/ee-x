@@ -12,31 +12,43 @@
 #include <string>
 
 #include <ee/ads/IInterstitialAd.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/IronSourceFwd.hpp"
 
 namespace ee {
 namespace iron_source {
-class InterstitialAd : public IInterstitialAd {
+class InterstitialAd : public IInterstitialAd,
+                       public SafeObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
-
-    virtual void load() override;
-
-    virtual bool show() override;
-
-protected:
-    explicit InterstitialAd(const Logger& logger, Bridge* plugin,
-                            const std::string& placementId);
+    virtual Task<bool> load() override;
+    virtual Task<bool> show() override;
 
 private:
     friend Bridge;
 
+    explicit InterstitialAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        Bridge* plugin, const std::string& adId);
+
+    void onLoaded();
+    void onFailedToLoad(const std::string& message);
+    void onFailedToShow(const std::string& message);
+    void onClicked();
+    void onClosed();
+
     const Logger& logger_;
+    std::shared_ptr<ads::IAsyncHelper<bool>> displayer_;
     Bridge* plugin_;
-    std::string placementId_;
+    std::string adId_;
+
+    std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace iron_source
 } // namespace ee

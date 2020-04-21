@@ -36,6 +36,9 @@ class IObserverManager;
 template <class Observer>
 class ObserverManager;
 
+template <class Observer>
+class SafeObserverManager;
+
 #if defined(EE_X_ANDROID)
 class JniUtils;
 #endif // EE_X_ANDROID
@@ -49,6 +52,7 @@ using core::MessageBridge;
 using core::PluginManager;
 using core::ScopeGuard;
 using core::ServiceLocator;
+using core::SpinLock;
 using core::VideoPlayer;
 using core::VideoPlayerManager;
 
@@ -57,6 +61,7 @@ using core::ObserverHandle;
 
 using core::IObserverManager;
 using core::ObserverManager;
+using core::SafeObserverManager;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

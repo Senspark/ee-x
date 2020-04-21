@@ -12,6 +12,8 @@
 #include <ui/CocosGUI.h>
 
 #include <ee/Ads.hpp>
+#include <ee/Cocos.hpp>
+#include <ee/Coroutine.hpp>
 
 namespace eetest {
 using Self = NativeAdTestScene;
@@ -54,8 +56,11 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     auto loadButton = createButton();
     loadButton->setNormalizedPosition(cocos2d::Vec2(0.4f, 0.6f));
     loadButton->setTitleText("LOAD");
-    loadButton->addClickEventListener(
-        std::bind([this] { ee::runOnUiThread([this] { adView_->load(); }); }));
+    loadButton->addClickEventListener(std::bind([this] {
+        ee::runOnUiThread(ee::makeAwaiter([this]() -> ee::Task<> { //
+            co_await adView_->load();
+        }));
+    }));
     addChild(loadButton);
 
     auto resizeButton = createButton();
@@ -76,8 +81,7 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
                     auto deltaYInPixels =
                         ee::Metrics::fromPoint(delta.y).toPixel();
                     ee::runOnUiThread([this, deltaXInPixels, deltaYInPixels] {
-                        int width, height;
-                        std::tie(width, height) = adView_->getSize();
+                        auto [width, height] = adView_->getSize();
                         adView_->setSize(
                             width + static_cast<int>(deltaXInPixels),
                             height - static_cast<int>(deltaYInPixels));
@@ -93,15 +97,21 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     auto showButton = createButton();
     showButton->setNormalizedPosition(cocos2d::Vec2(0.4f, 0.4f));
     showButton->setTitleText("SHOW");
-    showButton->addClickEventListener(std::bind(
-        [this] { ee::runOnUiThread([this] { adView_->setVisible(true); }); }));
+    showButton->addClickEventListener(std::bind([this] {
+        ee::runOnUiThread([this] { //
+            adView_->setVisible(true);
+        });
+    }));
     addChild(showButton);
 
     auto hideButton = createButton();
     hideButton->setNormalizedPosition(cocos2d::Vec2(0.6f, 0.4f));
     hideButton->setTitleText("HIDE");
-    hideButton->addClickEventListener(std::bind(
-        [this] { ee::runOnUiThread([this] { adView_->setVisible(false); }); }));
+    hideButton->addClickEventListener(std::bind([this] {
+        ee::runOnUiThread([this] { //
+            adView_->setVisible(false);
+        });
+    }));
     addChild(hideButton);
 
     auto moveTopLeftButton = createButton();
@@ -158,8 +168,7 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
             auto deltaXInPixels = ee::Metrics::fromPoint(deltaX).toPixel();
             auto deltaYInPixels = ee::Metrics::fromPoint(deltaY).toPixel();
             ee::runOnUiThread([this, deltaXInPixels, deltaYInPixels] {
-                int x, y;
-                std::tie(x, y) = adView_->getPosition();
+                auto [x, y] = adView_->getPosition();
                 adView_->setPosition(x + static_cast<int>(deltaXInPixels),
                                      y - static_cast<int>(deltaYInPixels));
             });

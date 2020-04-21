@@ -14,7 +14,7 @@
 namespace ee {
 namespace app_lovin {
 class Bridge;
-class RewardedVideo;
+class RewardedAd;
 } // namespace app_lovin
 
 using AppLovin = app_lovin::Bridge;

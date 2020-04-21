@@ -21,7 +21,7 @@ class Bridge final {
 public:
     Bridge();
     ~Bridge();
-    
+
     /// Constructs an AdMob bridge with a custom logger.
     explicit Bridge(const Logger& logger);
 
@@ -49,28 +49,36 @@ public:
                                             const std::string& layoutName,
                                             const NativeAdLayout& identifiers);
 
+    /// Creates an interstitial ad.
+    /// @param[in] adId The ad unit ID.
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId);
 
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& adId);
+    /// Creates an rewarded ad.
+    /// @param[in] adId The ad unit ID.
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
     friend BannerAd;
     friend NativeAd;
     friend InterstitialAd;
-    friend RewardedVideo;
+    friend RewardedAd;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
-    bool destroyRewardedVideo(const std::string& adId);
-
-    bool loading_;
+    bool destroyRewardedAd(const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
+
+    std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
+    std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
+    std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
+    std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
+
+    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace admob
 } // namespace ee

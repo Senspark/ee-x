@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_FACEBOOK_ADS_FWD_HPP_
-#define EE_X_FACEBOOK_ADS_FWD_HPP_
+#ifndef EE_X_FACEBOOK_ADS_FWD_HPP
+#define EE_X_FACEBOOK_ADS_FWD_HPP
 
 #include <ee/AdsFwd.hpp>
 
@@ -20,7 +20,7 @@ class BannerAd;
 class NativeAd;
 class NativeAdLayout;
 class InterstitialAd;
-class RewardedVideo;
+class RewardedAd;
 } // namespace facebook_ads
 
 using FacebookAds = facebook_ads::Bridge;
@@ -28,4 +28,4 @@ using FacebookBannerAdSize = facebook_ads::BannerAdSize;
 using FacebookNativeAdLayout = facebook_ads::NativeAdLayout;
 } // namespace ee
 
-#endif /* EE_X_FACEBOOK_ADS_FWD_HPP_ */
+#endif /* EE_X_FACEBOOK_ADS_FWD_HPP */

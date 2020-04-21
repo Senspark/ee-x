@@ -13,12 +13,12 @@
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/ads/internal/EEIAdView.h"
+#import "ee/ads/internal/EEMessageHelper.h"
 
 @interface EEAdViewHelper () {
     id<EEIMessageBridge> bridge_;
-    NSString* prefix_;
-    NSString* adId_;
     id<EEIAdView> view_;
+    EEMessageHelper* helper_;
 }
 
 @end
@@ -27,72 +27,36 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          view:(id<EEIAdView> _Nonnull)view
-                       prefix:(NSString* _Nonnull)prefix
-                         adId:(NSString* _Nonnull)adId {
+                       helper:(EEMessageHelper* _Nonnull)helper {
     self = [super init];
     if (self == nil) {
         return self;
     }
     bridge_ = bridge;
     view_ = view;
-    prefix_ = [prefix copy];
-    adId_ = [adId copy];
+    helper_ = [helper retain];
     return self;
 }
 
 - (void)dealloc {
-    [prefix_ release];
-    prefix_ = nil;
-    [adId_ release];
-    adId_ = nil;
+    [helper_ release];
+    helper_ = nil;
     [super dealloc];
 }
 
-- (NSString* _Nonnull)k__isLoaded {
-    return [NSString stringWithFormat:@"%@_isLoaded_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__load {
-    return [NSString stringWithFormat:@"%@_load_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__getPosition {
-    return [NSString stringWithFormat:@"%@_getPosition_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__setPosition {
-    return [NSString stringWithFormat:@"%@_setPosition_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__getSize {
-    return [NSString stringWithFormat:@"%@_getSize_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__setSize {
-    return [NSString stringWithFormat:@"%@_setSize_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__isVisible {
-    return [NSString stringWithFormat:@"%@_isVisible_%@", prefix_, adId_];
-}
-
-- (NSString* _Nonnull)k__setVisible {
-    return [NSString stringWithFormat:@"%@_setVisible_%@", prefix_, adId_];
-}
-
 - (void)registerHandlers {
-    [bridge_ registerHandler:[self k__isLoaded]
+    [bridge_ registerHandler:[helper_ isLoaded]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[view_ isLoaded]];
                     }];
 
-    [bridge_ registerHandler:[self k__load]
+    [bridge_ registerHandler:[helper_ load]
                     callback:^(NSString* message) {
                         [view_ load];
                         return @"";
                     }];
 
-    [bridge_ registerHandler:[self k__getPosition]
+    [bridge_ registerHandler:[helper_ getPosition]
                     callback:^(NSString* message) {
                         CGPoint position = [view_ getPosition];
                         NSMutableDictionary* dict =
@@ -102,7 +66,7 @@
                         return [EEJsonUtils convertDictionaryToString:dict];
                     }];
 
-    [bridge_ registerHandler:[self k__setPosition]
+    [bridge_ registerHandler:[helper_ setPosition]
                     callback:^(NSString* message) {
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
@@ -112,7 +76,7 @@
                         return @"";
                     }];
 
-    [bridge_ registerHandler:[self k__getSize]
+    [bridge_ registerHandler:[helper_ getSize]
                     callback:^(NSString* message) {
                         CGSize size = [view_ getSize];
                         NSMutableDictionary* dict =
@@ -122,7 +86,7 @@
                         return [EEJsonUtils convertDictionaryToString:dict];
                     }];
 
-    [bridge_ registerHandler:[self k__setSize]
+    [bridge_ registerHandler:[helper_ setSize]
                     callback:^(NSString* message) {
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
@@ -132,12 +96,12 @@
                         return @"";
                     }];
 
-    [bridge_ registerHandler:[self k__isVisible]
+    [bridge_ registerHandler:[helper_ isVisible]
                     callback:^(NSString* message) {
                         return [EEUtils toString:[view_ isVisible]];
                     }];
 
-    [bridge_ registerHandler:[self k__setVisible]
+    [bridge_ registerHandler:[helper_ setVisible]
                     callback:^(NSString* message) {
                         [view_ setVisible:[EEUtils toBool:message]];
                         return @"";
@@ -145,14 +109,14 @@
 }
 
 - (void)deregisterHandlers {
-    [bridge_ deregisterHandler:[self k__isLoaded]];
-    [bridge_ deregisterHandler:[self k__load]];
-    [bridge_ deregisterHandler:[self k__getPosition]];
-    [bridge_ deregisterHandler:[self k__setPosition]];
-    [bridge_ deregisterHandler:[self k__getSize]];
-    [bridge_ deregisterHandler:[self k__setSize]];
-    [bridge_ deregisterHandler:[self k__isVisible]];
-    [bridge_ deregisterHandler:[self k__setVisible]];
+    [bridge_ deregisterHandler:[helper_ isLoaded]];
+    [bridge_ deregisterHandler:[helper_ load]];
+    [bridge_ deregisterHandler:[helper_ getPosition]];
+    [bridge_ deregisterHandler:[helper_ setPosition]];
+    [bridge_ deregisterHandler:[helper_ getSize]];
+    [bridge_ deregisterHandler:[helper_ setSize]];
+    [bridge_ deregisterHandler:[helper_ isVisible]];
+    [bridge_ deregisterHandler:[helper_ setVisible]];
 }
 
 @end

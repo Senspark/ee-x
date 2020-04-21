@@ -14,25 +14,27 @@
 #include <utility>
 #include <vector>
 
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class MultiAdView : public IAdView,
+                    public SafeObserverManager<IAdViewObserver> {
 private:
     using Self = MultiAdView;
 
 public:
     MultiAdView();
-
     virtual ~MultiAdView() override;
 
     Self& addItem(const std::shared_ptr<IAdView>& item);
 
+    virtual void destroy() override;
+
     virtual bool isLoaded() const override;
-    virtual void load() override;
+    virtual Task<bool> load() override;
 
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;

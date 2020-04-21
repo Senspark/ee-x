@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.ads.AdViewHelper;
 import com.ee.ads.IAdView;
+import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
@@ -34,6 +35,8 @@ import com.facebook.ads.NativeAdListener;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 10/9/17.
  */
@@ -48,23 +51,24 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     private static final String k__title = "title";
     private static final String k__cover = "cover";
 
-    private static final String k__tag = "FacebookNativeAd";
-
     private static final Logger _logger = new Logger(FacebookNativeAd.class.getName());
 
-    private IMessageBridge _bridge;
-    private NativeAd _nativeAd;
-    private View _nativeAdView;
-    private boolean _isAdLoaded;
     private Context _context;
     private Activity _activity;
+    private IMessageBridge _bridge;
     private String _adId;
     private String _layoutName;
     private Map<String, String> _identifiers;
+    private MessageHelper _messageHelper;
     private AdViewHelper _helper;
     private ViewHelper _viewHelper;
+    private boolean _isLoaded;
+    private NativeAd _ad;
+    private View _view;
 
-    public FacebookNativeAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
+                     @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -72,7 +76,8 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
-        _helper = new AdViewHelper(_bridge, this, k__tag, adId);
+        _messageHelper = new MessageHelper("FacebookNativeAd", adId);
+        _helper = new AdViewHelper(_bridge, this, _messageHelper);
 
         createInternalAd();
         createView();
@@ -85,13 +90,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     void onDestroy(@NonNull Activity activity) {
-        assert _activity == activity;
+        assertThat(_activity).isEqualTo(activity);
         removeFromActivity(activity);
         _activity = null;
     }
 
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyView();
@@ -101,36 +107,11 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         _adId = null;
         _layoutName = null;
         _identifiers = null;
+        _messageHelper = null;
         _helper = null;
     }
 
-    @NonNull
-    private String kCreateInternalAd() {
-        return k__tag + "_createInternalAd_" + _adId;
-    }
-
-    @NonNull
-    private String kDestroyInternalAd() {
-        return k__tag + "_destroyInternalAd_" + _adId;
-    }
-
-    @NonNull
-    private String kOnLoaded() {
-        return k__tag + "_onLoaded_" + _adId;
-    }
-
-    @NonNull
-    private String kOnFailedToLoad() {
-        return k__tag + "_onFailedToLoad_" + _adId;
-    }
-
-    @NonNull
-    private String kOnClicked() {
-        return k__tag + "_onClicked_" + _adId;
-    }
-
     private void registerHandlers() {
-        Utils.checkMainThread();
         _helper.registerHandlers();
 
         _bridge.registerHandler(new MessageHandler() {
@@ -139,7 +120,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
             public String handle(@NonNull String message) {
                 return Utils.toString(createInternalAd());
             }
-        }, kCreateInternalAd());
+        }, _messageHelper.createInternalAd());
 
         _bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -147,38 +128,35 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
             public String handle(@NonNull String message) {
                 return Utils.toString(destroyInternalAd());
             }
-        }, kDestroyInternalAd());
+        }, _messageHelper.destroyInternalAd());
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
         _helper.deregisterHandlers();
 
-        _bridge.deregisterHandler(kCreateInternalAd());
-        _bridge.deregisterHandler(kDestroyInternalAd());
+        _bridge.deregisterHandler(_messageHelper.createInternalAd());
+        _bridge.deregisterHandler(_messageHelper.destroyInternalAd());
     }
 
     private boolean createInternalAd() {
         Utils.checkMainThread();
-        if (_nativeAd != null) {
+        if (_ad != null) {
             return false;
         }
-        _isAdLoaded = false;
-        NativeAd nativeAd = new NativeAd(_context, _adId);
-        nativeAd.setAdListener(this);
-        _nativeAd = nativeAd;
+        _isLoaded = false;
+        _ad = new NativeAd(_context, _adId);
         return true;
     }
 
     private boolean destroyInternalAd() {
         Utils.checkMainThread();
-        if (_nativeAd == null) {
+        if (_ad == null) {
             return false;
         }
-        _isAdLoaded = false;
-        _nativeAd.unregisterView();
-        _nativeAd.destroy();
-        _nativeAd = null;
+        _isLoaded = false;
+        _ad.unregisterView();
+        _ad.destroy();
+        _ad = null;
         return true;
     }
 
@@ -188,12 +166,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         View nativeAdView = LayoutInflater.from(_context).inflate(layoutId, null, false);
         nativeAdView.setVisibility(View.INVISIBLE);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
         nativeAdView.setLayoutParams(params);
 
-        _nativeAdView = nativeAdView;
-        _viewHelper = new ViewHelper(_nativeAdView);
+        _view = nativeAdView;
+        _viewHelper = new ViewHelper(_view);
 
         if (_activity != null) {
             addToActivity(_activity);
@@ -206,31 +186,30 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
             removeFromActivity(_activity);
         }
         _viewHelper = null;
-        _nativeAdView = null;
+        _view = null;
     }
 
     private void addToActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.addView(_nativeAdView);
+        rootView.addView(_view);
     }
 
     private void removeFromActivity(@NonNull Activity activity) {
         FrameLayout rootView = Utils.getRootView(activity);
-        rootView.removeView(_nativeAdView);
+        rootView.removeView(_view);
     }
 
     @Override
     public boolean isLoaded() {
         Utils.checkMainThread();
-        return _nativeAd != null && _isAdLoaded;
+        assertThat(_ad).isNotNull();
+        return _isLoaded;
     }
 
     @Override
     public void load() {
         Utils.checkMainThread();
-        if (_nativeAd == null) {
-            return;
-        }
+        assertThat(_ad).isNotNull();
         _logger.info("load");
 
         ///
@@ -238,7 +217,10 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         /// the MediaView to play videos immediately after nativeAd finishes loading.
         /// https://developers.facebook.com/docs/audience-network/android-native#mediaview
         ///
-        _nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
+        _ad.loadAd(_ad.buildLoadAdConfig()
+            .withAdListener(this)
+            .withMediaCacheFlag(NativeAd.MediaCacheFlag.ALL)
+            .build());
     }
 
     @NonNull
@@ -305,77 +287,76 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
         Utils.checkMainThread();
-        _bridge.callCpp(kOnFailedToLoad(), adError.getErrorMessage());
+        _bridge.callCpp(_messageHelper.onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
         Utils.checkMainThread();
-        if (_nativeAd == null || _nativeAd != ad)
-            return;
+        assertThat(_ad == ad);
 
-        _nativeAd.unregisterView();
+        _ad.unregisterView();
 
-        processView(_nativeAdView, k__call_to_action, new ViewProcessor<Button>() {
+        processView(_view, k__call_to_action, new ViewProcessor<Button>() {
             @Override
             public void process(Button view) {
-                view.setVisibility(_nativeAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
-                view.setText(_nativeAd.getAdCallToAction());
+                view.setVisibility(_ad.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
+                view.setText(_ad.getAdCallToAction());
             }
         });
 
-        processView(_nativeAdView, k__title, new ViewProcessor<TextView>() {
+        processView(_view, k__title, new ViewProcessor<TextView>() {
             @Override
             public void process(TextView view) {
-                view.setText(_nativeAd.getAdvertiserName());
+                view.setText(_ad.getAdvertiserName());
             }
         });
 
-        processView(_nativeAdView, k__body, new ViewProcessor<TextView>() {
+        processView(_view, k__body, new ViewProcessor<TextView>() {
             @Override
             public void process(TextView view) {
-                view.setText(_nativeAd.getAdBodyText());
+                view.setText(_ad.getAdBodyText());
             }
         });
 
-        processView(_nativeAdView, k__social_context, new ViewProcessor<TextView>() {
+        processView(_view, k__social_context, new ViewProcessor<TextView>() {
             @Override
             public void process(TextView view) {
-                view.setText(_nativeAd.getAdSocialContext());
+                view.setText(_ad.getAdSocialContext());
             }
         });
 
-        processView(_nativeAdView, k__ad_choices, new ViewProcessor<LinearLayout>() {
+        processView(_view, k__ad_choices, new ViewProcessor<LinearLayout>() {
             @Override
             public void process(LinearLayout view) {
                 // Remove old icons.
                 view.removeAllViews();
 
                 // Add the AdChoices icon.
-                AdOptionsView adOptionsView = new AdOptionsView(_context, _nativeAd, null);
+                AdOptionsView adOptionsView = new AdOptionsView(_context, _ad, null);
                 view.addView(adOptionsView);
             }
         });
 
-        processView(_nativeAdView, k__media, new ViewProcessor<MediaView>() {
+        processView(_view, k__media, new ViewProcessor<MediaView>() {
             @Override
             public void process(MediaView mediaView) {
-                final Button callToAction = _nativeAdView.findViewById(getIdentifier(k__call_to_action));
-                final ImageView icon = _nativeAdView.findViewById(getIdentifier(k__icon));
-                _nativeAd.registerViewForInteraction(_nativeAdView, mediaView, icon, Arrays.asList(callToAction, mediaView));
+                final Button callToAction = _view.findViewById(getIdentifier(k__call_to_action));
+                final ImageView icon = _view.findViewById(getIdentifier(k__icon));
+                _ad.registerViewForInteraction(_view, mediaView, icon, Arrays.asList(callToAction, mediaView));
             }
         });
 
-        _isAdLoaded = true;
-        _bridge.callCpp(kOnLoaded());
+        _isLoaded = true;
+        _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
         Utils.checkMainThread();
-        _bridge.callCpp(kOnClicked());
+        _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override

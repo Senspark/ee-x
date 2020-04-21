@@ -16,9 +16,9 @@ ee::UnityAds* getUnityAds();
 
 std::string getUnityGameId();
 std::string getUnityInterstitialAdId();
-std::string getUnityRewardedVideoId();
+std::string getUnityRewardedAdId();
 
-void testUnityAdsRewardedVideo();
+void testUnityAdsRewardedAd();
 } // namespace eetest
 
 #endif /* EE_X_TEST_UNITY_ADS_HPP */

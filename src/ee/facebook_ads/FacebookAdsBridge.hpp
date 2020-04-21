@@ -51,28 +51,33 @@ public:
                                             const NativeAdLayout& identifiers);
 
     /// Creates an interstitial ad.
-    /// @param[in] placementId The ad placement ID>
+    /// @param[in] adId The ad placement ID>
     std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::string& placementId);
+    createInterstitialAd(const std::string& adId);
 
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& placementId);
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
     friend BannerAd;
     friend NativeAd;
     friend InterstitialAd;
-    friend RewardedVideo;
+    friend RewardedAd;
 
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
-    bool destroyInterstitialAd(const std::string& placementId);
-    bool destroyRewardVideoAd(const std::string& placementId);
-
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
+    bool destroyInterstitialAd(const std::string& adId);
+    bool destroyRewardedAd(const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
+
+    std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
+    std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
+    std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
+    std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
+
+    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

@@ -11,32 +11,34 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
+#import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 @interface EEAdMobNativeAd () <GADUnifiedNativeAdLoaderDelegate,
-                               GADUnifiedNativeAdDelegate> {
-    id<EEIMessageBridge> bridge_;
-    GADAdLoader* adLoader_;
-    NSString* adId_;
-    NSArray<GADAdLoaderAdType>* adTypes_;
-    UIView* nativeAdPlaceholder_;
-    GADUnifiedNativeAdView* nativeAdView_;
-    NSString* layoutName_;
-    BOOL isAdLoaded_;
-    EEAdViewHelper* helper_;
-    EEViewHelper* viewHelper_;
-}
-
+                               GADUnifiedNativeAdDelegate>
 @end
 
-@implementation EEAdMobNativeAd
+@implementation EEAdMobNativeAd {
+    id<EEIMessageBridge> bridge_;
+    NSString* adId_;
+    NSArray<GADAdLoaderAdType>* adTypes_;
+    NSString* layoutName_;
+    EEMessageHelper* messageHelper_;
+    EEAdViewHelper* helper_;
+    EEViewHelper* viewHelper_;
+    BOOL isLoaded_;
+    GADAdLoader* ad_;
+    UIView* view_;
+    GADUnifiedNativeAdView* nativeAd_;
+}
 
 - (id _Nullable)initWithBridge:(id<EEIMessageBridge>)bridge
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                         layout:(NSString* _Nonnull)layoutName {
+    NSAssert([EEUtils isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -45,11 +47,11 @@
     adId_ = [adId copy];
     adTypes_ = [adTypes copy];
     layoutName_ = [layoutName copy];
+    messageHelper_ =
+        [[EEMessageHelper alloc] initWithPrefix:@"AdMobNativeAd" adId:adId];
     helper_ = [[EEAdViewHelper alloc] initWithBridge:bridge_
                                                 view:self
-                                              prefix:@"AdMobNativeAd"
-                                                adId:adId];
-
+                                              helper:messageHelper_];
     [self createInternalAd];
     [self createView];
     [self registerHandlers];
@@ -57,6 +59,7 @@
 }
 
 - (void)destroy {
+    NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
     [self destroyView];
     [self destroyInternalAd];
@@ -67,24 +70,14 @@
     adTypes_ = nil;
     [layoutName_ release];
     layoutName_ = nil;
+    [messageHelper_ release];
+    messageHelper_ = nil;
     [helper_ release];
     helper_ = nil;
 }
 
 - (void)dealloc {
     [super dealloc];
-}
-
-- (NSString*)k__onLoaded {
-    return [@"AdMobNativeAd_onLoaded_" stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onFailedToLoad {
-    return [@"AdMobNativeAd_onFailedToLoad_" stringByAppendingString:adId_];
-}
-
-- (NSString*)k__onClicked {
-    return [@"AdMobNativeAd_onClicked_" stringByAppendingString:adId_];
 }
 
 - (void)registerHandlers {
@@ -96,45 +89,47 @@
 }
 
 - (BOOL)createInternalAd {
-    if (adLoader_ != nil) {
+    NSAssert([EEUtils isMainThread], @"");
+    if (ad_ != nil) {
         return NO;
     }
-    isAdLoaded_ = NO;
+    isLoaded_ = NO;
+
+    GADVideoOptions* options = [[[GADVideoOptions alloc] init] autorelease];
+    options.startMuted = YES;
+
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
-
-    GADVideoOptions* videoOptions = [[GADVideoOptions alloc] init];
-    videoOptions.startMuted = YES;
-
-    GADAdLoader* loader =
-        [[[GADAdLoader alloc] initWithAdUnitID:adId_
-                            rootViewController:rootView
-                                       adTypes:adTypes_
-                                       options:@[videoOptions]] autorelease];
-    [loader setDelegate:self];
-    adLoader_ = [loader retain];
+    ad_ = [[GADAdLoader alloc] initWithAdUnitID:adId_
+                             rootViewController:rootView
+                                        adTypes:adTypes_
+                                        options:@[options]];
+    [ad_ setDelegate:self];
     return YES;
 }
 
 - (BOOL)destroyInternalAd {
-    if (adLoader_ == nil) {
+    NSAssert([EEUtils isMainThread], @"");
+    if (ad_ == nil) {
         return NO;
     }
-    isAdLoaded_ = NO;
-    [adLoader_ release];
-    adLoader_ = nil;
+    isLoaded_ = NO;
+    [ad_ setDelegate:nil];
+    [ad_ release];
+    ad_ = nil;
     return YES;
 }
 
 - (void)createView {
-    NSAssert(nativeAdPlaceholder_ == nil, @"");
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(view_ == nil, @"");
     UIView* view = [[[UIView alloc] init] autorelease];
     [view setHidden:YES];
 
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [[rootView view] addSubview:view];
 
-    nativeAdPlaceholder_ = [view retain];
-    viewHelper_ = [[EEViewHelper alloc] initWithView:nativeAdPlaceholder_];
+    view_ = [view retain];
+    viewHelper_ = [[EEViewHelper alloc] initWithView:view_];
 
     NSArray* nibObjects =
         [[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil];
@@ -142,28 +137,27 @@
 }
 
 - (void)destroyView {
-    NSAssert(nativeAdPlaceholder_ != nil, @"");
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(view_ != nil, @"");
     [viewHelper_ release];
     viewHelper_ = nil;
-    [nativeAdPlaceholder_ removeFromSuperview];
-    [nativeAdPlaceholder_ release];
-    nativeAdPlaceholder_ = nil;
+    [view_ removeFromSuperview];
+    [view_ release];
+    view_ = nil;
 }
 
 - (BOOL)isLoaded {
-    if (adLoader_ == nil) {
-        return NO;
-    }
-    return isAdLoaded_;
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(ad_ != nil, @"");
+    return isLoaded_;
 }
 
 - (void)load {
-    if (adLoader_ == nil) {
-        return;
-    }
-    isAdLoaded_ = NO;
+    NSAssert([EEUtils isMainThread], @"");
+    NSAssert(ad_ != nil, @"");
+    isLoaded_ = NO;
     GADRequest* request = [GADRequest request];
-    [adLoader_ loadRequest:request];
+    [ad_ loadRequest:request];
 }
 
 - (CGPoint)getPosition {
@@ -189,24 +183,25 @@
 - (void)setVisible:(BOOL)visible {
     [viewHelper_ setVisible:visible];
     if (visible) {
-        for (UIView* subView in [nativeAdView_ subviews]) {
+        for (UIView* subView in [nativeAd_ subviews]) {
             [subView setNeedsDisplay];
         }
     }
 }
 
-#pragma mark GADAdLoaderDelegate implementation
+#pragma mark - GADAdLoaderDelegate implementation
 
 - (void)adLoader:(GADAdLoader*)adLoader
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    NSAssert(adLoader_ == adLoader, @"");
-    [bridge_ callCpp:[self k__onFailedToLoad] message:[error description]];
+    NSAssert(ad_ == adLoader, @"");
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
+             message:[error description]];
 }
 
 - (void)adLoaderDidFinishLoading:(GADAdLoader*)adLoader {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSAssert(adLoader_ == adLoader, @"");
+    NSAssert(ad_ == adLoader, @"");
 }
 
 /// Gets an image representing the number of stars. Returns nil if rating is
@@ -227,34 +222,31 @@
 }
 
 - (void)setAdView:(GADUnifiedNativeAdView* _Nonnull)view {
-    if (nativeAdView_ != nil) {
+    if (nativeAd_ != nil) {
         // Remove previous ad view.
-        [nativeAdView_ removeFromSuperview];
+        [nativeAd_ removeFromSuperview];
     }
-    nativeAdView_ = view;
+    nativeAd_ = view;
 
     // Add new ad view and set constraints to fill its container.
-    [nativeAdPlaceholder_ addSubview:view];
+    [view_ addSubview:view];
 
     [view setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSDictionary* viewDictionary =
-        NSDictionaryOfVariableBindings(nativeAdView_);
-    [nativeAdPlaceholder_
-        addConstraints:[NSLayoutConstraint
-                           constraintsWithVisualFormat:@"H:|[nativeAdView_]|"
-                                               options:0
-                                               metrics:nil
-                                                 views:viewDictionary]];
-    [nativeAdPlaceholder_
-        addConstraints:[NSLayoutConstraint
-                           constraintsWithVisualFormat:@"V:|[nativeAdView_]|"
-                                               options:0
-                                               metrics:nil
-                                                 views:viewDictionary]];
+    NSDictionary* viewDictionary = NSDictionaryOfVariableBindings(nativeAd_);
+    [view_ addConstraints:[NSLayoutConstraint
+                              constraintsWithVisualFormat:@"H:|[nativeAd_]|"
+                                                  options:0
+                                                  metrics:nil
+                                                    views:viewDictionary]];
+    [view_ addConstraints:[NSLayoutConstraint
+                              constraintsWithVisualFormat:@"V:|[nativeAd_]|"
+                                                  options:0
+                                                  metrics:nil
+                                                    views:viewDictionary]];
 }
 
-#pragma mark GADUnifiedNativeAdDelegate
+#pragma mark - GADUnifiedNativeAdDelegate
 
 // The native ad was shown.
 - (void)nativeAdDidRecordImpression:(GADUnifiedNativeAd*)nativeAd {
@@ -285,13 +277,14 @@
 // application.
 - (void)nativeAdWillLeaveApplication:(GADUnifiedNativeAd*)nativeAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:[self k__onClicked]];
+    [bridge_ callCpp:[messageHelper_ onClicked]];
 }
 
-#pragma mark GADUnifiedNativeAdLoaderDelegate implementation
+#pragma mark - GADUnifiedNativeAdLoaderDelegate implementation
+
 - (void)adLoader:(nonnull GADAdLoader*)adLoader
     didReceiveUnifiedNativeAd:(nonnull GADUnifiedNativeAd*)nativeAd {
-    GADUnifiedNativeAdView* nativeAdView = nativeAdView_;
+    GADUnifiedNativeAdView* nativeAdView = nativeAd_;
 
     nativeAdView.nativeAd = nativeAd;
 
@@ -333,8 +326,8 @@
     // should be disabled.
     nativeAdView.callToActionView.userInteractionEnabled = NO;
 
-    isAdLoaded_ = YES;
-    [bridge_ callCpp:[self k__onLoaded]];
+    isLoaded_ = YES;
+    [bridge_ callCpp:[messageHelper_ onLoaded]];
 }
 
 @end

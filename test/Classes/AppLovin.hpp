@@ -14,7 +14,7 @@
 namespace eetest {
 ee::AppLovin* getAppLovin();
 
-void testAppLovinRewardedVideo();
+void testAppLovinRewardedAd();
 } // namespace eetest
 
 #endif /* EE_X_TEST_APP_LOVIN_HPP */

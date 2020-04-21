@@ -102,7 +102,22 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
                    }];
     [bridge registerHandler:k__runOnUiThread
                    callback:^(NSString* message) {
-                       return [self toString:[self runOnMainThread]];
+                       return [self toString:[self runOnMainThread:^{
+                                        [self signalMainThread];
+                                    }]];
+                   }];
+
+    [bridge registerHandler:k__runOnUiThreadDelayed
+                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* tag = dict[@"callback_id"];
+                       float delay = [dict[@"delay_time"] floatValue];
+                       [self runOnMainThreadDelayed:delay
+                                           callback:^{
+                                               [bridge callCpp:tag];
+                                           }];
+                       return @"";
                    }];
 
     [bridge registerHandler:k__getSHA1CertificateFingerprint
@@ -159,21 +174,6 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
                            toString:[self testConnection:@"www.google.com"]];
                    }];
 
-    [bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
-        NSString* callbackTag = dict[@"callback_id"];
-        float delay = [dict[@"delay_time"] floatValue];
-
-        dispatch_time_t popTime =
-            dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            [bridge callCpp:callbackTag];
-        });
-
-        return @"";
-    }
-                        tag:k__runOnUiThreadDelayed];
-
     [bridge registerHandler:k__isInstantApp
                    callback:^(NSString* message) {
                        return @"false";
@@ -202,15 +202,24 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
     [bridge callCpp:k__runOnUiThreadCallback];
 }
 
-+ (BOOL)runOnMainThread {
++ (BOOL)runOnMainThread:(void (^_Nonnull)(void))callback {
     if ([self isMainThread]) {
-        [self signalMainThread];
+        callback();
         return YES;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self signalMainThread];
+        callback();
     });
     return NO;
+}
+
++ (void)runOnMainThreadDelayed:(float)seconds
+                      callback:(void (^_Nonnull)(void))callback {
+    dispatch_time_t popTime =
+        dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+        callback();
+    });
 }
 
 + (NSString* _Nonnull)getVersionName {

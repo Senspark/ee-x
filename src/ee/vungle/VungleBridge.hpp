@@ -14,34 +14,39 @@ public:
 
     explicit Bridge(const Logger& logger);
 
+    void destroy();
+
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);
 
     [[deprecated]] void initialize(const std::string& gameId,
-                                   const std::string& placementId);
+                                   const std::string& adId);
 
     /// Creates a rewarded video.
-    std::shared_ptr<IRewardedVideo>
-    createRewardedVideo(const std::string& placementId);
+    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
 
 private:
-    friend RewardedVideo;
+    friend RewardedAd;
 
-    bool destroyRewardedVideo(const std::string& placementId);
+    bool destroyRewardedAd(const std::string& adId);
 
-    void loadVideoAd(const std::string& placementId) const;
+    bool hasRewardedAd(const std::string& adId) const;
+    void loadRewardedAd(const std::string& adId) const;
+    void showRewardedAd(const std::string& adId);
 
-    bool hasRewardedVideo(const std::string& placementId) const;
-    bool showRewardedVideo(const std::string& placementId);
+    void onLoaded(const std::string& adId);
+    void onFailedToLoad(const std::string& adId, const std::string& message);
+    void onFailedToShow(const std::string& adId, const std::string& message);
+    void onClosed(const std::string& adId, bool rewarded);
 
-    void onStart();
-    void onEnd(bool wasSuccessfulView);
-    void onUnavailable();
+    void onMediationAdClosed(const std::string& adId, bool rewarded);
 
-    bool errored_;
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::map<std::string, RewardedVideo*> rewardedVideos_;
+
+    std::map<std::string, std::shared_ptr<RewardedAd>> rewardedAds_;
+
+    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
 } // namespace vungle
 } // namespace ee

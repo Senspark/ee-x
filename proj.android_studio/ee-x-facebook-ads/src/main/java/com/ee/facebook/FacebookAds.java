@@ -26,17 +26,18 @@ import static com.google.common.truth.Truth.assertThat;
  * Created by Pham Xuan Han on 17/05/17.
  */
 public class FacebookAds implements PluginProtocol {
-    private static final String k__getTestDeviceHash = "FacebookAds_getTestDeviceHash";
-    private static final String k__addTestDevice = "FacebookAds_addTestDevice";
-    private static final String k__clearTestDevices = "FacebookAds_clearTestDevices";
-    private static final String k__createBannerAd = "FacebookAds_createBannerAd";
-    private static final String k__destroyBannerAd = "FacebookAds_destroyBannerAd";
-    private static final String k__createNativeAd = "FacebookAds_createNativeAd";
-    private static final String k__destroyNativeAd = "FacebookAds_destroyNativeAd";
-    private static final String k__createInterstitialAd = "FacebookAds_createInterstitialAd";
-    private static final String k__destroyInterstitialAd = "FacebookAds_destroyInterstitialAd";
-    private static final String k__createRewardVideoAd = "FacebookAds_createRewardVideoAd";
-    private static final String k__destroyRewardVideoAd = "FacebookAds_destroyRewardVideoAd";
+    private static final String kPrefix = "FacebookAds";
+    private static final String k__getTestDeviceHash = kPrefix + "getTestDeviceHash";
+    private static final String k__addTestDevice = kPrefix + "addTestDevice";
+    private static final String k__clearTestDevices = kPrefix + "clearTestDevices";
+    private static final String k__createBannerAd = kPrefix + "createBannerAd";
+    private static final String k__destroyBannerAd = kPrefix + "destroyBannerAd";
+    private static final String k__createNativeAd = kPrefix + "createNativeAd";
+    private static final String k__destroyNativeAd = kPrefix + "destroyNativeAd";
+    private static final String k__createInterstitialAd = kPrefix + "createInterstitialAd";
+    private static final String k__destroyInterstitialAd = kPrefix + "destroyInterstitialAd";
+    private static final String k__createRewardedAd = kPrefix + "createRewardedAd";
+    private static final String k__destroyRewardedAd = kPrefix + "destroyRewardedAd";
 
     private static final String k__ad_id = "ad_id";
     private static final String k__ad_size = "ad_size";
@@ -49,7 +50,7 @@ public class FacebookAds implements PluginProtocol {
     private Map<String, FacebookBannerAd> _bannerAds;
     private Map<String, FacebookNativeAd> _nativeAds;
     private Map<String, FacebookInterstitialAd> _interstitialAds;
-    private Map<String, FacebookRewardedAd> _rewardVideoAds;
+    private Map<String, FacebookRewardedAd> _rewardedAds;
 
     public FacebookAds(Context context) {
         Utils.checkMainThread();
@@ -60,7 +61,7 @@ public class FacebookAds implements PluginProtocol {
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
-        _rewardVideoAds = new HashMap<>();
+        _rewardedAds = new HashMap<>();
 
         if (!AudienceNetworkAds.isInitialized(context)) {
             if (BuildConfig.DEBUG) {
@@ -141,11 +142,11 @@ public class FacebookAds implements PluginProtocol {
         _interstitialAds.clear();
         _interstitialAds = null;
 
-        for (String key : _rewardVideoAds.keySet()) {
-            _rewardVideoAds.get(key).destroy();
+        for (String key : _rewardedAds.keySet()) {
+            _rewardedAds.get(key).destroy();
         }
-        _rewardVideoAds.clear();
-        _rewardVideoAds = null;
+        _rewardedAds.clear();
+        _rewardedAds = null;
 
         _context = null;
         _bridge = null;
@@ -269,9 +270,9 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return Utils.toString(createRewardVideoAd(placementId));
+                return Utils.toString(createRewardedAd(placementId));
             }
-        }, k__createRewardVideoAd);
+        }, k__createRewardedAd);
 
         _bridge.registerHandler(new MessageHandler() {
             @SuppressWarnings("UnnecessaryLocalVariable")
@@ -279,9 +280,9 @@ public class FacebookAds implements PluginProtocol {
             @Override
             public String handle(@NonNull String message) {
                 String placementId = message;
-                return Utils.toString(destroyRewardVideoAd(placementId));
+                return Utils.toString(destroyRewardedAd(placementId));
             }
-        }, k__destroyRewardVideoAd);
+        }, k__destroyRewardedAd);
 
     }
 
@@ -295,6 +296,8 @@ public class FacebookAds implements PluginProtocol {
         _bridge.deregisterHandler(k__destroyNativeAd);
         _bridge.deregisterHandler(k__createInterstitialAd);
         _bridge.deregisterHandler(k__destroyInterstitialAd);
+        _bridge.deregisterHandler(k__createRewardedAd);
+        _bridge.deregisterHandler(k__destroyRewardedAd);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -387,25 +390,25 @@ public class FacebookAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    private boolean createRewardVideoAd(@NonNull String placementId) {
+    private boolean createRewardedAd(@NonNull String placementId) {
         Utils.checkMainThread();
-        if (_rewardVideoAds.containsKey(placementId)) {
+        if (_rewardedAds.containsKey(placementId)) {
             return false;
         }
         FacebookRewardedAd ad = new FacebookRewardedAd(_context, placementId);
-        _rewardVideoAds.put(placementId, ad);
+        _rewardedAds.put(placementId, ad);
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean destroyRewardVideoAd(@NonNull String placementId) {
+    public boolean destroyRewardedAd(@NonNull String placementId) {
         Utils.checkMainThread();
-        if (!_rewardVideoAds.containsKey(placementId)) {
+        if (!_rewardedAds.containsKey(placementId)) {
             return false;
         }
-        FacebookRewardedAd ad = _rewardVideoAds.get(placementId);
+        FacebookRewardedAd ad = _rewardedAds.get(placementId);
         ad.destroy();
-        _rewardVideoAds.remove(placementId);
+        _rewardedAds.remove(placementId);
         return true;
     }
 }

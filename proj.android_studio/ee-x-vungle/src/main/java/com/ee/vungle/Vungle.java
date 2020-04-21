@@ -17,6 +17,7 @@ import com.vungle.warren.AdConfig;
 import com.vungle.warren.InitCallback;
 import com.vungle.warren.LoadAdCallback;
 import com.vungle.warren.PlayAdCallback;
+import com.vungle.warren.error.VungleException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -182,7 +183,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(VungleException throwable) {
                 _logger.info("vunglePub.init onFailure");
                 _initializing = false;
             }
@@ -210,7 +211,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(String adId, Throwable throwable) {
+            public void onError(String adId, VungleException throwable) {
                 _logger.info("onUnableToPlayAd: " + adId);
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
@@ -229,7 +230,7 @@ public class Vungle implements PluginProtocol {
             }
 
             @Override
-            public void onError(String adId, Throwable throwable) {
+            public void onError(String adId, VungleException throwable) {
                 _logger.info("onAdLoadError: " + adId + " reason: " + throwable.getMessage());
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);

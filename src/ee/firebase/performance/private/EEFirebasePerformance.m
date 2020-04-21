@@ -37,7 +37,7 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
         return self;
     }
 
-    [FIRApp configure];
+//    [FIRApp configure];
 
     traces_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];

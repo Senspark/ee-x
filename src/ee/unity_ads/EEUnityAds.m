@@ -148,7 +148,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 
 - (void)unityAdsReady:(NSString*)adId {
     NSLog(@"%s: adId = %@", __PRETTY_FUNCTION__, adId);
-    [bridge_ callCpp:k__onFailedToShow message:adId];
+    [bridge_ callCpp:k__onLoaded message:adId];
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {

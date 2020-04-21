@@ -29,14 +29,14 @@ Self::RewardedAd(
     , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 }
 
 Self::~RewardedAd() {}
 
 void Self::destroy() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     plugin_->destroyRewardedAd(adId_);
 }
 
@@ -45,7 +45,8 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     auto result = co_await loader_->process(
         [this] { //
@@ -58,7 +59,9 @@ Task<bool> Self::load() {
 }
 
 Task<IRewardedAdResult> Self::show() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd(adId_);
@@ -70,11 +73,14 @@ Task<IRewardedAdResult> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
     dispatchEvent([&](auto&& observer) {
@@ -85,35 +91,44 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
-                  core::toString(loader_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s loading = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(loader_->isProcessing()).c_str(),
+                  message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: message = %s displaying = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s displaying = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  message.c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(IRewardedAdResult::Failed);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
-                  core::toString(rewarded).c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s displaying = %s rewarded = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }

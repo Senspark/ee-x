@@ -76,6 +76,8 @@ void Self::onLoaded() {
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
     dispatchEvent([&](auto&& observer) {
@@ -86,23 +88,29 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: adId = %s message = %s loading = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
-                  core::toString(loader_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s loading = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(loader_->isProcessing()).c_str(),
+                  message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: adId = %s message = %s displaying = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s displaying = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  message.c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(false);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
@@ -123,6 +131,8 @@ void Self::onClosed() {
     if (displayer_->isProcessing()) {
         displayer_->resolve(true);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }

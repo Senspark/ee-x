@@ -54,7 +54,8 @@ Task<bool> Self::load() {
 }
 
 Task<IRewardedAdResult> Self::show() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+                  core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd();
@@ -71,6 +72,8 @@ void Self::onLoaded() {
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
     dispatchEvent([](auto&& observer) {
@@ -81,12 +84,14 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: message = %s loading = %s", __PRETTY_FUNCTION__,
-                  message.c_str(),
-                  core::toString(loader_->isProcessing()).c_str());
+    logger_.debug("%s: loading = %s message = %s", __PRETTY_FUNCTION__,
+                  core::toString(loader_->isProcessing()).c_str(),
+                  message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
+        logger_.error("%s: this ad is expected to be loading",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
@@ -101,13 +106,15 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s: rewarded = %s displaying = %s", __PRETTY_FUNCTION__,
-                  core::toString(rewarded).c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+    logger_.debug("%s: displaying = %s rewarded = %s", __PRETTY_FUNCTION__,
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }

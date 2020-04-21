@@ -106,9 +106,9 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to create an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     auto ad =
         std::shared_ptr<IAdView>(new BannerAd(bridge_, logger_, this, adId));
@@ -128,9 +128,9 @@ bool Self::destroyBannerAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     bannerAds_.erase(iter);
     return true;
@@ -154,9 +154,9 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to create an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     auto ad =
         std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId));
@@ -176,9 +176,9 @@ bool Self::destroyNativeAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     nativeAds_.erase(iter);
     return true;
@@ -197,9 +197,9 @@ Self::createInterstitialAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to create an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     auto ad = std::shared_ptr<IInterstitialAd>(new InterstitialAd(
         bridge_, logger_, interstitialAdDisplayer_, this, adId));
@@ -219,9 +219,9 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     interstitialAds_.erase(iter);
     return true;
@@ -239,9 +239,9 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to create an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     auto ad = std::shared_ptr<IRewardedAd>(
         new RewardedAd(bridge_, logger_, rewardedAdDisplayer_, this, adId));
@@ -261,9 +261,9 @@ bool Self::destroyRewardedAd(const std::string& adId) {
             // OK.
             return;
         }
-        assert(false);
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
+        assert(false);
     });
     rewardedAds_.erase(iter);
     return true;

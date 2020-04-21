@@ -72,25 +72,30 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: adId = %s message = %s displaying = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(), message.c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+    logger_.debug("%s: adId = %s displaying = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  message.c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(IRewardedAdResult::Failed);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s: adId = %s rewarded = %s displaying = %s",
+    logger_.debug("%s: adId = %s displaying = %s rewarded = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),
-                  core::toString(rewarded).c_str(),
-                  core::toString(displayer_->isProcessing()).c_str());
+                  core::toString(displayer_->isProcessing()).c_str(),
+                  core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
         displayer_->resolve(rewarded ? IRewardedAdResult::Completed
                                      : IRewardedAdResult::Canceled);
     } else {
+        logger_.error("%s: this ad is expected to be displaying",
+                      __PRETTY_FUNCTION__);
         assert(false);
     }
 }

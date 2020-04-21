@@ -143,7 +143,7 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
-    logger_.debug("%s: placementId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter == rewardedAds_.cend()) {
         return false;

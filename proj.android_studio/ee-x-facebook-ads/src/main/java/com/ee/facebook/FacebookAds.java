@@ -249,8 +249,8 @@ public class FacebookAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(createInterstitialAd(adId));
             }
         }, k__createInterstitialAd);
 
@@ -259,8 +259,8 @@ public class FacebookAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyInterstitialAd(adId));
             }
         }, k__destroyInterstitialAd);
 
@@ -269,8 +269,8 @@ public class FacebookAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(createRewardedAd(adId));
             }
         }, k__createRewardedAd);
 
@@ -279,8 +279,8 @@ public class FacebookAds implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyRewardedAd(adId));
             }
         }, k__destroyRewardedAd);
 
@@ -367,48 +367,48 @@ public class FacebookAds implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    private boolean createInterstitialAd(@NonNull String placementId) {
+    private boolean createInterstitialAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (_interstitialAds.containsKey(placementId)) {
+        if (_interstitialAds.containsKey(adId)) {
             return false;
         }
-        FacebookInterstitialAd ad = new FacebookInterstitialAd(_context, placementId);
-        _interstitialAds.put(placementId, ad);
+        FacebookInterstitialAd ad = new FacebookInterstitialAd(_context, adId);
+        _interstitialAds.put(adId, ad);
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean destroyInterstitialAd(@NonNull String placementId) {
+    public boolean destroyInterstitialAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (!_interstitialAds.containsKey(placementId)) {
+        if (!_interstitialAds.containsKey(adId)) {
             return false;
         }
-        FacebookInterstitialAd ad = _interstitialAds.get(placementId);
+        FacebookInterstitialAd ad = _interstitialAds.get(adId);
         ad.destroy();
-        _interstitialAds.remove(placementId);
+        _interstitialAds.remove(adId);
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
-    private boolean createRewardedAd(@NonNull String placementId) {
+    private boolean createRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (_rewardedAds.containsKey(placementId)) {
+        if (_rewardedAds.containsKey(adId)) {
             return false;
         }
-        FacebookRewardedAd ad = new FacebookRewardedAd(_context, placementId);
-        _rewardedAds.put(placementId, ad);
+        FacebookRewardedAd ad = new FacebookRewardedAd(_context, adId);
+        _rewardedAds.put(adId, ad);
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean destroyRewardedAd(@NonNull String placementId) {
+    public boolean destroyRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
-        if (!_rewardedAds.containsKey(placementId)) {
+        if (!_rewardedAds.containsKey(adId)) {
             return false;
         }
-        FacebookRewardedAd ad = _rewardedAds.get(placementId);
+        FacebookRewardedAd ad = _rewardedAds.get(adId);
         ad.destroy();
-        _rewardedAds.remove(placementId);
+        _rewardedAds.remove(adId);
         return true;
     }
 }

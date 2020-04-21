@@ -256,8 +256,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(createInterstitialAd(adId));
             }
         }, k__createInterstitialAd);
 
@@ -266,8 +266,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyInterstitialAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyInterstitialAd(adId));
             }
         }, k__destroyInterstitialAd);
 
@@ -276,8 +276,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(createRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(createRewardedAd(adId));
             }
         }, k__createRewardedAd);
 
@@ -286,8 +286,8 @@ public class AdMob implements PluginProtocol {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                String placementId = message;
-                return Utils.toString(destroyRewardedAd(placementId));
+                String adId = message;
+                return Utils.toString(destroyRewardedAd(adId));
             }
         }, k__destroyRewardedAd);
     }

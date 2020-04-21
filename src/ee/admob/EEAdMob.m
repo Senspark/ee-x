@@ -149,30 +149,28 @@ static NSString* const k__layout_name           = @"layout_name";
 
     [bridge_ registerHandler:k__createInterstitialAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self createInterstitialAd:placementId]];
+                        NSString* adId = message;
+                        return
+                            [EEUtils toString:[self createInterstitialAd:adId]];
                     }];
 
-    [bridge_ registerHandler:k__destroyInterstitialAd
-                    callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self destroyInterstitialAd:placementId]];
-                    }];
+    [bridge_
+        registerHandler:k__destroyInterstitialAd
+               callback:^(NSString* message) {
+                   NSString* adId = message;
+                   return [EEUtils toString:[self destroyInterstitialAd:adId]];
+               }];
 
     [bridge_ registerHandler:k__createRewardedAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self createRewardedAd:placementId]];
+                        NSString* adId = message;
+                        return [EEUtils toString:[self createRewardedAd:adId]];
                     }];
 
     [bridge_ registerHandler:k__destroyRewardedAd
                     callback:^(NSString* message) {
-                        NSString* placementId = message;
-                        return [EEUtils
-                            toString:[self destroyRewardedAd:placementId]];
+                        NSString* adId = message;
+                        return [EEUtils toString:[self destroyRewardedAd:adId]];
                     }];
 }
 

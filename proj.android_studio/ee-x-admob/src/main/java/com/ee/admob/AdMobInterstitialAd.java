@@ -33,6 +33,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     private InterstitialAd _ad;
 
     AdMobInterstitialAd(@NonNull Context context, @NonNull String adId) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _bridge = MessageBridge.getInstance();
@@ -44,7 +45,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     }
 
     void destroy() {
-        _logger.info("destroy: id = " + _adId);
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();

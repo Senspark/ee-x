@@ -30,6 +30,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     private boolean _rewarded;
 
     FacebookRewardedAd(@NonNull Context context, @NonNull String adId) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _bridge = MessageBridge.getInstance();
@@ -40,6 +41,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     void destroy() {
+        _logger.info("destroy: adId = %s", _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();

@@ -68,6 +68,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
                      @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -96,6 +97,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyView();

@@ -34,6 +34,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     private InterstitialAd _ad;
 
     FacebookInterstitialAd(@NonNull Context context, @NonNull String adId) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _bridge = MessageBridge.getInstance();
@@ -45,6 +46,7 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     }
 
     void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();

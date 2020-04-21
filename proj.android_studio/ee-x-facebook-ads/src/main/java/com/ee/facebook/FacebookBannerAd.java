@@ -63,6 +63,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     FacebookBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -88,6 +89,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();

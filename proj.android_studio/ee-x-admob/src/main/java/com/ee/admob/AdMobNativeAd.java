@@ -71,6 +71,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     AdMobNativeAd(@NonNull Context context, @Nullable Activity activity,
                   @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -98,6 +99,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     void destroy() {
+        _logger.info("destroy: adId = " + _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyView();

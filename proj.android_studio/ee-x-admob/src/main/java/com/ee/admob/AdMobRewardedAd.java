@@ -35,6 +35,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
     private RewardedAd _ad;
 
     AdMobRewardedAd(@NonNull Activity activity, @NonNull Context context, @NonNull String adId) {
+        _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
@@ -46,7 +47,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
     }
 
     void destroy() {
-        _logger.info("destroy: id = " + _adId);
+        _logger.info("destroy: adId = %s", _adId);
         Utils.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();

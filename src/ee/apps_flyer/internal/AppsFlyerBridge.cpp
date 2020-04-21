@@ -60,7 +60,9 @@ void Self::initialize(const std::string& devKey, const std::string& appId) {
 }
 
 void Self::startTracking() {
-    bridge_.call(kStartTracking);
+    runOnUiThread([this] { //
+        bridge_.call(kStartTracking);
+    });
 }
 
 std::string Self::getDeviceId() const {
@@ -68,19 +70,25 @@ std::string Self::getDeviceId() const {
 }
 
 void Self::setDebugEnabled(bool enabled) {
-    bridge_.call(kSetDebugEnabled, core::toString(enabled));
+    runOnUiThread([this, enabled] {
+        bridge_.call(kSetDebugEnabled, core::toString(enabled));
+    });
 }
 
 void Self::setStopTracking(bool enabled) {
-    bridge_.call(kSetStopTracking, core::toString(enabled));
+    runOnUiThread([this, enabled] {
+        bridge_.call(kSetStopTracking, core::toString(enabled));
+    });
 }
 
 void Self::trackEvent(const std::string& name,
                       const std::map<std::string, std::string>& values) {
-    nlohmann::json json;
-    json["name"] = name;
-    json["values"] = values;
-    bridge_.call(kTrackEvent, json.dump());
+    runOnUiThread([this, name, values] {
+        nlohmann::json json;
+        json["name"] = name;
+        json["values"] = values;
+        bridge_.call(kTrackEvent, json.dump());
+    });
 }
 } // namespace apps_flyer
 } // namespace ee

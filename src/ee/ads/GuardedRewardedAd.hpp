@@ -1,14 +1,14 @@
 #ifndef EE_X_GUARDED_REWARDED_AD_HPP
 #define EE_X_GUARDED_REWARDED_AD_HPP
 
-#include <ee/core/ObserverManager.hpp>
+#include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IRewardedAd.hpp"
 
 namespace ee {
 namespace ads {
 class GuardedRewardedAd : public IRewardedAd,
-                          public ObserverManager<IRewardedAdObserver> {
+                          public SafeObserverManager<IRewardedAdObserver> {
 public:
     explicit GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad);
     virtual ~GuardedRewardedAd() override;

@@ -157,6 +157,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
     }
 
     private void show() {
+        _logger.info("show");
         Utils.checkMainThread();
         assertThat(_ad).isNotNull();
         _ad.show(_activity, this);

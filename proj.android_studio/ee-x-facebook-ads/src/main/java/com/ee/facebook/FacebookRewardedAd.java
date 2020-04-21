@@ -128,11 +128,13 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     private void load() {
+        _logger.info("load");
         Utils.checkMainThread();
         _ad.loadAd(_ad.buildLoadAdConfig().withAdListener(this).build());
     }
 
     private void show() {
+        _logger.info("show");
         Utils.checkMainThread();
         _rewarded = false;
         boolean result = _ad.show(_ad.buildShowAdConfig().build());
@@ -145,30 +147,36 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
 
     @Override
     public void onRewardedVideoCompleted() {
+        _logger.info("onRewardedVideoCompleted");
         _rewarded = true;
     }
 
     @Override
     public void onRewardedVideoClosed() {
+        _logger.info("onRewardedVideoClosed");
         _bridge.callCpp(_messageHelper.onClosed(), Utils.toString(_rewarded));
     }
 
     @Override
     public void onAdClicked(Ad ad) {
+        _logger.info("onAdClicked");
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onError(Ad ad, AdError adError) {
+        _logger.info("onError");
         _bridge.callCpp(_messageHelper.onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
+        _logger.info("onAdLoaded");
         _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override
     public void onLoggingImpression(Ad ad) {
+        _logger.info("onLoggingImpression");
     }
 }

@@ -6,15 +6,16 @@
 //
 //
 
-#ifndef EE_LIBRARY_DYNAMIC_VALUE_HPP_
-#define EE_LIBRARY_DYNAMIC_VALUE_HPP_
+#ifndef EE_X_DYNAMIC_VALUE_HPP
+#define EE_X_DYNAMIC_VALUE_HPP
 
 #include <cstdint>
 #include <memory>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
+namespace core {
 namespace detail {
 template <class T, std::size_t Size = sizeof(T)>
 struct dynamic_value_storage;
@@ -88,6 +89,7 @@ private:
     std::unique_ptr<storage_type> value_;
     std::unique_ptr<storage_type> random_;
 };
+} // namespace core
 } // namespace ee
 
-#endif /* EE_LIBRARY_DYNAMIC_VALUE_HPP_ */
+#endif /* EE_X_DYNAMIC_VALUE_HPP */

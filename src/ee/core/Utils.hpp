@@ -12,6 +12,7 @@
 #include <cstdarg>
 #include <functional>
 #include <future>
+#include <random>
 #include <string>
 
 #include "ee/CoreFwd.hpp"
@@ -34,6 +35,40 @@ bool toBool(const std::string& value);
 /// http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 std::string format(std::string formatString, ...);
 std::string format(std::string formatString, std::va_list args);
+
+namespace detail {
+std::mt19937& getRandomEngine();
+} // namespace detail
+
+/// Randomizes using C++11 engine.
+template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
+T random(T min, T max) {
+    if constexpr (std::is_floating_point_v<T>) {
+        std::uniform_real_distribution<T> dist(min, max);
+        return dist(detail::getRandomEngine());
+    } else {
+        std::uniform_int_distribution<T> dist(min, max);
+        return dist(detail::getRandomEngine());
+    }
+}
+
+/// bit_cast.
+///
+/// https://gist.github.com/socantre/3472964
+template <class Dest, class Source>
+inline Dest bitCast(const Source& source) {
+    static_assert(sizeof(Dest) == sizeof(Source),
+                  "size of destination and source objects must be equal.");
+
+    static_assert(std::is_trivially_copyable<Dest>::value,
+                  "destination type must be trivially copyable.");
+
+    static_assert(std::is_trivially_copyable<Source>::value,
+                  "source type must be trivially copyable.");
+    Dest dest;
+    std::memcpy(&dest, &source, sizeof(dest));
+    return dest;
+}
 
 void log(const LogLevel& level, const std::string& tag,
          const std::string& message);
@@ -120,6 +155,7 @@ SafeInset getSafeInset();
 float getDensity();
 } // namespace core
 
+using core::bitCast;
 using core::format;
 using core::getApplicationName;
 using core::getDensity;
@@ -133,6 +169,7 @@ using core::isMainThread;
 using core::isTablet;
 using core::log;
 using core::openApplication;
+using core::random;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;

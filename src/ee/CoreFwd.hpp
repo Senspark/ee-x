@@ -32,6 +32,9 @@ class SpinLock;
 class VideoPlayer;
 class VideoPlayerManager;
 
+template <class T>
+class DynamicValue;
+
 class ObserverHandle;
 
 template <class Observer>
@@ -64,6 +67,7 @@ class JniUtils;
 #endif // EE_X_ANDROID
 } // namespace core
 
+using core::DynamicValue;
 using core::IMessageBridge;
 using core::IService;
 using core::Logger;

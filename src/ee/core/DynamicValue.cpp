@@ -6,13 +6,12 @@
 //
 //
 
-#include "ee/cocos/EEDynamicValue.hpp"
+#include "ee/core/DynamicValue.hpp"
 
-#include <base/ccRandom.h>
-
-#include "ee/cocos/EEUtils.hpp"
+#include "ee/core/Utils.hpp"
 
 namespace ee {
+namespace core {
 template <class T>
 using Self = DynamicValue<T>;
 
@@ -36,16 +35,16 @@ Self<T>& Self<T>::operator=(const Self& other) {
 template <class T>
 T Self<T>::get() const {
     auto intValue = (*value_) ^ (*random_);
-    auto ret = bit_cast<T>(intValue);
+    auto ret = bitCast<T>(intValue);
     return ret;
 }
 
 template <class T>
 Self<T>& Self<T>::set(T value) {
-    auto intValue = bit_cast<storage_type>(value);
+    auto intValue = bitCast<storage_type>(value);
     random_ = std::make_unique<storage_type>(
-        cocos2d::random(std::numeric_limits<storage_type>::min(),
-                        std::numeric_limits<storage_type>::max()));
+        random(std::numeric_limits<storage_type>::min(),
+               std::numeric_limits<storage_type>::max()));
     value_ = std::make_unique<storage_type>((*random_) ^ intValue);
     return *this;
 }
@@ -112,4 +111,5 @@ template class DynamicValue<unsigned long>;
 template class DynamicValue<unsigned long long>;
 template class DynamicValue<float>;
 template class DynamicValue<double>;
+} // namespace core
 } // namespace ee

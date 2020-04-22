@@ -118,10 +118,11 @@ bool sendMail(const std::string& recipient, const std::string& subject,
 
 bool isTablet();
 
-bool testConnection();
+/// Tests whether the specified host name can be resolved.
+Task<bool> testConnection(const std::string& hostName, float timeOut);
 
 /// Gets device's unique ID.
-void getDeviceId(const std::function<void(const std::string&)>& callback);
+Task<std::string> getDeviceId();
 
 std::string dumpBacktrace(size_t count);
 

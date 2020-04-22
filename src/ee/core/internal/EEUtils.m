@@ -8,6 +8,7 @@
 
 #import "ee/core/internal/EEUtils.h"
 
+#import <ReactiveObjC/ReactiveObjC.h>
 #import <TargetConditionals.h>
 
 #import "ee/core/internal/EEJsonUtils.h"
@@ -88,10 +89,12 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 
     [bridge registerHandler:k__getDeviceId
                    callback:^(NSString* message) {
-                       NSString* deviceId = [self getDeviceId];
                        NSDictionary* dict =
                            [EEJsonUtils convertStringToDictionary:message];
-                       NSString* callbackTag = dict[@"callback_id"];
+                       NSString* callbackTag = dict[@"callback_tag"];
+                       NSAssert(callbackTag != nil, @"");
+
+                       NSString* deviceId = [self getDeviceId];
                        [bridge callCpp:callbackTag message:deviceId];
                        return @"";
                    }];
@@ -170,8 +173,26 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 
     [bridge registerHandler:k__testConnection
                    callback:^(NSString* message) {
-                       return [self
-                           toString:[self testConnection:@"www.google.com"]];
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+
+                       NSString* callbackTag = dict[@"callback_tag"];
+                       NSString* hostName = dict[@"host_name"];
+                       float timeOut = [dict[@"time_out"] floatValue];
+                       NSAssert(callbackTag != nil, @"");
+                       NSAssert(hostName != nil, @"");
+
+                       [[self testConnection:hostName timeOut:timeOut]
+                           subscribeNext:^(id _Nullable x) {
+                               BOOL result = [x boolValue];
+                               [bridge callCpp:callbackTag
+                                       message:[self toString:result]];
+                           }
+                           error:^(NSError* _Nullable error) {
+                               [bridge callCpp:callbackTag
+                                       message:[self toString:NO]];
+                           }];
+                       return @"";
                    }];
 
     [bridge registerHandler:k__isInstantApp
@@ -278,8 +299,20 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 #endif // TARGET_OS_IOS
 }
 
-+ (BOOL)testConnection:(NSString* _Nonnull)hostName {
-    return [[EEReachability reachabilityWithHostname:hostName] isReachable];
++ (RACSignal*)testConnection:(NSString* _Nonnull)hostName
+                     timeOut:(float)timeOut {
+    RACScheduler* scheduler =
+        [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
+    return [[RACSignal
+        startLazilyWithScheduler:scheduler
+                           block:^(id<RACSubscriber> _Nonnull subscriber) {
+                               NetworkStatus status = [[EEReachability
+                                   reachabilityWithHostname:hostName]
+                                   currentReachabilityStatus];
+                               BOOL isReachable = status != NotReachable;
+                               [subscriber sendNext:@(isReachable)];
+                               [subscriber sendCompleted];
+                           }] timeout:timeOut onScheduler:scheduler];
 }
 
 + (NSString* _Nonnull)getDeviceId {
@@ -332,10 +365,6 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
     }
 #endif // TARGET_OS_IOS
     return density;
-}
-
-- (void)functionCallback:(NSString*)callbackTag {
-    [[EEMessageBridge getInstance] callCpp:callbackTag];
 }
 
 @end

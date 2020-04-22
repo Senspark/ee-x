@@ -13,6 +13,8 @@
 @class UIWindow;
 #endif // TARGET_OS_IOS
 
+@class RACSignal;
+
 @interface EEUtils : NSObject
 
 + (void)registerHandlers;
@@ -47,7 +49,8 @@
             body:(NSString* _Nonnull)body;
 
 + (BOOL)isTablet;
-+ (BOOL)testConnection:(NSString* _Nonnull)hostName;
++ (RACSignal*)testConnection:(NSString* _Nonnull)hostName
+                     timeOut:(float)timeOut;
 
 + (NSString* _Nonnull)getDeviceId;
 

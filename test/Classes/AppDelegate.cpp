@@ -140,8 +140,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     getLogger().info("Version name: %s", ee::getVersionName().c_str());
     getLogger().info("Version code: %s", ee::getVersionCode().c_str());
     getLogger().info("isTablet: %s", ee::isTablet() ? "true" : "false");
-    getLogger().info("isConnected: %s",
-                     ee::testConnection() ? "true" : "false");
+
+    ee::noAwait([]() -> ee::Task<> {
+        auto isConnected = co_await ee::testConnection("www.google.com", 1.0f);
+        getLogger().info("isConnected: %s", isConnected ? "true" : "false");
+    });
 
     NotificationAgent::getInstance()->initialize();
     // testAdMobBannerAd();

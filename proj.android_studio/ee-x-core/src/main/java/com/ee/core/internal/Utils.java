@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,10 +37,18 @@ import com.google.android.gms.instantapps.InstantApps;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -105,7 +112,7 @@ public class Utils {
     }
 
     public static void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
+        final MessageBridge bridge = MessageBridge.getInstance();
 
         bridge.registerHandler(new MessageHandler() {
             @NonNull
@@ -138,7 +145,7 @@ public class Utils {
                 Utils.runOnUiThreadDelayed(delay, new Runnable() {
                     @Override
                     public void run() {
-                        MessageBridge.getInstance().callCpp(tag);
+                        bridge.callCpp(tag);
                     }
                 });
                 return "";
@@ -217,12 +224,33 @@ public class Utils {
         }, k__isTablet);
 
         bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
             @NonNull
             @Override
             public String handle(@NonNull String message) {
+                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+                assertThat(dict).isNotNull();
+
+                final String callbackTag = (String) dict.get("callback_tag");
+                String hostName = (String) dict.get("host_name");
+                float timeOut = ((Double) dict.get("time_out")).floatValue();
+                assertThat(hostName).isNotNull();
+                assertThat(callbackTag).isNotNull();
+
                 Context context = PluginManager.getInstance().getContext();
-                return Utils.toString(testConnection(context));
+                testConnection(context, hostName, timeOut)
+                    .doOnSuccess(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(Boolean result) {
+                            bridge.callCpp(callbackTag, Utils.toString(result));
+                        }
+                    })
+                    .doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            bridge.callCpp(callbackTag, Utils.toString(false));
+                        }
+                    });
+                return "";
             }
         }, k__testConnection);
 
@@ -230,10 +258,26 @@ public class Utils {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
-                Context context = PluginManager.getInstance().getContext();
                 Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                String callbackTag = (String) dict.get("callback_id");
-                Utils.getDeviceId(context, callbackTag);
+                assertThat(dict).isNotNull();
+
+                final String callbackTag = (String) dict.get("callback_id");
+                assertThat(callbackTag).isNotNull();
+
+                Context context = PluginManager.getInstance().getContext();
+                getDeviceId(context)
+                    .doOnSuccess(new Consumer<String>() {
+                        @Override
+                        public void accept(String result) throws Throwable {
+                            bridge.callCpp(callbackTag, result);
+                        }
+                    })
+                    .doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            bridge.callCpp(callbackTag, "");
+                        }
+                    });
                 return "";
             }
         }, k__getDeviceId);
@@ -465,13 +509,33 @@ public class Utils {
         return false;
     }
 
+    /// This methods only test if internet is connected or connecting.
     @SuppressWarnings("WeakerAccess")
-    public static boolean testConnection(@NonNull Context context) {
+    public static boolean isInternetAvailable(@NonNull Context context) {
         ConnectivityManager connectivityManager =
             (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         return info != null && info.isConnectedOrConnecting();
+    }
+
+    /// https://stackoverflow.com/questions/9570237/android-check-internet-connection
+    /// https://stackoverflow.com/questions/2758612/executorservice-that-interrupts-tasks-after-a-timeout
+    public static Single<Boolean> testConnection(@NonNull final Context context, @NonNull final String hostName, final float timeOut) {
+        return Single
+            .fromCallable(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws UnknownHostException {
+                    boolean isAvailable = isInternetAvailable(context);
+                    if (!isAvailable) {
+                        return false;
+                    }
+                    InetAddress address = InetAddress.getByName(hostName);
+                    return !address.equals("");
+                }
+            })
+            .subscribeOn(Schedulers.io())
+            .timeout((long) (timeOut * 1000), TimeUnit.MILLISECONDS);
     }
 
     private static class SafeInset {
@@ -597,14 +661,22 @@ public class Utils {
         return dp * getDensity();
     }
 
-    @SuppressLint("HardwareIds")
-    private static void getDeviceId(@NonNull Context context, @NonNull final String tag) {
-        (new GetGAIDTask(context, new GetGAIDListener() {
-            @Override
-            public void onGAIDCallback(String s) {
-                MessageBridge.getInstance().callCpp(tag, s);
-            }
-        })).execute();
+    private static Single<String> getDeviceId(@NonNull final Context context) {
+        return Single
+            .fromCallable(new Callable<String>() {
+                @Override
+                public String call() throws
+                    GooglePlayServicesNotAvailableException,
+                    GooglePlayServicesRepairableException,
+                    IOException {
+                    AdvertisingIdClient.Info info = AdvertisingIdClient
+                        .getAdvertisingIdInfo(context.getApplicationContext());
+                    if (info.isLimitAdTrackingEnabled()) {
+                        return "";
+                    }
+                    return info.getId();
+                }
+            });
     }
 
     private static boolean isInstantApp(@NonNull Context context) {
@@ -619,47 +691,5 @@ public class Utils {
         } catch (final PackageManager.NameNotFoundException e) {
             return "";
         }
-    }
-
-    private static class GetGAIDTask extends AsyncTask<String, Integer, String> {
-        private Context _context;
-        private GetGAIDListener _listener;
-
-        GetGAIDTask(Context context, GetGAIDListener listener) {
-            _context = context;
-            _listener = listener;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String gaId = "";
-            try {
-                AdvertisingIdClient.Info adInfo = AdvertisingIdClient
-                    .getAdvertisingIdInfo(_context.getApplicationContext());
-                // check if user has opted out of tracking
-                if (adInfo.isLimitAdTrackingEnabled()) {
-                    return gaId;
-                }
-                gaId = adInfo.getId();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (GooglePlayServicesNotAvailableException e) {
-                e.printStackTrace();
-            } catch (GooglePlayServicesRepairableException e) {
-                e.printStackTrace();
-            }
-            return gaId;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (_listener != null) {
-                _listener.onGAIDCallback(s);
-            }
-        }
-    }
-
-    private interface GetGAIDListener {
-        void onGAIDCallback(String s);
     }
 }

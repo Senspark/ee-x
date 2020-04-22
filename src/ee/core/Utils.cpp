@@ -23,6 +23,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/SpinLock.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -243,28 +244,49 @@ bool isTablet() {
     return toBool(response);
 }
 
-bool testConnection() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testConnection);
-    return toBool(response);
+Task<bool> testConnection(const std::string& hostName, float timeOut) {
+    auto awaiter = LambdaAwaiter<bool>([hostName, timeOut](auto&& resolve) {
+        static int counter;
+        auto callbackTag = k__testConnection + std::to_string(counter++);
+
+        auto&& bridge = MessageBridge::getInstance();
+        bridge.registerHandler(
+            [resolve, &bridge, callbackTag](const std::string& message) {
+                bridge.deregisterHandler(callbackTag);
+                auto result = toBool(message);
+                resolve(result);
+                return "";
+            },
+            callbackTag);
+
+        nlohmann::json json;
+        json["callback_tag"] = callbackTag;
+        json["host_name"] = hostName;
+        json["time_out"] = timeOut;
+        bridge.call(k__testConnection, json.dump());
+    });
+    co_return co_await awaiter;
 }
 
-void getDeviceId(const std::function<void(const std::string&)>& callback) {
-    auto&& bridge = MessageBridge::getInstance();
-    static int callbackCounter = 0;
-    auto callbackTag = ee::format("getDeviceId_%d", callbackCounter++);
-    bridge.registerHandler(
-        [callback, callbackTag, &bridge](const std::string& msg) {
-            bridge.deregisterHandler(callbackTag);
-            if (callback) {
-                callback(msg);
-            }
-            return "";
-        },
-        callbackTag);
-    nlohmann::json json;
-    json["callback_id"] = callbackTag;
-    bridge.call(k__getDeviceId, json.dump());
+Task<std::string> getDeviceId() {
+    auto awaiter = LambdaAwaiter<std::string>([](auto&& resolve) {
+        static int counter;
+        auto callbackTag = "getDeviceId_" + std::to_string(counter++);
+
+        auto&& bridge = MessageBridge::getInstance();
+        bridge.registerHandler(
+            [resolve, &bridge, callbackTag](const std::string& message) {
+                bridge.deregisterHandler(callbackTag);
+                resolve(message);
+                return "";
+            },
+            callbackTag);
+
+        nlohmann::json json;
+        json["callback_tag"] = callbackTag;
+        bridge.call(k__getDeviceId, json.dump());
+    });
+    co_return co_await awaiter;
 }
 
 void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
@@ -316,7 +338,7 @@ SafeInset getSafeInset() {
     result.right = json["right"];
     result.top = json["top"];
     result.bottom = json["bottom"];
-#else // EE_X_ANDROID
+#else  // EE_X_ANDROID
     // TODO.
     result.left = 0;
     result.right = 0;

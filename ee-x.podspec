@@ -48,10 +48,12 @@ Pod::Spec.new do |spec|
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
-      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
+      'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC
     }
 
     s.dependency 'ee-x/json'
+    s.dependency 'ReactiveObjC'
   end
 
   spec.subspec 'ads' do |s|

@@ -1,9 +1,9 @@
-#include "ee/coroutine/SwitchToUiThread.hpp"
+#include "ee/core/SwitchToUiThread.hpp"
 
-#include <ee/core/Utils.hpp>
+#include "ee/core/Utils.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 using Self = SwitchToUiThread;
 
 Self::SwitchToUiThread()
@@ -23,5 +23,5 @@ bool Self::await_ready() {
 }
 
 void Self::await_resume() {}
-} // namespace coroutine
+} // namespace core
 } // namespace ee

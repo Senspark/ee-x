@@ -3,8 +3,10 @@
 
 #include <experimental/coroutine>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
-namespace coroutine {
+namespace cocos {
 struct SwitchToCocosThread {
 private:
     using Self = SwitchToCocosThread;
@@ -23,7 +25,7 @@ public:
 private:
     bool ready_;
 };
-} // namespace coroutine
+} // namespace cocos
 } // namespace ee
 
 #endif // EE_X_SWITCH_TO_COCOS_THREAD_HPP

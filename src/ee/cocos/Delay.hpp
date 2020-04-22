@@ -3,15 +3,17 @@
 
 #include <experimental/coroutine>
 
+#include "ee/CocosFwd.hpp"
+
 namespace ee {
-namespace coroutine {
+namespace cocos {
 struct Delay {
 private:
     using Self = Delay;
 
 public:
     explicit Delay(float duration);
-    
+
     Delay(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
@@ -23,7 +25,7 @@ private:
     float duration_;
     bool ready_;
 };
-} // namespace coroutine
+} // namespace cocos
 } // namespace ee
 
 #endif // EE_X_DELAY_HPP

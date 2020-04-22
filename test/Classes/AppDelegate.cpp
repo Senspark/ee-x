@@ -12,7 +12,6 @@
 
 #include <ee/Ads.hpp>
 #include <ee/Cocos.hpp>
-#include <ee/Coroutine.hpp>
 
 #include "AdMob.hpp"
 #include "AppLovin.hpp"

@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 
-#include <ee/CoroutineFwd.hpp>
+#include "ee/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {

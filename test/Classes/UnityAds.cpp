@@ -10,8 +10,6 @@
 
 #include <platform/CCPlatformConfig.h>
 
-#include <ee/Coroutine.hpp>
-
 #include "FunctionLogger.hpp"
 #include "Utils.hpp"
 

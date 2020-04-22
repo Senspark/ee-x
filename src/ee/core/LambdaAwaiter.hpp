@@ -5,13 +5,12 @@
 #include <functional>
 #include <vector>
 
-#include "ee/CoroutineFwd.hpp"
-#include "ee/coroutine/IsAwaitable.hpp"
-#include "ee/coroutine/NoAwait.hpp"
-#include "ee/coroutine/Task.hpp"
+#include "ee/core/IsAwaitable.hpp"
+#include "ee/core/NoAwait.hpp"
+#include "ee/core/Task.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 namespace detail {
 template <class Resolve, class Function, class Callable>
 Function makeFunction(const Callable& callable) {
@@ -127,7 +126,7 @@ private:
     bool ready_;
     std::vector<std::experimental::coroutine_handle<>> handles_;
 };
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_LAMBDA_AWAITER_HPP

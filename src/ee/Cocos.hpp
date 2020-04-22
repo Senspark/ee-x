@@ -73,4 +73,7 @@
 #include "ee/cocos/EEDataUtils.hpp"
 #include "ee/cocos/EEPreferences.hpp"
 
+#include "ee/cocos/Delay.hpp"
+#include "ee/cocos/SwitchToCocosThread.hpp"
+
 #endif // EE_X_COCOS_HPP

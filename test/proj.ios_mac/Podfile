@@ -14,7 +14,6 @@ abstract_target 'common' do
     target 'ee_x_test_mobile' do
         pod_ee_x('admob')
         pod_ee_x('app-lovin')
-        pod_ee_x('coroutine')
         pod_ee_x('facebook-ads')
         pod_ee_x('iron-source')
         pod_ee_x('unity-ads')

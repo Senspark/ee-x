@@ -5,10 +5,10 @@
 #include <experimental/coroutine>
 #include <variant>
 
-#include "ee/CoroutineFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 template <class T>
 struct Task {
     struct promise_type {
@@ -162,7 +162,7 @@ private:
 
     Handle coro_;
 };
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_TASK_HPP

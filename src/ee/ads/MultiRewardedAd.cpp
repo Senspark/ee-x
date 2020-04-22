@@ -8,9 +8,9 @@
 
 #include "ee/ads/MultiRewardedAd.hpp"
 
+#include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
-#include <ee/coroutine/NoAwait.hpp>
-#include <ee/coroutine/Task.hpp>
+#include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {

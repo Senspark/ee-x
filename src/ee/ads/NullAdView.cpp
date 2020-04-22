@@ -8,7 +8,7 @@
 
 #include "ee/ads/NullAdView.hpp"
 
-#include <ee/coroutine/Task.hpp>
+#include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {

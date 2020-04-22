@@ -13,7 +13,6 @@
 
 #include <ee/Ads.hpp>
 #include <ee/Cocos.hpp>
-#include <ee/Coroutine.hpp>
 
 namespace eetest {
 using Self = NativeAdTestScene;

@@ -4,10 +4,10 @@
 #include <experimental/coroutine>
 #include <type_traits>
 
-#include "ee/CoroutineFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 /// https://devblogs.microsoft.com/oldnewthing/20190322-00/?p=102354
 struct CompleteAsynchronously {
     struct promise_type {
@@ -36,9 +36,9 @@ CompleteAsynchronously
 noAwait(T lambda) /** Must copy lambda, don't use T&& */ {
     co_await lambda();
 }
-} // namespace coroutine
+} // namespace core
 
-using coroutine::noAwait;
+using core::noAwait;
 } // namespace ee
 
 #endif // EE_X_NO_AWAIT_HPP

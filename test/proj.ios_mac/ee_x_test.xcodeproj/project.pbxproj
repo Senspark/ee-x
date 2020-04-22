@@ -40,7 +40,6 @@
 		6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
-		AD0A589120ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
@@ -624,7 +623,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
-				AD0A589120ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */,
 				6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
@@ -689,7 +687,7 @@
 			baseConfigurationReference = EF08DE0B7A9A2F319B653225 /* Pods-common-ee_x_test_desktop.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = mac/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.desktop;
 				SDKROOT = macosx;
 			};
@@ -700,7 +698,7 @@
 			baseConfigurationReference = 8B94EDA7D814D9176338E5D0 /* Pods-common-ee_x_test_desktop.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = mac/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.desktop;
 				SDKROOT = macosx;
 			};

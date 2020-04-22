@@ -11,6 +11,13 @@
 
 #include "ee/Macro.hpp"
 
+namespace cppcoro {
+class async_mutex;
+class async_mutex_lock;
+class async_mutex_lock_operation;
+class async_mutex_scoped_lock_operation;
+} // namespace cppcoro
+
 namespace ee {
 namespace core {
 struct LogLevel;
@@ -39,6 +46,19 @@ class ObserverManager;
 template <class Observer>
 class SafeObserverManager;
 
+template <class T = void>
+struct Task;
+
+template <class T = void>
+struct LambdaAwaiter;
+
+using AsyncMutex = cppcoro::async_mutex;
+using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;
+using AsyncMutexScopedLockOperation =
+    cppcoro::async_mutex_scoped_lock_operation;
+
+struct SwitchToUiThread;
+
 #if defined(EE_X_ANDROID)
 class JniUtils;
 #endif // EE_X_ANDROID
@@ -62,6 +82,13 @@ using core::ObserverHandle;
 using core::IObserverManager;
 using core::ObserverManager;
 using core::SafeObserverManager;
+
+using core::AsyncMutex;
+using core::AsyncMutexLockOperation;
+using core::AsyncMutexScopedLockOperation;
+using core::LambdaAwaiter;
+using core::SwitchToUiThread;
+using core::Task;
 
 #if defined(EE_X_ANDROID)
 using core::JniUtils;

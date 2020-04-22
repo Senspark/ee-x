@@ -3,12 +3,12 @@
 
 #include <vector>
 
-#include "ee/coroutine/LambdaAwaiter.hpp"
-#include "ee/coroutine/NoAwait.hpp"
-#include "ee/coroutine/Task.hpp"
+#include "ee/core/LambdaAwaiter.hpp"
+#include "ee/core/NoAwait.hpp"
+#include "ee/core/Task.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 namespace detail {
 template <class T>
 Task<> toVoidTask(T&& task) {
@@ -35,7 +35,7 @@ Task<> whenAll(Args&&... args) {
     });
     co_return;
 }
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_WHEN_ALL_HPP

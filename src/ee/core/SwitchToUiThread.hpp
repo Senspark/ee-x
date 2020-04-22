@@ -3,8 +3,10 @@
 
 #include <experimental/coroutine>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
-namespace coroutine {
+namespace core {
 struct SwitchToUiThread {
 private:
     using Self = SwitchToUiThread;
@@ -23,7 +25,7 @@ public:
 private:
     bool ready_;
 };
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_SWITCH_TO_UI_THREAD_HPP

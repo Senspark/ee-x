@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.author         = 'Hai Hoang'
 
   spec.ios.deployment_target = '12.0'
-  spec.osx.deployment_target = '10.8'
+  spec.osx.deployment_target = '10.14'
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
@@ -47,7 +47,8 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/Jni*'
 
     s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a'
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
     }
 
     s.dependency 'ee-x/json'
@@ -263,27 +264,6 @@ Pod::Spec.new do |spec|
 
     s.ios.library = 'iconv'
     s.ios.framework = 'OpenAL'
-  end
-
-  spec.subspec 'cocos-coroutine' do |s|
-    s.source_files =
-      'src/ee/cocos_coroutine/*'
-    
-    s.xcconfig = {
-      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
-    }
-
-    s.dependency 'ee-x/coroutine'
-  end
-
-  spec.subspec 'coroutine' do |s|
-    s.source_files =
-      'src/ee/Coroutine*',
-      'src/ee/coroutine/*'
-
-    s.xcconfig = {
-      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts'
-    }
 
     s.dependency 'ee-x/core'
   end

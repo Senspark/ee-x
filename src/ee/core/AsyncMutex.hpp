@@ -6,7 +6,7 @@
 #include <experimental/coroutine>
 #include <mutex> // for std::adopt_lock_t
 
-#include "ee/CoroutineFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 /// https://github.com/lewissbaker/cppcoro/blob/master/include/cppcoro/async_mutex.hpp
 namespace cppcoro {
@@ -173,12 +173,12 @@ public:
 } // namespace cppcoro
 
 namespace ee {
-namespace coroutine {
+namespace core {
 using AsyncMutex = cppcoro::async_mutex;
 using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;
 using AsyncMutexScopedLockOperation =
     cppcoro::async_mutex_scoped_lock_operation;
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_ASYNC_MUTEX_HPP

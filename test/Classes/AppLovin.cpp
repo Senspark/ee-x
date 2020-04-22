@@ -8,8 +8,6 @@
 
 #include "AppLovin.hpp"
 
-#include <ee/Coroutine.hpp>
-
 #include "Utils.hpp"
 
 namespace eetest {

@@ -12,8 +12,8 @@
 
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/coroutine/Task.hpp>
 
 #include "ee/vungle/VungleBridge.hpp"
 

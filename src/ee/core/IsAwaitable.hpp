@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include "ee/CoroutineFwd.hpp"
+#include "ee/CoreFwd.hpp"
 
 namespace cppcoro {
 namespace detail {
@@ -89,10 +89,10 @@ constexpr bool is_awaitable_v = is_awaitable<T>::value;
 } // namespace cppcoro
 
 namespace ee {
-namespace coroutine {
+namespace core {
 template <class T>
 constexpr bool IsAwaitableV = cppcoro::is_awaitable_v<T>;
-} // namespace coroutine
+} // namespace core
 } // namespace ee
 
 #endif // EE_X_IS_AWAITABLE_HPP

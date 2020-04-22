@@ -11,8 +11,6 @@
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 
-#include <ee/Coroutine.hpp>
-
 #include "Utils.hpp"
 
 namespace eetest {

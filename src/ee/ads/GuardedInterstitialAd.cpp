@@ -5,8 +5,8 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/SpinLock.hpp>
-#include <ee/coroutine/SwitchToUiThread.hpp>
-#include <ee/coroutine/Task.hpp>
+#include <ee/core/SwitchToUiThread.hpp>
+#include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {

@@ -1,5 +1,5 @@
-#include <ee/coroutine/LambdaAwaiter.hpp>
-#include <ee/coroutine/Task.hpp>
+#include <ee/core/LambdaAwaiter.hpp>
+#include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {

@@ -313,11 +313,17 @@ class DialogManager;
 class IDialogManager;
 
 class Metrics;
+
+struct Delay;
+struct SwitchToCocosThread;
 } // namespace cocos
 
 using cocos::Dialog;
 using cocos::DialogComponent;
 using cocos::Metrics;
+
+using cocos::Delay;
+using cocos::SwitchToCocosThread;
 } // namespace ee
 
 #endif // EE_X_COCOS_FWD_HPP

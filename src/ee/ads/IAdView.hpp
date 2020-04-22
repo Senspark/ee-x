@@ -12,7 +12,6 @@
 #include <functional>
 #include <utility>
 
-#include <ee/CoroutineFwd.hpp>
 #include <ee/core/IObserverManager.hpp>
 
 #include "ee/AdsFwd.hpp"

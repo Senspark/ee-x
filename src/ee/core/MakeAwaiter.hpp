@@ -1,11 +1,11 @@
 #ifndef EE_X_MAKE_AWAITER_HPP
 #define EE_X_MAKE_AWAITER_HPP
 
-#include "ee/coroutine/NoAwait.hpp"
-#include "ee/coroutine/Task.hpp"
+#include "ee/core/NoAwait.hpp"
+#include "ee/core/Task.hpp"
 
 namespace ee {
-namespace coroutine {
+namespace core {
 /// Note: Generic lambda causes crash (xcode 11.3 + ndk r21).
 template <class T>
 struct MakeAwaiter;
@@ -25,9 +25,9 @@ template <class Function>
 auto makeAwaiter(const Function& f) {
     return MakeAwaiter<decltype(&Function::operator())>::make(f);
 }
-} // namespace coroutine
+} // namespace core
 
-using coroutine::makeAwaiter;
+using core::makeAwaiter;
 } // namespace ee
 
 #endif // EE_X_MAKE_AWAITER_HPP

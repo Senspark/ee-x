@@ -1,10 +1,10 @@
-#include "ee/cocos_coroutine/SwitchToCocosThread.hpp"
+#include "ee/cocos/SwitchToCocosThread.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>
 
 namespace ee {
-namespace coroutine {
+namespace cocos {
 using Self = SwitchToCocosThread;
 
 Self::SwitchToCocosThread()
@@ -26,5 +26,5 @@ bool Self::await_ready() {
 }
 
 void Self::await_resume() {}
-} // namespace coroutine
+} // namespace cocos
 } // namespace ee

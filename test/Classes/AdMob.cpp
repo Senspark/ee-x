@@ -12,8 +12,6 @@
 #include <platform/CCGLView.h>
 #include <platform/CCPlatformConfig.h>
 
-#include <ee/Coroutine.hpp>
-
 #include "Utils.hpp"
 
 namespace eetest {

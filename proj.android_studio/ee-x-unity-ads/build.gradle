@@ -21,9 +21,9 @@ dependencies {
 
     if (rootProject.ext.useIronsourceMediation) {
         // Unity SDK 3.4 is included in ironsource mediation library.
-        implementation 'com.ironsource.adapters:unityadsadapter:4.1.7'
+        implementation 'com.ironsource.adapters:unityadsadapter:4.3.1'
     } else {
         // https://github.com/Unity-Technologies/unity-ads-android/releases
-        implementation 'com.unity3d.ads:unity-ads:3.4.0'
+        implementation 'com.unity3d.ads:unity-ads:3.4.2'
     }
 }

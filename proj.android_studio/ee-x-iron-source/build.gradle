@@ -18,16 +18,16 @@ dependencies {
     api project(':ee-x-core')
 
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
-    implementation 'com.ironsource.sdk:mediationsdk:6.12.0'
+    implementation 'com.ironsource.sdk:mediationsdk:6.15.0.1'
 
     if (rootProject.ext.useIronsourceMediation) {
         // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-        implementation 'com.ironsource.adapters:facebookadapter:4.3.8'
+        implementation 'com.ironsource.adapters:facebookadapter:4.3.13'
 
         // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-        implementation 'com.ironsource.adapters:unityadsadapter:4.1.7'
+        implementation 'com.ironsource.adapters:unityadsadapter:4.3.1'
 
         // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-        implementation 'com.ironsource.adapters:admobadapter:4.3.7'
+        implementation 'com.ironsource.adapters:admobadapter:4.3.8'
     }
 }

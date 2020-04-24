@@ -17,5 +17,5 @@ dependencies {
 
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://bintray.com/applovin/Android/sdk_android
-    implementation 'com.applovin:applovin-sdk:9.11.5'
+    implementation 'com.applovin:applovin-sdk:9.12.3'
 }

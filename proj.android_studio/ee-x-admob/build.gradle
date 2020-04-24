@@ -5,7 +5,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
@@ -13,23 +13,23 @@ android {
 dependencies {
     api project(':ee-x-ads')
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.google.android.gms:play-services-ads:19.0.1'
 
     // https://bintray.com/google/mobile-ads-adapters-android
     if (rootProject.ext.useAdmobMediation) {
         // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-        implementation 'com.google.ads.mediation:facebook:5.6.0.0'
+        implementation 'com.google.ads.mediation:facebook:5.8.0.0'
 
         // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-        implementation 'com.google.ads.mediation:ironsource:6.11.0.0'
+        implementation 'com.google.ads.mediation:ironsource:6.15.0.1.0'
 
         // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
         if (rootProject.ext.useIronsourceMediation) {
-            implementation('com.google.ads.mediation:unity:3.4.0.0', {
+            implementation('com.google.ads.mediation:unity:3.4.2.1', {
                 exclude group: 'com.unity3d.ads'
             })
         } else {
-            implementation 'com.google.ads.mediation:unity:3.4.0.0'
+            implementation 'com.google.ads.mediation:unity:3.4.2.1'
         }
     }
 }

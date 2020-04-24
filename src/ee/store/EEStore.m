@@ -8,6 +8,7 @@
 
 #import "ee/store/EEStore.h"
 
+#import <ReactiveObjC/ReactiveObjC.h>
 #import <StoreKit/StoreKit.h>
 
 #import "ee/core/internal/EEDictionaryUtils.h"
@@ -15,47 +16,86 @@
 #import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 
-@interface EEStore () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
+#define kPrefix @"Store"
+
+// clang-format off
+static NSString* const k__can_purchase                = kPrefix "_canPurchase";
+static NSString* const k__purchase                    = kPrefix "_purchase";
+static NSString* const k__restore_transactions        = kPrefix "_restoreTransactions";
+static NSString* const k__request_products            = kPrefix "_requestProducts";
+static NSString* const k__request_products_succeeded  = kPrefix "_requestProductSucceeded";
+static NSString* const k__request_products_failed     = kPrefix "_requestProductFailed";
+static NSString* const k__restore_purchases_succeeded = kPrefix "_restorePurchasesSucceeded";
+static NSString* const k__restore_purchases_failed    = kPrefix "_restorePurchasesFailed";
+static NSString* const k__transaction_succeeded       = kPrefix "_transactionSucceeded";
+static NSString* const k__transaction_failed          = kPrefix "_transactionFailed";
+static NSString* const k__transaction_restored        = kPrefix "_transactionRestored";
+// clang-format on
+
+#undef kPrefix
+
+@interface EEStoreProductsRequestDelegate : NSObject <SKProductsRequestDelegate>
 @end
 
-@implementation EEStore
-
-// clang-format off
-static NSString* const k__can_purchase                = @"Store_canPurchase";
-static NSString* const k__purchase                    = @"Store_purchase";
-static NSString* const k__restore_transactions        = @"Store_restoreTransactions";
-static NSString* const k__request_products            = @"Store_requestProducts";
-static NSString* const k__request_products_succeeded  = @"Store_requestProductSucceeded";
-static NSString* const k__request_products_failed     = @"Store_requestProductFailed";
-static NSString* const k__restore_purchases_succeeded = @"Store_restorePurchasesSucceeded";
-static NSString* const k__restore_purchases_failed    = @"Store_restorePurchasesFailed";
-static NSString* const k__transaction_succeeded       = @"Store_transactionSucceeded";
-static NSString* const k__transaction_failed          = @"Store_transactionFailed";
-static NSString* const k__transaction_restored        = @"Store_transactionRestored";
-// clang-format on
-
-// clang-format off
-static NSString* const k__title             = @"title";
-static NSString* const k__description       = @"description";
-static NSString* const k__price             = @"price";
-static NSString* const k__product_id        = @"product_id";
-static NSString* const k__transaction_id    = @"transaction_id";
-static NSString* const k__currency_symbol   = @"currency_symbol";
-static NSString* const k__currency_code     = @"currency_code";
-static NSString* const k__error_code        = @"error_code";
-// clang-format on
-
-+ (instancetype _Nullable)getInstance {
-    static EEStore* sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[[self class] alloc] init];
-    });
-    return sharedInstance;
+@implementation EEStoreProductsRequestDelegate {
+    EEIMessageBridge* bridge_;
 }
 
-+ (BOOL)canMakePayments {
-    return [SKPaymentQueue canMakePayments];
+- (id)initWithBridge:(id<EEIMessageBridge>)bridge {
+    NSAssert([EEUtils isMainThread], @"");
+    self = [super init];
+    if (self == nil) {
+        return nil;
+    }
+    bridge_ = bridge;
+    return self;
+}
+
+- (void)productsRequest:(SKProductsRequest*)request
+     didReceiveResponse:(SKProductsResponse*)response {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSMutableArray* arr = [NSMutableArray array];
+
+    NSArray* products = [response products];
+    for (SKProduct* product in products) {
+        NSDictionary* dict = @{
+            @"product_id": [product productIdentifier],
+            @"localized_description": [product localizedDescription],
+            @"localized_title": [product localizedTitle],
+            @"price": @([[product price] longLongValue]),
+            @"price_locale"
+            //            k__currency_symbol: [locale
+            //            objectForKey:NSLocaleCurrencySymbol],
+            //            k__currency_code: [locale
+            //            objectForKey:NSLocaleCurrencyCode]
+        };
+        [arr addObject:dict];
+    }
+
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__request_products_succeeded
+            message:[EEJsonUtils convertArrayToString:arr]];
+}
+
+- (void)requestDidFinish:(SKRequest*)request {
+    // OK.
+}
+
+- (void)request:(SKRequest*)request didFailWithError:(NSError*)error {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__request_products_failed
+            message:[@([error code]) stringValue]];
+}
+
+@end
+
+@interface EEStore () <SKPaymentTransactionObserver>
+@end
+
+@implementation EEStore {
+    EEIMessageBridge* bridge_;
+    SKPaymentQueue* queue_;
 }
 
 - (instancetype)init {
@@ -63,19 +103,22 @@ static NSString* const k__error_code        = @"error_code";
     if (self == nil) {
         return nil;
     }
-    SKPaymentQueue* paymentQueue = [SKPaymentQueue defaultQueue];
-    [paymentQueue addTransactionObserver:self];
+
+    bridge_ = [EEMessageBridge getInstance];
+    queue_ = [SKPaymentQueue defaultQueue];
+
+    [self registerHandlers];
+    [queue_ addTransactionObserver:self];
     return self;
 }
 
-- (BOOL)initialize {
-    return YES;
+- (void)dealloc {
+    [super dealloc];
 }
 
-- (void)dealloc {
-    SKPaymentQueue* paymentQueue = [SKPaymentQueue defaultQueue];
-    [paymentQueue removeTransactionObserver:self];
-    [super dealloc];
+- (void)destroy {
+    [queue_ removeTransactionObserver:self];
+    [self deregisterHandlers];
 }
 
 - (void)registerHandlers {
@@ -115,6 +158,25 @@ static NSString* const k__error_code        = @"error_code";
     [bridge deregisterHandler:k__purchase];
 }
 
+- (BOOL)initialize {
+    return YES;
+}
+
+- (BOOL)canMakePayments {
+    return [SKPaymentQueue canMakePayments];
+}
+
+- (void)requestProducts:(NSSet* _Nonnull)identifiers {
+    EEStoreProductsRequestDelegate* delegate =
+        [[[EEStoreProductsRequestDelegate alloc] initWithBridge:bridge_]
+            autorelease];
+
+    SKProductsRequest* request = [[[SKProductsRequest alloc]
+        initWithProductIdentifiers:identifiers] autorelease];
+    [request setDelegate:delegate];
+    [request start];
+}
+
 - (void)retryUnfinishedTransactions {
     SKPaymentQueue* paymentQueue = [SKPaymentQueue defaultQueue];
     NSArray* transactions = [paymentQueue transactions];
@@ -132,92 +194,6 @@ static NSString* const k__error_code        = @"error_code";
     [payment setQuantity:1];
     SKPaymentQueue* paymentQueue = [SKPaymentQueue defaultQueue];
     [paymentQueue addPayment:payment];
-}
-
-- (void)requestProducts:(NSSet* _Nonnull)identifiers {
-    SKProductsRequest* request = [[[SKProductsRequest alloc]
-        initWithProductIdentifiers:identifiers] autorelease];
-    [request setDelegate:self];
-    [request start];
-}
-
-- (void)productsRequest:(SKProductsRequest*)request
-     didReceiveResponse:(SKProductsResponse*)response {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSMutableArray* arr = [NSMutableArray array];
-
-    NSArray* products = [response products];
-    for (SKProduct* product in products) {
-        NSString* title = [product localizedTitle];
-        NSString* description = [product localizedDescription];
-        NSDecimalNumber* price = [product price];
-        NSLocale* locale = [product priceLocale];
-        NSString* productId = [product productIdentifier];
-
-        NSDictionary* dict = @{
-            k__title: title,
-            k__description: description,
-            k__price: @([price doubleValue]),
-            k__product_id: productId,
-            k__currency_symbol: [locale objectForKey:NSLocaleCurrencySymbol],
-            k__currency_code: [locale objectForKey:NSLocaleCurrencyCode]
-        };
-        [arr addObject:dict];
-    }
-
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__request_products_succeeded
-            message:[EEJsonUtils convertArrayToString:arr]];
-}
-
-- (void)request:(SKRequest*)request didFailWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__request_products_failed
-            message:[@([error code]) stringValue]];
-}
-
-- (void)paymentQueue:(SKPaymentQueue*)queue
-    updatedTransactions:(NSArray<SKPaymentTransaction*>*)transactions {
-    for (SKPaymentTransaction* transaction in transactions) {
-        switch ([transaction transactionState]) {
-        case SKPaymentTransactionStatePurchasing:
-            // Ignore.
-            break;
-        case SKPaymentTransactionStatePurchased:
-            [self purchaseTransaction:transaction];
-            break;
-        case SKPaymentTransactionStateFailed:
-            [self failTransaction:transaction];
-            break;
-        case SKPaymentTransactionStateRestored:
-            [self restoreTransaction:transaction];
-            break;
-        case SKPaymentTransactionStateDeferred:
-            [self deferTransaction:transaction];
-            break;
-        }
-    }
-}
-
-- (void)paymentQueue:(SKPaymentQueue*)queue
-    removedTransactions:(NSArray<SKPaymentTransaction*>*)transactions {
-    //
-}
-
-- (void)paymentQueue:(SKPaymentQueue*)queue
-    restoreCompletedTransactionsFailedWithError:(NSError*)error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__restore_purchases_failed
-            message:[@([error code]) stringValue]];
-}
-
-- (void)paymentQueueRestoreCompletedTransactionsFinished:
-    (SKPaymentQueue*)queue {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge callCpp:k__restore_purchases_succeeded];
 }
 
 - (void)purchaseTransaction:(SKPaymentTransaction*)transaction {
@@ -291,6 +267,51 @@ static NSString* const k__error_code        = @"error_code";
              @"Unexpected transaction state");
     // http://stackoverflow.com/questions/26187148/deferred-transactions
     BOOL fix_clang_format __unused;
+}
+
+#pragma mark - SKPaymentTransactionObserver
+
+- (void)paymentQueue:(SKPaymentQueue*)queue
+    updatedTransactions:(NSArray<SKPaymentTransaction*>*)transactions {
+    for (SKPaymentTransaction* transaction in transactions) {
+        switch ([transaction transactionState]) {
+        case SKPaymentTransactionStatePurchasing:
+            // Ignore.
+            break;
+        case SKPaymentTransactionStatePurchased:
+            [self purchaseTransaction:transaction];
+            break;
+        case SKPaymentTransactionStateFailed:
+            [self failTransaction:transaction];
+            break;
+        case SKPaymentTransactionStateRestored:
+            [self restoreTransaction:transaction];
+            break;
+        case SKPaymentTransactionStateDeferred:
+            [self deferTransaction:transaction];
+            break;
+        }
+    }
+}
+
+- (void)paymentQueue:(SKPaymentQueue*)queue
+    removedTransactions:(NSArray<SKPaymentTransaction*>*)transactions {
+    //
+}
+
+- (void)paymentQueue:(SKPaymentQueue*)queue
+    restoreCompletedTransactionsFailedWithError:(NSError*)error {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__restore_purchases_failed
+            message:[@([error code]) stringValue]];
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:
+    (SKPaymentQueue*)queue {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    [bridge callCpp:k__restore_purchases_succeeded];
 }
 
 @end

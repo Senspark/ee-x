@@ -12,9 +12,9 @@
 
 @interface EEStore : NSObject
 
-+ (instancetype _Nullable)getInstance;
+- (void)destroy;
 
-+ (BOOL)canMakePayments;
+- (BOOL)canMakePayments;
 
 - (void)addPayment:(NSString* _Nonnull)productIdentifier;
 

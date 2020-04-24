@@ -18,7 +18,7 @@ dependencies {
     // implementation 'com.squareup.okhttp3:okhttp:4.2.2'
 
     // Fallback to 3.12.x
-    implementation 'com.squareup.okhttp3:okhttp:3.12.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.10'
 
     implementation 'com.android.billingclient:billing:1.1'
 }

@@ -475,6 +475,14 @@ Pod::Spec.new do |spec|
     s.ios.dependency 'ee-x/soomla-store-ios'
   end
 
+  spec.subspec 'store' do |s|
+    s.source_files =
+      'src/ee/Store*',
+      'src/ee/store/**/*'
+
+    s.dependency 'ee-x/core'
+  end
+
   spec.subspec 'jsb-core' do |s|
     s.source_files =
       'src/ee/jsb/jsb_core*',

@@ -6,62 +6,50 @@
 //
 //
 
-#ifndef EE_X_STORE_STORE_BRIDGE_HPP_
-#define EE_X_STORE_STORE_BRIDGE_HPP_
+#ifndef EE_X_STORE_BRIDGE_HPP
+#define EE_X_STORE_BRIDGE_HPP
 
 #include <string>
 #include <vector>
 
+#include "ee/StoreFwd.hpp"
+
 namespace ee {
 namespace store {
-class Store {
+enum SkuType {
+    InApp,
+    Subscription,
+};
+
+class Bridge {
 public:
-    /// Intializes the store with the specified public key (Android only).
-    /// iOS doesn't need to call this method.
-    void initialize(const std::string& publicKey);
+    Bridge();
+    ~Bridge();
 
-    bool canPurchase() const;
+    explicit Bridge(const Logger& logger);
 
-    void purchase(const std::string& productId);
+    void destroy();
 
-    void buyMarketItem(const std::string& productId,
-                       const std::string& payload);
+    void initialize();
 
-    /// Restores this user's previous transactions.
-    void restoreTransactions();
+    Task<std::vector<SkuDetails>>
+    getSkuDetails(SkuType type, const std::vector<std::string>& skuList);
 
-    void requestProducts(const std::vector<std::string>& productIds);
+    Task<std::vector<Purchase>> getPurchases(SkuType type);
 
-    /// Creates a list of all metadata stored in the market (the items that have
-    /// been purchased).
-    void refreshInventory();
+    Task<std::vector<PurchaseHistoryRecord>> getPurchaseHistory(SkuType type);
 
-    /// Refreshes the details of all market-purchasable items that were defined
-    /// in the market.
-    void refreshMarketItemDetails();
+    Task<Purchase> purchase(const std::string& sku);
 
-protected:
-    Store();
-    ~Store();
+    Task<bool> consume(const std::string& purchaseToken);
+
+    Task<bool> acknowledge(const std::string& purchaseToken);
 
 private:
-    void onRequestProductSucceeded();
-
-    void onRequestProductFailed(int errorCode);
-
-    void onRestorePurchasesSucceeded();
-
-    void onRestorePurchasesFailed(int errorCode);
-
-    void onTransactionSucceeded(const std::string& productId,
-                                const std::string& transactionId);
-
-    void onTransactionFailed(const std::string& productId, int errorCode);
-
-    void onTransactionRestored(const std::string& productId,
-                               const std::string& transactionId);
+    IMessageBridge& bridge_;
+    const Logger& logger_;
 };
 } // namespace store
 } // namespace ee
 
-#endif /* EE_X_STORE_STORE_BRIDGE_HPP_ */
+#endif /* EE_X_STORE_BRIDGE_HPP */

@@ -7,139 +7,137 @@
 //
 
 #include "ee/store/StoreBridge.hpp"
-#include "ee/Macro.hpp"
-#include "ee/core/Utils.hpp"
-#include "ee/core/MessageBridge.hpp"
 
 #include <ee/nlohmann/json.hpp>
+
+#include <ee/core/Logger.hpp>
+#include <ee/core/Task.hpp>
+#include <ee/core/Utils.hpp>
+#include <ee/core/internal/MessageBridge.hpp>
+
+#include "ee/store/Purchase.hpp"
+#include "ee/store/PurchaseHistoryRecord.hpp"
+#include "ee/store/SkuDetails.hpp"
 
 namespace ee {
 namespace store {
 namespace {
 // clang-format off
-constexpr auto k__initialize                  = "Store_initialize";
-constexpr auto k__can_purchase                = "Store_canPurchase";
-constexpr auto k__purchase                    = "Store_purchase";
-constexpr auto k__restore_transactions        = "Store_restoreTransactions";
-constexpr auto k__request_products            = "Store_requestProducts";
-constexpr auto k__request_products_succeeded  = "Store_requestProductSucceeded";
-constexpr auto k__request_products_failed     = "Store_requestProductFailed";
-constexpr auto k__restore_purchases_succeeded = "Store_restorePurchasesSucceeded";
-constexpr auto k__restore_purchases_failed    = "Store_restorePurchasesFailed";
-constexpr auto k__transaction_succeeded       = "Store_transactionSucceeded";
-constexpr auto k__transaction_failed          = "Store_transactionFailed";
-constexpr auto k__transaction_restored        = "Store_transactionRestored";
-// clang-format on
+const std::string kPrefix = "Store";
 
-// clang-format off
-constexpr auto k__title             = "title";
-constexpr auto k__description       = "description";
-constexpr auto k__price             = "price";
-constexpr auto k__product_id        = "product_id";
-constexpr auto k__transaction_id    = "transaction_id";
-constexpr auto k__currency_symbol   = "currency_symbol";
-constexpr auto k__currency_code     = "currency_code";
-constexpr auto k__error_code        = "error_code";
+const auto kGetSkuDetails      = kPrefix + "_getSkuDetails";
+const auto kGetPurchases       = kPrefix + "_getPurchases";
+const auto kGetPurchaseHistory = kPrefix + "_getPurchaseHistory";
+const auto kPurchase           = kPrefix + "_purchase";
+const auto kConsume            = kPrefix + "_consume";
+const auto kAcknowledge        = kPrefix + "_acknowledge";
+
+const auto kOnGetSkuDetails      = kPrefix + "_onGetSkuDetails";
+const auto kOnGetPurchases       = kPrefix + "_onGetPurchases";
+const auto kOnGetPurchaseHistory = kPrefix + "_onGetPurchaseHistory";
+const auto kOnPurchase           = kPrefix + "_onPurchase";
+const auto kOnConsume            = kPrefix + "_onConsume";
+const auto kOnAcknowledge        = kPrefix + "_onAcknowledge";
 // clang-format on
 } // namespace
 
-using Self = Store;
+using Self = Bridge;
 
-Self::Store() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.registerHandler(
+Self::Bridge()
+    : Self(Logger::getSystemLogger()) {}
+
+Self::Bridge(const Logger& logger)
+    : bridge_(MessageBridge::getInstance())
+    , logger_(logger) {
+    bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
+            // TODO.
             return "";
         },
-        k__request_products_succeeded);
-    bridge.registerHandler(
-        [this](const std::string& message) {
-            auto errorCode = std::stoi(message);
-            onRequestProductFailed(errorCode);
-            return "";
-        },
-        k__request_products_failed);
-    bridge.registerHandler(
-        [this](const std::string& message) {
-            onRestorePurchasesSucceeded();
-            return "";
-        },
-        k__restore_purchases_succeeded);
-    bridge.registerHandler(
-        [this](const std::string& message) {
-            auto errorCode = std::stoi(message);
-            onRestorePurchasesFailed(errorCode);
-            return "";
-        },
-        k__restore_purchases_failed);
-    bridge.registerHandler(
+        kOnGetSkuDetails);
+    bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
-            std::string productId = json[k__product_id];
-            std::string transactionId = json[k__transaction_id];
-            onTransactionSucceeded(productId, transactionId);
+            // TODO.
             return "";
         },
-        k__transaction_succeeded);
-    bridge.registerHandler(
+        kOnGetPurchases);
+    bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
-            std::string productId = json[k__product_id];
-            int errorCode = json[k__error_code];
-            onTransactionFailed(productId, errorCode);
+            // TODO.
             return "";
         },
-        k__transaction_failed);
-    bridge.registerHandler(
+        kOnGetPurchaseHistory);
+    bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
-            std::string productId = json[k__product_id];
-            std::string transactionId = json[k__transaction_id];
-            onTransactionRestored(productId, transactionId);
+            // TODO.
             return "";
         },
-        k__transaction_restored);
+        kOnPurchase);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            // TODO.
+            return "";
+        },
+        kOnConsume);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            // TODO.
+            return "";
+        },
+        kOnAcknowledge);
 }
 
-Self::~Store() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.deregisterHandler(k__request_products_succeeded);
-    bridge.deregisterHandler(k__request_products_failed);
-    bridge.deregisterHandler(k__restore_purchases_succeeded);
-    bridge.deregisterHandler(k__restore_purchases_failed);
-    bridge.deregisterHandler(k__transaction_succeeded);
-    bridge.deregisterHandler(k__transaction_failed);
-    bridge.deregisterHandler(k__transaction_restored);
+Self::~Bridge() {}
+
+void Self::destroy() {
+    bridge_.deregisterHandler(kOnGetSkuDetails);
+    bridge_.deregisterHandler(kOnGetPurchases);
+    bridge_.deregisterHandler(kOnGetPurchaseHistory);
+    bridge_.deregisterHandler(kOnPurchase);
+    bridge_.deregisterHandler(kOnConsume);
+    bridge_.deregisterHandler(kOnAcknowledge);
 }
 
-void Self::initialize(const std::string& publicKey) {
-#ifdef EE_X_ANDROID
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__initialize, publicKey);
-#endif // EE_X_ANDROID
+void Self::initialize() {
+    // TODO.
 }
 
-bool Self::canPurchase() const {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__can_purchase);
-    return core::toBool(response);
+Task<std::vector<SkuDetails>>
+Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
+    // TODO.
+    co_return std::vector<SkuDetails>();
 }
 
-void Self::purchase(const std::string& productId) {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__purchase, productId);
+Task<std::vector<Purchase>> Self::getPurchases(SkuType type) {
+    // TODO.
+    co_return std::vector<Purchase>();
 }
 
-void Self::restoreTransactions() {
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__restore_transactions);
+Task<std::vector<PurchaseHistoryRecord>>
+Self::getPurchaseHistory(SkuType type) {
+    // TODO.
+    co_return std::vector<PurchaseHistoryRecord>();
 }
 
-void Self::requestProducts(const std::vector<std::string>& productIds) {
-    nlohmann::json json = productIds;
-    auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__request_products, json.dump());
+Task<Purchase> Self::purchase(const std::string& sku) {
+    // TODO.
+    co_return Purchase();
+}
+
+Task<bool> Self::consume(const std::string& purchaseToken) {
+    // TODO.
+    co_return false;
+}
+
+Task<bool> Self::acknowledge(const std::string& purchaseToken) {
+    // TODO.
+    co_return false;
 }
 } // namespace store
 } // namespace ee

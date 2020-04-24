@@ -60,7 +60,7 @@ Self::RewardedAd(
         messageHelper_.onClosed());
 }
 
-Self::~RewardedAd() {}
+Self::~RewardedAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());

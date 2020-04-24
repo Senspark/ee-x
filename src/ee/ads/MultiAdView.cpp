@@ -25,7 +25,7 @@ Self::MultiAdView() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiAdView() {}
+Self::~MultiAdView() = default;
 
 Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
     items_.push_back(item);

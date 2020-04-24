@@ -26,8 +26,8 @@ constexpr auto k__store          = "store";
 
 using Self = NativeAdLayout;
 
-Self::NativeAdLayout() {}
-Self::~NativeAdLayout() {}
+Self::NativeAdLayout() = default;
+Self::~NativeAdLayout() = default;
 
 Self& Self::setBody(const std::string& id) {
     params_[k__body] = id;

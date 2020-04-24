@@ -42,9 +42,7 @@ Self::Bridge()
     //
 }
 
-Self::~Bridge() {
-    //
-}
+Self::~Bridge() = default;
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {
     runOnUiThread([this, devKey, appId] {

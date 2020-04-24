@@ -26,9 +26,8 @@ constexpr auto k__sponsor        = "sponsor";
 // clang-format on
 } // namespace
 
-Self::NativeAdLayout() {}
-
-Self::~NativeAdLayout() {}
+Self::NativeAdLayout() = default;
+Self::~NativeAdLayout() = default;
 
 Self& Self::setAdChoices(const std::string& id) {
     params_[k__ad_choices] = id;

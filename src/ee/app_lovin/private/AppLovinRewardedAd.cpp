@@ -29,7 +29,7 @@ Self::RewardedAd(
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 }
 
-Self::~RewardedAd() {}
+Self::~RewardedAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);

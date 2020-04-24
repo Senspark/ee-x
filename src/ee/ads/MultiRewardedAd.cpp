@@ -20,9 +20,7 @@ Self::MultiRewardedAd() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiRewardedAd() {
-    handle_->clear();
-}
+Self::~MultiRewardedAd() = default;
 
 Self& Self::addItem(const std::shared_ptr<IRewardedAd>& item) {
     items_.push_back(item);

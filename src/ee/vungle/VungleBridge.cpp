@@ -71,7 +71,7 @@ Self::Bridge(const Logger& logger)
         k__onClosed);
 }
 
-Self::~Bridge() {}
+Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);

@@ -44,7 +44,9 @@ Self::Bridge(const Logger& logger)
         k__onReceivedLink);
 }
 
-Self::~Bridge() {
+Self::~Bridge() = default;
+
+void Self::destroy() {
     bridge_.deregisterHandler(k__onReceivedLink);
 }
 

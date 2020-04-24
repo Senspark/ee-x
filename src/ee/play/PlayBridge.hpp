@@ -19,6 +19,8 @@ class Bridge final {
 public:
     Bridge();
     ~Bridge();
+    
+    void destroy();
 
     bool isSignedIn();
     void signin(bool silentSignIn = false);

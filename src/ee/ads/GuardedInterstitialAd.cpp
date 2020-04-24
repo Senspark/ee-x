@@ -47,7 +47,7 @@ Self::GuardedInterstitialAd(const std::shared_ptr<IInterstitialAd>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedInterstitialAd() {}
+Self::~GuardedInterstitialAd() = default;
 
 void Self::destroy() {
     ad_->destroy();

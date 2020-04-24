@@ -47,7 +47,7 @@ Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedRewardedAd() {}
+Self::~GuardedRewardedAd() = default;
 
 void Self::destroy() {
     ad_->destroy();

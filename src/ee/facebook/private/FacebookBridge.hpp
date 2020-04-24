@@ -18,6 +18,8 @@ public:
     Bridge();
     virtual ~Bridge() override;
 
+    virtual void destroy() override;
+
     /// @see Super.
     virtual bool isLoggedIn() const override;
 

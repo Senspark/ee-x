@@ -93,7 +93,7 @@ Self::Bridge(const Logger& logger)
         kOnAcknowledge);
 }
 
-Self::~Bridge() {}
+Self::~Bridge() = default;
 
 void Self::destroy() {
     bridge_.deregisterHandler(kOnGetSkuDetails);

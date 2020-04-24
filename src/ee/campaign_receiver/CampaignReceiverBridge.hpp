@@ -24,6 +24,8 @@ public:
 
     explicit Bridge(const Logger& logger);
 
+    void destroy();
+
     void initialize(const OnReceivedLinkCallback& callback);
 
 private:

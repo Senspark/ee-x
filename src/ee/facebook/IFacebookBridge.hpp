@@ -20,6 +20,8 @@ class IBridge {
 public:
     virtual ~IBridge() = default;
 
+    virtual void destroy() = 0;
+
     virtual bool isLoggedIn() const = 0;
 
     virtual void logIn(const std::vector<std::string>& permissions,

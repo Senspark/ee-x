@@ -47,9 +47,8 @@ constexpr auto k__testTrackEcommerceImpression = "GoogleAnalytics_testTrackEcomm
 // clang-format on
 } // namespace
 
-Self::Analytics() {}
-
-Self::~Analytics() {}
+Self::Analytics() = default;
+Self::~Analytics() = default;
 
 void Self::setDispatchInterval(int seconds) {
     auto&& bridge = MessageBridge::getInstance();

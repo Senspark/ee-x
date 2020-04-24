@@ -50,7 +50,7 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
         messageHelper_.onClicked());
 }
 
-Self::~NativeAd() {}
+Self::~NativeAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());

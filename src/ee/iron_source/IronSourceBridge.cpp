@@ -111,7 +111,7 @@ Self::Bridge(const Logger& logger)
         k__onRewardedAdClosed);
 }
 
-Self::~Bridge() {}
+Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);

@@ -68,9 +68,7 @@ Self::Bridge(const Logger& logger)
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 }
 
-Self::~Bridge() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-}
+Self::~Bridge() = default;
 
 std::string Self::getTestDeviceHash() const {
     return bridge_.call(k__getTestDeviceHash);

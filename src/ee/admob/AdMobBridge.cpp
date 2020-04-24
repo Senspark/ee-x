@@ -69,9 +69,7 @@ Self::Bridge(const Logger& logger)
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 }
 
-Self::~Bridge() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-}
+Self::~Bridge() = default;
 
 void Self::initialize(const std::string& applicationId) {
     runOnUiThread([this, applicationId] { //

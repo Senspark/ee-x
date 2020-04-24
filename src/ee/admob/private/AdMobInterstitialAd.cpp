@@ -65,7 +65,7 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
         messageHelper_.onClosed());
 }
 
-Self::~InterstitialAd() {}
+Self::~InterstitialAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());

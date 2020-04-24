@@ -46,7 +46,7 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedAdView() {}
+Self::~GuardedAdView() = default;
 
 void Self::destroy() {
     ad_->destroy();

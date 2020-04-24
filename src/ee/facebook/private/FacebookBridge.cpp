@@ -60,7 +60,9 @@ Self::Bridge()
     registerNotifications();
 }
 
-Self::~Bridge() {
+Self::~Bridge() = default;
+
+void Self::destroy() {
     bridge_.deregisterHandler(k__onProfileChanged);
 }
 

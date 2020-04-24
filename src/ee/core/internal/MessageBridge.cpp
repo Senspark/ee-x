@@ -28,7 +28,7 @@ Self::MessageBridge()
     handlerLock_ = std::make_unique<SpinLock>();
 }
 
-Self::~MessageBridge() {}
+Self::~MessageBridge() = default;
 
 std::string Self::callCpp(const std::string& tag, const std::string& message) {
     auto handler = findHandler(tag);

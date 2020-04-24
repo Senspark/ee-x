@@ -50,7 +50,9 @@ Self::Bridge()
         k_onSignedIn);
 }
 
-Self::~Bridge() {
+Self::~Bridge() = default;
+
+void Self::destroy() {
     bridge_.deregisterHandler(k_onSignedIn);
 }
 
@@ -73,7 +75,7 @@ void Self::setLoginCallback(const LoginResultCallback& callback) {
     callback_ = callback;
 }
 
-void Self::onSignedIn(bool success) {    
+void Self::onSignedIn(bool success) {
     if (callback_) {
         callback_(success);
     }

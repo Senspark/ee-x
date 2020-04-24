@@ -31,7 +31,7 @@ Self::InterstitialAd(const Logger& logger,
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
 }
 
-Self::~InterstitialAd() {}
+Self::~InterstitialAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());

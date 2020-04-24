@@ -21,6 +21,17 @@ public class JsonUtils {
     }
 
     @Nullable
+    public static String convertListToString(@Nullable List<Object> list) {
+        String result = null;
+        try {
+            result = parser.writeValueAsString(list);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @Nullable
     public static String convertDictionaryToString(@Nullable Map<String, Object> dict) {
         String result = null;
         try {

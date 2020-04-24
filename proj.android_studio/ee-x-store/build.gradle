@@ -1,16 +1,22 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'org.solovyev.android:checkout:1.2.1'
+    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.2'
 }

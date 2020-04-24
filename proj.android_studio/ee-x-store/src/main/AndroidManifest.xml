@@ -1,5 +1,2 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ee.store">
-    <uses-permission android:name="com.android.vending.BILLING"/>
-</manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ee.store"></manifest>

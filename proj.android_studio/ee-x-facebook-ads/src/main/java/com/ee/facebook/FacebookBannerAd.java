@@ -247,7 +247,7 @@ class FacebookBannerAd implements AdListener, IAdView {
             case -1: // Normal ads.
                 return Resources.getSystem().getDisplayMetrics().widthPixels;
             default: // Deprecated ads.
-                return (int) Utils.convertDpToPixel((double) size.getWidth());
+                return (int) Utils.convertDpToPixel(size.getWidth());
         }
     }
 
@@ -256,7 +256,7 @@ class FacebookBannerAd implements AdListener, IAdView {
             case 0: // Interstitial.
                 return Resources.getSystem().getDisplayMetrics().heightPixels;
             default: // Normal ads.
-                return (int) Utils.convertDpToPixel((double) size.getHeight());
+                return (int) Utils.convertDpToPixel(size.getHeight());
         }
     }
 }

@@ -13,8 +13,8 @@ import com.facebook.share.Sharer;
  */
 
 public class FacebookShareDelegate implements FacebookCallback<Sharer.Result> {
-    private int            _tag;
     private IMessageBridge _bridge;
+    private int _tag;
 
     FacebookShareDelegate(IMessageBridge bridge, int tag) {
         _bridge = bridge;
@@ -23,17 +23,17 @@ public class FacebookShareDelegate implements FacebookCallback<Sharer.Result> {
 
     @NonNull
     private String k__onSuccess() {
-        return "FacebookShareDelegate_onSuccess_" + String.valueOf(_tag);
+        return "FacebookShareDelegate_onSuccess_" + _tag;
     }
 
     @NonNull
     private String k__onFailure() {
-        return "FacebookShareDelegate_onFailure_" + String.valueOf(_tag);
+        return "FacebookShareDelegate_onFailure_" + _tag;
     }
 
     @NonNull
     private String k__onCancel() {
-        return "FacebookShareDelegate_onCancel_" + String.valueOf(_tag);
+        return "FacebookShareDelegate_onCancel_" + _tag;
     }
 
     @Override

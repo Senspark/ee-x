@@ -11,33 +11,34 @@ import com.facebook.share.widget.GameRequestDialog;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by eps on 3/21/18.
  */
 
-public class FacebookRequestDelegate implements FacebookCallback<GameRequestDialog.Result> {
-    private int            _tag;
+class FacebookRequestDelegate implements FacebookCallback<GameRequestDialog.Result> {
     private IMessageBridge _bridge;
+    private int _tag;
 
-    public FacebookRequestDelegate(IMessageBridge bridge, int tag) {
+    FacebookRequestDelegate(IMessageBridge bridge, int tag) {
         _bridge = bridge;
         _tag = tag;
     }
 
     @NonNull
     private String k__onSuccess() {
-        return "FacebookRequestDelegate_onSuccess_" + String.valueOf(_tag);
+        return "FacebookRequestDelegate_onSuccess_" + _tag;
     }
 
     @NonNull
     private String k__onFailure() {
-        return "FacebookRequestDelegate_onFailure_" + String.valueOf(_tag);
+        return "FacebookRequestDelegate_onFailure_" + _tag;
     }
 
     @NonNull
     private String k__onCancel() {
-        return "FacebookRequestDelegate_onCancel_" + String.valueOf(_tag);
+        return "FacebookRequestDelegate_onCancel_" + _tag;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class FacebookRequestDelegate implements FacebookCallback<GameRequestDial
         Map<String, Object> dict = new HashMap<>();
         dict.put("requestId", result.getRequestId());
         dict.put("requestRecipients", result.getRequestRecipients());
-        _bridge.callCpp(k__onSuccess(), JsonUtils.convertDictionaryToString(dict));
+        _bridge.callCpp(k__onSuccess(), Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
     }
 
     @Override

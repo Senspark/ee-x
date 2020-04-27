@@ -6,14 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.SparseArray;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.SparseArray;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -41,11 +41,10 @@ import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -93,7 +92,7 @@ public class Facebook implements PluginProtocol {
                     dict.put("userId", currentProfile.getId());
                     dict.put("firstName", currentProfile.getFirstName());
                     dict.put("middleName",
-                            currentProfile.getMiddleName() == null ? "" : currentProfile.getMiddleName());
+                        currentProfile.getMiddleName() == null ? "" : currentProfile.getMiddleName());
                     dict.put("lastName", currentProfile.getLastName());
                     dict.put("name", currentProfile.getName());
                     dict.put("picture", currentProfile.getProfilePictureUri(128, 128).toString());
@@ -127,7 +126,7 @@ public class Facebook implements PluginProtocol {
         dict.put("token", token.getToken());
         dict.put("applicationId", token.getApplicationId());
         dict.put("userId", token.getUserId());
-        return JsonUtils.convertDictionaryToString(dict);
+        return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
     }
 
     @NonNull
@@ -185,106 +184,78 @@ public class Facebook implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                registerNotifications();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            registerNotifications();
+            return "";
         }, k__registerNotifications);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(isLoggedIn());
-            }
-        }, k__isLoggedIn);
+        _bridge.registerHandler(message ->
+            Utils.toString(isLoggedIn()), k__isLoggedIn);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                List<String> permissions = (List<String>) dict.get("permissions");
-                Integer tag = (Integer) dict.get("tag");
-                logIn(permissions, new FacebookLoginDelegate(_bridge, tag));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            List<String> permissions = (List<String>) dict.get("permissions");
+            Integer tag = (Integer) dict.get("tag");
+            assertThat(permissions).isNotNull();
+            assertThat(tag).isNotNull();
+
+            logIn(permissions, new FacebookLoginDelegate(_bridge, tag));
+            return "";
         }, k__logIn);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                logOut();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            logOut();
+            return "";
         }, k__logOut);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                AccessToken token = getAccessToken();
-                return convertAccessTokenToString(token);
-            }
+        _bridge.registerHandler(message -> {
+            AccessToken token = getAccessToken();
+            return convertAccessTokenToString(token);
         }, k__getAccessToken);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return graphRequest(message);
-            }
-        }, k__graphRequest);
+        _bridge.registerHandler(this::graphRequest, k__graphRequest);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return sendRequest(message);
-            }
-        }, k__sendRequest);
+        _bridge.registerHandler(this::sendRequest, k__sendRequest);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                Integer tag = (Integer) dict.get("tag");
-                String url = (String) dict.get("url");
-                shareLinkContent(url, new FacebookShareDelegate(_bridge, tag));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            Integer tag = (Integer) dict.get("tag");
+            String url = (String) dict.get("url");
+            assertThat(tag).isNotNull();
+            assertThat(url).isNotNull();
+
+            shareLinkContent(url, new FacebookShareDelegate(_bridge, tag));
+            return "";
         }, k__shareLinkContent);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                Integer tag = (Integer) dict.get("tag");
-                String url = (String) dict.get("url");
-                sharePhotoContent(url, new FacebookShareDelegate(_bridge, tag));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            Integer tag = (Integer) dict.get("tag");
+            String url = (String) dict.get("url");
+            assertThat(tag).isNotNull();
+            assertThat(url).isNotNull();
+
+            sharePhotoContent(url, new FacebookShareDelegate(_bridge, tag));
+            return "";
         }, k__sharePhotoContent);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                Integer tag = (Integer) dict.get("tag");
-                String url = (String) dict.get("url");
-                shareVideoContent(url, new FacebookShareDelegate(_bridge, tag));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            Integer tag = (Integer) dict.get("tag");
+            String url = (String) dict.get("url");
+            assertThat(tag).isNotNull();
+            assertThat(url).isNotNull();
+
+            shareVideoContent(url, new FacebookShareDelegate(_bridge, tag));
+            return "";
         }, k__shareVideoContent);
     }
 
@@ -324,32 +295,36 @@ public class Facebook implements PluginProtocol {
 
     @NonNull
     private String k__onGraphSuccess(int tag) {
-        return "FacebookGraphDelegate_onSuccess_" + String.valueOf(tag);
+        return "FacebookGraphDelegate_onSuccess_" + tag;
     }
 
     @NonNull
     private String k__onGraphFailure(int tag) {
-        return "FacebookGraphDelegate_onFailure_" + String.valueOf(tag);
+        return "FacebookGraphDelegate_onFailure_" + tag;
     }
 
     @NonNull
     private String graphRequest(@NonNull String message) {
         Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-        final int tag = (Integer) dict.get("tag");
+        assertThat(dict).isNotNull();
+
+        Integer tag = (Integer) dict.get("tag");
         String path = (String) dict.get("path");
+        @SuppressWarnings("unchecked")
         Map<String, Object> parameters_ = (Map<String, Object>) dict.get("parameters");
+        assertThat(tag).isNotNull();
+        assertThat(path).isNotNull();
+        assertThat(parameters_).isNotNull();
+
         Bundle parameters = new Bundle();
         for (Map.Entry<String, Object> entry : parameters_.entrySet()) {
             parameters.putString(entry.getKey(), (String) entry.getValue());
         }
-        GraphRequest.Callback callback = new GraphRequest.Callback() {
-            @Override
-            public void onCompleted(GraphResponse response) {
-                if (response.getError() != null) {
-                    _bridge.callCpp(k__onGraphFailure(tag), response.getError().getErrorMessage());
-                } else {
-                    _bridge.callCpp(k__onGraphSuccess(tag), response.getRawResponse());
-                }
+        GraphRequest.Callback callback = response -> {
+            if (response.getError() != null) {
+                _bridge.callCpp(k__onGraphFailure(tag), response.getError().getErrorMessage());
+            } else {
+                _bridge.callCpp(k__onGraphSuccess(tag), response.getRawResponse());
             }
         };
         graphRequest(path, parameters, callback);
@@ -365,39 +340,59 @@ public class Facebook implements PluginProtocol {
     @NonNull
     private String sendRequest(@NonNull String message_) {
         Map<String, Object> dict = JsonUtils.convertStringToDictionary(message_);
-        int tag = (Integer) dict.get("tag");
+        assertThat(dict).isNotNull();
+
+        Integer tag = (Integer) dict.get("tag");
+        Integer actionType = (Integer) dict.get("actionType");
+        Integer filter = (Integer) dict.get("filter");
+        assertThat(tag).isNotNull();
+        assertThat(actionType).isNotNull();
+        assertThat(filter).isNotNull();
 
         SparseArray<GameRequestContent.ActionType> actionTypes = new SparseArray<>();
         actionTypes.put(0, null);
         actionTypes.put(1, GameRequestContent.ActionType.SEND);
         actionTypes.put(2, GameRequestContent.ActionType.ASKFOR);
         actionTypes.put(3, GameRequestContent.ActionType.TURN);
-        int actionType = (Integer) dict.get("actionType");
 
         SparseArray<GameRequestContent.Filters> filters = new SparseArray<>();
         filters.put(0, null);
         filters.put(1, GameRequestContent.Filters.APP_USERS);
         filters.put(2, GameRequestContent.Filters.APP_NON_USERS);
-        int filter = (Integer) dict.get("filter");
 
         String title = (String) dict.get("title");
+        @SuppressWarnings("unchecked")
         List<String> recipients = (List<String>) dict.get("recipients");
         String objectId = (String) dict.get("objectId");
         String data = (String) dict.get("data");
         String message = (String) dict.get("message");
+        assertThat(message).isNotNull();
 
-        sendRequest(actionTypes.get(actionType), filters.get(filter), title, recipients, objectId, data, message,
-                new FacebookRequestDelegate(_bridge, tag));
+        sendRequest(
+            actionTypes.get(actionType),
+            filters.get(filter),
+            title, recipients, objectId, data, message,
+            new FacebookRequestDelegate(_bridge, tag));
         return "";
     }
 
     public void sendRequest(@Nullable GameRequestContent.ActionType actionType,
-                            @Nullable GameRequestContent.Filters filter, @Nullable String title, @Nullable List<String> recipients,
-                            @Nullable String objectId, @Nullable String data, @NonNull String message,
+                            @Nullable GameRequestContent.Filters filter,
+                            @Nullable String title,
+                            @Nullable List<String> recipients,
+                            @Nullable String objectId,
+                            @Nullable String data,
+                            @NonNull String message,
                             @NonNull FacebookCallback<GameRequestDialog.Result> delegate) {
-        GameRequestContent content = new GameRequestContent.Builder().setActionType(actionType).setFilters(filter)
-                .setTitle(title).setObjectId(objectId).setRecipients(recipients).setData(data).setMessage(message)
-                .build();
+        GameRequestContent content = new GameRequestContent.Builder()
+            .setActionType(actionType)
+            .setFilters(filter)
+            .setTitle(title)
+            .setObjectId(objectId)
+            .setRecipients(recipients)
+            .setData(data)
+            .setMessage(message)
+            .build();
 
         GameRequestDialog dialog = new GameRequestDialog(_activity);
         dialog.registerCallback(_callbackManager, delegate);
@@ -413,7 +408,9 @@ public class Facebook implements PluginProtocol {
 //            encodedUrl = url;
 //        }
 
-        ShareLinkContent content = new ShareLinkContent.Builder().setContentUrl(Uri.parse(url)).build();
+        ShareLinkContent content = new ShareLinkContent.Builder()
+            .setContentUrl(Uri.parse(url))
+            .build();
         shareContent(content, delegate);
     }
 
@@ -436,11 +433,10 @@ public class Facebook implements PluginProtocol {
     }
 
     private void shareContent(ShareContent content, FacebookCallback<Sharer.Result> delegate) {
-        if(_activity == null)
-        {
+        if (_activity == null) {
             return;
         }
-        
+
         ShareDialog dialog = new ShareDialog(_activity);
         dialog.registerCallback(_callbackManager, delegate);
         dialog.show(content, ShareDialog.Mode.AUTOMATIC);

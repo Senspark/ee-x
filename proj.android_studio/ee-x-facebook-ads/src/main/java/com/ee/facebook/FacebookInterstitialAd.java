@@ -10,7 +10,6 @@ import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -60,21 +59,11 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     private void registerHandlers() {
         _helper.registerHandlers();
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(createInternalAd());
-            }
-        }, _messageHelper.createInternalAd());
+        _bridge.registerHandler(message ->
+            Utils.toString(createInternalAd()), _messageHelper.createInternalAd());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(destroyInternalAd());
-            }
-        }, _messageHelper.destroyInternalAd());
+        _bridge.registerHandler(message ->
+            Utils.toString(destroyInternalAd()), _messageHelper.destroyInternalAd());
     }
 
     private void deregisterHandlers() {

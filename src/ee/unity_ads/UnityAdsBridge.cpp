@@ -96,7 +96,7 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     runOnUiThread([this, gameId, testModeEnabled] {
         nlohmann::json json;
         json[k__gameId] = gameId;
-        json[k__testModeEnabled] = core::toString(testModeEnabled);
+        json[k__testModeEnabled] = testModeEnabled;
         bridge_.call(k__initialize, json.dump());
     });
 }

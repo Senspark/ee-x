@@ -20,7 +20,6 @@ import com.applovin.sdk.AppLovinSdkSettings;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -231,94 +230,52 @@ public class AppLovin implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String key = message;
-                initialize(key);
-                return "";
-            }
+            String key = message;
+            initialize(key);
+            return "";
         }, k__initialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setTestAdEnabled(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setTestAdEnabled(Utils.toBoolean(message));
+            return "";
         }, k__setTestAdsEnabled);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setVerboseLogging(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setVerboseLogging(Utils.toBoolean(message));
+            return "";
         }, k__setVerboseLogging);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setMuted(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setMuted(Utils.toBoolean(message));
+            return "";
         }, k__setMuted);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                loadInterstitialAd();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            loadInterstitialAd();
+            return "";
         }, k__loadInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(hasInterstitialAd());
-            }
-        }, k__hasInterstitialAd);
+        _bridge.registerHandler(message ->
+            Utils.toString(hasInterstitialAd()), k__hasInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                showInterstitialAd();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            showInterstitialAd();
+            return "";
         }, k__showInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedAd());
-            }
-        }, k__hasRewardedAd);
+        _bridge.registerHandler(message ->
+            Utils.toString(hasRewardedAd()), k__hasRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                loadRewardedAd();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            loadRewardedAd();
+            return "";
         }, k__loadRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                showRewardedAd();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            showRewardedAd();
+            return "";
         }, k__showRewardedAd);
     }
 

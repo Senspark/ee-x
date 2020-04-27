@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -21,6 +20,7 @@ import com.vungle.warren.error.VungleException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -114,44 +114,28 @@ public class Vungle implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                String gameId = (String) dict.get("gameId");
-                initialize(gameId);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            String gameId = (String) dict.get("gameId");
+            assertThat(gameId).isNotNull();
+
+            initialize(gameId);
+            return "";
         }, k__initialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedAd(message));
-            }
-        }, k__hasRewardedAd);
+        _bridge.registerHandler(message ->
+            Utils.toString(hasRewardedAd(message)), k__hasRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                loadRewardedAd(message);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            loadRewardedAd(message);
+            return "";
         }, k__loadRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                showRewardedAd(message);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            showRewardedAd(message);
+            return "";
         }, k__showRewardedAd);
     }
 
@@ -207,7 +191,7 @@ public class Vungle implements PluginProtocol {
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
                 dict.put("rewarded", completed);
-                _bridge.callCpp(k__onClosed, JsonUtils.convertDictionaryToString(dict));
+                _bridge.callCpp(k__onClosed, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
 
             @Override
@@ -216,7 +200,7 @@ public class Vungle implements PluginProtocol {
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
                 dict.put("message", throwable.getMessage());
-                _bridge.callCpp(k__onFailedToShow, JsonUtils.convertDictionaryToString(dict));
+                _bridge.callCpp(k__onFailedToShow, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
         };
 
@@ -226,7 +210,7 @@ public class Vungle implements PluginProtocol {
                 _logger.info("onAdLoaded: " + adId);
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
-                _bridge.callCpp(k__onLoaded, JsonUtils.convertDictionaryToString(dict));
+                _bridge.callCpp(k__onLoaded, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
 
             @Override
@@ -235,7 +219,7 @@ public class Vungle implements PluginProtocol {
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
                 dict.put("message", throwable.getMessage());
-                _bridge.callCpp(k__onFailedToLoad, JsonUtils.convertDictionaryToString(dict));
+                _bridge.callCpp(k__onFailedToLoad, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
         };
     }

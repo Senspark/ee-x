@@ -23,7 +23,6 @@ import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -114,21 +113,11 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     private void registerHandlers() {
         _helper.registerHandlers();
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(createInternalAd());
-            }
-        }, _messageHelper.createInternalAd());
+        _bridge.registerHandler(message ->
+            Utils.toString(createInternalAd()), _messageHelper.createInternalAd());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(destroyInternalAd());
-            }
-        }, _messageHelper.destroyInternalAd());
+        _bridge.registerHandler(message ->
+            Utils.toString(destroyInternalAd()), _messageHelper.destroyInternalAd());
     }
 
     private void deregisterHandlers() {
@@ -162,8 +151,11 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     private void createView() {
         Utils.checkMainThread();
-        int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
-        View nativeAdView = LayoutInflater.from(_context).inflate(layoutId, null, false);
+        int layoutId = _context.getResources()
+            .getIdentifier(_layoutName, "layout", _context.getPackageName());
+        View nativeAdView = LayoutInflater
+            .from(_context)
+            .inflate(layoutId, null, false);
         nativeAdView.setVisibility(View.INVISIBLE);
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -298,54 +290,33 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
         _ad.unregisterView();
 
-        processView(_view, k__call_to_action, new ViewProcessor<Button>() {
-            @Override
-            public void process(Button view) {
-                view.setVisibility(_ad.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
-                view.setText(_ad.getAdCallToAction());
-            }
+        processView(_view, k__call_to_action, (ViewProcessor<Button>) view -> {
+            view.setVisibility(_ad.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
+            view.setText(_ad.getAdCallToAction());
         });
 
-        processView(_view, k__title, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                view.setText(_ad.getAdvertiserName());
-            }
+        processView(_view, k__title, (ViewProcessor<TextView>) view ->
+            view.setText(_ad.getAdvertiserName()));
+
+        processView(_view, k__body, (ViewProcessor<TextView>) view ->
+            view.setText(_ad.getAdBodyText()));
+
+        processView(_view, k__social_context, (ViewProcessor<TextView>) view ->
+            view.setText(_ad.getAdSocialContext()));
+
+        processView(_view, k__ad_choices, (ViewProcessor<LinearLayout>) view -> {
+            // Remove old icons.
+            view.removeAllViews();
+
+            // Add the AdChoices icon.
+            AdOptionsView adOptionsView = new AdOptionsView(_context, _ad, null);
+            view.addView(adOptionsView);
         });
 
-        processView(_view, k__body, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                view.setText(_ad.getAdBodyText());
-            }
-        });
-
-        processView(_view, k__social_context, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                view.setText(_ad.getAdSocialContext());
-            }
-        });
-
-        processView(_view, k__ad_choices, new ViewProcessor<LinearLayout>() {
-            @Override
-            public void process(LinearLayout view) {
-                // Remove old icons.
-                view.removeAllViews();
-
-                // Add the AdChoices icon.
-                AdOptionsView adOptionsView = new AdOptionsView(_context, _ad, null);
-                view.addView(adOptionsView);
-            }
-        });
-
-        processView(_view, k__media, new ViewProcessor<MediaView>() {
-            @Override
-            public void process(MediaView mediaView) {
-                final Button callToAction = _view.findViewById(getIdentifier(k__call_to_action));
-                final ImageView icon = _view.findViewById(getIdentifier(k__icon));
-                _ad.registerViewForInteraction(_view, mediaView, icon, Arrays.asList(callToAction, mediaView));
-            }
+        processView(_view, k__media, (ViewProcessor<MediaView>) mediaView -> {
+            final Button callToAction = _view.findViewById(getIdentifier(k__call_to_action));
+            final ImageView icon = _view.findViewById(getIdentifier(k__icon));
+            _ad.registerViewForInteraction(_view, mediaView, icon, Arrays.asList(callToAction, mediaView));
         });
 
         _isLoaded = true;

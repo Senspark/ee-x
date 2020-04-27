@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 import com.ironsource.mediationsdk.logger.IronSourceError;
@@ -116,66 +115,37 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
+            assertThat(_activity).isNotNull();
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                assertThat(_activity).isNotNull();
-                String gameId = message;
-                initialize(_activity, gameId);
-                return "";
-            }
+            String gameId = message;
+            initialize(_activity, gameId);
+            return "";
         }, k__initialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                loadInterstitialAd();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            loadInterstitialAd();
+            return "";
         }, k__loadInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(hasInterstitialAd());
-            }
-        }, k__hasInterstitialAd);
+        _bridge.registerHandler(message ->
+            Utils.toString(hasInterstitialAd()), k__hasInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                showInterstitialAd(adId);
-                return "";
-            }
+            String adId = message;
+            showInterstitialAd(adId);
+            return "";
         }, k__showInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(hasRewardedAd());
-            }
-        }, k__hasRewardedAd);
+        _bridge.registerHandler(message ->
+            Utils.toString(hasRewardedAd()), k__hasRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                showRewardedAd(adId);
-                return "";
-            }
+            String adId = message;
+            showRewardedAd(adId);
+            return "";
         }, k__showRewardedAd);
     }
 
@@ -327,12 +297,7 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
         } else {
             // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
             // asynchronous.
-            Utils.runOnUiThreadDelayed(1.0f, new Runnable() {
-                @Override
-                public void run() {
-                    handleRewardedAdResult();
-                }
-            });
+            Utils.runOnUiThreadDelayed(1.0f, this::handleRewardedAdResult);
         }
     }
 

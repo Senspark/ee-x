@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -18,6 +17,7 @@ import com.unity3d.ads.UnityAds.UnityAdsError;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -107,50 +107,37 @@ public class UnityAds implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
 
-                String gameId = (String) dict.get(k__gameId);
-                boolean testModeEnabled = Utils.toBoolean((String) dict.get(k__testModeEnabled));
-                assertThat(_activity).isNotNull();
-                initialize(_activity, gameId, testModeEnabled);
-                return "";
-            }
+            String gameId = (String) dict.get(k__gameId);
+            Boolean testModeEnabled = (Boolean) dict.get(k__testModeEnabled);
+            assertThat(gameId).isNotNull();
+            assertThat(testModeEnabled).isNotNull();
+
+            assertThat(_activity).isNotNull();
+            initialize(_activity, gameId, testModeEnabled);
+            return "";
         }, k__initialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setDebugModeEnabled(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setDebugModeEnabled(Utils.toBoolean(message));
+            return "";
         }, k__setDebugModeEnabled);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(hasRewardedAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(hasRewardedAd(adId));
         }, k__hasRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
+            assertThat(_activity).isNotNull();
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                assertThat(_activity).isNotNull();
-                String adId = message;
-                showRewardedAd(_activity, adId);
-                return "";
-            }
+            String adId = message;
+            showRewardedAd(_activity, adId);
+            return "";
         }, k__showRewardedAd);
     }
 
@@ -191,21 +178,21 @@ public class UnityAds implements PluginProtocol {
                     Map<String, Object> dict = new HashMap<>();
                     dict.put("ad_id", adId);
                     dict.put("message", "");
-                    _bridge.callCpp(k__onFailedToShow, JsonUtils.convertDictionaryToString(dict));
+                    _bridge.callCpp(k__onFailedToShow, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
                     return;
                 }
                 if (state == FinishState.SKIPPED) {
                     Map<String, Object> dict = new HashMap<>();
                     dict.put("ad_id", adId);
                     dict.put("rewarded", false);
-                    _bridge.callCpp(k__onClosed, JsonUtils.convertDictionaryToString(dict));
+                    _bridge.callCpp(k__onClosed, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
                     return;
                 }
                 if (state == FinishState.COMPLETED) {
                     Map<String, Object> dict = new HashMap<>();
                     dict.put("ad_id", adId);
                     dict.put("rewarded", true);
-                    _bridge.callCpp(k__onClosed, JsonUtils.convertDictionaryToString(dict));
+                    _bridge.callCpp(k__onClosed, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
                     return;
                 }
                 assertThat(false).isTrue();

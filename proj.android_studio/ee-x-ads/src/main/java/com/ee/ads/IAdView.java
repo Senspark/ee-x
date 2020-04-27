@@ -1,6 +1,7 @@
 package com.ee.ads;
 
 import android.graphics.Point;
+
 import androidx.annotation.NonNull;
 
 public interface IAdView {

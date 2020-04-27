@@ -1,16 +1,18 @@
 package com.ee.ads;
 
-import androidx.annotation.NonNull;
-
 import android.graphics.Point;
+
+import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 10/12/17.
@@ -30,90 +32,62 @@ public class AdViewHelper {
     }
 
     public void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(_view.isLoaded());
-            }
-        }, _helper.isLoaded());
+        _bridge.registerHandler(message ->
+            Utils.toString(_view.isLoaded()), _helper.isLoaded());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                _view.load();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            _view.load();
+            return "";
         }, _helper.load());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point position = _view.getPosition();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("x", position.x);
-                dict.put("y", position.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
+        _bridge.registerHandler(message -> {
+            Point position = _view.getPosition();
+            Map<String, Object> dict = new HashMap<>();
+            dict.put("x", position.x);
+            dict.put("y", position.y);
+            return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
         }, _helper.getPosition());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("x");
-                int y = (Integer) dict.get("y");
-                _view.setPosition(new Point(x, y));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            Integer x = (Integer) dict.get("x");
+            Integer y = (Integer) dict.get("y");
+            assertThat(x).isNotNull();
+            assertThat(y).isNotNull();
+
+            _view.setPosition(new Point(x, y));
+            return "";
         }, _helper.setPosition());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Point size = _view.getSize();
-                Map<String, Object> dict = new HashMap<>();
-                dict.put("width", size.x);
-                dict.put("height", size.y);
-                return JsonUtils.convertDictionaryToString(dict);
-            }
+        _bridge.registerHandler(message -> {
+            Point size = _view.getSize();
+            Map<String, Object> dict = new HashMap<>();
+            dict.put("width", size.x);
+            dict.put("height", size.y);
+            return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
         }, _helper.getSize());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("ConstantConditions")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                int x = (Integer) dict.get("width");
-                int y = (Integer) dict.get("height");
-                _view.setSize(new Point(x, y));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            Integer x = (Integer) dict.get("width");
+            Integer y = (Integer) dict.get("height");
+            assertThat(x).isNotNull();
+            assertThat(y).isNotNull();
+
+            _view.setSize(new Point(x, y));
+            return "";
         }, _helper.setSize());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(_view.isVisible());
-            }
-        }, _helper.isVisible());
+        _bridge.registerHandler(message ->
+            Utils.toString(_view.isVisible()), _helper.isVisible());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                _view.setVisible(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            _view.setVisible(Utils.toBoolean(message));
+            return "";
         }, _helper.setVisible());
     }
 

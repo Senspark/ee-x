@@ -3,8 +3,6 @@ package com.ee.ads;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.internal.Utils;
 
 /**
@@ -25,30 +23,17 @@ public class InterstitialAdHelper {
     }
 
     public void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(_ad.isLoaded());
-            }
-        }, _helper.isLoaded());
+        _bridge.registerHandler(message ->
+            Utils.toString(_ad.isLoaded()), _helper.isLoaded());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                _ad.load();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            _ad.load();
+            return "";
         }, _helper.load());
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                _ad.show();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            _ad.show();
+            return "";
         }, _helper.show());
     }
 

@@ -12,9 +12,9 @@ import com.facebook.login.LoginResult;
  * Created by eps on 3/21/18.
  */
 
-public class FacebookLoginDelegate implements FacebookCallback<LoginResult> {
-    private int            _tag;
+class FacebookLoginDelegate implements FacebookCallback<LoginResult> {
     private IMessageBridge _bridge;
+    private int _tag;
 
     FacebookLoginDelegate(IMessageBridge bridge, int tag) {
         _bridge = bridge;
@@ -23,17 +23,17 @@ public class FacebookLoginDelegate implements FacebookCallback<LoginResult> {
 
     @NonNull
     private String k__onSuccess() {
-        return "FacebookLoginDelegate_onSuccess_" + String.valueOf(_tag);
+        return "FacebookLoginDelegate_onSuccess_" + _tag;
     }
 
     @NonNull
     private String k__onFailure() {
-        return "FacebookLoginDelegate_onFailure_" + String.valueOf(_tag);
+        return "FacebookLoginDelegate_onFailure_" + _tag;
     }
 
     @NonNull
     private String k__onCancel() {
-        return "FacebookLoginDelegate_onCancel_" + String.valueOf(_tag);
+        return "FacebookLoginDelegate_onCancel_" + _tag;
     }
 
     @Override

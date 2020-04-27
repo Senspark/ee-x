@@ -74,8 +74,8 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
                         NSString* gameId = dict[@"gameId"];
-                        BOOL testModeEnabled = [EEUtils
-                            toBool:(NSString*)dict[@"testModeEnabled"]];
+                        BOOL testModeEnabled =
+                            [dict[@"testModeEnabled"] boolValue];
                         [self initialize:gameId testMode:testModeEnabled];
                         return @"";
                     }];

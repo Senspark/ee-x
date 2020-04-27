@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.RemoteException;
+
 import androidx.annotation.NonNull;
 
 import com.android.installreferrer.api.InstallReferrerClient;
@@ -11,7 +12,6 @@ import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -37,14 +37,9 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
         MessageBridge bridge = MessageBridge.getInstance();
 
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                initialize();
-                return "";
-            }
+        bridge.registerHandler(message -> {
+            initialize();
+            return "";
         }, k__initialize);
     }
 

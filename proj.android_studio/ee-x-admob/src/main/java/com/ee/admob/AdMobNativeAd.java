@@ -128,21 +128,22 @@ class AdMobNativeAd extends AdListener implements IAdView {
         }
         _isLoaded = false;
         _ad = new AdLoader.Builder(_context, _adId)
-            .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-                @Override
-                public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAppInstallAd) {
-                    _logger.info("onAppInstallAdLoaded");
-                    int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
-                    UnifiedNativeAdView adView = (UnifiedNativeAdView) LayoutInflater.from(_context).inflate(layoutId, null, false);
-                    populateUnifiedNativeAdView(nativeAppInstallAd, adView);
-                    _view.removeAllViews();
+            .forUnifiedNativeAd(nativeAppInstallAd -> {
+                _logger.info("onAppInstallAdLoaded");
+                int layoutId = _context.getResources().getIdentifier(_layoutName, "layout", _context.getPackageName());
+                UnifiedNativeAdView adView = (UnifiedNativeAdView) LayoutInflater
+                    .from(_context)
+                    .inflate(layoutId, null, false);
+                populateUnifiedNativeAdView(nativeAppInstallAd, adView);
+                _view.removeAllViews();
 
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    _view.addView(adView, params);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+                _view.addView(adView, params);
 
-                    _isLoaded = true;
-                    _bridge.callCpp(_messageHelper.onLoaded());
-                }
+                _isLoaded = true;
+                _bridge.callCpp(_messageHelper.onLoaded());
             }).withAdListener(this).build();
         return true;
     }
@@ -162,7 +163,9 @@ class AdMobNativeAd extends AdListener implements IAdView {
         assertThat(_view).isNull();
         FrameLayout layout = new FrameLayout(_context);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.START | Gravity.TOP;
         layout.setLayoutParams(params);
 
@@ -267,119 +270,82 @@ class AdMobNativeAd extends AdListener implements IAdView {
         });
 
         // Some assets are guaranteed to be in every NativeAppInstallAd.
-        processView(adView, k__body, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                adView.setBodyView(view);
-                view.setText(nativeAppInstallAd.getBody());
-            }
+        processView(adView, k__body, (ViewProcessor<TextView>) view -> {
+            adView.setBodyView(view);
+            view.setText(nativeAppInstallAd.getBody());
         });
 
-        processView(adView, k__call_to_action, new ViewProcessor<Button>() {
-            @Override
-            public void process(Button view) {
-                adView.setCallToActionView(view);
-                view.setText(nativeAppInstallAd.getCallToAction());
-            }
+        processView(adView, k__call_to_action, (ViewProcessor<Button>) view -> {
+            adView.setCallToActionView(view);
+            view.setText(nativeAppInstallAd.getCallToAction());
         });
 
-        processView(adView, k__headline, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                adView.setHeadlineView(view);
-                view.setText(nativeAppInstallAd.getHeadline());
-            }
+        processView(adView, k__headline, (ViewProcessor<TextView>) view -> {
+            adView.setHeadlineView(view);
+            view.setText(nativeAppInstallAd.getHeadline());
         });
 
-        processView(adView, k__icon, new ViewProcessor<ImageView>() {
-            @Override
-            public void process(ImageView view) {
-                adView.setIconView(view);
-                if (nativeAppInstallAd.getIcon() != null) {
-                    view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
-                }
+        processView(adView, k__icon, (ViewProcessor<ImageView>) view -> {
+            adView.setIconView(view);
+            if (nativeAppInstallAd.getIcon() != null) {
+                view.setImageDrawable(nativeAppInstallAd.getIcon().getDrawable());
             }
         });
 
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
-            processView(adView, k__image, new ViewProcessor<ImageView>() {
-                @Override
-                public void process(ImageView view) {
-                    view.setVisibility(View.GONE);
-                }
-            });
-            processView(adView, k__media, new ViewProcessor<MediaView>() {
-                @Override
-                public void process(MediaView view) {
-                    adView.setMediaView(view);
-                }
-            });
+            processView(adView, k__image, (ViewProcessor<ImageView>) view ->
+                view.setVisibility(View.GONE));
+            processView(adView, k__media, adView::setMediaView);
         } else {
-            processView(adView, k__image, new ViewProcessor<ImageView>() {
-                @Override
-                public void process(ImageView view) {
-                    List<NativeAd.Image> images = nativeAppInstallAd.getImages();
-                    view.setVisibility(View.GONE);
-                    for (NativeAd.Image image : images) {
-                        if (image != null) {
-                            view.setVisibility(View.VISIBLE);
-                            view.setImageDrawable(image.getDrawable());
-                            break;
-                        }
+            processView(adView, k__image, (ViewProcessor<ImageView>) view -> {
+                List<NativeAd.Image> images = nativeAppInstallAd.getImages();
+                view.setVisibility(View.GONE);
+                for (NativeAd.Image image : images) {
+                    if (image != null) {
+                        view.setVisibility(View.VISIBLE);
+                        view.setImageDrawable(image.getDrawable());
+                        break;
                     }
                 }
             });
-            processView(adView, k__media, new ViewProcessor<MediaView>() {
-                @Override
-                public void process(MediaView view) {
-                    view.setVisibility(View.GONE);
-                }
-            });
+            processView(adView, k__media, (ViewProcessor<MediaView>) view ->
+                view.setVisibility(View.GONE));
         }
 
         // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
         // check before trying to display them.
-        processView(adView, k__price, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                adView.setPriceView(view);
-                CharSequence price = nativeAppInstallAd.getPrice();
-                if (price != null) {
-                    view.setVisibility(View.VISIBLE);
-                    view.setText(price);
-                } else {
-                    view.setVisibility(View.INVISIBLE);
-                }
+        processView(adView, k__price, (ViewProcessor<TextView>) view -> {
+            adView.setPriceView(view);
+            CharSequence price = nativeAppInstallAd.getPrice();
+            if (price != null) {
+                view.setVisibility(View.VISIBLE);
+                view.setText(price);
+            } else {
+                view.setVisibility(View.INVISIBLE);
             }
         });
 
-        processView(adView, k__star_rating, new ViewProcessor<RatingBar>() {
-            @Override
-            public void process(RatingBar view) {
-                adView.setStarRatingView(view);
-                Double starRating = nativeAppInstallAd.getStarRating();
-                if (starRating != null) {
-                    view.setRating(starRating.floatValue());
-                    view.setVisibility(View.VISIBLE);
-                } else {
-                    view.setVisibility(View.INVISIBLE);
-                }
+        processView(adView, k__star_rating, (ViewProcessor<RatingBar>) view -> {
+            adView.setStarRatingView(view);
+            Double starRating = nativeAppInstallAd.getStarRating();
+            if (starRating != null) {
+                view.setRating(starRating.floatValue());
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.INVISIBLE);
             }
         });
 
-        processView(adView, k__store, new ViewProcessor<TextView>() {
-            @Override
-            public void process(TextView view) {
-                adView.setStoreView(view);
-                CharSequence store = nativeAppInstallAd.getStore();
-                if (store != null) {
-                    view.setVisibility(View.VISIBLE);
-                    view.setText(store);
-                } else {
-                    view.setVisibility(View.INVISIBLE);
-                }
+        processView(adView, k__store, (ViewProcessor<TextView>) view -> {
+            adView.setStoreView(view);
+            CharSequence store = nativeAppInstallAd.getStore();
+            if (store != null) {
+                view.setVisibility(View.VISIBLE);
+                view.setText(store);
+            } else {
+                view.setVisibility(View.INVISIBLE);
             }
         });
 

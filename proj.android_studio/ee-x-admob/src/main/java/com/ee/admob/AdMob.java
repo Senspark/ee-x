@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -16,8 +15,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,126 +166,90 @@ public class AdMob implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String applicationId = message;
-                initialize(applicationId);
-                return "";
-            }
+            String applicationId = message;
+            initialize(applicationId);
+            return "";
         }, k__initialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return getEmulatorTestDeviceHash();
-            }
-        }, k__getEmulatorTestDeviceHash);
+        _bridge.registerHandler(message ->
+            getEmulatorTestDeviceHash(), k__getEmulatorTestDeviceHash);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String hash = message;
-                addTestDevice(hash);
-                return "";
-            }
+            String hash = message;
+            addTestDevice(hash);
+            return "";
         }, k__addTestDevice);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
 
-                String adId = (String) dict.get(k__ad_id);
-                Integer adSizeIndex = (Integer) dict.get(k__ad_size);
-                AdSize adSize = AdMobBannerAd.adSizeFor(adSizeIndex);
-                return Utils.toString(createBannerAd(adId, adSize));
-            }
+            String adId = (String) dict.get(k__ad_id);
+            Integer adSizeIndex = (Integer) dict.get(k__ad_size);
+            assertThat(adId).isNotNull();
+            assertThat(adSizeIndex).isNotNull();
+
+            AdSize adSize = AdMobBannerAd.adSizeFor(adSizeIndex);
+            return Utils.toString(createBannerAd(adId, adSize));
         }, k__createBannerAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(destroyBannerAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(destroyBannerAd(adId));
         }, k__destroyBannerAd);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
 
-                String adId = (String) dict.get(k__ad_id);
-                String layoutName = (String) dict.get(k__layout_name);
-                @SuppressWarnings("unchecked") Map<String, Object> identifiers_raw = (Map<String, Object>) dict.get(k__identifiers);
-                Map<String, String> identifiers = new HashMap<>();
-                for (String key : identifiers_raw.keySet()) {
-                    identifiers.put(key, (String) identifiers_raw.get(key));
-                }
-                return Utils.toString(createNativeAd(adId, layoutName, identifiers));
+            String adId = (String) dict.get(k__ad_id);
+            String layoutName = (String) dict.get(k__layout_name);
+            assertThat(adId).isNotNull();
+            assertThat(layoutName).isNotNull();
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> identifiers_raw = (Map<String, Object>) dict.get(k__identifiers);
+            assertThat(identifiers_raw).isNotNull();
+
+            Map<String, String> identifiers = new HashMap<>();
+            for (String key : identifiers_raw.keySet()) {
+                identifiers.put(key, (String) identifiers_raw.get(key));
             }
+            return Utils.toString(createNativeAd(adId, layoutName, identifiers));
         }, k__createNativeAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(destroyNativeAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(destroyNativeAd(adId));
         }, k__destroyNativeAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(createInterstitialAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(createInterstitialAd(adId));
         }, k__createInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(destroyInterstitialAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(destroyInterstitialAd(adId));
         }, k__destroyInterstitialAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(createRewardedAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(createRewardedAd(adId));
         }, k__createRewardedAd);
 
-        _bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String adId = message;
-                return Utils.toString(destroyRewardedAd(adId));
-            }
+            String adId = message;
+            return Utils.toString(destroyRewardedAd(adId));
         }, k__destroyRewardedAd);
     }
 
@@ -309,11 +270,8 @@ public class AdMob implements PluginProtocol {
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String applicationId) {
         Utils.checkMainThread();
-        MobileAds.initialize(_context, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                // onInitializationComplete
-            }
+        MobileAds.initialize(_context, initializationStatus -> {
+            // onInitializationComplete
         });
     }
 
@@ -325,7 +283,9 @@ public class AdMob implements PluginProtocol {
     public void addTestDevice(@NonNull String hash) {
         Utils.checkMainThread();
         _testDevices.add(hash);
-        RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(_testDevices).build();
+        RequestConfiguration configuration = new RequestConfiguration.Builder()
+            .setTestDeviceIds(_testDevices)
+            .build();
         MobileAds.setRequestConfiguration(configuration);
     }
 

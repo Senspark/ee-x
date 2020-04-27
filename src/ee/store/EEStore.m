@@ -37,7 +37,7 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
 @end
 
 @implementation EEStoreProductsRequestDelegate {
-    EEIMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 - (id)initWithBridge:(id<EEIMessageBridge>)bridge {
@@ -58,15 +58,19 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
     NSArray* products = [response products];
     for (SKProduct* product in products) {
         NSDictionary* dict = @{
-            @"product_id": [product productIdentifier],
+            @"product_identifier": [product productIdentifier],
             @"localized_description": [product localizedDescription],
             @"localized_title": [product localizedTitle],
             @"price": @([[product price] longLongValue]),
-            @"price_locale"
-            //            k__currency_symbol: [locale
-            //            objectForKey:NSLocaleCurrencySymbol],
-            //            k__currency_code: [locale
-            //            objectForKey:NSLocaleCurrencyCode]
+            @"subscription_group_identifier":
+                [product subscriptionGroupIdentifier],
+            @"subscription_period":
+                @([[product subscriptionPeriod] numberOfUnits]),
+            @"subscription_period_unit": @([[product subscriptionPeriod] unit]),
+            @"currency_symbol":
+                [[product priceLocale] objectForKey:NSLocaleCurrencySymbol],
+            @"currency_code":
+                [[product priceLocale] objectForKey:NSLocaleCurrencyCode],
         };
         [arr addObject:dict];
     }
@@ -93,7 +97,7 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
 @end
 
 @implementation EEStore {
-    EEIMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     SKPaymentQueue* queue_;
 }
 
@@ -125,7 +129,7 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
 
     [bridge registerHandler:k__can_purchase
                    callback:^(NSString* message) {
-                       return [EEUtils toString:[EEStore canMakePayments]];
+                       return [EEUtils toString:[self canMakePayments]];
                    }];
 
     [bridge registerHandler:k__purchase
@@ -196,6 +200,7 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
 }
 
 - (void)purchaseTransaction:(SKPaymentTransaction*)transaction {
+    /*
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert([transaction transactionState] ==
                  SKPaymentTransactionStatePurchased,
@@ -215,9 +220,11 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__transaction_succeeded
             message:[EEJsonUtils convertDictionaryToString:dict]];
+     */
 }
 
 - (void)failTransaction:(SKPaymentTransaction*)transaction {
+    /*
     NSLog(@"%s: %@", __PRETTY_FUNCTION__,
           [[transaction error] localizedDescription]);
     NSAssert([transaction transactionState] == SKPaymentTransactionStateFailed,
@@ -236,9 +243,11 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__transaction_failed
             message:[EEJsonUtils convertDictionaryToString:dict]];
+     */
 }
 
 - (void)restoreTransaction:(SKPaymentTransaction*)transaction {
+    /*
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert([transaction transactionState] ==
                  SKPaymentTransactionStateRestored,
@@ -258,6 +267,7 @@ static NSString* const k__transaction_restored        = kPrefix "_transactionRes
     EEMessageBridge* bridge = [EEMessageBridge getInstance];
     [bridge callCpp:k__transaction_restored
             message:[EEJsonUtils convertDictionaryToString:dict]];
+     */
 }
 
 - (void)deferTransaction:(SKPaymentTransaction*)transaction {

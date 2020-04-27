@@ -16,7 +16,6 @@ import com.crashlytics.android.answers.PurchaseEvent;
 import com.crashlytics.android.core.CrashTest;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -99,7 +98,7 @@ public class Crashlytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 causeCrash();
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__crashlytics_cause_crash);
 
@@ -108,7 +107,7 @@ public class Crashlytics implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 causeException();
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__crashlytics_cause_exception);
 
@@ -122,7 +121,7 @@ public class Crashlytics implements PluginProtocol {
                 Integer priority = (Integer) dict.get("priority");
 
                 setLogLevel(priority);
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__crashlytics_set_log_level);
 
@@ -138,7 +137,7 @@ public class Crashlytics implements PluginProtocol {
                 String message = (String) dict.get("message");
 
                 log(priority, tag, message);
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__crashlytics_log);
     }

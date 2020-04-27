@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
 import com.ee.core.PluginProtocol;
-import com.ee.core.internal.DictionaryUtils;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
@@ -102,7 +101,7 @@ public class Notification implements PluginProtocol {
                 Integer tag = (Integer) dict.get("tag");
 
                 schedule(ticker, title, body, delay, interval, tag);
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__notification_schedule);
 
@@ -111,7 +110,7 @@ public class Notification implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 unscheduleAll();
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__notification_unschedule_all);
 
@@ -125,7 +124,7 @@ public class Notification implements PluginProtocol {
                 Integer tag = (Integer) dict.get("tag");
 
                 unschedule(tag);
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__notification_unschedule);
 
@@ -134,7 +133,7 @@ public class Notification implements PluginProtocol {
             @Override
             public String handle(@NonNull String msg) {
                 clearAll();
-                return DictionaryUtils.emptyResult();
+                return "";
             }
         }, k__notification_clear_all);
     }

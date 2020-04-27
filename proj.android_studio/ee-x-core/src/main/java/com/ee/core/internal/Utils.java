@@ -223,63 +223,37 @@ public class Utils {
             }
         }, k__isTablet);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
+        bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
 
-                final String callbackTag = (String) dict.get("callback_tag");
-                String hostName = (String) dict.get("host_name");
-                float timeOut = ((Double) dict.get("time_out")).floatValue();
-                assertThat(hostName).isNotNull();
-                assertThat(callbackTag).isNotNull();
+            final String callbackTag = (String) dict.get("callback_tag");
+            String hostName = (String) dict.get("host_name");
+            float timeOut = ((Double) dict.get("time_out")).floatValue();
+            assertThat(hostName).isNotNull();
+            assertThat(callbackTag).isNotNull();
 
-                Context context = PluginManager.getInstance().getContext();
-                testConnection(context, hostName, timeOut)
-                    .doOnSuccess(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean result) {
-                            bridge.callCpp(callbackTag, Utils.toString(result));
-                        }
-                    })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) {
-                            bridge.callCpp(callbackTag, Utils.toString(false));
-                        }
-                    });
-                return "";
-            }
+            Context context = PluginManager.getInstance().getContext();
+            testConnection(context, hostName, timeOut)
+                .subscribe(
+                    result -> bridge.callCpp(callbackTag, Utils.toString(result)),
+                    exception -> bridge.callCpp(callbackTag, Utils.toString(false)));
+            return "";
         }, k__testConnection);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
+        bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
 
-                final String callbackTag = (String) dict.get("callback_id");
-                assertThat(callbackTag).isNotNull();
+            final String callbackTag = (String) dict.get("callback_tag");
+            assertThat(callbackTag).isNotNull();
 
-                Context context = PluginManager.getInstance().getContext();
-                getDeviceId(context)
-                    .doOnSuccess(new Consumer<String>() {
-                        @Override
-                        public void accept(String result) throws Throwable {
-                            bridge.callCpp(callbackTag, result);
-                        }
-                    })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) {
-                            bridge.callCpp(callbackTag, "");
-                        }
-                    });
-                return "";
-            }
+            Context context = PluginManager.getInstance().getContext();
+            getDeviceId(context)
+                .subscribe(
+                    result -> bridge.callCpp(callbackTag, result),
+                    exception -> bridge.callCpp(callbackTag, ""));
+            return "";
         }, k__getDeviceId);
 
         bridge.registerHandler(new MessageHandler() {

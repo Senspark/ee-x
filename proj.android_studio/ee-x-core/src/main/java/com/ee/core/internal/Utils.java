@@ -432,7 +432,7 @@ public class Utils {
             .<Boolean>create(emitter -> {
                 try {
                     boolean isAvailable = isInternetAvailable(context);
-                    if (isAvailable) {
+                    if (!isAvailable) {
                         emitter.onSuccess(false);
                         return;
                     }

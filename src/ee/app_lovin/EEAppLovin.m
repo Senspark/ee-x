@@ -8,15 +8,10 @@
 
 #import "ee/app_lovin/EEAppLovin.h"
 
-#ifdef EE_X_USE_IRON_SOURCE_MEDIATION
-#import <ISAppLovinAdapter/ALIncentivizedInterstitialAd.h>
-#import <ISAppLovinAdapter/ALSdk.h>
-#else // EE_X_USE_IRON_SOURCE_MEDIATION
 #import <AppLovinSDK/ALAdRewardDelegate.h>
 #import <AppLovinSDK/ALIncentivizedInterstitialAd.h>
 #import <AppLovinSDK/ALInterstitialAd.h>
 #import <AppLovinSDK/ALSdk.h>
-#endif // EE_X_USE_IRON_SOURCE_MEDIATION
 
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>

@@ -429,13 +429,18 @@ public class Utils {
     /// https://stackoverflow.com/questions/2758612/executorservice-that-interrupts-tasks-after-a-timeout
     public static Single<Boolean> testConnection(@NonNull Context context, @NonNull String hostName, float timeOut) {
         return Single
-            .fromCallable(() -> {
-                boolean isAvailable = isInternetAvailable(context);
-                if (!isAvailable) {
-                    return false;
+            .<Boolean>create(emitter -> {
+                try {
+                    boolean isAvailable = isInternetAvailable(context);
+                    if (isAvailable) {
+                        emitter.onSuccess(false);
+                        return;
+                    }
+                    InetAddress address = InetAddress.getByName(hostName);
+                    emitter.onSuccess(!address.equals(""));
+                } catch (UnknownHostException ex) {
+                    emitter.onError(ex);
                 }
-                InetAddress address = InetAddress.getByName(hostName);
-                return !address.equals("");
             })
             .subscribeOn(Schedulers.io())
             .timeout((long) (timeOut * 1000), TimeUnit.MILLISECONDS);

@@ -86,7 +86,7 @@ Pod::Spec.new do |spec|
     s.dependency 'Google-Mobile-Ads-SDK'
   end
 
-  spec.subspec 'app-lovin-base' do |s|
+  spec.subspec 'app-lovin' do |s|
     s.source_files =
       'src/ee/AppLovin*',
       'src/ee/app_lovin/**/*'
@@ -98,18 +98,12 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/CMakeLists.txt'
 
     s.dependency 'ee-x/ads'
-  end
-
-  spec.subspec 'app-lovin' do |s|
-    s.dependency 'ee-x/app-lovin-base'
     s.dependency 'AppLovinSDK'
   end
 
   spec.subspec 'app-lovin-mediation' do |s|
-    s.dependency 'ee-x/app-lovin-base'
+    s.dependency 'ee-x/app-lovin'
     s.dependency 'ee-x/iron-source-mediation-base'
-
-    # AppLovinSDK is included in IronSourceAppLovinAdapter.
     s.dependency 'IronSourceAppLovinAdapter'
   end
 

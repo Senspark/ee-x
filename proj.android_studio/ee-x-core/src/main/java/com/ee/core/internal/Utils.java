@@ -439,7 +439,11 @@ public class Utils {
                     InetAddress address = InetAddress.getByName(hostName);
                     emitter.onSuccess(!address.equals(""));
                 } catch (UnknownHostException ex) {
-                    emitter.onError(ex);
+                    if (emitter.isDisposed()) {
+                        // Time-out.
+                    } else {
+                        emitter.onError(ex);
+                    }
                 }
             })
             .subscribeOn(Schedulers.io())

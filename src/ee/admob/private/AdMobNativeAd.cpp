@@ -130,7 +130,7 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: adId = %s loading = %s  message = %s",
+    logger_.debug("%s: adId = %s loading = %s message = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());

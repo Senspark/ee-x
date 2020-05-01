@@ -299,8 +299,8 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 #endif // TARGET_OS_IOS
 }
 
-+ (RACSignal*)testConnection:(NSString* _Nonnull)hostName
-                     timeOut:(float)timeOut {
++ (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
+                              timeOut:(float)timeOut {
     RACScheduler* scheduler =
         [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
     return [[RACSignal
@@ -312,7 +312,8 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
                                BOOL isReachable = status != NotReachable;
                                [subscriber sendNext:@(isReachable)];
                                [subscriber sendCompleted];
-                           }] timeout:timeOut onScheduler:scheduler];
+                           }] timeout:timeOut
+                          onScheduler:scheduler];
 }
 
 + (NSString* _Nonnull)getDeviceId {
@@ -365,6 +366,14 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
     }
 #endif // TARGET_OS_IOS
     return density;
+}
+
++ (CGFloat)convertDpToPixels:(CGFloat)dp {
+    return dp * [self getDensity];
+}
+
++ (CGFloat)convertPixelsToDp:(CGFloat)pixels {
+    return pixels / [self getDensity];
 }
 
 @end

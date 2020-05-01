@@ -8,13 +8,12 @@
 
 #import "ee/admob/EEAdMob.h"
 
-#import <GoogleMobileAds/GoogleMobileAds.h>
-
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/admob/private/EEAdMobBannerAd.h"
+#import "ee/admob/private/EEAdMobBannerHelper.h"
 #import "ee/admob/private/EEAdMobInterstitialAd.h"
 #import "ee/admob/private/EEAdMobNativeAd.h"
 #import "ee/admob/private/EEAdMobRewardedAd.h"
@@ -26,6 +25,7 @@ static NSString* const k__initialize                = kPrefix "_initialize";
 static NSString* const k__getEmulatorTestDeviceHash = kPrefix "_getEmulatorTestDeviceHash";
 static NSString* const k__addTestDevice             = kPrefix "_addTestDevice";
 
+static NSString* const k__getBannerAdSize           = kPrefix "_getBannerAdSize";
 static NSString* const k__createBannerAd            = kPrefix "_createBannerAd";
 static NSString* const k__destroyBannerAd           = kPrefix "_destroyBannerAd";
 
@@ -47,11 +47,16 @@ static NSString* const k__layout_name           = @"layout_name";
 
 @implementation EEAdMob {
     id<EEIMessageBridge> bridge_;
+    EEAdMobBannerHelper* bannerHelper_;
     NSMutableArray<NSString*>* testDevices_;
     NSMutableDictionary<NSString*, EEAdMobBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEAdMobNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEAdMobInterstitialAd*>* interstitialAds_;
     NSMutableDictionary<NSString*, EEAdMobRewardedAd*>* rewardedAds_;
+}
+
++ (CGSize)sizeFor:(GADAdSize)size {
+    return CGSizeFromGADAdSize(size);
 }
 
 - (id)init {
@@ -61,6 +66,7 @@ static NSString* const k__layout_name           = @"layout_name";
         return self;
     }
     bridge_ = [EEMessageBridge getInstance];
+    bannerHelper_ = [[EEAdMobBannerHelper alloc] init];
     testDevices_ = [[NSMutableArray alloc] init];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
@@ -77,6 +83,8 @@ static NSString* const k__layout_name           = @"layout_name";
 - (void)destroy {
     NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
+    [bannerHelper_ release];
+    bannerHelper_ = nil;
     [testDevices_ release];
     testDevices_ = nil;
     [bannerAds_ release];
@@ -109,16 +117,25 @@ static NSString* const k__layout_name           = @"layout_name";
                         return @"";
                     }];
 
+    [bridge_ registerHandler:k__getBannerAdSize
+                    callback:^(NSString* message) {
+                        CGSize size = [self getBannerAdSize:[message intValue]];
+                        NSMutableDictionary* dict =
+                            [NSMutableDictionary dictionary];
+                        [dict setValue:@(size.width) forKey:@"width"];
+                        [dict setValue:@(size.height) forKey:@"height"];
+                        return [EEJsonUtils convertDictionaryToString:dict];
+                    }];
+
     [bridge_ registerHandler:k__createBannerAd
                     callback:^(NSString* message) {
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
                         NSString* adId = dict[k__ad_id];
-                        int adSizeIndex = [dict[k__ad_size] intValue];
-                        GADAdSize adSize =
-                            [EEAdMobBannerAd adSizeFor:adSizeIndex];
+                        int sizeId = [dict[k__ad_size] intValue];
+                        GADAdSize size = [bannerHelper_ getAdSize:sizeId];
                         return [EEUtils
-                            toString:[self createBannerAd:adId size:adSize]];
+                            toString:[self createBannerAd:adId size:size]];
                     }];
 
     [bridge_ registerHandler:k__destroyBannerAd
@@ -178,6 +195,7 @@ static NSString* const k__layout_name           = @"layout_name";
     [bridge_ deregisterHandler:k__initialize];
     [bridge_ deregisterHandler:k__getEmulatorTestDeviceHash];
     [bridge_ deregisterHandler:k__addTestDevice];
+    [bridge_ deregisterHandler:k__getBannerAdSize];
     [bridge_ deregisterHandler:k__createBannerAd];
     [bridge_ deregisterHandler:k__destroyBannerAd];
     [bridge_ deregisterHandler:k__createNativeAd];
@@ -202,6 +220,10 @@ static NSString* const k__layout_name           = @"layout_name";
     [testDevices_ addObject:hash];
     GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers =
         testDevices_;
+}
+
+- (CGSize)getBannerAdSize:(int)sizeId {
+    return [bannerHelper_ getSize:sizeId];
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size {

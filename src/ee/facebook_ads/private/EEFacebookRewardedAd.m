@@ -22,8 +22,8 @@
     id<EEIMessageBridge> bridge_;
     NSString* adId_;
     EEMessageHelper* messageHelper_;
-    FBRewardedVideoAd* ad_;
     BOOL rewarded_;
+    FBRewardedVideoAd* ad_;
 }
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge

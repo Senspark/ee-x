@@ -6,11 +6,9 @@
 //
 //
 
-#import <ee/core/EEIPlugin.h>
+#import <FBAudienceNetwork/FBAdSize.h>
 
-// Forward.
-struct FBAdSize;
-typedef struct FBAdSize FBAdSize;
+#import <ee/core/EEIPlugin.h>
 
 @interface EEFacebookAds : NSObject <EEIPlugin>
 
@@ -20,6 +18,7 @@ typedef struct FBAdSize FBAdSize;
 - (void)addTestDevice:(NSString* _Nonnull)hash;
 - (void)clearTestDevices;
 
+- (CGSize)getBannerAdSize:(int)sizeId;
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size;
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 

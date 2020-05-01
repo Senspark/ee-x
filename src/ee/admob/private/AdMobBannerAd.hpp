@@ -43,7 +43,8 @@ private:
     friend Bridge;
 
     explicit BannerAd(IMessageBridge& bridge, const Logger& logger,
-                      Bridge* plugin, const std::string& adId);
+                      Bridge* plugin, const std::string& adId,
+                      const std::pair<int, int>& size);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);
@@ -53,8 +54,10 @@ private:
     const Logger& logger_;
     Bridge* plugin_;
     std::string adId_;
+    std::pair<int, int> size_;
     ads::MessageHelper messageHelper_;
     ads::AdViewHelper helper_;
+    bool useCustomSize_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };

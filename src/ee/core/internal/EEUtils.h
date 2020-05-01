@@ -49,11 +49,13 @@
             body:(NSString* _Nonnull)body;
 
 + (BOOL)isTablet;
-+ (RACSignal*)testConnection:(NSString* _Nonnull)hostName
-                     timeOut:(float)timeOut;
++ (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
+                              timeOut:(float)timeOut;
 
 + (NSString* _Nonnull)getDeviceId;
 
 + (CGFloat)getDensity;
++ (CGFloat)convertDpToPixels:(CGFloat)dp;
++ (CGFloat)convertPixelsToDp:(CGFloat)pixels;
 
 @end

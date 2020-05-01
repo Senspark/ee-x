@@ -25,8 +25,8 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     private IMessageBridge _bridge;
     private String _adId;
     private MessageHelper _messageHelper;
-    private RewardedVideoAd _ad;
     private boolean _rewarded;
+    private RewardedVideoAd _ad;
 
     FacebookRewardedAd(@NonNull Context context, @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);

@@ -40,25 +40,8 @@ class AdMobBannerAd extends AdListener implements IAdView {
     private AdViewHelper _helper;
     private MessageHelper _messageHelper;
     private ViewHelper _viewHelper;
-    private boolean _customSize;
     private boolean _isLoaded;
     private AdView _ad;
-
-    static AdSize adSizeFor(int index) {
-        if (index == 0) {
-            return AdSize.BANNER;
-        }
-        if (index == 1) {
-            return AdSize.LARGE_BANNER;
-        }
-        if (index == 2) {
-            return AdSize.SMART_BANNER;
-        }
-        if (index == 3) {
-            return AdSize.MEDIUM_RECTANGLE;
-        }
-        return AdSize.BANNER;
-    }
 
     AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         _logger.info("constructor: adId = %s", adId);
@@ -122,7 +105,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (_ad != null) {
             return false;
         }
-        _customSize = false;
         _isLoaded = false;
 
         _ad = new AdView(_context);
@@ -148,7 +130,6 @@ class AdMobBannerAd extends AdListener implements IAdView {
         if (_ad == null) {
             return false;
         }
-        _customSize = false;
         _isLoaded = false;
         if (_activity != null) {
             removeFromActivity(_activity);
@@ -199,19 +180,12 @@ class AdMobBannerAd extends AdListener implements IAdView {
     @NonNull
     @Override
     public Point getSize() {
-        if (_customSize) {
-            return _viewHelper.getSize();
-        }
-        Utils.checkMainThread();
-        int width = _adSize.getWidthInPixels(_context);
-        int height = _adSize.getHeightInPixels(_context);
-        return new Point(width, height);
+        return _viewHelper.getSize();
     }
 
     @Override
     public void setSize(@NonNull Point size) {
         _viewHelper.setSize(size);
-        _customSize = true;
     }
 
     @Override

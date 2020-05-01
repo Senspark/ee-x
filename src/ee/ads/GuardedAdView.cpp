@@ -102,12 +102,19 @@ void Self::setPosition(int x, int y) {
 }
 
 std::pair<int, int> Self::getSize() const {
-    return ad_->getSize();
+    std::scoped_lock<SpinLock> lock(*lock_);
+    if (not size_.has_value()) {
+        size_ = ad_->getSize();
+    }
+    return size_.value();
 }
 
 void Self::setSize(int width, int height) {
-    runOnUiThread([this, width, height] { //
+    runOnUiThread([this, width, height] {
         ad_->setSize(width, height);
+
+        std::scoped_lock<SpinLock> lock(*lock_);
+        size_ = std::pair(width, height);
     });
 }
 

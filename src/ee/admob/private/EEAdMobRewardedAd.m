@@ -8,7 +8,7 @@
 
 #import "ee/admob/private/EEAdMobRewardedAd.h"
 
-#import <GoogleMobileAds/GoogleMobileAds.h>
+#import <GoogleMobileAds/GADRewardedAd.h>
 
 #import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>

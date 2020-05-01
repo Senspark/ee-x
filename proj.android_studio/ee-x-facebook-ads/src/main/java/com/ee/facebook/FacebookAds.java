@@ -3,6 +3,7 @@ package com.ee.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +19,7 @@ import com.facebook.ads.AudienceNetworkAds;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -29,6 +31,7 @@ public class FacebookAds implements PluginProtocol {
     private static final String k__getTestDeviceHash = kPrefix + "_getTestDeviceHash";
     private static final String k__addTestDevice = kPrefix + "_addTestDevice";
     private static final String k__clearTestDevices = kPrefix + "_clearTestDevices";
+    private static final String k__getBannerAdSize = kPrefix + "_getBannerAdSize";
     private static final String k__createBannerAd = kPrefix + "_createBannerAd";
     private static final String k__destroyBannerAd = kPrefix + "_destroyBannerAd";
     private static final String k__createNativeAd = kPrefix + "_createNativeAd";
@@ -46,6 +49,7 @@ public class FacebookAds implements PluginProtocol {
     private Context _context;
     private Activity _activity;
     private IMessageBridge _bridge;
+    private FacebookBannerHelper _bannerHelper;
     private Map<String, FacebookBannerAd> _bannerAds;
     private Map<String, FacebookNativeAd> _nativeAds;
     private Map<String, FacebookInterstitialAd> _interstitialAds;
@@ -56,7 +60,7 @@ public class FacebookAds implements PluginProtocol {
         _context = context;
         _activity = null;
         _bridge = MessageBridge.getInstance();
-
+        _bannerHelper = new FacebookBannerHelper();
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
         _interstitialAds = new HashMap<>();
@@ -178,15 +182,24 @@ public class FacebookAds implements PluginProtocol {
         }, k__clearTestDevices);
 
         _bridge.registerHandler(message -> {
+            int sizeId = Integer.parseInt(message);
+            Point size = getBannerAdSize(sizeId);
+            Map<String, Object> dict = new HashMap<>();
+            dict.put("width", size.x);
+            dict.put("height", size.y);
+            return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
+        }, k__getBannerAdSize);
+
+        _bridge.registerHandler(message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
             String adId = (String) dict.get(k__ad_id);
-            Integer adSizeIndex = (Integer) dict.get(k__ad_size);
+            Integer sizeId = (Integer) dict.get(k__ad_size);
             assertThat(adId).isNotNull();
-            assertThat(adSizeIndex).isNotNull();
+            assertThat(sizeId).isNotNull();
 
-            AdSize adSize = FacebookBannerAd.adSizeFor(adSizeIndex);
+            AdSize adSize = _bannerHelper.getAdSize(sizeId);
             return Utils.toString(createBannerAd(adId, adSize));
         }, k__createBannerAd);
 
@@ -249,6 +262,7 @@ public class FacebookAds implements PluginProtocol {
         _bridge.deregisterHandler(k__getTestDeviceHash);
         _bridge.deregisterHandler(k__addTestDevice);
         _bridge.deregisterHandler(k__clearTestDevices);
+        _bridge.deregisterHandler(k__getBannerAdSize);
         _bridge.deregisterHandler(k__createBannerAd);
         _bridge.deregisterHandler(k__destroyBannerAd);
         _bridge.deregisterHandler(k__createNativeAd);
@@ -275,6 +289,11 @@ public class FacebookAds implements PluginProtocol {
     public void clearTestDevices() {
         Utils.checkMainThread();
         AdSettings.clearTestDevices();
+    }
+
+    @NonNull
+    public Point getBannerAdSize(int sizeId) {
+        return _bannerHelper.getSize(sizeId);
     }
 
     @SuppressWarnings("WeakerAccess")

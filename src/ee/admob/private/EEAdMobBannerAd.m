@@ -8,7 +8,7 @@
 
 #import "ee/admob/private/EEAdMobBannerAd.h"
 
-#import <GoogleMobileAds/GoogleMobileAds.h>
+#import <GoogleMobileAds/GADBannerView.h>
 
 #import <ee/ads/internal/EEAdViewHelper.h>
 #import <ee/ads/internal/EEMessageHelper.h>
@@ -28,25 +28,6 @@
     EEViewHelper* viewHelper_;
     BOOL isLoaded_;
     GADBannerView* ad_;
-}
-
-+ (GADAdSize)adSizeFor:(int)index {
-    if (index == 0) {
-        return kGADAdSizeBanner;
-    }
-    if (index == 1) {
-        return kGADAdSizeLargeBanner;
-    }
-    if (index == 2) {
-        if ([EEUtils isLandscape]) {
-            return kGADAdSizeSmartBannerLandscape;
-        }
-        return kGADAdSizeSmartBannerPortrait;
-    }
-    if (index == 3) {
-        return kGADAdSizeMediumRectangle;
-    }
-    return kGADAdSizeInvalid;
 }
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge

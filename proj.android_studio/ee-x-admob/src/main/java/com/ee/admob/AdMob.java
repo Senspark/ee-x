@@ -3,6 +3,7 @@ package com.ee.admob;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -34,6 +36,7 @@ public class AdMob implements PluginProtocol {
     private static final String k__getEmulatorTestDeviceHash = kPrefix + "_getEmulatorTestDeviceHash";
     private static final String k__addTestDevice = kPrefix + "_addTestDevice";
 
+    private static final String k__getBannerAdSize = kPrefix + "_getBannerAdSize";
     private static final String k__createBannerAd = kPrefix + "_createBannerAd";
     private static final String k__destroyBannerAd = kPrefix + "_destroyBannerAd";
 
@@ -54,6 +57,7 @@ public class AdMob implements PluginProtocol {
     private Context _context;
     private Activity _activity;
     private IMessageBridge _bridge;
+    private AdMobBannerHelper _bannerHelper;
     private List<String> _testDevices;
     private Map<String, AdMobBannerAd> _bannerAds;
     private Map<String, AdMobNativeAd> _nativeAds;
@@ -65,6 +69,7 @@ public class AdMob implements PluginProtocol {
         _context = context;
         _activity = null;
         _bridge = MessageBridge.getInstance();
+        _bannerHelper = new AdMobBannerHelper(context);
         _testDevices = new ArrayList<>();
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
@@ -184,15 +189,24 @@ public class AdMob implements PluginProtocol {
         }, k__addTestDevice);
 
         _bridge.registerHandler(message -> {
+            int sizeId = Integer.parseInt(message);
+            Point size = getBannerAdSize(sizeId);
+            Map<String, Object> dict = new HashMap<>();
+            dict.put("width", size.x);
+            dict.put("height", size.y);
+            return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
+        }, k__getBannerAdSize);
+
+        _bridge.registerHandler(message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
             String adId = (String) dict.get(k__ad_id);
-            Integer adSizeIndex = (Integer) dict.get(k__ad_size);
+            Integer sizeId = (Integer) dict.get(k__ad_size);
             assertThat(adId).isNotNull();
-            assertThat(adSizeIndex).isNotNull();
+            assertThat(sizeId).isNotNull();
 
-            AdSize adSize = AdMobBannerAd.adSizeFor(adSizeIndex);
+            AdSize adSize = _bannerHelper.getAdSize(sizeId);
             return Utils.toString(createBannerAd(adId, adSize));
         }, k__createBannerAd);
 
@@ -257,6 +271,7 @@ public class AdMob implements PluginProtocol {
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__getEmulatorTestDeviceHash);
         _bridge.deregisterHandler(k__addTestDevice);
+        _bridge.deregisterHandler(k__getBannerAdSize);
         _bridge.deregisterHandler(k__createBannerAd);
         _bridge.deregisterHandler(k__destroyBannerAd);
         _bridge.deregisterHandler(k__createNativeAd);
@@ -287,6 +302,11 @@ public class AdMob implements PluginProtocol {
             .setTestDeviceIds(_testDevices)
             .build();
         MobileAds.setRequestConfiguration(configuration);
+    }
+
+    @NonNull
+    public Point getBannerAdSize(int sizeId) {
+        return _bannerHelper.getSize(sizeId);
     }
 
     @SuppressWarnings("WeakerAccess")

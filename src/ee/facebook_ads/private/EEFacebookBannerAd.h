@@ -6,17 +6,13 @@
 //
 //
 
-#import <ee/ads/internal/EEIAdView.h>
+#import <FBAudienceNetwork/FBAdSize.h>
 
-// Forward.
-struct FBAdSize;
-typedef struct FBAdSize FBAdSize;
+#import <ee/ads/internal/EEIAdView.h>
 
 @protocol EEIMessageBridge;
 
 @interface EEFacebookBannerAd : NSObject <EEIAdView>
-
-+ (FBAdSize)adSizeFor:(int)index;
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          adId:(NSString* _Nonnull)adId

@@ -20,14 +20,16 @@ namespace facebook_ads {
 using Self = BannerAd;
 
 Self::BannerAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
-               const std::string& adId)
+               const std::string& adId, const std::pair<int, int>& size)
     : bridge_(bridge)
     , logger_(logger)
     , plugin_(plugin)
     , adId_(adId)
+    , size_(size)
     , messageHelper_("FacebookBannerAd", adId)
     , helper_(bridge, messageHelper_) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    useCustomSize_ = false;
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
@@ -98,10 +100,14 @@ void Self::setPosition(int x, int y) {
 }
 
 std::pair<int, int> Self::getSize() const {
-    return helper_.getSize();
+    if (useCustomSize_) {
+        return helper_.getSize();
+    }
+    return size_;
 }
 
 void Self::setSize(int width, int height) {
+    useCustomSize_ = true;
     helper_.setSize(width, height);
 }
 

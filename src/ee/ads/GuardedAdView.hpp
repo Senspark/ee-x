@@ -1,6 +1,8 @@
 #ifndef EE_X_GUARDED_AD_VIEW_HPP
 #define EE_X_GUARDED_AD_VIEW_HPP
 
+#include <optional>
+
 #include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
@@ -36,6 +38,7 @@ private:
     bool loading_;
     bool loaded_;
     bool visible_;
+    mutable std::optional<std::pair<int, int>> size_;
     std::unique_ptr<ObserverHandle> handle_;
     std::unique_ptr<SpinLock> lock_;
 };

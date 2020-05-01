@@ -30,26 +30,6 @@
     FBAdView* ad_;
 }
 
-+ (FBAdSize)adSizeFor:(int)index {
-    if (index == 0) {
-        return kFBAdSizeHeight50Banner;
-    }
-    if (index == 1) {
-        return kFBAdSizeHeight90Banner;
-    }
-    if (index == 2) {
-        return kFBAdSizeInterstitial;
-    }
-    if (index == 3) {
-        return kFBAdSizeHeight250Rectangle;
-    }
-    if (index == 4) {
-        return kFBAdSize320x50;
-    }
-    NSAssert(NO, @"");
-    return kFBAdSize320x50;
-}
-
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(FBAdSize)adSize {

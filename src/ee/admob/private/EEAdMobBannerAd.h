@@ -14,8 +14,6 @@
 
 @interface EEAdMobBannerAd : NSObject <EEIAdView>
 
-+ (GADAdSize)adSizeFor:(int)index;
-
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(GADAdSize)adSize;

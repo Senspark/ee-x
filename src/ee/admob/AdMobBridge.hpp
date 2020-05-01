@@ -64,6 +64,8 @@ private:
     friend InterstitialAd;
     friend RewardedAd;
 
+    std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
+
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);

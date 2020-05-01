@@ -42,25 +42,8 @@ class FacebookBannerAd implements AdListener, IAdView {
     private MessageHelper _messageHelper;
     private AdViewHelper _helper;
     private ViewHelper _viewHelper;
-    private boolean _customSize;
     private boolean _isLoaded;
     private AdView _ad;
-
-    static AdSize adSizeFor(int index) {
-        if (index == 0) {
-            return AdSize.BANNER_HEIGHT_50;
-        }
-        if (index == 1) {
-            return AdSize.BANNER_HEIGHT_90;
-        }
-        if (index == 2) {
-            return AdSize.INTERSTITIAL;
-        }
-        if (index == 3) {
-            return AdSize.RECTANGLE_HEIGHT_250;
-        }
-        return AdSize.BANNER_320_50;
-    }
 
     FacebookBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
         _logger.info("constructor: adId = %s", adId);
@@ -114,7 +97,6 @@ class FacebookBannerAd implements AdListener, IAdView {
         if (_ad != null) {
             return false;
         }
-        _customSize = false;
         _isLoaded = false;
         _ad = new AdView(_context, _adId, _adSize);
 
@@ -136,7 +118,6 @@ class FacebookBannerAd implements AdListener, IAdView {
         if (_ad == null) {
             return false;
         }
-        _customSize = false;
         _isLoaded = false;
         if (_activity != null) {
             removeFromActivity(_activity);
@@ -185,19 +166,12 @@ class FacebookBannerAd implements AdListener, IAdView {
     @NonNull
     @Override
     public Point getSize() {
-        if (_customSize) {
-            return _viewHelper.getSize();
-        }
-        Utils.checkMainThread();
-        int width = getWidthInPixels(_adSize);
-        int height = getHeightInPixels(_adSize);
-        return new Point(width, height);
+        return _viewHelper.getSize();
     }
 
     @Override
     public void setSize(@NonNull Point size) {
         _viewHelper.setSize(size);
-        _customSize = true;
     }
 
     @Override
@@ -239,24 +213,5 @@ class FacebookBannerAd implements AdListener, IAdView {
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
         Utils.checkMainThread();
-    }
-
-    private static int getWidthInPixels(AdSize size) {
-        switch (size.getWidth()) {
-            case 0: // Interstitial.
-            case -1: // Normal ads.
-                return Resources.getSystem().getDisplayMetrics().widthPixels;
-            default: // Deprecated ads.
-                return (int) Utils.convertDpToPixel(size.getWidth());
-        }
-    }
-
-    private static int getHeightInPixels(AdSize size) {
-        switch (size.getHeight()) {
-            case 0: // Interstitial.
-                return Resources.getSystem().getDisplayMetrics().heightPixels;
-            default: // Normal ads.
-                return (int) Utils.convertDpToPixel(size.getHeight());
-        }
     }
 }

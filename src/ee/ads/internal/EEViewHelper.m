@@ -26,31 +26,31 @@
 
 - (CGPoint)getPosition {
     NSAssert([EEUtils isMainThread], @"");
-    CGFloat scale = [EEUtils getDensity];
     CGPoint position = [view_ frame].origin;
-    return CGPointMake(position.x * scale, position.y * scale);
+    return CGPointMake([EEUtils convertDpToPixels:position.x],
+                       [EEUtils convertDpToPixels:position.y]);
 }
 
 - (void)setPosition:(CGPoint)position {
     NSAssert([EEUtils isMainThread], @"");
-    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view_ frame];
-    frame.origin = CGPointMake(position.x / scale, position.y / scale);
+    frame.origin = CGPointMake([EEUtils convertPixelsToDp:position.x],
+                               [EEUtils convertPixelsToDp:position.y]);
     [view_ setFrame:frame];
 }
 
 - (CGSize)getSize {
     NSAssert([EEUtils isMainThread], @"");
-    CGFloat scale = [EEUtils getDensity];
     CGSize size = [view_ frame].size;
-    return CGSizeMake(size.width * scale, size.height * scale);
+    return CGSizeMake([EEUtils convertDpToPixels:size.width],
+                      [EEUtils convertDpToPixels:size.height]);
 }
 
 - (void)setSize:(CGSize)size {
     NSAssert([EEUtils isMainThread], @"");
-    CGFloat scale = [EEUtils getDensity];
     CGRect frame = [view_ frame];
-    frame.size = CGSizeMake(size.width / scale, size.height / scale);
+    frame.size = CGSizeMake([EEUtils convertPixelsToDp:size.width],
+                            [EEUtils convertPixelsToDp:size.height]);
     [view_ setFrame:frame];
 }
 

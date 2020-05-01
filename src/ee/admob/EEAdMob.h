@@ -19,6 +19,7 @@
 - (NSString* _Nonnull)getEmulatorTestDeviceHash;
 - (void)addTestDevice:(NSString* _Nonnull)hash;
 
+- (CGSize)getBannerAdSize:(int)sizeId;
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(GADAdSize)size;
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId;
 

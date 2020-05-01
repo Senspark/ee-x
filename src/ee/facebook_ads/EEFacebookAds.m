@@ -9,13 +9,13 @@
 #import "ee/facebook_ads/EEFacebookAds.h"
 
 #import <FBAudienceNetwork/FBAdSettings.h>
-#import <FBAudienceNetwork/FBAdSize.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEUtils.h>
 
 #import "ee/facebook_ads/private/EEFacebookBannerAd.h"
+#import "ee/facebook_ads/private/EEFacebookBannerHelper.h"
 #import "ee/facebook_ads/private/EEFacebookInterstitialAd.h"
 #import "ee/facebook_ads/private/EEFacebookNativeAd.h"
 #import "ee/facebook_ads/private/EEFacebookRewardedAd.h"
@@ -27,6 +27,7 @@ static NSString* const k__getTestDeviceHash     = kPrefix "_getTestDeviceHash";
 static NSString* const k__addTestDevice         = kPrefix "_addTestDevice";
 static NSString* const k__clearTestDevices      = kPrefix "_clearTestDevices";
 
+static NSString* const k__getBannerAdSize       = kPrefix "_getBannerAdSize";
 static NSString* const k__createBannerAd        = kPrefix "_createBannerAd";
 static NSString* const k__destroyBannerAd       = kPrefix "_destroyBannerAd";
 
@@ -51,6 +52,7 @@ static NSString* const k__identifiers           = @"identifiers";
 
 @implementation EEFacebookAds {
     id<EEIMessageBridge> bridge_;
+    EEFacebookBannerHelper* bannerHelper_;
     NSMutableDictionary<NSString*, EEFacebookBannerAd*>* bannerAds_;
     NSMutableDictionary<NSString*, EEFacebookNativeAd*>* nativeAds_;
     NSMutableDictionary<NSString*, EEFacebookInterstitialAd*>* interstitialAds_;
@@ -64,6 +66,7 @@ static NSString* const k__identifiers           = @"identifiers";
         return self;
     }
     bridge_ = [EEMessageBridge getInstance];
+    bannerHelper_ = [[EEFacebookBannerHelper alloc] init];
     bannerAds_ = [[NSMutableDictionary alloc] init];
     nativeAds_ = [[NSMutableDictionary alloc] init];
     interstitialAds_ = [[NSMutableDictionary alloc] init];
@@ -79,6 +82,8 @@ static NSString* const k__identifiers           = @"identifiers";
 - (void)destroy {
     NSAssert([EEUtils isMainThread], @"");
     [self deregisterHandlers];
+    [bannerHelper_ release];
+    bannerHelper_ = nil;
     [bannerAds_ release];
     bannerAds_ = nil;
     [nativeAds_ release];
@@ -108,16 +113,25 @@ static NSString* const k__identifiers           = @"identifiers";
                         return @"";
                     }];
 
+    [bridge_ registerHandler:k__getBannerAdSize
+                    callback:^(NSString* message) {
+                        CGSize size = [self getBannerAdSize:[message intValue]];
+                        NSMutableDictionary* dict =
+                            [NSMutableDictionary dictionary];
+                        [dict setValue:@(size.width) forKey:@"width"];
+                        [dict setValue:@(size.height) forKey:@"height"];
+                        return [EEJsonUtils convertDictionaryToString:dict];
+                    }];
+
     [bridge_ registerHandler:k__createBannerAd
                     callback:^(NSString* message) {
                         NSDictionary* dict =
                             [EEJsonUtils convertStringToDictionary:message];
                         NSString* adId = dict[k__ad_id];
-                        int adSizeIndex = [dict[k__ad_size] intValue];
-                        FBAdSize adSize =
-                            [EEFacebookBannerAd adSizeFor:adSizeIndex];
+                        int sizeId = [dict[k__ad_size] intValue];
+                        FBAdSize size = [bannerHelper_ getAdSize:sizeId];
                         return [EEUtils
-                            toString:[self createBannerAd:adId size:adSize]];
+                            toString:[self createBannerAd:adId size:size]];
                     }];
 
     [bridge_ registerHandler:k__destroyBannerAd
@@ -177,6 +191,7 @@ static NSString* const k__identifiers           = @"identifiers";
     [bridge_ deregisterHandler:k__addTestDevice];
     [bridge_ deregisterHandler:k__clearTestDevices];
 
+    [bridge_ deregisterHandler:k__getBannerAdSize];
     [bridge_ deregisterHandler:k__createBannerAd];
     [bridge_ deregisterHandler:k__destroyBannerAd];
 
@@ -202,6 +217,10 @@ static NSString* const k__identifiers           = @"identifiers";
 - (void)clearTestDevices {
     NSAssert([EEUtils isMainThread], @"");
     [FBAdSettings clearTestDevices];
+}
+
+- (CGSize)getBannerAdSize:(int)sizeId {
+    return [bannerHelper_ getSize:sizeId];
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size {

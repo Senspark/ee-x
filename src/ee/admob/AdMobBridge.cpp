@@ -34,6 +34,7 @@ const auto k__initialize                = kPrefix + "_initialize";
 const auto k__getEmulatorTestDeviceHash = kPrefix + "_getEmulatorTestDeviceHash";
 const auto k__addTestDevice             = kPrefix + "_addTestDevice";
     
+const auto k__getBannerAdSize           = kPrefix + "_getBannerAdSize";
 const auto k__createBannerAd            = kPrefix + "_createBannerAd";
 const auto k__destroyBannerAd           = kPrefix + "_destroyBannerAd";
 
@@ -87,6 +88,15 @@ void Self::addTestDevice(const std::string& hash) {
     });
 }
 
+std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
+    auto response = bridge_.call(k__getBannerAdSize,
+                                 std::to_string(static_cast<int>(adSize)));
+    auto json = nlohmann::json::parse(response);
+    int width = json["width"];
+    int height = json["height"];
+    return std::pair(width, height);
+}
+
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                               BannerAdSize adSize) {
     logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
@@ -108,8 +118,9 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                       __PRETTY_FUNCTION__);
         assert(false);
     });
-    auto ad =
-        std::shared_ptr<IAdView>(new BannerAd(bridge_, logger_, this, adId));
+    auto size = getBannerAdSize(adSize);
+    auto ad = std::shared_ptr<IAdView>(
+        new BannerAd(bridge_, logger_, this, adId, size));
     bannerAds_.emplace(adId, ad);
     return ad;
 }

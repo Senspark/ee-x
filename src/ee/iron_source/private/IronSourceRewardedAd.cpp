@@ -64,7 +64,7 @@ Task<IRewardedAdResult> Self::show() {
 
 void Self::onLoaded() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    dispatchEvent([&](auto&& observer) {
+    dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
         }

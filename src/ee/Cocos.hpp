@@ -28,6 +28,7 @@
 
 #include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/EEDialogComponent.hpp"
+#include "ee/cocos/EEDialogManager.hpp"
 #include "ee/cocos/EEDialogUtils.hpp"
 #include "ee/cocos/IDialogManager.hpp"
 

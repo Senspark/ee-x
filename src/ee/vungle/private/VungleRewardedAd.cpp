@@ -83,7 +83,7 @@ void Self::onLoaded() {
                       __PRETTY_FUNCTION__);
         assert(false);
     }
-    dispatchEvent([&](auto&& observer) {
+    dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
         }

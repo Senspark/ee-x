@@ -9,6 +9,8 @@
 
 #include <ee/CoreFwd.hpp>
 
+#include "ee/cocos/EEMacro.hpp"
+
 enum class ResolutionPolicy;
 
 namespace cocos2d {

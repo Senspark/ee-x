@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_SCOPE_GUARD_HPP_
 #define EE_LIBRARY_SCOPE_GUARD_HPP_
 
-#warning "Use #include <ee/core/ScopeGuard.hpp> instead."
+#warning "Use #include <ee/core/ScopeGuard.hpp> instead"
 #include <ee/core/ScopeGuard.hpp>
 
 #endif /* EE_LIBRARY_SCOPE_GUARD_HPP_ */

@@ -112,7 +112,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to create an ad.",
+        logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -135,7 +135,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to destroy an ad.",
+        logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -161,7 +161,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to create an ad.",
+        logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -183,7 +183,7 @@ bool Self::destroyNativeAd(const std::string& adId) {
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to destroy an ad.",
+        logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -204,7 +204,7 @@ Self::createInterstitialAd(const std::string& adId) {
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to create an ad.",
+        logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -225,7 +225,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
         if (core::toBool(response)) {
             return;
         }
-        logger_.error("%s: There was an error when attempt to destroy an ad.",
+        logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -245,7 +245,7 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to create an ad.",
+        logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });
@@ -267,7 +267,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
             // OK.
             return;
         }
-        logger_.error("%s: There was an error when attempt to destroy an ad.",
+        logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
         assert(false);
     });

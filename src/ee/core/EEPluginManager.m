@@ -49,7 +49,7 @@
 
 - (void)addPlugin:(NSString* _Nonnull)pluginName {
     if ([plugins_ objectForKey:pluginName] != nil) {
-        NSAssert(NO, @"...");
+        NSAssert(NO, @"");
         return;
     }
     Class clazz =
@@ -62,7 +62,7 @@
 
 - (void)removePlugin:(NSString* _Nonnull)pluginName {
     if ([plugins_ objectForKey:pluginName] == nil) {
-        NSAssert(NO, @"...");
+        NSAssert(NO, @"");
         return;
     }
     [plugins_ removeObjectForKey:pluginName];

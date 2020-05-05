@@ -51,7 +51,7 @@ void UiWidgetLoader::onHandlePropTypeBlock(cocos2d::Node* node,
                 widget->addClickEventListener(clickCallback);
                 callbackManager->setActiveClickCallback(nullptr);
             } else {
-                CCASSERT(false, "Unexpected value.");
+                CCASSERT(false, "Unexpected value");
             }
         }
         return;

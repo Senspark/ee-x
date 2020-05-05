@@ -9,7 +9,7 @@
 #ifndef EE_LIBRARY_HEADER_HPP_
 #define EE_LIBRARY_HEADER_HPP_
 
-#warning "Use #include <ee/Cocos.hpp> instead."
+#warning "Use #include <ee/Cocos.hpp> instead"
 #include "ee/Cocos.hpp"
 
 #endif /* EE_LIBRARY_HEADER_HPP_ */

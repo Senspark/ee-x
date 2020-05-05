@@ -128,7 +128,7 @@ void captureScreenInPixels(
     static cocos2d::EventListenerCustom* listener;
     if (listener != nullptr) {
         CCLOG("Warning: CaptureScreen has been called already, don't call more "
-              "than once in one frame.");
+              "than once in one frame");
         return;
     }
 

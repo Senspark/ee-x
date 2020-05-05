@@ -58,13 +58,13 @@ T random(T min, T max) {
 template <class Dest, class Source>
 inline Dest bitCast(const Source& source) {
     static_assert(sizeof(Dest) == sizeof(Source),
-                  "size of destination and source objects must be equal.");
+                  "size of destination and source objects must be equal");
 
     static_assert(std::is_trivially_copyable<Dest>::value,
-                  "destination type must be trivially copyable.");
+                  "destination type must be trivially copyable");
 
     static_assert(std::is_trivially_copyable<Source>::value,
-                  "source type must be trivially copyable.");
+                  "source type must be trivially copyable");
     Dest dest;
     std::memcpy(&dest, &source, sizeof(dest));
     return dest;

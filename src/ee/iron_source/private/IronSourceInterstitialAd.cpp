@@ -28,6 +28,7 @@ Self::InterstitialAd(const Logger& logger,
     , plugin_(plugin)
     , adId_(adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 }
 
 Self::~InterstitialAd() = default;

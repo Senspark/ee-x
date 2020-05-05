@@ -11,6 +11,5 @@
 
 #warning "Use #include <ee/Cocos.hpp> instead."
 #include "ee/Cocos.hpp"
-#include "ee/cocos/EEDialogManager.hpp"
 
 #endif /* EE_LIBRARY_HEADER_HPP_ */

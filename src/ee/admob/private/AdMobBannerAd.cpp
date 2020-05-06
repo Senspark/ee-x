@@ -143,9 +143,7 @@ void Self::onFailedToLoad(const std::string& message) {
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
-        logger_.error("%s: this ad is expected to be loading",
-                      __PRETTY_FUNCTION__);
-        assert(false);
+        // Note: AdMob banner is auto-loading.
     }
 }
 

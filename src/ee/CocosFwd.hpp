@@ -28,6 +28,7 @@ class ProgressTimer;
 class Menu;
 class MenuItem;
 class MenuItemImage;
+class MenuItemToggle;
 class ClippingRectangleNode;
 class ClippingNode;
 class ParticleSystem;

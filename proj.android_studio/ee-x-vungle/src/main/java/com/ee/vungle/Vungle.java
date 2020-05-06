@@ -199,7 +199,7 @@ public class Vungle implements PluginProtocol {
                 _logger.info("onUnableToPlayAd: " + adId);
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
-                dict.put("message", throwable.getMessage());
+                dict.put("message", throwable.getLocalizedMessage());
                 _bridge.callCpp(k__onFailedToShow, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
         };
@@ -215,10 +215,10 @@ public class Vungle implements PluginProtocol {
 
             @Override
             public void onError(String adId, VungleException throwable) {
-                _logger.info("onAdLoadError: " + adId + " reason: " + throwable.getMessage());
+                _logger.info("onAdLoadError: " + adId + " reason: " + throwable.getLocalizedMessage());
                 Map<String, Object> dict = new HashMap<>();
                 dict.put("ad_id", adId);
-                dict.put("message", throwable.getMessage());
+                dict.put("message", throwable.getLocalizedMessage());
                 _bridge.callCpp(k__onFailedToLoad, Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict)));
             }
         };

@@ -27,7 +27,7 @@ Self::BannerAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
     , adId_(adId)
     , size_(size)
     , messageHelper_("AdMobBannerAd", adId)
-    , helper_(bridge, messageHelper_) {
+    , helper_(bridge, messageHelper_, std::bind(&Self::getSize, this)) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     useCustomSize_ = false;
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();

@@ -10,6 +10,7 @@
 #define EE_X_AD_VIEW_HELPER_HPP
 
 #include <string>
+#include <utility>
 
 #include "ee/ads/internal/MessageHelper.hpp"
 
@@ -17,7 +18,10 @@ namespace ee {
 namespace ads {
 class AdViewHelper {
 public:
-    explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper);
+    using SizeProvider = std::function<std::pair<int, int>()>;
+
+    explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
+                          const SizeProvider& sizeProvider);
 
     bool isLoaded() const;
     void load();
@@ -40,6 +44,7 @@ private:
 
     IMessageBridge& bridge_;
     MessageHelper helper_;
+    SizeProvider sizeProvider_;
 
     float anchorX_;
     float anchorY_;

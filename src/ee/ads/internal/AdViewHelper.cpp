@@ -17,9 +17,11 @@ namespace ee {
 namespace ads {
 using Self = AdViewHelper;
 
-Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper)
+Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
+                   const SizeProvider& sizeProvider)
     : bridge_(bridge)
     , helper_(helper)
+    , sizeProvider_(sizeProvider)
     , anchorX_(0.0f)
     , anchorY_(0.0f) {}
 
@@ -40,7 +42,7 @@ std::pair<float, float> Self::getAnchor() const {
 
 void Self::setAnchor(float x, float y) {
     assert(isMainThread());
-    auto [width, height] = getSize();
+    auto [width, height] = sizeProvider_();
     auto [positionX, positionY] = getPositionTopLeft();
     setPositionTopLeft(positionX - static_cast<int>((x - anchorX_) * width),
                        positionY - static_cast<int>((y - anchorY_) * height));
@@ -50,7 +52,7 @@ void Self::setAnchor(float x, float y) {
 
 std::pair<int, int> Self::getPosition() const {
     assert(isMainThread());
-    auto [width, height] = getSize();
+    auto [width, height] = sizeProvider_();
     auto [anchorX, anchorY] = getAnchor();
     auto [x, y] = getPositionTopLeft();
     return std::pair(x + anchorX * width, y + anchorY * height);
@@ -58,7 +60,7 @@ std::pair<int, int> Self::getPosition() const {
 
 void Self::setPosition(int x, int y) {
     assert(isMainThread());
-    auto [width, height] = getSize();
+    auto [width, height] = sizeProvider_();
     auto [anchorX, anchorY] = getAnchor();
     setPositionTopLeft(x - static_cast<int>(anchorX * width),
                        y - static_cast<int>(anchorY * height));
@@ -92,7 +94,7 @@ std::pair<int, int> Self::getSize() const {
 
 void Self::setSize(int width, int height) {
     assert(isMainThread());
-    auto [currentWidth, currentHeight] = getSize();
+    auto [currentWidth, currentHeight] = sizeProvider_();
     auto [anchorX, anchorY] = getAnchor();
     auto [x, y] = getPositionTopLeft();
     setPositionTopLeft(

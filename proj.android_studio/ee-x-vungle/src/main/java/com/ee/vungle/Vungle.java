@@ -148,7 +148,7 @@ public class Vungle implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(final @NonNull String gameId) {
+    public void initialize(@NonNull String gameId) {
         Utils.checkMainThread();
         if (_initializing) {
             return;
@@ -224,7 +224,7 @@ public class Vungle implements PluginProtocol {
         };
     }
 
-    private boolean hasRewardedAd(String adId) {
+    private boolean hasRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
         if (!com.vungle.warren.Vungle.isInitialized()) {
             return false;
@@ -232,12 +232,12 @@ public class Vungle implements PluginProtocol {
         return com.vungle.warren.Vungle.canPlayAd(adId);
     }
 
-    private void loadRewardedAd(String adId) {
+    private void loadRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
         com.vungle.warren.Vungle.loadAd(adId, _loadAdCallback);
     }
 
-    private void showRewardedAd(String adId) {
+    private void showRewardedAd(@NonNull String adId) {
         Utils.checkMainThread();
         com.vungle.warren.Vungle.playAd(adId, new AdConfig(), _playAdCallback);
     }

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 /// Used to switch between ndkBuild and cmake.
-def USE_CMAKE = true
+def USE_CMAKE = false
 
 /// Modify this variable to build the desired architectures.
 String[] architectures = [

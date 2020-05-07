@@ -144,7 +144,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     getLogger().info("isConnected: %s",
                      ee::testConnection() ? "true" : "false");
 
-    NotificationAgent::getInstance()->initialize();
+    // NotificationAgent::getInstance()->initialize();
     // testAdMobBannerAd();
     // testAdMobNativeAd();
     // testAdMobInterstitial();
@@ -160,7 +160,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     cocos2d::log("Create scene");
     // director->runWithScene(VideoPlayerTestScene::create());
     // director->runWithScene(createMultiNativeAdTestScene());
-    director->runWithScene(TwitterShareTestScene::create());
+    // director->runWithScene(TwitterShareTestScene::create());
 
     return true;
 }

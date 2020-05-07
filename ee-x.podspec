@@ -260,8 +260,9 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
-    s.ios.library = 'iconv'
-    s.ios.framework = 'OpenAL'
+    s.library = 'iconv'
+    s.framework = 'OpenAL'
+    s.osx.framework = 'GameController'
   end
 
   spec.subspec 'cocos-coroutine' do |s|

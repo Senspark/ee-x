@@ -17,13 +17,6 @@ android {
 
 dependencies {
     implementation project(':ee-x-firebase-core')
-
-    // Recommended: Add the Firebase SDK for Google Analytics.
     implementation 'com.google.firebase:firebase-analytics:17.4.0'
-
-    // Add the Firebase SDK for Crashlytics.
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
-
-    // Add the Firebase Crashlytics NDK dependency.
     implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.0'
 }

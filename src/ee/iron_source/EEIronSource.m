@@ -165,7 +165,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 - (void)interstitialDidFailToLoadWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [bridge_ callCpp:k__onInterstitialAdFailedToLoad
-             message:[error description]];
+             message:[error localizedDescription]]; // [error description]
+                                                    // returns empty.
 }
 
 - (void)interstitialDidOpen {

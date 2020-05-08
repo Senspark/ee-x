@@ -21,7 +21,7 @@ namespace ee {
 namespace core {
 
 // lower string
-std::string str_tolower(std::string s);
+[[deprecated]] std::string str_tolower(std::string s);
 
 /// Converts float to string without trailing zeroes.
 std::string toString(float value);
@@ -70,40 +70,38 @@ inline Dest bitCast(const Source& source) {
     return dest;
 }
 
+/// Logs a message using __android_log_print (Android) and NSLog (iOS).
 void log(const LogLevel& level, const std::string& tag,
          const std::string& message);
 
-/// Checks whether the current thread is the main thread (UI thread on Android).
+std::string dumpBacktrace(size_t count);
+
+/// Checks whether the current thread is the UI thread (Android) or Main thread
+/// (iOS).
 bool isMainThread();
 
 template <class T>
 using Runnable = std::function<T()>;
 
 /// Runs the specified runnable on the main thread.
+/// @returns Whether the function is executed immediately.
 bool runOnUiThread(const Runnable<void>& runnable);
+
+/// Runs the specifieid runnable on the main thread after a delay.
+void runOnUiThreadDelayed(const Runnable<void>& runnable, float delay);
 
 /// Runs the specified runnable on the main thread and block the current thread.
 /// If the current thread is the main thread, it will be executed immediately.
-void runOnUiThreadAndWait(const Runnable<void>& runnable);
+[[deprecated]] void runOnUiThreadAndWait(const Runnable<void>& runnable);
 
 template <class T>
-T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
+[[deprecated]] T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
     std::promise<T> promise;
     runOnUiThread([runnable, &promise] { // Fix clang-format.
         promise.set_value(runnable());
     });
     return promise.get_future().get();
 }
-
-/// Android only.
-/// iOS returns an empty string.
-std::string getSHA1CertificateFingerprint();
-
-/// Gets the version name of the application.
-std::string getVersionName();
-
-/// Gets the version code of the application.
-std::string getVersionCode();
 
 /// Checks whether an application with the specified package name (Android) or
 /// scheme (iOS) is installed.
@@ -113,27 +111,34 @@ bool isApplicationInstalled(const std::string& applicationId);
 /// (iOS).
 bool openApplication(const std::string& applicationId);
 
-bool sendMail(const std::string& recipient, const std::string& subject,
-              const std::string& body);
-
-bool isTablet();
-
-/// Tests whether the specified host name can be resolved.
-Task<bool> testConnection(const std::string& hostName, float timeOut);
-
-/// Gets device's unique ID.
-Task<std::string> getDeviceId();
-
-std::string dumpBacktrace(size_t count);
-
-void runOnUiThreadDelayed(const std::function<void()>& func, float delay);
-
-bool isInstantApp();
-
-void showInstallPrompt(const std::string& url, const std::string& referrer);
+/// Gets the application ID (Android) or bundle identifier (iOS).
+std::string getApplicationId();
 
 /// Gets the name of the application.
 std::string getApplicationName();
+
+/// Gets the version name of the application.
+std::string getVersionName();
+
+/// Gets the version code of the application.
+std::string getVersionCode();
+
+/// Android only.
+/// iOS returns an empty string.
+std::string getSHA1CertificateFingerprint();
+
+/// Checks whether the current application is an Google Instant application
+/// (Android only).
+bool isInstantApp();
+
+/// Checks whether the current device is a table.
+bool isTablet();
+
+/// Gets the screen density, i.e. pixel to dp ratio.
+float getDensity();
+
+/// Gets device's unique ID.
+Task<std::string> getDeviceId();
 
 /// https://developer.android.com/reference/android/view/DisplayCutout
 struct SafeInset {
@@ -152,8 +157,14 @@ struct SafeInset {
 
 SafeInset getSafeInset();
 
-/// Gets the screen density, i.e. pixel to dp ratio.
-float getDensity();
+bool sendMail(const std::string& recipient, const std::string& subject,
+              const std::string& body);
+
+/// Tests whether the specified host name can be resolved.
+Task<bool> testConnection(const std::string& hostName, float timeOut);
+
+/// Show Google Instant application installation prompt (Android only).
+void showInstallPrompt(const std::string& url, const std::string& referrer);
 } // namespace core
 
 using core::bitCast;

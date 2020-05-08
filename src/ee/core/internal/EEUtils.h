@@ -38,24 +38,25 @@
 + (void)runOnMainThreadDelayed:(float)seconds
                       callback:(void (^_Nonnull)(void))callback;
 
++ (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId;
++ (BOOL)openApplication:(NSString* _Nonnull)applicationId;
+
++ (NSString* _Nonnull)getApplicationId;
++ (NSString* _Nonnull)getApplicationName;
 + (NSString* _Nonnull)getVersionName;
 + (NSString* _Nonnull)getVersionCode;
 
-+ (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId;
-+ (BOOL)openApplication:(NSString* _Nonnull)applicationId;
++ (BOOL)isTablet;
++ (CGFloat)getDensity;
++ (CGFloat)convertDpToPixels:(CGFloat)dp;
++ (CGFloat)convertPixelsToDp:(CGFloat)pixels;
++ (NSString* _Nonnull)getDeviceId;
 
 + (BOOL)sendMail:(NSString* _Nonnull)recipient
          subject:(NSString* _Nonnull)subject
             body:(NSString* _Nonnull)body;
 
-+ (BOOL)isTablet;
 + (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
                               timeOut:(float)timeOut;
-
-+ (NSString* _Nonnull)getDeviceId;
-
-+ (CGFloat)getDensity;
-+ (CGFloat)convertDpToPixels:(CGFloat)dp;
-+ (CGFloat)convertPixelsToDp:(CGFloat)pixels;
 
 @end

@@ -29,36 +29,6 @@
 
 namespace ee {
 namespace core {
-
-struct BacktraceState {
-    void** current;
-    void** end;
-};
-/*
-void runOnUiThreadAndWait(const Runnable<void>& runnable) {
-#ifdef EE_X_ANDROID
-    if (std::this_thread::get_id() == uiThreadId_) {
-        runnable();
-        return;
-    }
-    std::mutex mtx;
-    std::condition_variable cv;
-    bool processed = false;
-    runOnUiThread([runnable, &mtx, &cv, &processed] {
-        std::unique_lock<std::mutex> lock(mtx);
-        runnable();
-        processed = true;
-        lock.unlock();
-        cv.notify_one();
-    });
-    std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, [&processed] { return processed; });
-#else  // EE_X_ANDROID
-    runnable();
-#endif // EE_X_ANDROID
-}
-*/
-
 std::string str_tolower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(),
                    [](unsigned char c) { return std::tolower(c); } // correct
@@ -115,26 +85,79 @@ std::string format(std::string formatString, std::va_list args) {
     }
 }
 
+struct BacktraceState {
+    void** current;
+    void** end;
+};
+
+_Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
+    BacktraceState* state = static_cast<BacktraceState*>(arg);
+    uintptr_t pc = _Unwind_GetIP(context);
+    if (pc) {
+        if (state->current == state->end) {
+            return _URC_END_OF_STACK;
+        } else {
+            *state->current++ = reinterpret_cast<void*>(pc);
+        }
+    }
+    return _URC_NO_REASON;
+}
+
+size_t captureBacktrace(void** buffer, size_t max) {
+    BacktraceState state = {buffer, buffer + max};
+    _Unwind_Backtrace(unwindCallback, &state);
+
+    return state.current - buffer;
+}
+
+void dumpBacktrace(std::ostream& os, void** buffer, size_t count) {
+    for (size_t idx = 0; idx < count; ++idx) {
+        const void* addr = buffer[idx];
+        const char* symbol = "";
+
+        Dl_info info;
+        if (dladdr(addr, &info) && info.dli_sname) {
+            symbol = info.dli_sname;
+        }
+
+        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol
+           << "\n";
+    }
+}
+
+std::string dumpBacktrace(size_t count) {
+    void* buffer[count];
+    std::ostringstream oss;
+
+    dumpBacktrace(oss, buffer, captureBacktrace(buffer, count));
+    return oss.str();
+}
+
 namespace {
 // clang-format off
 constexpr auto k__isMainThread                  = "Utils_isMainThread";
 constexpr auto k__runOnUiThread                 = "Utils_runOnUiThread";
+constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
 constexpr auto k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
-constexpr auto k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFingerprint";
-constexpr auto k__getVersionName                = "Utils_getVersionName";
-constexpr auto k__getVersionCode                = "Utils_getVersionCode";
+
 constexpr auto k__isApplicationInstalled        = "Utils_isApplicationInstalled";
 constexpr auto k__openApplication               = "Utils_openApplication";
-constexpr auto k__sendMail                      = "Utils_sendMail";
-constexpr auto k__isTablet                      = "Utils_isTablet";
-constexpr auto k__testConnection                = "Utils_testConnection";
-constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
-constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
-constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
-constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
+
+constexpr auto k__getApplicationId              = "Utils_getApplicationId";
 constexpr auto k__getApplicationName            = "Utils_getApplicationName";
-constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
+constexpr auto k__getVersionName                = "Utils_getVersionName";
+constexpr auto k__getVersionCode                = "Utils_getVersionCode";
+
+constexpr auto k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFingerprint";
+constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
+constexpr auto k__isTablet                      = "Utils_isTablet";
 constexpr auto k__getDensity                    = "Utils_getDensity";
+constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
+constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
+
+constexpr auto k__sendMail                      = "Utils_sendMail";
+constexpr auto k__testConnection                = "Utils_testConnection";
+constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
 // clang-format on
 } // namespace
 
@@ -191,6 +214,25 @@ bool runOnUiThread(const Runnable<void>& runnable) {
     return toBool(response);
 }
 
+void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
+    auto&& bridge = MessageBridge::getInstance();
+    static int counter = 0;
+    auto callbackTag = ee::format("runOnUiThreadDelayed_%d", counter++);
+    bridge.registerHandler(
+        [func, callbackTag, &bridge](const std::string& msg) {
+            bridge.deregisterHandler(callbackTag);
+            if (func) {
+                func();
+            }
+            return "";
+        },
+        callbackTag);
+    nlohmann::json json;
+    json["callback_id"] = callbackTag;
+    json["delay_time"] = delay;
+    bridge.call(k__runOnUiThreadDelayed, json.dump());
+}
+
 void runOnUiThreadAndWait(const Runnable<void>& runnable) {
     std::promise<void> promise;
     runOnUiThread([runnable, &promise] {
@@ -198,21 +240,6 @@ void runOnUiThreadAndWait(const Runnable<void>& runnable) {
         promise.set_value();
     });
     return promise.get_future().get();
-}
-
-std::string getSHA1CertificateFingerprint() {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getSHA1CertificateFingerprint);
-}
-
-std::string getVersionName() {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getVersionName);
-}
-
-std::string getVersionCode() {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getVersionCode);
 }
 
 bool isApplicationInstalled(const std::string& applicationId) {
@@ -227,6 +254,95 @@ bool openApplication(const std::string& applicationId) {
     return toBool(response);
 }
 
+std::string getApplicationId() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getApplicationId);
+}
+
+std::string getApplicationName() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getApplicationName);
+}
+
+std::string getVersionName() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getVersionName);
+}
+
+std::string getVersionCode() {
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getVersionCode);
+}
+
+std::string getSHA1CertificateFingerprint() {
+#if EE_X_ANDROID
+    auto&& bridge = MessageBridge::getInstance();
+    return bridge.call(k__getSHA1CertificateFingerprint);
+#else  // EE_X_ANDROID
+    return "";
+#endif // EE_X_ANDROID
+}
+
+bool isInstantApp() {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__isInstantApp);
+    return toBool(response);
+}
+
+bool isTablet() {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__isTablet);
+    return toBool(response);
+}
+
+float getDensity() {
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__getDensity);
+    return std::stof(response);
+}
+
+Task<std::string> getDeviceId() {
+    auto awaiter = LambdaAwaiter<std::string>([](auto&& resolve) {
+        static int counter;
+        auto callbackTag = "getDeviceId_" + std::to_string(counter++);
+
+        auto&& bridge = MessageBridge::getInstance();
+        bridge.registerHandler(
+            [resolve, &bridge, callbackTag](const std::string& message) {
+                bridge.deregisterHandler(callbackTag);
+                resolve(message);
+                return "";
+            },
+            callbackTag);
+
+        nlohmann::json json;
+        json["callback_tag"] = callbackTag;
+        bridge.call(k__getDeviceId, json.dump());
+    });
+    co_return co_await awaiter;
+}
+
+SafeInset getSafeInset() {
+    SafeInset result;
+#ifdef EE_X_ANDROID
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = bridge.call(k__getSafeInset);
+    auto json = nlohmann::json::parse(response);
+
+    result.left = json["left"];
+    result.right = json["right"];
+    result.top = json["top"];
+    result.bottom = json["bottom"];
+#else  // EE_X_ANDROID
+    // TODO.
+    result.left = 0;
+    result.right = 0;
+    result.top = 0;
+    result.bottom = 0;
+#endif // EE_X_ANDROID
+    return result;
+}
+
 bool sendMail(const std::string& recipient, const std::string& subject,
               const std::string& body) {
     nlohmann::json json;
@@ -235,12 +351,6 @@ bool sendMail(const std::string& recipient, const std::string& subject,
     json["body"] = body;
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__sendMail, json.dump());
-    return toBool(response);
-}
-
-bool isTablet() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isTablet);
     return toBool(response);
 }
 
@@ -268,133 +378,12 @@ Task<bool> testConnection(const std::string& hostName, float timeOut) {
     co_return co_await awaiter;
 }
 
-Task<std::string> getDeviceId() {
-    auto awaiter = LambdaAwaiter<std::string>([](auto&& resolve) {
-        static int counter;
-        auto callbackTag = "getDeviceId_" + std::to_string(counter++);
-
-        auto&& bridge = MessageBridge::getInstance();
-        bridge.registerHandler(
-            [resolve, &bridge, callbackTag](const std::string& message) {
-                bridge.deregisterHandler(callbackTag);
-                resolve(message);
-                return "";
-            },
-            callbackTag);
-
-        nlohmann::json json;
-        json["callback_tag"] = callbackTag;
-        bridge.call(k__getDeviceId, json.dump());
-    });
-    co_return co_await awaiter;
-}
-
-void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
-    auto&& bridge = MessageBridge::getInstance();
-    static int counter = 0;
-    auto callbackTag = ee::format("runOnUiThreadDelayed_%d", counter++);
-    bridge.registerHandler(
-        [func, callbackTag, &bridge](const std::string& msg) {
-            bridge.deregisterHandler(callbackTag);
-            if (func) {
-                func();
-            }
-            return "";
-        },
-        callbackTag);
-    nlohmann::json json;
-    json["callback_id"] = callbackTag;
-    json["delay_time"] = delay;
-    bridge.call(k__runOnUiThreadDelayed, json.dump());
-}
-
-bool isInstantApp() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isInstantApp);
-    return toBool(response);
-}
-
 void showInstallPrompt(const std::string& url, const std::string& referrer) {
     nlohmann::json json;
     json["url"] = url;
     json["referrer"] = referrer;
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showInstallPrompt, json.dump());
-}
-
-std::string getApplicationName() {
-    auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getApplicationName);
-}
-
-SafeInset getSafeInset() {
-    SafeInset result;
-#ifdef EE_X_ANDROID
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__getSafeInset);
-    auto json = nlohmann::json::parse(response);
-
-    result.left = json["left"];
-    result.right = json["right"];
-    result.top = json["top"];
-    result.bottom = json["bottom"];
-#else  // EE_X_ANDROID
-    // TODO.
-    result.left = 0;
-    result.right = 0;
-    result.top = 0;
-    result.bottom = 0;
-#endif // EE_X_ANDROID
-    return result;
-}
-
-float getDensity() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__getDensity);
-    return std::stof(response);
-}
-
-_Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
-    BacktraceState* state = static_cast<BacktraceState*>(arg);
-    uintptr_t pc = _Unwind_GetIP(context);
-    if (pc) {
-        if (state->current == state->end) {
-            return _URC_END_OF_STACK;
-        } else {
-            *state->current++ = reinterpret_cast<void*>(pc);
-        }
-    }
-    return _URC_NO_REASON;
-}
-
-size_t captureBacktrace(void** buffer, size_t max) {
-    BacktraceState state = {buffer, buffer + max};
-    _Unwind_Backtrace(unwindCallback, &state);
-
-    return state.current - buffer;
-}
-
-void dumpBacktrace(std::ostream& os, void** buffer, size_t count) {
-    for (size_t idx = 0; idx < count; ++idx) {
-        const void* addr = buffer[idx];
-        const char* symbol = "";
-
-        Dl_info info;
-        if (dladdr(addr, &info) && info.dli_sname) {
-            symbol = info.dli_sname;
-        }
-
-        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol
-           << "\n";
-    }
-}
-
-std::string dumpBacktrace(size_t count) {
-    void* buffer[count];
-    std::ostringstream oss;
-
-    dumpBacktrace(oss, buffer, captureBacktrace(buffer, count));
-    return oss.str();
 }
 } // namespace core
 } // namespace ee

@@ -64,156 +64,6 @@ static NSString* const k__false = @"false";
     return [value isEqualToString:k__true];
 }
 
-// clang-format off
-static NSString* const k__isMainThread                  = @"Utils_isMainThread";
-static NSString* const k__runOnUiThread                 = @"Utils_runOnUiThread";
-static NSString* const k__runOnUiThreadCallback         = @"Utils_runOnUiThreadCallback";
-static NSString* const k__getSHA1CertificateFingerprint = @"Utils_getSHA1CertificateFingerprint";
-static NSString* const k__getVersionName                = @"Utils_getVersionName";
-static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
-static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationInstalled";
-static NSString* const k__openApplication               = @"Utils_openApplication";
-static NSString* const k__sendMail                      = @"Utils_sendMail";
-static NSString* const k__isTablet                      = @"Utils_isTablet";
-static NSString* const k__testConnection                = @"Utils_testConnection";
-static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
-static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadDelayed";
-static NSString* const k__isInstantApp                  = @"Utils_isInstantApp";
-static NSString* const k__showInstallPrompt             = @"Utils_showInstallPrompt";
-static NSString* const k__getApplicationName            = @"Utils_getApplicationName";
-static NSString* const k__getDensity                    = @"Utils_getDensity";
-// clang-format on
-
-+ (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-
-    [bridge registerHandler:k__getDeviceId
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* callbackTag = dict[@"callback_tag"];
-                       NSAssert(callbackTag != nil, @"");
-
-                       NSString* deviceId = [self getDeviceId];
-                       [bridge callCpp:callbackTag message:deviceId];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:k__isMainThread
-                   callback:^(NSString* message) {
-                       return [self toString:[self isMainThread]];
-                   }];
-    [bridge registerHandler:k__runOnUiThread
-                   callback:^(NSString* message) {
-                       return [self toString:[self runOnMainThread:^{
-                                        [self signalMainThread];
-                                    }]];
-                   }];
-
-    [bridge registerHandler:k__runOnUiThreadDelayed
-                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* tag = dict[@"callback_id"];
-                       float delay = [dict[@"delay_time"] floatValue];
-                       [self runOnMainThreadDelayed:delay
-                                           callback:^{
-                                               [bridge callCpp:tag];
-                                           }];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:k__getSHA1CertificateFingerprint
-                   callback:^(NSString* message) {
-                       // Not supported.
-                       return @"";
-                   }];
-
-    [bridge registerHandler:k__getVersionName
-                   callback:^(NSString* message) {
-                       return [self getVersionName];
-                   }];
-
-    [bridge registerHandler:k__getVersionCode
-                   callback:^(NSString* message) {
-                       return [self getVersionCode];
-                   }];
-
-    [bridge
-        registerHandler:k__isApplicationInstalled
-               callback:^(NSString* message) {
-                   NSString* applicationId = message;
-                   return [self
-                       toString:[self isApplicationInstalled:applicationId]];
-               }];
-
-    [bridge registerHandler:k__openApplication
-                   callback:^(NSString* message) {
-                       NSString* applicationId = message;
-                       return
-                           [self toString:[self openApplication:applicationId]];
-                   }];
-
-    [bridge registerHandler:k__sendMail
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* recipient = dict[@"recipient"];
-                       NSString* subject = dict[@"subject"];
-                       NSString* body = dict[@"body"];
-                       return [self toString:[self sendMail:recipient
-                                                    subject:subject
-                                                       body:body]];
-                   }];
-
-    [bridge registerHandler:k__isTablet
-                   callback:^(NSString* message) {
-                       return [self toString:[self isTablet]];
-                   }];
-
-    [bridge registerHandler:k__testConnection
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-
-                       NSString* callbackTag = dict[@"callback_tag"];
-                       NSString* hostName = dict[@"host_name"];
-                       float timeOut = [dict[@"time_out"] floatValue];
-                       NSAssert(callbackTag != nil, @"");
-                       NSAssert(hostName != nil, @"");
-
-                       [[self testConnection:hostName timeOut:timeOut]
-                           subscribeNext:^(id _Nullable x) {
-                               BOOL result = [x boolValue];
-                               [bridge callCpp:callbackTag
-                                       message:[self toString:result]];
-                           }
-                           error:^(NSError* _Nullable error) {
-                               [bridge callCpp:callbackTag
-                                       message:[self toString:NO]];
-                           }];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:k__isInstantApp
-                   callback:^(NSString* message) {
-                       return @"false";
-                   }];
-    [bridge registerHandler:k__showInstallPrompt
-                   callback:^(NSString* message) {
-                       return @"";
-                   }];
-    [bridge registerHandler:k__getApplicationName
-                   callback:^(NSString* message) {
-                       return [self getApplicationName];
-                   }];
-    [bridge registerHandler:k__getDensity
-                   callback:^(NSString* message) {
-                       CGFloat density = [self getDensity];
-                       return [NSString stringWithFormat:@"%f", density];
-                   }];
-}
-
 + (BOOL)isMainThread {
     return [NSThread isMainThread];
 }
@@ -243,16 +93,147 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
     });
 }
 
-+ (NSString* _Nonnull)getVersionName {
-    NSString* versionName = [[NSBundle mainBundle]
-        objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    return versionName;
-}
+// clang-format off
+static NSString* const k__isMainThread                  = @"Utils_isMainThread";
+static NSString* const k__runOnUiThread                 = @"Utils_runOnUiThread";
+static NSString* const k__runOnUiThreadDelayed          = @"Utils_runOnUiThreadDelayed";
+static NSString* const k__runOnUiThreadCallback         = @"Utils_runOnUiThreadCallback";
 
-+ (NSString* _Nonnull)getVersionCode {
-    NSString* versionString = [[NSBundle mainBundle]
-        objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
-    return versionString;
+static NSString* const k__isApplicationInstalled        = @"Utils_isApplicationInstalled";
+static NSString* const k__openApplication               = @"Utils_openApplication";
+
+static NSString* const k__getApplicationId              = @"Utils_getApplicationId";
+static NSString* const k__getApplicationName            = @"Utils_getApplicationName";
+static NSString* const k__getVersionName                = @"Utils_getVersionName";
+static NSString* const k__getVersionCode                = @"Utils_getVersionCode";
+
+static NSString* const k__isTablet                      = @"Utils_isTablet";
+static NSString* const k__getDensity                    = @"Utils_getDensity";
+static NSString* const k__getDeviceId                   = @"Utils_getDeviceId";
+
+static NSString* const k__sendMail                      = @"Utils_sendMail";
+static NSString* const k__testConnection                = @"Utils_testConnection";
+// clang-format on
+
++ (void)registerHandlers {
+    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+
+    [bridge registerHandler:k__isMainThread
+                   callback:^(NSString* message) {
+                       return [self toString:[self isMainThread]];
+                   }];
+    [bridge registerHandler:k__runOnUiThread
+                   callback:^(NSString* message) {
+                       return [self toString:[self runOnMainThread:^{
+                                        [self signalMainThread];
+                                    }]];
+                   }];
+
+    [bridge registerHandler:k__runOnUiThreadDelayed
+                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* tag = dict[@"callback_id"];
+                       float delay = [dict[@"delay_time"] floatValue];
+                       [self runOnMainThreadDelayed:delay
+                                           callback:^{
+                                               [bridge callCpp:tag];
+                                           }];
+                       return @"";
+                   }];
+
+    [bridge
+        registerHandler:k__isApplicationInstalled
+               callback:^(NSString* message) {
+                   NSString* applicationId = message;
+                   return [self
+                       toString:[self isApplicationInstalled:applicationId]];
+               }];
+
+    [bridge registerHandler:k__openApplication
+                   callback:^(NSString* message) {
+                       NSString* applicationId = message;
+                       return
+                           [self toString:[self openApplication:applicationId]];
+                   }];
+
+    [bridge registerHandler:k__getApplicationId
+                   callback:^(NSString* message) {
+                       return [self getApplicationId];
+                   }];
+
+    [bridge registerHandler:k__getApplicationName
+                   callback:^(NSString* message) {
+                       return [self getApplicationName];
+                   }];
+
+    [bridge registerHandler:k__getVersionName
+                   callback:^(NSString* message) {
+                       return [self getVersionName];
+                   }];
+
+    [bridge registerHandler:k__getVersionCode
+                   callback:^(NSString* message) {
+                       return [self getVersionCode];
+                   }];
+
+    [bridge registerHandler:k__isTablet
+                   callback:^(NSString* message) {
+                       return [self toString:[self isTablet]];
+                   }];
+
+    [bridge registerHandler:k__getDensity
+                   callback:^(NSString* message) {
+                       CGFloat density = [self getDensity];
+                       return [NSString stringWithFormat:@"%f", density];
+                   }];
+
+    [bridge registerHandler:k__getDeviceId
+                   callback:^(NSString* message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* callbackTag = dict[@"callback_tag"];
+                       NSAssert(callbackTag != nil, @"");
+
+                       NSString* deviceId = [self getDeviceId];
+                       [bridge callCpp:callbackTag message:deviceId];
+                       return @"";
+                   }];
+
+    [bridge registerHandler:k__sendMail
+                   callback:^(NSString* message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+                       NSString* recipient = dict[@"recipient"];
+                       NSString* subject = dict[@"subject"];
+                       NSString* body = dict[@"body"];
+                       return [self toString:[self sendMail:recipient
+                                                    subject:subject
+                                                       body:body]];
+                   }];
+    [bridge registerHandler:k__testConnection
+                   callback:^(NSString* message) {
+                       NSDictionary* dict =
+                           [EEJsonUtils convertStringToDictionary:message];
+
+                       NSString* callbackTag = dict[@"callback_tag"];
+                       NSString* hostName = dict[@"host_name"];
+                       float timeOut = [dict[@"time_out"] floatValue];
+                       NSAssert(callbackTag != nil, @"");
+                       NSAssert(hostName != nil, @"");
+
+                       [[self testConnection:hostName timeOut:timeOut]
+                           subscribeNext:^(id _Nullable x) {
+                               BOOL result = [x boolValue];
+                               [bridge callCpp:callbackTag
+                                       message:[self toString:result]];
+                           }
+                           error:^(NSError* _Nullable error) {
+                               [bridge callCpp:callbackTag
+                                       message:[self toString:NO]];
+                           }];
+                       return @"";
+                   }];
 }
 
 + (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId {
@@ -276,19 +257,27 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 #endif // TARGET_OS_IOS
 }
 
-+ (BOOL)sendMail:(NSString* _Nonnull)recipient
-         subject:(NSString* _Nonnull)subject
-            body:(NSString* _Nonnull)body {
-#if TARGET_OS_IOS
-    NSString* str = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@",
-                                               recipient, subject, body];
-    NSURL* url =
-        [NSURL URLWithString:[str stringByAddingPercentEscapesUsingEncoding:
-                                      NSUTF8StringEncoding]];
-    return [[UIApplication sharedApplication] openURL:url];
-#else  // TARGET_OS_IOS
-    return NO;
-#endif // TARGET_OS_IOS
++ (NSString* _Nonnull)getApplicationId {
+    return [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+}
+
++ (NSString* _Nonnull)getApplicationName {
+    NSString* appName = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+    return appName;
+}
+
++ (NSString* _Nonnull)getVersionName {
+    NSString* versionName = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    return versionName;
+}
+
++ (NSString* _Nonnull)getVersionCode {
+    NSString* versionString = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
+    return versionString;
 }
 
 + (BOOL)isTablet {
@@ -297,55 +286,6 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 #else  // TARGET_OS_IOS
     return NO;
 #endif // TARGET_OS_IOS
-}
-
-+ (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
-                              timeOut:(float)timeOut {
-    RACScheduler* scheduler =
-        [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
-    return [[RACSignal
-        startLazilyWithScheduler:scheduler
-                           block:^(id<RACSubscriber> _Nonnull subscriber) {
-                               NetworkStatus status = [[EEReachability
-                                   reachabilityWithHostname:hostName]
-                                   currentReachabilityStatus];
-                               BOOL isReachable = status != NotReachable;
-                               [subscriber sendNext:@(isReachable)];
-                               [subscriber sendCompleted];
-                           }] timeout:timeOut
-                          onScheduler:scheduler];
-}
-
-+ (NSString* _Nonnull)getDeviceId {
-#if TARGET_OS_IOS
-    // https://stackoverflow.com/questions/24760150/how-to-get-a-hashed-device-id-for-testing-admob-on-ios
-    NSString* deviceId =
-        [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    return deviceId == nil ? @"" : deviceId;
-#else  // TARGET_OS_IOS
-    // https://stackoverflow.com/questions/933460/unique-hardware-id-in-mac-os-x
-    io_registry_entry_t ioRegistryRoot =
-        IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/");
-    CFStringRef uuidCf = (CFStringRef)IORegistryEntryCreateCFProperty(
-        ioRegistryRoot, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0);
-    IOObjectRelease(ioRegistryRoot);
-    const auto CFIndex bufSize = 100;
-    static char buf[bufSize];
-    Boolean successful =
-        CFStringGetCString(uuidCf, buf, bufSize, kCFStringEncodingMacRoman);
-    CFRelease(uuidCf);
-    if (successful) {
-        NSString* deviceId = [NSString stringWithUTF8String:buf];
-        return deviceId == nil ? @"" : deviceId;
-    }
-    return @"";
-#endif // TARGET_OS_IOS
-}
-
-+ (NSString* _Nonnull)getApplicationName {
-    NSString* appName = [[NSBundle mainBundle]
-        objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-    return appName;
 }
 
 + (CGFloat)getDensity {
@@ -374,6 +314,63 @@ static NSString* const k__getDensity                    = @"Utils_getDensity";
 
 + (CGFloat)convertPixelsToDp:(CGFloat)pixels {
     return pixels / [self getDensity];
+}
+
++ (NSString* _Nonnull)getDeviceId {
+#if TARGET_OS_IOS
+    // https://stackoverflow.com/questions/24760150/how-to-get-a-hashed-device-id-for-testing-admob-on-ios
+    NSString* deviceId =
+        [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    return deviceId == nil ? @"" : deviceId;
+#else  // TARGET_OS_IOS
+    // https://stackoverflow.com/questions/933460/unique-hardware-id-in-mac-os-x
+    io_registry_entry_t ioRegistryRoot =
+        IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/");
+    CFStringRef uuidCf = (CFStringRef)IORegistryEntryCreateCFProperty(
+        ioRegistryRoot, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0);
+    IOObjectRelease(ioRegistryRoot);
+    const auto CFIndex bufSize = 100;
+    static char buf[bufSize];
+    Boolean successful =
+        CFStringGetCString(uuidCf, buf, bufSize, kCFStringEncodingMacRoman);
+    CFRelease(uuidCf);
+    if (successful) {
+        NSString* deviceId = [NSString stringWithUTF8String:buf];
+        return deviceId == nil ? @"" : deviceId;
+    }
+    return @"";
+#endif // TARGET_OS_IOS
+}
+
++ (BOOL)sendMail:(NSString* _Nonnull)recipient
+         subject:(NSString* _Nonnull)subject
+            body:(NSString* _Nonnull)body {
+#if TARGET_OS_IOS
+    NSString* str = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@",
+                                               recipient, subject, body];
+    NSURL* url =
+        [NSURL URLWithString:[str stringByAddingPercentEscapesUsingEncoding:
+                                      NSUTF8StringEncoding]];
+    return [[UIApplication sharedApplication] openURL:url];
+#else  // TARGET_OS_IOS
+    return NO;
+#endif // TARGET_OS_IOS
+}
+
++ (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
+                              timeOut:(float)timeOut {
+    RACScheduler* scheduler =
+        [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
+    return [[RACSignal
+        startLazilyWithScheduler:scheduler
+                           block:^(id<RACSubscriber> _Nonnull subscriber) {
+                               NetworkStatus status = [[EEReachability
+                                   reachabilityWithHostname:hostName]
+                                   currentReachabilityStatus];
+                               BOOL isReachable = status != NotReachable;
+                               [subscriber sendNext:@(isReachable)];
+                               [subscriber sendCompleted];
+                           }] timeout:timeOut onScheduler:scheduler];
 }
 
 @end

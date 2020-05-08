@@ -258,14 +258,13 @@ static NSString* const k__testConnection                = @"Utils_testConnection
 }
 
 + (NSString* _Nonnull)getApplicationId {
-    return [[NSBundle mainBundle]
-        objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+    return [[[NSBundle mainBundle] infoDictionary]
+        objectForKey:(NSString*)kCFBundleIdentifierKey];
 }
 
 + (NSString* _Nonnull)getApplicationName {
-    NSString* appName = [[NSBundle mainBundle]
-        objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-    return appName;
+    return [[[NSBundle mainBundle] infoDictionary]
+        objectForKey:(NSString*)kCFBundleNameKey];
 }
 
 + (NSString* _Nonnull)getVersionName {

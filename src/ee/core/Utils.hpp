@@ -169,6 +169,7 @@ void showInstallPrompt(const std::string& url, const std::string& referrer);
 
 using core::bitCast;
 using core::format;
+using core::getApplicationId;
 using core::getApplicationName;
 using core::getDensity;
 using core::getDeviceId;

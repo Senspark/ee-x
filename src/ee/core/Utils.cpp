@@ -275,7 +275,7 @@ std::string getVersionCode() {
 }
 
 std::string getSHA1CertificateFingerprint() {
-#if EE_X_ANDROID
+#ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
     return bridge.call(k__getSHA1CertificateFingerprint);
 #else  // EE_X_ANDROID
@@ -284,9 +284,13 @@ std::string getSHA1CertificateFingerprint() {
 }
 
 bool isInstantApp() {
+#ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
     auto response = bridge.call(k__isInstantApp);
     return toBool(response);
+#else  // EE_X_ANDROID
+    return false;
+#endif // EE_X_ANDROID
 }
 
 bool isTablet() {
@@ -379,11 +383,13 @@ Task<bool> testConnection(const std::string& hostName, float timeOut) {
 }
 
 void showInstallPrompt(const std::string& url, const std::string& referrer) {
+#ifdef EE_X_ANDROID
     nlohmann::json json;
     json["url"] = url;
     json["referrer"] = referrer;
     auto&& bridge = MessageBridge::getInstance();
     bridge.call(k__showInstallPrompt, json.dump());
+#endif // EE_X_ANDROID
 }
 } // namespace core
 } // namespace ee

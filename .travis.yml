@@ -22,8 +22,8 @@ matrix:
         - pod install --project-directory=test/proj.ios_mac
 
       script:
-        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile ONLY_ACTIVE_ARCH=NO | xcpretty
-        - xcodebuild -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_desktop ONLY_ACTIVE_ARCH=NO | xcpretty
+        - xcodebuild -quiet -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_mobile ONLY_ACTIVE_ARCH=NO OTHER_CFLAGS="-Wno-documentaiton" | xcpretty
+        - xcodebuild -quite -workspace test/proj.ios_mac/ee_x_test.xcworkspace -scheme ee_x_test_desktop ONLY_ACTIVE_ARCH=NO OTHER_CFLAGS="-Wno-documentation" | xcpretty
 
     - language: android
 

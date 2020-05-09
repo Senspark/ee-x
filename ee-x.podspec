@@ -299,6 +299,17 @@ Pod::Spec.new do |spec|
     s.exclude_files =
       'src/ee/facebook/CMakeLists.txt'
 
+    # Fix linking errors with Facebook SDK 7.
+    s.xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' ')
+    }
+
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKCoreKit'
     s.dependency 'FBSDKLoginKit'

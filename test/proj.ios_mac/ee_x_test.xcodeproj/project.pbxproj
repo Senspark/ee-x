@@ -70,19 +70,19 @@
 			remoteGlobalIDString = 507B40FD1C31BDD30067B53E;
 			remoteInfo = "libcocos2d tvOS";
 		};
-		4B120C1A23D0780600528149 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A07A4C241783777C0073F6A7;
-			remoteInfo = "libcocos2d iOS";
-		};
 		4B120C1D23D0780D00528149 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 1551A33E158F2AB200E66CFE;
 			remoteInfo = "libcocos2d Mac";
+		};
+		AD7F5F6C2466CF340035253E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A07A4C241783777C0073F6A7;
+			remoteInfo = "libcocos2d iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -357,7 +357,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4B120C1B23D0780600528149 /* PBXTargetDependency */,
+				AD7F5F6D2466CF340035253E /* PBXTargetDependency */,
 			);
 			name = ee_x_test_mobile;
 			productName = iphone;
@@ -568,6 +568,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
+				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.11.4/AppLovinSDKResources.bundle",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 				"${PODS_ROOT}/../../../res/stars_3_5.png",
 				"${PODS_ROOT}/../../../res/stars_4.png",
 				"${PODS_ROOT}/../../../res/stars_4_5.png",
@@ -577,6 +580,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
@@ -636,15 +642,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4B120C1B23D0780600528149 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "libcocos2d iOS";
-			targetProxy = 4B120C1A23D0780600528149 /* PBXContainerItemProxy */;
-		};
 		4B120C1E23D0780D00528149 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "libcocos2d Mac";
 			targetProxy = 4B120C1D23D0780D00528149 /* PBXContainerItemProxy */;
+		};
+		AD7F5F6D2466CF340035253E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcocos2d iOS";
+			targetProxy = AD7F5F6C2466CF340035253E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -743,7 +749,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -790,7 +798,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

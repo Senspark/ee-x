@@ -146,7 +146,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         getLogger().info("isConnected: %s", isConnected ? "true" : "false");
     });
 
-    NotificationAgent::getInstance()->initialize();
+    // NotificationAgent::getInstance()->initialize();
     // testAdMobBannerAd();
     // testAdMobNativeAd();
     // testAdMobInterstitial();

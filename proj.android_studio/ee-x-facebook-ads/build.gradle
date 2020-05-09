@@ -3,8 +3,8 @@
 apply plugin: 'com.android.library'
 
 repositories {
-    maven { url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
 }
 
 android {

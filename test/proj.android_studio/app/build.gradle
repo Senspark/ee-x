@@ -1,30 +1,86 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.gms.google-services'
 
 /// Used to switch between ndkBuild and cmake.
 def USE_CMAKE = false
 
+def CPP_FLAGS = [
+    '-DCC_USE_PHYSICS=0',
+    '-DCC_USE_3D_PHYSICS=0',
+    '-DCC_ENABLE_BULLET_INTEGRATION=0',
+    '-DCC_ENABLE_BOX2D_INTEGRATION=0',
+    '-DCC_ENABLE_CHIPMUNK_INTEGRATION=0',
+    '-std=c++2a',
+    '-U__SSE__',
+    '-frtti',
+    '-fexceptions',
+    '-fsigned-char',
+    '-fcoroutines-ts',
+    '-Wall',
+    '-Wextra',
+
+    // Disable some unnecessary warnings.
+    '-Wno-unused-parameter',
+]
+
 /// Modify this variable to build the desired architectures.
-String[] architectures = [
-        'armeabi-v7a',
-        // 'arm64-v8a'
+String[] ARCHITECTURES = [
+    'armeabi-v7a',
+    // 'arm64-v8a'
 ]
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    buildTypes {
+        debug {
+            debuggable true
+            jniDebuggable true
+
+            externalNativeBuild {
+                cmake {
+                    cppFlags '-DCOCOS2D_DEBUG=1'
+                }
+                ndkBuild {
+                    cppFlags '-DCOCOS2D_DEBUG=1'
+                }
+            }
+        }
+        release {
+            minifyEnabled false
+            debuggable false
+            jniDebuggable false
+
+            externalNativeBuild {
+                cmake {
+                    cppFlags '-DNDEBUG'
+                }
+                ndkBuild {
+                    cppFlags '-DNDEBUG'
+                }
+            }
+
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion rootProject.ext.targetSdkVersion
-
         applicationId 'com.ee.test.android'
+        minSdkVersion 16
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '1.0.0'
-        multiDexEnabled true
 
-        // API key used for testing.
-        manifestPlaceholders = [fabric_api_key: '45063244ecb24aee8a3b252cb5c6a2c549cf91f9']
+        multiDexEnabled true
 
         externalNativeBuild {
             cmake {
@@ -35,28 +91,17 @@ android {
                 arguments '-DBUILD_EDITOR_COCOSTUDIO=OFF'
                 arguments '-DBUILD_EDITOR_SPINE=OFF'
                 arguments '-DBUILD_EXTENSIONS=OFF'
-                cppFlags '-frtti'
-                cppFlags '-fexceptions'
-                cppFlags '-fsigned-char'
-                cppFlags '-std=c++2a'
-                cppFlags '-U__SSE__'
-                cppFlags '-Wno-extern-c-compat'
-                abiFilters.addAll(architectures)
+                cppFlags += CPP_FLAGS
+                abiFilters ARCHITECTURES
             }
             ndkBuild {
                 targets 'ee_x_test'
                 arguments 'APP_STL=c++_static'
                 arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                arguments 'APP_PLATFORM=android-16'
                 arguments 'APP_LDFLAGS=-latomic'
                 arguments '-j' + Runtime.runtime.availableProcessors()
-                cppFlags '-frtti'
-                cppFlags '-fexceptions'
-                cppFlags '-fsigned-char'
-                cppFlags '-std=c++2a'
-                cppFlags '-U__SSE__'
-                cppFlags '-Wno-extern-c-compat'
-                abiFilters.addAll(architectures)
+                cppFlags += CPP_FLAGS
+                abiFilters ARCHITECTURES
             }
         }
     }
@@ -73,66 +118,36 @@ android {
         }
     }
 
-    splits {
-        abi {
-            enable true
-            reset()
-            include architectures
-            universalApk false
-        }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'lib/x86/libcrashlytics.so'
+        exclude 'lib/x86_64/libcrashlytics.so'
     }
 
     sourceSets {
         main {
             assets.srcDir '../../Resources'
             jni.srcDirs = []
-            jniLibs.srcDir 'src/main/libs'
         }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            debuggable false
-            jniDebuggable false
-
-            externalNativeBuild {
-                cmake {
-                    cppFlags '-DNDEBUG'
-                }
-                ndkBuild {
-                    cppFlags '-DNDEBUG'
-                }
-            }
-        }
-        debug {
-            debuggable true
-            jniDebuggable true
-
-            externalNativeBuild {
-                cmake {
-                    cppFlags '-DCOCOS2D_DEBUG=1'
-                }
-                ndkBuild {
-                    cppFlags '-DCOCOS2D_DEBUG=1'
-                }
-            }
-        }
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
     }
 }
 
-crashlytics {
-    enableNdk true
-    androidNdkOut 'src/main/obj'
-    androidNdkLibsOut 'src/main/libs'
+/// Force version be 1 to avoid multiple version codes in Firebase console.
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        if (variant.buildType.isDebuggable()) {
+            output.versionCodeOverride = 1
+        }
+    }
 }
 
 dependencies {
@@ -147,9 +162,9 @@ dependencies {
     implementation project(':ee-x-vungle')
     implementation project(':ee-x-apps-flyer')
     implementation project(':ee-x-campaign-receiver')
-    implementation project(':ee-x-crashlytics')
     implementation project(':ee-x-facebook')
     implementation project(':ee-x-firebase-analytics')
+    implementation project(':ee-x-firebase-crashlytics')
     implementation project(':ee-x-firebase-dynamic-link')
     implementation project(':ee-x-firebase-messaging')
     implementation project(':ee-x-firebase-performance')
@@ -164,5 +179,3 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 }
-
-apply plugin: 'com.google.gms.google-services'

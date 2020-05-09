@@ -1,17 +1,22 @@
 apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+repositories {
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+}
 
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion rootProject.ext.targetSdkVersion
-    }
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
     }
 }
 

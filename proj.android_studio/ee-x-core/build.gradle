@@ -1,23 +1,24 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
-    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 
 dependencies {
     api 'androidx.annotation:annotation:1.1.0'
     api 'androidx.core:core:1.2.0'
+
     api 'com.google.truth:truth:1.0.1'
 
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
@@ -31,8 +32,8 @@ dependencies {
 
     // Fallback to 2.9.x
     // https://github.com/FasterXML/jackson/wiki/Jackson-Releases
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.10'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.10'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.10'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.10'
 
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'

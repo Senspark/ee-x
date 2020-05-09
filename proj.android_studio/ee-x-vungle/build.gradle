@@ -2,22 +2,18 @@
 
 apply plugin: 'com.android.library'
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
-    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
 
@@ -26,5 +22,5 @@ dependencies {
 
     // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
     implementation 'com.vungle:publisher-sdk-android:6.5.3'
-    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }

@@ -77,12 +77,12 @@
 			remoteGlobalIDString = 1551A33E158F2AB200E66CFE;
 			remoteInfo = "libcocos2d Mac";
 		};
-		4B25376E240D1FC900EC1B6C /* PBXContainerItemProxy */ = {
+		AD7F5F6C2466CF340035253E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 1551A33E158F2AB200E66CFE;
-			remoteInfo = "libcocos2d Mac";
+			remoteGlobalIDString = A07A4C241783777C0073F6A7;
+			remoteInfo = "libcocos2d iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -356,7 +356,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4B25376F240D1FC900EC1B6C /* PBXTargetDependency */,
+				AD7F5F6D2466CF340035253E /* PBXTargetDependency */,
 			);
 			name = ee_x_test_mobile;
 			productName = iphone;
@@ -662,10 +662,10 @@
 			name = "libcocos2d Mac";
 			targetProxy = 4B120C1D23D0780D00528149 /* PBXContainerItemProxy */;
 		};
-		4B25376F240D1FC900EC1B6C /* PBXTargetDependency */ = {
+		AD7F5F6D2466CF340035253E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "libcocos2d Mac";
-			targetProxy = 4B25376E240D1FC900EC1B6C /* PBXContainerItemProxy */;
+			name = "libcocos2d iOS";
+			targetProxy = AD7F5F6C2466CF340035253E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

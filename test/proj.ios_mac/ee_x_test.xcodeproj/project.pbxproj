@@ -13,7 +13,6 @@
 		4B120C1F23D0781000528149 /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B120C1523D077FD00528149 /* libcocos2d Mac.a */; };
 		6F2580241ECBFC9A00B910F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580231ECBFC9A00B910F9 /* main.mm */; };
 		6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
-		6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
 		6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802B1ECBFF8C00B910F9 /* AppController.mm */; };
 		6F25802F1ECBFFAE00B910F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802E1ECBFFAE00B910F9 /* main.m */; };
 		6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationAgent.cpp */; };
@@ -568,27 +567,21 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
-				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.11.4/AppLovinSDKResources.bundle",
+				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.12.5/AppLovinSDKResources.bundle",
 				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
-				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 				"${PODS_ROOT}/../../../res/stars_3_5.png",
 				"${PODS_ROOT}/../../../res/stars_4.png",
 				"${PODS_ROOT}/../../../res/stars_4_5.png",
 				"${PODS_ROOT}/../../../res/stars_5.png",
-				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.12.2/AppLovinSDKResources.bundle",
-				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_5.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -633,7 +626,6 @@
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
-				6F2580281ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,
 			);
@@ -665,7 +657,6 @@
 				DEVELOPMENT_TEAM = 3P4Y2KDTFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.mobile;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -681,7 +672,6 @@
 				DEVELOPMENT_TEAM = 3P4Y2KDTFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ee.test.mobile;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -716,7 +706,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_ASSIGN_ENUM = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -732,7 +721,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = USE_FILE32API;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -765,7 +753,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_ASSIGN_ENUM = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -778,10 +765,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
-					USE_FILE32API,
-				);
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;

@@ -49,12 +49,12 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/Jni*'
 
     s.pod_target_xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
-      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
       'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC.
     }
 
     s.xcconfig = {
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
       'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => [
         'NDEBUG'
       ].join(' ')
@@ -309,8 +309,9 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
-    s.ios.library = 'iconv'
-    s.ios.framework = 'OpenAL'
+    s.library = 'iconv'
+    s.framework = 'OpenAL'
+    s.osx.library = 'z'
     s.osx.framework = 'GameController'
     s.dependency 'ee-x/core'
   end
@@ -511,7 +512,7 @@ Pod::Spec.new do |spec|
 
     s.exclude_files =
       'src/ee/play/Android.mk',
-      'src/ee/play/CMakeLists.txt'
+      'src/ee/play/CMakeLists.txt',
       'src/ee/play/generate.sh',
       'src/ee/play/sourcelist.cmake'
 

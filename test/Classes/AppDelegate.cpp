@@ -32,6 +32,9 @@ const auto DesignResolution = cocos2d::Size(480, 320);
 } // namespace
 
 namespace {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+// Nothing.
+#else
 void testMultiAds() {
     auto ad = std::make_shared<ee::MultiRewardedAd>();
 
@@ -72,6 +75,7 @@ void testMultiAds() {
         }));
     });
 }
+#endif
 } // namespace
 
 AppDelegate::AppDelegate() {}
@@ -127,9 +131,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ee::Logger::setSystemLogger(getLogger());
 
-    CrashlyticsAgent::getInstance()->initialize();
-    CrashlyticsAgent::getInstance()->logDebug("debug_message");
-    CrashlyticsAgent::getInstance()->logInfo("info_message");
+    // CrashlyticsAgent::getInstance()->initialize();
+    // CrashlyticsAgent::getInstance()->logDebug("debug_message");
+    // CrashlyticsAgent::getInstance()->logInfo("info_message");
 
     getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
     ee::runOnUiThreadAndWait([] {
@@ -155,7 +159,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // testUnityAdsRewardedAd();
     // testIronSourceRewardedAd();
     // testVungle();
-    testMultiAds();
+    // testMultiAds();
     // testFacebookInterstitialAd();
     // testFacebookNativeAd();
 

@@ -26,9 +26,9 @@ matrix:
           -quiet
           -workspace test/proj.ios_mac/ee_x_test.xcworkspace
           -scheme ee_x_test_mobile
-          -allowProvisioningUpdates
+          -sdk iphonesimulator
           ONLY_ACTIVE_ARCH=NO
-          OTHER_CFLAGS="-Wno-documentaiton"
+          OTHER_CFLAGS="-Wno-documentation"
           | xcpretty && exit ${PIPESTATUS[0]}
         - xcodebuild
           -quiet

@@ -15,6 +15,7 @@ CMakeFiles/
 *.cmake
 CMakeCache.txt
 Makefile
+
 gradlew
 gradlew.bat
 .gradle/
@@ -22,3 +23,11 @@ gradle/
 .settings
 .project
 .classpath
+
+# Jekyll
+.classpath_site
+.sass-cache
+.jekyll-metadata
+Gemfile.lock
+_site
+_posts

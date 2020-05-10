@@ -42,4 +42,22 @@ plugins:
 #   - vendor/gems/
 #   - vendor/ruby/
 
-source: docs
+# https://help.github.com/en/github/working-with-github-pages/about-github-pages-and-jekyll#configuring-jekyll-in-your-github-pages-site
+# Some configuration settings cannot be changed for GitHub Pages sites.
+lsi: false
+safe: true
+source: . # [your repo's top level directory]
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
+exclude:
+  - proj.android_studio
+  - proj.ios_mac
+  - res
+  - test
+  - third_party

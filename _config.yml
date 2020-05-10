@@ -55,6 +55,8 @@ kramdown:
   math_engine: mathjax
   syntax_highlighter: rouge
 
+baseurl: /ee-x
+
 exclude:
   - proj.android_studio
   - proj.ios_mac

@@ -1,0 +1,8 @@
+Hai Hoang:
+  name: "Hai Hoang"
+  avatar: "https://vi.gravatar.com/userimage/140568255/3af0b55f269e04f296f9ab836bbb8489.jpeg"
+  email: "enrevol@gmail.com"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-github"
+      url: "https://github.com/enrevol"

@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Your awesome title
+title: EE-x | Cross-platform library for cocos2d-x
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -65,3 +65,32 @@ exclude:
   - res
   - test
   - third_party
+
+# minimal-mistakes theme settings.
+# https://mmistakes.github.io/minimal-mistakes/docs/configuration/
+# https://github.com/mmistakes/minimal-mistakes/blob/master/_config.yml
+minimal_mistakes_skin: dirt
+repository: "Senspark/ee-x"
+footer:
+  links:
+    - label: "Google Play"
+      icon: "fab fa-google-play"
+      url: "https://play.google.com/store/apps/dev?id=7830868662152106484"
+    - label: "App Store"
+      icon: "fab fa-app-store-ios"
+      url: "https://apps.apple.com/us/developer/id560842775"
+    - label: "Facebook"
+      icon: "fab fa-facebook"
+      url: "https://www.facebook.com/TeamSenspark"
+    - label: "GitHub"
+      icon: "fab fa-github"
+      url: "https://github.com/Senspark"
+
+# Front matters config.
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: single
+      sidebar:
+          nav: docs

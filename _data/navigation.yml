@@ -1,0 +1,58 @@
+main:
+  - title: Android
+    url: docs/android/
+  - title: iOS
+    url: docs/ios/
+
+docs:
+  - title: Getting Started
+    url: /docs/getting-started
+  - title: Ads
+    children:
+      - title: AdMob
+        url: /docs/admob
+      - title: Facebook Ads
+        url: /docs/facebook-ads
+      - title: IronSource
+        url: /docs/iron-source
+      - title: Unity Ads
+        url: /docs/unity-ads
+      - title: Vungle
+        url: /docs/vungle
+  - title: Analytics
+    children:
+      - title: AppsFlyer
+        url: /docs/apps-flyer
+      - title: Google Analytics
+        url: /docs/google-analytics
+      - title: Tenjin
+        url: /docs/tenjin
+  - title: Firebase
+    children:
+      - title: Firebase Analytics
+        url: /docs/firebase-analytics
+      - title: Firebase Crashlytics
+        url: /docs/firebase-crashlytics
+      - title: Firebase Dynamic Links
+        url: /docs/firebase-dynamic-links
+      - title: Firebase Messaging
+        url: /docs/firebase-messaging
+      - title: Firebase Remote Config
+        url: /docs/firebase-remote-config
+      - title: Firebase Storage
+        url: /docs/firebase-storage
+  - title: Others
+    children:
+      - title: Cocos
+        url: /docs/cocos
+      - title: Campaign Receiver
+        url: /docs/campaign-receiver
+      - title: Facebook
+        url: /docs/facebook
+      - title: Play
+        url: /docs/play
+      - title: Recorder
+        url: /docs/recorder
+      - title: Store
+        url: docs/store
+      

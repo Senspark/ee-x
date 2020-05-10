@@ -76,7 +76,7 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         _logger.debug(
             "onActivityResult: requestCode = " + requestCode + " resultCode = " + resultCode +
-            " data = " + data);
+                " data = " + data);
         if (PluginManager.getInstance().onActivityResult(requestCode, resultCode, data)) {
             return;
         }

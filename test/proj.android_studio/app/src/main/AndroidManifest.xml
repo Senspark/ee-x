@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ee.test.android">
 
-    <uses-feature android:glEsVersion="0x00020000"/>
-
     <application
         android:name=".MyApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         tools:replace="android:fullBackupContent">
-
-        <meta-data
-            android:name="android.app.lib_name"
-            android:value="_ee_x_test"/>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabric_api_key}"/>
 
         <activity
             android:name=".MyActivity"
@@ -28,11 +17,17 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="_ee_x_test" />
     </application>
 
+    <uses-feature android:glEsVersion="0x00020000" />
 </manifest>

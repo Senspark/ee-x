@@ -43,13 +43,21 @@ Pod::Spec.new do |spec|
     s.exclude_files =
       'src/ee/core/Android.mk',
       'src/ee/core/CMakeLists.txt',
+      'src/ee/core/generate.sh',
+      'src/ee/core/sourcelist.cmake',
       'src/ee/core/**/*Android*',
       'src/ee/core/**/Jni*'
+
+    s.pod_target_xcconfig = {
+      'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC.
+    }
 
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
       'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
-      'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC
+      'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => [
+        'NDEBUG'
+      ].join(' ')
     }
 
     s.dependency 'ee-x/json'
@@ -65,7 +73,10 @@ Pod::Spec.new do |spec|
       'src/ee/ads/private/*'
 
     s.exclude_files =
-      'src/ee/ads/CMakeLists.txt'
+      'src/ee/ads/Android.mk',
+      'src/ee/ads/CMakeLists.txt',
+      'src/ee/ads/generate.sh',
+      'src/ee/ads/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
   end
@@ -79,7 +90,10 @@ Pod::Spec.new do |spec|
       'src/ee/admob/private/*'
 
     s.exclude_files =
-      'src/ee/admob/CMakeLists.txt'
+      'src/ee/admob/Android.mk',
+      'src/ee/admob/CMakeLists.txt',
+      'src/ee/admob/generate.sh',
+      'src/ee/admob/sourcelist.cmake'
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
@@ -95,7 +109,10 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/private/*'
     
     s.exclude_files =
-      'src/ee/app_lovin/CMakeLists.txt'
+      'src/ee/app_lovin/Android.mk',
+      'src/ee/app_lovin/CMakeLists.txt',
+      'src/ee/app_lovin/generate.sh',
+      'src/ee/app_lovin/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
     s.dependency 'AppLovinSDK'
@@ -116,7 +133,10 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/private/*'
 
     s.exclude_files =
-      'src/ee/facebook_ads/CMakeLists.txt'
+      'src/ee/facebook_ads/Android.mk',
+      'src/ee/facebook_ads/CMakeLists.txt',
+      'src/ee/facebook_ads/generate.sh',
+      'src/ee/facebook_ads/sourcelist.cmake'
       
     s.dependency 'ee-x/ads'
     s.dependency 'FBAudienceNetwork'
@@ -124,8 +144,9 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'iron-source-mediation-base' do |s|
     s.preserve_path = 'dummy_path'
-    s.xcconfig = {
+    s.pod_target_xcconfig = {
       'GCC_PREPROCESSOR_DEFINITIONS' => [
+        # Used to determine which headers to include.
         'EE_X_USE_IRON_SOURCE_MEDIATION'
       ].join(' ')
     }
@@ -140,7 +161,10 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/private/*'
 
     s.exclude_files =
-      'src/ee/iron_source/CMakeLists.txt'
+      'src/ee/iron_source/Android.mk',
+      'src/ee/iron_source/CMakeLists.txt',
+      'src/ee/iron_source/generate.sh',
+      'src/ee/iron_source/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
     s.dependency 'IronSourceSDK'
@@ -155,7 +179,10 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/private/*'
 
     s.exclude_files =
-      'src/ee/unity_ads/CMakeLists.txt'
+      'src/ee/unity_ads/Android.mk',
+      'src/ee/unity_ads/CMakeLists.txt',
+      'src/ee/unity_ads/generate.sh',
+      'src/ee/unity_ads/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
   end
@@ -182,7 +209,10 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/private/*'
 
     s.exclude_files =
-      'src/ee/vungle/CMakeLists.txt'
+      'src/ee/vungle/Android.mk',
+      'src/ee/vungle/CMakeLists.txt',
+      'src/ee/vungle/generate.sh',
+      'src/ee/vungle/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
   end
@@ -209,7 +239,10 @@ Pod::Spec.new do |spec|
       'src/ee/apps_flyer/private/*'
 
     s.exclude_files =
-      'src/ee/apps_flyer/CMakeLists.txt'
+      'src/ee/apps_flyer/Android.mk',
+      'src/ee/apps_flyer/CMakeLists.txt',
+      'src/ee/apps_flyer/generate.sh',
+      'src/ee/apps_flyer/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework'
@@ -221,7 +254,10 @@ Pod::Spec.new do |spec|
       'src/ee/campaign_receiver/**/*'
 
     s.exclude_files =
-      'src/ee/campaign_receiver/CMakeLists.txt'
+      'src/ee/campaign_receiver/Android.mk',
+      'src/ee/campaign_receiver/CMakeLists.txt',
+      'src/ee/campaign_receiver/generate.sh',
+      'src/ee/campaign_receiver/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
   end
@@ -232,7 +268,10 @@ Pod::Spec.new do |spec|
       'src/ee/crashlytics/**/*'
 
     s.exclude_files =
-      'src/ee/crashlytics/CMakeLists.txt'
+      'src/ee/crashlytics/Android.mk',
+      'src/ee/crashlytics/CMakeLists.txt',
+      'src/ee/crashlytics/generate.sh',
+      'src/ee/crashlytics/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
     s.dependency 'Crashlytics'
@@ -244,7 +283,19 @@ Pod::Spec.new do |spec|
       'src/ee/Cocos*',
       'src/ee/cocos/*'
 
+    s.exclude_files =
+      'src/ee/cocos/Android.mk',
+      'src/ee/cocos/CMakeLists.txt',
+      'src/ee/cocos/generate.sh',
+      'src/ee/cocos/sourcelist.cmake'
+
     s.xcconfig = {
+      'GCC_PREPROCESSOR_DEFINITIONS' => [
+        'USE_FILE32API' # Used in unzip library in cocos2d-x.
+      ].join(' '),
+      'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => [
+        'COCOS2D_DEBUG=1'
+      ].join(' '),
       'HEADER_SEARCH_PATHS' => [
         '${PODS_ROOT}/../../cocos2d',
         '${PODS_ROOT}/../../cocos2d/cocos',
@@ -258,9 +309,10 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
-    s.ios.library = 'iconv'
-    s.ios.framework = 'OpenAL'
-
+    s.library = 'iconv'
+    s.framework = 'OpenAL'
+    s.osx.library = 'z'
+    s.osx.framework = 'GameController'
     s.dependency 'ee-x/core'
   end
 
@@ -273,7 +325,21 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/private/*'
 
     s.exclude_files =
-      'src/ee/facebook/CMakeLists.txt'
+      'src/ee/facebook/Android.mk',
+      'src/ee/facebook/CMakeLists.txt',
+      'src/ee/facebook/generate.sh',
+      'src/ee/facebook/sourcelist.cmake'
+
+    # Fix linking errors with Facebook SDK 7.
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' ')
+    }
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKCoreKit'
@@ -297,7 +363,11 @@ Pod::Spec.new do |spec|
       'src/ee/firebase/core/*'
 
     s.exclude_files =
-      'src/ee/firebase/**/*Android*'
+      'src/ee/firebase/core/Android.mk',
+      'src/ee/firebase/core/CMakeLists.txt',
+      'src/ee/firebase/core/generate.sh',
+      'src/ee/firebase/core/sourcelist.cmake',
+      'src/ee/firebase/core/*Android*'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
@@ -307,18 +377,39 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-analytics' do |s|
     s.source_files = 'src/ee/firebase/analytics/*'
+
+    s.exclude_files =
+      'src/ee/firebase/analytics/Android.mk',
+      'src/ee/firebase/analytics/CMakeLists.txt',
+      'src/ee/firebase/analytics/generate.sh',
+      'src/ee/firebase/analytics/sourcelist.cmake'
+
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
     s.dependency 'ee-x/firebase-core'
   end
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
+
+    s.exclude_files =
+      'src/ee/firebase/crashlytics/Android.mk',
+      'src/ee/firebase/crashlytics/CMakeLists.txt',
+      'src/ee/firebase/crashlytics/generate.sh',
+      'src/ee/firebase/crashlytics/sourcelist.cmake'
+
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Crashlytics'
   end
 
   spec.subspec 'firebase-dynamic-link' do |s|
     s.source_files = 'src/ee/firebase/dynamic_link/*'
+
+    s.exclude_files =
+      'src/ee/firebase/dynamic_link/Android.mk',
+      'src/ee/firebase/dynamic_link/CMakeLists.txt',
+      'src/ee/firebase/dynamic_link/generate.sh',
+      'src/ee/firebase/dynamic_link/sourcelist.cmake'
+
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/DynamicLinks'
@@ -326,6 +417,13 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-messaging' do |s|
     s.source_files = 'src/ee/firebase/messaging/*'
+
+    s.exclude_files =
+      'src/ee/firebase/messaging/Android.mk',
+      'src/ee/firebase/messaging/CMakeLists.txt',
+      'src/ee/firebase/messaging/generate.sh',
+      'src/ee/firebase/messaging/sourcelist.cmake'
+
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Messaging'
@@ -333,6 +431,13 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-remote-config' do |s|
     s.source_files = 'src/ee/firebase/remote_config/*'
+
+    s.exclude_files =
+      'src/ee/firebase/remote_config/Android.mk',
+      'src/ee/firebase/remote_config/CMakeLists.txt',
+      'src/ee/firebase/remote_config/generate.sh',
+      'src/ee/firebase/remote_config/sourcelist.cmake'
+
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/RemoteConfig'
@@ -340,6 +445,13 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-storage' do |s|
     s.source_files = 'src/ee/firebase/storage/*'
+
+    s.exclude_files =
+      'src/ee/firebase/storage/Android.mk',
+      'src/ee/firebase/storage/CMakeLists.txt',
+      'src/ee/firebase/storage/generate.sh',
+      'src/ee/firebase/storage/sourcelist.cmake'
+
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Storage'
@@ -347,6 +459,13 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ee/firebase/performance/**/*'
+
+    s.exclude_files =
+      'src/ee/firebase/performance/Android.mk',
+      'src/ee/firebase/performance/CMakeLists.txt',
+      'src/ee/firebase/performance/generate.sh',
+      'src/ee/firebase/performance/sourcelist.cmake'
+
     s.private_header_files = 'src/ee/firebase/performance/private/*'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Performance'
@@ -361,7 +480,10 @@ Pod::Spec.new do |spec|
       'src/ee/google/private/*'
 
     s.exclude_files =
-      'src/ee/google/CMakeLists.txt'
+      'src/ee/google/Android.mk',
+      'src/ee/google/CMakeLists.txt',
+      'src/ee/google/generate.sh',
+      'src/ee/google/sourcelist.cmake'
 
     s.platform = :ios
     s.dependency 'ee-x/core'
@@ -374,7 +496,10 @@ Pod::Spec.new do |spec|
       'src/ee/notification/**/*'
 
     s.exclude_files =
-      'src/ee/notification/CMakeLists.txt'
+      'src/ee/notification/Android.mk',
+      'src/ee/notification/CMakeLists.txt',
+      'src/ee/notification/generate.sh',
+      'src/ee/notification/sourcelist.cmake'
 
     s.platform = :ios
     s.dependency 'ee-x/core'
@@ -386,7 +511,10 @@ Pod::Spec.new do |spec|
       'src/ee/play/*'
 
     s.exclude_files =
-      'src/ee/play/CMakeLists.txt'
+      'src/ee/play/Android.mk',
+      'src/ee/play/CMakeLists.txt',
+      'src/ee/play/generate.sh',
+      'src/ee/play/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
   end
@@ -396,6 +524,12 @@ Pod::Spec.new do |spec|
       'src/ee/Recorder*',
       'src/ee/recorder/*'
 
+    s.exclude_files =
+      'src/ee/recorder/Android.mk',
+      'src/ee/recorder/CMakeLists.txt',
+      'src/ee/recorder/generate.sh',
+      'src/ee/recorder/sourcelist.cmake'
+
     s.dependency 'ee-x/core'
   end
 
@@ -403,6 +537,12 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Tenjin*',
       'src/ee/tenjin/**/*'
+
+    s.exclude_files =
+      'src/ee/tenjin/Android.mk',
+      'src/ee/tenjin/CMakeLists.txt',
+      'src/ee/tenjin/generate.sh',
+      'src/ee/tenjin/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
     s.dependency 'TenjinSDK'

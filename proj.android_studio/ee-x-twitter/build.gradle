@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion 14
@@ -13,7 +13,7 @@ android {
 dependencies {
     api project(':ee-x-core')
 
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
     implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
 

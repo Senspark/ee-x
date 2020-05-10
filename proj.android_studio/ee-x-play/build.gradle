@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion 14
@@ -12,6 +12,6 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    implementation "com.google.android.gms:play-services-games:19.0.0"
-    implementation "com.google.android.gms:play-services-auth:18.0.0"
+    implementation 'com.google.android.gms:play-services-games:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 }

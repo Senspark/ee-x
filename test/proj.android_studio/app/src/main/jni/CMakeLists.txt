@@ -28,16 +28,16 @@ add_subdirectory(${PROJECT_ROOT_DIR}/.. ${ENGINE_BINARY_PATH}/ee-x)
 target_link_libraries(${PROJECT_NAME}
     -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive
     cocos2d
-    soomla_cocos2dx_store
+    soomla_store
     ee_x_admob
     ee_x_app_lovin
     ee_x_apps_flyer
     ee_x_campaign_receiver
     ee_x_cocos
-    ee_x_crashlytics
     ee_x_facebook
     ee_x_facebook_ads
     ee_x_firebase_analytics
+    ee_x_firebase_crashlytics
     ee_x_firebase_dynamic_link
     ee_x_firebase_messaging
     ee_x_firebase_performance
@@ -49,7 +49,6 @@ target_link_libraries(${PROJECT_NAME}
     ee_x_play
     ee_x_recorder
     ee_x_tenjin
-    ee_x_twitter
     ee_x_unity_ads
     ee_x_vungle
 )

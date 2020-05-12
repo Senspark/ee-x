@@ -176,7 +176,6 @@ dependencies {
     implementation project(':ee-x-play')
     implementation project(':ee-x-recorder')
     implementation project(':ee-x-tenjin')
-    implementation project(':ee-x-twitter')
 
     implementation 'androidx.multidex:multidex:2.0.1'
 }

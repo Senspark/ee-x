@@ -151,6 +151,17 @@ android.applicationVariants.all { variant ->
     }
 }
 
+/// Automatically run uploadCrashlyticsSymbolFile tasks.
+tasks.whenTaskAdded { task ->
+    ['assemble', 'bundle'].each { prefix ->
+        if (task.name.startsWith(prefix) &&
+            task.name.endsWith('Release')) {
+            def variant = task.name.substring(prefix.length())
+            task.finalizedBy "uploadCrashlyticsSymbolFile${variant}"
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

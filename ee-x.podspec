@@ -24,10 +24,8 @@ Pod::Spec.new do |spec|
   spec.header_mappings_dir = 'src'
 
   spec.subspec 'json' do |s|
-    # Don't use source_files: all dirs may be included in header map.
-    # s.source_files = 'third_party/nlohmann/include/**/*'
-    s.preserve_path = 'third_party/nlohmann/include'
-    s.public_header_files = 'third_party/nlohmann/include/**/*'
+    s.source_files = 'third_party/nlohmann/include/**/*'
+    s.private_header_files = 'third_party/nlohmann/include/**/*'
     s.header_mappings_dir = 'third_party/nlohmann/include'
   end
 
@@ -70,6 +68,7 @@ Pod::Spec.new do |spec|
       'src/ee/ads/**/*'
 
     s.private_header_files =
+      'src/ee/ads/internal/*',
       'src/ee/ads/private/*'
 
     s.exclude_files =
@@ -87,6 +86,7 @@ Pod::Spec.new do |spec|
       'src/ee/admob/**/*'
 
     s.private_header_files =
+      'src/ee/admob/internal/*',
       'src/ee/admob/private/*'
 
     s.exclude_files =
@@ -106,6 +106,7 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/**/*'
 
     s.private_header_files =
+      'src/ee/app_lovin/internal/*',
       'src/ee/app_lovin/private/*'
     
     s.exclude_files =
@@ -130,6 +131,7 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/**/*'
 
     s.private_header_files =
+      'src/ee/facebook_ads/internal/*',
       'src/ee/facebook_ads/private/*'
 
     s.exclude_files =
@@ -158,6 +160,7 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/**/*'
 
     s.private_header_files =
+      'src/ee/iron_source/internal/*',
       'src/ee/iron_source/private/*'
 
     s.exclude_files =
@@ -176,6 +179,7 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/**/*'
 
     s.private_header_files =
+      'src/ee/unity_ads/internal/*',
       'src/ee/unity_ads/private/*'
 
     s.exclude_files =
@@ -206,6 +210,7 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/**/*'
 
     s.private_header_files =
+      'src/ee/vungle/internal/*',
       'src/ee/vungle/private/*'
 
     s.exclude_files =
@@ -236,6 +241,7 @@ Pod::Spec.new do |spec|
       'src/ee/apps_flyer/**/*'
 
     s.private_header_files =
+      'src/ee/apps_flyer/internal/*',
       'src/ee/apps_flyer/private/*'
 
     s.exclude_files =
@@ -322,6 +328,7 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/**/*'
 
     s.private_header_files =
+      'src/ee/facebook/internal/*',
       'src/ee/facebook/private/*'
 
     s.exclude_files =
@@ -347,14 +354,39 @@ Pod::Spec.new do |spec|
     s.dependency 'FBSDKShareKit'
   end
 
+  # Fix duplicated UUID since there are many common.h files.
+  spec.subspec 'firebase-headers-internal' do |s|
+    s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/internal/*'
+    s.private_header_files = 'third_party/firebase_cpp_sdk/include/firebase/internal/*'
+    s.header_mappings_dir = 'third_party/firebase_cpp_sdk/include'
+  end
+
+  spec.subspec 'firebase-headers-storage' do |s|
+    s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/storage/*'
+    s.private_header_files = 'third_party/firebase_cpp_sdk/include/firebase/storage/*'
+    s.header_mappings_dir = 'third_party/firebase_cpp_sdk/include'
+  end
+
   spec.subspec 'firebase-headers' do |s|
-    # Don't use source_files: all dirs may be included in header map.
-    # Conflict google_play_services/availability.h and macOS Availability.h
-    # s.source_files = 'third_party/firebase_cpp_sdk/include/**/*'
-    s.preserve_path = 'third_party/firebase_cpp_sdk/include'
-    s.public_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
+    s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/**/*'
+
+      # Don't use source_files: all dirs may be included in header map.
+      # Conflict google_play_services/availability.h and macOS Availability.h
+      # 'third_party/firebase_cpp_sdk/include/google_play_services/availability.h'
+
+    s.private_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
+
+    s.exclude_files =
+      'third_party/firebase_cpp_sdk/include/firebase/auth/*',
+      'third_party/firebase_cpp_sdk/include/firebase/database/*',
+      'third_party/firebase_cpp_sdk/include/firebase/functions/*',
+      'third_party/firebase_cpp_sdk/include/firebase/internal/*',
+      'third_party/firebase_cpp_sdk/include/firebase/storage/*'
+
     s.header_mappings_dir = 'third_party/firebase_cpp_sdk/include'
     s.platform = :ios
+    s.dependency 'ee-x/firebase-headers-internal'
+    s.dependency 'ee-x/firebase-headers-storage'
   end
 
   spec.subspec 'firebase-core' do |s|
@@ -459,14 +491,14 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ee/firebase/performance/**/*'
+    s.private_header_files = 'src/ee/firebase/performance/private/*'
 
     s.exclude_files =
       'src/ee/firebase/performance/Android.mk',
       'src/ee/firebase/performance/CMakeLists.txt',
       'src/ee/firebase/performance/generate.sh',
       'src/ee/firebase/performance/sourcelist.cmake'
-
-    s.private_header_files = 'src/ee/firebase/performance/private/*'
+    
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Performance'
   end
@@ -477,6 +509,7 @@ Pod::Spec.new do |spec|
       'src/ee/google/**/*'
 
     s.private_header_files =
+      'src/ee/google/internal/*',
       'src/ee/google/private/*'
 
     s.exclude_files =
@@ -538,6 +571,9 @@ Pod::Spec.new do |spec|
       'src/ee/Tenjin*',
       'src/ee/tenjin/**/*'
 
+    s.private_header_files =
+      'src/ee/tenjin/private/*'
+
     s.exclude_files =
       'src/ee/tenjin/Android.mk',
       'src/ee/tenjin/CMakeLists.txt',
@@ -559,16 +595,19 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jansson' do |s| 
     s.source_files = 'third_party/jansson/src/**/*'
+    s.private_header_files = 'third_party/jansson/src/**/*'
     s.header_mappings_dir = 'third_party/jansson/src'
   end
 
   spec.subspec 'keeva' do |s|
     s.source_files = 'third_party/keeva/src/**/*'
+    s.private_header_files = 'third_party/keeva/src/**/*'
     s.header_mappings_dir = 'third_party/keeva/src'
   end
 
   spec.subspec 'soomla-core-ios' do |s|
     s.source_files = 'third_party/soomla/core/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/core/src/ios/**/*'
     s.header_mappings_dir = 'third_party/soomla/core/src'
     s.dependency 'ee-x/keeva'
   end
@@ -595,6 +634,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-store-ios' do |s| 
     s.source_files = 'third_party/soomla/store/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/store/src/ios/**/*'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.dependency 'ee-x/soomla-core-ios'
   end

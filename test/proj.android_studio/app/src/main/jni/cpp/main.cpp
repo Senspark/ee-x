@@ -1,7 +1,8 @@
-#include "AppDelegate.hpp"
-
 #include <jni.h>
+
 #include <ee/Core.hpp>
+
+#include "AppDelegate.hpp"
 
 namespace {
 std::unique_ptr<eetest::AppDelegate> appDelegate;

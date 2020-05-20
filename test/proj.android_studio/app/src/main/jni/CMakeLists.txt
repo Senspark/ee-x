@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME} SHARED "")
 
 execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${PROJECT_ROOT_DIR}/Classes)
 include(${PROJECT_ROOT_DIR}/Classes/sourcelist.cmake)
+include(${PROJECT_ROOT_DIR}/Classes/includelist.cmake)
 target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/cpp/main.cpp)
 
 target_include_directories(${PROJECT_NAME}

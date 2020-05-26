@@ -12,7 +12,7 @@ import com.ee.campaignreceiver.CampaignReceiver;
 import com.ee.core.PluginManager;
 import com.ee.facebook.Facebook;
 import com.ee.facebook.FacebookAds;
-import com.ee.firebase.core.Firebase;
+import com.ee.firebase.core.FirebaseCore;
 import com.ee.firebase.crashlytics.FirebaseCrashlytics;
 import com.ee.firebase.performance.FirebasePerformance;
 import com.ee.google.analytics.GoogleAnalytics;
@@ -41,7 +41,7 @@ public class MyApplication extends Application {
         manager.addPlugin(new CampaignReceiver(this));
         manager.addPlugin(new Facebook());
         manager.addPlugin(new FacebookAds(this));
-        manager.addPlugin(new Firebase(this));
+        manager.addPlugin(new FirebaseCore(this));
         manager.addPlugin(new FirebaseCrashlytics());
         manager.addPlugin(new FirebasePerformance());
         manager.addPlugin(new GoogleAnalytics(this));

@@ -8,8 +8,6 @@
 
 #import "AppController.h"
 
-#import <FIRApp.h>
-
 #import <cocos2d.h>
 
 #import <ee/Core.hpp>
@@ -55,19 +53,25 @@ static eetest::AppDelegate s_sharedApplication;
         (__bridge void*)[_viewController view]);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
 
-    [FIRApp configure];
-
     EEPluginManager* manager = [EEPluginManager getInstance];
     [manager initializePlugins];
-    [manager addPlugin:@"FirebaseCrashlytics"];
-    [manager addPlugin:@"Notification"];
     [manager addPlugin:@"AdMob"];
     [manager addPlugin:@"AppLovin"];
+    [manager addPlugin:@"AppsFlyer"];
+    [manager addPlugin:@"CampaignReceiver"];
+    [manager addPlugin:@"Facebook"];
     [manager addPlugin:@"FacebookAds"];
+    [manager addPlugin:@"FirebaseApp"];
+    [manager addPlugin:@"FirebaseCrashlytics"];
+    [manager addPlugin:@"FirebasePerformance"];
+    [manager addPlugin:@"GoogleAnalytics"];
     [manager addPlugin:@"IronSource"];
+    [manager addPlugin:@"Notification"];
+    [manager addPlugin:@"Play"];
+    [manager addPlugin:@"Recorder"];
+    [manager addPlugin:@"Tenjin"];
     [manager addPlugin:@"UnityAds"];
     [manager addPlugin:@"Vungle"];
-    [manager addPlugin:@"Twitter"];
 
     // run the cocos2d-x game scene
     app->run();

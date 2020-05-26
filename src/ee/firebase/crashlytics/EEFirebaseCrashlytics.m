@@ -1,4 +1,4 @@
-#import "ee/firebase/crashlytics/private/EEFirebaseCrashlytics.h"
+#import "ee/firebase/crashlytics/EEFirebaseCrashlytics.h"
 
 #import <FirebaseCrashlytics/FIRCrashlytics.h>
 

@@ -8,8 +8,6 @@
 
 #include "ee/firebase/core/FirebaseApp.hpp"
 
-#import <FIRApp.h>
-
 #include <firebase/app.h>
 
 namespace ee {
@@ -21,8 +19,6 @@ void Self::initialize() {
     if (initialized) {
         return;
     }
-
-    [FIRApp configure];
 
     auto options = ::firebase::AppOptions();
     auto app = ::firebase::App::Create(options);

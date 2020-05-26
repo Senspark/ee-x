@@ -5,9 +5,8 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/9/19.
 //
 
-#import "ee/firebase/performance/private/EEFirebasePerformance.h"
+#import "ee/firebase/performance/EEFirebasePerformance.h"
 
-#import <FirebaseCore/FIRApp.h>
 #import <FirebasePerformance/FIRPerformance.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
@@ -36,9 +35,6 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
     if (self == nil) {
         return self;
     }
-
-//    [FIRApp configure];
-
     traces_ = [[NSMutableDictionary alloc] init];
     [self registerHandlers];
     return self;

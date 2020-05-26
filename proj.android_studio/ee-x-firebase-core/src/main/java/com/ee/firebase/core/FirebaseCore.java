@@ -12,12 +12,12 @@ import com.google.firebase.FirebaseApp;
 /**
  * Created by Zinge on 7/4/16.
  */
-public class Firebase implements PluginProtocol {
-    private static final Logger _logger = new Logger(Firebase.class.getName());
+public class FirebaseCore implements PluginProtocol {
+    private static final Logger _logger = new Logger(FirebaseCore.class.getName());
 
     private native void setActivity(Object activity);
 
-    public Firebase(Context context) {
+    public FirebaseCore(Context context) {
         _logger.debug("constructor begin.");
         FirebaseApp.initializeApp(context);
         _logger.debug("constructor end.");

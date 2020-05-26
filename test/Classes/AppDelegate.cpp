@@ -177,7 +177,8 @@ void AppDelegate::applicationDidEnterBackground() {
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->stopAnimation();
 #ifndef EE_X_DESKTOP
-    NotificationAgent::getInstance()->scheduleAll();
+    // FIXME.
+    // NotificationAgent::getInstance()->scheduleAll();
 #endif // EE_X_DESKTOP
 }
 
@@ -185,7 +186,8 @@ void AppDelegate::applicationWillEnterForeground() {
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->startAnimation();
 #ifndef EE_X_DESKTOP
-    NotificationAgent::getInstance()->unscheduleAll();
+    // FIXME.
+    // NotificationAgent::getInstance()->unscheduleAll();
 #endif // EE_X_DESKTOP
 }
 } // namespace eetest

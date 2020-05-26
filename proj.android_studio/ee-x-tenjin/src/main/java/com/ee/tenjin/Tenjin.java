@@ -83,6 +83,8 @@ public class Tenjin implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
+        _tenjin = null;
     }
 
     @Override

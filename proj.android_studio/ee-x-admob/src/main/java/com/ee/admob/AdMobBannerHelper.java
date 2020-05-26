@@ -14,7 +14,7 @@ import java.util.Objects;
 import static com.google.common.truth.Truth.assertThat;
 
 class AdMobBannerHelper {
-    private Map<Integer, Point> _sizes;
+    private final Map<Integer, Point> _sizes;
 
     @NonNull
     private static Point convertAdSizeToSize(Context context, AdSize adSize) {

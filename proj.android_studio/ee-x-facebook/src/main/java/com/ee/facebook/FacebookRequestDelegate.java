@@ -18,10 +18,10 @@ import java.util.Objects;
  */
 
 class FacebookRequestDelegate implements FacebookCallback<GameRequestDialog.Result> {
-    private IMessageBridge _bridge;
-    private int _tag;
+    private final IMessageBridge _bridge;
+    private final int _tag;
 
-    FacebookRequestDelegate(IMessageBridge bridge, int tag) {
+    FacebookRequestDelegate(@NonNull IMessageBridge bridge, int tag) {
         _bridge = bridge;
         _tag = tag;
     }

@@ -3,8 +3,8 @@ package com.ee.ads;
 import androidx.annotation.NonNull;
 
 public class MessageHelper {
-    private String _prefix;
-    private String _adId;
+    private final String _prefix;
+    private final String _adId;
 
     public MessageHelper(@NonNull String prefix, @NonNull String adId) {
         _prefix = prefix;

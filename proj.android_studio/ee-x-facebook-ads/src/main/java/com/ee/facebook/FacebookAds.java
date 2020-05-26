@@ -127,6 +127,10 @@ public class FacebookAds implements PluginProtocol {
         Utils.checkMainThread();
         deregisterHandlers();
 
+        _context = null;
+        _bridge = null;
+        _bannerHelper = null;
+
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).destroy();
         }
@@ -150,9 +154,6 @@ public class FacebookAds implements PluginProtocol {
         }
         _rewardedAds.clear();
         _rewardedAds = null;
-
-        _context = null;
-        _bridge = null;
     }
 
     @Override

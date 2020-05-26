@@ -29,32 +29,32 @@ import java.util.Map;
 
 public class Play implements PluginProtocol {
 
-    private static final String k_isSignedIn          = "Play_isSignedIn";
-    private static final String k_signin              = "Play_signin";
-    private static final String k_signout             = "Play_signout";
-    private static final String k_showAchievements    = "Play_showAchievements";
+    private static final String k_isSignedIn = "Play_isSignedIn";
+    private static final String k_signin = "Play_signin";
+    private static final String k_signout = "Play_signout";
+    private static final String k_showAchievements = "Play_showAchievements";
     private static final String k_increaseAchievement = "Play_increaseAchievement";
-    private static final String k_unlockAchievement   = "Play_unlockAchievement";
-    private static final String k_showLeaderboard     = "Play_showLeaderboard";
+    private static final String k_unlockAchievement = "Play_unlockAchievement";
+    private static final String k_showLeaderboard = "Play_showLeaderboard";
     private static final String k_showAllLeaderboards = "Play_showAllLeaderboards";
-    private static final String k_submitScore         = "Play_submitScore";
-    private static final String k_onSignedIn          = "Play_onSignedIn";
+    private static final String k_submitScore = "Play_submitScore";
+    private static final String k_onSignedIn = "Play_onSignedIn";
 
     private static final String k_silent_sign_in = "silent_sign_in";
-    private static final String k_achievementId  = "achievement_id";
-    private static final String k_increment      = "increment";
-    private static final String k_leaderboardId  = "leaderboard_id";
-    private static final String k_score          = "score";
+    private static final String k_achievementId = "achievement_id";
+    private static final String k_increment = "increment";
+    private static final String k_leaderboardId = "leaderboard_id";
+    private static final String k_score = "score";
 
-    private static final int RC_SIGN_IN         = 201912001;
-    private static final int RC_ACHIEVEMENT_UI  = 201912002;
+    private static final int RC_SIGN_IN = 201912001;
+    private static final int RC_ACHIEVEMENT_UI = 201912002;
     private static final int RC_LEADER_BOARD_UI = 201912003;
 
     private static final Logger _logger = new Logger(Play.class.getName());
 
     private Activity _activity;
 
-    private GoogleSignInClient  _signinClient  = null;
+    private GoogleSignInClient _signinClient = null;
     private GoogleSignInOptions _signInOptions = null;
 
     public Play() {
@@ -237,7 +237,7 @@ public class Play implements PluginProtocol {
         }
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(_activity);
         if (account != null && GoogleSignIn.hasPermissions(account,
-                _signInOptions.getScopeArray())) {
+            _signInOptions.getScopeArray())) {
             // Already signed in.
             return true;
         } else {
@@ -259,16 +259,16 @@ public class Play implements PluginProtocol {
     private void signInSilently() {
         _logger.debug("signInSliently");
         _signinClient.silentSignIn().addOnCompleteListener(_activity,
-                new OnCompleteListener<GoogleSignInAccount>() {
-            @Override
-            public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                if (task.isSuccessful()) {
-                    _logger.debug("signInSliently: success");
-                } else {
-                    _logger.debug("signInSliently: failed");
+            new OnCompleteListener<GoogleSignInAccount>() {
+                @Override
+                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                    if (task.isSuccessful()) {
+                        _logger.debug("signInSliently: success");
+                    } else {
+                        _logger.debug("signInSliently: failed");
+                    }
                 }
-            }
-        });
+            });
     }
 
     private void startSignInIntent() {
@@ -373,11 +373,11 @@ public class Play implements PluginProtocol {
 
     private AchievementsClient getAchievementsClient() {
         return Games.getAchievementsClient(_activity,
-                GoogleSignIn.getLastSignedInAccount(_activity));
+            GoogleSignIn.getLastSignedInAccount(_activity));
     }
 
     private LeaderboardsClient getLeaderboardsClient() {
         return Games.getLeaderboardsClient(_activity,
-                GoogleSignIn.getLastSignedInAccount(_activity));
+            GoogleSignIn.getLastSignedInAccount(_activity));
     }
 }

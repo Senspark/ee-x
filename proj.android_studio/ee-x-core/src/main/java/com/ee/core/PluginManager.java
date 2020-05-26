@@ -3,6 +3,7 @@ package com.ee.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -20,9 +21,9 @@ import java.util.Map;
 public class PluginManager {
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
-    private Context                     _context;
-    private Activity                    _activity;
-    private Map<String, PluginProtocol> _plugins;
+    private Context _context;
+    private Activity _activity;
+    private final Map<String, PluginProtocol> _plugins;
 
     private static class Holder {
         private static final PluginManager Instance = new PluginManager();
@@ -45,9 +46,10 @@ public class PluginManager {
         return _context;
     }
 
-    public Activity getActivity() { return _activity; }
+    public Activity getActivity() {
+        return _activity;
+    }
 
-    @SuppressWarnings({"unused", "TryWithIdenticalCatches"})
     public void addPlugin(@NonNull String pluginName) {
         _logger.info("addPlugin: " + pluginName);
         if (_plugins.containsKey(pluginName)) {
@@ -144,6 +146,7 @@ public class PluginManager {
         for (String key : _plugins.keySet()) {
             _plugins.get(key).destroy();
         }
+        _context = null;
     }
 
     public boolean onBackPressed() {

@@ -45,6 +45,15 @@ class AdMobRewardedAd extends RewardedAdCallback {
         registerHandlers();
     }
 
+    void onCreate(@NonNull Activity activity) {
+        _activity = activity;
+    }
+
+    void onDestroy(@NonNull Activity activity) {
+        assertThat(_activity).isEqualTo(activity);
+        _activity = null;
+    }
+
     void destroy() {
         _logger.info("destroy: adId = %s", _adId);
         Utils.checkMainThread();

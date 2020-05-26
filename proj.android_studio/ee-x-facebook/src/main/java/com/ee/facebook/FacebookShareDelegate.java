@@ -13,10 +13,10 @@ import com.facebook.share.Sharer;
  */
 
 public class FacebookShareDelegate implements FacebookCallback<Sharer.Result> {
-    private IMessageBridge _bridge;
-    private int _tag;
+    private final IMessageBridge _bridge;
+    private final int _tag;
 
-    FacebookShareDelegate(IMessageBridge bridge, int tag) {
+    FacebookShareDelegate(@NonNull IMessageBridge bridge, int tag) {
         _bridge = bridge;
         _tag = tag;
     }

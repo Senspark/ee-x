@@ -93,6 +93,9 @@ public class AdMob implements PluginProtocol {
         for (String key : _nativeAds.keySet()) {
             _nativeAds.get(key).onCreate(activity);
         }
+        for (String key : _rewardedAds.keySet()) {
+            _rewardedAds.get(key).onCreate(activity);
+        }
     }
 
     @Override
@@ -126,6 +129,9 @@ public class AdMob implements PluginProtocol {
             for (String key : _nativeAds.keySet()) {
                 _nativeAds.get(key).onDestroy(_activity);
             }
+            for (String key : _rewardedAds.keySet()) {
+                _rewardedAds.get(key).onCreate(_activity);
+            }
             _activity = null;
         }
     }
@@ -134,6 +140,12 @@ public class AdMob implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+
+        _context = null;
+        _bridge = null;
+
+        _bannerHelper = null;
+        _testDevices = null;
 
         for (String key : _bannerAds.keySet()) {
             _bannerAds.get(key).destroy();
@@ -155,9 +167,6 @@ public class AdMob implements PluginProtocol {
 
         _rewardedAds.clear();
         _rewardedAds = null;
-
-        _bridge = null;
-        _context = null;
     }
 
     @Override
@@ -172,9 +181,7 @@ public class AdMob implements PluginProtocol {
 
     private void registerHandlers() {
         _bridge.registerHandler(message -> {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            String applicationId = message;
-            initialize(applicationId);
+            initialize();
             return "";
         }, k__initialize);
 
@@ -283,7 +290,7 @@ public class AdMob implements PluginProtocol {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void initialize(@NonNull String applicationId) {
+    public void initialize() {
         Utils.checkMainThread();
         MobileAds.initialize(_context, initializationStatus -> {
             // onInitializationComplete

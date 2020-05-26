@@ -15,7 +15,7 @@ public class MessageBridge implements IMessageBridge {
     /**
      * Registered handlers.
      */
-    private Map<String, MessageHandler> _handlers;
+    private final Map<String, MessageHandler> _handlers;
 
     private final Object _handlerLock;
 

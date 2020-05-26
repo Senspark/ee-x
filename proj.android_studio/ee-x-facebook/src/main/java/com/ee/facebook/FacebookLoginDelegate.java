@@ -13,10 +13,10 @@ import com.facebook.login.LoginResult;
  */
 
 class FacebookLoginDelegate implements FacebookCallback<LoginResult> {
-    private IMessageBridge _bridge;
-    private int _tag;
+    private final IMessageBridge _bridge;
+    private final int _tag;
 
-    FacebookLoginDelegate(IMessageBridge bridge, int tag) {
+    FacebookLoginDelegate(@NonNull IMessageBridge bridge, int tag) {
         _bridge = bridge;
         _tag = tag;
     }

@@ -184,6 +184,7 @@ dependencies {
     implementation project(':ee-x-notification')
     implementation project(':ee-x-play')
     implementation project(':ee-x-recorder')
+    implementation project(':ee-x-soomla-store')
     implementation project(':ee-x-tenjin')
     implementation project(':ee-x-unity-ads')
     implementation project(':ee-x-vungle')

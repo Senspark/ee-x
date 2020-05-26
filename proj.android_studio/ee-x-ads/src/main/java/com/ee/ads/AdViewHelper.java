@@ -19,9 +19,9 @@ import static com.google.common.truth.Truth.assertThat;
  */
 
 public class AdViewHelper {
-    private IMessageBridge _bridge;
-    private IAdView _view;
-    private MessageHelper _helper;
+    private final IMessageBridge _bridge;
+    private final IAdView _view;
+    private final MessageHelper _helper;
 
     public AdViewHelper(@NonNull IMessageBridge bridge,
                         @NonNull IAdView view,

@@ -170,6 +170,10 @@ public class Facebook implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
+        _callbackManager = null;
+        _accessTokenTracker = null;
+        _profileTracker = null;
     }
 
     @Override

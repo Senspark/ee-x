@@ -6,8 +6,8 @@ import android.util.Log;
  * Created by enrevol on 4/13/16.
  */
 public class Logger {
-    private String _tag;
-    private int    _logLevel;
+    private final String _tag;
+    private int _logLevel;
 
     public Logger(String tag) {
         _tag = tag;

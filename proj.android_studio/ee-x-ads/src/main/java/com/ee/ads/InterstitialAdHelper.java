@@ -10,9 +10,9 @@ import com.ee.core.internal.Utils;
  */
 
 public class InterstitialAdHelper {
-    private IMessageBridge _bridge;
-    private IInterstitialAd _ad;
-    private MessageHelper _helper;
+    private final IMessageBridge _bridge;
+    private final IInterstitialAd _ad;
+    private final MessageHelper _helper;
 
     public InterstitialAdHelper(@NonNull IMessageBridge bridge,
                                 @NonNull IInterstitialAd ad,

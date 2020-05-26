@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.ee.core.internal.Utils;
 
 public class ViewHelper {
-    private View _view;
+    private final View _view;
 
     public ViewHelper(@NonNull View view) {
         _view = view;

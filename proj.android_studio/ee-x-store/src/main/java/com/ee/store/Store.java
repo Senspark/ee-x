@@ -121,13 +121,16 @@ public class Store implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _context = null;
+        _bridge = null;
+        _scheduler = null;
+        _disposable.dispose();
+        _disposable = null;
+        _purchaseSubject = null;
         if (_billingClient != null) {
             _billingClient.endConnection();
             _billingClient = null;
         }
-        _disposable.dispose();
-        _context = null;
-        _bridge = null;
     }
 
     @Override

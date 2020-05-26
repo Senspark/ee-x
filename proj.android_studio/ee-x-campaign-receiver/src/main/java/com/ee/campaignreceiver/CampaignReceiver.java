@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.android.installreferrer.api.InstallReferrerClient;
 import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
@@ -22,25 +23,18 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
     private static final Logger _logger = new Logger(CampaignReceiver.class.getName());
 
     private Context _context;
-    private Activity _activity;
+    private IMessageBridge _bridge;
     private boolean _initialized;
     private InstallReferrerClient _mReferrerClient;
 
-
-    @SuppressWarnings("unused")
     public CampaignReceiver(Context context) {
-        super();
+        _logger.debug("constructor begin: context = " + context);
         Utils.checkMainThread();
         _context = context;
-        _activity = null;
+        _bridge = MessageBridge.getInstance();
         _initialized = false;
-
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(message -> {
-            initialize();
-            return "";
-        }, k__initialize);
+        registerHandlers();
+        _logger.debug("constructor begin: end.");
     }
 
 //    @Override
@@ -55,11 +49,6 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 //        }
 //    }
 
-    public void initialize() {
-        _mReferrerClient = InstallReferrerClient.newBuilder(_context).build();
-        _mReferrerClient.startConnection(this);
-    }
-
     @NonNull
     @Override
     public String getPluginName() {
@@ -68,7 +57,6 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
     @Override
     public void onCreate(@NonNull Activity activity) {
-        _activity = activity;
     }
 
     @Override
@@ -89,12 +77,13 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
     @Override
     public void onDestroy() {
-        _activity = null;
     }
 
     @Override
     public void destroy() {
         Utils.checkMainThread();
+        deregisterHandlers();
+        _context = null;
         if (!_initialized) {
             return;
         }
@@ -108,6 +97,26 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    private void registerHandlers() {
+        _bridge.registerHandler(message -> {
+            initialize();
+            return "";
+        }, k__initialize);
+    }
+
+    private void deregisterHandlers() {
+        _bridge.deregisterHandler(k__initialize);
+    }
+
+    public void initialize() {
+        if (_initialized) {
+            return;
+        }
+        _initialized = true;
+        _mReferrerClient = InstallReferrerClient.newBuilder(_context).build();
+        _mReferrerClient.startConnection(this);
     }
 
     @Override

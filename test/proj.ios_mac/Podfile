@@ -14,13 +14,10 @@ abstract_target 'common' do
 
         pod_ee_x('admob')
         pod_ee_x('app-lovin')
-        pod_ee_x('facebook-ads')
-        pod_ee_x('iron-source')
-        pod_ee_x('unity-ads')
-        pod_ee_x('vungle')
         pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')
         pod_ee_x('facebook')
+        pod_ee_x('facebook-ads')
         pod_ee_x('firebase-analytics')
         pod_ee_x('firebase-crashlytics')
         pod_ee_x('firebase-dynamic-link')
@@ -29,14 +26,13 @@ abstract_target 'common' do
         pod_ee_x('firebase-remote-config')
         pod_ee_x('firebase-storage')
         pod_ee_x('google-analytics')
+        pod_ee_x('iron-source')
         pod_ee_x('notification')
         pod_ee_x('play')
         pod_ee_x('recorder')
         pod_ee_x('tenjin')
-        
-        pod 'FBSDKCoreKit', :modular_headers => true
-        pod 'FBSDKLoginKit', :modular_headers => true
-        pod 'FBSDKShareKit', :modular_headers => true
+        pod_ee_x('unity-ads')
+        pod_ee_x('vungle')
     end
 
     target 'ee_x_test_desktop' do

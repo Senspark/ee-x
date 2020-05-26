@@ -16,7 +16,6 @@
 
 #include <ee/core/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseCore.hpp>
-#include <ee/firebase/core/FirebaseScheduler.hpp>
 
 namespace ee {
 namespace firebase {
@@ -26,7 +25,6 @@ using Self = Bridge;
 Self::Bridge() {
     initialized_ = false;
     defaultsDirty_ = false;
-    fetchScheduler_ = nullptr;
 }
 
 Self::~Bridge() {
@@ -52,8 +50,6 @@ bool Self::initialize() {
         return false;
     }
 
-    fetchScheduler_ = std::make_unique<Scheduler<void>>();
-
     initialized_ = true;
     return true;
 }
@@ -70,8 +66,7 @@ void Self::fetchOnly(const std::function<void()>& callback) {
     if (not initialized_) {
         return;
     }
-    fetchScheduler_->push(
-        ::firebase::remote_config::Fetch(),
+    ::firebase::remote_config::Fetch().OnCompletion(
         [callback, guard](const ::firebase::Future<void>& future) {
             // Handled by scope guard.
         });
@@ -82,12 +77,10 @@ void Self::fetch(bool devModeEnabled, const FetchCallback& callback) {
     if (not initialized_) {
         return;
     }
-
     SetConfigSetting(
         ::firebase::remote_config::ConfigSetting::kConfigSettingDeveloperMode,
         devModeEnabled ? "1" : "0");
-    fetchScheduler_->push(
-        ::firebase::remote_config::Fetch(),
+    ::firebase::remote_config::Fetch().OnCompletion(
         [callback, guard](const ::firebase::Future<void>& future) {
             auto fetched = ::firebase::remote_config::ActivateFetched();
             if (not fetched) {

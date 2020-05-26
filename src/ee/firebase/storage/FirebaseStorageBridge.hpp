@@ -81,10 +81,6 @@ private:
 
     ::firebase::storage::Storage* storage_;
 
-    std::unique_ptr<Scheduler<::firebase::storage::Metadata>>
-        metadataScheduler_;
-    std::unique_ptr<Scheduler<std::size_t>> bytesScheduler_;
-
     std::array<char, max_file_size_in_bytes> buffer_;
 };
 } // namespace storage

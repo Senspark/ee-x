@@ -15,11 +15,6 @@ namespace ee {
 namespace firebase {
 class Core;
 
-#if defined(EE_X_MOBILE)
-template <class T>
-class Scheduler;
-#endif // EE_X_MOBILE
-
 namespace analytics {
 class Bridge;
 } // namespace analytics

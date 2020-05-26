@@ -120,7 +120,6 @@ private:
     bool defaultsDirty_;
 
     std::map<std::string, ::firebase::Variant> defaults_;
-    std::unique_ptr<Scheduler<void>> fetchScheduler_;
 };
 } // namespace remote_config
 } // namespace firebase

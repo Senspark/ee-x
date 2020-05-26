@@ -14,7 +14,6 @@
 
 #include <ee/core/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseCore.hpp>
-#include <ee/firebase/core/FirebaseScheduler.hpp>
 
 namespace ee {
 namespace firebase {
@@ -25,8 +24,6 @@ Self::Bridge() {
     initialized_ = false;
     fetching_ = false;
     storage_ = nullptr;
-    metadataScheduler_ = nullptr;
-    bytesScheduler_ = nullptr;
 }
 
 Self::~Bridge() {}
@@ -49,10 +46,6 @@ bool Self::initialize() {
     if (initResult != ::firebase::InitResult::kInitResultSuccess) {
         return false;
     }
-
-    metadataScheduler_ =
-        std::make_unique<Scheduler<::firebase::storage::Metadata>>();
-    bytesScheduler_ = std::make_unique<Scheduler<std::size_t>>();
 
     initialized_ = true;
     fetching_ = false;
@@ -110,8 +103,7 @@ void Self::getHash(const std::string& filePath, const HashCallback& callback) {
     if (not file.is_valid()) {
         return;
     }
-    metadataScheduler_->push(
-        file.GetMetadata(),
+    file.GetMetadata().OnCompletion(
         [callback,
          guard](const ::firebase::Future<::firebase::storage::Metadata>& fut) {
             if (fut.error() != ::firebase::storage::kErrorNone) {
@@ -140,9 +132,9 @@ void Self::getData(const std::string& filePath, const DataCallback& callback) {
         return;
     }
     fetching_ = true;
-    bytesScheduler_->push(
-        file.GetBytes(std::addressof(buffer_.at(0)), buffer_.size()),
-        [this, callback, guard](const ::firebase::Future<std::size_t>& fut) {
+    file.GetBytes(std::addressof(buffer_.at(0)), buffer_.size())
+        .OnCompletion([this, callback,
+                       guard](const ::firebase::Future<std::size_t>& fut) {
             fetching_ = false;
             if (fut.error() != ::firebase::storage::kErrorNone) {
                 return;

@@ -60,20 +60,6 @@ bool CCNativeSoomlaStore::transactionsAlreadyRestored() {
 }
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-void CCNativeSoomlaStore::startIabServiceInBg() {
-    ValueMap params;
-    params["method"] = "CCSoomlaStore::startIabServiceInBg";
-    CCNdkBridge::callNative(params, nullptr);
-}
-
-void CCNativeSoomlaStore::stopIabServiceInBg() {
-    ValueMap params;
-    params["method"] = "CCSoomlaStore::stopIabServiceInBg";
-    CCNdkBridge::callNative(params, nullptr);
-}
-#endif
-
 void CCNativeSoomlaStore::loadBillingService() {
     ValueMap params;
     params["method"] = "CCSoomlaStore::loadBillingService";

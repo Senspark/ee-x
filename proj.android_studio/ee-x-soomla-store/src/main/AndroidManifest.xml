@@ -6,9 +6,5 @@
         <meta-data
             android:name="billing.service"
             android:value="google.GooglePlayIabService" />
-
-        <activity
-            android:name="com.soomla.store.billing.google.GooglePlayIabService$IabActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
     </application>
 </manifest>

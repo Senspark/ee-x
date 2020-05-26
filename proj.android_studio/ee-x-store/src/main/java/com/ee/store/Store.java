@@ -337,7 +337,7 @@ public class Store implements PluginProtocol {
         _bridge.deregisterHandler(kAcknowledge);
     }
 
-    private Single<BillingClient> connect() {
+    public Single<BillingClient> connect() {
         return Single.<BillingClient>create(emitter -> {
             if (_billingClient != null && _billingClient.isReady()) {
                 emitter.onSuccess(_billingClient);
@@ -373,8 +373,8 @@ public class Store implements PluginProtocol {
         }).subscribeOn(_scheduler);
     }
 
-    private Single<List<SkuDetails>> getSkuDetails(@SkuType @NonNull String skuType,
-                                                   @NonNull List<String> skuList) {
+    public Single<List<SkuDetails>> getSkuDetails(@SkuType @NonNull String skuType,
+                                                  @NonNull List<String> skuList) {
         return getSkuDetails(SkuDetailsParams
             .newBuilder()
             .setSkusList(skuList)
@@ -397,7 +397,7 @@ public class Store implements PluginProtocol {
             .subscribeOn(_scheduler);
     }
 
-    private Single<List<Purchase>> getPurchases(@SkuType @NonNull String skuType) {
+    public Single<List<Purchase>> getPurchases(@SkuType @NonNull String skuType) {
         return connect().flatMap(client ->
             Single.<List<Purchase>>create(emitter -> {
                 PurchasesResult result = client.queryPurchases(skuType);
@@ -422,7 +422,7 @@ public class Store implements PluginProtocol {
                 }))).subscribeOn(_scheduler);
     }
 
-    private Single<Purchase> purchase(@NonNull String sku) {
+    public Single<Purchase> purchase(@NonNull String sku) {
         return Single.<Purchase>create(emitter -> {
             SkuDetails details = StreamSupport
                 .stream(_skuDetailsList)
@@ -490,7 +490,7 @@ public class Store implements PluginProtocol {
             })).subscribeOn(_scheduler);
     }
 
-    private Completable consume(@NonNull String purchaseToken) {
+    public Completable consume(@NonNull String purchaseToken) {
         return consume(ConsumeParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)

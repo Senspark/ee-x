@@ -92,22 +92,6 @@ public class StoreBridge {
             }
         });
 
-        ndkGlue.registerCallHandler("CCSoomlaStore::startIabServiceInBg", new NdkGlue.CallHandler() {
-            @Override
-            public void handle(JSONObject params, JSONObject retParams) throws Exception {
-                SoomlaUtils.LogDebug("SOOMLA", "startIabServiceInBg is called from java!");
-                SoomlaStore.getInstance().startIabServiceInBg();
-            }
-        });
-
-        ndkGlue.registerCallHandler("CCSoomlaStore::stopIabServiceInBg", new NdkGlue.CallHandler() {
-            @Override
-            public void handle(JSONObject params, JSONObject retParams) throws Exception {
-                SoomlaUtils.LogDebug("SOOMLA", "stopIabServiceInBg is called from java!");
-                SoomlaStore.getInstance().stopIabServiceInBg();
-            }
-        });
-
         ndkGlue.registerCallHandler("CCSoomlaStore::restoreTransactions", new NdkGlue.CallHandler() {
             @Override
             public void handle(JSONObject params, JSONObject retParams) throws Exception {

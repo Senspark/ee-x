@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/firebase/core/FirebaseApp.hpp"
+#include "ee/firebase/core/FirebaseCore.hpp"
 
 #include <mutex>
 
@@ -24,7 +24,7 @@ jobject global_activity = nullptr;
 extern "C" {
 JNIEXPORT void JNICALL Java_com_ee_firebase_core_FirebaseCore_setActivity(
     JNIEnv* env, jobject instance, jobject activity) {
-    std::lock_guard<std::mutex> guard(global_activity_mutex);
+    std::scoped_lock<std::mutex> guard(global_activity_mutex);
     if (global_activity != nullptr) {
         env->DeleteGlobalRef(global_activity);
     }
@@ -39,7 +39,7 @@ jobject getWindowContext() {
 }
 } // namespace
 
-using Self = App;
+using Self = Core;
 
 void Self::initialize() {
     static bool initialized = false;
@@ -48,7 +48,7 @@ void Self::initialize() {
     }
 
     auto options = ::firebase::AppOptions();
-    JNIEnv* env = core::JniUtils::getEnv();
+    JNIEnv* env = JniUtils::getEnv();
     auto app = ::firebase::App::Create(options, env, getWindowContext());
     static_cast<void>(app); // Silence warning.
 

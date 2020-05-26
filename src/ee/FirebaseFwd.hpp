@@ -13,7 +13,7 @@
 
 namespace ee {
 namespace firebase {
-class App;
+class Core;
 
 #if defined(EE_X_MOBILE)
 template <class T>
@@ -55,7 +55,7 @@ class Bridge;
 } // namespace storage
 } // namespace firebase
 
-using FirebaseApp = firebase::App;
+using FirebaseCore = firebase::Core;
 using FirebaseAnalytics = firebase::analytics::Bridge;
 using FirebaseCrashlytics = firebase::crashlytics::Bridge;
 using FirebaseDynamicLink = firebase::dynamic_link::Bridge;

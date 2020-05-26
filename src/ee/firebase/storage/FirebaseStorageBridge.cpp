@@ -13,7 +13,7 @@
 #include <firebase/storage.h>
 
 #include <ee/core/ScopeGuard.hpp>
-#include <ee/firebase/core/FirebaseApp.hpp>
+#include <ee/firebase/core/FirebaseCore.hpp>
 #include <ee/firebase/core/FirebaseScheduler.hpp>
 
 namespace ee {
@@ -36,7 +36,7 @@ bool Self::initialize() {
         return true;
     }
 
-    App::initialize();
+    Core::initialize();
 
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {

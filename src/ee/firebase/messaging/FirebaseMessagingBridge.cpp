@@ -10,7 +10,7 @@
 
 #include <firebase/messaging.h>
 
-#include <ee/firebase/core/FirebaseApp.hpp>
+#include <ee/firebase/core/FirebaseCore.hpp>
 
 namespace ee {
 namespace firebase {
@@ -109,7 +109,7 @@ bool Self::initialize() {
         return true;
     }
 
-    App::initialize();
+    Core::initialize();
 
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {

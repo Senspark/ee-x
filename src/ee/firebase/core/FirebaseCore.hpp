@@ -6,14 +6,14 @@
 //
 //
 
-#ifndef EE_X_FIREBASE_APP_HPP_
-#define EE_X_FIREBASE_APP_HPP_
+#ifndef EE_X_FIREBASE_CORE_HPP
+#define EE_X_FIREBASE_CORE_HPP
 
 #include "ee/FirebaseFwd.hpp"
 
 namespace ee {
 namespace firebase {
-class App {
+class Core {
 public:
     /// Initializes the Firebase app.
     static void initialize();
@@ -21,4 +21,4 @@ public:
 } // namespace firebase
 } // namespace ee
 
-#endif /* EE_X_FIREBASE_APP_HPP_ */
+#endif /* EE_X_FIREBASE_CORE_HPP */

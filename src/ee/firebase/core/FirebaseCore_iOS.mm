@@ -6,13 +6,13 @@
 //
 //
 
-#include "ee/firebase/core/FirebaseApp.hpp"
+#include "ee/firebase/core/FirebaseCore.hpp"
 
 #include <firebase/app.h>
 
 namespace ee {
 namespace firebase {
-using Self = App;
+using Self = Core;
 
 void Self::initialize() {
     static bool initialized = false;

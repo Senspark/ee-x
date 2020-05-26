@@ -13,8 +13,8 @@
 
 #include "ee/FirebaseFwd.hpp"
 
-#if __has_include("ee/firebase/core/FirebaseApp.hpp")
-#include "ee/firebase/core/FirebaseApp.hpp"
+#if __has_include("ee/firebase/core/FirebaseCore.hpp")
+#include "ee/firebase/core/FirebaseCore.hpp"
 #endif
 
 #if __has_include("ee/firebase/analytics/FirebaseAnalyticsBridge.hpp")

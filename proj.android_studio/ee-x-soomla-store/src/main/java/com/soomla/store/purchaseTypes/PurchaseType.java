@@ -24,21 +24,18 @@ import com.soomla.store.exceptions.InsufficientFundsException;
  * abstract class describes basic features of the actual implementations of <code>PurchaseType<code>.
  */
 public abstract class PurchaseType {
-
     /*
      * Buys the purchasable virtual item.
      * Implementation in subclasses will be according to specific type of purchase.
      *
-     * @param payload a string you want to be assigned to the purchase. This string
-     *   is saved in a static variable and will be given bacl to you when the
-     *   purchase is completed.
      * @throws InsufficientFundsException
      */
-    public abstract void buy(String payload) throws InsufficientFundsException;
+    public abstract void buy() throws InsufficientFundsException;
 
 
-    /** Setters and Getters */
-
+    /**
+     * Setters and Getters
+     */
     public void setAssociatedItem(PurchasableVirtualItem associatedItem) {
         mAssociatedItem = associatedItem;
     }
@@ -48,9 +45,9 @@ public abstract class PurchaseType {
     }
 
 
-    /** Private Members */
-
+    /**
+     * Private Members
+     */
     //the PurchasableVirtualItem associated with this PurchaseType
     private PurchasableVirtualItem mAssociatedItem;
-
 }

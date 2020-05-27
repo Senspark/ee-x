@@ -34,7 +34,7 @@ public class StoreBridge {
 
     private static StoreBridge INSTANCE = null;
 
-    private static IStoreAssets mStoreAssets   = null;
+    private static IStoreAssets mStoreAssets = null;
 
     public static StoreBridge getInstance() {
         if (INSTANCE == null) {
@@ -81,11 +81,10 @@ public class StoreBridge {
             @Override
             public void handle(JSONObject params, JSONObject retParams) throws Exception {
                 String productId = params.getString("productId");
-                String payload = params.getString("payload");
                 SoomlaUtils.LogDebug("SOOMLA", "buyWithMarket is called from java with productId: " + productId + "!");
                 PurchasableVirtualItem pvi = StoreInfo.getPurchasableItem(productId);
-                if(pvi.getPurchaseType() instanceof PurchaseWithMarket) {
-                    SoomlaStore.getInstance().buyWithMarket(((PurchaseWithMarket)pvi.getPurchaseType()).getMarketItem(), payload);
+                if (pvi.getPurchaseType() instanceof PurchaseWithMarket) {
+                    SoomlaStore.getInstance().buyWithMarket(((PurchaseWithMarket) pvi.getPurchaseType()).getMarketItem());
                 } else {
                     throw new VirtualItemNotFoundException("productId", productId);
                 }
@@ -350,9 +349,8 @@ public class StoreBridge {
             @Override
             public void handle(JSONObject params, JSONObject retParams) throws Exception {
                 String itemId = params.getString("itemId");
-                String payload = params.optString("payload");
                 SoomlaUtils.LogDebug("SOOMLA", "buy is called from java!");
-                StoreInventory.buy(itemId, payload);
+                StoreInventory.buy(itemId);
             }
         });
 
@@ -578,8 +576,7 @@ public class StoreBridge {
             @Override
             public void handle(JSONObject params, JSONObject retParams) throws Exception {
                 String itemId = params.getString("itemId");
-                String payload = params.getString("payload");
-                storeEventHandlerBridge.pushOnItemPurchased(itemId, payload);
+                storeEventHandlerBridge.pushOnItemPurchased(itemId);
             }
         });
 

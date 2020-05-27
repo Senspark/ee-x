@@ -26,18 +26,17 @@ import com.soomla.store.exceptions.InsufficientFundsException;
 /**
  * This type of Purchase is used to let users purchase <code>PurchasableVirtualItem</code>s in the
  * market with real money $$$.
- *
+ * <p>
  * Real Game Example: Purchase a Sword for $1.99.
  */
 public class PurchaseWithMarket extends PurchaseType {
-
     /**
      * Constructor.
      * Constructs a PurchaseWithMarket object by constructing a new <code>MarketItem</code> object
      * with the given <code>productId</code> and price, and declaring it as UNMANAGED.
      *
-     * @param productId the productId as it appears in the Market.
-     * @param price the price in the Market.
+     * @param productId      the productId as it appears in the Market.
+     * @param price          the price in the Market.
      * @param isSubscription let PurchaseWithMarket know is current purchase is subscription.
      */
     public PurchaseWithMarket(String productId, double price, boolean isSubscription) {
@@ -51,7 +50,7 @@ public class PurchaseWithMarket extends PurchaseType {
      * with the given <code>productId</code> and price, and declaring it as UNMANAGED.
      *
      * @param productId the productId as it appears in the Market.
-     * @param price the price in the Market.
+     * @param price     the price in the Market.
      */
     public PurchaseWithMarket(String productId, double price) {
         this(productId, price, false);
@@ -60,7 +59,7 @@ public class PurchaseWithMarket extends PurchaseType {
     /**
      * Constructor.
      *
-     * @param marketItem the representation of the item in the market
+     * @param marketItem     the representation of the item in the market
      * @param isSubscription let PurchaseWithMarket know is current purchase is subscription.
      */
     public PurchaseWithMarket(MarketItem marketItem, boolean isSubscription) {
@@ -83,20 +82,22 @@ public class PurchaseWithMarket extends PurchaseType {
      * @throws InsufficientFundsException
      */
     @Override
-    public void buy(String payload) throws InsufficientFundsException {
+    public void buy() throws InsufficientFundsException {
         SoomlaUtils.LogDebug(TAG, "Starting in-app purchase for productId: "
-                + mMarketItem.getProductId());
-        
+            + mMarketItem.getProductId());
+
         BusProvider.getInstance().post(new ItemPurchaseStartedEvent(getAssociatedItem().getItemId()));
         try {
-            SoomlaStore.getInstance().buyWithMarket(mMarketItem, mIsSubscription, payload);
+            SoomlaStore.getInstance().buyWithMarket(mMarketItem, mIsSubscription);
         } catch (IllegalStateException e) {
             SoomlaUtils.LogError(TAG, "Error when purchasing item");
         }
     }
 
 
-    /** Setters and Getters */
+    /**
+     * Setters and Getters
+     */
 
     public MarketItem getMarketItem() {
         return mMarketItem;
@@ -107,7 +108,9 @@ public class PurchaseWithMarket extends PurchaseType {
     }
 
 
-    /** Private Members */
+    /**
+     * Private Members
+     */
 
     private static final String TAG = "SOOMLA PurchaseWithMarket"; //used for Log messages
 

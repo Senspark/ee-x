@@ -509,7 +509,7 @@ public class Store implements PluginProtocol {
                 }))).subscribeOn(_scheduler);
     }
 
-    private Completable acknowledge(@NonNull String purchaseToken) {
+    public Completable acknowledge(@NonNull String purchaseToken) {
         return acknowledge(AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)

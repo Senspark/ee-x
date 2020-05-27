@@ -16,106 +16,103 @@
 
 package com.soomla.store.billing;
 
- import java.util.List;
+import java.util.List;
 
- /**
-  * A utility class that defines interfaces for passing callbacks to in-app billing events.
-  */
+/**
+ * A utility class that defines interfaces for passing callbacks to in-app billing events.
+ */
 public class IabCallbacks {
-
-     /**
-      * Listens for in-app billing service initialization
-      */
+    /**
+     * Listens for in-app billing service initialization
+     */
     public interface IabInitListener {
 
-         /**
-          * Performs the following function upon success.
-          *
-          * @param alreadyInBg true if the listener has already been initialized and is in
-          *                    background, false otherwise.
-          */
-        public void success(boolean alreadyInBg);
+        /**
+         * Performs the following function upon success.
+         *
+         * @param alreadyInBg true if the listener has already been initialized and is in
+         *                    background, false otherwise.
+         */
+        void success(boolean alreadyInBg);
 
-         /**
-          * Performs the following function upon failure and prints the given message.
-          *
-          * @param message reason for failure
-          */
-        public void fail(String message);
+        /**
+         * Performs the following function upon failure and prints the given message.
+         *
+         * @param message reason for failure
+         */
+        void fail(String message);
     }
 
-     /**
-      * Listens for in-app purchases being made.
-      */
+    /**
+     * Listens for in-app purchases being made.
+     */
     public interface OnPurchaseListener {
 
-         /**
-          * The user has successfully completed a purchase.
-          *
-          * @param purchase the successful purchase
-          */
-        public void success(IabPurchase purchase);
+        /**
+         * The user has successfully completed a purchase.
+         *
+         * @param purchase the successful purchase
+         */
+        void success(IabPurchase purchase);
 
-         /**
-          * The user has cancelled a purchase.
-          *
-          * @param purchase the cancelled purchase
-          */
-        public void cancelled(IabPurchase purchase);
+        /**
+         * The user has cancelled a purchase.
+         *
+         * @param purchase the cancelled purchase
+         */
+        void cancelled(IabPurchase purchase);
 
-         /**
-          * The user tries to buy an item he/she already owns.
-          *
-          * @param purchase the purchase that is already owned
-          */
-        public void alreadyOwned(IabPurchase purchase);
+        /**
+         * The user tries to buy an item he/she already owns.
+         *
+         * @param purchase the purchase that is already owned
+         */
+        void alreadyOwned(IabPurchase purchase);
 
-         /**
-          * The user fails to make the purchase.
-          *
-          * @param message reason for failure
-          */
-        public void fail(String message);
+        /**
+         * The user fails to make the purchase.
+         *
+         * @param message reason for failure
+         */
+        void fail(String message);
 
-         /**
-          * The purchase verification has started
-          *
-          * @param purchase the purchase being verified
-          */
-         public void verificationStarted(List<IabPurchase> purchases);
-
+        /**
+         * The purchase verification has started
+         *
+         * @param purchase the purchase being verified
+         */
+        void verificationStarted(List<IabPurchase> purchases);
     }
 
-     /**
-      * Listens for restore purchases queries
-      */
+    /**
+     * Listens for restore purchases queries
+     */
     public interface OnRestorePurchasesListener {
+        /**
+         * Restore Purchase is successful.
+         *
+         * @param purchases list of purchases from he/she inventory
+         */
+        void success(List<IabPurchase> purchases);
 
-         /**
-          * Restore Purchase is successful.
-          *
-          * @param purchases list of purchases from he/she inventory
-          */
-        public void success(List<IabPurchase> purchases);
+        /**
+         * Query inventory fails.
+         *
+         * @param message reason for failure
+         */
+        void fail(String message);
 
-         /**
-          * Query inventory fails.
-          *
-          * @param message reason for failure
-          */
-        public void fail(String message);
-
-         /**
-          * The purchase verification has started
-          *
-          * @param purchase the purchase being verified
-          */
-         public void verificationStarted(List<IabPurchase> purchases);
+        /**
+         * The purchase verification has started
+         *
+         * @param purchase the purchase being verified
+         */
+        void verificationStarted(List<IabPurchase> purchases);
     }
 
-     /**
-      * Listens for fetch skus details queries
-      */
+    /**
+     * Listens for fetch skus details queries
+     */
     public interface OnFetchSkusDetailsListener {
 
         /**
@@ -123,33 +120,38 @@ public class IabCallbacks {
          *
          * @param skuDetails list of skus details
          */
-        public void success(List<IabSkuDetails> skuDetails);
+        void success(List<IabSkuDetails> skuDetails);
+
         /**
          * Query inventory fails.
          *
          * @param message reason for failure
          */
-         public void fail(String message);
+        void fail(String message);
     }
 
+    public interface OnAcknowledgeListener {
+        void success(IabPurchase purchase);
 
-     /**
-      * Listens for consumptions of purchases
-      */
+        void fail(String message);
+    }
+
+    /**
+     * Listens for consumptions of purchases
+     */
     public interface OnConsumeListener {
-         /**
-          * Purchase consumption is successful
-          *
-          * @param purchase consumed purchase
-          */
-        public void success(IabPurchase purchase);
+        /**
+         * Purchase consumption is successful
+         *
+         * @param purchase consumed purchase
+         */
+        void success(IabPurchase purchase);
 
-         /**
-          * Purchase consumption fails
-          *
-          * @param message reason for failure
-          */
-        public void fail(String message);
+        /**
+         * Purchase consumption fails
+         *
+         * @param message reason for failure
+         */
+        void fail(String message);
     }
-
 }

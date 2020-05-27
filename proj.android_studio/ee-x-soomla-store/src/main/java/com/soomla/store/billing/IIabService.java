@@ -24,6 +24,8 @@ import java.util.Map;
  * in-app billing service (e.g. Google Play, Amazon App Store, Samsung Apps...)
  */
 public interface IIabService {
+    void acknowledgeAsync(IabPurchase purchase, IabCallbacks.OnAcknowledgeListener listener);
+
     /**
      * Works like {@link #consume}, but is asynchronous. Performs the consumption in the background
      * and notifies the given listener upon completion of consumption.
@@ -32,8 +34,7 @@ public interface IIabService {
      * @param purchase        the purchase to be consumed
      * @param consumeListener the listener to notify when the consumption is finished.
      */
-    void consumeAsync(IabPurchase purchase,
-                      IabCallbacks.OnConsumeListener consumeListener);
+    void consumeAsync(IabPurchase purchase, IabCallbacks.OnConsumeListener listener);
 
     /**
      * Initiates the UI flow for an in-app purchase.

@@ -25,7 +25,6 @@ import com.soomla.SoomlaConfig;
 import com.soomla.SoomlaUtils;
 import com.soomla.store.billing.IIabService;
 import com.soomla.store.billing.IabCallbacks;
-import com.soomla.store.billing.IabException;
 import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabSkuDetails;
 import com.soomla.store.billing.google.Consts;
@@ -58,6 +57,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Scheduler;
+
 /**
  * This class holds the basic assets needed to operate the Store.
  * You can use it to perform any operation related to the mobile store.
@@ -67,8 +70,9 @@ import java.util.List;
  * To properly work with this class you must initialize it with the {@link #initialize} method.
  */
 public class SoomlaStore {
-
     public static final String VERSION = "3.6.21";
+
+    private final Scheduler _scheduler;
 
     /**
      * Initializes the SOOMLA SDK.
@@ -419,22 +423,25 @@ public class SoomlaStore {
 
                                 try {
                                     PurchasableVirtualItem pvi = StoreInfo.getPurchasableItem(sku);
-                                    consumeIfConsumable(purchase, pvi);
-
-                                    if (StoreInfo.isItemNonConsumable(pvi)) {
-                                        SoomlaUtils.LogDebug(TAG,
-                                            "(alreadyOwned) the user tried to " +
-                                                "buy a non-consumable that was already " +
-                                                "owned. itemId: " + pvi.getItemId() +
-                                                "    productId: " + sku);
-                                        BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-                                    }
+                                    consumeIfConsumable(purchase, pvi).subscribe(
+                                        () -> {
+                                            if (StoreInfo.isItemNonConsumable(pvi)) {
+                                                SoomlaUtils.LogDebug(TAG,
+                                                    "(alreadyOwned) the user tried to buy a non-consumable that was already owned. itemId: " +
+                                                        pvi.getItemId() + "    productId: " + sku);
+                                                BusProvider.getInstance().post(
+                                                    new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+                                            }
+                                        },
+                                        exception -> BusProvider.getInstance().post(
+                                            new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL))
+                                    );
                                 } catch (VirtualItemNotFoundException e) {
                                     SoomlaUtils.LogError(TAG,
-                                        "(alreadyOwned) ERROR : Couldn't find the " +
-                                            "VirtualCurrencyPack with productId: " + sku +
-                                            ". It's unexpected so an unexpected error is being emitted.");
-                                    BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+                                        "(alreadyOwned) ERROR : Couldn't find the VirtualCurrencyPack with productId: " +
+                                            sku + ". It's unexpected so an unexpected error is being emitted.");
+                                    BusProvider.getInstance().post(
+                                        new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
                                 }
                             }
 
@@ -468,7 +475,6 @@ public class SoomlaStore {
                 public void fail(String message) {
                     reportIabInitFailure(message);
                 }
-
             });
     }
 
@@ -647,17 +653,34 @@ public class SoomlaStore {
      *
      * @param purchase purchase to be consumed
      */
-    private void consumeIfConsumable(IabPurchase purchase, PurchasableVirtualItem pvi) {
-        try {
-            if (!StoreInfo.isItemNonConsumable(pvi)) {
-                mInAppBillingService.consume(purchase);
+    private Completable consumeIfConsumable(IabPurchase purchase, PurchasableVirtualItem pvi) {
+        return Completable.create(emitter -> {
+            if (StoreInfo.isItemNonConsumable(pvi)) {
+                mInAppBillingService.acknowledgeAsync(purchase, new IabCallbacks.OnAcknowledgeListener() {
+                    @Override
+                    public void success(IabPurchase purchase) {
+                        emitter.onComplete();
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        emitter.onError(new Exception(message));
+                    }
+                });
+            } else {
+                mInAppBillingService.consumeAsync(purchase, new IabCallbacks.OnConsumeListener() {
+                    @Override
+                    public void success(IabPurchase purchase) {
+                        emitter.onComplete();
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        emitter.onError(new Exception(message));
+                    }
+                });
             }
-        } catch (IabException e) {
-            SoomlaUtils.LogDebug(TAG, "Error while consuming: itemId: " + pvi.getItemId() +
-                "   productId: " + purchase.getSku());
-            SoomlaUtils.LogError(TAG, e.getMessage());
-            BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-        }
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -698,39 +721,45 @@ public class SoomlaStore {
         SoomlaUtils.LogError(TAG, "ERROR: SoomlaStore failure: " + message);
     }
 
-    private void finalizeTransaction(IabPurchase purchase, PurchasableVirtualItem pvi, boolean isRestoring) {
+    private Completable finalizeTransaction(IabPurchase purchase, PurchasableVirtualItem pvi, boolean isRestoring) {
         SoomlaUtils.LogDebug(TAG, "IabPurchase successful. Finalizing transaction");
+        return Completable.create(emitter -> {
 
-        // if the purchasable item is non-consumable and it already exists then we
-        // don't fire any events.
-        // fixes: https://github.com/soomla/unity3d-store/issues/192
-        // TODO: update on the issue in github
-        if (StoreInfo.isItemNonConsumable(pvi)) {
-            if (StorageManager.getVirtualItemStorage(pvi).getBalance(pvi.getItemId()) == 1) {
-                return;
+            // if the purchasable item is non-consumable and it already exists then we
+            // don't fire any events.
+            // fixes: https://github.com/soomla/unity3d-store/issues/192
+            // TODO: update on the issue in github
+            if (StoreInfo.isItemNonConsumable(pvi)) {
+                if (StorageManager.getVirtualItemStorage(pvi).getBalance(pvi.getItemId()) == 1) {
+                    return;
+                }
             }
-        }
 
 
-        String developerPayload = purchase.getDeveloperPayload();
-        final String token = purchase.getToken();
-        final String orderId = purchase.getOrderId();
-        final String originalJson = purchase.getOriginalJson();
-        final String signature = purchase.getSignature();
-        final String userId = purchase.getUserId();
+            String developerPayload = purchase.getDeveloperPayload();
+            final String token = purchase.getToken();
+            final String orderId = purchase.getOrderId();
+            final String originalJson = purchase.getOriginalJson();
+            final String signature = purchase.getSignature();
+            final String userId = purchase.getUserId();
 
-        BusProvider.getInstance().post(new MarketPurchaseEvent(pvi, isRestoring, developerPayload, new HashMap<String, String>() {{
-            put("token", token);
-            put("orderId", orderId);
-            put("originalJson", originalJson);
-            put("signature", signature);
-            put("userId", userId);
-        }}, null));
+            BusProvider.getInstance().post(new MarketPurchaseEvent(pvi, isRestoring, developerPayload, new HashMap<String, String>() {{
+                put("token", token);
+                put("orderId", orderId);
+                put("originalJson", originalJson);
+                put("signature", signature);
+                put("userId", userId);
+            }}, null));
 
-        pvi.give(1);
-        BusProvider.getInstance().post(new ItemPurchasedEvent(pvi.getItemId(), isRestoring, developerPayload));
+            pvi.give(1);
+            BusProvider.getInstance().post(new ItemPurchasedEvent(pvi.getItemId(), isRestoring, developerPayload));
 
-        consumeIfConsumable(purchase, pvi);
+            consumeIfConsumable(purchase, pvi).subscribe(
+                emitter::onComplete,
+                emitter::onError);
+
+            // BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+        });
     }
 
     /* Singleton */
@@ -753,6 +782,7 @@ public class SoomlaStore {
      */
     private SoomlaStore() {
         BusProvider.getInstance().register(this);
+        _scheduler = AndroidSchedulers.mainThread();
     }
 
     /* Private Members */

@@ -129,6 +129,15 @@ public class GooglePlayIabService implements IIabService {
     }
 
     @Override
+    public void acknowledgeAsync(IabPurchase purchase, IabCallbacks.OnAcknowledgeListener listener) {
+        _store.acknowledge(purchase.getToken())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(() -> listener.success(purchase),
+                exception -> listener.fail(exception.getMessage()));
+
+    }
+
+    @Override
     public void consumeAsync(IabPurchase purchase, IabCallbacks.OnConsumeListener listener) {
         _store.consume(purchase.getToken())
             .observeOn(AndroidSchedulers.mainThread())

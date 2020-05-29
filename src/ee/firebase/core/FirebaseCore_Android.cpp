@@ -15,27 +15,22 @@
 #include <firebase/app.h>
 
 #include "ee/core/JniUtils.hpp"
+#include "ee/core/internal/JniMethodInfo.hpp"
 
 namespace ee {
 namespace firebase {
-std::mutex global_activity_mutex;
-jobject global_activity = nullptr;
-
-extern "C" {
-JNIEXPORT void JNICALL Java_com_ee_firebase_core_FirebaseCore_setActivity(
-    JNIEnv* env, jobject instance, jobject activity) {
-    std::scoped_lock<std::mutex> guard(global_activity_mutex);
-    if (global_activity != nullptr) {
-        env->DeleteGlobalRef(global_activity);
-    }
-    global_activity = env->NewGlobalRef(activity);
-}
-} // extern "C"
-
 namespace {
 jobject getWindowContext() {
-    std::lock_guard<std::mutex> guard(global_activity_mutex);
-    return global_activity;
+    // Fix issue where IPlugin::onCreate is called before Activity.onCreate.
+    auto methodInfo = JniUtils::getStaticMethodInfo(
+        "com/ee/firebase/core/FirebaseCore", "staticGetActivity",
+        "()Ljava/lang/Object;");
+    if (methodInfo == nullptr) {
+        throw std::runtime_error("Method not found!");
+    }
+    jobject response = methodInfo->getEnv()->CallStaticObjectMethod(
+        methodInfo->getClass(), methodInfo->getMethodId());
+    return response;
 }
 } // namespace
 

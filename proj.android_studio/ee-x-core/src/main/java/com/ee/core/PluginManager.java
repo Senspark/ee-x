@@ -1,8 +1,10 @@
 package com.ee.core;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,22 +16,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * Created by Zinge on 6/5/16.
  */
 
 public class PluginManager {
-    public interface PluginCreator {
-        IPlugin create(@NonNull Context context, @NonNull IMessageBridge bridge);
+    private interface PluginExecutor {
+        void execute(@NonNull IPlugin plugin);
     }
 
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
     private Context _context;
     private Activity _activity;
+    private String _activityClassName;
     private final IMessageBridge _bridge;
     private final Map<String, IPlugin> _plugins;
     private final Map<String, String> _classes;
+    private final Application.ActivityLifecycleCallbacks _lifecycleCallbacks;
 
     private static class Holder {
         private static final PluginManager Instance = new PluginManager();
@@ -51,6 +57,7 @@ public class PluginManager {
         _classes.put("FacebookAds", "com.ee.facebook.FacebookAds");
         _classes.put("FirebaseCore", "com.ee.firebase.core.FirebaseCore");
         _classes.put("FirebaseCrashlytics", "com.ee.firebase.crashlytics.FirebaseCrashlytics");
+        _classes.put("FirebasePerformance", "com.ee.firebase.performance.FirebasePerformance");
         _classes.put("GoogleAnalytics", "com.ee.google.analytics.GoogleAnalytics");
         _classes.put("IronSource", "com.ee.ironsource.IronSource");
         _classes.put("Notification", "com.ee.notification.Notification");
@@ -60,10 +67,100 @@ public class PluginManager {
         _classes.put("Tenjin", "com.ee.tenjin.Tenjin");
         _classes.put("UnityAds", "com.ee.unityads.UnityAds");
         _classes.put("Vungle", "com.ee.vungle.Vungle");
+
+        _lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity,
+                                          @Nullable Bundle savedInstanceState) {
+                if (activity.getClass().getName().equals(_activityClassName)) {
+                    if (_activity == null) {
+                        _activity = activity;
+                        executePlugins(plugin -> plugin.onCreate(activity));
+                    } else {
+                        _logger.warn("onActivityCreated: invalid activity");
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+                if (activity.getClass().getName().equals(_activityClassName)) {
+                    if (_activity == activity) {
+                        executePlugins(IPlugin::onStart);
+                    } else {
+                        _logger.warn("onActivityStarted: invalid activity");
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+                if (activity.getClass().getName().equals(_activityClassName)) {
+                    if (_activity == activity) {
+                        executePlugins(IPlugin::onResume);
+                    } else {
+                        _logger.warn("onActivityResumed: invalid activity");
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+                if (activity.getClass().getName() == _activityClassName) {
+                    if (_activity == activity) {
+                        executePlugins(IPlugin::onPause);
+                    } else {
+                        _logger.warn("onActivityPaused: invalid activity");
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+                if (activity.getClass().getName().equals(_activityClassName)) {
+                    if (_activity == activity) {
+                        executePlugins(IPlugin::onStop);
+                    } else {
+                        _logger.warn("onActivityStopped: invalid activity");
+                    }
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity,
+                                                    @NonNull Bundle outState) {
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                if (activity.getClass().getName().equals(_activityClassName)) {
+                    if (_activity == activity) {
+                        _activity = null;
+                        executePlugins(IPlugin::onDestroy);
+                    } else {
+                        _logger.warn("onActivityDestroyed: invalid activity");
+                    }
+                }
+            }
+        };
     }
 
     public void initializePlugins(Context context) {
         _context = context;
+
+        // Register lifecycle callbacks.
+        if (context instanceof Application) {
+            ((Application) context).registerActivityLifecycleCallbacks(_lifecycleCallbacks);
+        } else {
+            assertThat(true).isFalse();
+        }
+
+        // Find main activity.
+        String packageName = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        _activityClassName = launchIntent.getComponent().getClassName();
+        assertThat(_activityClassName).isNotNull();
+
         Utils.registerHandlers(_bridge);
     }
 
@@ -104,7 +201,6 @@ public class PluginManager {
         }
     }
 
-    @SuppressWarnings("unused")
     public void removePlugin(@NonNull String pluginName) {
         _logger.info("removePlugin: " + pluginName);
         if (!_plugins.containsKey(pluginName)) {
@@ -122,44 +218,6 @@ public class PluginManager {
         return _plugins.get(pluginName);
     }
 
-    public void onCreate(Activity activity) {
-        _activity = activity;
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onCreate(activity);
-        }
-    }
-
-    public void onStart() {
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onStart();
-        }
-    }
-
-    public void onStop() {
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onStop();
-        }
-    }
-
-    public void onResume() {
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onResume();
-        }
-    }
-
-    public void onPause() {
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onPause();
-        }
-    }
-
-    public void onDestroy() {
-        _activity = null;
-        for (String key : _plugins.keySet()) {
-            _plugins.get(key).onDestroy();
-        }
-    }
-
     public void destroy() {
         Utils.deregisterHandlers(_bridge);
         for (String key : _plugins.keySet()) {
@@ -168,19 +226,19 @@ public class PluginManager {
         _context = null;
     }
 
-    public boolean onBackPressed() {
-        boolean result = false;
-        for (String key : _plugins.keySet()) {
-            result = result || _plugins.get(key).onBackPressed();
-        }
-        return result;
-    }
-
+    /// FIXME: to be removed (used in Recorder plugin).
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         boolean result = false;
         for (String key : _plugins.keySet()) {
             result = result || _plugins.get(key).onActivityResult(requestCode, responseCode, data);
         }
         return result;
+    }
+
+    private void executePlugins(PluginExecutor executor) {
+        for (String key : _plugins.keySet()) {
+            IPlugin plugin = _plugins.get(key);
+            executor.execute(plugin);
+        }
     }
 }

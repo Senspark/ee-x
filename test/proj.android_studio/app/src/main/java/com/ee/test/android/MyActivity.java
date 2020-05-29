@@ -19,8 +19,6 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
-        PluginManager manager = PluginManager.getInstance();
-        manager.onCreate(this);
         _logger.debug("onCreate: end.");
     }
 
@@ -28,7 +26,6 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onStart() {
         _logger.debug("onStart: begin.");
         super.onStart();
-        PluginManager.getInstance().onStart();
         _logger.debug("onStart: end.");
     }
 
@@ -36,7 +33,6 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onStop() {
         _logger.debug("onStop: begin.");
         super.onStop();
-        PluginManager.getInstance().onStop();
         _logger.debug("onStop: end.");
     }
 
@@ -44,7 +40,6 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onResume() {
         _logger.debug("onResume: begin.");
         super.onResume();
-        PluginManager.getInstance().onResume();
         _logger.debug("onResume: end.");
     }
 
@@ -52,7 +47,6 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onPause() {
         _logger.debug("onPause: begin.");
         super.onPause();
-        PluginManager.getInstance().onPause();
         _logger.debug("onPause: end.");
     }
 
@@ -60,16 +54,7 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onDestroy() {
         _logger.debug("onDestroy: begin.");
         super.onDestroy();
-        PluginManager.getInstance().onDestroy();
         _logger.debug("onDestroy: end.");
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (PluginManager.getInstance().onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override

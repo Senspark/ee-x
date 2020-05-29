@@ -136,17 +136,18 @@ public class SoomlaStore {
                                     SoomlaUtils.LogDebug(TAG, "Got owned items: " + ownedSkus);
                                 }
 
-                                handleSuccessfulPurchases(purchases, true, new HandleSuccessfulPurchasesFinishedHandler() {
-                                    @Override
-                                    public void onFinished() {
-
+                                handleSuccessfulPurchases(purchases, true).subscribe(
+                                    () -> {
                                         // Restore transactions always finished successfully even if
                                         // something wrong happened when handling a specific item.
 
                                         BusProvider.getInstance().post(
                                             new RestoreTransactionsFinishedEvent(true));
+                                    },
+                                    exception -> {
+                                        // Won't happen.
                                     }
-                                });
+                                );
                             } else {
                                 BusProvider.getInstance().post(
                                     new RestoreTransactionsFinishedEvent(true));
@@ -406,7 +407,7 @@ public class SoomlaStore {
 
                             @Override
                             public void success(IabPurchase purchase) {
-                                handleSuccessfulPurchase(purchase, false);
+                                handleSuccessfulPurchase(purchase, false).subscribe();
                             }
 
                             @Override
@@ -544,20 +545,16 @@ public class SoomlaStore {
         //BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(msg));
     }
 
-
-    private interface HandleSuccessfulPurchasesFinishedHandler {
-        void onFinished();
-    }
-
-    private void handleSuccessfulPurchases(List<IabPurchase> purchases, boolean isRestoring, HandleSuccessfulPurchasesFinishedHandler handler) {
-        for (IabPurchase purchase : purchases) {
-            handleSuccessfulPurchase(purchase, isRestoring);
-        }
-
-        if (handler != null) {
-            handler.onFinished();
-        }
-
+    private Completable handleSuccessfulPurchases(List<IabPurchase> purchases,
+                                                  boolean isRestoring) {
+        return Completable.create(emitter -> {
+            List<Completable> items = new ArrayList<>();
+            for (IabPurchase purchase : purchases) {
+                items.add(handleSuccessfulPurchase(purchase, isRestoring));
+            }
+            emitter.setDisposable(Completable.merge(items).subscribe(
+                emitter::onComplete, emitter::onError));
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -566,45 +563,50 @@ public class SoomlaStore {
      *
      * @param purchase purchase whose state is to be checked.
      */
-    private void handleSuccessfulPurchase(IabPurchase purchase, boolean isRestoring) {
-        String sku = purchase.getSku();
+    private Completable handleSuccessfulPurchase(IabPurchase purchase, boolean isRestoring) {
+        return Completable.create(emitter -> {
+            String sku = purchase.getSku();
 
-        PurchasableVirtualItem pvi;
-        try {
-            pvi = StoreInfo.getPurchasableItem(sku);
-        } catch (VirtualItemNotFoundException e) {
-            SoomlaUtils.LogError(TAG, "(handleSuccessfulPurchase - purchase or query-inventory) "
-                + "ERROR : Couldn't find the " +
-                " VirtualCurrencyPack OR MarketItem  with productId: " + sku +
-                ". It's unexpected so an unexpected error is being emitted.");
-            BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(
-                UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-            return;
-        }
+            PurchasableVirtualItem pvi;
+            try {
+                pvi = StoreInfo.getPurchasableItem(sku);
+            } catch (VirtualItemNotFoundException e) {
+                SoomlaUtils.LogError(TAG, "(handleSuccessfulPurchase - purchase or query-inventory) "
+                    + "ERROR : Couldn't find the " +
+                    " VirtualCurrencyPack OR MarketItem  with productId: " + sku +
+                    ". It's unexpected so an unexpected error is being emitted.");
+                BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(
+                    UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
 
-        switch (purchase.getPurchaseState()) {
-            case 0: {
-                if (purchase.isServerVerified()) {
-                    this.finalizeTransaction(purchase, pvi, isRestoring);
-                } else {
-                    BusProvider.getInstance().post(
-                        new UnexpectedStoreErrorEvent(
-                            purchase.getVerificationErrorCode() != null ?
-                                purchase.getVerificationErrorCode() :
-                                UnexpectedStoreErrorEvent.ErrorCode.GENERAL));
-                }
-
-                break;
+                emitter.onComplete();
+                return;
             }
-            case 1:
-            case 2:
-                SoomlaUtils.LogDebug(TAG, "IabPurchase refunded.");
-                if (!StoreConfig.friendlyRefunds) {
-                    pvi.take(1);
+
+            switch (purchase.getPurchaseState()) {
+                case 0: {
+                    if (purchase.isServerVerified()) {
+                        emitter.setDisposable(finalizeTransaction(purchase, pvi, isRestoring)
+                            .subscribe(emitter::onComplete, emitter::onError));
+                    } else {
+                        BusProvider.getInstance().post(
+                            new UnexpectedStoreErrorEvent(
+                                purchase.getVerificationErrorCode() != null ?
+                                    purchase.getVerificationErrorCode() :
+                                    UnexpectedStoreErrorEvent.ErrorCode.GENERAL));
+                    }
+
+                    break;
                 }
-                BusProvider.getInstance().post(new MarketRefundEvent(pvi, purchase.getDeveloperPayload()));
-                break;
-        }
+                case 1:
+                case 2:
+                    SoomlaUtils.LogDebug(TAG, "IabPurchase refunded.");
+                    if (!StoreConfig.friendlyRefunds) {
+                        pvi.take(1);
+                    }
+                    BusProvider.getInstance().post(new MarketRefundEvent(pvi, purchase.getDeveloperPayload()));
+                    break;
+            }
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -754,12 +756,11 @@ public class SoomlaStore {
             pvi.give(1);
             BusProvider.getInstance().post(new ItemPurchasedEvent(pvi.getItemId(), isRestoring, developerPayload));
 
-            consumeIfConsumable(purchase, pvi).subscribe(
-                emitter::onComplete,
-                emitter::onError);
+            emitter.setDisposable(consumeIfConsumable(purchase, pvi).subscribe(
+                emitter::onComplete, emitter::onError));
 
             // BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-        });
+        }).subscribeOn(_scheduler);
     }
 
     /* Singleton */

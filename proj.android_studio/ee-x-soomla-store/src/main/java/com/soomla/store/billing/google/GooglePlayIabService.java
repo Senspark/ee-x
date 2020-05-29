@@ -99,8 +99,9 @@ public class GooglePlayIabService implements IIabService {
                             .subscribe(
                                 () -> listener.success(iabPurchaseList),
                                 exception -> listener.fail(exception.getMessage()));
+                    } else {
+                        listener.success(iabPurchaseList);
                     }
-                    listener.success(iabPurchaseList);
                 },
                 exception -> listener.fail(exception.getMessage()));
     }
@@ -257,14 +258,16 @@ public class GooglePlayIabService implements IIabService {
                 },
                 exception -> {
                     IabPurchase iabPurchase = new IabPurchase(itemType, sku, null, null, 0);
-                    StoreException storeException = (StoreException) exception;
-                    if (storeException.responseCode == BillingResponseCode.USER_CANCELED) {
-                        listener.cancelled(iabPurchase);
-                        return;
-                    }
-                    if (storeException.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
-                        listener.alreadyOwned(iabPurchase);
-                        return;
+                    if (exception instanceof StoreException) {
+                        StoreException storeException = (StoreException) exception;
+                        if (storeException.responseCode == BillingResponseCode.USER_CANCELED) {
+                            listener.cancelled(iabPurchase);
+                            return;
+                        }
+                        if (storeException.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
+                            listener.alreadyOwned(iabPurchase);
+                            return;
+                        }
                     }
                     listener.fail(exception.getMessage());
                 }
@@ -291,6 +294,7 @@ public class GooglePlayIabService implements IIabService {
                     Boolean.parseBoolean(KeyValueStorage.getValue(VERIFY_ON_SERVER_FAILURE)));
                 sv.verifyPurchase();
             }
+            emitter.onComplete();
         }).subscribeOn(_scheduler);
     }
 

@@ -1,11 +1,13 @@
 package com.soomla.cocos2dx.store;
 
 import android.opengl.GLSurfaceView;
+
 import com.soomla.BusProvider;
 import com.soomla.cocos2dx.common.NdkGlue;
 import com.soomla.store.domain.MarketItem;
 import com.soomla.store.events.*;
 import com.squareup.otto.Subscribe;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +27,8 @@ public class StoreEventHandlerBridge {
         BusProvider.getInstance().register(this);
     }
 
-    public void pushOnItemPurchased(String itemId, String payload) {
-        BusProvider.getInstance().post(new ItemPurchasedEvent(itemId, payload, this));
+    public void pushOnItemPurchased(String itemId) {
+        BusProvider.getInstance().post(new ItemPurchasedEvent(itemId, this));
     }
 
     public void pushOnItemPurchaseStarted(String itemId) {
@@ -35,7 +37,7 @@ public class StoreEventHandlerBridge {
 
     public void pushOnUnexpectedStoreError(int errorCode) {
         BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(
-                UnexpectedStoreErrorEvent.ErrorCode.values()[errorCode], this));
+            UnexpectedStoreErrorEvent.ErrorCode.values()[errorCode], this));
     }
 
     public void pushOnSoomlaStoreInitialized() {
@@ -73,7 +75,7 @@ public class StoreEventHandlerBridge {
             }
         });
     }
-	
+
     @Subscribe
     public void onIabServiceStarted(IabServiceStartedEvent iabServiceStartedEvent) {
         mGLThread.queueEvent(new Runnable() {
@@ -89,7 +91,7 @@ public class StoreEventHandlerBridge {
             }
         });
     }
-	
+
     @Subscribe
     public void onIabServiceStopped(IabServiceStoppedEvent iabServiceStoppedEvent) {
         mGLThread.queueEvent(new Runnable() {
@@ -208,7 +210,7 @@ public class StoreEventHandlerBridge {
                     JSONObject parameters = new JSONObject();
                     parameters.put("method", "CCStoreEventHandler::onItemPurchased");
                     parameters.put("itemId", itemPurchasedEvent.getItemId());
-                    parameters.put("payload", itemPurchasedEvent.getPayload());
+                    parameters.put("payload", "" /* FIXME */);
                     NdkGlue.getInstance().sendMessageWithParameters(parameters);
                 } catch (JSONException e) {
                     throw new IllegalStateException(e);

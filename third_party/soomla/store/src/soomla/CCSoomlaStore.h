@@ -91,18 +91,6 @@ public:
 
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-    /**
-     Starts the in-app billing service in background.
-     */
-    virtual void startIabServiceInBg() {}
-
-    /**
-     Stops the in-app billing service in background.
-     */
-    virtual void stopIabServiceInBg() {}
-#endif
 protected:
     /**
      Loads the billing service for the store

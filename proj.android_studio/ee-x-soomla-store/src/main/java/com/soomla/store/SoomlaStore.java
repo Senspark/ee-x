@@ -18,16 +18,16 @@ package com.soomla.store;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+
 import com.soomla.BusProvider;
 import com.soomla.SoomlaApp;
 import com.soomla.SoomlaConfig;
 import com.soomla.SoomlaUtils;
 import com.soomla.store.billing.IIabService;
-import com.soomla.store.billing.IabHelper;
 import com.soomla.store.billing.IabCallbacks;
-import com.soomla.store.billing.IabException;
 import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabSkuDetails;
+import com.soomla.store.billing.google.Consts;
 import com.soomla.store.data.StorageManager;
 import com.soomla.store.data.StoreInfo;
 import com.soomla.store.domain.MarketItem;
@@ -57,17 +57,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Scheduler;
+
 /**
  * This class holds the basic assets needed to operate the Store.
  * You can use it to perform any operation related to the mobile store.
- *
+ * <p>
  * This is the only class you need to initialize in order to use the SOOMLA SDK.
- *
+ * <p>
  * To properly work with this class you must initialize it with the {@link #initialize} method.
  */
 public class SoomlaStore {
-
     public static final String VERSION = "3.6.21";
+
+    private final Scheduler _scheduler;
 
     /**
      * Initializes the SOOMLA SDK.
@@ -96,62 +101,6 @@ public class SoomlaStore {
     }
 
     /**
-     * Starts in-app billing service in background.
-     */
-    public void startIabServiceInBg() {
-        if (mInAppBillingService == null) {
-            SoomlaUtils.LogError(TAG, "Billing service is not loaded. Can't invoke startIabServiceInBg.");
-            return;
-        }
-
-        mInAppBillingService.startIabServiceInBg(new IabCallbacks.IabInitListener() {
-
-            @Override
-            public void success(boolean alreadyInBg) {
-                if (!alreadyInBg) {
-                    notifyIabServiceStarted();
-                    SoomlaUtils.LogDebug(TAG, "Successfully started billing service in background.");
-                } else {
-                    SoomlaUtils.LogDebug(TAG, "Couldn't start billing service in background. "
-                            + "Was already started.");
-                }
-            }
-
-            @Override
-            public void fail(String message) {
-                SoomlaUtils.LogError(TAG, "Couldn't start billing service in background. error: "
-                        + message);
-            }
-        });
-    }
-
-    /**
-     * Stops in-app billing service in background.
-     *
-     * IMPORTANT: This function is not supported in all billing providers (Amazon for example).
-     */
-    public void stopIabServiceInBg() {
-        if (mInAppBillingService == null) {
-            SoomlaUtils.LogError(TAG, "Billing service is not loaded. Can't invoke stopIabServiceInBg.");
-            return;
-        }
-
-        mInAppBillingService.stopIabServiceInBg(new IabCallbacks.IabInitListener() {
-
-            @Override
-            public void success(boolean alreadyInBg) {
-                SoomlaUtils.LogDebug(TAG, "Successfully stopped billing service in background.");
-            }
-
-            @Override
-            public void fail(String message) {
-                SoomlaUtils.LogError(TAG, "Couldn't stop billing service in background. error: "
-                        + message);
-            }
-        });
-    }
-
-    /**
      * Restoring old purchases for the current user (device).
      */
     public void restoreTransactions() {
@@ -161,125 +110,125 @@ public class SoomlaStore {
         }
 
         mInAppBillingService.initializeBillingService(
-                new IabCallbacks.IabInitListener() {
+            new IabCallbacks.IabInitListener() {
 
-                    @Override
-                    public void success(boolean alreadyInBg) {
-                        if (!alreadyInBg) {
-                            notifyIabServiceStarted();
-                        }
-
-                        SoomlaUtils.LogDebug(TAG,
-                                "Setup successful, restoring purchases");
-
-                        IabCallbacks.OnRestorePurchasesListener restorePurchasesListener = new IabCallbacks.OnRestorePurchasesListener() {
-                            @Override
-                            public void success(List<IabPurchase> purchases) {
-                                SoomlaUtils.LogDebug(TAG, "Transactions restored");
-
-                                if (purchases.size() > 0) {
-
-                                    if (SoomlaConfig.logDebug) {
-                                        String ownedSkus = "";
-                                        for (IabPurchase purchase : purchases) {
-                                            ownedSkus += purchase.getSku() + " / ";
-                                        }
-                                        SoomlaUtils.LogDebug(TAG, "Got owned items: " + ownedSkus);
-                                    }
-
-                                    handleSuccessfulPurchases(purchases, true, new HandleSuccessfulPurchasesFinishedHandler() {
-                                        @Override
-                                        public void onFinished() {
-
-                                            // Restore transactions always finished successfully even if
-                                            // something wrong happened when handling a specific item.
-
-                                            BusProvider.getInstance().post(
-                                                    new RestoreTransactionsFinishedEvent(true));
-                                        }
-                                    });
-                                } else {
-                                    BusProvider.getInstance().post(
-                                            new RestoreTransactionsFinishedEvent(true));
-                                }
-                            }
-
-                            @Override
-                            public void fail(String message) {
-                                BusProvider.getInstance().post(new RestoreTransactionsFinishedEvent(false));
-                                handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode.GENERAL, message);
-                            }
-
-                            @Override
-                            public void verificationStarted(List<IabPurchase> purchases) {
-                                handleVerificationStarted(purchases);
-                            }
-                        };
-
-                        IabCallbacks.OnRestorePurchasesListener restoreSubscriptionsListener = new IabCallbacks.OnRestorePurchasesListener() {
-                            @Override
-                            public void success(List<IabPurchase> purchases) {
-
-                                // collect subscription ids list
-                                List<String> subscriptionIds = new ArrayList<String>();
-                                for (IabPurchase purchase : purchases) {
-                                    subscriptionIds.add(purchase.getSku());
-                                }
-
-                                // collect subscriptionVG list
-                                List<VirtualGood> subscriptions = new ArrayList<VirtualGood>();
-                                for (VirtualGood good : StoreInfo.getGoods()) {
-                                    if ((good.getPurchaseType() instanceof PurchaseWithMarket) && ((PurchaseWithMarket)good.getPurchaseType()).isSubscription()) {
-                                        subscriptions.add(good);
-                                    }
-                                }
-
-                                // give unset subscriptions and take expired
-                                for (VirtualGood subscription : subscriptions) {
-                                    String productId = ((PurchaseWithMarket)subscription.getPurchaseType()).getMarketItem().getProductId();
-                                    if (subscriptionIds.contains(productId)) {
-                                        // TODO: is here should be 1 to give? Maybe current item has not only just 0/1 state
-                                        subscription.give(1, false);
-                                    } else {
-                                        try {
-                                            subscription.take(StoreInventory.getVirtualItemBalance(subscription.getItemId()), false);
-                                        }
-                                        catch (VirtualItemNotFoundException ex) {
-                                            // possibly unreachable block
-                                        }
-                                    }
-                                }
-                                // TODO: Should we notify user about repaired or expired subscriptions?
-                            }
-
-                            @Override
-                            public void fail(String message) {
-                                SoomlaUtils.LogDebug(TAG, "Subscriptions restoring failed: " + message);
-                            }
-
-                            @Override
-                            public void verificationStarted(List<IabPurchase> purchases) {
-                                // should we do it in subscription restoring? possibly it should be empty
-                            }
-                        };
-
-                        // no events like in restore purchases - keep subscription restoring silent for end-user
-
-                        BusProvider.getInstance().post(new RestoreTransactionsStartedEvent());
-
-                        try {
-                            mInAppBillingService.restorePurchasesAsync(restorePurchasesListener);
-                        } catch (IllegalStateException ex) {
-                            SoomlaUtils.LogError(TAG, "Can't proceed with restorePurchases. error: " + ex.getMessage());
-                            restorePurchasesListener.fail("Can't proceed with restorePurchases. error: " + ex.getMessage());
-                        }
+                @Override
+                public void success(boolean alreadyInBg) {
+                    if (!alreadyInBg) {
+                        notifyIabServiceStarted();
                     }
 
-                    @Override
-                    public void fail(String message) {
-                        reportIabInitFailure(message);
+                    SoomlaUtils.LogDebug(TAG,
+                        "Setup successful, restoring purchases");
+
+                    IabCallbacks.OnRestorePurchasesListener restorePurchasesListener = new IabCallbacks.OnRestorePurchasesListener() {
+                        @Override
+                        public void success(List<IabPurchase> purchases) {
+                            SoomlaUtils.LogDebug(TAG, "Transactions restored");
+
+                            if (purchases.size() > 0) {
+
+                                if (SoomlaConfig.logDebug) {
+                                    String ownedSkus = "";
+                                    for (IabPurchase purchase : purchases) {
+                                        ownedSkus += purchase.getSku() + " / ";
+                                    }
+                                    SoomlaUtils.LogDebug(TAG, "Got owned items: " + ownedSkus);
+                                }
+
+                                handleSuccessfulPurchases(purchases, true).subscribe(
+                                    () -> {
+                                        // Restore transactions always finished successfully even if
+                                        // something wrong happened when handling a specific item.
+
+                                        BusProvider.getInstance().post(
+                                            new RestoreTransactionsFinishedEvent(true));
+                                    },
+                                    exception -> {
+                                        // Won't happen.
+                                    }
+                                );
+                            } else {
+                                BusProvider.getInstance().post(
+                                    new RestoreTransactionsFinishedEvent(true));
+                            }
+                        }
+
+                        @Override
+                        public void fail(String message) {
+                            BusProvider.getInstance().post(new RestoreTransactionsFinishedEvent(false));
+                            handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode.GENERAL, message);
+                        }
+
+                        @Override
+                        public void verificationStarted(List<IabPurchase> purchases) {
+                            handleVerificationStarted(purchases);
+                        }
+                    };
+
+                    IabCallbacks.OnRestorePurchasesListener restoreSubscriptionsListener = new IabCallbacks.OnRestorePurchasesListener() {
+                        @Override
+                        public void success(List<IabPurchase> purchases) {
+
+                            // collect subscription ids list
+                            List<String> subscriptionIds = new ArrayList<String>();
+                            for (IabPurchase purchase : purchases) {
+                                subscriptionIds.add(purchase.getSku());
+                            }
+
+                            // collect subscriptionVG list
+                            List<VirtualGood> subscriptions = new ArrayList<VirtualGood>();
+                            for (VirtualGood good : StoreInfo.getGoods()) {
+                                if ((good.getPurchaseType() instanceof PurchaseWithMarket) && ((PurchaseWithMarket) good.getPurchaseType()).isSubscription()) {
+                                    subscriptions.add(good);
+                                }
+                            }
+
+                            // give unset subscriptions and take expired
+                            for (VirtualGood subscription : subscriptions) {
+                                String productId = ((PurchaseWithMarket) subscription.getPurchaseType()).getMarketItem().getProductId();
+                                if (subscriptionIds.contains(productId)) {
+                                    // TODO: is here should be 1 to give? Maybe current item has not only just 0/1 state
+                                    subscription.give(1, false);
+                                } else {
+                                    try {
+                                        subscription.take(StoreInventory.getVirtualItemBalance(subscription.getItemId()), false);
+                                    } catch (VirtualItemNotFoundException ex) {
+                                        // possibly unreachable block
+                                    }
+                                }
+                            }
+                            // TODO: Should we notify user about repaired or expired subscriptions?
+                        }
+
+                        @Override
+                        public void fail(String message) {
+                            SoomlaUtils.LogDebug(TAG, "Subscriptions restoring failed: " + message);
+                        }
+
+                        @Override
+                        public void verificationStarted(List<IabPurchase> purchases) {
+                            // should we do it in subscription restoring? possibly it should be empty
+                        }
+                    };
+
+                    // no events like in restore purchases - keep subscription restoring silent for end-user
+
+                    BusProvider.getInstance().post(new RestoreTransactionsStartedEvent());
+
+                    try {
+                        mInAppBillingService.restorePurchasesAsync(restorePurchasesListener);
+                    } catch (IllegalStateException ex) {
+                        SoomlaUtils.LogError(TAG, "Can't proceed with restorePurchases. error: " + ex.getMessage());
+                        restorePurchasesListener.fail("Can't proceed with restorePurchases. error: " + ex.getMessage());
                     }
                 }
+
+                @Override
+                public void fail(String message) {
+                    reportIabInitFailure(message);
+                }
+            }
         );
     }
 
@@ -306,99 +255,99 @@ public class SoomlaStore {
         }
 
         mInAppBillingService.initializeBillingService(
-                new IabCallbacks.IabInitListener() {
+            new IabCallbacks.IabInitListener() {
 
-                    @Override
-                    public void success(boolean alreadyInBg) {
-                        if (!alreadyInBg) {
-                            notifyIabServiceStarted();
-                        }
-                        SoomlaUtils.LogDebug(TAG,
-                                "Setup successful, refreshing market items details");
-
-                        IabCallbacks.OnFetchSkusDetailsListener fetchSkusDetailsListener =
-                                new IabCallbacks.OnFetchSkusDetailsListener() {
-
-                                    @Override
-                                    public void success(List<IabSkuDetails> skuDetails) {
-                                        SoomlaUtils.LogDebug(TAG, "Market items details refreshed");
-
-                                        List<MarketItem> marketItems = new ArrayList<MarketItem>();
-                                        if (skuDetails.size() > 0) {
-                                            List<VirtualItem> virtualItems = new ArrayList<VirtualItem>();
-
-                                            for (IabSkuDetails iabSkuDetails : skuDetails) {
-                                                String productId = iabSkuDetails.getSku();
-                                                String price = iabSkuDetails.getPrice();
-                                                String title = iabSkuDetails.getTitle();
-                                                String desc = iabSkuDetails.getDescription();
-                                                String currencyCode = iabSkuDetails.getCurrencyCode();
-                                                long priceMicros = iabSkuDetails.getPriceMicros();
-
-                                                SoomlaUtils.LogDebug(TAG, "Got item details: " +
-                                                        "\ntitle:\t" + iabSkuDetails.getTitle() +
-                                                        "\nprice:\t" + iabSkuDetails.getPrice() +
-                                                        "\nproductId:\t" + iabSkuDetails.getSku() +
-                                                        "\ndesc:\t" + iabSkuDetails.getDescription());
-
-                                                try {
-                                                    PurchasableVirtualItem pvi = StoreInfo.
-                                                            getPurchasableItem(productId);
-                                                    MarketItem mi = ((PurchaseWithMarket)
-                                                            pvi.getPurchaseType()).getMarketItem();
-                                                    mi.setMarketInformation(price, title, desc, currencyCode, priceMicros);
-
-                                                    marketItems.add(mi);
-                                                    virtualItems.add(pvi);
-                                                } catch (VirtualItemNotFoundException e) {
-                                                    String msg = "(refreshInventory) Couldn't find a "
-                                                            + "purchasable item associated with: " + productId;
-                                                    SoomlaUtils.LogError(TAG, msg);
-                                                }
-                                            }
-
-                                            StoreInfo.save(virtualItems);
-                                        }
-                                        BusProvider.getInstance().post(new MarketItemsRefreshFinishedEvent(marketItems));
-
-                                        if (followedByRestoreTransactions) {
-                                            restoreTransactions();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void fail(String message) {
-                                        SoomlaUtils.LogError(TAG, "Market items details failed to refresh " + message);
-
-                                        BusProvider.getInstance().post(new MarketItemsRefreshFailedEvent(message));
-
-                                        if (followedByRestoreTransactions) {
-                                            restoreTransactions();
-                                        }
-                                    }
-                                };
-
-                        final List<String> purchasableProductIds = StoreInfo.getAllProductIds();
-
-                        BusProvider.getInstance().post(new MarketItemsRefreshStartedEvent());
-
-                        try {
-                            mInAppBillingService.fetchSkusDetailsAsync(purchasableProductIds, fetchSkusDetailsListener);
-                        } catch (IllegalStateException ex) {
-                            SoomlaUtils.LogError(TAG, "Can't proceed with fetchSkusDetails. error: " + ex.getMessage());
-                            fetchSkusDetailsListener.fail("Can't proceed with fetchSkusDetails. error: " + ex.getMessage());
-
-                            if (followedByRestoreTransactions) {
-                                restoreTransactions();
-                            }
-                        }
+                @Override
+                public void success(boolean alreadyInBg) {
+                    if (!alreadyInBg) {
+                        notifyIabServiceStarted();
                     }
+                    SoomlaUtils.LogDebug(TAG,
+                        "Setup successful, refreshing market items details");
 
-                    @Override
-                    public void fail(String message) {
-                        reportIabInitFailure(message);
+                    IabCallbacks.OnFetchSkusDetailsListener fetchSkusDetailsListener =
+                        new IabCallbacks.OnFetchSkusDetailsListener() {
+
+                            @Override
+                            public void success(List<IabSkuDetails> skuDetails) {
+                                SoomlaUtils.LogDebug(TAG, "Market items details refreshed");
+
+                                List<MarketItem> marketItems = new ArrayList<MarketItem>();
+                                if (skuDetails.size() > 0) {
+                                    List<VirtualItem> virtualItems = new ArrayList<VirtualItem>();
+
+                                    for (IabSkuDetails iabSkuDetails : skuDetails) {
+                                        String productId = iabSkuDetails.getSku();
+                                        String price = iabSkuDetails.getPrice();
+                                        String title = iabSkuDetails.getTitle();
+                                        String desc = iabSkuDetails.getDescription();
+                                        String currencyCode = iabSkuDetails.getCurrencyCode();
+                                        long priceMicros = iabSkuDetails.getPriceMicros();
+
+                                        SoomlaUtils.LogDebug(TAG, "Got item details: " +
+                                            "\ntitle:\t" + iabSkuDetails.getTitle() +
+                                            "\nprice:\t" + iabSkuDetails.getPrice() +
+                                            "\nproductId:\t" + iabSkuDetails.getSku() +
+                                            "\ndesc:\t" + iabSkuDetails.getDescription());
+
+                                        try {
+                                            PurchasableVirtualItem pvi = StoreInfo.
+                                                getPurchasableItem(productId);
+                                            MarketItem mi = ((PurchaseWithMarket)
+                                                pvi.getPurchaseType()).getMarketItem();
+                                            mi.setMarketInformation(price, title, desc, currencyCode, priceMicros);
+
+                                            marketItems.add(mi);
+                                            virtualItems.add(pvi);
+                                        } catch (VirtualItemNotFoundException e) {
+                                            String msg = "(refreshInventory) Couldn't find a "
+                                                + "purchasable item associated with: " + productId;
+                                            SoomlaUtils.LogError(TAG, msg);
+                                        }
+                                    }
+
+                                    StoreInfo.save(virtualItems);
+                                }
+                                BusProvider.getInstance().post(new MarketItemsRefreshFinishedEvent(marketItems));
+
+                                if (followedByRestoreTransactions) {
+                                    restoreTransactions();
+                                }
+                            }
+
+                            @Override
+                            public void fail(String message) {
+                                SoomlaUtils.LogError(TAG, "Market items details failed to refresh " + message);
+
+                                BusProvider.getInstance().post(new MarketItemsRefreshFailedEvent(message));
+
+                                if (followedByRestoreTransactions) {
+                                    restoreTransactions();
+                                }
+                            }
+                        };
+
+                    final List<String> purchasableProductIds = StoreInfo.getAllProductIds();
+
+                    BusProvider.getInstance().post(new MarketItemsRefreshStartedEvent());
+
+                    try {
+                        mInAppBillingService.fetchSkusDetailsAsync(purchasableProductIds, fetchSkusDetailsListener);
+                    } catch (IllegalStateException ex) {
+                        SoomlaUtils.LogError(TAG, "Can't proceed with fetchSkusDetails. error: " + ex.getMessage());
+                        fetchSkusDetailsListener.fail("Can't proceed with fetchSkusDetails. error: " + ex.getMessage());
+
+                        if (followedByRestoreTransactions) {
+                            restoreTransactions();
+                        }
                     }
                 }
+
+                @Override
+                public void fail(String message) {
+                    reportIabInitFailure(message);
+                }
+            }
         );
     }
 
@@ -416,23 +365,21 @@ public class SoomlaStore {
      *
      * @param marketItem The item to purchase - this item has to be defined EXACTLY the same in
      *                   the market
-     * @param payload A payload to get back when this purchase is finished.
      * @throws IllegalStateException
      */
-    public void buyWithMarket(final MarketItem marketItem, final String payload) throws IllegalStateException {
-        buyWithMarket(marketItem, false, payload);
+    public void buyWithMarket(final MarketItem marketItem) throws IllegalStateException {
+        buyWithMarket(marketItem, false);
     }
 
     /**
      * Starts a purchase process in the market.
      *
-     * @param marketItem The item to purchase - this item has to be defined EXACTLY the same in
-     *                   the market
+     * @param marketItem     The item to purchase - this item has to be defined EXACTLY the same in
+     *                       the market
      * @param isSubscription determines if subscription is purchasing
-     * @param payload A payload to get back when this purchase is finished.
      * @throws IllegalStateException
      */
-    public void buyWithMarket(final MarketItem marketItem, final boolean isSubscription, final String payload) throws IllegalStateException {
+    public void buyWithMarket(final MarketItem marketItem, final boolean isSubscription) throws IllegalStateException {
         if (mInAppBillingService == null) {
             SoomlaUtils.LogError(TAG, "Billing service is not loaded. Can't invoke buyWithMarket.");
             return;
@@ -448,87 +395,88 @@ public class SoomlaStore {
         }
 
         mInAppBillingService.initializeBillingService
-                (new IabCallbacks.IabInitListener() {
+            (new IabCallbacks.IabInitListener() {
+                @Override
+                public void success(boolean alreadyInBg) {
+                    if (!alreadyInBg) {
+                        notifyIabServiceStarted();
+                    }
 
-                    @Override
-                    public void success(boolean alreadyInBg) {
-                        if (!alreadyInBg) {
-                            notifyIabServiceStarted();
-                        }
+                    IabCallbacks.OnPurchaseListener purchaseListener =
+                        new IabCallbacks.OnPurchaseListener() {
 
-                        IabCallbacks.OnPurchaseListener purchaseListener =
-                                new IabCallbacks.OnPurchaseListener() {
+                            @Override
+                            public void success(IabPurchase purchase) {
+                                handleSuccessfulPurchase(purchase, false).subscribe();
+                            }
 
-                                    @Override
-                                    public void success(IabPurchase purchase) {
-                                        handleSuccessfulPurchase(purchase, false);
-                                    }
+                            @Override
+                            public void cancelled(IabPurchase purchase) {
+                                handleCancelledPurchase(purchase);
+                            }
 
-                                    @Override
-                                    public void cancelled(IabPurchase purchase) {
-                                        handleCancelledPurchase(purchase);
-                                    }
+                            @Override
+                            public void alreadyOwned(IabPurchase purchase) {
+                                String sku = purchase.getSku();
+                                SoomlaUtils.LogDebug(TAG, "Tried to buy an item that was not" +
+                                    " consumed (maybe it's an already owned " +
+                                    "non-consumable). productId: " + sku);
 
-                                    @Override
-                                    public void alreadyOwned(IabPurchase purchase) {
-                                        String sku = purchase.getSku();
-                                        SoomlaUtils.LogDebug(TAG, "Tried to buy an item that was not" +
-                                                " consumed (maybe it's an already owned " +
-                                                "non-consumable). productId: " + sku);
-
-                                        try {
-                                            PurchasableVirtualItem pvi = StoreInfo.getPurchasableItem(sku);
-                                            consumeIfConsumable(purchase, pvi);
-
+                                try {
+                                    PurchasableVirtualItem pvi = StoreInfo.getPurchasableItem(sku);
+                                    consumeIfConsumable(purchase, pvi).subscribe(
+                                        () -> {
                                             if (StoreInfo.isItemNonConsumable(pvi)) {
                                                 SoomlaUtils.LogDebug(TAG,
-                                                        "(alreadyOwned) the user tried to " +
-                                                        "buy a non-consumable that was already " +
-                                                        "owned. itemId: " + pvi.getItemId() +
-                                                        "    productId: " + sku);
-                                                BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+                                                    "(alreadyOwned) the user tried to buy a non-consumable that was already owned. itemId: " +
+                                                        pvi.getItemId() + "    productId: " + sku);
+                                                BusProvider.getInstance().post(
+                                                    new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
                                             }
-                                        } catch (VirtualItemNotFoundException e) {
-                                            SoomlaUtils.LogError(TAG,
-                                                    "(alreadyOwned) ERROR : Couldn't find the " +
-                                                    "VirtualCurrencyPack with productId: " + sku +
-                                                    ". It's unexpected so an unexpected error is being emitted.");
-                                            BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void fail(String message) {
-                                        handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL, message);
-                                    }
-
-                                    @Override
-                                    public void verificationStarted(List<IabPurchase> purchases) {
-                                        handleVerificationStarted(purchases);
-                                    }
-                                };
-
-                        BusProvider.getInstance().post(new MarketPurchaseStartedEvent(pvi, getInAppBillingService().shouldVerifyPurchases()));
-
-                        try {
-                            if (isSubscription) {
-                                mInAppBillingService.launchPurchaseFlow(IabHelper.ITEM_TYPE_SUBS, marketItem.getProductId(), purchaseListener, payload);
-                            } else {
-                                mInAppBillingService.launchPurchaseFlow(IabHelper.ITEM_TYPE_INAPP, marketItem.getProductId(), purchaseListener, payload);
+                                        },
+                                        exception -> BusProvider.getInstance().post(
+                                            new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL))
+                                    );
+                                } catch (VirtualItemNotFoundException e) {
+                                    SoomlaUtils.LogError(TAG,
+                                        "(alreadyOwned) ERROR : Couldn't find the VirtualCurrencyPack with productId: " +
+                                            sku + ". It's unexpected so an unexpected error is being emitted.");
+                                    BusProvider.getInstance().post(
+                                        new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+                                }
                             }
-                        } catch (IllegalStateException ex) {
-                            SoomlaUtils.LogError(TAG, "Can't proceed with launchPurchaseFlow. error: " + ex.getMessage());
-                            purchaseListener.fail("Can't proceed with launchPurchaseFlow. error: " + ex.getMessage());
+
+                            @Override
+                            public void fail(String message) {
+                                handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL, message);
+                            }
+
+                            @Override
+                            public void verificationStarted(List<IabPurchase> purchases) {
+                                handleVerificationStarted(purchases);
+                            }
+                        };
+
+                    BusProvider.getInstance().post(new MarketPurchaseStartedEvent(pvi, getInAppBillingService().shouldVerifyPurchases()));
+
+                    try {
+                        if (isSubscription) {
+                            mInAppBillingService.launchPurchaseFlow(Consts.ITEM_TYPE_SUBSCRIPTION, marketItem.getProductId(), purchaseListener);
+                        } else {
+                            mInAppBillingService.launchPurchaseFlow(Consts.ITEM_TYPE_INAPP, marketItem.getProductId(), purchaseListener);
                         }
-
+                    } catch (IllegalStateException ex) {
+                        SoomlaUtils.LogError(TAG, "Can't proceed with launchPurchaseFlow. error: " + ex.getMessage());
+                        purchaseListener.fail("Can't proceed with launchPurchaseFlow. error: " + ex.getMessage());
                     }
 
-                    @Override
-                    public void fail(String message) {
-                        reportIabInitFailure(message);
-                    }
+                }
 
-                });
+                @Override
+                public void fail(String message) {
+                    reportIabInitFailure(message);
+                }
+            });
     }
 
 
@@ -556,8 +504,8 @@ public class SoomlaStore {
             aClass = tryFetchIabService();
             if (aClass == null) {
                 String err = "You don't have a billing service attached. " +
-                        "Decide which billing service you want, add it to AndroidManifest.xml " +
-                        "and add its jar to the path.";
+                    "Decide which billing service you want, add it to AndroidManifest.xml " +
+                    "and add its jar to the path.";
                 handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode.GENERAL, err);
                 return false;
             }
@@ -597,20 +545,16 @@ public class SoomlaStore {
         //BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(msg));
     }
 
-
-    private interface HandleSuccessfulPurchasesFinishedHandler {
-        void onFinished();
-    }
-
-    private void handleSuccessfulPurchases(List<IabPurchase> purchases, boolean isRestoring, HandleSuccessfulPurchasesFinishedHandler handler) {
-        for (IabPurchase purchase : purchases) {
-            handleSuccessfulPurchase(purchase, isRestoring);
-        }
-
-        if (handler != null) {
-            handler.onFinished();
-        }
-
+    private Completable handleSuccessfulPurchases(List<IabPurchase> purchases,
+                                                  boolean isRestoring) {
+        return Completable.create(emitter -> {
+            List<Completable> items = new ArrayList<>();
+            for (IabPurchase purchase : purchases) {
+                items.add(handleSuccessfulPurchase(purchase, isRestoring));
+            }
+            emitter.setDisposable(Completable.merge(items).subscribe(
+                emitter::onComplete, emitter::onError));
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -619,45 +563,50 @@ public class SoomlaStore {
      *
      * @param purchase purchase whose state is to be checked.
      */
-    private void handleSuccessfulPurchase(IabPurchase purchase, boolean isRestoring) {
-        String sku = purchase.getSku();
+    private Completable handleSuccessfulPurchase(IabPurchase purchase, boolean isRestoring) {
+        return Completable.create(emitter -> {
+            String sku = purchase.getSku();
 
-        PurchasableVirtualItem pvi;
-        try {
-            pvi = StoreInfo.getPurchasableItem(sku);
-        } catch (VirtualItemNotFoundException e) {
-            SoomlaUtils.LogError(TAG, "(handleSuccessfulPurchase - purchase or query-inventory) "
+            PurchasableVirtualItem pvi;
+            try {
+                pvi = StoreInfo.getPurchasableItem(sku);
+            } catch (VirtualItemNotFoundException e) {
+                SoomlaUtils.LogError(TAG, "(handleSuccessfulPurchase - purchase or query-inventory) "
                     + "ERROR : Couldn't find the " +
                     " VirtualCurrencyPack OR MarketItem  with productId: " + sku +
                     ". It's unexpected so an unexpected error is being emitted.");
-            BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(
+                BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(
                     UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-            return;
-        }
 
-        switch (purchase.getPurchaseState()) {
-            case 0: {
-                if (purchase.isServerVerified()) {
-                    this.finalizeTransaction(purchase, pvi, isRestoring);
-                } else {
-                    BusProvider.getInstance().post(
-                            new UnexpectedStoreErrorEvent(
-                                    purchase.getVerificationErrorCode() != null?
-                                            purchase.getVerificationErrorCode() :
-                                            UnexpectedStoreErrorEvent.ErrorCode.GENERAL));
-                }
-
-                break;
+                emitter.onComplete();
+                return;
             }
-            case 1:
-            case 2:
-                SoomlaUtils.LogDebug(TAG, "IabPurchase refunded.");
-                if (!StoreConfig.friendlyRefunds) {
-                    pvi.take(1);
+
+            switch (purchase.getPurchaseState()) {
+                case 0: {
+                    if (purchase.isServerVerified()) {
+                        emitter.setDisposable(finalizeTransaction(purchase, pvi, isRestoring)
+                            .subscribe(emitter::onComplete, emitter::onError));
+                    } else {
+                        BusProvider.getInstance().post(
+                            new UnexpectedStoreErrorEvent(
+                                purchase.getVerificationErrorCode() != null ?
+                                    purchase.getVerificationErrorCode() :
+                                    UnexpectedStoreErrorEvent.ErrorCode.GENERAL));
+                    }
+
+                    break;
                 }
-                BusProvider.getInstance().post(new MarketRefundEvent(pvi, purchase.getDeveloperPayload()));
-                break;
-        }
+                case 1:
+                case 2:
+                    SoomlaUtils.LogDebug(TAG, "IabPurchase refunded.");
+                    if (!StoreConfig.friendlyRefunds) {
+                        pvi.take(1);
+                    }
+                    BusProvider.getInstance().post(new MarketRefundEvent(pvi, purchase.getDeveloperPayload()));
+                    break;
+            }
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -674,8 +623,8 @@ public class SoomlaStore {
             BusProvider.getInstance().post(new MarketPurchaseCancelledEvent(v));
         } catch (VirtualItemNotFoundException e) {
             SoomlaUtils.LogError(TAG, "(purchaseActionResultCancelled) ERROR : Couldn't find the "
-                    + "VirtualCurrencyPack OR MarketItem  with productId: " + sku
-                    + ". It's unexpected so an unexpected error is being emitted.");
+                + "VirtualCurrencyPack OR MarketItem  with productId: " + sku
+                + ". It's unexpected so an unexpected error is being emitted.");
             BusProvider.getInstance().post(new UnexpectedStoreErrorEvent());
         }
     }
@@ -694,8 +643,8 @@ public class SoomlaStore {
                 BusProvider.getInstance().post(new VerificationStartedEvent(v));
             } catch (VirtualItemNotFoundException e) {
                 SoomlaUtils.LogError(TAG, "(purchaseActionResultCancelled) ERROR : Couldn't find the "
-                        + "VirtualCurrencyPack OR MarketItem  with productId: " + sku
-                        + ". It's unexpected so an unexpected error is being emitted.");
+                    + "VirtualCurrencyPack OR MarketItem  with productId: " + sku
+                    + ". It's unexpected so an unexpected error is being emitted.");
                 BusProvider.getInstance().post(new UnexpectedStoreErrorEvent());
             }
         }
@@ -706,17 +655,34 @@ public class SoomlaStore {
      *
      * @param purchase purchase to be consumed
      */
-    private void consumeIfConsumable(IabPurchase purchase, PurchasableVirtualItem pvi) {
-        try {
-            if (!StoreInfo.isItemNonConsumable(pvi)) {
-                mInAppBillingService.consume(purchase);
+    private Completable consumeIfConsumable(IabPurchase purchase, PurchasableVirtualItem pvi) {
+        return Completable.create(emitter -> {
+            if (StoreInfo.isItemNonConsumable(pvi)) {
+                mInAppBillingService.acknowledgeAsync(purchase, new IabCallbacks.OnAcknowledgeListener() {
+                    @Override
+                    public void success(IabPurchase purchase) {
+                        emitter.onComplete();
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        emitter.onError(new Exception(message));
+                    }
+                });
+            } else {
+                mInAppBillingService.consumeAsync(purchase, new IabCallbacks.OnConsumeListener() {
+                    @Override
+                    public void success(IabPurchase purchase) {
+                        emitter.onComplete();
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        emitter.onError(new Exception(message));
+                    }
+                });
             }
-        } catch (IabException e) {
-            SoomlaUtils.LogDebug(TAG, "Error while consuming: itemId: " + pvi.getItemId() +
-                    "   productId: " + purchase.getSku());
-            SoomlaUtils.LogError(TAG, e.getMessage());
-            BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
-        }
+        }).subscribeOn(_scheduler);
     }
 
     /**
@@ -728,7 +694,7 @@ public class SoomlaStore {
         String iabServiceClassName;
         try {
             ApplicationInfo ai = SoomlaApp.getAppContext().getPackageManager().getApplicationInfo(
-                    SoomlaApp.getAppContext().getPackageName(), PackageManager.GET_META_DATA);
+                SoomlaApp.getAppContext().getPackageName(), PackageManager.GET_META_DATA);
             assert ai.metaData != null;
             iabServiceClassName = ai.metaData.getString("billing.service");
         } catch (Exception e) {
@@ -750,46 +716,51 @@ public class SoomlaStore {
      * Posts an unexpected error event saying the purchase failed.
      *
      * @param errorCode
-     * @param message error message.
+     * @param message   error message.
      */
     private void handleErrorResult(UnexpectedStoreErrorEvent.ErrorCode errorCode, String message) {
         BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(errorCode));
         SoomlaUtils.LogError(TAG, "ERROR: SoomlaStore failure: " + message);
     }
 
-    private void finalizeTransaction(IabPurchase purchase, PurchasableVirtualItem pvi, boolean isRestoring) {
+    private Completable finalizeTransaction(IabPurchase purchase, PurchasableVirtualItem pvi, boolean isRestoring) {
         SoomlaUtils.LogDebug(TAG, "IabPurchase successful. Finalizing transaction");
+        return Completable.create(emitter -> {
 
-        // if the purchasable item is non-consumable and it already exists then we
-        // don't fire any events.
-        // fixes: https://github.com/soomla/unity3d-store/issues/192
-        // TODO: update on the issue in github
-        if (StoreInfo.isItemNonConsumable(pvi)) {
-            if (StorageManager.getVirtualItemStorage(pvi).getBalance(pvi.getItemId()) == 1) {
-                return;
+            // if the purchasable item is non-consumable and it already exists then we
+            // don't fire any events.
+            // fixes: https://github.com/soomla/unity3d-store/issues/192
+            // TODO: update on the issue in github
+            if (StoreInfo.isItemNonConsumable(pvi)) {
+                if (StorageManager.getVirtualItemStorage(pvi).getBalance(pvi.getItemId()) == 1) {
+                    return;
+                }
             }
-        }
 
 
-        String developerPayload = purchase.getDeveloperPayload();
-        final String token = purchase.getToken();
-        final String orderId = purchase.getOrderId();
-        final String originalJson = purchase.getOriginalJson();
-        final String signature = purchase.getSignature();
-        final String userId = purchase.getUserId();
+            String developerPayload = purchase.getDeveloperPayload();
+            final String token = purchase.getToken();
+            final String orderId = purchase.getOrderId();
+            final String originalJson = purchase.getOriginalJson();
+            final String signature = purchase.getSignature();
+            final String userId = purchase.getUserId();
 
-        BusProvider.getInstance().post(new MarketPurchaseEvent(pvi, isRestoring, developerPayload, new HashMap<String, String>() {{
-                    put("token", token);
-                    put("orderId", orderId);
-                    put("originalJson", originalJson);
-                    put("signature", signature);
-                    put("userId", userId);
-                }}, null));
+            BusProvider.getInstance().post(new MarketPurchaseEvent(pvi, isRestoring, developerPayload, new HashMap<String, String>() {{
+                put("token", token);
+                put("orderId", orderId);
+                put("originalJson", originalJson);
+                put("signature", signature);
+                put("userId", userId);
+            }}, null));
 
-        pvi.give(1);
-        BusProvider.getInstance().post(new ItemPurchasedEvent(pvi.getItemId(), isRestoring, developerPayload));
+            pvi.give(1);
+            BusProvider.getInstance().post(new ItemPurchasedEvent(pvi.getItemId(), isRestoring, developerPayload));
 
-        consumeIfConsumable(purchase, pvi);
+            emitter.setDisposable(consumeIfConsumable(purchase, pvi).subscribe(
+                emitter::onComplete, emitter::onError));
+
+            // BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+        }).subscribeOn(_scheduler);
     }
 
     /* Singleton */
@@ -812,6 +783,7 @@ public class SoomlaStore {
      */
     private SoomlaStore() {
         BusProvider.getInstance().register(this);
+        _scheduler = AndroidSchedulers.mainThread();
     }
 
     /* Private Members */

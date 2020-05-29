@@ -17,6 +17,7 @@
 package com.soomla.store;
 
 import android.text.TextUtils;
+
 import com.soomla.SoomlaUtils;
 import com.soomla.data.KeyValueStorage;
 import com.soomla.store.data.StorageManager;
@@ -47,17 +48,17 @@ public class StoreInventory {
     /**
      * Buys the item with the given <code>itemId</code>.
      *
-     * @param itemId id of item to be purchased
+     * @param itemId  id of item to be purchased
      * @param payload a string you want to be assigned to the purchase. This string
-     *   is saved in a static variable and will be given bacl to you when the
-     *   purchase is completed.
+     *                is saved in a static variable and will be given bacl to you when the
+     *                purchase is completed.
      * @throws InsufficientFundsException
      * @throws VirtualItemNotFoundException
      */
-    public static void buy(String itemId, String payload) throws InsufficientFundsException,
-            VirtualItemNotFoundException {
+    public static void buy(String itemId) throws InsufficientFundsException,
+        VirtualItemNotFoundException {
         PurchasableVirtualItem pvi = (PurchasableVirtualItem) StoreInfo.getVirtualItem(itemId);
-        pvi.buy(payload);
+        pvi.buy();
     }
 
     /** VIRTUAL ITEMS **/
@@ -77,7 +78,7 @@ public class StoreInventory {
     /**
      * Gives your user the given amount of the virtual item with the given <code>itemId</code>.
      * For example, when your user plays your game for the first time you GIVE him/her 1000 gems.
-     *
+     * <p>
      * NOTE: This action is different than buy -
      * You use <code>give(int amount)</code> to give your user something for free.
      * You use <code>buy()</code> to give your user something and you get something in return.
@@ -87,7 +88,7 @@ public class StoreInventory {
      * @throws VirtualItemNotFoundException
      */
     public static void giveVirtualItem(String itemId, int amount)
-            throws VirtualItemNotFoundException  {
+        throws VirtualItemNotFoundException {
         VirtualItem item = StoreInfo.getVirtualItem(itemId);
         item.give(amount);
     }
@@ -101,7 +102,7 @@ public class StoreInventory {
      * @throws VirtualItemNotFoundException
      */
     public static void takeVirtualItem(String itemId, int amount)
-            throws VirtualItemNotFoundException  {
+        throws VirtualItemNotFoundException {
         VirtualItem item = StoreInfo.getVirtualItem(itemId);
         item.take(amount);
     }
@@ -119,7 +120,7 @@ public class StoreInventory {
      * @throws NotEnoughGoodsException
      */
     public static void equipVirtualGood(String goodItemId) throws
-            VirtualItemNotFoundException, ClassCastException, NotEnoughGoodsException{
+        VirtualItemNotFoundException, ClassCastException, NotEnoughGoodsException {
         EquippableVG good = (EquippableVG) StoreInfo.getVirtualItem(goodItemId);
 
         try {
@@ -140,7 +141,7 @@ public class StoreInventory {
      * @throws ClassCastException
      */
     public static void unEquipVirtualGood(String goodItemId) throws
-            VirtualItemNotFoundException, ClassCastException{
+        VirtualItemNotFoundException, ClassCastException {
         EquippableVG good = (EquippableVG) StoreInfo.getVirtualItem(goodItemId);
 
         good.unequip();
@@ -155,7 +156,7 @@ public class StoreInventory {
      * @throws ClassCastException
      */
     public static boolean isVirtualGoodEquipped(String goodItemId) throws
-            VirtualItemNotFoundException, ClassCastException{
+        VirtualItemNotFoundException, ClassCastException {
         EquippableVG good = (EquippableVG) StoreInfo.getVirtualItem(goodItemId);
 
         return StorageManager.getVirtualGoodsStorage().isEquipped(good.getItemId());
@@ -163,15 +164,15 @@ public class StoreInventory {
 
     /**
      * Retrieves the upgrade level of the virtual good with the given <code>goodItemId</code>.
-     *
+     * <p>
      * For Example:
      * Let's say there's a strength attribute to one of the characters in your game and you provide
      * your users with the ability to upgrade that strength on a scale of 1-3.
      * This is what you've created:
-     *  1. <code>SingleUseVG</code> for "strength"
-     *  2. <code>UpgradeVG</code> for strength 'level 1'.
-     *  3. <code>UpgradeVG</code> for strength 'level 2'.
-     *  4. <code>UpgradeVG</code> for strength 'level 3'.
+     * 1. <code>SingleUseVG</code> for "strength"
+     * 2. <code>UpgradeVG</code> for strength 'level 1'.
+     * 3. <code>UpgradeVG</code> for strength 'level 2'.
+     * 4. <code>UpgradeVG</code> for strength 'level 3'.
      * In the example, this function will retrieve the upgrade level for "strength" (1, 2, or 3).
      *
      * @param goodItemId id of the virtual good whose upgrade level we want to know
@@ -211,7 +212,7 @@ public class StoreInventory {
      * @throws VirtualItemNotFoundException
      */
     public static String getGoodCurrentUpgrade(String goodItemId)
-            throws VirtualItemNotFoundException {
+        throws VirtualItemNotFoundException {
         VirtualGood good = (VirtualGood) StoreInfo.getVirtualItem(goodItemId);
 
         String upgradeVGItemId = StorageManager.getVirtualGoodsStorage().getCurrentUpgrade(good.getItemId());
@@ -232,17 +233,17 @@ public class StoreInventory {
      * Upgrades the virtual good with the given <code>goodItemId</code> by doing the following:
      * 1. Checks if the good is currently upgraded or if this is the first time being upgraded.
      * 2. If the good is currently upgraded, upgrades to the next upgrade in the series, or in
-     *    other words, <code>buy()</code>s the next upgrade. In case there are no more upgrades
-     *    available(meaning the current upgrade is the last available), the function returns.
+     * other words, <code>buy()</code>s the next upgrade. In case there are no more upgrades
+     * available(meaning the current upgrade is the last available), the function returns.
      * 3. If the good has never been upgraded before, the function upgrades it to the first
-     *    available upgrade, or in other words, <code>buy()</code>s the first upgrade in the series.
+     * available upgrade, or in other words, <code>buy()</code>s the first upgrade in the series.
      *
      * @param goodItemId the id of the virtual good to be upgraded
      * @throws VirtualItemNotFoundException
      * @throws InsufficientFundsException
      */
     public static void upgradeVirtualGood(String goodItemId)
-            throws VirtualItemNotFoundException, InsufficientFundsException {
+        throws VirtualItemNotFoundException, InsufficientFundsException {
         VirtualGood good = (VirtualGood) StoreInfo.getVirtualItem(goodItemId);
 
         String upgradeVGItemId = StorageManager.getVirtualGoodsStorage().getCurrentUpgrade(good.getItemId());
@@ -259,11 +260,11 @@ public class StoreInventory {
                 return;
             }
             UpgradeVG vgu = (UpgradeVG) StoreInfo.getVirtualItem(nextItemId);
-            vgu.buy("");
+            vgu.buy();
         } else {
             UpgradeVG first = StoreInfo.getGoodFirstUpgrade(goodItemId);
             if (first != null) {
-                first.buy("");
+                first.buy();
             }
         }
     }
@@ -283,7 +284,7 @@ public class StoreInventory {
             upgradeVG.give(1);
         } catch (ClassCastException ex) {
             SoomlaUtils.LogError("SOOMLA StoreInventory",
-                    "The given itemId was of a non UpgradeVG VirtualItem. Can't force it.");
+                "The given itemId was of a non UpgradeVG VirtualItem. Can't force it.");
         }
     }
 
@@ -310,7 +311,7 @@ public class StoreInventory {
         SoomlaUtils.LogDebug(TAG, "Fetching balances for Currencies");
         // we're cloning the list to avoid situations where someone else tries to manipulate list while we iterate
         List<VirtualCurrency> currencies = new ArrayList<VirtualCurrency>(StoreInfo.getCurrencies());
-        for(VirtualCurrency currency : currencies) {
+        for (VirtualCurrency currency : currencies) {
             HashMap<String, Object> updatedValues = new HashMap<String, Object>();
             updatedValues.put("balance", StorageManager.getVirtualCurrencyStorage().getBalance(currency.getItemId()));
 
@@ -320,7 +321,7 @@ public class StoreInventory {
         SoomlaUtils.LogDebug(TAG, "Fetching balances for Goods");
         // we're cloning the list to avoid situations where someone else tries to manipulate list while we iterate
         List<VirtualGood> goods = new ArrayList<VirtualGood>(StoreInfo.getGoods());
-        for(VirtualGood good : goods) {
+        for (VirtualGood good : goods) {
             HashMap<String, Object> updatedValues = new HashMap<String, Object>();
 
             updatedValues.put("balance", StorageManager.getVirtualGoodsStorage().getBalance(good.getItemId()));
@@ -331,7 +332,7 @@ public class StoreInventory {
 
             if (StoreInfo.hasUpgrades(good.getItemId())) {
                 String vguId = StorageManager.getVirtualGoodsStorage().getCurrentUpgrade(good.getItemId());
-                updatedValues.put("currentUpgrade", (TextUtils.isEmpty(vguId) ? "none" : vguId ));
+                updatedValues.put("currentUpgrade", (TextUtils.isEmpty(vguId) ? "none" : vguId));
             }
 
             itemsDict.put(good.getItemId(), updatedValues);
@@ -411,8 +412,7 @@ public class StoreInventory {
             }
 
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             SoomlaUtils.LogError(TAG, "Unknown error has occurred while resetting item balances " + e.getMessage());
         }
 
@@ -424,8 +424,8 @@ public class StoreInventory {
 
         for (String key : allKeys) {
             if (key.startsWith(StoreInfo.DB_NONCONSUMABLE_KEY_PREFIX) ||
-                    key.startsWith(VirtualCurrencyStorage.DB_CURRENCY_KEY_PREFIX) ||
-                    key.startsWith(VirtualGoodsStorage.DB_KEY_GOOD_PREFIX)) {
+                key.startsWith(VirtualCurrencyStorage.DB_CURRENCY_KEY_PREFIX) ||
+                key.startsWith(VirtualGoodsStorage.DB_KEY_GOOD_PREFIX)) {
                 KeyValueStorage.deleteKeyValue(key);
             }
         }

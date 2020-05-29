@@ -22,6 +22,7 @@ import com.soomla.store.exceptions.InsufficientFundsException;
 import com.soomla.store.purchaseTypes.PurchaseType;
 import com.soomla.store.purchaseTypes.PurchaseWithMarket;
 import com.soomla.store.purchaseTypes.PurchaseWithVirtualItem;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,9 +36,9 @@ public abstract class PurchasableVirtualItem extends VirtualItem {
     /**
      * Constructor.
      *
-     * @param mName see parent
+     * @param mName        see parent
      * @param mDescription see parent
-     * @param mItemId see parent
+     * @param mItemId      see parent
      * @param purchaseType the way this item is purchased
      */
     public PurchasableVirtualItem(String mName, String mDescription, String mItemId,
@@ -63,7 +64,7 @@ public abstract class PurchasableVirtualItem extends VirtualItem {
 
         if (purchaseType.equals(StoreJSONConsts.PURCHASE_TYPE_MARKET)) {
             JSONObject marketItemObj =
-                    purchasableObj.getJSONObject(StoreJSONConsts.PURCHASE_MARKET_ITEM);
+                purchasableObj.getJSONObject(StoreJSONConsts.PURCHASE_MARKET_ITEM);
 
             mPurchaseType = new PurchaseWithMarket(new MarketItem(marketItemObj));
         } else if (purchaseType.equals(StoreJSONConsts.PURCHASE_TYPE_VI)) {
@@ -84,31 +85,30 @@ public abstract class PurchasableVirtualItem extends VirtualItem {
      * @{inheritDoc}
      */
     @Override
-    public JSONObject toJSONObject(){
+    public JSONObject toJSONObject() {
         JSONObject parentJsonObject = super.toJSONObject();
         JSONObject jsonObject = new JSONObject();
         try {
             Iterator<?> keys = parentJsonObject.keys();
-            while(keys.hasNext())
-            {
-                String key = (String)keys.next();
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
                 jsonObject.put(key, parentJsonObject.get(key));
             }
 
             JSONObject purchasableObj = new JSONObject();
 
-            if(mPurchaseType instanceof PurchaseWithMarket) {
+            if (mPurchaseType instanceof PurchaseWithMarket) {
                 purchasableObj.put(StoreJSONConsts.PURCHASE_TYPE, StoreJSONConsts.PURCHASE_TYPE_MARKET);
 
                 MarketItem mi = ((PurchaseWithMarket) mPurchaseType).getMarketItem();
                 purchasableObj.put(StoreJSONConsts.PURCHASE_MARKET_ITEM, mi.toJSONObject());
-            } else if(mPurchaseType instanceof PurchaseWithVirtualItem) {
+            } else if (mPurchaseType instanceof PurchaseWithVirtualItem) {
                 purchasableObj.put(StoreJSONConsts.PURCHASE_TYPE, StoreJSONConsts.PURCHASE_TYPE_VI);
 
                 purchasableObj.put(StoreJSONConsts.PURCHASE_VI_ITEMID,
-                        ((PurchaseWithVirtualItem) mPurchaseType).getTargetItemId());
+                    ((PurchaseWithVirtualItem) mPurchaseType).getTargetItemId());
                 purchasableObj.put(StoreJSONConsts.PURCHASE_VI_AMOUNT,
-                        ((PurchaseWithVirtualItem) mPurchaseType).getAmount());
+                    ((PurchaseWithVirtualItem) mPurchaseType).getAmount());
             }
 
             jsonObject.put(StoreJSONConsts.PURCHASABLE_ITEM, purchasableObj);
@@ -124,15 +124,13 @@ public abstract class PurchasableVirtualItem extends VirtualItem {
      * allows him/her to buy. This action uses the associated <code>PurchaseType</code> to perform
      * the purchase.
      *
-     * @param payload a string you want to be assigned to the purchase. This string
-     *   is saved in a static variable and will be given bacl to you when the
-     *   purchase is completed.
      * @throws InsufficientFundsException if the user does not have enough funds for buying.
      */
-    public void buy(String payload) throws InsufficientFundsException {
-        if (!canBuy()) return;
-
-        mPurchaseType.buy(payload);
+    public void buy() throws InsufficientFundsException {
+        if (!canBuy()) {
+            return;
+        }
+        mPurchaseType.buy();
     }
 
     /**
@@ -144,14 +142,18 @@ public abstract class PurchasableVirtualItem extends VirtualItem {
     protected abstract boolean canBuy();
 
 
-    /** Setters and Getters */
+    /**
+     * Setters and Getters
+     */
 
     public PurchaseType getPurchaseType() {
         return mPurchaseType;
     }
 
 
-    /** Private Members */
+    /**
+     * Private Members
+     */
 
     private static final String TAG = "SOOMLA PurchasableVirtualItem"; //used for Log messages
 

@@ -21,7 +21,6 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -31,11 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import java8.util.stream.StreamSupport;
 
@@ -71,17 +71,17 @@ public class Store implements PluginProtocol {
     private Scheduler _scheduler;
     private CompositeDisposable _disposable;
     private PublishSubject<PurchasesUpdate> _purchaseSubject;
-    private BillingClient _billingClient;
-    private List<SkuDetails> _skuDetailsList;
+    private Observable<BillingClient> _connectObservable;
+    private Map<String, SkuDetails> _skuDetailsList;
 
-    public Store(@NonNull Context context) {
+    public Store(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _context = context;
-        _bridge = MessageBridge.getInstance();
-        _scheduler = Schedulers.io();
+        _bridge = bridge;
+        _scheduler = AndroidSchedulers.mainThread();
         _disposable = new CompositeDisposable();
         _purchaseSubject = PublishSubject.create();
-        _skuDetailsList = new ArrayList<>();
+        _skuDetailsList = new HashMap<>();
         registerHandlers();
     }
 
@@ -127,10 +127,8 @@ public class Store implements PluginProtocol {
         _disposable.dispose();
         _disposable = null;
         _purchaseSubject = null;
-        if (_billingClient != null) {
-            _billingClient.endConnection();
-            _billingClient = null;
-        }
+        _connectObservable = null;
+        _skuDetailsList = null;
     }
 
     @Override
@@ -337,44 +335,52 @@ public class Store implements PluginProtocol {
         _bridge.deregisterHandler(kAcknowledge);
     }
 
-    private Single<BillingClient> connect() {
-        return Single.<BillingClient>create(emitter -> {
-            if (_billingClient != null && _billingClient.isReady()) {
-                emitter.onSuccess(_billingClient);
-                return;
-            }
+    public Observable<BillingClient> connect() {
+        if (_connectObservable != null) {
+            return _connectObservable;
+        }
+        Observable<BillingClient> observable = Observable.create(emitter -> {
             BillingClient client = BillingClient
                 .newBuilder(_context)
                 .enablePendingPurchases()
                 .setListener((result, purchases) ->
                     _purchaseSubject.onNext(new PurchasesUpdate(result.getResponseCode(), purchases)))
                 .build();
-
-            _billingClient = client;
             client.startConnection(new BillingClientStateListener() {
                 @Override
                 public void onBillingSetupFinished(BillingResult result) {
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         _logger.info("Connected to BillingClient.");
-                        emitter.onSuccess(client);
+                        emitter.onNext(client);
                     } else {
                         _logger.info("Could not connect to BillingClient. Response code = %s",
                             result.getResponseCode());
-                        _billingClient = null;
                         emitter.onError(new StoreException(result.getResponseCode()));
                     }
                 }
 
                 @Override
                 public void onBillingServiceDisconnected() {
-                    _billingClient = null; // We'll build up a new connection upon next request.
+                    emitter.onComplete();
                 }
             });
-        }).subscribeOn(_scheduler);
+            emitter.setCancellable(() -> {
+                if (client.isReady()) {
+                    client.endConnection();
+                }
+            });
+        });
+        _connectObservable = observable
+            .share()
+            .repeat()
+            .replay()
+            .refCount()
+            .subscribeOn(_scheduler);
+        return _connectObservable;
     }
 
-    private Single<List<SkuDetails>> getSkuDetails(@SkuType @NonNull String skuType,
-                                                   @NonNull List<String> skuList) {
+    public Single<List<SkuDetails>> getSkuDetails(@SkuType @NonNull String skuType,
+                                                  @NonNull List<String> skuList) {
         return getSkuDetails(SkuDetailsParams
             .newBuilder()
             .setSkusList(skuList)
@@ -383,23 +389,29 @@ public class Store implements PluginProtocol {
     }
 
     private Single<List<SkuDetails>> getSkuDetails(@NonNull SkuDetailsParams params) {
-        return connect().flatMap(client ->
-            Single.<List<SkuDetails>>create(emitter ->
+        return Single.<List<SkuDetails>>create(emitter ->
+            emitter.setDisposable(connect().subscribe(client ->
                 client.querySkuDetailsAsync(params, (result, detailsList) -> {
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         // https://stackoverflow.com/questions/56832130/skudetailslist-returning-null
+                        if (detailsList != null) {
+                            for (SkuDetails details : detailsList) {
+                                String sku = details.getSku();
+                                _skuDetailsList.remove(sku);
+                                _skuDetailsList.put(sku, details);
+                            }
+                        }
                         emitter.onSuccess(detailsList != null ? detailsList : new ArrayList<>());
                     } else {
                         emitter.onError(new StoreException(result.getResponseCode()));
                     }
-                })))
-            .doOnSuccess(detailsList -> _skuDetailsList = detailsList)
+                }), emitter::onError)))
             .subscribeOn(_scheduler);
     }
 
-    private Single<List<Purchase>> getPurchases(@SkuType @NonNull String skuType) {
-        return connect().flatMap(client ->
-            Single.<List<Purchase>>create(emitter -> {
+    public Single<List<Purchase>> getPurchases(@SkuType @NonNull String skuType) {
+        return Single.<List<Purchase>>create(emitter ->
+            emitter.setDisposable(connect().subscribe(client -> {
                 PurchasesResult result = client.queryPurchases(skuType);
                 if (result.getResponseCode() == BillingResponseCode.OK) {
                     List<Purchase> purchaseList = result.getPurchasesList();
@@ -407,35 +419,33 @@ public class Store implements PluginProtocol {
                 } else {
                     emitter.onError(new StoreException(result.getResponseCode()));
                 }
-            })).subscribeOn(_scheduler);
+            }, emitter::onError)))
+            .subscribeOn(_scheduler);
     }
 
     private Single<List<PurchaseHistoryRecord>> getPurchaseHistory(@SkuType @NonNull String skuType) {
-        return connect().flatMap(client ->
-            Single.<List<PurchaseHistoryRecord>>create(emitter ->
+        return Single.<List<PurchaseHistoryRecord>>create(emitter ->
+            emitter.setDisposable(connect().subscribe(client ->
                 client.queryPurchaseHistoryAsync(skuType, (result, recordList) -> {
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         emitter.onSuccess(recordList != null ? recordList : new ArrayList<>());
                     } else {
                         emitter.onError(new StoreException(result.getResponseCode()));
                     }
-                }))).subscribeOn(_scheduler);
+                }), emitter::onError)))
+            .subscribeOn(_scheduler);
     }
 
-    private Single<Purchase> purchase(@NonNull String sku) {
+    public Single<Purchase> purchase(@NonNull String sku) {
         return Single.<Purchase>create(emitter -> {
-            SkuDetails details = StreamSupport
-                .stream(_skuDetailsList)
-                .filter(item -> item.getSku().equals(sku))
-                .findFirst()
-                .orElse(null);
+            SkuDetails details = _skuDetailsList.get(sku);
             if (details == null) {
                 emitter.onError(new IllegalStateException("Cannot find sku details"));
                 return;
             }
-            emitter.setDisposable(purchase(details).subscribe());
+            emitter.setDisposable(
+                purchase(details).subscribe(emitter::onSuccess, emitter::onError));
         }).subscribeOn(_scheduler);
-
     }
 
     private Single<Purchase> purchase(@NonNull SkuDetails details) {
@@ -451,6 +461,7 @@ public class Store implements PluginProtocol {
                             .anyMatch(item -> item.getSku().equals(details.getSku()));
                     })
                     .firstOrError()
+                    .subscribeOn(_scheduler)
                     .subscribe(update -> {
                         if (update.code == BillingResponseCode.OK) {
                             assertThat(update.purchases).isNotNull();
@@ -463,8 +474,8 @@ public class Store implements PluginProtocol {
                         } else {
                             emitter.onError(new StoreException(update.code));
                         }
-                    }, emitter::onError))
-            )).subscribeOn(_scheduler);
+                    }, emitter::onError))))
+            .subscribeOn(_scheduler);
     }
 
     private Completable launchBillingFlow(@NonNull SkuDetails details) {
@@ -475,8 +486,8 @@ public class Store implements PluginProtocol {
     }
 
     private Completable launchBillingFlow(BillingFlowParams params) {
-        return connect().flatMapCompletable(client ->
-            Completable.create(emitter -> {
+        return Completable.create(emitter ->
+            emitter.setDisposable(connect().subscribe(client -> {
                 if (_activity == null) {
                     emitter.onError(new IllegalStateException("Activity is not available"));
                     return;
@@ -487,10 +498,11 @@ public class Store implements PluginProtocol {
                 } else {
                     emitter.onError(new StoreException(result.getResponseCode()));
                 }
-            })).subscribeOn(_scheduler);
+            })))
+            .subscribeOn(_scheduler);
     }
 
-    private Completable consume(@NonNull String purchaseToken) {
+    public Completable consume(@NonNull String purchaseToken) {
         return consume(ConsumeParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)
@@ -498,18 +510,19 @@ public class Store implements PluginProtocol {
     }
 
     private Completable consume(@NonNull ConsumeParams params) {
-        return connect().flatMapCompletable(client ->
-            Completable.create(emitter ->
+        return Completable.create(emitter ->
+            emitter.setDisposable(connect().subscribe(client ->
                 client.consumeAsync(params, (result, token) -> {
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         emitter.onComplete();
                     } else {
                         emitter.onError(new StoreException(result.getResponseCode()));
                     }
-                }))).subscribeOn(_scheduler);
+                }))))
+            .subscribeOn(_scheduler);
     }
 
-    private Completable acknowledge(@NonNull String purchaseToken) {
+    public Completable acknowledge(@NonNull String purchaseToken) {
         return acknowledge(AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)
@@ -517,15 +530,15 @@ public class Store implements PluginProtocol {
     }
 
     private Completable acknowledge(@NonNull AcknowledgePurchaseParams params) {
-        return connect().flatMapCompletable(client ->
-            Completable.create(emitter -> {
+        return Completable.create(emitter ->
+            emitter.setDisposable(connect().subscribe(client ->
                 client.acknowledgePurchase(params, result -> {
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         emitter.onComplete();
                     } else {
                         emitter.onError(new StoreException(result.getResponseCode()));
                     }
-                });
-            })).subscribeOn(_scheduler);
+                }))))
+            .subscribeOn(_scheduler);
     }
 }

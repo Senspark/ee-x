@@ -16,8 +16,6 @@
 
 package com.soomla.store.billing;
 
-import com.soomla.store.domain.PurchasableVirtualItem;
-
 import java.util.List;
 import java.util.Map;
 
@@ -26,34 +24,17 @@ import java.util.Map;
  * in-app billing service (e.g. Google Play, Amazon App Store, Samsung Apps...)
  */
 public interface IIabService {
-
-    /**
-     * Checks if in-app billing service is initialized.
-     *
-     * @return true if Iab is initialized, false otherwise
-     */
-    boolean isIabServiceInitialized();
-
-    /**
-     * Consumes the given purchase. In order to consume a product, the product must be owned, and
-     * upon consumption completion, the user will no longer own the product.
-     * This method may block, do not call from UI thread. For that see {@link #consumeAsync}.
-     *
-     * @param purchase the PurchaseInfo that represents the item to consume.
-     * @throws IabException if there is a problem during consumption.
-     */
-    void consume(IabPurchase purchase) throws IabException;
+    void acknowledgeAsync(IabPurchase purchase, IabCallbacks.OnAcknowledgeListener listener);
 
     /**
      * Works like {@link #consume}, but is asynchronous. Performs the consumption in the background
      * and notifies the given listener upon completion of consumption.
      * This method is safe to call from a UI thread.
      *
-     * @param purchase the purchase to be consumed
+     * @param purchase        the purchase to be consumed
      * @param consumeListener the listener to notify when the consumption is finished.
      */
-    void consumeAsync(IabPurchase purchase,
-                      final IabCallbacks.OnConsumeListener consumeListener);
+    void consumeAsync(IabPurchase purchase, IabCallbacks.OnConsumeListener listener);
 
     /**
      * Initiates the UI flow for an in-app purchase.
@@ -61,15 +42,13 @@ public interface IIabService {
      * The calling activity will be paused while the user interacts with the Market.
      * This method MUST be called from the UI thread of the Activity.
      *
-     * @param sku the sku of the item to purchase.
+     * @param sku              the sku of the item to purchase.
      * @param purchaseListener the listener to notify when the purchase process finishes
-     * @param extraData extra data (developer payload), which will be returned with the purchase
-     *                  data when the purchase completes.
+     * @param extraData        extra data (developer payload), which will be returned with the purchase
+     *                         data when the purchase completes.
      */
-    void launchPurchaseFlow(String itemType,
-                            String sku,
-                            final IabCallbacks.OnPurchaseListener purchaseListener,
-                            String extraData);
+    void launchPurchaseFlow(String itemType, String sku,
+                            IabCallbacks.OnPurchaseListener listener);
 
     /**
      * Restores purchases asynchronously. This operation will get all previously purchased
@@ -77,7 +56,7 @@ public interface IIabService {
      *
      * @param restorePurchasesListener the listener to notify when the query operation completes.
      */
-    void restorePurchasesAsync(IabCallbacks.OnRestorePurchasesListener restorePurchasesListener);
+    void restorePurchasesAsync(IabCallbacks.OnRestorePurchasesListener listener);
 
     /**
      * Fetches all details for the given skus. The details is what the developer provided on
@@ -85,7 +64,7 @@ public interface IIabService {
      *
      * @param fetchSkusDetailsListener the listener to notify when the query operation completes.
      */
-    void fetchSkusDetailsAsync(List<String> skus, IabCallbacks.OnFetchSkusDetailsListener fetchSkusDetailsListener);
+    void fetchSkusDetailsAsync(List<String> skus, IabCallbacks.OnFetchSkusDetailsListener listener);
 
     /**
      * Initializes in-app billing service and notifies the given <code>initListener</code> upon
@@ -94,25 +73,7 @@ public interface IIabService {
      * @param initListener the listener to notify when the <code>initializeBillingService</code>
      *                     process completes.
      */
-    void initializeBillingService(IabCallbacks.IabInitListener initListener);
-
-    /**
-     * Starts in-app billing service in background and notifies the given <code>initListener</code>
-     * upon completion.
-     *
-     * @param initListener the listener to notify when the <code>startIabServiceInBg</code> process
-     *                     completes.
-     */
-    void startIabServiceInBg(IabCallbacks.IabInitListener initListener);
-
-    /**
-     * Stops in-app billing service in background and notifies the given <code>initListener</code>
-     * upon completion.
-     *
-     * @param initListener the listener to notify when the <code>stopIabServiceInBg</code> process
-     *                     completes.
-     */
-    void stopIabServiceInBg(IabCallbacks.IabInitListener initListener);
+    void initializeBillingService(IabCallbacks.IabInitListener listener);
 
     /**
      * Parameters that configures receipt validation for purchases.
@@ -128,5 +89,4 @@ public interface IIabService {
      * @return true if service should verify purchases, false otherwise
      */
     boolean shouldVerifyPurchases();
-
 }

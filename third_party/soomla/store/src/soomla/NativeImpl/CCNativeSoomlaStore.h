@@ -44,13 +44,6 @@ namespace soomla {
         virtual bool transactionsAlreadyRestored();
         
 #endif
-        
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        
-        virtual void startIabServiceInBg();
-        
-        virtual void stopIabServiceInBg();
-#endif
     protected:
         virtual void loadBillingService();
     };

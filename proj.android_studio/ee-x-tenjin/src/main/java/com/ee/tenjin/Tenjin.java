@@ -1,14 +1,13 @@
 package com.ee.tenjin;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 import com.tenjin.android.TenjinSDK;
@@ -27,10 +26,9 @@ public class Tenjin implements PluginProtocol {
     private boolean _isResumeCalled;
     private boolean _isInitializeCalled;
 
-    public Tenjin() {
+    public Tenjin(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
-        _bridge = MessageBridge.getInstance();
-        _activity = null;
+        _bridge = bridge;
         registerHandlers();
     }
 
@@ -93,21 +91,16 @@ public class Tenjin implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String apiKey = message;
-                initialize(apiKey);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            String apiKey = message;
+            initialize(apiKey);
+            return "";
         }, k__initialize);
     }
 
     private void deregisterHandlers() {
         _bridge.deregisterHandler(k__initialize);
     }
-
 
     @SuppressWarnings("unused")
     private void initialize(String apiKey) {

@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -33,12 +33,15 @@ class AdMobRewardedAd extends RewardedAdCallback {
     private boolean _rewarded;
     private RewardedAd _ad;
 
-    AdMobRewardedAd(@NonNull Activity activity, @NonNull Context context, @NonNull String adId) {
+    AdMobRewardedAd(@NonNull Context context,
+                    @Nullable Activity activity,
+                    @NonNull IMessageBridge bridge,
+                    @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _adId = adId;
         _messageHelper = new MessageHelper("AdMobRewardedAd", adId);
         createInternalAd();

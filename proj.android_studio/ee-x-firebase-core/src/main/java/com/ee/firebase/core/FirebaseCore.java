@@ -3,8 +3,10 @@ package com.ee.firebase.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.PluginProtocol;
 import com.google.firebase.FirebaseApp;
@@ -17,7 +19,7 @@ public class FirebaseCore implements PluginProtocol {
 
     private native void setActivity(Object activity);
 
-    public FirebaseCore(Context context) {
+    public FirebaseCore(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin.");
         FirebaseApp.initializeApp(context);
         _logger.debug("constructor end.");

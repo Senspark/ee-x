@@ -8,7 +8,6 @@ import android.graphics.Point;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -64,11 +63,10 @@ public class AdMob implements PluginProtocol {
     private Map<String, AdMobInterstitialAd> _interstitialAds;
     private Map<String, AdMobRewardedAd> _rewardedAds;
 
-    public AdMob(Context context) {
+    public AdMob(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _context = context;
-        _activity = null;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _bannerHelper = new AdMobBannerHelper(context);
         _testDevices = new ArrayList<>();
         _bannerAds = new HashMap<>();
@@ -322,7 +320,7 @@ public class AdMob implements PluginProtocol {
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
-        AdMobBannerAd ad = new AdMobBannerAd(_context, _activity, adId, size);
+        AdMobBannerAd ad = new AdMobBannerAd(_context, _activity, _bridge, adId, size);
         _bannerAds.put(adId, ad);
         return true;
     }
@@ -339,12 +337,14 @@ public class AdMob implements PluginProtocol {
         return true;
     }
 
-    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
+                                  @NonNull Map<String, String> identifiers) {
         Utils.checkMainThread();
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
-        AdMobNativeAd ad = new AdMobNativeAd(_context, _activity, adId, layoutName, identifiers);
+        AdMobNativeAd ad =
+            new AdMobNativeAd(_context, _activity, _bridge, adId, layoutName, identifiers);
         _nativeAds.put(adId, ad);
         return true;
     }
@@ -366,7 +366,7 @@ public class AdMob implements PluginProtocol {
         if (_interstitialAds.containsKey(adId)) {
             return false;
         }
-        AdMobInterstitialAd ad = new AdMobInterstitialAd(_context, adId);
+        AdMobInterstitialAd ad = new AdMobInterstitialAd(_context, _bridge, adId);
         _interstitialAds.put(adId, ad);
         return true;
     }
@@ -389,7 +389,7 @@ public class AdMob implements PluginProtocol {
         if (_rewardedAds.containsKey(adId)) {
             return false;
         }
-        AdMobRewardedAd ad = new AdMobRewardedAd(_activity, _context, adId);
+        AdMobRewardedAd ad = new AdMobRewardedAd(_context, _activity, _bridge, adId);
         _rewardedAds.put(adId, ad);
         return true;
     }

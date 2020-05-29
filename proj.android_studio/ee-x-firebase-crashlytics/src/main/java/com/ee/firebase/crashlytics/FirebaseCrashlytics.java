@@ -1,13 +1,13 @@
 package com.ee.firebase.crashlytics;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -18,9 +18,9 @@ public class FirebaseCrashlytics implements PluginProtocol {
 
     private IMessageBridge _bridge;
 
-    public FirebaseCrashlytics() {
+    public FirebaseCrashlytics(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         registerHandlers();
     }
 
@@ -31,7 +31,7 @@ public class FirebaseCrashlytics implements PluginProtocol {
     }
 
     @Override
-    public void onCreate(@NonNull final Activity activity) {
+    public void onCreate(@NonNull Activity activity) {
     }
 
     @Override
@@ -58,10 +58,11 @@ public class FirebaseCrashlytics implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
     }
 
     @Override
-    public boolean onActivityResult(final int requestCode, final int responseCode, final Intent data) {
+    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         return false;
     }
 

@@ -65,13 +65,17 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     private NativeAd _ad;
     private View _view;
 
-    FacebookNativeAd(@NonNull Context context, @Nullable Activity activity,
-                     @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    FacebookNativeAd(@NonNull Context context,
+                     @Nullable Activity activity,
+                     @NonNull IMessageBridge bridge,
+                     @NonNull String adId,
+                     @NonNull String layoutName,
+                     @NonNull Map<String, String> identifiers) {
         _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
@@ -260,7 +264,9 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends View> boolean processView(@NonNull View view, @NonNull String key, @NonNull ViewProcessor<T> processor) {
+    private <T extends View> boolean processView(@NonNull View view,
+                                                 @NonNull String key,
+                                                 @NonNull ViewProcessor<T> processor) {
         int id = getIdentifier(key);
         if (id == 0) {
             _logger.error("Can not find identifier for key: " + key);
@@ -314,8 +320,8 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
         });
 
         processView(_view, k__media, (ViewProcessor<MediaView>) mediaView -> {
-            final Button callToAction = _view.findViewById(getIdentifier(k__call_to_action));
-            final ImageView icon = _view.findViewById(getIdentifier(k__icon));
+            Button callToAction = _view.findViewById(getIdentifier(k__call_to_action));
+            ImageView icon = _view.findViewById(getIdentifier(k__icon));
             _ad.registerViewForInteraction(_view, mediaView, icon, Arrays.asList(callToAction, mediaView));
         });
 

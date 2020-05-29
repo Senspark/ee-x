@@ -19,11 +19,17 @@ import java.util.Map;
  */
 
 public class PluginManager {
+    public interface PluginCreator {
+        PluginProtocol create(@NonNull Context context, @NonNull IMessageBridge bridge);
+    }
+
     private static final Logger _logger = new Logger(PluginManager.class.getName());
 
     private Context _context;
     private Activity _activity;
+    private final IMessageBridge _bridge;
     private final Map<String, PluginProtocol> _plugins;
+    private final Map<String, String> _classes;
 
     private static class Holder {
         private static final PluginManager Instance = new PluginManager();
@@ -34,12 +40,31 @@ public class PluginManager {
     }
 
     private PluginManager() {
+        _bridge = MessageBridge.getInstance();
         _plugins = new HashMap<>();
+        _classes = new HashMap<>();
+        _classes.put("AdMob", "com.ee.admob.AdMob");
+        _classes.put("AppLovin", "com.ee.applovin.AppLovin");
+        _classes.put("AppsFlyer", "com.ee.appsflyer.AppsFlyer");
+        _classes.put("CampaignReceiver", "com.ee.campaignreceiver.CampaignReceiver");
+        _classes.put("Facebook", "com.ee.facebook.Facebook");
+        _classes.put("FacebookAds", "com.ee.facebook.FacebookAds");
+        _classes.put("FirebaseCore", "com.ee.firebase.core.FirebaseCore");
+        _classes.put("FirebaseCrashlytics", "com.ee.firebase.crashlytics.FirebaseCrashlytics");
+        _classes.put("GoogleAnalytics", "com.ee.google.analytics.GoogleAnalytics");
+        _classes.put("IronSource", "com.ee.ironsource.IronSource");
+        _classes.put("Notification", "com.ee.notification.Notification");
+        _classes.put("Play", "com.ee.play.Play");
+        _classes.put("Recorder", "com.ee.recorder.Recorder");
+        _classes.put("Store", "com.ee.store.Store");
+        _classes.put("Tenjin", "com.ee.tenjin.Tenjin");
+        _classes.put("UnityAds", "com.ee.unityads.UnityAds");
+        _classes.put("Vungle", "com.ee.vungle.Vungle");
     }
 
     public void initializePlugins(Context context) {
         _context = context;
-        Utils.registerHandlers();
+        Utils.registerHandlers(_bridge);
     }
 
     public Context getContext() {
@@ -50,40 +75,33 @@ public class PluginManager {
         return _activity;
     }
 
-    public void addPlugin(@NonNull String pluginName) {
-        _logger.info("addPlugin: " + pluginName);
-        if (_plugins.containsKey(pluginName)) {
-            _logger.error("addPlugin: " + pluginName + " already exists!");
+    public void addPlugin(@NonNull String name) {
+        _logger.info("addPlugin: " + name);
+        if (_plugins.containsKey(name)) {
+            _logger.error("addPlugin: " + name + " already exists!");
             return;
         }
-
+        if (!_classes.containsKey(name)) {
+            _logger.error("addPlugin: " + name + " classes doesn't exist!");
+            return;
+        }
+        String className = _classes.get(name);
         try {
-            Class<?> clazz = Class.forName(pluginName);
-            Constructor<?> constructor = clazz.getConstructor(Context.class);
-
-            Object object = constructor.newInstance();
-
-            _plugins.put(pluginName, (PluginProtocol) object);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            Class<?> clazz = Class.forName(className);
+            Constructor<?> constructor = clazz.getConstructor(Context.class, IMessageBridge.class);
+            Object object = constructor.newInstance(_context, _bridge);
+            _plugins.put(name, (PluginProtocol) object);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
         }
-    }
-
-    public void addPlugin(@NonNull PluginProtocol plugin) {
-        _logger.info("addPlugin: " + plugin);
-        if (_plugins.containsKey(plugin.getPluginName())) {
-            _logger.error("addPlugin: " + plugin.getPluginName() + " already exists!");
-            return;
-        }
-        _plugins.put(plugin.getPluginName(), plugin);
     }
 
     @SuppressWarnings("unused")
@@ -143,6 +161,7 @@ public class PluginManager {
     }
 
     public void destroy() {
+        Utils.deregisterHandlers(_bridge);
         for (String key : _plugins.keySet()) {
             _plugins.get(key).destroy();
         }

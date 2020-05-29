@@ -17,13 +17,13 @@ class AdMobBannerHelper {
     private final Map<Integer, Point> _sizes;
 
     @NonNull
-    private static Point convertAdSizeToSize(Context context, AdSize adSize) {
+    private static Point convertAdSizeToSize(@NonNull Context context, @NonNull AdSize adSize) {
         int width = adSize.getWidthInPixels(context);
         int height = adSize.getHeightInPixels(context);
         return new Point(width, height);
     }
 
-    AdMobBannerHelper(Context context) {
+    AdMobBannerHelper(@NonNull Context context) {
         _sizes = new HashMap<>();
         for (int i = 0; i < 4; ++i) {
             AdSize adSize = getAdSize(i);

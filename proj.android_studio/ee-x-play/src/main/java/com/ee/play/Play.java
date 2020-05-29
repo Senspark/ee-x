@@ -1,12 +1,13 @@
 package com.ee.play;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
@@ -28,7 +29,6 @@ import com.google.android.gms.tasks.Task;
 import java.util.Map;
 
 public class Play implements PluginProtocol {
-
     private static final String k_isSignedIn = "Play_isSignedIn";
     private static final String k_signin = "Play_signin";
     private static final String k_signout = "Play_signout";
@@ -53,13 +53,13 @@ public class Play implements PluginProtocol {
     private static final Logger _logger = new Logger(Play.class.getName());
 
     private Activity _activity;
-
+    private IMessageBridge _bridge;
     private GoogleSignInClient _signinClient = null;
     private GoogleSignInOptions _signInOptions = null;
 
-    public Play() {
+    public Play(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
-        _activity = null;
+        _bridge = bridge;
         registerHandlers();
     }
 
@@ -109,9 +109,7 @@ public class Play implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -120,7 +118,7 @@ public class Play implements PluginProtocol {
             }
         }, k_isSignedIn);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -131,7 +129,7 @@ public class Play implements PluginProtocol {
             }
         }, k_signin);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -140,7 +138,7 @@ public class Play implements PluginProtocol {
             }
         }, k_signout);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -149,7 +147,7 @@ public class Play implements PluginProtocol {
             }
         }, k_showAchievements);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -161,7 +159,7 @@ public class Play implements PluginProtocol {
             }
         }, k_increaseAchievement);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -172,7 +170,7 @@ public class Play implements PluginProtocol {
             }
         }, k_unlockAchievement);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -183,7 +181,7 @@ public class Play implements PluginProtocol {
             }
         }, k_showLeaderboard);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -192,7 +190,7 @@ public class Play implements PluginProtocol {
             }
         }, k_showAllLeaderboards);
 
-        bridge.registerHandler(new MessageHandler() {
+        _bridge.registerHandler(new MessageHandler() {
             @NonNull
             @Override
             public String handle(@NonNull String message) {
@@ -206,24 +204,22 @@ public class Play implements PluginProtocol {
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k_isSignedIn);
-        bridge.deregisterHandler(k_signin);
-        bridge.deregisterHandler(k_signout);
-        bridge.deregisterHandler(k_showAchievements);
-        bridge.deregisterHandler(k_increaseAchievement);
-        bridge.deregisterHandler(k_unlockAchievement);
-        bridge.deregisterHandler(k_showLeaderboard);
-        bridge.deregisterHandler(k_showAllLeaderboards);
-        bridge.deregisterHandler(k_submitScore);
+        _bridge.deregisterHandler(k_isSignedIn);
+        _bridge.deregisterHandler(k_signin);
+        _bridge.deregisterHandler(k_signout);
+        _bridge.deregisterHandler(k_showAchievements);
+        _bridge.deregisterHandler(k_increaseAchievement);
+        _bridge.deregisterHandler(k_unlockAchievement);
+        _bridge.deregisterHandler(k_showLeaderboard);
+        _bridge.deregisterHandler(k_showAllLeaderboards);
+        _bridge.deregisterHandler(k_submitScore);
     }
 
     @Override
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
-            Boolean success = responseCode == Activity.RESULT_OK;
-            MessageBridge.getInstance().callCpp(k_onSignedIn, Utils.toString(success));
+            boolean success = responseCode == Activity.RESULT_OK;
+            _bridge.callCpp(k_onSignedIn, Utils.toString(success));
             return true;
         }
         return false;

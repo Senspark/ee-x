@@ -5,15 +5,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+
 import androidx.annotation.NonNull;
+
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -22,18 +22,20 @@ import java.util.Map;
  */
 
 public class Notification implements PluginProtocol {
-    private static final String k__notification_schedule            = "__notification_schedule";
-    private static final String k__notification_unschedule_all      = "__notification_unschedule_all";
-    private static final String k__notification_unschedule          = "__notification_unschedule";
-    private static final String k__notification_clear_all           = "__notification_clear_all";
+    private static final String k__notification_schedule = "__notification_schedule";
+    private static final String k__notification_unschedule_all = "__notification_unschedule_all";
+    private static final String k__notification_unschedule = "__notification_unschedule";
+    private static final String k__notification_clear_all = "__notification_clear_all";
 
     private static final Logger _logger = new Logger(Notification.class.getName());
 
     private Context _context;
+    private IMessageBridge _bridge;
 
-    public Notification(Context context) {
+    public Notification(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
         _context = context;
+        _bridge = bridge;
         registerHandlers();
         _logger.debug("constructor end.");
     }
@@ -71,6 +73,8 @@ public class Notification implements PluginProtocol {
     @Override
     public void destroy() {
         deregisterHandlers();
+        _context = null;
+        _bridge = null;
     }
 
     @Override
@@ -84,66 +88,45 @@ public class Notification implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
+        _bridge.registerHandler(msg -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+            assert dict != null;
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
+            String title = (String) dict.get("title");
+            String ticker = (String) dict.get("ticker");
+            String body = (String) dict.get("body");
+            Integer delay = (Integer) dict.get("delay");
+            Integer interval = (Integer) dict.get("interval");
+            Integer tag = (Integer) dict.get("tag");
 
-                String title = (String) dict.get("title");
-                String ticker = (String) dict.get("ticker");
-                String body = (String) dict.get("body");
-                Integer delay = (Integer) dict.get("delay");
-                Integer interval = (Integer) dict.get("interval");
-                Integer tag = (Integer) dict.get("tag");
-
-                schedule(ticker, title, body, delay, interval, tag);
-                return "";
-            }
+            schedule(ticker, title, body, delay, interval, tag);
+            return "";
         }, k__notification_schedule);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                unscheduleAll();
-                return "";
-            }
+        _bridge.registerHandler(msg -> {
+            unscheduleAll();
+            return "";
         }, k__notification_unschedule_all);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
-                assert dict != null;
+        _bridge.registerHandler(msg -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+            assert dict != null;
 
-                Integer tag = (Integer) dict.get("tag");
-
-                unschedule(tag);
-                return "";
-            }
+            Integer tag = (Integer) dict.get("tag");
+            unschedule(tag);
+            return "";
         }, k__notification_unschedule);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String msg) {
-                clearAll();
-                return "";
-            }
+        _bridge.registerHandler(msg -> {
+            clearAll();
+            return "";
         }, k__notification_clear_all);
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__notification_schedule);
-        bridge.deregisterHandler(k__notification_unschedule_all);
-        bridge.deregisterHandler(k__notification_unschedule);
+        _bridge.deregisterHandler(k__notification_schedule);
+        _bridge.deregisterHandler(k__notification_unschedule_all);
+        _bridge.deregisterHandler(k__notification_unschedule);
     }
 
     @SuppressWarnings("WeakerAccess")

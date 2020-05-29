@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -49,11 +48,11 @@ public class Vungle implements PluginProtocol {
     private LoadAdCallback _loadAdCallback;
     private InitCallback _initCallback;
 
-    public Vungle(Context context) {
+    public Vungle(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = context;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _initializing = false;
         registerHandlers();
         _logger.debug("constructor end.");

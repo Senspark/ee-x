@@ -11,7 +11,6 @@ import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
@@ -34,11 +33,11 @@ public class AppsFlyer implements PluginProtocol {
     private IMessageBridge _bridge;
     private AppsFlyerLib _tracker;
 
-    public AppsFlyer(Context context) {
+    public AppsFlyer(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
         Utils.checkMainThread();
         _context = context;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _tracker = AppsFlyerLib.getInstance();
         registerHandlers();
         _logger.debug("constructor end.");
@@ -93,54 +92,31 @@ public class AppsFlyer implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String devKey = message;
-                initialize(devKey);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            String devKey = message;
+            initialize(devKey);
+            return "";
         }, kInitialize);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                startTracking();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            startTracking();
+            return "";
         }, kStartTracking);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return getDeviceId();
-            }
-        }, kGetDeviceId);
+        _bridge.registerHandler(message -> getDeviceId(), kGetDeviceId);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setDebugEnabled(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setDebugEnabled(Utils.toBoolean(message));
+            return "";
         }, kSetDebugEnabled);
 
-        _bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assert dict != null;
-                String name = (String) dict.get("name");
-                Map<String, Object> values = (Map<String, Object>) dict.get("values");
-                trackEvent(name, values);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assert dict != null;
+            String name = (String) dict.get("name");
+            Map<String, Object> values = (Map<String, Object>) dict.get("values");
+            trackEvent(name, values);
+            return "";
         }, kTrackEvent);
     }
 

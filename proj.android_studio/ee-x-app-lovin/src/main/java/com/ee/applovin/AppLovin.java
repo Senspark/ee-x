@@ -19,7 +19,6 @@ import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkSettings;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -164,11 +163,11 @@ public class AppLovin implements PluginProtocol {
     private AppLovinIncentivizedInterstitial _rewardedAd;
     private RewardedAdListener _rewardedAdListener;
 
-    public AppLovin(Context context) {
+    public AppLovin(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
         Utils.checkMainThread();
         _context = context;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         registerHandlers();
         _logger.debug("constructor end.");
     }

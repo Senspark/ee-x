@@ -9,7 +9,6 @@ import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -32,11 +31,13 @@ class FacebookInterstitialAd implements InterstitialAdListener, IInterstitialAd 
     private InterstitialAdHelper _helper;
     private InterstitialAd _ad;
 
-    FacebookInterstitialAd(@NonNull Context context, @NonNull String adId) {
+    FacebookInterstitialAd(@NonNull Context context,
+                           @NonNull IMessageBridge bridge,
+                           @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _adId = adId;
         _messageHelper = new MessageHelper("FacebookInterstitialAd", adId);
         _helper = new InterstitialAdHelper(_bridge, this, _messageHelper);

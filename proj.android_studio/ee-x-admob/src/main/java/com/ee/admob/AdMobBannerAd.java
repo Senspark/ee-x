@@ -16,7 +16,6 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -43,12 +42,16 @@ class AdMobBannerAd extends AdListener implements IAdView {
     private boolean _isLoaded;
     private AdView _ad;
 
-    AdMobBannerAd(@NonNull Context context, @Nullable Activity activity, @NonNull String adId, @NonNull AdSize adSize) {
+    AdMobBannerAd(@NonNull Context context,
+                  @Nullable Activity activity,
+                  @NonNull IMessageBridge bridge,
+                  @NonNull String adId,
+                  @NonNull AdSize adSize) {
         _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _adId = adId;
         _adSize = adSize;
         _messageHelper = new MessageHelper("AdMobBannerAd", adId);

@@ -1,6 +1,7 @@
 package com.ee.facebook;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -23,7 +23,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
@@ -72,10 +71,9 @@ public class Facebook implements PluginProtocol {
     private AccessTokenTracker _accessTokenTracker;
     private ProfileTracker _profileTracker;
 
-    public Facebook() {
+    public Facebook(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
-        _bridge = MessageBridge.getInstance();
-        _activity = null;
+        _bridge = bridge;
         _callbackManager = CallbackManager.Factory.create();
         _accessTokenTracker = new AccessTokenTracker() {
             @Override

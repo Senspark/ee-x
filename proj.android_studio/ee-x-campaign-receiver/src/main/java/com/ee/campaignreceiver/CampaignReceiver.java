@@ -12,7 +12,6 @@ import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -27,11 +26,11 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
     private boolean _initialized;
     private InstallReferrerClient _mReferrerClient;
 
-    public CampaignReceiver(Context context) {
+    public CampaignReceiver(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
         Utils.checkMainThread();
         _context = context;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _initialized = false;
         registerHandlers();
         _logger.debug("constructor begin: end.");
@@ -44,8 +43,7 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 //            String referral = extras.getString("referrer");
 //            _logger.debug("onReceive referral : " + referral);
 //
-//            MessageBridge bridge = MessageBridge.getInstance();
-//            bridge.callCpp(k__onReceivedLink, referral);
+//            _bridge.callCpp(k__onReceivedLink, referral);
 //        }
 //    }
 
@@ -84,6 +82,7 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
         Utils.checkMainThread();
         deregisterHandlers();
         _context = null;
+        _bridge = null;
         if (!_initialized) {
             return;
         }
@@ -129,9 +128,7 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
                     String referral = response.getInstallReferrer();
                     _logger.debug("onInstallReferrerSetupFinished referral : " + referral);
-
-                    MessageBridge bridge = MessageBridge.getInstance();
-                    bridge.callCpp(k__onReceivedLink, referral);
+                    _bridge.callCpp(k__onReceivedLink, referral);
 
                     _mReferrerClient.endConnection();
                 } catch (RemoteException e) {

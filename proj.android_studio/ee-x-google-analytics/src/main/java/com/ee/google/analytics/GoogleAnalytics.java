@@ -7,9 +7,8 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -24,46 +23,46 @@ import java.util.Set;
 
 import static com.google.common.truth.Truth.assertThat;
 
-
 /**
  * Created by Zinge on 10/13/17.
  */
-
 public class GoogleAnalytics implements PluginProtocol {
-    private static final String k__setDispatchInterval       =
+    private static final String k__setDispatchInterval =
         "GoogleAnalytics_setDispatchInterval";
-    private static final String k__setDryRun                 = "GoogleAnalytics_setDryRun";
-    private static final String k__setOptOut                 = "GoogleAnalytics_setOptOut";
+    private static final String k__setDryRun = "GoogleAnalytics_setDryRun";
+    private static final String k__setOptOut = "GoogleAnalytics_setOptOut";
     private static final String k__setTrackUncaughtException =
         "GoogleAnalytics_setTrackUncaughtException";
-    private static final String k__dispatch                  = "GoogleAnalytics_dispatch";
-    private static final String k__createTracker             = "GoogleAnalytics_createTracker";
-    private static final String k__destroyTracker            = "GoogleAnalytics_destroyTracker";
+    private static final String k__dispatch = "GoogleAnalytics_dispatch";
+    private static final String k__createTracker = "GoogleAnalytics_createTracker";
+    private static final String k__destroyTracker = "GoogleAnalytics_destroyTracker";
 
-    private static final String k__testTrackEvent               = "GoogleAnalytics_testTrackEvent";
-    private static final String k__testTrackException           =
+    private static final String k__testTrackEvent = "GoogleAnalytics_testTrackEvent";
+    private static final String k__testTrackException =
         "GoogleAnalytics_testTrackException";
-    private static final String k__testTrackScreenView          =
+    private static final String k__testTrackScreenView =
         "GoogleAnalytics_testTrackScreenView";
-    private static final String k__testTrackSocial              = "GoogleAnalytics_testTrackSocial";
-    private static final String k__testTrackTiming              = "GoogleAnalytics_testTrackTiming";
+    private static final String k__testTrackSocial = "GoogleAnalytics_testTrackSocial";
+    private static final String k__testTrackTiming = "GoogleAnalytics_testTrackTiming";
     private static final String k__testCustomDimensionAndMetric =
         "GoogleAnalytics_testCustomDimensionAndMetric";
-    private static final String k__testTrackEcommerceAction     =
+    private static final String k__testTrackEcommerceAction =
         "GoogleAnalytics_testTrackEcommerceAction";
     private static final String k__testTrackEcommerceImpression =
         "GoogleAnalytics_testTrackEcommerceImpression";
 
     private static final Logger _logger = new Logger(GoogleAnalytics.class.getName());
 
-    private Context                                          _context;
+    private Context _context;
+    private IMessageBridge _bridge;
     private com.google.android.gms.analytics.GoogleAnalytics _analytics;
-    private Map<String, GoogleAnalyticsTracker>              _trackers;
-    private boolean                                          _exceptionReportingEnabled;
+    private Map<String, GoogleAnalyticsTracker> _trackers;
+    private boolean _exceptionReportingEnabled;
 
-    public GoogleAnalytics(Context context) {
+    public GoogleAnalytics(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _context = context;
+        _bridge = bridge;
         _analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(_context);
         _trackers = new HashMap<>();
         _exceptionReportingEnabled = false;
@@ -112,6 +111,7 @@ public class GoogleAnalytics implements PluginProtocol {
         _trackers = null;
         _analytics = null;
         _context = null;
+        _bridge = null;
     }
 
     @Override
@@ -125,176 +125,108 @@ public class GoogleAnalytics implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                int seconds = Integer.valueOf(message);
-                setLocalDispatchInterval(seconds);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            int seconds = Integer.valueOf(message);
+            setLocalDispatchInterval(seconds);
+            return "";
         }, k__setDispatchInterval);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setDryRun(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setDryRun(Utils.toBoolean(message));
+            return "";
         }, k__setDryRun);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setAppOptOut(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setAppOptOut(Utils.toBoolean(message));
+            return "";
         }, k__setOptOut);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setExceptionReportingEnabled(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setExceptionReportingEnabled(Utils.toBoolean(message));
+            return "";
         }, k__setTrackUncaughtException);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                dispatchLocalHits();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            dispatchLocalHits();
+            return "";
         }, k__dispatch);
 
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String trackingId = message;
-                return Utils.toString(createTracker(trackingId));
-            }
+        _bridge.registerHandler(message -> {
+            String trackingId = message;
+            return Utils.toString(createTracker(trackingId));
         }, k__createTracker);
 
-        bridge.registerHandler(new MessageHandler() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                String trackingId = message;
-                return Utils.toString(destroyTracker(trackingId));
-            }
+        _bridge.registerHandler(message -> {
+            String trackingId = message;
+            return Utils.toString(destroyTracker(trackingId));
         }, k__destroyTracker);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackEvent(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackEvent(dict));
         }, k__testTrackEvent);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackException(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackException(dict));
         }, k__testTrackException);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackScreenView(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackScreenView(dict));
         }, k__testTrackScreenView);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackSocial(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackSocial(dict));
         }, k__testTrackSocial);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackTiming(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackTiming(dict));
         }, k__testTrackTiming);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testCustomDimensionAndMetric(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testCustomDimensionAndMetric(dict));
         }, k__testCustomDimensionAndMetric);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackEcommerceAction(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackEcommerceAction(dict));
         }, k__testTrackEcommerceAction);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                return Utils.toString(testTrackEcommerceImpression(dict));
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            return Utils.toString(testTrackEcommerceImpression(dict));
         }, k__testTrackEcommerceImpression);
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
-        MessageBridge bridge = MessageBridge.getInstance();
+        _bridge.deregisterHandler(k__setDispatchInterval);
+        _bridge.deregisterHandler(k__setDryRun);
+        _bridge.deregisterHandler(k__setOptOut);
+        _bridge.deregisterHandler(k__setTrackUncaughtException);
+        _bridge.deregisterHandler(k__dispatch);
+        _bridge.deregisterHandler(k__createTracker);
+        _bridge.deregisterHandler(k__destroyTracker);
 
-        bridge.deregisterHandler(k__setDispatchInterval);
-        bridge.deregisterHandler(k__setDryRun);
-        bridge.deregisterHandler(k__setOptOut);
-        bridge.deregisterHandler(k__setTrackUncaughtException);
-        bridge.deregisterHandler(k__dispatch);
-        bridge.deregisterHandler(k__createTracker);
-        bridge.deregisterHandler(k__destroyTracker);
-
-        bridge.deregisterHandler(k__testTrackEvent);
-        bridge.deregisterHandler(k__testTrackException);
-        bridge.deregisterHandler(k__testTrackScreenView);
-        bridge.deregisterHandler(k__testTrackSocial);
-        bridge.deregisterHandler(k__testTrackTiming);
-        bridge.deregisterHandler(k__testCustomDimensionAndMetric);
-        bridge.deregisterHandler(k__testTrackEcommerceAction);
-        bridge.deregisterHandler(k__testTrackEcommerceImpression);
+        _bridge.deregisterHandler(k__testTrackEvent);
+        _bridge.deregisterHandler(k__testTrackException);
+        _bridge.deregisterHandler(k__testTrackScreenView);
+        _bridge.deregisterHandler(k__testTrackSocial);
+        _bridge.deregisterHandler(k__testTrackTiming);
+        _bridge.deregisterHandler(k__testCustomDimensionAndMetric);
+        _bridge.deregisterHandler(k__testTrackEcommerceAction);
+        _bridge.deregisterHandler(k__testTrackEcommerceImpression);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -331,7 +263,8 @@ public class GoogleAnalytics implements PluginProtocol {
         if (_trackers.containsKey(trackingId)) {
             return false;
         }
-        GoogleAnalyticsTracker tracker = new GoogleAnalyticsTracker(_analytics, trackingId);
+        GoogleAnalyticsTracker tracker =
+            new GoogleAnalyticsTracker(_bridge, _analytics, trackingId);
         tracker.setExceptionReportingEnabled(_exceptionReportingEnabled);
         _trackers.put(trackingId, tracker);
         return true;

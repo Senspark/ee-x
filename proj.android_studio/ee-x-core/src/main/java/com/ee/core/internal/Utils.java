@@ -25,8 +25,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginManager;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.instantapps.InstantApps;
@@ -138,9 +138,7 @@ public class Utils {
         }
     }
 
-    public static void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
+    public static void registerHandlers(IMessageBridge bridge) {
         bridge.registerHandler(message ->
             toString(isMainThread()), k__isMainThread);
 
@@ -286,6 +284,26 @@ public class Utils {
             showInstantPrompt(url, referrer, activity);
             return "";
         }, k__showInstallPrompt);
+    }
+
+    public static void deregisterHandlers(IMessageBridge bridge) {
+        bridge.deregisterHandler(k__isMainThread);
+        bridge.deregisterHandler(k__runOnUiThread);
+        bridge.deregisterHandler(k__runOnUiThreadDelayed);
+        bridge.deregisterHandler(k__isApplicationInstalled);
+        bridge.deregisterHandler(k__openApplication);
+        bridge.deregisterHandler(k__getApplicationId);
+        bridge.deregisterHandler(k__getVersionName);
+        bridge.deregisterHandler(k__getVersionCode);
+        bridge.deregisterHandler(k__getSHA1CertificateFingerprint);
+        bridge.deregisterHandler(k__isInstantApp);
+        bridge.deregisterHandler(k__isTablet);
+        bridge.deregisterHandler(k__getDensity);
+        bridge.deregisterHandler(k__getDeviceId);
+        bridge.deregisterHandler(k__getSafeInset);
+        bridge.deregisterHandler(k__sendMail);
+        bridge.deregisterHandler(k__testConnection);
+        bridge.deregisterHandler(k__showInstallPrompt);
     }
 
     @SuppressWarnings("WeakerAccess")

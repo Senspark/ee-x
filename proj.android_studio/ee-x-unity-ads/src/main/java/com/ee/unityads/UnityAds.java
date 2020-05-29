@@ -1,13 +1,13 @@
 package com.ee.unityads;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -45,10 +45,10 @@ public class UnityAds implements PluginProtocol {
     private IUnityAdsListener _listener;
 
     @SuppressWarnings("unused")
-    public UnityAds() {
+    public UnityAds(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _logger.debug("constructor begin.");
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         registerHandlers();
         _logger.debug("constructor end.");
     }

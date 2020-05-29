@@ -23,7 +23,6 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -69,13 +68,17 @@ class AdMobNativeAd extends AdListener implements IAdView {
     private AdLoader _ad;
     private FrameLayout _view;
 
-    AdMobNativeAd(@NonNull Context context, @Nullable Activity activity,
-                  @NonNull String adId, @NonNull String layoutName, @NonNull Map<String, String> identifiers) {
+    AdMobNativeAd(@NonNull Context context,
+                  @Nullable Activity activity,
+                  @NonNull IMessageBridge bridge,
+                  @NonNull String adId,
+                  @NonNull String layoutName,
+                  @NonNull Map<String, String> identifiers) {
         _logger.info("constructor: adId = %s", adId);
         Utils.checkMainThread();
         _context = context;
         _activity = activity;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _adId = adId;
         _layoutName = layoutName;
         _identifiers = identifiers;
@@ -253,7 +256,8 @@ class AdMobNativeAd extends AdListener implements IAdView {
         return resources.getIdentifier(_identifiers.get(identifier), "id", _context.getPackageName());
     }
 
-    private void populateUnifiedNativeAdView(final UnifiedNativeAd nativeAppInstallAd, final UnifiedNativeAdView adView) {
+    private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAppInstallAd,
+                                             UnifiedNativeAdView adView) {
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
         // have a video asset.
         VideoController vc = nativeAppInstallAd.getVideoController();
@@ -358,7 +362,9 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends View> void processView(@NonNull View view, @NonNull String key, @NonNull ViewProcessor<T> processor) {
+    private <T extends View> void processView(@NonNull View view,
+                                              @NonNull String key,
+                                              @NonNull ViewProcessor<T> processor) {
         int id = getIdentifier(key);
         if (id == 0) {
             _logger.error("Can not find identifier for key: " + key);

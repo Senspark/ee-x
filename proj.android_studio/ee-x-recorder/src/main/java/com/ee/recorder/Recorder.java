@@ -11,9 +11,8 @@ import android.os.IBinder;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
-import com.ee.core.MessageHandler;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 
@@ -36,14 +35,15 @@ public class Recorder implements PluginProtocol {
     private static final int PERMISSION_CODE = 1;
 
     private Activity _activity;
+    private IMessageBridge _bridge;
     private RecordService _recordService;
     private ServiceConnection _serviceConnection;
     private MediaProjectionManager _mediaProjectionManager;
     private String _filePath;
 
-    public Recorder(Context context) {
+    public Recorder(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
-        _activity = null;
+        _bridge = bridge;
         registerHandlers();
         if (isSupported()) {
             _mediaProjectionManager = (MediaProjectionManager) context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -105,6 +105,7 @@ public class Recorder implements PluginProtocol {
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();
+        _bridge = null;
     }
 
     @Override
@@ -113,59 +114,31 @@ public class Recorder implements PluginProtocol {
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
+        _bridge.registerHandler(message -> Utils.toString(isSupported()), k__isSupported);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return Utils.toString(isSupported());
-            }
-        }, k__isSupported);
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                startRecording();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            startRecording();
+            return "";
         }, k__startRecording);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                stopRecording();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            stopRecording();
+            return "";
         }, k__stopRecording);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                cancelRecording();
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            cancelRecording();
+            return "";
         }, k__cancelRecording);
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                return getRecordingUrl();
-            }
-        }, k__getRecordingUrl);
+        _bridge.registerHandler(message -> getRecordingUrl(), k__getRecordingUrl);
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__startRecording);
-        bridge.deregisterHandler(k__stopRecording);
-        bridge.deregisterHandler(k__cancelRecording);
-        bridge.deregisterHandler(k__getRecordingUrl);
+        _bridge.deregisterHandler(k__startRecording);
+        _bridge.deregisterHandler(k__stopRecording);
+        _bridge.deregisterHandler(k__cancelRecording);
+        _bridge.deregisterHandler(k__getRecordingUrl);
     }
 
     @Override

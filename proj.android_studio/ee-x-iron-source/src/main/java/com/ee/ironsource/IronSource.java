@@ -1,12 +1,13 @@
 package com.ee.ironsource;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.Utils;
 import com.ironsource.mediationsdk.logger.IronSourceError;
@@ -45,14 +46,14 @@ public class IronSource implements PluginProtocol, RewardedVideoListener, Inters
     private static final Logger _logger = new Logger(IronSource.class.getName());
 
     private Activity _activity;
-    private MessageBridge _bridge;
+    private IMessageBridge _bridge;
     private boolean _initialized;
     private boolean _rewarded;
 
-    public IronSource() {
+    public IronSource(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _logger.debug("constructor begin.");
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         registerHandlers();
         _logger.debug("constructor end.");
     }

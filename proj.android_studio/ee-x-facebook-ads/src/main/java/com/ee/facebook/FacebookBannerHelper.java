@@ -15,7 +15,7 @@ import java.util.Objects;
 import static com.google.common.truth.Truth.assertThat;
 
 class FacebookBannerHelper {
-    private Map<Integer, Point> _sizes;
+    private final Map<Integer, Point> _sizes;
 
     private static int getWidthInPixels(AdSize adSize) {
         switch (adSize.getWidth()) {

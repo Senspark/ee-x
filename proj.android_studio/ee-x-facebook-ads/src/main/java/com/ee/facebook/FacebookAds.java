@@ -8,7 +8,6 @@ import android.graphics.Point;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.MessageBridge;
 import com.ee.core.PluginProtocol;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
@@ -55,11 +54,10 @@ public class FacebookAds implements PluginProtocol {
     private Map<String, FacebookInterstitialAd> _interstitialAds;
     private Map<String, FacebookRewardedAd> _rewardedAds;
 
-    public FacebookAds(Context context) {
+    public FacebookAds(@NonNull Context context, @NonNull IMessageBridge bridge) {
         Utils.checkMainThread();
         _context = context;
-        _activity = null;
-        _bridge = MessageBridge.getInstance();
+        _bridge = bridge;
         _bannerHelper = new FacebookBannerHelper();
         _bannerAds = new HashMap<>();
         _nativeAds = new HashMap<>();
@@ -303,7 +301,7 @@ public class FacebookAds implements PluginProtocol {
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
-        FacebookBannerAd ad = new FacebookBannerAd(_context, _activity, adId, adSize);
+        FacebookBannerAd ad = new FacebookBannerAd(_context, _activity, _bridge, adId, adSize);
         _bannerAds.put(adId, ad);
         return true;
     }
@@ -328,7 +326,7 @@ public class FacebookAds implements PluginProtocol {
             return false;
         }
         FacebookNativeAd ad =
-            new FacebookNativeAd(_context, _activity, adId, layoutName, identifiers);
+            new FacebookNativeAd(_context, _activity, _bridge, adId, layoutName, identifiers);
         _nativeAds.put(adId, ad);
         return true;
     }
@@ -351,7 +349,7 @@ public class FacebookAds implements PluginProtocol {
         if (_interstitialAds.containsKey(adId)) {
             return false;
         }
-        FacebookInterstitialAd ad = new FacebookInterstitialAd(_context, adId);
+        FacebookInterstitialAd ad = new FacebookInterstitialAd(_context, _bridge, adId);
         _interstitialAds.put(adId, ad);
         return true;
     }
@@ -374,7 +372,7 @@ public class FacebookAds implements PluginProtocol {
         if (_rewardedAds.containsKey(adId)) {
             return false;
         }
-        FacebookRewardedAd ad = new FacebookRewardedAd(_context, adId);
+        FacebookRewardedAd ad = new FacebookRewardedAd(_context, _bridge, adId);
         _rewardedAds.put(adId, ad);
         return true;
     }

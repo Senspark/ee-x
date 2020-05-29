@@ -2,6 +2,7 @@ package com.ee.google.analytics;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.IMessageBridge;
 import com.ee.core.MessageBridge;
 import com.ee.core.MessageHandler;
 import com.ee.core.internal.JsonUtils;
@@ -18,14 +19,17 @@ import static com.google.common.truth.Truth.assertThat;
  */
 
 public class GoogleAnalyticsTracker {
-    private static final String k__key   = "key";
+    private static final String k__key = "key";
     private static final String k__value = "value";
 
-    private String  _trackingId;
+    private IMessageBridge _bridge;
+    private String _trackingId;
     private Tracker _tracker;
 
-    GoogleAnalyticsTracker(@NonNull com.google.android.gms.analytics.GoogleAnalytics analytics,
+    GoogleAnalyticsTracker(@NonNull IMessageBridge bridge,
+                           @NonNull com.google.android.gms.analytics.GoogleAnalytics analytics,
                            @NonNull String trackingId) {
+        _bridge = bridge;
         _trackingId = trackingId;
         _tracker = analytics.newTracker(trackingId);
         registerHandlers();
@@ -33,6 +37,7 @@ public class GoogleAnalyticsTracker {
 
     void destroy() {
         deregisterHandlers();
+        _bridge = null;
         _tracker = null;
         _trackingId = null;
     }
@@ -53,53 +58,37 @@ public class GoogleAnalyticsTracker {
     }
 
     private void registerHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-                assertThat(dict).isNotNull();
-                String key = (String) dict.get(k__key);
-                String value = (String) dict.get(k__value);
-                setParameter(key, value);
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+            String key = (String) dict.get(k__key);
+            String value = (String) dict.get(k__value);
+            setParameter(key, value);
+            return "";
         }, k__setParameter());
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                setAdvertisingIdCollectionEnabled(Utils.toBoolean(message));
-                return "";
-            }
+        _bridge.registerHandler(message -> {
+            setAdvertisingIdCollectionEnabled(Utils.toBoolean(message));
+            return "";
         }, k__setAllowIDFACollection());
 
-        bridge.registerHandler(new MessageHandler() {
-            @NonNull
-            @Override
-            public String handle(@NonNull String message) {
-                Map<String, Object> rawDict = JsonUtils.convertStringToDictionary(message);
-                assertThat(rawDict).isNotNull();
+        _bridge.registerHandler(message -> {
+            Map<String, Object> rawDict = JsonUtils.convertStringToDictionary(message);
+            assertThat(rawDict).isNotNull();
 
-                Map<String, String> dict = new HashMap<>();
-                for (String key : rawDict.keySet()) {
-                    dict.put(key, (String) rawDict.get(key));
-                }
-                send(dict);
-                return "";
+            Map<String, String> dict = new HashMap<>();
+            for (String key : rawDict.keySet()) {
+                dict.put(key, (String) rawDict.get(key));
             }
+            send(dict);
+            return "";
         }, k__send());
     }
 
     private void deregisterHandlers() {
-        MessageBridge bridge = MessageBridge.getInstance();
-
-        bridge.deregisterHandler(k__setParameter());
-        bridge.deregisterHandler(k__setAllowIDFACollection());
-        bridge.deregisterHandler(k__send());
+        _bridge.deregisterHandler(k__setParameter());
+        _bridge.deregisterHandler(k__setAllowIDFACollection());
+        _bridge.deregisterHandler(k__send());
     }
 
     @SuppressWarnings("WeakerAccess")

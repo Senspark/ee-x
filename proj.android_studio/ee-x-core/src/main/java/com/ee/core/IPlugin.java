@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 /**
  * Created by Zinge on 6/1/16.
  */
-public interface PluginProtocol {
+public interface IPlugin {
     /**
      * Gets the name of the plugin.
      */

@@ -8,7 +8,7 @@ import android.graphics.Point;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
@@ -28,7 +28,7 @@ import static com.google.common.truth.Truth.assertThat;
  * Created by Zinge on 10/13/17.
  */
 
-public class AdMob implements PluginProtocol {
+public class AdMob implements IPlugin {
     private static final String kPrefix = "AdMob";
 
     private static final String k__initialize = kPrefix + "_initialize";

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.PluginManager;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 
 import java.util.Locale;
@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by Zinge on 3/29/17.
  */
 
-public class Notification implements PluginProtocol {
+public class Notification implements IPlugin {
     private static final String k__notification_schedule = "__notification_schedule";
     private static final String k__notification_unschedule_all = "__notification_unschedule_all";
     private static final String k__notification_unschedule = "__notification_unschedule";

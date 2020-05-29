@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.MessageHandler;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,7 +28,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.Map;
 
-public class Play implements PluginProtocol {
+public class Play implements IPlugin {
     private static final String k_isSignedIn = "Play_isSignedIn";
     private static final String k_signin = "Play_signin";
     private static final String k_signout = "Play_signout";

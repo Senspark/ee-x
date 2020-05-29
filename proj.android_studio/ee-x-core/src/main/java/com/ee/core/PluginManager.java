@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class PluginManager {
     public interface PluginCreator {
-        PluginProtocol create(@NonNull Context context, @NonNull IMessageBridge bridge);
+        IPlugin create(@NonNull Context context, @NonNull IMessageBridge bridge);
     }
 
     private static final Logger _logger = new Logger(PluginManager.class.getName());
@@ -28,7 +28,7 @@ public class PluginManager {
     private Context _context;
     private Activity _activity;
     private final IMessageBridge _bridge;
-    private final Map<String, PluginProtocol> _plugins;
+    private final Map<String, IPlugin> _plugins;
     private final Map<String, String> _classes;
 
     private static class Holder {
@@ -90,7 +90,7 @@ public class PluginManager {
             Class<?> clazz = Class.forName(className);
             Constructor<?> constructor = clazz.getConstructor(Context.class, IMessageBridge.class);
             Object object = constructor.newInstance(_context, _bridge);
-            _plugins.put(name, (PluginProtocol) object);
+            _plugins.put(name, (IPlugin) object);
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (NoSuchMethodException ex) {
@@ -115,7 +115,7 @@ public class PluginManager {
     }
 
     @Nullable
-    public PluginProtocol getPlugin(@NonNull String pluginName) {
+    public IPlugin getPlugin(@NonNull String pluginName) {
         if (!_plugins.containsKey(pluginName)) {
             return null;
         }

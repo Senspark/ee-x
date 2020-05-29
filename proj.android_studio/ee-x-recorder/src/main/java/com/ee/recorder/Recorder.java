@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.Utils;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +23,7 @@ import java.util.Locale;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class Recorder implements PluginProtocol {
+public class Recorder implements IPlugin {
     private static final String k__isSupported = "Recorder_isSupported";
     private static final String k__startRecording = "Recorder_startRecording";
     private static final String k__stopRecording = "Recorder_stopRecording";

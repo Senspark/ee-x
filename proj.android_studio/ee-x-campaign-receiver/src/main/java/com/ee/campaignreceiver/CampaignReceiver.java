@@ -12,10 +12,10 @@ import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.Utils;
 
-public class CampaignReceiver /* extends BroadcastReceiver */ implements InstallReferrerStateListener, PluginProtocol {
+public class CampaignReceiver /* extends BroadcastReceiver */ implements InstallReferrerStateListener, IPlugin {
     private static final String k__initialize = "CampaignReceiver_initialize";
     private static final String k__onReceivedLink = "CampaignReceiver_onReceivedLink";
 

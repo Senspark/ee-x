@@ -8,14 +8,14 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.Utils;
 import com.google.firebase.perf.metrics.Trace;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FirebasePerformance implements PluginProtocol {
+public class FirebasePerformance implements IPlugin {
     private static final String k__setDataCollectionEnabled = "FirebasePerformance_setDataCollectionEnabled";
     private static final String k__isDataCollectionEnabled = "FirebasePerformance_isDataCollectionEnabled";
     private static final String k__startTrace = "FirebasePerformance_startTrace";

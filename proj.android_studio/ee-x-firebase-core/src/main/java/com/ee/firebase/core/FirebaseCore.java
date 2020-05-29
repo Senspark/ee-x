@@ -8,13 +8,13 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.google.firebase.FirebaseApp;
 
 /**
  * Created by Zinge on 7/4/16.
  */
-public class FirebaseCore implements PluginProtocol {
+public class FirebaseCore implements IPlugin {
     private static final Logger _logger = new Logger(FirebaseCore.class.getName());
 
     private native void setActivity(Object activity);

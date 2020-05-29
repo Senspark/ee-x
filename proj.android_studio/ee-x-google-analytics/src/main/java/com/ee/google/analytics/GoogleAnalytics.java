@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.analytics.HitBuilders;
@@ -26,7 +26,7 @@ import static com.google.common.truth.Truth.assertThat;
 /**
  * Created by Zinge on 10/13/17.
  */
-public class GoogleAnalytics implements PluginProtocol {
+public class GoogleAnalytics implements IPlugin {
     private static final String k__setDispatchInterval =
         "GoogleAnalytics_setDispatchInterval";
     private static final String k__setDryRun = "GoogleAnalytics_setDryRun";

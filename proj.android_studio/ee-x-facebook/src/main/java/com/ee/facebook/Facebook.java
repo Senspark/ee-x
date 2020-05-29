@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.facebook.AccessToken;
@@ -50,7 +50,7 @@ import static com.google.common.truth.Truth.assertThat;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class Facebook implements PluginProtocol {
+public class Facebook implements IPlugin {
     private static final String k__registerNotifications = "Facebook_registerNotifications";
     private static final String k__isLoggedIn = "Facebook_isLoggedIn";
     private static final String k__logIn = "Facebook_logIn";

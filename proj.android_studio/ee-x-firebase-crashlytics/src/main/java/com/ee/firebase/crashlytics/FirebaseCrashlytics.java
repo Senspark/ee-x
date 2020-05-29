@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.Utils;
 
-public class FirebaseCrashlytics implements PluginProtocol {
+public class FirebaseCrashlytics implements IPlugin {
     private static final String kLog = "FirebaseCrashlytics_log";
 
     private static final Logger _logger = new Logger(FirebaseCrashlytics.class.getName());

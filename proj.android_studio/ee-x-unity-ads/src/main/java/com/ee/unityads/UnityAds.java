@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.unity3d.ads.IUnityAdsListener;
@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import static com.google.common.truth.Truth.assertThat;
 
-public class UnityAds implements PluginProtocol {
+public class UnityAds implements IPlugin {
     private static final String kPrefix = "UnityAds";
 
     private static final String k__initialize = kPrefix + "_initialize";

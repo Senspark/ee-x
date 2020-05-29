@@ -8,11 +8,11 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.Utils;
 import com.tenjin.android.TenjinSDK;
 
-public class Tenjin implements PluginProtocol {
+public class Tenjin implements IPlugin {
     private static final String k__initialize = "Tenjin_initialize";
 
     private static final Logger _logger = new Logger(Tenjin.class.getName());

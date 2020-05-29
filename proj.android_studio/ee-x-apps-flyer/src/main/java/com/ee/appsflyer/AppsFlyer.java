@@ -11,14 +11,13 @@ import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageHandler;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 
 import java.util.Map;
 
-public class AppsFlyer implements PluginProtocol {
+public class AppsFlyer implements IPlugin {
     private static final String kPrefix = "AppsFlyer";
     private static final String kInitialize = kPrefix + "Initialize";
     private static final String kStartTracking = kPrefix + "StartTracking";

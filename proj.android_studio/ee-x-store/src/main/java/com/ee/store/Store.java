@@ -21,7 +21,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 
@@ -45,7 +45,7 @@ import static com.google.common.truth.Truth.assertThat;
  * Created by Zinge on 5/16/17.
  */
 
-public class Store implements PluginProtocol {
+public class Store implements IPlugin {
     private static final Logger _logger = new Logger(Store.class.getName());
 
     private static final String kPrefix = "Store";

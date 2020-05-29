@@ -8,7 +8,7 @@ import android.graphics.Point;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.PluginProtocol;
+import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
 import com.ee.core.internal.Utils;
 import com.ee.facebook.ads.BuildConfig;
@@ -25,7 +25,7 @@ import static com.google.common.truth.Truth.assertThat;
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-public class FacebookAds implements PluginProtocol {
+public class FacebookAds implements IPlugin {
     private static final String kPrefix = "FacebookAds";
     private static final String k__getTestDeviceHash = kPrefix + "_getTestDeviceHash";
     private static final String k__addTestDevice = kPrefix + "_addTestDevice";

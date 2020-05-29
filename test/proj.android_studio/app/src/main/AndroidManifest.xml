@@ -30,7 +30,7 @@
 
         <meta-data
             android:name="android.app.lib_name"
-            android:value="_ee_x_test" />
+            android:value="ee_x_test" />
     </application>
 
     <uses-feature android:glEsVersion="0x00020000" />

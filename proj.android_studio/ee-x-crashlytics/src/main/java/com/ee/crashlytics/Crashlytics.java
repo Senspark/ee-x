@@ -85,11 +85,6 @@ public class Crashlytics implements PluginProtocol {
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 

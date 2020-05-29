@@ -103,11 +103,6 @@ public class Play implements IPlugin {
         deregisterHandlers();
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(new MessageHandler() {
             @NonNull

@@ -82,11 +82,6 @@ public class FirebasePerformance implements IPlugin {
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         Utils.checkMainThread();
         _bridge.registerHandler(message -> {

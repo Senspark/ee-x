@@ -82,11 +82,6 @@ public class Notification implements IPlugin {
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(msg -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);

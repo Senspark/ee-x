@@ -73,11 +73,6 @@ public class Tenjin implements IPlugin {
     }
 
     @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
-    @Override
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();

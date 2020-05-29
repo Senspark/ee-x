@@ -64,9 +64,4 @@ public class FirebaseCore implements IPlugin {
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         return false;
     }
-
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
 }

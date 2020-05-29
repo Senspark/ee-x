@@ -110,11 +110,6 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(message -> {
             assertThat(_activity).isNotNull();

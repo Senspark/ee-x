@@ -93,11 +93,6 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(message -> {
             initialize();

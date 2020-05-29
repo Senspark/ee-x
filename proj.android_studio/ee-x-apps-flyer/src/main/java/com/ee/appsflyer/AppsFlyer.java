@@ -85,11 +85,6 @@ public class AppsFlyer implements IPlugin {
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(message -> {
             String devKey = message;

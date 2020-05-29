@@ -160,11 +160,6 @@ public class Facebook implements IPlugin {
     }
 
     @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
-    @Override
     public void destroy() {
         Utils.checkMainThread();
         deregisterHandlers();

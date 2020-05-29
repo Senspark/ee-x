@@ -2,6 +2,7 @@ package com.ee.core;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -50,9 +51,4 @@ public interface IPlugin {
     void destroy();
 
     boolean onActivityResult(int requestCode, int responseCode, Intent data);
-
-    /**
-     * @return True if the back key pressed was handled.
-     */
-    boolean onBackPressed();
 }

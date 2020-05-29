@@ -114,11 +114,6 @@ public class GameCenter implements PluginProtocol {
         deregisterHandlers();
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         MessageBridge bridge = MessageBridge.getInstance();
 

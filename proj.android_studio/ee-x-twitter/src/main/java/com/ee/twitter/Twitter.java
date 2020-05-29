@@ -93,11 +93,6 @@ public class Twitter implements PluginProtocol {
         deregisterHandlers();
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(new MessageHandler() {
             @NonNull

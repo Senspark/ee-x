@@ -108,11 +108,6 @@ public class Recorder implements IPlugin {
         _bridge = null;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(message -> Utils.toString(isSupported()), k__isSupported);
 

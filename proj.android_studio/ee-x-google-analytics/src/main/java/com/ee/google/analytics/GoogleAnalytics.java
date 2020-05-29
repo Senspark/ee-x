@@ -119,11 +119,6 @@ public class GoogleAnalytics implements IPlugin {
         return false;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(message -> {
             int seconds = Integer.valueOf(message);

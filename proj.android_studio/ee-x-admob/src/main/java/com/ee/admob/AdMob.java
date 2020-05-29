@@ -130,7 +130,7 @@ public class AdMob implements PluginProtocol {
                 _nativeAds.get(key).onDestroy(_activity);
             }
             for (String key : _rewardedAds.keySet()) {
-                _rewardedAds.get(key).onCreate(_activity);
+                _rewardedAds.get(key).onDestroy(_activity);
             }
             _activity = null;
         }

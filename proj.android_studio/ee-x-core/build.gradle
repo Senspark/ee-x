@@ -24,6 +24,8 @@ dependencies {
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
     api 'io.reactivex.rxjava3:rxjava:3.0.2'
 
+    api 'net.sourceforge.streamsupport:streamsupport:1.7.2'
+
     // 2.10.x has issue with Android 4.3 (crash on Samsung Galaxy S3 in prelaunch report):
     // Could not find class 'java.beans.Transient', referenced from method com.fasterxml.jackson.databind.ext.Java7SupportImpl.<init>
     // implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'

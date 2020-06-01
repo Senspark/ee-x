@@ -37,43 +37,32 @@ namespace {
 #else
 void testMultiAds() {
     auto ad = std::make_shared<ee::MultiRewardedAd>();
+    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+        getAdMob()->createRewardedAd(getAdMobRewardedAdTestId())));
+    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+        getAppLovin()->createRewardedAd()));
+    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+        getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));
+    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+        getUnityAds()->createRewardedAd(getUnityRewardedAdId())));
+    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
+        getVungle()->createRewardedAd(getVungleRewardedAdId())));
 
-    ee::runOnUiThread([ad] {
-        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-            getAdMob()->createRewardedAd(getAdMobRewardedAdTestId())));
-        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-            getAppLovin()->createRewardedAd()));
-        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-            getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));
-        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-            getUnityAds()->createRewardedAd(getUnityRewardedAdId())));
-        ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-            getVungle()->createRewardedAd(getVungleRewardedAdId())));
-    });
+    scheduleForever(1.0f, 3.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
+                        getLogger().info("Load rewarded ad");
+                        auto result = co_await ad->load();
+                        logCurrentThread();
+                        getLogger().info("Load rewarded ad: result = %d",
+                                         static_cast<int>(result));
+                    }));
 
-    scheduleForever(1.0f, 3.0f, [ad] {
-        logCurrentThread();
-        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
-            logCurrentThread();
-            getLogger().info("Load rewarded ad");
-            auto result = co_await ad->load();
-            logCurrentThread();
-            getLogger().info("Load rewarded ad: result = %d",
-                             static_cast<int>(result));
-        }));
-    });
-
-    scheduleForever(2.0f, 3.0f, [ad] {
-        logCurrentThread();
-        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
-            logCurrentThread();
-            getLogger().info("Show rewarded ad");
-            auto result = co_await ad->show();
-            logCurrentThread();
-            getLogger().info("Show rewarded ad result = %d",
-                             static_cast<int>(result));
-        }));
-    });
+    scheduleForever(2.0f, 3.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
+                        getLogger().info("Show rewarded ad");
+                        auto result = co_await ad->show();
+                        logCurrentThread();
+                        getLogger().info("Show rewarded ad result = %d",
+                                         static_cast<int>(result));
+                    }));
 }
 #endif
 } // namespace

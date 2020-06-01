@@ -18,12 +18,9 @@ ee::FacebookAds* getFacebookAds() {
     static auto plugin = ee::FacebookAds();
     static bool initialized = false;
     if (not initialized) {
-        ee::runOnUiThreadAndWait([] {
-            plugin.clearTestDevices();
-            plugin.addTestDevice(plugin.getTestDeviceHash());
-            plugin.addTestDevice(
-                "ad45c323f6a9b07f7a9c072549efb279"); // BlueStacks.
-        });
+        plugin.clearTestDevices();
+        plugin.addTestDevice(plugin.getTestDeviceHash());
+        plugin.addTestDevice("ad45c323f6a9b07f7a9c072549efb279"); // BlueStacks.
         initialized = true;
     }
     return &plugin;
@@ -61,99 +58,75 @@ void testFacebookNativeAd() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    auto ad = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>([] {
-        getLogger().info("Create Facebook native ad");
-        auto ad = createFacebookNativeAd();
-        ad->setVisible(true);
-        return ad;
-    });
+    auto ad = createFacebookNativeAd();
+    ad->setVisible(true);
 
     float delay = 0.0f;
     scheduleForever(delay += 1.0f, 5.0f, [ad] {
-        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> { //
+        ee::noAwait([ad]() -> ee::Task<> { //
             co_await ad->load();
-        }));
+        });
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
-        ee::runOnUiThread([screenWidth, screenHeight, ad] {
-            getLogger().info("Resize = screen size / 4");
-            ad->setAnchor(0.5f, 0.5f);
-            ad->setPosition(screenWidth / 2, screenHeight / 2);
-            ad->setSize(screenWidth / 4, screenHeight / 4);
-        });
+        getLogger().info("Resize = screen size / 4");
+        ad->setAnchor(0.5f, 0.5f);
+        ad->setPosition(screenWidth / 2, screenHeight / 2);
+        ad->setSize(screenWidth / 4, screenHeight / 4);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [ad] {
-        ee::runOnUiThread([ad] {
-            getLogger().info("Move to top-left");
-            ad->setAnchor(0, 0);
-            ad->setPosition(0, 0);
-        });
+        getLogger().info("Move to top-left");
+        ad->setAnchor(0, 0);
+        ad->setPosition(0, 0);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, ad] {
-        ee::runOnUiThread([screenWidth, ad] {
-            getLogger().info("Move to top-right");
-            ad->setAnchor(1, 0);
-            ad->setPosition(screenWidth, 0);
-        });
+        getLogger().info("Move to top-right");
+        ad->setAnchor(1, 0);
+        ad->setPosition(screenWidth, 0);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
-        ee::runOnUiThread([screenWidth, screenHeight, ad] {
-            getLogger().info("Move to bottom-right");
-            ad->setAnchor(1, 1);
-            ad->setPosition(screenWidth, screenHeight);
-        });
+        getLogger().info("Move to bottom-right");
+        ad->setAnchor(1, 1);
+        ad->setPosition(screenWidth, screenHeight);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenHeight, ad] {
-        ee::runOnUiThread([screenHeight, ad] {
-            getLogger().info("Move to bottom-left");
-            ad->setAnchor(0, 1);
-            ad->setPosition(0, screenHeight);
-        });
+        getLogger().info("Move to bottom-left");
+        ad->setAnchor(0, 1);
+        ad->setPosition(0, screenHeight);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
-        ee::runOnUiThread([screenWidth, screenHeight, ad] {
-            getLogger().info("Move to center");
-            ad->setAnchor(0.5f, 0.5f);
-            ad->setPosition(screenWidth / 2, screenHeight / 2);
-        });
+        getLogger().info("Move to center");
+        ad->setAnchor(0.5f, 0.5f);
+        ad->setPosition(screenWidth / 2, screenHeight / 2);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
-        ee::runOnUiThread([screenWidth, screenHeight, ad] {
-            getLogger().info("Resize = screen size");
-            ad->setSize(screenWidth, screenHeight);
-        });
+        getLogger().info("Resize = screen size");
+        ad->setSize(screenWidth, screenHeight);
     });
 
     scheduleForever(delay += 1.0f, 8.0f, [screenWidth, screenHeight, ad] {
-        ee::runOnUiThread([screenWidth, screenHeight, ad] {
-            getLogger().info("Resize = screen size / 2");
-            ad->setSize(screenWidth / 2, screenHeight / 2);
-        });
+        getLogger().info("Resize = screen size / 2");
+        ad->setSize(screenWidth / 2, screenHeight / 2);
     });
 }
 
 void testFacebookInterstitialAd() {
     auto interstitialAd = createFacebookInterstitialAd();
-    scheduleForever(1.0f, 3.0f, [interstitialAd] {
-        logCurrentThread();
-        ee::runOnUiThread([interstitialAd] {
-            logCurrentThread();
-            interstitialAd->load();
-        });
-    });
-    scheduleForever(2.0f, 3.0f, [interstitialAd] {
-        logCurrentThread();
-        ee::runOnUiThread([interstitialAd] {
-            logCurrentThread();
-            interstitialAd->show();
-        });
-    });
+    scheduleForever(1.0f, 3.0f,
+                    ee::makeAwaiter([interstitialAd]() -> ee::Task<> { //
+                        co_await interstitialAd->load();
+                        logCurrentThread();
+                    }));
+    scheduleForever(2.0f, 3.0f,
+                    ee::makeAwaiter([interstitialAd]() -> ee::Task<> {
+                        co_await interstitialAd->show();
+                        logCurrentThread();
+                    }));
 }
 } // namespace eetest

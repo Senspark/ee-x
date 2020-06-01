@@ -56,9 +56,9 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     loadButton->setNormalizedPosition(cocos2d::Vec2(0.4f, 0.6f));
     loadButton->setTitleText("LOAD");
     loadButton->addClickEventListener(std::bind([this] {
-        ee::runOnUiThread(ee::makeAwaiter([this]() -> ee::Task<> { //
+        ee::noAwait([this]() -> ee::Task<> { //
             co_await adView_->load();
-        }));
+        });
     }));
     addChild(loadButton);
 
@@ -79,12 +79,9 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
                         ee::Metrics::fromPoint(delta.x).toPixel();
                     auto deltaYInPixels =
                         ee::Metrics::fromPoint(delta.y).toPixel();
-                    ee::runOnUiThread([this, deltaXInPixels, deltaYInPixels] {
-                        auto [width, height] = adView_->getSize();
-                        adView_->setSize(
-                            width + static_cast<int>(deltaXInPixels),
-                            height - static_cast<int>(deltaYInPixels));
-                    });
+                    auto [width, height] = adView_->getSize();
+                    adView_->setSize(width + static_cast<int>(deltaXInPixels),
+                                     height - static_cast<int>(deltaYInPixels));
                 }
                 firstTouch_ = false;
                 lastPosition_ = resizeButton->getTouchMovePosition();
@@ -96,20 +93,16 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     auto showButton = createButton();
     showButton->setNormalizedPosition(cocos2d::Vec2(0.4f, 0.4f));
     showButton->setTitleText("SHOW");
-    showButton->addClickEventListener(std::bind([this] {
-        ee::runOnUiThread([this] { //
-            adView_->setVisible(true);
-        });
+    showButton->addClickEventListener(std::bind([this] { //
+        adView_->setVisible(true);
     }));
     addChild(showButton);
 
     auto hideButton = createButton();
     hideButton->setNormalizedPosition(cocos2d::Vec2(0.6f, 0.4f));
     hideButton->setTitleText("HIDE");
-    hideButton->addClickEventListener(std::bind([this] {
-        ee::runOnUiThread([this] { //
-            adView_->setVisible(false);
-        });
+    hideButton->addClickEventListener(std::bind([this] { //
+        adView_->setVisible(false);
     }));
     addChild(hideButton);
 
@@ -117,10 +110,8 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     moveTopLeftButton->setNormalizedPosition(cocos2d::Vec2(0.1f, 0.9f));
     moveTopLeftButton->setTitleText("MOVE");
     moveTopLeftButton->addClickEventListener(std::bind([this] {
-        ee::runOnUiThread([this] {
-            adView_->setAnchor(0, 0);
-            adView_->setPosition(0, 0);
-        });
+        adView_->setAnchor(0, 0);
+        adView_->setPosition(0, 0);
     }));
     addChild(moveTopLeftButton);
 
@@ -128,10 +119,8 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     moveTopRightButton->setNormalizedPosition(cocos2d::Vec2(0.9f, 0.9f));
     moveTopRightButton->setTitleText("MOVE");
     moveTopRightButton->addClickEventListener(std::bind([this, screenWidth] {
-        ee::runOnUiThread([this, screenWidth] {
-            adView_->setAnchor(1, 0);
-            adView_->setPosition(screenWidth, 0);
-        });
+        adView_->setAnchor(1, 0);
+        adView_->setPosition(screenWidth, 0);
     }));
     addChild(moveTopRightButton);
 
@@ -139,10 +128,8 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     moveBottomLeftButton->setNormalizedPosition(cocos2d::Vec2(0.1f, 0.1f));
     moveBottomLeftButton->setTitleText("MOVE");
     moveBottomLeftButton->addClickEventListener(std::bind([this, screenHeight] {
-        ee::runOnUiThread([this, screenHeight] {
-            adView_->setAnchor(0, 1);
-            adView_->setPosition(0, screenHeight);
-        });
+        adView_->setAnchor(0, 1);
+        adView_->setPosition(0, screenHeight);
     }));
     addChild(moveBottomLeftButton);
 
@@ -151,10 +138,8 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
     moveBottomRightButton->setTitleText("MOVE");
     moveBottomRightButton->addClickEventListener(
         std::bind([this, screenWidth, screenHeight] {
-            ee::runOnUiThread([this, screenWidth, screenHeight] {
-                adView_->setAnchor(1, 1);
-                adView_->setPosition(screenWidth, screenHeight);
-            });
+            adView_->setAnchor(1, 1);
+            adView_->setPosition(screenWidth, screenHeight);
         }));
     addChild(moveBottomRightButton);
 
@@ -166,11 +151,9 @@ bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
             auto deltaY = touch->getDelta().y;
             auto deltaXInPixels = ee::Metrics::fromPoint(deltaX).toPixel();
             auto deltaYInPixels = ee::Metrics::fromPoint(deltaY).toPixel();
-            ee::runOnUiThread([this, deltaXInPixels, deltaYInPixels] {
-                auto [x, y] = adView_->getPosition();
-                adView_->setPosition(x + static_cast<int>(deltaXInPixels),
-                                     y - static_cast<int>(deltaYInPixels));
-            });
+            auto [x, y] = adView_->getPosition();
+            adView_->setPosition(x + static_cast<int>(deltaXInPixels),
+                                 y - static_cast<int>(deltaYInPixels));
         },
         std::placeholders::_1);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,

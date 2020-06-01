@@ -19,10 +19,8 @@ ee::Vungle* getVungle() {
     static bool initialized;
     if (not initialized) {
         // Initialize Vungle on the main thread.
-        ee::runOnUiThreadAndWait([] {
-            FunctionLogger logger("Initialize Vungle");
-            plugin.initialize(getVungleGameId());
-        });
+        FunctionLogger logger("Initialize Vungle");
+        plugin.initialize(getVungleGameId());
         initialized = true;
     }
     return &plugin;
@@ -42,21 +40,16 @@ std::string getVungleRewardedAdId() {
 
 void testVungleRewardedAd() {
     // Create a Vungle rewarded video on the main thread.
-    auto ad =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
-            FunctionLogger logger("Create Vungle rewarded ad");
-            return std::make_shared<ee::GuardedRewardedAd>(
-                getVungle()->createRewardedAd(getVungleRewardedAdId()));
-        });
+    auto ad = std::make_shared<ee::GuardedRewardedAd>(
+        getVungle()->createRewardedAd(getVungleRewardedAdId()));
 
     float delay = 0.0f;
-    scheduleForever(delay += 5.0f, 5.0f, [ad] {
-        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
-            FunctionLogger logger("Show Vungle rewarded ad");
-            auto result = co_await ad->show();
-            logCurrentThread();
-            getLogger().info("Result = %d", static_cast<int>(result));
-        }));
-    });
+    scheduleForever(delay += 5.0f, 5.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
+                        FunctionLogger logger("Show Vungle rewarded ad");
+                        auto result = co_await ad->show();
+                        logCurrentThread();
+                        getLogger().info("Result = %d",
+                                         static_cast<int>(result));
+                    }));
 }
 } // namespace eetest

@@ -18,10 +18,8 @@ ee::IronSource* getIronSource() {
     static auto plugin = std::make_unique<ee::IronSource>();
     static bool initialized;
     if (not initialized) {
-        ee::runOnUiThreadAndWait([] {
-            FunctionLogger logger("Initialize ironSource");
-            plugin->initialize(getIronSourceGameId());
-        });
+        FunctionLogger logger("Initialize ironSource");
+        plugin->initialize(getIronSourceGameId());
         initialized = true;
     }
     return plugin.get();
@@ -40,19 +38,14 @@ std::string getIronSourceRewardedAdId() {
 }
 
 void testIronSourceRewardedAd() {
-    auto ad =
-        ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IRewardedAd>>([] {
-            FunctionLogger logger("Create ironSource rewarded ad");
-            return std::make_shared<ee::GuardedRewardedAd>(
-                getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
-        });
+    auto ad = std::make_shared<ee::GuardedRewardedAd>(
+        getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
 
     float delay = 0.0f;
-    scheduleForever(delay += 5.0f, 5.0f, [ad] {
-        ee::runOnUiThread(ee::makeAwaiter([ad]() -> ee::Task<> {
-            FunctionLogger logger("Show ironSource rewarded ad");
-            co_await ad->show();
-        }));
-    });
+    scheduleForever(delay += 5.0f, 5.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
+                        FunctionLogger logger("Show ironSource rewarded ad");
+                        co_await ad->show();
+                        logCurrentThread();
+                    }));
 }
 } // namespace eetest

@@ -23,17 +23,13 @@ NativeAdTestScene* createMultiNativeAdTestScene() {
     int screenWidth = static_cast<int>(frameSize.width);
     int screenHeight = static_cast<int>(frameSize.height);
 
-    auto adView = ee::runOnUiThreadAndWaitResult<std::shared_ptr<ee::IAdView>>(
-        [screenWidth, screenHeight] {
-            auto ad = std::make_shared<ee::MultiAdView>();
+    auto ad = std::make_shared<ee::MultiAdView>();
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS ||                                   \
     CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-            ad->addItem(createAdMobNativeAd());
-            ad->addItem(createFacebookNativeAd());
+    ad->addItem(createAdMobNativeAd());
+    ad->addItem(createFacebookNativeAd());
 #endif
-            ad->setSize(screenWidth / 4, screenHeight / 4);
-            return ad;
-        });
-    return NativeAdTestScene::createWithAdView(adView);
+    ad->setSize(screenWidth / 4, screenHeight / 4);
+    return NativeAdTestScene::createWithAdView(ad);
 }
 } // namespace eetest

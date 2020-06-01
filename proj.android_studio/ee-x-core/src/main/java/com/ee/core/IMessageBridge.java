@@ -36,6 +36,15 @@ public interface IMessageBridge {
     boolean registerHandler(MessageHandler handler, @NonNull String tag);
 
     /**
+     * REgisters a new async handler to receive messages from C++.
+     *
+     * @param handler The handler.
+     * @param tag     The unique tag of the handler.
+     * @return Whether the registration was successful.
+     */
+    boolean registerAsyncHandler(AsyncMessageHandler handler, @NonNull String tag);
+
+    /**
      * Deregisters an existing handler not to receive messages from C++.
      *
      * @param tag The unique

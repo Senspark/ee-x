@@ -8,14 +8,12 @@
 
 #import "ee/core/internal/EEMessageBridge.h"
 
-@interface EEMessageBridge () {
+#import "ee/core/internal/EEJsonUtils.h"
+
+@implementation EEMessageBridge {
     /// Registered handlers.
     NSMutableDictionary* handlers_;
 }
-
-@end
-
-@implementation EEMessageBridge
 
 + (instancetype _Nonnull)getInstance {
     static EEMessageBridge* sharedInstance = nil;
@@ -60,6 +58,25 @@
 - (BOOL)registerHandler:(NSString* _Nonnull)tag
                callback:(EEMessageHandler _Nonnull)handler {
     return [self registerHandler:handler tag:tag];
+}
+
+- (BOOL)registerAsyncHandler:(NSString* _Nonnull)tag
+                    callback:(EEMessageAsyncHandler _Nonnull)handler {
+    return [self
+        registerHandler:tag
+               callback:^(NSString* _Nonnull message) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:message];
+
+                   NSString* callbackTag = (NSString*)dict[@"callback_tag"];
+                   NSString* originalMessage = (NSString*)dict[@"message"];
+
+                   handler(
+                       originalMessage, ^(NSString* _Nonnull callbackMessage) {
+                           [self callCpp:callbackTag message:callbackMessage];
+                       });
+                   return @"";
+               }];
 }
 
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag {

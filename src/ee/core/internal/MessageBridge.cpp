@@ -11,6 +11,9 @@
 #include <cassert>
 #include <mutex>
 
+#include <ee/nlohmann/json.hpp>
+
+#include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/SpinLock.hpp"
 
@@ -24,7 +27,8 @@ Self& Self::getInstance() {
 }
 
 Self::MessageBridge()
-    : logger_(Logger::getSystemLogger()) {
+    : logger_(Logger::getSystemLogger())
+    , callbackCounter_(0) {
     handlerLock_ = std::make_unique<SpinLock>();
 }
 
@@ -37,6 +41,27 @@ std::string Self::callCpp(const std::string& tag, const std::string& message) {
         return "";
     }
     return handler(message);
+}
+
+Task<std::string> Self::callAsync(const std::string& tag,
+                                  const std::string& message) {
+    auto awaiter = LambdaAwaiter<std::string>([this, tag,
+                                               message](auto&& resolve) {
+        auto callbackTag = tag + std::to_string(callbackCounter_++);
+        registerHandler(
+            [this, resolve, callbackTag](const std::string& callbackMessage) {
+                deregisterHandler(callbackTag);
+                resolve(callbackMessage);
+                return "";
+            },
+            callbackTag);
+        nlohmann::json json;
+        json["callback_tag"] = callbackTag;
+        json["message"] = message;
+        call(tag, json.dump());
+    });
+    auto result = co_await awaiter;
+    co_return result;
 }
 
 bool Self::registerHandler(const MessageHandler& handler,

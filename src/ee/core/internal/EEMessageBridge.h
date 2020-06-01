@@ -14,25 +14,22 @@
 
 - (BOOL)isHandlerRegistered:(NSString* _Nonnull)tag;
 
-/// @see Super.
 - (BOOL)registerHandler:(EEMessageHandler _Nonnull)handler
                     tag:(NSString* _Nonnull)tag;
 
-/// @see Super.
 - (BOOL)registerHandler:(NSString* _Nonnull)tag
                callback:(EEMessageHandler _Nonnull)handler;
 
-/// @see Super.
+- (BOOL)registerAsyncHandler:(NSString* _Nonnull)tag
+                    callback:(EEMessageAsyncHandler _Nonnull)handler;
+
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag;
 
-/// @see Super.
 - (NSString* _Nonnull)call:(NSString* _Nonnull)tag
                    message:(NSString* _Nonnull)message;
 
-/// @see Super.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag;
 
-/// @see Super.
 - (NSString* _Nonnull)callCpp:(NSString* _Nonnull)tag
                       message:(NSString* _Nonnull)message;
 

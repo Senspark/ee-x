@@ -145,17 +145,14 @@ public class Utils {
         bridge.registerHandler(message ->
             toString(runOnUiThread(() -> bridge.callCpp(k__runOnUiThreadCallback))), k__runOnUiThread);
 
-        bridge.registerHandler(message -> {
+        bridge.registerAsyncHandler((message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
-            String tag = (String) dict.get("callback_id");
-            Double delay = (Double) dict.get("delay_time");
-            assertThat(tag).isNotNull();
+            Double delay = (Double) dict.get("delay");
             assertThat(delay).isNotNull();
 
-            runOnUiThreadDelayed(delay.floatValue(), () -> bridge.callCpp(tag));
-            return "";
+            runOnUiThreadDelayed(delay.floatValue(), () -> resolver.resolve(""));
         }, k__runOnUiThreadDelayed);
 
         bridge.registerHandler(message -> {
@@ -209,19 +206,12 @@ public class Utils {
             return String.valueOf(density);
         }, k__getDensity);
 
-        bridge.registerHandler(message -> {
-            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-            assertThat(dict).isNotNull();
-
-            String callbackTag = (String) dict.get("callback_tag");
-            assertThat(callbackTag).isNotNull();
-
+        bridge.registerAsyncHandler((message, resolver) -> {
             Context context = PluginManager.getInstance().getContext();
             getDeviceId(context)
                 .subscribe(
-                    result -> bridge.callCpp(callbackTag, result),
-                    exception -> bridge.callCpp(callbackTag, ""));
-            return "";
+                    resolver::resolve,
+                    exception -> resolver.resolve(""));
         }, k__getDeviceId);
 
         bridge.registerHandler(message -> {
@@ -250,23 +240,20 @@ public class Utils {
             return toString(sendMail(context, recipient, subject, body));
         }, k__sendMail);
 
-        bridge.registerHandler(message -> {
+        bridge.registerAsyncHandler((message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
-            String callbackTag = (String) dict.get("callback_tag");
             String hostName = (String) dict.get("host_name");
             Double timeOut = (Double) dict.get("time_out");
             assertThat(hostName).isNotNull();
-            assertThat(callbackTag).isNotNull();
             assertThat(timeOut).isNotNull();
 
             Context context = PluginManager.getInstance().getContext();
             testConnection(context, hostName, timeOut.floatValue())
                 .subscribe(
-                    result -> bridge.callCpp(callbackTag, Utils.toString(result)),
-                    exception -> bridge.callCpp(callbackTag, Utils.toString(false)));
-            return "";
+                    result -> resolver.resolve(Utils.toString(result)),
+                    exception -> resolver.resolve(Utils.toString(false)));
         }, k__testConnection);
 
         bridge.registerHandler(message -> {

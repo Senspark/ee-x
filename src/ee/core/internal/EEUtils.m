@@ -129,18 +129,17 @@ static NSString* const k__testConnection                = @"Utils_testConnection
                                     }]];
                    }];
 
-    [bridge registerHandler:k__runOnUiThreadDelayed
-                   callback:^NSString* _Nonnull(NSString* _Nonnull message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* tag = dict[@"callback_id"];
-                       float delay = [dict[@"delay_time"] floatValue];
-                       [self runOnMainThreadDelayed:delay
-                                           callback:^{
-                                               [bridge callCpp:tag];
-                                           }];
-                       return @"";
-                   }];
+    [bridge registerAsyncHandler:k__runOnUiThreadDelayed
+                        callback:^(NSString* _Nonnull message,
+                                   EEMessageAsyncResolver _Nonnull resolver) {
+                            NSDictionary* dict =
+                                [EEJsonUtils convertStringToDictionary:message];
+                            float delay = [dict[@"delay"] floatValue];
+                            [self runOnMainThreadDelayed:delay
+                                                callback:^{
+                                                    resolver(@"");
+                                                }];
+                        }];
 
     [bridge
         registerHandler:k__isApplicationInstalled
@@ -188,17 +187,12 @@ static NSString* const k__testConnection                = @"Utils_testConnection
                        return [NSString stringWithFormat:@"%f", density];
                    }];
 
-    [bridge registerHandler:k__getDeviceId
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* callbackTag = dict[@"callback_tag"];
-                       NSAssert(callbackTag != nil, @"");
-
-                       NSString* deviceId = [self getDeviceId];
-                       [bridge callCpp:callbackTag message:deviceId];
-                       return @"";
-                   }];
+    [bridge registerAsyncHandler:k__getDeviceId
+                        callback:^(NSString* _Nonnull message,
+                                   EEMessageAsyncResolver _Nonnull resolver) {
+                            NSString* deviceId = [self getDeviceId];
+                            resolver(deviceId);
+                        }];
 
     [bridge registerHandler:k__sendMail
                    callback:^(NSString* message) {
@@ -211,29 +205,25 @@ static NSString* const k__testConnection                = @"Utils_testConnection
                                                     subject:subject
                                                        body:body]];
                    }];
-    [bridge registerHandler:k__testConnection
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
+    [bridge registerAsyncHandler:k__testConnection
+                        callback:^(NSString* _Nonnull message,
+                                   EEMessageAsyncResolver _Nonnull resolver) {
+                            NSDictionary* dict =
+                                [EEJsonUtils convertStringToDictionary:message];
 
-                       NSString* callbackTag = dict[@"callback_tag"];
-                       NSString* hostName = dict[@"host_name"];
-                       float timeOut = [dict[@"time_out"] floatValue];
-                       NSAssert(callbackTag != nil, @"");
-                       NSAssert(hostName != nil, @"");
+                            NSString* hostName = dict[@"host_name"];
+                            float timeOut = [dict[@"time_out"] floatValue];
+                            NSAssert(hostName != nil, @"");
 
-                       [[self testConnection:hostName timeOut:timeOut]
-                           subscribeNext:^(id _Nullable x) {
-                               BOOL result = [x boolValue];
-                               [bridge callCpp:callbackTag
-                                       message:[self toString:result]];
-                           }
-                           error:^(NSError* _Nullable error) {
-                               [bridge callCpp:callbackTag
-                                       message:[self toString:NO]];
-                           }];
-                       return @"";
-                   }];
+                            [[self testConnection:hostName timeOut:timeOut]
+                                subscribeNext:^(id _Nullable x) {
+                                    BOOL result = [x boolValue];
+                                    resolver([self toString:result]);
+                                }
+                                error:^(NSError* _Nullable error) {
+                                    resolver([self toString:NO]);
+                                }];
+                        }];
 }
 
 + (BOOL)isApplicationInstalled:(NSString* _Nonnull)applicationId {

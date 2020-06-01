@@ -2,8 +2,12 @@ package com.ee.core;
 
 import androidx.annotation.NonNull;
 
+import com.ee.core.internal.JsonUtils;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Created by Zinge on 3/29/17.
@@ -44,8 +48,8 @@ public class MessageBridge implements IMessageBridge {
     /**
      * Calls a handler from Java with a message.
      *
-     * @param tag The unique tag of the handler.
-     * @param msg The message.
+     * @param tag     The unique tag of the handler.
+     * @param message The message.
      * @return Reply message from Java.
      */
     @NonNull
@@ -61,8 +65,8 @@ public class MessageBridge implements IMessageBridge {
     /**
      * Statically calls a handler from Java with a message.
      *
-     * @param tag The unique tag of the handler.
-     * @param msg The message.
+     * @param tag     The unique tag of the handler.
+     * @param message The message.
      * @return Reply message from Java.
      */
     @NonNull
@@ -89,8 +93,8 @@ public class MessageBridge implements IMessageBridge {
     /**
      * Calls a handler from C++ with a message.
      *
-     * @param tag The unique tag of the handler.
-     * @param msg The message.
+     * @param tag     The unique tag of the handler.
+     * @param message The message.
      * @return Reply message from C++.
      */
     @NonNull
@@ -108,6 +112,22 @@ public class MessageBridge implements IMessageBridge {
             _handlers.put(tag, handler);
             return true;
         }
+    }
+
+    public boolean registerAsyncHandler(AsyncMessageHandler handler, @NonNull String tag) {
+        return registerHandler(message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            String callbackTag = (String) dict.get("callback_tag");
+            String originalMessage = (String) dict.get("message");
+            assertThat(callbackTag).isNotNull();
+            assertThat(originalMessage).isNotNull();
+
+            handler.handle(originalMessage, callbackMessage ->
+                callCpp(callbackTag, callbackMessage));
+            return "";
+        }, tag);
     }
 
     /**

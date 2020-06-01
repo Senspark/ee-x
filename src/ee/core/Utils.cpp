@@ -215,22 +215,16 @@ bool runOnUiThread(const Runnable<void>& runnable) {
 }
 
 void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
-    auto&& bridge = MessageBridge::getInstance();
-    static int counter = 0;
-    auto callbackTag = ee::format("runOnUiThreadDelayed_%d", counter++);
-    bridge.registerHandler(
-        [func, callbackTag, &bridge](const std::string& msg) {
-            bridge.deregisterHandler(callbackTag);
-            if (func) {
-                func();
-            }
-            return "";
-        },
-        callbackTag);
-    nlohmann::json json;
-    json["callback_id"] = callbackTag;
-    json["delay_time"] = delay;
-    bridge.call(k__runOnUiThreadDelayed, json.dump());
+    noAwait([func, delay]() -> Task<> {
+        nlohmann::json json;
+        json["delay"] = delay;
+        auto&& bridge = MessageBridge::getInstance();
+        auto response =
+            co_await bridge.callAsync(k__runOnUiThreadDelayed, json.dump());
+        if (func) {
+            func();
+        }
+    });
 }
 
 void runOnUiThreadAndWait(const Runnable<void>& runnable) {
@@ -306,24 +300,9 @@ float getDensity() {
 }
 
 Task<std::string> getDeviceId() {
-    auto awaiter = LambdaAwaiter<std::string>([](auto&& resolve) {
-        static int counter;
-        auto callbackTag = "getDeviceId_" + std::to_string(counter++);
-
-        auto&& bridge = MessageBridge::getInstance();
-        bridge.registerHandler(
-            [resolve, &bridge, callbackTag](const std::string& message) {
-                bridge.deregisterHandler(callbackTag);
-                resolve(message);
-                return "";
-            },
-            callbackTag);
-
-        nlohmann::json json;
-        json["callback_tag"] = callbackTag;
-        bridge.call(k__getDeviceId, json.dump());
-    });
-    co_return co_await awaiter;
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = co_await bridge.callAsync(k__getDeviceId);
+    co_return response;
 }
 
 SafeInset getSafeInset() {
@@ -359,27 +338,12 @@ bool sendMail(const std::string& recipient, const std::string& subject,
 }
 
 Task<bool> testConnection(const std::string& hostName, float timeOut) {
-    auto awaiter = LambdaAwaiter<bool>([hostName, timeOut](auto&& resolve) {
-        static int counter;
-        auto callbackTag = k__testConnection + std::to_string(counter++);
-
-        auto&& bridge = MessageBridge::getInstance();
-        bridge.registerHandler(
-            [resolve, &bridge, callbackTag](const std::string& message) {
-                bridge.deregisterHandler(callbackTag);
-                auto result = toBool(message);
-                resolve(result);
-                return "";
-            },
-            callbackTag);
-
-        nlohmann::json json;
-        json["callback_tag"] = callbackTag;
-        json["host_name"] = hostName;
-        json["time_out"] = timeOut;
-        bridge.call(k__testConnection, json.dump());
-    });
-    co_return co_await awaiter;
+    nlohmann::json json;
+    json["host_name"] = hostName;
+    json["time_out"] = timeOut;
+    auto&& bridge = MessageBridge::getInstance();
+    auto response = co_await bridge.callAsync(k__testConnection, json.dump());
+    co_return toBool(response);
 }
 
 void showInstallPrompt(const std::string& url, const std::string& referrer) {

@@ -10,6 +10,10 @@
 
 typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 
+typedef void (^EEMessageAsyncResolver)(NSString* _Nonnull message);
+typedef void (^EEMessageAsyncHandler)(NSString* _Nonnull message,
+                                      EEMessageAsyncResolver _Nonnull resolver);
+
 @protocol EEIMessageBridge <NSObject>
 
 /// Registers a new handler to receive messages from C++.
@@ -23,7 +27,15 @@ typedef NSString* _Nonnull (^EEMessageHandler)(NSString* _Nonnull message);
 - (BOOL)registerHandler:(NSString* _Nonnull)tag
                callback:(EEMessageHandler _Nonnull)handler;
 
-/// Deregisters an existing handler not to receive messages from C++.
+/// Registers a new async handler to receive messages from C++.
+/// @param handler The handler.
+/// @param tag The unique tag of the handler.
+/// @return Whether the registration was successful.
+- (BOOL)registerAsyncHandler:(NSString* _Nonnull)tag
+                    callback:(EEMessageAsyncHandler _Nonnull)handler;
+
+/// Deregisters an existing handler not to receive
+/// messages from C++.
 /// @param tag The unique tag of the handler.
 /// @return Whether the deregistration was successful.
 - (BOOL)deregisterHandler:(NSString* _Nonnull)tag;

@@ -25,6 +25,9 @@ public:
     virtual std::string call(const std::string& tag,
                              const std::string& message = "") override;
 
+    virtual Task<std::string>
+    callAsync(const std::string& tag, const std::string& message = "") override;
+
     virtual std::string callCpp(const std::string& tag,
                                 const std::string& message) override;
 
@@ -43,6 +46,8 @@ private:
     MessageHandler findHandler(const std::string& tag);
 
     const Logger& logger_;
+
+    int callbackCounter_;
 
     std::unique_ptr<SpinLock> handlerLock_;
 

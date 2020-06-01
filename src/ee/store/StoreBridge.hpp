@@ -9,6 +9,7 @@
 #ifndef EE_X_STORE_BRIDGE_HPP
 #define EE_X_STORE_BRIDGE_HPP
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -39,7 +40,7 @@ public:
 
     Task<std::vector<PurchaseHistoryRecord>> getPurchaseHistory(SkuType type);
 
-    Task<Purchase> purchase(const std::string& sku);
+    Task<std::optional<Purchase>> purchase(const std::string& sku);
 
     Task<bool> consume(const std::string& purchaseToken);
 

@@ -57,14 +57,6 @@ public class Store implements IPlugin {
     private static final String kConsume = kPrefix + "_consume";
     private static final String kAcknowledge = kPrefix + "_acknowledge";
 
-    private static final String kOnConnect = kPrefix + "_onConnect";
-    private static final String kOnGetSkuDetails = kPrefix + "_onGetSkuDetails";
-    private static final String kOnGetPurchases = kPrefix + "_onGetPurchases";
-    private static final String kOnGetPurchaseHistory = kPrefix + "_onGetPurchaseHistory";
-    private static final String kOnPurchase = kPrefix + "_onPurchase";
-    private static final String kOnConsume = kPrefix + "_onConsume";
-    private static final String kOnAcknowledge = kPrefix + "_onAcknowledge";
-
     private Context _context;
     private Activity _activity;
     private IMessageBridge _bridge;
@@ -137,7 +129,7 @@ public class Store implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             _disposable.add(connect().subscribe(
                 client -> {
                     Map<String, Object> result = new HashMap<>();
@@ -145,7 +137,7 @@ public class Store implements IPlugin {
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnConnect, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
@@ -154,12 +146,11 @@ public class Store implements IPlugin {
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnConnect, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kConnect);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -176,26 +167,25 @@ public class Store implements IPlugin {
                     }
 
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
                     result.put("item", list);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetSkuDetails, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
                     result.put("error", exception.getMessage());
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetSkuDetails, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kGetSkuDetails);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             String skuType = message;
             _disposable.add(getPurchases(skuType).subscribe(
                 purchaseList -> {
@@ -205,26 +195,25 @@ public class Store implements IPlugin {
                     }
 
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
                     result.put("item", list);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetPurchases, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
                     result.put("error", exception.getMessage());
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetPurchases, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kGetPurchases);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             String skuType = message;
             _disposable.add(getPurchaseHistory(skuType).subscribe(
                 recordList -> {
@@ -234,89 +223,87 @@ public class Store implements IPlugin {
                     }
 
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
                     result.put("item", list);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetPurchaseHistory, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
                     result.put("error", exception.getMessage());
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnGetPurchaseHistory, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kGetPurchaseHistory);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             String sku = message;
             _disposable.add(purchase(sku).subscribe(
                 purchase -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
+                    result.put("item", StoreUtils.convertPurchaseToDictionary(purchase));
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnPurchase, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
+                    result.put("error", exception.getMessage());
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnPurchase, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kPurchase);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             String purchaseToken = message;
             _disposable.add(consume(purchaseToken).subscribe(
                 () -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnConsume, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnConsume, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kConsume);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerAsyncHandler((message, resolver) -> {
             String purchaseToken = message;
             _disposable.add(acknowledge(purchaseToken).subscribe(
                 () -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", true);
+                    result.put("successful", true);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnAcknowledge, response);
+                    resolver.resolve(response);
                 },
                 exception -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put("result", false);
+                    result.put("successful", false);
 
                     String response = JsonUtils.convertDictionaryToString(result);
                     assertThat(response).isNotNull();
-                    _bridge.callCpp(kOnAcknowledge, response);
+                    resolver.resolve(response);
                 }));
-            return "";
         }, kAcknowledge);
     }
 

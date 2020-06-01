@@ -21,6 +21,48 @@
 
 namespace ee {
 namespace store {
+std::string toString(SkuType data) {
+    if (data == SkuType::InApp) {
+        return "inapp";
+    }
+    if (data == SkuType::Subscription) {
+        return "subs";
+    }
+    assert(false);
+    return "";
+}
+
+void to_json(nlohmann::json& json, SkuType data) {
+    json = toString(data);
+}
+
+void from_json(const nlohmann::json& json, SkuDetails& data) {
+    data.description = json.at("description");
+    data.freeTrialPeriod = json.at("free_trial_period");
+    data.price = json.at("price");
+    data.priceAmountMicros = json.at("price_amount_micros");
+    data.sku = json.at("sku");
+    data.subscriptionPeriod = json.at("subscription_period");
+    data.title = json.at("title");
+}
+
+void from_json(const nlohmann::json& json, Purchase& data) {
+    data.packageName = json.at("package_name");
+    data.purchaseState = json.at("purchase_state");
+    data.purchaseToken = json.at("purchase_token");
+    data.signature = json.at("signature");
+    data.sku = json.at("sku");
+    data.isAcknowledge = json.at("is_acknowledge");
+    data.isAutoRenewing = json.at("is_auto_renewing");
+}
+
+void from_json(const nlohmann::json& json, PurchaseHistoryRecord& data) {
+    data.purchaseTime = json.at("purchase_time");
+    data.purchaseToken = json.at("purchase_token");
+    data.signature = json.at("signature");
+    data.sku = json.at("sku");
+}
+
 namespace {
 // clang-format off
 const std::string kPrefix = "Store";
@@ -31,13 +73,6 @@ const auto kGetPurchaseHistory = kPrefix + "_getPurchaseHistory";
 const auto kPurchase           = kPrefix + "_purchase";
 const auto kConsume            = kPrefix + "_consume";
 const auto kAcknowledge        = kPrefix + "_acknowledge";
-
-const auto kOnGetSkuDetails      = kPrefix + "_onGetSkuDetails";
-const auto kOnGetPurchases       = kPrefix + "_onGetPurchases";
-const auto kOnGetPurchaseHistory = kPrefix + "_onGetPurchaseHistory";
-const auto kOnPurchase           = kPrefix + "_onPurchase";
-const auto kOnConsume            = kPrefix + "_onConsume";
-const auto kOnAcknowledge        = kPrefix + "_onAcknowledge";
 // clang-format on
 } // namespace
 
@@ -48,61 +83,11 @@ Self::Bridge()
 
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnGetSkuDetails);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnGetPurchases);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnGetPurchaseHistory);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnPurchase);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnConsume);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            // TODO.
-            return "";
-        },
-        kOnAcknowledge);
-}
+    , logger_(logger) {}
 
 Self::~Bridge() = default;
 
-void Self::destroy() {
-    bridge_.deregisterHandler(kOnGetSkuDetails);
-    bridge_.deregisterHandler(kOnGetPurchases);
-    bridge_.deregisterHandler(kOnGetPurchaseHistory);
-    bridge_.deregisterHandler(kOnPurchase);
-    bridge_.deregisterHandler(kOnConsume);
-    bridge_.deregisterHandler(kOnAcknowledge);
-}
+void Self::destroy() {}
 
 void Self::initialize() {
     // TODO.
@@ -110,34 +95,79 @@ void Self::initialize() {
 
 Task<std::vector<SkuDetails>>
 Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
-    // TODO.
-    co_return std::vector<SkuDetails>();
+    nlohmann::json json;
+    json["sku_type"] = type;
+    json["sku_list"] = skuList;
+    auto response = co_await bridge_.callAsync(kGetSkuDetails, json.dump());
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    std::vector<SkuDetails> items;
+    if (successful) {
+        items = responseJson.at("item").get<std::vector<SkuDetails>>();
+    } else {
+        auto error = responseJson.at("error").get<std::string>();
+        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    }
+    co_return items;
 }
 
 Task<std::vector<Purchase>> Self::getPurchases(SkuType type) {
-    // TODO.
-    co_return std::vector<Purchase>();
+    auto response = co_await bridge_.callAsync(kGetPurchases, toString(type));
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    std::vector<Purchase> items;
+    if (successful) {
+        items = responseJson.at("item").get<std::vector<Purchase>>();
+    } else {
+        auto error = responseJson.at("error").get<std::string>();
+        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    }
+    co_return items;
 }
 
 Task<std::vector<PurchaseHistoryRecord>>
 Self::getPurchaseHistory(SkuType type) {
-    // TODO.
-    co_return std::vector<PurchaseHistoryRecord>();
+    auto response =
+        co_await bridge_.callAsync(kGetPurchaseHistory, toString(type));
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    std::vector<PurchaseHistoryRecord> items;
+    if (successful) {
+        items =
+            responseJson.at("item").get<std::vector<PurchaseHistoryRecord>>();
+    } else {
+        auto error = responseJson.at("error").get<std::string>();
+        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    }
+    co_return items;
 }
 
-Task<Purchase> Self::purchase(const std::string& sku) {
-    // TODO.
-    co_return Purchase();
+Task<std::optional<Purchase>> Self::purchase(const std::string& sku) {
+    auto response = co_await bridge_.callAsync(kPurchase, sku);
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    std::optional<Purchase> item = std::nullopt;
+    if (successful) {
+        item = responseJson.at("item").get<Purchase>();
+    } else {
+        auto error = responseJson.at("error").get<std::string>();
+        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    }
+    co_return item;
 }
 
 Task<bool> Self::consume(const std::string& purchaseToken) {
-    // TODO.
-    co_return false;
+    auto response = co_await bridge_.callAsync(kConsume, purchaseToken);
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    co_return successful;
 }
 
 Task<bool> Self::acknowledge(const std::string& purchaseToken) {
-    // TODO.
-    co_return false;
+    auto response = co_await bridge_.callAsync(kAcknowledge, purchaseToken);
+    auto responseJson = nlohmann::json::parse(response);
+    auto successful = responseJson.at("successful").get<bool>();
+    co_return successful;
 }
 } // namespace store
 } // namespace ee

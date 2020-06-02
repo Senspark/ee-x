@@ -69,6 +69,7 @@ static eetest::AppDelegate s_sharedApplication;
     [manager addPlugin:@"Notification"];
     [manager addPlugin:@"Play"];
     [manager addPlugin:@"Recorder"];
+    [manager addPlugin:@"Store"];
     [manager addPlugin:@"Tenjin"];
     [manager addPlugin:@"UnityAds"];
     [manager addPlugin:@"Vungle"];

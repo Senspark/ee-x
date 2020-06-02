@@ -7,16 +7,14 @@
 //
 #import "ee/core/EEPluginManager.h"
 
+#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/internal/EEUtils.h"
 #import "ee/core/private/EEVideoPlayerManager.h"
 
-@interface EEPluginManager () {
+@implementation EEPluginManager {
+    id<EEIMessageBridge> bridge_;
     NSMutableDictionary<NSString*, id<EEIPlugin>>* plugins_;
 }
-
-@end
-
-@implementation EEPluginManager
 
 + (instancetype _Nonnull)getInstance {
     static EEPluginManager* sharedInstance = nil;
@@ -32,6 +30,7 @@
     if (self == nil) {
         return nil;
     }
+    bridge_ = [EEMessageBridge getInstance];
     plugins_ = [[NSMutableDictionary alloc] init];
     return self;
 }
@@ -55,7 +54,12 @@
     Class clazz =
         NSClassFromString([NSString stringWithFormat:@"EE%@", pluginName]);
     if ([clazz conformsToProtocol:@protocol(EEIPlugin)]) {
+        // Objective-C.
         id plugin = [[[clazz alloc] init] autorelease];
+        [plugins_ setObject:plugin forKey:pluginName];
+    } else {
+        // Swift.
+        id plugin = [[[clazz alloc] initWithBridge: bridge_] autorelease];
         [plugins_ setObject:plugin forKey:pluginName];
     }
 }

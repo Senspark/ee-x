@@ -9,6 +9,7 @@ Pod::Spec.new do |spec|
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
 
+  spec.swift_version = '5.0'
   spec.ios.deployment_target = '12.0'
   spec.osx.deployment_target = '10.14'
 
@@ -60,6 +61,7 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/json'
     s.dependency 'ReactiveObjC'
+    s.dependency 'RxSwift'
   end
 
   spec.subspec 'ads' do |s|

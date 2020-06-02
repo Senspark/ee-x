@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import <ee/core/EEIPlugin.h>
 
-@interface EECampaignReceiver : NSObject
+@interface EECampaignReceiver : NSObject <EEIPlugin>
 
 + (BOOL)application:(UIApplication*)app
             openURL:(nonnull NSURL*)url

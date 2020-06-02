@@ -61,7 +61,7 @@ static eetest::AppDelegate s_sharedApplication;
     [manager addPlugin:@"CampaignReceiver"];
     [manager addPlugin:@"Facebook"];
     [manager addPlugin:@"FacebookAds"];
-    [manager addPlugin:@"FirebaseApp"];
+    [manager addPlugin:@"FirebaseCore"];
     [manager addPlugin:@"FirebaseCrashlytics"];
     [manager addPlugin:@"FirebasePerformance"];
     [manager addPlugin:@"GoogleAnalytics"];

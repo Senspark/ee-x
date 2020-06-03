@@ -47,10 +47,6 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/*Android*',
       'src/ee/core/**/Jni*'
 
-    s.pod_target_xcconfig = {
-      'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC.
-    }
-
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
       'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
@@ -60,7 +56,6 @@ Pod::Spec.new do |spec|
     }
 
     s.dependency 'ee-x/json'
-    s.dependency 'ReactiveObjC'
     s.dependency 'RxSwift'
   end
 

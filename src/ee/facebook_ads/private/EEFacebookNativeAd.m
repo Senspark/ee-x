@@ -13,11 +13,12 @@
 #import <FBAudienceNetwork/FBMediaView.h>
 #import <FBAudienceNetwork/FBNativeAd.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/ads/internal/EEAdViewHelper.h>
 #import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/ads/internal/EEViewHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 #import "ee/facebook_ads/EEFacebookNativeAdView.h"
 

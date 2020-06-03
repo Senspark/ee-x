@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SPINE_FACTORY_HPP_
 #define EE_LIBRARY_SPINE_FACTORY_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <map>
 #include <string>
@@ -71,5 +73,7 @@ private:
         cachedSkeletonData_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SPINE_FACTORY_HPP_ */

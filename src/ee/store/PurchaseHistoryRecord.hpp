@@ -1,6 +1,8 @@
 #ifndef EE_X_PURCHASE_HISTORY_RECORD_HPP
 #define EE_X_PURCHASE_HISTORY_RECORD_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/StoreFwd.hpp"
@@ -15,5 +17,7 @@ struct PurchaseHistoryRecord {
 };
 } // namespace store
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_PURCHASE_HISTORY_RECORD_HPP

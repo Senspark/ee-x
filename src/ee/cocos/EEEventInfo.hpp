@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_EVENT_INFO_HPP
 #define EE_LIBRARY_EVENT_INFO_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 #include <tuple>
@@ -34,5 +36,7 @@ public:
     }
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_EVENT_INFO_HPP */

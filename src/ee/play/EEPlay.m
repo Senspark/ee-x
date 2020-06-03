@@ -9,9 +9,10 @@
 
 #import <GameKit/GameKit.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 @interface EEPlay () <GKGameCenterControllerDelegate> {
     EEMessageBridge* _bridge;

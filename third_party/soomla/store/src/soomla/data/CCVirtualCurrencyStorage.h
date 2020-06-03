@@ -17,6 +17,8 @@
 #ifndef __CCVirtualCurrencyStorage_H__
 #define __CCVirtualCurrencyStorage_H__
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCVirtualItemStorage.h"
 
 namespace soomla {
@@ -40,4 +42,7 @@ private:
     static std::string keyCurrencyBalance(const std::string& itemId);
 };
 } // namespace soomla
+
+#endif // __cplusplus
+
 #endif // __CCVirtualCurrencyStorage_H__

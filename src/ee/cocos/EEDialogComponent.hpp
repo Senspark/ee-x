@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_DIALOG_COMPONENT_HPP_
 #define EE_LIBRARY_DIALOG_COMPONENT_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCComponent.h>
 
 #include "ee/CocosFwd.hpp"
@@ -61,5 +63,7 @@ private:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_DIALOG_COMPONENT_HPP_ */

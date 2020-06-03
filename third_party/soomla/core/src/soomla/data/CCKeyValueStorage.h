@@ -17,6 +17,8 @@
 #ifndef __CCKeyValueStorage_H
 #define __CCKeyValueStorage_H
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #define DB_KEY_PRFIX "soomla."
@@ -77,5 +79,7 @@ public:
     virtual void purge() = 0;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCKeyValueStorage_H

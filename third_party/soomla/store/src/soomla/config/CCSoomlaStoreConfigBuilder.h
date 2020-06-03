@@ -17,6 +17,8 @@
 #ifndef COCOS2DXSTORE_CCSOOMLASTORECONFIGBUILDER_H
 #define COCOS2DXSTORE_CCSOOMLASTORECONFIGBUILDER_H
 
+#ifdef __cplusplus
+
 #include <soomla/CCSoomlaConfigBuilder.h>
 
 #include "soomla/config/CCSoomlaStoreGpConfigBuilder.h"
@@ -33,5 +35,7 @@ public:
     setGpConfiguration(CCSoomlaStoreGpConfigBuilder* gpConfig);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // COCOS2DXSTORE_CCSOOMLASTORECONFIGBUILDER_H

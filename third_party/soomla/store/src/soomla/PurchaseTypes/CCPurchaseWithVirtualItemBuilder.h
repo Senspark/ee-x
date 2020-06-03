@@ -1,6 +1,8 @@
 #ifndef SOOMLA_STORE_PURCHASE_WITH_VIRTUAL_ITEM_BUILDER_HPP
 #define SOOMLA_STORE_PURCHASE_WITH_VIRTUAL_ITEM_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include <optional>
 #include <string>
 
@@ -25,5 +27,7 @@ private:
 // Backward compatibility.
 using CCPurchaseWithVirtualItemBuilder = PurchaseWithVirtualItemBuilder;
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* SOOMLA_STORE_PURCHASE_WITH_VIRTUAL_ITEM_BUILDER_HPP */

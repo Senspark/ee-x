@@ -17,6 +17,8 @@
 #ifndef __CCVirtualCategory_H_
 #define __CCVirtualCategory_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCSoomlaMacros.h>
@@ -80,5 +82,7 @@ protected:
 
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCVirtualCategory_H_

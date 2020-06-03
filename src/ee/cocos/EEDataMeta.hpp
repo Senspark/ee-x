@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_DATA_META_HPP
 #define EE_LIBRARY_DATA_META_HPP
 
+#ifdef __cplusplus
+
 #include <type_traits>
 
 #include "ee/cocos/EEMeta.hpp"
@@ -146,5 +148,7 @@ std::underlying_type_t<T> convert_enum_to_integer(const T& arg) {
 }
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_DATA_META_HPP */

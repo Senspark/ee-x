@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP
 #define EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP
 
+#ifdef __cplusplus
+
 // Must included first.
 #include "ee/CocosFwd.hpp"
 
@@ -41,5 +43,7 @@ protected:
                               const cocos2d::Value& value) override;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP */

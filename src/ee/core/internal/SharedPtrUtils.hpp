@@ -8,6 +8,8 @@
 #ifndef EE_X_SHARED_PTR_UTILS_HPP
 #define EE_X_SHARED_PTR_UTILS_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <memory>
 #include <string>
@@ -46,5 +48,7 @@ void registerDeleter(const SharedPtrDeleter<T>& deleter) {
 }
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_SHARED_PTR_UTILS_HPP */

@@ -1,6 +1,8 @@
 #ifndef EE_X_IS_AWAITABLE_HPP
 #define EE_X_IS_AWAITABLE_HPP
 
+#ifdef __cplusplus
+
 #include <type_traits>
 
 #include "ee/CoreFwd.hpp"
@@ -94,5 +96,7 @@ template <class T>
 constexpr bool IsAwaitableV = cppcoro::is_awaitable_v<T>;
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_IS_AWAITABLE_HPP

@@ -1,3 +1,5 @@
+#ifdef __cplusplus
+
 #include "ee/core/ObserverBinder.hpp"
 
 namespace ee {
@@ -12,3 +14,5 @@ ObserverBinder<Observer> Self::bind(IObserverManager<Observer>& manager) {
 #undef Self
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus

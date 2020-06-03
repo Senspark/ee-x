@@ -17,6 +17,8 @@
 #ifndef __CCSoomlaMacros_h
 #define __CCSoomlaMacros_h
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 
@@ -188,5 +190,6 @@ __Double *__ret__ = nullptr; \
 __Dictionary *__ret__ = __Dictionary::create(); \
 params->setObject(__String::create(__methodName__), "method");
 
+#endif // __cplusplus
 
 #endif // __CCSoomlaMacros_h

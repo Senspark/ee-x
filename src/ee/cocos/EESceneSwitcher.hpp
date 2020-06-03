@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SCENE_SWITCHER_HPP_
 #define EE_LIBRARY_SCENE_SWITCHER_HPP_
 
+#ifdef __cplusplus
+
 #include <queue>
 
 #include <2d/CCTransition.h>
@@ -138,5 +140,7 @@ private:
     cocos2d::Node* actor_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SCENE_SWITCHER_HPP_ */

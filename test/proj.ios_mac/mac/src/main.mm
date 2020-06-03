@@ -4,6 +4,7 @@
 
 int main(int argc, char* argv[]) {
     eetest::AppDelegate app;
-    [[EEPluginManager getInstance] addPlugin:@"Crashlytics"];
+    EEPluginManager* manager = [EEPluginManager getInstance];
+    [manager initializePlugins];
     return cocos2d::Application::getInstance()->run();
 }

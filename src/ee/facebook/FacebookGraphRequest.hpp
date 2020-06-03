@@ -8,6 +8,8 @@
 #ifndef EE_X_FACEBOOK_GRAPH_REQUEST_HPP
 #define EE_X_FACEBOOK_GRAPH_REQUEST_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <string>
 
@@ -35,5 +37,7 @@ private:
 };
 } // namespace facebook
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_GRAPH_REQUEST_HPP */

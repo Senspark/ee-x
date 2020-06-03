@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SKELETON_BONE_HPP_
 #define EE_LIBRARY_SKELETON_BONE_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCNode.h>
 
 #include "ee/CocosFwd.hpp"
@@ -40,5 +42,7 @@ private:
     spine::SkeletonAnimation* parentSkeleton_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SKELETON_BONE_HPP_ */

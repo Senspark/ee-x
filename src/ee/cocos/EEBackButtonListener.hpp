@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_
 #define EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_
 
+#ifdef __cplusplus
+
 #include <base/CCEventListenerKeyboard.h>
 
 #include "ee/CocosFwd.hpp"
@@ -92,5 +94,7 @@ private:
     }
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_BACK_BUTTON_LISTENER_HPP_ */

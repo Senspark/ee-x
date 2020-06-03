@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_CLIPPING_RECTANGLE_NODE_HPP
 #define EE_LIBRARY_CLIPPING_RECTANGLE_NODE_HPP
 
+#ifdef __cplusplus
+
 #include <2d/CCClippingRectangleNode.h>
 #include <renderer/CCCustomCommand.h>
 
@@ -40,5 +42,7 @@ protected:
     cocos2d::Rect previousScissorRect_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_CLIPPING_RECTANGLE_NODE_HPP */

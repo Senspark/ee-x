@@ -1,6 +1,8 @@
 #ifndef SOOMLA_PURCHASABLE_VIRTUAL_ITEM_BUILDER_HPP
 #define SOOMLA_PURCHASABLE_VIRTUAL_ITEM_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include <base/CCRefPtr.h>
 
 #include "soomla/domain/CCVirtualItemBuilder.h"
@@ -16,5 +18,7 @@ protected:
     cocos2d::RefPtr<CCPurchaseType> type_;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // SOOMLA_PURCHASABLE_VIRTUAL_ITEM_BUILDER_HPP

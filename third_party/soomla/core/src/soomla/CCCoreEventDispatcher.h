@@ -17,6 +17,8 @@
 #ifndef __CCCoreEventDispatcher_H_
 #define __CCCoreEventDispatcher_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/rewards/CCReward.h"
@@ -70,5 +72,7 @@ public:
                                const cocos2d::ValueMap& extra);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCCoreEventDispatcher_H_

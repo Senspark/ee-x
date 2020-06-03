@@ -9,6 +9,8 @@
 #ifndef EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_
 #define EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/NotificationFwd.hpp"
@@ -58,5 +60,7 @@ private:
 };
 } // namespace notification
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_NOTIFICATION_NOTIFICATION_BUIDLER_HPP_ */

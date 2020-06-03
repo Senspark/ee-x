@@ -9,6 +9,8 @@
 #ifndef EE_X_CAMPAIGN_RECEIVER_BRIDGE_HPP
 #define EE_X_CAMPAIGN_RECEIVER_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 
 #include "ee/CampaignReceiverFwd.hpp"
@@ -35,5 +37,7 @@ private:
 };
 } // namespace campaign_receiver
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CAMPAIGN_RECEIVER_BRIDGE_HPP */

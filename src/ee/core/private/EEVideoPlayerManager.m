@@ -7,8 +7,9 @@
 
 #import "ee/core/private/EEVideoPlayerManager.h"
 
+#import <ee_x-Swift.h>
+
 #import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/EEUtils.h"
 #import "ee/core/private/EEVideoPlayer.h"
 
 @implementation EEVideoPlayerManager {

@@ -9,6 +9,8 @@
 #ifndef EE_X_LOGGER_HPP
 #define EE_X_LOGGER_HPP
 
+#ifdef __cplusplus
+
 #include <cstdarg>
 #include <functional>
 #include <string>
@@ -65,5 +67,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_LOGGER_HPP */

@@ -1,6 +1,8 @@
 #ifndef EE_X_OBSERVER_BINDER_HPP
 #define EE_X_OBSERVER_BINDER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CoreFwd.hpp"
 
 namespace ee {
@@ -19,6 +21,8 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #include "ee/core/ObserverBinder.inl"
 

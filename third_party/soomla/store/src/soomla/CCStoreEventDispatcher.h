@@ -2,6 +2,8 @@
 #ifndef __CCStoreEventDispatcher_H_
 #define __CCStoreEventDispatcher_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/domain/CCMarketItem.h"
@@ -308,5 +310,7 @@ public:
     virtual void onMarketItemsRefreshFailed(const std::string& errorMessage);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCStoreEventDispatcher_H_

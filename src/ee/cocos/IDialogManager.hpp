@@ -1,6 +1,8 @@
 #ifndef EE_X_I_DIALOG_MANAGER_HPP
 #define EE_X_I_DIALOG_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -39,5 +41,7 @@ public:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_I_DIALOG_MANAGER_HPP

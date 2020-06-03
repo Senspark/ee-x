@@ -17,6 +17,8 @@
 #ifndef __CCDomainFactory_H_
 #define __CCDomainFactory_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/domain/CCDomain.h"
@@ -38,5 +40,7 @@ private:
         mCreators;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCDomainFactory_H_

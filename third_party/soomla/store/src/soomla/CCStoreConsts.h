@@ -17,6 +17,8 @@
 #ifndef __CCStoreConsts_H__
 #define __CCStoreConsts_H__
 
+#ifdef __cplusplus
+
 /**
 * This class contains all static const String names of the keys/vals in the
 * JSON being parsed all around the SDK.
@@ -140,5 +142,7 @@ namespace soomla {
         static char const *EVENT_IAB_SERVICE_STOPPED;
     };
 }
+
+#endif // __cplusplus
 
 #endif /* __CCStoreConsts_H__ */

@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_BANNER_AD_SIZE_HPP
 #define EE_X_ADMOB_BANNER_AD_SIZE_HPP
 
+#ifdef __cplusplus
+
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
@@ -32,5 +34,7 @@ enum class BannerAdSize {
 };
 } // namespace admob
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADMOB_BANNER_AD_SIZE_HPP */

@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_TRANSITION_FADE_OUT_HPP_
 #define EE_LIBRARY_TRANSITION_FADE_OUT_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCTransition.h>
 
 #include "ee/cocos/EECocos2dxFwd.hpp"
@@ -42,5 +44,7 @@ private:
     cocos2d::Color4B color_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_TRANSITION_FADE_OUT_HPP_ */

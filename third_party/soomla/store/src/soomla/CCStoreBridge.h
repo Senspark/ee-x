@@ -3,6 +3,8 @@
 #ifndef __CCStoreBridge_H_
 #define __CCStoreBridge_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCStoreAssets.h"
@@ -34,5 +36,7 @@ public:
     virtual void applyParams(const cocos2d::ValueMap& storeParams);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCStoreBridge_H_

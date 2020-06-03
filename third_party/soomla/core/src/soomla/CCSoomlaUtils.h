@@ -19,6 +19,7 @@
 #ifndef __CCSoomlaUtils_H_
 #define __CCSoomlaUtils_H_
 
+#ifdef __cplusplus
 
 #include "soomla/CCError.h"
 
@@ -64,5 +65,7 @@ namespace soomla {
         static bool isEmpty(const std::string& str);
     };
 };
+
+#endif // __cplusplus
 
 #endif //__CCSoomlaUtils_H_

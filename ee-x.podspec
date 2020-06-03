@@ -9,6 +9,7 @@ Pod::Spec.new do |spec|
   # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
   spec.author         = 'Hai Hoang'
 
+  spec.swift_version = '5.0'
   spec.ios.deployment_target = '12.0'
   spec.osx.deployment_target = '10.14'
 
@@ -46,10 +47,6 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/*Android*',
       'src/ee/core/**/Jni*'
 
-    s.pod_target_xcconfig = {
-      'CLANG_ENABLE_OBJC_WEAK' => 'YES' # Fixed for ReactiveObjC.
-    }
-
     s.xcconfig = {
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
       'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
@@ -58,8 +55,22 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
+    # Fix linking errors with Facebook SDK 7.
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' '),
+      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
+      'DEAD_CODE_STRIPPING' => 'YES'
+    }
+
     s.dependency 'ee-x/json'
-    s.dependency 'ReactiveObjC'
+    s.dependency 'ReachabilitySwift'
+    s.dependency 'RxSwift'
   end
 
   spec.subspec 'ads' do |s|
@@ -336,17 +347,6 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/CMakeLists.txt',
       'src/ee/facebook/generate.sh',
       'src/ee/facebook/sourcelist.cmake'
-
-    # Fix linking errors with Facebook SDK 7.
-    s.user_target_xcconfig = {
-      'LD_RUNPATH_SEARCH_PATHS' => [
-        '/usr/lib/swift'
-      ].join(' '),
-      'LIBRARY_SEARCH_PATHS' => [
-        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
-      ].join(' ')
-    }
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKCoreKit'

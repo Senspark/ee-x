@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_MESSAGING_BRIDGE_HPP
 #define EE_X_FIREBASE_MESSAGING_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <map>
 #include <memory>
@@ -154,5 +156,7 @@ private:
 } // namespace messaging
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_MESSAGING_BRIDGE_HPP */

@@ -10,9 +10,10 @@
 #import <FirebasePerformance/FIRPerformance.h>
 #import <FirebasePerformance/FIRTrace.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 @interface EEFirebasePerformanceTrace () {
     NSString* traceName_;

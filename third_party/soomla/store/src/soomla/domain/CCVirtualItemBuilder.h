@@ -8,6 +8,8 @@
 #ifndef SOOMLA_VIRTUAL_ITEM_BUILDER_HPP
 #define SOOMLA_VIRTUAL_ITEM_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include <optional>
 #include <string>
 
@@ -35,5 +37,7 @@ protected:
     std::optional<std::string> itemId_;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* SOOMLA_VIRTUAL_ITEM_BUILDER_HPP */

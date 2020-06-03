@@ -9,9 +9,10 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 
+#import <ee_x-Swift.h>
+
 #import "ee/core/internal/EEJsonUtils.h"
 #import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/EEUtils.h"
 
 @interface EEVideoPlayer ()
 #if TARGET_OS_IOS

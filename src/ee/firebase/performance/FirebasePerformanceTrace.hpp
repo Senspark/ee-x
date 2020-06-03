@@ -8,6 +8,8 @@
 #ifndef EE_X_FIREBASE_PERFORMANCE_TRACE_HPP
 #define EE_X_FIREBASE_PERFORMANCE_TRACE_HPP
 
+#ifdef __cplusplus
+
 #include <cstdint>
 #include <string>
 
@@ -42,5 +44,7 @@ private:
 } // namespace performance
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_PERFORMANCE_TRACE_HPP */

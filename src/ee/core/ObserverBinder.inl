@@ -1,3 +1,5 @@
+#ifdef __cplusplus
+
 #include "ee/core/ObserverHandle.hpp"
 
 namespace ee {
@@ -23,3 +25,5 @@ Self<Observer>& Self<Observer>::addObserver(const Observer& observer) {
 #undef Self
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus

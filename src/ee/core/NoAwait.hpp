@@ -1,6 +1,8 @@
 #ifndef EE_X_NO_AWAIT_HPP
 #define EE_X_NO_AWAIT_HPP
 
+#ifdef __cplusplus
+
 #include <experimental/coroutine>
 #include <type_traits>
 
@@ -40,5 +42,7 @@ noAwait(T lambda) /** Must copy lambda, don't use T&& */ {
 
 using core::noAwait;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_NO_AWAIT_HPP

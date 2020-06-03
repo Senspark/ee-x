@@ -17,6 +17,8 @@
 #ifndef __CCNativeRewardStorage_H__
 #define __CCNativeRewardStorage_H__
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCRewardStorage.h"
 
 namespace soomla {
@@ -29,5 +31,7 @@ public:
                                     unsigned int idx);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCNativeRewardStorage_H__

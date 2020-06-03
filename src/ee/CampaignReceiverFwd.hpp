@@ -9,6 +9,8 @@
 #ifndef EE_X_CAMPAIGN_RECEIVER_FWD_HPP
 #define EE_X_CAMPAIGN_RECEIVER_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -18,5 +20,7 @@ class Bridge;
 
 using CampaignReceiver = campaign_receiver::Bridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CAMPAIGN_RECEIVER_FWD_HPP */

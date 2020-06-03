@@ -8,6 +8,8 @@
 #ifndef EE_X_FACEBOOK_REQUEST_CONTENT_HPP
 #define EE_X_FACEBOOK_REQUEST_CONTENT_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 #include <vector>
 
@@ -71,5 +73,7 @@ private:
 };
 } // namespace facebook
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_REQUEST_CONTENT_HPP */

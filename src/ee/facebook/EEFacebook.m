@@ -9,9 +9,10 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEUtils.h>
 
 #import "ee/facebook/private/EEFacebookRequestDelegate.h"
 #import "ee/facebook/private/EEFacebookShareDelegate.h"

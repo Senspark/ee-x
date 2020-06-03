@@ -8,6 +8,8 @@
 #ifndef EE_X_I_APPS_FLYER_BRIDGE_HPP
 #define EE_X_I_APPS_FLYER_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <string>
 
@@ -41,5 +43,7 @@ public:
 };
 } // namespace apps_flyer
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_APPS_FLYER_BRIDGE_HPP */

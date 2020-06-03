@@ -8,8 +8,9 @@
 
 #import "ee/ads/internal/EEInterstitialAdHelper.h"
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEIMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 #import "ee/ads/internal/EEIInterstitialAd.h"
 #import "ee/ads/internal/EEMessageHelper.h"

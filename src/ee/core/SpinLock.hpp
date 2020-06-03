@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_SPIN_LOCK_HPP_
 #define EE_X_CORE_SPIN_LOCK_HPP_
 
+#ifdef __cplusplus
+
 #include <atomic>
 
 namespace ee {
@@ -35,5 +37,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CORE_SPIN_LOCK_HPP_ */

@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_META_HPP
 #define EE_LIBRARY_META_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -30,5 +32,7 @@ struct requires_enum {
 // clang-format on
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_META_HPP */

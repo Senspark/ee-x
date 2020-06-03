@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_DATA_UTILS_HPP
 #define EE_LIBRARY_DATA_UTILS_HPP
 
+#ifdef __cplusplus
+
 #include <cstddef>
 #include <string>
 
@@ -126,5 +128,7 @@ private:
     std::size_t times_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_DATA_UTILS_HPP */

@@ -8,6 +8,8 @@
 #ifndef SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP
 #define SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCVirtualItemBuilder.h"
 #include "soomla/domain/virtualCurrencies/CCVirtualCurrency.h"
 
@@ -24,5 +26,7 @@ public:
 /// Backward compatibility.
 using CCVirtualCurrencyBuilder = VirtualCurrencyBuilder;
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* SOOMLA_VIRTUAL_CURRENCY_BUILDER_HPP */

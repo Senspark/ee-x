@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_REMOTE_CONFIG_BRIDGE_HPP
 #define EE_X_FIREBASE_REMOTE_CONFIG_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <cstdint>
 #include <map>
 #include <memory>
@@ -124,5 +126,7 @@ private:
 } // namespace remote_config
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_REMOTE_CONFIG_BRIDGE_HPP */

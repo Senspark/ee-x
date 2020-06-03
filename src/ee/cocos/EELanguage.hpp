@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_LANGUAGE_HPP
 #define EE_LIBRARY_LANGUAGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/CocosFwd.hpp"
@@ -47,5 +49,7 @@ private:
 };
 } // namespace language
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_LANGUAGE_HPP */

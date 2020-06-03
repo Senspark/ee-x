@@ -1,6 +1,6 @@
 #import "ee/admob/private/EEAdMobBannerHelper.h"
 
-#import <ee/core/internal/EEUtils.h>
+#import <ee_x-Swift.h>
 
 @implementation EEAdMobBannerHelper {
     NSMutableDictionary<NSNumber*, NSValue*>* sizes_;

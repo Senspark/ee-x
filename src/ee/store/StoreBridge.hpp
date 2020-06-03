@@ -9,6 +9,8 @@
 #ifndef EE_X_STORE_BRIDGE_HPP
 #define EE_X_STORE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <optional>
 #include <string>
 #include <vector>
@@ -52,5 +54,7 @@ private:
 };
 } // namespace store
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_STORE_BRIDGE_HPP */

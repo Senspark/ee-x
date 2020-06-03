@@ -17,6 +17,8 @@
 #ifndef __CCDomain_H_
 #define __CCDomain_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 namespace soomla {
@@ -35,5 +37,7 @@ protected:
                                   const std::string& key);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCDomain_H_

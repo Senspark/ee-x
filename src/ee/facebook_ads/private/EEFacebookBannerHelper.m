@@ -1,6 +1,6 @@
 #import "ee/facebook_ads/private/EEFacebookBannerHelper.h"
 
-#import <ee/core/internal/EEUtils.h>
+#import <ee_x-Swift.h>
 
 @implementation EEFacebookBannerHelper {
     NSMutableDictionary<NSNumber*, NSValue*>* sizes_;

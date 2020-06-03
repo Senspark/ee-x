@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_CORE_HPP
 #define EE_X_FIREBASE_CORE_HPP
 
+#ifdef __cplusplus
+
 #include "ee/FirebaseFwd.hpp"
 
 namespace ee {
@@ -20,5 +22,7 @@ public:
 };
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_CORE_HPP */

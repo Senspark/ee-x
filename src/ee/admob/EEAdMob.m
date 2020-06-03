@@ -8,9 +8,10 @@
 
 #import "ee/admob/EEAdMob.h"
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 #import "ee/admob/private/EEAdMobBannerAd.h"
 #import "ee/admob/private/EEAdMobBannerHelper.h"

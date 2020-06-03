@@ -17,6 +17,8 @@
 #ifndef __CCSoomlaStore_H_
 #define __CCSoomlaStore_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCError.h>
@@ -101,5 +103,7 @@ private:
     static bool initialized;
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif // !__CCSoomlaStore_H_

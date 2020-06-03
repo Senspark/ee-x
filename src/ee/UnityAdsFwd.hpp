@@ -9,6 +9,8 @@
 #ifndef EE_X_UNITY_ADS_FWD_HPP
 #define EE_X_UNITY_ADS_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
@@ -20,5 +22,7 @@ class RewardedAd;
 
 using UnityAds = unity_ads::Bridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_UNITY_ADS_FWD_HPP */

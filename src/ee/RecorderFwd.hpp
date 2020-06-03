@@ -6,6 +6,8 @@
 #ifndef EE_X_RECORDER_FWD_HPP
 #define EE_X_RECORDER_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -15,5 +17,7 @@ class Bridge;
 
 using Recorder = recorder::Bridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_RECORDER_FWD_HPP */

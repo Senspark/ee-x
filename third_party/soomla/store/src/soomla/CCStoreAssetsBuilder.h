@@ -8,6 +8,8 @@
 #ifndef CCStoreAssetsBuilder_h
 #define CCStoreAssetsBuilder_h
 
+#ifdef __cplusplus
+
 #include "soomla/CCStoreAssets.h"
 
 namespace soomla {
@@ -73,5 +75,7 @@ private:
     cocos2d::RefPtr<StoreAssets> storeAssets_;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* CCStoreAssetsBuilder_h */

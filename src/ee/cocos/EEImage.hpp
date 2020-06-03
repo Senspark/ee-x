@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_IMAGE_HPP_
 #define EE_LIBRARY_IMAGE_HPP_
 
+#ifdef __cplusplus
+
 #include <cstdint>
 
 #include "ee/CocosFwd.hpp"
@@ -43,5 +45,7 @@ using image::boxBlur2D;
 
 using image::tentBlur1D;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_IMAGE_HPP_ */

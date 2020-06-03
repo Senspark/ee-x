@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_LAZY_GUARD_HPP_
 #define EE_LIBRARY_LAZY_GUARD_HPP_
 
+#ifdef __cplusplus
+
 #include <type_traits>
 
 #include "ee/CocosFwd.hpp"
@@ -66,5 +68,7 @@ auto makeLazyHolder(T&& instance) {
     return Tp(std::forward<T>(instance));
 }
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_LAZY_GUARD_HPP_ */

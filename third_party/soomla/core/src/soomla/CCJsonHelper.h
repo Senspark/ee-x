@@ -17,6 +17,8 @@
 #ifndef __CCJsonHelper_H_
 #define __CCJsonHelper_H_
 
+#ifdef __cplusplus
+
 #include <iostream>
 
 #include <ee/jansson/jansson.h>
@@ -36,5 +38,7 @@ public:
     
     static json_t* getJsonFromValue(const cocos2d::Value& value);
 };
+
+#endif // __cplusplus
 
 #endif //__CCJsonHelper_H_

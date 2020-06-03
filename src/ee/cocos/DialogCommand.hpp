@@ -9,6 +9,8 @@
 #ifndef EE_X_DIALOG_COMMAND_HPP
 #define EE_X_DIALOG_COMMAND_HPP
 
+#ifdef __cplusplus
+
 #include <cstddef>
 
 #include "ee/cocos/DialogGuard.hpp"
@@ -37,5 +39,7 @@ private:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_DIALOG_COMMAND_HPP */

@@ -17,6 +17,8 @@
 #ifndef COCOS2DXSTORE_CCSOOMLASTOREGPCONFIGBUILDER_H
 #define COCOS2DXSTORE_CCSOOMLASTOREGPCONFIGBUILDER_H
 
+#ifdef __cplusplus
+
 #include <soomla/CCSoomlaConfigBuilder.h>
 
 namespace soomla {
@@ -32,5 +34,7 @@ public:
         const std::string& refreshToken, bool verifyOnServerFailure);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // COCOS2DXSTORE_CCSOOMLASTOREGPCONFIGBUILDER_H

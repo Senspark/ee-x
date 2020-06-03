@@ -9,6 +9,8 @@
 #ifndef EE_X_FACEBOOK_ADS_FWD_HPP
 #define EE_X_FACEBOOK_ADS_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
@@ -27,5 +29,7 @@ using FacebookAds = facebook_ads::Bridge;
 using FacebookBannerAdSize = facebook_ads::BannerAdSize;
 using FacebookNativeAdLayout = facebook_ads::NativeAdLayout;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_ADS_FWD_HPP */

@@ -1,6 +1,8 @@
 #ifndef EE_X_SERVICE_LOCATOR_HPP
 #define EE_X_SERVICE_LOCATOR_HPP
 
+#ifdef __cplusplus
+
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -65,5 +67,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_SERVICE_LOCATOR_HPP

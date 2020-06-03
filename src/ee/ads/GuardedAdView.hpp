@@ -1,6 +1,8 @@
 #ifndef EE_X_GUARDED_AD_VIEW_HPP
 #define EE_X_GUARDED_AD_VIEW_HPP
 
+#ifdef __cplusplus
+
 #include <optional>
 
 #include <ee/core/SafeObserverManager.hpp>
@@ -44,5 +46,7 @@ private:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_GUARDED_AD_VIEW_HPP

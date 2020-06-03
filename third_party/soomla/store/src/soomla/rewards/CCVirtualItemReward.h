@@ -2,6 +2,8 @@
 #ifndef __CCVirtualItemReward_H_
 #define __CCVirtualItemReward_H_
 
+#ifdef __cplusplus
+
 #include <soomla/CCCoreConsts.h>
 #include <soomla/rewards/CCReward.h>
 
@@ -64,5 +66,7 @@ protected:
     void putAssociatedItemIdToValueMap(cocos2d::ValueMap& map);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCVirtualItemReward_H_

@@ -17,6 +17,8 @@
 #ifndef __CCSingleUseVG_H_
 #define __CCSingleUseVG_H_
 
+#ifdef __cplusplus
+
 #include "soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
@@ -76,5 +78,7 @@ public:
     virtual const char* getType() const override;
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCSingleUseVG_H_

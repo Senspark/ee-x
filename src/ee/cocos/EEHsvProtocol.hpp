@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_HSV_PROTOCOL_HPP_
 #define EE_LIBRARY_HSV_PROTOCOL_HPP_
 
+#ifdef __cplusplus
+
 #include <math/Mat4.h>
 
 #include "ee/CocosFwd.hpp"
@@ -67,5 +69,7 @@ private:
     bool contrastMatrixDirty_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_HSV_PROTOCOL_HPP_ */

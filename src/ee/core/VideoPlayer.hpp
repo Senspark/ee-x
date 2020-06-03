@@ -8,6 +8,8 @@
 #ifndef EE_X_VIDEO_PLAYER_HPP
 #define EE_X_VIDEO_PLAYER_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/CoreFwd.hpp"
@@ -72,5 +74,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_VIDEO_PLAYER_HPP */

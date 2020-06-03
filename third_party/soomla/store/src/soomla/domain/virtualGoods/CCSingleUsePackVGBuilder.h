@@ -1,6 +1,8 @@
 #ifndef SOOMLA_SINGLE_USE_PACK_VG_BUILDER_HPP
 #define SOOMLA_SINGLE_USE_PACK_VG_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCPurchasableVirtualItemBuilder.h"
 #include "soomla/domain/virtualGoods/CCSingleUsePackVG.h"
 
@@ -24,5 +26,7 @@ private:
 // Backward compatibility.
 using CCSingleUsePackVGBuilder = SingleUsePackVGBuilder;
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // SOOMLA_SINGLE_USE_PACK_VG_BUILDER_HPP

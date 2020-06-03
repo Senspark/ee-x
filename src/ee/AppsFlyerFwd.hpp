@@ -8,6 +8,8 @@
 #ifndef EE_X_APPS_FLYER_FWD_HPP
 #define EE_X_APPS_FLYER_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -17,5 +19,7 @@ class IBridge;
 
 using IAppsFlyer = apps_flyer::IBridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_APPS_FLYER_FWD_HPP */

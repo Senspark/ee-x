@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_ACTION_HPP_
 #define EE_LIBRARY_ACTION_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCActionInterval.h>
 
 #include "ee/CocosFwd.hpp"
@@ -96,5 +98,7 @@ protected:
     cocos2d::Vec2 endPosition_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_ACTION_HPP_ */

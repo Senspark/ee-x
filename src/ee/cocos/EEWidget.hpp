@@ -8,6 +8,8 @@
 #ifndef EE_LIBRARY_WIDGET_HPP
 #define EE_LIBRARY_WIDGET_HPP
 
+#ifdef __cplusplus
+
 // Must be included first.
 #include "ee/CocosFwd.hpp"
 
@@ -96,5 +98,7 @@ private:
 };
 } // namespace ui
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_WIDGET_HPP */

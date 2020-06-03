@@ -17,6 +17,8 @@
 #ifndef __CCNativeCoreBridge_H_
 #define __CCNativeCoreBridge_H_
 
+#ifdef __cplusplus
+
 #include "soomla/CCCoreBridge.h"
 
 namespace soomla {
@@ -29,5 +31,7 @@ private:
     void bindNative();
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* __CCNativeCoreBridge_H_ */

@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_DYNAMIC_LINK_BRIDGE_HPP
 #define EE_X_FIREBASE_DYNAMIC_LINK_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <map>
 #include <memory>
@@ -58,5 +60,7 @@ private:
 } // namespace dynamic_link
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_DYNAMIC_LINK_BRIDGE_HPP */

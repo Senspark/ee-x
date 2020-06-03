@@ -8,6 +8,8 @@
 #ifndef EE_LIBRARY_I_LANGUAGE_SWITCHER_HPP
 #define EE_LIBRARY_I_LANGUAGE_SWITCHER_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 
@@ -50,5 +52,7 @@ public:
 };
 } // namespace language
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_E_LANGUAGE_SWITCHER_HPP */

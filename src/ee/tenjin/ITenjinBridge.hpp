@@ -5,6 +5,8 @@
 #ifndef EE_X_I_TENJIN_BRIDGE_HPP
 #define EE_X_I_TENJIN_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/TenjinFwd.hpp"
@@ -19,5 +21,7 @@ public:
 };
 } // namespace tenjin
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_TENJIN_BRIDGE_HPP */

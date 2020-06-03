@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_EVENT_LISTENER_HPP_
 #define EE_LIBRARY_EVENT_LISTENER_HPP_
 
+#ifdef __cplusplus
+
 #include <base/CCEventListener.h>
 
 #include "ee/CocosFwd.hpp"
@@ -58,5 +60,7 @@ private:
 };
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_EVENT_LISTENER_HPP_ */

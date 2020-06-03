@@ -6,6 +6,8 @@
 #ifndef EE_X_FACEBOOK_FWD_HPP_
 #define EE_X_FACEBOOK_FWD_HPP_
 
+#ifdef __cplusplus
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -52,5 +54,7 @@ using IFacebookShareDelegate = facebook::IShareDelegate;
 using FacebookRequestContent = facebook::RequestContent;
 using FacebookGraphRequest = facebook::GraphRequest;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_FWD_HPP_ */

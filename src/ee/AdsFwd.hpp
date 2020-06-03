@@ -9,6 +9,8 @@
 #ifndef EE_X_ADS_FWD_HPP
 #define EE_X_ADS_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -72,5 +74,7 @@ using IRewardedVideo [[deprecated]] = IRewardedAd;
 using MultiRewardedVideo [[deprecated]] = MultiRewardedAd;
 using NullRewardedVideo [[deprecated]] = NullRewardedAd;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADS_FWD_HPP */

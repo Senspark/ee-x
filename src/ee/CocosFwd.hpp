@@ -1,6 +1,8 @@
 #ifndef EE_X_COCOS_FWD_HPP
 #define EE_X_COCOS_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <cstddef>
 #include <string>
 #include <unordered_map>
@@ -326,5 +328,7 @@ using cocos::Metrics;
 using cocos::Delay;
 using cocos::SwitchToCocosThread;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_COCOS_FWD_HPP

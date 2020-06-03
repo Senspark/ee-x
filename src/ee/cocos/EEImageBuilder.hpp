@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_IMAGE_BUILDER_HPP_
 #define EE_LIBRARY_IMAGE_BUILDER_HPP_
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include <platform/CCGL.h>
@@ -93,5 +95,7 @@ private:
     GLuint wrapT_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_IMAGE_BUILDER_HPP_ */

@@ -1,6 +1,8 @@
 #ifndef EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include <ee/FirebaseFwd.hpp>
@@ -21,5 +23,7 @@ private:
 } // namespace crashlytics
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP

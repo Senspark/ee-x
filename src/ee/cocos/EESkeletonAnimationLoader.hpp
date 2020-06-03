@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_
 #define EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include "ee/cocos/EENodeV3Loader.hpp"
 
 namespace ee {
@@ -49,5 +51,7 @@ private:
     std::string animationName_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SKELETON_ANIMATION_LOADER_HPP_ */

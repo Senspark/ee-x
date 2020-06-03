@@ -9,6 +9,8 @@
 #ifndef EE_X_I_INTERSTITIAL_AD_HPP
 #define EE_X_I_INTERSTITIAL_AD_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 
 #include <ee/core/IObserverManager.hpp>
@@ -44,5 +46,7 @@ public:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_INTERSTITIAL_AD_HPP */

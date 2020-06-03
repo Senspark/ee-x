@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_BUTTON_HPP_
 #define EE_LIBRARY_BUTTON_HPP_
 
+#ifdef __cplusplus
+
 #include <array>
 #include <functional>
 
@@ -209,5 +211,7 @@ private:
 };
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_BUTTON_HPP_ */

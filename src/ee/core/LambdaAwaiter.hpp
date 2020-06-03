@@ -1,6 +1,8 @@
 #ifndef EE_X_LAMBDA_AWAITER_HPP
 #define EE_X_LAMBDA_AWAITER_HPP
 
+#ifdef __cplusplus
+
 #include <experimental/coroutine>
 #include <functional>
 #include <vector>
@@ -128,5 +130,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_LAMBDA_AWAITER_HPP

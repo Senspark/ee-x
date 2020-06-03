@@ -19,6 +19,8 @@
 #ifndef __CCPurchaseType__
 #define __CCPurchaseType__
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCError.h>
@@ -72,5 +74,7 @@ public:
 };
 
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCPurchaseType__

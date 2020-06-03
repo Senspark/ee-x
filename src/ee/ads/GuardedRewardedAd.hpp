@@ -1,6 +1,8 @@
 #ifndef EE_X_GUARDED_REWARDED_AD_HPP
 #define EE_X_GUARDED_REWARDED_AD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IRewardedAd.hpp"
@@ -30,5 +32,7 @@ private:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_GUARDED_REWARDED_AD_HPP

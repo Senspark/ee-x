@@ -1,6 +1,8 @@
 #ifndef EE_X_IRON_SOURCE_BRIDGE_HPP
 #define EE_X_IRON_SOURCE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <memory>
 #include <string>
@@ -69,5 +71,7 @@ private:
 };
 } // namespace iron_source
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_IRON_SOURCE_BRIDGE_HPP */

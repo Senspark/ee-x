@@ -17,6 +17,8 @@
 #ifndef __CCPurchaseWithVirtualItem_H_
 #define __CCPurchaseWithVirtualItem_H_
 
+#ifdef __cplusplus
+
 #include "soomla/PurchaseTypes/CCPurchaseType.h"
 
 namespace soomla {
@@ -70,5 +72,7 @@ public:
 };
 
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCPurchaseWithVirtualItem_H_

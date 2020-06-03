@@ -8,6 +8,8 @@
 #ifndef EE_X_I_FACEBOOK_DELEGATE_HPP
 #define EE_X_I_FACEBOOK_DELEGATE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 
@@ -33,5 +35,7 @@ public:
 };
 } // namespace facebook
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_FACEBOOK_REQUEST_DELEGATE_HPP */

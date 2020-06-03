@@ -17,6 +17,8 @@
 #ifndef __CCVirtualItemStorage_H__
 #define __CCVirtualItemStorage_H__
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCError.h>
@@ -111,5 +113,7 @@ protected:
                                         int amountAdded) = 0;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCVirtualItemStorage_H__

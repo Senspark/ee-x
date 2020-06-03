@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SPRITE_WITH_HSV_HPP_
 #define EE_LIBRARY_SPRITE_WITH_HSV_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCSprite.h>
 
 #include "ee/cocos/EEHsvProtocol.hpp"
@@ -67,5 +69,7 @@ private:
     cocos2d::GLProgramState* customState_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SPRITE_WITH_HSV_HPP_ */

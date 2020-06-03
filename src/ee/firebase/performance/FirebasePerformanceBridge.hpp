@@ -8,6 +8,8 @@
 #ifndef EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
 #define EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <memory>
 #include <string>
 
@@ -46,5 +48,7 @@ public:
 } // namespace performance
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP */

@@ -17,6 +17,8 @@
 #ifndef __CCPurchasableVirtualItem__
 #define __CCPurchasableVirtualItem__
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCVirtualItem.h"
 #include "soomla/PurchaseTypes/CCPurchaseType.h"
 
@@ -82,5 +84,7 @@ protected:
     void putPurchaseTypeToValueMap(cocos2d::ValueMap& map);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCPurchasableVirtualItem__

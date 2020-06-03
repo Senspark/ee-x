@@ -1,6 +1,8 @@
 #ifndef EE_X_MAKE_AWAITER_HPP
 #define EE_X_MAKE_AWAITER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/core/NoAwait.hpp"
 #include "ee/core/Task.hpp"
 
@@ -29,5 +31,7 @@ auto makeAwaiter(const Function& f) {
 
 using core::makeAwaiter;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_MAKE_AWAITER_HPP

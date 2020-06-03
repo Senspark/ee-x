@@ -17,6 +17,8 @@
 #ifndef __CCStoreAssets_H_
 #define __CCStoreAssets_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/domain/CCVirtualCategory.h"
@@ -85,5 +87,7 @@ namespace soomla {
         virtual cocos2d::Vector<CCVirtualCategory*>& getCategories() = 0;
     };
 };
+
+#endif // __cplusplus
 
 #endif //__CCStoreAssets_H_

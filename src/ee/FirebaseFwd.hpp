@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_FWD_HPP
 #define EE_X_FIREBASE_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -64,5 +66,7 @@ using FirebaseConfigInfo = firebase::remote_config::ConfigInfo;
 using FirebaseRemoteConfig = firebase::remote_config::Bridge;
 using FirebaseStorage = firebase::storage::Bridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_FWD_HPP */

@@ -17,6 +17,8 @@
 #ifndef __CCSequenceReward_H_
 #define __CCSequenceReward_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCSoomlaMacros.h"
@@ -49,5 +51,7 @@ protected:
     virtual bool giveInner() override;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCSequenceReward_H_

@@ -9,6 +9,8 @@
 #ifndef EE_X_LEGACY_DIALOG_MANAGER_HPP
 #define EE_X_LEGACY_DIALOG_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 #include "ee/cocos/Dialog.hpp"
@@ -27,5 +29,7 @@ public:
 
 using DialogManager = cocos::LegacyDialogManager;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_LEGACY_DIALOG_MANAGER_HPP */

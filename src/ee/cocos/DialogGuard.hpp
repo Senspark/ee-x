@@ -9,6 +9,8 @@
 #ifndef EE_X_DIALOG_GUARD_HPP
 #define EE_X_DIALOG_GUARD_HPP
 
+#ifdef __cplusplus
+
 #include <base/CCRefPtr.h>
 
 #include "ee/CocosFwd.hpp"
@@ -28,5 +30,7 @@ private:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_DIALOG_GUARD_HPP */

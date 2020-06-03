@@ -17,6 +17,8 @@
 #ifndef COCOS2DXCORE_ССSOOMLACONFIGBUILDER_H
 #define COCOS2DXCORE_ССSOOMLACONFIGBUILDER_H
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 namespace soomla {
@@ -37,5 +39,7 @@ public:
     const cocos2d::ValueMap& build();
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // COCOS2D

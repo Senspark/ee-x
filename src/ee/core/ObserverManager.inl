@@ -1,3 +1,5 @@
+#ifdef __cplusplus
+
 namespace ee {
 namespace core {
 #define Self ObserverManager
@@ -42,3 +44,5 @@ void Self<Observer>::dispatchEvent(const Dispatcher& dispatcher) {
 #undef Self
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus

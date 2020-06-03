@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_FWD_HPP
 #define EE_X_CORE_FWD_HPP
 
+#ifdef __cplusplus
+
 #include "ee/Macro.hpp"
 
 namespace cppcoro {
@@ -98,5 +100,7 @@ using core::Task;
 using core::JniUtils;
 #endif // EE_X_ANDROID
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CORE_FWD_HPP */

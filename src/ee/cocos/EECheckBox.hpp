@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_CHECK_BOX_HPP_
 #define EE_LIBRARY_CHECK_BOX_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <vector>
 
@@ -78,5 +80,7 @@ private:
     CheckAllBox* checkAllBox_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_CHECK_BOX_HPP_ */

@@ -1,3 +1,5 @@
+#ifdef __cplusplus
+
 #include <mutex>
 
 namespace ee {
@@ -31,3 +33,5 @@ void Self<Observer>::dispatchEvent(const Dispatcher& dispatcher) {
 #undef Self
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus

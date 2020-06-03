@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_LANGUAGE_SWITCHER_HPP
 #define EE_LIBRARY_LANGUAGE_SWITCHER_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <set>
 #include <string>
@@ -66,5 +68,7 @@ private:
 };
 } // namespace language
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_LANGUAGE_SWITCHER_HPP */

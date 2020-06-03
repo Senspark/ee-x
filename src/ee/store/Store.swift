@@ -48,11 +48,12 @@ private class StoreProductsRequestDelegate: NSObject, SKProductsRequestDelegate 
 }
 
 @objc(EEStore)
-private class Store: NSObject, SKPaymentTransactionObserver {
+public class Store: NSObject, SKPaymentTransactionObserver {
     private let _bridge: EEIMessageBridge
     private let _queue: SKPaymentQueue
 
-    @objc private init(_ bridge: EEIMessageBridge) {
+    @objc
+    public init(_ bridge: EEIMessageBridge) {
         _bridge = bridge
         _queue = SKPaymentQueue.default()
         super.init()
@@ -88,7 +89,7 @@ private class Store: NSObject, SKPaymentTransactionObserver {
         _queue.restoreCompletedTransactions()
     }
 
-    fileprivate func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             switch transaction.transactionState {
             case .purchasing:
@@ -163,17 +164,17 @@ private class Store: NSObject, SKPaymentTransactionObserver {
         // http://stackoverflow.com/questions/26187148/deferred-transactions
     }
 
-    fileprivate func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+    public func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
         // FIXME.
     }
 
-    fileprivate func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         // FIXME.
 //    EEMessageBridge* bridge = [EEMessageBridge getInstance];
 //    [bridge callCpp:k__restore_purchases_succeeded];
     }
 
-    fileprivate func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+    public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         // FIXME.
 //        EEMessageBridge* bridge = [EEMessageBridge getInstance];
 //        [bridge callCpp:k__restore_purchases_failed

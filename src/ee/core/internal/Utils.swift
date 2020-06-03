@@ -9,7 +9,8 @@ import Foundation
 import Reachability
 import RxSwift
 
-@objc public class Utils: NSObject {
+@objc(EEUtils)
+public class Utils: NSObject {
     private static let kPrefix = "Utils_"
     private static let kIsMainThread = kPrefix + "isMainThread"
     private static let kRunOnUiThread = kPrefix + "runOnUiThread"
@@ -21,31 +22,36 @@ import RxSwift
     private static let kGetApplicationName = kPrefix + "getApplicationName"
     private static let kGetVersionName = kPrefix + "getVersionName"
     private static let kGetVersionCode = kPrefix + "getVersionCode"
-    private static let kIsTablet = "isTablet"
-    private static let kGetDensity = "Utils_getDensity"
-    private static let kGetDeviceId = "Utils_getDeviceId"
-    private static let kSendMail = "Utils_sendMail"
-    private static let kTestConnection = "Utils_testConnection"
+    private static let kIsTablet = kPrefix + "isTablet"
+    private static let kGetDensity = kPrefix + "getDensity"
+    private static let kGetDeviceId = kPrefix + "getDeviceId"
+    private static let kSendMail = kPrefix + "sendMail"
+    private static let kTestConnection = kPrefix + "testConnection"
 
     #if os(iOS)
-    private class func getCurrentRootViewController() -> UIViewController? {
+    @objc
+    public class func getCurrentRootViewController() -> UIViewController? {
         return UIApplication.shared.keyWindow?.rootViewController
     }
 
-    private class func isLandspace() -> Bool {
+    @objc
+    public class func isLandscape() -> Bool {
         return UIApplication.shared.statusBarOrientation.isLandscape
     }
     #endif // os(iOS)
 
-    private class func toString(_ value: Bool) -> String {
+    @objc
+    public class func toString(_ value: Bool) -> String {
         return value ? "true" : "false"
     }
 
-    private class func toBool(_ value: String) -> Bool {
+    @objc
+    public class func toBool(_ value: String) -> Bool {
         assert(value == "true" || value == "false", "Unexpected value: " + value)
         return value == "true"
     }
 
+    @objc
     public class func registerHandlers(_ bridge: EEIMessageBridge) {
         bridge.registerHandler(kIsMainThread) { _ in
             toString(isMainThread())
@@ -118,11 +124,13 @@ import RxSwift
         }
     }
 
-    private class func isMainThread() -> Bool {
+    @objc
+    public class func isMainThread() -> Bool {
         return Thread.isMainThread
     }
 
-    private class func runOnMainThread(_ callback: @escaping () -> Void) -> Bool {
+    @objc
+    public class func runOnMainThread(_ callback: @escaping () -> Void) -> Bool {
         if isMainThread() {
             callback()
             return true
@@ -142,15 +150,25 @@ import RxSwift
     }
 
     private class func isApplicationInstalled(_ applicationId: String) -> Bool {
+        #if os(iOS)
         if let url = URL(string: applicationId + "://") {
             return UIApplication.shared.canOpenURL(url)
         }
+        #else
+        if NSWorkspace.shared.fullPath(forApplication: applicationId) != nil {
+            return true
+        }
+        #endif
         return false
     }
 
     private class func openApplication(_ applicationId: String) -> Bool {
         if let url = URL(string: applicationId + "://") {
+            #if os(iOS)
             return UIApplication.shared.openURL(url)
+            #elseif os(OSX)
+            return NSWorkspace.shared.open(url)
+            #endif
         }
         return false
     }
@@ -176,36 +194,54 @@ import RxSwift
     }
 
     private class func isTablet() -> Bool {
+        #if os(iOS)
         return UIDevice.current.model.hasPrefix("iPad")
+        #else
+        return false
+        #endif
     }
 
-    private class func getDensity() -> Float {
+    @objc
+    public class func getDensity() -> Float {
+        #if os(iOS)
         return Float(UIScreen.main.scale)
-
-        /*
-         macos.
-         if ([[NSScreen mainScreen]
-                 respondsToSelector:@selector(backingScaleFactor)]) {
-             for (NSScreen* screen in [NSScreen screens]) {
-                 CGFloat scale = [screen backingScaleFactor];
-                 if (scale > density) {
-                     density = scale;
-                 }
-             }
-         }
-         */
+        #else
+        let screen = NSScreen.screens.max { lhs, rhs in
+            lhs.backingScaleFactor < rhs.backingScaleFactor
+        }
+        return Float(screen?.backingScaleFactor ?? 1)
+        #endif
     }
 
-    private class func convertDpToPixels(_ dp: Float) -> Float {
+    @objc
+    public class func convertDpToPixels(_ dp: Float) -> Float {
         return dp * getDensity()
     }
 
-    private class func convertPixelsToDp(_ pixels: Float) -> Float {
+    @objc
+    public class func convertPixelsToDp(_ pixels: Float) -> Float {
         return pixels / getDensity()
     }
 
     private class func getDeviceId() -> String {
+        #if os(iOS)
         return UIDevice.current.identifierForVendor?.uuidString ?? ""
+        #else
+        // Get the platform expert
+        let platformExpert: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+
+        // Get the serial number as a CFString ( actually as Unmanaged<AnyObject>! )
+        let serialNumberAsCFString = IORegistryEntryCreateCFProperty(
+            platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0)
+
+        // Release the platform expert (we're responsible)
+        IOObjectRelease(platformExpert)
+
+        // Take the unretained value of the unmanaged-any-object
+        // (so we're not responsible for releasing it)
+        // and pass it back as a String or, if it fails, an empty string
+        return (serialNumberAsCFString?.takeUnretainedValue() as? String) ?? ""
+        #endif
     }
 
     private class func sendMail(_ recipient: String, _ subject: String, _ body: String) -> Bool {
@@ -216,7 +252,11 @@ import RxSwift
         guard let url = URL(string: encodedStr) else {
             return false
         }
+        #if os(iOS)
         return UIApplication.shared.openURL(url)
+        #else
+        return NSWorkspace.shared.open(url)
+        #endif
     }
 
     private class func testConnection(_ hostName: String, _ timeOut: Float) -> Single<Bool> {

@@ -7,8 +7,9 @@
 //
 #import "ee/core/EEPluginManager.h"
 
+#import <ee_x-Swift.h>
+
 #import "ee/core/internal/EEMessageBridge.h"
-#import "ee/core/internal/EEUtils.h"
 #import "ee/core/private/EEVideoPlayerManager.h"
 
 @implementation EEPluginManager {
@@ -42,7 +43,7 @@
 }
 
 - (void)initializePlugins {
-    [EEUtils registerHandlers];
+    [EEUtils registerHandlers:bridge_];
     [EEVideoPlayerManager registerHandlers];
 }
 
@@ -59,7 +60,7 @@
         [plugins_ setObject:plugin forKey:pluginName];
     } else {
         // Swift.
-        id plugin = [[[clazz alloc] initWithBridge: bridge_] autorelease];
+        id plugin = [[[clazz alloc] init: bridge_] autorelease];
         [plugins_ setObject:plugin forKey:pluginName];
     }
 }

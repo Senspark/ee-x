@@ -10,10 +10,11 @@
 
 #import <GoogleMobileAds/GADRewardedAd.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEUtils.h>
 
 @interface EEAdMobRewardedAd () <GADRewardedAdDelegate>
 @end

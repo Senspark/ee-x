@@ -7,9 +7,10 @@
 
 #import <ReplayKit/ReplayKit.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 @interface EERecorder () <RPScreenRecorderDelegate,
                           RPPreviewViewControllerDelegate> {

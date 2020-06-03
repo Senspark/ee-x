@@ -10,9 +10,10 @@
 
 #import <FBAudienceNetwork/FBAdSettings.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 #import <ee/core/internal/EEMessageBridge.h>
-#import <ee/core/internal/EEUtils.h>
 
 #import "ee/facebook_ads/private/EEFacebookBannerAd.h"
 #import "ee/facebook_ads/private/EEFacebookBannerHelper.h"

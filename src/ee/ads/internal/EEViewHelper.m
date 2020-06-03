@@ -1,7 +1,5 @@
 #import "ee/ads/internal/EEViewHelper.h"
 
-#import <ee/core/internal/EEUtils.h>
-
 #if TARGET_OS_IOS
 #import <UIKit/UIView.h>
 #define EE_VIEW UIView
@@ -9,6 +7,8 @@
 #import <AppKit/NSView.h>
 #define EE_VIEW NSView
 #endif // TARGET_OS_IOS
+
+#import <ee_x-Swift.h>
 
 @implementation EEViewHelper {
     EE_VIEW* view_;

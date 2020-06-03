@@ -55,6 +55,19 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
+    # Fix linking errors with Facebook SDK 7.
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' '),
+      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
+      'DEAD_CODE_STRIPPING' => 'YES'
+    }
+
     s.dependency 'ee-x/json'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
@@ -334,17 +347,6 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/CMakeLists.txt',
       'src/ee/facebook/generate.sh',
       'src/ee/facebook/sourcelist.cmake'
-
-    # Fix linking errors with Facebook SDK 7.
-    s.user_target_xcconfig = {
-      'LD_RUNPATH_SEARCH_PATHS' => [
-        '/usr/lib/swift'
-      ].join(' '),
-      'LIBRARY_SEARCH_PATHS' => [
-        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
-      ].join(' ')
-    }
 
     s.dependency 'ee-x/core'
     s.dependency 'FBSDKCoreKit'

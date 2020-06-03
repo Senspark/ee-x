@@ -56,6 +56,7 @@ Pod::Spec.new do |spec|
     }
 
     s.dependency 'ee-x/json'
+    s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
   end
 

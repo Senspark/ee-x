@@ -19,6 +19,8 @@
 #ifndef __CCVirtualCurrency_H__
 #define __CCVirtualCurrency_H__
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCVirtualItem.h"
 
 namespace soomla {
@@ -85,5 +87,7 @@ public:
     virtual int getBalance(CCError** error = nullptr) override;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* defined(__CCVirtualCurrency_H__) */

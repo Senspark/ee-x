@@ -17,6 +17,8 @@
 #ifndef __CCEventDispatcher_H_
 #define __CCEventDispatcher_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 namespace soomla {
@@ -36,5 +38,7 @@ public:
     void unregisterEventHander(const std::string& key);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCEventDispatcher_H_

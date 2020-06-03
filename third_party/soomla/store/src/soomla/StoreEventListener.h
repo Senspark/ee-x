@@ -9,6 +9,8 @@
 #ifndef SOOMLA_STORE_STORE_EVENT_LISTENER_HPP_
 #define SOOMLA_STORE_STORE_EVENT_LISTENER_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <memory>
 #include <unordered_map>
@@ -105,5 +107,7 @@ private:
     std::unique_ptr<Impl> impl_;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* SOOMLA_STORE_STORE_EVENT_LISTENER_HPP_ */

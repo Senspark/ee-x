@@ -17,6 +17,8 @@
 #ifndef __CCSoomlaEntity_H_
 #define __CCSoomlaEntity_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCCoreConsts.h"
@@ -62,5 +64,7 @@ protected:
     void putDescriptionToValueMap(cocos2d::ValueMap& dict);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCSoomlaEntity_H_

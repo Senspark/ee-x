@@ -1,6 +1,8 @@
 #ifndef EE_X_DELAY_HPP
 #define EE_X_DELAY_HPP
 
+#ifdef __cplusplus
+
 #include <experimental/coroutine>
 
 #include "ee/CocosFwd.hpp"
@@ -27,5 +29,7 @@ private:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_DELAY_HPP

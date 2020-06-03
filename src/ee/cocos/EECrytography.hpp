@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_CRYTOGRAPHY_HPP_
 #define EE_LIBRARY_CRYTOGRAPHY_HPP_
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/CocosFwd.hpp"
@@ -26,5 +28,7 @@ std::string generateCrc(const std::string& input);
 
 std::string generateMd5(const std::string& input);
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_CRYTOGRAPHY_HPP_ */

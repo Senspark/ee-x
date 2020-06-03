@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_CONSOLE_DELEGATE_HPP_
 #define EE_LIBRARY_CONSOLE_DELEGATE_HPP_
 
+#ifdef __cplusplus
+
 #include <ui/UIEditBox/UIEditBox.h>
 
 #include <ee/CocosFwd.hpp>
@@ -33,5 +35,7 @@ private:
 };
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_CONSOLE_DELEGATE_HPP_ */

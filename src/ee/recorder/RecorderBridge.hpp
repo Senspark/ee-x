@@ -6,6 +6,8 @@
 #ifndef EE_X_RECORDER_BRIDGE_HPP
 #define EE_X_RECORDER_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/RecorderFwd.hpp"
@@ -32,5 +34,7 @@ private:
 };
 } // namespace recorder
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_RECORDER_BRIDGE_HPP */

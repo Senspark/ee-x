@@ -17,6 +17,8 @@
 #ifndef __CCSingleUsePackVG_H_
 #define __CCSingleUsePackVG_H_
 
+#ifdef __cplusplus
+
 #include "soomla/CCStoreConsts.h"
 
 #include "soomla/domain/virtualGoods/CCVirtualGood.h"
@@ -126,5 +128,7 @@ protected:
     void putGoodAmountToValueMap(cocos2d::ValueMap& map);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCSingleUsePackVG_H_

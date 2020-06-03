@@ -9,6 +9,8 @@
 #ifndef EE_X_MULTI_INTERSTITIAL_AD_HPP
 #define EE_X_MULTI_INTERSTITIAL_AD_HPP
 
+#ifdef __cplusplus
+
 #include <memory>
 #include <vector>
 
@@ -43,5 +45,7 @@ private:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_MULTI_INTERSTITIAL_AD_HPP */

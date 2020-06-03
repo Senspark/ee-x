@@ -5,6 +5,10 @@
 #ifndef EE_X_TENJIN_FWD_HPP
 #define EE_X_TENJIN_FWD_HPP
 
+#ifdef __cplusplus
+
+#include <ee/CoreFwd.hpp>
+
 namespace ee {
 namespace tenjin {
 class IBridge;
@@ -12,5 +16,7 @@ class IBridge;
 
 using ITenjin = tenjin::IBridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_TENJIN_FWD_HPP */

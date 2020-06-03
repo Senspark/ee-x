@@ -17,6 +17,8 @@
 #ifndef __CCReward_H_
 #define __CCReward_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCCoreConsts.h"
@@ -60,5 +62,7 @@ private:
     static cocos2d::Map<std::string, CCReward*> rewardsMap;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCReward_H_

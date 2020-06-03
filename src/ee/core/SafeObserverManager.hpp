@@ -1,6 +1,8 @@
 #ifndef EE_X_SAFE_OBSERVER_MANAGER_HPP
 #define EE_X_SAFE_OBSERVER_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/core/ObserverManager.hpp"
 #include "ee/core/SpinLock.hpp"
 
@@ -27,6 +29,8 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #include "ee/core/SafeObserverManager.inl"
 

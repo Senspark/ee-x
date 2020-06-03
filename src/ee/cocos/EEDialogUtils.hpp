@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_DIALOG_UTILS_HPP_
 #define EE_LIBRARY_DIALOG_UTILS_HPP_
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -39,5 +41,7 @@ Dialog* addBlurBackground(Dialog* dialog, float duration = 0.8f,
 Dialog* addHorizontalTransition(Dialog* dialog, float duration = 0.8f,
                                 float rate = 0.8f);
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_DIALOG_UTILS_HPP_ */

@@ -17,6 +17,8 @@
 #ifndef __CCMarketItem_H_
 #define __CCMarketItem_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCSoomlaMacros.h>
@@ -99,5 +101,7 @@ protected:
     void putMarketPriceMicrosToValueMap(cocos2d::ValueMap& map);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCMarketItem_H_

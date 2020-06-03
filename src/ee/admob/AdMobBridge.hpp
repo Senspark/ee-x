@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_BRIDGE_HPP
 #define EE_X_ADMOB_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <memory>
 #include <string>
@@ -84,5 +86,7 @@ private:
 };
 } // namespace admob
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADMOB_BRIDGE_HPP */

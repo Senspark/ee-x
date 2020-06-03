@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_MESSAGE_BRIDGE_HPP_
 #define EE_X_CORE_MESSAGE_BRIDGE_HPP_
 
+#ifdef __cplusplus
+
 #include <unordered_map>
 
 #include "ee/core/IMessageBridge.hpp"
@@ -56,5 +58,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CORE_MESSAGE_BRIDGE_HPP_ */

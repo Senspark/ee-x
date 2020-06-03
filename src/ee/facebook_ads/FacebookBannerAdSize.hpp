@@ -9,6 +9,8 @@
 #ifndef EE_X_FACEBOOK_BANNER_AD_SIZE_HPP
 #define EE_X_FACEBOOK_BANNER_AD_SIZE_HPP
 
+#ifdef __cplusplus
+
 namespace ee {
 namespace facebook_ads {
 enum class BannerAdSize {
@@ -30,5 +32,7 @@ enum class BannerAdSize {
 };
 } // namespace facebook_ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_BANNER_AD_SIZE_HPP */

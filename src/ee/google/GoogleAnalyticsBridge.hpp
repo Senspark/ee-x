@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_BRIDGE_HPP
 #define EE_X_GOOGLE_ANALYTICS_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/GoogleAnalyticsFwd.hpp"
@@ -48,5 +50,7 @@ private:
 };
 } // namespace google
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_HPP */

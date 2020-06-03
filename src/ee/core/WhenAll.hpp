@@ -1,6 +1,8 @@
 #ifndef EE_X_WHEN_ALL_HPP
 #define EE_X_WHEN_ALL_HPP
 
+#ifdef __cplusplus
+
 #include <vector>
 
 #include "ee/core/LambdaAwaiter.hpp"
@@ -37,5 +39,7 @@ Task<> whenAll(Args&&... args) {
 }
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_WHEN_ALL_HPP

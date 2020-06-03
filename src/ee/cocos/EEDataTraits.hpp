@@ -9,6 +9,8 @@
 #ifndef EE_DATA_TRAITS_HPP_
 #define EE_DATA_TRAITS_HPP_
 
+#ifdef __cplusplus
+
 #include <chrono>
 #include <string>
 #include <type_traits>
@@ -85,5 +87,7 @@ public:
     }
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_DATA_TRAITS_HPP_ */

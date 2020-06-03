@@ -19,6 +19,8 @@
 #ifndef __CCVirtualGood_H_
 #define __CCVirtualGood_H_
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCPurchasableVirtualItem.h"
 
 namespace soomla {
@@ -47,5 +49,6 @@ namespace soomla {
     };
 };
 
+#endif // __cplusplus
 
 #endif //__CCVirtualGood_H_

@@ -1,6 +1,8 @@
 #ifndef EE_X_ASYNC_MUTEX_HPP
 #define EE_X_ASYNC_MUTEX_HPP
 
+#ifdef __cplusplus
+
 #include <atomic>
 #include <cstdint>
 #include <experimental/coroutine>
@@ -180,5 +182,7 @@ using AsyncMutexScopedLockOperation =
     cppcoro::async_mutex_scoped_lock_operation;
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_ASYNC_MUTEX_HPP

@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_UTILS_HPP_
 #define EE_LIBRARY_UTILS_HPP_
 
+#ifdef __cplusplus
+
 #include <cstring>
 #include <functional>
 #include <limits>
@@ -266,5 +268,7 @@ void downloadImage(
     const std::string& imageUrl,
     const std::function<void(cocos2d::Texture2D*)>& afterDownloaded);
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_UTILS_HPP_ */

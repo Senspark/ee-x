@@ -17,6 +17,8 @@
 #ifndef __CCCoreBridge_H_
 #define __CCCoreBridge_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCError.h"
@@ -39,5 +41,7 @@ namespace soomla {
         virtual bool init();
     };
 };
+
+#endif // __cplusplus
 
 #endif // !__CCCoreBridge_H_

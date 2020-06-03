@@ -17,6 +17,8 @@
 #ifndef __CCBridgelessKeyValueStorage_H
 #define __CCBridgelessKeyValueStorage_H
 
+#ifdef __cplusplus
+
 #include <set>
 
 #include "soomla/data/CCKeyValueStorage.h"
@@ -48,5 +50,7 @@ protected:
     void loadStoredKeys();
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCBridgelessKeyValueStorage_H

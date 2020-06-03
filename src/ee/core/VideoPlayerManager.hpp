@@ -8,6 +8,8 @@
 #ifndef EE_X_VIDEO_PLAYER_MANAGER_HPP
 #define EE_X_VIDEO_PLAYER_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <memory>
 
@@ -41,5 +43,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_VIDEO_PLAYER_MANAGER_HPP */

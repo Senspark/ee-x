@@ -1,6 +1,8 @@
 #ifndef EE_X_I_OBSERVER_MANAGER_HPP
 #define EE_X_I_OBSERVER_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 
@@ -27,5 +29,7 @@ public:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_I_OBSERVER_MANAGER_HPP

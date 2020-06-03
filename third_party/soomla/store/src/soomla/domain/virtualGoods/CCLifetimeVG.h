@@ -17,6 +17,8 @@
 #ifndef __CCLifetimeVG_H_
 #define __CCLifetimeVG_H_
 
+#ifdef __cplusplus
+
 #include "soomla/domain/virtualGoods/CCVirtualGood.h"
 
 namespace soomla {
@@ -78,5 +80,7 @@ public:
     virtual const char* getType() const;
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCLifetimeVG_H_

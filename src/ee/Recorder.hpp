@@ -14,7 +14,7 @@
 #endif // __cplusplus
 
 #ifdef __OBJC__
-#import "ee/recorder/EERecorder.hpp"
+#import "ee/recorder/EERecorder.h"
 #endif // __OBJC__
 
 #endif /* EE_X_RECORDER_HPP */

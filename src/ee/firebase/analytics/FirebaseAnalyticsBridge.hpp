@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -91,5 +93,7 @@ private:
 } // namespace analytics
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP */

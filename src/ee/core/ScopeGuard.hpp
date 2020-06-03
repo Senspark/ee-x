@@ -9,6 +9,8 @@
 #ifndef EE_X_SCOPE_GUARD_HPP_
 #define EE_X_SCOPE_GUARD_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 
 #include "ee/CoreFwd.hpp"
@@ -56,5 +58,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_SCOPE_GUARD_HPP_ */

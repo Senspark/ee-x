@@ -17,6 +17,8 @@
 #ifndef __CCNativeVirtualCurrencyStorage_H_
 #define __CCNativeVirtualCurrencyStorage_H_
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCVirtualCurrencyStorage.h"
 
 namespace soomla {
@@ -44,5 +46,7 @@ public:
                        CCError** error = nullptr);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCNativeVirtualCurrencyStorage_H_

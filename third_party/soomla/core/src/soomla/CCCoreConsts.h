@@ -17,6 +17,8 @@
 #ifndef __CCCoreConsts__
 #define __CCCoreConsts__
 
+#ifdef __cplusplus
+
 namespace soomla {
     class CCCoreConsts {
     public:
@@ -54,5 +56,7 @@ namespace soomla {
         static char const *EVENT_CUSTOM;
     };
 }
+
+#endif // __cplusplus
 
 #endif /* defined(__CCCoreConsts__) */

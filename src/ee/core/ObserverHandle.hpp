@@ -1,6 +1,8 @@
 #ifndef EE_X_OBSERVER_HANDLE_HPP
 #define EE_X_OBSERVER_HANDLE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <vector>
 
@@ -28,6 +30,8 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #include "ee/core/ObserverHandle.inl"
 

@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_FWD_HPP
 #define EE_X_GOOGLE_ANALYTICS_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <string>
 
@@ -38,5 +40,7 @@ using GoogleTimingBuilder = google::TimingBuilder;
 using GoogleProduct = google::Product;
 using GoogleProductAction = google::ProductAction;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_FWD_HPP */

@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_
 #define EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include <ui/UIWidget.h>
 
 #include "ee/cocos/EEUiWidgetLoader.hpp"
@@ -55,5 +57,7 @@ private:
     cocos2d::ui::Widget::TextureResType textureResType_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_ */

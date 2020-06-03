@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_
 #define EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_
 
+#ifdef __cplusplus
+
 #include <GUI/CCControlExtension/CCControl.h>
 #include <ui/UIWidget.h>
 
@@ -79,5 +81,7 @@ private:
     }
 } // namespace detail
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_WIDGET_CALLBACK_HPP_ */

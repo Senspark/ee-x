@@ -6,6 +6,8 @@
 #ifndef EE_X_PLAY_BRIDGE_HPP
 #define EE_X_PLAY_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 
@@ -45,5 +47,7 @@ private:
 };
 } // namespace play
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_PLAY_BRIDGE_HPP */

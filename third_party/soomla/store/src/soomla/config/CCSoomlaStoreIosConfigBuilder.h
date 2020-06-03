@@ -17,6 +17,8 @@
 #ifndef COCOS2DXSTORE_CCSOOMLASTOREIOSCONFIGBUILDER_H
 #define COCOS2DXSTORE_CCSOOMLASTOREIOSCONFIGBUILDER_H
 
+#ifdef __cplusplus
+
 #include <soomla/CCSoomlaConfigBuilder.h>
 
 namespace soomla {
@@ -28,5 +30,7 @@ public:
     activateFraudProtection(bool verifyOnServerFailure);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // COCOS2DXSTORE_CCSOOMLASTOREIOSCONFIGBUILDER_H

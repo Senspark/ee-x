@@ -17,6 +17,8 @@
 #ifndef __CCVirtualGoodsStorage_H__
 #define __CCVirtualGoodsStorage_H__
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCVirtualItemStorage.h"
 #include "soomla/domain/virtualGoods/CCEquippableVG.h"
 #include "soomla/domain/virtualGoods/CCUpgradeVG.h"
@@ -139,5 +141,7 @@ private:
     static std::string keyGoodUpgrade(const std::string& itemId);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCVirtualGoodsStorage_H__

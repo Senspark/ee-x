@@ -17,6 +17,8 @@
 #ifndef __CCRewardStorage_H_
 #define __CCRewardStorage_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/rewards/CCReward.h"
@@ -43,5 +45,7 @@ private:
     std::string keyRewardLastGiven(const std::string& rewardId);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCRewardStorage_H_

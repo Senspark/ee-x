@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_PARTICLE_POOL_HPP
 #define EE_LIBRARY_PARTICLE_POOL_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -25,5 +27,7 @@ void initializeParticlePool(const std::string& plistName, std::size_t capacity);
 cocos2d::ParticleSystem* createParticle(const std::string& plistName,
                                         const std::string& textureName);
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_PARTICLE_POOL_HPP */

@@ -17,6 +17,8 @@
 #ifndef __CCStoreInventory_H_
 #define __CCStoreInventory_H_
 
+#ifdef __cplusplus
+
 #include <set>
 
 #include <cocos2d.h>
@@ -235,5 +237,7 @@ private:
     std::set<std::string> mLocalEquippedGoods;
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCStoreInventory_H_

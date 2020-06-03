@@ -19,6 +19,8 @@
 #ifndef __CCVirtualItem_H__
 #define __CCVirtualItem_H__
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCError.h>
@@ -127,5 +129,7 @@ namespace soomla {
     };
     
 }
+
+#endif // __cplusplus
 
 #endif /* defined(__CCVirtualItem_H__) */

@@ -17,6 +17,8 @@
 #ifndef __CCRandomReward_H_
 #define __CCRandomReward_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCSoomlaMacros.h"
@@ -48,5 +50,7 @@ protected:
     virtual bool giveInner() override;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCRandomReward_H_

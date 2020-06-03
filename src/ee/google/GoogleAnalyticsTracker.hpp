@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_TRACKER_HPP
 #define EE_X_GOOGLE_ANALYTICS_TRACKER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/GoogleAnalyticsFwd.hpp"
 
 namespace ee {
@@ -48,5 +50,7 @@ private:
 };
 } // namespace google
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_TRACKER_HPP */

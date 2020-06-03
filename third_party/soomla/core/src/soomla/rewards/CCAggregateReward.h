@@ -17,6 +17,8 @@
 #ifndef __CCAggregateReward_H_
 #define __CCAggregateReward_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCSoomlaMacros.h"
@@ -46,5 +48,7 @@ namespace soomla {
     protected:
     };
 }
+
+#endif // __cplusplus
 
 #endif //__CCAggregateReward_H_

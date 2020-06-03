@@ -17,6 +17,8 @@
 #ifndef __CCNdkBridge_H_
 #define __CCNdkBridge_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/CCError.h"
@@ -42,5 +44,7 @@ public:
                                         CCError** pError);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCNdkBridge_H_

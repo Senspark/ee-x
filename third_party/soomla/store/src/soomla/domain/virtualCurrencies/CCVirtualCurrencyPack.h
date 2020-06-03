@@ -17,6 +17,8 @@
 #ifndef __CCVirtualCurrencyPack_H_
 #define __CCVirtualCurrencyPack_H_
 
+#ifdef __cplusplus
+
 #include <soomla/CCSoomlaMacros.h>
 #include "soomla/CCStoreConsts.h"
 
@@ -121,5 +123,7 @@ protected:
     void putCurrencyItemIdToValueMap(cocos2d::ValueMap& map);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCVirtualCurrencyPack_H_

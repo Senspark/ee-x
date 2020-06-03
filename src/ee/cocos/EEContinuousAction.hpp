@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_CONTINUOUS_ACTION_HPP_
 #define EE_LIBRARY_CONTINUOUS_ACTION_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <vector>
 
@@ -28,5 +30,7 @@ private:
     std::vector<TailAction> actions_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_CONTINUOUS_ACTION_HPP_ */

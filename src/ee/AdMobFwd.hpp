@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_FWD_HPP
 #define EE_X_ADMOB_FWD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/AdsFwd.hpp>
 
 namespace ee {
@@ -27,5 +29,7 @@ using AdMob = admob::Bridge;
 using AdMobBannerAdSize = admob::BannerAdSize;
 using AdMobNativeAdLayout = admob::NativeAdLayout;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADMOB_FWD_HPP */

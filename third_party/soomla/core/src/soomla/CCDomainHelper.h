@@ -18,6 +18,8 @@
 #ifndef __CCDomainHelper_H_
 #define __CCDomainHelper_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include "soomla/domain/CCDomain.h"
@@ -34,5 +36,7 @@ public:
     getValueVectorFromDomains(const cocos2d::Vector<CCDomain*>& domainArray);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCDomainHelper_H_

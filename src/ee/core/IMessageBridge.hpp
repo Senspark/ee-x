@@ -8,6 +8,8 @@
 #ifndef EE_X_CORE_I_MESSAGE_BRIDGE_HPP
 #define EE_X_CORE_I_MESSAGE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 
@@ -56,5 +58,7 @@ public:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CORE_I_MESSAGE_BRIDGE_HPP */

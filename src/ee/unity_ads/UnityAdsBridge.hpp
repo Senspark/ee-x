@@ -9,6 +9,8 @@
 #ifndef EE_X_UNITY_ADS_BRIDGE_HPP
 #define EE_X_UNITY_ADS_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <memory>
 #include <string>
@@ -76,5 +78,7 @@ private:
 };
 } // namespace unity_ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_ADS_BRIDGE_HPP_ */

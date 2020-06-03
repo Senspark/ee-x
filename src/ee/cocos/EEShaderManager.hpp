@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SHADER_MANAGER_HPP
 #define EE_LIBRARY_SHADER_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <string>
 
@@ -53,5 +55,7 @@ private:
     std::map<std::string, std::unique_ptr<Shader>> shaders_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SHADER_MANAGER_HPP */

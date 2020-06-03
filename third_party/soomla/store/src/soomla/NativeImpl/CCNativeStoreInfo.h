@@ -17,6 +17,8 @@
 #ifndef __CCNativeStoreInfo_H_
 #define __CCNativeStoreInfo_H_
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCStoreInfo.h"
 
 namespace soomla {
@@ -37,5 +39,7 @@ namespace soomla {
         virtual void setStoreAssets(CCStoreAssets *storeAssets);
     };
 }
+
+#endif // __cplusplus
 
 #endif // __CCNativeStoreInfo_H_

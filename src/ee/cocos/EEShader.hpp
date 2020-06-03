@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SHADER_HPP
 #define EE_LIBRARY_SHADER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -52,5 +54,7 @@ protected:
     cocos2d::EventListener* backgroundListener_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SHADER_HPP */

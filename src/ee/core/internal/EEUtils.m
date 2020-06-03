@@ -8,7 +8,7 @@
 
 #import "ee/core/internal/EEUtils.h"
 
-#import <ReactiveObjC/ReactiveObjC.h>
+// #import <ReactiveObjC/ReactiveObjC.h>
 #import <TargetConditionals.h>
 
 #import "ee/core/internal/EEJsonUtils.h"
@@ -348,18 +348,19 @@ static NSString* const k__testConnection                = @"Utils_testConnection
 
 + (RACSignal* _Nonnull)testConnection:(NSString* _Nonnull)hostName
                               timeOut:(float)timeOut {
-    RACScheduler* scheduler =
-        [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
-    return [[RACSignal
-        startLazilyWithScheduler:scheduler
-                           block:^(id<RACSubscriber> _Nonnull subscriber) {
-                               NetworkStatus status = [[EEReachability
-                                   reachabilityWithHostname:hostName]
-                                   currentReachabilityStatus];
-                               BOOL isReachable = status != NotReachable;
-                               [subscriber sendNext:@(isReachable)];
-                               [subscriber sendCompleted];
-                           }] timeout:timeOut onScheduler:scheduler];
+//    RACScheduler* scheduler =
+//        [RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground];
+//    return [[RACSignal
+//        startLazilyWithScheduler:scheduler
+//                           block:^(id<RACSubscriber> _Nonnull subscriber) {
+//                               NetworkStatus status = [[EEReachability
+//                                   reachabilityWithHostname:hostName]
+//                                   currentReachabilityStatus];
+//                               BOOL isReachable = status != NotReachable;
+//                               [subscriber sendNext:@(isReachable)];
+//                               [subscriber sendCompleted];
+//                           }] timeout:timeOut onScheduler:scheduler];
+    return nil;
 }
 
 @end

@@ -1,6 +1,8 @@
 #ifndef EE_X_TASK_HPP
 #define EE_X_TASK_HPP
 
+#ifdef __cplusplus
+
 #include <exception>
 #include <experimental/coroutine>
 #include <variant>
@@ -164,5 +166,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_TASK_HPP

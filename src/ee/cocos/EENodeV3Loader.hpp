@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_NODE_V3_LOADER_HPP_
 #define EE_LIBRARY_NODE_V3_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include <cocosbuilder/CCNodeLoader.h>
 
 #include "ee/CocosFwd.hpp"
@@ -59,5 +61,7 @@ private:
     bool localZOrderOverridden_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_NODE_V3_LOADER_HPP_ */

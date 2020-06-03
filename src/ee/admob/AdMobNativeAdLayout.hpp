@@ -9,6 +9,8 @@
 #ifndef EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP
 #define EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 #include <unordered_map>
 
@@ -41,5 +43,7 @@ protected:
 };
 } // namespace admob
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADMOB_NATIVE_AD_LAYOUT_HPP */

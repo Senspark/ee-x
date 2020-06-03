@@ -17,6 +17,8 @@
 #ifndef __CCNativeKeyValueStorage_H__
 #define __CCNativeKeyValueStorage_H__
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCKeyValueStorage.h"
 
 namespace soomla {
@@ -38,5 +40,7 @@ public:
     virtual void purge() override;
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCNativeKeyValueStorage_H__

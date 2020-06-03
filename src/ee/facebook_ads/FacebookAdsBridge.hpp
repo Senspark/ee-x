@@ -9,6 +9,8 @@
 #ifndef EE_X_FACEBOOK_ADS_BRIDGE_HPP_
 #define EE_X_FACEBOOK_ADS_BRIDGE_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <map>
 #include <memory>
@@ -83,5 +85,7 @@ private:
 };
 } // namespace facebook_ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_ADS_BRIDGE_HPP_ */

@@ -17,6 +17,8 @@
 #ifndef __CCAbstractAggregatedEventHandler_H_
 #define __CCAbstractAggregatedEventHandler_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 namespace soomla {
@@ -128,5 +130,7 @@ protected:
     }
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCAbstractAggregatedEventHandler_H_

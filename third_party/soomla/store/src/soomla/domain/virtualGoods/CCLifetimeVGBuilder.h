@@ -8,6 +8,8 @@
 #ifndef SOOMLA_LIFETIME_VG_BUILDER_HPP
 #define SOOMLA_LIFETIME_VG_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCPurchasableVirtualItemBuilder.h"
 #include "soomla/domain/virtualGoods/CCLifetimeVG.h"
 
@@ -24,5 +26,7 @@ public:
 // Backward compatibility.
 using CCLifetimeVGBuilder = LifetimeVGBuilder;
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* SOOMLA_LIFETIME_VG_BUILDER_HPP */

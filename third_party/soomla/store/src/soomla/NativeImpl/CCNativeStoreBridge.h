@@ -17,6 +17,8 @@
 #ifndef __CCNativeStoreBridge_H_
 #define __CCNativeStoreBridge_H_
 
+#ifdef __cplusplus
+
 #include "soomla/CCStoreBridge.h"
 
 namespace soomla {
@@ -36,5 +38,7 @@ namespace soomla {
     };
     
 }
+
+#endif // __cplusplus
 
 #endif // __CCNativeStoreBridge_H_

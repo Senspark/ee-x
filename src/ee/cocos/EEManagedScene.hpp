@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_MANAGED_SCENE_HPP_
 #define EE_LIBRARY_MANAGED_SCENE_HPP_
 
+#ifdef __cplusplus
+
 #include <2d/CCScene.h>
 
 #include "ee/CocosFwd.hpp"
@@ -42,5 +44,7 @@ private:
     std::vector<ImageBuilder> images_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_MANAGED_SCENE_HPP_ */

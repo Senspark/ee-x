@@ -17,6 +17,8 @@
 #ifndef __CCEquippableVG_H_
 #define __CCEquippableVG_H_
 
+#ifdef __cplusplus
+
 #include "soomla/domain/virtualGoods/CCLifetimeVG.h"
 
 namespace soomla {
@@ -154,5 +156,8 @@ protected:
     void fillEquippingModelFromValueMap(const cocos2d::ValueMap& map);
     void putEquippingModelToValueMap(cocos2d::ValueMap& map);
 };
-}; // n
+} // namespace soomla
+
+#endif // __cplusplus
+
 #endif

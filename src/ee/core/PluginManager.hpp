@@ -8,6 +8,8 @@
 #ifndef EE_X_PLUGIN_MANAGER_HPP
 #define EE_X_PLUGIN_MANAGER_HPP
 
+#ifdef __cplusplus
+
 #include <memory>
 
 namespace ee {
@@ -19,5 +21,7 @@ public:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_PLUGIN_MANAGER_HPP */

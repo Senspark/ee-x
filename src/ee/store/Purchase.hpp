@@ -1,6 +1,8 @@
 #ifndef EE_X_PURCHASE_HPP
 #define EE_X_PURCHASE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/StoreFwd.hpp"
@@ -19,5 +21,7 @@ struct Purchase {
 };
 } // namespace store
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_PURCHASE_HPP

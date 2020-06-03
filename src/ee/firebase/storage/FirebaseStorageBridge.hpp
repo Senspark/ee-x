@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_STORAGE_BRIDGE_HPP
 #define EE_X_FIREBASE_STORAGE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <array>
 #include <functional>
 #include <memory>
@@ -86,5 +88,7 @@ private:
 } // namespace storage
 } // namespace firebase
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_STORAGE_BRIDGE_HPP */

@@ -17,6 +17,8 @@
 #ifndef __CCError_H_
 #define __CCError_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 namespace soomla {
@@ -40,5 +42,7 @@ private:
     bool init(std::string& errorInfo);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCError_H_

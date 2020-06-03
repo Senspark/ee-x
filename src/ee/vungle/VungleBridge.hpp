@@ -1,6 +1,8 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 
 #include "ee/VungleFwd.hpp"
@@ -50,5 +52,7 @@ private:
 };
 } // namespace vungle
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_VUNGLE_BRIDGE_HPP */

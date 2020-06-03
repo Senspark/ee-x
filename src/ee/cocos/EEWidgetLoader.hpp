@@ -8,6 +8,8 @@
 #ifndef EE_LIBRARY_WIDGET_LOADER_HPP
 #define EE_LIBRARY_WIDGET_LOADER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
 namespace ee {
@@ -31,5 +33,7 @@ protected:
 };
 } // namespace ui
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_WIDGET_LOADER_HPP */

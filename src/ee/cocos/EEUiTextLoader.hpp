@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_UI_TEXT_LOADER_HPP_
 #define EE_LIBRARY_UI_TEXT_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
 namespace ee {
@@ -98,5 +100,7 @@ private:
     int outlineSize_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_TEXT_LOADER_HPP_ */

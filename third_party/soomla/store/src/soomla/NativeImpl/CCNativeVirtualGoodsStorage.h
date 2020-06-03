@@ -17,6 +17,8 @@
 #ifndef __CCNativeVirtualGoodsStorage_H_
 #define __CCNativeVirtualGoodsStorage_H_
 
+#ifdef __cplusplus
+
 #include "soomla/data/CCVirtualGoodsStorage.h"
 
 namespace soomla {
@@ -62,5 +64,7 @@ public:
                          CCError** error = nullptr);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCNativeVirtualGoodsStorage_H_

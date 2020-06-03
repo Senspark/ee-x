@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_LANGUAGE_DELEGATE_HPP
 #define EE_LIBRARY_LANGUAGE_DELEGATE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 #include <vector>
@@ -67,5 +69,7 @@ private:
 };
 } // namespace language
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_LANGUAGE_DELEGATE_HPP */

@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_COMMAND_POOL_HPP_
 #define EE_LIBRARY_COMMAND_POOL_HPP_
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 #include <tuple>
@@ -109,5 +111,7 @@ private:
     std::vector<Command> commands_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_COMMAND_POOL_HPP_ */

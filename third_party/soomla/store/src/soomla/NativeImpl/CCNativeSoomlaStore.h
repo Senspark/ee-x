@@ -17,6 +17,8 @@
 #ifndef __CCNativeSoomlaStore_H_
 #define __CCNativeSoomlaStore_H_
 
+#ifdef __cplusplus
+
 #include "soomla/CCSoomlaStore.h"
 
 namespace soomla {
@@ -48,5 +50,7 @@ namespace soomla {
         virtual void loadBillingService();
     };
 }
+
+#endif // __cplusplus
 
 #endif // __CCNativeSoomlaStore_H_

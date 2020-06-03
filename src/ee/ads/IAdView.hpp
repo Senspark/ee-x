@@ -9,6 +9,8 @@
 #ifndef EE_X_I_AD_VIEW_HPP
 #define EE_X_I_AD_VIEW_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <utility>
 
@@ -71,5 +73,7 @@ public:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_AD_VIEW_HPP */

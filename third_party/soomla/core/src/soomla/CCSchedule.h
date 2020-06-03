@@ -17,6 +17,8 @@
 #ifndef __CCSchedule_H_
 #define __CCSchedule_H_
 
+#ifdef __cplusplus
+
 #include "soomla/CCCoreConsts.h"
 #include "soomla/CCSoomlaMacros.h"
 #include "soomla/domain/CCDomain.h"
@@ -82,5 +84,7 @@ protected:
     void putActivationLimitToValueMap(cocos2d::ValueMap& map);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCSchedule_H_

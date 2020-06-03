@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_GENERIC_LOADER_HPP_
 #define EE_LIBRARY_GENERIC_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include <tuple>
 #include <type_traits>
 
@@ -90,5 +92,7 @@ private:
     Constructor callback_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_GENERIC_LOADER_HPP_ */

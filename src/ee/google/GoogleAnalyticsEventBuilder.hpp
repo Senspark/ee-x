@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_EVENT_BUILDER_HPP
 #define EE_X_GOOGLE_ANALYTICS_EVENT_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include "ee/google/GoogleAnalyticsBuilder.hpp"
 
 namespace ee {
@@ -37,5 +39,7 @@ public:
 };
 } // namespace google
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_EVENT_BUILDER_HPP */

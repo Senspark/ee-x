@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SKELETON_BONE_LOADER_HPP_
 #define EE_LIBRARY_SKELETON_BONE_LOADER_HPP_
 
+#ifdef __cplusplus
+
 #include "ee/cocos/EENodeV3Loader.hpp"
 
 namespace ee {
@@ -29,5 +31,7 @@ protected:
                            cocosbuilder::CCBReader* reader) override;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SKELETON_BONE_LOADER_HPP_ */

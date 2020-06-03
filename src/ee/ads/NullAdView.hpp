@@ -9,6 +9,8 @@
 #ifndef EE_X_NULL_AD_VIEW_HPP
 #define EE_X_NULL_AD_VIEW_HPP
 
+#ifdef __cplusplus
+
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
@@ -47,5 +49,7 @@ private:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_NULL_AD_VIEW_HPP */

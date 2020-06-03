@@ -9,6 +9,8 @@
 #ifndef EE_X_UTILS_HPP
 #define EE_X_UTILS_HPP
 
+#ifdef __cplusplus
+
 #include <cstdarg>
 #include <functional>
 #include <future>
@@ -191,5 +193,7 @@ using core::testConnection;
 
 using core::SafeInset;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_UTILS_HPP */

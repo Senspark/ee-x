@@ -1,6 +1,8 @@
 #ifndef EE_X_SWITCH_TO_UI_THREAD_HPP
 #define EE_X_SWITCH_TO_UI_THREAD_HPP
 
+#ifdef __cplusplus
+
 #include <experimental/coroutine>
 
 #include "ee/CoreFwd.hpp"
@@ -27,5 +29,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif // EE_X_SWITCH_TO_UI_THREAD_HPP

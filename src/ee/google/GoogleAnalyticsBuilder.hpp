@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_BUILDER_HPP
 #define EE_X_GOOGLE_ANALYTICS_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include <map>
 #include <vector>
 
@@ -87,5 +89,7 @@ private:
 };
 } // namespace google
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_BUILDER_HPP */

@@ -8,6 +8,8 @@
 #ifndef EE_X_I_FACEBOOK_BRIDGE_HPP
 #define EE_X_I_FACEBOOK_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <string>
 #include <vector>
@@ -61,5 +63,7 @@ public:
 };
 } // namespace facebook
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_FACEBOOK_BRIDGE_HPP */

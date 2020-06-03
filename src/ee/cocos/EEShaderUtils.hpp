@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_SHADER_UTILS_HPP
 #define EE_LIBRARY_SHADER_UTILS_HPP
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 namespace ee {
@@ -83,5 +85,7 @@ cocos2d::GLProgram* createVerticalBlurProgram(std::size_t height,
                                               bool useLinearSampling,
                                               float sigma);
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_SHADER_UTILS_HPP */

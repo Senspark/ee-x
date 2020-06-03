@@ -17,6 +17,8 @@
 #ifndef __CCStoreInfo_H_
 #define __CCStoreInfo_H_
 
+#ifdef __cplusplus
+
 #include <cocos2d.h>
 
 #include <soomla/CCError.h>
@@ -194,5 +196,7 @@ private:
         mGoodsUpgrades;
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCStoreInfo_H_

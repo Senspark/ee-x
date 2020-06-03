@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_EVENT_DISPATCHER_HPP_
 #define EE_LIBRARY_EVENT_DISPATCHER_HPP_
 
+#ifdef __cplusplus
+
 #include <memory>
 #include <vector>
 
@@ -98,5 +100,7 @@ private:
     std::vector<UniqueListener> listeners_;
 };
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_EVENT_DISPATCHER_HPP_ */

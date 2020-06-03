@@ -17,6 +17,8 @@
 #ifndef __CCPurchaseWithMarket_H_
 #define __CCPurchaseWithMarket_H_
 
+#ifdef __cplusplus
+
 #include "soomla/domain/CCMarketItem.h"
 #include "soomla/PurchaseTypes/CCPurchaseType.h"
 
@@ -65,5 +67,7 @@ public:
     ~CCPurchaseWithMarket();
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCPurchaseWithMarket_H_

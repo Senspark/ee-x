@@ -9,6 +9,8 @@
 #ifndef EE_LIBRARY_FLAGS_HPP_
 #define EE_LIBRARY_FLAGS_HPP_
 
+#ifdef __cplusplus
+
 #include "ee/CocosFwd.hpp"
 
 #define EE_ENABLE_BITWISE_OPERATORS_FOR_ENUM(EnumType)                         \
@@ -175,5 +177,7 @@ operator--(EnumType& value, int) noexcept {
     --value;
     return result;
 }
+
+#endif // __cplusplus
 
 #endif /* EE_LIBRARY_FLAGS_HPP_ */

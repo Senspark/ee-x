@@ -8,6 +8,8 @@
 #ifndef SOOMLA_PURCHASE_WITH_MARKET_BUILDER_HPP
 #define SOOMLA_PURCHASE_WITH_MARKET_BUILDER_HPP
 
+#ifdef __cplusplus
+
 #include <optional>
 #include <string>
 
@@ -32,5 +34,7 @@ private:
 // Backward compatibility.
 using CCPurchaseWithMarketBuilder = PurchaseWithMarketBuilder;
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif /* CCPurchaseWithMarketBuilder_hpp */

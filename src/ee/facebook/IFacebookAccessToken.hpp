@@ -8,6 +8,8 @@
 #ifndef EE_X_I_FACEBOOK_ACCESS_TOKEN_HPP
 #define EE_X_I_FACEBOOK_ACCESS_TOKEN_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/FacebookFwd.hpp"
@@ -30,5 +32,7 @@ public:
 };
 } // namespace facebook
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_I_FACEBOOK_ACCESS_TOKEN_HPP */

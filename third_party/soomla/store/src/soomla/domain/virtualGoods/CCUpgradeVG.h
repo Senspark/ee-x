@@ -17,6 +17,8 @@
 #ifndef __CCUpgradeVG_H_
 #define __CCUpgradeVG_H_
 
+#ifdef __cplusplus
+
 #include <soomla/CCSoomlaMacros.h>
 #include "soomla/CCStoreConsts.h"
 
@@ -135,5 +137,7 @@ protected:
     void putNextItemIdToValueMap(cocos2d::ValueMap& map);
 };
 }; // namespace soomla
+
+#endif // __cplusplus
 
 #endif //__CCUpgradeVG_H_

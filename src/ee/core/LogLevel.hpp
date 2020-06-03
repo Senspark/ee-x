@@ -9,6 +9,8 @@
 #ifndef EE_X_CORE_LOG_LEVEL_HPP_
 #define EE_X_CORE_LOG_LEVEL_HPP_
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/CoreFwd.hpp"
@@ -32,5 +34,7 @@ struct LogLevel {
 };
 } // namespace core
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_CORE_LOG_LEVEL_HPP_ */

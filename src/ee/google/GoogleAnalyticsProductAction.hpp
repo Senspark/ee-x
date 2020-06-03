@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_PRODUCT_ACTION_HPP
 #define EE_X_GOOGLE_ANALYTICS_PRODUCT_ACTION_HPP
 
+#ifdef __cplusplus
+
 #include "ee/GoogleAnalyticsFwd.hpp"
 
 namespace ee {
@@ -97,5 +99,7 @@ private:
 };
 } // namespace google
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_PRODUCT_ACTION_HPP */

@@ -17,6 +17,8 @@
 #ifndef __CCSoomla_H_
 #define __CCSoomla_H_
 
+#ifdef __cplusplus
+
 #include <string>
 
 namespace soomla {
@@ -26,5 +28,7 @@ public:
     static void initialize(const std::string& soomlaSecret);
 };
 } // namespace soomla
+
+#endif // __cplusplus
 
 #endif // __CCSoomla_H_

@@ -9,6 +9,8 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/AppLovinFwd.hpp"
@@ -70,5 +72,7 @@ private:
 };
 } // namespace app_lovin
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_APP_LOVIN_BRIDGE_HPP */

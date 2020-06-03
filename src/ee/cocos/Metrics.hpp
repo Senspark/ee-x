@@ -9,6 +9,8 @@
 #ifndef EE_X_METRICS_HPP
 #define EE_X_METRICS_HPP
 
+#ifdef __cplusplus
+
 #include <string>
 
 #include "ee/CocosFwd.hpp"
@@ -39,5 +41,7 @@ private:
 };
 } // namespace cocos
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_METRICS_HPP */

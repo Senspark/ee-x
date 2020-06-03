@@ -9,6 +9,8 @@
 #ifndef EE_X_NULL_REWARDED_AD_HPP
 #define EE_X_NULL_REWARDED_AD_HPP
 
+#ifdef __cplusplus
+
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IRewardedAd.hpp"
@@ -26,5 +28,7 @@ public:
 };
 } // namespace ads
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_NULL_REWARDED_AD_HPP */

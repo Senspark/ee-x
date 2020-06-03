@@ -9,6 +9,8 @@
 #ifndef EE_X_PLAY_FWD_HPP_
 #define EE_X_PLAY_FWD_HPP_
 
+#ifdef __cplusplus
+
 #include <ee/CoreFwd.hpp>
 
 namespace ee {
@@ -18,5 +20,7 @@ class Bridge;
 
 using Play = play::Bridge;
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_PLAY_FWD_HPP_ */

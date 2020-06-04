@@ -78,22 +78,19 @@ Task<bool> Self::load() {
 }
 
 Task<bool> Self::show() {
-    bool displayed = false;
+    bool result = false;
     for (auto&& item : items_) {
-        if (not displayed) {
-            if (co_await item->show()) {
-                displayed = true;
-                continue;
-            }
+        if (not result) {
+            result = co_await item->show();
         }
         if (not item->isLoaded()) {
-            noAwait([item]() -> Task<> { //
+            noAwait([item]() -> Task<> {
                 // Load in background.
                 co_await item->load();
             });
         }
     }
-    co_return displayed;
+    co_return result;
 }
 } // namespace ads
 } // namespace ee

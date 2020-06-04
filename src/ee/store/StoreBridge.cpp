@@ -52,7 +52,7 @@ void from_json(const nlohmann::json& json, Purchase& data) {
     data.purchaseToken = json.at("purchase_token");
     data.signature = json.at("signature");
     data.sku = json.at("sku");
-    data.isAcknowledge = json.at("is_acknowledge");
+    data.isAcknowledged = json.at("is_acknowledged");
     data.isAutoRenewing = json.at("is_auto_renewing");
 }
 

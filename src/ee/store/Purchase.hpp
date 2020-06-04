@@ -16,7 +16,7 @@ struct Purchase {
     std::string purchaseToken;
     std::string signature;
     std::string sku;
-    bool isAcknowledge;
+    bool isAcknowledged;
     bool isAutoRenewing;
 };
 } // namespace store

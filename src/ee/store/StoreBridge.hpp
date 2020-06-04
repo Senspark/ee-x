@@ -19,7 +19,7 @@
 
 namespace ee {
 namespace store {
-enum SkuType {
+enum class SkuType {
     InApp,
     Subscription,
 };

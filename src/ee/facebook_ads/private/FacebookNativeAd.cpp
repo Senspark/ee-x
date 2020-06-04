@@ -28,7 +28,7 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
     , plugin_(plugin)
     , adId_(adId)
     , messageHelper_("FacebookNativeAd", adId)
-    , helper_(bridge, messageHelper_, std::bind(&Self::getSize, this)) {
+    , helper_(bridge, messageHelper_, std::pair(0, 0)) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     attempted_ = false;
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();

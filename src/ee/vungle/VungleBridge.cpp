@@ -2,6 +2,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
@@ -98,12 +99,13 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        return iter->second;
+        return iter->second.strong;
     }
-    auto ad = std::shared_ptr<RewardedAd>(
-        new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
-    rewardedAds_.emplace(adId, ad);
-    return ad;
+    auto weak = new RewardedAd(logger_, rewardedAdDisplayer_, this, adId);
+    auto strong = std::make_shared<ads::GuardedRewardedAd>(
+        std::shared_ptr<RewardedAd>(weak));
+    rewardedAds_.try_emplace(adId, strong, weak);
+    return strong;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
@@ -140,7 +142,7 @@ void Self::onLoaded(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second->onLoaded();
+        iter->second.weak->onLoaded();
     } else {
         // Mediation.
         assert(false);
@@ -151,7 +153,7 @@ void Self::onFailedToLoad(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second->onFailedToLoad(message);
+        iter->second.weak->onFailedToLoad(message);
     } else {
         // Mediation.
         assert(false);
@@ -162,7 +164,7 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second->onFailedToShow(message);
+        iter->second.weak->onFailedToShow(message);
     } else {
         // Mediation.
         assert(false);
@@ -173,7 +175,7 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second->onClosed(rewarded);
+        iter->second.weak->onClosed(rewarded);
     } else {
         // Mediation.
         assert(false);

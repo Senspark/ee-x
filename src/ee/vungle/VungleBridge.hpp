@@ -46,7 +46,17 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    std::map<std::string, std::shared_ptr<RewardedAd>> rewardedAds_;
+    template <class Strong, class Weak>
+    struct Ad {
+        std::shared_ptr<Strong> strong;
+        Weak* weak;
+
+        explicit Ad(const std::shared_ptr<Strong>& strong_, Weak* weak_)
+            : strong(strong_)
+            , weak(weak_) {}
+    };
+
+    std::map<std::string, Ad<IRewardedAd, RewardedAd>> rewardedAds_;
 
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

@@ -51,11 +51,9 @@ std::string getUnityRewardedAdId() {
 }
 
 void testUnityAdsRewardedAd() {
-    auto rewardedAd = std::make_shared<ee::GuardedRewardedAd>(
-        getUnityAds()->createRewardedAd(getUnityRewardedAdId()));
-
-    auto interstitialAd = std::make_shared<ee::GuardedInterstitialAd>(
-        getUnityAds()->createInterstitialAd(getUnityInterstitialAdId()));
+    auto rewardedAd = getUnityAds()->createRewardedAd(getUnityRewardedAdId());
+    auto interstitialAd =
+        getUnityAds()->createInterstitialAd(getUnityInterstitialAdId());
 
     float delay = 0.0f;
     scheduleOnce(delay += 5.0f, ee::makeAwaiter([rewardedAd]() -> ee::Task<> {

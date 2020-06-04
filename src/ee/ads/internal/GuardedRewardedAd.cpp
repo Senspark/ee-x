@@ -1,21 +1,22 @@
-#include "ee/ads/GuardedAdView.hpp"
+#include "ee/ads/internal/GuardedRewardedAd.hpp"
 
 #include <mutex>
 
+#include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/SpinLock.hpp>
 #include <ee/core/SwitchToUiThread.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Utils.hpp>
 
 namespace ee {
 namespace ads {
-using Self = GuardedAdView;
+using Self = GuardedRewardedAd;
 
-Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
+Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
     : ad_(ad) {
     loading_ = false;
     loaded_ = false;
+    displaying_ = false;
 
     handle_ = std::make_unique<ObserverHandle>();
     handle_->bind(*ad_).addObserver({
@@ -46,7 +47,7 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedAdView() = default;
+Self::~GuardedRewardedAd() = default;
 
 void Self::destroy() {
     ad_->destroy();
@@ -63,6 +64,10 @@ Task<bool> Self::load() {
     if (loaded_) {
         lock.unlock();
         co_return true;
+    }
+    if (displaying_) {
+        lock.unlock();
+        co_return false;
     }
     lock.unlock();
     co_await SwitchToUiThread();
@@ -81,55 +86,36 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-std::pair<float, float> Self::getAnchor() const {
-    return ad_->getAnchor();
-}
-
-void Self::setAnchor(float x, float y) {
-    runOnUiThread([this, x, y] { //
-        ad_->setAnchor(x, y);
-    });
-}
-
-std::pair<int, int> Self::getPosition() const {
-    return ad_->getPosition();
-}
-
-void Self::setPosition(int x, int y) {
-    runOnUiThread([this, x, y] { //
-        ad_->setPosition(x, y);
-    });
-}
-
-std::pair<int, int> Self::getSize() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
-    if (not size_.has_value()) {
-        size_ = ad_->getSize();
+Task<IRewardedAdResult> Self::show() {
+    std::unique_lock<SpinLock> lock(*lock_);
+    if (not loaded_) {
+        lock.unlock();
+        co_return IRewardedAdResult::Failed;
     }
-    return size_.value();
-}
-
-void Self::setSize(int width, int height) {
-    runOnUiThread([this, width, height] {
-        ad_->setSize(width, height);
-
-        std::scoped_lock<SpinLock> lock(*lock_);
-        size_ = std::pair(width, height);
-    });
-}
-
-bool Self::isVisible() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
-    return visible_;
-}
-
-void Self::setVisible(bool visible) {
-    runOnUiThread([this, visible] { //
-        ad_->setVisible(visible);
-
-        std::scoped_lock<SpinLock> lock(*lock_);
-        visible_ = visible;
-    });
+    if (loading_) {
+        lock.unlock();
+        co_return IRewardedAdResult::Failed;
+    }
+    lock.unlock();
+    co_await SwitchToUiThread();
+    lock.lock();
+    if (displaying_) {
+        // Waiting.
+        lock.unlock();
+        co_return co_await ad_->show();
+    }
+    displaying_ = true;
+    lock.unlock();
+    auto result = co_await ad_->show();
+    lock.lock();
+    displaying_ = false;
+    if (result == IRewardedAdResult::Failed) {
+        // Failed to show, can use this ad again.
+    } else {
+        loaded_ = false;
+    }
+    lock.unlock();
+    co_return result;
 }
 } // namespace ads
 } // namespace ee

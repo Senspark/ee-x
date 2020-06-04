@@ -37,16 +37,11 @@ namespace {
 #else
 void testMultiAds() {
     auto ad = std::make_shared<ee::MultiRewardedAd>();
-    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-        getAdMob()->createRewardedAd(getAdMobRewardedAdTestId())));
-    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-        getAppLovin()->createRewardedAd()));
-    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-        getIronSource()->createRewardedAd(getIronSourceRewardedAdId())));
-    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-        getUnityAds()->createRewardedAd(getUnityRewardedAdId())));
-    ad->addItem(std::make_shared<ee::GuardedRewardedAd>(
-        getVungle()->createRewardedAd(getVungleRewardedAdId())));
+    ad->addItem(getAdMob()->createRewardedAd(getAdMobRewardedAdTestId()));
+    ad->addItem(getAppLovin()->createRewardedAd());
+    ad->addItem(getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
+    ad->addItem(getUnityAds()->createRewardedAd(getUnityRewardedAdId()));
+    ad->addItem(getVungle()->createRewardedAd(getVungleRewardedAdId()));
 
     scheduleForever(1.0f, 3.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
                         getLogger().info("Load rewarded ad");

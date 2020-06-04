@@ -4,6 +4,8 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/ads/internal/GuardedInterstitialAd.hpp>
+#include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
@@ -53,6 +55,8 @@ Self::Bridge(const Logger& logger)
     auto&& mediation = ads::MediationManager::getInstance();
     interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    interstitialAd_ = nullptr;
+    rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -143,42 +147,45 @@ std::shared_ptr<IInterstitialAd>
 Self::createInterstitialAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (interstitialAd_) {
-        return interstitialAd_;
+    if (sharedInterstitialAd_) {
+        return sharedInterstitialAd_;
     }
-    auto ad = std::shared_ptr<InterstitialAd>(
-        new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId));
-    interstitialAd_ = ad;
-    return ad;
+    interstitialAd_ =
+        new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId);
+    sharedInterstitialAd_ = std::make_shared<ads::GuardedInterstitialAd>(
+        std::shared_ptr<InterstitialAd>(interstitialAd_));
+    return sharedInterstitialAd_;
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (interstitialAd_ == nullptr) {
+    if (sharedInterstitialAd_ == nullptr) {
         return false;
     }
-    interstitialAd_.reset();
+    interstitialAd_ = nullptr;
+    sharedInterstitialAd_.reset();
     return true;
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedAd_) {
-        return rewardedAd_;
+    if (sharedRewardedAd_) {
+        return sharedRewardedAd_;
     }
-    auto ad = std::shared_ptr<RewardedAd>(
-        new RewardedAd(logger_, rewardedAdDisplayer_, this, adId));
-    rewardedAd_ = ad;
-    return ad;
+    rewardedAd_ = new RewardedAd(logger_, rewardedAdDisplayer_, this, adId);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(
+        std::shared_ptr<RewardedAd>(rewardedAd_));
+    return sharedRewardedAd_;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (rewardedAd_ == nullptr) {
+    if (sharedRewardedAd_ == nullptr) {
         return false;
     }
-    rewardedAd_.reset();
+    rewardedAd_ = nullptr;
+    sharedRewardedAd_.reset();
     return true;
 }
 

@@ -53,10 +53,8 @@ private:
     const Logger& logger_;
     Bridge* plugin_;
     std::string adId_;
-    std::pair<int, int> size_;
     ads::MessageHelper messageHelper_;
     ads::AdViewHelper helper_;
-    bool useCustomSize_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };

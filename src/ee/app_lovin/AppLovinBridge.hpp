@@ -66,7 +66,8 @@ private:
     const Logger& logger_;
 
     /// Share the same instance.
-    std::shared_ptr<RewardedAd> rewardedAd_;
+    RewardedAd* rewardedAd_;
+    std::shared_ptr<IRewardedAd> sharedRewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

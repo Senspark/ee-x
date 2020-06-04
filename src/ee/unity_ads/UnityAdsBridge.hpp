@@ -69,9 +69,19 @@ private:
     /// Currently displaying ad ID.
     std::string adId_;
 
+    template <class Strong, class Weak>
+    struct Ad {
+        std::shared_ptr<Strong> strong;
+        Weak* weak;
+
+        explicit Ad(const std::shared_ptr<Strong>& strong_, Weak* weak_)
+            : strong(strong_)
+            , weak(weak_) {}
+    };
+
     /// Unity only has rewarded ads.
-    std::map<std::string, std::shared_ptr<InterstitialAd>> interstitialAds_;
-    std::map<std::string, std::shared_ptr<RewardedAd>> rewardedAds_;
+    std::map<std::string, Ad<IInterstitialAd, InterstitialAd>> interstitialAds_;
+    std::map<std::string, Ad<IRewardedAd, RewardedAd>> rewardedAds_;
 
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;

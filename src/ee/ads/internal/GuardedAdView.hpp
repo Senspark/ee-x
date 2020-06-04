@@ -3,8 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <optional>
-
 #include <ee/core/SafeObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
@@ -15,6 +13,7 @@ class GuardedAdView : public IAdView,
                       public SafeObserverManager<IAdViewObserver> {
 public:
     explicit GuardedAdView(const std::shared_ptr<IAdView>& ad);
+
     virtual ~GuardedAdView() override;
 
     virtual void destroy() override;
@@ -39,8 +38,6 @@ private:
 
     bool loading_;
     bool loaded_;
-    bool visible_;
-    mutable std::optional<std::pair<int, int>> size_;
     std::unique_ptr<ObserverHandle> handle_;
     std::unique_ptr<SpinLock> lock_;
 };

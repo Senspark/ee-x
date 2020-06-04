@@ -40,8 +40,7 @@ std::string getVungleRewardedAdId() {
 
 void testVungleRewardedAd() {
     // Create a Vungle rewarded video on the main thread.
-    auto ad = std::make_shared<ee::GuardedRewardedAd>(
-        getVungle()->createRewardedAd(getVungleRewardedAdId()));
+    auto ad = getVungle()->createRewardedAd(getVungleRewardedAdId());
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, ee::makeAwaiter([ad]() -> ee::Task<> {

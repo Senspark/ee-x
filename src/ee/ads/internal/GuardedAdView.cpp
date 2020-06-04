@@ -1,22 +1,21 @@
-#include "ee/ads/GuardedInterstitialAd.hpp"
+#include "ee/ads/internal/GuardedAdView.hpp"
 
 #include <mutex>
 
-#include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/SpinLock.hpp>
 #include <ee/core/SwitchToUiThread.hpp>
 #include <ee/core/Task.hpp>
+#include <ee/core/Utils.hpp>
 
 namespace ee {
 namespace ads {
-using Self = GuardedInterstitialAd;
+using Self = GuardedAdView;
 
-Self::GuardedInterstitialAd(const std::shared_ptr<IInterstitialAd>& ad)
+Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     : ad_(ad) {
     loading_ = false;
     loaded_ = false;
-    displaying_ = false;
 
     handle_ = std::make_unique<ObserverHandle>();
     handle_->bind(*ad_).addObserver({
@@ -47,7 +46,7 @@ Self::GuardedInterstitialAd(const std::shared_ptr<IInterstitialAd>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedInterstitialAd() = default;
+Self::~GuardedAdView() = default;
 
 void Self::destroy() {
     ad_->destroy();
@@ -64,10 +63,6 @@ Task<bool> Self::load() {
     if (loaded_) {
         lock.unlock();
         co_return true;
-    }
-    if (displaying_) {
-        lock.unlock();
-        co_return false;
     }
     lock.unlock();
     co_await SwitchToUiThread();
@@ -86,36 +81,36 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<bool> Self::show() {
-    std::unique_lock<SpinLock> lock(*lock_);
-    if (not loaded_) {
-        lock.unlock();
-        co_return false;
-    }
-    if (loading_) {
-        lock.unlock();
-        co_return false;
-    }
-    lock.unlock();
-    co_await SwitchToUiThread();
-    lock.lock();
-    if (displaying_) {
-        // Waiting.
-        lock.unlock();
-        co_return co_await ad_->show();
-    }
-    displaying_ = true;
-    lock.unlock();
-    auto result = co_await ad_->show();
-    lock.lock();
-    displaying_ = false;
-    if (not result) {
-        // Failed to show, can use this ad again.
-    } else {
-        loaded_ = false;
-    }
-    lock.unlock();
-    co_return result;
+std::pair<float, float> Self::getAnchor() const {
+    return ad_->getAnchor();
+}
+
+void Self::setAnchor(float x, float y) {
+    ad_->setAnchor(x, y);
+}
+
+std::pair<int, int> Self::getPosition() const {
+    return ad_->getPosition();
+}
+
+void Self::setPosition(int x, int y) {
+    ad_->setPosition(x, y);
+}
+
+std::pair<int, int> Self::getSize() const {
+    return ad_->getSize();
+}
+
+void Self::setSize(int width, int height) {
+    ad_->setSize(width, height);
+}
+
+bool Self::isVisible() const {
+    return ad_->isVisible();
+}
+
+void Self::setVisible(bool visible) {
+    ad_->setVisible(visible);
 }
 } // namespace ads
 } // namespace ee

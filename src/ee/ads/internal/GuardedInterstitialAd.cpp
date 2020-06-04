@@ -1,4 +1,4 @@
-#include "ee/ads/GuardedRewardedAd.hpp"
+#include "ee/ads/internal/GuardedInterstitialAd.hpp"
 
 #include <mutex>
 
@@ -10,9 +10,9 @@
 
 namespace ee {
 namespace ads {
-using Self = GuardedRewardedAd;
+using Self = GuardedInterstitialAd;
 
-Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
+Self::GuardedInterstitialAd(const std::shared_ptr<IInterstitialAd>& ad)
     : ad_(ad) {
     loading_ = false;
     loaded_ = false;
@@ -47,7 +47,7 @@ Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
     lock_ = std::make_unique<SpinLock>();
 }
 
-Self::~GuardedRewardedAd() = default;
+Self::~GuardedInterstitialAd() = default;
 
 void Self::destroy() {
     ad_->destroy();
@@ -86,15 +86,15 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<IRewardedAdResult> Self::show() {
+Task<bool> Self::show() {
     std::unique_lock<SpinLock> lock(*lock_);
     if (not loaded_) {
         lock.unlock();
-        co_return IRewardedAdResult::Failed;
+        co_return false;
     }
     if (loading_) {
         lock.unlock();
-        co_return IRewardedAdResult::Failed;
+        co_return false;
     }
     lock.unlock();
     co_await SwitchToUiThread();
@@ -109,7 +109,7 @@ Task<IRewardedAdResult> Self::show() {
     auto result = co_await ad_->show();
     lock.lock();
     displaying_ = false;
-    if (result == IRewardedAdResult::Failed) {
+    if (not result) {
         // Failed to show, can use this ad again.
     } else {
         loaded_ = false;

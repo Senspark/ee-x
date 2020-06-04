@@ -21,7 +21,7 @@ public:
     using SizeProvider = std::function<std::pair<int, int>()>;
 
     explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
-                          const SizeProvider& sizeProvider);
+                          const std::pair<int, int>& size);
 
     bool isLoaded() const;
     void load();
@@ -42,12 +42,26 @@ private:
     std::pair<int, int> getPositionTopLeft() const;
     void setPositionTopLeft(int x, int y);
 
+    const std::pair<int, int> getSizeInternal() const;
+    void setSizeInternal(int width, int height);
+
+    const std::pair<float, float> getAnchorInternal() const;
+    void setAnchorInternal(float x, float y);
+
+    const std::pair<int, int> getPositionInternal() const;
+    void setPositionInternal(int x, int y);
+
+    bool isVisibleInternal() const;
+    void setVisibleInternal(bool visible);
+
     IMessageBridge& bridge_;
     MessageHelper helper_;
-    SizeProvider sizeProvider_;
 
-    float anchorX_;
-    float anchorY_;
+    std::pair<float, float> anchor_;
+    std::pair<int, int> position_; ///< @note Top left position.
+    std::pair<int, int> size_;
+    bool visible_;
+    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

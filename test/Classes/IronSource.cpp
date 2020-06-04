@@ -38,8 +38,7 @@ std::string getIronSourceRewardedAdId() {
 }
 
 void testIronSourceRewardedAd() {
-    auto ad = std::make_shared<ee::GuardedRewardedAd>(
-        getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
+    auto ad = getIronSource()->createRewardedAd(getIronSourceRewardedAdId());
 
     float delay = 0.0f;
     scheduleForever(delay += 5.0f, 5.0f, ee::makeAwaiter([ad]() -> ee::Task<> {

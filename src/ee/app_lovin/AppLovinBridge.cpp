@@ -10,6 +10,7 @@
 
 #include <cassert>
 
+#include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
@@ -131,6 +132,7 @@ Self::Bridge(const Logger& logger)
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -242,21 +244,22 @@ void Self::showInterstitialAd() {
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_) {
-        return rewardedAd_;
+    if (sharedRewardedAd_) {
+        return sharedRewardedAd_;
     }
-    auto ad = std::shared_ptr<RewardedAd>(
-        new RewardedAd(logger_, rewardedAdDisplayer_, this));
-    rewardedAd_ = ad;
-    return ad;
+    rewardedAd_ = new RewardedAd(logger_, rewardedAdDisplayer_, this);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(
+        std::shared_ptr<RewardedAd>(rewardedAd_));
+    return sharedRewardedAd_;
 }
 
 bool Self::destroyRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_ == nullptr) {
+    if (sharedRewardedAd_ == nullptr) {
         return false;
     }
-    rewardedAd_.reset();
+    rewardedAd_ = nullptr;
+    sharedRewardedAd_.reset();
     return true;
 }
 

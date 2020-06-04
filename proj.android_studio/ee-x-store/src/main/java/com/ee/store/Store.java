@@ -48,14 +48,14 @@ import static com.google.common.truth.Truth.assertThat;
 public class Store implements IPlugin {
     private static final Logger _logger = new Logger(Store.class.getName());
 
-    private static final String kPrefix = "Store";
-    private static final String kConnect = kPrefix + "_connect";
-    private static final String kGetSkuDetails = kPrefix + "_getSkuDetails";
-    private static final String kGetPurchases = kPrefix + "_getPurchases";
-    private static final String kGetPurchaseHistory = kPrefix + "_getPurchaseHistory";
-    private static final String kPurchase = kPrefix + "_getPurchase";
-    private static final String kConsume = kPrefix + "_consume";
-    private static final String kAcknowledge = kPrefix + "_acknowledge";
+    private static final String kPrefix = "Store_";
+    private static final String kConnect = kPrefix + "connect";
+    private static final String kGetSkuDetails = kPrefix + "getSkuDetails";
+    private static final String kGetPurchases = kPrefix + "getPurchases";
+    private static final String kGetPurchaseHistory = kPrefix + "getPurchaseHistory";
+    private static final String kPurchase = kPrefix + "purchase";
+    private static final String kConsume = kPrefix + "consume";
+    private static final String kAcknowledge = kPrefix + "acknowledge";
 
     private Context _context;
     private Activity _activity;

@@ -74,8 +74,12 @@ public class PluginManager {
                                           @Nullable Bundle savedInstanceState) {
                 if (activity.getClass().getName().equals(_activityClassName)) {
                     if (_activity == null) {
-                        _activity = activity;
-                        executePlugins(plugin -> plugin.onCreate(activity));
+                        if (activity.isTaskRoot()) {
+                            _activity = activity;
+                            executePlugins(plugin -> plugin.onCreate(activity));
+                        } else {
+                            _logger.warn("onActivityCreated: is not root activity");
+                        }
                     } else {
                         _logger.warn("onActivityCreated: invalid activity");
                     }

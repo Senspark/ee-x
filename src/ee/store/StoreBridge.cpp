@@ -93,7 +93,7 @@ void Self::initialize() {
     // TODO.
 }
 
-Task<std::vector<SkuDetails>>
+Task<std::optional<std::vector<SkuDetails>>>
 Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
     nlohmann::json json;
     json["sku_type"] = type;
@@ -101,59 +101,55 @@ Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
     auto response = co_await bridge_.callAsync(kGetSkuDetails, json.dump());
     auto responseJson = nlohmann::json::parse(response);
     auto successful = responseJson.at("successful").get<bool>();
-    std::vector<SkuDetails> items;
     if (successful) {
-        items = responseJson.at("item").get<std::vector<SkuDetails>>();
-    } else {
-        auto error = responseJson.at("error").get<std::string>();
-        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+        auto items = responseJson.at("item").get<std::vector<SkuDetails>>();
+        co_return items;
     }
-    co_return items;
+    auto error = responseJson.at("error").get<std::string>();
+    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    co_return std::nullopt;
 }
 
 Task<std::vector<Purchase>> Self::getPurchases(SkuType type) {
     auto response = co_await bridge_.callAsync(kGetPurchases, toString(type));
     auto responseJson = nlohmann::json::parse(response);
     auto successful = responseJson.at("successful").get<bool>();
-    std::vector<Purchase> items;
     if (successful) {
-        items = responseJson.at("item").get<std::vector<Purchase>>();
-    } else {
-        auto error = responseJson.at("error").get<std::string>();
-        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+        auto items = responseJson.at("item").get<std::vector<Purchase>>();
+        co_return items;
     }
-    co_return items;
+    auto error = responseJson.at("error").get<std::string>();
+    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    co_return std::nullopt;
 }
 
-Task<std::vector<PurchaseHistoryRecord>>
+Task<std::optional<std::vector<PurchaseHistoryRecord>>>
 Self::getPurchaseHistory(SkuType type) {
     auto response =
         co_await bridge_.callAsync(kGetPurchaseHistory, toString(type));
     auto responseJson = nlohmann::json::parse(response);
     auto successful = responseJson.at("successful").get<bool>();
-    std::vector<PurchaseHistoryRecord> items;
     if (successful) {
-        items =
+        auto items =
             responseJson.at("item").get<std::vector<PurchaseHistoryRecord>>();
-    } else {
-        auto error = responseJson.at("error").get<std::string>();
-        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+        co_return items;
     }
-    co_return items;
+    auto error = responseJson.at("error").get<std::string>();
+    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    co_return std::nullopt;
 }
 
 Task<std::optional<Purchase>> Self::purchase(const std::string& sku) {
     auto response = co_await bridge_.callAsync(kPurchase, sku);
     auto responseJson = nlohmann::json::parse(response);
     auto successful = responseJson.at("successful").get<bool>();
-    std::optional<Purchase> item = std::nullopt;
     if (successful) {
-        item = responseJson.at("item").get<Purchase>();
-    } else {
-        auto error = responseJson.at("error").get<std::string>();
-        logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+        auto item = responseJson.at("item").get<Purchase>();
+        co_return item;
     }
-    co_return item;
+    auto error = responseJson.at("error").get<std::string>();
+    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
+    co_return std::nullopt;
 }
 
 Task<bool> Self::consume(const std::string& purchaseToken) {

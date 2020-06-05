@@ -35,12 +35,13 @@ public:
 
     void initialize();
 
-    Task<std::vector<SkuDetails>>
+    Task<std::optional<std::vector<SkuDetails>>>
     getSkuDetails(SkuType type, const std::vector<std::string>& skuList);
 
-    Task<std::vector<Purchase>> getPurchases(SkuType type);
+    Task<std::optional<std::vector<Purchase>>> getPurchases(SkuType type);
 
-    Task<std::vector<PurchaseHistoryRecord>> getPurchaseHistory(SkuType type);
+    Task<std::optional<std::vector<PurchaseHistoryRecord>>>
+    getPurchaseHistory(SkuType type);
 
     Task<std::optional<Purchase>> purchase(const std::string& sku);
 

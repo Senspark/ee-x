@@ -38,6 +38,8 @@ Task<> whenAll(Args&&... args) {
     co_return;
 }
 } // namespace core
+
+using core::whenAll;
 } // namespace ee
 
 #endif // __cplusplus

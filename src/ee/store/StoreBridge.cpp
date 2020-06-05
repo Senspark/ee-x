@@ -110,7 +110,7 @@ Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
     co_return std::nullopt;
 }
 
-Task<std::vector<Purchase>> Self::getPurchases(SkuType type) {
+Task<std::optional<std::vector<Purchase>>> Self::getPurchases(SkuType type) {
     auto response = co_await bridge_.callAsync(kGetPurchases, toString(type));
     auto responseJson = nlohmann::json::parse(response);
     auto successful = responseJson.at("successful").get<bool>();

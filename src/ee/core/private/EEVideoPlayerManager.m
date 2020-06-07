@@ -9,11 +9,10 @@
 
 #import <ee_x-Swift.h>
 
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/private/EEVideoPlayer.h"
 
 @implementation EEVideoPlayerManager {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     NSMutableDictionary<NSString*, EEVideoPlayer*>* players_;
 }
 
@@ -30,20 +29,16 @@ static NSString* const k__destroy = @"VideoPlayerManager_destroy";
 }
 
 + (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-    [bridge registerHandler:k__create
-                   callback:^(NSString* message) {
-                       NSString* tag = message;
-                       return [EEUtils
-                           toString:[[self getInstance] createVideoPlayer:tag]];
-                   }];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
+    [bridge registerHandler:k__create:^(NSString* message) {
+        NSString* tag = message;
+        return [EEUtils toString:[[self getInstance] createVideoPlayer:tag]];
+    }];
 
-    [bridge registerHandler:k__destroy
-                   callback:^(NSString* message) {
-                       NSString* tag = message;
-                       return [EEUtils toString:[[self getInstance]
-                                                    destroyVideoPlayer:tag]];
-                   }];
+    [bridge registerHandler:k__destroy:^(NSString* message) {
+        NSString* tag = message;
+        return [EEUtils toString:[[self getInstance] destroyVideoPlayer:tag]];
+    }];
 }
 
 - (id)init {

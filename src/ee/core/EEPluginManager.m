@@ -9,7 +9,6 @@
 
 #import <ee_x-Swift.h>
 
-#import "ee/core/internal/EEMessageBridge.h"
 #import "ee/core/private/EEVideoPlayerManager.h"
 
 @implementation EEPluginManager {

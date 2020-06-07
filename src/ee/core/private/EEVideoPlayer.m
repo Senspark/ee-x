@@ -12,7 +12,6 @@
 #import <ee_x-Swift.h>
 
 #import "ee/core/internal/EEJsonUtils.h"
-#import "ee/core/internal/EEMessageBridge.h"
 
 @interface EEVideoPlayer ()
 #if TARGET_OS_IOS
@@ -22,14 +21,14 @@
 
 @implementation EEVideoPlayer {
     NSString* tag_;
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 #if TARGET_OS_IOS
 @synthesize moviePlayer = moviePlayer_;
 #endif // TARGET_OS_IOS
 
-- (id)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                  tag:(NSString* _Nonnull)tag {
     self = [super init];
     if (self == nil) {

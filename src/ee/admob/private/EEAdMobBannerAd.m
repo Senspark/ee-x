@@ -15,7 +15,6 @@
 #import <ee/ads/internal/EEAdViewHelper.h>
 #import <ee/ads/internal/EEMessageHelper.h>
 #import <ee/ads/internal/EEViewHelper.h>
-#import <ee/core/internal/EEIMessageBridge.h>
 
 @interface EEAdMobBannerAd () <GADBannerViewDelegate>
 @end

@@ -52,7 +52,7 @@ public class Utils: NSObject {
     }
 
     @objc
-    public class func registerHandlers(_ bridge: EEIMessageBridge) {
+    public class func registerHandlers(_ bridge: IMessageBridge) {
         bridge.registerHandler(kIsMainThread) { _ in
             toString(isMainThread())
         }

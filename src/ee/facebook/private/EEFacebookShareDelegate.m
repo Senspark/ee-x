@@ -7,7 +7,6 @@
 
 #import "ee/facebook/private/EEFacebookShareDelegate.h"
 
-#import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 
 @implementation EEFacebookShareDelegate {

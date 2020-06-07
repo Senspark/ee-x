@@ -14,7 +14,6 @@
 
 #import <ee/ads/internal/EEInterstitialAdHelper.h>
 #import <ee/ads/internal/EEMessageHelper.h>
-#import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 
 @interface EEAdMobInterstitialAd () <GADInterstitialDelegate>

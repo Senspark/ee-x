@@ -13,7 +13,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/ads/internal/EEMessageHelper.h>
-#import <ee/core/internal/EEIMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 
 @interface EEFacebookRewardedAd () <FBRewardedVideoAdDelegate>

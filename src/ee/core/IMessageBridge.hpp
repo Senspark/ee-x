@@ -23,6 +23,18 @@ class IMessageBridge {
 public:
     virtual ~IMessageBridge() = default;
 
+    /// Registers a handler to receive messages from other platforms.
+    /// @param handler The handler to handle the message.
+    /// @param tag The unique tag of the handler.
+    /// @return Whether the registration was successful.
+    virtual bool registerHandler(const MessageHandler& handler,
+                                 const std::string& tag) = 0;
+
+    /// Deregisters a handler not to receive messages from other platforms.
+    /// @param tag The unique tag of the handler.
+    /// @return Whether the deregistration was successful.
+    virtual bool deregisterHandler(const std::string& tag) = 0;
+
     /// Calls a handler from other platforms with a message.
     /// @param tag The unique tag of the handler.
     /// @param message The message.
@@ -35,26 +47,6 @@ public:
     /// @param message The message.
     virtual Task<std::string> callAsync(const std::string& tag,
                                         const std::string& message = "") = 0;
-
-    /// Calls a handler from C++ with a message.
-    /// @warning This method should not be called manually.
-    /// @param tag The unique tag of the handler.
-    /// @param message The message.
-    /// @return Reply message from C++.
-    virtual std::string callCpp(const std::string& tag,
-                                const std::string& message) = 0;
-
-    /// Registers a handler to receive messages from other platforms.
-    /// @param handler The handler to handle the message.
-    /// @param tag The unique tag of the handler.
-    /// @return Whether the registration was successful.
-    virtual bool registerHandler(const MessageHandler& handler,
-                                 const std::string& tag) = 0;
-
-    /// Deregisters a handler not to receive messages from other platforms.
-    /// @param tag The unique tag of the handler.
-    /// @return Whether the deregistration was successful.
-    virtual bool deregisterHandler(const std::string& tag) = 0;
 };
 } // namespace core
 } // namespace ee

@@ -276,3 +276,8 @@ public class Utils: NSObject {
         .timeout(.milliseconds(Int(timeOut * 1000)), scheduler: scheduler)
     }
 }
+
+@_cdecl("ee_staticLog")
+public func ee_staticLog(_ message: UnsafePointer<CChar>) {
+    print(String(cString: message))
+}

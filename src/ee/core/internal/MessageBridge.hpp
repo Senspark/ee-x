@@ -24,19 +24,23 @@ private:
 public:
     static MessageBridge& getInstance();
 
+    virtual bool registerHandler(const MessageHandler& handler,
+                                 const std::string& tag) override;
+
+    virtual bool deregisterHandler(const std::string& tag) override;
+
     virtual std::string call(const std::string& tag,
                              const std::string& message = "") override;
 
     virtual Task<std::string>
     callAsync(const std::string& tag, const std::string& message = "") override;
 
-    virtual std::string callCpp(const std::string& tag,
-                                const std::string& message) override;
-
-    virtual bool registerHandler(const MessageHandler& handler,
-                                 const std::string& tag) override;
-
-    virtual bool deregisterHandler(const std::string& tag) override;
+    /// Calls a handler from C++ with a message.
+    /// @warning This method should not be called manually.
+    /// @param tag The unique tag of the handler.
+    /// @param message The message.
+    /// @return Reply message from C++.
+    std::string callCpp(const std::string& tag, const std::string& message);
 
 private:
     MessageBridge();
@@ -60,5 +64,18 @@ private:
 } // namespace ee
 
 #endif // __cplusplus
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+/// Required for Swift.
+extern char* ee_callCppInternal(const char* tag, const char* message);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
 #endif /* EE_X_CORE_MESSAGE_BRIDGE_HPP_ */

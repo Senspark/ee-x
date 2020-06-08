@@ -21,9 +21,14 @@
 #include <thread>
 #include <unwind.h>
 
+#ifdef EE_X_ANDROID
+#include <android/log.h>
+#endif // EE_X_ANDROID
+
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/core/LambdaAwaiter.hpp"
+#include "ee/core/LogLevel.hpp"
 #include "ee/core/SpinLock.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
@@ -168,15 +173,15 @@ bool isMainThread() {
 }
 
 namespace {
-std::queue<Runnable<void>> q_;
+std::queue<Runnable<>> q_;
 SpinLock lock_;
 
-void pushRunnable(const Runnable<void>& runnable) {
+void pushRunnable(const Runnable<>& runnable) {
     std::lock_guard<SpinLock> guard(lock_);
     q_.push(runnable);
 }
 
-Runnable<void> popRunnable() {
+Runnable<> popRunnable() {
     std::lock_guard<SpinLock> guard(lock_);
     assert(not q_.empty());
     auto runnable = q_.front();
@@ -202,7 +207,7 @@ void registerHandler() {
 }
 } // namespace
 
-bool runOnUiThread(const Runnable<void>& runnable) {
+bool runOnUiThread(const Runnable<>& runnable) {
     if (isMainThread()) {
         runnable();
         return true;
@@ -214,20 +219,20 @@ bool runOnUiThread(const Runnable<void>& runnable) {
     return toBool(response);
 }
 
-void runOnUiThreadDelayed(const std::function<void()>& func, float delay) {
-    noAwait([func, delay]() -> Task<> {
+void runOnUiThreadDelayed(const Runnable<>& runnable, float delay) {
+    noAwait([runnable, delay]() -> Task<> {
         nlohmann::json json;
         json["delay"] = delay;
         auto&& bridge = MessageBridge::getInstance();
         auto response =
             co_await bridge.callAsync(k__runOnUiThreadDelayed, json.dump());
-        if (func) {
-            func();
+        if (runnable) {
+            runnable();
         }
     });
 }
 
-void runOnUiThreadAndWait(const Runnable<void>& runnable) {
+void runOnUiThreadAndWait(const Runnable<>& runnable) {
     std::promise<void> promise;
     runOnUiThread([runnable, &promise] {
         runnable();
@@ -355,5 +360,30 @@ void showInstallPrompt(const std::string& url, const std::string& referrer) {
     bridge.call(k__showInstallPrompt, json.dump());
 #endif // EE_X_ANDROID
 }
+
+#ifdef EE_X_ANDROID
+void log(const LogLevel& level, const std::string& tag,
+         const std::string& message) {
+    __android_log_print(level.priority, tag.c_str(), "%s", message.c_str());
+}
+#endif // EE_X_ANDROID
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+extern "C" {
+void ee_staticLog(const char* message);
+} // extern "C"
+
+void log(const LogLevel& level, const std::string& tag,
+         const std::string& message) {
+    std::string buffer;
+    buffer.reserve(level.desc.size() + 1 + tag.size() + 1 + message.size());
+    buffer += level.desc;
+    buffer += " ";
+    buffer += tag;
+    buffer += " ";
+    buffer += message;
+    ee_staticLog(buffer.c_str());
+}
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 } // namespace core
 } // namespace ee

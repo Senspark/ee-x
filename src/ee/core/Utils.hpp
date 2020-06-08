@@ -82,19 +82,19 @@ std::string dumpBacktrace(size_t count);
 /// (iOS).
 bool isMainThread();
 
-template <class T>
+template <class T = void>
 using Runnable = std::function<T()>;
 
 /// Runs the specified runnable on the main thread.
 /// @returns Whether the function is executed immediately.
-bool runOnUiThread(const Runnable<void>& runnable);
+bool runOnUiThread(const Runnable<>& runnable);
 
 /// Runs the specifieid runnable on the main thread after a delay.
-void runOnUiThreadDelayed(const Runnable<void>& runnable, float delay);
+void runOnUiThreadDelayed(const Runnable<>& runnable, float delay);
 
 /// Runs the specified runnable on the main thread and block the current thread.
 /// If the current thread is the main thread, it will be executed immediately.
-[[deprecated]] void runOnUiThreadAndWait(const Runnable<void>& runnable);
+[[deprecated]] void runOnUiThreadAndWait(const Runnable<>& runnable);
 
 template <class T>
 [[deprecated]] T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {

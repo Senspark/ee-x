@@ -11,17 +11,11 @@
 #import "ee/core/internal/MessageBridge_Swift.h"
 
 extern "C" {
-const char* ee_callCppInternal(const char* tag, const char* message) {
+char* ee_callCppInternal(const char* tag, const char* message) {
     auto&& bridge = ee::MessageBridge::getInstance();
     auto result = bridge.callCpp(tag, message);
-    auto result_chars = new char[result.size() + 1];
-    std::copy(result.cbegin(), result.cend(), result_chars);
-    result_chars[result.size()] = '\0';
+    auto result_chars = strdup(result.c_str());
     return result_chars;
-}
-
-void ee_freeString(const char* str) {
-    delete[] str;
 }
 
 char* ee_staticCall(const char* tag, const char* message);

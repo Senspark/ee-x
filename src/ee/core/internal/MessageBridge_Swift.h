@@ -12,8 +12,7 @@
 extern "C" {
 #endif // __cplusplus
 
-extern const char* ee_callCppInternal(const char* tag, const char* message);
-extern void ee_freeString(const char* str);
+extern char* ee_callCppInternal(const char* tag, const char* message);
 
 #ifdef __cplusplus
 } // extern "C"

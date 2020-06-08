@@ -89,7 +89,7 @@ public class MessageBridge: NSObject, IMessageBridge {
             return ""
         }
         let response = String(cString: response_cpp)
-        ee_freeString(response_cpp)
+        free(response_cpp)
         return response
     }
 }

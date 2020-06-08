@@ -17,7 +17,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #define kPrefix @"UnityAds"
 
@@ -69,35 +68,34 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__initialize
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        NSString* gameId = dict[@"gameId"];
-                        BOOL testModeEnabled =
-                            [dict[@"testModeEnabled"] boolValue];
-                        [self initialize:gameId testMode:testModeEnabled];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+               k__initialize:^(NSString* message) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:message];
+                   NSString* gameId = dict[@"gameId"];
+                   BOOL testModeEnabled = [dict[@"testModeEnabled"] boolValue];
+                   [self initialize:gameId testMode:testModeEnabled];
+                   return @"";
+               }];
 
-    [bridge_ registerHandler:k__setDebugModeEnabled
-                    callback:^(NSString* message) {
-                        [self setDebugMode:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__setDebugModeEnabled:^(NSString* message) {
+            [self setDebugMode:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__hasRewardedAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self hasRewardedAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+            k__hasRewardedAd:^(NSString* message) {
+                NSString* adId = message;
+                return [EEUtils toString:[self hasRewardedAd:adId]];
+            }];
 
-    [bridge_ registerHandler:k__showRewardedAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        [self showRewardedAd:adId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__showRewardedAd:^(NSString* message) {
+               NSString* adId = message;
+               [self showRewardedAd:adId];
+               return @"";
+           }];
 }
 
 - (void)deregisterHandlers {
@@ -148,7 +146,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 
 - (void)unityAdsReady:(NSString*)adId {
     NSLog(@"%s: adId = %@", __PRETTY_FUNCTION__, adId);
-    [bridge_ callCpp:k__onLoaded message:adId];
+    [bridge_ callCpp:k__onLoaded:adId];
 }
 
 - (void)unityAdsDidError:(UnityAdsError)error withMessage:(NSString*)message {
@@ -163,27 +161,27 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
           withFinishState:(UnityAdsFinishState)state {
     NSLog(@"%s: adId = %@ state = %d", __PRETTY_FUNCTION__, adId, (int)state);
     if (state == kUnityAdsFinishStateError) {
-        [bridge_ callCpp:k__onFailedToShow
-                 message:[EEJsonUtils convertObjectToString:@{
-                     @"ad_id": adId,
-                     @"message": @"",
-                 }]];
+        [bridge_ callCpp:k__onFailedToShow //
+                        :[EEJsonUtils convertObjectToString:@{
+                            @"ad_id": adId,
+                            @"message": @"",
+                        }]];
         return;
     }
     if (state == kUnityAdsFinishStateSkipped) {
-        [bridge_ callCpp:k__onClosed
-                 message:[EEJsonUtils convertObjectToString:@{
-                     @"ad_id": adId,
-                     @"rewarded": @(NO),
-                 }]];
+        [bridge_ callCpp:k__onClosed //
+                        :[EEJsonUtils convertObjectToString:@{
+                            @"ad_id": adId,
+                            @"rewarded": @(NO),
+                        }]];
         return;
     }
     if (state == kUnityAdsFinishStateCompleted) {
-        [bridge_ callCpp:k__onClosed
-                 message:[EEJsonUtils convertObjectToString:@{
-                     @"ad_id": adId,
-                     @"rewarded": @(YES),
-                 }]];
+        [bridge_ callCpp:k__onClosed //
+                        :[EEJsonUtils convertObjectToString:@{
+                            @"ad_id": adId,
+                            @"rewarded": @(YES),
+                        }]];
         return;
     }
     NSAssert(NO, @"");

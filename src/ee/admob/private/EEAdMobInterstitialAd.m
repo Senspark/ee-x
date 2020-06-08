@@ -66,14 +66,16 @@
 
 - (void)registerHandlers {
     [helper_ registerHandlers];
-    [bridge_ registerHandler:[messageHelper_ createInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self createInternalAd]];
-                    }];
-    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self destroyInternalAd]];
-                    }];
+    [bridge_ registerHandler:[messageHelper_ createInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self createInternalAd]];
+                            }];
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self destroyInternalAd]];
+                            }];
 }
 
 - (void)deregisterHandlers {
@@ -133,8 +135,8 @@
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(ad_ == ad, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad] //
+                    :[error description]];
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial*)ad {

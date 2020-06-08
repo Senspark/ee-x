@@ -16,7 +16,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #import "ee/google/internal/EEGoogleAnalyticsTracker.h"
 
@@ -65,117 +64,110 @@ static NSString* const k__testTrackEcommerceImpression = @"GoogleAnalytics_testT
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:k__setDispatchInterval
-                   callback:^(NSString* message) {
-                       NSTimeInterval seconds = [message intValue];
-                       [self setDispatchInterval:seconds];
-                       return @"";
-                   }];
+    [bridge registerHandler:
+        k__setDispatchInterval:^(NSString* message) {
+            NSTimeInterval seconds = [message intValue];
+            [self setDispatchInterval:seconds];
+            return @"";
+        }];
 
-    [bridge registerHandler:k__setDryRun
-                   callback:^(NSString* message) {
-                       [self setDryRun:[EEUtils toBool:message]];
-                       return @"";
-                   }];
-
-    [bridge registerHandler:k__setOptOut
-                   callback:^(NSString* message) {
-                       [self setOptOut:[EEUtils toBool:message]];
-                       return @"";
-                   }];
-
-    [bridge
-        registerHandler:k__setTrackUncaughtException
-               callback:^(NSString* message) {
-                   [self setTrackUncaughtException:[EEUtils toBool:message]];
+    [bridge registerHandler:
+               k__setDryRun:^(NSString* message) {
+                   [self setDryRun:[EEUtils toBool:message]];
                    return @"";
                }];
 
-    [bridge registerHandler:k__dispatch
-                   callback:^(NSString* message) {
-                       [self dispatch];
-                       return @"";
-                   }];
+    [bridge registerHandler:
+               k__setOptOut:^(NSString* message) {
+                   [self setOptOut:[EEUtils toBool:message]];
+                   return @"";
+               }];
 
-    [bridge registerHandler:k__createTracker
-                   callback:^(NSString* message) {
-                       NSString* trackingId = message;
-                       return
-                           [EEUtils toString:[self createTracker:trackingId]];
-                   }];
+    [bridge registerHandler:
+        k__setTrackUncaughtException:^(NSString* message) {
+            [self setTrackUncaughtException:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge registerHandler:k__destroyTracker
-                   callback:^(NSString* message) {
-                       NSString* trackingId = message;
-                       return
-                           [EEUtils toString:[self destroyTracker:trackingId]];
-                   }];
+    [bridge registerHandler:
+                k__dispatch:^(NSString* message) {
+                    [self dispatch];
+                    return @"";
+                }];
 
-    [bridge registerHandler:k__testTrackEvent
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils toString:[self testTrackEvent:dict]];
-                   }];
+    [bridge registerHandler:
+           k__createTracker:^(NSString* message) {
+               NSString* trackingId = message;
+               return [EEUtils toString:[self createTracker:trackingId]];
+           }];
 
-    [bridge registerHandler:k__testTrackException
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils toString:[self testTrackException:dict]];
-                   }];
+    [bridge registerHandler:
+          k__destroyTracker:^(NSString* message) {
+              NSString* trackingId = message;
+              return [EEUtils toString:[self destroyTracker:trackingId]];
+          }];
 
-    [bridge registerHandler:k__testTrackScreenView
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return
-                           [EEUtils toString:[self testTrackScreenView:dict]];
-                   }];
+    [bridge registerHandler:
+          k__testTrackEvent:^(NSString* message) {
+              NSDictionary* dict =
+                  [EEJsonUtils convertStringToDictionary:message];
+              return [EEUtils toString:[self testTrackEvent:dict]];
+          }];
 
-    [bridge registerHandler:k__testTrackSocial
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils toString:[self testTrackSocial:dict]];
-                   }];
+    [bridge registerHandler:
+        k__testTrackException:^(NSString* message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            return [EEUtils toString:[self testTrackException:dict]];
+        }];
 
-    [bridge registerHandler:k__testTrackTiming
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils toString:[self testTrackTiming:dict]];
-                   }];
+    [bridge registerHandler:
+        k__testTrackScreenView:^(NSString* message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            return [EEUtils toString:[self testTrackScreenView:dict]];
+        }];
 
-    [bridge registerHandler:k__testCustomDimensionAndMetric
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils
-                           toString:[self testCustomDimensionAndMetric:dict]];
-                   }];
+    [bridge registerHandler:
+         k__testTrackSocial:^(NSString* message) {
+             NSDictionary* dict =
+                 [EEJsonUtils convertStringToDictionary:message];
+             return [EEUtils toString:[self testTrackSocial:dict]];
+         }];
 
-    [bridge registerHandler:k__testTrackEcommerceAction
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils
-                           toString:[self testTrackEcommerceAction:dict]];
-                   }];
+    [bridge registerHandler:
+         k__testTrackTiming:^(NSString* message) {
+             NSDictionary* dict =
+                 [EEJsonUtils convertStringToDictionary:message];
+             return [EEUtils toString:[self testTrackTiming:dict]];
+         }];
 
-    [bridge registerHandler:k__testTrackEcommerceImpression
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       return [EEUtils
-                           toString:[self testTrackEcommerceImpression:dict]];
-                   }];
+    [bridge registerHandler:
+        k__testCustomDimensionAndMetric:^(NSString* message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            return [EEUtils toString:[self testCustomDimensionAndMetric:dict]];
+        }];
+
+    [bridge registerHandler:
+        k__testTrackEcommerceAction:^(NSString* message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            return [EEUtils toString:[self testTrackEcommerceAction:dict]];
+        }];
+
+    [bridge registerHandler:
+        k__testTrackEcommerceImpression:^(NSString* message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            return [EEUtils toString:[self testTrackEcommerceImpression:dict]];
+        }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__setDispatchInterval];
     [bridge deregisterHandler:k__setDryRun];

@@ -12,7 +12,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #import "ee/firebase/performance/private//EEFirebasePerformanceTrace.h"
 
@@ -47,34 +46,34 @@ static NSString* const k__newTrace                  = @"FirebasePerformance_newT
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:k__setDataCollectionEnabled
-                   callback:^(NSString* message) {
-                       [self setDataCollectionEnabled:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge registerHandler:
+        k__setDataCollectionEnabled:^(NSString* message) {
+            [self setDataCollectionEnabled:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge registerHandler:k__isDataCollectionEnabled
-                   callback:^(NSString* message) {
-                       return [EEUtils toString:[self isDataCollectionEnabled]];
-                   }];
+    [bridge registerHandler:
+        k__isDataCollectionEnabled:^(NSString* message) {
+            return [EEUtils toString:[self isDataCollectionEnabled]];
+        }];
 
-    [bridge registerHandler:k__startTrace
-                   callback:^(NSString* message) {
-                       NSString* traceName = message;
-                       return [EEUtils toString:[self startTrace:traceName]];
-                   }];
+    [bridge registerHandler:
+              k__startTrace:^(NSString* message) {
+                  NSString* traceName = message;
+                  return [EEUtils toString:[self startTrace:traceName]];
+              }];
 
-    [bridge registerHandler:k__newTrace
-                   callback:^(NSString* message) {
-                       NSString* traceName = message;
-                       return [EEUtils toString:[self newTrace:traceName]];
-                   }];
+    [bridge registerHandler:
+                k__newTrace:^(NSString* message) {
+                    NSString* traceName = message;
+                    return [EEUtils toString:[self newTrace:traceName]];
+                }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:k__setDataCollectionEnabled];
     [bridge deregisterHandler:k__isDataCollectionEnabled];

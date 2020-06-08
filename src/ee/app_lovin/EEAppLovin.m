@@ -16,7 +16,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #define kPrefix @"AppLovin"
 
@@ -72,8 +71,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)adService:(ALAdService*)adService didFailToLoadAdWithError:(int)code {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialAdFailedToLoad
-             message:[@(code) stringValue]];
+    [bridge_ callCpp:k__onInterstitialAdFailedToLoad //
+                    :[@(code) stringValue]];
 }
 
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
@@ -120,7 +119,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)adService:(ALAdService*)adService didFailToLoadAdWithError:(int)code {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onRewardedAdFailedToLoad message:[@(code) stringValue]];
+    [bridge_ callCpp:k__onRewardedAdFailedToLoad //
+                    :[@(code) stringValue]];
 }
 
 - (void)ad:(ALAd*)ad wasClickedIn:(UIView*)view {
@@ -134,8 +134,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)ad:(ALAd*)ad wasHiddenIn:(UIView*)view {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onRewardedAdClosed
-             message:[EEUtils toString:rewarded_]];
+    [bridge_ callCpp:k__onRewardedAdClosed //
+                    :[EEUtils toString:rewarded_]];
 }
 
 - (void)rewardValidationRequestForAd:(ALAd*)ad
@@ -208,64 +208,64 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__initialize
-                    callback:^(NSString* message) {
-                        NSString* key = message;
-                        [self initialize:key];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+               k__initialize:^(NSString* message) {
+                   NSString* key = message;
+                   [self initialize:key];
+                   return @"";
+               }];
 
-    [bridge_ registerHandler:k__setTestAdsEnabled
-                    callback:^(NSString* message) {
-                        [self setTestAdsEnabled:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__setTestAdsEnabled:^(NSString* message) {
+            [self setTestAdsEnabled:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__setVerboseLogging
-                    callback:^(NSString* message) {
-                        [self setVerboseLogging:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__setVerboseLogging:^(NSString* message) {
+            [self setVerboseLogging:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__setMuted
-                    callback:^(NSString* message) {
-                        [self setMuted:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+                 k__setMuted:^(NSString* message) {
+                     [self setMuted:[EEUtils toBool:message]];
+                     return @"";
+                 }];
 
-    [bridge_ registerHandler:k__hasInterstitialAd
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasInterstitialAd]];
-                    }];
+    [bridge_ registerHandler:
+        k__hasInterstitialAd:^(NSString* message) {
+            return [EEUtils toString:[self hasInterstitialAd]];
+        }];
 
-    [bridge_ registerHandler:k__loadInterstitialAd
-                    callback:^(NSString* message) {
-                        [self loadInterstitialAd];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__loadInterstitialAd:^(NSString* message) {
+            [self loadInterstitialAd];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__showInterstitialAd
-                    callback:^(NSString* message) {
-                        [self showInterstitialAd];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__showInterstitialAd:^(NSString* message) {
+            [self showInterstitialAd];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__hasRewardedAd
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasRewardedAd]];
-                    }];
+    [bridge_ registerHandler:
+            k__hasRewardedAd:^(NSString* message) {
+                return [EEUtils toString:[self hasRewardedAd]];
+            }];
 
-    [bridge_ registerHandler:k__loadRewardedAd
-                    callback:^(NSString* message) {
-                        [self loadRewardedAd];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__loadRewardedAd:^(NSString* message) {
+               [self loadRewardedAd];
+               return @"";
+           }];
 
-    [bridge_ registerHandler:k__showRewardedAd
-                    callback:^(NSString* message) {
-                        [self showRewardedAd];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__showRewardedAd:^(NSString* message) {
+               [self showRewardedAd];
+               return @"";
+           }];
 }
 
 - (void)deregisterHandlers {

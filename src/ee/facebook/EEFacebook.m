@@ -11,7 +11,6 @@
 
 #import <ee_x-Swift.h>
 
-#import <ee/core/internal/EEMessageBridge.h>
 #import <ee/core/internal/EEJsonUtils.h>
 
 #import "ee/facebook/private/EEFacebookRequestDelegate.h"
@@ -70,58 +69,58 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__registerNotifications
-                    callback:^(NSString* message) {
-                        [self registerNotifications];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__registerNotifications:^(NSString* message) {
+            [self registerNotifications];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__isLoggedIn
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self isLoggedIn]];
-                    }];
+    [bridge_ registerHandler:
+               k__isLoggedIn:^(NSString* message) {
+                   return [EEUtils toString:[self isLoggedIn]];
+               }];
 
-    [bridge_ registerHandler:k__logIn
-                    callback:^(NSString* _Nonnull message) {
+    [bridge_ registerHandler:
+                    k__logIn:^(NSString* _Nonnull message) {
                         return [self logIn:message];
                     }];
 
-    [bridge_ registerHandler:k__logOut
-                    callback:^(NSString* _Nonnull message) {
-                        [self logOut];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+                   k__logOut:^(NSString* _Nonnull message) {
+                       [self logOut];
+                       return @"";
+                   }];
 
-    [bridge_ registerHandler:k__getAccessToken
-                    callback:^(NSString* _Nonnull message) {
-                        FBSDKAccessToken* token = [self getAccessToken];
-                        return [self convertAccessTokenToString:token];
-                    }];
+    [bridge_ registerHandler:
+           k__getAccessToken:^(NSString* _Nonnull message) {
+               FBSDKAccessToken* token = [self getAccessToken];
+               return [self convertAccessTokenToString:token];
+           }];
 
-    [bridge_ registerHandler:k__graphRequest
-                    callback:^(NSString* message) {
-                        return [self graphRequest:message];
-                    }];
+    [bridge_ registerHandler:
+             k__graphRequest:^(NSString* message) {
+                 return [self graphRequest:message];
+             }];
 
-    [bridge_ registerHandler:k__sendRequest
-                    callback:^(NSString* message) {
-                        return [self sendRequest:message];
-                    }];
+    [bridge_ registerHandler:
+              k__sendRequest:^(NSString* message) {
+                  return [self sendRequest:message];
+              }];
 
-    [bridge_ registerHandler:k__shareLinkContent
-                    callback:^(NSString* message) {
-                        return [self shareLinkContent:message];
-                    }];
+    [bridge_ registerHandler:
+         k__shareLinkContent:^(NSString* message) {
+             return [self shareLinkContent:message];
+         }];
 
-    [bridge_ registerHandler:k__sharePhotoContent
-                    callback:^(NSString* message) {
-                        return [self sharePhotoContent:message];
-                    }];
+    [bridge_ registerHandler:
+        k__sharePhotoContent:^(NSString* message) {
+            return [self sharePhotoContent:message];
+        }];
 
-    [bridge_ registerHandler:k__shareVideoContent
-                    callback:^(NSString* message) {
-                        return [self shareVideoContent:message];
-                    }];
+    [bridge_ registerHandler:
+        k__shareVideoContent:^(NSString* message) {
+            return [self shareVideoContent:message];
+        }];
 }
 
 - (void)deregisterHandlers {
@@ -177,8 +176,8 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
                  forKey:@"picture"];
     }
 
-    [bridge_ callCpp:k__onProfileChanged
-             message:[EEJsonUtils convertDictionaryToString:dict]];
+    [bridge_ callCpp:k__onProfileChanged //
+                    :[EEJsonUtils convertDictionaryToString:dict]];
 }
 
 - (BOOL)isLoggedIn {
@@ -214,13 +213,13 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
         FBSDKLoginManagerLoginResult* _Nullable result,
         NSError* _Nullable error) {
         if (error != nil) {
-            [bridge_ callCpp:[self k__onLoginFailure:tag]
-                     message:[error localizedDescription]];
+            [bridge_ callCpp:[self k__onLoginFailure:tag] //
+                            :[error localizedDescription]];
         } else if ([result isCancelled]) {
             [bridge_ callCpp:[self k__onLoginCancel:tag]];
         } else {
-            [bridge_ callCpp:[self k__onLoginSuccess:tag]
-                     message:[self convertAccessTokenToString:[result token]]];
+            [bridge_ callCpp:[self k__onLoginSuccess:tag] //
+                            :[self convertAccessTokenToString:[result token]]];
         }
     };
 
@@ -267,11 +266,11 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
     FBSDKGraphRequestBlock handler =
         ^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
             if (error != nil) {
-                [bridge_ callCpp:[self k__onGraphFailure:tag]
-                         message:[error localizedDescription]];
+                [bridge_ callCpp:[self k__onGraphFailure:tag] //
+                                :[error localizedDescription]];
             } else {
-                [bridge_ callCpp:[self k__onGraphSuccess:tag]
-                         message:[EEJsonUtils convertObjectToString:result]];
+                [bridge_ callCpp:[self k__onGraphSuccess:tag] //
+                                :[EEJsonUtils convertObjectToString:result]];
             }
         };
     [self graphRequest:path parameters:parameters handler:handler];

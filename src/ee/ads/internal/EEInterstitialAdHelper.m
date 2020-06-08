@@ -39,22 +39,19 @@
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:[helper_ isLoaded]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[ad_ isLoaded]];
-                    }];
+    [bridge_ registerHandler:[helper_ isLoaded]:^(NSString* message) {
+        return [EEUtils toString:[ad_ isLoaded]];
+    }];
 
-    [bridge_ registerHandler:[helper_ load]
-                    callback:^(NSString* message) {
-                        [ad_ load];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ load]:^(NSString* message) {
+        [ad_ load];
+        return @"";
+    }];
 
-    [bridge_ registerHandler:[helper_ show]
-                    callback:^(NSString* message) {
-                        [ad_ show];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ show]:^(NSString* message) {
+        [ad_ show];
+        return @"";
+    }];
 }
 
 - (void)deregisterHandlers {

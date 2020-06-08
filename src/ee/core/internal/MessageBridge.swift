@@ -39,7 +39,7 @@ public class MessageBridge: NSObject, IMessageBridge {
     
     @discardableResult
     public func registerAsyncHandler(_ tag: String,
-                                     _ handler: @escaping MessageAsyncHandler) -> Bool {
+                                     _ handler: @escaping AsyncMessageHandler) -> Bool {
         return registerHandler(tag) { message -> String in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard let callbackTag = dict["callback_tag"] as? String else {
@@ -75,12 +75,9 @@ public class MessageBridge: NSObject, IMessageBridge {
         return _handlers[tag]
     }
     
-    public func call(_ tag: String, _ message: String) -> String {
-        guard let handler = findHandler(tag) else {
-            assert(false, "A handler with tag " + tag + " doesn't exist")
-            return ""
-        }
-        return handler(message)
+    @discardableResult
+    public func callCpp(_ tag: String) -> String {
+        return callCpp(tag, "")
     }
     
     @discardableResult
@@ -92,15 +89,33 @@ public class MessageBridge: NSObject, IMessageBridge {
         free(response_cpp)
         return response
     }
+    
+    /// Calls a handler from Objective-C with a message.
+    /// @warning This method should not be called manually.
+    /// @param tag The tag of the handler.
+    /// @param message The message.
+    /// @return Reply message from Objective-C.
+    private func call(_ tag: String, _ message: String) -> String {
+        guard let handler = findHandler(tag) else {
+            assert(false, "A handler with tag " + tag + " doesn't exist")
+            return ""
+        }
+        return handler(message)
+    }
+    
+    fileprivate class func staticCall(_ tag: UnsafePointer<CChar>,
+                                      _ message: UnsafePointer<CChar>) -> UnsafeMutablePointer<CChar>? {
+        let tag_str = String(cString: tag)
+        let message_str = String(cString: message)
+        let response = _sharedInstance.call(tag_str, message_str)
+        let response_unmanaged = strdup(response)
+        return response_unmanaged
+    }
 }
 
 /// https://stackoverflow.com/questions/55941571/passing-a-swift-string-to-c
 @_cdecl("ee_staticCall")
 public func ee_staticCall(_ tag: UnsafePointer<CChar>,
                           _ message: UnsafePointer<CChar>) -> UnsafeMutablePointer<CChar>? {
-    let tag_str = String(cString: tag)
-    let message_str = String(cString: message)
-    let response = MessageBridge.getInstance().call(tag_str, message_str)
-    let response_unmanaged = strdup(response)
-    return response_unmanaged
+    return MessageBridge.staticCall(tag, message)
 }

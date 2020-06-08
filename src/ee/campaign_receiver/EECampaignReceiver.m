@@ -8,13 +8,9 @@
 
 #import "ee/campaign_receiver/EECampaignReceiver.h"
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
-
-@interface EECampaignReceiver () {
-}
-
-@end
 
 @implementation EECampaignReceiver
 
@@ -38,8 +34,9 @@ static NSString* const k__onReceivedLink = @"CampaignReceiver_onReceivedLink";
 + (BOOL)application:(UIApplication*)app
             openURL:(nonnull NSURL*)url
             options:(nonnull NSDictionary<NSString*, id>*)options {
-    EEMessageBridge* bridgeMessage = [EEMessageBridge getInstance];
-    [bridgeMessage callCpp:k__onReceivedLink message:[url absoluteString]];
+    id<EEIMessageBridge> bridgeMessage = [EEMessageBridge getInstance];
+    [bridgeMessage callCpp:k__onReceivedLink //
+                          :[url absoluteString]];
     return true;
 }
 @end

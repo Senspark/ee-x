@@ -58,28 +58,30 @@
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:[messageHelper_ createInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self createInternalAd]];
-                    }];
-    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self destroyInternalAd]];
-                    }];
-    [bridge_ registerHandler:[messageHelper_ isLoaded]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self isLoaded]];
-                    }];
-    [bridge_ registerHandler:[messageHelper_ load]
-                    callback:^(NSString* message) {
-                        [self load];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[messageHelper_ show]
-                    callback:^(NSString* message) {
-                        [self show];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[messageHelper_ createInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self createInternalAd]];
+                            }];
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self destroyInternalAd]];
+                            }];
+    [bridge_ registerHandler:[messageHelper_ isLoaded] //
+                            :^(NSString* message) {
+                                return [EEUtils toString:[self isLoaded]];
+                            }];
+    [bridge_ registerHandler:[messageHelper_ load] //
+                            :^(NSString* message) {
+                                [self load];
+                                return @"";
+                            }];
+    [bridge_ registerHandler:[messageHelper_ show] //
+                            :^(NSString* message) {
+                                [self show];
+                                return @"";
+                            }];
 }
 
 - (void)deregisterHandlers {
@@ -122,8 +124,8 @@
     [ad_ loadRequest:request
         completionHandler:^(GADRequestError* _Nullable error) {
             if (error) {
-                [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-                         message:[error description]];
+                [bridge_ callCpp:[messageHelper_ onFailedToLoad] //
+                                :[error description]];
             } else {
                 [bridge_ callCpp:[messageHelper_ onLoaded]];
             }
@@ -151,8 +153,8 @@
     didFailToPresentWithError:(nonnull NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(ad_ == rewardedAd, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToShow]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToShow] //
+                    :[error description]];
 }
 
 /// Tells the delegate that the rewarded ad was presented.
@@ -165,8 +167,8 @@
 - (void)rewardedAdDidDismiss:(nonnull GADRewardedAd*)rewardedAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(ad_ == rewardedAd, @"");
-    [bridge_ callCpp:[messageHelper_ onClosed]
-             message:[EEUtils toString:rewarded_]];
+    [bridge_ callCpp:[messageHelper_ onClosed] //
+                    :[EEUtils toString:rewarded_]];
 }
 
 @end

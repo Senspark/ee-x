@@ -11,7 +11,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #import "ee/google/internal/EEGoogleAnalyticsTracker.h"
 
@@ -67,35 +66,31 @@ static NSString* const k__value = @"value";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:[self k__setParameter]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* key = [dict objectForKey:k__key];
-                       NSString* value = [dict objectForKey:k__value];
-                       [self setParameter:key value:value];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__setParameter]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        NSString* key = [dict objectForKey:k__key];
+        NSString* value = [dict objectForKey:k__value];
+        [self setParameter:key value:value];
+        return @"";
+    }];
 
-    [bridge registerHandler:[self k__setAllowIDFACollection]
-                   callback:^(NSString* message) {
-                       [self setAllowIDFACollection:[EEUtils toBool:message]];
-                       return @"";
-                   }];
+    [bridge
+        registerHandler:[self k__setAllowIDFACollection]:^(NSString* message) {
+            [self setAllowIDFACollection:[EEUtils toBool:message]];
+            return @"";
+        }];
 
-    [bridge registerHandler:[self k__send]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       [self send:dict];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__send]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        [self send:dict];
+        return @"";
+    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:[self k__setParameter]];
     [bridge deregisterHandler:[self k__setAllowIDFACollection]];

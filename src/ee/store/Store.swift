@@ -9,9 +9,9 @@ import Foundation
 import StoreKit
 
 private class StoreProductsRequestDelegate: NSObject, SKProductsRequestDelegate {
-    private let _bridge: EEIMessageBridge
+    private let _bridge: IMessageBridge
 
-    fileprivate init(_ bridge: EEIMessageBridge) {
+    fileprivate init(_ bridge: IMessageBridge) {
         _bridge = bridge
         super.init()
     }
@@ -49,11 +49,11 @@ private class StoreProductsRequestDelegate: NSObject, SKProductsRequestDelegate 
 
 @objc(EEStore)
 public class Store: NSObject, SKPaymentTransactionObserver {
-    private let _bridge: EEIMessageBridge
+    private let _bridge: IMessageBridge
     private let _queue: SKPaymentQueue
 
     @objc
-    public init(_ bridge: EEIMessageBridge) {
+    public init(_ bridge: IMessageBridge) {
         _bridge = bridge
         _queue = SKPaymentQueue.default()
         super.init()

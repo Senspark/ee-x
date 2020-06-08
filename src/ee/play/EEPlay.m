@@ -12,10 +12,9 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 @interface EEPlay () <GKGameCenterControllerDelegate> {
-    EEMessageBridge* _bridge;
+    id<EEIMessageBridge> _bridge;
 }
 @end
 
@@ -53,68 +52,72 @@ static NSString* const k__score         = @"score";
 }
 
 - (void)registerHandlers {
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        return [EEUtils toString:[self isSignedIn]];
-    }
-                         tag:k__isSignedIn];
+    [_bridge registerHandler:
+               k__isSignedIn:^NSString* _Nonnull(NSString* _Nonnull message) {
+                   return [EEUtils toString:[self isSignedIn]];
+               }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self signIn];
-        return @"";
-    }
-                         tag:k__signin];
+    [_bridge registerHandler:
+                   k__signin:^NSString* _Nonnull(NSString* _Nonnull message) {
+                       [self signIn];
+                       return @"";
+                   }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self signOut];
-        return @"";
-    }
-                         tag:k__signout];
+    [_bridge registerHandler:
+                  k__signout:^NSString* _Nonnull(NSString* _Nonnull message) {
+                      [self signOut];
+                      return @"";
+                  }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self showAchievements];
-        return @"";
-    }
-                         tag:k__showAchievements];
+    [_bridge registerHandler:
+         k__showAchievements:^NSString* _Nonnull(NSString* _Nonnull message) {
+             [self showAchievements];
+             return @"";
+         }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
-        NSString* achievementId = dict[k__achievementId];
-        double percent = [dict[k__increment] doubleValue];
-        [self incrementAchievement:achievementId withPercent:percent];
-        return @"";
-    }
-                         tag:k__increaseAchievement];
+    [_bridge registerHandler:
+        k__increaseAchievement:^NSString* _Nonnull(NSString* _Nonnull message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            NSString* achievementId = dict[k__achievementId];
+            double percent = [dict[k__increment] doubleValue];
+            [self incrementAchievement:achievementId withPercent:percent];
+            return @"";
+        }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
-        NSString* achievementId = dict[k__achievementId];
-        [self unlockAchievement:achievementId];
-        return @"";
-    }
-                         tag:k__unlockAchievement];
+    [_bridge registerHandler:
+        k__unlockAchievement:^NSString* _Nonnull(NSString* _Nonnull message) {
+            NSDictionary* dict =
+                [EEJsonUtils convertStringToDictionary:message];
+            NSString* achievementId = dict[k__achievementId];
+            [self unlockAchievement:achievementId];
+            return @"";
+        }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
-        NSString* leaderboardId = dict[k__leaderboardId];
-        [self showLeaderboard:leaderboardId];
-        return @"";
-    }
-                         tag:k__showLeaderboard];
+    [_bridge registerHandler:
+          k__showLeaderboard:^NSString* _Nonnull(NSString* _Nonnull message) {
+              NSDictionary* dict =
+                  [EEJsonUtils convertStringToDictionary:message];
+              NSString* leaderboardId = dict[k__leaderboardId];
+              [self showLeaderboard:leaderboardId];
+              return @"";
+          }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        [self showAllLeaderboards];
-        return @"";
-    }
-                         tag:k__showAllLeaderboards];
+    [_bridge registerHandler:
+        k__showAllLeaderboards:^NSString* _Nonnull(NSString* _Nonnull message) {
+            [self showAllLeaderboards];
+            return @"";
+        }];
 
-    [_bridge registerHandler:^NSString* _Nonnull(NSString* _Nonnull message) {
-        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
-        NSString* leaderboardId = dict[k__leaderboardId];
-        int64_t score = [dict[k__score] longLongValue];
-        [self submitScore:leaderboardId withScore:score];
-        return @"";
-    }
-                         tag:k__submitScore];
+    [_bridge registerHandler:
+              k__submitScore:^NSString* _Nonnull(NSString* _Nonnull message) {
+                  NSDictionary* dict =
+                      [EEJsonUtils convertStringToDictionary:message];
+                  NSString* leaderboardId = dict[k__leaderboardId];
+                  int64_t score = [dict[k__score] longLongValue];
+                  [self submitScore:leaderboardId withScore:score];
+                  return @"";
+              }];
 }
 
 - (void)deregisterHandlers {
@@ -149,9 +152,9 @@ static NSString* const k__score         = @"score";
             }
 
             if ([[GKLocalPlayer localPlayer] isAuthenticated]) {
-                [_bridge callCpp:k_onSignedIn message:[EEUtils toString:YES]];
+                [_bridge callCpp:k_onSignedIn:[EEUtils toString:YES]];
             } else {
-                [_bridge callCpp:k_onSignedIn message:[EEUtils toString:NO]];
+                [_bridge callCpp:k_onSignedIn:[EEUtils toString:NO]];
             }
         };
 

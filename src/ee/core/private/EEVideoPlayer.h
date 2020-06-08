@@ -12,11 +12,11 @@
 @class MPMoviePlayerController;
 #endif // TARGET_OS_IOS
 
-@class EEMessageBridge;
+@protocol EEIMessageBridge;
 
 @interface EEVideoPlayer : NSObject
 
-- (id _Null_unspecified)initWithBridge:(EEMessageBridge* _Nonnull)bridge
+- (id _Null_unspecified)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                                    tag:(NSString* _Nonnull)tag;
 
 - (void)destroy;

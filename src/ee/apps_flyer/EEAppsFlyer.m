@@ -12,7 +12,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #define kPrefix @"AppsFlyer"
 
@@ -66,48 +65,48 @@ static NSString* const kTrackEvent      = kPrefix "TrackEvent";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:kInitialize
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        NSString* devKey = dict[@"devKey"];
-                        NSString* appId = dict[@"appId"];
-                        [self initialize:devKey appId:appId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+                 kInitialize:^(NSString* message) {
+                     NSDictionary* dict =
+                         [EEJsonUtils convertStringToDictionary:message];
+                     NSString* devKey = dict[@"devKey"];
+                     NSString* appId = dict[@"appId"];
+                     [self initialize:devKey appId:appId];
+                     return @"";
+                 }];
 
-    [bridge_ registerHandler:kStartTracking
-                    callback:^(NSString* message) {
-                        [self startTracking];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+              kStartTracking:^(NSString* message) {
+                  [self startTracking];
+                  return @"";
+              }];
 
-    [bridge_ registerHandler:kGetDeviceId
-                    callback:^(NSString* message) {
-                        return [self getDeviceId];
-                    }];
+    [bridge_ registerHandler:
+                kGetDeviceId:^(NSString* message) {
+                    return [self getDeviceId];
+                }];
 
-    [bridge_ registerHandler:kSetDebugEnabled
-                    callback:^(NSString* message) {
-                        [self setDebugEnabled:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+            kSetDebugEnabled:^(NSString* message) {
+                [self setDebugEnabled:[EEUtils toBool:message]];
+                return @"";
+            }];
 
-    [bridge_ registerHandler:kSetStopTracking
-                    callback:^(NSString* message) {
-                        [self setStopTracking:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+            kSetStopTracking:^(NSString* message) {
+                [self setStopTracking:[EEUtils toBool:message]];
+                return @"";
+            }];
 
-    [bridge_ registerHandler:kTrackEvent
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        NSString* name = dict[@"name"];
-                        NSDictionary* values = dict[@"values"];
-                        [self trackEvent:name values:values];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+                 kTrackEvent:^(NSString* message) {
+                     NSDictionary* dict =
+                         [EEJsonUtils convertStringToDictionary:message];
+                     NSString* name = dict[@"name"];
+                     NSDictionary* values = dict[@"values"];
+                     [self trackEvent:name values:values];
+                     return @"";
+                 }];
 }
 
 - (void)deregisterHandlers {

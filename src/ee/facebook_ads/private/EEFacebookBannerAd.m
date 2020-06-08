@@ -167,8 +167,8 @@
 - (void)adView:(FBAdView*)adView didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(ad_ == adView, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad] //
+                    :[error description]];
 }
 
 - (void)adViewWillLogImpression:(FBAdView*)adView {

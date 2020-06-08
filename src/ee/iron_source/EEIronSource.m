@@ -15,7 +15,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #define kPrefix @"IronSource"
 
@@ -78,42 +77,42 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__initialize
-                    callback:^(NSString* message) {
-                        NSString* gameId = message;
-                        [self initialize:gameId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+               k__initialize:^(NSString* message) {
+                   NSString* gameId = message;
+                   [self initialize:gameId];
+                   return @"";
+               }];
 
-    [bridge_ registerHandler:k__hasInterstitialAd
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasInterstitialAd]];
-                    }];
+    [bridge_ registerHandler:
+        k__hasInterstitialAd:^(NSString* message) {
+            return [EEUtils toString:[self hasInterstitialAd]];
+        }];
 
-    [bridge_ registerHandler:k__loadInterstitialAd
-                    callback:^(NSString* message) {
-                        [self loadInterstitialAd];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__loadInterstitialAd:^(NSString* message) {
+            [self loadInterstitialAd];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__showInterstitialAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        [self showInterstitialAd:adId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__showInterstitialAd:^(NSString* message) {
+            NSString* adId = message;
+            [self showInterstitialAd:adId];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__hasRewardedAd
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self hasRewardedAd]];
-                    }];
+    [bridge_ registerHandler:
+            k__hasRewardedAd:^(NSString* message) {
+                return [EEUtils toString:[self hasRewardedAd]];
+            }];
 
-    [bridge_ registerHandler:k__showRewardedAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        [self showRewardedAd:adId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__showRewardedAd:^(NSString* message) {
+               NSString* adId = message;
+               [self showRewardedAd:adId];
+               return @"";
+           }];
 }
 
 - (void)deregisterHandlers {
@@ -165,9 +164,9 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)interstitialDidFailToLoadWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialAdFailedToLoad
-             message:[error localizedDescription]]; // [error description]
-                                                    // returns empty.
+    [bridge_ callCpp:k__onInterstitialAdFailedToLoad //
+                    :[error localizedDescription]];  // [error description]
+                                                     // returns empty.
 }
 
 - (void)interstitialDidOpen {
@@ -185,8 +184,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)interstitialDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onInterstitialAdFailedToShow
-             message:[error description]];
+    [bridge_ callCpp:k__onInterstitialAdFailedToShow //
+                    :[error description]];
 }
 
 - (void)didClickInterstitial {
@@ -209,8 +208,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)handleRewardedAdResult {
-    [bridge_ callCpp:k__onRewardedAdClosed
-             message:[EEUtils toString:rewarded_]];
+    [bridge_ callCpp:k__onRewardedAdClosed //
+                    :[EEUtils toString:rewarded_]];
 }
 
 - (void)rewardedVideoHasChangedAvailability:(BOOL)available {
@@ -227,7 +226,8 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 
 - (void)rewardedVideoDidFailToShowWithError:(NSError*)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [bridge_ callCpp:k__onRewardedAdFailedToShow message:[error description]];
+    [bridge_ callCpp:k__onRewardedAdFailedToShow //
+                    :[error description]];
 }
 
 - (void)rewardedVideoDidOpen {
@@ -242,10 +242,10 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
         // Already has result.
         [self handleRewardedAdResult];
     } else {
-        [EEUtils runOnMainThreadDelayed:1.0f
-                               callback:^{
-                                   [self handleRewardedAdResult];
-                               }];
+        [EEUtils runOnMainThreadDelayed:
+                                   1.0f:^{
+                                       [self handleRewardedAdResult];
+                                   }];
     }
 }
 

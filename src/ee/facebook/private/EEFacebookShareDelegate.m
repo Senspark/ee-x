@@ -7,6 +7,8 @@
 
 #import "ee/facebook/private/EEFacebookShareDelegate.h"
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 
 @implementation EEFacebookShareDelegate {
@@ -38,13 +40,14 @@
 
 - (void)sharer:(id<FBSDKSharing>)sharer
     didCompleteWithResults:(NSDictionary*)results {
-    [bridge_ callCpp:[self k__onSuccess]
-             message:[EEJsonUtils convertDictionaryToString:results]];
+    [bridge_ callCpp:[self k__onSuccess] //
+                    :[EEJsonUtils convertDictionaryToString:results]];
     [self release];
 }
 
 - (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError*)error {
-    [bridge_ callCpp:[self k__onFailure] message:[error localizedDescription]];
+    [bridge_ callCpp:[self k__onFailure] //
+                    :[error localizedDescription]];
     [self release];
 }
 

@@ -75,7 +75,7 @@
 
 - (void)destroy {
     [self deregisterHandlers];
-    
+
 #if TARGET_OS_IOS
     [[NSNotificationCenter defaultCenter]
         removeObserver:self
@@ -133,65 +133,56 @@
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:[self k__loadFile]
-                    callback:^(NSString* message) {
-                        [self loadFile:message];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__setPosition]
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        int x = [dict[@"x"] intValue];
-                        int y = [dict[@"y"] intValue];
-                        [self setPosition:CGPointMake(x, y)];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__setSize]
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        int width = [dict[@"width"] intValue];
-                        int height = [dict[@"height"] intValue];
-                        [self setSize:CGSizeMake(width, height)];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__play]
-                    callback:^(NSString* message) {
-                        [self play];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__pause]
-                    callback:^(NSString* message) {
-                        [self pause];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__resume]
-                    callback:^(NSString* message) {
-                        [self pause];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__stop]
-                    callback:^(NSString* message) {
-                        [self resume];
-                        return @"";
-                    }];
-    [bridge_ registerHandler:[self k__setVisible]
-                    callback:^(NSString* message) {
-                        [self setVisible:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[self k__loadFile]:^(NSString* message) {
+        [self loadFile:message];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__setPosition]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        int x = [dict[@"x"] intValue];
+        int y = [dict[@"y"] intValue];
+        [self setPosition:CGPointMake(x, y)];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__setSize]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        int width = [dict[@"width"] intValue];
+        int height = [dict[@"height"] intValue];
+        [self setSize:CGSizeMake(width, height)];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__play]:^(NSString* message) {
+        [self play];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__pause]:^(NSString* message) {
+        [self pause];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__resume]:^(NSString* message) {
+        [self pause];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__stop]:^(NSString* message) {
+        [self resume];
+        return @"";
+    }];
+    [bridge_ registerHandler:[self k__setVisible]:^(NSString* message) {
+        [self setVisible:[EEUtils toBool:message]];
+        return @"";
+    }];
     [bridge_
-        registerHandler:[self k__setKeepAspectRatioEnabled]
-               callback:^(NSString* message) {
-                   [self setKeepAspectRatioEnabled:[EEUtils toBool:message]];
-                   return @"";
-               }];
-    [bridge_ registerHandler:[self k__setFullScreenEnabled]
-                    callback:^(NSString* message) {
-                        [self setFullScreenEnabled:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+        registerHandler:[self k__setKeepAspectRatioEnabled] //
+                       :^(NSString* message) {
+                           [self setKeepAspectRatioEnabled:[EEUtils
+                                                               toBool:message]];
+                           return @"";
+                       }];
+    [bridge_
+        registerHandler:[self k__setFullScreenEnabled]:^(NSString* message) {
+            [self setFullScreenEnabled:[EEUtils toBool:message]];
+            return @"";
+        }];
 }
 
 - (void)deregisterHandlers {
@@ -205,29 +196,29 @@
 }
 
 - (void)loadFile:(NSString* _Nonnull)path {
-    #if TARGET_OS_IOS
+#if TARGET_OS_IOS
     NSURL* url = [NSURL fileURLWithPath:path];
     [[self moviePlayer] setMovieSourceType:MPMovieSourceTypeFile];
     [[self moviePlayer] setContentURL:url];
-    #endif // TARGET_OS_IOS
+#endif // TARGET_OS_IOS
 }
 
 - (void)setPosition:(CGPoint)position {
-    #if TARGET_OS_IOS
+#if TARGET_OS_IOS
     CGFloat scale = [EEUtils getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.origin = CGPointMake(position.x / scale, position.y / scale);
     [[[self moviePlayer] view] setFrame:frame];
-    #endif // TARGET_OS_IOS
+#endif // TARGET_OS_IOS
 }
 
 - (void)setSize:(CGSize)size {
-    #if TARGET_OS_IOS
+#if TARGET_OS_IOS
     CGFloat scale = [EEUtils getDensity];
     CGRect frame = [[[self moviePlayer] view] frame];
     frame.size = CGSizeMake(size.width / scale, size.height / scale);
     [[[self moviePlayer] view] setFrame:frame];
-    #endif // TARGET_OS_IOS
+#endif // TARGET_OS_IOS
 }
 
 - (void)play {
@@ -261,9 +252,9 @@
 }
 
 - (void)setCurrentPlaybackTime:(NSTimeInterval)second {
-    #if TARGET_OS_IOS
+#if TARGET_OS_IOS
     [[self moviePlayer] setCurrentPlaybackTime:second];
-    #endif // TARGET_OS_IOS
+#endif // TARGET_OS_IOS
 }
 
 - (BOOL)isVisible {

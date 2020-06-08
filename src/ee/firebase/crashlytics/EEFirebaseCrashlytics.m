@@ -1,8 +1,8 @@
 #import "ee/firebase/crashlytics/EEFirebaseCrashlytics.h"
 
-#import <FirebaseCrashlytics/FIRCrashlytics.h>
+#import <ee_x-Swift.h>
 
-#import <ee/core/internal/EEMessageBridge.h>
+#import <FirebaseCrashlytics/FIRCrashlytics.h>
 
 @interface EEFirebaseCrashlytics () {
     id<EEIMessageBridge> bridge_;
@@ -30,11 +30,11 @@ static NSString* const kLog = @"FirebaseCrashlytics_log";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:kLog
-                    callback:^(NSString* message) {
-                        [self log:message];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+                        kLog:^(NSString* message) {
+                            [self log:message];
+                            return @"";
+                        }];
 }
 
 - (void)deregisterHandlers {

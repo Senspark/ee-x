@@ -10,11 +10,10 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 @interface EERecorder () <RPScreenRecorderDelegate,
                           RPPreviewViewControllerDelegate> {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     RPScreenRecorder* recorder_;
 }
 
@@ -50,33 +49,33 @@ NSString* const k__getRecordingUrl = @"Recorder_getRecordingUrl";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__isSupported
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self isSupported]];
-                    }];
+    [bridge_ registerHandler:
+              k__isSupported:^(NSString* message) {
+                  return [EEUtils toString:[self isSupported]];
+              }];
 
-    [bridge_ registerHandler:k__startRecording
-                    callback:^(NSString* message) {
-                        [self startRecording];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__startRecording:^(NSString* message) {
+               [self startRecording];
+               return @"";
+           }];
 
-    [bridge_ registerHandler:k__stopRecording
-                    callback:^(NSString* message) {
-                        [self stopRecording];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+            k__stopRecording:^(NSString* message) {
+                [self stopRecording];
+                return @"";
+            }];
 
-    [bridge_ registerHandler:k__cancelRecording
-                    callback:^(NSString* message) {
-                        [self cancelRecording];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+          k__cancelRecording:^(NSString* message) {
+              [self cancelRecording];
+              return @"";
+          }];
 
-    [bridge_ registerHandler:k__getRecordingUrl
-                    callback:^(NSString* message) {
-                        return [self getRecordingUrl];
-                    }];
+    [bridge_ registerHandler:
+          k__getRecordingUrl:^(NSString* message) {
+              return [self getRecordingUrl];
+          }];
 }
 
 - (void)deregisterHandlers {

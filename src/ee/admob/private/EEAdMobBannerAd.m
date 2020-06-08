@@ -160,8 +160,7 @@
     didFailToReceiveAdWithError:(GADRequestError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(ad_ == bannerView, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad]:[error description]];
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView*)bannerView {

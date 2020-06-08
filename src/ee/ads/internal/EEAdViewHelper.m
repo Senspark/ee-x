@@ -45,67 +45,55 @@
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:[helper_ isLoaded]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[view_ isLoaded]];
-                    }];
+    [bridge_ registerHandler:[helper_ isLoaded]:^(NSString* message) {
+        return [EEUtils toString:[view_ isLoaded]];
+    }];
 
-    [bridge_ registerHandler:[helper_ load]
-                    callback:^(NSString* message) {
-                        [view_ load];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ load]:^(NSString* message) {
+        [view_ load];
+        return @"";
+    }];
 
-    [bridge_ registerHandler:[helper_ getPosition]
-                    callback:^(NSString* message) {
-                        CGPoint position = [view_ getPosition];
-                        NSMutableDictionary* dict =
-                            [NSMutableDictionary dictionary];
-                        [dict setValue:@(position.x) forKey:@"x"];
-                        [dict setValue:@(position.y) forKey:@"y"];
-                        return [EEJsonUtils convertDictionaryToString:dict];
-                    }];
+    [bridge_ registerHandler:[helper_ getPosition]:^(NSString* message) {
+        CGPoint position = [view_ getPosition];
+        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+        [dict setValue:@(position.x) forKey:@"x"];
+        [dict setValue:@(position.y) forKey:@"y"];
+        return [EEJsonUtils convertDictionaryToString:dict];
+    }];
 
-    [bridge_ registerHandler:[helper_ setPosition]
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        int x = [dict[@"x"] intValue];
-                        int y = [dict[@"y"] intValue];
-                        [view_ setPosition:CGPointMake(x, y)];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ setPosition]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        int x = [dict[@"x"] intValue];
+        int y = [dict[@"y"] intValue];
+        [view_ setPosition:CGPointMake(x, y)];
+        return @"";
+    }];
 
-    [bridge_ registerHandler:[helper_ getSize]
-                    callback:^(NSString* message) {
-                        CGSize size = [view_ getSize];
-                        NSMutableDictionary* dict =
-                            [NSMutableDictionary dictionary];
-                        [dict setValue:@(size.width) forKey:@"width"];
-                        [dict setValue:@(size.height) forKey:@"height"];
-                        return [EEJsonUtils convertDictionaryToString:dict];
-                    }];
+    [bridge_ registerHandler:[helper_ getSize]:^(NSString* message) {
+        CGSize size = [view_ getSize];
+        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+        [dict setValue:@(size.width) forKey:@"width"];
+        [dict setValue:@(size.height) forKey:@"height"];
+        return [EEJsonUtils convertDictionaryToString:dict];
+    }];
 
-    [bridge_ registerHandler:[helper_ setSize]
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        int width = [dict[@"width"] intValue];
-                        int height = [dict[@"height"] intValue];
-                        [view_ setSize:CGSizeMake(width, height)];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ setSize]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        int width = [dict[@"width"] intValue];
+        int height = [dict[@"height"] intValue];
+        [view_ setSize:CGSizeMake(width, height)];
+        return @"";
+    }];
 
-    [bridge_ registerHandler:[helper_ isVisible]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[view_ isVisible]];
-                    }];
+    [bridge_ registerHandler:[helper_ isVisible]:^(NSString* message) {
+        return [EEUtils toString:[view_ isVisible]];
+    }];
 
-    [bridge_ registerHandler:[helper_ setVisible]
-                    callback:^(NSString* message) {
-                        [view_ setVisible:[EEUtils toBool:message]];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[helper_ setVisible]:^(NSString* message) {
+        [view_ setVisible:[EEUtils toBool:message]];
+        return @"";
+    }];
 }
 
 - (void)deregisterHandlers {

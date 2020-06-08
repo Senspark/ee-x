@@ -141,8 +141,9 @@ public class Utils: NSObject {
         return false
     }
 
-    private class func runOnMainThreadDelayed(_ seconds: Float,
-                                              _ callback: @escaping () -> Void) {
+    @objc
+    public class func runOnMainThreadDelayed(_ seconds: Float,
+                                             _ callback: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(
             deadline: .now() + .milliseconds(Int(seconds * 1000))) {
             callback()

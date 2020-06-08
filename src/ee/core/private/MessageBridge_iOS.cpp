@@ -6,9 +6,9 @@
 //
 //
 
-#import "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/internal/MessageBridge.hpp"
 
-#import "ee/core/internal/MessageBridge_Swift.h"
+#include "ee/core/internal/MessageBridge_Swift.h"
 
 extern "C" {
 char* ee_callCppInternal(const char* tag, const char* message) {

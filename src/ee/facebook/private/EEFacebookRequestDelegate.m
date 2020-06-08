@@ -7,6 +7,8 @@
 
 #import "ee/facebook/private/EEFacebookRequestDelegate.h"
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
 
 @implementation EEFacebookRequestDelegate {
@@ -38,14 +40,15 @@
 
 - (void)gameRequestDialog:(FBSDKGameRequestDialog*)gameRequestDialog
     didCompleteWithResults:(NSDictionary*)results {
-    [bridge_ callCpp:[self k__onSuccess]
-             message:[EEJsonUtils convertDictionaryToString:results]];
+    [bridge_ callCpp:[self k__onSuccess] //
+                    :[EEJsonUtils convertDictionaryToString:results]];
     [self release];
 }
 
 - (void)gameRequestDialog:(FBSDKGameRequestDialog*)gameRequestDialog
          didFailWithError:(NSError*)error {
-    [bridge_ callCpp:[self k__onFailure] message:[error localizedDescription]];
+    [bridge_ callCpp:[self k__onFailure] //
+                    :[error localizedDescription]];
     [self release];
 }
 

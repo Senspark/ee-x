@@ -9,10 +9,10 @@ import Foundation
 
 @objc(EETenjin)
 public class Tenjin: NSObject {
-    private let _bridge: EEIMessageBridge
+    private let _bridge: IMessageBridge
 
     @objc
-    public init(_ bridge: EEIMessageBridge) {
+    public init(_ bridge: IMessageBridge) {
         _bridge = bridge
         super.init()
     }

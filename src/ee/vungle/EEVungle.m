@@ -19,7 +19,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #define kPrefix @"Vungle"
 
@@ -42,7 +41,7 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 @end
 
 @implementation EEVungle {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
     BOOL initialized_;
     VungleSDK* sdk_;
     NSSet<NSString*>* loadingAdIds_;
@@ -79,31 +78,31 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__initialize
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        NSString* gameId = dict[@"gameId"];
-                        [self initialize:gameId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+               k__initialize:^(NSString* message) {
+                   NSDictionary* dict =
+                       [EEJsonUtils convertStringToDictionary:message];
+                   NSString* gameId = dict[@"gameId"];
+                   [self initialize:gameId];
+                   return @"";
+               }];
 
-    [bridge_ registerHandler:k__hasRewardedAd
-                    callback:^(NSString* adId) {
-                        return [EEUtils toString:[self hasRewardedAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+            k__hasRewardedAd:^(NSString* adId) {
+                return [EEUtils toString:[self hasRewardedAd:adId]];
+            }];
 
-    [bridge_ registerHandler:k__loadRewardedAd
-                    callback:^(NSString* adId) {
-                        [self loadRewardedAd:adId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__loadRewardedAd:^(NSString* adId) {
+               [self loadRewardedAd:adId];
+               return @"";
+           }];
 
-    [bridge_ registerHandler:k__showRewardedAd
-                    callback:^(NSString* adId) {
-                        [self showRewardedAd:adId];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+           k__showRewardedAd:^(NSString* adId) {
+               [self showRewardedAd:adId];
+               return @"";
+           }];
 }
 
 - (void)deregisterHandlers {
@@ -138,11 +137,11 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
     NSError* error = nil;
     [sdk_ loadPlacementWithID:adId error:&error];
     if (error != nil) {
-        [bridge_ callCpp:k__onFailedToLoad
-                 message:[EEJsonUtils convertDictionaryToString:@{
-                     @"ad_id": adId,
-                     @"message": [error description],
-                 }]];
+        [bridge_ callCpp:k__onFailedToLoad //
+                        :[EEJsonUtils convertDictionaryToString:@{
+                            @"ad_id": adId,
+                            @"message": [error description],
+                        }]];
         return;
     }
     // OK.
@@ -154,11 +153,11 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
     NSError* error = nil;
     [sdk_ playAd:view options:nil placementID:adId error:&error];
     if (error != nil) {
-        [bridge_ callCpp:k__onFailedToShow
-                 message:[EEJsonUtils convertDictionaryToString:@{
-                     @"ad_id": adId,
-                     @"message": [error description],
-                 }]];
+        [bridge_ callCpp:k__onFailedToShow //
+                        :[EEJsonUtils convertDictionaryToString:@{
+                            @"ad_id": adId,
+                            @"message": [error description],
+                        }]];
         return;
     }
     // OK.
@@ -171,10 +170,10 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
           (int)isAdPlayable, adId, error.description);
     if ([loadingAdIds_ containsObject:adId]) {
         NSAssert(isAdPlayable, @"");
-        [bridge_ callCpp:k__onLoaded
-                 message:[EEJsonUtils convertDictionaryToString:@{
-                     @"ad_id": adId,
-                 }]];
+        [bridge_ callCpp:k__onLoaded //
+                        :[EEJsonUtils convertDictionaryToString:@{
+                            @"ad_id": adId,
+                        }]];
         return;
     }
     if (error != nil) {
@@ -195,11 +194,11 @@ static NSString* const k__onClosed       = kPrefix "_onClosed";
 - (void)vungleDidCloseAdWithViewInfo:(VungleViewInfo*)info
                          placementID:(NSString*)adId {
     BOOL result = [[info completedView] boolValue];
-    [bridge_ callCpp:k__onClosed
-             message:[EEJsonUtils convertDictionaryToString:@{
-                 @"ad_id": adId,
-                 @"rewarded": @(result),
-             }]];
+    [bridge_ callCpp:k__onClosed //
+                    :[EEJsonUtils convertDictionaryToString:@{
+                        @"ad_id": adId,
+                        @"rewarded": @(result),
+                    }]];
 }
 
 @end

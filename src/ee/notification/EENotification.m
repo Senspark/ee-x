@@ -10,11 +10,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import <ee_x-Swift.h>
+
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 @implementation EENotification {
-    EEMessageBridge* bridge_;
+    id<EEIMessageBridge> bridge_;
 }
 
 // clang-format off
@@ -60,46 +61,43 @@ NSString* const k__notification_clear_all           = @"__notification_clear_all
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__notification_schedule
-                    callback:^(NSString* msg) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:msg];
-                        NSString* title = [dict objectForKey:@"title"];
-                        NSString* body = [dict objectForKey:@"body"];
-                        NSNumber* delay = [dict objectForKey:@"delay"];
-                        NSNumber* interval = [dict objectForKey:@"interval"];
-                        NSNumber* tag = [dict objectForKey:@"tag"];
+    [bridge_ registerHandler:
+        k__notification_schedule:^(NSString* msg) {
+            NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+            NSString* title = [dict objectForKey:@"title"];
+            NSString* body = [dict objectForKey:@"body"];
+            NSNumber* delay = [dict objectForKey:@"delay"];
+            NSNumber* interval = [dict objectForKey:@"interval"];
+            NSNumber* tag = [dict objectForKey:@"tag"];
 
-                        [self schedule:title
-                                  body:body
-                                 delay:(NSTimeInterval)[delay intValue]
-                              interval:[EENotification
-                                           parseInterval:[interval intValue]]
-                                   tag:tag];
-                        return @"";
-                    }];
+            [self schedule:title
+                      body:body
+                     delay:(NSTimeInterval)[delay intValue]
+                  interval:[EENotification parseInterval:[interval intValue]]
+                       tag:tag];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__notification_unschedule_all
-                    callback:^(NSString* msg) {
-                        [self unscheduleAll];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__notification_unschedule_all:^(NSString* msg) {
+            [self unscheduleAll];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__notification_unschedule
-                    callback:^(NSString* msg) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:msg];
-                        NSNumber* tag = [dict objectForKey:@"tag"];
+    [bridge_ registerHandler:
+        k__notification_unschedule:^(NSString* msg) {
+            NSDictionary* dict = [EEJsonUtils convertStringToDictionary:msg];
+            NSNumber* tag = [dict objectForKey:@"tag"];
 
-                        [self unschedule:tag];
-                        return @"";
-                    }];
+            [self unschedule:tag];
+            return @"";
+        }];
 
-    [bridge_ registerHandler:k__notification_clear_all
-                    callback:^(NSString* msg) {
-                        [self clearAll];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:
+        k__notification_clear_all:^(NSString* msg) {
+            [self clearAll];
+            return @"";
+        }];
 }
 
 - (void)deregisterHandlers {

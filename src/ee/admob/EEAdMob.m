@@ -11,7 +11,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 #import "ee/admob/private/EEAdMobBannerAd.h"
 #import "ee/admob/private/EEAdMobBannerHelper.h"
@@ -99,97 +98,91 @@ static NSString* const k__layout_name           = @"layout_name";
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:k__initialize
-                    callback:^(NSString* message) {
-                        NSString* applicationId = message;
-                        [self initialize:applicationId];
-                        return @"";
-                    }];
-
-    [bridge_ registerHandler:k__getEmulatorTestDeviceHash
-                    callback:^(NSString* message) {
-                        return [self getEmulatorTestDeviceHash];
-                    }];
-
-    [bridge_ registerHandler:k__addTestDevice
-                    callback:^(NSString* message) {
-                        NSString* hash = message;
-                        [self addTestDevice:hash];
-                        return @"";
-                    }];
-
-    [bridge_ registerHandler:k__getBannerAdSize
-                    callback:^(NSString* message) {
-                        CGSize size = [self getBannerAdSize:[message intValue]];
-                        NSMutableDictionary* dict =
-                            [NSMutableDictionary dictionary];
-                        [dict setValue:@(size.width) forKey:@"width"];
-                        [dict setValue:@(size.height) forKey:@"height"];
-                        return [EEJsonUtils convertDictionaryToString:dict];
-                    }];
-
-    [bridge_ registerHandler:k__createBannerAd
-                    callback:^(NSString* message) {
-                        NSDictionary* dict =
-                            [EEJsonUtils convertStringToDictionary:message];
-                        NSString* adId = dict[k__ad_id];
-                        int sizeId = [dict[k__ad_size] intValue];
-                        GADAdSize size = [bannerHelper_ getAdSize:sizeId];
-                        return [EEUtils
-                            toString:[self createBannerAd:adId size:size]];
-                    }];
-
-    [bridge_ registerHandler:k__destroyBannerAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self destroyBannerAd:adId]];
-                    }];
-
-    [bridge_
-        registerHandler:k__createNativeAd
-               callback:^(NSString* message) {
-                   NSDictionary* dict =
-                       [EEJsonUtils convertStringToDictionary:message];
-                   NSString* adId = dict[k__ad_id];
-                   NSString* layoutName = dict[k__layout_name];
-                   return [EEUtils
-                       toString:
-                           [self createNativeAd:adId
-                                           type:kGADAdLoaderAdTypeUnifiedNative
-                                         layout:layoutName]];
+    [bridge_ registerHandler:
+               k__initialize:^(NSString* message) {
+                   NSString* applicationId = message;
+                   [self initialize:applicationId];
+                   return @"";
                }];
 
-    [bridge_ registerHandler:k__destroyNativeAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self destroyNativeAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+        k__getEmulatorTestDeviceHash:^(NSString* message) {
+            return [self getEmulatorTestDeviceHash];
+        }];
 
-    [bridge_ registerHandler:k__createInterstitialAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return
-                            [EEUtils toString:[self createInterstitialAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+            k__addTestDevice:^(NSString* message) {
+                NSString* hash = message;
+                [self addTestDevice:hash];
+                return @"";
+            }];
 
-    [bridge_
-        registerHandler:k__destroyInterstitialAd
-               callback:^(NSString* message) {
-                   NSString* adId = message;
-                   return [EEUtils toString:[self destroyInterstitialAd:adId]];
-               }];
+    [bridge_ registerHandler:
+          k__getBannerAdSize:^(NSString* message) {
+              CGSize size = [self getBannerAdSize:[message intValue]];
+              NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+              [dict setValue:@(size.width) forKey:@"width"];
+              [dict setValue:@(size.height) forKey:@"height"];
+              return [EEJsonUtils convertDictionaryToString:dict];
+          }];
 
-    [bridge_ registerHandler:k__createRewardedAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self createRewardedAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+           k__createBannerAd:^(NSString* message) {
+               NSDictionary* dict =
+                   [EEJsonUtils convertStringToDictionary:message];
+               NSString* adId = dict[k__ad_id];
+               int sizeId = [dict[k__ad_size] intValue];
+               GADAdSize size = [bannerHelper_ getAdSize:sizeId];
+               return [EEUtils toString:[self createBannerAd:adId size:size]];
+           }];
 
-    [bridge_ registerHandler:k__destroyRewardedAd
-                    callback:^(NSString* message) {
-                        NSString* adId = message;
-                        return [EEUtils toString:[self destroyRewardedAd:adId]];
-                    }];
+    [bridge_ registerHandler:
+          k__destroyBannerAd:^(NSString* message) {
+              NSString* adId = message;
+              return [EEUtils toString:[self destroyBannerAd:adId]];
+          }];
+
+    [bridge_ registerHandler:
+           k__createNativeAd:^(NSString* message) {
+               NSDictionary* dict =
+                   [EEJsonUtils convertStringToDictionary:message];
+               NSString* adId = dict[k__ad_id];
+               NSString* layoutName = dict[k__layout_name];
+               return [EEUtils
+                   toString:[self createNativeAd:adId
+                                            type:kGADAdLoaderAdTypeUnifiedNative
+                                          layout:layoutName]];
+           }];
+
+    [bridge_ registerHandler:
+          k__destroyNativeAd:^(NSString* message) {
+              NSString* adId = message;
+              return [EEUtils toString:[self destroyNativeAd:adId]];
+          }];
+
+    [bridge_ registerHandler:
+        k__createInterstitialAd:^(NSString* message) {
+            NSString* adId = message;
+            return [EEUtils toString:[self createInterstitialAd:adId]];
+        }];
+
+    [bridge_ registerHandler:
+        k__destroyInterstitialAd:^(NSString* message) {
+            NSString* adId = message;
+            return [EEUtils toString:[self destroyInterstitialAd:adId]];
+        }];
+
+    [bridge_ registerHandler:
+         k__createRewardedAd:^(NSString* message) {
+             NSString* adId = message;
+             return [EEUtils toString:[self createRewardedAd:adId]];
+         }];
+
+    [bridge_ registerHandler:
+        k__destroyRewardedAd:^(NSString* message) {
+            NSString* adId = message;
+            return [EEUtils toString:[self destroyRewardedAd:adId]];
+        }];
 }
 
 - (void)deregisterHandlers {

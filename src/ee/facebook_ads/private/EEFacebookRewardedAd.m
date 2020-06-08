@@ -59,32 +59,31 @@
 }
 
 - (void)registerHandlers {
-    [bridge_ registerHandler:[messageHelper_ createInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self createInternalAd]];
-                    }];
+    [bridge_ registerHandler:[messageHelper_ createInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self createInternalAd]];
+                            }];
 
-    [bridge_ registerHandler:[messageHelper_ destroyInternalAd]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self destroyInternalAd]];
-                    }];
+    [bridge_ registerHandler:[messageHelper_ destroyInternalAd] //
+                            :^(NSString* message) {
+                                return
+                                    [EEUtils toString:[self destroyInternalAd]];
+                            }];
 
-    [bridge_ registerHandler:[messageHelper_ isLoaded]
-                    callback:^(NSString* message) {
-                        return [EEUtils toString:[self isLoaded]];
-                    }];
+    [bridge_ registerHandler:[messageHelper_ isLoaded]:^(NSString* message) {
+        return [EEUtils toString:[self isLoaded]];
+    }];
 
-    [bridge_ registerHandler:[messageHelper_ load]
-                    callback:^(NSString* message) {
-                        [self load];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[messageHelper_ load]:^(NSString* message) {
+        [self load];
+        return @"";
+    }];
 
-    [bridge_ registerHandler:[messageHelper_ show]
-                    callback:^(NSString* message) {
-                        [self show];
-                        return @"";
-                    }];
+    [bridge_ registerHandler:[messageHelper_ show]:^(NSString* message) {
+        [self show];
+        return @"";
+    }];
 }
 
 - (void)deregisterHandlers {
@@ -156,8 +155,8 @@
 - (void)rewardedVideoAdDidClose:(FBRewardedVideoAd*)rewardedVideoAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSAssert(ad_ == rewardedVideoAd, @"");
-    [bridge_ callCpp:[messageHelper_ onClosed]
-             message:[EEUtils toString:rewarded_]];
+    [bridge_ callCpp:[messageHelper_ onClosed] //
+                    :[EEUtils toString:rewarded_]];
 }
 
 - (void)rewardedVideoAdWillClose:(FBRewardedVideoAd*)rewardedVideoAd {
@@ -169,8 +168,8 @@
        didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
     NSAssert(ad_ == rewardedVideoAd, @"");
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad] //
+                    :[error description]];
 }
 
 - (void)rewardedVideoAdVideoComplete:(FBRewardedVideoAd*)rewardedVideoAd {

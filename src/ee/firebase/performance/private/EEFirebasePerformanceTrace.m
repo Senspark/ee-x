@@ -13,7 +13,6 @@
 #import <ee_x-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
-#import <ee/core/internal/EEMessageBridge.h>
 
 @interface EEFirebasePerformanceTrace () {
     NSString* traceName_;
@@ -76,51 +75,42 @@ static NSString* const k__value = @"value";
 }
 
 - (void)registerHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
-    [bridge registerHandler:[self k__start]
-                   callback:^(NSString* message) {
-                       [self start];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__start]:^(NSString* message) {
+        [self start];
+        return @"";
+    }];
 
-    [bridge registerHandler:[self k__stop]
-                   callback:^(NSString* message) {
-                       [self stop];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__stop]:^(NSString* message) {
+        [self stop];
+        return @"";
+    }];
 
-    [bridge registerHandler:[self k__putMetric]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* name = [dict objectForKey:k__key];
-                       int64_t value =
-                           [[dict objectForKey:k__value] longLongValue];
-                       [self putMetric:name value:value];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__putMetric]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        NSString* name = [dict objectForKey:k__key];
+        int64_t value = [[dict objectForKey:k__value] longLongValue];
+        [self putMetric:name value:value];
+        return @"";
+    }];
 
-    [bridge registerHandler:[self k__incrementMetric]
-                   callback:^(NSString* message) {
-                       NSDictionary* dict =
-                           [EEJsonUtils convertStringToDictionary:message];
-                       NSString* name = [dict objectForKey:k__key];
-                       int64_t value =
-                           [[dict objectForKey:k__value] longLongValue];
-                       [self incrementMetric:name value:value];
-                       return @"";
-                   }];
+    [bridge registerHandler:[self k__incrementMetric]:^(NSString* message) {
+        NSDictionary* dict = [EEJsonUtils convertStringToDictionary:message];
+        NSString* name = [dict objectForKey:k__key];
+        int64_t value = [[dict objectForKey:k__value] longLongValue];
+        [self incrementMetric:name value:value];
+        return @"";
+    }];
 
-    [bridge registerHandler:[self k__getLongMetric]
-                   callback:^(NSString* message) {
-                       NSString* name = message;
-                       return [EEUtils toString:[self getLongMetric:name]];
-                   }];
+    [bridge registerHandler:[self k__getLongMetric]:^(NSString* message) {
+        NSString* name = message;
+        return [EEUtils toString:[self getLongMetric:name]];
+    }];
 }
 
 - (void)deregisterHandlers {
-    EEMessageBridge* bridge = [EEMessageBridge getInstance];
+    id<EEIMessageBridge> bridge = [EEMessageBridge getInstance];
 
     [bridge deregisterHandler:[self k__start]];
     [bridge deregisterHandler:[self k__stop]];

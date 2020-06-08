@@ -331,19 +331,29 @@ public class Store implements IPlugin {
             client.startConnection(new BillingClientStateListener() {
                 @Override
                 public void onBillingSetupFinished(BillingResult result) {
-                    if (result.getResponseCode() == BillingResponseCode.OK) {
-                        _logger.info("Connected to BillingClient.");
-                        emitter.onNext(client);
+                    if (emitter.isDisposed()) {
+                        if (client.isReady()) {
+                            client.endConnection();
+                        }
                     } else {
-                        _logger.info("Could not connect to BillingClient. Response code = %s",
-                            result.getResponseCode());
-                        emitter.onError(new StoreException(result.getResponseCode()));
+                        if (result.getResponseCode() == BillingResponseCode.OK) {
+                            _logger.info("Connected to BillingClient.");
+                            emitter.onNext(client);
+                        } else {
+                            _logger.info("Could not connect to BillingClient. Response code = %s",
+                                result.getResponseCode());
+                            emitter.onError(new StoreException(result.getResponseCode()));
+                        }
                     }
                 }
 
                 @Override
                 public void onBillingServiceDisconnected() {
-                    emitter.onComplete();
+                    if (emitter.isDisposed()) {
+                        // Fix UndeliverableException.
+                    } else {
+                        emitter.onComplete();
+                    }
                 }
             });
             emitter.setCancellable(() -> {
@@ -374,6 +384,10 @@ public class Store implements IPlugin {
         return Single.<List<SkuDetails>>create(emitter ->
             emitter.setDisposable(connect().subscribe(client ->
                 client.querySkuDetailsAsync(params, (result, detailsList) -> {
+                    if (emitter.isDisposed()) {
+                        // Fix UndeliverableException.
+                        return;
+                    }
                     if (result.getResponseCode() == BillingResponseCode.OK) {
                         // https://stackoverflow.com/questions/56832130/skudetailslist-returning-null
                         if (detailsList != null) {

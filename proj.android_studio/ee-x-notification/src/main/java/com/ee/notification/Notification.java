@@ -83,8 +83,8 @@ public class Notification implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(msg -> {
-            Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+        _bridge.registerHandler(k__notification_schedule, message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assert dict != null;
 
             String title = (String) dict.get("title");
@@ -96,32 +96,33 @@ public class Notification implements IPlugin {
 
             schedule(ticker, title, body, delay, interval, tag);
             return "";
-        }, k__notification_schedule);
+        });
 
-        _bridge.registerHandler(msg -> {
+        _bridge.registerHandler(k__notification_unschedule_all, message -> {
             unscheduleAll();
             return "";
-        }, k__notification_unschedule_all);
+        });
 
-        _bridge.registerHandler(msg -> {
-            Map<String, Object> dict = JsonUtils.convertStringToDictionary(msg);
+        _bridge.registerHandler(k__notification_unschedule, message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assert dict != null;
 
             Integer tag = (Integer) dict.get("tag");
             unschedule(tag);
             return "";
-        }, k__notification_unschedule);
+        });
 
-        _bridge.registerHandler(msg -> {
+        _bridge.registerHandler(k__notification_clear_all, message -> {
             clearAll();
             return "";
-        }, k__notification_clear_all);
+        });
     }
 
     private void deregisterHandlers() {
         _bridge.deregisterHandler(k__notification_schedule);
         _bridge.deregisterHandler(k__notification_unschedule_all);
         _bridge.deregisterHandler(k__notification_unschedule);
+        _bridge.deregisterHandler(k__notification_clear_all);
     }
 
     @SuppressWarnings("WeakerAccess")

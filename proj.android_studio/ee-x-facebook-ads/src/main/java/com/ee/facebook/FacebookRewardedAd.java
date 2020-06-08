@@ -52,24 +52,24 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message ->
-            Utils.toString(createInternalAd()), _messageHelper.createInternalAd());
+        _bridge.registerHandler(_messageHelper.createInternalAd(), message ->
+            Utils.toString(createInternalAd()));
 
-        _bridge.registerHandler(message ->
-            Utils.toString(destroyInternalAd()), _messageHelper.destroyInternalAd());
+        _bridge.registerHandler(_messageHelper.destroyInternalAd(), message ->
+            Utils.toString(destroyInternalAd()));
 
-        _bridge.registerHandler(message ->
-            Utils.toString(isLoaded()), _messageHelper.isLoaded());
+        _bridge.registerHandler(_messageHelper.isLoaded(), message ->
+            Utils.toString(isLoaded()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_messageHelper.load(), message -> {
             load();
             return "";
-        }, _messageHelper.load());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_messageHelper.show(), message -> {
             show();
             return "";
-        }, _messageHelper.show());
+        });
     }
 
     private void deregisterHandlers() {

@@ -109,27 +109,28 @@ public class Recorder implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> Utils.toString(isSupported()), k__isSupported);
+        _bridge.registerHandler(k__isSupported, message -> Utils.toString(isSupported()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__startRecording, message -> {
             startRecording();
             return "";
-        }, k__startRecording);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__stopRecording, message -> {
             stopRecording();
             return "";
-        }, k__stopRecording);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__cancelRecording, message -> {
             cancelRecording();
             return "";
-        }, k__cancelRecording);
+        });
 
-        _bridge.registerHandler(message -> getRecordingUrl(), k__getRecordingUrl);
+        _bridge.registerHandler(k__getRecordingUrl, message -> getRecordingUrl());
     }
 
     private void deregisterHandlers() {
+        _bridge.deregisterHandler(k__isSupported);
         _bridge.deregisterHandler(k__startRecording);
         _bridge.deregisterHandler(k__stopRecording);
         _bridge.deregisterHandler(k__cancelRecording);

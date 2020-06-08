@@ -68,10 +68,10 @@ public class FirebaseCrashlytics implements IPlugin {
 
     private void registerHandlers() {
         Utils.checkMainThread();
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(kLog, message -> {
             log(message);
             return "";
-        }, kLog);
+        });
     }
 
     private void deregisterHandlers() {

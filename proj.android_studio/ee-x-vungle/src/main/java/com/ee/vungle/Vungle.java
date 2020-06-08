@@ -108,7 +108,7 @@ public class Vungle implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -117,20 +117,20 @@ public class Vungle implements IPlugin {
 
             initialize(gameId);
             return "";
-        }, k__initialize);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(hasRewardedAd(message)), k__hasRewardedAd);
+        _bridge.registerHandler(k__hasRewardedAd, message ->
+            Utils.toString(hasRewardedAd(message)));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__loadRewardedAd, message -> {
             loadRewardedAd(message);
             return "";
-        }, k__loadRewardedAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showRewardedAd, message -> {
             showRewardedAd(message);
             return "";
-        }, k__showRewardedAd);
+        });
     }
 
     private void deregisterHandlers() {

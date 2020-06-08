@@ -23,18 +23,18 @@ public class InterstitialAdHelper {
     }
 
     public void registerHandlers() {
-        _bridge.registerHandler(message ->
-            Utils.toString(_ad.isLoaded()), _helper.isLoaded());
+        _bridge.registerHandler(_helper.isLoaded(), message ->
+            Utils.toString(_ad.isLoaded()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.load(), message -> {
             _ad.load();
             return "";
-        }, _helper.load());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.show(), message -> {
             _ad.show();
             return "";
-        }, _helper.show());
+        });
     }
 
     public void deregisterHandlers() {

@@ -181,15 +181,15 @@ public class Facebook implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__registerNotifications, message -> {
             registerNotifications();
             return "";
-        }, k__registerNotifications);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(isLoggedIn()), k__isLoggedIn);
+        _bridge.registerHandler(k__isLoggedIn, message ->
+            Utils.toString(isLoggedIn()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__logIn, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -200,23 +200,23 @@ public class Facebook implements IPlugin {
 
             logIn(permissions, new FacebookLoginDelegate(_bridge, tag));
             return "";
-        }, k__logIn);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__logOut, message -> {
             logOut();
             return "";
-        }, k__logOut);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__getAccessToken, message -> {
             AccessToken token = getAccessToken();
             return convertAccessTokenToString(token);
-        }, k__getAccessToken);
+        });
 
-        _bridge.registerHandler(this::graphRequest, k__graphRequest);
+        _bridge.registerHandler(k__graphRequest, this::graphRequest);
 
-        _bridge.registerHandler(this::sendRequest, k__sendRequest);
+        _bridge.registerHandler(k__sendRequest, this::sendRequest);
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__shareLinkContent, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -227,9 +227,9 @@ public class Facebook implements IPlugin {
 
             shareLinkContent(url, new FacebookShareDelegate(_bridge, tag));
             return "";
-        }, k__shareLinkContent);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__sharePhotoContent, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -240,9 +240,9 @@ public class Facebook implements IPlugin {
 
             sharePhotoContent(url, new FacebookShareDelegate(_bridge, tag));
             return "";
-        }, k__sharePhotoContent);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__shareVideoContent, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -253,7 +253,7 @@ public class Facebook implements IPlugin {
 
             shareVideoContent(url, new FacebookShareDelegate(_bridge, tag));
             return "";
-        }, k__shareVideoContent);
+        });
     }
 
     private void deregisterHandlers() {

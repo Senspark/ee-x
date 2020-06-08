@@ -84,22 +84,23 @@ public class FirebasePerformance implements IPlugin {
 
     private void registerHandlers() {
         Utils.checkMainThread();
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setDataCollectionEnabled, message -> {
             setDataCollectionEnabled(Utils.toBoolean(message));
             return "";
-        }, k__setDataCollectionEnabled);
+        });
 
-        _bridge.registerHandler(message -> Utils.toString(isDataCollectionEnabled()), k__isDataCollectionEnabled);
+        _bridge.registerHandler(k__isDataCollectionEnabled, message ->
+            Utils.toString(isDataCollectionEnabled()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__startTrace, message -> {
             String traceName = message;
             return Utils.toString(startTrace(traceName));
-        }, k__startTrace);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__newTrace, message -> {
             String traceName = message;
             return Utils.toString(newTrace(traceName));
-        }, k__newTrace);
+        });
     }
 
     private void deregisterHandlers() {

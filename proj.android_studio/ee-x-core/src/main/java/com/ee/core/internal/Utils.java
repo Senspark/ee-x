@@ -139,13 +139,12 @@ public class Utils {
     }
 
     public static void registerHandlers(IMessageBridge bridge) {
-        bridge.registerHandler(message ->
-            toString(isMainThread()), k__isMainThread);
+        bridge.registerHandler(k__isMainThread, message -> toString(isMainThread()));
 
-        bridge.registerHandler(message ->
-            toString(runOnUiThread(() -> bridge.callCpp(k__runOnUiThreadCallback))), k__runOnUiThread);
+        bridge.registerHandler(k__runOnUiThread, message ->
+            toString(runOnUiThread(() -> bridge.callCpp(k__runOnUiThreadCallback))));
 
-        bridge.registerAsyncHandler((message, resolver) -> {
+        bridge.registerAsyncHandler(k__runOnUiThreadDelayed, (message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -153,68 +152,68 @@ public class Utils {
             assertThat(delay).isNotNull();
 
             runOnUiThreadDelayed(delay.floatValue(), () -> resolver.resolve(""));
-        }, k__runOnUiThreadDelayed);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__isApplicationInstalled, message -> {
             Context context = PluginManager.getInstance().getContext();
             @SuppressWarnings("UnnecessaryLocalVariable")
             String applicationId = message;
             return toString(isApplicationInstalled(context, applicationId));
-        }, k__isApplicationInstalled);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__openApplication, message -> {
             Context context = PluginManager.getInstance().getContext();
             @SuppressWarnings("UnnecessaryLocalVariable")
             String applicationId = message;
             return toString(openApplication(context, applicationId));
-        }, k__openApplication);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getApplicationId, message -> {
             Context context = PluginManager.getInstance().getContext();
             return getApplicationId(context);
-        }, k__getApplicationId);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getApplicationName, message -> {
             Context context = PluginManager.getInstance().getContext();
             return getApplicationName(context);
-        }, k__getApplicationName);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getVersionName, message -> {
             Context context = PluginManager.getInstance().getContext();
             return getVersionName(context);
-        }, k__getVersionName);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getVersionCode, message -> {
             Context context = PluginManager.getInstance().getContext();
             return String.valueOf(getVersionCode(context));
-        }, k__getVersionCode);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getSHA1CertificateFingerprint, message -> {
             Context context = PluginManager.getInstance().getContext();
             return getSHA1CertificateFingerprint(context);
-        }, k__getSHA1CertificateFingerprint);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__isInstantApp, message -> {
             Context context = PluginManager.getInstance().getContext();
             return toString(isInstantApp(context));
-        }, k__isInstantApp);
+        });
 
-        bridge.registerHandler(message -> toString(isTablet()), k__isTablet);
+        bridge.registerHandler(k__isTablet, message -> toString(isTablet()));
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getDensity, message -> {
             double density = getDensity();
             return String.valueOf(density);
-        }, k__getDensity);
+        });
 
-        bridge.registerAsyncHandler((message, resolver) -> {
+        bridge.registerAsyncHandler(k__getDeviceId, (message, resolver) -> {
             Context context = PluginManager.getInstance().getContext();
             getDeviceId(context)
                 .subscribe(
                     resolver::resolve,
                     exception -> resolver.resolve(""));
-        }, k__getDeviceId);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__getSafeInset, message -> {
             Activity activity = PluginManager.getInstance().getActivity();
             SafeInset inset = getSafeInset(activity);
             Map<String, Object> dict = new HashMap<>();
@@ -223,9 +222,9 @@ public class Utils {
             dict.put("top", inset.top);
             dict.put("bottom", inset.bottom);
             return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
-        }, k__getSafeInset);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__sendMail, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -238,9 +237,9 @@ public class Utils {
 
             Context context = PluginManager.getInstance().getContext();
             return toString(sendMail(context, recipient, subject, body));
-        }, k__sendMail);
+        });
 
-        bridge.registerAsyncHandler((message, resolver) -> {
+        bridge.registerAsyncHandler(k__testConnection, (message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -254,9 +253,9 @@ public class Utils {
                 .subscribe(
                     result -> resolver.resolve(Utils.toString(result)),
                     exception -> resolver.resolve(Utils.toString(false)));
-        }, k__testConnection);
+        });
 
-        bridge.registerHandler(message -> {
+        bridge.registerHandler(k__showInstallPrompt, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -270,7 +269,7 @@ public class Utils {
 
             showInstantPrompt(url, referrer, activity);
             return "";
-        }, k__showInstallPrompt);
+        });
     }
 
     public static void deregisterHandlers(IMessageBridge bridge) {
@@ -307,7 +306,8 @@ public class Utils {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean openApplication(@NonNull Context context, @NonNull String applicationId) {
+    public static boolean openApplication(@NonNull Context context, @NonNull String
+        applicationId) {
         PackageManager packetManager = context.getPackageManager();
         Intent launchIntent = packetManager.getLaunchIntentForPackage(applicationId);
         if (launchIntent != null) {
@@ -496,7 +496,8 @@ public class Utils {
     }
 
     private static boolean getSafeInset_Oppo(Activity activity, SafeInset inset)
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+        throws
+        ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
         if (!activity.getPackageManager().hasSystemFeature("com.oppo.feature.screen.heteromorphism")) {
             return false;
         }
@@ -555,7 +556,8 @@ public class Utils {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static boolean sendMail(@NonNull Context context, @NonNull String recipient, @NonNull String subject,
+    public static boolean sendMail(@NonNull Context context, @NonNull String
+        recipient, @NonNull String subject,
                                    @NonNull String body) {
         Intent intent = new Intent(Intent.ACTION_SEND) //
             .setType("message/rfc822") //
@@ -589,7 +591,8 @@ public class Utils {
 
     /// https://stackoverflow.com/questions/9570237/android-check-internet-connection
     /// https://stackoverflow.com/questions/2758612/executorservice-that-interrupts-tasks-after-a-timeout
-    public static Single<Boolean> testConnection(@NonNull Context context, @NonNull String hostName, float timeOut) {
+    public static Single<Boolean> testConnection(@NonNull Context context, @NonNull String
+        hostName, float timeOut) {
         return Single
             .<Boolean>create(emitter -> {
                 try {
@@ -612,7 +615,8 @@ public class Utils {
             .timeout((long) (timeOut * 1000), TimeUnit.MILLISECONDS);
     }
 
-    public static void showInstantPrompt(@NonNull String url, @NonNull String referrer, @NonNull Activity activity) {
+    public static void showInstantPrompt(@NonNull String url, @NonNull String
+        referrer, @NonNull Activity activity) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE);
         InstantApps.showInstallPrompt(activity, intent, INSTALL_APP_REQUEST_CODE, referrer);
     }

@@ -102,7 +102,7 @@ public class UnityAds implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -114,26 +114,26 @@ public class UnityAds implements IPlugin {
             assertThat(_activity).isNotNull();
             initialize(_activity, gameId, testModeEnabled);
             return "";
-        }, k__initialize);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setDebugModeEnabled, message -> {
             setDebugModeEnabled(Utils.toBoolean(message));
             return "";
-        }, k__setDebugModeEnabled);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__hasRewardedAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(hasRewardedAd(adId));
-        }, k__hasRewardedAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showRewardedAd, message -> {
             assertThat(_activity).isNotNull();
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             showRewardedAd(_activity, adId);
             return "";
-        }, k__showRewardedAd);
+        });
     }
 
     private void deregisterHandlers() {

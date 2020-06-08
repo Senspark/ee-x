@@ -111,38 +111,38 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             assertThat(_activity).isNotNull();
             @SuppressWarnings("UnnecessaryLocalVariable")
             String gameId = message;
             initialize(_activity, gameId);
             return "";
-        }, k__initialize);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__loadInterstitialAd, message -> {
             loadInterstitialAd();
             return "";
-        }, k__loadInterstitialAd);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(hasInterstitialAd()), k__hasInterstitialAd);
+        _bridge.registerHandler(k__hasInterstitialAd, message ->
+            Utils.toString(hasInterstitialAd()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showInterstitialAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             showInterstitialAd(adId);
             return "";
-        }, k__showInterstitialAd);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(hasRewardedAd()), k__hasRewardedAd);
+        _bridge.registerHandler(k__hasRewardedAd, message ->
+            Utils.toString(hasRewardedAd()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showRewardedAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             showRewardedAd(adId);
             return "";
-        }, k__showRewardedAd);
+        });
     }
 
     private void deregisterHandlers() {

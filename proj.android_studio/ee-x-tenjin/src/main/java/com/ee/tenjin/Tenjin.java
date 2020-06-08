@@ -86,11 +86,11 @@ public class Tenjin implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             String apiKey = message;
             initialize(apiKey);
             return "";
-        }, k__initialize);
+        });
     }
 
     private void deregisterHandlers() {

@@ -129,7 +129,7 @@ public class Store implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kConnect, (message, resolver) -> {
             _disposable.add(connect().subscribe(
                 client -> {
                     Map<String, Object> result = new HashMap<>();
@@ -148,9 +148,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kConnect);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kGetSkuDetails, (message, resolver) -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -183,9 +183,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kGetSkuDetails);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kGetPurchases, (message, resolver) -> {
             String skuType = message;
             _disposable.add(getPurchases(skuType).subscribe(
                 purchaseList -> {
@@ -211,9 +211,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kGetPurchases);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kGetPurchaseHistory, (message, resolver) -> {
             String skuType = message;
             _disposable.add(getPurchaseHistory(skuType).subscribe(
                 recordList -> {
@@ -239,9 +239,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kGetPurchaseHistory);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kPurchase, (message, resolver) -> {
             String sku = message;
             _disposable.add(purchase(sku).subscribe(
                 purchase -> {
@@ -262,9 +262,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kPurchase);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kConsume, (message, resolver) -> {
             String purchaseToken = message;
             _disposable.add(consume(purchaseToken).subscribe(
                 () -> {
@@ -283,9 +283,9 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kConsume);
+        });
 
-        _bridge.registerAsyncHandler((message, resolver) -> {
+        _bridge.registerAsyncHandler(kAcknowledge, (message, resolver) -> {
             String purchaseToken = message;
             _disposable.add(acknowledge(purchaseToken).subscribe(
                 () -> {
@@ -304,7 +304,7 @@ public class Store implements IPlugin {
                     assertThat(response).isNotNull();
                     resolver.resolve(response);
                 }));
-        }, kAcknowledge);
+        });
     }
 
     private void deregisterHandlers() {

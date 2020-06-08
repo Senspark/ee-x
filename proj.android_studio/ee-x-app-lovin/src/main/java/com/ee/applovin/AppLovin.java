@@ -224,53 +224,53 @@ public class AppLovin implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String key = message;
             initialize(key);
             return "";
-        }, k__initialize);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setTestAdsEnabled, message -> {
             setTestAdEnabled(Utils.toBoolean(message));
             return "";
-        }, k__setTestAdsEnabled);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setVerboseLogging, message -> {
             setVerboseLogging(Utils.toBoolean(message));
             return "";
-        }, k__setVerboseLogging);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setMuted, message -> {
             setMuted(Utils.toBoolean(message));
             return "";
-        }, k__setMuted);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__loadInterstitialAd, message -> {
             loadInterstitialAd();
             return "";
-        }, k__loadInterstitialAd);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(hasInterstitialAd()), k__hasInterstitialAd);
+        _bridge.registerHandler(k__hasInterstitialAd, message ->
+            Utils.toString(hasInterstitialAd()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showInterstitialAd, message -> {
             showInterstitialAd();
             return "";
-        }, k__showInterstitialAd);
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(hasRewardedAd()), k__hasRewardedAd);
+        _bridge.registerHandler(k__hasRewardedAd, message ->
+            Utils.toString(hasRewardedAd()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__loadRewardedAd, message -> {
             loadRewardedAd();
             return "";
-        }, k__loadRewardedAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__showRewardedAd, message -> {
             showRewardedAd();
             return "";
-        }, k__showRewardedAd);
+        });
     }
 
     private void deregisterHandlers() {

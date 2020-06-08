@@ -94,10 +94,10 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__initialize, message -> {
             initialize();
             return "";
-        }, k__initialize);
+        });
     }
 
     private void deregisterHandlers() {

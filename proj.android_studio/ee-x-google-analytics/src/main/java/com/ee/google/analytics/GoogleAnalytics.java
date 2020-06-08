@@ -120,89 +120,89 @@ public class GoogleAnalytics implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setDispatchInterval, message -> {
             int seconds = Integer.valueOf(message);
             setLocalDispatchInterval(seconds);
             return "";
-        }, k__setDispatchInterval);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setDryRun, message -> {
             setDryRun(Utils.toBoolean(message));
             return "";
-        }, k__setDryRun);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setOptOut, message -> {
             setAppOptOut(Utils.toBoolean(message));
             return "";
-        }, k__setOptOut);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setTrackUncaughtException, message -> {
             setExceptionReportingEnabled(Utils.toBoolean(message));
             return "";
-        }, k__setTrackUncaughtException);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__dispatch, message -> {
             dispatchLocalHits();
             return "";
-        }, k__dispatch);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__createTracker, message -> {
             String trackingId = message;
             return Utils.toString(createTracker(trackingId));
-        }, k__createTracker);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__destroyTracker, message -> {
             String trackingId = message;
             return Utils.toString(destroyTracker(trackingId));
-        }, k__destroyTracker);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackEvent, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackEvent(dict));
-        }, k__testTrackEvent);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackException, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackException(dict));
-        }, k__testTrackException);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackScreenView, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackScreenView(dict));
-        }, k__testTrackScreenView);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackSocial, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackSocial(dict));
-        }, k__testTrackSocial);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackTiming, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackTiming(dict));
-        }, k__testTrackTiming);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testCustomDimensionAndMetric, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testCustomDimensionAndMetric(dict));
-        }, k__testCustomDimensionAndMetric);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackEcommerceAction, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackEcommerceAction(dict));
-        }, k__testTrackEcommerceAction);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__testTrackEcommerceImpression, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             return Utils.toString(testTrackEcommerceImpression(dict));
-        }, k__testTrackEcommerceImpression);
+        });
     }
 
     private void deregisterHandlers() {

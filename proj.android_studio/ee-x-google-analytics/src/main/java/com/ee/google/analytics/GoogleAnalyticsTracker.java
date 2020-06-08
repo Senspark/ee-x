@@ -58,21 +58,21 @@ public class GoogleAnalyticsTracker {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setParameter(), message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
             String key = (String) dict.get(k__key);
             String value = (String) dict.get(k__value);
             setParameter(key, value);
             return "";
-        }, k__setParameter());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__setAllowIDFACollection(), message -> {
             setAdvertisingIdCollectionEnabled(Utils.toBoolean(message));
             return "";
-        }, k__setAllowIDFACollection());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__send(), message -> {
             Map<String, Object> rawDict = JsonUtils.convertStringToDictionary(message);
             assertThat(rawDict).isNotNull();
 
@@ -82,7 +82,7 @@ public class GoogleAnalyticsTracker {
             }
             send(dict);
             return "";
-        }, k__send());
+        });
     }
 
     private void deregisterHandlers() {

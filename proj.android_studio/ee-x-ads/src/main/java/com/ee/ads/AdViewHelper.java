@@ -32,23 +32,23 @@ public class AdViewHelper {
     }
 
     public void registerHandlers() {
-        _bridge.registerHandler(message ->
-            Utils.toString(_view.isLoaded()), _helper.isLoaded());
+        _bridge.registerHandler(_helper.isLoaded(), message ->
+            Utils.toString(_view.isLoaded()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.load(), message -> {
             _view.load();
             return "";
-        }, _helper.load());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.getPosition(), message -> {
             Point position = _view.getPosition();
             Map<String, Object> dict = new HashMap<>();
             dict.put("x", position.x);
             dict.put("y", position.y);
             return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
-        }, _helper.getPosition());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.setPosition(), message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -59,17 +59,17 @@ public class AdViewHelper {
 
             _view.setPosition(new Point(x, y));
             return "";
-        }, _helper.setPosition());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.getSize(), message -> {
             Point size = _view.getSize();
             Map<String, Object> dict = new HashMap<>();
             dict.put("width", size.x);
             dict.put("height", size.y);
             return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
-        }, _helper.getSize());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.setSize(), message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -80,15 +80,15 @@ public class AdViewHelper {
 
             _view.setSize(new Point(x, y));
             return "";
-        }, _helper.setSize());
+        });
 
-        _bridge.registerHandler(message ->
-            Utils.toString(_view.isVisible()), _helper.isVisible());
+        _bridge.registerHandler(_helper.isVisible(), message ->
+            Utils.toString(_view.isVisible()));
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(_helper.setVisible(), message -> {
             _view.setVisible(Utils.toBoolean(message));
             return "";
-        }, _helper.setVisible());
+        });
     }
 
     public void deregisterHandlers() {

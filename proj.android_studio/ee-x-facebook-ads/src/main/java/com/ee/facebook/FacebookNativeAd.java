@@ -117,11 +117,11 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     private void registerHandlers() {
         _helper.registerHandlers();
 
-        _bridge.registerHandler(message ->
-            Utils.toString(createInternalAd()), _messageHelper.createInternalAd());
+        _bridge.registerHandler(_messageHelper.createInternalAd(), message ->
+            Utils.toString(createInternalAd()));
 
-        _bridge.registerHandler(message ->
-            Utils.toString(destroyInternalAd()), _messageHelper.destroyInternalAd());
+        _bridge.registerHandler(_messageHelper.destroyInternalAd(), message ->
+            Utils.toString(destroyInternalAd()));
     }
 
     private void deregisterHandlers() {

@@ -86,32 +86,32 @@ public class AppsFlyer implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(kInitialize, message -> {
             String devKey = message;
             initialize(devKey);
             return "";
-        }, kInitialize);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(kStartTracking, message -> {
             startTracking();
             return "";
-        }, kStartTracking);
+        });
 
-        _bridge.registerHandler(message -> getDeviceId(), kGetDeviceId);
+        _bridge.registerHandler(kGetDeviceId, message -> getDeviceId());
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(kSetDebugEnabled, message -> {
             setDebugEnabled(Utils.toBoolean(message));
             return "";
-        }, kSetDebugEnabled);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(kTrackEvent, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assert dict != null;
             String name = (String) dict.get("name");
             Map<String, Object> values = (Map<String, Object>) dict.get("values");
             trackEvent(name, values);
             return "";
-        }, kTrackEvent);
+        });
     }
 
     private void deregisterHandlers() {

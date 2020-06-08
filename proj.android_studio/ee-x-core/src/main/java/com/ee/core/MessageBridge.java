@@ -1,6 +1,7 @@
 package com.ee.core;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ee.core.internal.JsonUtils;
 
@@ -35,7 +36,7 @@ public class MessageBridge implements IMessageBridge {
      *
      * @return A message bridge instance.
      */
-    public static MessageBridge getInstance() {
+    public static IMessageBridge getInstance() {
         return Holder.Instance;
     }
 
@@ -44,6 +45,73 @@ public class MessageBridge implements IMessageBridge {
         _handlerLock = new Object();
     }
 
+    public boolean registerHandler(@NonNull String tag, @NonNull MessageHandler handler) {
+        synchronized (_handlerLock) {
+            if (_handlers.containsKey(tag)) {
+                _logger.error("registerHandler: " + tag + " already exists!");
+                return false;
+            }
+            _handlers.put(tag, handler);
+            return true;
+        }
+    }
+
+    public boolean registerAsyncHandler(@NonNull String tag, @NonNull AsyncMessageHandler handler) {
+        return registerHandler(tag, message -> {
+            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
+            assertThat(dict).isNotNull();
+
+            String callbackTag = (String) dict.get("callback_tag");
+            String originalMessage = (String) dict.get("message");
+            assertThat(callbackTag).isNotNull();
+            assertThat(originalMessage).isNotNull();
+
+            handler.handle(originalMessage, callbackMessage ->
+                callCpp(callbackTag, callbackMessage));
+            return "";
+        });
+    }
+
+    public boolean deregisterHandler(@NonNull String tag) {
+        synchronized (_handlerLock) {
+            if (!_handlers.containsKey(tag)) {
+                _logger.error("deregisterHandler: " + tag + " doesn't exist!");
+                return false;
+            }
+            _handlers.remove(tag);
+            return true;
+        }
+    }
+
+    @Nullable
+    private MessageHandler findHandler(@NonNull String tag) {
+        synchronized (_handlerLock) {
+            if (!_handlers.containsKey(tag)) {
+                return null;
+            }
+            return _handlers.get(tag);
+        }
+    }
+
+    @NonNull
+    public String callCpp(@NonNull String tag) {
+        return callCpp(tag, "");
+    }
+
+    @NonNull
+    public String callCpp(@NonNull String tag, @NonNull String message) {
+        return callCppInternal(tag, message);
+    }
+
+    /**
+     * Calls a handler from C++ with a message.
+     *
+     * @param tag     The unique tag of the handler.
+     * @param message The message.
+     * @return Reply message from C++.
+     */
+    @NonNull
+    private native String callCppInternal(@NonNull String tag, @NonNull String message);
 
     /**
      * Calls a handler from Java with a message.
@@ -71,85 +139,6 @@ public class MessageBridge implements IMessageBridge {
      */
     @NonNull
     private static String staticCall(@NonNull String tag, @NonNull String message) {
-        return getInstance().call(tag, message);
-    }
-
-    /**
-     * See parent.
-     */
-    @NonNull
-    public String callCpp(@NonNull String tag) {
-        return callCppInternal(tag, "");
-    }
-
-    /**
-     * See parent.
-     */
-    @NonNull
-    public String callCpp(@NonNull String tag, @NonNull String message) {
-        return callCppInternal(tag, message);
-    }
-
-    /**
-     * Calls a handler from C++ with a message.
-     *
-     * @param tag     The unique tag of the handler.
-     * @param message The message.
-     * @return Reply message from C++.
-     */
-    @NonNull
-    private native String callCppInternal(@NonNull String tag, @NonNull String message);
-
-    /**
-     * See parent.
-     */
-    public boolean registerHandler(MessageHandler handler, @NonNull String tag) {
-        synchronized (_handlerLock) {
-            if (_handlers.containsKey(tag)) {
-                _logger.error("registerHandler: " + tag + " already exists!");
-                return false;
-            }
-            _handlers.put(tag, handler);
-            return true;
-        }
-    }
-
-    public boolean registerAsyncHandler(AsyncMessageHandler handler, @NonNull String tag) {
-        return registerHandler(message -> {
-            Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
-            assertThat(dict).isNotNull();
-
-            String callbackTag = (String) dict.get("callback_tag");
-            String originalMessage = (String) dict.get("message");
-            assertThat(callbackTag).isNotNull();
-            assertThat(originalMessage).isNotNull();
-
-            handler.handle(originalMessage, callbackMessage ->
-                callCpp(callbackTag, callbackMessage));
-            return "";
-        }, tag);
-    }
-
-    /**
-     * See parent.
-     */
-    public boolean deregisterHandler(@NonNull String tag) {
-        synchronized (_handlerLock) {
-            if (!_handlers.containsKey(tag)) {
-                _logger.error("deregisterHandler: " + tag + " doesn't exist!");
-                return false;
-            }
-            _handlers.remove(tag);
-            return true;
-        }
-    }
-
-    private MessageHandler findHandler(@NonNull String tag) {
-        synchronized (_handlerLock) {
-            if (!_handlers.containsKey(tag)) {
-                return null;
-            }
-            return _handlers.get(tag);
-        }
+        return Holder.Instance.call(tag, message);
     }
 }

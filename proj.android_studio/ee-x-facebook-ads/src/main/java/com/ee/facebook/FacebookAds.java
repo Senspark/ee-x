@@ -160,31 +160,31 @@ public class FacebookAds implements IPlugin {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message ->
-            getTestDeviceHash(), k__getTestDeviceHash);
+        _bridge.registerHandler(k__getTestDeviceHash, message ->
+            getTestDeviceHash());
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__addTestDevice, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String hash = message;
             addTestDevice(hash);
             return "";
-        }, k__addTestDevice);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__clearTestDevices, message -> {
             clearTestDevices();
             return "";
-        }, k__clearTestDevices);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__getBannerAdSize, message -> {
             int sizeId = Integer.parseInt(message);
             Point size = getBannerAdSize(sizeId);
             Map<String, Object> dict = new HashMap<>();
             dict.put("width", size.x);
             dict.put("height", size.y);
             return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
-        }, k__getBannerAdSize);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__createBannerAd, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -195,14 +195,14 @@ public class FacebookAds implements IPlugin {
 
             AdSize adSize = _bannerHelper.getAdSize(sizeId);
             return Utils.toString(createBannerAd(adId, adSize));
-        }, k__createBannerAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__destroyBannerAd, message -> {
             String adId = message;
             return Utils.toString(destroyBannerAd(adId));
-        }, k__destroyBannerAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__createNativeAd, message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assertThat(dict).isNotNull();
 
@@ -218,38 +218,37 @@ public class FacebookAds implements IPlugin {
                 identifiers.put(key, (String) identifiers_raw.get(key));
             }
             return Utils.toString(createNativeAd(adId, layoutName, identifiers));
-        }, k__createNativeAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__destroyNativeAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(destroyNativeAd(adId));
-        }, k__destroyNativeAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__createInterstitialAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(createInterstitialAd(adId));
-        }, k__createInterstitialAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__destroyInterstitialAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(destroyInterstitialAd(adId));
-        }, k__destroyInterstitialAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__createRewardedAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(createRewardedAd(adId));
-        }, k__createRewardedAd);
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__destroyRewardedAd, message -> {
             @SuppressWarnings("UnnecessaryLocalVariable")
             String adId = message;
             return Utils.toString(destroyRewardedAd(adId));
-        }, k__destroyRewardedAd);
-
+        });
     }
 
     private void deregisterHandlers() {

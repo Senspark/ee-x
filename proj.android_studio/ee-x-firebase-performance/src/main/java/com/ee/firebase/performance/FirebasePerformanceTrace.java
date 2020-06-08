@@ -58,17 +58,17 @@ public class FirebasePerformanceTrace {
     }
 
     private void registerHandlers() {
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__start(), message -> {
             start();
             return "";
-        }, k__start());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__stop(), message -> {
             stop();
             return "";
-        }, k__stop());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__incrementMetric(), message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assert dict != null;
 
@@ -76,9 +76,9 @@ public class FirebasePerformanceTrace {
             Integer value = (Integer) dict.get(k__value);
             incrementMetric(key, value);
             return "";
-        }, k__incrementMetric());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__putMetric(), message -> {
             Map<String, Object> dict = JsonUtils.convertStringToDictionary(message);
             assert dict != null;
 
@@ -86,12 +86,12 @@ public class FirebasePerformanceTrace {
             Long value = (Long) dict.get(k__value);
             putMetric(key, value);
             return "";
-        }, k__putMetric());
+        });
 
-        _bridge.registerHandler(message -> {
+        _bridge.registerHandler(k__getLongMetric(), message -> {
             String metricName = message;
             return String.valueOf(getLongMetric(metricName));
-        }, k__getLongMetric());
+        });
     }
 
     private void deregisterHandlers() {

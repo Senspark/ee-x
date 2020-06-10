@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -37,7 +38,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -363,27 +363,36 @@ public class Utils {
     @SuppressWarnings("WeakerAccess")
     @NonNull
     public static String getSHA1CertificateFingerprint(@NonNull Context context) {
+        return getCertificateFingerprint(context, "SHA1");
+    }
+
+    @NonNull
+    private static String getCertificateFingerprint(@NonNull Context context, @NonNull String algorithm) {
         String hash = "";
         try {
             PackageManager packetManager = context.getPackageManager();
             int flags = PackageManager.GET_SIGNATURES;
             PackageInfo info = packetManager.getPackageInfo(context.getPackageName(), flags);
-            MessageDigest digest = MessageDigest.getInstance("SHA1");
-            digest.update(info.signatures[0].toByteArray());
-
-            StringBuilder builder = new StringBuilder();
-            for (byte b : digest.digest()) {
-                String hex = Integer.toString(b & 0xff, 16);
-                if (hex.length() == 1) {
-                    builder.append('0');
-                }
-                builder.append(hex.toUpperCase(Locale.US));
-            }
-            hash = builder.toString();
+            Signature signature = info.signatures[0];
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            hash = toHexString(digest.digest(signature.toByteArray()));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return hash;
+    }
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    @NonNull
+    private static String toHexString(@NonNull byte[] bytes) {
+        char[] chars = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; ++i) {
+            int v = bytes[i] & 0xFF;
+            chars[i * 2] = HEX_ARRAY[v >> 4];
+            chars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(chars);
     }
 
     private static boolean isInstantApp(@NonNull Context context) {

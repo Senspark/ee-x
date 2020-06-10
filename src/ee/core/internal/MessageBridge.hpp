@@ -49,7 +49,7 @@ private:
     MessageBridge(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    MessageHandler findHandler(const std::string& tag);
+    MessageHandler findHandler(const std::string& tag) const;
 
     const Logger& logger_;
 

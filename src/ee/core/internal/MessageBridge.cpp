@@ -61,7 +61,7 @@ bool Self::deregisterHandler(const std::string& tag) {
     return true;
 }
 
-MessageHandler Self::findHandler(const std::string& tag) {
+MessageHandler Self::findHandler(const std::string& tag) const {
     std::scoped_lock<SpinLock> lock(*handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {

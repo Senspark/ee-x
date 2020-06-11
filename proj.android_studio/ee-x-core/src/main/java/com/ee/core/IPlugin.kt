@@ -1,54 +1,51 @@
-package com.ee.core;
+package com.ee.core
 
-import android.app.Activity;
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
+import android.app.Activity
+import android.content.Intent
 
 /**
  * Created by Zinge on 6/1/16.
  */
-public interface IPlugin {
+interface IPlugin {
     /**
      * Gets the name of the plugin.
      */
-    @NonNull
-    String getPluginName();
+    val pluginName: String
 
     /**
      * Called when the main activity has been created.
      */
-    void onCreate(@NonNull Activity activity);
+    fun onCreate(activity: Activity)
 
     /**
      * Called when the main activity has been started.
      */
-    void onStart();
+    fun onStart()
 
     /**
      * Called when the main activity has been stopped.
      */
-    void onStop();
+    fun onStop()
 
     /**
      * Called when the main activity has been resumed.
      */
-    void onResume();
+    fun onResume()
 
     /**
      * Called when the main activity has been paused.
      */
-    void onPause();
+    fun onPause()
 
     /**
      * Called when the main activity has been destroyed.
      */
-    void onDestroy();
+    fun onDestroy()
 
     /**
      * Called when the application has been destroyed.
      */
-    void destroy();
-
-    boolean onActivityResult(int requestCode, int responseCode, Intent data);
+    fun destroy()
+    
+    fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean
 }

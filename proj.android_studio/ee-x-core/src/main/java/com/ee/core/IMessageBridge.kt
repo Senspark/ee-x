@@ -1,7 +1,5 @@
 package com.ee.core
 
-import kotlinx.serialization.json.Json
-
 interface MessageHandler {
     fun handle(message: String): String
 }

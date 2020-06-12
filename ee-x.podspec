@@ -51,6 +51,7 @@ Pod::Spec.new do |spec|
       'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
       'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
       'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => [
+        '$(inherited)',
         'NDEBUG'
       ].join(' ')
     }
@@ -311,6 +312,7 @@ Pod::Spec.new do |spec|
         'USE_FILE32API' # Used in unzip library in cocos2d-x.
       ].join(' '),
       'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => [
+        '$(inherited)',
         'COCOS2D_DEBUG=1'
       ].join(' '),
       'HEADER_SEARCH_PATHS' => [

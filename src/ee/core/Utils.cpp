@@ -140,35 +140,37 @@ std::string dumpBacktrace(size_t count) {
 
 namespace {
 // clang-format off
-constexpr auto k__isMainThread                  = "Utils_isMainThread";
-constexpr auto k__runOnUiThread                 = "Utils_runOnUiThread";
-constexpr auto k__runOnUiThreadDelayed          = "Utils_runOnUiThreadDelayed";
-constexpr auto k__runOnUiThreadCallback         = "Utils_runOnUiThreadCallback";
+const std::string kPrefix = "Utils_";
 
-constexpr auto k__isApplicationInstalled        = "Utils_isApplicationInstalled";
-constexpr auto k__openApplication               = "Utils_openApplication";
+const auto kIsMainThread             = kPrefix + "IsMainThread";
+const auto kRunOnUiThread            = kPrefix + "runOnUiThread";
+const auto kRunOnUiThreadDelayed     = kPrefix + "runOnUiThreadDelayed";
+const auto kRunOnUiThreadCallback    = kPrefix + "runOnUiThreadCallback";
 
-constexpr auto k__getApplicationId              = "Utils_getApplicationId";
-constexpr auto k__getApplicationName            = "Utils_getApplicationName";
-constexpr auto k__getVersionName                = "Utils_getVersionName";
-constexpr auto k__getVersionCode                = "Utils_getVersionCode";
+const auto kIsApplicationInstalled   = kPrefix + "isApplicationInstalled";
+const auto kOpenApplication          = kPrefix + "openApplication";
 
-constexpr auto k__getSHA1CertificateFingerprint = "Utils_getSHA1CertificateFingerprint";
-constexpr auto k__isInstantApp                  = "Utils_isInstantApp";
-constexpr auto k__isTablet                      = "Utils_isTablet";
-constexpr auto k__getDensity                    = "Utils_getDensity";
-constexpr auto k__getDeviceId                   = "Utils_getDeviceId";
-constexpr auto k__getSafeInset                  = "Utils_getSafeInset";
+const auto kGetApplicationId         = kPrefix + "getApplicationId";
+const auto kGetApplicationName       = kPrefix + "getApplicationName";
+const auto kGetVersionName           = kPrefix + "getVersionName";
+const auto kGetVersionCode           = kPrefix + "getVersionCode";
 
-constexpr auto k__sendMail                      = "Utils_sendMail";
-constexpr auto k__testConnection                = "Utils_testConnection";
-constexpr auto k__showInstallPrompt             = "Utils_showInstallPrompt";
+const auto kGetApplicationSignatures = kPrefix + "getApplicationSignatures";
+const auto kIsInstantApp             = kPrefix + "isInstantApp";
+const auto kIsTablet                 = kPrefix + "isTablet";
+const auto kGetDensity               = kPrefix + "getDensity";
+const auto kGetDeviceId              = kPrefix + "getDeviceId";
+const auto kGetSafeInset             = kPrefix + "getSafeInset";
+
+const auto kSendMail                 = kPrefix + "sendMail";
+const auto kTestConnection           = kPrefix + "testConnection";
+const auto kShowInstallPrompt        = kPrefix + "showInstallPrompt";
 // clang-format on
 } // namespace
 
 bool isMainThread() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isMainThread);
+    auto response = bridge.call(kIsMainThread);
     return toBool(response);
 }
 
@@ -202,7 +204,7 @@ void registerHandler() {
                 runOnUiThreadCallback();
                 return "";
             },
-            k__runOnUiThreadCallback);
+            kRunOnUiThreadCallback);
     });
 }
 } // namespace
@@ -215,7 +217,7 @@ bool runOnUiThread(const Runnable<>& runnable) {
     registerHandler();
     pushRunnable(runnable);
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__runOnUiThread);
+    auto response = bridge.call(kRunOnUiThread);
     return toBool(response);
 }
 
@@ -225,7 +227,7 @@ void runOnUiThreadDelayed(const Runnable<>& runnable, float delay) {
         json["delay"] = delay;
         auto&& bridge = MessageBridge::getInstance();
         auto response =
-            co_await bridge.callAsync(k__runOnUiThreadDelayed, json.dump());
+            co_await bridge.callAsync(kRunOnUiThreadDelayed, json.dump());
         if (runnable) {
             runnable();
         }
@@ -243,40 +245,42 @@ void runOnUiThreadAndWait(const Runnable<>& runnable) {
 
 bool isApplicationInstalled(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isApplicationInstalled, applicationId);
+    auto response = bridge.call(kIsApplicationInstalled, applicationId);
     return toBool(response);
 }
 
 bool openApplication(const std::string& applicationId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__openApplication, applicationId);
+    auto response = bridge.call(kOpenApplication, applicationId);
     return toBool(response);
 }
 
 std::string getApplicationId() {
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getApplicationId);
+    return bridge.call(kGetApplicationId);
 }
 
 std::string getApplicationName() {
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getApplicationName);
+    return bridge.call(kGetApplicationName);
 }
 
 std::string getVersionName() {
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getVersionName);
+    return bridge.call(kGetVersionName);
 }
 
 std::string getVersionCode() {
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getVersionCode);
+    return bridge.call(kGetVersionCode);
 }
 
 std::string getSHA1CertificateFingerprint() {
 #ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
-    return bridge.call(k__getSHA1CertificateFingerprint);
+    auto response = bridge.call(kGetApplicationSignatures, "SHA1");
+    auto signatures = nlohmann::json::parse(response);
+    return signatures.empty() ? "" : signatures[0];
 #else  // EE_X_ANDROID
     return "";
 #endif // EE_X_ANDROID
@@ -285,7 +289,7 @@ std::string getSHA1CertificateFingerprint() {
 bool isInstantApp() {
 #ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isInstantApp);
+    auto response = bridge.call(kIsInstantApp);
     return toBool(response);
 #else  // EE_X_ANDROID
     return false;
@@ -294,19 +298,19 @@ bool isInstantApp() {
 
 bool isTablet() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isTablet);
+    auto response = bridge.call(kIsTablet);
     return toBool(response);
 }
 
 float getDensity() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__getDensity);
+    auto response = bridge.call(kGetDensity);
     return std::stof(response);
 }
 
 Task<std::string> getDeviceId() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = co_await bridge.callAsync(k__getDeviceId);
+    auto response = co_await bridge.callAsync(kGetDeviceId);
     co_return response;
 }
 
@@ -314,7 +318,7 @@ SafeInset getSafeInset() {
     SafeInset result;
 #ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__getSafeInset);
+    auto response = bridge.call(kGetSafeInset);
     auto json = nlohmann::json::parse(response);
 
     result.left = json["left"];
@@ -338,7 +342,7 @@ bool sendMail(const std::string& recipient, const std::string& subject,
     json["subject"] = subject;
     json["body"] = body;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__sendMail, json.dump());
+    auto response = bridge.call(kSendMail, json.dump());
     return toBool(response);
 }
 
@@ -347,7 +351,7 @@ Task<bool> testConnection(const std::string& hostName, float timeOut) {
     json["host_name"] = hostName;
     json["time_out"] = timeOut;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = co_await bridge.callAsync(k__testConnection, json.dump());
+    auto response = co_await bridge.callAsync(kTestConnection, json.dump());
     co_return toBool(response);
 }
 
@@ -357,7 +361,7 @@ void showInstallPrompt(const std::string& url, const std::string& referrer) {
     json["url"] = url;
     json["referrer"] = referrer;
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__showInstallPrompt, json.dump());
+    bridge.call(kShowInstallPrompt, json.dump());
 #endif // EE_X_ANDROID
 }
 

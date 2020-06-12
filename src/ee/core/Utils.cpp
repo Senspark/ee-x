@@ -142,7 +142,7 @@ namespace {
 // clang-format off
 const std::string kPrefix = "Utils_";
 
-const auto kIsMainThread             = kPrefix + "IsMainThread";
+const auto kIsMainThread             = kPrefix + "isMainThread";
 const auto kRunOnUiThread            = kPrefix + "runOnUiThread";
 const auto kRunOnUiThreadDelayed     = kPrefix + "runOnUiThreadDelayed";
 const auto kRunOnUiThreadCallback    = kPrefix + "runOnUiThreadCallback";
@@ -278,8 +278,11 @@ std::string getVersionCode() {
 std::string getSHA1CertificateFingerprint() {
 #ifdef EE_X_ANDROID
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(kGetApplicationSignatures, "SHA1");
-    auto signatures = nlohmann::json::parse(response);
+    nlohmann::json request;
+    request["algorithm"] = "SHA1";
+    auto response = bridge.call(kGetApplicationSignatures, request.dump());
+    auto json = nlohmann::json::parse(response);
+    auto signatures = json["signatures"];
     return signatures.empty() ? "" : signatures[0];
 #else  // EE_X_ANDROID
     return "";

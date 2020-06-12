@@ -8,7 +8,7 @@
 
 #import <GoogleMobileAds/GADAdSize.h>
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEAdMob : NSObject <EEIPlugin>
 

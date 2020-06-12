@@ -7,7 +7,7 @@
 //
 #import <Foundation/Foundation.h>
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEPlay : NSObject <EEIPlugin>
 

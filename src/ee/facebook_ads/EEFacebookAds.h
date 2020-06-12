@@ -8,7 +8,7 @@
 
 #import <FBAudienceNetwork/FBAdSize.h>
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEFacebookAds : NSObject <EEIPlugin>
 

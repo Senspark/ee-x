@@ -5,6 +5,8 @@
 //  Created by Zinge on 3/29/17.
 //
 //
+
+/*
 #import "ee/core/EEPluginManager.h"
 
 #import <ee_x-Swift.h>
@@ -14,15 +16,6 @@
 @implementation EEPluginManager {
     id<EEIMessageBridge> bridge_;
     NSMutableDictionary<NSString*, id<EEIPlugin>>* plugins_;
-}
-
-+ (instancetype _Nonnull)getInstance {
-    static EEPluginManager* sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
 }
 
 - (id)init {
@@ -124,3 +117,4 @@
 }
 
 @end
+*/

@@ -1,4 +1,4 @@
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEFirebaseCrashlytics : NSObject <EEIPlugin>
 

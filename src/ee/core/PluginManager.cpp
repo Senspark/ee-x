@@ -27,6 +27,23 @@ void Self::initializePlugins() {
 
 namespace {
 std::unordered_map<Plugin, std::string> pluginNames_ = {{
+    {Plugin::AdMob, "AdMob"},
+    {Plugin::AppLovin, "AppLovin"},
+    {Plugin::AppsFlyer, "AppsFlyer"},
+    {Plugin::CampaignReceiver, "CampaignReceiver"},
+    {Plugin::Facebook, "Facebook"},
+    {Plugin::FacebookAds, "FacebookAds"},
+    {Plugin::FirebaseCore, "FirebaseCore"},
+    {Plugin::FirebaseCrashlytics, "FirebaseCrashlytics"},
+    {Plugin::FirebasePerformance, "FirebasePerformance"},
+    {Plugin::GoogleAnalytics, "GoogleAnalytics"},
+    {Plugin::IronSource, "IronSource"},
+    {Plugin::Notification, "Notification"},
+    {Plugin::Play, "Play"},
+    {Plugin::Recorder, "Recorder"},
+    {Plugin::Store, "Store"},
+    {Plugin::Tenjin, "Tenjin"},
+    {Plugin::UnityAds, "UnityAds"},
     {Plugin::Vungle, "Vungle"},
 }};
 } // namespace

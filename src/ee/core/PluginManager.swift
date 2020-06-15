@@ -13,7 +13,7 @@ public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _bridge = MessageBridge.getInstance()
-    private let _plugins: [String: IPlugin]
+    private var _plugins: [String: IPlugin]
     
     @objc
     public class func getInstance() -> PluginManager {
@@ -32,19 +32,42 @@ public class PluginManager: NSObject {
                 #selector(PluginManager.application(_:open:sourceApplication:annotation:)))
         swizzle(#selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
                 #selector(PluginManager.application(_:continue:restorationHandler:)))
+        Utils.registerHandlers(_bridge)
     }
     
     /// Adds and initialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
     @objc
     public func addPlugin(_ name: String) -> Bool {
-        return true
+        if _plugins.contains(where: { key, _ -> Bool in key == name }) {
+            assert(false, "Plugin already exists: \(name)")
+            return false
+        }
+        guard let clazz = NSClassFromString("EE" + name) as? NSObject.Type else {
+            assert(false, "Invalid plugin: \(name)")
+            return false
+        }
+        var plugin: IPlugin?
+        if name == "Store" || name == "Tenjin" {
+            plugin = (clazz as! IPlugin.Type).init(_bridge)
+        } else {
+            plugin = clazz.init() as? IPlugin
+        }
+        assert(plugin != nil, "Initialization failed")
+        _plugins[name] = plugin
+        return false
     }
     
     /// Removes and deinitialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
     @objc
     public func removePlugin(_ name: String) -> Bool {
+        guard let plugin = _plugins[name] else {
+            assert(false, "Plugin not exists: \(name)")
+            return false
+        }
+        plugin.destroy()
+        _plugins.removeValue(forKey: name)
         return true
     }
     
@@ -76,7 +99,7 @@ public class PluginManager: NSObject {
                              open url: URL,
                              options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         return executePlugins { plugin in
-            plugin.application(application, open: url, options: options)
+            plugin.application?(application, open: url, options: options) ?? false
         }
     }
     
@@ -86,7 +109,7 @@ public class PluginManager: NSObject {
                              sourceApplication: String?,
                              annotation: Any) -> Bool {
         return executePlugins { plugin in
-            plugin.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+            plugin.application?(application, open: url, sourceApplication: sourceApplication, annotation: annotation) ?? false
         }
     }
     
@@ -95,7 +118,7 @@ public class PluginManager: NSObject {
                              continue userActivity: NSUserActivity,
                              restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return executePlugins { plugin in
-            plugin.application(application, continue: userActivity, restorationHandler: restorationHandler)
+            plugin.application?(application, continue: userActivity, restorationHandler: restorationHandler) ?? false
         }
     }
     

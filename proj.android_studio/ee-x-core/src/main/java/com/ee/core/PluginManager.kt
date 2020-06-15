@@ -70,11 +70,7 @@ class PluginManager private constructor() {
                     if (_activity == null) {
                         if (activity.isTaskRoot) {
                             _activity = activity
-                            executePlugins(object : PluginExecutor {
-                                override fun execute(plugin: IPlugin) {
-                                    plugin.onCreate(activity)
-                                }
-                            })
+                            executePlugins { plugin -> plugin.onCreate(activity) }
                         } else {
                             _logger.warn("onActivityCreated: is not root activity")
                         }
@@ -87,11 +83,7 @@ class PluginManager private constructor() {
             override fun onActivityStarted(activity: Activity) {
                 if (activity.javaClass.name == _activityClassName) {
                     if (_activity === activity) {
-                        executePlugins(object : PluginExecutor {
-                            override fun execute(plugin: IPlugin) {
-                                plugin.onStart()
-                            }
-                        })
+                        executePlugins(IPlugin::onStart)
                     } else {
                         _logger.warn("onActivityStarted: invalid activity")
                     }
@@ -101,11 +93,7 @@ class PluginManager private constructor() {
             override fun onActivityResumed(activity: Activity) {
                 if (activity.javaClass.name == _activityClassName) {
                     if (_activity === activity) {
-                        executePlugins(object : PluginExecutor {
-                            override fun execute(plugin: IPlugin) {
-                                plugin.onResume()
-                            }
-                        })
+                        executePlugins(IPlugin::onResume)
                     } else {
                         _logger.warn("onActivityResumed: invalid activity")
                     }
@@ -115,11 +103,7 @@ class PluginManager private constructor() {
             override fun onActivityPaused(activity: Activity) {
                 if (activity.javaClass.name === _activityClassName) {
                     if (_activity === activity) {
-                        executePlugins(object : PluginExecutor {
-                            override fun execute(plugin: IPlugin) {
-                                plugin.onPause()
-                            }
-                        })
+                        executePlugins(IPlugin::onPause)
                     } else {
                         _logger.warn("onActivityPaused: invalid activity")
                     }
@@ -129,11 +113,7 @@ class PluginManager private constructor() {
             override fun onActivityStopped(activity: Activity) {
                 if (activity.javaClass.name == _activityClassName) {
                     if (_activity === activity) {
-                        executePlugins(object : PluginExecutor {
-                            override fun execute(plugin: IPlugin) {
-                                plugin.onStart()
-                            }
-                        })
+                        executePlugins(IPlugin::onStop)
                     } else {
                         _logger.warn("onActivityStopped: invalid activity")
                     }
@@ -148,11 +128,7 @@ class PluginManager private constructor() {
                 if (activity.javaClass.name == _activityClassName) {
                     if (_activity === activity) {
                         _activity = null
-                        executePlugins(object : PluginExecutor {
-                            override fun execute(plugin: IPlugin) {
-                                plugin.onDestroy()
-                            }
-                        })
+                        executePlugins(IPlugin::onDestroy)
                     } else {
                         _logger.warn("onActivityDestroyed: invalid activity")
                     }
@@ -218,19 +194,19 @@ class PluginManager private constructor() {
         }
     }
 
-    fun removePlugin(pluginName: String) {
-        _logger.info("removePlugin: $pluginName")
-        val plugin = _plugins[pluginName]
+    fun removePlugin(name: String) {
+        _logger.info("removePlugin: $name")
+        val plugin = _plugins[name]
         if (plugin == null) {
-            _logger.error("removePlugin: $pluginName doesn't exist!")
+            _logger.error("removePlugin: $name doesn't exist!")
             return
         }
         plugin.destroy()
-        _plugins.remove(pluginName)
+        _plugins.remove(name)
     }
 
-    fun getPlugin(pluginName: String): IPlugin? {
-        return _plugins[pluginName]
+    fun getPlugin(name: String): IPlugin? {
+        return _plugins[name]
     }
 
     fun destroy() {
@@ -254,5 +230,13 @@ class PluginManager private constructor() {
         for (entry in _plugins) {
             executor.execute(entry.value)
         }
+    }
+
+    private fun executePlugins(executor: (plugin: IPlugin) -> Unit) {
+        executePlugins(object : PluginExecutor {
+            override fun execute(plugin: IPlugin) {
+                executor(plugin)
+            }
+        })
     }
 }

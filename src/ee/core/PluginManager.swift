@@ -14,6 +14,7 @@ public class PluginManager: NSObject {
     
     private let _bridge = MessageBridge.getInstance()
     private var _plugins: [String: IPlugin]
+    private var _delegate: UIApplicationDelegate?
     
     @objc
     public class func getInstance() -> PluginManager {
@@ -25,7 +26,8 @@ public class PluginManager: NSObject {
     }
     
     @objc
-    public func initializePlugins() {
+    public func initializePlugins(_ delegate: UIApplicationDelegate) -> Bool {
+        _delegate = delegate
         swizzle(#selector(UIApplicationDelegate.application(_:open:options:)),
                 #selector(PluginManager.application(_:open:options:)))
         swizzle(#selector(UIApplicationDelegate.application(_:open:sourceApplication:annotation:)),
@@ -33,6 +35,7 @@ public class PluginManager: NSObject {
         swizzle(#selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
                 #selector(PluginManager.application(_:continue:restorationHandler:)))
         Utils.registerHandlers(_bridge)
+        return true
     }
     
     /// Adds and initialize a plugin.
@@ -85,7 +88,7 @@ public class PluginManager: NSObject {
             assert(false, "Invalid method")
             return
         }
-        let originalClass: AnyClass? = object_getClass(UIApplication.shared.delegate)
+        let originalClass: AnyClass? = object_getClass(_delegate)
         if let originalMethod = class_getInstanceMethod(originalClass, originalSelector) {
             method_exchangeImplementations(originalMethod, replacedMethod)
         } else {
@@ -98,9 +101,14 @@ public class PluginManager: NSObject {
     private func application(_ application: UIApplication,
                              open url: URL,
                              options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return executePlugins { plugin in
-            plugin.application?(application, open: url, options: options) ?? false
-        }
+        // https://stackoverflow.com/questions/39003876/calling-original-function-from-swizzled-function
+        typealias Func = @convention(c) (AnyObject, Selector, UIApplication, URL, [UIApplication.OpenURLOptionsKey: Any]) -> Bool
+        let closure = ee_closureCast(#selector(PluginManager.application(_:open:options:)), Func.self)
+        let response = closure(self, #selector(UIApplicationDelegate.application(_:open:options:)),
+                               application, url, options)
+        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                                        open: url,
+                                                                                        options: options) ?? false }
     }
     
     @objc
@@ -108,18 +116,27 @@ public class PluginManager: NSObject {
                              open url: URL,
                              sourceApplication: String?,
                              annotation: Any) -> Bool {
-        return executePlugins { plugin in
-            plugin.application?(application, open: url, sourceApplication: sourceApplication, annotation: annotation) ?? false
-        }
+        typealias Func = @convention(c) (AnyObject, Selector, UIApplication, URL, String?, Any) -> Bool
+        let closure = ee_closureCast(#selector(PluginManager.application(_:open:sourceApplication:annotation:)), Func.self)
+        let response = closure(self, #selector(UIApplicationDelegate.application(_:open:sourceApplication:annotation:)),
+                               application, url, sourceApplication, annotation)
+        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                                        open: url,
+                                                                                        sourceApplication: sourceApplication,
+                                                                                        annotation: annotation) ?? false }
     }
     
     @objc
     private func application(_ application: UIApplication,
                              continue userActivity: NSUserActivity,
                              restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return executePlugins { plugin in
-            plugin.application?(application, continue: userActivity, restorationHandler: restorationHandler) ?? false
-        }
+        typealias Func = @convention(c) (AnyObject, Selector, UIApplication, NSUserActivity, @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool
+        let closure = ee_closureCast(#selector(PluginManager.application(_:continue:restorationHandler:)), Func.self)
+        let response = closure(self, #selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
+                               application, userActivity, restorationHandler)
+        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                                        continue: userActivity,
+                                                                                        restorationHandler: restorationHandler) ?? false }
     }
     
     fileprivate class func staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
@@ -133,9 +150,19 @@ public class PluginManager: NSObject {
     }
 }
 
+private func ee_closureCast<T>(_ swizzledSelector: Selector,
+                               _ type: T.Type) -> T {
+    let impl = class_getMethodImplementation(PluginManager.self, swizzledSelector)
+    return unsafeBitCast(impl, to: T.self)
+}
+
 @_cdecl("ee_staticInitializePlugins")
-public func ee_staticInitializePlugins() {
-    return PluginManager.getInstance().initializePlugins()
+public func ee_staticInitializePlugins() -> Bool {
+    guard let delegate = UIApplication.shared.delegate else {
+        assert(false, "Delegate not assigned")
+        return false
+    }
+    return PluginManager.getInstance().initializePlugins(delegate)
 }
 
 @_cdecl("ee_staticAddPlugin")

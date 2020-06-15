@@ -39,12 +39,17 @@ enum class Plugin {
 
 class PluginManager {
 public:
-    static void initializePlugins();
+    /// Initializes core plugins.
+    /// Must be called first.
+    static bool initializePlugins();
 
     template <class T>
     static std::unique_ptr<T> createPlugin();
 
+    /// @note Internal uses.
     static bool addPlugin(Plugin plugin);
+
+    /// @note Internal uses.
     static bool removePlugin(Plugin plugin);
 };
 } // namespace core

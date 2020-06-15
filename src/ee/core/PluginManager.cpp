@@ -14,15 +14,32 @@ namespace ee {
 namespace core {
 using Self = PluginManager;
 
+#if defined(EE_X_ANDROID)
+bool Self::initializePlugins() {
+    // FIXME.
+    return false;
+}
+
+bool Self::addPlugin(Plugin plugin) {
+    // FIXME.
+    return false;
+}
+
+bool Self::removePlugin(Plugin plugin) {
+    // FIXME.
+    return false;
+}
+#endif // EE_X_ANDROID
+
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-void ee_staticInitializePlugins();
+bool ee_staticInitializePlugins();
 bool ee_staticAddPlugin(const std::string& name);
 bool ee_staticRemovePlugin(const std::string& name);
 } // extern "C"
 
-void Self::initializePlugins() {
-    ee_staticInitializePlugins();
+bool Self::initializePlugins() {
+    return ee_staticInitializePlugins();
 }
 
 namespace {

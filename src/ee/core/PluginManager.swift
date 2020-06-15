@@ -14,10 +14,12 @@ public class PluginManager: NSObject {
     
     private let _bridge = MessageBridge.getInstance()
     private var _plugins: [String: IPlugin]
-    private var _delegate: UIApplicationDelegate?
     
-    @objc
-    public class func getInstance() -> PluginManager {
+    #if os(iOS)
+    private var _delegate: UIApplicationDelegate?
+    #endif // os(iOS)
+    
+    fileprivate class func getInstance() -> PluginManager {
         return _sharedInstance
     }
     
@@ -25,8 +27,8 @@ public class PluginManager: NSObject {
         _plugins = [:]
     }
     
-    @objc
-    public func initializePlugins(_ delegate: UIApplicationDelegate) -> Bool {
+    #if os(iOS)
+    fileprivate func initializePlugins(_ delegate: UIApplicationDelegate) -> Bool {
         _delegate = delegate
         swizzle(#selector(UIApplicationDelegate.application(_:open:options:)),
                 #selector(PluginManager.application(_:open:options:)))
@@ -37,11 +39,16 @@ public class PluginManager: NSObject {
         Utils.registerHandlers(_bridge)
         return true
     }
+    #else // os(iOS)
+    fileprivate func initializePlugins() -> Bool {
+        Utils.registerHandlers(_bridge)
+        return true
+    }
+    #endif // os(iOS)
     
     /// Adds and initialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
-    @objc
-    public func addPlugin(_ name: String) -> Bool {
+    fileprivate func addPlugin(_ name: String) -> Bool {
         if _plugins.contains(where: { key, _ -> Bool in key == name }) {
             assert(false, "Plugin already exists: \(name)")
             return false
@@ -63,8 +70,7 @@ public class PluginManager: NSObject {
     
     /// Removes and deinitialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
-    @objc
-    public func removePlugin(_ name: String) -> Bool {
+    fileprivate func removePlugin(_ name: String) -> Bool {
         guard let plugin = _plugins[name] else {
             assert(false, "Plugin not exists: \(name)")
             return false
@@ -83,6 +89,7 @@ public class PluginManager: NSObject {
         return false
     }
     
+    #if os(iOS)
     private func swizzle(_ originalSelector: Selector, _ replacedSelector: Selector) {
         guard let replacedMethod = class_getInstanceMethod(PluginManager.self, replacedSelector) else {
             assert(false, "Invalid method")
@@ -138,6 +145,7 @@ public class PluginManager: NSObject {
                                                                                         continue: userActivity,
                                                                                         restorationHandler: restorationHandler) ?? false }
     }
+    #endif // os(iOS)
     
     fileprivate class func staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
         let name_str = String(cString: name)
@@ -158,11 +166,15 @@ private func ee_closureCast<T>(_ swizzledSelector: Selector,
 
 @_cdecl("ee_staticInitializePlugins")
 public func ee_staticInitializePlugins() -> Bool {
+    #if os(iOS)
     guard let delegate = UIApplication.shared.delegate else {
         assert(false, "Delegate not assigned")
         return false
     }
     return PluginManager.getInstance().initializePlugins(delegate)
+    #else // os(iOS)
+    return PluginManager.getInstance().initializePlugins()
+    #endif // os(iOS)
 }
 
 @_cdecl("ee_staticAddPlugin")

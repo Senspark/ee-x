@@ -14,6 +14,7 @@ public protocol IPlugin: NSObjectProtocol {
     /// Destroys this plugin.
     func destroy()
 
+    #if os(iOS)
     @objc
     optional func application(_ application: UIApplication,
                               open url: URL,
@@ -28,4 +29,5 @@ public protocol IPlugin: NSObjectProtocol {
     optional func application(_ application: UIApplication,
                               continue userActivity: NSUserActivity,
                               restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool
+    #endif // os(iOS)
 }

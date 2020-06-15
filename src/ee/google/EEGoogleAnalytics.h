@@ -6,7 +6,7 @@
 //
 //
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEGoogleAnalytics : NSObject <EEIPlugin>
 

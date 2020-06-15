@@ -3,7 +3,7 @@
 //
 //
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EERecorder : NSObject <EEIPlugin>
 

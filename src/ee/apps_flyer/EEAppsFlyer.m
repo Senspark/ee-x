@@ -169,29 +169,31 @@ static NSString* const kTrackEvent      = kPrefix "TrackEvent";
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, error);
 }
 
-- (BOOL)application:(UIApplication* _Nonnull)application
-              openURL:(NSURL* _Nonnull)url
-    sourceApplication:(NSString* _Nonnull)sourceApplication
-           annotation:(id _Nonnull)annotation {
+- (BOOL)application:(UIApplication*)application
+               open:(NSURL*)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey, id>*)options {
+    [tracker_ handleOpenUrl:url options:options];
+    return NO;
+}
+
+- (BOOL)application:(UIApplication*)application
+                 open:(NSURL*)url
+    sourceApplication:(NSString*)sourceApplication
+           annotation:(id)annotation {
     [tracker_ handleOpenURL:url
           sourceApplication:sourceApplication
              withAnnotation:annotation];
-    return YES;
+    return NO;
 }
 
-- (BOOL)application:(UIApplication* _Nonnull)application
-            openURL:(NSURL* _Nonnull)url
-            options:(NSDictionary* _Nonnull)options {
-    [tracker_ handleOpenUrl:url options:options];
-    return YES;
-}
-
-- (BOOL)application:(UIApplication* _Nonnull)application
-    continueUserActivity:(NSUserActivity* _Nonnull)userActivity
-      restorationHandler:(EERestorationHandler _Nonnull)restorationHandler {
+- (BOOL)application:(UIApplication*)application
+              continue:(NSUserActivity*)userActivity
+    restorationHandler:
+        (void (^)(NSArray<id<UIUserActivityRestoring>>* _Nullable))
+            restorationHandler {
     [tracker_ continueUserActivity:userActivity
                 restorationHandler:restorationHandler];
-    return YES;
+    return NO;
 }
 
 @end

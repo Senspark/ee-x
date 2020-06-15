@@ -13,11 +13,13 @@
 #include <map>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/AppsFlyerFwd.hpp"
 
 namespace ee {
 namespace apps_flyer {
-class IBridge {
+class IBridge : public IPlugin {
 public:
     virtual ~IBridge() = default;
 

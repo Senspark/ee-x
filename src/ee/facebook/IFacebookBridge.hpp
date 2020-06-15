@@ -14,15 +14,15 @@
 #include <string>
 #include <vector>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/FacebookFwd.hpp"
 
 namespace ee {
 namespace facebook {
-class IBridge {
+class IBridge : public IPlugin {
 public:
     virtual ~IBridge() = default;
-
-    virtual void destroy() = 0;
 
     virtual bool isLoggedIn() const = 0;
 

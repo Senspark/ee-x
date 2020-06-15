@@ -26,9 +26,13 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
+    PluginManager::addPlugin(Plugin::Tenjin);
 }
 
-Self::~Bridge() {
+Self::~Bridge() {}
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::Tenjin);
 }
 
 void Self::initialize(const std::string& apiKey) {

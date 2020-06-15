@@ -5,6 +5,7 @@
 
 #include "ee/recorder/RecorderBridge.hpp"
 
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -25,11 +26,11 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
-    //
+    PluginManager::addPlugin(Plugin::Recorder);
 }
 
 Self::~Bridge() {
-    //
+    PluginManager::removePlugin(Plugin::Recorder);
 }
 
 bool Self::isSupported() const {

@@ -15,17 +15,21 @@
 #include <memory>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     /// Constructs an AdMob bridge with a custom logger.
     explicit Bridge(const Logger& logger);
+
+    virtual void destroy() override;
 
     /// Optional.
     /// Calls this method for faster ads loading.

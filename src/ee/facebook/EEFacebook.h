@@ -7,7 +7,7 @@
 #import <FBSDKLoginKit/FBSDKLoginManager.h>
 #import <FBSDKShareKit/FBSDKGameRequestContent.h>
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @protocol FBSDKGameRequestDialogDelegate;
 @protocol FBSDKSharingDelegate;

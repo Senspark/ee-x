@@ -16,16 +16,20 @@
 #include <memory>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
+
+    virtual void destroy() override;
 
     /// Gets the current device's hash, iOS only, for Android search for
     /// AdSettings tag.

@@ -39,10 +39,14 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
-    //
+    PluginManager::addPlugin(Plugin::AppsFlyer);
 }
 
 Self::~Bridge() = default;
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::AppsFlyer);
+}
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {
     runOnUiThread([this, devKey, appId] {

@@ -136,12 +136,23 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
     [bridge_ deregisterHandler:k__shareVideoContent];
 }
 
-- (BOOL)application:(UIApplication* _Nonnull)application
-            openURL:(NSURL* _Nonnull)url
-            options:(NSDictionary* _Nonnull)options {
+- (BOOL)application:(UIApplication*)application
+               open:(NSURL*)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey, id>*)options {
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                           openURL:url
                                                           options:options];
+}
+
+- (BOOL)application:(UIApplication*)application
+                 open:(NSURL*)url
+    sourceApplication:(NSString*)sourceApplication
+           annotation:(id)annotation {
+    return
+        [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                       openURL:url
+                                             sourceApplication:sourceApplication
+                                                    annotation:annotation];
 }
 
 - (NSString* _Nonnull)convertAccessTokenToString:(FBSDKAccessToken*)token {

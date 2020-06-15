@@ -50,6 +50,7 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
+    PluginManager::addPlugin(Plugin::Facebook);
     delegateId_ = 0;
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -64,6 +65,7 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     bridge_.deregisterHandler(k__onProfileChanged);
+    PluginManager::removePlugin(Plugin::Facebook);
 }
 
 void Self::registerNotifications() {

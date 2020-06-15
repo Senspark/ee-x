@@ -7,18 +7,20 @@
 #include <memory>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/IronSourceFwd.hpp"
 
 namespace ee {
 namespace iron_source {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);

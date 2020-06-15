@@ -196,10 +196,12 @@ class PluginManager private constructor() {
 
     fun removePlugin(name: String) {
         _logger.info("removePlugin: $name")
-        if (!_plugins.containsKey(name)) {
+        val plugin = _plugins[name]
+        if (plugin == null) {
             _logger.error("removePlugin: $name doesn't exist!")
             return
         }
+        plugin.destroy()
         _plugins.remove(name)
     }
 

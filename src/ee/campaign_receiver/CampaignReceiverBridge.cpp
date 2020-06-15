@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include <ee/core/Logger.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -32,6 +33,7 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    PluginManager::addPlugin(Plugin::CampaignReceiver);
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -48,12 +50,13 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     bridge_.deregisterHandler(k__onReceivedLink);
+    PluginManager::removePlugin(Plugin::CampaignReceiver);
 }
 
 void Self::initialize(const OnReceivedLinkCallback& callback) {
 #ifdef EE_X_ANDROID
     bridge_.call(k__initialize);
-#endif
+#endif // EE_X_ANDROID
     callback_ = callback;
 }
 } // namespace campaign_receiver

@@ -13,20 +13,22 @@
 
 #include <functional>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/CampaignReceiverFwd.hpp"
 
 namespace ee {
 namespace campaign_receiver {
 using OnReceivedLinkCallback = std::function<void(const std::string&)>;
 
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     void initialize(const OnReceivedLinkCallback& callback);
 

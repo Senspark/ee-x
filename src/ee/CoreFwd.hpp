@@ -22,15 +22,22 @@ class async_mutex_scoped_lock_operation;
 
 namespace ee {
 namespace core {
+enum class Plugin;
+class IPlugin;
+class PluginManager;
+
 struct LogLevel;
 class Logger;
+
 class IMessageBridge;
-class IService;
 class MessageBridge;
-class PluginManager;
-class ScopeGuard;
+
+class IService;
 class ServiceLocator;
+
+class ScopeGuard;
 class SpinLock;
+
 class VideoPlayer;
 class VideoPlayerManager;
 
@@ -71,10 +78,12 @@ class JniUtils;
 
 using core::DynamicValue;
 using core::IMessageBridge;
+using core::IPlugin;
 using core::IService;
 using core::Logger;
 using core::LogLevel;
 using core::MessageBridge;
+using core::Plugin;
 using core::PluginManager;
 using core::ScopeGuard;
 using core::ServiceLocator;

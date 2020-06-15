@@ -6,14 +6,17 @@
 #include <string>
 
 #include <ee/FirebaseFwd.hpp>
+#include <ee/core/IPlugin.hpp>
 
 namespace ee {
 namespace firebase {
 namespace crashlytics {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
+
+    virtual void destroy() override;
 
     void log(const std::string& message);
 

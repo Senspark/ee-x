@@ -1,4 +1,4 @@
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 @interface EEFirebaseCore : NSObject <EEIPlugin>
 @end

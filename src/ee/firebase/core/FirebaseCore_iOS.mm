@@ -10,6 +10,8 @@
 
 #include <firebase/app.h>
 
+#include <ee/core/PluginManager.hpp>
+
 namespace ee {
 namespace firebase {
 using Self = Core;
@@ -19,6 +21,8 @@ void Self::initialize() {
     if (initialized) {
         return;
     }
+
+    PluginManager::addPlugin(Plugin::FirebaseCore);
 
     auto options = ::firebase::AppOptions();
     auto app = ::firebase::App::Create(options);

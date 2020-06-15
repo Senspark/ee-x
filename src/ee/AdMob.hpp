@@ -18,8 +18,4 @@
 #include "ee/admob/AdMobNativeAdLayout.hpp"
 #endif // __cplusplus
 
-#ifdef __OBJC__
-#import "ee/admob/EEAdMob.h"
-#endif // __OBJC__
-
 #endif /* EE_X_ADMOB_HPP */

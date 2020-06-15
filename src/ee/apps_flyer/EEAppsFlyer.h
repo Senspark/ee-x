@@ -5,7 +5,7 @@
 //  Created by eps on 6/26/18.
 //
 
-#import <ee/core/EEIPlugin.h>
+@protocol EEIPlugin;
 
 /// https://support.appsflyer.com/hc/en-us/articles/207032066-AppsFlyer-SDK-Integration-iOS
 @interface EEAppsFlyer : NSObject <EEIPlugin>

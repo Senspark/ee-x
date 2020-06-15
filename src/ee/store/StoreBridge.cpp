@@ -11,6 +11,7 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/core/Logger.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
@@ -83,11 +84,15 @@ Self::Bridge()
 
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {}
+    , logger_(logger) {
+    PluginManager::addPlugin(Plugin::Store);
+}
 
 Self::~Bridge() = default;
 
-void Self::destroy() {}
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::Store);
+}
 
 void Self::initialize() {
     // TODO.

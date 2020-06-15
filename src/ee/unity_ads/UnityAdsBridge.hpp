@@ -15,18 +15,20 @@
 #include <memory>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     /// Initializes Unity Ads.
     /// @param[in] gameId Unity Ads game ID.

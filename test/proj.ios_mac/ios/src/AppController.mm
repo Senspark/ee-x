@@ -10,8 +10,6 @@
 
 #import <cocos2d.h>
 
-#import <ee/Core.hpp>
-
 #import "AppDelegate.hpp"
 #import "RootViewController.h"
 
@@ -52,27 +50,6 @@ static eetest::AppDelegate s_sharedApplication;
     auto glview = cocos2d::GLViewImpl::createWithEAGLView(
         (__bridge void*)[_viewController view]);
     cocos2d::Director::getInstance()->setOpenGLView(glview);
-
-    EEPluginManager* manager = [EEPluginManager getInstance];
-    [manager initializePlugins];
-    [manager addPlugin:@"AdMob"];
-    [manager addPlugin:@"AppLovin"];
-    [manager addPlugin:@"AppsFlyer"];
-    [manager addPlugin:@"CampaignReceiver"];
-    [manager addPlugin:@"Facebook"];
-    [manager addPlugin:@"FacebookAds"];
-    [manager addPlugin:@"FirebaseCore"];
-    [manager addPlugin:@"FirebaseCrashlytics"];
-    [manager addPlugin:@"FirebasePerformance"];
-    [manager addPlugin:@"GoogleAnalytics"];
-    [manager addPlugin:@"IronSource"];
-    [manager addPlugin:@"Notification"];
-    [manager addPlugin:@"Play"];
-    [manager addPlugin:@"Recorder"];
-    [manager addPlugin:@"Store"];
-    [manager addPlugin:@"Tenjin"];
-    [manager addPlugin:@"UnityAds"];
-    [manager addPlugin:@"Vungle"];
 
     // run the cocos2d-x game scene
     app->run();

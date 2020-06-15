@@ -7,6 +7,7 @@
 
 #include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
 
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -25,6 +26,14 @@ constexpr auto k__startTrace                = "FirebasePerformance_startTrace";
 constexpr auto k__newTrace                  = "FirebasePerformance_newTrace";
 // clang-format on
 } // namespace
+
+Self::Bridge() {
+    PluginManager::addPlugin(Plugin::FirebasePerformance);
+}
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::FirebasePerformance);
+}
 
 void Self::setDataCollectionEnabled(bool enabled) {
     auto&& bridge = MessageBridge::getInstance();

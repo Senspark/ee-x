@@ -10,6 +10,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -20,7 +21,13 @@ namespace notification {
 using Self = Bridge;
 
 Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {}
+    : bridge_(MessageBridge::getInstance()) {
+    PluginManager::addPlugin(Plugin::Notification);
+}
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::Notification);
+}
 
 void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;

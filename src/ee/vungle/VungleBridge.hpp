@@ -5,18 +5,20 @@
 
 #include <map>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/VungleFwd.hpp"
 
 namespace ee {
 namespace vungle {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     /// Initializes Vungle with the specified game ID.
     void initialize(const std::string& gameId);

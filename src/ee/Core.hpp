@@ -40,10 +40,6 @@
 #ifdef __cplusplus
 #include "ee/core/JniUtils.hpp"
 #endif // __cplusplus
-#elif defined(EE_X_IOS) || defined(EE_X_OSX)
-#if defined(__OBJC__)
-#import "ee/core/EEPluginManager.h"
-#endif // __OBJC__
 #endif // EE_X_ANDROID
 
 #endif /* EE_X_CORE_HEADER_HPP_ */

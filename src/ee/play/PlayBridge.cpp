@@ -7,6 +7,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -42,6 +43,7 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
+    PluginManager::addPlugin(Plugin::Play);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onSignedIn(core::toBool(message));
@@ -54,6 +56,7 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     bridge_.deregisterHandler(k_onSignedIn);
+    PluginManager::removePlugin(Plugin::Play);
 }
 
 bool Self::isSignedIn() {

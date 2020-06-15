@@ -11,18 +11,20 @@
 #include <functional>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/PlayFwd.hpp"
 
 namespace ee {
 namespace play {
 using LoginResultCallback = std::function<void(bool success)>;
 
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
-    
-    void destroy();
+
+    virtual void destroy() override;
 
     bool isSignedIn();
     void signin(bool silentSignIn = false);

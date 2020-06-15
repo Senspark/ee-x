@@ -13,14 +13,18 @@
 
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/NotificationFwd.hpp"
 
 namespace ee {
 namespace notification {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
-    
+
+    virtual void destroy() override;
+
     /// Schedules a notification.
     void schedule(const NotificationBuilder& builder);
 
@@ -36,7 +40,7 @@ private:
     /// Unschedule all notifications.
     /// Only supported on iOS.
     void unscheduleAll();
-    
+
     IMessageBridge& bridge_;
 };
 } // namespace notification

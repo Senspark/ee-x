@@ -13,18 +13,20 @@
 
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/AppLovinFwd.hpp"
 
 namespace ee {
 namespace app_lovin {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     void initialize(const std::string& key);
 

@@ -6,6 +6,7 @@
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -39,6 +40,8 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug(__PRETTY_FUNCTION__);
+    PluginManager::addPlugin(Plugin::Vungle);
+
     auto&& mediation = ads::MediationManager::getInstance();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 
@@ -80,6 +83,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(k__onFailedToLoad);
     bridge_.deregisterHandler(k__onFailedToShow);
     bridge_.deregisterHandler(k__onClosed);
+    PluginManager::removePlugin(Plugin::Vungle);
 }
 
 void Self::initialize(const std::string& gameId) {

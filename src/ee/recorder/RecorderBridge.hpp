@@ -10,14 +10,18 @@
 
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/RecorderFwd.hpp"
 
 namespace ee {
 namespace recorder {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
+
+    virtual void destroy() override;
 
     /// Checks whether recorder is supported on the current device.
     bool isSupported() const;

@@ -17,6 +17,8 @@ public:
     Bridge();
     virtual ~Bridge() override;
 
+    virtual void destroy() override;
+
     virtual void initialize(const std::string& devKey,
                             const std::string& appId) override;
 

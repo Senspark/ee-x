@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/StoreFwd.hpp"
 
 namespace ee {
@@ -24,14 +26,14 @@ enum class SkuType {
     Subscription,
 };
 
-class Bridge {
+class Bridge final : public IPlugin {
 public:
     Bridge();
     ~Bridge();
 
     explicit Bridge(const Logger& logger);
 
-    void destroy();
+    virtual void destroy() override;
 
     void initialize();
 

@@ -9,7 +9,6 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-@objc(EEPluginManager)
 public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
@@ -38,12 +37,16 @@ public class PluginManager: NSObject {
     /// Adds and initialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
     @objc
-    public func addPlugin(_ name: String) {}
+    public func addPlugin(_ name: String) -> Bool {
+        return true
+    }
     
     /// Removes and deinitialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
     @objc
-    public func removePlugin(_ name: String) {}
+    public func removePlugin(_ name: String) -> Bool {
+        return true
+    }
     
     private func executePlugins(_ executor: PluginExecutor) -> Bool {
         for entry in _plugins {
@@ -95,4 +98,29 @@ public class PluginManager: NSObject {
             plugin.application(application, continue: userActivity, restorationHandler: restorationHandler)
         }
     }
+    
+    fileprivate class func staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
+        let name_str = String(cString: name)
+        return _sharedInstance.addPlugin(name_str)
+    }
+    
+    fileprivate class func staticRemovePlugin(_ name: UnsafePointer<CChar>) -> Bool {
+        let name_str = String(cString: name)
+        return _sharedInstance.removePlugin(name_str)
+    }
+}
+
+@_cdecl("ee_staticInitializePlugins")
+public func ee_staticInitializePlugins() {
+    return PluginManager.getInstance().initializePlugins()
+}
+
+@_cdecl("ee_staticAddPlugin")
+public func ee_staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
+    return PluginManager.staticAddPlugin(name)
+}
+
+@_cdecl("ee_staticRemovePlugin")
+public func ee_staticRemovePlugin(_ name: UnsafePointer<CChar>) -> Bool {
+    return PluginManager.staticRemovePlugin(name)
 }

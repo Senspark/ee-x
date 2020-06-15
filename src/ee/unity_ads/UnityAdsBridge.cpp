@@ -17,6 +17,7 @@
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -55,6 +56,8 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    PluginManager::addPlugin(Plugin::UnityAds);
+
     displaying_ = false;
 
     auto&& mediation = ads::MediationManager::getInstance();
@@ -90,6 +93,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(k__onLoaded);
     bridge_.deregisterHandler(k__onFailedToShow);
     bridge_.deregisterHandler(k__onClosed);
+    PluginManager::removePlugin(Plugin::UnityAds);
 }
 
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {

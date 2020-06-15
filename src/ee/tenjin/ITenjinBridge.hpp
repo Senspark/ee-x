@@ -9,11 +9,13 @@
 
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/TenjinFwd.hpp"
 
 namespace ee {
 namespace tenjin {
-class IBridge {
+class IBridge : public IPlugin {
 public:
     virtual ~IBridge() = default;
 

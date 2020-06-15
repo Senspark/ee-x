@@ -13,6 +13,8 @@
 #include <memory>
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include <ee/FirebaseFwd.hpp>
 
 /// Wrapper for Firebase Performance.
@@ -23,10 +25,12 @@
 namespace ee {
 namespace firebase {
 namespace performance {
-class Bridge final {
+class Bridge final : public IPlugin {
 public:
-    Bridge() = default;
+    Bridge();
     ~Bridge() = default;
+
+    virtual void destroy() override;
 
     /// @property dataCollectionEnabled
     /// @see

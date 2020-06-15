@@ -10,6 +10,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -47,8 +48,15 @@ constexpr auto k__testTrackEcommerceImpression = "GoogleAnalytics_testTrackEcomm
 // clang-format on
 } // namespace
 
-Self::Analytics() = default;
+Self::Analytics() {
+    PluginManager::addPlugin(Plugin::GoogleAnalytics);
+}
+
 Self::~Analytics() = default;
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::GoogleAnalytics);
+}
 
 void Self::setDispatchInterval(int seconds) {
     auto&& bridge = MessageBridge::getInstance();

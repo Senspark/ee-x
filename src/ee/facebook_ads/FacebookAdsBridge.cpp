@@ -16,6 +16,7 @@
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -67,12 +68,18 @@ Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
+    PluginManager::addPlugin(Plugin::FacebookAds);
+
     auto&& mediation = ads::MediationManager::getInstance();
     interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 }
 
 Self::~Bridge() = default;
+
+void Self::destroy() {
+    PluginManager::removePlugin(Plugin::FacebookAds);
+}
 
 std::string Self::getTestDeviceHash() const {
     return bridge_.call(k__getTestDeviceHash);

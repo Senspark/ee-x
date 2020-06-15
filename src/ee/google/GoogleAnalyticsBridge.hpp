@@ -13,14 +13,18 @@
 
 #include <string>
 
+#include <ee/core/IPlugin.hpp>
+
 #include "ee/GoogleAnalyticsFwd.hpp"
 
 namespace ee {
 namespace google {
-class Analytics {
+class Analytics : public IPlugin {
 public:
     Analytics();
     ~Analytics();
+
+    virtual void destroy() override;
 
     void setDispatchInterval(int seconds);
     void setDryRun(bool enabled);

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -64,7 +65,7 @@ public class AdMob implements IPlugin {
     private Map<String, AdMobRewardedAd> _rewardedAds;
 
     public AdMob(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _bannerHelper = new AdMobBannerHelper(context);
@@ -136,7 +137,7 @@ public class AdMob implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
 
         _context = null;
@@ -284,7 +285,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         MobileAds.initialize(_context, initializationStatus -> {
             // onInitializationComplete
         });
@@ -296,7 +297,7 @@ public class AdMob implements IPlugin {
     }
 
     public void addTestDevice(@NonNull String hash) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _testDevices.add(hash);
         RequestConfiguration configuration = new RequestConfiguration.Builder()
             .setTestDeviceIds(_testDevices)
@@ -311,7 +312,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean createBannerAd(@NonNull String adId, @NonNull AdSize size) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
@@ -322,7 +323,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyBannerAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_bannerAds.containsKey(adId)) {
             return false;
         }
@@ -334,7 +335,7 @@ public class AdMob implements IPlugin {
 
     public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
                                   @NonNull Map<String, String> identifiers) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
@@ -345,7 +346,7 @@ public class AdMob implements IPlugin {
     }
 
     public boolean destroyNativeAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_nativeAds.containsKey(adId)) {
             return false;
         }
@@ -357,7 +358,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean createInterstitialAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_interstitialAds.containsKey(adId)) {
             return false;
         }
@@ -368,7 +369,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyInterstitialAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_interstitialAds.containsKey(adId)) {
             return false;
         }
@@ -380,7 +381,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean createRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_rewardedAds.containsKey(adId)) {
             return false;
         }
@@ -391,7 +392,7 @@ public class AdMob implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_rewardedAds.containsKey(adId)) {
             return false;
         }

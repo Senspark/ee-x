@@ -16,6 +16,7 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -48,7 +49,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
                   @NonNull String adId,
                   @NonNull AdSize adSize) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = bridge;
@@ -67,12 +68,12 @@ class AdMobBannerAd extends AdListener implements IAdView {
     }
 
     void onResume() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _ad.resume();
     }
 
     void onPause() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _ad.pause();
     }
 
@@ -84,7 +85,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     void destroy() {
         _logger.info("destroy: adId = " + _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
@@ -104,7 +105,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -129,7 +130,7 @@ class AdMobBannerAd extends AdListener implements IAdView {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -155,14 +156,14 @@ class AdMobBannerAd extends AdListener implements IAdView {
 
     @Override
     public boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_adId).isNotNull();
         return _isLoaded;
     }
 
     @Override
     public void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_adId).isNotNull();
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
@@ -209,33 +210,33 @@ class AdMobBannerAd extends AdListener implements IAdView {
     @Override
     public void onAdClosed() {
         _logger.info("onAdClosed");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onAdOpened() {
         _logger.info("onAdOpened");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _isLoaded = true;
         _bridge.callCpp(_messageHelper.onLoaded());
     }
@@ -243,12 +244,12 @@ class AdMobBannerAd extends AdListener implements IAdView {
     @Override
     public void onAdClicked() {
         _logger.info("onAdClicked");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdImpression() {
         _logger.info("onAdImpression");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 }

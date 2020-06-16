@@ -7,9 +7,10 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.vungle.warren.AdConfig;
 import com.vungle.warren.InitCallback;
@@ -49,7 +50,7 @@ public class Vungle implements IPlugin {
     private InitCallback _initCallback;
 
     public Vungle(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("constructor begin: context = " + context);
         _context = context;
         _bridge = bridge;
@@ -90,7 +91,7 @@ public class Vungle implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _context = null;
         _bridge = null;
@@ -134,7 +135,7 @@ public class Vungle implements IPlugin {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.deregisterHandler(k__initialize);
         _bridge.deregisterHandler(k__hasRewardedAd);
         _bridge.deregisterHandler(k__showRewardedAd);
@@ -143,7 +144,7 @@ public class Vungle implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String gameId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_initializing) {
             return;
         }
@@ -219,7 +220,7 @@ public class Vungle implements IPlugin {
     }
 
     private boolean hasRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!com.vungle.warren.Vungle.isInitialized()) {
             return false;
         }
@@ -227,12 +228,12 @@ public class Vungle implements IPlugin {
     }
 
     private void loadRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         com.vungle.warren.Vungle.loadAd(adId, _loadAdCallback);
     }
 
     private void showRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         com.vungle.warren.Vungle.playAd(adId, new AdConfig(), _playAdCallback);
     }
 }

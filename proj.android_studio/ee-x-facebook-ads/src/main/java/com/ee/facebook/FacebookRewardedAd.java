@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -31,7 +32,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
                        @NonNull IMessageBridge bridge,
                        @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _adId = adId;
@@ -42,7 +43,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
 
     void destroy() {
         _logger.info("destroy: adId = %s", _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
@@ -81,7 +82,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -90,7 +91,7 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -100,19 +101,19 @@ class FacebookRewardedAd implements RewardedVideoAdListener {
     }
 
     private boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         return _ad.isAdLoaded();
     }
 
     private void load() {
         _logger.info("load");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _ad.loadAd(_ad.buildLoadAdConfig().withAdListener(this).build());
     }
 
     private void show() {
         _logger.info("show");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _rewarded = false;
         boolean result = _ad.show(_ad.buildShowAdConfig().build());
         if (result) {

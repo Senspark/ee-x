@@ -23,6 +23,7 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -75,7 +76,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
                   @NonNull String layoutName,
                   @NonNull Map<String, String> identifiers) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = bridge;
@@ -103,7 +104,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     void destroy() {
         _logger.info("destroy: adId = " + _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyView();
         destroyInternalAd();
@@ -125,7 +126,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -152,7 +153,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -162,7 +163,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private void createView() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_view).isNull();
         FrameLayout layout = new FrameLayout(_context);
 
@@ -181,7 +182,7 @@ class AdMobNativeAd extends AdListener implements IAdView {
     }
 
     private void destroyView() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_view).isNotNull();
         if (_activity != null) {
             removeFromActivity(_activity);
@@ -202,14 +203,14 @@ class AdMobNativeAd extends AdListener implements IAdView {
 
     @Override
     public boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         return _isLoaded;
     }
 
     @Override
     public void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
@@ -381,33 +382,33 @@ class AdMobNativeAd extends AdListener implements IAdView {
     @Override
     public void onAdClosed() {
         _logger.info("onAdClosed");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onAdOpened() {
         _logger.info("onAdOpened");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         // There is one important difference between the way AdListener objects work with native ads
         // and the way they work with banners and interstitials. Because the AdLoader has its own
         // format-specific listeners (i.e., UnifiedNativeAd.OnUnifiedNativeAdLoadedListener) to use
@@ -418,12 +419,12 @@ class AdMobNativeAd extends AdListener implements IAdView {
     @Override
     public void onAdClicked() {
         _logger.info("onAdClicked");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdImpression() {
         _logger.info("onAdImpression");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 }

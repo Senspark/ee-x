@@ -12,6 +12,7 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/SpinLock.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 namespace ee {

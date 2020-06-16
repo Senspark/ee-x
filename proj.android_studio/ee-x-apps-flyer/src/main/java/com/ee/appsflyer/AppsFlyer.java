@@ -10,9 +10,10 @@ import androidx.annotation.NonNull;
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
 import java.util.Map;
@@ -34,7 +35,7 @@ public class AppsFlyer implements IPlugin {
 
     public AppsFlyer(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _tracker = AppsFlyerLib.getInstance();
@@ -125,7 +126,7 @@ public class AppsFlyer implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String devKey) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         AppsFlyerConversionListener listener = new AppsFlyerConversionListener() {
             @Override
             public void onConversionDataSuccess(Map<String, Object> conversionData) {

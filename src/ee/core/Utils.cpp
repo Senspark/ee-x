@@ -29,7 +29,6 @@
 
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/SpinLock.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
@@ -130,80 +129,24 @@ std::string dumpBacktrace(size_t count) {
     return oss.str();
 }
 
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+extern "C" {
+void ee_runOnMainThread();
+} // extern "C"
 
-bool isMainThread() {
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(kIsMainThread);
-    return toBool(response);
-}
-
-namespace {
-std::queue<Runnable<>> q_;
-SpinLock lock_;
-
-void pushRunnable(const Runnable<>& runnable) {
-    std::lock_guard<SpinLock> guard(lock_);
-    q_.push(runnable);
-}
-
-Runnable<> popRunnable() {
-    std::lock_guard<SpinLock> guard(lock_);
-    assert(not q_.empty());
-    auto runnable = q_.front();
-    q_.pop();
-    return runnable;
-}
-
-void runOnUiThreadCallback() {
-    popRunnable()();
-}
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
 void registerHandler() {
-    static std::once_flag flag;
-    std::call_once(flag, [] {
-        auto&& bridge = MessageBridge::getInstance();
-        bridge.registerHandler(
-            [](const std::string& message) {
-                runOnUiThreadCallback();
-                return "";
-            },
-            kRunOnUiThreadCallback);
-    });
-}
-} // namespace
-
-bool runOnUiThread(const Runnable<>& runnable) {
-    if (isMainThread()) {
-        runnable();
-        return true;
-    }
-    registerHandler();
-    pushRunnable(runnable);
-    auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(kRunOnUiThread);
-    return toBool(response);
-}
-
-void runOnUiThreadDelayed(const Runnable<>& runnable, float delay) {
-    noAwait([runnable, delay]() -> Task<> {
-        nlohmann::json json;
-        json["delay"] = delay;
-        auto&& bridge = MessageBridge::getInstance();
-        auto response =
-            co_await bridge.callAsync(kRunOnUiThreadDelayed, json.dump());
-        if (runnable) {
-            runnable();
-        }
-    });
-}
-
-void runOnUiThreadAndWait(const Runnable<>& runnable) {
-    std::promise<void> promise;
-    runOnUiThread([runnable, &promise] {
-        runnable();
-        promise.set_value();
-    });
-    return promise.get_future().get();
+    //    static std::once_flag flag;
+    //    std::call_once(flag, [] {
+    //        auto&& bridge = MessageBridge::getInstance();
+    //        bridge.registerHandler(
+    //            [](const std::string& message) {
+    //                runOnUiThreadCallback();
+    //                return "";
+    //            },
+    //            kRunOnUiThreadCallback);
+    //    });
 }
 
 #ifdef EE_X_ANDROID

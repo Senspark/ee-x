@@ -8,9 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.ecommerce.Product;
@@ -60,7 +61,7 @@ public class GoogleAnalytics implements IPlugin {
     private boolean _exceptionReportingEnabled;
 
     public GoogleAnalytics(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(_context);
@@ -101,7 +102,7 @@ public class GoogleAnalytics implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         for (String key : _trackers.keySet()) {
             GoogleAnalyticsTracker tracker = _trackers.get(key);

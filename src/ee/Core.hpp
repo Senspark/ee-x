@@ -32,6 +32,7 @@
 #include "ee/core/SpinLock.hpp"
 #include "ee/core/SwitchToUiThread.hpp"
 #include "ee/core/Task.hpp"
+#include "ee/core/Thread.hpp"
 #include "ee/core/Utils.hpp"
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/VideoPlayerManager.hpp"

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.ee.core.IMessageBridge;
 import com.ee.core.IPlugin;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.ee.facebook.ads.BuildConfig;
 import com.facebook.ads.AdSettings;
@@ -55,7 +56,7 @@ public class FacebookAds implements IPlugin {
     private Map<String, FacebookRewardedAd> _rewardedAds;
 
     public FacebookAds(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _bannerHelper = new FacebookBannerHelper();
@@ -122,7 +123,7 @@ public class FacebookAds implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
 
         _context = null;
@@ -274,13 +275,13 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void addTestDevice(@NonNull String hash) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         AdSettings.addTestDevice(hash);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void clearTestDevices() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         AdSettings.clearTestDevices();
     }
 
@@ -291,7 +292,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean createBannerAd(@NonNull String adId, @NonNull AdSize adSize) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_bannerAds.containsKey(adId)) {
             return false;
         }
@@ -302,7 +303,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyBannerAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_bannerAds.containsKey(adId)) {
             return false;
         }
@@ -315,7 +316,7 @@ public class FacebookAds implements IPlugin {
     @SuppressWarnings("WeakerAccess")
     public boolean createNativeAd(@NonNull String adId, @NonNull String layoutName,
                                   @NonNull Map<String, String> identifiers) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_nativeAds.containsKey(adId)) {
             return false;
         }
@@ -327,7 +328,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyNativeAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_nativeAds.containsKey(adId)) {
             return false;
         }
@@ -339,7 +340,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     private boolean createInterstitialAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_interstitialAds.containsKey(adId)) {
             return false;
         }
@@ -350,7 +351,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyInterstitialAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_interstitialAds.containsKey(adId)) {
             return false;
         }
@@ -362,7 +363,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     private boolean createRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_rewardedAds.containsKey(adId)) {
             return false;
         }
@@ -373,7 +374,7 @@ public class FacebookAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean destroyRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_rewardedAds.containsKey(adId)) {
             return false;
         }

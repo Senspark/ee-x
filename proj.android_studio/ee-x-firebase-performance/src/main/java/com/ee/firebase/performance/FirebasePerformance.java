@@ -7,8 +7,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.firebase.perf.metrics.Trace;
 
@@ -28,7 +29,7 @@ public class FirebasePerformance implements IPlugin {
     private Map<String, FirebasePerformanceTrace> _traces;
 
     public FirebasePerformance(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge = bridge;
         _performance = com.google.firebase.perf.FirebasePerformance.getInstance();
         _traces = new HashMap<>();
@@ -67,7 +68,7 @@ public class FirebasePerformance implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         for (String key : _traces.keySet()) {
             _traces.get(key).destroy();
@@ -83,7 +84,7 @@ public class FirebasePerformance implements IPlugin {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.registerHandler(k__setDataCollectionEnabled, message -> {
             setDataCollectionEnabled(Utils.toBoolean(message));
             return "";
@@ -104,7 +105,7 @@ public class FirebasePerformance implements IPlugin {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.deregisterHandler(k__setDataCollectionEnabled);
         _bridge.deregisterHandler(k__isDataCollectionEnabled);
         _bridge.deregisterHandler(k__newTrace);

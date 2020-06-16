@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.ee.core.internal.Utils;
+import com.ee.core.internal.Thread;
 
 public class ViewHelper {
     private final View _view;
@@ -17,7 +17,7 @@ public class ViewHelper {
 
     @NonNull
     public Point getPosition() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         /*
         int p[] = new int[2];
         view.getLocationInWindow(p);
@@ -28,7 +28,7 @@ public class ViewHelper {
     }
 
     public void setPosition(@NonNull Point position) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _view.getLayoutParams();
         params.leftMargin = position.x;
         params.topMargin = position.y;
@@ -37,14 +37,14 @@ public class ViewHelper {
 
     @NonNull
     public Point getSize() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         // return new Point(view.getWidth(), view.getHeight());
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _view.getLayoutParams();
         return new Point(params.width, params.height);
     }
 
     public void setSize(@NonNull Point size) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) _view.getLayoutParams();
         params.width = size.x;
         params.height = size.y;
@@ -52,12 +52,12 @@ public class ViewHelper {
     }
 
     public boolean isVisible() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         return _view.getVisibility() == View.VISIBLE;
     }
 
     public void setVisible(boolean visible) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (visible) {
             _view.setVisibility(View.VISIBLE);
         } else {

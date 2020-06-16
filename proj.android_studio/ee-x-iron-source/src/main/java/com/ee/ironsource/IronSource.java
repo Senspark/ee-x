@@ -7,8 +7,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;
@@ -51,7 +52,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
     private boolean _rewarded;
 
     public IronSource(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("constructor begin.");
         _bridge = bridge;
         registerHandlers();
@@ -79,13 +80,13 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @Override
     public void onResume() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         com.ironsource.mediationsdk.IronSource.onResume(_activity);
     }
 
     @Override
     public void onPause() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         com.ironsource.mediationsdk.IronSource.onPause(_activity);
     }
 
@@ -95,7 +96,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
         if (!_initialized) {
@@ -158,7 +159,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull Activity activity, @NonNull String gameId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -173,14 +174,14 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @SuppressWarnings("WeakerAccess")
     public void loadInterstitialAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("loadInterstitialAd");
         com.ironsource.mediationsdk.IronSource.loadInterstitial();
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasInterstitialAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         boolean value = com.ironsource.mediationsdk.IronSource.isInterstitialReady();
         _logger.debug("hasInterstitialAd " + value);
         return value;
@@ -188,7 +189,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @SuppressWarnings("WeakerAccess")
     public boolean showInterstitialAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("showInterstitialAd");
         com.ironsource.mediationsdk.IronSource.showInterstitial(adId);
         return true;
@@ -196,7 +197,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasRewardedAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         boolean value = com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
         _logger.debug("hasRewardedAd " + value);
         return value;
@@ -204,7 +205,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("showRewardedAd");
         _rewarded = false;
         com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId);
@@ -293,7 +294,7 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
         } else {
             // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
             // asynchronous.
-            Utils.runOnUiThreadDelayed(1.0f, this::handleRewardedAdResult);
+            Thread.runOnMainThreadDelayed(1.0f, this::handleRewardedAdResult);
         }
     }
 

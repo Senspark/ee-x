@@ -13,7 +13,6 @@
 
 #include <cstdarg>
 #include <functional>
-#include <future>
 #include <string>
 
 #include "ee/CoreFwd.hpp"
@@ -59,42 +58,11 @@ void log(const LogLevel& level, const std::string& tag,
          const std::string& message);
 
 std::string dumpBacktrace(size_t count);
-
-/// Checks whether the current thread is the UI thread (Android) or Main thread
-/// (iOS).
-bool isMainThread();
-
-template <class T = void>
-using Runnable = std::function<T()>;
-
-/// Runs the specified runnable on the main thread.
-/// @returns Whether the function is executed immediately.
-bool runOnUiThread(const Runnable<>& runnable);
-
-/// Runs the specifieid runnable on the main thread after a delay.
-void runOnUiThreadDelayed(const Runnable<>& runnable, float delay);
-
-/// Runs the specified runnable on the main thread and block the current thread.
-/// If the current thread is the main thread, it will be executed immediately.
-[[deprecated]] void runOnUiThreadAndWait(const Runnable<>& runnable);
-
-template <class T>
-[[deprecated]] T runOnUiThreadAndWaitResult(const Runnable<T>& runnable) {
-    std::promise<T> promise;
-    runOnUiThread([runnable, &promise] { // Fix clang-format.
-        promise.set_value(runnable());
-    });
-    return promise.get_future().get();
-}
 } // namespace core
 
 using core::bitCast;
 using core::format;
-using core::isMainThread;
 using core::log;
-using core::runOnUiThread;
-using core::runOnUiThreadAndWait;
-using core::runOnUiThreadAndWaitResult;
 } // namespace ee
 
 #endif // __cplusplus

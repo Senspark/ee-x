@@ -20,6 +20,7 @@ import com.applovin.sdk.AppLovinSdkSettings;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
 import java.util.Map;
@@ -68,20 +69,20 @@ public class AppLovin implements IPlugin {
         @Override
         public void adDisplayed(AppLovinAd ad) {
             _logger.info("adDisplayed");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void adHidden(AppLovinAd ad) {
             _logger.info("adHidden");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
             _bridge.callCpp(k__onInterstitialAdClosed);
         }
 
         @Override
         public void adClicked(AppLovinAd ad) {
             _logger.info("adClicked");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
             _bridge.callCpp(k__onInterstitialAdClicked);
         }
     }
@@ -104,51 +105,51 @@ public class AppLovin implements IPlugin {
         @Override
         public void adDisplayed(AppLovinAd ad) {
             _logger.info("adDisplayed");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void adHidden(AppLovinAd ad) {
             _logger.info("adHidden");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
             _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded));
         }
 
         @Override
         public void userRewardVerified(AppLovinAd ad, Map<String, String> response) {
             _logger.info("userRewardVerified: " + response);
-            Utils.checkMainThread();
+            Thread.checkMainThread();
             _rewarded = true;
         }
 
         @Override
         public void userOverQuota(AppLovinAd ad, Map<String, String> response) {
             _logger.info("userOverQuota: " + response);
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void userRewardRejected(AppLovinAd ad, Map<String, String> response) {
             _logger.info("userRewardRejected: " + response);
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void validationRequestFailed(AppLovinAd ad, int responseCode) {
             _logger.info("validationRequestFailed: code = " + responseCode);
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void userDeclinedToViewAd(AppLovinAd ad) {
             _logger.info("userDeclinedToViewAd");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
         }
 
         @Override
         public void adClicked(AppLovinAd ad) {
             _logger.info("adClicked");
-            Utils.checkMainThread();
+            Thread.checkMainThread();
             _bridge.callCpp(k__onRewardedAdClicked);
         }
     }
@@ -165,7 +166,7 @@ public class AppLovin implements IPlugin {
 
     public AppLovin(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         registerHandlers();
@@ -206,7 +207,7 @@ public class AppLovin implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _context = null;
         _bridge = null;
@@ -288,7 +289,7 @@ public class AppLovin implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull String key) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -312,55 +313,55 @@ public class AppLovin implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void setTestAdEnabled(boolean enabled) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         // Removed.
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setVerboseLogging(boolean enabled) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _sdk.getSettings().setVerboseLogging(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setMuted(boolean enabled) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _sdk.getSettings().setMuted(enabled);
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasInterstitialAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         // FIXME.
         return _sdk.getAdService().hasPreloadedAd(AppLovinAdSize.INTERSTITIAL);
     }
 
     public void loadInterstitialAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _sdk.getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, _interstitialAdListener);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void showInterstitialAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _interstitialAd.show();
     }
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasRewardedAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         return _rewardedAd.isAdReadyToDisplay();
     }
 
     @SuppressWarnings("WeakerAccess")
     public void loadRewardedAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _rewardedAd.preload(_rewardedAdListener);
     }
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _rewardedAdListener._rewarded = false;
         _rewardedAd.show(_context, _rewardedAdListener, null, _rewardedAdListener, _rewardedAdListener);
     }

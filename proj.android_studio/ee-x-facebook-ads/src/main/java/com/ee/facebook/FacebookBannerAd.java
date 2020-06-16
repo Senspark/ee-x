@@ -2,7 +2,6 @@ package com.ee.facebook;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Gravity;
@@ -17,7 +16,7 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -51,7 +50,7 @@ class FacebookBannerAd implements AdListener, IAdView {
                      @NonNull String adId,
                      @NonNull AdSize adSize) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = bridge;
@@ -77,7 +76,7 @@ class FacebookBannerAd implements AdListener, IAdView {
 
     void destroy() {
         _logger.info("destroy: adId = " + _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
@@ -97,7 +96,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -118,7 +117,7 @@ class FacebookBannerAd implements AdListener, IAdView {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -144,14 +143,14 @@ class FacebookBannerAd implements AdListener, IAdView {
 
     @Override
     public boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         return _isLoaded;
     }
 
     @Override
     public void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _ad.loadAd(_ad.buildLoadAdConfig().withAdListener(this).build());
     }
@@ -194,14 +193,14 @@ class FacebookBannerAd implements AdListener, IAdView {
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _isLoaded = true;
         _bridge.callCpp(_messageHelper.onLoaded());
     }
@@ -209,13 +208,13 @@ class FacebookBannerAd implements AdListener, IAdView {
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 }

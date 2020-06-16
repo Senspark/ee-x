@@ -3,7 +3,7 @@ package com.ee.facebook;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.internal.Utils;
+import com.ee.core.internal.Thread;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -38,19 +38,19 @@ class FacebookLoginDelegate implements FacebookCallback<LoginResult> {
 
     @Override
     public void onSuccess(LoginResult result) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onSuccess(), Facebook.convertAccessTokenToString(result.getAccessToken()));
     }
 
     @Override
     public void onError(FacebookException error) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onFailure(), error.getLocalizedMessage());
     }
 
     @Override
     public void onCancel() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onCancel());
     }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -38,7 +39,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
                     @NonNull IMessageBridge bridge,
                     @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = bridge;
@@ -59,7 +60,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
 
     void destroy() {
         _logger.info("destroy: adId = %s", _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
@@ -98,7 +99,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -107,7 +108,7 @@ class AdMobRewardedAd extends RewardedAdCallback {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -116,13 +117,13 @@ class AdMobRewardedAd extends RewardedAdCallback {
     }
 
     private boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         return _ad.isLoaded();
     }
 
     private void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _logger.info("load");
         AdRequest.Builder builder = new AdRequest.Builder();
@@ -130,14 +131,14 @@ class AdMobRewardedAd extends RewardedAdCallback {
             @Override
             public void onRewardedAdLoaded() {
                 // Ad successfully loaded.
-                Utils.checkMainThread();
+                Thread.checkMainThread();
                 _bridge.callCpp(_messageHelper.onLoaded());
             }
 
             @Override
             public void onRewardedAdFailedToLoad(int errorCode) {
                 // Ad failed to load.
-                Utils.checkMainThread();
+                Thread.checkMainThread();
                 _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
             }
         };
@@ -146,35 +147,35 @@ class AdMobRewardedAd extends RewardedAdCallback {
 
     private void show() {
         _logger.info("show");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _ad.show(_activity, this);
     }
 
     @Override
     public void onRewardedAdOpened() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.info("onRewardedAdOpened");
     }
 
     @Override
     public void onRewardedAdClosed() {
         _logger.info("onAdClosed");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClosed(), Utils.toString(_rewarded));
     }
 
     @Override
     public void onUserEarnedReward(@NonNull RewardItem reward) {
         _logger.info("onUserEarnedReward");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _rewarded = true;
     }
 
     @Override
     public void onRewardedAdFailedToShow(int errorCode) {
         _logger.info("onRewardedAdFailedToShow");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToShow(), String.valueOf(errorCode));
     }
 }

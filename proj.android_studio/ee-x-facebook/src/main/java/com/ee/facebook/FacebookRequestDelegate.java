@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.Utils;
+import com.ee.core.internal.Thread;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.widget.GameRequestDialog;
@@ -43,7 +43,7 @@ class FacebookRequestDelegate implements FacebookCallback<GameRequestDialog.Resu
 
     @Override
     public void onSuccess(GameRequestDialog.Result result) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         Map<String, Object> dict = new HashMap<>();
         dict.put("requestId", result.getRequestId());
         dict.put("requestRecipients", result.getRequestRecipients());
@@ -52,13 +52,13 @@ class FacebookRequestDelegate implements FacebookCallback<GameRequestDialog.Resu
 
     @Override
     public void onError(FacebookException error) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onFailure(), error.getLocalizedMessage());
     }
 
     @Override
     public void onCancel() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onCancel());
     }
 }

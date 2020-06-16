@@ -1,6 +1,6 @@
 #include "ee/core/SwitchToUiThread.hpp"
 
-#include "ee/core/Utils.hpp"
+#include "ee/core/Thread.hpp"
 
 namespace ee {
 namespace core {

@@ -36,12 +36,12 @@ public class PluginManager: NSObject {
                 #selector(PluginManager.application(_:open:sourceApplication:annotation:)))
         swizzle(#selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
                 #selector(PluginManager.application(_:continue:restorationHandler:)))
-        Utils.registerHandlers(_bridge)
+        Platform.registerHandlers(_bridge)
         return true
     }
     #else // os(iOS)
     fileprivate func initializePlugins() -> Bool {
-        Utils.registerHandlers(_bridge)
+        Platform.registerHandlers(_bridge)
         return true
     }
     #endif // os(iOS)

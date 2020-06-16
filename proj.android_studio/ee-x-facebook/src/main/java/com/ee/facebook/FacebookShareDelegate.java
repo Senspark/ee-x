@@ -3,7 +3,7 @@ package com.ee.facebook;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.internal.Utils;
+import com.ee.core.internal.Thread;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
@@ -38,19 +38,19 @@ public class FacebookShareDelegate implements FacebookCallback<Sharer.Result> {
 
     @Override
     public void onSuccess(Sharer.Result result) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onSuccess(), "");
     }
 
     @Override
     public void onError(FacebookException error) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onFailure(), error.getLocalizedMessage());
     }
 
     @Override
     public void onCancel() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(k__onCancel());
     }
 }

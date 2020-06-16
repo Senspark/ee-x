@@ -22,7 +22,7 @@ import com.ee.ads.MessageHelper;
 import com.ee.ads.ViewHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
-import com.ee.core.MessageBridge;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -72,7 +72,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
                      @NonNull String layoutName,
                      @NonNull Map<String, String> identifiers) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _activity = activity;
         _bridge = bridge;
@@ -101,7 +101,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     @SuppressWarnings("WeakerAccess")
     public void destroy() {
         _logger.info("destroy: adId = " + _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyView();
         destroyInternalAd();
@@ -132,7 +132,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -142,7 +142,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -154,7 +154,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private void createView() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         int layoutId = _context.getResources()
             .getIdentifier(_layoutName, "layout", _context.getPackageName());
         View nativeAdView = LayoutInflater
@@ -177,7 +177,7 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     }
 
     private void destroyView() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_activity != null) {
             removeFromActivity(_activity);
         }
@@ -197,14 +197,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
 
     @Override
     public boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         return _isLoaded;
     }
 
     @Override
     public void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _logger.info("load");
 
@@ -284,14 +284,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     @Override
     public void onError(Ad ad, AdError adError) {
         _logger.info("onError: " + adError.getErrorMessage());
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToLoad(), adError.getErrorMessage());
     }
 
     @Override
     public void onAdLoaded(Ad ad) {
         _logger.info("onAdLoaded");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad == ad);
 
         _ad.unregisterView();
@@ -332,14 +332,14 @@ class FacebookNativeAd implements NativeAdListener, IAdView {
     @Override
     public void onAdClicked(Ad ad) {
         _logger.info("onAdClicked");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onLoggingImpression(Ad ad) {
         _logger.info("onLoggingImpression");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override

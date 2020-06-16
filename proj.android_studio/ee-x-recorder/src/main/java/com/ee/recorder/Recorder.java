@@ -12,8 +12,9 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ public class Recorder implements IPlugin {
     private String _filePath;
 
     public Recorder(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge = bridge;
         registerHandlers();
         if (isSupported()) {
@@ -103,7 +104,7 @@ public class Recorder implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
     }

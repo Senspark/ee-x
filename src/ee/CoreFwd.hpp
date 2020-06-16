@@ -42,6 +42,7 @@ class SpinLock;
 struct SafeInset;
 
 class Platform;
+class Thread;
 
 class VideoPlayer;
 class VideoPlayerManager;
@@ -103,6 +104,7 @@ using core::SpinLock;
 
 using core::Platform;
 using core::SafeInset;
+using core::Thread;
 
 using core::VideoPlayer;
 using core::VideoPlayerManager;

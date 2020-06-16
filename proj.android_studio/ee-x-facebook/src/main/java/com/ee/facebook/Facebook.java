@@ -13,9 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -72,7 +73,7 @@ public class Facebook implements IPlugin {
     private ProfileTracker _profileTracker;
 
     public Facebook(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge = bridge;
         _callbackManager = CallbackManager.Factory.create();
         _accessTokenTracker = new AccessTokenTracker() {
@@ -161,7 +162,7 @@ public class Facebook implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
         _callbackManager = null;

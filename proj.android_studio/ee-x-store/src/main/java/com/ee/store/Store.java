@@ -20,10 +20,10 @@ import com.android.billingclient.api.PurchaseHistoryRecord;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
-import com.ee.core.internal.Utils;
+import com.ee.core.internal.Thread;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class Store implements IPlugin {
     private Map<String, SkuDetails> _skuDetailsList;
 
     public Store(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _scheduler = AndroidSchedulers.mainThread();
@@ -111,7 +111,7 @@ public class Store implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _context = null;
         _bridge = null;

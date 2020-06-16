@@ -7,9 +7,10 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.JsonUtils;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds.FinishState;
@@ -46,7 +47,7 @@ public class UnityAds implements IPlugin {
 
     @SuppressWarnings("unused")
     public UnityAds(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.debug("constructor begin.");
         _bridge = bridge;
         registerHandlers();
@@ -87,7 +88,7 @@ public class UnityAds implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
         if (!_initialized) {
@@ -145,7 +146,7 @@ public class UnityAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void initialize(@NonNull Activity activity, @NonNull String gameId, boolean testModeEnabled) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_initialized) {
             return;
         }
@@ -155,20 +156,20 @@ public class UnityAds implements IPlugin {
         _listener = new IUnityAdsListener() {
             public void onUnityAdsReady(String adId) {
                 _logger.info("onUnityAdsReady: " + adId);
-                Utils.checkMainThread();
+                Thread.checkMainThread();
                 _bridge.callCpp(k__onLoaded, adId);
             }
 
             @Override
             public void onUnityAdsStart(String adId) {
                 _logger.info("onUnityAdsStart: " + adId);
-                Utils.checkMainThread();
+                Thread.checkMainThread();
             }
 
             @Override
             public void onUnityAdsFinish(String adId, FinishState state) {
                 _logger.info("onUnityAdsFinish: " + adId + " state = " + state);
-                Utils.checkMainThread();
+                Thread.checkMainThread();
                 if (state == FinishState.ERROR) {
                     Map<String, Object> dict = new HashMap<>();
                     dict.put("ad_id", adId);
@@ -196,7 +197,7 @@ public class UnityAds implements IPlugin {
             @Override
             public void onUnityAdsError(UnityAdsError unityAdsError, String s) {
                 _logger.info("onUnityAdsError: " + s + " error = " + unityAdsError);
-                Utils.checkMainThread();
+                Thread.checkMainThread();
             }
         };
         com.unity3d.ads.UnityAds.initialize(activity, gameId, testModeEnabled);
@@ -206,7 +207,7 @@ public class UnityAds implements IPlugin {
 
     @SuppressWarnings({"unused", "WeakerAccess"})
     public void setDebugModeEnabled(boolean enabled) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_initialized) {
             return;
         }
@@ -215,7 +216,7 @@ public class UnityAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public boolean hasRewardedAd(@NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_initialized) {
             return false;
         }
@@ -224,7 +225,7 @@ public class UnityAds implements IPlugin {
 
     @SuppressWarnings("WeakerAccess")
     public void showRewardedAd(@NonNull Activity activity, @NonNull String adId) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (!_initialized) {
             // FIXME: handle error.
             return;

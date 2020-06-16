@@ -9,6 +9,7 @@ import com.ee.ads.InterstitialAdHelper;
 import com.ee.ads.MessageHelper;
 import com.ee.core.IMessageBridge;
 import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -34,7 +35,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
                         @NonNull IMessageBridge bridge,
                         @NonNull String adId) {
         _logger.info("constructor: adId = %s", adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _adId = adId;
@@ -46,7 +47,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
 
     void destroy() {
         _logger.info("destroy: adId = " + _adId);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         destroyInternalAd();
         _context = null;
@@ -73,7 +74,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     }
 
     private boolean createInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad != null) {
             return false;
         }
@@ -84,7 +85,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     }
 
     private boolean destroyInternalAd() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         if (_ad == null) {
             return false;
         }
@@ -95,14 +96,14 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
 
     @Override
     public boolean isLoaded() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         return _ad.isLoaded();
     }
 
     @Override
     public void load() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _logger.info("load");
         assertThat(_ad).isNotNull();
         AdRequest.Builder builder = new AdRequest.Builder();
@@ -111,7 +112,7 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
 
     @Override
     public void show() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         assertThat(_ad).isNotNull();
         _ad.show();
     }
@@ -119,41 +120,41 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     @Override
     public void onAdClosed() {
         _logger.info("onAdClosed");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClosed());
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
         _logger.info("onAdFailedToLoad: code = " + errorCode);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onFailedToLoad(), String.valueOf(errorCode));
     }
 
     @Override
     public void onAdLeftApplication() {
         _logger.info("onAdLeftApplication");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onClicked());
     }
 
     @Override
     public void onAdOpened() {
         _logger.info("onAdOpened");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 
     @Override
     public void onAdLoaded() {
         _logger.info("onAdLoaded");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.callCpp(_messageHelper.onLoaded());
     }
 
     @Override
     public void onAdClicked() {
         _logger.info("onAdClicked");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
         // Use onAdLeftApplication instead.
     }
@@ -161,6 +162,6 @@ class AdMobInterstitialAd extends AdListener implements IInterstitialAd {
     @Override
     public void onAdImpression() {
         _logger.info("onAdImpression");
-        Utils.checkMainThread();
+        Thread.checkMainThread();
     }
 }

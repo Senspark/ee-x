@@ -7,8 +7,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
 public class FirebaseCrashlytics implements IPlugin {
@@ -19,7 +20,7 @@ public class FirebaseCrashlytics implements IPlugin {
     private IMessageBridge _bridge;
 
     public FirebaseCrashlytics(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge = bridge;
         registerHandlers();
     }
@@ -56,7 +57,7 @@ public class FirebaseCrashlytics implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
     }
@@ -67,7 +68,7 @@ public class FirebaseCrashlytics implements IPlugin {
     }
 
     private void registerHandlers() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.registerHandler(kLog, message -> {
             log(message);
             return "";
@@ -75,7 +76,7 @@ public class FirebaseCrashlytics implements IPlugin {
     }
 
     private void deregisterHandlers() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge.deregisterHandler(kLog);
     }
 

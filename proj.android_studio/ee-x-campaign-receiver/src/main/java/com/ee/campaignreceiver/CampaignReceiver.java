@@ -11,8 +11,9 @@ import com.android.installreferrer.api.InstallReferrerClient;
 import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
 public class CampaignReceiver /* extends BroadcastReceiver */ implements InstallReferrerStateListener, IPlugin {
@@ -28,7 +29,7 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
     public CampaignReceiver(@NonNull Context context, @NonNull IMessageBridge bridge) {
         _logger.debug("constructor begin: context = " + context);
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _context = context;
         _bridge = bridge;
         _initialized = false;
@@ -79,7 +80,7 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _context = null;
         _bridge = null;

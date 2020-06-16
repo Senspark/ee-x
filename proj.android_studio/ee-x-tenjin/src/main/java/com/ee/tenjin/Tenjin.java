@@ -7,9 +7,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
-import com.ee.core.internal.Utils;
+import com.ee.core.Logger;
+import com.ee.core.internal.Thread;
 import com.tenjin.android.TenjinSDK;
 
 public class Tenjin implements IPlugin {
@@ -27,7 +27,7 @@ public class Tenjin implements IPlugin {
     private boolean _isInitializeCalled;
 
     public Tenjin(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _bridge = bridge;
         registerHandlers();
     }
@@ -74,7 +74,7 @@ public class Tenjin implements IPlugin {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
         _bridge = null;
         _tenjin = null;

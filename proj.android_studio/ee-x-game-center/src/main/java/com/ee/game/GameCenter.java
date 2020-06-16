@@ -68,7 +68,7 @@ public class GameCenter implements PluginProtocol {
     private String  _lastLeaderboardId      = "";
 
     public GameCenter() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         _activity = null;
         registerHandlers();
     }
@@ -110,7 +110,7 @@ public class GameCenter implements PluginProtocol {
 
     @Override
     public void destroy() {
-        Utils.checkMainThread();
+        Thread.checkMainThread();
         deregisterHandlers();
     }
 

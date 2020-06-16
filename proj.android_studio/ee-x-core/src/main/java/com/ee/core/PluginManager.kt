@@ -162,7 +162,6 @@ class PluginManager private constructor() {
         val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
         _activityClassName = launchIntent!!.component!!.className
         assertThat(_activityClassName).isNotNull()
-        Utils.registerHandlers(_bridge, context)
         Platform.registerHandlers(_bridge, context)
     }
 
@@ -211,7 +210,6 @@ class PluginManager private constructor() {
     }
 
     fun destroy() {
-        Utils.deregisterHandlers(_bridge)
         Platform.deregisterHandlers(_bridge)
         for (entry in _plugins) {
             entry.value.destroy()

@@ -9,9 +9,9 @@ import Foundation
 import Reachability
 import RxSwift
 
-@objc(EEPlatformUtils)
-public class PlatformUtils: NSObject {
-    private static let kPrefix = "PlatformUtils_"
+@objc(EEPlatform)
+public class Platform: NSObject {
+    private static let kPrefix = "Platform_"
 
     private static let kIsApplicationInstalled = kPrefix + "isApplicationInstalled"
     private static let kOpenApplication = kPrefix + "openApplication"

@@ -13,7 +13,7 @@
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 
-#include <ee/core/PlatformUtils.hpp>
+#include <ee/core/Platform.hpp>
 
 namespace ee {
 namespace cocos {

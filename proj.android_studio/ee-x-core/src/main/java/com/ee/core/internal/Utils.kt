@@ -117,6 +117,6 @@ object Utils {
     /// https://stackoverflow.com/questions/4605527/converting-pixels-to-dp
     @JvmStatic
     fun convertDpToPixel(dp: Double): Double {
-        return dp * PlatformUtils.getDensity()
+        return dp * Platform.getDensity()
     }
 }

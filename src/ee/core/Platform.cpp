@@ -5,7 +5,7 @@
 //  Created by eps on 6/16/20.
 //
 
-#include "ee/core/PlatformUtils.hpp"
+#include "ee/core/Platform.hpp"
 
 #include <ee/nlohmann/json.hpp>
 
@@ -17,7 +17,7 @@ namespace ee {
 namespace core {
 namespace {
 // clang-format off
-const std::string kPrefix = "PlatformUtils_";
+const std::string kPrefix = "Platform_";
 
 const auto kIsApplicationInstalled   = kPrefix + "isApplicationInstalled";
 const auto kOpenApplication          = kPrefix + "openApplication";
@@ -40,7 +40,7 @@ const auto kShowInstallPrompt        = kPrefix + "showInstallPrompt";
 // clang-format on
 } // namespace
 
-using Self = PlatformUtils;
+using Self = Platform;
 
 IMessageBridge* Self::bridge_ = nullptr;
 

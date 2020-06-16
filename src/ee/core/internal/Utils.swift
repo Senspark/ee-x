@@ -88,12 +88,12 @@ public class Utils: NSObject {
 
     @objc
     public class func convertDpToPixels(_ dp: Float) -> Float {
-        return dp * PlatformUtils.getDensity()
+        return dp * Platform.getDensity()
     }
 
     @objc
     public class func convertPixelsToDp(_ pixels: Float) -> Float {
-        return pixels / PlatformUtils.getDensity()
+        return pixels / Platform.getDensity()
     }
 }
 

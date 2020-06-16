@@ -41,7 +41,7 @@ class SpinLock;
 
 struct SafeInset;
 
-class PlatformUtils;
+class Platform;
 
 class VideoPlayer;
 class VideoPlayerManager;
@@ -101,7 +101,7 @@ using core::DynamicValue;
 using core::ScopeGuard;
 using core::SpinLock;
 
-using core::PlatformUtils;
+using core::Platform;
 using core::SafeInset;
 
 using core::VideoPlayer;

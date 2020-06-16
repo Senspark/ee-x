@@ -6,7 +6,7 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.ee.core.internal.PlatformUtils
+import com.ee.core.internal.Platform
 import com.ee.core.internal.Utils
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -163,7 +163,7 @@ class PluginManager private constructor() {
         _activityClassName = launchIntent!!.component!!.className
         assertThat(_activityClassName).isNotNull()
         Utils.registerHandlers(_bridge, context)
-        PlatformUtils.registerHandlers(_bridge, context)
+        Platform.registerHandlers(_bridge, context)
     }
 
     fun addPlugin(name: String) {
@@ -212,7 +212,7 @@ class PluginManager private constructor() {
 
     fun destroy() {
         Utils.deregisterHandlers(_bridge)
-        PlatformUtils.deregisterHandlers(_bridge)
+        Platform.deregisterHandlers(_bridge)
         for (entry in _plugins) {
             entry.value.destroy()
         }

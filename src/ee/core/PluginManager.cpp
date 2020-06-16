@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/core/PlatformUtils.hpp"
+#include "ee/core/Platform.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
@@ -45,7 +45,7 @@ bool ee_staticRemovePlugin(const std::string& name);
 template <>
 bool Self::initializePlugins<Library::Core>() {
     auto&& bridge = MessageBridge::getInstance();
-    PlatformUtils::registerHandlers(bridge);
+    Platform::registerHandlers(bridge);
     return ee_staticInitializePlugins();
 }
 

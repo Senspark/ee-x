@@ -28,9 +28,9 @@ import java.net.UnknownHostException
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 
-object PlatformUtils {
-    private val _logger = Logger(PlatformUtils::class.java.name)
-    private const val kPrefix = "PlatformUtils_"
+object Platform {
+    private val _logger = Logger(Platform::class.java.name)
+    private const val kPrefix = "Platform_"
     private const val kIsApplicationInstalled = kPrefix + "isApplicationInstalled"
     private const val kOpenApplication = kPrefix + "openApplication"
     private const val kGetApplicationId = kPrefix + "getApplicationId"

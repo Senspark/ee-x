@@ -5,8 +5,8 @@
 //  Created by eps on 6/16/20.
 //
 
-#ifndef EE_X_PLATFORM_UTILS_HPP
-#define EE_X_PLATFORM_UTILS_HPP
+#ifndef EE_X_PLATFORM_HPP
+#define EE_X_PLATFORM_HPP
 
 #ifdef __cplusplus
 
@@ -90,20 +90,20 @@ private:
 };
 } // namespace core
 
-constexpr auto getApplicationId = &PlatformUtils::getApplicationId;
-constexpr auto getApplicationName = &PlatformUtils::getApplicationName;
-constexpr auto getDensity = &PlatformUtils::getDensity;
-constexpr auto getDeviceId = &PlatformUtils::getDeviceId;
-constexpr auto getSafeInset = &PlatformUtils::getSafeInset;
+constexpr auto getApplicationId = &Platform::getApplicationId;
+constexpr auto getApplicationName = &Platform::getApplicationName;
+constexpr auto getDensity = &Platform::getDensity;
+constexpr auto getDeviceId = &Platform::getDeviceId;
+constexpr auto getSafeInset = &Platform::getSafeInset;
 constexpr auto getSHA1CertificateFingerprint =
-    &PlatformUtils::getSHA1CertificateFingerprint;
-constexpr auto getVersionCode = &PlatformUtils::getVersionCode;
-constexpr auto getVersionName = &PlatformUtils::getVersionName;
-constexpr auto isApplicationInstalled = &PlatformUtils::isApplicationInstalled;
-constexpr auto isTablet = &PlatformUtils::isTablet;
-constexpr auto openApplication = &PlatformUtils::openApplication;
-constexpr auto sendMail = &PlatformUtils::sendMail;
-constexpr auto testConnection = &PlatformUtils::testConnection;
+    &Platform::getSHA1CertificateFingerprint;
+constexpr auto getVersionCode = &Platform::getVersionCode;
+constexpr auto getVersionName = &Platform::getVersionName;
+constexpr auto isApplicationInstalled = &Platform::isApplicationInstalled;
+constexpr auto isTablet = &Platform::isTablet;
+constexpr auto openApplication = &Platform::openApplication;
+constexpr auto sendMail = &Platform::sendMail;
+constexpr auto testConnection = &Platform::testConnection;
 } // namespace ee
 
 #endif // __cplusplus

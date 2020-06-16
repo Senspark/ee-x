@@ -10,7 +10,7 @@
 
 #include <ee/nlohmann/json.hpp>
 
-#include <ee/core/PlatformUtils.hpp>
+#include <ee/core/Platform.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 

@@ -101,6 +101,11 @@ public class PluginManager: NSObject {
         } else {
             class_addMethod(originalClass, originalSelector,
                             method_getImplementation(replacedMethod), method_getTypeEncoding(replacedMethod))
+            
+            // https://stackoverflow.com/questions/28211973/swift-closure-as-anyobject/32454665
+            let block: (AnyObject) -> Bool = { _ in false }
+            let impl = imp_implementationWithBlock(unsafeBitCast(block as @convention(block) (AnyObject) -> Bool, to: AnyObject.self))
+            method_setImplementation(replacedMethod, impl)
         }
     }
     

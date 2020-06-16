@@ -41,6 +41,8 @@ NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
     }
     bridge_ = [EEMessageBridge getInstance];
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    [FBSDKSettings setAutoLogAppEventsEnabled:YES];
+    [FBSDKSettings setAdvertiserIDCollectionEnabled:YES];
     [self registerHandlers];
     return self;
 }

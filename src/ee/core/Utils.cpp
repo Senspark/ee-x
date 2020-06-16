@@ -56,14 +56,6 @@ bool toBool(const std::string& value) {
     return value == "true";
 }
 
-namespace detail {
-std::mt19937& getRandomEngine() {
-    static std::random_device rd;
-    static std::mt19937 engine(rd());
-    return engine;
-}
-} // namespace detail
-
 std::string format(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);

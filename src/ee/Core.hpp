@@ -24,6 +24,7 @@
 #include "ee/core/ObserverHandle.hpp"
 #include "ee/core/ObserverManager.hpp"
 #include "ee/core/PluginManager.hpp"
+#include "ee/core/RandomUtils.hpp"
 #include "ee/core/SafeObserverManager.hpp"
 #include "ee/core/ScopeGuard.hpp"
 #include "ee/core/ServiceLocator.hpp"

@@ -14,14 +14,12 @@
 #include <cstdarg>
 #include <functional>
 #include <future>
-#include <random>
 #include <string>
 
 #include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
-
 // lower string
 [[deprecated]] std::string str_tolower(std::string s);
 
@@ -37,22 +35,6 @@ bool toBool(const std::string& value);
 /// http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 std::string format(std::string formatString, ...);
 std::string format(std::string formatString, std::va_list args);
-
-namespace detail {
-std::mt19937& getRandomEngine();
-} // namespace detail
-
-/// Randomizes using C++11 engine.
-template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
-T random(T min, T max) {
-    if constexpr (std::is_floating_point_v<T>) {
-        std::uniform_real_distribution<T> dist(min, max);
-        return dist(detail::getRandomEngine());
-    } else {
-        std::uniform_int_distribution<T> dist(min, max);
-        return dist(detail::getRandomEngine());
-    }
-}
 
 /// bit_cast.
 ///
@@ -184,7 +166,6 @@ using core::isMainThread;
 using core::isTablet;
 using core::log;
 using core::openApplication;
-using core::random;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;

@@ -16,24 +16,28 @@
 
 namespace ee {
 namespace core {
-namespace detail {
-std::mt19937& getRandomEngine();
-} // namespace detail
+class RandomUtils {
+public:
+    static std::mt19937& getRandomEngine();
 
-/// Randomizes using C++11 engine.
-template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
-T random(T min, T max) {
-    if constexpr (std::is_floating_point_v<T>) {
-        std::uniform_real_distribution<T> dist(min, max);
-        return dist(detail::getRandomEngine());
-    } else {
-        std::uniform_int_distribution<T> dist(min, max);
-        return dist(detail::getRandomEngine());
+    /// Randomizes using C++11 engine.
+    template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
+    static T random(T min, T max) {
+        if constexpr (std::is_floating_point_v<T>) {
+            std::uniform_real_distribution<T> dist(min, max);
+            return dist(getRandomEngine());
+        } else {
+            std::uniform_int_distribution<T> dist(min, max);
+            return dist(getRandomEngine());
+        }
     }
-}
+};
 } // namespace core
 
-using core::random;
+// Brings to ee::
+constexpr auto random = [](auto&& min, auto&& max) {
+    return core::RandomUtils::random(min, max);
+};
 } // namespace ee
 
 #endif // __cplusplus

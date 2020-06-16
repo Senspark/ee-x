@@ -9,12 +9,12 @@
 
 namespace ee {
 namespace core {
-namespace detail {
-std::mt19937& getRandomEngine() {
+using Self = RandomUtils;
+
+std::mt19937& Self::getRandomEngine() {
     static std::random_device rd;
     static std::mt19937 engine(rd());
     return engine;
 }
-} // namespace detail
 } // namespace core
 } // namespace ee

@@ -86,93 +86,15 @@ template <class T>
     });
     return promise.get_future().get();
 }
-
-/// Checks whether an application with the specified package name (Android) or
-/// scheme (iOS) is installed.
-bool isApplicationInstalled(const std::string& applicationId);
-
-/// Opens an application with the specified package name (Android) or scheme
-/// (iOS).
-bool openApplication(const std::string& applicationId);
-
-/// Gets the application ID (Android) or bundle identifier (iOS).
-std::string getApplicationId();
-
-/// Gets the name of the application.
-std::string getApplicationName();
-
-/// Gets the version name of the application.
-std::string getVersionName();
-
-/// Gets the version code of the application.
-std::string getVersionCode();
-
-/// Android only.
-/// iOS returns an empty string.
-std::string getSHA1CertificateFingerprint();
-
-/// Checks whether the current application is an Google Instant application
-/// (Android only).
-bool isInstantApp();
-
-/// Checks whether the current device is a table.
-bool isTablet();
-
-/// Gets the screen density, i.e. pixel to dp ratio.
-float getDensity();
-
-/// Gets device's unique ID.
-Task<std::string> getDeviceId();
-
-/// https://developer.android.com/reference/android/view/DisplayCutout
-struct SafeInset {
-    /// The inset from the left which avoids the display cutout in pixels.
-    int left;
-
-    /// The inset from the right which avoids the display cutout in pixels.
-    int right;
-
-    /// The inset from the top which avoids the display cutout in pixels.
-    int top;
-
-    /// The inset from the bottom which avoids the display cutout in pixels.
-    int bottom;
-};
-
-SafeInset getSafeInset();
-
-bool sendMail(const std::string& recipient, const std::string& subject,
-              const std::string& body);
-
-/// Tests whether the specified host name can be resolved.
-Task<bool> testConnection(const std::string& hostName, float timeOut);
-
-/// Show Google Instant application installation prompt (Android only).
-void showInstallPrompt(const std::string& url, const std::string& referrer);
 } // namespace core
 
 using core::bitCast;
 using core::format;
-using core::getApplicationId;
-using core::getApplicationName;
-using core::getDensity;
-using core::getDeviceId;
-using core::getSafeInset;
-using core::getSHA1CertificateFingerprint;
-using core::getVersionCode;
-using core::getVersionName;
-using core::isApplicationInstalled;
 using core::isMainThread;
-using core::isTablet;
 using core::log;
-using core::openApplication;
 using core::runOnUiThread;
 using core::runOnUiThreadAndWait;
 using core::runOnUiThreadAndWaitResult;
-using core::sendMail;
-using core::testConnection;
-
-using core::SafeInset;
 } // namespace ee
 
 #endif // __cplusplus

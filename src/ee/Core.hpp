@@ -23,6 +23,7 @@
 #include "ee/core/ObserverBinder.hpp"
 #include "ee/core/ObserverHandle.hpp"
 #include "ee/core/ObserverManager.hpp"
+#include "ee/core/PlatformUtils.hpp"
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/RandomUtils.hpp"
 #include "ee/core/SafeObserverManager.hpp"

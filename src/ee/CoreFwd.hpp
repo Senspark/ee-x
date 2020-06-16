@@ -39,6 +39,10 @@ class ServiceLocator;
 class ScopeGuard;
 class SpinLock;
 
+struct SafeInset;
+
+class PlatformUtils;
+
 class VideoPlayer;
 class VideoPlayerManager;
 
@@ -96,6 +100,9 @@ using core::ServiceLocator;
 using core::DynamicValue;
 using core::ScopeGuard;
 using core::SpinLock;
+
+using core::PlatformUtils;
+using core::SafeInset;
 
 using core::VideoPlayer;
 using core::VideoPlayerManager;

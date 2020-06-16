@@ -10,8 +10,8 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include <ee/core/PlatformUtils.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/notification/NotificationBuilder.hpp"
@@ -32,7 +32,7 @@ void Self::destroy() {
 void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
     json["title"] =
-        builder.title_.empty() ? core::getApplicationName() : builder.title_;
+        builder.title_.empty() ? getApplicationName() : builder.title_;
     json["body"] = builder.body_;
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;

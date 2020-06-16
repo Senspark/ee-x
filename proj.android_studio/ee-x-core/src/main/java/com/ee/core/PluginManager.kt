@@ -6,8 +6,8 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.ee.core.internal.Utils.deregisterHandlers
-import com.ee.core.internal.Utils.registerHandlers
+import com.ee.core.internal.PlatformUtils
+import com.ee.core.internal.Utils
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -162,7 +162,8 @@ class PluginManager private constructor() {
         val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
         _activityClassName = launchIntent!!.component!!.className
         assertThat(_activityClassName).isNotNull()
-        registerHandlers(_bridge, context)
+        Utils.registerHandlers(_bridge, context)
+        PlatformUtils.registerHandlers(_bridge, context)
     }
 
     fun addPlugin(name: String) {
@@ -210,7 +211,8 @@ class PluginManager private constructor() {
     }
 
     fun destroy() {
-        deregisterHandlers(_bridge)
+        Utils.deregisterHandlers(_bridge)
+        PlatformUtils.deregisterHandlers(_bridge)
         for (entry in _plugins) {
             entry.value.destroy()
         }

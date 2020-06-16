@@ -5,11 +5,11 @@
 //  Created by eps on 6/16/20.
 //
 
-#include "ee/core/RandomUtils.hpp"
+#include "ee/core/Random.hpp"
 
 namespace ee {
 namespace core {
-using Self = RandomUtils;
+using Self = Random;
 
 std::mt19937& Self::getRandomEngine() {
     static std::random_device rd;

@@ -16,13 +16,13 @@
 
 namespace ee {
 namespace core {
-class RandomUtils {
+class Random {
 public:
     static std::mt19937& getRandomEngine();
 
     /// Randomizes using C++11 engine.
     template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
-    static T random(T min, T max) {
+    static T range(T min, T max) {
         if constexpr (std::is_floating_point_v<T>) {
             std::uniform_real_distribution<T> dist(min, max);
             return dist(getRandomEngine());
@@ -36,7 +36,7 @@ public:
 
 // Brings to ee::
 constexpr auto random = [](auto&& min, auto&& max) {
-    return core::RandomUtils::random(min, max);
+    return core::Random::range(min, max);
 };
 } // namespace ee
 

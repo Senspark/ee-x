@@ -11,6 +11,7 @@
 #include <jni/JniHelper.h>
 
 #include <ee/core/internal/JniUtils.hpp>
+#endif // defined(EE_X_ANDROID)
 
 namespace ee {
 namespace core {
@@ -18,10 +19,11 @@ using Self = PluginManager;
 
 template <>
 bool Self::initializePlugins<Library::Cocos>() {
+#if defined(EE_X_ANDROID)
     auto vm = cocos2d::JniHelper::getJavaVM();
     JniUtils::setVm(vm);
-    initializePlugins<Library::Core>();
+#endif // defined(EE_X_ANDROID)
+    return initializePlugins<Library::Core>();
 }
 } // namespace core
 } // namespace ee
-#endif // defined(EE_X_ANDROID)

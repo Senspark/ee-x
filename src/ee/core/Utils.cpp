@@ -9,27 +9,17 @@
 #include "ee/core/Utils.hpp"
 
 #include <cassert>
-#include <cstdarg>
-#include <cstdlib>
 #include <dlfcn.h>
 #include <iomanip>
 #include <iostream>
-#include <mutex>
-#include <queue>
-#include <random>
 #include <sstream>
-#include <thread>
 #include <unwind.h>
 
 #ifdef EE_X_ANDROID
 #include <android/log.h>
 #endif // EE_X_ANDROID
 
-#include <ee/nlohmann/json.hpp>
-
-#include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/LogLevel.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
 namespace core {
@@ -127,26 +117,6 @@ std::string dumpBacktrace(size_t count) {
 
     dumpBacktrace(oss, buffer, captureBacktrace(buffer, count));
     return oss.str();
-}
-
-#if defined(EE_X_IOS) || defined(EE_X_OSX)
-extern "C" {
-void ee_runOnMainThread();
-} // extern "C"
-
-#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
-
-void registerHandler() {
-    //    static std::once_flag flag;
-    //    std::call_once(flag, [] {
-    //        auto&& bridge = MessageBridge::getInstance();
-    //        bridge.registerHandler(
-    //            [](const std::string& message) {
-    //                runOnUiThreadCallback();
-    //                return "";
-    //            },
-    //            kRunOnUiThreadCallback);
-    //    });
 }
 
 #ifdef EE_X_ANDROID

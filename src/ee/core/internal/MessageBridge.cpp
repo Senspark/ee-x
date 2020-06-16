@@ -104,40 +104,40 @@ Task<std::string> Self::callAsync(const std::string& tag,
 
 #ifdef EE_X_ANDROID
 extern "C" {
-JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridge_callCppInternal(
-    JNIEnv* env, jobject instance, jstring tag_, jstring msg_) {
-    const char* tag = env->GetStringUTFChars(tag_, nullptr);
-    const char* msg = env->GetStringUTFChars(msg_, nullptr);
+JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridgeKt_ee_1callCppInternal(
+    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
+    auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
+    auto message_cpp = env->GetStringUTFChars(message, nullptr);
 
-    auto result = MessageBridge::getInstance().callCpp(tag, msg);
+    auto result = MessageBridge::getInstance().callCpp(tag_cpp, message_cpp);
 
-    env->ReleaseStringUTFChars(tag_, tag);
-    env->ReleaseStringUTFChars(msg_, msg);
+    env->ReleaseStringUTFChars(tag, tag_cpp);
+    env->ReleaseStringUTFChars(message, message_cpp);
 
     return env->NewStringUTF(result.c_str());
 }
 } // extern "C"
 
 std::string Self::call(const std::string& tag, const std::string& message) {
-    auto methodInfo = JniUtils::getStaticMethodInfo(
-        "com/ee/core/MessageBridge", "staticCall",
+    auto method = JniUtils::getStaticMethodInfo(
+        "com/ee/core/MessageBridgeKt", "ee_staticCall",
         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
-    if (methodInfo == nullptr) {
+    if (method == nullptr) {
         throw std::runtime_error("Method not found!");
     }
 
     auto tag_java = JniUtils::toJavaString(tag);
-    auto msg_java = JniUtils::toJavaString(message);
+    auto message_java = JniUtils::toJavaString(message);
 
-    jobject response = methodInfo->getEnv()->CallStaticObjectMethod(
-        methodInfo->getClass(), methodInfo->getMethodId(), tag_java->get(),
-        msg_java->get());
+    jobject response = method->getEnv()->CallStaticObjectMethod(
+        method->getClass(), method->getMethodId(), tag_java->get(),
+        message_java->get());
 
     jstring response_java = static_cast<jstring>(response);
     auto result = JniUtils::toString(response_java);
 
-    methodInfo->getEnv()->DeleteLocalRef(response);
+    method->getEnv()->DeleteLocalRef(response);
 
     return result;
 }

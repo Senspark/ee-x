@@ -28,15 +28,7 @@ class MessageBridge private constructor() : IMessageBridge {
             return _sharedInstance;
         }
 
-        /**
-         * Statically calls a handler from Java with a message.
-         *
-         * @param tag     The unique tag of the handler.
-         * @param message The message.
-         * @return Reply message from Java.
-         */
-        @JvmStatic
-        private fun staticCall(tag: String, message: String): String {
+        fun staticCall(tag: String, message: String): String {
             return _sharedInstance.call(tag, message)
         }
     }
@@ -106,18 +98,10 @@ class MessageBridge private constructor() : IMessageBridge {
         return callCpp(tag, "")
     }
 
-    override fun callCpp(tag: String, message: String): String {
-        return callCppInternal(tag, message)
-    }
 
-    /**
-     * Calls a handler from C++ with a message.
-     *
-     * @param tag     The unique tag of the handler.
-     * @param message The message.
-     * @return Reply message from C++.
-     */
-    private external fun callCppInternal(tag: String, message: String): String
+    override fun callCpp(tag: String, message: String): String {
+        return ee_callCppInternal(tag, message)
+    }
 
     /**
      * Calls a handler from Java with a message.
@@ -134,4 +118,10 @@ class MessageBridge private constructor() : IMessageBridge {
         }
         return handler.handle(message)
     }
+}
+
+private external fun ee_callCppInternal(tag: String, message: String): String
+
+private fun ee_staticCall(tag: String, message: String): String {
+    return MessageBridge.staticCall(tag, message)
 }

@@ -16,6 +16,11 @@
 
 namespace ee {
 namespace core {
+enum class Library {
+    Core,
+    Cocos,
+};
+
 enum class Plugin {
     AdMob,
     AppLovin,
@@ -39,16 +44,19 @@ enum class Plugin {
 
 class PluginManager {
 public:
-    /// Initializes core plugins.
+    /// Initializes plugins.
     /// Must be called first.
+    template <Library library = Library::Core>
     static bool initializePlugins();
 
     template <class T>
     static std::unique_ptr<T> createPlugin();
 
+    /// Adds a cross-platform plugin.
     /// @note Internal uses.
     static bool addPlugin(Plugin plugin);
 
+    /// Remove a cross-platform plugin.
     /// @note Internal uses.
     static bool removePlugin(Plugin plugin);
 };

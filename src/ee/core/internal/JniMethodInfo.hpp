@@ -6,12 +6,14 @@
 //
 //
 
-#ifndef EE_CORE_JNI_METHOD_INFO_HPP_
-#define EE_CORE_JNI_METHOD_INFO_HPP_
+#ifndef EE_X_JNI_METHOD_INFO_HPP
+#define EE_X_JNI_METHOD_INFO_HPP
 
 #include <memory>
 
 #include <jni.h>
+
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
@@ -47,4 +49,4 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif /* EE_CORE_JNI_METHOD_INFO_HPP_ */
+#endif /* EE_X_JNI_METHOD_INFO_HPP */

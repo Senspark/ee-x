@@ -299,7 +299,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'cocos' do |s|
     s.source_files =
       'src/ee/Cocos*',
-      'src/ee/cocos/*'
+      'src/ee/cocos/**/*'
 
     s.exclude_files =
       'src/ee/cocos/Android.mk',

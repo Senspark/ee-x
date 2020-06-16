@@ -16,8 +16,8 @@ std::unique_ptr<JniString> JniString::create(JNIEnv* env,
 }
 
 JniString::JniString(JNIEnv* env, const std::u16string& str)
-    : env_{env}
-    , javaString_{nullptr} {
+    : env_(env)
+    , javaString_(nullptr) {
     javaString_ = env_->NewString(reinterpret_cast<const jchar*>(str.c_str()),
                                   str.size());
 }

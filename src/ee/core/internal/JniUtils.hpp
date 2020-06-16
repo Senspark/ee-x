@@ -6,30 +6,22 @@
 //
 //
 
-#ifndef EE_CORE_JNI_UTILS_HPP_
-#define EE_CORE_JNI_UTILS_HPP_
+#ifndef EE_X_JNI_UTILS_HPP
+#define EE_X_JNI_UTILS_HPP
 
 #include <string>
 #include <thread>
 
 #include <jni.h>
 
+#include "ee/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
-class JniMethodInfo;
-class JniString;
-
 class JniUtils final {
 public:
-    /// Assigns the JavaVM pointer to retrieve JNIEnv pointer later.
-    ///
-    /// Calls this in main.cpp.
+    /// Sets the JavaVM pointer.
     static void setVm(JavaVM* vm);
-
-    /// Marks the Cocos thread.
-    ///
-    /// Calls this in AppDelegate.cpp.
-    static void markCocosThread() noexcept;
 
     /// Retrieves the thread specified JNIEnv pointer corresponding to the
     /// current thread.
@@ -52,22 +44,11 @@ public:
                         const char* signature);
 
 private:
-    /// Caches the JNIEnv pointer for the current thread.
-    static JNIEnv* cacheEnv();
+    static JavaVM* getVm();
 
-    /// Destructor for pthread.
-    static void detachCurrentThread(void*);
-
-    /// Marked Cocos thread.
-    static bool isCocosThreadMarked_;
-    static std::thread::id cocosThreadId_;
-
-    /// Assigned JavaVM pointer.
     static JavaVM* vm_;
 };
 } // namespace core
-
-using core::JniUtils;
 } // namespace ee
 
-#endif /* EE_CORE_JNI_UTILS_HPP_ */
+#endif /* EE_X_JNI_UTILS_HPP */

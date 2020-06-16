@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_CORE_HEADER_HPP_
-#define EE_X_CORE_HEADER_HPP_
+#ifndef EE_X_CORE_HPP
+#define EE_X_CORE_HPP
 
 #ifdef __cplusplus
 #include "ee/CoreFwd.hpp"
@@ -36,10 +36,4 @@
 #include "ee/core/WhenAll.hpp"
 #endif // __cplusplus
 
-#if defined(EE_X_ANDROID)
-#ifdef __cplusplus
-#include "ee/core/JniUtils.hpp"
-#endif // __cplusplus
-#endif // EE_X_ANDROID
-
-#endif /* EE_X_CORE_HEADER_HPP_ */
+#endif /* EE_X_CORE_HPP */

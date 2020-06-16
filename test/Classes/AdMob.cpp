@@ -120,12 +120,12 @@ void testAdMobBannerAd() {
         ad->setPosition((screenWidth - width) / 2, (screenHeight - height) / 2);
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+    scheduleForever(delay += 2.0f, 8.0f, [ad] {
         getLogger().info("Move to top-left");
         ad->setPosition(0, 0);
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, ad] {
         getLogger().info("Move to top-right");
         auto [width, height] = ad->getSize();
         ad->setPosition(screenWidth - width, 0);
@@ -137,7 +137,7 @@ void testAdMobBannerAd() {
         ad->setPosition(screenWidth - width, screenHeight - height);
     });
 
-    scheduleForever(delay += 2.0f, 8.0f, [screenWidth, screenHeight, ad] {
+    scheduleForever(delay += 2.0f, 8.0f, [screenHeight, ad] {
         getLogger().info("Move to bottom-left");
         auto [width, height] = ad->getSize();
         ad->setPosition(0, screenHeight - height);

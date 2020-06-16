@@ -8,14 +8,10 @@
 
 #include "ee/firebase/core/FirebaseCore.hpp"
 
-#include <mutex>
-
-#include <jni.h>
-
 #include <firebase/app.h>
 
-#include "ee/core/JniUtils.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
+#include "ee/core/internal/JniUtils.hpp"
 
 namespace ee {
 namespace firebase {

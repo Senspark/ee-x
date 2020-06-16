@@ -22,6 +22,7 @@ class async_mutex_scoped_lock_operation;
 
 namespace ee {
 namespace core {
+enum class Library;
 enum class Plugin;
 class IPlugin;
 class PluginManager;
@@ -72,22 +73,30 @@ using AsyncMutexScopedLockOperation =
 struct SwitchToUiThread;
 
 #if defined(EE_X_ANDROID)
+class JniMethodInfo;
+class JniString;
 class JniUtils;
 #endif // EE_X_ANDROID
 } // namespace core
 
-using core::DynamicValue;
-using core::IMessageBridge;
 using core::IPlugin;
-using core::IService;
-using core::Logger;
-using core::LogLevel;
-using core::MessageBridge;
+using core::Library;
 using core::Plugin;
 using core::PluginManager;
-using core::ScopeGuard;
+
+using core::Logger;
+using core::LogLevel;
+
+using core::IMessageBridge;
+using core::MessageBridge;
+
+using core::IService;
 using core::ServiceLocator;
+
+using core::DynamicValue;
+using core::ScopeGuard;
 using core::SpinLock;
+
 using core::VideoPlayer;
 using core::VideoPlayerManager;
 
@@ -106,6 +115,8 @@ using core::SwitchToUiThread;
 using core::Task;
 
 #if defined(EE_X_ANDROID)
+using core::JniMethodInfo;
+using core::JniString;
 using core::JniUtils;
 #endif // EE_X_ANDROID
 } // namespace ee

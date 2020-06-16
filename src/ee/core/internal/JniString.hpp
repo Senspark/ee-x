@@ -6,13 +6,15 @@
 //
 //
 
-#ifndef EE_CORE_JNI_STRING_HPP_
-#define EE_CORE_JNI_STRING_HPP_
+#ifndef EE_X_JNI_STRING_HPP
+#define EE_X_JNI_STRING_HPP
 
 #include <memory>
 #include <string>
 
 #include <jni.h>
+
+#include "ee/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
@@ -38,4 +40,4 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif /* EE_CORE_JNI_STRING_HPP_ */
+#endif /* EE_X_JNI_STRING_HPP */

@@ -17,10 +17,9 @@ std::unique_ptr<JniMethodInfo> JniMethodInfo::create(JNIEnv* env, jclass clazz,
 }
 
 JniMethodInfo::JniMethodInfo(JNIEnv* env, jclass clazz, jmethodID methodId)
-    : env_{env}
-    , clazz_{clazz}
-    , methodId_{methodId} {
-}
+    : env_(env)
+    , clazz_(clazz)
+    , methodId_(methodId) {}
 
 JniMethodInfo::~JniMethodInfo() {
     if (env_ != nullptr && clazz_ != nullptr) {

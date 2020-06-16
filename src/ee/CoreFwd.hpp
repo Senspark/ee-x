@@ -72,6 +72,8 @@ using AsyncMutexScopedLockOperation =
 struct SwitchToUiThread;
 
 #if defined(EE_X_ANDROID)
+class JniMethodInfo;
+class JniString;
 class JniUtils;
 #endif // EE_X_ANDROID
 } // namespace core
@@ -106,6 +108,8 @@ using core::SwitchToUiThread;
 using core::Task;
 
 #if defined(EE_X_ANDROID)
+using core::JniMethodInfo;
+using core::JniString;
 using core::JniUtils;
 #endif // EE_X_ANDROID
 } // namespace ee

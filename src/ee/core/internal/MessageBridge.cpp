@@ -18,9 +18,9 @@
 #include "ee/core/SpinLock.hpp"
 
 #ifdef EE_X_ANDROID
-#include "ee/core/JniUtils.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
+#include "ee/core/internal/JniUtils.hpp"
 #endif // EE_X_ANDROID
 
 namespace ee {

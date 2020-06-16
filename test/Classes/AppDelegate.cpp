@@ -122,10 +122,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // CrashlyticsAgent::getInstance()->logInfo("info_message");
 
     getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
-    ee::runOnUiThreadAndWait([] {
-        getLogger().info("UI thread ID: %s", getCurrentThreadId().c_str());
-    });
-
     getLogger().info("SHA1: %s", ee::getSHA1CertificateFingerprint().c_str());
     getLogger().info("Version name: %s", ee::getVersionName().c_str());
     getLogger().info("Version code: %s", ee::getVersionCode().c_str());

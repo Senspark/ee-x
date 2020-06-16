@@ -5,8 +5,8 @@
 //  Created by eps on 6/16/20.
 //
 
-#ifndef EE_X_THREAD_UTILS_HPP
-#define EE_X_THREAD_UTILS_HPP
+#ifndef EE_X_THREAD_HPP
+#define EE_X_THREAD_HPP
 
 #ifdef __cplusplus
 
@@ -72,4 +72,4 @@ extern void ee_runOnMainThreadDelayedCallback(int key);
 #endif // __cplusplus
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
-#endif /* EE_X_THREAD_UTILS_HPP */
+#endif /* EE_X_THREAD_HPP */

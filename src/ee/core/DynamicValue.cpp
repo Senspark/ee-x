@@ -8,7 +8,7 @@
 
 #include "ee/core/DynamicValue.hpp"
 
-#include "ee/core/RandomUtils.hpp"
+#include "ee/core/Random.hpp"
 #include "ee/core/Utils.hpp"
 
 namespace ee {

@@ -5,8 +5,8 @@
 //  Created by eps on 6/16/20.
 //
 
-#ifndef EE_X_RANDOM_UTILS_HPP
-#define EE_X_RANDOM_UTILS_HPP
+#ifndef EE_X_RANDOM_HPP
+#define EE_X_RANDOM_HPP
 
 #ifdef __cplusplus
 
@@ -42,4 +42,4 @@ constexpr auto random = [](auto&& min, auto&& max) {
 
 #endif // __cplusplus
 
-#endif /* EE_X_RANDOM_UTILS_HPP */
+#endif /* EE_X_RANDOM_HPP */

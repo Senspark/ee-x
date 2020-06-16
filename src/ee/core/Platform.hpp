@@ -31,7 +31,7 @@ struct SafeInset {
     int bottom;
 };
 
-class PlatformUtils {
+class Platform {
 public:
     static void registerHandlers(IMessageBridge& bridge);
 

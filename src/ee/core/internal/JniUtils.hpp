@@ -20,6 +20,9 @@ namespace ee {
 namespace core {
 class JniUtils final {
 public:
+    /// Sets the JavaVM pointer.
+    static void setVm(JavaVM* vm);
+
     /// Retrieves the thread specified JNIEnv pointer corresponding to the
     /// current thread.
     static JNIEnv* getEnv();
@@ -42,6 +45,8 @@ public:
 
 private:
     static JavaVM* getVm();
+
+    static JavaVM* vm_;
 };
 } // namespace core
 } // namespace ee

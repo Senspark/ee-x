@@ -21,21 +21,14 @@ namespace ee {
 namespace core {
 using Self = JniUtils;
 
-namespace {
-JavaVM* getVmInternal() {
-    // https://stackoverflow.com/questions/35583247/fetch-java-vm-reference-create-java-object-from-c-and-concurrency
-    JavaVM* vm;
-    jsize vmCount;
-    if (JNI_GetCreatedJavaVMs(&vm, 1, &vmCount) != JNI_OK || vmCount == 0) {
-        return nullptr;
-    }
-    return vm;
+JavaVM* Self::vm_ = nullptr;
+
+void Self::setVm(JavaVM* vm) {
+    vm_ = vm;
 }
-} // namespace
 
 JavaVM* Self::getVm() {
-    static auto vm = getVmInternal();
-    return vm;
+    return vm_;
 }
 
 namespace {

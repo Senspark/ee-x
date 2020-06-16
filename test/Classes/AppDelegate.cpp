@@ -107,7 +107,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto&& winSize = director->getWinSize();
     getLogger().info("winSize = %f %f", winSize.width, winSize.height);
 
-    ee::PluginManager::initializePlugins();
+    ee::PluginManager::initializePlugins<ee::Library::Cocos>();
 
     constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);

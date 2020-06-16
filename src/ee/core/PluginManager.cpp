@@ -15,7 +15,8 @@ namespace core {
 using Self = PluginManager;
 
 #if defined(EE_X_ANDROID)
-bool Self::initializePlugins() {
+template <>
+bool Self::initializePlugins<Library::Core>() {
     // FIXME.
     return false;
 }
@@ -38,7 +39,8 @@ bool ee_staticAddPlugin(const std::string& name);
 bool ee_staticRemovePlugin(const std::string& name);
 } // extern "C"
 
-bool Self::initializePlugins() {
+template <>
+bool Self::initializePlugins<Library::Core>() {
     return ee_staticInitializePlugins();
 }
 

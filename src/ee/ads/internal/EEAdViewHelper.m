@@ -15,15 +15,11 @@
 #import "ee/ads/internal/EEIAdView.h"
 #import "ee/ads/internal/EEMessageHelper.h"
 
-@interface EEAdViewHelper () {
+@implementation EEAdViewHelper {
     id<EEIMessageBridge> bridge_;
     id<EEIAdView> view_;
     EEMessageHelper* helper_;
 }
-
-@end
-
-@implementation EEAdViewHelper
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge> _Nonnull)bridge
                          view:(id<EEIAdView> _Nonnull)view

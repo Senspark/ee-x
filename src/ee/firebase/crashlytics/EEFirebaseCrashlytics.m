@@ -4,13 +4,9 @@
 
 #import <FirebaseCrashlytics/FIRCrashlytics.h>
 
-@interface EEFirebaseCrashlytics () {
+@implementation EEFirebaseCrashlytics {
     id<EEIMessageBridge> bridge_;
 }
-
-@end
-
-@implementation EEFirebaseCrashlytics
 
 static NSString* const kLog = @"FirebaseCrashlytics_log";
 

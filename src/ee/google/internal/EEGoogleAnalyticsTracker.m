@@ -14,14 +14,10 @@
 
 #import "ee/google/internal/EEGoogleAnalyticsTracker.h"
 
-@interface EEGoogleAnalyticsTracker () {
+@implementation EEGoogleAnalyticsTracker {
     NSString* trackingId_;
     id<GAITracker> tracker_;
 }
-
-@end
-
-@implementation EEGoogleAnalyticsTracker
 
 // clang-format off
 static NSString* const k__key   = @"key";

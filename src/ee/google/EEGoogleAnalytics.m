@@ -19,13 +19,9 @@
 
 #import "ee/google/internal/EEGoogleAnalyticsTracker.h"
 
-@interface EEGoogleAnalytics () {
+@implementation EEGoogleAnalytics {
     NSMutableDictionary<NSString*, EEGoogleAnalyticsTracker*>* trackers_;
 }
-
-@end
-
-@implementation EEGoogleAnalytics
 
 // clang-format off
 static NSString* const k__setDispatchInterval          = @"GoogleAnalytics_setDispatchInterval";

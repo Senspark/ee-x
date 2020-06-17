@@ -20,8 +20,9 @@ using Self = PluginManager;
 #if defined(EE_X_ANDROID)
 template <>
 bool Self::initializePlugins<Library::Core>() {
-    // FIXME.
-    return false;
+    auto&& bridge = MessageBridge::getInstance();
+    Platform::registerHandlers(bridge);
+    return true;
 }
 
 bool Self::addPlugin(Plugin plugin) {

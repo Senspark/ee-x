@@ -39,8 +39,8 @@ bool Self::removePlugin(Plugin plugin) {
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
 bool ee_staticInitializePlugins();
-bool ee_staticAddPlugin(const std::string& name);
-bool ee_staticRemovePlugin(const std::string& name);
+bool ee_staticAddPlugin(const char* name);
+bool ee_staticRemovePlugin(const char* name);
 } // extern "C"
 
 template <>
@@ -75,12 +75,12 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 
 bool Self::addPlugin(Plugin plugin) {
     auto&& name = pluginNames_.at(plugin);
-    return ee_staticAddPlugin(name);
+    return ee_staticAddPlugin(name.c_str());
 }
 
 bool Self::removePlugin(Plugin plugin) {
     auto&& name = pluginNames_.at(plugin);
-    return ee_staticRemovePlugin(name);
+    return ee_staticRemovePlugin(name.c_str());
 }
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 } // namespace core

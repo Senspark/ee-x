@@ -50,7 +50,7 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {
-    runOnUiThread([this, devKey, appId] {
+    runOnMainThread([this, devKey, appId] {
 #ifdef EE_X_ANDROID
         bridge_.call(kInitialize, devKey);
 #else  // EE_X_ANDROID
@@ -63,7 +63,7 @@ void Self::initialize(const std::string& devKey, const std::string& appId) {
 }
 
 void Self::startTracking() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(kStartTracking);
     });
 }
@@ -73,20 +73,20 @@ std::string Self::getDeviceId() const {
 }
 
 void Self::setDebugEnabled(bool enabled) {
-    runOnUiThread([this, enabled] {
+    runOnMainThread([this, enabled] {
         bridge_.call(kSetDebugEnabled, core::toString(enabled));
     });
 }
 
 void Self::setStopTracking(bool enabled) {
-    runOnUiThread([this, enabled] {
+    runOnMainThread([this, enabled] {
         bridge_.call(kSetStopTracking, core::toString(enabled));
     });
 }
 
 void Self::trackEvent(const std::string& name,
                       const std::map<std::string, std::string>& values) {
-    runOnUiThread([this, name, values] {
+    runOnMainThread([this, name, values] {
         nlohmann::json json;
         json["name"] = name;
         json["values"] = values;

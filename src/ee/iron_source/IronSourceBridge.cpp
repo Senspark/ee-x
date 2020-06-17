@@ -140,7 +140,7 @@ void Self::destroy() {
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    runOnUiThread([this, gameId] { //
+    runOnMainThread([this, gameId] { //
         bridge_.call(k__initialize, gameId);
     });
 }
@@ -202,13 +202,13 @@ bool Self::hasInterstitialAd() const {
 }
 
 void Self::loadInterstitialAd() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__loadInterstitialAd);
     });
 }
 
 void Self::showInterstitialAd(const std::string& adId) {
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         bridge_.call(k__showInterstitialAd, adId);
     });
 }
@@ -220,7 +220,7 @@ bool Self::hasRewardedAd() const {
 }
 
 void Self::showRewardedAd(const std::string& adId) {
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         bridge_.call(k__showRewardedAd, adId);
     });
 }

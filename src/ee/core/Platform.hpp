@@ -97,6 +97,7 @@ constexpr auto getDeviceId = &Platform::getDeviceId;
 constexpr auto getSafeInset = &Platform::getSafeInset;
 constexpr auto getSHA1CertificateFingerprint =
     &Platform::getSHA1CertificateFingerprint;
+constexpr auto isInstantApp = &Platform::isInstantApp;
 constexpr auto getVersionCode = &Platform::getVersionCode;
 constexpr auto getVersionName = &Platform::getVersionName;
 constexpr auto isApplicationInstalled = &Platform::isApplicationInstalled;

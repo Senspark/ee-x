@@ -60,7 +60,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (id)init {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -80,7 +80,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     [bannerHelper_ release];
     bannerHelper_ = nil;
@@ -205,12 +205,12 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (void)addTestDevice:(NSString* _Nonnull)hash {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [FBAdSettings addTestDevice:hash];
 }
 
 - (void)clearTestDevices {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [FBAdSettings clearTestDevices];
 }
 
@@ -219,7 +219,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)createBannerAd:(NSString* _Nonnull)adId size:(FBAdSize)size {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -231,7 +231,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyBannerAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([bannerAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -244,7 +244,7 @@ static NSString* const k__identifiers           = @"identifiers";
 - (BOOL)createNativeAd:(NSString*)adId
                 layout:(NSString*)layout
            identifiers:(NSDictionary* _Nonnull)identifiers {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -258,7 +258,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyNativeAd:(NSString*)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([nativeAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -269,7 +269,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)createInterstitialAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([interstitialAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -281,7 +281,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyInterstitialAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([interstitialAds_ objectForKey:adId] == nil) {
         return NO;
     }
@@ -292,7 +292,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)createRewardedAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([rewardedAds_ objectForKey:adId] != nil) {
         return NO;
     }
@@ -304,7 +304,7 @@ static NSString* const k__identifiers           = @"identifiers";
 }
 
 - (BOOL)destroyRewardedAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if ([rewardedAds_ objectForKey:adId] == nil) {
         return NO;
     }

@@ -38,7 +38,7 @@
                           adId:(NSString* _Nonnull)adId
                          types:(NSArray<GADAdLoaderAdType>* _Nonnull)adTypes
                         layout:(NSString* _Nonnull)layoutName {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -59,7 +59,7 @@
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     [self destroyView];
     [self destroyInternalAd];
@@ -89,7 +89,7 @@
 }
 
 - (BOOL)createInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ != nil) {
         return NO;
     }
@@ -108,7 +108,7 @@
 }
 
 - (BOOL)destroyInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ == nil) {
         return NO;
     }
@@ -120,7 +120,7 @@
 }
 
 - (void)createView {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(view_ == nil, @"");
     UIView* view = [[[UIView alloc] init] autorelease];
     [view setHidden:YES];
@@ -137,7 +137,7 @@
 }
 
 - (void)destroyView {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(view_ != nil, @"");
     [viewHelper_ release];
     viewHelper_ = nil;
@@ -147,13 +147,13 @@
 }
 
 - (BOOL)isLoaded {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     return isLoaded_;
 }
 
 - (void)load {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     isLoaded_ = NO;
     GADRequest* request = [GADRequest request];

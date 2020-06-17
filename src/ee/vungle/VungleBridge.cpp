@@ -89,7 +89,7 @@ void Self::destroy() {
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    runOnUiThread([this, gameId] {
+    runOnMainThread([this, gameId] {
         nlohmann::json json;
         json["gameId"] = gameId;
         bridge_.call(k__initialize, json.dump());
@@ -131,14 +131,14 @@ bool Self::hasRewardedAd(const std::string& adId) const {
 
 void Self::loadRewardedAd(const std::string& adId) const {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         bridge_.call(k__loadRewardedAd, adId);
     });
 }
 
 void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         bridge_.call(k__showRewardedAd, adId);
     });
 }

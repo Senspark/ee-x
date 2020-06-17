@@ -52,7 +52,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (id)init {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -67,7 +67,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     if (!initialized_) {
         return;
@@ -126,7 +126,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 #pragma mark - Initialization
 
 - (void)initialize:(NSString*)gameId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (initialized_) {
         return;
     }
@@ -142,17 +142,17 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 #pragma mark - Interstitial Ad
 
 - (BOOL)hasInterstitialAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     return [IronSource hasInterstitial];
 }
 
 - (void)loadInterstitialAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [IronSource loadInterstitial];
 }
 
 - (void)showInterstitialAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [IronSource showInterstitialWithViewController:rootView placement:adId];
 }
@@ -196,12 +196,12 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 #pragma mark - Rewarded Ad
 
 - (BOOL)hasRewardedAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     return [IronSource hasRewardedVideo];
 }
 
 - (void)showRewardedAd:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     rewarded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];
     [IronSource showRewardedVideoWithViewController:rootView placement:adId];
@@ -242,10 +242,10 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
         // Already has result.
         [self handleRewardedAdResult];
     } else {
-        [EEUtils runOnMainThreadDelayed:
-                                   1.0f:^{
-                                       [self handleRewardedAdResult];
-                                   }];
+        [EEThread runOnMainThreadDelayed:
+                                    1.0f:^{
+                                        [self handleRewardedAdResult];
+                                    }];
     }
 }
 

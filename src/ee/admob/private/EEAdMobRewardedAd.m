@@ -28,7 +28,7 @@
 
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -43,7 +43,7 @@
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     [self destroyInternalAd];
 
@@ -93,7 +93,7 @@
 }
 
 - (BOOL)createInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ != nil) {
         return NO;
     }
@@ -102,7 +102,7 @@
 }
 
 - (BOOL)destroyInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ == nil) {
         return NO;
     }
@@ -112,13 +112,13 @@
 }
 
 - (BOOL)isLoaded {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     return [ad_ isReady];
 }
 
 - (void)load {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     GADRequest* request = [GADRequest request];
     [ad_ loadRequest:request
@@ -133,7 +133,7 @@
 }
 
 - (void)show {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     rewarded_ = NO;
     UIViewController* rootView = [EEUtils getCurrentRootViewController];

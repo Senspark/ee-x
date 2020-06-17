@@ -69,7 +69,7 @@ static NSString* const k__sponsor           = @"sponsor";
                 adId:(NSString* _Nonnull)adId
               layout:(NSString* _Nonnull)layoutName
          identifiers:(NSDictionary* _Nonnull)identifiers {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -90,7 +90,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterhandlers];
     [self destroyView];
     [self destroyInternalAd];
@@ -132,7 +132,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (BOOL)createInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ != nil) {
         return NO;
     }
@@ -143,7 +143,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (BOOL)destroyInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ == nil) {
         return NO;
     }
@@ -156,7 +156,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (void)createView {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(view_ == nil, @"");
     EEFacebookNativeAdView* view =
         [[[NSBundle mainBundle] loadNibNamed:layoutName_ owner:nil options:nil]
@@ -172,7 +172,7 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (void)destroyView {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(view_ != nil, @"");
     [viewHelper_ release];
     viewHelper_ = nil;
@@ -182,13 +182,13 @@ static NSString* const k__sponsor           = @"sponsor";
 }
 
 - (BOOL)isLoaded {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     return isLoaded_;
 }
 
 - (void)load {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     [ad_ loadAdWithMediaCachePolicy:FBNativeAdsCachePolicyAll];
 }
@@ -282,8 +282,8 @@ static NSString* const k__sponsor           = @"sponsor";
 
 - (void)nativeAd:(FBNativeAd*)nativeAd didFailWithError:(NSError*)error {
     NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error description]);
-    [bridge_ callCpp:[messageHelper_ onFailedToLoad]
-             message:[error description]];
+    [bridge_ callCpp:[messageHelper_ onFailedToLoad] //
+                    :[error description]];
 }
 
 - (void)nativeAdDidClick:(FBNativeAd*)nativeAd {

@@ -33,7 +33,7 @@
 - (id _Nonnull)initWithBridge:(id<EEIMessageBridge>)bridge
                          adId:(NSString* _Nonnull)adId
                          size:(FBAdSize)adSize {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -53,7 +53,7 @@
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterhandlers];
     [self destroyInternalAd];
 
@@ -78,7 +78,7 @@
 }
 
 - (BOOL)createInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ != nil) {
         return NO;
     }
@@ -97,7 +97,7 @@
 }
 
 - (BOOL)destroyInternalAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (ad_ == nil) {
         return NO;
     }
@@ -112,13 +112,13 @@
 }
 
 - (BOOL)isLoaded {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     NSAssert(ad_ != nil, @"");
     return isLoaded_;
 }
 
 - (void)load {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [ad_ loadAd];
 }
 

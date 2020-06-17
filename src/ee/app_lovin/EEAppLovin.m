@@ -55,7 +55,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (id)initWithBridge:(id<EEIMessageBridge>)bridge {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return nil;
@@ -103,7 +103,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (id)initWithBridge:(id<EEIMessageBridge>)bridge {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return nil;
@@ -172,7 +172,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (id)init {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -188,7 +188,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     if (!initialized_) {
         return;
@@ -282,7 +282,7 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)initialize:(NSString* _Nonnull)key {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (initialized_) {
         return;
     }
@@ -308,29 +308,29 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)setVerboseLogging:(BOOL)enabled {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [[sdk_ settings] setIsVerboseLogging:enabled];
 }
 
 - (void)setMuted:(BOOL)enabled {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [[sdk_ settings] setMuted:enabled];
 }
 
 - (BOOL)hasInterstitialAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     // FIXME: use boolean variable.
     return [interstitialAd_ isReadyForDisplay];
 }
 
 - (void)loadInterstitialAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [[sdk_ adService] loadNextAd:[ALAdSize interstitial]
                        andNotify:interstitialAdDelegate_];
 }
 
 - (void)showInterstitialAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [interstitialAd_ show];
 }
 
@@ -339,12 +339,12 @@ static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClose
 }
 
 - (void)loadRewardedAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [rewardedAd_ preloadAndNotify:rewardedAdDelegate_];
 }
 
 - (void)showRewardedAd {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     rewardedAdDelegate_->rewarded_ = NO;
     [rewardedAd_ showAndNotify:rewardedAdDelegate_];
 }

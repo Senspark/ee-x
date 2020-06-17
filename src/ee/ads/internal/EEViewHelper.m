@@ -15,7 +15,7 @@
 }
 
 - (id _Nonnull)initWithView:(EE_VIEW* _Nonnull)view {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -25,14 +25,14 @@
 }
 
 - (CGPoint)getPosition {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     CGPoint position = [view_ frame].origin;
     return CGPointMake([EEUtils convertDpToPixels:position.x],
                        [EEUtils convertDpToPixels:position.y]);
 }
 
 - (void)setPosition:(CGPoint)position {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     CGRect frame = [view_ frame];
     frame.origin = CGPointMake([EEUtils convertPixelsToDp:position.x],
                                [EEUtils convertPixelsToDp:position.y]);
@@ -40,14 +40,14 @@
 }
 
 - (CGSize)getSize {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     CGSize size = [view_ frame].size;
     return CGSizeMake([EEUtils convertDpToPixels:size.width],
                       [EEUtils convertDpToPixels:size.height]);
 }
 
 - (void)setSize:(CGSize)size {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     CGRect frame = [view_ frame];
     frame.size = CGSizeMake([EEUtils convertPixelsToDp:size.width],
                             [EEUtils convertPixelsToDp:size.height]);
@@ -55,12 +55,12 @@
 }
 
 - (BOOL)isVisible {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     return [view_ isHidden];
 }
 
 - (void)setVisible:(BOOL)visible {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [view_ setHidden:!visible];
 }
 

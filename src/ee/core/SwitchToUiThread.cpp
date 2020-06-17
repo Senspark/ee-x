@@ -12,7 +12,7 @@ Self::SwitchToUiThread()
 Self::~SwitchToUiThread() = default;
 
 void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
-    runOnUiThread([this, handle]() mutable {
+    runOnMainThread([this, handle]() mutable {
         ready_ = true;
         handle.resume();
     });

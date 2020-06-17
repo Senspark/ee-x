@@ -44,7 +44,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (id)init {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     self = [super init];
     if (self == nil) {
         return self;
@@ -59,7 +59,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (void)destroy {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     [self deregisterHandlers];
     if (!initialized_) {
         return;
@@ -106,7 +106,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (void)initialize:(NSString* _Nonnull)gameId testMode:(BOOL)testModeEnabled {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (initialized_) {
         return;
     }
@@ -119,7 +119,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (void)setDebugMode:(BOOL)enabled {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (!initialized_) {
         return;
     }
@@ -127,7 +127,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (BOOL)hasRewardedAd:(NSString*)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (!initialized_) {
         return NO;
     }
@@ -135,7 +135,7 @@ static NSString* const k__onClosed            = kPrefix "_onClosed";
 }
 
 - (void)showRewardedAd:(NSString*)adId {
-    NSAssert([EEUtils isMainThread], @"");
+    NSAssert([EEThread isMainThread], @"");
     if (!initialized_) {
         // FIXME: handle error.
         return;

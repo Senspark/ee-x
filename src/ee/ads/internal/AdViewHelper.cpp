@@ -85,7 +85,7 @@ std::pair<float, float> Self::getAnchor() const {
 }
 
 void Self::setAnchor(float x, float y) {
-    runOnUiThread([this, x, y] {
+    runOnMainThread([this, x, y] {
         auto [width, height] = getSizeInternal();
         auto [anchorX, anchorY] = getAnchorInternal();
         auto [positionX, positionY] = getPositionInternal();
@@ -123,7 +123,7 @@ std::pair<int, int> Self::getPositionTopLeft() const {
 }
 
 void Self::setPositionTopLeft(int x, int y) {
-    runOnUiThread([this, x, y] {
+    runOnMainThread([this, x, y] {
         nlohmann::json json;
         json["x"] = x;
         json["y"] = y;
@@ -145,7 +145,7 @@ std::pair<int, int> Self::getSize() const {
 }
 
 void Self::setSize(int width, int height) {
-    runOnUiThread([this, width, height] {
+    runOnMainThread([this, width, height] {
         auto [currentWidth, currentHeight] = getSizeInternal();
         auto [anchorX, anchorY] = getAnchorInternal();
         auto [x, y] = getPositionInternal();
@@ -171,7 +171,7 @@ bool Self::isVisible() const {
 }
 
 void Self::setVisible(bool visible) {
-    runOnUiThread([this, visible] {
+    runOnMainThread([this, visible] {
         assert(isMainThread());
         bridge_.call(helper_.setVisible(), core::toString(visible));
         setVisibleInternal(visible);

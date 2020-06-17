@@ -87,13 +87,13 @@ std::string Self::getTestDeviceHash() const {
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    runOnUiThread([this, hash] { //
+    runOnMainThread([this, hash] { //
         bridge_.call(k__addTestDevice, hash);
     });
 }
 
 void Self::clearTestDevices() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__clearTestDevices);
     });
 }
@@ -114,7 +114,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     if (iter != bannerAds_.cend()) {
         return iter->second;
     }
-    runOnUiThread([this, adId, adSize] {
+    runOnMainThread([this, adId, adSize] {
         nlohmann::json json;
         json[k__ad_id] = adId;
         json[k__ad_size] = static_cast<int>(adSize);
@@ -140,7 +140,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     if (iter == bannerAds_.cend()) {
         return false;
     }
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         auto response = bridge_.call(k__destroyBannerAd, adId);
         if (core::toBool(response)) {
             // OK.
@@ -162,7 +162,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     if (iter != nativeAds_.cend()) {
         return iter->second;
     }
-    runOnUiThread([this, adId, layoutName, identifiers] {
+    runOnMainThread([this, adId, layoutName, identifiers] {
         nlohmann::json json;
         json[k__ad_id] = adId;
         json[k__layout_name] = layoutName;
@@ -188,7 +188,7 @@ bool Self::destroyNativeAd(const std::string& adId) {
     if (iter == nativeAds_.cend()) {
         return false;
     }
-    runOnUiThread([this, adId] {
+    runOnMainThread([this, adId] {
         auto response = bridge_.call(k__destroyNativeAd, adId);
         if (core::toBool(response)) {
             // OK.
@@ -209,7 +209,7 @@ Self::createInterstitialAd(const std::string& adId) {
     if (iter != interstitialAds_.cend()) {
         return iter->second;
     }
-    runOnUiThread([this, adId] {
+    runOnMainThread([this, adId] {
         auto response = bridge_.call(k__createInterstitialAd, adId);
         if (core::toBool(response)) {
             // OK.
@@ -232,7 +232,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     if (iter == interstitialAds_.cend()) {
         return false;
     }
-    runOnUiThread([this, adId] {
+    runOnMainThread([this, adId] {
         auto&& response = bridge_.call(k__destroyInterstitialAd, adId);
         if (core::toBool(response)) {
             return;
@@ -251,7 +251,7 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     if (iter != rewardedAds_.cend()) {
         return iter->second;
     }
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         auto response = bridge_.call(k__createRewardedAd, adId);
         if (core::toBool(response)) {
             // OK.
@@ -274,7 +274,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
     if (iter == rewardedAds_.cend()) {
         return false;
     }
-    runOnUiThread([this, adId] {
+    runOnMainThread([this, adId] {
         auto&& response = bridge_.call(k__destroyRewardedAd, adId);
         if (core::toBool(response)) {
             // OK.

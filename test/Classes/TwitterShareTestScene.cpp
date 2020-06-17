@@ -56,7 +56,7 @@ bool Self::init() {
         cocos2d::Vec2(screenSize.width / 2, screenSize.height / 2));
     shareButton->setTitleText("Twitter");
     shareButton->addClickEventListener(std::bind([this] {
-        ee::runOnUiThread([this] {
+        ee::runOnMainThread([this] {
             twitter_->shareContent("this is a string to twitter...");
         });
     }));

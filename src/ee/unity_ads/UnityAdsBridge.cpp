@@ -100,7 +100,7 @@ void Self::destroy() {
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
                   gameId.c_str(), core::toString(testModeEnabled).c_str());
-    runOnUiThread([this, gameId, testModeEnabled] {
+    runOnMainThread([this, gameId, testModeEnabled] {
         nlohmann::json json;
         json[k__gameId] = gameId;
         json[k__testModeEnabled] = testModeEnabled;
@@ -109,7 +109,7 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    runOnUiThread([this, enabled] {
+    runOnMainThread([this, enabled] {
         bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
     });
 }
@@ -172,7 +172,7 @@ void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     adId_ = adId;
     displaying_ = true;
-    runOnUiThread([this, adId] { //
+    runOnMainThread([this, adId] { //
         bridge_.call(k__showRewardedAd, adId);
     });
 }

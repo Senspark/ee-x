@@ -207,25 +207,25 @@ void Self::destroy() {
 
 void Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    runOnUiThread([this, key] { //
+    runOnMainThread([this, key] { //
         bridge_.call(k__initialize, key);
     });
 }
 
 void Self::setTestAdsEnabled(bool enabled) {
-    runOnUiThread([this, enabled] { //
+    runOnMainThread([this, enabled] { //
         bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
     });
 }
 
 void Self::setVerboseLogging(bool enabled) {
-    runOnUiThread([this, enabled] { //
+    runOnMainThread([this, enabled] { //
         bridge_.call(k__setVerboseLogging, core::toString(enabled));
     });
 }
 
 void Self::setMuted(bool enabled) {
-    runOnUiThread([this, enabled] { //
+    runOnMainThread([this, enabled] { //
         bridge_.call(k__setMuted, core::toString(enabled));
     });
 }
@@ -237,13 +237,13 @@ bool Self::hasInterstitialAd() const {
 }
 
 void Self::loadInterstitialAd() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__loadInterstitialAd);
     });
 }
 
 void Self::showInterstitialAd() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__showInterstitialAd);
     });
 }
@@ -277,13 +277,13 @@ bool Self::hasRewardedAd() const {
 
 void Self::loadRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__loadRewardedAd);
     });
 }
 
 void Self::showRewardedAd() {
-    runOnUiThread([this] { //
+    runOnMainThread([this] { //
         bridge_.call(k__showRewardedAd);
     });
 }

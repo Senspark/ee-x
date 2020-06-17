@@ -28,7 +28,7 @@ bool Self::init() {
     }
 
     auto winSize = _director->getWinSize();
-    ee::runOnUiThread([this, winSize] {
+    ee::runOnMainThread([this, winSize] {
         player_ = ee::VideoPlayerManager::getInstance().createVideoPlayer();
         player_->setKeepAspectRatioEnabled(false);
         player_->setVisible(false);
@@ -45,7 +45,7 @@ void Self::onEnter() {
 
     auto fileUtils = cocos2d::FileUtils::getInstance();
     auto path = fileUtils->fullPathForFilename("videos/cocosvideo.mp4");
-    ee::runOnUiThread([this, path] {
+    ee::runOnMainThread([this, path] {
         player_->setVisible(true);
         player_->loadFile(path);
         player_->play();

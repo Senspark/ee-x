@@ -23,9 +23,6 @@ public:
     void await_suspend(std::experimental::coroutine_handle<> handle);
     bool await_ready();
     void await_resume();
-
-private:
-    bool ready_;
 };
 } // namespace cocos
 } // namespace ee

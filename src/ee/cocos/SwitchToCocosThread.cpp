@@ -7,22 +7,20 @@ namespace ee {
 namespace cocos {
 using Self = SwitchToCocosThread;
 
-Self::SwitchToCocosThread()
-    : ready_(false) {}
-
+Self::SwitchToCocosThread() = default;
 Self::~SwitchToCocosThread() = default;
 
 void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
     auto director = cocos2d::Director::getInstance();
     auto scheduler = director->getScheduler();
-    scheduler->performFunctionInCocosThread([this, handle]() mutable {
-        ready_ = true;
+    scheduler->performFunctionInCocosThread([this, handle]() mutable { //
         handle.resume();
     });
 }
 
 bool Self::await_ready() {
-    return ready_;
+    // Always suspend.
+    return false;
 }
 
 void Self::await_resume() {}

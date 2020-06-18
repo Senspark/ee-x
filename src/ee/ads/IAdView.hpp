@@ -39,7 +39,7 @@ public:
     virtual bool isLoaded() const = 0;
 
     /// Attempts to load this ad view.
-    virtual Task<bool> load() = 0;
+    [[nodiscard]] virtual Task<bool> load() = 0;
 
     /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;

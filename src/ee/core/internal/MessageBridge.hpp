@@ -32,7 +32,7 @@ public:
     virtual std::string call(const std::string& tag,
                              const std::string& message = "") override;
 
-    virtual Task<std::string>
+    [[nodiscard]] virtual Task<std::string>
     callAsync(const std::string& tag, const std::string& message = "") override;
 
     /// Calls a handler from C++ with a message.

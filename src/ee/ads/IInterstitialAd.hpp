@@ -39,10 +39,10 @@ public:
     virtual bool isLoaded() const = 0;
 
     /// Attempts to load this ad.
-    virtual Task<bool> load() = 0;
+    [[nodiscard]] virtual Task<bool> load() = 0;
 
     /// Attempts to show this ad.
-    virtual Task<bool> show() = 0;
+    [[nodiscard]] virtual Task<bool> show() = 0;
 };
 } // namespace ads
 } // namespace ee

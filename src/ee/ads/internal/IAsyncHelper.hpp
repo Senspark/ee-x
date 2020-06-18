@@ -20,8 +20,8 @@ public:
     virtual bool isProcessing() const = 0;
 
     /// Asynchronously processes.
-    virtual Task<Result> process(const Processor& processor,
-                                 const Finalizer& finalizer) = 0;
+    [[nodiscard]] virtual Task<Result> process(const Processor& processor,
+                                               const Finalizer& finalizer) = 0;
 
     /// Resolves the result.
     virtual void resolve(Result result) = 0;

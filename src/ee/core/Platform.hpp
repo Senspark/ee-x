@@ -70,7 +70,7 @@ public:
     static float getDensity();
 
     /// Gets device's unique ID.
-    static Task<std::string> getDeviceId();
+    [[nodiscard]] static Task<std::string> getDeviceId();
 
     static SafeInset getSafeInset();
 
@@ -78,8 +78,8 @@ public:
                          const std::string& subject, const std::string& body);
 
     /// Tests whether the specified host name can be resolved.
-    static Task<bool> testConnection(const std::string& hostName,
-                                     float timeOut);
+    [[nodiscard]] static Task<bool> testConnection(const std::string& hostName,
+                                                   float timeOut);
 
     /// Show Google Instant application installation prompt (Android only).
     static void showInstallPrompt(const std::string& url,

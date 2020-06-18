@@ -85,10 +85,8 @@ Task<IRewardedAdResult> Self::show() {
             result = co_await item->show();
         }
         if (not item->isLoaded()) {
-            noAwait([item]() -> Task<> {
-                // Load in background.
-                co_await item->load();
-            });
+            // Load in background.
+            noAwait(item->load());
         }
     }
     co_return result;

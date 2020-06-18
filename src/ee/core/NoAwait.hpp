@@ -11,13 +11,13 @@
 namespace ee {
 namespace core {
 /// https://devblogs.microsoft.com/oldnewthing/20190322-00/?p=102354
-struct CompleteAsynchronously {
-    struct promise_type {
-        auto get_return_object() const noexcept {
+class CompleteAsynchronously {
+public:
+    class promise_type {
+    public:
+        auto get_return_object() { //
             return CompleteAsynchronously();
         }
-
-        void return_void() const noexcept {}
 
         auto initial_suspend() const noexcept { //
             return std::experimental::suspend_never();
@@ -27,16 +27,33 @@ struct CompleteAsynchronously {
             return std::experimental::suspend_never();
         }
 
+        void return_void() const noexcept {}
+
         void unhandled_exception() noexcept { //
             std::terminate();
         }
     };
 };
 
-template <class T, class = std::enable_if_t<std::is_invocable_v<T>>>
-CompleteAsynchronously
-noAwait(T lambda) /** Must copy lambda, don't use T&& */ {
-    co_await lambda();
+namespace detail {
+template <class T>
+struct IsTask : std::false_type {};
+
+template <class T>
+struct IsTask<Task<T>> : std::true_type {};
+} // namespace detail
+
+template <class T, class = std::enable_if_t<std::is_invocable_v<T> ||
+                                            detail::IsTask<T>::value>>
+CompleteAsynchronously noAwait(T&& value) {
+    if constexpr (std::is_invocable_v<T>) {
+        auto lambda = std::forward<T>(value);
+        co_await lambda();
+    }
+    if constexpr (detail::IsTask<T>::value) {
+        auto task = std::forward<T>(value);
+        co_await task;
+    }
 }
 } // namespace core
 

@@ -20,11 +20,9 @@ namespace detail {
 template <class Resolver, class Function, class Callable>
 Function makeFunction(const Callable& callable) {
     if constexpr (IsAwaitableV<
-                      std::invoke_result_t<Callable, const Resolve&>>) {
-        return [callable](const Resolve& resolve) {
-            noAwait([callable, resolve]() -> Task<> { //
-                co_await callable(resolve);
-            });
+                      std::invoke_result_t<Callable, const Resolver&>>) {
+        return [callable](const Resolver& resolver) { //
+            noAwait(callable(resolver));
         };
     }
     // Normal callable.

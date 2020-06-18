@@ -65,7 +65,7 @@ template <class Observer>
 class SafeObserverManager;
 
 template <class T = void>
-struct Task;
+class Task;
 
 template <class T = void>
 class LambdaAwaiter;

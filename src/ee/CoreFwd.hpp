@@ -68,7 +68,7 @@ template <class T = void>
 struct Task;
 
 template <class T = void>
-struct LambdaAwaiter;
+class LambdaAwaiter;
 
 using AsyncMutex = cppcoro::async_mutex;
 using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;

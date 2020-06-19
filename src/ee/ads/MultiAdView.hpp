@@ -51,31 +51,20 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    std::shared_ptr<IAdView> activeItem_;
-
     /// Custom anchor.
     std::pair<float, float> anchor_;
 
     /// Custom position.
     std::pair<int, int> position_;
 
-    /// Custom size.
-    std::pair<int, int> size_;
-
-    /// Whether to use custom size.
-    bool useCustomSize_;
-
     /// Whether visible.
     bool visible_;
 
-    /// Whether the active item is new.
-    bool new_;
-
     std::vector<std::shared_ptr<IAdView>> items_;
-
-    std::set<std::shared_ptr<IAdView>> loadedItems_;
-
     std::unique_ptr<ObserverHandle> handle_;
+
+    std::shared_ptr<IAdView> activeItem_;
+    std::set<std::shared_ptr<IAdView>> loadedItems_;
 };
 } // namespace ads
 } // namespace ee

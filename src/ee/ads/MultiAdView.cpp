@@ -8,6 +8,7 @@
 
 #include "ee/ads/MultiAdView.hpp"
 
+#include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
 
@@ -18,10 +19,7 @@ using Self = MultiAdView;
 Self::MultiAdView() {
     anchor_ = std::make_pair(0, 0);
     position_ = std::make_pair(0, 0);
-    size_ = std::make_pair(0, 0);
     visible_ = false;
-    useCustomSize_ = false;
-    new_ = false;
     handle_ = std::make_unique<ObserverHandle>();
 }
 
@@ -35,26 +33,7 @@ Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
         .addObserver({
             .onLoaded =
                 [this, item] {
-                    bool displayed = false;
-                    if (visible_) {
-                        /*
-                         Uncomment to display loaded item immediately.
-                        if (not new_) {
-                            // Hide old item.
-                            if (activeItem_) {
-                                activeItem_->setVisible(false);
-                            }
-                            // Display new item.
-                            activeItem_ = item;
-                            activeItem_->setVisible(true);
-                            displayed = true;
-                            new_ = true;
-                        }
-                         */
-                    }
-                    if (not displayed) {
-                        loadedItems_.insert(item);
-                    }
+                    loadedItems_.insert(item);
 
                     // Propagation.
                     dispatchEvent([](auto&& observer) {
@@ -85,7 +64,12 @@ void Self::destroy() {
 }
 
 bool Self::isLoaded() const {
-    return not loadedItems_.empty();
+    for (auto&& item : items_) {
+        if (item->isLoaded()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Task<bool> Self::load() {
@@ -95,11 +79,12 @@ Task<bool> Self::load() {
             // Ignore displaying item.
             continue;
         }
-        if (loadedItems_.count(item) == 0) {
-            // Force old views to load.
-            if (co_await item->load()) {
-                result = true;
-            }
+        if (loadedItems_.count(item) != 0) {
+            // Already loaded and not displayed.
+            continue;
+        }
+        if (co_await item->load()) {
+            result = true;
         }
     }
     co_return result;
@@ -128,9 +113,6 @@ void Self::setPosition(float x, float y) {
 }
 
 std::pair<float, float> Self::getSize() const {
-    if (useCustomSize_) {
-        return size_;
-    }
     // Combined size of all ad views.
     int width = 0;
     int height = 0;
@@ -140,12 +122,10 @@ std::pair<float, float> Self::getSize() const {
         width = std::max(width, itemWidth);
         height = std::max(height, itemHeight);
     }
-    return std::tie(width, height);
+    return std::pair(width, height);
 }
 
 void Self::setSize(float width, float height) {
-    size_ = std::make_pair(width, height);
-    useCustomSize_ = true;
     for (auto&& item : items_) {
         item->setSize(width, height);
     }
@@ -161,20 +141,28 @@ void Self::setVisible(bool visible) {
         item->setVisible(false);
     }
     if (visible) {
-        new_ = false;
-        if (not loadedItems_.empty()) {
-            // Swap new item.
+        if (loadedItems_.empty()) {
+            // Use last active ad.
+        } else {
+            // Prefer to displaying loaded ad.
             for (auto&& item : items_) {
                 if (loadedItems_.count(item) != 0) {
+                    loadedItems_.erase(item);
                     activeItem_ = item;
                     break;
                 }
             }
-            loadedItems_.erase(activeItem_);
-            new_ = true;
         }
         if (activeItem_) {
             activeItem_->setVisible(true);
+        }
+    } else {
+        if (loadedItems_.empty()) {
+            // Don't reload the currently active ad.
+        } else {
+            if (activeItem_) {
+                noAwait(activeItem_->load());
+            }
         }
     }
 }

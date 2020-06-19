@@ -40,6 +40,6 @@ private:
 } // namespace cocos
 } // namespace ee
 
-#endif __cplusplus
+#endif // __cplusplus
 
 #endif /* EE_X_COCOS_REWARDED_AD_HPP */

@@ -142,7 +142,12 @@ void Self::setVisible(bool visible) {
     }
     if (visible) {
         if (loadedItems_.empty()) {
-            // Use last active ad.
+            for (auto&& item : items_) {
+                if (item != activeItem_ && item->isLoaded()) {
+                    activeItem_ = item;
+                    break;
+                }
+            }
         } else {
             // Prefer to displaying loaded ad.
             for (auto&& item : items_) {
@@ -157,12 +162,9 @@ void Self::setVisible(bool visible) {
             activeItem_->setVisible(true);
         }
     } else {
-        if (loadedItems_.empty()) {
-            // Don't reload the currently active ad.
-        } else {
-            if (activeItem_) {
-                noAwait(activeItem_->load());
-            }
+        if (activeItem_) {
+            // Reload the currently active ad.
+            noAwait(activeItem_->load());
         }
     }
 }

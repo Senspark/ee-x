@@ -7,6 +7,8 @@
 
 #include "ee/cocos/CocosAdView.hpp"
 
+#include <base/CCDirector.h>
+
 #include <ee/core/MakeAwaiter.hpp>
 #include <ee/core/ObserverHandle.hpp>
 
@@ -43,6 +45,7 @@ Self::CocosAdView(const std::shared_ptr<IAdView>& ad)
         }),
     });
     metrics_ = std::make_unique<Metrics>(Metrics::fromPoint(1));
+    sceneHeight_ = cocos2d::Director::getInstance()->getWinSize().height;
 }
 
 Self::~CocosAdView() = default;
@@ -70,21 +73,23 @@ void Self::setAnchor(float x, float y) {
     ad_->setAnchor(x, y);
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     auto&& [x, y] = ad_->getPosition();
-    return std::pair(x / metrics_->toPixel(), y / metrics_->toPixel());
+    return std::pair(x / metrics_->toPixel(),
+                     sceneHeight_ - y / metrics_->toPixel());
 }
 
-void Self::setPosition(int x, int y) {
-    ad_->setPosition(metrics_->toPixel() * x, metrics_->toPixel() * y);
+void Self::setPosition(float x, float y) {
+    ad_->setPosition(metrics_->toPixel() * x,
+                     metrics_->toPixel() * (sceneHeight_ - y));
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     auto&& [width, height] = ad_->getSize();
     return std::pair(width / metrics_->toPixel(), height / metrics_->toPixel());
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     ad_->setSize(metrics_->toPixel() * width, metrics_->toPixel() * height);
 }
 

@@ -46,21 +46,21 @@ void Self::setAnchor(float x, float y) {
     anchorY_ = y;
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     return std::make_pair(positionX_ + anchorX_ * width_,
                           positionY_ + anchorY_ * height_);
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPosition(float x, float y) {
     positionX_ = x - static_cast<int>(anchorX_ * width_);
     positionY_ = y - static_cast<int>(anchorY_ * height_);
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     return std::tie(width_, height_);
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     positionX_ = positionX_ - static_cast<int>((width - width_) * anchorX_);
     positionY_ = positionY_ - static_cast<int>((height - height_) * anchorY_);
 }

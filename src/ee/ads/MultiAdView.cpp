@@ -116,18 +116,18 @@ void Self::setAnchor(float x, float y) {
     }
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     return position_;
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPosition(float x, float y) {
     position_ = std::make_pair(x, y);
     for (auto&& item : items_) {
         item->setPosition(x, y);
     }
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     if (useCustomSize_) {
         return size_;
     }
@@ -143,7 +143,7 @@ std::pair<int, int> Self::getSize() const {
     return std::tie(width, height);
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     size_ = std::make_pair(width, height);
     useCustomSize_ = true;
     for (auto&& item : items_) {

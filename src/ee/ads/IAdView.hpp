@@ -50,19 +50,19 @@ public:
     virtual void setAnchor(float x, float y) = 0;
 
     /// Gets the position in pixels.
-    virtual std::pair<int, int> getPosition() const = 0;
+    virtual std::pair<float, float> getPosition() const = 0;
 
     /// Moves this ad view to the specified position.
     /// @param[in] x The horizontal position in pixels.
     /// @param[in] y The vertical position in pixels.
-    virtual void setPosition(int x, int y) = 0;
+    virtual void setPosition(float x, float y) = 0;
 
     /// Gets this ad view's size in pixels.
     /// @return A pair of width and height in pixels.
-    virtual std::pair<int, int> getSize() const = 0;
+    virtual std::pair<float, float> getSize() const = 0;
 
     /// Sets the size in pixels.
-    virtual void setSize(int width, int height) = 0;
+    virtual void setSize(float width, float height) = 0;
 
     /// Checks whether this ad is visible.
     virtual bool isVisible() const = 0;

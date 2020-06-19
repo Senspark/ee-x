@@ -29,11 +29,11 @@ public:
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
 
-    virtual std::pair<int, int> getPosition() const override;
-    virtual void setPosition(int x, int y) override;
+    virtual std::pair<float, float> getPosition() const override;
+    virtual void setPosition(float x, float y) override;
 
-    virtual std::pair<int, int> getSize() const override;
-    virtual void setSize(int width, int height) override;
+    virtual std::pair<float, float> getSize() const override;
+    virtual void setSize(float width, float height) override;
 
     virtual bool isVisible() const override;
     virtual void setVisible(bool visible) override;

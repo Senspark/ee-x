@@ -109,19 +109,19 @@ void Self::setAnchor(float x, float y) {
     helper_.setAnchor(x, y);
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     return helper_.getPosition();
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPosition(float x, float y) {
     helper_.setPosition(x, y);
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     return helper_.getSize();
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     helper_.setSize(width, height);
 }
 

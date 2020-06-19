@@ -89,19 +89,19 @@ void Self::setAnchor(float x, float y) {
     ad_->setAnchor(x, y);
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     return ad_->getPosition();
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPosition(float x, float y) {
     ad_->setPosition(x, y);
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     return ad_->getSize();
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     ad_->setSize(width, height);
 }
 

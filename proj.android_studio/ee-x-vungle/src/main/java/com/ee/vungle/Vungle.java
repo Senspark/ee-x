@@ -59,12 +59,6 @@ public class Vungle implements IPlugin {
         _logger.debug("constructor end.");
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Vungle";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
     }

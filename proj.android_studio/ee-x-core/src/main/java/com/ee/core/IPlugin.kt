@@ -8,11 +8,6 @@ import android.content.Intent
  */
 interface IPlugin {
     /**
-     * Gets the name of the plugin.
-     */
-    val pluginName: String
-
-    /**
      * Called when the main activity has been created.
      */
     fun onCreate(activity: Activity)
@@ -46,6 +41,6 @@ interface IPlugin {
      * Called when the application has been destroyed.
      */
     fun destroy()
-    
+
     fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean
 }

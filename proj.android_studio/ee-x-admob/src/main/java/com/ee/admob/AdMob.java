@@ -64,9 +64,9 @@ public class AdMob implements IPlugin {
     private Map<String, AdMobInterstitialAd> _interstitialAds;
     private Map<String, AdMobRewardedAd> _rewardedAds;
 
-    public AdMob(@NonNull Context context, @NonNull IMessageBridge bridge) {
-        Thread.checkMainThread();
+    public AdMob(@NonNull Context context, @NonNull Activity activity, @NonNull IMessageBridge bridge) {
         _context = context;
+        _activity = activity;
         _bridge = bridge;
         _bannerHelper = new AdMobBannerHelper(context);
         _testDevices = new ArrayList<>();
@@ -75,12 +75,6 @@ public class AdMob implements IPlugin {
         _interstitialAds = new HashMap<>();
         _rewardedAds = new HashMap<>();
         registerHandlers();
-    }
-
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "AdMob";
     }
 
     @Override
@@ -137,7 +131,6 @@ public class AdMob implements IPlugin {
 
     @Override
     public void destroy() {
-        Thread.checkMainThread();
         deregisterHandlers();
 
         _context = null;

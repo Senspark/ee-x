@@ -54,12 +54,6 @@ public class UnityAds implements IPlugin {
         _logger.debug("constructor end.");
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "UnityAds";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

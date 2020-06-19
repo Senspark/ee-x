@@ -18,8 +18,8 @@ import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkSettings;
 import com.ee.core.IMessageBridge;
-import com.ee.core.Logger;
 import com.ee.core.IPlugin;
+import com.ee.core.Logger;
 import com.ee.core.internal.Thread;
 import com.ee.core.internal.Utils;
 
@@ -171,12 +171,6 @@ public class AppLovin implements IPlugin {
         _bridge = bridge;
         registerHandlers();
         _logger.debug("constructor end.");
-    }
-
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "AppLovin";
     }
 
     @Override

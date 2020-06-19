@@ -10,7 +10,6 @@ import com.ee.core.IMessageBridge;
 import com.ee.core.IPlugin;
 import com.ee.core.Logger;
 import com.ee.core.internal.Thread;
-import com.ee.core.internal.Utils;
 
 public class FirebaseCrashlytics implements IPlugin {
     private static final String kLog = "FirebaseCrashlytics_log";
@@ -23,12 +22,6 @@ public class FirebaseCrashlytics implements IPlugin {
         Thread.checkMainThread();
         _bridge = bridge;
         registerHandlers();
-    }
-
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "FirebaseCrashlytics";
     }
 
     @Override

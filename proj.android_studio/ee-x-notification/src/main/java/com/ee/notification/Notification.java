@@ -40,12 +40,6 @@ public class Notification implements IPlugin {
         _logger.debug("constructor end.");
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Notification";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
     }

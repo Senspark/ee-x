@@ -77,12 +77,6 @@ public class FacebookAds implements IPlugin {
         registerHandlers();
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "FacebookAds";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

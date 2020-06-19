@@ -36,12 +36,6 @@ public class FirebasePerformance implements IPlugin {
         registerHandlers();
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "FirebasePerformance";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
     }

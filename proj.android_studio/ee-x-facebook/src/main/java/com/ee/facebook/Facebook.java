@@ -128,12 +128,6 @@ public class Facebook implements IPlugin {
         return Objects.requireNonNull(JsonUtils.convertDictionaryToString(dict));
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Facebook";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

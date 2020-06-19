@@ -13,6 +13,33 @@ object Utils {
     private val _logger = Logger(Utils::class.java.name)
 
     @JvmStatic
+    fun getCurrentActivity(): Activity? {
+        // https://stackoverflow.com/a/28423385
+        val activityThreadClass = Class.forName("android.app.ActivityThread")
+        val activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null)
+        val activitiesField = activityThreadClass.getDeclaredField("mActivities")
+        activitiesField.isAccessible = true
+
+        val activities = activitiesField.get(activityThread) as? Map<*, *> ?: return null
+        for (item in activities.values) {
+            val activityRecord = item as Any
+            val activityRecordClass = activityRecord::class.java
+            val pausedField = activityRecordClass.getDeclaredField("paused")
+            pausedField.isAccessible = true
+            if (pausedField.getBoolean(activityRecord)) {
+                // Ignored.
+            } else {
+                val activityField = activityRecordClass.getDeclaredField("activity")
+                activityField.isAccessible = true
+                @Suppress("UnnecessaryVariable")
+                val activity = activityField.get(activityRecord) as Activity
+                return activity
+            }
+        }
+        return null
+    }
+
+    @JvmStatic
     fun getRootView(activity: Activity): FrameLayout {
         return activity.findViewById<View>(android.R.id.content).rootView as FrameLayout
     }

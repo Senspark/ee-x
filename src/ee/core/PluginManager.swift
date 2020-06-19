@@ -9,7 +9,7 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-public class PluginManager: NSObject {
+private class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _bridge = MessageBridge.getInstance()

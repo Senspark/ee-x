@@ -59,12 +59,6 @@ public class IronSource implements IPlugin, RewardedVideoListener, InterstitialL
         _logger.debug("constructor end.");
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "IronSource";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

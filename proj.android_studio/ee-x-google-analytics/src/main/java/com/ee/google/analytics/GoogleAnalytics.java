@@ -70,12 +70,6 @@ public class GoogleAnalytics implements IPlugin {
         registerHandlers();
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "GoogleAnalytics";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
     }

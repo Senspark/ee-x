@@ -51,12 +51,6 @@ public class Recorder implements IPlugin {
         }
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Recorder";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

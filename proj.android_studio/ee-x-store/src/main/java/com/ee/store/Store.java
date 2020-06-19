@@ -77,12 +77,6 @@ public class Store implements IPlugin {
         registerHandlers();
     }
 
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Store";
-    }
-
     @Override
     public void onCreate(@NonNull Activity activity) {
         _activity = activity;

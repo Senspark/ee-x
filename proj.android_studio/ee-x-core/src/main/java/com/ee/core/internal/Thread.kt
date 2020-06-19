@@ -53,16 +53,19 @@ object Thread {
 private external fun ee_runOnMainThreadCallback()
 private external fun ee_runOnMainThreadDelayedCallback(key: Int)
 
+@Suppress("unused")
 private fun ee_isMainThread(): Boolean {
     return Thread.isMainThread()
 }
 
+@Suppress("unused")
 private fun ee_runOnMainThread(): Boolean {
     return Thread.runOnMainThread(Runnable {
         ee_runOnMainThreadCallback()
     })
 }
 
+@Suppress("unused")
 private fun ee_runOnMainThreadDelayed(key: Int, delay: Float) {
     Thread.runOnMainThreadDelayed(delay, Runnable {
         ee_runOnMainThreadDelayedCallback(key)

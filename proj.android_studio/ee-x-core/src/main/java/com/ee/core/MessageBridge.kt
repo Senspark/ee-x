@@ -122,6 +122,7 @@ class MessageBridge private constructor() : IMessageBridge {
 
 private external fun ee_callCppInternal(tag: String, message: String): String
 
+@Suppress("unused")
 private fun ee_staticCall(tag: String, message: String): String {
     return MessageBridge.staticCall(tag, message)
 }

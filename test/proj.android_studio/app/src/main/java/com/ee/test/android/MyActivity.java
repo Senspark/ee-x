@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ee.core.Logger;
-import com.ee.core.PluginManager;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -59,12 +58,6 @@ public class MyActivity extends Cocos2dxActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        _logger.debug(
-            "onActivityResult: requestCode = " + requestCode + " resultCode = " + resultCode +
-                " data = " + data);
-        if (PluginManager.getInstance().onActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

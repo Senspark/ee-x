@@ -1,11 +1,10 @@
 package com.ee.core
 
 import android.app.Activity
-import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.AnyThread
 import com.ee.core.internal.Platform
 import com.ee.core.internal.Utils
 import com.google.common.truth.Truth.assertThat
@@ -16,7 +15,7 @@ import java.lang.reflect.InvocationTargetException
 /**
  * Created by Zinge on 6/5/16.
  */
-internal class PluginManager private constructor() {
+class PluginManager private constructor() {
     companion object {
         private val _logger = Logger(PluginManager::class.java.name)
 
@@ -137,14 +136,17 @@ internal class PluginManager private constructor() {
         }
     }
 
+    @AnyThread
     fun getContext(): Context? {
         return _context
     }
 
+    @AnyThread
     fun getActivity(): Activity? {
         return _activity
     }
 
+    @AnyThread
     @ImplicitReflectionSerializer
     @UnstableDefault
     internal fun initializePlugins(activity: Activity): Boolean {
@@ -160,6 +162,7 @@ internal class PluginManager private constructor() {
         return true
     }
 
+    @AnyThread
     internal fun addPlugin(name: String): Boolean {
         _logger.info("addPlugin: $name")
         if (_plugins.containsKey(name)) {
@@ -190,6 +193,7 @@ internal class PluginManager private constructor() {
         return true
     }
 
+    @AnyThread
     internal fun removePlugin(name: String): Boolean {
         _logger.info("removePlugin: $name")
         val plugin = _plugins[name]
@@ -202,10 +206,12 @@ internal class PluginManager private constructor() {
         return true
     }
 
+    @AnyThread
     internal fun getPlugin(name: String): IPlugin? {
         return _plugins[name]
     }
 
+    @AnyThread
     private fun destroy() {
         Platform.deregisterHandlers(_bridge)
         for (entry in _plugins) {

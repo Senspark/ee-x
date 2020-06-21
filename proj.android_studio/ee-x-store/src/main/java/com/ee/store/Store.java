@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
@@ -57,19 +58,20 @@ public class Store implements IPlugin {
     private static final String kConsume = kPrefix + "consume";
     private static final String kAcknowledge = kPrefix + "acknowledge";
 
+    private IMessageBridge _bridge;
     private Context _context;
     private Activity _activity;
-    private IMessageBridge _bridge;
     private Scheduler _scheduler;
     private CompositeDisposable _disposable;
     private PublishSubject<PurchasesUpdate> _purchaseSubject;
     private Observable<BillingClient> _connectObservable;
     private Map<String, SkuDetails> _skuDetailsList;
 
-    public Store(@NonNull Context context, @NonNull IMessageBridge bridge) {
+    public Store(@NonNull IMessageBridge bridge, @NonNull Context context, @Nullable Activity activity) {
         Thread.checkMainThread();
-        _context = context;
         _bridge = bridge;
+        _context = context;
+        _activity = activity;
         _scheduler = AndroidSchedulers.mainThread();
         _disposable = new CompositeDisposable();
         _purchaseSubject = PublishSubject.create();

@@ -3,6 +3,8 @@ package com.ee.core.internal
 import android.app.Activity
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.core.Logger
 import com.google.common.truth.Truth.assertThat
 
@@ -13,6 +15,7 @@ object Utils {
     private val _logger = Logger(Utils::class.java.name)
 
     @JvmStatic
+    @AnyThread
     fun getCurrentActivity(): Activity? {
         // https://stackoverflow.com/a/28423385
         val activityThreadClass = Class.forName("android.app.ActivityThread")
@@ -40,15 +43,18 @@ object Utils {
     }
 
     @JvmStatic
+    @UiThread
     fun getRootView(activity: Activity): FrameLayout {
         return activity.findViewById<View>(android.R.id.content).rootView as FrameLayout
     }
 
+    @AnyThread
     @JvmStatic
     fun toString(value: Boolean): String {
         return if (value) "true" else "false"
     }
 
+    @AnyThread
     @JvmStatic
     fun toBoolean(value: String): Boolean {
         assertThat(value).isAnyOf("true", "false")
@@ -56,6 +62,7 @@ object Utils {
     }
 
     /// https://stackoverflow.com/questions/4605527/converting-pixels-to-dp
+    @AnyThread
     @JvmStatic
     fun convertDpToPixel(dp: Double): Double {
         return dp * Platform.getDensity()

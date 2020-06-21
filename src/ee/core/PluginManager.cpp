@@ -48,13 +48,12 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 bool ee_staticInitializePlugins() {
     auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
                                                 "ee_staticInitializePlugins",
-                                                "(Ljava/lang/String;)Z");
-    auto name_java = JniUtils::toJavaString(name);
+                                                "()Z");
     return method->getEnv()->CallStaticBooleanMethod(
-        method->getClass(), method->getMethodId(), name_java->get());
+        method->getClass(), method->getMethodId());
 }
 
-bool ee_staticAddPlugin(const std::string& name) {
+bool ee_staticAddPlugin(const char* name) {
     auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
                                                 "ee_staticAddPlugin",
                                                 "(Ljava/lang/String;)Z");
@@ -63,7 +62,7 @@ bool ee_staticAddPlugin(const std::string& name) {
         method->getClass(), method->getMethodId(), name_java->get());
 }
 
-bool ee_staticRemovePlugin(const std::string& plugin) {
+bool ee_staticRemovePlugin(const char* name) {
     auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
                                                 "ee_staticRemovePlugin",
                                                 "(Ljava/lang/String;)Z");

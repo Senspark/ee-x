@@ -2,16 +2,18 @@ package com.ee.core.internal
 
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.AnyThread
 import com.ee.core.Logger
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 
 object Thread {
     private val _logger = Logger(Thread::class.java.name)
 
     /// https://stackoverflow.com/questions/1069066/get-current-stack-trace-in-java
     private val currentStackTrace: Array<StackTraceElement>
-        get() = java.lang.Thread.currentThread().stackTrace
+        @AnyThread get() = java.lang.Thread.currentThread().stackTrace
 
+    @AnyThread
     @JvmStatic
     fun checkMainThread() {
         if (!isMainThread()) {
@@ -19,14 +21,16 @@ object Thread {
             for (e in currentStackTrace) {
                 _logger.warn(e.toString())
             }
-            Truth.assertThat(false).isTrue()
+            assertThat(false).isTrue()
         }
     }
 
+    @AnyThread
     fun isMainThread(): Boolean {
         return java.lang.Thread.currentThread() === Looper.getMainLooper().thread
     }
 
+    @AnyThread
     fun runOnMainThread(callback: Runnable): Boolean {
         if (isMainThread()) {
             callback.run()
@@ -40,6 +44,7 @@ object Thread {
         return false
     }
 
+    @AnyThread
     @JvmStatic
     fun runOnMainThreadDelayed(seconds: Float, callback: Runnable) {
         val handler = Handler(Looper.getMainLooper())

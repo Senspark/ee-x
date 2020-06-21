@@ -54,16 +54,16 @@ public class GoogleAnalytics implements IPlugin {
 
     private static final Logger _logger = new Logger(GoogleAnalytics.class.getName());
 
-    private Context _context;
     private IMessageBridge _bridge;
+    private Context _context;
     private com.google.android.gms.analytics.GoogleAnalytics _analytics;
     private Map<String, GoogleAnalyticsTracker> _trackers;
     private boolean _exceptionReportingEnabled;
 
-    public GoogleAnalytics(@NonNull Context context, @NonNull IMessageBridge bridge) {
+    public GoogleAnalytics(@NonNull IMessageBridge bridge, @NonNull Context context, @Nullable Activity activity) {
         Thread.checkMainThread();
-        _context = context;
         _bridge = bridge;
+        _context = context;
         _analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(_context);
         _trackers = new HashMap<>();
         _exceptionReportingEnabled = false;

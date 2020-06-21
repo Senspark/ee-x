@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.installreferrer.api.InstallReferrerClient;
 import com.android.installreferrer.api.InstallReferrerStateListener;
@@ -14,7 +15,6 @@ import com.ee.core.IMessageBridge;
 import com.ee.core.IPlugin;
 import com.ee.core.Logger;
 import com.ee.core.internal.Thread;
-import com.ee.core.internal.Utils;
 
 public class CampaignReceiver /* extends BroadcastReceiver */ implements InstallReferrerStateListener, IPlugin {
     private static final String k__initialize = "CampaignReceiver_initialize";
@@ -22,12 +22,12 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 
     private static final Logger _logger = new Logger(CampaignReceiver.class.getName());
 
-    private Context _context;
     private IMessageBridge _bridge;
+    private Context _context;
     private boolean _initialized;
     private InstallReferrerClient _mReferrerClient;
 
-    public CampaignReceiver(@NonNull Context context, @NonNull IMessageBridge bridge) {
+    public CampaignReceiver(@NonNull IMessageBridge bridge, @NonNull Context context, @Nullable Activity activity) {
         _logger.debug("constructor begin: context = " + context);
         Thread.checkMainThread();
         _context = context;
@@ -47,12 +47,6 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
 //            _bridge.callCpp(k__onReceivedLink, referral);
 //        }
 //    }
-
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "CampaignReceiver";
-    }
 
     @Override
     public void onCreate(@NonNull Activity activity) {

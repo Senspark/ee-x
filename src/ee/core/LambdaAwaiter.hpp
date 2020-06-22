@@ -22,7 +22,9 @@ Function makeFunction(const Callable& callable) {
     if constexpr (IsAwaitableV<
                       std::invoke_result_t<Callable, const Resolver&>>) {
         return [callable](const Resolver& resolver) { //
-            noAwait(callable(resolver));
+            noAwait([callable, &resolver]() -> Task<> {
+                co_await callable(resolver);
+            });
         };
     }
     // Normal callable.

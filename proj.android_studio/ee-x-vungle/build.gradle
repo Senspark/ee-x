@@ -1,6 +1,7 @@
 // https://support.vungle.com/hc/en-us/articles/115000468071-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-5-
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion

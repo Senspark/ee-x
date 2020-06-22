@@ -1,5 +1,6 @@
 package com.ee.ads
 
+import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
@@ -10,6 +11,7 @@ import com.ee.core.registerHandler
 class InterstitialAdHelper(private val _bridge: IMessageBridge,
                            private val _ad: IInterstitialAd,
                            private val _helper: MessageHelper) {
+    @AnyThread
     fun registerHandlers() {
         _bridge.registerHandler(_helper.isLoaded) {
             Utils.toString(_ad.isLoaded)
@@ -24,6 +26,7 @@ class InterstitialAdHelper(private val _bridge: IMessageBridge,
         }
     }
 
+    @AnyThread
     fun deregisterHandlers() {
         _bridge.deregisterHandler(_helper.isLoaded)
         _bridge.deregisterHandler(_helper.load)

@@ -11,6 +11,7 @@ import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.ConcurrentHashMap
 
 @ImplicitReflectionSerializer
 @UnstableDefault
@@ -28,7 +29,7 @@ class FirebasePerformance(
     }
 
     private val _performance = com.google.firebase.perf.FirebasePerformance.getInstance()
-    private val _traces: MutableMap<String, FirebasePerformanceTrace> = HashMap()
+    private val _traces: MutableMap<String, FirebasePerformanceTrace> = ConcurrentHashMap()
 
     init {
         registerHandlers()

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Point
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.internal.Utils
@@ -18,13 +19,14 @@ import com.facebook.ads.AudienceNetworkAds
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class FacebookAds(
+class FacebookAds(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -45,10 +47,10 @@ private class FacebookAds(
     }
 
     private val _bannerHelper = FacebookBannerHelper()
-    private val _bannerAds: MutableMap<String, FacebookBannerAd> = HashMap()
-    private val _nativeAds: MutableMap<String, FacebookNativeAd> = HashMap()
-    private val _interstitialAds: MutableMap<String, FacebookInterstitialAd> = HashMap()
-    private val _rewardedAds: MutableMap<String, FacebookRewardedAd> = HashMap()
+    private val _bannerAds: MutableMap<String, FacebookBannerAd> = ConcurrentHashMap()
+    private val _nativeAds: MutableMap<String, FacebookNativeAd> = ConcurrentHashMap()
+    private val _interstitialAds: MutableMap<String, FacebookInterstitialAd> = ConcurrentHashMap()
+    private val _rewardedAds: MutableMap<String, FacebookRewardedAd> = ConcurrentHashMap()
 
     init {
         if (!AudienceNetworkAds.isInitialized(_context)) {
@@ -126,6 +128,7 @@ private class FacebookAds(
         }
         _bridge.registerHandler(k__getBannerAdSize) { message ->
             @Serializable
+            @Suppress("unused")
             class Response(
                 val width: Int,
                 val height: Int
@@ -197,12 +200,12 @@ private class FacebookAds(
     val testDeviceHash: String
         @AnyThread get() = ""
 
-    @AnyThread
+    @UiThread
     fun addTestDevice(hash: String) {
         AdSettings.addTestDevice(hash)
     }
 
-    @AnyThread
+    @UiThread
     fun clearTestDevices() {
         AdSettings.clearTestDevices()
     }

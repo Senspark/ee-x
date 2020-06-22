@@ -1,6 +1,7 @@
 package com.ee.ads
 
 import android.graphics.Point
+import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
@@ -18,6 +19,7 @@ import kotlinx.serialization.UnstableDefault
 class AdViewHelper(private val _bridge: IMessageBridge,
                    private val _view: IAdView,
                    private val _helper: MessageHelper) {
+    @AnyThread
     fun registerHandlers() {
         _bridge.registerHandler(_helper.isLoaded) {
             Utils.toString(_view.isLoaded)
@@ -79,6 +81,7 @@ class AdViewHelper(private val _bridge: IMessageBridge,
         }
     }
 
+    @AnyThread
     fun deregisterHandlers() {
         _bridge.deregisterHandler(_helper.isLoaded)
         _bridge.deregisterHandler(_helper.load)

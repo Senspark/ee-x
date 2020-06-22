@@ -36,7 +36,9 @@ internal class AdMobRewardedAd(
     init {
         _logger.info("constructor: adId = %s", _adId)
         createInternalAd()
-        registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            registerHandlers()
+        })
     }
 
     fun onCreate(activity: Activity) {
@@ -52,7 +54,9 @@ internal class AdMobRewardedAd(
     fun destroy() {
         _logger.info("destroy: adId = %s", _adId)
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
     @AnyThread

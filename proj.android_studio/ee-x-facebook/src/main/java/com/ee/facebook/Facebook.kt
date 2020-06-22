@@ -46,7 +46,7 @@ import java.io.File
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-internal class Facebook(
+class Facebook(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -151,6 +151,7 @@ internal class Facebook(
         _accessTokenTracker.startTracking()
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(k__registerNotifications) {
             registerNotifications()
@@ -219,6 +220,7 @@ internal class Facebook(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(k__registerNotifications)
         _bridge.deregisterHandler(k__isLoggedIn)

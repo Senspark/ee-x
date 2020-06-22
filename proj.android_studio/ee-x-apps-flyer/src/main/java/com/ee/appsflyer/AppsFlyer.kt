@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.core.IMessageBridge
@@ -19,7 +21,7 @@ import kotlinx.serialization.UnstableDefault
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class AppsFlyer(
+class AppsFlyer(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -58,6 +60,7 @@ private class AppsFlyer(
         deregisterHandlers()
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
             initialize(message)
@@ -87,6 +90,7 @@ private class AppsFlyer(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kStartTracking)
@@ -96,6 +100,7 @@ private class AppsFlyer(
         _bridge.deregisterHandler(kTrackEvent)
     }
 
+    @UiThread
     fun initialize(devKey: String) {
         Thread.checkMainThread()
         val listener = object : AppsFlyerConversionListener {
@@ -122,17 +127,20 @@ private class AppsFlyer(
         _tracker.init(devKey, listener, _context)
     }
 
+    @UiThread
     fun startTracking() {
         _tracker.startTracking(_context as Application?)
     }
 
     val deviceId: String
-        get() = _tracker.getAppsFlyerUID(_context)
+        @AnyThread get() = _tracker.getAppsFlyerUID(_context)
 
+    @UiThread
     fun setDebugEnabled(enabled: Boolean) {
         _tracker.setDebugLog(enabled)
     }
 
+    @UiThread
     fun trackEvent(name: String, values: Map<String, Any>) {
         _tracker.trackEvent(_context, name, values)
     }

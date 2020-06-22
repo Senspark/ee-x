@@ -50,8 +50,10 @@ internal class FacebookBannerAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        createInternalAd()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+        })
     }
 
     fun onCreate(activity: Activity) {
@@ -65,10 +67,13 @@ internal class FacebookBannerAd(
         _activity = null
     }
 
+    @AnyThread
     fun destroy() {
         _logger.info("destroy: adId = $_adId")
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
     @AnyThread

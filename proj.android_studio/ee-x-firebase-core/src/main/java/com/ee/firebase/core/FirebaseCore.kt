@@ -25,18 +25,12 @@ class FirebaseCore(
         _logger.debug("constructor end.")
     }
 
-    override fun onCreate(activity: Activity) {
-        _activity = activity
-    }
-
+    override fun onCreate(activity: Activity) {}
     override fun onStart() {}
     override fun onStop() {}
     override fun onResume() {}
     override fun onPause() {}
-
-    override fun onDestroy() {
-        _activity = null
-    }
+    override fun onDestroy() {}
 
     override fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
         return false

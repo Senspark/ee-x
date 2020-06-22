@@ -12,7 +12,7 @@ import com.ee.core.internal.Thread
 import com.ee.core.registerHandler
 import com.tenjin.android.TenjinSDK
 
-private class Tenjin(
+class Tenjin(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -49,7 +49,9 @@ private class Tenjin(
 
     override fun destroy() {
         deregisterHandlers()
-        _tenjin = null
+        Thread.runOnMainThread(Runnable {
+            _tenjin = null
+        })
     }
 
     @AnyThread

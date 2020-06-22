@@ -2,6 +2,7 @@
 // https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion

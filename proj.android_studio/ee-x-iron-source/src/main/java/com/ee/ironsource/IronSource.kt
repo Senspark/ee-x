@@ -19,7 +19,7 @@ import com.ironsource.mediationsdk.sdk.RewardedVideoListener
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-private class IronSource(
+class IronSource(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?)
@@ -78,16 +78,18 @@ private class IronSource(
         return false
     }
 
-    @AnyThread
     override fun destroy() {
         deregisterHandlers()
-        if (!_initialized) {
-            return
-        }
-        com.ironsource.mediationsdk.IronSource.setInterstitialListener(null)
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null)
+        Thread.runOnMainThread(Runnable {
+            if (!_initialized) {
+                return@Runnable
+            }
+            com.ironsource.mediationsdk.IronSource.setInterstitialListener(null)
+            com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null)
+        })
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(k__initialize) { message ->
             initialize(message)

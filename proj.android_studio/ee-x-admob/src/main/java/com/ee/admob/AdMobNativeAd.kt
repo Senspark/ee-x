@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.ads.AdViewHelper
 import com.ee.ads.IAdView
@@ -70,10 +71,11 @@ internal class AdMobNativeAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        Thread.checkMainThread()
-        createInternalAd()
-        createView()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+            createView()
+        })
     }
 
     fun onCreate(activity: Activity) {
@@ -87,22 +89,27 @@ internal class AdMobNativeAd(
         _activity = null
     }
 
+    @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
-        Thread.checkMainThread()
         deregisterHandlers()
-        destroyView()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyView()
+            destroyInternalAd()
+        })
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _helper.deregisterHandlers()
     }
 
+    @UiThread
     private fun createInternalAd(): Boolean {
         Thread.checkMainThread()
         if (_ad != null) {
@@ -128,6 +135,7 @@ internal class AdMobNativeAd(
         return true
     }
 
+    @UiThread
     private fun destroyInternalAd(): Boolean {
         Thread.checkMainThread()
         if (_ad == null) {
@@ -138,6 +146,7 @@ internal class AdMobNativeAd(
         return true
     }
 
+    @UiThread
     private fun createView() {
         Thread.checkMainThread()
         assertThat(_view).isNull()
@@ -152,6 +161,7 @@ internal class AdMobNativeAd(
         addToActivity()
     }
 
+    @UiThread
     private fun destroyView() {
         Thread.checkMainThread()
         removeFromActivity()
@@ -159,12 +169,14 @@ internal class AdMobNativeAd(
         _viewHelper = null
     }
 
+    @UiThread
     private fun addToActivity() {
         val activity = _activity ?: return
         val rootView = Utils.getRootView(activity)
         rootView.addView(_view)
     }
 
+    @UiThread
     private fun removeFromActivity() {
         val activity = _activity ?: return
         val rootView = Utils.getRootView(activity)
@@ -172,12 +184,13 @@ internal class AdMobNativeAd(
     }
 
     override val isLoaded: Boolean
-        get() {
+        @UiThread get() {
             Thread.checkMainThread()
             assertThat(_ad).isNotNull()
             return _isLoaded
         }
 
+    @UiThread
     override fun load() {
         _logger.info("${this::load}")
         Thread.checkMainThread()
@@ -186,20 +199,20 @@ internal class AdMobNativeAd(
     }
 
     override var position: Point
-        get() = _viewHelper?.position ?: Point(0, 0)
-        set(value) {
+        @UiThread get() = _viewHelper?.position ?: Point(0, 0)
+        @UiThread set(value) {
             _viewHelper?.position = value
         }
 
     override var size: Point
-        get() = _viewHelper?.size ?: Point(0, 0)
-        set(value) {
+        @UiThread get() = _viewHelper?.size ?: Point(0, 0)
+        @UiThread set(value) {
             _viewHelper?.size = value
         }
 
     override var isVisible: Boolean
-        get() = _viewHelper?.isVisible ?: false
-        set(value) {
+        @UiThread get() = _viewHelper?.isVisible ?: false
+        @UiThread set(value) {
             _viewHelper?.isVisible = value
         }
 

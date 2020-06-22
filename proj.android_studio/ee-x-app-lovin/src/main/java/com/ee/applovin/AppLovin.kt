@@ -3,6 +3,8 @@ package com.ee.applovin
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.applovin.adview.AppLovinIncentivizedInterstitial
 import com.applovin.adview.AppLovinInterstitialAd
 import com.applovin.adview.AppLovinInterstitialAdDialog
@@ -16,7 +18,7 @@ import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
 
-private class AppLovin(
+class AppLovin(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -67,21 +69,24 @@ private class AppLovin(
 
     override fun destroy() {
         deregisterHandlers()
-        if (!_initialized) {
-            return
-        }
-        _sdk = null
-        _interstitialAd?.let { ad ->
-            ad.setAdLoadListener(null)
-            ad.setAdDisplayListener(null)
-            ad.setAdClickListener(null)
-        }
-        _interstitialAd = null
-        _interstitialAdListener = null
-        _rewardedAd = null
-        _rewardedAdListener = null
+        Thread.runOnMainThread(Runnable {
+            if (!_initialized) {
+                return@Runnable
+            }
+            _sdk = null
+            _interstitialAd?.let { ad ->
+                ad.setAdLoadListener(null)
+                ad.setAdDisplayListener(null)
+                ad.setAdClickListener(null)
+            }
+            _interstitialAd = null
+            _interstitialAdListener = null
+            _rewardedAd = null
+            _rewardedAdListener = null
+        })
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(k__initialize) { message ->
             initialize(message)
@@ -123,6 +128,7 @@ private class AppLovin(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(k__initialize)
         _bridge.deregisterHandler(k__setTestAdsEnabled)
@@ -136,6 +142,7 @@ private class AppLovin(
         _bridge.deregisterHandler(k__showRewardedAd)
     }
 
+    @UiThread
     fun initialize(key: String) {
         Thread.checkMainThread()
         if (_initialized) {
@@ -163,56 +170,65 @@ private class AppLovin(
         _initialized = true
     }
 
+    @UiThread
     fun setTestAdEnabled(enabled: Boolean) {
         Thread.checkMainThread()
         // Removed.
     }
 
+    @UiThread
     fun setVerboseLogging(enabled: Boolean) {
         Thread.checkMainThread()
-        val sdk = _sdk ?: return
+        val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
         sdk.settings.setVerboseLogging(enabled)
     }
 
+    @UiThread
     fun setMuted(enabled: Boolean) {
         Thread.checkMainThread()
-        val sdk = _sdk ?: return
+        val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
         sdk.settings.isMuted = enabled
     }
 
+    @UiThread
     fun hasInterstitialAd(): Boolean {
         Thread.checkMainThread()
-        val ad = _interstitialAd ?: return false
+        val ad = _interstitialAd ?: throw IllegalStateException("Please call initialize() first")
         return ad.isAdReadyToDisplay
     }
 
+    @UiThread
     fun loadInterstitialAd() {
         Thread.checkMainThread()
-        val sdk = _sdk ?: return
+        val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
         sdk.adService.loadNextAd(AppLovinAdSize.INTERSTITIAL, _interstitialAdListener)
     }
 
+    @UiThread
     fun showInterstitialAd() {
         Thread.checkMainThread()
-        val ad = _interstitialAd ?: return
+        val ad = _interstitialAd ?: throw IllegalStateException("Please call initialize() first")
         ad.show()
     }
 
+    @UiThread
     fun hasRewardedAd(): Boolean {
         Thread.checkMainThread()
-        val ad = _rewardedAd ?: return false
+        val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
         return ad.isAdReadyToDisplay
     }
 
+    @UiThread
     fun loadRewardedAd() {
         Thread.checkMainThread()
-        val ad = _rewardedAd ?: return
+        val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
         ad.preload(_rewardedAdListener)
     }
 
+    @UiThread
     fun showRewardedAd() {
         Thread.checkMainThread()
-        val ad = _rewardedAd ?: return
+        val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
         ad.show(_context, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener)
     }
 }

@@ -68,7 +68,6 @@ public class Store implements IPlugin {
     private Map<String, SkuDetails> _skuDetailsList;
 
     public Store(@NonNull IMessageBridge bridge, @NonNull Context context, @Nullable Activity activity) {
-        Thread.checkMainThread();
         _bridge = bridge;
         _context = context;
         _activity = activity;

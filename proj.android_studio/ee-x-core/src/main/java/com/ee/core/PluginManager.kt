@@ -5,12 +5,14 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.os.Bundle
 import androidx.annotation.AnyThread
+import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Platform
 import com.ee.core.internal.Utils
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import java.lang.reflect.InvocationTargetException
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 6/5/16.
@@ -32,8 +34,8 @@ class PluginManager private constructor() {
     }
 
     private val _bridge: IMessageBridge = MessageBridge.getInstance()
-    private val _plugins: MutableMap<String, IPlugin>
-    private val _classes: MutableMap<String, String>
+    private val _plugins: MutableMap<String, IPlugin> = ConcurrentHashMap()
+    private val _classes: MutableMap<String, String> = ConcurrentHashMap()
     private val _lifecycleCallbacks: ActivityLifecycleCallbacks
 
     private var _context: Context? = null
@@ -41,8 +43,6 @@ class PluginManager private constructor() {
     private var _activityClass: Class<out Activity>? = null
 
     init {
-        _plugins = HashMap()
-        _classes = HashMap()
         _classes["AdMob"] = "com.ee.admob.AdMob"
         _classes["AppLovin"] = "com.ee.applovin.AppLovin"
         _classes["AppsFlyer"] = "com.ee.appsflyer.AppsFlyer"
@@ -156,6 +156,7 @@ class PluginManager private constructor() {
             return false
         }
         _context = context
+        _activity = activity
         _activityClass = activity::class.java
         activity.application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
         Platform.registerHandlers(_bridge, context)
@@ -176,8 +177,11 @@ class PluginManager private constructor() {
         val className = _classes[name] as String
         try {
             val clazz = Class.forName(className)
-            val constructor = clazz.getConstructor(Context::class.java, IMessageBridge::class.java)
-            val plugin = constructor.newInstance(_context, _bridge)
+            val constructor = clazz.getConstructor(
+                IMessageBridge::class.java,
+                Context::class.java,
+                Activity::class.java)
+            val plugin = constructor.newInstance(_bridge, _context, _activity)
             _plugins[name] = plugin as IPlugin
         } catch (ex: ClassNotFoundException) {
             ex.printStackTrace()
@@ -236,6 +240,7 @@ class PluginManager private constructor() {
 }
 
 @ImplicitReflectionSerializer
+@NativeThread
 @Suppress("unused")
 @UnstableDefault
 private fun ee_staticInitializePlugins(): Boolean {
@@ -247,14 +252,22 @@ private fun ee_staticInitializePlugins(): Boolean {
     return PluginManager.getInstance().initializePlugins(activity)
 }
 
+@NativeThread
 @Suppress("unused")
 private fun ee_staticAddPlugin(name: String): Boolean {
     return PluginManager.getInstance().addPlugin(name)
 }
 
+@NativeThread
 @Suppress("unused")
 private fun ee_staticRemovePlugin(name: String): Boolean {
     return PluginManager.getInstance().removePlugin(name)
+}
+
+@NativeThread
+@Suppress("unused")
+private fun ee_staticGetActivity(): Any? {
+    return PluginManager.getInstance().getActivity()
 }
 
 /// Legacy method used by Soomla.

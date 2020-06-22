@@ -3,11 +3,11 @@ package com.ee.vungle
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
-import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
@@ -27,7 +27,7 @@ import kotlinx.serialization.UnstableDefault
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class Vungle(
+class Vungle(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -69,7 +69,7 @@ private class Vungle(
         deregisterHandlers()
     }
 
-    @NativeThread
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(k__initialize) { message ->
             @Serializable
@@ -94,7 +94,7 @@ private class Vungle(
         }
     }
 
-    @NativeThread
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(k__initialize)
         _bridge.deregisterHandler(k__hasRewardedAd)
@@ -146,6 +146,7 @@ private class Vungle(
             override fun onAdLoad(adId: String) {
                 _logger.info("${Vungle::loadRewardedAd}: ${this::onAdLoad}: $adId")
                 @Serializable
+                @Suppress("unused")
                 class Response(
                     val ad_id: String
                 )
@@ -157,6 +158,7 @@ private class Vungle(
             override fun onError(adId: String, throwable: VungleException) {
                 _logger.info("${Vungle::loadRewardedAd}: ${this::onError}: $adId reason: ${throwable.localizedMessage}")
                 @Serializable
+                @Suppress("unused")
                 class Response(
                     val ad_id: String,
                     val message: String
@@ -179,6 +181,7 @@ private class Vungle(
             override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
                 _logger.info("${Vungle::showRewardedAd}: ${this::onAdEnd}: $adId successful = $completed clicked = $isCTAClicked")
                 @Serializable
+                @Suppress("unused")
                 class Response(
                     val ad_id: String,
                     val rewarded: Boolean
@@ -191,6 +194,7 @@ private class Vungle(
             override fun onError(adId: String, throwable: VungleException) {
                 _logger.info("${Vungle::showRewardedAd}: ${this::onError}: $adId message = ${throwable.localizedMessage}")
                 @Serializable
+                @Suppress("unused")
                 class Response(
                     val ad_id: String,
                     val message: String

@@ -9,7 +9,7 @@ import com.ee.core.IPlugin
 import com.ee.core.Logger
 import com.ee.core.registerHandler
 
-private class FirebaseCrashlytics(
+class FirebaseCrashlytics(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {

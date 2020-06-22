@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
+import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.ads.AdViewHelper
 import com.ee.ads.IAdView
@@ -13,7 +14,6 @@ import com.ee.ads.MessageHelper
 import com.ee.ads.ViewHelper
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
-import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils.getRootView
 import com.google.android.gms.ads.AdListener
@@ -50,7 +50,9 @@ internal class AdMobBannerAd(
     init {
         _logger.info("constructor: adId = %s", _adId)
         createInternalAd()
-        registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            registerHandlers()
+        })
     }
 
     fun onCreate(activity: Activity) {
@@ -74,23 +76,26 @@ internal class AdMobBannerAd(
         _activity = null
     }
 
-    @NativeThread
+    @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
-    @NativeThread
+    @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
     }
 
-    @NativeThread
+    @AnyThread
     private fun deregisterHandlers() {
         _helper.deregisterHandlers()
     }
 
+    @UiThread
     private fun createInternalAd(): Boolean {
         Thread.checkMainThread()
         if (_ad != null) {
@@ -112,6 +117,7 @@ internal class AdMobBannerAd(
         return true
     }
 
+    @UiThread
     private fun destroyInternalAd(): Boolean {
         Thread.checkMainThread()
         val ad = _ad ?: return false
@@ -138,12 +144,13 @@ internal class AdMobBannerAd(
     }
 
     override val isLoaded: Boolean
-        get() {
+        @UiThread get() {
             Thread.checkMainThread()
             Truth.assertThat(_ad).isNotNull()
             return _isLoaded
         }
 
+    @UiThread
     override fun load() {
         _logger.info("${this::load}")
         Thread.checkMainThread()
@@ -152,20 +159,20 @@ internal class AdMobBannerAd(
     }
 
     override var position: Point
-        get() = _viewHelper?.position ?: Point(0, 0)
-        set(value) {
+        @UiThread get() = _viewHelper?.position ?: Point(0, 0)
+        @UiThread set(value) {
             _viewHelper?.position = value
         }
 
     override var size: Point
-        get() = _viewHelper?.size ?: Point(0, 0)
-        set(value) {
+        @UiThread get() = _viewHelper?.size ?: Point(0, 0)
+        @UiThread set(value) {
             _viewHelper?.size = value
         }
 
     override var isVisible: Boolean
-        get() = _viewHelper?.isVisible ?: false
-        set(value) {
+        @UiThread get() = _viewHelper?.isVisible ?: false
+        @UiThread set(value) {
             _viewHelper?.isVisible = value
             if (value) {
                 // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until

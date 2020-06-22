@@ -8,6 +8,7 @@ import com.ee.ads.InterstitialAdHelper
 import com.ee.ads.MessageHelper
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
+import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
@@ -35,16 +36,19 @@ internal class FacebookInterstitialAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        Thread.checkMainThread()
-        createInternalAd()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+        })
     }
 
+    @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
-        Thread.checkMainThread()
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
     @AnyThread
@@ -99,6 +103,7 @@ internal class FacebookInterstitialAd(
         ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
     }
 
+    @UiThread
     override fun show() {
         Thread.checkMainThread()
         val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")

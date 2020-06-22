@@ -24,19 +24,19 @@ internal class FirebasePerformanceTrace(
     }
 
     private val k__start: String
-        get() = "FirebasePerformance_start_$_traceName"
+        @AnyThread get() = "FirebasePerformance_start_$_traceName"
 
     private val k__stop: String
-        get() = "FirebasePerformance_stop_$_traceName"
+        @AnyThread get() = "FirebasePerformance_stop_$_traceName"
 
     private val k__incrementMetric: String
-        get() = "FirebasePerformance_incrementMetric_$_traceName"
+        @AnyThread get() = "FirebasePerformance_incrementMetric_$_traceName"
 
     private val k__getLongMetric: String
-        get() = "FirebasePerformance_getLongMetric_$_traceName"
+        @AnyThread get() = "FirebasePerformance_getLongMetric_$_traceName"
 
     private val k__putMetric: String
-        get() = "FirebasePerformance_putMetric_$_traceName"
+        @AnyThread get() = "FirebasePerformance_putMetric_$_traceName"
 
     @AnyThread
     private fun registerHandlers() {

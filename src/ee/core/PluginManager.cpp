@@ -46,11 +46,18 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 
 #if defined(EE_X_ANDROID)
 bool ee_staticInitializePlugins() {
+    auto method = JniUtils::getStaticMethodInfo(
+        "com/ee/core/PluginManagerKt", "ee_staticInitializePlugins", "()Z");
+    return method->getEnv()->CallStaticBooleanMethod(method->getClass(),
+                                                     method->getMethodId());
+}
+
+void* ee_staticGetActivity() {
     auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
-                                                "ee_staticInitializePlugins",
-                                                "()Z");
-    return method->getEnv()->CallStaticBooleanMethod(
-        method->getClass(), method->getMethodId());
+                                                "ee_staticGetActivity",
+                                                "()Ljava/lang/Object;");
+    return method->getEnv()->CallStaticObjectMethod(method->getClass(),
+                                                    method->getMethodId());
 }
 
 bool ee_staticAddPlugin(const char* name) {
@@ -75,6 +82,7 @@ bool ee_staticRemovePlugin(const char* name) {
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
 bool ee_staticInitializePlugins();
+void* ee_staticGetActivity();
 bool ee_staticAddPlugin(const char* name);
 bool ee_staticRemovePlugin(const char* name);
 } // extern "C"
@@ -86,6 +94,10 @@ bool Self::initializePlugins<Library::Core>() {
     auto&& bridge = MessageBridge::getInstance();
     Platform::registerHandlers(bridge);
     return ee_staticInitializePlugins();
+}
+
+void* Self::getActivity() {
+    return ee_staticGetActivity();
 }
 
 bool Self::addPlugin(Plugin plugin) {

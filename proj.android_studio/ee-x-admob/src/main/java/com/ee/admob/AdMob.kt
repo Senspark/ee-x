@@ -7,7 +7,6 @@ import android.graphics.Point
 import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
-import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
@@ -20,13 +19,14 @@ import com.google.android.gms.ads.RequestConfiguration
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 10/13/17.
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class AdMob(
+class AdMob(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -48,10 +48,10 @@ private class AdMob(
 
     private val _bannerHelper = AdMobBannerHelper(_context)
     private val _testDevices: MutableList<String> = ArrayList()
-    private val _bannerAds: MutableMap<String, AdMobBannerAd> = HashMap()
-    private val _nativeAds: MutableMap<String, AdMobNativeAd> = HashMap()
-    private val _interstitialAds: MutableMap<String, AdMobInterstitialAd> = HashMap()
-    private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = HashMap()
+    private val _bannerAds: MutableMap<String, AdMobBannerAd> = ConcurrentHashMap()
+    private val _nativeAds: MutableMap<String, AdMobNativeAd> = ConcurrentHashMap()
+    private val _interstitialAds: MutableMap<String, AdMobInterstitialAd> = ConcurrentHashMap()
+    private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = ConcurrentHashMap()
 
     init {
         registerHandlers()
@@ -137,6 +137,7 @@ private class AdMob(
         }
         _bridge.registerHandler(k__getBannerAdSize) { message ->
             @Serializable
+            @Suppress("unused")
             class Response(
                 val width: Int,
                 val height: Int
@@ -212,7 +213,7 @@ private class AdMob(
     val emulatorTestDeviceHash: String
         @AnyThread get() = AdRequest.DEVICE_ID_EMULATOR
 
-    @NativeThread
+    @AnyThread
     fun addTestDevice(hash: String) {
         Thread.checkMainThread()
         _testDevices.add(hash)
@@ -222,12 +223,12 @@ private class AdMob(
         MobileAds.setRequestConfiguration(configuration)
     }
 
-    @NativeThread
+    @AnyThread
     fun getBannerAdSize(sizeId: Int): Point {
         return _bannerHelper.getSize(sizeId)
     }
 
-    @NativeThread
+    @AnyThread
     fun createBannerAd(adId: String, size: AdSize): Boolean {
         if (_bannerAds.containsKey(adId)) {
             return false
@@ -237,7 +238,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun destroyBannerAd(adId: String): Boolean {
         val ad = _bannerAds[adId] ?: return false
         ad.destroy()
@@ -245,7 +246,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun createNativeAd(adId: String, layoutName: String,
                        identifiers: Map<String, String>): Boolean {
         if (_nativeAds.containsKey(adId)) {
@@ -256,7 +257,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun destroyNativeAd(adId: String): Boolean {
         val ad = _nativeAds[adId] ?: return false
         ad.destroy()
@@ -264,7 +265,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun createInterstitialAd(adId: String): Boolean {
         if (_interstitialAds.containsKey(adId)) {
             return false
@@ -274,7 +275,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun destroyInterstitialAd(adId: String): Boolean {
         val ad = _interstitialAds[adId] ?: return false
         ad.destroy()
@@ -282,7 +283,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun createRewardedAd(adId: String): Boolean {
         if (_rewardedAds.containsKey(adId)) {
             return false
@@ -292,7 +293,7 @@ private class AdMob(
         return true
     }
 
-    @NativeThread
+    @AnyThread
     fun destroyRewardedAd(adId: String): Boolean {
         val ad = _rewardedAds[adId] ?: return false
         ad.destroy()

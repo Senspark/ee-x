@@ -2,6 +2,7 @@ package com.ee.admob
 
 import android.content.Context
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.ads.IInterstitialAd
 import com.ee.ads.InterstitialAdHelper
 import com.ee.ads.MessageHelper
@@ -56,12 +57,14 @@ internal class AdMobInterstitialAd(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _helper.deregisterHandlers()
         _bridge.deregisterHandler(_messageHelper.createInternalAd)
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
+    @UiThread
     private fun createInternalAd(): Boolean {
         Thread.checkMainThread()
         if (_ad != null) {
@@ -70,10 +73,11 @@ internal class AdMobInterstitialAd(
         val ad = InterstitialAd(_context)
         ad.adUnitId = _adId
         ad.adListener = this
-        _ad = ad;
+        _ad = ad
         return true
     }
 
+    @UiThread
     private fun destroyInternalAd(): Boolean {
         Thread.checkMainThread()
         val ad = _ad ?: return false
@@ -83,12 +87,13 @@ internal class AdMobInterstitialAd(
     }
 
     override val isLoaded: Boolean
-        get() {
+        @UiThread get() {
             Thread.checkMainThread()
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             return ad.isLoaded
         }
 
+    @UiThread
     override fun load() {
         _logger.info("${this::load}")
         Thread.checkMainThread()
@@ -96,6 +101,7 @@ internal class AdMobInterstitialAd(
         ad.loadAd(AdRequest.Builder().build())
     }
 
+    @UiThread
     override fun show() {
         Thread.checkMainThread()
         val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")

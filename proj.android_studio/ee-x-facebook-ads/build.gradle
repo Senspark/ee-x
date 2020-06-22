@@ -1,6 +1,7 @@
 // https://developers.facebook.com/docs/audience-network/android
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 repositories {
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }

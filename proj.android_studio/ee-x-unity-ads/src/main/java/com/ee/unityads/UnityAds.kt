@@ -23,7 +23,7 @@ import kotlinx.serialization.UnstableDefault
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class UnityAds(
+class UnityAds(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -68,10 +68,12 @@ private class UnityAds(
 
     override fun destroy() {
         deregisterHandlers()
-        if (!_initialized) {
-            return
-        }
-        com.unity3d.ads.UnityAds.removeListener(_listener)
+        Thread.runOnMainThread(Runnable {
+            if (!_initialized) {
+                return@Runnable
+            }
+            com.unity3d.ads.UnityAds.removeListener(_listener)
+        })
     }
 
     @AnyThread
@@ -134,34 +136,37 @@ private class UnityAds(
                 Thread.checkMainThread()
                 if (state == FinishState.ERROR) {
                     @Serializable
-                    class Response(
+                    @Suppress("unused")
+                    class ResponseA(
                         val ad_id: String,
                         val message: String
                     )
 
-                    val response = Response(adId, "")
+                    val response = ResponseA(adId, "")
                     _bridge.callCpp(k__onFailedToShow, response.serialize())
                     return
                 }
                 if (state == FinishState.SKIPPED) {
                     @Serializable
-                    class Response(
+                    @Suppress("unused")
+                    class ResponseB(
                         val ad_id: String,
                         val rewarded: Boolean
                     )
 
-                    val response = Response(adId, false)
+                    val response = ResponseB(adId, false)
                     _bridge.callCpp(k__onClosed, response.serialize())
                     return
                 }
                 if (state == FinishState.COMPLETED) {
                     @Serializable
-                    class Response(
+                    @Suppress("unused")
+                    class ResponseC(
                         val ad_id: String,
                         val rewarded: Boolean
                     )
 
-                    val response = Response(adId, true)
+                    val response = ResponseC(adId, true)
                     _bridge.callCpp(k__onClosed, response.serialize())
                     return
                 }
@@ -190,17 +195,17 @@ private class UnityAds(
     @UiThread
     fun hasRewardedAd(adId: String): Boolean {
         Thread.checkMainThread()
-        return if (!_initialized) {
-            false
-        } else com.unity3d.ads.UnityAds.isReady(adId)
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+        return com.unity3d.ads.UnityAds.isReady(adId)
     }
 
     @UiThread
     fun showRewardedAd(adId: String) {
         Thread.checkMainThread()
         if (!_initialized) {
-            // FIXME: handle error.
-            return
+            throw IllegalStateException("Please call initialize() first")
         }
         com.unity3d.ads.UnityAds.show(_activity, adId)
     }

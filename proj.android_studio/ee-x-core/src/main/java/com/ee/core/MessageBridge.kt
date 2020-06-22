@@ -1,5 +1,6 @@
 package com.ee.core
 
+import com.ee.core.internal.NativeThread
 import com.ee.core.internal.deserialize
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
@@ -122,6 +123,7 @@ class MessageBridge private constructor() : IMessageBridge {
 
 private external fun ee_callCppInternal(tag: String, message: String): String
 
+@NativeThread
 @Suppress("unused")
 private fun ee_staticCall(tag: String, message: String): String {
     return MessageBridge.staticCall(tag, message)

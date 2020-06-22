@@ -31,16 +31,19 @@ internal class FacebookRewardedAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        Thread.checkMainThread()
-        createInternalAd()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+        })
     }
 
+    @AnyThread
     fun destroy() {
         _logger.info("destroy: adId = %s", _adId)
-        Thread.checkMainThread()
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
     @AnyThread

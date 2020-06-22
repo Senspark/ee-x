@@ -182,6 +182,11 @@ public func ee_staticInitializePlugins() -> Bool {
     #endif // os(iOS)
 }
 
+@_cdecl("ee_staticGetActivity")
+public func ee_staticGetActivity() -> Any? {
+    return nil
+}
+
 @_cdecl("ee_staticAddPlugin")
 public func ee_staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
     return PluginManager.staticAddPlugin(name)

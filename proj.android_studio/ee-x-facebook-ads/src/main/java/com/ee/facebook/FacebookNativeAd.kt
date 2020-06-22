@@ -59,7 +59,6 @@ internal class FacebookNativeAd(
         private const val k__media = "media"
         private const val k__social_context = "social_context"
         private const val k__title = "title"
-        private const val k__cover = "cover"
     }
 
     private val _messageHelper = MessageHelper("FacebookNativeAd", _adId)
@@ -71,10 +70,11 @@ internal class FacebookNativeAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        Thread.checkMainThread()
-        createInternalAd()
-        createView()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+            createView()
+        })
     }
 
     fun onCreate(activity: Activity) {
@@ -88,12 +88,14 @@ internal class FacebookNativeAd(
         _activity = null
     }
 
+    @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
-        Thread.checkMainThread()
         deregisterHandlers()
-        destroyView()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyView()
+            destroyInternalAd()
+        })
     }
 
     @AnyThread

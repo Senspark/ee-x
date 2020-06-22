@@ -3,6 +3,7 @@ package com.ee.play
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
@@ -22,7 +23,7 @@ import kotlinx.serialization.UnstableDefault
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-private class Play(
+class Play(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
@@ -70,6 +71,7 @@ private class Play(
         deregisterHandlers()
     }
 
+    @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(k_isSignedIn) {
             Utils.toString(isSignedIn())
@@ -140,6 +142,7 @@ private class Play(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(k_isSignedIn)
         _bridge.deregisterHandler(k_signin)

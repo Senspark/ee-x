@@ -32,10 +32,6 @@ class FirebaseCrashlytics(
     override fun onPause() {}
     override fun onDestroy() {}
 
-    override fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
-        return false
-    }
-
     override fun destroy() {
         deregisterHandlers()
     }

@@ -83,11 +83,6 @@ public class CampaignReceiver /* extends BroadcastReceiver */ implements Install
         }
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(k__initialize, message -> {
             initialize();

@@ -1,7 +1,6 @@
 package com.ee.core
 
 import android.app.Activity
-import android.content.Intent
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 
@@ -44,9 +43,6 @@ interface IPlugin {
      */
     @UiThread
     fun onDestroy()
-
-    @UiThread
-    fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean
 
     /**
      * Called when the application has been destroyed.

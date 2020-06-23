@@ -109,11 +109,6 @@ public class GoogleAnalytics implements IPlugin {
         _bridge = null;
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerHandler(k__setDispatchInterval, message -> {
             int seconds = Integer.valueOf(message);

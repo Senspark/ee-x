@@ -118,11 +118,6 @@ public class Store implements IPlugin {
         _skuDetailsList = null;
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
-        return false;
-    }
-
     private void registerHandlers() {
         _bridge.registerAsyncHandler(kConnect, (message, resolver) -> {
             _disposable.add(connect().subscribe(

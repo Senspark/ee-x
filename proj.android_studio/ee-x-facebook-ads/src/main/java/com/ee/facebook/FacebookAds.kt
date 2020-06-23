@@ -89,10 +89,6 @@ class FacebookAds(
         _activity = null
     }
 
-    override fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
-        return false
-    }
-
     override fun destroy() {
         deregisterHandlers()
         for (ad in _bannerAds.values) {

@@ -21,7 +21,8 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/facebook/facebook-android-sdk/blob/master/CHANGELOG.md
-    implementation 'com.facebook.android:facebook-share:7.0.0'
+    // TODO: com.facebook.FacebookContentProvider dependency.
+    api 'com.facebook.android:facebook-share:7.0.0'
     implementation 'com.facebook.android:facebook-login:7.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

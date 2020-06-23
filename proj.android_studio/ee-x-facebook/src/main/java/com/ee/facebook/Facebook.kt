@@ -2,7 +2,6 @@ package com.ee.facebook
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.util.SparseArray
 import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
+import com.ee.core.InvisibleActivity
 import com.ee.core.Logger
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
@@ -86,18 +86,19 @@ class Facebook(
     }
 
     private val _callbackManager = CallbackManager.Factory.create()
+    private val _loginManager = LoginManager.getInstance()
     private val _accessTokenTracker: AccessTokenTracker
     private val _profileTracker: ProfileTracker
 
     init {
         _accessTokenTracker = object : AccessTokenTracker() {
-            override fun onCurrentAccessTokenChanged(oldAccessToken: AccessToken,
-                                                     currentAccessToken: AccessToken) {
+            override fun onCurrentAccessTokenChanged(oldAccessToken: AccessToken?,
+                                                     currentAccessToken: AccessToken?) {
                 _logger.debug("${this::onCurrentAccessTokenChanged}")
             }
         }
         _profileTracker = object : ProfileTracker() {
-            override fun onCurrentProfileChanged(oldProfile: Profile, currentProfile: Profile) {
+            override fun onCurrentProfileChanged(oldProfile: Profile?, currentProfile: Profile?) {
                 _logger.debug("onCurrentProfileChanged")
                 val dict: MutableMap<String, Any> = HashMap()
                 if (currentProfile != null) {
@@ -137,10 +138,6 @@ class Facebook(
     override fun onPause() {}
     override fun onDestroy() {
         _activity = null
-    }
-
-    override fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
-        return _callbackManager.onActivityResult(requestCode, responseCode, data)
     }
 
     override fun destroy() {
@@ -239,15 +236,24 @@ class Facebook(
         get() = AccessToken.getCurrentAccessToken() != null
 
     private fun logIn(permissions: List<String>, callback: FacebookCallback<LoginResult>) {
-        LoginManager.getInstance().registerCallback(_callbackManager, callback)
-        LoginManager.getInstance().logInWithReadPermissions(_activity, permissions)
+        val activity = _activity ?: throw IllegalStateException("Activity is null")
+        InvisibleActivity.Builder(activity)
+            .onStart { innerActivity ->
+                _loginManager.registerCallback(_callbackManager, callback)
+                _loginManager.logInWithReadPermissions(innerActivity, permissions)
+            }
+            .onFinish { requestCode, resultCode, data ->
+                _callbackManager.onActivityResult(requestCode, resultCode, data)
+            }
+            .process()
     }
 
     private fun logOut() {
-        LoginManager.getInstance().logOut()
+        _loginManager.logOut()
     }
 
-    private val accessToken: AccessToken?
+    private
+    val accessToken: AccessToken?
         get() = AccessToken.getCurrentAccessToken()
 
     private fun k__onGraphSuccess(tag: Int): String {
@@ -339,9 +345,18 @@ class Facebook(
             .setData(data)
             .setMessage(message)
             .build()
-        val dialog = GameRequestDialog(_activity)
-        dialog.registerCallback(_callbackManager, delegate)
-        dialog.show(content)
+
+        val activity = _activity ?: throw IllegalStateException("Activity is null")
+        InvisibleActivity.Builder(activity)
+            .onStart { innerActivity ->
+                val dialog = GameRequestDialog(innerActivity)
+                dialog.registerCallback(_callbackManager, delegate)
+                dialog.show(content)
+            }
+            .onFinish { requestCode, resultCode, data ->
+                _callbackManager.onActivityResult(requestCode, resultCode, data)
+            }
+            .process()
     }
 
     private fun shareLinkContent(url: String, delegate: FacebookCallback<Sharer.Result>) {
@@ -373,11 +388,16 @@ class Facebook(
     }
 
     private fun shareContent(content: ShareContent<*, *>, delegate: FacebookCallback<Sharer.Result>) {
-        if (_activity == null) {
-            return
-        }
-        val dialog = ShareDialog(_activity)
-        dialog.registerCallback(_callbackManager, delegate)
-        dialog.show(content, ShareDialog.Mode.AUTOMATIC)
+        val activity = _activity ?: throw IllegalStateException("Activity is null")
+        InvisibleActivity.Builder(activity)
+            .onStart { innerActivity ->
+                val dialog = ShareDialog(innerActivity)
+                dialog.registerCallback(_callbackManager, delegate)
+                dialog.show(content, ShareDialog.Mode.AUTOMATIC)
+            }
+            .onFinish { requestCode, resultCode, data ->
+                _callbackManager.onActivityResult(requestCode, resultCode, data)
+            }
+            .process()
     }
 }

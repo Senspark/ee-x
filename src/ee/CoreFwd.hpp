@@ -75,7 +75,7 @@ using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;
 using AsyncMutexScopedLockOperation =
     cppcoro::async_mutex_scoped_lock_operation;
 
-struct SwitchToUiThread;
+class SwitchToMainThread;
 
 #if defined(EE_X_ANDROID)
 class JniMethodInfo;
@@ -120,8 +120,10 @@ using core::AsyncMutex;
 using core::AsyncMutexLockOperation;
 using core::AsyncMutexScopedLockOperation;
 using core::LambdaAwaiter;
-using core::SwitchToUiThread;
+using core::SwitchToMainThread;
 using core::Task;
+
+using SwitchToUiThread [[deprecated]] = SwitchToMainThread;
 
 #if defined(EE_X_ANDROID)
 using core::JniMethodInfo;

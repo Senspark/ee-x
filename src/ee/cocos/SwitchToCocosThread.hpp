@@ -9,7 +9,7 @@
 
 namespace ee {
 namespace cocos {
-struct SwitchToCocosThread {
+class SwitchToCocosThread {
 private:
     using Self = SwitchToCocosThread;
 

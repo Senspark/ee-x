@@ -1,5 +1,5 @@
-#ifndef EE_X_SWITCH_TO_UI_THREAD_HPP
-#define EE_X_SWITCH_TO_UI_THREAD_HPP
+#ifndef EE_X_SWITCH_TO_MAIN_THREAD_HPP
+#define EE_X_SWITCH_TO_MAIN_THREAD_HPP
 
 #ifdef __cplusplus
 
@@ -9,15 +9,15 @@
 
 namespace ee {
 namespace core {
-struct SwitchToUiThread {
+class SwitchToMainThread {
 private:
-    using Self = SwitchToUiThread;
+    using Self = SwitchToMainThread;
 
 public:
-    SwitchToUiThread();
-    ~SwitchToUiThread();
+    SwitchToMainThread();
+    ~SwitchToMainThread();
 
-    SwitchToUiThread(const Self&) = delete;
+    SwitchToMainThread(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
     void await_suspend(std::experimental::coroutine_handle<> handle);
@@ -29,4 +29,4 @@ public:
 
 #endif // __cplusplus
 
-#endif // EE_X_SWITCH_TO_UI_THREAD_HPP
+#endif // EE_X_SWITCH_TO_MAIN_THREAD_HPP

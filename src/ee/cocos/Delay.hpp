@@ -9,7 +9,7 @@
 
 namespace ee {
 namespace cocos {
-struct Delay {
+class Delay {
 private:
     using Self = Delay;
 

@@ -317,8 +317,8 @@ class IDialogManager;
 
 class Metrics;
 
-struct Delay;
-struct SwitchToCocosThread;
+class Delay;
+class SwitchToCocosThread;
 
 class CocosAdView;
 class CocosInterstitialAd;

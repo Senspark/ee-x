@@ -1,13 +1,13 @@
-#include "ee/core/SwitchToUiThread.hpp"
+#include "ee/core/SwitchToMainThread.hpp"
 
 #include "ee/core/Thread.hpp"
 
 namespace ee {
 namespace core {
-using Self = SwitchToUiThread;
+using Self = SwitchToMainThread;
 
-Self::SwitchToUiThread() = default;
-Self::~SwitchToUiThread() = default;
+Self::SwitchToMainThread() = default;
+Self::~SwitchToMainThread() = default;
 
 void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
     runOnMainThread([this, handle]() mutable { //

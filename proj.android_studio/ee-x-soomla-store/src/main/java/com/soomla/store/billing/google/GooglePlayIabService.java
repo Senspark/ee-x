@@ -266,11 +266,11 @@ public class GooglePlayIabService implements IIabService {
                     IabPurchase iabPurchase = new IabPurchase(itemType, sku, null, null, 0);
                     if (exception instanceof StoreException) {
                         StoreException storeException = (StoreException) exception;
-                        if (storeException.responseCode == BillingResponseCode.USER_CANCELED) {
+                        if (storeException.getResponseCode() == BillingResponseCode.USER_CANCELED) {
                             listener.cancelled(iabPurchase);
                             return;
                         }
-                        if (storeException.responseCode == BillingResponseCode.ITEM_ALREADY_OWNED) {
+                        if (storeException.getResponseCode() == BillingResponseCode.ITEM_ALREADY_OWNED) {
                             listener.alreadyOwned(iabPurchase);
                             return;
                         }

@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdView
 import com.google.common.truth.Truth
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
@@ -43,33 +44,35 @@ internal class AdMobBannerAd(
 
     private val _messageHelper = MessageHelper("AdMobBannerAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
-    private var _isLoaded = false
+    private val _isLoaded = AtomicBoolean(false)
     private var _ad: AdView? = null
     private var _viewHelper: ViewHelper? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-        })
+        createInternalAd()
     }
 
+    @UiThread
     fun onCreate(activity: Activity) {
         _activity = activity
         addToActivity()
     }
 
+    @UiThread
     fun onResume() {
         Thread.checkMainThread()
         _ad?.resume()
     }
 
+    @UiThread
     fun onPause() {
         Thread.checkMainThread()
         _ad?.pause()
     }
 
+    @UiThread
     fun onDestroy(activity: Activity) {
         Truth.assertThat(_activity).isEqualTo(activity)
         removeFromActivity()
@@ -80,9 +83,7 @@ internal class AdMobBannerAd(
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyInternalAd()
-        })
+        destroyInternalAd()
     }
 
     @AnyThread
@@ -95,84 +96,87 @@ internal class AdMobBannerAd(
         _helper.deregisterHandlers()
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        _isLoaded = false
-        val ad = AdView(_context)
-        ad.adSize = _adSize
-        ad.adListener = this
-        ad.adUnitId = _adId
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT)
-        params.gravity = Gravity.START or Gravity.TOP
-        ad.layoutParams = params
-        _ad = ad
-        _viewHelper = ViewHelper(ad)
-        addToActivity()
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            Thread.checkMainThread()
+            if (_ad != null) {
+                return@Runnable
+            }
+            _isLoaded.set(false)
+            val ad = AdView(_context)
+            ad.adSize = _adSize
+            ad.adListener = this
+            ad.adUnitId = _adId
+            val params = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT)
+            params.gravity = Gravity.START or Gravity.TOP
+            ad.layoutParams = params
+            _ad = ad
+            _viewHelper = ViewHelper(ad)
+            addToActivity()
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        val ad = _ad ?: return false
-        _isLoaded = false
-        removeFromActivity()
-        ad.destroy()
-        _ad = null
-        _viewHelper = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: return@Runnable
+            _isLoaded.set(false)
+            removeFromActivity()
+            ad.destroy()
+            _ad = null
+            _viewHelper = null
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun addToActivity() {
-        val activity = _activity ?: return
-        val rootView = getRootView(activity)
-        rootView.addView(_ad)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = getRootView(activity)
+            rootView.addView(_ad)
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun removeFromActivity() {
-        val activity = _activity ?: return
-        val rootView = getRootView(activity)
-        rootView.removeView(_ad)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = getRootView(activity)
+            rootView.removeView(_ad)
+        })
     }
 
     override val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            Truth.assertThat(_ad).isNotNull()
-            return _isLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     override fun load() {
-        _logger.info("${this::load}")
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.loadAd(AdRequest.Builder().build())
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::load}")
+            Thread.checkMainThread()
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.loadAd(AdRequest.Builder().build())
+        })
     }
 
     override var position: Point
-        @UiThread get() = _viewHelper?.position ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.position ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.position = value
         }
 
     override var size: Point
-        @UiThread get() = _viewHelper?.size ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.size ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.size = value
         }
 
     override var isVisible: Boolean
-        @UiThread get() = _viewHelper?.isVisible ?: false
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.isVisible ?: false
+        @AnyThread set(value) {
             _viewHelper?.isVisible = value
             if (value) {
                 // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
@@ -206,7 +210,7 @@ internal class AdMobBannerAd(
     override fun onAdLoaded() {
         _logger.info("${this::onAdLoaded}")
         Thread.checkMainThread()
-        _isLoaded = true
+        _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 

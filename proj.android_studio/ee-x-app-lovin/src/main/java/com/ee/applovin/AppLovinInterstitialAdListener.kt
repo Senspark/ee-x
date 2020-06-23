@@ -7,9 +7,11 @@ import com.applovin.sdk.AppLovinAdLoadListener
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
 import com.ee.core.internal.Thread
+import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinInterstitialAdListener(
-    private val _bridge: IMessageBridge)
+    private val _bridge: IMessageBridge,
+    private val _isLoaded: AtomicBoolean)
     : AppLovinAdLoadListener
     , AppLovinAdDisplayListener
     , AppLovinAdClickListener {
@@ -25,6 +27,7 @@ internal class AppLovinInterstitialAdListener(
 
     override fun adReceived(ad: AppLovinAd) {
         _logger.info("${this::adReceived}")
+        _isLoaded.set(true)
         _bridge.callCpp(k__onInterstitialAdLoaded)
     }
 
@@ -36,6 +39,7 @@ internal class AppLovinInterstitialAdListener(
     override fun adDisplayed(ad: AppLovinAd) {
         _logger.info("${this::adDisplayed}")
         Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun adHidden(ad: AppLovinAd) {

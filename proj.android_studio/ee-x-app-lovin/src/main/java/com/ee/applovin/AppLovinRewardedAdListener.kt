@@ -10,9 +10,11 @@ import com.ee.core.IMessageBridge
 import com.ee.core.Logger
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
+import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinRewardedAdListener(
-    private val _bridge: IMessageBridge)
+    private val _bridge: IMessageBridge,
+    private val _isLoaded: AtomicBoolean)
     : AppLovinAdLoadListener
     , AppLovinAdDisplayListener
     , AppLovinAdClickListener
@@ -32,6 +34,7 @@ internal class AppLovinRewardedAdListener(
 
     override fun adReceived(ad: AppLovinAd) {
         _logger.info("${this::adReceived}")
+        _isLoaded.set(true)
         _bridge.callCpp(k__onRewardedAdLoaded)
     }
 
@@ -43,6 +46,7 @@ internal class AppLovinRewardedAdListener(
     override fun adDisplayed(ad: AppLovinAd) {
         _logger.info("${this::adDisplayed}")
         Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun adHidden(ad: AppLovinAd) {

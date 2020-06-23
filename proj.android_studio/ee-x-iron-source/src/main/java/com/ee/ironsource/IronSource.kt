@@ -2,7 +2,6 @@ package com.ee.ironsource
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
@@ -15,6 +14,7 @@ import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.InterstitialListener
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -48,6 +48,8 @@ class IronSource(
     }
 
     private var _initialized = false
+    private val _isInterstitialAdLoaded = AtomicBoolean(false)
+    private val _isRewardedAdLoaded = AtomicBoolean(false)
     private var _rewarded = false
 
     init {
@@ -96,14 +98,14 @@ class IronSource(
             ""
         }
         _bridge.registerHandler(k__hasInterstitialAd) {
-            Utils.toString(hasInterstitialAd())
+            Utils.toString(hasInterstitialAd)
         }
         _bridge.registerHandler(k__showInterstitialAd) { message ->
             showInterstitialAd(message)
             ""
         }
         _bridge.registerHandler(k__hasRewardedAd) {
-            Utils.toString(hasRewardedAd())
+            Utils.toString(hasRewardedAd)
         }
         _bridge.registerHandler(k__showRewardedAd) { message ->
             showRewardedAd(message)
@@ -121,58 +123,51 @@ class IronSource(
         _bridge.deregisterHandler(k__showRewardedAd)
     }
 
-    @UiThread
+    @AnyThread
     fun initialize(gameId: String) {
-        Thread.checkMainThread()
-        if (_initialized) {
-            return
-        }
-        com.ironsource.mediationsdk.IronSource.init(_activity, gameId,
-            com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO,
-            com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL)
-        com.ironsource.mediationsdk.IronSource.shouldTrackNetworkState(_activity, true)
-        com.ironsource.mediationsdk.IronSource.setInterstitialListener(this)
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this)
-        _initialized = true
+        Thread.runOnMainThread(Runnable {
+            if (_initialized) {
+                return@Runnable
+            }
+            com.ironsource.mediationsdk.IronSource.init(_activity, gameId,
+                com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO,
+                com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL)
+            com.ironsource.mediationsdk.IronSource.shouldTrackNetworkState(_activity, true)
+            com.ironsource.mediationsdk.IronSource.setInterstitialListener(this)
+            com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this)
+            _initialized = true
+        })
     }
 
-    @UiThread
+    @AnyThread
     fun loadInterstitialAd() {
-        _logger.debug(this::loadInterstitialAd.name)
-        Thread.checkMainThread()
-        com.ironsource.mediationsdk.IronSource.loadInterstitial()
+        Thread.runOnMainThread(Runnable {
+            _logger.debug(this::loadInterstitialAd.name)
+            com.ironsource.mediationsdk.IronSource.loadInterstitial()
+        })
     }
 
-    @UiThread
-    fun hasInterstitialAd(): Boolean {
-        Thread.checkMainThread()
-        val value = com.ironsource.mediationsdk.IronSource.isInterstitialReady()
-        _logger.debug("${this::hasInterstitialAd.name}: $value")
-        return value
+    val hasInterstitialAd: Boolean
+        @AnyThread get() = _isInterstitialAdLoaded.get()
+
+    @AnyThread
+    fun showInterstitialAd(adId: String) {
+        Thread.runOnMainThread(Runnable {
+            _logger.debug("${this::showInterstitialAd.name}: $adId")
+            com.ironsource.mediationsdk.IronSource.showInterstitial(adId)
+        })
     }
 
-    @UiThread
-    fun showInterstitialAd(adId: String): Boolean {
-        _logger.debug("${this::showInterstitialAd.name}: $adId")
-        Thread.checkMainThread()
-        com.ironsource.mediationsdk.IronSource.showInterstitial(adId)
-        return true
-    }
+    val hasRewardedAd: Boolean
+        @AnyThread get() = _isRewardedAdLoaded.get()
 
-    @UiThread
-    fun hasRewardedAd(): Boolean {
-        Thread.checkMainThread()
-        val value = com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable()
-        _logger.debug("${this::hasRewardedAd.name}: $value")
-        return value
-    }
-
-    @UiThread
+    @AnyThread
     fun showRewardedAd(adId: String) {
-        _logger.debug("${this::showRewardedAd.name}: $adId")
-        Thread.checkMainThread()
-        _rewarded = false
-        com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId)
+        Thread.runOnMainThread(Runnable {
+            _logger.debug("${this::showRewardedAd.name}: $adId")
+            _rewarded = false
+            com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId)
+        })
     }
 
     private fun handleRewardedAdResult() {
@@ -181,6 +176,7 @@ class IronSource(
 
     override fun onInterstitialAdReady() {
         _logger.debug(this::onInterstitialAdReady.name)
+        _isInterstitialAdLoaded.set(true)
         _bridge.callCpp(k__onInterstitialAdLoaded)
     }
 
@@ -191,6 +187,7 @@ class IronSource(
 
     override fun onInterstitialAdOpened() {
         _logger.debug(this::onInterstitialAdOpened.name)
+        _isInterstitialAdLoaded.set(false)
     }
 
     override fun onInterstitialAdClosed() {
@@ -215,6 +212,7 @@ class IronSource(
     override fun onRewardedVideoAvailabilityChanged(available: Boolean) {
         _logger.info("${this::onRewardedVideoAvailabilityChanged}: $available")
         if (available) {
+            _isRewardedAdLoaded.set(true)
             _bridge.callCpp(k__onRewardedAdLoaded)
         }
     }

@@ -2,12 +2,11 @@ package com.ee.facebook
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Point
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
+import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
 import com.ee.core.internal.serialize
@@ -193,17 +192,21 @@ class FacebookAds(
         _bridge.deregisterHandler(k__destroyRewardedAd)
     }
 
-    val testDeviceHash: String
+    private val testDeviceHash: String
         @AnyThread get() = ""
 
-    @UiThread
+    @AnyThread
     fun addTestDevice(hash: String) {
-        AdSettings.addTestDevice(hash)
+        Thread.runOnMainThread(Runnable {
+            AdSettings.addTestDevice(hash)
+        })
     }
 
-    @UiThread
+    @AnyThread
     fun clearTestDevices() {
-        AdSettings.clearTestDevices()
+        Thread.runOnMainThread(Runnable {
+            AdSettings.clearTestDevices()
+        })
     }
 
     @AnyThread

@@ -3,7 +3,6 @@ package com.ee.admob
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.ads.MessageHelper
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
@@ -16,6 +15,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.common.truth.Truth.assertThat
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by KietLe on 12/03/19.
@@ -30,15 +30,14 @@ internal class AdMobRewardedAd(
     }
 
     private val _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
+    private val _isLoaded = AtomicBoolean(false)
     private var _rewarded = false
     private var _ad: RewardedAd? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-        })
+        createInternalAd()
     }
 
     fun onCreate(activity: Activity) {
@@ -54,18 +53,18 @@ internal class AdMobRewardedAd(
     fun destroy() {
         _logger.info("destroy: adId = %s", _adId)
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyInternalAd()
-        })
+        destroyInternalAd()
     }
 
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(_messageHelper.createInternalAd) {
-            Utils.toString(createInternalAd())
+            createInternalAd()
+            ""
         }
         _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            Utils.toString(destroyInternalAd())
+            destroyInternalAd()
+            ""
         }
         _bridge.registerHandler(_messageHelper.isLoaded) {
             Utils.toString(isLoaded)
@@ -89,65 +88,65 @@ internal class AdMobRewardedAd(
         _bridge.deregisterHandler(_messageHelper.show)
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        _ad = RewardedAd(_context, _adId)
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad != null) {
+                return@Runnable
+            }
+            _ad = RewardedAd(_context, _adId)
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad == null) {
-            return false
-        }
-        _ad = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad == null) {
+                return@Runnable
+            }
+            _ad = null
+        })
     }
 
     private val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-            return ad.isLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     private fun load() {
-        _logger.info("${this::load}")
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        val callback = object : RewardedAdLoadCallback() {
-            override fun onRewardedAdLoaded() {
-                // Ad successfully loaded.
-                Thread.checkMainThread()
-                _bridge.callCpp(_messageHelper.onLoaded)
-            }
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::load}")
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val callback = object : RewardedAdLoadCallback() {
+                override fun onRewardedAdLoaded() {
+                    // Ad successfully loaded.
+                    Thread.checkMainThread()
+                    _isLoaded.set(true)
+                    _bridge.callCpp(_messageHelper.onLoaded)
+                }
 
-            override fun onRewardedAdFailedToLoad(errorCode: Int) {
-                // Ad failed to load.
-                Thread.checkMainThread()
-                _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+                override fun onRewardedAdFailedToLoad(errorCode: Int) {
+                    // Ad failed to load.
+                    Thread.checkMainThread()
+                    _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+                }
             }
-        }
-        ad.loadAd(AdRequest.Builder().build(), callback)
+            ad.loadAd(AdRequest.Builder().build(), callback)
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun show() {
-        _logger.info("${this::show}")
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.show(_activity, this)
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::show}")
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.show(_activity, this)
+        })
     }
 
     override fun onRewardedAdOpened() {
-        Thread.checkMainThread()
         _logger.info("${this::onRewardedAdOpened}")
+        Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun onRewardedAdClosed() {

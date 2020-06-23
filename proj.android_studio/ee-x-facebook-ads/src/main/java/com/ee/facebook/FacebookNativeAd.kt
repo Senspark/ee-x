@@ -32,6 +32,7 @@ import com.facebook.ads.NativeAdListener
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.atomic.AtomicBoolean
 
 private typealias ViewProcessor<T> = (view: T) -> Unit
 
@@ -63,7 +64,7 @@ internal class FacebookNativeAd(
 
     private val _messageHelper = MessageHelper("FacebookNativeAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
-    private var _isLoaded = false
+    private var _isLoaded = AtomicBoolean(false)
     private var _ad: NativeAd? = null
     private var _view: View? = null
     private var _viewHelper: ViewHelper? = null
@@ -71,17 +72,17 @@ internal class FacebookNativeAd(
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-            createView()
-        })
+        createInternalAd()
+        createView()
     }
 
+    @UiThread
     fun onCreate(activity: Activity) {
         _activity = activity
         addToActivity()
     }
 
+    @UiThread
     fun onDestroy(activity: Activity) {
         assertThat(_activity).isEqualTo(activity)
         removeFromActivity()
@@ -92,20 +93,20 @@ internal class FacebookNativeAd(
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyView()
-            destroyInternalAd()
-        })
+        destroyView()
+        destroyInternalAd()
     }
 
     @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
         _bridge.registerHandler(_messageHelper.createInternalAd) {
-            Utils.toString(createInternalAd())
+            createInternalAd()
+            ""
         }
         _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            Utils.toString(destroyInternalAd())
+            destroyInternalAd()
+            ""
         }
     }
 
@@ -116,108 +117,111 @@ internal class FacebookNativeAd(
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        _isLoaded = false
-        _ad = NativeAd(_context, _adId)
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad != null) {
+                return@Runnable
+            }
+            _isLoaded.set(false)
+            _ad = NativeAd(_context, _adId)
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        val ad = _ad ?: return false
-        _isLoaded = false
-        ad.unregisterView()
-        ad.destroy()
-        _ad = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: return@Runnable
+            _isLoaded.set(false)
+            ad.unregisterView()
+            ad.destroy()
+            _ad = null
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun createView() {
-        Thread.checkMainThread()
-        val layoutId = _context.resources
-            .getIdentifier(_layoutName, "layout", _context.packageName)
-        val view = LayoutInflater
-            .from(_context)
-            .inflate(layoutId, null, false)
-        view.visibility = View.INVISIBLE
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT)
-        params.gravity = Gravity.START or Gravity.TOP
-        view.layoutParams = params
-        _view = view
-        _viewHelper = ViewHelper(view)
-        addToActivity()
+        Thread.runOnMainThread(Runnable {
+            val layoutId = _context.resources
+                .getIdentifier(_layoutName, "layout", _context.packageName)
+            val view = LayoutInflater
+                .from(_context)
+                .inflate(layoutId, null, false)
+            view.visibility = View.INVISIBLE
+            val params = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT)
+            params.gravity = Gravity.START or Gravity.TOP
+            view.layoutParams = params
+            _view = view
+            _viewHelper = ViewHelper(view)
+            addToActivity()
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun destroyView() {
-        Thread.checkMainThread()
-        removeFromActivity()
-        _view = null
-        _viewHelper = null
+        Thread.runOnMainThread(Runnable {
+            removeFromActivity()
+            _view = null
+            _viewHelper = null
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun addToActivity() {
-        val activity = _activity ?: return
-        val rootView = Utils.getRootView(activity)
-        rootView.addView(_view)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = Utils.getRootView(activity)
+            rootView.addView(_view)
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun removeFromActivity() {
-        val activity = _activity ?: return
-        val rootView = Utils.getRootView(activity)
-        rootView.removeView(_view)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = Utils.getRootView(activity)
+            rootView.removeView(_view)
+        })
     }
 
     override val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            assertThat(_ad).isNotNull()
-            return _isLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     override fun load() {
-        _logger.info("${this::load}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::load}")
 
-        ///
-        /// Audience Network supports pre-caching video or image assets which enables
-        /// the MediaView to play videos immediately after nativeAd finishes loading.
-        /// https://developers.facebook.com/docs/audience-network/android-native#mediaview
-        ///
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.loadAd(ad.buildLoadAdConfig()
-            .withAdListener(this)
-            .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL)
-            .build())
+            ///
+            /// Audience Network supports pre-caching video or image assets which enables
+            /// the MediaView to play videos immediately after nativeAd finishes loading.
+            /// https://developers.facebook.com/docs/audience-network/android-native#mediaview
+            ///
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.loadAd(ad.buildLoadAdConfig()
+                .withAdListener(this)
+                .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL)
+                .build())
+        })
     }
 
     override var position: Point
-        @UiThread get() = _viewHelper?.position ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.position ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.position = value
         }
 
     override var size: Point
-        @UiThread get() = _viewHelper?.size ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.size ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.size = value
         }
 
     override var isVisible: Boolean
-        @UiThread get() = _viewHelper?.isVisible ?: false
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.isVisible ?: false
+        @AnyThread set(value) {
             _viewHelper?.isVisible = value
         }
 
@@ -286,7 +290,7 @@ internal class FacebookNativeAd(
             val icon = view.findViewById<ImageView>(getIdentifier(k__icon))
             ad.registerViewForInteraction(view, item, icon, listOf(callToAction, item))
         }
-        _isLoaded = true
+        _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 

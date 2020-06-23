@@ -61,7 +61,6 @@ private:
     std::pair<int, int> position_; ///< @note Top left position.
     std::pair<int, int> size_;
     bool visible_;
-    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

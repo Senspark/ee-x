@@ -11,8 +11,6 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/MakeAwaiter.hpp>
-#include <ee/core/SwitchToUiThread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
@@ -73,11 +71,10 @@ Task<bool> Self::load() {
     logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process( //
-        makeAwaiter([this]() -> Task<> {
-            co_await SwitchToUiThread();
+    auto result = co_await loader_->process(
+        [this] { //
             helper_.load();
-        }),
+        },
         [](bool result) {
             // OK.
         });

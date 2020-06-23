@@ -16,7 +16,6 @@
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -97,9 +96,7 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& applicationId) {
-    runOnMainThread([this, applicationId] { //
-        bridge_.call(k__initialize, applicationId);
-    });
+    bridge_.call(k__initialize, applicationId);
 }
 
 std::string Self::getEmulatorTestDeviceHash() const {
@@ -107,9 +104,7 @@ std::string Self::getEmulatorTestDeviceHash() const {
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    runOnMainThread([this, hash] { //
-        bridge_.call(k__addTestDevice, hash);
-    });
+    bridge_.call(k__addTestDevice, hash);
 }
 
 std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {

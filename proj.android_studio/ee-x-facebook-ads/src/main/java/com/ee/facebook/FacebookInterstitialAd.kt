@@ -2,20 +2,18 @@ package com.ee.facebook
 
 import android.content.Context
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.ads.IInterstitialAd
 import com.ee.ads.InterstitialAdHelper
 import com.ee.ads.MessageHelper
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
-import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Thread
-import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
 import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/11/17.
@@ -32,33 +30,32 @@ internal class FacebookInterstitialAd(
 
     private val _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
     private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _isLoaded = AtomicBoolean(false)
     private var _ad: InterstitialAd? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-        })
+        createInternalAd()
     }
 
     @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyInternalAd()
-        })
+        destroyInternalAd()
     }
 
     @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
         _bridge.registerHandler(_messageHelper.createInternalAd) {
-            Utils.toString(createInternalAd())
+            createInternalAd()
+            ""
         }
         _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            Utils.toString(destroyInternalAd())
+            destroyInternalAd()
+            ""
         }
     }
 
@@ -69,54 +66,53 @@ internal class FacebookInterstitialAd(
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        _ad = InterstitialAd(_context, _adId)
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad != null) {
+                return@Runnable
+            }
+            _ad = InterstitialAd(_context, _adId)
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        val ad = _ad ?: return false
-        ad.destroy()
-        _ad = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: return@Runnable
+            ad.destroy()
+            _ad = null
+        })
     }
 
     override val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-            return ad.isAdLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     override fun load() {
-        _logger.info("${this::load}")
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::load}")
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
+        })
     }
 
-    @UiThread
+    @AnyThread
     override fun show() {
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        val result = ad.show(ad.buildShowAdConfig().build())
-        if (result) {
-            // OK.
-        } else {
-            _bridge.callCpp(_messageHelper.onFailedToShow)
-        }
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val result = ad.show(ad.buildShowAdConfig().build())
+            if (result) {
+                // OK.
+            } else {
+                _bridge.callCpp(_messageHelper.onFailedToShow)
+            }
+        })
     }
 
     override fun onInterstitialDisplayed(ad: Ad) {
         _logger.info("${this::onInterstitialDisplayed}")
+        _isLoaded.set(false)
         Thread.checkMainThread()
     }
 
@@ -135,6 +131,7 @@ internal class FacebookInterstitialAd(
     override fun onAdLoaded(ad: Ad) {
         _logger.info("${this::onAdLoaded}")
         Thread.checkMainThread()
+        _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 

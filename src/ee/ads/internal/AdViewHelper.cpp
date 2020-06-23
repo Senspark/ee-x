@@ -11,8 +11,6 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/SpinLock.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 namespace ee {
@@ -26,57 +24,45 @@ Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
     , anchor_(0, 0)
     , position_(0, 0)
     , size_(size)
-    , visible_(false) {
-    lock_ = std::make_unique<SpinLock>();
-}
+    , visible_(false) {}
 
 const std::pair<int, int> Self::getSizeInternal() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
     return size_;
 }
 
 void Self::setSizeInternal(int width, int height) {
-    std::scoped_lock<SpinLock> lock(*lock_);
     size_ = std::pair(width, height);
 }
 
 const std::pair<float, float> Self::getAnchorInternal() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
     return anchor_;
 }
 
 void Self::setAnchorInternal(float x, float y) {
-    std::scoped_lock<SpinLock> lock(*lock_);
     anchor_ = std::pair(x, y);
 }
 
 const std::pair<int, int> Self::getPositionInternal() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
     return position_;
 }
 
 void Self::setPositionInternal(int x, int y) {
-    std::scoped_lock<SpinLock> lock(*lock_);
     position_ = std::pair(x, y);
 }
 
 bool Self::isVisibleInternal() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
     return visible_;
 }
 void Self::setVisibleInternal(bool visible) {
-    std::scoped_lock<SpinLock> lock(*lock_);
     visible_ = visible;
 }
 
 bool Self::isLoaded() const {
-    assert(isMainThread());
     auto response = bridge_.call(helper_.isLoaded());
     return core::toBool(response);
 }
 
 void Self::load() {
-    assert(isMainThread());
     bridge_.call(helper_.load());
 }
 
@@ -85,15 +71,12 @@ std::pair<float, float> Self::getAnchor() const {
 }
 
 void Self::setAnchor(float x, float y) {
-    runOnMainThread([this, x, y] {
-        auto [width, height] = getSizeInternal();
-        auto [anchorX, anchorY] = getAnchorInternal();
-        auto [positionX, positionY] = getPositionInternal();
-        setPositionTopLeft(positionX - static_cast<int>((x - anchorX) * width),
-                           positionY -
-                               static_cast<int>((y - anchorY) * height));
-        setAnchorInternal(x, y);
-    });
+    auto [width, height] = getSizeInternal();
+    auto [anchorX, anchorY] = getAnchorInternal();
+    auto [positionX, positionY] = getPositionInternal();
+    setPositionTopLeft(positionX - static_cast<int>((x - anchorX) * width),
+                       positionY - static_cast<int>((y - anchorY) * height));
+    setAnchorInternal(x, y);
 }
 
 std::pair<int, int> Self::getPosition() const {
@@ -123,13 +106,11 @@ std::pair<int, int> Self::getPositionTopLeft() const {
 }
 
 void Self::setPositionTopLeft(int x, int y) {
-    runOnMainThread([this, x, y] {
-        nlohmann::json json;
-        json["x"] = x;
-        json["y"] = y;
-        bridge_.call(helper_.setPosition(), json.dump());
-        setPositionInternal(x, y);
-    });
+    nlohmann::json json;
+    json["x"] = x;
+    json["y"] = y;
+    bridge_.call(helper_.setPosition(), json.dump());
+    setPositionInternal(x, y);
 }
 
 std::pair<int, int> Self::getSize() const {
@@ -145,20 +126,18 @@ std::pair<int, int> Self::getSize() const {
 }
 
 void Self::setSize(int width, int height) {
-    runOnMainThread([this, width, height] {
-        auto [currentWidth, currentHeight] = getSizeInternal();
-        auto [anchorX, anchorY] = getAnchorInternal();
-        auto [x, y] = getPositionInternal();
-        setPositionTopLeft(
-            x - static_cast<int>((width - currentWidth) * anchorX),
-            y - static_cast<int>((height - currentHeight) * anchorY));
+    auto [currentWidth, currentHeight] = getSizeInternal();
+    auto [anchorX, anchorY] = getAnchorInternal();
+    auto [x, y] = getPositionInternal();
+    setPositionTopLeft(
+        x - static_cast<int>((width - currentWidth) * anchorX),
+        y - static_cast<int>((height - currentHeight) * anchorY));
 
-        nlohmann::json json;
-        json["width"] = width;
-        json["height"] = height;
-        bridge_.call(helper_.setSize(), json.dump());
-        setSizeInternal(width, height);
-    });
+    nlohmann::json json;
+    json["width"] = width;
+    json["height"] = height;
+    bridge_.call(helper_.setSize(), json.dump());
+    setSizeInternal(width, height);
 }
 
 bool Self::isVisible() const {
@@ -171,11 +150,8 @@ bool Self::isVisible() const {
 }
 
 void Self::setVisible(bool visible) {
-    runOnMainThread([this, visible] {
-        assert(isMainThread());
-        bridge_.call(helper_.setVisible(), core::toString(visible));
-        setVisibleInternal(visible);
-    });
+    bridge_.call(helper_.setVisible(), core::toString(visible));
+    setVisibleInternal(visible);
 }
 } // namespace ads
 } // namespace ee

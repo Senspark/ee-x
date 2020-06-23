@@ -24,6 +24,7 @@ import com.facebook.ads.AdView
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/9/17.
@@ -44,23 +45,23 @@ internal class FacebookBannerAd(
 
     private val _messageHelper = MessageHelper("FacebookBannerAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
-    private var _isLoaded = false
+    private val _isLoaded = AtomicBoolean(false)
     private var _ad: AdView? = null
     private var _viewHelper: ViewHelper? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-        })
+        createInternalAd()
     }
 
+    @UiThread
     fun onCreate(activity: Activity) {
         _activity = activity
         addToActivity()
     }
 
+    @UiThread
     fun onDestroy(activity: Activity) {
         assertThat(_activity).isEqualTo(activity)
         removeFromActivity()
@@ -71,9 +72,7 @@ internal class FacebookBannerAd(
     fun destroy() {
         _logger.info("destroy: adId = $_adId")
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyInternalAd()
-        })
+        destroyInternalAd()
     }
 
     @AnyThread
@@ -86,80 +85,81 @@ internal class FacebookBannerAd(
         _helper.deregisterHandlers()
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        _isLoaded = false
-        val ad = AdView(_context, _adId, _adSize)
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT)
-        params.gravity = Gravity.START or Gravity.TOP
-        ad.layoutParams = params
-        _ad = ad
-        _viewHelper = ViewHelper(ad)
-        addToActivity()
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad != null) {
+                return@Runnable
+            }
+            _isLoaded.set(false)
+            val ad = AdView(_context, _adId, _adSize)
+            val params = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT)
+            params.gravity = Gravity.START or Gravity.TOP
+            ad.layoutParams = params
+            _ad = ad
+            _viewHelper = ViewHelper(ad)
+            addToActivity()
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        val ad = _ad ?: return false
-        _isLoaded = false
-        removeFromActivity()
-        ad.destroy()
-        _ad = null
-        _viewHelper = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: return@Runnable
+            _isLoaded.set(false)
+            removeFromActivity()
+            ad.destroy()
+            _ad = null
+            _viewHelper = null
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun addToActivity() {
-        val activity = _activity ?: return
-        val rootView = Utils.getRootView(activity)
-        rootView.addView(_ad)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = Utils.getRootView(activity)
+            rootView.addView(_ad)
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun removeFromActivity() {
-        val activity = _activity ?: return
-        val rootView = Utils.getRootView(activity)
-        rootView.removeView(_ad)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val rootView = Utils.getRootView(activity)
+            rootView.removeView(_ad)
+        })
     }
 
     override val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            assertThat(_ad).isNotNull()
-            return _isLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     override fun load() {
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
+        })
     }
 
     override var position: Point
-        @UiThread get() = _viewHelper?.position ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.position ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.position = value
         }
 
     override var size: Point
-        @UiThread get() = _viewHelper?.size ?: Point(0, 0)
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.size ?: Point(0, 0)
+        @AnyThread set(value) {
             _viewHelper?.size = value
         }
 
     override var isVisible: Boolean
-        @UiThread get() = _viewHelper?.isVisible ?: false
-        @UiThread set(value) {
+        @AnyThread get() = _viewHelper?.isVisible ?: false
+        @AnyThread set(value) {
             _viewHelper?.isVisible = value
             if (value) {
                 _ad?.setBackgroundColor(Color.BLACK)
@@ -175,7 +175,7 @@ internal class FacebookBannerAd(
     override fun onAdLoaded(ad: Ad) {
         _logger.info("${this::onAdLoaded}")
         Thread.checkMainThread()
-        _isLoaded = true
+        _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 

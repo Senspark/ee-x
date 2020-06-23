@@ -2,9 +2,7 @@ package com.ee.vungle
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
@@ -21,6 +19,7 @@ import com.vungle.warren.error.VungleException
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -47,6 +46,7 @@ class Vungle(
 
     private var _initializing = false
     private var _initialized = false
+    private val _loadedAdIds: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
 
     init {
         _logger.debug("constructor begin: context = $_context activity = $_activity")
@@ -98,107 +98,108 @@ class Vungle(
         _bridge.deregisterHandler(k__loadRewardedAd)
     }
 
-    @UiThread
+    @AnyThread
     fun initialize(gameId: String) {
-        Thread.checkMainThread()
-        if (_initializing) {
-            return
-        }
-        if (_initialized) {
-            return
-        }
-        _initializing = true
-
-        com.vungle.warren.Vungle.init(gameId, _context, object : InitCallback {
-            override fun onSuccess() {
-                _logger.info("${Vungle::initialize}: ${this::onSuccess}")
-                _initializing = false
-                _initialized = true
+        Thread.runOnMainThread(Runnable {
+            if (_initializing) {
+                return@Runnable
             }
-
-            override fun onError(throwable: VungleException) {
-                _logger.info("${Vungle::initialize}: ${this::onError}: message = ${throwable.localizedMessage}")
-                _initializing = false
+            if (_initialized) {
+                return@Runnable
             }
+            _initializing = true
 
-            override fun onAutoCacheAdAvailable(adId: String) {}
+            com.vungle.warren.Vungle.init(gameId, _context, object : InitCallback {
+                override fun onSuccess() {
+                    _logger.info("${Vungle::initialize}: ${this::onSuccess}")
+                    _initializing = false
+                    _initialized = true
+                }
+
+                override fun onError(throwable: VungleException) {
+                    _logger.info("${Vungle::initialize}: ${this::onError}: message = ${throwable.localizedMessage}")
+                    _initializing = false
+                }
+
+                override fun onAutoCacheAdAvailable(adId: String) {}
+            })
         })
     }
 
-    @UiThread
+    @AnyThread
     private fun hasRewardedAd(adId: String): Boolean {
-        Thread.checkMainThread()
-        if (!com.vungle.warren.Vungle.isInitialized()) {
-            // Waiting for initialization.
-            return false
-        }
-        return com.vungle.warren.Vungle.canPlayAd(adId)
+        return _loadedAdIds.contains(adId)
     }
 
-    @UiThread
+    @AnyThread
     private fun loadRewardedAd(adId: String) {
-        Thread.checkMainThread()
-        com.vungle.warren.Vungle.loadAd(adId, object : LoadAdCallback {
-            override fun onAdLoad(adId: String) {
-                _logger.info("${Vungle::loadRewardedAd}: ${this::onAdLoad}: $adId")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String
-                )
+        Thread.runOnMainThread(Runnable {
+            com.vungle.warren.Vungle.loadAd(adId, object : LoadAdCallback {
+                override fun onAdLoad(adId: String) {
+                    _logger.info("${Vungle::loadRewardedAd}: ${this::onAdLoad}: $adId")
+                    _loadedAdIds.add(adId)
 
-                val response = Response(adId)
-                _bridge.callCpp(k__onLoaded, response.serialize())
-            }
+                    @Serializable
+                    @Suppress("unused")
+                    class Response(
+                        val ad_id: String
+                    )
 
-            override fun onError(adId: String, throwable: VungleException) {
-                _logger.info("${Vungle::loadRewardedAd}: ${this::onError}: $adId reason: ${throwable.localizedMessage}")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String,
-                    val message: String
-                )
+                    val response = Response(adId)
+                    _bridge.callCpp(k__onLoaded, response.serialize())
+                }
 
-                val response = Response(adId, throwable.localizedMessage ?: "")
-                _bridge.callCpp(k__onFailedToLoad, response.serialize())
-            }
+                override fun onError(adId: String, throwable: VungleException) {
+                    _logger.info("${Vungle::loadRewardedAd}: ${this::onError}: $adId reason: ${throwable.localizedMessage}")
+                    @Serializable
+                    @Suppress("unused")
+                    class Response(
+                        val ad_id: String,
+                        val message: String
+                    )
+
+                    val response = Response(adId, throwable.localizedMessage ?: "")
+                    _bridge.callCpp(k__onFailedToLoad, response.serialize())
+                }
+            })
         })
     }
 
-    @UiThread
+    @AnyThread
     private fun showRewardedAd(adId: String) {
-        Thread.checkMainThread()
-        com.vungle.warren.Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
-            override fun onAdStart(adId: String) {
-                _logger.info("${Vungle::showRewardedAd}: ${this::onAdStart}: $adId")
-            }
+        Thread.runOnMainThread(Runnable {
+            com.vungle.warren.Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
+                override fun onAdStart(adId: String) {
+                    _logger.info("${Vungle::showRewardedAd}: ${this::onAdStart}: $adId")
+                    _loadedAdIds.remove(adId)
+                }
 
-            override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
-                _logger.info("${Vungle::showRewardedAd}: ${this::onAdEnd}: $adId successful = $completed clicked = $isCTAClicked")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String,
-                    val rewarded: Boolean
-                )
+                override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
+                    _logger.info("${Vungle::showRewardedAd}: ${this::onAdEnd}: $adId successful = $completed clicked = $isCTAClicked")
+                    @Serializable
+                    @Suppress("unused")
+                    class Response(
+                        val ad_id: String,
+                        val rewarded: Boolean
+                    )
 
-                val response = Response(adId, completed)
-                _bridge.callCpp(k__onClosed, response.serialize())
-            }
+                    val response = Response(adId, completed)
+                    _bridge.callCpp(k__onClosed, response.serialize())
+                }
 
-            override fun onError(adId: String, throwable: VungleException) {
-                _logger.info("${Vungle::showRewardedAd}: ${this::onError}: $adId message = ${throwable.localizedMessage}")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String,
-                    val message: String
-                )
+                override fun onError(adId: String, throwable: VungleException) {
+                    _logger.info("${Vungle::showRewardedAd}: ${this::onError}: $adId message = ${throwable.localizedMessage}")
+                    @Serializable
+                    @Suppress("unused")
+                    class Response(
+                        val ad_id: String,
+                        val message: String
+                    )
 
-                val response = Response(adId, throwable.localizedMessage ?: "")
-                _bridge.callCpp(k__onFailedToShow, response.serialize())
-            }
+                    val response = Response(adId, throwable.localizedMessage ?: "")
+                    _bridge.callCpp(k__onFailedToShow, response.serialize())
+                }
+            })
         })
     }
 }

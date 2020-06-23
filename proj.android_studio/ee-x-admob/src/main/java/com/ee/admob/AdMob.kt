@@ -2,7 +2,6 @@ package com.ee.admob
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Point
 import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
@@ -186,6 +185,7 @@ class AdMob(
         }
     }
 
+    @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(k__initialize)
         _bridge.deregisterHandler(k__getEmulatorTestDeviceHash)
@@ -201,22 +201,25 @@ class AdMob(
         _bridge.deregisterHandler(k__destroyRewardedAd)
     }
 
+    @AnyThread
     fun initialize() {
-        Thread.checkMainThread()
-        MobileAds.initialize(_context)
+        Thread.runOnMainThread(Runnable {
+            MobileAds.initialize(_context)
+        })
     }
 
-    val emulatorTestDeviceHash: String
+    private val emulatorTestDeviceHash: String
         @AnyThread get() = AdRequest.DEVICE_ID_EMULATOR
 
     @AnyThread
     fun addTestDevice(hash: String) {
-        Thread.checkMainThread()
-        _testDevices.add(hash)
-        val configuration = RequestConfiguration.Builder()
-            .setTestDeviceIds(_testDevices)
-            .build()
-        MobileAds.setRequestConfiguration(configuration)
+        Thread.runOnMainThread(Runnable {
+            _testDevices.add(hash)
+            val configuration = RequestConfiguration.Builder()
+                .setTestDeviceIds(_testDevices)
+                .build()
+            MobileAds.setRequestConfiguration(configuration)
+        })
     }
 
     @AnyThread

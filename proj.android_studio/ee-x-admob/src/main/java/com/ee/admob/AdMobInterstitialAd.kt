@@ -2,18 +2,17 @@ package com.ee.admob
 
 import android.content.Context
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.ads.IInterstitialAd
 import com.ee.ads.InterstitialAdHelper
 import com.ee.ads.MessageHelper
 import com.ee.core.IMessageBridge
 import com.ee.core.Logger
 import com.ee.core.internal.Thread
-import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
@@ -31,6 +30,7 @@ internal class AdMobInterstitialAd(
         private val _logger = Logger(AdMobInterstitialAd::class.java.name)
     }
 
+    private val _isLoaded = AtomicBoolean(false)
     private var _ad: InterstitialAd? = null
 
     init {
@@ -54,10 +54,12 @@ internal class AdMobInterstitialAd(
     private fun registerHandlers() {
         _helper.registerHandlers()
         _bridge.registerHandler(_messageHelper.createInternalAd) {
-            Utils.toString(createInternalAd())
+            createInternalAd()
+            ""
         }
         _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            Utils.toString(destroyInternalAd())
+            destroyInternalAd()
+            ""
         }
     }
 
@@ -68,48 +70,46 @@ internal class AdMobInterstitialAd(
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
-    @UiThread
-    private fun createInternalAd(): Boolean {
-        Thread.checkMainThread()
-        if (_ad != null) {
-            return false
-        }
-        val ad = InterstitialAd(_context)
-        ad.adUnitId = _adId
-        ad.adListener = this
-        _ad = ad
-        return true
+    @AnyThread
+    private fun createInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            if (_ad != null) {
+                return@Runnable
+            }
+            val ad = InterstitialAd(_context)
+            ad.adUnitId = _adId
+            ad.adListener = this
+            _ad = ad
+        })
     }
 
-    @UiThread
-    private fun destroyInternalAd(): Boolean {
-        Thread.checkMainThread()
-        val ad = _ad ?: return false
-        ad.adListener = null
-        _ad = null
-        return true
+    @AnyThread
+    private fun destroyInternalAd() {
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: return@Runnable
+            ad.adListener = null
+            _ad = null
+        })
     }
 
     override val isLoaded: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-            return ad.isLoaded
-        }
+        @AnyThread get() = _isLoaded.get()
 
-    @UiThread
+    @AnyThread
     override fun load() {
-        _logger.info("${this::load}")
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.loadAd(AdRequest.Builder().build())
+        Thread.runOnMainThread(Runnable {
+            _logger.info("${this::load}")
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.loadAd(AdRequest.Builder().build())
+        })
     }
 
-    @UiThread
+    @AnyThread
     override fun show() {
-        Thread.checkMainThread()
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.show()
+        Thread.runOnMainThread(Runnable {
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.show()
+        })
     }
 
     override fun onAdClosed() {
@@ -132,12 +132,14 @@ internal class AdMobInterstitialAd(
 
     override fun onAdOpened() {
         _logger.info("${this::onAdOpened}")
+        _isLoaded.set(false)
         Thread.checkMainThread()
     }
 
     override fun onAdLoaded() {
         _logger.info("${this::onAdLoaded}")
         Thread.checkMainThread()
+        _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 

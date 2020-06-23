@@ -10,7 +10,6 @@
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -140,13 +139,7 @@ void Self::destroy() {
 
 void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    runOnMainThread([this, gameId] { //
-        bridge_.call(k__initialize, gameId);
-    });
-}
-
-void Self::setCloseTimeOut(float timeOut) {
-    // Already managed in iOS/Android.
+    bridge_.call(k__initialize, gameId);
 }
 
 std::shared_ptr<IInterstitialAd>
@@ -196,33 +189,25 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasInterstitialAd() const {
-    assert(isMainThread());
     auto response = bridge_.call(k__hasInterstitialAd);
     return core::toBool(response);
 }
 
 void Self::loadInterstitialAd() {
-    runOnMainThread([this] { //
-        bridge_.call(k__loadInterstitialAd);
-    });
+    bridge_.call(k__loadInterstitialAd);
 }
 
 void Self::showInterstitialAd(const std::string& adId) {
-    runOnMainThread([this, adId] { //
-        bridge_.call(k__showInterstitialAd, adId);
-    });
+    bridge_.call(k__showInterstitialAd, adId);
 }
 
 bool Self::hasRewardedAd() const {
-    assert(isMainThread());
     auto response = bridge_.call(k__hasRewardedAd);
     return core::toBool(response);
 }
 
 void Self::showRewardedAd(const std::string& adId) {
-    runOnMainThread([this, adId] { //
-        bridge_.call(k__showRewardedAd, adId);
-    });
+    bridge_.call(k__showRewardedAd, adId);
 }
 
 #pragma mark - Interstitial Ad Callbacks.

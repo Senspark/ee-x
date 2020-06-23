@@ -3,9 +3,7 @@ package com.ee.appsflyer
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.core.IMessageBridge
@@ -97,48 +95,55 @@ class AppsFlyer(
         _bridge.deregisterHandler(kTrackEvent)
     }
 
-    @UiThread
+    @AnyThread
     fun initialize(devKey: String) {
-        Thread.checkMainThread()
-        val listener = object : AppsFlyerConversionListener {
-            override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
-                for (key in conversionData.keys) {
-                    _logger.debug("${this::onConversionDataSuccess}: $key = ${conversionData[key]}")
+        Thread.runOnMainThread(Runnable {
+            val listener = object : AppsFlyerConversionListener {
+                override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
+                    for (key in conversionData.keys) {
+                        _logger.debug("${this::onConversionDataSuccess}: $key = ${conversionData[key]}")
+                    }
+                }
+
+                override fun onConversionDataFail(errorMessage: String) {
+                    _logger.debug("${this::onConversionDataFail}: $errorMessage")
+                }
+
+                override fun onAppOpenAttribution(conversionData: Map<String, String>) {
+                    for (key in conversionData.keys) {
+                        _logger.debug("${this::onAppOpenAttribution}: $key = ${conversionData[key]}")
+                    }
+                }
+
+                override fun onAttributionFailure(errorMessage: String) {
+                    _logger.debug("${this::onAttributionFailure}: $errorMessage")
                 }
             }
-
-            override fun onConversionDataFail(errorMessage: String) {
-                _logger.debug("${this::onConversionDataFail}: $errorMessage")
-            }
-
-            override fun onAppOpenAttribution(conversionData: Map<String, String>) {
-                for (key in conversionData.keys) {
-                    _logger.debug("${this::onAppOpenAttribution}: $key = ${conversionData[key]}")
-                }
-            }
-
-            override fun onAttributionFailure(errorMessage: String) {
-                _logger.debug("${this::onAttributionFailure}: $errorMessage")
-            }
-        }
-        _tracker.init(devKey, listener, _context)
+            _tracker.init(devKey, listener, _context)
+        })
     }
 
-    @UiThread
+    @AnyThread
     fun startTracking() {
-        _tracker.startTracking(_context as Application?)
+        Thread.runOnMainThread(Runnable {
+            _tracker.startTracking(_context as Application?)
+        })
     }
 
     val deviceId: String
         @AnyThread get() = _tracker.getAppsFlyerUID(_context)
 
-    @UiThread
+    @AnyThread
     fun setDebugEnabled(enabled: Boolean) {
-        _tracker.setDebugLog(enabled)
+        Thread.runOnMainThread(Runnable {
+            _tracker.setDebugLog(enabled)
+        })
     }
 
-    @UiThread
+    @AnyThread
     fun trackEvent(name: String, values: Map<String, Any>) {
-        _tracker.trackEvent(_context, name, values)
+        Thread.runOnMainThread(Runnable {
+            _tracker.trackEvent(_context, name, values)
+        })
     }
 }

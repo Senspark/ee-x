@@ -38,8 +38,8 @@ private:
         const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
         Bridge* plugin, const std::string& adId);
 
-    bool createInternalAd();
-    bool destroyInternalAd();
+    void createInternalAd();
+    void destroyInternalAd();
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

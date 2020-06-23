@@ -44,8 +44,8 @@ private:
     explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
                       Bridge* plugin, const std::string& adId);
 
-    bool createInternalAd();
-    bool destroyInternalAd();
+    void createInternalAd();
+    void destroyInternalAd();
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

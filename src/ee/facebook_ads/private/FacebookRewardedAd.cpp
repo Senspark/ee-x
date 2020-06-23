@@ -13,9 +13,6 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/MakeAwaiter.hpp>
-#include <ee/core/SwitchToUiThread.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/facebook_ads/FacebookAdsBridge.hpp"
@@ -84,22 +81,17 @@ void Self::destroy() {
     assert(succeeded);
 }
 
-bool Self::createInternalAd() {
+void Self::createInternalAd() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    assert(Thread::isMainThread());
-    auto response = bridge_.call(messageHelper_.createInternalAd());
-    return core::toBool(response);
+    bridge_.call(messageHelper_.createInternalAd());
 }
 
-bool Self::destroyInternalAd() {
+void Self::destroyInternalAd() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    assert(Thread::isMainThread());
-    auto response = bridge_.call(messageHelper_.destroyInternalAd());
-    return core::toBool(response);
+    bridge_.call(messageHelper_.destroyInternalAd());
 }
 
 bool Self::isLoaded() const {
-    assert(Thread::isMainThread());
     auto response = bridge_.call(messageHelper_.isLoaded());
     return core::toBool(response);
 }
@@ -108,11 +100,10 @@ Task<bool> Self::load() {
     logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process( //
-        makeAwaiter([this]() -> Task<> {
-            co_await SwitchToUiThread();
+    auto result = co_await loader_->process(
+        [this] { //
             bridge_.call(messageHelper_.load());
-        }),
+        },
         [this](bool result) {
             if (result) {
                 // OK.
@@ -131,10 +122,9 @@ Task<IRewardedAdResult> Self::show() {
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
-        makeAwaiter([this]() -> Task<> {
-            co_await SwitchToUiThread();
+        [this] { //
             bridge_.call(messageHelper_.show());
-        }),
+        },
         [this](IRewardedAdResult result) {
             if (result == IRewardedAdResult::Failed) {
                 // Failed to show.

@@ -18,7 +18,6 @@
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -100,18 +99,14 @@ void Self::destroy() {
 void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
                   gameId.c_str(), core::toString(testModeEnabled).c_str());
-    runOnMainThread([this, gameId, testModeEnabled] {
-        nlohmann::json json;
-        json[k__gameId] = gameId;
-        json[k__testModeEnabled] = testModeEnabled;
-        bridge_.call(k__initialize, json.dump());
-    });
+    nlohmann::json json;
+    json[k__gameId] = gameId;
+    json[k__testModeEnabled] = testModeEnabled;
+    bridge_.call(k__initialize, json.dump());
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    runOnMainThread([this, enabled] {
-        bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
-    });
+    bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<IInterstitialAd>
@@ -163,7 +158,6 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasRewardedAd(const std::string& adId) const {
-    assert(isMainThread());
     auto response = bridge_.call(k__hasRewardedAd, adId);
     return core::toBool(response);
 }
@@ -172,9 +166,7 @@ void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     adId_ = adId;
     displaying_ = true;
-    runOnMainThread([this, adId] { //
-        bridge_.call(k__showRewardedAd, adId);
-    });
+    bridge_.call(k__showRewardedAd, adId);
 }
 
 void Self::onLoaded(const std::string& adId) {

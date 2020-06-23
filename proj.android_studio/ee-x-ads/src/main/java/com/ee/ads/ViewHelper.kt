@@ -3,57 +3,53 @@ package com.ee.ads
 import android.graphics.Point
 import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.UiThread
+import androidx.annotation.AnyThread
 import com.ee.core.internal.Thread
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 class ViewHelper(private val _view: View) {
+    private val _position = AtomicReference<Point>(Point(0, 0))
+    private val _size = AtomicReference<Point>(Point(0, 0))
+    private val _visible = AtomicBoolean(false)
+
     var position: Point
-        @UiThread get() {
-            Thread.checkMainThread()
-            /*
-            int p[] = new int[2];
-            view.getLocationInWindow(p);
-            return new Point(p[0], p[1]);
-            */
-            val params = _view.layoutParams as FrameLayout.LayoutParams
-            return Point(params.leftMargin, params.topMargin)
-        }
-        @UiThread set(value) {
-            Thread.checkMainThread()
-            val params = _view.layoutParams as FrameLayout.LayoutParams
-            params.leftMargin = value.x
-            params.topMargin = value.y
-            _view.layoutParams = params
+        @AnyThread get() = _position.get()
+        @AnyThread set(value) {
+            Thread.runOnMainThread(Runnable {
+                val params = _view.layoutParams as FrameLayout.LayoutParams
+                params.leftMargin = value.x
+                params.topMargin = value.y
+                _view.layoutParams = params
+                _position.set(value)
+            })
         }
 
     var size: Point
-        @UiThread get() {
-            Thread.checkMainThread()
-            // return new Point(view.getWidth(), view.getHeight());
-            val params = _view.layoutParams as FrameLayout.LayoutParams
-            return Point(params.width, params.height)
-        }
-        @UiThread set(value) {
-            Thread.checkMainThread()
-            val params = _view.layoutParams as FrameLayout.LayoutParams
-            params.width = value.x
-            params.height = value.y
-            _view.layoutParams = params
+        @AnyThread get() = _size.get()
+        @AnyThread set(value) {
+            Thread.runOnMainThread(Runnable {
+                Thread.checkMainThread()
+                val params = _view.layoutParams as FrameLayout.LayoutParams
+                params.width = value.x
+                params.height = value.y
+                _view.layoutParams = params
+                _size.set(value)
+            })
         }
 
     var isVisible: Boolean
-        @UiThread get() {
-            Thread.checkMainThread()
-            return _view.visibility == View.VISIBLE
-        }
-        @UiThread set(value) {
-            Thread.checkMainThread()
-            if (value) {
-                _view.visibility = View.VISIBLE
-            } else {
-                // View.INVISIBLE doesn't trigger a view redraw.
-                // Production: load and then call setVisible(true) doesn't show the native ad.
-                _view.visibility = View.GONE
-            }
+        @AnyThread get() = _visible.get()
+        @AnyThread set(value) {
+            Thread.runOnMainThread(Runnable {
+                if (value) {
+                    _view.visibility = View.VISIBLE
+                } else {
+                    // View.INVISIBLE doesn't trigger a view redraw.
+                    // Production: load and then call setVisible(true) doesn't show the native ad.
+                    _view.visibility = View.GONE
+                }
+                _visible.set(value)
+            })
         }
 }

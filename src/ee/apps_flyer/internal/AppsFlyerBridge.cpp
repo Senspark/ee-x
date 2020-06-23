@@ -10,7 +10,6 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -50,22 +49,18 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {
-    runOnMainThread([this, devKey, appId] {
 #ifdef EE_X_ANDROID
-        bridge_.call(kInitialize, devKey);
+    bridge_.call(kInitialize, devKey);
 #else  // EE_X_ANDROID
-        nlohmann::json json;
-        json["devKey"] = devKey;
-        json["appId"] = appId;
-        bridge_.call(kInitialize, json.dump());
+    nlohmann::json json;
+    json["devKey"] = devKey;
+    json["appId"] = appId;
+    bridge_.call(kInitialize, json.dump());
 #endif // EE_X_ANDROID
-    });
 }
 
 void Self::startTracking() {
-    runOnMainThread([this] { //
-        bridge_.call(kStartTracking);
-    });
+    bridge_.call(kStartTracking);
 }
 
 std::string Self::getDeviceId() const {
@@ -73,25 +68,19 @@ std::string Self::getDeviceId() const {
 }
 
 void Self::setDebugEnabled(bool enabled) {
-    runOnMainThread([this, enabled] {
-        bridge_.call(kSetDebugEnabled, core::toString(enabled));
-    });
+    bridge_.call(kSetDebugEnabled, core::toString(enabled));
 }
 
 void Self::setStopTracking(bool enabled) {
-    runOnMainThread([this, enabled] {
-        bridge_.call(kSetStopTracking, core::toString(enabled));
-    });
+    bridge_.call(kSetStopTracking, core::toString(enabled));
 }
 
 void Self::trackEvent(const std::string& name,
                       const std::map<std::string, std::string>& values) {
-    runOnMainThread([this, name, values] {
-        nlohmann::json json;
-        json["name"] = name;
-        json["values"] = values;
-        bridge_.call(kTrackEvent, json.dump());
-    });
+    nlohmann::json json;
+    json["name"] = name;
+    json["values"] = values;
+    bridge_.call(kTrackEvent, json.dump());
 }
 } // namespace apps_flyer
 } // namespace ee

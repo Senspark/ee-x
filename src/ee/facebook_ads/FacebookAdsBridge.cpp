@@ -17,7 +17,6 @@
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -100,15 +99,11 @@ std::string Self::getTestDeviceHash() const {
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    runOnMainThread([this, hash] { //
-        bridge_.call(k__addTestDevice, hash);
-    });
+    bridge_.call(k__addTestDevice, hash);
 }
 
 void Self::clearTestDevices() {
-    runOnMainThread([this] { //
-        bridge_.call(k__clearTestDevices);
-    });
+    bridge_.call(k__clearTestDevices);
 }
 
 std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {

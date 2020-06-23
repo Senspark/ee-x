@@ -25,8 +25,6 @@ public:
     /// Initializes ironSource with the specified game ID.
     void initialize(const std::string& gameId);
 
-    void setCloseTimeOut(float timeOut);
-
     /// Creates an interstitial ad with the specified placement ID.
     std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId);

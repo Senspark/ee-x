@@ -2,21 +2,25 @@ package com.ee.play
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
+import com.ee.core.InvisibleActivity
 import com.ee.core.Logger
+import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
 import com.ee.core.registerHandler
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.achievement.Achievement
+import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
@@ -30,33 +34,33 @@ class Play(
     companion object {
         private val _logger = Logger(Play::class.java.name)
 
-        private const val k_isSignedIn = "Play_isSignedIn"
-        private const val k_signin = "Play_signin"
-        private const val k_signout = "Play_signout"
-        private const val k_showAchievements = "Play_showAchievements"
-        private const val k_increaseAchievement = "Play_increaseAchievement"
-        private const val k_unlockAchievement = "Play_unlockAchievement"
-        private const val k_showLeaderboard = "Play_showLeaderboard"
-        private const val k_showAllLeaderboards = "Play_showAllLeaderboards"
-        private const val k_submitScore = "Play_submitScore"
-        private const val k_onSignedIn = "Play_onSignedIn"
-        private const val RC_SIGN_IN = 201912001
-        private const val RC_ACHIEVEMENT_UI = 201912002
-        private const val RC_LEADER_BOARD_UI = 201912003
+        private const val kIsLoggedIn = "Play_isSignedIn"
+        private const val kLogIn = "Play_signin"
+        private const val kLogOut = "Play_signout"
+        private const val kShowAchievements = "Play_showAchievements"
+        private const val kIncreaseAchievement = "Play_increaseAchievement"
+        private const val kUnlockAchievement = "Play_unlockAchievement"
+        private const val kShowLeaderboard = "Play_showLeaderboard"
+        private const val kShowAllLeaderboards = "Play_showAllLeaderboards"
+        private const val kSubmitScore = "Play_submitScore"
+        private const val kOnLoggedIn = "Play_onSignedIn"
     }
 
-    private var _signInClient: GoogleSignInClient? = null
-    private var _signInOptions: GoogleSignInOptions? = null
+    private val _options = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
+    private var _client: GoogleSignInClient? = null
 
     init {
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            _activity?.let { activity ->
+                _client = GoogleSignIn.getClient(activity, _options)
+            }
+        })
     }
 
     override fun onCreate(activity: Activity) {
         _activity = activity
-        val options = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
-        _signInOptions = options
-        _signInClient = GoogleSignIn.getClient(activity, options)
+        _client = GoogleSignIn.getClient(activity, _options)
     }
 
     override fun onStart() {}
@@ -73,28 +77,32 @@ class Play(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k_isSignedIn) {
-            Utils.toString(isSignedIn())
+        _bridge.registerHandler(kIsLoggedIn) {
+            Utils.toString(isLoggedIn)
         }
-        _bridge.registerHandler(k_signin) { message ->
+        _bridge.registerHandler(kLogIn) { message ->
             @Serializable
             class Request(
                 val silent_sign_in: Boolean
             )
 
             val request = deserialize<Request>(message)
-            signIn(request.silent_sign_in)
+            logIn(request.silent_sign_in) { successful ->
+                _bridge.callCpp(kOnLoggedIn, Utils.toString(successful))
+            }
             ""
         }
-        _bridge.registerHandler(k_signout) {
-            signOut()
+        _bridge.registerHandler(kLogOut) {
+            logOut {
+                // OK.
+            }
             ""
         }
-        _bridge.registerHandler(k_showAchievements) {
+        _bridge.registerHandler(kShowAchievements) {
             showAchievements()
             ""
         }
-        _bridge.registerHandler(k_increaseAchievement) { message ->
+        _bridge.registerHandler(kIncreaseAchievement) { message ->
             @Serializable
             class Request(
                 val achievement_id: String,
@@ -105,7 +113,7 @@ class Play(
             incrementAchievement(request.achievement_id, request.increment)
             ""
         }
-        _bridge.registerHandler(k_unlockAchievement) { message ->
+        _bridge.registerHandler(kUnlockAchievement) { message ->
             @Serializable
             class Request(
                 val achievement_id: String
@@ -115,7 +123,7 @@ class Play(
             unlockAchievement(request.achievement_id)
             ""
         }
-        _bridge.registerHandler(k_showLeaderboard) { message ->
+        _bridge.registerHandler(kShowLeaderboard) { message ->
             @Serializable
             class Request(
                 val leaderboard_id: String
@@ -125,11 +133,11 @@ class Play(
             showLeaderboard(request.leaderboard_id)
             ""
         }
-        _bridge.registerHandler(k_showAllLeaderboards) {
+        _bridge.registerHandler(kShowAllLeaderboards) {
             showAllLeaderboards()
             ""
         }
-        _bridge.registerHandler(k_submitScore) { message ->
+        _bridge.registerHandler(kSubmitScore) { message ->
             @Serializable
             class Request(
                 val leaderboard_id: String,
@@ -144,158 +152,183 @@ class Play(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k_isSignedIn)
-        _bridge.deregisterHandler(k_signin)
-        _bridge.deregisterHandler(k_signout)
-        _bridge.deregisterHandler(k_showAchievements)
-        _bridge.deregisterHandler(k_increaseAchievement)
-        _bridge.deregisterHandler(k_unlockAchievement)
-        _bridge.deregisterHandler(k_showLeaderboard)
-        _bridge.deregisterHandler(k_showAllLeaderboards)
-        _bridge.deregisterHandler(k_submitScore)
+        _bridge.deregisterHandler(kIsLoggedIn)
+        _bridge.deregisterHandler(kLogIn)
+        _bridge.deregisterHandler(kLogOut)
+        _bridge.deregisterHandler(kShowAchievements)
+        _bridge.deregisterHandler(kIncreaseAchievement)
+        _bridge.deregisterHandler(kUnlockAchievement)
+        _bridge.deregisterHandler(kShowLeaderboard)
+        _bridge.deregisterHandler(kShowAllLeaderboards)
+        _bridge.deregisterHandler(kSubmitScore)
     }
 
-    override fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
-        if (requestCode == RC_SIGN_IN) {
-            val success = responseCode == Activity.RESULT_OK
-            _bridge.callCpp(k_onSignedIn, Utils.toString(success))
-            return true
+    private val signInAccount: GoogleSignInAccount?
+        @UiThread get() = GoogleSignIn.getLastSignedInAccount(_context)
+
+    private val achievementsClient: AchievementsClient?
+        @UiThread get() {
+            val activity = _activity ?: return null
+            val account = signInAccount ?: return null
+            return Games.getAchievementsClient(activity, account)
         }
-        return false
-    }
+
+    private val leaderboardsClient: LeaderboardsClient?
+        @UiThread get() {
+            val activity = _activity ?: return null
+            val account = signInAccount ?: return null
+            return Games.getLeaderboardsClient(activity, account)
+        }
 
     // Check whether player is already signed in
     // https://developers.google.com/games/services/android/signin
-    private fun isSignedIn(): Boolean {
-        val options = _signInOptions ?: return false
-        val account = GoogleSignIn.getLastSignedInAccount(_activity)
-        return account != null && GoogleSignIn.hasPermissions(account, *options.scopeArray)
-    }
+    private val isLoggedIn: Boolean
+        @UiThread get() = GoogleSignIn.hasPermissions(signInAccount, *_options.scopeArray)
 
-    private fun signIn(silentSignIn: Boolean) {
-        _logger.debug("signIn $silentSignIn")
-        if (silentSignIn) {
-            signInSilently()
-        } else {
-            startSignInIntent()
-        }
-    }
-
-    private fun signInSilently() {
-        _logger.debug("signInSilently")
+    @UiThread
+    private fun logIn(silently: Boolean, callback: (successful: Boolean) -> Unit) {
+        _logger.debug("${this::logIn.name}: silently = $silently")
         val activity = _activity ?: return
-        val client = _signInClient ?: return
-        client.silentSignIn().addOnCompleteListener(activity) { task ->
-            if (task.isSuccessful) {
-                _logger.debug("signInSilently: success")
-            } else {
-                _logger.debug("signInSilently: failed")
+        val client = _client ?: throw IllegalArgumentException("Client is null")
+        if (silently) {
+            client.silentSignIn().addOnCompleteListener { task ->
+                callback(task.isSuccessful)
             }
+        } else {
+            val code = 1
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    innerActivity.startActivityForResult(client.signInIntent, code)
+                }
+                .onFinish { requestCode, resultCode, _ ->
+                    assertThat(requestCode == code)
+                    val successful = resultCode == Activity.RESULT_OK
+                    callback(successful)
+                }
+                .process()
         }
     }
 
-    private fun startSignInIntent() {
-        _logger.debug("startSignInIntent")
-        val activity = _activity ?: return
-        val client = _signInClient ?: return
-        activity.startActivityForResult(client.signInIntent, RC_SIGN_IN)
-    }
-
-    private fun signOut() {
-        val activity = _activity ?: return
-        val client = _signInClient ?: return
-        client.signOut().addOnCompleteListener(activity) {
-            _logger.debug("signOut(): success")
+    @UiThread
+    private fun logOut(callback: (successful: Boolean) -> Unit) {
+        _logger.debug(this::logOut.name)
+        val client = _client ?: throw IllegalArgumentException("Client is null")
+        client.signOut().addOnCompleteListener { task ->
+            callback(task.isSuccessful)
         }
     }
 
+    @UiThread
     private fun showAchievements() {
-        if (!isSignedIn()) {
+        if (!isLoggedIn) {
             return
         }
-        achievementsClient?.achievementsIntent?.addOnSuccessListener { intent ->
+        val client = achievementsClient ?: return
+        client.achievementsIntent.addOnSuccessListener { intent ->
             val activity = _activity ?: return@addOnSuccessListener
-            activity.startActivityForResult(intent, RC_ACHIEVEMENT_UI)
+            val code = 1
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    innerActivity.startActivityForResult(intent, code)
+                }
+                .onFinish { requestCode, _, _ ->
+                    assertThat(requestCode == code)
+                    // OK.
+                }
+                .process()
         }
     }
 
     // Load all achievements and check increment
     // Ref: https://stackoverflow.com/questions/23848014/google-play-game-services-unlock
     // -achievement-store-unlock-in-game-or-call-unlo/23853222#23853222
-    private fun incrementAchievement(achievementId: String?, percent: Double) {
-        if (!isSignedIn()) {
+    @UiThread
+    private fun incrementAchievement(achievementId: String, percent: Double) {
+        if (!isLoggedIn) {
             return
         }
-        val client = achievementsClient
-        client?.load(true)?.addOnCompleteListener { task ->
-            val buff = task.result!!.get()
-            val bufSize = buff!!.count
-            for (i in 0 until bufSize) {
-                val ach = buff[i]
-                val id = ach.achievementId
-                if (ach.type != Achievement.TYPE_INCREMENTAL) {
+        val client = achievementsClient ?: return
+        client.load(true).addOnCompleteListener { task ->
+            val buffer = task.result?.get() ?: return@addOnCompleteListener
+            val bufferSize = buffer.count
+            for (i in 0 until bufferSize) {
+                val achievement = buffer[i]
+                if (achievement.type != Achievement.TYPE_INCREMENTAL) {
                     continue
                 }
-                if (id.compareTo(achievementId!!) == 0) {
-                    val currStep = ach.currentSteps
-                    val totalStep = ach.totalSteps
-                    val reportStep = (percent * totalStep).toInt()
-                    val increment = reportStep - currStep
-                    if (increment > 0) {
-                        client.increment(achievementId, increment)
-                    }
-                    break
+                if (achievement.achievementId != achievementId) {
+                    continue
                 }
+                val currStep = achievement.currentSteps
+                val totalStep = achievement.totalSteps
+                val reportStep = (percent * totalStep).toInt()
+                val increment = reportStep - currStep
+                if (increment > 0) {
+                    client.increment(achievementId, increment)
+                }
+                break
             }
-            buff.release()
+            buffer.release()
         }
     }
 
-    private fun unlockAchievement(achievementId: String?) {
-        if (!isSignedIn()) {
+    @UiThread
+    private fun unlockAchievement(achievementId: String) {
+        if (!isLoggedIn) {
             return
         }
-        achievementsClient?.unlock(achievementId!!)
+        val client = achievementsClient ?: return
+        client.unlock(achievementId)
     }
 
+    @UiThread
     private fun showLeaderboard(leaderboardId: String) {
-        if (!isSignedIn()) {
+        if (!isLoggedIn) {
             return
         }
-        leaderboardsClient?.getLeaderboardIntent(leaderboardId)?.addOnSuccessListener { intent ->
+        val client = leaderboardsClient ?: return
+        client.getLeaderboardIntent(leaderboardId).addOnSuccessListener { intent ->
             val activity = _activity ?: return@addOnSuccessListener
-            activity.startActivityForResult(intent, RC_LEADER_BOARD_UI)
+            val code = 1
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    innerActivity.startActivityForResult(intent, code)
+                }
+                .onFinish { requestCode, _, _ ->
+                    assertThat(requestCode).isEqualTo(code)
+                    // OK.
+                }
+                .process()
         }
     }
 
+    @UiThread
     private fun showAllLeaderboards() {
-        if (!isSignedIn()) {
+        if (!isLoggedIn) {
             return
         }
-        leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
+        val client = leaderboardsClient ?: return
+        client.allLeaderboardsIntent.addOnSuccessListener { intent ->
             val activity = _activity ?: return@addOnSuccessListener
-            activity.startActivityForResult(intent, RC_LEADER_BOARD_UI)
+            val code = 1
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    innerActivity.startActivityForResult(intent, code)
+                }
+                .onFinish { requestCode, _, _ ->
+                    assertThat(requestCode).isEqualTo(code)
+                    // OK.
+                }
+                .process()
         }
     }
 
-    private fun submitScore(leaderboardName: String, score: Long) {
-        if (!isSignedIn()) {
+    @UiThread
+    private fun submitScore(leaderboardId: String, score: Long) {
+        if (!isLoggedIn) {
             return
         }
-        leaderboardsClient?.submitScore(leaderboardName, score)
+        val client = leaderboardsClient ?: return
+        client.submitScore(leaderboardId, score)
     }
-
-    private val achievementsClient: AchievementsClient?
-        get() {
-            val activity = _activity ?: return null
-            val account = GoogleSignIn.getLastSignedInAccount(activity) ?: return null
-            return Games.getAchievementsClient(activity, account)
-        }
-
-    private val leaderboardsClient: LeaderboardsClient?
-        get() {
-            val activity = _activity ?: return null
-            val account = GoogleSignIn.getLastSignedInAccount(activity) ?: return null
-            return Games.getLeaderboardsClient(activity, account)
-        }
 }

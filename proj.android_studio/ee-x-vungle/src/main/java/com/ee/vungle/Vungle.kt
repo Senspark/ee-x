@@ -19,6 +19,7 @@ import com.vungle.warren.error.VungleException
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**

@@ -18,18 +18,6 @@ android {
 }
 
 dependencies {
-    // 2.10.x has issue with Android 4.3 (crash on Samsung Galaxy S3 in prelaunch report):
-    // Could not find class 'java.beans.Transient', referenced from method com.fasterxml.jackson.databind.ext.Java7SupportImpl.<init>
-    // implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
-    // implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
-    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
-
-    // Fallback to 2.9.x
-    // https://github.com/FasterXML/jackson/wiki/Jackson-Releases
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.10'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.10'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.10'
-
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-instantapps:17.0.0'
 

@@ -280,22 +280,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'crashlytics' do |s|
-    s.source_files =
-      'src/ee/Crashlytics*',
-      'src/ee/crashlytics/**/*'
-
-    s.exclude_files =
-      'src/ee/crashlytics/Android.mk',
-      'src/ee/crashlytics/CMakeLists.txt',
-      'src/ee/crashlytics/generate.sh',
-      'src/ee/crashlytics/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'Crashlytics'
-    s.dependency 'Fabric'
-  end
-
   spec.subspec 'cocos' do |s|
     s.source_files =
       'src/ee/Cocos*',
@@ -584,15 +568,6 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'TenjinSDK'
-  end
-
-  spec.subspec 'twitter' do |s|
-    s.source_files =
-      'src/ee/Twitter*',
-      'src/ee/twitter/**/*'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'TwitterKit'
   end
 
   spec.subspec 'jansson' do |s| 

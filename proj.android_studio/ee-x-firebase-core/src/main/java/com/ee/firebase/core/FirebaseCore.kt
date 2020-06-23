@@ -2,7 +2,6 @@ package com.ee.firebase.core
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger

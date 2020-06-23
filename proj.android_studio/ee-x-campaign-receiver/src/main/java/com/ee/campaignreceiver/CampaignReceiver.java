@@ -2,7 +2,6 @@ package com.ee.campaignreceiver;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.RemoteException;
 
 import androidx.annotation.NonNull;

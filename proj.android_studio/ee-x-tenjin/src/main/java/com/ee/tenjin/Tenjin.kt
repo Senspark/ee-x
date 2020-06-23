@@ -2,9 +2,7 @@ package com.ee.tenjin
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
@@ -63,10 +61,11 @@ class Tenjin(
         _bridge.deregisterHandler(k__initialize)
     }
 
-    @UiThread
+    @AnyThread
     private fun initialize(apiKey: String) {
-        Thread.checkMainThread()
-        _tenjin = TenjinSDK.getInstance(_activity, apiKey)
-        _tenjin?.connect()
+        Thread.runOnMainThread(Runnable {
+            _tenjin = TenjinSDK.getInstance(_activity, apiKey)
+            _tenjin?.connect()
+        })
     }
 }

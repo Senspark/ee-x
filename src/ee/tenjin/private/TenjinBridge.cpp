@@ -5,7 +5,6 @@
 #include "ee/tenjin/private/TenjinBridge.hpp"
 
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
 namespace ee {
@@ -37,9 +36,7 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& apiKey) {
-    Thread::runOnMainThread([this, apiKey] { //
-        bridge_.call(k__initialize, apiKey);
-    });
+    bridge_.call(k__initialize, apiKey);
 }
 } // namespace tenjin
 } // namespace ee

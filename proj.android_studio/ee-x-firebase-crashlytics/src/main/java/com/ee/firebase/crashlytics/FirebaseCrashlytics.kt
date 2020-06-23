@@ -2,7 +2,6 @@ package com.ee.firebase.crashlytics
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.AnyThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin

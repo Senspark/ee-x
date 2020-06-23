@@ -134,6 +134,7 @@ public class Recorder implements IPlugin {
         _bridge.deregisterHandler(k__getRecordingUrl);
     }
 
+    /* FIXME.
     @Override
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         if (requestCode != PERMISSION_CODE || responseCode != Activity.RESULT_OK) {
@@ -152,6 +153,7 @@ public class Recorder implements IPlugin {
         _activity.startService(intent);
         return true;
     }
+     */
 
     public boolean isSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;

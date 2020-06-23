@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 repositories {
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
@@ -23,6 +24,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
+    implementation 'androidx.annotation:annotation:1.1.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     implementation 'com.ironsource.sdk:mediationsdk:6.15.0.1'
@@ -37,4 +39,7 @@ dependencies {
         // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
         implementation 'com.ironsource.adapters:admobadapter:4.3.8'
     }
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

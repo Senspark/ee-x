@@ -30,6 +30,7 @@ class AdViewHelper(private val _bridge: IMessageBridge,
         }
         _bridge.registerHandler(_helper.getPosition) {
             @Serializable
+            @Suppress("unused")
             class Response(
                 val x: Int,
                 val y: Int
@@ -52,9 +53,10 @@ class AdViewHelper(private val _bridge: IMessageBridge,
         }
         _bridge.registerHandler(_helper.getSize) {
             @Serializable
+            @Suppress("unused")
             class Response(
-                val x: Int,
-                val y: Int
+                val width: Int,
+                val height: Int
             )
 
             val size = _view.size
@@ -64,12 +66,12 @@ class AdViewHelper(private val _bridge: IMessageBridge,
         _bridge.registerHandler(_helper.setSize) { message ->
             @Serializable
             class Request(
-                val x: Int,
-                val y: Int
+                val width: Int,
+                val height: Int
             )
 
             val request = deserialize<Request>(message)
-            _view.size = Point(request.x, request.y)
+            _view.size = Point(request.width, request.height)
             ""
         }
         _bridge.registerHandler(_helper.isVisible) {

@@ -73,6 +73,7 @@ class Facebook(
                 return ""
             }
             @Serializable
+            @Suppress("unused")
             class Response(
                 val token: String,
                 val applicationId: String,

@@ -35,15 +35,19 @@ internal class AdMobInterstitialAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        createInternalAd()
         registerHandlers()
+        Thread.runOnMainThread(Runnable {
+            createInternalAd()
+        })
     }
 
     @AnyThread
     fun destroy() {
         _logger.info("${this::destroy}: adId = $_adId")
         deregisterHandlers()
-        destroyInternalAd()
+        Thread.runOnMainThread(Runnable {
+            destroyInternalAd()
+        })
     }
 
     @AnyThread

@@ -49,9 +49,9 @@ internal class AdMobBannerAd(
 
     init {
         _logger.info("constructor: adId = %s", _adId)
-        createInternalAd()
+        registerHandlers()
         Thread.runOnMainThread(Runnable {
-            registerHandlers()
+            createInternalAd()
         })
     }
 

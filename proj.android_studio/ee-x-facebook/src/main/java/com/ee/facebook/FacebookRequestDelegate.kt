@@ -31,6 +31,7 @@ internal class FacebookRequestDelegate(
     override fun onSuccess(result: GameRequestDialog.Result) {
         Thread.checkMainThread()
         @Serializable
+        @Suppress("unused")
         class Response(
             val requestId: String,
             val requestRecipients: List<String>

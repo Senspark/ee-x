@@ -18,7 +18,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup:otto:1.3.8'
+    api project(':ee-x-store')
+    implementation 'com.android.billingclient:billing:2.2.1'
 
     // OkHttp3 3.13.x requires Android 5+ API 21.
     // https://stackoverflow.com/questions/55813654/exception-android-java-util-objects-in-android-version-4-3
@@ -27,5 +28,5 @@ dependencies {
     // Fallback to 3.12.x
     implementation 'com.squareup.okhttp3:okhttp:3.12.10'
 
-    implementation project(':ee-x-store')
+    implementation 'com.squareup:otto:1.3.8'
 }

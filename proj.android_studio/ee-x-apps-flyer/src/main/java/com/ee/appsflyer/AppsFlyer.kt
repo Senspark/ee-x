@@ -16,6 +16,7 @@ import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
 import com.ee.core.registerHandler
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
 
@@ -81,7 +82,7 @@ class AppsFlyer(
             @Serializable
             class Request(
                 val name: String,
-                val values: Map<String, Any>
+                val values: Map<String, @Polymorphic Any>
             )
 
             val request = deserialize<Request>(message)

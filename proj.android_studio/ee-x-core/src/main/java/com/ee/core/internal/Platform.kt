@@ -71,6 +71,7 @@ object Platform {
             )
 
             @Serializable
+            @Suppress("unused")
             class Response(
                 val signatures: List<String>
             )
@@ -91,6 +92,7 @@ object Platform {
         }
         bridge.registerHandler(kGetSafeInset) {
             @Serializable
+            @Suppress("unused")
             class Response(
                 val left: Int,
                 val right: Int,

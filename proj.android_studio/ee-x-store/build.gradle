@@ -17,5 +17,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-    api 'com.android.billingclient:billing:2.2.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'com.android.billingclient:billing:2.2.1'
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.2'
 }

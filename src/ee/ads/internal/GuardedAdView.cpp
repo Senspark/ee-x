@@ -4,7 +4,6 @@
 
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/SpinLock.hpp>
-#include <ee/core/SwitchToUiThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
@@ -64,9 +63,6 @@ Task<bool> Self::load() {
         lock.unlock();
         co_return true;
     }
-    lock.unlock();
-    co_await SwitchToUiThread();
-    lock.lock();
     if (loading_) {
         // Waiting.
         lock.unlock();

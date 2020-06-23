@@ -13,6 +13,9 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/MakeAwaiter.hpp>
+#include <ee/core/SwitchToUiThread.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
@@ -76,17 +79,20 @@ void Self::destroy() {
 
 bool Self::createInternalAd() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    assert(Thread::isMainThread());
     auto response = bridge_.call(messageHelper_.createInternalAd());
     return core::toBool(response);
 }
 
 bool Self::destroyInternalAd() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    assert(Thread::isMainThread());
     auto response = bridge_.call(messageHelper_.destroyInternalAd());
     return core::toBool(response);
 }
 
 bool Self::isLoaded() const {
+    assert(Thread::isMainThread());
     auto response = bridge_.call(messageHelper_.isLoaded());
     return core::toBool(response);
 }
@@ -95,10 +101,11 @@ Task<bool> Self::load() {
     logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process(
-        [this] { //
+    auto result = co_await loader_->process( //
+        makeAwaiter([this]() -> Task<> {
+            co_await SwitchToUiThread();
             bridge_.call(messageHelper_.load());
-        },
+        }),
         [](bool result) {
             // OK.
         });
@@ -109,10 +116,11 @@ Task<IRewardedAdResult> Self::show() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
-    auto result = co_await displayer_->process(
-        [this] { //
+    auto result = co_await displayer_->process( //
+        makeAwaiter([this]() -> Task<> {
+            co_await SwitchToUiThread();
             bridge_.call(messageHelper_.show());
-        },
+        }),
         [this](IRewardedAdResult result) {
             if (result == IRewardedAdResult::Failed) {
                 // Failed.

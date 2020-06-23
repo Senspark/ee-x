@@ -1,6 +1,8 @@
 // https://developers.facebook.com/docs/audience-network/android
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 repositories {
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
@@ -24,8 +26,10 @@ android {
 
 dependencies {
     api project(':ee-x-ads')
-    api 'androidx.recyclerview:recyclerview:1.1.0'
 
     // https://developers.facebook.com/docs/audience-network/changelog-android/
     implementation 'com.facebook.android:audience-network-sdk:5.8.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

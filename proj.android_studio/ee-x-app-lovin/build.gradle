@@ -1,6 +1,8 @@
 // https://dash.applovin.com/integration#androidIntegration
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -23,4 +25,7 @@ dependencies {
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://bintray.com/applovin/Android/sdk_android
     implementation 'com.applovin:applovin-sdk:9.12.3'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

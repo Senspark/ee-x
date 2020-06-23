@@ -2,6 +2,8 @@
 // https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -20,11 +22,15 @@ android {
 
 dependencies {
     api project(':ee-x-core')
-
-    // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
-    implementation 'com.appsflyer:af-android-sdk:5.0.2'
+    implementation 'androidx.annotation:annotation:1.1.0'
 
     // https://stackoverflow.com/questions/59263642/install-referrer-library-v1-1-adds-permissions
     // https://developer.android.com/google/play/installreferrer/release-notes
     implementation 'com.android.installreferrer:installreferrer:1.0'
+
+    // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
+    implementation 'com.appsflyer:af-android-sdk:5.0.2'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

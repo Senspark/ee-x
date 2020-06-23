@@ -1,17 +1,18 @@
 package com.ee.core
 
 import android.app.Activity
-import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.AnyThread
+import com.ee.core.internal.NativeThread
 import com.ee.core.internal.Platform
 import com.ee.core.internal.Utils
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import java.lang.reflect.InvocationTargetException
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 6/5/16.
@@ -33,17 +34,15 @@ class PluginManager private constructor() {
     }
 
     private val _bridge: IMessageBridge = MessageBridge.getInstance()
-    private val _plugins: MutableMap<String, IPlugin>
-    private val _classes: MutableMap<String, String>
+    private val _plugins: MutableMap<String, IPlugin> = ConcurrentHashMap()
+    private val _classes: MutableMap<String, String> = ConcurrentHashMap()
     private val _lifecycleCallbacks: ActivityLifecycleCallbacks
 
     private var _context: Context? = null
     private var _activity: Activity? = null
-    private var _activityClassName: String? = null
+    private var _activityClass: Class<out Activity>? = null
 
     init {
-        _plugins = HashMap()
-        _classes = HashMap()
         _classes["AdMob"] = "com.ee.admob.AdMob"
         _classes["AppLovin"] = "com.ee.applovin.AppLovin"
         _classes["AppsFlyer"] = "com.ee.appsflyer.AppsFlyer"
@@ -66,7 +65,7 @@ class PluginManager private constructor() {
         _lifecycleCallbacks = object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity,
                                            savedInstanceState: Bundle?) {
-                if (activity.javaClass.name == _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity == null) {
                         if (activity.isTaskRoot) {
                             _activity = activity
@@ -81,7 +80,7 @@ class PluginManager private constructor() {
             }
 
             override fun onActivityStarted(activity: Activity) {
-                if (activity.javaClass.name == _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onStart)
                     } else {
@@ -91,7 +90,7 @@ class PluginManager private constructor() {
             }
 
             override fun onActivityResumed(activity: Activity) {
-                if (activity.javaClass.name == _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onResume)
                     } else {
@@ -101,7 +100,7 @@ class PluginManager private constructor() {
             }
 
             override fun onActivityPaused(activity: Activity) {
-                if (activity.javaClass.name === _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onPause)
                     } else {
@@ -111,7 +110,7 @@ class PluginManager private constructor() {
             }
 
             override fun onActivityStopped(activity: Activity) {
-                if (activity.javaClass.name == _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onStop)
                     } else {
@@ -125,7 +124,7 @@ class PluginManager private constructor() {
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                if (activity.javaClass.name == _activityClassName) {
+                if (activity::class.java == _activityClass) {
                     if (_activity === activity) {
                         _activity = null
                         executePlugins(IPlugin::onDestroy)
@@ -137,49 +136,52 @@ class PluginManager private constructor() {
         }
     }
 
+    @AnyThread
     fun getContext(): Context? {
         return _context
     }
 
+    @AnyThread
     fun getActivity(): Activity? {
         return _activity
     }
 
+    @AnyThread
     @ImplicitReflectionSerializer
     @UnstableDefault
-    fun initializePlugins(context: Context) {
-        _context = context
-
-        // Register lifecycle callbacks.
-        if (context is Application) {
-            context.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
-        } else {
-            assertThat(true).isFalse()
+    internal fun initializePlugins(activity: Activity): Boolean {
+        val context = activity.applicationContext
+        if (context == null) {
+            assertThat(false).isTrue()
+            return false
         }
-
-        // Find main activity.
-        val packageName = context.packageName
-        val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
-        _activityClassName = launchIntent!!.component!!.className
-        assertThat(_activityClassName).isNotNull()
+        _context = context
+        _activity = activity
+        _activityClass = activity::class.java
+        activity.application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
         Platform.registerHandlers(_bridge, context)
+        return true
     }
 
-    fun addPlugin(name: String) {
+    @AnyThread
+    internal fun addPlugin(name: String): Boolean {
         _logger.info("addPlugin: $name")
         if (_plugins.containsKey(name)) {
             _logger.error("addPlugin: $name already exists!")
-            return
+            return false
         }
         if (!_classes.containsKey(name)) {
             _logger.error("addPlugin: $name classes doesn't exist!")
-            return
+            return false
         }
         val className = _classes[name] as String
         try {
             val clazz = Class.forName(className)
-            val constructor = clazz.getConstructor(Context::class.java, IMessageBridge::class.java)
-            val plugin = constructor.newInstance(_context, _bridge)
+            val constructor = clazz.getConstructor(
+                IMessageBridge::class.java,
+                Context::class.java,
+                Activity::class.java)
+            val plugin = constructor.newInstance(_bridge, _context, _activity)
             _plugins[name] = plugin as IPlugin
         } catch (ex: ClassNotFoundException) {
             ex.printStackTrace()
@@ -192,38 +194,34 @@ class PluginManager private constructor() {
         } catch (ex: InvocationTargetException) {
             ex.printStackTrace()
         }
+        return true
     }
 
-    fun removePlugin(name: String) {
+    @AnyThread
+    internal fun removePlugin(name: String): Boolean {
         _logger.info("removePlugin: $name")
         val plugin = _plugins[name]
         if (plugin == null) {
             _logger.error("removePlugin: $name doesn't exist!")
-            return
+            return false
         }
         plugin.destroy()
         _plugins.remove(name)
+        return true
     }
 
-    fun getPlugin(name: String): IPlugin? {
+    @AnyThread
+    internal fun getPlugin(name: String): IPlugin? {
         return _plugins[name]
     }
 
-    fun destroy() {
+    @AnyThread
+    private fun destroy() {
         Platform.deregisterHandlers(_bridge)
         for (entry in _plugins) {
             entry.value.destroy()
         }
         _context = null
-    }
-
-    /// FIXME: to be removed (used in Recorder plugin).
-    fun onActivityResult(requestCode: Int, responseCode: Int, data: Intent?): Boolean {
-        var result = false
-        for (entry in _plugins) {
-            result = result || entry.value.onActivityResult(requestCode, responseCode, data)
-        }
-        return result
     }
 
     private fun executePlugins(executor: PluginExecutor) {
@@ -239,4 +237,40 @@ class PluginManager private constructor() {
             }
         })
     }
+}
+
+@ImplicitReflectionSerializer
+@NativeThread
+@Suppress("unused")
+@UnstableDefault
+private fun ee_staticInitializePlugins(): Boolean {
+    val activity = Utils.getCurrentActivity()
+    if (activity == null) {
+        assertThat(false).isTrue()
+        return false
+    }
+    return PluginManager.getInstance().initializePlugins(activity)
+}
+
+@NativeThread
+@Suppress("unused")
+private fun ee_staticAddPlugin(name: String): Boolean {
+    return PluginManager.getInstance().addPlugin(name)
+}
+
+@NativeThread
+@Suppress("unused")
+private fun ee_staticRemovePlugin(name: String): Boolean {
+    return PluginManager.getInstance().removePlugin(name)
+}
+
+@NativeThread
+@Suppress("unused")
+private fun ee_staticGetActivity(): Any? {
+    return PluginManager.getInstance().getActivity()
+}
+
+/// Legacy method used by Soomla.
+fun ee_getStorePlugin(): IPlugin? {
+    return PluginManager.getInstance().getPlugin("Store")
 }

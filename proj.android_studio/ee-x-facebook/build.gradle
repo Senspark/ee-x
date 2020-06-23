@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -19,6 +21,10 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/facebook/facebook-android-sdk/blob/master/CHANGELOG.md
+    // TODO: com.facebook.FacebookContentProvider dependency.
     api 'com.facebook.android:facebook-share:7.0.0'
-    api 'com.facebook.android:facebook-login:7.0.0'
+    implementation 'com.facebook.android:facebook-login:7.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

@@ -13,10 +13,14 @@ import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Surface
-import com.ee.core.*
+import com.ee.core.IMessageBridge
+import com.ee.core.Logger
+import com.ee.core.PluginManager
+import com.ee.core.registerAsyncHandler
+import com.ee.core.registerHandler
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.wrappers.InstantApps
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -67,6 +71,7 @@ object Platform {
             )
 
             @Serializable
+            @Suppress("unused")
             class Response(
                 val signatures: List<String>
             )
@@ -87,6 +92,7 @@ object Platform {
         }
         bridge.registerHandler(kGetSafeInset) {
             @Serializable
+            @Suppress("unused")
             class Response(
                 val left: Int,
                 val right: Int,
@@ -96,7 +102,7 @@ object Platform {
 
             val activity = PluginManager.getInstance().getActivity()
             if (activity == null) {
-                Truth.assertThat(false).isTrue()
+                assertThat(false).isTrue()
                 return@registerHandler ""
             }
             val inset = getSafeInset(activity)
@@ -142,10 +148,10 @@ object Platform {
             val request = deserialize<Request>(message)
             val activity = PluginManager.getInstance().getActivity()
             if (activity == null) {
-                Truth.assertThat(false).isTrue()
+                assertThat(false).isTrue()
                 return@registerHandler ""
             }
-            Truth.assertThat(activity).isNotNull()
+            assertThat(activity).isNotNull()
             showInstantPrompt(request.url, request.referrer, activity)
             ""
         }

@@ -9,7 +9,7 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-public class PluginManager: NSObject {
+private class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _bridge = MessageBridge.getInstance()
@@ -180,6 +180,11 @@ public func ee_staticInitializePlugins() -> Bool {
     #else // os(iOS)
     return PluginManager.getInstance().initializePlugins()
     #endif // os(iOS)
+}
+
+@_cdecl("ee_staticGetActivity")
+public func ee_staticGetActivity() -> Any? {
+    return nil
 }
 
 @_cdecl("ee_staticAddPlugin")

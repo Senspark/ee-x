@@ -22,7 +22,7 @@ import android.text.TextUtils;
 import com.android.billingclient.api.BillingClient.BillingResponseCode;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
-import com.ee.core.PluginManager;
+import com.ee.core.PluginManagerKt;
 import com.ee.store.Store;
 import com.ee.store.StoreException;
 import com.soomla.SoomlaApp;
@@ -52,20 +52,26 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * see parent for more docs.
  */
 public class GooglePlayIabService implements IIabService {
-    private final Store _store;
+    private Store _store;
     private final Scheduler _scheduler;
 
     public static final String VERSION = "2.2.1";
 
     public GooglePlayIabService() {
-        _store = (Store) PluginManager.getInstance().getPlugin("Store");
         _scheduler = Schedulers.io();
         configVerifyPurchases(null);    // we reset it every run
     }
 
+    private Store getStore() {
+        if (_store == null) {
+            _store = (Store) PluginManagerKt.ee_getStorePlugin();
+        }
+        return _store;
+    }
+
     @Override
     public void initializeBillingService(IabCallbacks.IabInitListener listener) {
-        _store.connect()
+        getStore().connect()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 client -> listener.success(true),
@@ -75,7 +81,7 @@ public class GooglePlayIabService implements IIabService {
 
     @Override
     public void restorePurchasesAsync(IabCallbacks.OnRestorePurchasesListener listener) {
-        _store.getPurchases(Consts.ITEM_TYPE_INAPP)
+        getStore().getPurchases(Consts.ITEM_TYPE_INAPP)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 purchaseList -> {
@@ -108,7 +114,7 @@ public class GooglePlayIabService implements IIabService {
 
     @Override
     public void fetchSkusDetailsAsync(List<String> skus, IabCallbacks.OnFetchSkusDetailsListener listener) {
-        _store.getSkuDetails(Consts.ITEM_TYPE_INAPP, skus)
+        getStore().getSkuDetails(Consts.ITEM_TYPE_INAPP, skus)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 detailsList -> {
@@ -131,7 +137,7 @@ public class GooglePlayIabService implements IIabService {
 
     @Override
     public void acknowledgeAsync(IabPurchase purchase, IabCallbacks.OnAcknowledgeListener listener) {
-        _store.acknowledge(purchase.getToken())
+        getStore().acknowledge(purchase.getToken())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(() -> listener.success(purchase),
                 exception -> listener.fail(exception.getMessage()));
@@ -140,7 +146,7 @@ public class GooglePlayIabService implements IIabService {
 
     @Override
     public void consumeAsync(IabPurchase purchase, IabCallbacks.OnConsumeListener listener) {
-        _store.consume(purchase.getToken())
+        getStore().consume(purchase.getToken())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 () -> listener.success(purchase),
@@ -232,7 +238,7 @@ public class GooglePlayIabService implements IIabService {
             throw new IllegalStateException();
         }
 
-        _store.purchase(sku)
+        getStore().purchase(sku)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 purchase -> {

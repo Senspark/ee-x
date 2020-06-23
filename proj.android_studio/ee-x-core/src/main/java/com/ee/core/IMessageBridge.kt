@@ -1,5 +1,7 @@
 package com.ee.core
 
+import androidx.annotation.AnyThread
+
 interface MessageHandler {
     fun handle(message: String): String
 }
@@ -23,6 +25,7 @@ interface IMessageBridge {
      * @param handler The handler.
      * @return Whether the registration was successful.
      */
+    @AnyThread
     fun registerHandler(tag: String, handler: MessageHandler): Boolean
 
     /**
@@ -32,6 +35,7 @@ interface IMessageBridge {
      * @param handler The handler.
      * @return Whether the registration was successful.
      */
+    @AnyThread
     fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler): Boolean
 
     /**
@@ -40,6 +44,7 @@ interface IMessageBridge {
      * @param tag The unique
      * @return Whether the deregistration was successful.
      */
+    @AnyThread
     fun deregisterHandler(tag: String): Boolean
 
     /**
@@ -48,6 +53,7 @@ interface IMessageBridge {
      * @param tag The unique tag of the handler.
      * @return Reply message from c++.
      */
+    @AnyThread
     fun callCpp(tag: String): String
 
     /**
@@ -57,10 +63,12 @@ interface IMessageBridge {
      * @param message The message.
      * @return Reply message from C++.
      */
+    @AnyThread
     fun callCpp(tag: String, message: String): String
 }
 
 // https://stackoverflow.com/questions/33590646/kotlin-use-a-lambda-in-place-of-a-functional-interface
+@AnyThread
 inline fun IMessageBridge.registerHandler(
     tag: String, crossinline handler: (string: String) -> String): Boolean {
     return registerHandler(tag, object : MessageHandler {
@@ -70,6 +78,7 @@ inline fun IMessageBridge.registerHandler(
     })
 }
 
+@AnyThread
 inline fun IMessageBridge.registerAsyncHandler(
     tag: String, crossinline handler: (message: String, resolver: AsyncMessageResolver) -> Unit): Boolean {
     return registerAsyncHandler(tag, object : AsyncMessageHandler {

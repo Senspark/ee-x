@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ee.core.IMessageBridge;
 import com.ee.core.IPlugin;
@@ -35,26 +36,21 @@ public class Recorder implements IPlugin {
 
     private static final int PERMISSION_CODE = 1;
 
-    private Activity _activity;
     private IMessageBridge _bridge;
+    private Activity _activity;
     private RecordService _recordService;
     private ServiceConnection _serviceConnection;
     private MediaProjectionManager _mediaProjectionManager;
     private String _filePath;
 
-    public Recorder(@NonNull Context context, @NonNull IMessageBridge bridge) {
+    public Recorder(@NonNull IMessageBridge bridge, @NonNull Context context, @Nullable Activity activity) {
         Thread.checkMainThread();
         _bridge = bridge;
+        _activity = activity;
         registerHandlers();
         if (isSupported()) {
             _mediaProjectionManager = (MediaProjectionManager) context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         }
-    }
-
-    @NonNull
-    @Override
-    public String getPluginName() {
-        return "Recorder";
     }
 
     @Override
@@ -138,6 +134,7 @@ public class Recorder implements IPlugin {
         _bridge.deregisterHandler(k__getRecordingUrl);
     }
 
+    /* FIXME.
     @Override
     public boolean onActivityResult(int requestCode, int responseCode, Intent data) {
         if (requestCode != PERMISSION_CODE || responseCode != Activity.RESULT_OK) {
@@ -156,6 +153,7 @@ public class Recorder implements IPlugin {
         _activity.startService(intent);
         return true;
     }
+     */
 
     public boolean isSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;

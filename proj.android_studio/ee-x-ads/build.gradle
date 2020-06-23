@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -17,4 +19,7 @@ android {
 
 dependencies {
     api project(':ee-x-core')
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

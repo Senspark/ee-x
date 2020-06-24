@@ -6,11 +6,11 @@ import android.content.Intent
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val ticker = intent.getStringExtra("ticker")
-        val title = intent.getStringExtra("title")
-        val body = intent.getStringExtra("body")
+        val className = intent.getStringExtra("className") ?: return
+        val ticker = intent.getStringExtra("ticker") ?: ""
+        val title = intent.getStringExtra("title") ?: ""
+        val body = intent.getStringExtra("body") ?: ""
         val tag = intent.getIntExtra("tag", 0)
-        val className = intent.getStringExtra("className")
         try {
             val clazz = Class.forName(className)
             val clickIntent = NotificationUtils.createClickIntent(context, clazz, tag)

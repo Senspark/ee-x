@@ -527,7 +527,11 @@ Pod::Spec.new do |spec|
   spec.subspec 'play' do |s|
     s.source_files =
       'src/ee/Play*',
-      'src/ee/play/*'
+      'src/ee/play/**/*'
+
+    s.private_header_files =
+      'src/ee/play/internal/*',
+      'src/ee/play/private/*'
 
     s.exclude_files =
       'src/ee/play/Android.mk',

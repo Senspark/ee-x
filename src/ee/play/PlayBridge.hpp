@@ -17,8 +17,6 @@
 
 namespace ee {
 namespace play {
-using LoginResultCallback = std::function<void(bool success)>;
-
 class Bridge final : public IPlugin {
 public:
     Bridge();
@@ -26,26 +24,35 @@ public:
 
     virtual void destroy() override;
 
-    bool isSignedIn();
-    void signin(bool silentSignIn = false);
-    void signout();
-    void setLoginCallback(const LoginResultCallback& callback);
-    void onSignedIn(bool success);
+    /// Checks whether the user is logged in Play services.
+    bool isLoggedIn() const;
 
+    /// Attempts to log the user in Play services.
+    [[nodiscard]] Task<bool> logIn(bool silently = false);
+
+    /// Logs user out Play services.
+    [[nodiscard]] Task<bool> logOut();
+
+    /// Show achievements.
     void showAchievements();
-    void loadAchievements(bool force_reload);
 
-    void incrementAchievement(const std::string& achievement_id,
-                              double percent);
-    void unlockAchievement(const std::string& achievement_id);
+    /// Increments the specified achievement.
+    void incrementAchievement(const std::string& achievementId, double percent);
 
-    void showLeaderboard(const std::string& leaderboard_id = "");
+    /// Unlocks the specifieid achievement.
+    void unlockAchievement(const std::string& achievementId);
+
+    /// Shows the specifieid leaderboard.
+    void showLeaderboard(const std::string& leaderboardId);
+
+    /// Show all leaderboards.
     void showAllLeaderboards();
-    void submitScore(const std::string& leaderboard_id, int64_t score);
+
+    /// Submits a leaderboard score.
+    void submitScore(const std::string& leaderboardId, std::int64_t score);
 
 private:
     IMessageBridge& bridge_;
-    LoginResultCallback callback_{nullptr};
 };
 } // namespace play
 } // namespace ee

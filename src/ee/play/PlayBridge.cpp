@@ -8,6 +8,7 @@
 #include <ee/nlohmann/json.hpp>
 
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -15,27 +16,16 @@ namespace ee {
 namespace play {
 namespace {
 // clang-format off
-constexpr auto k__isSignedIn           = "Play_isSignedIn";
-constexpr auto k_signin                = "Play_signin";
-constexpr auto k_signout               = "Play_signout";
-constexpr auto k_showAchievements      = "Play_showAchievements";
-constexpr auto k_increaseAchievement   = "Play_increaseAchievement";
-constexpr auto k_unlockAchievement     = "Play_unlockAchievement";
-constexpr auto k_showLeaderboard       = "Play_showLeaderboard";
-constexpr auto k_showAllLeaderboards   = "Play_showAllLeaderboards";
-constexpr auto k_submitScore           = "Play_submitScore";
-
-constexpr auto k_onSignedIn           = "Play_onSignedIn";
-// clang-format on
-} // namespace
-
-namespace {
-// clang-format off
-constexpr auto k_silent_sign_in        = "silent_sign_in";
-constexpr auto k_achievementId         = "achievement_id";
-constexpr auto k_increment             = "increment";
-constexpr auto k_leaderboardId         = "leaderboard_id";
-constexpr auto k_score                 = "score";
+const std::string kPrefix        = "Play";
+const auto kIsLoggedIn           = kPrefix + "IsLoggedIn";
+const auto kLogIn                = kPrefix + "LogIn";
+const auto kLogOut               = kPrefix + "LogOut";
+const auto kShowAchievements     = kPrefix + "ShowAchievements";
+const auto kIncrementAchievement = kPrefix + "IncrementAchievement";
+const auto kUnlockAchievement    = kPrefix + "UnlockAchievement";
+const auto kShowLeaderboard      = kPrefix + "ShowLeaderboard";
+const auto kShowAllLeaderboards  = kPrefix + "ShowAllLeaderboards";
+const auto kSubmitScore          = kPrefix + "SubmitScore";
 // clang-format on
 } // namespace
 
@@ -44,83 +34,64 @@ using Self = Bridge;
 Self::Bridge()
     : bridge_(MessageBridge::getInstance()) {
     PluginManager::addPlugin(Plugin::Play);
-    bridge_.registerHandler(
-        [this](const std::string& message) {
-            onSignedIn(core::toBool(message));
-            return "";
-        },
-        k_onSignedIn);
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    bridge_.deregisterHandler(k_onSignedIn);
     PluginManager::removePlugin(Plugin::Play);
 }
 
-bool Self::isSignedIn() {
-    auto response = bridge_.call(k__isSignedIn);
+bool Self::isLoggedIn() const {
+    auto response = bridge_.call(kIsLoggedIn);
     return core::toBool(response);
 }
 
-void Self::signin(bool silentSignIn) {
-    nlohmann::json json;
-    json[k_silent_sign_in] = silentSignIn;
-    bridge_.call(k_signin, json.dump());
+Task<bool> Self::logIn(bool silently) {
+    nlohmann::json request;
+    request["silently"] = silently;
+    auto response = co_await bridge_.callAsync(kLogIn, request.dump());
+    co_return core::toBool(response);
 }
 
-void Self::signout() {
-    bridge_.call(k_signout);
-}
-
-void Self::setLoginCallback(const LoginResultCallback& callback) {
-    callback_ = callback;
-}
-
-void Self::onSignedIn(bool success) {
-    if (callback_) {
-        callback_(success);
-    }
+Task<bool> Self::logOut() {
+    auto response = co_await bridge_.callAsync(kLogOut);
+    co_return core::toBool(response);
 }
 
 void Self::showAchievements() {
-    bridge_.call(k_showAchievements);
+    bridge_.call(kShowAchievements);
 }
 
-void Self::loadAchievements(bool force_reload) {
-    // Not implement
-}
-
-void Self::incrementAchievement(const std::string& achievement_id,
+void Self::incrementAchievement(const std::string& achievementId,
                                 double percent) {
     nlohmann::json json;
-    json[k_achievementId] = achievement_id;
-    json[k_increment] = percent;
-    bridge_.call(k_increaseAchievement, json.dump());
+    json["achievement_id"] = achievementId;
+    json["increment"] = percent;
+    bridge_.call(kIncrementAchievement, json.dump());
 }
 
-void Self::unlockAchievement(const std::string& achievement_id) {
+void Self::unlockAchievement(const std::string& achievementId) {
     nlohmann::json json;
-    json[k_achievementId] = achievement_id;
-    bridge_.call(k_unlockAchievement, json.dump());
+    json["achievement_id"] = achievementId;
+    bridge_.call(kUnlockAchievement, json.dump());
 }
 
-void Self::showLeaderboard(const std::string& leaderboard_id) {
+void Self::showLeaderboard(const std::string& leaderboardId) {
     nlohmann::json json;
-    json[k_leaderboardId] = leaderboard_id;
-    bridge_.call(k_showLeaderboard, json.dump());
+    json["leaderboard_id"] = leaderboardId;
+    bridge_.call(kShowLeaderboard, json.dump());
 }
 
 void Self::showAllLeaderboards() {
-    bridge_.call(k_showAllLeaderboards);
+    bridge_.call(kShowAllLeaderboards);
 }
 
-void Self::submitScore(const std::string& leaderboard_id, int64_t score) {
+void Self::submitScore(const std::string& leaderboardId, std::int64_t score) {
     nlohmann::json json;
-    json[k_leaderboardId] = leaderboard_id;
-    json[k_score] = score;
-    bridge_.call(k_submitScore, json.dump());
+    json["leaderboard_id"] = leaderboardId;
+    json["score"] = score;
+    bridge_.call(kSubmitScore, json.dump());
 }
 } // namespace play
 } // namespace ee

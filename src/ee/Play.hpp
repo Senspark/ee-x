@@ -6,16 +6,12 @@
 //
 //
 
-#ifndef EE_X_PLAY_HEADER_HPP_
-#define EE_X_PLAY_HEADER_HPP_
+#ifndef EE_X_PLAY_HPP
+#define EE_X_PLAY_HPP
 
 #include <ee/Core.hpp>
 
 #include "ee/PlayFwd.hpp"
 #include "ee/play/PlayBridge.hpp"
 
-#ifdef __OBJC__
-#import "ee/play/EEPlay.h"
-#endif // __OBJC__
-
-#endif /* EE_X_PLAY_HEADER_HPP_ */
+#endif /* EE_X_PLAY_HPP */

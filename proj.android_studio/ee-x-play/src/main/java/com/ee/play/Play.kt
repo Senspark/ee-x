@@ -11,6 +11,7 @@ import com.ee.core.Logger
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
+import com.ee.core.registerAsyncHandler
 import com.ee.core.registerHandler
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -34,16 +35,16 @@ class Play(
     companion object {
         private val _logger = Logger(Play::class.java.name)
 
-        private const val kIsLoggedIn = "Play_isSignedIn"
-        private const val kLogIn = "Play_signin"
-        private const val kLogOut = "Play_signout"
-        private const val kShowAchievements = "Play_showAchievements"
-        private const val kIncreaseAchievement = "Play_increaseAchievement"
-        private const val kUnlockAchievement = "Play_unlockAchievement"
-        private const val kShowLeaderboard = "Play_showLeaderboard"
-        private const val kShowAllLeaderboards = "Play_showAllLeaderboards"
-        private const val kSubmitScore = "Play_submitScore"
-        private const val kOnLoggedIn = "Play_onSignedIn"
+        private const val kPrefix = "Play"
+        private const val kIsLoggedIn = "${kPrefix}IsLoggedIn"
+        private const val kLogIn = "${kPrefix}LogIn"
+        private const val kLogOut = "${kPrefix}LogOut"
+        private const val kShowAchievements = "${kPrefix}ShowAchievements"
+        private const val kIncrementAchievement = "${kPrefix}IncreaseAchievement"
+        private const val kUnlockAchievement = "${kPrefix}UnlockAchievement"
+        private const val kShowLeaderboard = "${kPrefix}ShowLeaderboard"
+        private const val kShowAllLeaderboards = "${kPrefix}ShowAllLeaderboards"
+        private const val kSubmitScore = "${kPrefix}SubmitScore"
     }
 
     private val _options = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
@@ -80,29 +81,27 @@ class Play(
         _bridge.registerHandler(kIsLoggedIn) {
             Utils.toString(isLoggedIn)
         }
-        _bridge.registerHandler(kLogIn) { message ->
+        _bridge.registerAsyncHandler(kLogIn) { message, resolver ->
             @Serializable
             class Request(
-                val silent_sign_in: Boolean
+                val silently: Boolean
             )
 
             val request = deserialize<Request>(message)
-            logIn(request.silent_sign_in) { successful ->
-                _bridge.callCpp(kOnLoggedIn, Utils.toString(successful))
+            logIn(request.silently) { successful ->
+                resolver.resolve(Utils.toString(successful))
             }
-            ""
         }
-        _bridge.registerHandler(kLogOut) {
-            logOut {
-                // OK.
+        _bridge.registerAsyncHandler(kLogOut) { _, resolver ->
+            logOut { successful ->
+                resolver.resolve(Utils.toString(successful))
             }
-            ""
         }
         _bridge.registerHandler(kShowAchievements) {
             showAchievements()
             ""
         }
-        _bridge.registerHandler(kIncreaseAchievement) { message ->
+        _bridge.registerHandler(kIncrementAchievement) { message ->
             @Serializable
             class Request(
                 val achievement_id: String,
@@ -156,7 +155,7 @@ class Play(
         _bridge.deregisterHandler(kLogIn)
         _bridge.deregisterHandler(kLogOut)
         _bridge.deregisterHandler(kShowAchievements)
-        _bridge.deregisterHandler(kIncreaseAchievement)
+        _bridge.deregisterHandler(kIncrementAchievement)
         _bridge.deregisterHandler(kUnlockAchievement)
         _bridge.deregisterHandler(kShowLeaderboard)
         _bridge.deregisterHandler(kShowAllLeaderboards)

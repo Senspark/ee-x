@@ -1,27 +1,29 @@
 //
-//  AdMobRewardedAd.swift
-//  ee-x-366f64ba
+//  FacebookInterstitialAd.swift
+//  Pods
 //
 //  Created by eps on 6/24/20.
 //
 
+import FBAudienceNetwork
 import Foundation
-import GoogleMobileAds
 
-internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
+internal class FacebookInterstitialAd:
+    NSObject, IInterstitialAd, FBInterstitialAdDelegate {
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
+    private var _helper: InterstitialAdHelper?
     private var _isLoaded = false
-    private var _rewarded = false
-    private var _ad: GADRewardedAd?
+    private var _ad: FBInterstitialAd?
     
     init(_ bridge: IMessageBridge,
          _ adId: String) {
         _bridge = bridge
         _adId = adId
-        _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
+        _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
         super.init()
+        _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
         createInternalAd()
     }
@@ -32,6 +34,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     }
     
     func registerHandlers() {
+        _helper?.registerHandlers()
         _bridge.registerHandler(_messageHelper.createInternalAd) { _ in
             self.createInternalAd()
             return ""
@@ -40,25 +43,12 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             self.destroyInternalAd()
             return ""
         }
-        _bridge.registerHandler(_messageHelper.isLoaded) { _ in
-            Utils.toString(self.isLoaded)
-        }
-        _bridge.registerHandler(_messageHelper.load) { _ in
-            self.load()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.show) { _ in
-            self.show()
-            return ""
-        }
     }
     
     func deregisterHandlers() {
+        _helper?.deregisterHandlers()
         _bridge.deregisterHandler(_messageHelper.createInternalAd)
         _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
-        _bridge.deregisterHandler(_messageHelper.isLoaded)
-        _bridge.deregisterHandler(_messageHelper.load)
-        _bridge.deregisterHandler(_messageHelper.show)
     }
     
     func createInternalAd() {
@@ -66,15 +56,18 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             if self._ad != nil {
                 return
             }
-            self._ad = GADRewardedAd(adUnitID: self._adId)
+            let ad = FBInterstitialAd(placementID: self._adId)
+            ad.delegate = self
+            self._ad = ad
         }
     }
     
     func destroyInternalAd() {
         Thread.runOnMainThread {
-            if self._ad == nil {
+            guard let ad = self._ad else {
                 return
             }
+            ad.delegate = nil
             self._ad = nil
         }
     }
@@ -88,14 +81,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
             }
-            ad.load(GADRequest(), completionHandler: { error in
-                if let error = error {
-                    self._bridge.callCpp(self._messageHelper.onFailedToLoad,
-                                         error.localizedDescription)
-                } else {
-                    self._bridge.callCpp(self._messageHelper.onLoaded)
-                }
-            })
+            ad.load()
         }
     }
     
@@ -107,27 +93,41 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
             }
-            ad.present(fromRootViewController: rootView, delegate: self)
+            let result = ad.show(fromRootViewController: rootView)
+            if result {
+                // OK.
+            } else {
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
+            }
         }
     }
     
-    func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
+    func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
         print("\(#function)")
+        _bridge.callCpp(_messageHelper.onLoaded)
     }
     
-    func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
+    func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
         print("\(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
+        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
-    func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
+    func interstitialAdWillLogImpression(_ interstitialAd: FBInterstitialAd) {
         print("\(#function)")
-        _rewarded = true
     }
     
-    func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
+    func interstitialAdDidClick(_ interstitialAd: FBInterstitialAd) {
+        print("\(#function)")
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+    
+    func interstitialAdWillClose(_ interstitialAd: FBInterstitialAd) {
+        print("\(#function)")
+    }
+    
+    func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
         print("\(#function)")
         _isLoaded = false
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        _bridge.callCpp(_messageHelper.onClosed)
     }
 }

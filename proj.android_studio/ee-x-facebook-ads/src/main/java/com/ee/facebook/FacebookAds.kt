@@ -31,18 +31,18 @@ class FacebookAds(
     private var _activity: Activity?) : IPlugin {
     companion object {
         private const val kPrefix = "FacebookAds"
-        private const val k__getTestDeviceHash = "${kPrefix}_getTestDeviceHash"
-        private const val k__addTestDevice = "${kPrefix}_addTestDevice"
-        private const val k__clearTestDevices = "${kPrefix}_clearTestDevices"
-        private const val k__getBannerAdSize = "${kPrefix}_getBannerAdSize"
-        private const val k__createBannerAd = "${kPrefix}_createBannerAd"
-        private const val k__destroyBannerAd = "${kPrefix}_destroyBannerAd"
-        private const val k__createNativeAd = "${kPrefix}_createNativeAd"
-        private const val k__destroyNativeAd = "${kPrefix}_destroyNativeAd"
-        private const val k__createInterstitialAd = "${kPrefix}_createInterstitialAd"
-        private const val k__destroyInterstitialAd = "${kPrefix}_destroyInterstitialAd"
-        private const val k__createRewardedAd = "${kPrefix}_createRewardedAd"
-        private const val k__destroyRewardedAd = "${kPrefix}_destroyRewardedAd"
+        private const val kGetTestDeviceHash = "${kPrefix}GetTestDeviceHash"
+        private const val kAddTestDevice = "${kPrefix}AddTestDevice"
+        private const val kClearTestDevices = "${kPrefix}ClearTestDevices"
+        private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
+        private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
+        private const val kDestroyBannerAd = "${kPrefix}DestroyBannerAd"
+        private const val kCreateNativeAd = "${kPrefix}CreateNativeAd"
+        private const val kDestroyNativeAd = "${kPrefix}DestroyNativeAd"
+        private const val kCreateInterstitialAd = "${kPrefix}CreateInterstitialAd"
+        private const val kDestroyInterstitialAd = "${kPrefix}DestroyInterstitialAd"
+        private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
+        private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
     }
 
     private val _bannerHelper = FacebookBannerHelper()
@@ -110,18 +110,18 @@ class FacebookAds(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__getTestDeviceHash) {
+        _bridge.registerHandler(kGetTestDeviceHash) {
             testDeviceHash
         }
-        _bridge.registerHandler(k__addTestDevice) { message ->
+        _bridge.registerHandler(kAddTestDevice) { message ->
             addTestDevice(message)
             ""
         }
-        _bridge.registerHandler(k__clearTestDevices) {
+        _bridge.registerHandler(kClearTestDevices) {
             clearTestDevices()
             ""
         }
-        _bridge.registerHandler(k__getBannerAdSize) { message ->
+        _bridge.registerHandler(kGetBannerAdSize) { message ->
             @Serializable
             @Suppress("unused")
             class Response(
@@ -134,7 +134,7 @@ class FacebookAds(
             val response = Response(size.x, size.y)
             response.serialize()
         }
-        _bridge.registerHandler(k__createBannerAd) { message ->
+        _bridge.registerHandler(kCreateBannerAd) { message ->
             @Serializable
             class Request(
                 val ad_id: String,
@@ -145,10 +145,10 @@ class FacebookAds(
             val adSize = _bannerHelper.getAdSize(request.ad_size)
             Utils.toString(createBannerAd(request.ad_id, adSize))
         }
-        _bridge.registerHandler(k__destroyBannerAd) { message ->
+        _bridge.registerHandler(kDestroyBannerAd) { message ->
             Utils.toString(destroyBannerAd(message))
         }
-        _bridge.registerHandler(k__createNativeAd) { message ->
+        _bridge.registerHandler(kCreateNativeAd) { message ->
             @Serializable
             class Request(
                 val ad_id: String,
@@ -159,37 +159,37 @@ class FacebookAds(
             val request = deserialize<Request>(message)
             Utils.toString(createNativeAd(request.ad_id, request.layout_name, request.identifiers))
         }
-        _bridge.registerHandler(k__destroyNativeAd) { message ->
+        _bridge.registerHandler(kDestroyNativeAd) { message ->
             Utils.toString(destroyNativeAd(message))
         }
-        _bridge.registerHandler(k__createInterstitialAd) { message ->
+        _bridge.registerHandler(kCreateInterstitialAd) { message ->
             Utils.toString(createInterstitialAd(message))
         }
-        _bridge.registerHandler(k__destroyInterstitialAd) { message ->
+        _bridge.registerHandler(kDestroyInterstitialAd) { message ->
             Utils.toString(destroyInterstitialAd(message))
         }
-        _bridge.registerHandler(k__createRewardedAd) { message ->
+        _bridge.registerHandler(kCreateRewardedAd) { message ->
             Utils.toString(createRewardedAd(message))
         }
-        _bridge.registerHandler(k__destroyRewardedAd) { message ->
+        _bridge.registerHandler(kDestroyRewardedAd) { message ->
             Utils.toString(destroyRewardedAd(message))
         }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__getTestDeviceHash)
-        _bridge.deregisterHandler(k__addTestDevice)
-        _bridge.deregisterHandler(k__clearTestDevices)
-        _bridge.deregisterHandler(k__getBannerAdSize)
-        _bridge.deregisterHandler(k__createBannerAd)
-        _bridge.deregisterHandler(k__destroyBannerAd)
-        _bridge.deregisterHandler(k__createNativeAd)
-        _bridge.deregisterHandler(k__destroyNativeAd)
-        _bridge.deregisterHandler(k__createInterstitialAd)
-        _bridge.deregisterHandler(k__destroyInterstitialAd)
-        _bridge.deregisterHandler(k__createRewardedAd)
-        _bridge.deregisterHandler(k__destroyRewardedAd)
+        _bridge.deregisterHandler(kGetTestDeviceHash)
+        _bridge.deregisterHandler(kAddTestDevice)
+        _bridge.deregisterHandler(kClearTestDevices)
+        _bridge.deregisterHandler(kGetBannerAdSize)
+        _bridge.deregisterHandler(kCreateBannerAd)
+        _bridge.deregisterHandler(kDestroyBannerAd)
+        _bridge.deregisterHandler(kCreateNativeAd)
+        _bridge.deregisterHandler(kDestroyNativeAd)
+        _bridge.deregisterHandler(kCreateInterstitialAd)
+        _bridge.deregisterHandler(kDestroyInterstitialAd)
+        _bridge.deregisterHandler(kCreateRewardedAd)
+        _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
     private val testDeviceHash: String

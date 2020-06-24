@@ -1,26 +1,27 @@
 //
-//  AdMobRewardedAd.swift
-//  ee-x-366f64ba
+//  FacebookRewardedAd.swift
+//  Pods
 //
 //  Created by eps on 6/24/20.
 //
 
+import FBAudienceNetwork
 import Foundation
-import GoogleMobileAds
 
-internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
+internal class FacebookRewardedAd:
+    NSObject, FBRewardedVideoAdDelegate {
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
     private var _isLoaded = false
     private var _rewarded = false
-    private var _ad: GADRewardedAd?
+    private var _ad: FBRewardedVideoAd?
     
     init(_ bridge: IMessageBridge,
          _ adId: String) {
         _bridge = bridge
         _adId = adId
-        _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
+        _messageHelper = MessageHelper("FacebookRewardedAd", _adId)
         super.init()
         registerHandlers()
         createInternalAd()
@@ -66,15 +67,18 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             if self._ad != nil {
                 return
             }
-            self._ad = GADRewardedAd(adUnitID: self._adId)
+            let ad = FBRewardedVideoAd(placementID: self._adId)
+            ad.delegate = self
+            self._ad = ad
         }
     }
     
     func destroyInternalAd() {
         Thread.runOnMainThread {
-            if self._ad == nil {
+            guard let ad = self._ad else {
                 return
             }
+            ad.delegate = nil
             self._ad = nil
         }
     }
@@ -88,14 +92,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
             }
-            ad.load(GADRequest(), completionHandler: { error in
-                if let error = error {
-                    self._bridge.callCpp(self._messageHelper.onFailedToLoad,
-                                         error.localizedDescription)
-                } else {
-                    self._bridge.callCpp(self._messageHelper.onLoaded)
-                }
-            })
+            ad.load()
         }
     }
     
@@ -107,25 +104,54 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
             }
-            ad.present(fromRootViewController: rootView, delegate: self)
+            self._rewarded = false
+            let result = ad.show(fromRootViewController: rootView)
+            if result {
+                // OK.
+            } else {
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
+            }
         }
     }
     
-    func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
+    func rewardedVideoAdDidLoad(_ rewardedVideoAd: FBRewardedVideoAd) {
+        print("\(#function)")
+        _isLoaded = true
+        _bridge.callCpp(_messageHelper.onLoaded)
+    }
+    
+    func rewardedVideoAd(_ rewardedVideoAd: FBRewardedVideoAd, didFailWithError error: Error) {
+        print("\(#function): \(error.localizedDescription)")
+        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+    }
+    
+    func rewardedVideoAdDidClick(_ rewardedVideoAd: FBRewardedVideoAd) {
+        print("\(#function)")
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+    
+    func rewardedVideoAdWillLogImpression(_ rewardedVideoAd: FBRewardedVideoAd) {
         print("\(#function)")
     }
     
-    func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
-    }
-    
-    func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
+    func rewardedVideoAdVideoComplete(_ rewardedVideoAd: FBRewardedVideoAd) {
         print("\(#function)")
         _rewarded = true
     }
     
-    func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
+    func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: FBRewardedVideoAd) {
+        print("\(#function)")
+    }
+    
+    func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: FBRewardedVideoAd) {
+        print("\(#function)")
+    }
+    
+    func rewardedVideoAdWillClose(_ rewardedVideoAd: FBRewardedVideoAd) {
+        print("\(#function)")
+    }
+    
+    func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
         print("\(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))

@@ -24,16 +24,12 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         super.init()
         _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
-        Thread.runOnMainThread {
-            self.createInternalAd()
-        }
+        createInternalAd()
     }
     
     func destroy() {
         deregisterHandlers()
-        Thread.runOnMainThread {
-            self.destroyInternalAd()
-        }
+        destroyInternalAd()
     }
     
     func registerHandlers() {
@@ -112,12 +108,16 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         print("\(#function)")
-        _isLoaded = false
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         print("\(#function)")
         _bridge.callCpp(_messageHelper.onFailedToShow)
+    }
+    
+    func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
+        print("\(#function)")
+        _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
@@ -126,11 +126,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         print("\(#function)")
+        _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
-    }
-    
-    func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
-        print("\(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
     }
 }

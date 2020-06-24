@@ -9,7 +9,7 @@ import FBAudienceNetwork
 import Foundation
 
 internal class FacebookBannerHelper {
-    private class func getWithInDp(_ adSize: FBAdSize) -> Float {
+    private class func getWidthInDp(_ adSize: FBAdSize) -> Float {
         let width = lrintf(Float(adSize.size.width))
         switch width {
         case 0, // Interstitial ad.
@@ -31,9 +31,10 @@ internal class FacebookBannerHelper {
     }
 
     private class func convertAdSizeToSize(_ adSize: FBAdSize) -> CGSize {
-        let size = CGSize(width: Float(getWithInDp(adSize)),
-                          height: Float(getHeightInDp(adSize)))
-        
+        let size = CGSize(width: Double(getWidthInDp(adSize)),
+                          height: Double(getHeightInDp(adSize)))
+        return CGSize(width: Double(Utils.convertDpToPixels(Float(size.width))),
+                      height: Double(Utils.convertDpToPixels(Float(size.height))))
     }
 
     private var _sizes: [Int: CGSize] = [:]
@@ -41,6 +42,8 @@ internal class FacebookBannerHelper {
     init() {
         for i in 0...4 {
             let adSize = getAdSize(i)
+            let size = FacebookBannerHelper.convertAdSizeToSize(adSize)
+            _sizes[i] = size
         }
     }
 

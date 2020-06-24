@@ -27,8 +27,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
     private var _helper: AdViewHelper?
     private var _isLoaded = false
     private var _ad: GADAdLoader?
-    private var _view: UIView?
-    private var _adView: GADUnifiedNativeAdView?
+    private var _view: GADUnifiedNativeAdView?
     private var _viewHelper: ViewHelper?
 
     init(_ bridge: IMessageBridge,
@@ -61,7 +60,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
 
     func createInternalAd() {
         Thread.runOnMainThread {
-            if self._ad == nil {
+            if self._ad != nil {
                 return
             }
             self._isLoaded = false
@@ -88,25 +87,23 @@ internal class AdMobNativeAd: NSObject, IAdView,
         }
     }
 
+    func createAdView() -> GADUnifiedNativeAdView {
+        guard let nibObjects = Bundle(for: GADUnifiedNativeAdView.self).loadNibNamed(_layoutName,
+                                                                                     owner: nil,
+                                                                                     options: nil) else {
+            assert(false, "Invalid layout")
+        }
+        guard let view = nibObjects[0] as? GADUnifiedNativeAdView else {
+            assert(false, "Invalid layout class")
+        }
+        return view
+    }
+
     func createView() {
         Thread.runOnMainThread {
             assert(self._view == nil)
-            let view = UIView()
-            view.isHidden = true
-            let adView = self.createAdView()
-            view.addSubview(adView)
-            view.translatesAutoresizingMaskIntoConstraints = false
-            let dict = dictionaryOfNames(adView)
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[_adView]|",
-                                                               options: NSLayoutConstraint.FormatOptions(rawValue: 0),
-                                                               metrics: nil,
-                                                               views: dict))
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[[_adView]|",
-                                                               options: NSLayoutConstraint.FormatOptions(rawValue: 0),
-                                                               metrics: nil,
-                                                               views: dict))
+            let view = self.createAdView()
             self._view = view
-            self._adView = adView
             self._viewHelper = ViewHelper(view)
             let rootView = Utils.getCurrentRootViewController()
             rootView?.view.addSubview(view)
@@ -152,21 +149,9 @@ internal class AdMobNativeAd: NSObject, IAdView,
         set(value) {
             _viewHelper?.isVisible = value
             if value {
-                _adView?.subviews.forEach { $0.setNeedsDisplay() }
+                _view?.subviews.forEach { $0.setNeedsDisplay() }
             }
         }
-    }
-
-    func createAdView() -> GADUnifiedNativeAdView {
-        guard let nibObjects = Bundle(for: GADUnifiedNativeAdView.self).loadNibNamed(_layoutName,
-                                                                                     owner: nil,
-                                                                                     options: nil) else {
-            assert(false, "Invalid layout")
-        }
-        guard let view = nibObjects[0] as? GADUnifiedNativeAdView else {
-            assert(false, "Invalid layout class")
-        }
-        return view
     }
 
     /// Gets an image representing the number of stars. Returns nil if rating is
@@ -182,47 +167,47 @@ internal class AdMobNativeAd: NSObject, IAdView,
     }
 
     func adLoader(_ adLoader: GADAdLoader, didReceive ad: GADUnifiedNativeAd) {
-        guard let adView = _adView else {
+        guard let view = _view else {
             assert(false, "Ad view is not initialized")
         }
 
         // Populate the native ad view with the native ad assets.
         // The headline and mediaContent are guaranteed to be present in every
         // native ad.
-        (adView.headlineView as? UILabel)?.text = ad.headline
-        adView.mediaView?.mediaContent = ad.mediaContent
+        (view.headlineView as? UILabel)?.text = ad.headline
+        view.mediaView?.mediaContent = ad.mediaContent
 
         // These assets are not guaranteed to be present. Check that they are before
         // showing or hiding them.
-        (adView.bodyView as? UILabel)?.text = ad.body
-        adView.bodyView?.isHidden = ad.body == nil
+        (view.bodyView as? UILabel)?.text = ad.body
+        view.bodyView?.isHidden = ad.body == nil
 
-        (adView.callToActionView as? UIButton)?.setTitle(ad.callToAction, for: UIControl.State.normal)
-        adView.callToActionView?.isHidden = ad.callToAction == nil
+        (view.callToActionView as? UIButton)?.setTitle(ad.callToAction, for: UIControl.State.normal)
+        view.callToActionView?.isHidden = ad.callToAction == nil
 
-        (adView.iconView as? UIImageView)?.image = ad.icon?.image
-        adView.iconView?.isHidden = ad.icon == nil
+        (view.iconView as? UIImageView)?.image = ad.icon?.image
+        view.iconView?.isHidden = ad.icon == nil
 
-        (adView.starRatingView as? UIImageView)?.image = imageForStars(ad.starRating?.floatValue ?? 0)
-        adView.starRatingView?.isHidden = ad.starRating == nil
+        (view.starRatingView as? UIImageView)?.image = imageForStars(ad.starRating?.floatValue ?? 0)
+        view.starRatingView?.isHidden = ad.starRating == nil
 
-        (adView.storeView as? UILabel)?.text = ad.store
-        adView.storeView?.isHidden = ad.store == nil
+        (view.storeView as? UILabel)?.text = ad.store
+        view.storeView?.isHidden = ad.store == nil
 
-        (adView.priceView as? UILabel)?.text = ad.price
-        adView.priceView?.isHidden = ad.price == nil
+        (view.priceView as? UILabel)?.text = ad.price
+        view.priceView?.isHidden = ad.price == nil
 
-        (adView.advertiserView as? UILabel)?.text = ad.advertiser
-        adView.advertiserView?.isHidden = ad.advertiser == nil
+        (view.advertiserView as? UILabel)?.text = ad.advertiser
+        view.advertiserView?.isHidden = ad.advertiser == nil
 
         // In order for the SDK to process touch events properly, user interaction
         // should be disabled.
-        adView.callToActionView?.isUserInteractionEnabled = false
+        view.callToActionView?.isUserInteractionEnabled = false
 
         // Set ourselves as the ad delegate to be notified of native ad events.
         ad.delegate = self
 
-        adView.nativeAd = ad
+        view.nativeAd = ad
 
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
@@ -237,6 +222,10 @@ internal class AdMobNativeAd: NSObject, IAdView,
         print("\(#function)")
     }
 
+    func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
+        print("\(#function)")
+    }
+
     func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
         print("\(#function)")
     }
@@ -245,8 +234,9 @@ internal class AdMobNativeAd: NSObject, IAdView,
         print("\(#function)")
     }
 
-    func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
+    func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
         print("\(#function)")
+        _bridge.callCpp(_messageHelper.onClicked)
     }
 
     func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
@@ -255,10 +245,5 @@ internal class AdMobNativeAd: NSObject, IAdView,
 
     func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
         print("\(#function)")
-    }
-
-    func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
     }
 }

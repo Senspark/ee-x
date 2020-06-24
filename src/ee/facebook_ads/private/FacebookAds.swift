@@ -1,17 +1,17 @@
 //
-//  AdMob.swift
-//  ee-x-366f64ba
+//  FacebookAds.swift
+//  Pods
 //
-//  Created by eps on 6/24/20.
+//  Created by eps on 6/25/20.
 //
 
+import FBAudienceNetwork
 import Foundation
-import GoogleMobileAds
 
-private let kPrefix = "AdMob"
-private let kInitialize = "\(kPrefix)Initialize"
-private let kGetEmulatorTestDeviceHash = "\(kPrefix)GetEmulatorTestDeviceHash"
+private let kPrefix = "FacebookAds"
+private let kGetTestDeviceHash = "\(kPrefix)GetTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
+private let kClearTestDevices = "\(kPrefix)ClearTestDevices"
 private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
 private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
 private let kDestroyBannerAd = "\(kPrefix)DestroyBannerAd"
@@ -22,15 +22,14 @@ private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
-@objc(EEAdMob)
-class AdMob: NSObject, IPlugin {
+@objc(EEFacebookAds_Swift)
+class FacebookAds: NSObject, IPlugin {
     private let _bridge: IMessageBridge
-    private let _bannerHelper = AdMobBannerHelper()
-    private var _testDevices: [String] = []
-    private var _bannerAds: [String: AdMobBannerAd] = [:]
-    private var _nativeAds: [String: AdMobNativeAd] = [:]
-    private var _interstitialAds: [String: AdMobInterstitialAd] = [:]
-    private var _rewardedAds: [String: AdMobRewardedAd] = [:]
+    private let _bannerHelper = FacebookBannerHelper()
+    private var _bannerAds: [String: FacebookBannerAd] = [:]
+    private var _nativeAds: [String: FacebookNativeAd] = [:]
+    private var _interstitialAds: [String: FacebookInterstitialAd] = [:]
+    private var _rewardedAds: [String: FacebookRewardedAd] = [:]
 
     required init(_ bridge: IMessageBridge) {
         _bridge = bridge
@@ -51,15 +50,15 @@ class AdMob: NSObject, IPlugin {
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { _ in
-            self.initialize()
-            return ""
-        }
-        _bridge.registerHandler(kGetEmulatorTestDeviceHash) { _ in
-            self.emulatorTestDeviceHash
+        _bridge.registerHandler(kGetTestDeviceHash) { _ in
+            self.testDeviceHash
         }
         _bridge.registerHandler(kAddTestDevice) { message in
             self.addTestDevice(message)
+            return ""
+        }
+        _bridge.registerHandler(kClearTestDevices) { _ in
+            self.clearTestDevice()
             return ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message in
@@ -112,9 +111,9 @@ class AdMob: NSObject, IPlugin {
     }
 
     func deregisterHandlers() {
-        _bridge.deregisterHandler(kInitialize)
-        _bridge.deregisterHandler(kGetEmulatorTestDeviceHash)
+        _bridge.deregisterHandler(kGetTestDeviceHash)
         _bridge.deregisterHandler(kAddTestDevice)
+        _bridge.deregisterHandler(kClearTestDevices)
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kCreateBannerAd)
         _bridge.deregisterHandler(kDestroyBannerAd)
@@ -126,32 +125,31 @@ class AdMob: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
-    func initialize() {
-        Thread.runOnMainThread {
-            GADMobileAds.sharedInstance().start(completionHandler: nil)
-        }
-    }
-
-    var emulatorTestDeviceHash: String {
-        return kGADSimulatorID as? String ?? ""
+    var testDeviceHash: String {
+        return FBAdSettings.testDeviceHash()
     }
 
     func addTestDevice(_ hash: String) {
         Thread.runOnMainThread {
-            self._testDevices.append(hash)
-            GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = self._testDevices
+            FBAdSettings.addTestDevice(hash)
+        }
+    }
+
+    func clearTestDevice() {
+        Thread.runOnMainThread {
+            FBAdSettings.clearTestDevices()
         }
     }
 
     func getBannerAdSize(_ sizeId: Int) -> CGSize {
-        return _bannerHelper.getSize(index: sizeId)
+        return _bannerHelper.getSize(sizeId)
     }
 
-    func createBannerAd(_ adId: String, _ size: GADAdSize) -> Bool {
+    func createBannerAd(_ adId: String, _ size: FBAdSize) -> Bool {
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobBannerAd(_bridge, adId, size)
+        let ad = FacebookBannerAd(_bridge, adId, size)
         _bannerAds[adId] = ad
         return true
     }
@@ -169,7 +167,7 @@ class AdMob: NSObject, IPlugin {
         if _nativeAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobNativeAd(_bridge, adId, layoutName)
+        let ad = FacebookNativeAd(_bridge, adId, layoutName)
         _nativeAds[adId] = ad
         return true
     }
@@ -187,7 +185,7 @@ class AdMob: NSObject, IPlugin {
         if _interstitialAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobInterstitialAd(_bridge, adId)
+        let ad = FacebookInterstitialAd(_bridge, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -205,7 +203,7 @@ class AdMob: NSObject, IPlugin {
         if _rewardedAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobRewardedAd(_bridge, adId)
+        let ad = FacebookRewardedAd(_bridge, adId)
         _rewardedAds[adId] = ad
         return true
     }

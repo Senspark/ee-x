@@ -8,7 +8,7 @@
 import Foundation
 import GoogleMobileAds
 
-class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
+internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper

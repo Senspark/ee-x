@@ -17,7 +17,7 @@ func dictionaryOfNames(_ arr: UIView...) -> [String: UIView] {
     return d
 }
 
-class AdMobNativeAd: NSObject, IAdView,
+internal class AdMobNativeAd: NSObject, IAdView,
     GADUnifiedNativeAdLoaderDelegate,
     GADUnifiedNativeAdDelegate {
     private let _bridge: IMessageBridge

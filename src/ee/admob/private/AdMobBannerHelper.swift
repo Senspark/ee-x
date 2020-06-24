@@ -8,8 +8,8 @@
 import Foundation
 import GoogleMobileAds
 
-class AdMobBannerHelper {
-    class func convertAdSizeToSize(_ adSize: GADAdSize) -> CGSize {
+internal class AdMobBannerHelper {
+    private class func convertAdSizeToSize(_ adSize: GADAdSize) -> CGSize {
         let size = CGSizeFromGADAdSize(adSize)
         return CGSize(width: Double(Utils.convertDpToPixels(Float(size.width))),
                       height: Double(Utils.convertDpToPixels(Float(size.height))))

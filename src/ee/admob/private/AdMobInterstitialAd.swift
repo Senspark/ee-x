@@ -8,7 +8,7 @@
 import Foundation
 import GoogleMobileAds
 
-class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDelegate {
+internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDelegate {
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper

@@ -21,8 +21,8 @@ internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private val _adId: String)
-    : AdListener()
-    , IInterstitialAd {
+    : IInterstitialAd
+    , AdListener() {
     private val _messageHelper = MessageHelper("AdMobInterstitialAd", _adId)
     private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
 

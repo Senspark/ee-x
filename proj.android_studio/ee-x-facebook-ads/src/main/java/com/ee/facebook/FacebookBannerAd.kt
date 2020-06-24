@@ -37,8 +37,8 @@ internal class FacebookBannerAd(
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize)
-    : AdListener
-    , IAdView {
+    : IAdView
+    , AdListener {
     companion object {
         private val _logger = Logger(FacebookBannerAd::class.java.name)
     }

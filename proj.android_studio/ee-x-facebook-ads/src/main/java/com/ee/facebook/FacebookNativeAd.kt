@@ -48,8 +48,8 @@ internal class FacebookNativeAd(
     private val _adId: String,
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
-    : NativeAdListener
-    , IAdView {
+    : IAdView
+    , NativeAdListener {
     companion object {
         private val _logger = Logger(FacebookNativeAd::class.java.name)
 

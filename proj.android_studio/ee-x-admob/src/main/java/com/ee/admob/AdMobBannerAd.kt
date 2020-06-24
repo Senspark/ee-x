@@ -36,8 +36,8 @@ internal class AdMobBannerAd(
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize)
-    : AdListener()
-    , IAdView {
+    : IAdView
+    , AdListener() {
     companion object {
         private val _logger = Logger(AdMobBannerAd::class.java.name)
     }
@@ -106,8 +106,8 @@ internal class AdMobBannerAd(
             _isLoaded.set(false)
             val ad = AdView(_context)
             ad.adSize = _adSize
-            ad.adListener = this
             ad.adUnitId = _adId
+            ad.adListener = this
             val params = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT)
@@ -125,6 +125,7 @@ internal class AdMobBannerAd(
             val ad = _ad ?: return@Runnable
             _isLoaded.set(false)
             removeFromActivity()
+            ad.adListener = null
             ad.destroy()
             _ad = null
             _viewHelper = null
@@ -156,7 +157,6 @@ internal class AdMobBannerAd(
     override fun load() {
         Thread.runOnMainThread(Runnable {
             _logger.info("${this::load}")
-            Thread.checkMainThread()
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         })

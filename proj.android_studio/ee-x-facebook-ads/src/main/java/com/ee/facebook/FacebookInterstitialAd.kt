@@ -22,8 +22,8 @@ internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private val _adId: String)
-    : InterstitialAdListener
-    , IInterstitialAd {
+    : IInterstitialAd
+    , InterstitialAdListener {
     companion object {
         private val _logger = Logger(FacebookInterstitialAd::class.java.name)
     }

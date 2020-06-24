@@ -14,6 +14,7 @@ public class Thread: NSObject {
         return Foundation.Thread.isMainThread
     }
 
+    @discardableResult
     @objc
     public class func runOnMainThread(_ callback: @escaping () -> Void) -> Bool {
         if isMainThread() {

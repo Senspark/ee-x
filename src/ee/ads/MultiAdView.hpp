@@ -65,6 +65,7 @@ private:
 
     std::shared_ptr<IAdView> activeItem_;
     std::set<std::shared_ptr<IAdView>> loadedItems_;
+    std::unique_ptr<SpinLock> locker_;
 };
 } // namespace ads
 } // namespace ee

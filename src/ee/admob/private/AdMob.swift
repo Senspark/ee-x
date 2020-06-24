@@ -22,8 +22,8 @@ private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
-@objc(EEAdMob)
-class AdMob: NSObject, IPlugin {
+@objc(EEAdMob_Swift)
+public class AdMob: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
@@ -32,13 +32,13 @@ class AdMob: NSObject, IPlugin {
     private var _interstitialAds: [String: AdMobInterstitialAd] = [:]
     private var _rewardedAds: [String: AdMobRewardedAd] = [:]
 
-    required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge) {
         _bridge = bridge
         super.init()
         registerHandlers()
     }
 
-    func destroy() {
+    public func destroy() {
         deregisterHandlers()
         _bannerAds.values.forEach { $0.destroy() }
         _bannerAds.removeAll()

@@ -11,7 +11,7 @@ private let kShowLeaderboard = "\(kPrefix)ShowLeaderboard"
 private let kShowAllLeaderboards = "\(kPrefix)ShowAllLeaderboards"
 private let kSubmitScore = "\(kPrefix)SubmitScore"
 
-@objc(EEPlay)
+@objc(EEPlay_Swift)
 public class Play: NSObject, IPlugin, GKGameCenterControllerDelegate {
     private let _bridge: IMessageBridge
     

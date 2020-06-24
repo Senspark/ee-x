@@ -23,7 +23,7 @@ private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
 @objc(EEFacebookAds_Swift)
-class FacebookAds: NSObject, IPlugin {
+public class FacebookAds: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _bannerHelper = FacebookBannerHelper()
     private var _bannerAds: [String: FacebookBannerAd] = [:]
@@ -31,13 +31,13 @@ class FacebookAds: NSObject, IPlugin {
     private var _interstitialAds: [String: FacebookInterstitialAd] = [:]
     private var _rewardedAds: [String: FacebookRewardedAd] = [:]
 
-    required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge) {
         _bridge = bridge
         super.init()
         registerHandlers()
     }
 
-    func destroy() {
+    public func destroy() {
         deregisterHandlers()
         _bannerAds.values.forEach { $0.destroy() }
         _bannerAds.removeAll()

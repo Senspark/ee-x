@@ -94,12 +94,12 @@ class Facebook(
         _accessTokenTracker = object : AccessTokenTracker() {
             override fun onCurrentAccessTokenChanged(oldAccessToken: AccessToken?,
                                                      currentAccessToken: AccessToken?) {
-                _logger.debug("${this::onCurrentAccessTokenChanged}")
+                _logger.debug(this::onCurrentAccessTokenChanged.name)
             }
         }
         _profileTracker = object : ProfileTracker() {
             override fun onCurrentProfileChanged(oldProfile: Profile?, currentProfile: Profile?) {
-                _logger.debug("onCurrentProfileChanged")
+                _logger.debug(this::onCurrentProfileChanged.name)
                 val dict: MutableMap<String, Any> = HashMap()
                 if (currentProfile != null) {
                     dict["userId"] = currentProfile.id

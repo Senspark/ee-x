@@ -166,27 +166,27 @@ internal class FacebookBannerAd(
             }
         }
 
-    override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError} ${adError.errorMessage}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
-    }
-
     override fun onAdLoaded(ad: Ad) {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         Thread.checkMainThread()
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
-    override fun onAdClicked(ad: Ad) {
-        _logger.info("${this::onAdClicked}")
+    override fun onError(ad: Ad, adError: AdError) {
+        _logger.info("${this::onError.name} ${adError.errorMessage}")
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info("${this::onLoggingImpression}")
+        _logger.info(this::onLoggingImpression.name)
         Thread.checkMainThread()
+    }
+
+    override fun onAdClicked(ad: Ad) {
+        _logger.info(this::onAdClicked.name)
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onClicked)
     }
 }

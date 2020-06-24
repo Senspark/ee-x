@@ -118,19 +118,19 @@ class UnityAds(
             }
             _listener = object : IUnityAdsListener {
                 override fun onUnityAdsReady(adId: String) {
-                    _logger.info("${this::onUnityAdsReady}: $adId")
+                    _logger.info("${this::onUnityAdsReady.name}: $adId")
                     Thread.checkMainThread()
                     _loadedAds.add(adId)
                     _bridge.callCpp(k__onLoaded, adId)
                 }
 
                 override fun onUnityAdsStart(adId: String) {
-                    _logger.info("${this::onUnityAdsStart}: $adId")
+                    _logger.info("${this::onUnityAdsStart.name}: $adId")
                     Thread.checkMainThread()
                 }
 
                 override fun onUnityAdsFinish(adId: String, state: FinishState) {
-                    _logger.info("${this::onUnityAdsFinish}: $adId state = $state")
+                    _logger.info("${this::onUnityAdsFinish.name}: $adId state = $state")
                     Thread.checkMainThread()
                     if (state == FinishState.ERROR) {
                         @Serializable
@@ -152,6 +152,7 @@ class UnityAds(
                             val rewarded: Boolean
                         )
 
+                        _loadedAds.remove(adId)
                         val response = ResponseB(adId, false)
                         _bridge.callCpp(k__onClosed, response.serialize())
                         return
@@ -164,6 +165,7 @@ class UnityAds(
                             val rewarded: Boolean
                         )
 
+                        _loadedAds.remove(adId)
                         val response = ResponseC(adId, true)
                         _bridge.callCpp(k__onClosed, response.serialize())
                         return
@@ -172,7 +174,7 @@ class UnityAds(
                 }
 
                 override fun onUnityAdsError(unityAdsError: UnityAdsError, s: String) {
-                    _logger.info("${this::onUnityAdsError}: $s error = $unityAdsError")
+                    _logger.info("${this::onUnityAdsError.name}: $s error = $unityAdsError")
                     Thread.checkMainThread()
                 }
             }

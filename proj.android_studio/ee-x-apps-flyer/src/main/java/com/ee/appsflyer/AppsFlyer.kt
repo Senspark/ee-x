@@ -101,22 +101,22 @@ class AppsFlyer(
             val listener = object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
                     for (key in conversionData.keys) {
-                        _logger.debug("${this::onConversionDataSuccess}: $key = ${conversionData[key]}")
+                        _logger.debug("${this::onConversionDataSuccess.name}: $key = ${conversionData[key]}")
                     }
                 }
 
                 override fun onConversionDataFail(errorMessage: String) {
-                    _logger.debug("${this::onConversionDataFail}: $errorMessage")
+                    _logger.debug("${this::onConversionDataFail.name}: $errorMessage")
                 }
 
                 override fun onAppOpenAttribution(conversionData: Map<String, String>) {
                     for (key in conversionData.keys) {
-                        _logger.debug("${this::onAppOpenAttribution}: $key = ${conversionData[key]}")
+                        _logger.debug("${this::onAppOpenAttribution.name}: $key = ${conversionData[key]}")
                     }
                 }
 
                 override fun onAttributionFailure(errorMessage: String) {
-                    _logger.debug("${this::onAttributionFailure}: $errorMessage")
+                    _logger.debug("${this::onAttributionFailure.name}: $errorMessage")
                 }
             }
             _tracker.init(devKey, listener, _context)

@@ -26,31 +26,31 @@ internal class AppLovinInterstitialAdListener(
     }
 
     override fun adReceived(ad: AppLovinAd) {
-        _logger.info("${this::adReceived}")
+        _logger.info(this::adReceived.name)
         _isLoaded.set(true)
         _bridge.callCpp(k__onInterstitialAdLoaded)
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
-        _logger.info("${this::failedToReceiveAd}: code $errorCode")
+        _logger.info("${this::failedToReceiveAd.name}: code $errorCode")
         _bridge.callCpp(k__onInterstitialAdFailedToLoad, errorCode.toString())
     }
 
     override fun adDisplayed(ad: AppLovinAd) {
-        _logger.info("${this::adDisplayed}")
+        _logger.info(this::adDisplayed.name)
         Thread.checkMainThread()
-        _isLoaded.set(false)
-    }
-
-    override fun adHidden(ad: AppLovinAd) {
-        _logger.info("${this::adHidden}")
-        Thread.checkMainThread()
-        _bridge.callCpp(k__onInterstitialAdClosed)
     }
 
     override fun adClicked(ad: AppLovinAd) {
-        _logger.info("${this::adClicked}")
+        _logger.info(this::adClicked.name)
         Thread.checkMainThread()
         _bridge.callCpp(k__onInterstitialAdClicked)
+    }
+
+    override fun adHidden(ad: AppLovinAd) {
+        _logger.info(this::adHidden.name)
+        Thread.checkMainThread()
+        _isLoaded.set(false)
+        _bridge.callCpp(k__onInterstitialAdClosed)
     }
 }

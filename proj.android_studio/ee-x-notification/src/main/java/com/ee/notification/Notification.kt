@@ -114,11 +114,11 @@ class Notification(
     }
 
     fun unscheduleAll() {
-        _logger.debug("${this::unscheduleAll}: not supported.")
+        _logger.debug("${this::unscheduleAll.name}: not supported.")
     }
 
     fun unschedule(tag: Int) {
-        _logger.debug("${this::unschedule}: tag = $tag")
+        _logger.debug("${this::unschedule.name}: tag = $tag")
         val intent = Intent(_context, NotificationReceiver::class.java)
         NotificationUtils.unscheduleAlarm(_context, intent, tag)
     }

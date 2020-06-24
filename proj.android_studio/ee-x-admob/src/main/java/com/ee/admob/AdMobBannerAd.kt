@@ -81,7 +81,7 @@ internal class AdMobBannerAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy}: adId = $_adId")
+        _logger.info("${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
     }
@@ -99,7 +99,6 @@ internal class AdMobBannerAd(
     @AnyThread
     private fun createInternalAd() {
         Thread.runOnMainThread(Runnable {
-            Thread.checkMainThread()
             if (_ad != null) {
                 return@Runnable
             }
@@ -156,7 +155,7 @@ internal class AdMobBannerAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         })
@@ -185,42 +184,42 @@ internal class AdMobBannerAd(
             }
         }
 
-    override fun onAdClosed() {
-        _logger.info("${this::onAdClosed}")
-        Thread.checkMainThread()
-    }
-
-    override fun onAdFailedToLoad(errorCode: Int) {
-        _logger.info("${this::onAdFailedToLoad}: code = $errorCode")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
-    }
-
-    override fun onAdLeftApplication() {
-        _logger.info("${this::onAdLeftApplication}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
-    }
-
-    override fun onAdOpened() {
-        _logger.info("${this::onAdOpened}")
-        Thread.checkMainThread()
-    }
-
     override fun onAdLoaded() {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         Thread.checkMainThread()
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
-    override fun onAdClicked() {
-        _logger.info("${this::onAdClicked}")
+    override fun onAdFailedToLoad(errorCode: Int) {
+        _logger.info("${this::onAdFailedToLoad.name}: code = $errorCode")
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+    }
+
+    override fun onAdOpened() {
+        _logger.info(this::onAdOpened.name)
         Thread.checkMainThread()
     }
 
     override fun onAdImpression() {
-        _logger.info("${this::onAdImpression}")
+        _logger.info(this::onAdImpression.name)
+        Thread.checkMainThread()
+    }
+
+    override fun onAdClicked() {
+        _logger.info(this::onAdClicked.name)
+        Thread.checkMainThread()
+    }
+
+    override fun onAdLeftApplication() {
+        _logger.info(this::onAdLeftApplication.name)
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+
+    override fun onAdClosed() {
+        _logger.info(this::onAdClosed.name)
         Thread.checkMainThread()
     }
 }

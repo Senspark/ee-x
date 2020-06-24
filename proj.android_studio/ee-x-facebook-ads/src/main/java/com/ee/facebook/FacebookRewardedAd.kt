@@ -100,7 +100,7 @@ internal class FacebookRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
         })
@@ -110,7 +110,6 @@ internal class FacebookRewardedAd(
     private fun show() {
         Thread.runOnMainThread(Runnable {
             _logger.info(this::show.name)
-            Thread.checkMainThread()
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             _rewarded = false
             val result = ad.show(ad.buildShowAdConfig().build())
@@ -122,34 +121,34 @@ internal class FacebookRewardedAd(
         })
     }
 
-    override fun onRewardedVideoCompleted() {
-        _logger.info("${this::onRewardedVideoCompleted}")
-        _rewarded = true
-    }
-
-    override fun onRewardedVideoClosed() {
-        _logger.info("${this::onRewardedVideoClosed}")
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
-    }
-
-    override fun onAdClicked(ad: Ad) {
-        _logger.info("${this::onAdClicked}")
-        _bridge.callCpp(_messageHelper.onClicked)
-    }
-
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError}")
+        _logger.info("${this::onError.name}: ${adError.errorMessage}")
         _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info("${this::onLoggingImpression}")
+        _logger.info(this::onLoggingImpression.name)
+    }
+
+    override fun onAdClicked(ad: Ad) {
+        _logger.info(this::onAdClicked.name)
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+
+    override fun onRewardedVideoCompleted() {
+        _logger.info(this::onRewardedVideoCompleted.name)
+        _rewarded = true
+    }
+
+    override fun onRewardedVideoClosed() {
+        _logger.info(this::onRewardedVideoClosed.name)
         _isLoaded.set(false)
+        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

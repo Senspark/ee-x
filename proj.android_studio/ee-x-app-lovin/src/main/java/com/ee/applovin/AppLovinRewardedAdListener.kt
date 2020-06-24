@@ -33,66 +33,66 @@ internal class AppLovinRewardedAdListener(
     private var _rewarded = false
 
     override fun adReceived(ad: AppLovinAd) {
-        _logger.info("${this::adReceived}")
+        _logger.info(this::adReceived.name)
         _isLoaded.set(true)
         _bridge.callCpp(k__onRewardedAdLoaded)
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
-        _logger.info("${this::failedToReceiveAd}: code $errorCode")
+        _logger.info("${this::failedToReceiveAd.name}: code $errorCode")
         _bridge.callCpp(k__onRewardedAdFailedToLoad, errorCode.toString())
     }
 
-    override fun adDisplayed(ad: AppLovinAd) {
-        _logger.info("${this::adDisplayed}")
-        Thread.checkMainThread()
-        _isLoaded.set(false)
-    }
-
-    override fun adHidden(ad: AppLovinAd) {
-        _logger.info("${this::adHidden}")
-        Thread.checkMainThread()
-        _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded))
-    }
-
-    override fun userRewardVerified(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("${this::userRewardVerified}: $response")
-        Thread.checkMainThread()
-        _rewarded = true
-    }
-
-    override fun userOverQuota(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("${this::userOverQuota}: $response")
-        Thread.checkMainThread()
-    }
-
-    override fun userRewardRejected(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("${this::userRewardRejected}: $response")
-        Thread.checkMainThread()
-    }
-
-    override fun validationRequestFailed(ad: AppLovinAd, responseCode: Int) {
-        _logger.info("${this::validationRequestFailed}: code = $responseCode")
-        Thread.checkMainThread()
-    }
-
     override fun userDeclinedToViewAd(ad: AppLovinAd) {
-        _logger.info("${this::userDeclinedToViewAd}")
+        _logger.info(this::userDeclinedToViewAd.name)
         Thread.checkMainThread()
+    }
+
+    override fun adDisplayed(ad: AppLovinAd) {
+        _logger.info(this::adDisplayed.name)
+        Thread.checkMainThread()
+    }
+
+    override fun videoPlaybackBegan(ad: AppLovinAd) {
+        _logger.info(this::videoPlaybackBegan.name)
+        _rewarded = false
     }
 
     override fun adClicked(ad: AppLovinAd) {
-        _logger.info("${this::adClicked}")
+        _logger.info(this::adClicked.name)
         Thread.checkMainThread()
         _bridge.callCpp(k__onRewardedAdClicked)
     }
 
-    override fun videoPlaybackBegan(ad: AppLovinAd) {
-        _logger.info("${this::videoPlaybackBegan}")
-        _rewarded = false
+    override fun videoPlaybackEnded(ad: AppLovinAd, percentViewed: Double, fullyWatched: Boolean) {
+        _logger.info(this::videoPlaybackEnded.name)
     }
 
-    override fun videoPlaybackEnded(ad: AppLovinAd, percentViewed: Double, fullyWatched: Boolean) {
-        _logger.info("${this::videoPlaybackEnded}")
+    override fun userRewardVerified(ad: AppLovinAd, response: Map<String, String>) {
+        _logger.info("${this::userRewardVerified.name}: $response")
+        Thread.checkMainThread()
+        _rewarded = true
+    }
+
+    override fun userRewardRejected(ad: AppLovinAd, response: Map<String, String>) {
+        _logger.info("${this::userRewardRejected.name}: $response")
+        Thread.checkMainThread()
+    }
+
+    override fun userOverQuota(ad: AppLovinAd, response: Map<String, String>) {
+        _logger.info("${this::userOverQuota.name}: $response")
+        Thread.checkMainThread()
+    }
+
+    override fun validationRequestFailed(ad: AppLovinAd, responseCode: Int) {
+        _logger.info("${this::validationRequestFailed.name}: code = $responseCode")
+        Thread.checkMainThread()
+    }
+
+    override fun adHidden(ad: AppLovinAd) {
+        _logger.info(this::adHidden.name)
+        Thread.checkMainThread()
+        _isLoaded.set(false)
+        _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded))
     }
 }

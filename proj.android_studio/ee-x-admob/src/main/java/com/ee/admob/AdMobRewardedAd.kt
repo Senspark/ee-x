@@ -114,7 +114,7 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
@@ -137,33 +137,33 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun show() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::show}")
+            _logger.info(this::show.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.show(_activity, this)
         })
     }
 
-    override fun onRewardedAdOpened() {
-        _logger.info("${this::onRewardedAdOpened}")
+    override fun onRewardedAdFailedToShow(errorCode: Int) {
+        _logger.info(this::onRewardedAdFailedToShow.name)
         Thread.checkMainThread()
-        _isLoaded.set(false)
+        _bridge.callCpp(_messageHelper.onFailedToShow, errorCode.toString())
     }
 
-    override fun onRewardedAdClosed() {
-        _logger.info("${this::onRewardedAdClosed}")
+    override fun onRewardedAdOpened() {
+        _logger.info(this::onRewardedAdOpened.name)
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        _logger.info("${this::onUserEarnedReward}")
+        _logger.info(this::onUserEarnedReward.name)
         Thread.checkMainThread()
         _rewarded = true
     }
 
-    override fun onRewardedAdFailedToShow(errorCode: Int) {
-        _logger.info("${this::onRewardedAdFailedToShow}")
+    override fun onRewardedAdClosed() {
+        _logger.info(this::onRewardedAdClosed.name)
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToShow, errorCode.toString())
+        _isLoaded.set(false)
+        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

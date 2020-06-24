@@ -29,7 +29,6 @@ class ViewHelper(private val _view: View) {
         @AnyThread get() = _size.get()
         @AnyThread set(value) {
             Thread.runOnMainThread(Runnable {
-                Thread.checkMainThread()
                 val params = _view.layoutParams as FrameLayout.LayoutParams
                 params.width = value.x
                 params.height = value.y

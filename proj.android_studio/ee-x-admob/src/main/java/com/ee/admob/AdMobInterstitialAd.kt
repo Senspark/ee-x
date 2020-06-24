@@ -36,18 +36,14 @@ internal class AdMobInterstitialAd(
     init {
         _logger.info("constructor: adId = %s", _adId)
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
-            createInternalAd()
-        })
+        createInternalAd()
     }
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy}: adId = $_adId")
+        _logger.info("${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
-            destroyInternalAd()
-        })
+        destroyInternalAd()
     }
 
     @AnyThread
@@ -98,7 +94,7 @@ internal class AdMobInterstitialAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info("${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         })
@@ -112,46 +108,46 @@ internal class AdMobInterstitialAd(
         })
     }
 
-    override fun onAdClosed() {
-        _logger.info("${this::onAdClosed}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClosed)
-    }
-
-    override fun onAdFailedToLoad(errorCode: Int) {
-        _logger.info("${this::onAdFailedToLoad}: code = $errorCode")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
-    }
-
-    override fun onAdLeftApplication() {
-        _logger.info("${this::onAdLeftApplication}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
-    }
-
-    override fun onAdOpened() {
-        _logger.info("${this::onAdOpened}")
-        _isLoaded.set(false)
-        Thread.checkMainThread()
-    }
-
     override fun onAdLoaded() {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         Thread.checkMainThread()
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
+    override fun onAdFailedToLoad(errorCode: Int) {
+        _logger.info("${this::onAdFailedToLoad.name}: code = $errorCode")
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+    }
+
+    override fun onAdOpened() {
+        _logger.info(this::onAdOpened.name)
+        Thread.checkMainThread()
+    }
+
+    override fun onAdImpression() {
+        _logger.info(this::onAdImpression.name)
+        Thread.checkMainThread()
+    }
+
     override fun onAdClicked() {
-        _logger.info("${this::onAdClosed}")
+        _logger.info(this::onAdClosed.name)
         Thread.checkMainThread()
         // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
         // Use onAdLeftApplication instead.
     }
 
-    override fun onAdImpression() {
-        _logger.info("${this::onAdImpression}")
+    override fun onAdLeftApplication() {
+        _logger.info(this::onAdLeftApplication.name)
         Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+
+    override fun onAdClosed() {
+        _logger.info(this::onAdClosed.name)
+        Thread.checkMainThread()
+        _isLoaded.set(false)
+        _bridge.callCpp(_messageHelper.onClosed)
     }
 }

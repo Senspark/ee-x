@@ -3,7 +3,6 @@ package com.ee.ironsource
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
@@ -171,6 +170,7 @@ class IronSource(
     }
 
     private fun handleRewardedAdResult() {
+        _isRewardedAdLoaded.set(false)
         _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded))
     }
 
@@ -185,16 +185,6 @@ class IronSource(
         _bridge.callCpp(k__onInterstitialAdFailedToLoad, ironSourceError.errorMessage)
     }
 
-    override fun onInterstitialAdOpened() {
-        _logger.debug(this::onInterstitialAdOpened.name)
-        _isInterstitialAdLoaded.set(false)
-    }
-
-    override fun onInterstitialAdClosed() {
-        _logger.debug(this::onInterstitialAdClosed.name)
-        _bridge.callCpp(k__onInterstitialAdClosed)
-    }
-
     override fun onInterstitialAdShowSucceeded() {
         _logger.debug(this::onInterstitialAdShowSucceeded.name)
     }
@@ -204,40 +194,58 @@ class IronSource(
         _bridge.callCpp(k__onInterstitialAdFailedToShow, ironSourceError.errorMessage)
     }
 
+    override fun onInterstitialAdOpened() {
+        _logger.debug(this::onInterstitialAdOpened.name)
+    }
+
     override fun onInterstitialAdClicked() {
-        _logger.debug("${this::onInterstitialAdClicked}")
+        _logger.debug(this::onInterstitialAdClicked.name)
         _bridge.callCpp(k__onInterstitialAdClicked)
     }
 
+    override fun onInterstitialAdClosed() {
+        _logger.debug(this::onInterstitialAdClosed.name)
+        _isInterstitialAdLoaded.set(false)
+        _bridge.callCpp(k__onInterstitialAdClosed)
+    }
+
     override fun onRewardedVideoAvailabilityChanged(available: Boolean) {
-        _logger.info("${this::onRewardedVideoAvailabilityChanged}: $available")
+        _logger.info("${this::onRewardedVideoAvailabilityChanged.name}: $available")
         if (available) {
             _isRewardedAdLoaded.set(true)
             _bridge.callCpp(k__onRewardedAdLoaded)
         }
     }
 
-    override fun onRewardedVideoAdRewarded(placement: Placement) {
-        _logger.debug("${this::onRewardedVideoAdRewarded}: ${placement.placementName}")
-        _rewarded = true
-    }
-
     override fun onRewardedVideoAdShowFailed(ironSourceError: IronSourceError) {
-        _logger.debug("${this::onRewardedVideoAdShowFailed}: ${ironSourceError.errorMessage}")
+        _logger.debug("${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
         _bridge.callCpp(k__onRewardedAdFailedToShow, ironSourceError.errorMessage)
     }
 
+    override fun onRewardedVideoAdOpened() {
+        _logger.debug(this::onRewardedVideoAdOpened.name)
+    }
+
+    override fun onRewardedVideoAdStarted() {
+        _logger.debug(this::onRewardedVideoAdStarted.name)
+    }
+
     override fun onRewardedVideoAdClicked(placement: Placement) {
-        _logger.debug("${this::onRewardedVideoAdClicked}: ${placement.placementName}")
+        _logger.debug("${this::onRewardedVideoAdClicked.name}: ${placement.placementName}")
         _bridge.callCpp(k__onRewardedAdClicked)
     }
 
-    override fun onRewardedVideoAdOpened() {
-        _logger.debug("${this.onRewardedVideoAdOpened()}")
+    override fun onRewardedVideoAdEnded() {
+        _logger.debug(this::onRewardedVideoAdEnded.name)
+    }
+
+    override fun onRewardedVideoAdRewarded(placement: Placement) {
+        _logger.debug("${this::onRewardedVideoAdRewarded.name}: ${placement.placementName}")
+        _rewarded = true
     }
 
     override fun onRewardedVideoAdClosed() {
-        _logger.debug("${this.onRewardedVideoAdClosed()}")
+        _logger.debug(this::onRewardedVideoAdClosed.name)
         if (_rewarded) {
             handleRewardedAdResult()
         } else {
@@ -247,13 +255,5 @@ class IronSource(
                 handleRewardedAdResult()
             })
         }
-    }
-
-    override fun onRewardedVideoAdStarted() {
-        _logger.debug("${this::onRewardedVideoAdStarted}")
-    }
-
-    override fun onRewardedVideoAdEnded() {
-        _logger.debug("${this::onRewardedVideoAdEnded}")
     }
 }

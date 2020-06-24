@@ -64,7 +64,7 @@ internal class FacebookNativeAd(
 
     private val _messageHelper = MessageHelper("FacebookNativeAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
-    private var _isLoaded = AtomicBoolean(false)
+    private val _isLoaded = AtomicBoolean(false)
     private var _ad: NativeAd? = null
     private var _view: View? = null
     private var _viewHelper: ViewHelper? = null
@@ -91,7 +91,7 @@ internal class FacebookNativeAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy}: adId = $_adId")
+        _logger.info("${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyView()
         destroyInternalAd()
@@ -192,7 +192,7 @@ internal class FacebookNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info("${this::load.name}")
 
             ///
             /// Audience Network supports pre-caching video or image assets which enables
@@ -252,13 +252,13 @@ internal class FacebookNativeAd(
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError}: ${adError.errorMessage}")
+        _logger.info("${this::onError.name}: ${adError.errorMessage}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onAdLoaded(nativeAd: Ad) {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         Thread.checkMainThread()
         assertThat(_ad === nativeAd)
         val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
@@ -294,18 +294,18 @@ internal class FacebookNativeAd(
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
-    override fun onAdClicked(ad: Ad) {
-        _logger.info("${this::onAdClicked}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+    override fun onMediaDownloaded(ad: Ad) {
+        _logger.info(this::onMediaDownloaded.name)
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info("${this::onLoggingImpression}")
+        _logger.info(this::onLoggingImpression.name)
         Thread.checkMainThread()
     }
 
-    override fun onMediaDownloaded(ad: Ad) {
-        _logger.info("${this::onMediaDownloaded}")
+    override fun onAdClicked(ad: Ad) {
+        _logger.info(this::onAdClicked.name)
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onClicked)
     }
 }

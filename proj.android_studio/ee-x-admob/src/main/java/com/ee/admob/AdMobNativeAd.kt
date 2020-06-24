@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -68,8 +67,7 @@ internal class AdMobNativeAd(
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: AdLoader? = null
-    private var _view: FrameLayout? = null
-    private var _adView: UnifiedNativeAdView? = null
+    private var _view: UnifiedNativeAdView? = null
     private var _viewHelper: ViewHelper? = null
 
     init {
@@ -92,7 +90,7 @@ internal class AdMobNativeAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy}: adId = $_adId")
+        _logger.info("${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyView()
         destroyInternalAd()
@@ -136,19 +134,18 @@ internal class AdMobNativeAd(
     @AnyThread
     private fun createView() {
         Thread.runOnMainThread(Runnable {
-            assertThat(_view).isNull()
-            val view = FrameLayout(_context)
+            val layoutId = _context.resources
+                .getIdentifier(_layoutName, "layout", _context.packageName)
+            val view = LayoutInflater
+                .from(_context)
+                .inflate(layoutId, null, false)
+            view.visibility = View.INVISIBLE
             val params = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT)
             params.gravity = Gravity.START or Gravity.TOP
             view.layoutParams = params
-            val adView = createAdView()
-            view.addView(adView, ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT))
-            _view = view
-            _adView = adView
+            _view = view as UnifiedNativeAdView
             _viewHelper = ViewHelper(view)
             addToActivity()
         })
@@ -187,7 +184,7 @@ internal class AdMobNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load}")
+            _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         })
@@ -220,14 +217,6 @@ internal class AdMobNativeAd(
     }
 
     @UiThread
-    private fun createAdView(): UnifiedNativeAdView {
-        val layoutId = _context.resources.getIdentifier(_layoutName, "layout", _context.packageName)
-        return LayoutInflater
-            .from(_context)
-            .inflate(layoutId, null, false) as UnifiedNativeAdView
-    }
-
-    @UiThread
     private fun <T : View> processView(view: View,
                                        key: String,
                                        processor: ViewProcessor<T>): Boolean {
@@ -247,7 +236,7 @@ internal class AdMobNativeAd(
 
     override fun onUnifiedNativeAdLoaded(ad: UnifiedNativeAd) {
         _logger.info(this::onUnifiedNativeAdLoaded.name)
-        val adView = _adView ?: return
+        val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
 
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
         // have a video asset.
@@ -260,26 +249,26 @@ internal class AdMobNativeAd(
             override fun onVideoEnd() {
                 // Publishers should allow native ads to complete video playback before refreshing
                 // or replacing them with another ad in the same UI location.
-                _logger.debug("${this::onVideoEnd}")
+                _logger.debug(this::onVideoEnd.name)
                 super.onVideoEnd()
             }
         }
 
         // Some assets are guaranteed to be in every NativeAppInstallAd.
-        processView(adView, k__body) { item: TextView ->
-            adView.bodyView = item
+        processView<TextView>(view, k__body) { item ->
+            view.bodyView = item
             item.text = ad.body
         }
-        processView(adView, k__call_to_action) { item: Button ->
-            adView.callToActionView = item
+        processView<Button>(view, k__call_to_action) { item ->
+            view.callToActionView = item
             item.text = ad.callToAction
         }
-        processView(adView, k__headline) { item: TextView ->
-            adView.headlineView = item
+        processView<TextView>(view, k__headline) { item ->
+            view.headlineView = item
             item.text = ad.headline
         }
-        processView(adView, k__icon) { item: ImageView ->
-            adView.iconView = item
+        processView<ImageView>(view, k__icon) { item ->
+            view.iconView = item
             if (ad.icon != null) {
                 item.setImageDrawable(ad.icon.drawable)
             }
@@ -288,14 +277,14 @@ internal class AdMobNativeAd(
         // Apps can check the VideoController's hasVideoContent property to determine if the
         // NativeAppInstallAd has a video asset.
         if (vc.hasVideoContent()) {
-            processView<ImageView>(adView, k__image) { item ->
+            processView<ImageView>(view, k__image) { item ->
                 item.visibility = View.GONE
             }
-            processView(adView, k__media) { item: MediaView ->
-                adView.mediaView = item
+            processView<MediaView>(view, k__media) { item ->
+                view.mediaView = item
             }
         } else {
-            processView<ImageView>(adView, k__image) { item ->
+            processView<ImageView>(view, k__image) { item ->
                 val images = ad.images
                 item.visibility = View.GONE
                 for (image in images) {
@@ -306,15 +295,15 @@ internal class AdMobNativeAd(
                     }
                 }
             }
-            processView<MediaView>(adView, k__media) { item ->
+            processView<MediaView>(view, k__media) { item ->
                 item.visibility = View.GONE
             }
         }
 
         // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
         // check before trying to display them.
-        processView<TextView>(adView, k__price) { item ->
-            adView.priceView = item
+        processView<TextView>(view, k__price) { item ->
+            view.priceView = item
             val price: CharSequence? = ad.price
             if (price != null) {
                 item.visibility = View.VISIBLE
@@ -323,8 +312,8 @@ internal class AdMobNativeAd(
                 item.visibility = View.INVISIBLE
             }
         }
-        processView<RatingBar>(adView, k__star_rating) { item ->
-            adView.starRatingView = item
+        processView<RatingBar>(view, k__star_rating) { item ->
+            view.starRatingView = item
             val starRating = ad.starRating
             if (starRating != null) {
                 item.rating = starRating.toFloat()
@@ -333,8 +322,8 @@ internal class AdMobNativeAd(
                 item.visibility = View.INVISIBLE
             }
         }
-        processView<TextView>(adView, k__store) { item ->
-            adView.storeView = item
+        processView<TextView>(view, k__store) { item ->
+            view.storeView = item
             val store: CharSequence? = ad.store
             if (store != null) {
                 item.visibility = View.VISIBLE
@@ -345,36 +334,14 @@ internal class AdMobNativeAd(
         }
 
         // Assign native ad object to the native view.
-        adView.setNativeAd(ad)
+        view.setNativeAd(ad)
 
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
-    override fun onAdClosed() {
-        _logger.info("${this::onAdClosed}")
-        Thread.checkMainThread()
-    }
-
-    override fun onAdFailedToLoad(errorCode: Int) {
-        _logger.info("${this::onAdFailedToLoad}: code = $errorCode")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
-    }
-
-    override fun onAdLeftApplication() {
-        _logger.info("${this::onAdLeftApplication}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
-    }
-
-    override fun onAdOpened() {
-        _logger.info(this::onAdOpened.name)
-        Thread.checkMainThread()
-    }
-
     override fun onAdLoaded() {
-        _logger.info("${this::onAdLoaded}")
+        _logger.info(this::onAdLoaded.name)
         Thread.checkMainThread()
         // There is one important difference between the way AdListener objects work with native ads
         // and the way they work with banners and interstitials. Because the AdLoader has its own
@@ -383,13 +350,35 @@ internal class AdMobNativeAd(
         // native ad loads successfully.
     }
 
-    override fun onAdClicked() {
-        _logger.info("${this::onAdClicked}")
+    override fun onAdFailedToLoad(errorCode: Int) {
+        _logger.info("${this::onAdFailedToLoad.name}: code = $errorCode")
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+    }
+
+    override fun onAdOpened() {
+        _logger.info(this::onAdOpened.name)
         Thread.checkMainThread()
     }
 
     override fun onAdImpression() {
-        _logger.info("${this::onAdImpression}")
+        _logger.info(this::onAdImpression.name)
+        Thread.checkMainThread()
+    }
+
+    override fun onAdClicked() {
+        _logger.info(this::onAdClicked.name)
+        Thread.checkMainThread()
+    }
+
+    override fun onAdLeftApplication() {
+        _logger.info(this::onAdLeftApplication.name)
+        Thread.checkMainThread()
+        _bridge.callCpp(_messageHelper.onClicked)
+    }
+
+    override fun onAdClosed() {
+        _logger.info(this::onAdClosed.name)
         Thread.checkMainThread()
     }
 }

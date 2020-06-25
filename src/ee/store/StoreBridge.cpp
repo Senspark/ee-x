@@ -66,14 +66,13 @@ void from_json(const nlohmann::json& json, PurchaseHistoryRecord& data) {
 
 namespace {
 // clang-format off
-const std::string kPrefix = "Store";
-
-const auto kGetSkuDetails      = kPrefix + "_getSkuDetails";
-const auto kGetPurchases       = kPrefix + "_getPurchases";
-const auto kGetPurchaseHistory = kPrefix + "_getPurchaseHistory";
-const auto kPurchase           = kPrefix + "_purchase";
-const auto kConsume            = kPrefix + "_consume";
-const auto kAcknowledge        = kPrefix + "_acknowledge";
+const std::string kPrefix      = "StoreBridge";
+const auto kGetSkuDetails      = kPrefix + "GetSkuDetails";
+const auto kGetPurchases       = kPrefix + "GetPurchases";
+const auto kGetPurchaseHistory = kPrefix + "GetPurchaseHistory";
+const auto kPurchase           = kPrefix + "Ppurchase";
+const auto kConsume            = kPrefix + "Consume";
+const auto kAcknowledge        = kPrefix + "Acknowledge";
 // clang-format on
 } // namespace
 

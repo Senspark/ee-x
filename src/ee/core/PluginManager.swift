@@ -53,17 +53,13 @@ private class PluginManager: NSObject {
             assert(false, "Plugin already exists: \(name)")
             return false
         }
-        guard let clazz = NSClassFromString("EE" + name) as? NSObject.Type else {
+        guard let plugin =
+            // Swift plugins.
+            (NSClassFromString("EE\(name)Bridge") as? IPlugin.Type)?.init(_bridge) ??
+            // Objective-C plugins.
+            (NSClassFromString("EE\(name)") as? NSObject.Type)?.init() as? IPlugin else {
             assert(false, "Invalid plugin: \(name)")
-            return false
         }
-        var plugin: IPlugin?
-        if name == "Store" || name == "Tenjin" {
-            plugin = (clazz as! IPlugin.Type).init(_bridge)
-        } else {
-            plugin = clazz.init() as? IPlugin
-        }
-        assert(plugin != nil, "Initialization failed")
         _plugins[name] = plugin
         return false
     }

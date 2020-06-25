@@ -32,24 +32,24 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix           = "FacebookAds";
+const std::string kPrefix         = "FacebookAdsBridge";
 
-const auto k__getTestDeviceHash     = kPrefix + "_getTestDeviceHash";
-const auto k__addTestDevice         = kPrefix + "_addTestDevice";
-const auto k__clearTestDevices      = kPrefix + "_clearTestDevices";
+const auto kGetTestDeviceHash     = kPrefix + "GetTestDeviceHash";
+const auto kAddTestDevice         = kPrefix + "AddTestDevice";
+const auto kClearTestDevices      = kPrefix + "ClearTestDevices";
 
-const auto k__getBannerAdSize       = kPrefix + "_getBannerAdSize";
-const auto k__createBannerAd        = kPrefix + "_createBannerAd";
-const auto k__destroyBannerAd       = kPrefix + "_destroyBannerAd";
+const auto kGetBannerAdSize       = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd        = kPrefix + "CreateBannerAd";
+const auto kDestroyBannerAd       = kPrefix + "DestroyBannerAd";
 
-const auto k__createNativeAd        = kPrefix + "_createNativeAd";
-const auto k__destroyNativeAd       = kPrefix + "_destroyNativeAd";
+const auto kCreateNativeAd        = kPrefix + "CreateNativeAd";
+const auto kDestroyNativeAd       = kPrefix + "DestroyNativeAd";
 
-const auto k__createInterstitialAd  = kPrefix + "_createInterstitialAd";
-const auto k__destroyInterstitialAd = kPrefix + "_destroyInterstitialAd";
+const auto kCreateInterstitialAd  = kPrefix + "CreateInterstitialAd";
+const auto kDestroyInterstitialAd = kPrefix + "DestroyInterstitialAd";
     
-const auto k__createRewardedAd      = kPrefix + "_createRewardedAd";
-const auto k__destroyRewardedAd     = kPrefix + "_destroyRewardedAd";
+const auto kCreateRewardedAd      = kPrefix + "CreateRewardedAd";
+const auto kDestroyRewardedAd     = kPrefix + "DestroyRewardedAd";
 } // namespace
 
 namespace {
@@ -95,19 +95,19 @@ void Self::destroy() {
 }
 
 std::string Self::getTestDeviceHash() const {
-    return bridge_.call(k__getTestDeviceHash);
+    return bridge_.call(kGetTestDeviceHash);
 }
 
 void Self::addTestDevice(const std::string& hash) {
-    bridge_.call(k__addTestDevice, hash);
+    bridge_.call(kAddTestDevice, hash);
 }
 
 void Self::clearTestDevices() {
-    bridge_.call(k__clearTestDevices);
+    bridge_.call(kClearTestDevices);
 }
 
 std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
-    auto response = bridge_.call(k__getBannerAdSize,
+    auto response = bridge_.call(kGetBannerAdSize,
                                  std::to_string(static_cast<int>(adSize)));
     auto json = nlohmann::json::parse(response);
     int width = json["width"];
@@ -125,7 +125,7 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     nlohmann::json json;
     json[k__ad_id] = adId;
     json[k__ad_size] = static_cast<int>(adSize);
-    auto response = bridge_.call(k__createBannerAd, json.dump());
+    auto response = bridge_.call(kCreateBannerAd, json.dump());
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
@@ -145,7 +145,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     if (iter == bannerAds_.cend()) {
         return false;
     }
-    auto response = bridge_.call(k__destroyBannerAd, adId);
+    auto response = bridge_.call(kDestroyBannerAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
@@ -168,7 +168,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     json[k__ad_id] = adId;
     json[k__layout_name] = layoutName;
     json[k__identifiers] = identifiers.params_;
-    auto response = bridge_.call(k__createNativeAd, json.dump());
+    auto response = bridge_.call(kCreateNativeAd, json.dump());
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
@@ -187,7 +187,7 @@ bool Self::destroyNativeAd(const std::string& adId) {
     if (iter == nativeAds_.cend()) {
         return false;
     }
-    auto response = bridge_.call(k__destroyNativeAd, adId);
+    auto response = bridge_.call(kDestroyNativeAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
@@ -205,7 +205,7 @@ Self::createInterstitialAd(const std::string& adId) {
     if (iter != interstitialAds_.cend()) {
         return iter->second;
     }
-    auto response = bridge_.call(k__createInterstitialAd, adId);
+    auto response = bridge_.call(kCreateInterstitialAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
@@ -225,7 +225,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     if (iter == interstitialAds_.cend()) {
         return false;
     }
-    auto&& response = bridge_.call(k__destroyInterstitialAd, adId);
+    auto&& response = bridge_.call(kDestroyInterstitialAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);
@@ -242,7 +242,7 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     if (iter != rewardedAds_.cend()) {
         return iter->second;
     }
-    auto response = bridge_.call(k__createRewardedAd, adId);
+    auto response = bridge_.call(kCreateRewardedAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad",
                       __PRETTY_FUNCTION__);
@@ -262,7 +262,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
     if (iter == rewardedAds_.cend()) {
         return false;
     }
-    auto&& response = bridge_.call(k__destroyRewardedAd, adId);
+    auto&& response = bridge_.call(kDestroyRewardedAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad",
                       __PRETTY_FUNCTION__);

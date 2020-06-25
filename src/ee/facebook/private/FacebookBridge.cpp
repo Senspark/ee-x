@@ -32,17 +32,18 @@ std::unique_ptr<IFacebook> PluginManager::createPlugin() {
 namespace facebook {
 namespace {
 // clang-format off
-constexpr auto k__registerNotifications = "Facebook_registerNotifications";
-constexpr auto k__isLoggedIn            = "Facebook_isLoggedIn";
-constexpr auto k__logIn                 = "Facebook_logIn";
-constexpr auto k__logOut                = "Facebook_logOut";
-constexpr auto k__getAccessToken        = "Facebook_getAccessToken";
-constexpr auto k__onProfileChanged      = "Facebook_onProfileChanged";
-constexpr auto k__graphRequest          = "Facebook_graphRequest";
-constexpr auto k__sendRequest           = "Facebook_sendRequest";
-constexpr auto k__shareLinkContent      = "Facebook_shareLinkContent";
-constexpr auto k__sharePhotoContent     = "Facebook_sharePhotoContent";
-constexpr auto k__shareVideoContent     = "Facebook_shareVideoContent";
+const std::string kPrefix         = "FacebookBridge";
+const auto kRegisterNotifications = kPrefix + "RegisterNotifications";
+const auto kIsLoggedIn            = kPrefix + "IsLoggedIn";
+const auto kLogIn                 = kPrefix + "LogIn";
+const auto kLogOut                = kPrefix + "LogOut";
+const auto kGetAccessToken        = kPrefix + "GetAccessToken";
+const auto kOnProfileChanged      = kPrefix + "OnProfileChanged";
+const auto kGraphRequest          = kPrefix + "GraphRequest";
+const auto kSendRequest           = kPrefix + "SendRequest";
+const auto kShareLinkContent      = kPrefix + "ShareLinkContent";
+const auto kSharePhotoContent     = kPrefix + "SharePhotoContent";
+const auto kShareVideoContent     = kPrefix + "ShareVideoContent";
 // clang-format on
 } // namespace
 
@@ -57,19 +58,19 @@ Self::Bridge()
             onProfileChanged(message);
             return "";
         },
-        k__onProfileChanged);
+        kOnProfileChanged);
     registerNotifications();
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    bridge_.deregisterHandler(k__onProfileChanged);
+    bridge_.deregisterHandler(kOnProfileChanged);
     PluginManager::removePlugin(Plugin::Facebook);
 }
 
 void Self::registerNotifications() {
-    bridge_.call(k__registerNotifications);
+    bridge_.call(kRegisterNotifications);
 }
 
 void Self::onProfileChanged(const std::string& profile) {
@@ -77,7 +78,7 @@ void Self::onProfileChanged(const std::string& profile) {
 }
 
 bool Self::isLoggedIn() const {
-    auto response = bridge_.call(k__isLoggedIn);
+    auto response = bridge_.call(kIsLoggedIn);
     return core::toBool(response);
 }
 
@@ -88,7 +89,7 @@ void Self::logIn(const std::vector<std::string>& permissions,
     nlohmann::json json;
     json["permissions"] = permissions;
     json["tag"] = delegate->tag_;
-    bridge_.call(k__logIn, json.dump());
+    bridge_.call(kLogIn, json.dump());
 }
 
 std::shared_ptr<ILoginDelegate> Self::createLoginDelegate() {
@@ -96,11 +97,11 @@ std::shared_ptr<ILoginDelegate> Self::createLoginDelegate() {
 }
 
 void Self::logOut() {
-    bridge_.call(k__logOut);
+    bridge_.call(kLogOut);
 }
 
 std::shared_ptr<IAccessToken> Self::getAccessToken() const {
-    auto response = bridge_.call(k__getAccessToken);
+    auto response = bridge_.call(kGetAccessToken);
     if (response.empty()) {
         return nullptr;
     }
@@ -114,7 +115,7 @@ void Self::graphRequest(const GraphRequest& request,
     delegate->self_ = delegate;
     auto json = nlohmann::json::parse(request.toString());
     json["tag"] = delegate->tag_;
-    bridge_.call(k__graphRequest, json.dump());
+    bridge_.call(kGraphRequest, json.dump());
 }
 
 std::shared_ptr<IGraphDelegate> Self::createGraphDelegate() {
@@ -127,7 +128,7 @@ void Self::sendRequest(const RequestContent& content,
     delegate->self_ = delegate;
     auto json = nlohmann::json::parse(content.toString());
     json["tag"] = delegate->tag_;
-    bridge_.call(k__sendRequest, json.dump());
+    bridge_.call(kSendRequest, json.dump());
 }
 
 std::shared_ptr<IRequestDelegate> Self::createRequestDelegate() {
@@ -141,7 +142,7 @@ void Self::shareLinkContent(const std::string& url,
     nlohmann::json json;
     json["url"] = url;
     json["tag"] = delegate->tag_;
-    bridge_.call(k__shareLinkContent, json.dump());
+    bridge_.call(kShareLinkContent, json.dump());
 }
 
 void Self::sharePhotoContent(const std::string& url,
@@ -151,7 +152,7 @@ void Self::sharePhotoContent(const std::string& url,
     nlohmann::json json;
     json["url"] = url;
     json["tag"] = delegate->tag_;
-    bridge_.call(k__sharePhotoContent, json.dump());
+    bridge_.call(kSharePhotoContent, json.dump());
 }
 
 void Self::shareVideoContent(const std::string& url,
@@ -161,7 +162,7 @@ void Self::shareVideoContent(const std::string& url,
     nlohmann::json json;
     json["url"] = url;
     json["tag"] = delegate->tag_;
-    bridge_.call(k__shareVideoContent, json.dump());
+    bridge_.call(kShareVideoContent, json.dump());
 }
 
 std::shared_ptr<IShareDelegate> Self::createShareDelegate() {

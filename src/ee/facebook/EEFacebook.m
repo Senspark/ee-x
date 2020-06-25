@@ -9,7 +9,7 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 
@@ -20,18 +20,20 @@
     id<EEIMessageBridge> bridge_;
 }
 
+#define kPrefix @"FacebookBridge"
+
 // clang-format off
-NSString* const k__registerNotifications = @"Facebook_registerNotifications";
-NSString* const k__isLoggedIn            = @"Facebook_isLoggedIn";
-NSString* const k__logIn                 = @"Facebook_logIn";
-NSString* const k__logOut                = @"Facebook_logOut";
-NSString* const k__getAccessToken        = @"Facebook_getAccessToken";
-NSString* const k__onProfileChanged      = @"Facebook_onProfileChanged";
-NSString* const k__graphRequest          = @"Facebook_graphRequest";
-NSString* const k__sendRequest           = @"Facebook_sendRequest";
-NSString* const k__shareLinkContent      = @"Facebook_shareLinkContent";
-NSString* const k__sharePhotoContent     = @"Facebook_sharePhotoContent";
-NSString* const k__shareVideoContent     = @"Facebook_shareVideoContent";
+NSString* const k__registerNotifications = kPrefix "RegisterNotifications";
+NSString* const k__isLoggedIn            = kPrefix "IsLoggedIn";
+NSString* const k__logIn                 = kPrefix "LogIn";
+NSString* const k__logOut                = kPrefix "LogOut";
+NSString* const k__getAccessToken        = kPrefix "GetAccessToken";
+NSString* const k__onProfileChanged      = kPrefix "OnProfileChanged";
+NSString* const k__graphRequest          = kPrefix "GraphRequest";
+NSString* const k__sendRequest           = kPrefix "SendRequest";
+NSString* const k__shareLinkContent      = kPrefix "ShareLinkContent";
+NSString* const k__sharePhotoContent     = kPrefix "SharePhotoContent";
+NSString* const k__shareVideoContent     = kPrefix "ShareVideoContent";
 // clang-format on
 
 - (id)init {

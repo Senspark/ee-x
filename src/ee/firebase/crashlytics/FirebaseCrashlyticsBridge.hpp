@@ -1,6 +1,10 @@
 #ifndef EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 
+#ifdef __OBJC__
+#import <FirebaseCrashlytics/FIRCrashlytics.h>
+#endif // __OBJC__
+
 #ifdef __cplusplus
 
 #include <string>

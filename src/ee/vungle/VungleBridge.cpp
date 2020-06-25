@@ -18,18 +18,19 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix    = "Vungle";
+const std::string kPrefix    = "VungleBridge";
 
-const auto k__initialize     = kPrefix + "_initialize";
+const auto kInitialize     = kPrefix + "Initialize";
 
-const auto k__hasRewardedAd  = kPrefix + "_hasRewardedAd";
-const auto k__loadRewardedAd = kPrefix + "_loadRewardedAd";
-const auto k__showRewardedAd = kPrefix + "_showRewardedAd";
+const auto kHasRewardedAd  = kPrefix + "HasRewardedAd";
+const auto kLoadRewardedAd = kPrefix + "LoadRewardedAd";
+const auto kShowRewardedAd = kPrefix + "ShowRewardedAd";
 
-const auto k__onLoaded       = kPrefix + "_onLoaded";
-const auto k__onFailedToLoad = kPrefix + "_onFailedToLoad";
-const auto k__onFailedToShow = kPrefix + "_onFailedToShow";
-const auto k__onClosed       = kPrefix + "_onClosed";
+const auto kOnLoaded       = kPrefix + "OnLoaded";
+const auto kOnFailedToLoad = kPrefix + "OnFailedToLoad";
+const auto kOnFailedToShow = kPrefix + "OnFailedToShow";
+const auto kOnClicked      = kPrefix + "OnClicked";
+const auto kOnClosed       = kPrefix + "OnClosed";
 // clang-format on
 } // namespace
 
@@ -51,38 +52,44 @@ Self::Bridge(const Logger& logger)
             onLoaded(json["ad_id"]);
             return "";
         },
-        k__onLoaded);
+        kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onFailedToLoad(json["ad_id"], json["message"]);
             return "";
         },
-        k__onFailedToLoad);
+        kOnFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onFailedToShow(json["ad_id"], json["message"]);
             return "";
         },
-        k__onFailedToShow);
+        kOnFailedToShow);
+    bridge_.registerHandler(
+        [this](const std::string& message) {
+            onClicked(message);
+            return "";
+        },
+        kOnClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onClosed(json["ad_id"], json["rewarded"]);
             return "";
         },
-        k__onClosed);
+        kOnClosed);
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onLoaded);
-    bridge_.deregisterHandler(k__onFailedToLoad);
-    bridge_.deregisterHandler(k__onFailedToShow);
-    bridge_.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(kOnLoaded);
+    bridge_.deregisterHandler(kOnFailedToLoad);
+    bridge_.deregisterHandler(kOnFailedToShow);
+    bridge_.deregisterHandler(kOnClosed);
     PluginManager::removePlugin(Plugin::Vungle);
 }
 
@@ -90,7 +97,7 @@ void Self::initialize(const std::string& gameId) {
     logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
     nlohmann::json json;
     json["gameId"] = gameId;
-    bridge_.call(k__initialize, json.dump());
+    bridge_.call(kInitialize, json.dump());
 }
 
 void Self::initialize(const std::string& gameId, const std::string& adId) {
@@ -121,18 +128,18 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasRewardedAd(const std::string& adId) const {
-    auto result = bridge_.call(k__hasRewardedAd, adId);
+    auto result = bridge_.call(kHasRewardedAd, adId);
     return core::toBool(result);
 }
 
 void Self::loadRewardedAd(const std::string& adId) const {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    bridge_.call(k__loadRewardedAd, adId);
+    bridge_.call(kLoadRewardedAd, adId);
 }
 
 void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    bridge_.call(k__showRewardedAd, adId);
+    bridge_.call(kShowRewardedAd, adId);
 }
 
 void Self::onLoaded(const std::string& adId) {
@@ -162,6 +169,17 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
         iter->second.weak->onFailedToShow(message);
+    } else {
+        // Mediation.
+        assert(false);
+    }
+}
+
+void Self::onClicked(const std::string& adId) {
+    logger_.debug(__PRETTY_FUNCTION__);
+    auto iter = rewardedAds_.find(adId);
+    if (iter != rewardedAds_.cend()) {
+        iter->second.weak->onClicked();
     } else {
         // Mediation.
         assert(false);

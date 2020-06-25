@@ -118,6 +118,15 @@ void Self::onFailedToShow(const std::string& message) {
     }
 }
 
+void Self::onClicked() {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    dispatchEvent([](auto&& observer) {
+        if (observer.onClicked) {
+            observer.onClicked();
+        }
+    });
+}
+
 void Self::onClosed(bool rewarded) {
     logger_.debug("%s: adId = %s displaying = %s rewarded = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),

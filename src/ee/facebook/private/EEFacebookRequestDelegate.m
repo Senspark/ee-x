@@ -7,7 +7,7 @@
 
 #import "ee/facebook/private/EEFacebookRequestDelegate.h"
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 

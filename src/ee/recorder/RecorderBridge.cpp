@@ -13,12 +13,13 @@ namespace ee {
 namespace recorder {
 namespace {
 // clang-format off
-constexpr auto k__isSupported              = "Recorder_isSupported";
-constexpr auto k__startRecording           = "Recorder_startRecording";
-constexpr auto k__stopRecording            = "Recorder_stopRecording";
-constexpr auto k__cancelRecording          = "Recorder_cancelRecording";
-constexpr auto k__getRecordingUrl          = "Recorder_getRecordingUrl";
-constexpr auto k__checkRecordingPermission = "Recorder_checkRecordingPermission";
+const std::string kPrefix            = "RecorderBridge";
+const auto kIsSupported              = kPrefix + "IsSupported";
+const auto kStartRecording           = kPrefix + "StartRecording";
+const auto kStopRecording            = kPrefix + "StopRecording";
+const auto kCancelRecording          = kPrefix + "CancelRecording";
+const auto kGetRecordingUrl          = kPrefix + "GetRecordingUrl";
+const auto kCheckRecordingPermission = kPrefix + "CheckRecordingPermission";
 // clang-format on
 } // namespace
 
@@ -34,28 +35,28 @@ Self::~Bridge() {
 }
 
 bool Self::isSupported() const {
-    auto&& response = bridge_.call(k__isSupported);
+    auto&& response = bridge_.call(kIsSupported);
     return core::toBool(response);
 }
 
 void Self::startRecording() {
-    bridge_.call(k__startRecording);
+    bridge_.call(kStartRecording);
 }
 
 void Self::stopRecording() {
-    bridge_.call(k__stopRecording);
+    bridge_.call(kStopRecording);
 }
 
 void Self::cancelRecording() {
-    bridge_.call(k__cancelRecording);
+    bridge_.call(kCancelRecording);
 }
 
 std::string Self::getRecordingUrl() const {
-    return bridge_.call(k__getRecordingUrl);
+    return bridge_.call(kGetRecordingUrl);
 }
 
 bool Self::checkRecordingPermission() const {
-    auto response = bridge_.call(k__checkRecordingPermission);
+    auto response = bridge_.call(kCheckRecordingPermission);
     return core::toBool(response);
 }
 } // namespace recorder

@@ -9,7 +9,8 @@ namespace crashlytics {
 using Self = Bridge;
 
 namespace {
-constexpr auto kLog = "FirebaseCrashlytics_log";
+const std::string kPrefix = "FirebaseCrashlyticsBridge";
+const auto kLog = kPrefix + "Log";
 } // namespace
 
 Self::Bridge()

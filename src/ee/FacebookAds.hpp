@@ -18,8 +18,4 @@
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
 #endif // __cplusplus
 
-#ifdef __OBJC__
-#import "ee/facebook_ads/EEFacebookAds.h"
-#endif // __OBJC__
-
 #endif /* EE_X_FACEBOOK_ADS_HPP */

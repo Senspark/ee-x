@@ -23,7 +23,7 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
-    implementation 'com.vungle:publisher-sdk-android:6.5.3'
+    implementation 'com.vungle:publisher-sdk-android:6.7.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'

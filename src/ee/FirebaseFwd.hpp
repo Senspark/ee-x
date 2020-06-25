@@ -15,7 +15,9 @@
 
 namespace ee {
 namespace firebase {
-class Core;
+namespace core {
+class Bridge;
+} // namespace core
 
 namespace analytics {
 class Bridge;
@@ -52,7 +54,7 @@ class Bridge;
 } // namespace storage
 } // namespace firebase
 
-using FirebaseCore = firebase::Core;
+using FirebaseCore = firebase::core::Bridge;
 using FirebaseAnalytics = firebase::analytics::Bridge;
 using FirebaseCrashlytics = firebase::crashlytics::Bridge;
 using FirebaseDynamicLink = firebase::dynamic_link::Bridge;

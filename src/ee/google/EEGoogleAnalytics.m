@@ -13,7 +13,7 @@
 #import <GoogleAnalytics/GAIECommerceFields.h>
 #import <GoogleAnalytics/GAIFields.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 
@@ -23,23 +23,25 @@
     NSMutableDictionary<NSString*, EEGoogleAnalyticsTracker*>* trackers_;
 }
 
-// clang-format off
-static NSString* const k__setDispatchInterval          = @"GoogleAnalytics_setDispatchInterval";
-static NSString* const k__setDryRun                    = @"GoogleAnalytics_setDryRun";
-static NSString* const k__setOptOut                    = @"GoogleAnalytics_setOptOut";
-static NSString* const k__setTrackUncaughtException    = @"GoogleAnalytics_setTrackUncaughtException";
-static NSString* const k__dispatch                     = @"GoogleAnalytics_dispatch";
-static NSString* const k__createTracker                = @"GoogleAnalytics_createTracker";
-static NSString* const k__destroyTracker               = @"GoogleAnalytics_destroyTracker";
+#define kPrefix @"GoogleAnalyticsBridge"
 
-static NSString* const k__testTrackEvent               = @"GoogleAnalytics_testTrackEvent";
-static NSString* const k__testTrackException           = @"GoogleAnalytics_testTrackException";
-static NSString* const k__testTrackScreenView          = @"GoogleAnalytics_testTrackScreenView";
-static NSString* const k__testTrackSocial              = @"GoogleAnalytics_testTrackSocial";
-static NSString* const k__testTrackTiming              = @"GoogleAnalytics_testTrackTiming";
-static NSString* const k__testCustomDimensionAndMetric = @"GoogleAnalytics_testCustomDimensionAndMetric";
-static NSString* const k__testTrackEcommerceAction     = @"GoogleAnalytics_testTrackEcommerceAction";
-static NSString* const k__testTrackEcommerceImpression = @"GoogleAnalytics_testTrackEcommerceImpression";
+// clang-format off
+static NSString* const k__setDispatchInterval          = kPrefix "SetDispatchInterval";
+static NSString* const k__setDryRun                    = kPrefix "SetDryRun";
+static NSString* const k__setOptOut                    = kPrefix "SetOptOut";
+static NSString* const k__setTrackUncaughtException    = kPrefix "SetTrackUncaughtException";
+static NSString* const k__dispatch                     = kPrefix "Dispatch";
+static NSString* const k__createTracker                = kPrefix "CreateTracker";
+static NSString* const k__destroyTracker               = kPrefix "DestroyTracker";
+
+static NSString* const k__testTrackEvent               = kPrefix "TestTrackEvent";
+static NSString* const k__testTrackException           = kPrefix "TestTrackException";
+static NSString* const k__testTrackScreenView          = kPrefix "TestTrackScreenView";
+static NSString* const k__testTrackSocial              = kPrefix "TestTrackSocial";
+static NSString* const k__testTrackTiming              = kPrefix "TestTrackTiming";
+static NSString* const k__testCustomDimensionAndMetric = kPrefix "TestCustomDimensionAndMetric";
+static NSString* const k__testTrackEcommerceAction     = kPrefix "TestTrackEcommerceAction";
+static NSString* const k__testTrackEcommerceImpression = kPrefix "TestTrackEcommerceImpression";
 // clang-format on
 
 - (id)init {

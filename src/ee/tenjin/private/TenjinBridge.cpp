@@ -18,7 +18,8 @@ std::unique_ptr<ITenjin> PluginManager::createPlugin() {
 namespace tenjin {
 namespace {
 // clang-format off
-constexpr auto k__initialize = "Tenjin_initialize";
+const std::string kPrefix = "TenjinBridge";
+const auto kInitialize = kPrefix + "Initialize";
 // clang-format on
 } // namespace
 
@@ -36,7 +37,7 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& apiKey) {
-    bridge_.call(k__initialize, apiKey);
+    bridge_.call(kInitialize, apiKey);
 }
 } // namespace tenjin
 } // namespace ee

@@ -7,7 +7,7 @@
 
 #import <ReplayKit/ReplayKit.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 
@@ -21,12 +21,14 @@
 
 @implementation EERecorder
 
+#define kPrefix @"RecorderBridge"
+
 // clang-format off
-NSString* const k__isSupported     = @"Recorder_isSupported";
-NSString* const k__startRecording  = @"Recorder_startRecording";
-NSString* const k__stopRecording   = @"Recorder_stopRecording";
-NSString* const k__cancelRecording = @"Recorder_cancelRecording";
-NSString* const k__getRecordingUrl = @"Recorder_getRecordingUrl";
+NSString* const k__isSupported     = kPrefix "IsSupported";
+NSString* const k__startRecording  = kPrefix "StartRecording";
+NSString* const k__stopRecording   = kPrefix "StopRecording";
+NSString* const k__cancelRecording = kPrefix "CancelRecording";
+NSString* const k__getRecordingUrl = kPrefix "GetRecordingUrl";
 // clang-format on
 
 - (id)init {

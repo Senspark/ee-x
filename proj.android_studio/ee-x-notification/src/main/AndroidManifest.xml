@@ -4,6 +4,6 @@
     package="com.ee.notification">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application>
-        <receiver android:name="com.ee.notification.NotificationReceiver"/>
+        <receiver android:name="com.ee.internal.NotificationReceiver"/>
     </application>
 </manifest>

@@ -7,7 +7,7 @@
     <application>
         <!-- https://stackoverflow.com/questions/57026489/mediaprojection-service-type-not-recognized-in-android-q -->
         <service
-            android:name=".RecordService"
+            android:name="com.ee.internal.RecordService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"

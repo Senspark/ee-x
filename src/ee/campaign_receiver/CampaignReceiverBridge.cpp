@@ -21,8 +21,9 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__onReceivedLink            = "CampaignReceiver_onReceivedLink";
-constexpr auto k__initialize                = "CampaignReceiver_initialize";
+const std::string kPrefix  = "CampaignReceiverBridge";
+const auto kInitialize     = kPrefix + "Initialize";
+const auto kOnReceivedLink = kPrefix + "OnReceivedLink";
 // clang-format on
 } // namespace
 
@@ -43,19 +44,19 @@ Self::Bridge(const Logger& logger)
             }
             return "";
         },
-        k__onReceivedLink);
+        kOnReceivedLink);
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    bridge_.deregisterHandler(k__onReceivedLink);
+    bridge_.deregisterHandler(kOnReceivedLink);
     PluginManager::removePlugin(Plugin::CampaignReceiver);
 }
 
 void Self::initialize(const OnReceivedLinkCallback& callback) {
 #ifdef EE_X_ANDROID
-    bridge_.call(k__initialize);
+    bridge_.call(kInitialize);
 #endif // EE_X_ANDROID
     callback_ = callback;
 }

@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 
@@ -18,11 +18,13 @@
     id<EEIMessageBridge> bridge_;
 }
 
+#define kPrefix @"NotificationBridge"
+
 // clang-format off
-NSString* const k__notification_schedule            = @"__notification_schedule";
-NSString* const k__notification_unschedule          = @"__notification_unschedule";
-NSString* const k__notification_unschedule_all      = @"__notification_unschedule_all";
-NSString* const k__notification_clear_all           = @"__notification_clear_all";
+NSString* const k__notification_schedule            = kPrefix "Schedule";
+NSString* const k__notification_unschedule          = kPrefix "Unschedule";
+NSString* const k__notification_unschedule_all      = kPrefix "UnscheduleAll";
+NSString* const k__notification_clear_all           = kPrefix "ClearAll";
 // clang-format on
 
 - (id)init {

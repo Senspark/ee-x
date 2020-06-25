@@ -40,6 +40,7 @@ private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onFailedToShow(const std::string& message);
+    void onClicked();
     void onClosed(bool rewarded);
 
     const Logger& logger_;

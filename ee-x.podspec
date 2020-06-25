@@ -3,6 +3,7 @@ Pod::Spec.new do |spec|
   spec.version        = '0.1.5'
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
+  spec.module_name    = 'ee'
 
   spec.homepage       = 'https://github.com/Senspark/ee-x'
 
@@ -32,6 +33,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'core' do |s|
     s.source_files =
+      'src/ee/ee.h',
       'src/ee/Macro.hpp',
       'src/ee/Core*',
       'src/ee/core/**/*'
@@ -378,7 +380,10 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-core' do |s|
     s.source_files =
       'src/ee/Firebase*',
-      'src/ee/firebase/core/*'
+      'src/ee/firebase/core/**/*'
+
+    s.private_header_files =
+      'src/ee/firebase/core/private/*'
 
     s.exclude_files =
       'src/ee/firebase/core/Android.mk',
@@ -408,6 +413,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
+    s.private_header_files = 'src/ee/firebase/crashlytics/private/*'
 
     s.exclude_files =
       'src/ee/firebase/crashlytics/Android.mk',
@@ -634,6 +640,10 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/Store*',
       'src/ee/store/**/*'
+
+    s.private_header_files =
+      'src/ee/store/internal/*',
+      'src/ee/store/private/*'
 
     s.dependency 'ee-x/core'
   end

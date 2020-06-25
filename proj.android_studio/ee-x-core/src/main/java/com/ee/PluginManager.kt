@@ -158,6 +158,7 @@ class PluginManager private constructor() {
                 Activity::class.java)
             val plugin = constructor.newInstance(_bridge, _context, _activity)
             _plugins[name] = plugin as IPlugin
+            return true
         } catch (ex: ClassNotFoundException) {
             ex.printStackTrace()
         } catch (ex: NoSuchMethodException) {
@@ -169,7 +170,7 @@ class PluginManager private constructor() {
         } catch (ex: InvocationTargetException) {
             ex.printStackTrace()
         }
-        return true
+        return false
     }
 
     @AnyThread

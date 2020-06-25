@@ -10,7 +10,7 @@
 #import <FirebasePerformance/FIRPerformance.h>
 #import <FirebasePerformance/FIRTrace.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 

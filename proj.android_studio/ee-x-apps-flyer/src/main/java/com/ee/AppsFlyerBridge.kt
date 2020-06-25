@@ -66,6 +66,10 @@ class AppsFlyerBridge(
             setDebugEnabled(Utils.toBoolean(message))
             ""
         }
+        _bridge.registerHandler(kSetStopTracking) { message ->
+            setStopTracking(Utils.toBoolean(message))
+            ""
+        }
         _bridge.registerHandler(kTrackEvent) { message ->
             @Serializable
             class Request(
@@ -114,6 +118,8 @@ class AppsFlyerBridge(
                 }
             }
             _tracker.init(devKey, listener, _context)
+            _tracker.setDeviceTrackingDisabled(true)
+            _tracker.enableLocationCollection(true)
         })
     }
 
@@ -131,6 +137,13 @@ class AppsFlyerBridge(
     fun setDebugEnabled(enabled: Boolean) {
         Thread.runOnMainThread(Runnable {
             _tracker.setDebugLog(enabled)
+        })
+    }
+
+    @AnyThread
+    fun setStopTracking(enabled: Boolean) {
+        Thread.runOnMainThread(Runnable {
+            _tracker.stopTracking(enabled, _context)
         })
     }
 

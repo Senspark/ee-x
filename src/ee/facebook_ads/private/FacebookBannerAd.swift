@@ -10,6 +10,7 @@ import Foundation
 
 internal class FacebookBannerAd:
     NSObject, IAdView, FBAdViewDelegate {
+    private let _logger = Logger("\(FacebookBannerAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _adSize: FBAdSize
@@ -104,26 +105,26 @@ internal class FacebookBannerAd:
     }
     
     func adViewDidLoad(_ adView: FBAdView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func adView(_ adView: FBAdView, didFailWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func adViewDidClick(_ adView: FBAdView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func adViewDidFinishHandlingClick(_ adView: FBAdView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func adViewWillLogImpression(_ adView: FBAdView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 }

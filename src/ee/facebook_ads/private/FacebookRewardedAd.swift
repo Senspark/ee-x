@@ -10,6 +10,7 @@ import Foundation
 
 internal class FacebookRewardedAd:
     NSObject, FBRewardedVideoAdDelegate {
+    private let _logger = Logger("\(FacebookRewardedAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
@@ -115,44 +116,44 @@ internal class FacebookRewardedAd:
     }
     
     func rewardedVideoAdDidLoad(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func rewardedVideoAd(_ rewardedVideoAd: FBRewardedVideoAd, didFailWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func rewardedVideoAdDidClick(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func rewardedVideoAdWillLogImpression(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func rewardedVideoAdVideoComplete(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _rewarded = true
     }
     
     func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func rewardedVideoAdWillClose(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }

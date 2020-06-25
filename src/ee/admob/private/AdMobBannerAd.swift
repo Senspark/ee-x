@@ -9,6 +9,7 @@ import Foundation
 import GoogleMobileAds
 
 internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
+    private let _logger = Logger("\(AdMobBannerAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _adSize: GADAdSize
@@ -103,30 +104,30 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
     }
 
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
 
     func adViewWillPresentScreen(_ bannerView: GADBannerView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     func adViewWillDismissScreen(_ bannerView: GADBannerView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 }

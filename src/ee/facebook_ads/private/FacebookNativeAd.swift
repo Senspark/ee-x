@@ -10,6 +10,7 @@ import Foundation
 
 internal class FacebookNativeAd:
     NSObject, IAdView, FBNativeAdDelegate {
+    private let _logger = Logger("\(FacebookNativeAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _layoutName: String
@@ -151,7 +152,7 @@ internal class FacebookNativeAd:
     }
     
     func nativeAdDidLoad(_ ad: FBNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         assert(ad == _ad)
         
         guard let view = _view else {
@@ -180,24 +181,24 @@ internal class FacebookNativeAd:
     }
     
     func nativeAd(_ nativeAd: FBNativeAd, didFailWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func nativeAdWillLogImpression(_ nativeAd: FBNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func nativeAdDidClick(_ nativeAd: FBNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func nativeAdDidFinishHandlingClick(_ nativeAd: FBNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func nativeAdDidDownloadMedia(_ nativeAd: FBNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 }

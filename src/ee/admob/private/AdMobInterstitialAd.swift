@@ -9,6 +9,7 @@ import Foundation
 import GoogleMobileAds
 
 internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDelegate {
+    private let _logger = Logger("\(AdMobInterstitialAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
@@ -97,35 +98,35 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     }
     
     func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onFailedToShow)
     }
     
     func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
     }

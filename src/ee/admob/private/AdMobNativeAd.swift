@@ -20,6 +20,7 @@ func dictionaryOfNames(_ arr: UIView...) -> [String: UIView] {
 internal class AdMobNativeAd: NSObject, IAdView,
     GADUnifiedNativeAdLoaderDelegate,
     GADUnifiedNativeAdDelegate {
+    private let _logger = Logger("\(AdMobNativeAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _layoutName: String
@@ -214,36 +215,36 @@ internal class AdMobNativeAd: NSObject, IAdView,
     }
 
     func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: GADRequestError) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
 
     func adLoaderDidFinishLoading(_ adLoader: GADAdLoader) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func nativeAdDidRecordClick(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 
     func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
 }

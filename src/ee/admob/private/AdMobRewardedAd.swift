@@ -9,6 +9,7 @@ import Foundation
 import GoogleMobileAds
 
 internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
+    private let _logger = Logger("\(AdMobRewardedAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
@@ -112,21 +113,21 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     }
     
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _rewarded = true
     }
     
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }

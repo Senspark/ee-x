@@ -10,6 +10,7 @@ import Foundation
 
 internal class FacebookInterstitialAd:
     NSObject, IInterstitialAd, FBInterstitialAdDelegate {
+    private let _logger = Logger("\(FacebookInterstitialAd.self)")
     private let _bridge: IMessageBridge
     private let _adId: String
     private let _messageHelper: MessageHelper
@@ -103,30 +104,30 @@ internal class FacebookInterstitialAd:
     }
     
     func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
-        print("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func interstitialAdWillLogImpression(_ interstitialAd: FBInterstitialAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func interstitialAdDidClick(_ interstitialAd: FBInterstitialAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func interstitialAdWillClose(_ interstitialAd: FBInterstitialAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
     }
     
     func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
-        print("\(#function)")
+        _logger.debug("\(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
     }

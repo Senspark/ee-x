@@ -25,8 +25,8 @@ class IronSourceBridge(
 
         private const val kPrefix = "IronSource"
         private const val kInitialize = "${kPrefix}Initialize"
-        private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
+        private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
         private const val kShowInterstitialAd = "${kPrefix}ShowInterstitialAd"
         private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
         private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
@@ -127,9 +127,13 @@ class IronSourceBridge(
             IronSource.shouldTrackNetworkState(_activity, true)
             IronSource.setInterstitialListener(this)
             IronSource.setRewardedVideoListener(this)
+            IronSource.setUserId(IronSource.getAdvertiserId(_context))
             _initialized = true
         })
     }
+
+    val hasInterstitialAd: Boolean
+        @AnyThread get() = _isInterstitialAdLoaded.get()
 
     @AnyThread
     fun loadInterstitialAd() {
@@ -138,9 +142,6 @@ class IronSourceBridge(
             IronSource.loadInterstitial()
         })
     }
-
-    val hasInterstitialAd: Boolean
-        @AnyThread get() = _isInterstitialAdLoaded.get()
 
     @AnyThread
     fun showInterstitialAd(adId: String) {

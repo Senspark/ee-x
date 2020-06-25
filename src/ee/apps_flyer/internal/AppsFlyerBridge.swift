@@ -29,6 +29,9 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
 
     public func destroy() {
         deregisterHandlers()
+        Thread.runOnMainThread {
+            self._tracker.delegate = nil
+        }
     }
 
     func registerHandlers() {

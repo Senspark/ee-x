@@ -3,7 +3,7 @@ package com.ee.test.android;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ee.core.Logger;
+import com.ee.Logger;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 

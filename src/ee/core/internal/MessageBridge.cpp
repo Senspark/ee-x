@@ -104,8 +104,11 @@ Task<std::string> Self::callAsync(const std::string& tag,
 
 #ifdef EE_X_ANDROID
 extern "C" {
-JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridgeKt_ee_1callCppInternal(
-    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
+JNIEXPORT jstring JNICALL
+Java_com_ee_internal_MessageBridgeKt_ee_1callCppInternal(JNIEnv* env,
+                                                         jclass clazz,
+                                                         jstring tag,
+                                                         jstring message) {
     auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
     auto message_cpp = env->GetStringUTFChars(message, nullptr);
 
@@ -120,7 +123,7 @@ JNIEXPORT jstring JNICALL Java_com_ee_core_MessageBridgeKt_ee_1callCppInternal(
 
 std::string Self::call(const std::string& tag, const std::string& message) {
     auto method = JniUtils::getStaticMethodInfo(
-        "com/ee/core/MessageBridgeKt", "ee_staticCall",
+        "com/ee/internal/MessageBridgeKt", "ee_staticCall",
         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
     if (method == nullptr) {

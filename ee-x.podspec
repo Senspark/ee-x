@@ -380,7 +380,10 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-core' do |s|
     s.source_files =
       'src/ee/Firebase*',
-      'src/ee/firebase/core/*'
+      'src/ee/firebase/core/**/*'
+
+    s.private_header_files =
+      'src/ee/firebase/core/private/*'
 
     s.exclude_files =
       'src/ee/firebase/core/Android.mk',
@@ -410,6 +413,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
+    s.private_header_files = 'src/ee/firebase/crashlytics/private/*'
 
     s.exclude_files =
       'src/ee/firebase/crashlytics/Android.mk',

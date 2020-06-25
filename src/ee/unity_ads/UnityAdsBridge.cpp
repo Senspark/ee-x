@@ -30,22 +30,14 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix         = "UnityAds";
-
-const auto k__initialize          = kPrefix + "_initialize";
-const auto k__setDebugModeEnabled = kPrefix + "_setDebugModeEnabled";
-const auto k__hasRewardedAd       = kPrefix + "_hasRewardedAd";
-const auto k__showRewardedAd      = kPrefix + "_showRewardedAd";
-const auto k__onLoaded            = kPrefix + "_onLoaded";
-const auto k__onFailedToShow      = kPrefix + "_onFailedToShow";
-const auto k__onClosed            = kPrefix + "_onClosed";
-// clang-format on
-} // namespace
-
-namespace {
-// clang-format off
-constexpr auto k__gameId          = "gameId";
-constexpr auto k__testModeEnabled = "testModeEnabled";
+const std::string kPrefix       = "UnityAds";
+const auto kInitialize          = kPrefix + "Initialize";
+const auto kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
+const auto kHasRewardedAd       = kPrefix + "HasRewardedAd";
+const auto kShowRewardedAd      = kPrefix + "ShowRewardedAd";
+const auto kOnLoaded            = kPrefix + "OnLoaded";
+const auto kOnFailedToShow      = kPrefix + "OnFailedToShow";
+const auto kOnClosed            = kPrefix + "OnClosed";
 // clang-format on
 } // namespace
 
@@ -69,30 +61,30 @@ Self::Bridge(const Logger& logger)
             onLoaded(message);
             return "";
         },
-        k__onLoaded);
+        kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onFailedToShow(json["ad_id"], json["message"]);
             return "";
         },
-        k__onFailedToShow);
+        kOnFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onClosed(json["ad_id"], json["rewarded"]);
             return "";
         },
-        k__onClosed);
+        kOnClosed);
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug(__PRETTY_FUNCTION__);
-    bridge_.deregisterHandler(k__onLoaded);
-    bridge_.deregisterHandler(k__onFailedToShow);
-    bridge_.deregisterHandler(k__onClosed);
+    bridge_.deregisterHandler(kOnLoaded);
+    bridge_.deregisterHandler(kOnFailedToShow);
+    bridge_.deregisterHandler(kOnClosed);
     PluginManager::removePlugin(Plugin::UnityAds);
 }
 
@@ -100,13 +92,13 @@ void Self::initialize(const std::string& gameId, bool testModeEnabled) {
     logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
                   gameId.c_str(), core::toString(testModeEnabled).c_str());
     nlohmann::json json;
-    json[k__gameId] = gameId;
-    json[k__testModeEnabled] = testModeEnabled;
-    bridge_.call(k__initialize, json.dump());
+    json["gameId"] = gameId;
+    json["testModeEnabled"] = testModeEnabled;
+    bridge_.call(kInitialize, json.dump());
 }
 
 void Self::setDebugModeEnabled(bool enabled) {
-    bridge_.call(k__setDebugModeEnabled, core::toString(enabled));
+    bridge_.call(kSetDebugModeEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<IInterstitialAd>
@@ -158,7 +150,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 bool Self::hasRewardedAd(const std::string& adId) const {
-    auto response = bridge_.call(k__hasRewardedAd, adId);
+    auto response = bridge_.call(kHasRewardedAd, adId);
     return core::toBool(response);
 }
 
@@ -166,7 +158,7 @@ void Self::showRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     adId_ = adId;
     displaying_ = true;
-    bridge_.call(k__showRewardedAd, adId);
+    bridge_.call(kShowRewardedAd, adId);
 }
 
 void Self::onLoaded(const std::string& adId) {

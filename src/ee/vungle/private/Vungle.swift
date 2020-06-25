@@ -80,10 +80,10 @@ public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
     func loadRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
             do {
-                _loadingAdIds.insert(adId)
+                self._loadingAdIds.insert(adId)
                 try self._sdk.loadPlacement(withID: adId)
             } catch {
-                _loadingAdIds.remove(adId)
+                self._loadingAdIds.remove(adId)
                 self._bridge.callCpp(kOnFailedToLoad, EEJsonUtils.convertDictionary(toString: [
                     "ad_id": adId,
                     "message": error.localizedDescription

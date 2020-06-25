@@ -16,8 +16,4 @@
 #include "ee/unity_ads/UnityAdsBridge.hpp"
 #endif // __cplusplus
 
-#ifdef __OBJC__
-#import "ee/unity_ads/EEUnityAds.h"
-#endif // __OBJC__
-
 #endif /* EE_X_UNITY_ADS_HPP */

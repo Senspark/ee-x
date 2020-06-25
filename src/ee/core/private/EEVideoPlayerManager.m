@@ -7,7 +7,7 @@
 
 #import "ee/core/private/EEVideoPlayerManager.h"
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import "ee/core/private/EEVideoPlayer.h"
 

@@ -13,7 +13,7 @@
 #import <GoogleAnalytics/GAIECommerceFields.h>
 #import <GoogleAnalytics/GAIFields.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 

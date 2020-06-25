@@ -9,7 +9,7 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import "ee/core/internal/EEJsonUtils.h"
 

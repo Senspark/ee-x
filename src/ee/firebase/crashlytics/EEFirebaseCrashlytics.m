@@ -1,6 +1,6 @@
 #import "ee/firebase/crashlytics/EEFirebaseCrashlytics.h"
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <FirebaseCrashlytics/FIRCrashlytics.h>
 

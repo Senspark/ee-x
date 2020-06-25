@@ -41,6 +41,7 @@ private:
     void onLoaded(const std::string& adId);
     void onFailedToLoad(const std::string& adId, const std::string& message);
     void onFailedToShow(const std::string& adId, const std::string& message);
+    void onClicked(const std::string& adId);
     void onClosed(const std::string& adId, bool rewarded);
 
     void onMediationAdClosed(const std::string& adId, bool rewarded);

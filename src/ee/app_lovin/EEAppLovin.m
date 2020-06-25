@@ -13,7 +13,7 @@
 #import <AppLovinSDK/ALInterstitialAd.h>
 #import <AppLovinSDK/ALSdk.h>
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 

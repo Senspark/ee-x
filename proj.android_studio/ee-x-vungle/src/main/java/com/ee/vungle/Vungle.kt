@@ -35,18 +35,20 @@ class Vungle(
         private val _logger = Logger(Vungle::class.java.name)
 
         private const val kPrefix = "Vungle"
-        private const val k__initialize = "${kPrefix}_initialize"
-        private const val k__hasRewardedAd = "${kPrefix}_hasRewardedAd"
-        private const val k__loadRewardedAd = "${kPrefix}_loadRewardedAd"
-        private const val k__showRewardedAd = "${kPrefix}_showRewardedAd"
-        private const val k__onLoaded = "${kPrefix}_onLoaded"
-        private const val k__onFailedToLoad = "${kPrefix}_onFailedToLoad"
-        private const val k__onFailedToShow = "${kPrefix}_onFailedToShow"
-        private const val k__onClosed = "${kPrefix}_onClosed"
+        private const val kInitialize = "${kPrefix}Initialize"
+        private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
+        private const val kLoadRewardedAd = "${kPrefix}LoadRewardedAd"
+        private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
+        private const val kOnLoaded = "${kPrefix}OnLoaded"
+        private const val kOnFailedToLoad = "${kPrefix}OnFailedToLoad"
+        private const val kOnFailedToShow = "${kPrefix}OnFailedToShow"
+        private const val kOnClicked = "${kPrefix}OnClicked"
+        private const val kOnClosed = "${kPrefix}OnClosed"
     }
 
     private var _initializing = false
     private var _initialized = false
+    private var _rewarded = false
     private val _loadedAdIds: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
 
     init {
@@ -68,24 +70,24 @@ class Vungle(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__initialize) { message ->
+        _bridge.registerHandler(kInitialize) { message ->
             @Serializable
             class Request(
-                val gameId: String
+                val application_id: String
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.gameId)
+            initialize(request.application_id)
             ""
         }
-        _bridge.registerHandler(k__hasRewardedAd) { message ->
+        _bridge.registerHandler(kHasRewardedAd) { message ->
             Utils.toString(hasRewardedAd(message))
         }
-        _bridge.registerHandler(k__loadRewardedAd) { message ->
+        _bridge.registerHandler(kLoadRewardedAd) { message ->
             loadRewardedAd(message)
             ""
         }
-        _bridge.registerHandler(k__showRewardedAd) { message ->
+        _bridge.registerHandler(kShowRewardedAd) { message ->
             showRewardedAd(message)
             ""
         }
@@ -93,14 +95,14 @@ class Vungle(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__initialize)
-        _bridge.deregisterHandler(k__hasRewardedAd)
-        _bridge.deregisterHandler(k__showRewardedAd)
-        _bridge.deregisterHandler(k__loadRewardedAd)
+        _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kShowRewardedAd)
+        _bridge.deregisterHandler(kLoadRewardedAd)
     }
 
     @AnyThread
-    fun initialize(gameId: String) {
+    fun initialize(applicationId: String) {
         Thread.runOnMainThread(Runnable {
             if (_initializing) {
                 return@Runnable
@@ -110,7 +112,7 @@ class Vungle(
             }
             _initializing = true
 
-            com.vungle.warren.Vungle.init(gameId, _context, object : InitCallback {
+            com.vungle.warren.Vungle.init(applicationId, _context, object : InitCallback {
                 override fun onSuccess() {
                     _logger.info("${Vungle::initialize.name}: ${this::onSuccess.name}")
                     _initializing = false
@@ -147,11 +149,11 @@ class Vungle(
                     )
 
                     val response = Response(adId)
-                    _bridge.callCpp(k__onLoaded, response.serialize())
+                    _bridge.callCpp(kOnLoaded, response.serialize())
                 }
 
-                override fun onError(adId: String, throwable: VungleException) {
-                    _logger.info("${Vungle::loadRewardedAd.name}: ${this::onError.name}: $adId reason: ${throwable.localizedMessage}")
+                override fun onError(adId: String, exception: VungleException) {
+                    _logger.info("${Vungle::loadRewardedAd.name}: ${this::onError.name}: $adId reason: ${exception.localizedMessage}")
                     @Serializable
                     @Suppress("unused")
                     class Response(
@@ -159,8 +161,8 @@ class Vungle(
                         val message: String
                     )
 
-                    val response = Response(adId, throwable.localizedMessage ?: "")
-                    _bridge.callCpp(k__onFailedToLoad, response.serialize())
+                    val response = Response(adId, exception.localizedMessage ?: "")
+                    _bridge.callCpp(kOnFailedToLoad, response.serialize())
                 }
             })
         })
@@ -169,13 +171,41 @@ class Vungle(
     @AnyThread
     private fun showRewardedAd(adId: String) {
         Thread.runOnMainThread(Runnable {
+            _rewarded = false
             com.vungle.warren.Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
+                override fun onError(adId: String, exception: VungleException) {
+                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onError.name}: $adId message = ${exception.localizedMessage}")
+                    @Serializable
+                    @Suppress("unused")
+                    class Response(
+                        val ad_id: String,
+                        val message: String
+                    )
+
+                    val response = Response(adId, exception.localizedMessage ?: "")
+                    _bridge.callCpp(kOnFailedToShow, response.serialize())
+                }
+
                 override fun onAdStart(adId: String) {
                     _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdStart.name}: $adId")
                 }
 
-                override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdEnd.name}: $adId successful = $completed clicked = $isCTAClicked")
+                override fun onAdClick(adId: String) {
+                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdClick.name}: $adId")
+                    _bridge.callCpp(kOnClicked, adId)
+                }
+
+                override fun onAdLeftApplication(adId: String) {
+                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdLeftApplication.name}: $adId")
+                }
+
+                override fun onAdRewarded(adId: String) {
+                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdRewarded.name}: $adId")
+                    _rewarded = true
+                }
+
+                override fun onAdEnd(adId: String) {
+                    _logger.info("${Vungle::showRewardedAd.name}: onAdEnd: $adId")
                     @Serializable
                     @Suppress("unused")
                     class Response(
@@ -184,21 +214,12 @@ class Vungle(
                     )
 
                     _loadedAdIds.remove(adId)
-                    val response = Response(adId, completed)
-                    _bridge.callCpp(k__onClosed, response.serialize())
+                    val response = Response(adId, _rewarded)
+                    _bridge.callCpp(kOnClosed, response.serialize())
                 }
 
-                override fun onError(adId: String, throwable: VungleException) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onError.name}: $adId message = ${throwable.localizedMessage}")
-                    @Serializable
-                    @Suppress("unused")
-                    class Response(
-                        val ad_id: String,
-                        val message: String
-                    )
-
-                    val response = Response(adId, throwable.localizedMessage ?: "")
-                    _bridge.callCpp(k__onFailedToShow, response.serialize())
+                override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
+                    // Deprecated.
                 }
             })
         })

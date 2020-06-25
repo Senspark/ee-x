@@ -3,6 +3,7 @@ Pod::Spec.new do |spec|
   spec.version        = '0.1.5'
   spec.summary        = 'ee-x'
   spec.description    = 'ee-x'
+  spec.module_name    = 'ee'
 
   spec.homepage       = 'https://github.com/Senspark/ee-x'
 
@@ -32,6 +33,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'core' do |s|
     s.source_files =
+      'src/ee/ee.h',
       'src/ee/Macro.hpp',
       'src/ee/Core*',
       'src/ee/core/**/*'

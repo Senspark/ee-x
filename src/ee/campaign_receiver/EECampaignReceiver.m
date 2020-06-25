@@ -8,7 +8,7 @@
 
 #import "ee/campaign_receiver/EECampaignReceiver.h"
 
-#import <ee_x-Swift.h>
+#import <ee-Swift.h>
 
 #import <ee/core/internal/EEJsonUtils.h>
 

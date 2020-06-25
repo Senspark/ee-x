@@ -55,7 +55,7 @@ private class PluginManager: NSObject {
         }
         guard let plugin =
             // Swift plugins.
-            (NSClassFromString("EE\(name)_Swift") as? IPlugin.Type)?.init(_bridge) ??
+            (NSClassFromString("EE\(name)Bridge") as? IPlugin.Type)?.init(_bridge) ??
             // Objective-C plugins.
             (NSClassFromString("EE\(name)") as? NSObject.Type)?.init() as? IPlugin else {
             assert(false, "Invalid plugin: \(name)")

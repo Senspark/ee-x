@@ -23,11 +23,11 @@ internal class AppLovinRewardedAdListener(
     companion object {
         private val _logger = Logger(AppLovinRewardedAdListener::class.java.name)
 
-        private const val kPrefix = "AppLovin"
-        private const val k__onRewardedAdLoaded = "${kPrefix}_onRewardedAdLoaded"
-        private const val k__onRewardedAdFailedToLoad = "${kPrefix}_onRewardedAdFailedToLoad"
-        private const val k__onRewardedAdClicked = "${kPrefix}_onRewardedAdClicked"
-        private const val k__onRewardedAdClosed = "${kPrefix}_onRewardedAdClosed"
+        private const val kPrefix = "AppLovinBridge"
+        private const val kOnRewardedAdLoaded = "${kPrefix}OnRewardedAdLoaded"
+        private const val kOnRewardedAdFailedToLoad = "${kPrefix}OnRewardedAdFailedToLoad"
+        private const val kOnRewardedAdClicked = "${kPrefix}OnRewardedAdClicked"
+        private const val kOnRewardedAdClosed = "${kPrefix}OnRewardedAdClosed"
     }
 
     private var _rewarded = false
@@ -35,12 +35,12 @@ internal class AppLovinRewardedAdListener(
     override fun adReceived(ad: AppLovinAd) {
         _logger.info(this::adReceived.name)
         _isLoaded.set(true)
-        _bridge.callCpp(k__onRewardedAdLoaded)
+        _bridge.callCpp(kOnRewardedAdLoaded)
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
         _logger.info("${this::failedToReceiveAd.name}: code $errorCode")
-        _bridge.callCpp(k__onRewardedAdFailedToLoad, errorCode.toString())
+        _bridge.callCpp(kOnRewardedAdFailedToLoad, errorCode.toString())
     }
 
     override fun userDeclinedToViewAd(ad: AppLovinAd) {
@@ -61,7 +61,7 @@ internal class AppLovinRewardedAdListener(
     override fun adClicked(ad: AppLovinAd) {
         _logger.info(this::adClicked.name)
         Thread.checkMainThread()
-        _bridge.callCpp(k__onRewardedAdClicked)
+        _bridge.callCpp(kOnRewardedAdClicked)
     }
 
     override fun videoPlaybackEnded(ad: AppLovinAd, percentViewed: Double, fullyWatched: Boolean) {
@@ -93,6 +93,6 @@ internal class AppLovinRewardedAdListener(
         _logger.info(this::adHidden.name)
         Thread.checkMainThread()
         _isLoaded.set(false)
-        _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded))
+        _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 }

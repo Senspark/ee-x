@@ -32,7 +32,7 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix           = "FacebookAds";
+const std::string kPrefix         = "FacebookAdsBridge";
 
 const auto kGetTestDeviceHash     = kPrefix + "GetTestDeviceHash";
 const auto kAddTestDevice         = kPrefix + "AddTestDevice";

@@ -8,7 +8,7 @@
 import Foundation
 import GoogleMobileAds
 
-private let kPrefix = "AdMob"
+private let kPrefix = "AdMobBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kGetEmulatorTestDeviceHash = "\(kPrefix)GetEmulatorTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
@@ -22,8 +22,8 @@ private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
-@objc(EEAdMob_Swift)
-public class AdMob: NSObject, IPlugin {
+@objc(EEAdMobBridge)
+public class AdMobBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
@@ -72,10 +72,10 @@ public class AdMob: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateBannerAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["ad_id"] as? String else {
+            guard let adId = dict["adId"] as? String else {
                 assert(false, "Invalid argument")
             }
-            guard let sizeId = dict["ad_size"] as? Int else {
+            guard let sizeId = dict["adSize"] as? Int else {
                 assert(false, "Invalid argument")
             }
             let adSize = self._bannerHelper.getAdSize(sizeId)
@@ -86,10 +86,10 @@ public class AdMob: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateNativeAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["ad_id"] as? String else {
+            guard let adId = dict["adId"] as? String else {
                 assert(false, "Invalid argument")
             }
-            guard let layoutName = dict["layout_name"] as? String else {
+            guard let layoutName = dict["layoutName"] as? String else {
                 assert(false, "Invalid argument")
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))

@@ -23,7 +23,7 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
 import com.ee.core.PluginManagerKt;
-import com.ee.store.Store;
+import com.ee.store.StoreBridge;
 import com.ee.store.StoreException;
 import com.soomla.SoomlaApp;
 import com.soomla.SoomlaConfig;
@@ -52,7 +52,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * see parent for more docs.
  */
 public class GooglePlayIabService implements IIabService {
-    private Store _store;
+    private StoreBridge _store;
     private final Scheduler _scheduler;
 
     public static final String VERSION = "2.2.1";
@@ -62,9 +62,9 @@ public class GooglePlayIabService implements IIabService {
         configVerifyPurchases(null);    // we reset it every run
     }
 
-    private Store getStore() {
+    private StoreBridge getStore() {
         if (_store == null) {
-            _store = (Store) PluginManagerKt.ee_getStorePlugin();
+            _store = (StoreBridge) PluginManagerKt.ee_getStorePlugin();
         }
         return _store;
     }

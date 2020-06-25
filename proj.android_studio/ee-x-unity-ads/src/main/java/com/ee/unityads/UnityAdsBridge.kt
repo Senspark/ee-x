@@ -13,6 +13,7 @@ import com.ee.core.internal.serialize
 import com.ee.core.registerHandler
 import com.google.common.truth.Truth.assertThat
 import com.unity3d.ads.IUnityAdsListener
+import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAds.FinishState
 import com.unity3d.ads.UnityAds.UnityAdsError
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -23,14 +24,14 @@ import java.util.concurrent.ConcurrentHashMap
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-class UnityAds(
+class UnityAdsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(UnityAds::class.java.name)
+        private val _logger = Logger(UnityAdsBridge::class.java.name)
 
-        private const val kPrefix = "UnityAds"
+        private const val kPrefix = "UnityAdsBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetDebugModeEnabled = "${kPrefix}SetDebugModeEnabled"
         private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
@@ -69,7 +70,7 @@ class UnityAds(
             if (!_initialized) {
                 return@Runnable
             }
-            com.unity3d.ads.UnityAds.removeListener(_listener)
+            UnityAds.removeListener(_listener)
         })
     }
 
@@ -178,8 +179,8 @@ class UnityAds(
                     Thread.checkMainThread()
                 }
             }
-            com.unity3d.ads.UnityAds.initialize(_activity, gameId, testModeEnabled)
-            com.unity3d.ads.UnityAds.addListener(_listener)
+            UnityAds.initialize(_activity, gameId, testModeEnabled)
+            UnityAds.addListener(_listener)
             _initialized = true
         })
     }
@@ -209,7 +210,7 @@ class UnityAds(
             if (!_initialized) {
                 throw IllegalStateException("Please call initialize() first")
             }
-            com.unity3d.ads.UnityAds.show(_activity, adId)
+            UnityAds.show(_activity, adId)
         })
     }
 }

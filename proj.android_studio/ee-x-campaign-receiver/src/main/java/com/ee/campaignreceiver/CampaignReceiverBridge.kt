@@ -11,16 +11,17 @@ import com.ee.core.Logger
 import com.ee.core.internal.Thread
 import com.ee.core.registerHandler
 
-class CampaignReceiver /* extends BroadcastReceiver */(
+class CampaignReceiverBridge /* extends BroadcastReceiver */(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?)
     : IPlugin {
     companion object {
-        private val _logger = Logger(CampaignReceiver::class.java.name)
+        private val _logger = Logger(CampaignReceiverBridge::class.java.name)
 
-        private const val k__initialize = "CampaignReceiver_initialize"
-        private const val k__onReceivedLink = "CampaignReceiver_onReceivedLink"
+        private const val kPrefix = "CampaignReceiverBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
+        private const val kOnReceivedLink = "${kPrefix}OnReceivedLink"
     }
 
     private var _initialized = false
@@ -59,14 +60,14 @@ class CampaignReceiver /* extends BroadcastReceiver */(
     }
 
     private fun registerHandlers() {
-        _bridge.registerHandler(k__initialize) {
+        _bridge.registerHandler(kInitialize) {
             initialize()
             ""
         }
     }
 
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__initialize)
+        _bridge.deregisterHandler(kInitialize)
     }
 
     fun initialize() {
@@ -85,7 +86,7 @@ class CampaignReceiver /* extends BroadcastReceiver */(
                                 val response = client.installReferrer
                                 val referral = response.installReferrer
                                 _logger.debug("${this::onInstallReferrerSetupFinished.name}: referral = $referral")
-                                _bridge.callCpp(k__onReceivedLink, referral)
+                                _bridge.callCpp(kOnReceivedLink, referral)
                                 client.endConnection()
                             } catch (ex: RemoteException) {
                                 ex.printStackTrace()

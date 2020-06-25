@@ -28,7 +28,7 @@ internal class FacebookLoginDelegate(
 
     override fun onSuccess(result: LoginResult) {
         Thread.checkMainThread()
-        _bridge.callCpp(k__onSuccess, Facebook.convertAccessTokenToString(result.accessToken))
+        _bridge.callCpp(k__onSuccess, FacebookBridge.convertAccessTokenToString(result.accessToken))
     }
 
     override fun onError(error: FacebookException) {

@@ -20,10 +20,11 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-constexpr auto k__setDataCollectionEnabled  = "FirebasePerformance_setDataCollectionEnabled";
-constexpr auto k__isDataCollectionEnabled   = "FirebasePerformance_isDataCollectionEnabled";
-constexpr auto k__startTrace                = "FirebasePerformance_startTrace";
-constexpr auto k__newTrace                  = "FirebasePerformance_newTrace";
+const std::string kPrefix = "FirebasePerformanceBridge";
+const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
+const auto kIsDataCollectionEnabled  = kPrefix + "IsDataCollectionEnabled";
+const auto kStartTrace               = kPrefix + "StartTrace";
+const auto kNewTrace                 = kPrefix + "NewTrace";
 // clang-format on
 } // namespace
 
@@ -37,19 +38,19 @@ void Self::destroy() {
 
 void Self::setDataCollectionEnabled(bool enabled) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setDataCollectionEnabled, core::toString(enabled));
+    bridge.call(kSetDataCollectionEnabled, ee::core::toString(enabled));
 }
 
 bool Self::isDataCollectionEnabled() {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__isDataCollectionEnabled);
-    return core::toBool(response);
+    auto response = bridge.call(kIsDataCollectionEnabled);
+    return ee::core::toBool(response);
 }
 
 std::shared_ptr<Trace> Self::startTrace(const std::string& name) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__startTrace, name);
-    if (not core::toBool(response)) {
+    auto response = bridge.call(kStartTrace, name);
+    if (not ee::core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<Trace>(new Trace(this, name));
@@ -57,8 +58,8 @@ std::shared_ptr<Trace> Self::startTrace(const std::string& name) {
 
 std::shared_ptr<Trace> Self::newTrace(const std::string& name) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__newTrace, name);
-    if (not core::toBool(response)) {
+    auto response = bridge.call(kNewTrace, name);
+    if (not ee::core::toBool(response)) {
         return nullptr;
     }
     return std::shared_ptr<Trace>(new Trace(this, name));

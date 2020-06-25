@@ -20,14 +20,14 @@ import kotlinx.serialization.UnstableDefault
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-class AppsFlyer(
+class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(AppsFlyer::class.java.name)
+        private val _logger = Logger(AppsFlyerBridge::class.java.name)
 
-        private const val kPrefix = "AppsFlyer"
+        private const val kPrefix = "AppsFlyerBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kStartTracking = "${kPrefix}StartTracking"
         private const val kGetDeviceId = "${kPrefix}GetDeviceId"

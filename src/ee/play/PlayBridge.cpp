@@ -16,7 +16,7 @@ namespace ee {
 namespace play {
 namespace {
 // clang-format off
-const std::string kPrefix        = "Play";
+const std::string kPrefix        = "PlayBridge";
 const auto kIsLoggedIn           = kPrefix + "IsLoggedIn";
 const auto kLogIn                = kPrefix + "LogIn";
 const auto kLogOut               = kPrefix + "LogOut";

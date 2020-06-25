@@ -1,25 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.ee.vungle">
     <!-- Required permissions for caching and ad operations to work -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <!--Vungle Activities-->
-        <activity
-            android:name="com.vungle.warren.ui.VungleActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-        <activity
-            android:name="com.vungle.warren.ui.VungleFlexViewActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-            android:launchMode="singleTop"
-            android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <receiver
             android:name="com.vungle.warren.NetworkProviderReceiver"
             android:enabled="false">

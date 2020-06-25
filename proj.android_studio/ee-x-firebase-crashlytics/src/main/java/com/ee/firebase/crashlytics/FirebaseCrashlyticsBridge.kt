@@ -7,18 +7,20 @@ import com.ee.core.IMessageBridge
 import com.ee.core.IPlugin
 import com.ee.core.Logger
 import com.ee.core.registerHandler
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class FirebaseCrashlytics(
+class FirebaseCrashlyticsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FirebaseCrashlytics::class.java.name)
+        private val _logger = Logger(FirebaseCrashlyticsBridge::class.java.name)
 
-        private const val kLog = "FirebaseCrashlytics_log"
+        private const val kPrefix = "FirebaseCrashlyticsBridge"
+        private const val kLog = "${kPrefix}Log"
     }
 
-    private val _crashlytics = com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance()
+    private val _crashlytics = FirebaseCrashlytics.getInstance()
 
     init {
         registerHandlers()

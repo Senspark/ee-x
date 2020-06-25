@@ -1,6 +1,6 @@
 import GameKit
 
-private let kPrefix = "Play"
+private let kPrefix = "PlayBridge"
 private let kIsLoggedIn = "\(kPrefix)IsLoggedIn"
 private let kLogIn = "\(kPrefix)LogIn"
 private let kLogOut = "\(kPrefix)LogOut"
@@ -11,8 +11,8 @@ private let kShowLeaderboard = "\(kPrefix)ShowLeaderboard"
 private let kShowAllLeaderboards = "\(kPrefix)ShowAllLeaderboards"
 private let kSubmitScore = "\(kPrefix)SubmitScore"
 
-@objc(EEPlay_Swift)
-public class Play: NSObject, IPlugin, GKGameCenterControllerDelegate {
+@objc(EEPlayBridge)
+public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
     private let _bridge: IMessageBridge
     
     public required init(_ bridge: IMessageBridge) {

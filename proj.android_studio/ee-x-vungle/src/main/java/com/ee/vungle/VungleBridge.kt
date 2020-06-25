@@ -15,6 +15,7 @@ import com.vungle.warren.AdConfig
 import com.vungle.warren.InitCallback
 import com.vungle.warren.LoadAdCallback
 import com.vungle.warren.PlayAdCallback
+import com.vungle.warren.Vungle
 import com.vungle.warren.error.VungleException
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
@@ -27,14 +28,14 @@ import java.util.concurrent.ConcurrentHashMap
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-class Vungle(
+class VungleBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Vungle::class.java.name)
+        private val _logger = Logger(VungleBridge::class.java.name)
 
-        private const val kPrefix = "Vungle"
+        private const val kPrefix = "VungleBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
         private const val kLoadRewardedAd = "${kPrefix}LoadRewardedAd"
@@ -112,15 +113,15 @@ class Vungle(
             }
             _initializing = true
 
-            com.vungle.warren.Vungle.init(applicationId, _context, object : InitCallback {
+            Vungle.init(applicationId, _context, object : InitCallback {
                 override fun onSuccess() {
-                    _logger.info("${Vungle::initialize.name}: ${this::onSuccess.name}")
+                    _logger.info("${VungleBridge::initialize.name}: ${this::onSuccess.name}")
                     _initializing = false
                     _initialized = true
                 }
 
                 override fun onError(throwable: VungleException) {
-                    _logger.info("${Vungle::initialize.name}: ${this::onError.name}: message = ${throwable.localizedMessage}")
+                    _logger.info("${VungleBridge::initialize.name}: ${this::onError.name}: message = ${throwable.localizedMessage}")
                     _initializing = false
                 }
 
@@ -137,9 +138,9 @@ class Vungle(
     @AnyThread
     private fun loadRewardedAd(adId: String) {
         Thread.runOnMainThread(Runnable {
-            com.vungle.warren.Vungle.loadAd(adId, object : LoadAdCallback {
+            Vungle.loadAd(adId, object : LoadAdCallback {
                 override fun onAdLoad(adId: String) {
-                    _logger.info("${Vungle::loadRewardedAd.name}: ${this::onAdLoad.name}: $adId")
+                    _logger.info("${VungleBridge::loadRewardedAd.name}: ${this::onAdLoad.name}: $adId")
                     _loadedAdIds.add(adId)
 
                     @Serializable
@@ -153,7 +154,7 @@ class Vungle(
                 }
 
                 override fun onError(adId: String, exception: VungleException) {
-                    _logger.info("${Vungle::loadRewardedAd.name}: ${this::onError.name}: $adId reason: ${exception.localizedMessage}")
+                    _logger.info("${VungleBridge::loadRewardedAd.name}: ${this::onError.name}: $adId reason: ${exception.localizedMessage}")
                     @Serializable
                     @Suppress("unused")
                     class Response(
@@ -172,9 +173,9 @@ class Vungle(
     private fun showRewardedAd(adId: String) {
         Thread.runOnMainThread(Runnable {
             _rewarded = false
-            com.vungle.warren.Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
+            Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
                 override fun onError(adId: String, exception: VungleException) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onError.name}: $adId message = ${exception.localizedMessage}")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: ${this::onError.name}: $adId message = ${exception.localizedMessage}")
                     @Serializable
                     @Suppress("unused")
                     class Response(
@@ -187,25 +188,25 @@ class Vungle(
                 }
 
                 override fun onAdStart(adId: String) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdStart.name}: $adId")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: ${this::onAdStart.name}: $adId")
                 }
 
                 override fun onAdClick(adId: String) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdClick.name}: $adId")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: ${this::onAdClick.name}: $adId")
                     _bridge.callCpp(kOnClicked, adId)
                 }
 
                 override fun onAdLeftApplication(adId: String) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdLeftApplication.name}: $adId")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: ${this::onAdLeftApplication.name}: $adId")
                 }
 
                 override fun onAdRewarded(adId: String) {
-                    _logger.info("${Vungle::showRewardedAd.name}: ${this::onAdRewarded.name}: $adId")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: ${this::onAdRewarded.name}: $adId")
                     _rewarded = true
                 }
 
                 override fun onAdEnd(adId: String) {
-                    _logger.info("${Vungle::showRewardedAd.name}: onAdEnd: $adId")
+                    _logger.info("${VungleBridge::showRewardedAd.name}: onAdEnd: $adId")
                     @Serializable
                     @Suppress("unused")
                     class Response(

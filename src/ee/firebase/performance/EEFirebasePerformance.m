@@ -23,11 +23,13 @@
 
 @implementation EEFirebasePerformance
 
+#define kPrefix @"FirebasePerformanceBridge"
+
 // clang-format off
-static NSString* const k__setDataCollectionEnabled  = @"FirebasePerformance_setDataCollectionEnabled";
-static NSString* const k__isDataCollectionEnabled   = @"FirebasePerformance_isDataCollectionEnabled";
-static NSString* const k__startTrace                = @"FirebasePerformance_startTrace";
-static NSString* const k__newTrace                  = @"FirebasePerformance_newTrace";
+static NSString* const k__setDataCollectionEnabled  = kPrefix "SetDataCollectionEnabled";
+static NSString* const k__isDataCollectionEnabled   = kPrefix "IsDataCollectionEnabled";
+static NSString* const k__startTrace                = kPrefix "StartTrace";
+static NSString* const k__newTrace                  = kPrefix "NewTrace";
 // clang-format on
 
 - (id)init {

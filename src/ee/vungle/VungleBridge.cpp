@@ -18,7 +18,7 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix    = "Vungle";
+const std::string kPrefix    = "VungleBridge";
 
 const auto kInitialize     = kPrefix + "Initialize";
 
@@ -175,7 +175,7 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     }
 }
 
-void Self::onClicked(const std::string &adId) {
+void Self::onClicked(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {

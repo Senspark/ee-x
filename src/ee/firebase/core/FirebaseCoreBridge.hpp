@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_FIREBASE_CORE_HPP
-#define EE_X_FIREBASE_CORE_HPP
+#ifndef EE_X_FIREBASE_CORE_BRIDGE_HPP
+#define EE_X_FIREBASE_CORE_BRIDGE_HPP
 
 #ifdef __cplusplus
 
@@ -15,14 +15,16 @@
 
 namespace ee {
 namespace firebase {
-class Core {
+namespace core {
+class Bridge {
 public:
     /// Initializes the Firebase app.
     static void initialize();
 };
+} // namespace core
 } // namespace firebase
 } // namespace ee
 
 #endif // __cplusplus
 
-#endif /* EE_X_FIREBASE_CORE_HPP */
+#endif /* EE_X_FIREBASE_CORE_BRIDGE_HPP */

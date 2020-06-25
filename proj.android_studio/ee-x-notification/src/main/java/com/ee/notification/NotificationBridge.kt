@@ -20,17 +20,18 @@ import kotlinx.serialization.UnstableDefault
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-class Notification(
+class NotificationBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Notification::class.java.name)
+        private val _logger = Logger(NotificationBridge::class.java.name)
 
-        private const val k__notification_schedule = "__notification_schedule"
-        private const val k__notification_unschedule_all = "__notification_unschedule_all"
-        private const val k__notification_unschedule = "__notification_unschedule"
-        private const val k__notification_clear_all = "__notification_clear_all"
+        private const val kPrefix = "NotificationBridge"
+        private const val kSchedule = "${kPrefix}Schedule"
+        private const val kUnschedule = "${kPrefix}Unschedule"
+        private const val kUnscheduleAll = "${kPrefix}UnscheduleAll"
+        private const val kClearAll = "${kPrefix}ClearAll"
     }
 
     init {
@@ -58,7 +59,7 @@ class Notification(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__notification_schedule) { message ->
+        _bridge.registerHandler(kSchedule) { message ->
             @Serializable
             class Request(
                 val title: String,
@@ -73,11 +74,11 @@ class Notification(
             schedule(request.ticker, request.title, request.body, request.delay, request.interval, request.tag)
             ""
         }
-        _bridge.registerHandler(k__notification_unschedule_all) {
+        _bridge.registerHandler(kUnscheduleAll) {
             unscheduleAll()
             ""
         }
-        _bridge.registerHandler(k__notification_unschedule) { message ->
+        _bridge.registerHandler(kUnschedule) { message ->
             @Serializable
             class Request(
                 val tag: Int
@@ -87,7 +88,7 @@ class Notification(
             unschedule(request.tag)
             ""
         }
-        _bridge.registerHandler(k__notification_clear_all) {
+        _bridge.registerHandler(kClearAll) {
             clearAll()
             ""
         }
@@ -95,10 +96,10 @@ class Notification(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__notification_schedule)
-        _bridge.deregisterHandler(k__notification_unschedule_all)
-        _bridge.deregisterHandler(k__notification_unschedule)
-        _bridge.deregisterHandler(k__notification_clear_all)
+        _bridge.deregisterHandler(kSchedule)
+        _bridge.deregisterHandler(kUnscheduleAll)
+        _bridge.deregisterHandler(kUnschedule)
+        _bridge.deregisterHandler(kClearAll)
     }
 
     fun schedule(ticker: String, title: String, body: String, delay: Int, interval: Int, tag: Int) {
@@ -113,14 +114,14 @@ class Notification(
             delay, interval)
     }
 
-    fun unscheduleAll() {
-        _logger.debug("${this::unscheduleAll.name}: not supported.")
-    }
-
     fun unschedule(tag: Int) {
         _logger.debug("${this::unschedule.name}: tag = $tag")
         val intent = Intent(_context, NotificationReceiver::class.java)
         NotificationUtils.unscheduleAlarm(_context, intent, tag)
+    }
+
+    fun unscheduleAll() {
+        _logger.debug("${this::unscheduleAll.name}: not supported.")
     }
 
     fun clearAll() {

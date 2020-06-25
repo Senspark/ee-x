@@ -46,24 +46,25 @@ import java.io.File
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-class Facebook(
+class FacebookBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Facebook::class.java.name)
+        private val _logger = Logger(FacebookBridge::class.java.name)
 
-        private const val k__registerNotifications = "Facebook_registerNotifications"
-        private const val k__isLoggedIn = "Facebook_isLoggedIn"
-        private const val k__logIn = "Facebook_logIn"
-        private const val k__logOut = "Facebook_logOut"
-        private const val k__getAccessToken = "Facebook_getAccessToken"
-        private const val k__onProfileChanged = "Facebook_onProfileChanged"
-        private const val k__graphRequest = "Facebook_graphRequest"
-        private const val k__sendRequest = "Facebook_sendRequest"
-        private const val k__shareLinkContent = "Facebook_shareLinkContent"
-        private const val k__sharePhotoContent = "Facebook_sharePhotoContent"
-        private const val k__shareVideoContent = "Facebook_shareVideoContent"
+        private const val kPrefix = "FacebookBridge"
+        private const val kRegisterNotifications = "${kPrefix}RegisterNotifications"
+        private const val kIsLoggedIn = "${kPrefix}IsLoggedIn"
+        private const val kLogIn = "${kPrefix}LogIn"
+        private const val kLogOut = "${kPrefix}LogOut"
+        private const val kGetAccessToken = "${kPrefix}GetAccessToken"
+        private const val kOnProfileChanged = "${kPrefix}OnProfileChanged"
+        private const val kGraphRequest = "${kPrefix}GraphRequest"
+        private const val kSendRequest = "${kPrefix}SendRequest"
+        private const val kShareLinkContent = "${kPrefix}ShareLinkContent"
+        private const val kSharePhotoContent = "${kPrefix}SharePhotoContent"
+        private const val kShareVideoContent = "${kPrefix}ShareVideoContent"
 
         @AnyThread
         @ImplicitReflectionSerializer
@@ -151,14 +152,14 @@ class Facebook(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__registerNotifications) {
+        _bridge.registerHandler(kRegisterNotifications) {
             registerNotifications()
             ""
         }
-        _bridge.registerHandler(k__isLoggedIn) {
+        _bridge.registerHandler(kIsLoggedIn) {
             Utils.toString(isLoggedIn)
         }
-        _bridge.registerHandler(k__logIn) { message ->
+        _bridge.registerHandler(kLogIn) { message ->
             @Serializable
             class Request(
                 val permissions: List<String>,
@@ -169,21 +170,21 @@ class Facebook(
             logIn(request.permissions, FacebookLoginDelegate(_bridge, request.tag))
             ""
         }
-        _bridge.registerHandler(k__logOut) {
+        _bridge.registerHandler(kLogOut) {
             logOut()
             ""
         }
-        _bridge.registerHandler(k__getAccessToken) {
+        _bridge.registerHandler(kGetAccessToken) {
             val token = accessToken
             convertAccessTokenToString(token)
         }
-        _bridge.registerHandler(k__graphRequest) { message ->
+        _bridge.registerHandler(kGraphRequest) { message ->
             graphRequest(message)
         }
-        _bridge.registerHandler(k__sendRequest) { message ->
+        _bridge.registerHandler(kSendRequest) { message ->
             sendRequest(message)
         }
-        _bridge.registerHandler(k__shareLinkContent) { message ->
+        _bridge.registerHandler(kShareLinkContent) { message ->
             @Serializable
             class Request(
                 val url: String,
@@ -194,7 +195,7 @@ class Facebook(
             shareLinkContent(request.url, FacebookShareDelegate(_bridge, request.tag))
             ""
         }
-        _bridge.registerHandler(k__sharePhotoContent) { message ->
+        _bridge.registerHandler(kSharePhotoContent) { message ->
             @Serializable
             class Request(
                 val url: String,
@@ -205,7 +206,7 @@ class Facebook(
             sharePhotoContent(request.url, FacebookShareDelegate(_bridge, request.tag))
             ""
         }
-        _bridge.registerHandler(k__shareVideoContent) { message ->
+        _bridge.registerHandler(kShareVideoContent) { message ->
             @Serializable
             class Request(
                 val url: String,
@@ -220,16 +221,16 @@ class Facebook(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__registerNotifications)
-        _bridge.deregisterHandler(k__isLoggedIn)
-        _bridge.deregisterHandler(k__logIn)
-        _bridge.deregisterHandler(k__logOut)
-        _bridge.deregisterHandler(k__getAccessToken)
-        _bridge.deregisterHandler(k__graphRequest)
-        _bridge.deregisterHandler(k__sendRequest)
-        _bridge.deregisterHandler(k__shareLinkContent)
-        _bridge.deregisterHandler(k__sharePhotoContent)
-        _bridge.deregisterHandler(k__shareVideoContent)
+        _bridge.deregisterHandler(kRegisterNotifications)
+        _bridge.deregisterHandler(kIsLoggedIn)
+        _bridge.deregisterHandler(kLogIn)
+        _bridge.deregisterHandler(kLogOut)
+        _bridge.deregisterHandler(kGetAccessToken)
+        _bridge.deregisterHandler(kGraphRequest)
+        _bridge.deregisterHandler(kSendRequest)
+        _bridge.deregisterHandler(kShareLinkContent)
+        _bridge.deregisterHandler(kSharePhotoContent)
+        _bridge.deregisterHandler(kShareVideoContent)
     }
 
     private val isLoggedIn: Boolean

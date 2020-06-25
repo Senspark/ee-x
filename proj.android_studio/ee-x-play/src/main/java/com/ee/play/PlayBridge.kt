@@ -28,14 +28,14 @@ import kotlinx.serialization.UnstableDefault
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-class Play(
+class PlayBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Play::class.java.name)
+        private val _logger = Logger(PlayBridge::class.java.name)
 
-        private const val kPrefix = "Play"
+        private const val kPrefix = "PlayBridge"
         private const val kIsLoggedIn = "${kPrefix}IsLoggedIn"
         private const val kLogIn = "${kPrefix}LogIn"
         private const val kLogOut = "${kPrefix}LogOut"

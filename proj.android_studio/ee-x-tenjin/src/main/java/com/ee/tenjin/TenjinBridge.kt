@@ -10,14 +10,15 @@ import com.ee.core.internal.Thread
 import com.ee.core.registerHandler
 import com.tenjin.android.TenjinSDK
 
-class Tenjin(
+class TenjinBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Tenjin::class.java.name)
+        private val _logger = Logger(TenjinBridge::class.java.name)
 
-        private const val k__initialize = "Tenjin_initialize"
+        private const val kPrefix = "TenjinBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
     }
 
     private var _tenjin: TenjinSDK? = null
@@ -50,7 +51,7 @@ class Tenjin(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__initialize) { message ->
+        _bridge.registerHandler(kInitialize) { message ->
             initialize(message)
             ""
         }
@@ -58,7 +59,7 @@ class Tenjin(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__initialize)
+        _bridge.deregisterHandler(kInitialize)
     }
 
     @AnyThread

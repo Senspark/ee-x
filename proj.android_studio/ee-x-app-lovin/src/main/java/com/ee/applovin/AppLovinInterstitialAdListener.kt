@@ -18,22 +18,22 @@ internal class AppLovinInterstitialAdListener(
     companion object {
         private val _logger = Logger(AppLovinInterstitialAdListener::class.java.name)
 
-        private const val kPrefix = "AppLovin"
-        private const val k__onInterstitialAdLoaded = "${kPrefix}_onInterstitialAdLoaded"
-        private const val k__onInterstitialAdFailedToLoad = "${kPrefix}_onInterstitialAdFailedToLoad"
-        private const val k__onInterstitialAdClicked = "${kPrefix}_onInterstitialAdClicked"
-        private const val k__onInterstitialAdClosed = "${kPrefix}_onInterstitialAdClosed"
+        private const val kPrefix = "AppLovinBridge"
+        private const val kOnInterstitialAdLoaded = "${kPrefix}OnInterstitialAdLoaded"
+        private const val kOnInterstitialAdFailedToLoad = "${kPrefix}OnInterstitialAdFailedToLoad"
+        private const val kOnInterstitialAdClicked = "${kPrefix}OnInterstitialAdClicked"
+        private const val kOnInterstitialAdClosed = "${kPrefix}OnInterstitialAdClosed"
     }
 
     override fun adReceived(ad: AppLovinAd) {
         _logger.info(this::adReceived.name)
         _isLoaded.set(true)
-        _bridge.callCpp(k__onInterstitialAdLoaded)
+        _bridge.callCpp(kOnInterstitialAdLoaded)
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
         _logger.info("${this::failedToReceiveAd.name}: code $errorCode")
-        _bridge.callCpp(k__onInterstitialAdFailedToLoad, errorCode.toString())
+        _bridge.callCpp(kOnInterstitialAdFailedToLoad, errorCode.toString())
     }
 
     override fun adDisplayed(ad: AppLovinAd) {
@@ -44,13 +44,13 @@ internal class AppLovinInterstitialAdListener(
     override fun adClicked(ad: AppLovinAd) {
         _logger.info(this::adClicked.name)
         Thread.checkMainThread()
-        _bridge.callCpp(k__onInterstitialAdClicked)
+        _bridge.callCpp(kOnInterstitialAdClicked)
     }
 
     override fun adHidden(ad: AppLovinAd) {
         _logger.info(this::adHidden.name)
         Thread.checkMainThread()
         _isLoaded.set(false)
-        _bridge.callCpp(k__onInterstitialAdClosed)
+        _bridge.callCpp(kOnInterstitialAdClosed)
     }
 }

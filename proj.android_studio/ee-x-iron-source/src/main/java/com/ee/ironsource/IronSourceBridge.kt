@@ -9,6 +9,7 @@ import com.ee.core.Logger
 import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
+import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.InterstitialListener
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-class IronSource(
+class IronSourceBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?)
@@ -26,24 +27,24 @@ class IronSource(
     , RewardedVideoListener
     , InterstitialListener {
     companion object {
-        private val _logger = Logger(IronSource::class.java.name)
+        private val _logger = Logger(IronSourceBridge::class.java.name)
 
         private const val kPrefix = "IronSource"
-        private const val k__initialize = "${kPrefix}_initialize"
-        private const val k__loadInterstitialAd = "${kPrefix}_loadInterstitialAd"
-        private const val k__hasInterstitialAd = "${kPrefix}_hasInterstitialAd"
-        private const val k__showInterstitialAd = "${kPrefix}_showInterstitialAd"
-        private const val k__hasRewardedAd = "${kPrefix}_hasRewardedAd"
-        private const val k__showRewardedAd = "${kPrefix}_showRewardedAd"
-        private const val k__onInterstitialAdLoaded = "${kPrefix}_onInterstitialAdLoaded"
-        private const val k__onInterstitialAdFailedToLoad = "${kPrefix}_onInterstitialAdFailedToLoad"
-        private const val k__onInterstitialAdFailedToShow = "${kPrefix}_onInterstitialAdFailedToShow"
-        private const val k__onInterstitialAdClicked = "${kPrefix}_onInterstitialAdClicked"
-        private const val k__onInterstitialAdClosed = "${kPrefix}_onInterstitialAdClosed"
-        private const val k__onRewardedAdLoaded = "${kPrefix}_onRewardedAdLoaded"
-        private const val k__onRewardedAdFailedToShow = "${kPrefix}_onRewardedAdFailedToShow"
-        private const val k__onRewardedAdClicked = "${kPrefix}_onRewardedAdClicked"
-        private const val k__onRewardedAdClosed = "${kPrefix}_onRewardedAdClosed"
+        private const val kInitialize = "${kPrefix}Initialize"
+        private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
+        private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
+        private const val kShowInterstitialAd = "${kPrefix}ShowInterstitialAd"
+        private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
+        private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
+        private const val kOnInterstitialAdLoaded = "${kPrefix}OnInterstitialAdLoaded"
+        private const val kOnInterstitialAdFailedToLoad = "${kPrefix}OnInterstitialAdFailedToLoad"
+        private const val kOnInterstitialAdFailedToShow = "${kPrefix}OnInterstitialAdFailedToShow"
+        private const val kOnInterstitialAdClicked = "${kPrefix}OnInterstitialAdClicked"
+        private const val kOnInterstitialAdClosed = "${kPrefix}OnInterstitialAdClosed"
+        private const val kOnRewardedAdLoaded = "${kPrefix}OnRewardedAdLoaded"
+        private const val kOnRewardedAdFailedToShow = "${kPrefix}OnRewardedAdFailedToShow"
+        private const val kOnRewardedAdClicked = "${kPrefix}OnRewardedAdClicked"
+        private const val kOnRewardedAdClosed = "${kPrefix}OnRewardedAdClosed"
     }
 
     private var _initialized = false
@@ -65,12 +66,12 @@ class IronSource(
     override fun onStop() {}
     override fun onResume() {
         Thread.checkMainThread()
-        com.ironsource.mediationsdk.IronSource.onResume(_activity)
+        IronSource.onResume(_activity)
     }
 
     override fun onPause() {
         Thread.checkMainThread()
-        com.ironsource.mediationsdk.IronSource.onPause(_activity)
+        IronSource.onPause(_activity)
     }
 
     override fun onDestroy() {}
@@ -81,32 +82,32 @@ class IronSource(
             if (!_initialized) {
                 return@Runnable
             }
-            com.ironsource.mediationsdk.IronSource.setInterstitialListener(null)
-            com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(null)
+            IronSource.setInterstitialListener(null)
+            IronSource.setRewardedVideoListener(null)
         })
     }
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__initialize) { message ->
+        _bridge.registerHandler(kInitialize) { message ->
             initialize(message)
             ""
         }
-        _bridge.registerHandler(k__loadInterstitialAd) {
+        _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
             ""
         }
-        _bridge.registerHandler(k__hasInterstitialAd) {
+        _bridge.registerHandler(kHasInterstitialAd) {
             Utils.toString(hasInterstitialAd)
         }
-        _bridge.registerHandler(k__showInterstitialAd) { message ->
+        _bridge.registerHandler(kShowInterstitialAd) { message ->
             showInterstitialAd(message)
             ""
         }
-        _bridge.registerHandler(k__hasRewardedAd) {
+        _bridge.registerHandler(kHasRewardedAd) {
             Utils.toString(hasRewardedAd)
         }
-        _bridge.registerHandler(k__showRewardedAd) { message ->
+        _bridge.registerHandler(kShowRewardedAd) { message ->
             showRewardedAd(message)
             ""
         }
@@ -114,12 +115,12 @@ class IronSource(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__initialize)
-        _bridge.deregisterHandler(k__loadInterstitialAd)
-        _bridge.deregisterHandler(k__hasInterstitialAd)
-        _bridge.deregisterHandler(k__showInterstitialAd)
-        _bridge.deregisterHandler(k__hasRewardedAd)
-        _bridge.deregisterHandler(k__showRewardedAd)
+        _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kLoadInterstitialAd)
+        _bridge.deregisterHandler(kHasInterstitialAd)
+        _bridge.deregisterHandler(kShowInterstitialAd)
+        _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kShowRewardedAd)
     }
 
     @AnyThread
@@ -128,12 +129,10 @@ class IronSource(
             if (_initialized) {
                 return@Runnable
             }
-            com.ironsource.mediationsdk.IronSource.init(_activity, gameId,
-                com.ironsource.mediationsdk.IronSource.AD_UNIT.REWARDED_VIDEO,
-                com.ironsource.mediationsdk.IronSource.AD_UNIT.INTERSTITIAL)
-            com.ironsource.mediationsdk.IronSource.shouldTrackNetworkState(_activity, true)
-            com.ironsource.mediationsdk.IronSource.setInterstitialListener(this)
-            com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(this)
+            IronSource.init(_activity, gameId, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL)
+            IronSource.shouldTrackNetworkState(_activity, true)
+            IronSource.setInterstitialListener(this)
+            IronSource.setRewardedVideoListener(this)
             _initialized = true
         })
     }
@@ -142,7 +141,7 @@ class IronSource(
     fun loadInterstitialAd() {
         Thread.runOnMainThread(Runnable {
             _logger.debug(this::loadInterstitialAd.name)
-            com.ironsource.mediationsdk.IronSource.loadInterstitial()
+            IronSource.loadInterstitial()
         })
     }
 
@@ -153,7 +152,7 @@ class IronSource(
     fun showInterstitialAd(adId: String) {
         Thread.runOnMainThread(Runnable {
             _logger.debug("${this::showInterstitialAd.name}: $adId")
-            com.ironsource.mediationsdk.IronSource.showInterstitial(adId)
+            IronSource.showInterstitial(adId)
         })
     }
 
@@ -165,24 +164,24 @@ class IronSource(
         Thread.runOnMainThread(Runnable {
             _logger.debug("${this::showRewardedAd.name}: $adId")
             _rewarded = false
-            com.ironsource.mediationsdk.IronSource.showRewardedVideo(adId)
+            IronSource.showRewardedVideo(adId)
         })
     }
 
     private fun handleRewardedAdResult() {
         _isRewardedAdLoaded.set(false)
-        _bridge.callCpp(k__onRewardedAdClosed, Utils.toString(_rewarded))
+        _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
     override fun onInterstitialAdReady() {
         _logger.debug(this::onInterstitialAdReady.name)
         _isInterstitialAdLoaded.set(true)
-        _bridge.callCpp(k__onInterstitialAdLoaded)
+        _bridge.callCpp(kOnInterstitialAdLoaded)
     }
 
     override fun onInterstitialAdLoadFailed(ironSourceError: IronSourceError) {
         _logger.debug("${this::onInterstitialAdLoadFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(k__onInterstitialAdFailedToLoad, ironSourceError.errorMessage)
+        _bridge.callCpp(kOnInterstitialAdFailedToLoad, ironSourceError.errorMessage)
     }
 
     override fun onInterstitialAdShowSucceeded() {
@@ -191,7 +190,7 @@ class IronSource(
 
     override fun onInterstitialAdShowFailed(ironSourceError: IronSourceError) {
         _logger.debug("${this::onInterstitialAdShowFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(k__onInterstitialAdFailedToShow, ironSourceError.errorMessage)
+        _bridge.callCpp(kOnInterstitialAdFailedToShow, ironSourceError.errorMessage)
     }
 
     override fun onInterstitialAdOpened() {
@@ -200,26 +199,26 @@ class IronSource(
 
     override fun onInterstitialAdClicked() {
         _logger.debug(this::onInterstitialAdClicked.name)
-        _bridge.callCpp(k__onInterstitialAdClicked)
+        _bridge.callCpp(kOnInterstitialAdClicked)
     }
 
     override fun onInterstitialAdClosed() {
         _logger.debug(this::onInterstitialAdClosed.name)
         _isInterstitialAdLoaded.set(false)
-        _bridge.callCpp(k__onInterstitialAdClosed)
+        _bridge.callCpp(kOnInterstitialAdClosed)
     }
 
     override fun onRewardedVideoAvailabilityChanged(available: Boolean) {
         _logger.info("${this::onRewardedVideoAvailabilityChanged.name}: $available")
         if (available) {
             _isRewardedAdLoaded.set(true)
-            _bridge.callCpp(k__onRewardedAdLoaded)
+            _bridge.callCpp(kOnRewardedAdLoaded)
         }
     }
 
     override fun onRewardedVideoAdShowFailed(ironSourceError: IronSourceError) {
         _logger.debug("${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(k__onRewardedAdFailedToShow, ironSourceError.errorMessage)
+        _bridge.callCpp(kOnRewardedAdFailedToShow, ironSourceError.errorMessage)
     }
 
     override fun onRewardedVideoAdOpened() {
@@ -232,7 +231,7 @@ class IronSource(
 
     override fun onRewardedVideoAdClicked(placement: Placement) {
         _logger.debug("${this::onRewardedVideoAdClicked.name}: ${placement.placementName}")
-        _bridge.callCpp(k__onRewardedAdClicked)
+        _bridge.callCpp(kOnRewardedAdClicked)
     }
 
     override fun onRewardedVideoAdEnded() {

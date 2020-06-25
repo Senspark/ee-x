@@ -24,8 +24,7 @@ std::unique_ptr<IAppsFlyer> PluginManager::createPlugin() {
 namespace apps_flyer {
 namespace {
 // clang-format off
-const std::string kPrefix = "AppsFlyer";
-
+const std::string kPrefix   = "AppsFlyerBridge";
 const auto kInitialize      = kPrefix + "Initialize";
 const auto kStartTracking   = kPrefix + "StartTracking";
 const auto kGetDeviceId     = kPrefix + "GetDeviceId";

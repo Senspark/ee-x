@@ -15,7 +15,7 @@
 @implementation EECampaignReceiver
 
 // clang-format off
-static NSString* const k__onReceivedLink = @"CampaignReceiver_onReceivedLink";
+static NSString* const kOnReceivedLink = @"CampaignReceiverBridgeOnReceivedLink";
 // clang-format on
 
 - (id)init {
@@ -35,7 +35,7 @@ static NSString* const k__onReceivedLink = @"CampaignReceiver_onReceivedLink";
             openURL:(nonnull NSURL*)url
             options:(nonnull NSDictionary<NSString*, id>*)options {
     id<EEIMessageBridge> bridgeMessage = [EEMessageBridge getInstance];
-    [bridgeMessage callCpp:k__onReceivedLink //
+    [bridgeMessage callCpp:kOnReceivedLink //
                           :[url absoluteString]];
     return true;
 }

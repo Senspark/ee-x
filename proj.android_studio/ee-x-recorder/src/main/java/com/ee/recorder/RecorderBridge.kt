@@ -22,18 +22,19 @@ import java.util.*
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-class Recorder(
+class RecorderBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Recorder::class.java.name)
+        private val _logger = Logger(RecorderBridge::class.java.name)
 
-        private const val k__isSupported = "Recorder_isSupported"
-        private const val k__startRecording = "Recorder_startRecording"
-        private const val k__stopRecording = "Recorder_stopRecording"
-        private const val k__cancelRecording = "Recorder_cancelRecording"
-        private const val k__getRecordingUrl = "Recorder_getRecordingUrl"
+        private const val kPrefix = "RecorderBridge"
+        private const val kIsSupported = "${kPrefix}IsSupported"
+        private const val kStartRecording = "${kPrefix}StartRecording"
+        private const val kStopRecording = "${kPrefix}StopRecording"
+        private const val kCancelRecording = "${kPrefix}CancelRecording"
+        private const val kGetRecordingUrl = "${kPrefix}GetRecordingUrl"
     }
 
     private var _recordService: RecordService? = null
@@ -84,32 +85,32 @@ class Recorder(
     }
 
     private fun registerHandlers() {
-        _bridge.registerHandler(k__isSupported) {
+        _bridge.registerHandler(kIsSupported) {
             Utils.toString(isSupported)
         }
-        _bridge.registerHandler(k__startRecording) {
+        _bridge.registerHandler(kStartRecording) {
             startRecording()
             ""
         }
-        _bridge.registerHandler(k__stopRecording) {
+        _bridge.registerHandler(kStopRecording) {
             stopRecording()
             ""
         }
-        _bridge.registerHandler(k__cancelRecording) {
+        _bridge.registerHandler(kCancelRecording) {
             cancelRecording()
             ""
         }
-        _bridge.registerHandler(k__getRecordingUrl) {
+        _bridge.registerHandler(kGetRecordingUrl) {
             _recordingUrl ?: ""
         }
     }
 
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__isSupported)
-        _bridge.deregisterHandler(k__startRecording)
-        _bridge.deregisterHandler(k__stopRecording)
-        _bridge.deregisterHandler(k__cancelRecording)
-        _bridge.deregisterHandler(k__getRecordingUrl)
+        _bridge.deregisterHandler(kIsSupported)
+        _bridge.deregisterHandler(kStartRecording)
+        _bridge.deregisterHandler(kStopRecording)
+        _bridge.deregisterHandler(kCancelRecording)
+        _bridge.deregisterHandler(kGetRecordingUrl)
     }
 
     val isSupported: Boolean

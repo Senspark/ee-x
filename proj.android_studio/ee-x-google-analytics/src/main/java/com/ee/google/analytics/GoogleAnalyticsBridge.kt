@@ -10,6 +10,7 @@ import com.ee.core.internal.Thread
 import com.ee.core.internal.Utils
 import com.ee.core.internal.deserialize
 import com.ee.core.registerHandler
+import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders.EventBuilder
 import com.google.android.gms.analytics.HitBuilders.ExceptionBuilder
 import com.google.android.gms.analytics.HitBuilders.ScreenViewBuilder
@@ -26,31 +27,32 @@ import java.util.concurrent.ConcurrentHashMap
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-class GoogleAnalytics(
+class GoogleAnalyticsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(GoogleAnalytics::class.java.name)
+        private val _logger = Logger(GoogleAnalyticsBridge::class.java.name)
 
-        private const val k__setDispatchInterval = "GoogleAnalytics_setDispatchInterval"
-        private const val k__setDryRun = "GoogleAnalytics_setDryRun"
-        private const val k__setOptOut = "GoogleAnalytics_setOptOut"
-        private const val k__setTrackUncaughtException = "GoogleAnalytics_setTrackUncaughtException"
-        private const val k__dispatch = "GoogleAnalytics_dispatch"
-        private const val k__createTracker = "GoogleAnalytics_createTracker"
-        private const val k__destroyTracker = "GoogleAnalytics_destroyTracker"
-        private const val k__testTrackEvent = "GoogleAnalytics_testTrackEvent"
-        private const val k__testTrackException = "GoogleAnalytics_testTrackException"
-        private const val k__testTrackScreenView = "GoogleAnalytics_testTrackScreenView"
-        private const val k__testTrackSocial = "GoogleAnalytics_testTrackSocial"
-        private const val k__testTrackTiming = "GoogleAnalytics_testTrackTiming"
-        private const val k__testCustomDimensionAndMetric = "GoogleAnalytics_testCustomDimensionAndMetric"
-        private const val k__testTrackEcommerceAction = "GoogleAnalytics_testTrackEcommerceAction"
-        private const val k__testTrackEcommerceImpression = "GoogleAnalytics_testTrackEcommerceImpression"
+        private const val kPrefix = "GoogleAnalyticsBridge"
+        private const val kSetDispatchInterval = "${kPrefix}SetDispatchInterval"
+        private const val kSetDryRun = "${kPrefix}SetDryRun"
+        private const val kSetOptOut = "${kPrefix}SetOptOut"
+        private const val kSetTrackUncaughtException = "${kPrefix}SetTrackUncaughtException"
+        private const val kDispatch = "${kPrefix}Dispatch"
+        private const val kCreateTracker = "${kPrefix}CreateTracker"
+        private const val kDestroyTracker = "${kPrefix}DestroyTracker"
+        private const val kTestTrackEvent = "${kPrefix}TestTrackEvent"
+        private const val kTestTrackException = "${kPrefix}TestTrackException"
+        private const val kTestTrackScreenView = "${kPrefix}TestTrackScreenView"
+        private const val kTestTrackSocial = "${kPrefix}TestTrackSocial"
+        private const val kTestTrackTiming = "${kPrefix}TestTrackTiming"
+        private const val kTestCustomDimensionAndMetric = "${kPrefix}TestCustomDimensionAndMetric"
+        private const val kTestTrackEcommerceAction = "${kPrefix}TestTrackEcommerceAction"
+        private const val kTestTrackEcommerceImpression = "${kPrefix}TestTrackEcommerceImpression"
     }
 
-    private val _analytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(_context)
+    private val _analytics = GoogleAnalytics.getInstance(_context)
     private val _trackers: MutableMap<String, GoogleAnalyticsTracker> = ConcurrentHashMap()
     private var _exceptionReportingEnabled = false
 
@@ -75,62 +77,62 @@ class GoogleAnalytics(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__setDispatchInterval) { message ->
+        _bridge.registerHandler(kSetDispatchInterval) { message ->
             val seconds = Integer.valueOf(message)
             setLocalDispatchInterval(seconds)
             ""
         }
-        _bridge.registerHandler(k__setDryRun) { message ->
+        _bridge.registerHandler(kSetDryRun) { message ->
             setDryRun(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__setOptOut) { message ->
+        _bridge.registerHandler(kSetOptOut) { message ->
             setAppOptOut(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__setTrackUncaughtException) { message ->
+        _bridge.registerHandler(kSetTrackUncaughtException) { message ->
             setExceptionReportingEnabled(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__dispatch) {
+        _bridge.registerHandler(kDispatch) {
             dispatchLocalHits()
             ""
         }
-        _bridge.registerHandler(k__createTracker) { message ->
+        _bridge.registerHandler(kCreateTracker) { message ->
             Utils.toString(createTracker(message))
         }
-        _bridge.registerHandler(k__destroyTracker) { message ->
+        _bridge.registerHandler(kDestroyTracker) { message ->
             Utils.toString(destroyTracker(message))
         }
-        _bridge.registerHandler(k__testTrackEvent) { message ->
+        _bridge.registerHandler(kTestTrackEvent) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackEvent(params))
         }
-        _bridge.registerHandler(k__testTrackException) { message ->
+        _bridge.registerHandler(kTestTrackException) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackException(params))
         }
-        _bridge.registerHandler(k__testTrackScreenView) { message ->
+        _bridge.registerHandler(kTestTrackScreenView) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackScreenView(params))
         }
-        _bridge.registerHandler(k__testTrackSocial) { message ->
+        _bridge.registerHandler(kTestTrackSocial) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackSocial(params))
         }
-        _bridge.registerHandler(k__testTrackTiming) { message ->
+        _bridge.registerHandler(kTestTrackTiming) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackTiming(params))
         }
-        _bridge.registerHandler(k__testCustomDimensionAndMetric) { message ->
+        _bridge.registerHandler(kTestCustomDimensionAndMetric) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testCustomDimensionAndMetric(params))
         }
-        _bridge.registerHandler(k__testTrackEcommerceAction) { message ->
+        _bridge.registerHandler(kTestTrackEcommerceAction) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackEcommerceAction(params))
         }
-        _bridge.registerHandler(k__testTrackEcommerceImpression) { message ->
+        _bridge.registerHandler(kTestTrackEcommerceImpression) { message ->
             val params = deserialize<Map<String, String>>(message)
             Utils.toString(testTrackEcommerceImpression(params))
         }
@@ -138,21 +140,21 @@ class GoogleAnalytics(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__setDispatchInterval)
-        _bridge.deregisterHandler(k__setDryRun)
-        _bridge.deregisterHandler(k__setOptOut)
-        _bridge.deregisterHandler(k__setTrackUncaughtException)
-        _bridge.deregisterHandler(k__dispatch)
-        _bridge.deregisterHandler(k__createTracker)
-        _bridge.deregisterHandler(k__destroyTracker)
-        _bridge.deregisterHandler(k__testTrackEvent)
-        _bridge.deregisterHandler(k__testTrackException)
-        _bridge.deregisterHandler(k__testTrackScreenView)
-        _bridge.deregisterHandler(k__testTrackSocial)
-        _bridge.deregisterHandler(k__testTrackTiming)
-        _bridge.deregisterHandler(k__testCustomDimensionAndMetric)
-        _bridge.deregisterHandler(k__testTrackEcommerceAction)
-        _bridge.deregisterHandler(k__testTrackEcommerceImpression)
+        _bridge.deregisterHandler(kSetDispatchInterval)
+        _bridge.deregisterHandler(kSetDryRun)
+        _bridge.deregisterHandler(kSetOptOut)
+        _bridge.deregisterHandler(kSetTrackUncaughtException)
+        _bridge.deregisterHandler(kDispatch)
+        _bridge.deregisterHandler(kCreateTracker)
+        _bridge.deregisterHandler(kDestroyTracker)
+        _bridge.deregisterHandler(kTestTrackEvent)
+        _bridge.deregisterHandler(kTestTrackException)
+        _bridge.deregisterHandler(kTestTrackScreenView)
+        _bridge.deregisterHandler(kTestTrackSocial)
+        _bridge.deregisterHandler(kTestTrackTiming)
+        _bridge.deregisterHandler(kTestCustomDimensionAndMetric)
+        _bridge.deregisterHandler(kTestTrackEcommerceAction)
+        _bridge.deregisterHandler(kTestTrackEcommerceImpression)
     }
 
     @AnyThread

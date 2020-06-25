@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let kPrefix = "Vungle"
+private let kPrefix = "VungleBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kHasRewardedAd = "\(kPrefix)HasRewardedAd"
 private let kLoadRewardedAd = "\(kPrefix)LoadRewardedAd"
@@ -18,9 +18,9 @@ private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClicked = "\(kPrefix)OnClicked"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
-@objc(EEVungle_Swift)
-public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
-    private let _logger = Logger("\(Vungle.self)")
+@objc(EEVungleBridge)
+public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
+    private let _logger = Logger("\(VungleBridge.self)")
     private let _bridge: IMessageBridge
     private let _sdk = VungleSDK.shared()
     private var _initializing = false

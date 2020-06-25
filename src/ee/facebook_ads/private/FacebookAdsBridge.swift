@@ -8,7 +8,7 @@
 import FBAudienceNetwork
 import Foundation
 
-private let kPrefix = "FacebookAds"
+private let kPrefix = "FacebookAdsBridge"
 private let kGetTestDeviceHash = "\(kPrefix)GetTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
 private let kClearTestDevices = "\(kPrefix)ClearTestDevices"
@@ -22,8 +22,8 @@ private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
-@objc(EEFacebookAds_Swift)
-public class FacebookAds: NSObject, IPlugin {
+@objc(EEFacebookAdsBridge)
+public class FacebookAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _bannerHelper = FacebookBannerHelper()
     private var _bannerAds: [String: FacebookBannerAd] = [:]

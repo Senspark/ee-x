@@ -31,34 +31,19 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix               = "AdMob";
-
+const std::string kPrefix             = "AdMobBridge";
 const auto kInitialize                = kPrefix + "Initialize";
-    
 const auto kGetEmulatorTestDeviceHash = kPrefix + "GetEmulatorTestDeviceHash";
 const auto kAddTestDevice             = kPrefix + "AddTestDevice";
-    
 const auto kGetBannerAdSize           = kPrefix + "GetBannerAdSize";
 const auto kCreateBannerAd            = kPrefix + "CreateBannerAd";
 const auto kDestroyBannerAd           = kPrefix + "DestroyBannerAd";
-
 const auto kCreateNativeAd            = kPrefix + "CreateNativeAd";
 const auto kDestroyNativeAd           = kPrefix + "DestroyNativeAd";
-
 const auto kCreateInterstitialAd      = kPrefix + "CreateInterstitialAd";
 const auto kDestroyInterstitialAd     = kPrefix + "DestroyInterstitialAd";
-
 const auto kCreateRewardedAd          = kPrefix + "CreateRewardedAd";
 const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
-// clang-format on
-} // namespace
-
-namespace {
-// clang-format off
-constexpr auto k__ad_id                 = "ad_id";
-constexpr auto k__ad_size               = "ad_size";
-constexpr auto k__layout_name           = "layout_name";
-constexpr auto k__identifiers           = "identifiers";
 // clang-format on
 } // namespace
 
@@ -125,8 +110,8 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
         return iter->second;
     }
     nlohmann::json json;
-    json[k__ad_id] = adId;
-    json[k__ad_size] = static_cast<int>(adSize);
+    json["adId"] = adId;
+    json["adSize"] = static_cast<int>(adSize);
     auto response = bridge_.call(kCreateBannerAd, json.dump());
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad.",
@@ -167,9 +152,9 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
         return iter->second;
     }
     nlohmann::json json;
-    json[k__ad_id] = adId;
-    json[k__layout_name] = layoutName;
-    json[k__identifiers] = identifiers.params_;
+    json["adId"] = adId;
+    json["layoutName"] = layoutName;
+    json["identifiers"] = identifiers.params_;
     auto&& response = bridge_.call(kCreateNativeAd, json.dump());
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to create an ad.",

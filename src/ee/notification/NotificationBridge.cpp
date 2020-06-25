@@ -18,6 +18,14 @@
 
 namespace ee {
 namespace notification {
+namespace {
+const std::string kPrefix = "NotificationBridge";
+const auto kSchedule = kPrefix + "Schedule";
+const auto kUnschedule = kPrefix + "Unschedule";
+const auto kUnscheduleAll = kPrefix + "UnscheduleAll";
+const auto kClearAll = kPrefix + "ClearAll";
+} // namespace
+
 using Self = Bridge;
 
 Self::Bridge()
@@ -37,7 +45,7 @@ void Self::schedule(const NotificationBuilder& builder) {
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;
     json["tag"] = builder.tag_;
-    bridge_.call("__notification_schedule", json.dump());
+    bridge_.call(kSchedule, json.dump());
 }
 
 void Self::schedule(const std::string& msg, int tag, int delay, int interval) {
@@ -52,15 +60,15 @@ void Self::schedule(const std::string& msg, int tag, int delay, int interval) {
 void Self::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;
-    bridge_.call("__notification_unschedule", json.dump());
+    bridge_.call(kUnschedule, json.dump());
 }
 
 void Self::unscheduleAll() {
-    bridge_.call("__notification_unschedule_all");
+    bridge_.call(kUnscheduleAll);
 }
 
 void Self::clearAll() {
-    bridge_.call("__notification_clear_all");
+    bridge_.call(kClearAll);
 }
 } // namespace notification
 } // namespace ee

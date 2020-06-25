@@ -17,31 +17,31 @@
 
 #import <ee/core/internal/EEJsonUtils.h>
 
-#define kPrefix @"AppLovin"
+#define kPrefix @"AppLovinBridge"
 
 // clang-format off
-static NSString* const k__initialize         = kPrefix "_initialize";
-static NSString* const k__setTestAdsEnabled  = kPrefix "_setTestAdsEnabled";
-static NSString* const k__setVerboseLogging  = kPrefix "_setVerboseLogging";
-static NSString* const k__setMuted           = kPrefix "_setMuted";
+static NSString* const k__initialize         = kPrefix "Initialize";
+static NSString* const k__setTestAdsEnabled  = kPrefix "SetTestAdsEnabled";
+static NSString* const k__setVerboseLogging  = kPrefix "SetVerboseLogging";
+static NSString* const k__setMuted           = kPrefix "SetMuted";
 
-static NSString* const k__hasInterstitialAd  = kPrefix "_hasInterstitialAd";
-static NSString* const k__loadInterstitialAd = kPrefix "_loadInterstitialAd";
-static NSString* const k__showInterstitialAd = kPrefix "_showInterstitialAd";
+static NSString* const k__hasInterstitialAd  = kPrefix "HasInterstitialAd";
+static NSString* const k__loadInterstitialAd = kPrefix "LoadInterstitialAd";
+static NSString* const k__showInterstitialAd = kPrefix "ShowInterstitialAd";
 
-static NSString* const k__loadRewardedAd     = kPrefix "_loadRewardedAd";
-static NSString* const k__hasRewardedAd      = kPrefix "_hasRewardedAd";
-static NSString* const k__showRewardedAd     = kPrefix "_showRewardedAd";
+static NSString* const k__loadRewardedAd     = kPrefix "LoadRewardedAd";
+static NSString* const k__hasRewardedAd      = kPrefix "HasRewardedAd";
+static NSString* const k__showRewardedAd     = kPrefix "ShowRewardedAd";
 
-static NSString* const k__onInterstitialAdLoaded       = kPrefix "_onInterstitialAdLoaded";
-static NSString* const k__onInterstitialAdFailedToLoad = kPrefix "_onInterstitialAdFailedToLoad";
-static NSString* const k__onInterstitialAdClicked      = kPrefix "_onInterstitialAdClicked";
-static NSString* const k__onInterstitialAdClosed       = kPrefix "_onInterstitialAdClosed";
+static NSString* const k__onInterstitialAdLoaded       = kPrefix "OnInterstitialAdLoaded";
+static NSString* const k__onInterstitialAdFailedToLoad = kPrefix "OnInterstitialAdFailedToLoad";
+static NSString* const k__onInterstitialAdClicked      = kPrefix "OnInterstitialAdClicked";
+static NSString* const k__onInterstitialAdClosed       = kPrefix "OnInterstitialAdClosed";
 
-static NSString* const k__onRewardedAdLoaded       = kPrefix "_onRewardedAdLoaded";
-static NSString* const k__onRewardedAdFailedToLoad = kPrefix "_onRewardedAdFailedToLoad";
-static NSString* const k__onRewardedAdClicked      = kPrefix "_onRewardedAdClicked";
-static NSString* const k__onRewardedAdClosed       = kPrefix "_onRewardedAdClosed";
+static NSString* const k__onRewardedAdLoaded       = kPrefix "OnRewardedAdLoaded";
+static NSString* const k__onRewardedAdFailedToLoad = kPrefix "OnRewardedAdFailedToLoad";
+static NSString* const k__onRewardedAdClicked      = kPrefix "OnRewardedAdClicked";
+static NSString* const k__onRewardedAdClosed       = kPrefix "OnRewardedAdClosed";
 // clang-format on
 
 #undef kPrefix

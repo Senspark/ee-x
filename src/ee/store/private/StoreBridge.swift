@@ -47,8 +47,8 @@ private class StoreProductsRequestDelegate: NSObject, SKProductsRequestDelegate 
     }
 }
 
-@objc(EEStore_Swift)
-public class Store: NSObject, IPlugin, SKPaymentTransactionObserver {
+@objc(EEStoreBridge)
+public class StoreBridge: NSObject, IPlugin, SKPaymentTransactionObserver {
     private let _bridge: IMessageBridge
     private let _queue: SKPaymentQueue
 

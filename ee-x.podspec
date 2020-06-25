@@ -637,6 +637,10 @@ Pod::Spec.new do |spec|
       'src/ee/Store*',
       'src/ee/store/**/*'
 
+    s.private_header_files =
+      'src/ee/store/internal/*',
+      'src/ee/store/private/*'
+
     s.dependency 'ee-x/core'
   end
 

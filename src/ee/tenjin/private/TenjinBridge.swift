@@ -7,8 +7,8 @@
 
 import Foundation
 
-@objc(EETenjin_Swift)
-public class Tenjin: NSObject, IPlugin {
+@objc(EETenjinBridge)
+public class TenjinBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
 
     public required init(_ bridge: IMessageBridge) {

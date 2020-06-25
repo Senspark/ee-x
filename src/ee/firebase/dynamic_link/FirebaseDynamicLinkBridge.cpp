@@ -11,7 +11,7 @@
 #include <firebase/dynamic_links.h>
 
 #include <ee/core/Logger.hpp>
-#include <ee/firebase/core/FirebaseCore.hpp>
+#include <ee/firebase/core/FirebaseCoreBridge.hpp>
 
 namespace ee {
 namespace firebase {
@@ -50,7 +50,7 @@ bool Self::initialize() {
     if (initialized_) {
         return true;
     }
-    Core::initialize();
+    FirebaseCore::initialize();
 
     auto app = ::firebase::App::GetInstance();
     if (app == nullptr) {

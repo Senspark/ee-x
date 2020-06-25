@@ -29,22 +29,23 @@ using Self = Analytics;
 
 namespace {
 // clang-format off
-constexpr auto k__setDispatchInterval          = "GoogleAnalytics_setDispatchInterval";
-constexpr auto k__setDryRun                    = "GoogleAnalytics_setDryRun";
-constexpr auto k__setOptOut                    = "GoogleAnalytics_setOptOut";
-constexpr auto k__setTrackUncaughtException    = "GoogleAnalytics_setTrackUncaughtException";
-constexpr auto k__dispatch                     = "GoogleAnalytics_dispatch";
-constexpr auto k__createTracker                = "GoogleAnalytics_createTracker";
-constexpr auto k__destroyTracker               = "GoogleAnalytics_destroyTracker";
+const std::string kPrefix = "GoogleAnalyticsBridgeg";
+const auto kSetDispatchInterval          = kPrefix + "SetDispatchInterval";
+const auto kSetDryRun                    = kPrefix + "SetDryRun";
+const auto kSetOptOut                    = kPrefix + "SetOptOut";
+const auto kSetTrackUncaughtException    = kPrefix + "SetTrackUncaughtException";
+const auto kDispatch                     = kPrefix + "Dispatch";
+const auto kCreateTracker                = kPrefix + "CreateTracker";
+const auto kDestroyTracker               = kPrefix + "DestroyTracker";
     
-constexpr auto k__testTrackEvent               = "GoogleAnalytics_testTrackEvent";
-constexpr auto k__testTrackException           = "GoogleAnalytics_testTrackException";
-constexpr auto k__testTrackScreenView          = "GoogleAnalytics_testTrackScreenView";
-constexpr auto k__testTrackSocial              = "GoogleAnalytics_testTrackSocial";
-constexpr auto k__testTrackTiming              = "GoogleAnalytics_testTrackTiming";
-constexpr auto k__testCustomDimensionAndMetric = "GoogleAnalytics_testCustomDimensionAndMetric";
-constexpr auto k__testTrackEcommerceAction     = "GoogleAnalytics_testTrackEcommerceAction";
-constexpr auto k__testTrackEcommerceImpression = "GoogleAnalytics_testTrackEcommerceImpression";
+const auto kTestTrackEvent               = kPrefix + "TestTrackEvent";
+const auto kTestTrackException           = kPrefix + "TestTrackException";
+const auto kTestTrackScreenView          = kPrefix + "TestTrackScreenView";
+const auto kTestTrackSocial              = kPrefix + "TestTrackSocial";
+const auto kTestTrackTiming              = kPrefix + "TestTrackTiming";
+const auto kTestCustomDimensionAndMetric = kPrefix + "TestCustomDimensionAndMetric";
+const auto kTestTrackEcommerceAction     = kPrefix + "TestTrackEcommerceAction";
+const auto kTestTrackEcommerceImpression = kPrefix + "TestTrackEcommerceImpression";
 // clang-format on
 } // namespace
 
@@ -60,33 +61,33 @@ void Self::destroy() {
 
 void Self::setDispatchInterval(int seconds) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setDispatchInterval, std::to_string(seconds));
+    bridge.call(kSetDispatchInterval, std::to_string(seconds));
 }
 
 void Self::setDryRun(bool enabled) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setDryRun, core::toString(enabled));
+    bridge.call(kSetDryRun, core::toString(enabled));
 }
 
 void Self::setOptOut(bool enabled) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setOptOut, core::toString(enabled));
+    bridge.call(kSetOptOut, core::toString(enabled));
 }
 
 void Self::setTrackUncaughtException(bool enabled) {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__setTrackUncaughtException, core::toString(enabled));
+    bridge.call(kSetTrackUncaughtException, core::toString(enabled));
 }
 
 void Self::dispatch() {
     auto&& bridge = MessageBridge::getInstance();
-    bridge.call(k__dispatch);
+    bridge.call(kDispatch);
 }
 
 std::shared_ptr<AnalyticsTracker>
 Self::createTracker(const std::string& trackingId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__createTracker, trackingId);
+    auto response = bridge.call(kCreateTracker, trackingId);
     if (not core::toBool(response)) {
         return nullptr;
     }
@@ -96,7 +97,7 @@ Self::createTracker(const std::string& trackingId) {
 
 bool Self::destroyTracker(const std::string& trackingId) {
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__destroyTracker, trackingId);
+    auto response = bridge.call(kDestroyTracker, trackingId);
     return core::toBool(response);
 }
 
@@ -124,7 +125,7 @@ bool Self::testTrackEvent() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackEvent, json.dump());
+    auto response = bridge.call(kTestTrackEvent, json.dump());
     return core::toBool(response);
 }
 
@@ -133,7 +134,7 @@ bool Self::testTrackException() {
         ExceptionBuilder().setDescription("description").setFatal(true).build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackException, json.dump());
+    auto response = bridge.call(kTestTrackException, json.dump());
     return core::toBool(response);
 }
 
@@ -141,7 +142,7 @@ bool Self::testTrackScreenView() {
     auto dict = ScreenViewBuilder().build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackScreenView, json.dump());
+    auto response = bridge.call(kTestTrackScreenView, json.dump());
     return core::toBool(response);
 }
 
@@ -153,7 +154,7 @@ bool Self::testTrackSocial() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackSocial, json.dump());
+    auto response = bridge.call(kTestTrackSocial, json.dump());
     return core::toBool(response);
 }
 
@@ -166,7 +167,7 @@ bool Self::testTrackTiming() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackTiming, json.dump());
+    auto response = bridge.call(kTestTrackTiming, json.dump());
     return core::toBool(response);
 }
 
@@ -180,7 +181,7 @@ bool Self::testCustomDimensionAndMetric() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testCustomDimensionAndMetric, json.dump());
+    auto response = bridge.call(kTestCustomDimensionAndMetric, json.dump());
     return core::toBool(response);
 }
 
@@ -207,7 +208,7 @@ bool Self::testEcommerceAction() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackEcommerceAction, json.dump());
+    auto response = bridge.call(kTestTrackEcommerceAction, json.dump());
     return core::toBool(response);
 }
 
@@ -240,7 +241,7 @@ bool Self::testEcommerceImpression() {
                     .build();
     nlohmann::json json = dict;
     auto&& bridge = MessageBridge::getInstance();
-    auto response = bridge.call(k__testTrackEcommerceImpression, json.dump());
+    auto response = bridge.call(kTestTrackEcommerceImpression, json.dump());
     return core::toBool(response);
 }
 } // namespace google

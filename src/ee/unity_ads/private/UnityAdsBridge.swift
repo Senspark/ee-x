@@ -7,7 +7,7 @@
 
 import UnityAds
 
-private let kPrefix = "UnityAds"
+private let kPrefix = "UnityAdsBridge"
 
 private let kInitialize = "\(kPrefix)Initialize"
 private let kSetDebugModeEnabled = "\(kPrefix)SetDebugModeEnabled"
@@ -19,7 +19,7 @@ private let kOnLoaded = "\(kPrefix)OnLoaded"
 private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
-@objc(EEUnityAds_Swift)
+@objc(EEUnityAdsBridge)
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     private let _logger = Logger("\(UnityAdsBridge.self)")
     private let _bridge: IMessageBridge

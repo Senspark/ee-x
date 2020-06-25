@@ -97,30 +97,30 @@ enum class Error {
 
 namespace {
 // clang-format off
-const std::string kPrefix        = "AppLovin";
+const std::string kPrefix = "AppLovinBridge";
 
-const auto k__initialize         = kPrefix + "_initialize";
-const auto k__setTestAdsEnabled  = kPrefix + "_setTestAdsEnabled";
-const auto k__setVerboseLogging  = kPrefix + "_setVerboseLogging";
-const auto k__setMuted           = kPrefix + "_setMuted";
+const auto kInitialize         = kPrefix + "Initialize";
+const auto kSetTestAdsEnabled  = kPrefix + "SetTestAdsEnabled";
+const auto kSetVerboseLogging  = kPrefix + "SetVerboseLogging";
+const auto kSetMuted           = kPrefix + "SetMuted";
 
-const auto k__hasInterstitialAd  = kPrefix + "_hasInterstitialAd";
-const auto k__loadInterstitialAd = kPrefix + "_loadInterstitialAd";
-const auto k__showInterstitialAd = kPrefix + "_showInterstitialAd";
+const auto kHasInterstitialAd  = kPrefix + "HasInterstitialAd";
+const auto kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
+const auto kShowInterstitialAd = kPrefix + "ShowInterstitialAd";
 
-const auto k__hasRewardedAd      = kPrefix + "_hasRewardedAd";
-const auto k__loadRewardedAd     = kPrefix + "_loadRewardedAd";
-const auto k__showRewardedAd     = kPrefix + "_showRewardedAd";
+const auto kHasRewardedAd      = kPrefix + "HasRewardedAd";
+const auto kLoadRewardedAd     = kPrefix + "LoadRewardedAd";
+const auto kShowRewardedAd     = kPrefix + "ShowRewardedAd";
 
-const auto k__onInterstitialAdLoaded       = kPrefix + "_onInterstitialAdLoaded";
-const auto k__onInterstitialAdFailedToLoad = kPrefix + "_onInterstitialAdFailedToLoad";
-const auto k__onInterstitialAdClicked      = kPrefix + "_onInterstitialAdClicked";
-const auto k__onInterstitialAdClosed       = kPrefix + "_onInterstitialAdClosed";
+const auto kOnInterstitialAdLoaded       = kPrefix + "OnInterstitialAdLoaded";
+const auto kOnInterstitialAdFailedToLoad = kPrefix + "OnInterstitialAdFailedToLoad";
+const auto kOnInterstitialAdClicked      = kPrefix + "OnInterstitialAdClicked";
+const auto kOnInterstitialAdClosed       = kPrefix + "OnInterstitialAdClosed";
 
-const auto k__onRewardedAdLoaded       = kPrefix + "_onRewardedAdLoaded";
-const auto k__onRewardedAdFailedToLoad = kPrefix + "_onRewardedAdFailedToLoad";
-const auto k__onRewardedAdClicked      = kPrefix + "_onRewardedAdClicked";
-const auto k__onRewardedAdClosed       = kPrefix + "_onRewardedAdClosed";
+const auto kOnRewardedAdLoaded       = kPrefix + "OnRewardedAdLoaded";
+const auto kOnRewardedAdFailedToLoad = kPrefix + "OnRewardedAdFailedToLoad";
+const auto kOnRewardedAdClicked      = kPrefix + "OnRewardedAdClicked";
+const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 // clang-format on
 } // namespace
 
@@ -142,49 +142,49 @@ Self::Bridge(const Logger& logger)
             onInterstitialAdLoaded();
             return "";
         },
-        k__onInterstitialAdLoaded);
+        kOnInterstitialAdLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onInterstitialAdFailedToLoad(message);
             return "";
         },
-        k__onInterstitialAdFailedToLoad);
+        kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onInterstitialAdClicked();
             return "";
         },
-        k__onInterstitialAdClicked);
+        kOnInterstitialAdClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onInterstitialAdClosed();
             return "";
         },
-        k__onInterstitialAdClosed);
+        kOnInterstitialAdClosed);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedAdLoaded();
             return "";
         },
-        k__onRewardedAdLoaded);
+        kOnRewardedAdLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedAdFailedToLoad(message);
             return "";
         },
-        k__onRewardedAdFailedToLoad);
+        kOnRewardedAdFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedAdClicked();
             return "";
         },
-        k__onRewardedAdClicked);
+        kOnRewardedAdClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
             onRewardedAdClosed(core::toBool(message));
             return "";
         },
-        k__onRewardedAdClosed);
+        kOnRewardedAdClosed);
 }
 
 Self::~Bridge() = default;
@@ -192,46 +192,46 @@ Self::~Bridge() = default;
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 
-    bridge_.deregisterHandler(k__onInterstitialAdLoaded);
-    bridge_.deregisterHandler(k__onInterstitialAdFailedToLoad);
-    bridge_.deregisterHandler(k__onInterstitialAdClicked);
-    bridge_.deregisterHandler(k__onInterstitialAdClosed);
-    bridge_.deregisterHandler(k__onRewardedAdLoaded);
-    bridge_.deregisterHandler(k__onRewardedAdFailedToLoad);
-    bridge_.deregisterHandler(k__onRewardedAdClicked);
-    bridge_.deregisterHandler(k__onRewardedAdClosed);
+    bridge_.deregisterHandler(kOnInterstitialAdLoaded);
+    bridge_.deregisterHandler(kOnInterstitialAdFailedToLoad);
+    bridge_.deregisterHandler(kOnInterstitialAdClicked);
+    bridge_.deregisterHandler(kOnInterstitialAdClosed);
+    bridge_.deregisterHandler(kOnRewardedAdLoaded);
+    bridge_.deregisterHandler(kOnRewardedAdFailedToLoad);
+    bridge_.deregisterHandler(kOnRewardedAdClicked);
+    bridge_.deregisterHandler(kOnRewardedAdClosed);
 
     PluginManager::removePlugin(Plugin::AppLovin);
 }
 
 void Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    bridge_.call(k__initialize, key);
+    bridge_.call(kInitialize, key);
 }
 
 void Self::setTestAdsEnabled(bool enabled) {
-    bridge_.call(k__setTestAdsEnabled, core::toString(enabled));
+    bridge_.call(kSetTestAdsEnabled, core::toString(enabled));
 }
 
 void Self::setVerboseLogging(bool enabled) {
-    bridge_.call(k__setVerboseLogging, core::toString(enabled));
+    bridge_.call(kSetVerboseLogging, core::toString(enabled));
 }
 
 void Self::setMuted(bool enabled) {
-    bridge_.call(k__setMuted, core::toString(enabled));
+    bridge_.call(kSetMuted, core::toString(enabled));
 }
 
 bool Self::hasInterstitialAd() const {
-    auto result = bridge_.call(k__hasInterstitialAd);
+    auto result = bridge_.call(kHasInterstitialAd);
     return core::toBool(result);
 }
 
 void Self::loadInterstitialAd() {
-    bridge_.call(k__loadInterstitialAd);
+    bridge_.call(kLoadInterstitialAd);
 }
 
 void Self::showInterstitialAd() {
-    bridge_.call(k__showInterstitialAd);
+    bridge_.call(kShowInterstitialAd);
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
@@ -256,17 +256,17 @@ bool Self::destroyRewardedAd() {
 }
 
 bool Self::hasRewardedAd() const {
-    auto result = bridge_.call(k__hasRewardedAd);
+    auto result = bridge_.call(kHasRewardedAd);
     return core::toBool(result);
 }
 
 void Self::loadRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.call(k__loadRewardedAd);
+    bridge_.call(kLoadRewardedAd);
 }
 
 void Self::showRewardedAd() {
-    bridge_.call(k__showRewardedAd);
+    bridge_.call(kShowRewardedAd);
 }
 
 void Self::onInterstitialAdLoaded() {

@@ -14,17 +14,18 @@ import java.util.concurrent.ConcurrentHashMap
 
 @ImplicitReflectionSerializer
 @UnstableDefault
-class FirebasePerformance(
+class FirebasePerformanceBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FirebasePerformance::class.java.name)
+        private val _logger = Logger(FirebasePerformanceBridge::class.java.name)
 
-        private const val k__setDataCollectionEnabled = "FirebasePerformance_setDataCollectionEnabled"
-        private const val k__isDataCollectionEnabled = "FirebasePerformance_isDataCollectionEnabled"
-        private const val k__startTrace = "FirebasePerformance_startTrace"
-        private const val k__newTrace = "FirebasePerformance_newTrace"
+        private const val kPrefix = "FirebasePerformanceBridge"
+        private const val kSetDataCollectionEnabled = "${kPrefix}SetDataCollectionEnabled"
+        private const val kIsDataCollectionEnabled = "${kPrefix}IsDataCollectionEnabled"
+        private const val kStartTrace = "${kPrefix}StartTrace"
+        private const val kNewTrace = "${kPrefix}NewTrace"
     }
 
     private val _performance = com.google.firebase.perf.FirebasePerformance.getInstance()
@@ -51,27 +52,27 @@ class FirebasePerformance(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__setDataCollectionEnabled) { message ->
+        _bridge.registerHandler(kSetDataCollectionEnabled) { message ->
             isDataCollectionEnabled = Utils.toBoolean(message)
             ""
         }
-        _bridge.registerHandler(k__isDataCollectionEnabled) {
+        _bridge.registerHandler(kIsDataCollectionEnabled) {
             Utils.toString(isDataCollectionEnabled)
         }
-        _bridge.registerHandler(k__startTrace) { message ->
+        _bridge.registerHandler(kStartTrace) { message ->
             Utils.toString(startTrace(message))
         }
-        _bridge.registerHandler(k__newTrace) { message ->
+        _bridge.registerHandler(kNewTrace) { message ->
             Utils.toString(newTrace(message))
         }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__setDataCollectionEnabled)
-        _bridge.deregisterHandler(k__isDataCollectionEnabled)
-        _bridge.deregisterHandler(k__newTrace)
-        _bridge.deregisterHandler(k__startTrace)
+        _bridge.deregisterHandler(kSetDataCollectionEnabled)
+        _bridge.deregisterHandler(kIsDataCollectionEnabled)
+        _bridge.deregisterHandler(kNewTrace)
+        _bridge.deregisterHandler(kStartTrace)
     }
 
     private var isDataCollectionEnabled: Boolean

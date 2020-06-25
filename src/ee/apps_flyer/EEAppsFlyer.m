@@ -13,7 +13,7 @@
 
 #import <ee/core/internal/EEJsonUtils.h>
 
-#define kPrefix @"AppsFlyer"
+#define kPrefix @"AppsFlyerBridge"
 
 // clang-format off
 static NSString* const kInitialize      = kPrefix "Initialize";

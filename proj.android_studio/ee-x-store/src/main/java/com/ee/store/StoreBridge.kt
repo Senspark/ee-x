@@ -37,21 +37,21 @@ import kotlinx.serialization.UnstableDefault
  */
 @ImplicitReflectionSerializer
 @UnstableDefault
-class Store(
+class StoreBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(Store::class.java.name)
+        private val _logger = Logger(StoreBridge::class.java.name)
 
-        private const val kPrefix = "Store_"
-        private const val kConnect = "${kPrefix}connect"
-        private const val kGetSkuDetails = "${kPrefix}getSkuDetails"
-        private const val kGetPurchases = "${kPrefix}getPurchases"
-        private const val kGetPurchaseHistory = "${kPrefix}getPurchaseHistory"
-        private const val kPurchase = "${kPrefix}purchase"
-        private const val kConsume = "${kPrefix}consume"
-        private const val kAcknowledge = "${kPrefix}acknowledge"
+        private const val kPrefix = "StoreBridge"
+        private const val kConnect = "${kPrefix}Connect"
+        private const val kGetSkuDetails = "${kPrefix}GetSkuDetails"
+        private const val kGetPurchases = "${kPrefix}GetPurchases"
+        private const val kGetPurchaseHistory = "${kPrefix}GetPurchaseHistory"
+        private const val kPurchase = "${kPrefix}Purchase"
+        private const val kConsume = "${kPrefix}Consume"
+        private const val kAcknowledge = "${kPrefix}Acknowledge"
     }
 
     private val _scheduler = AndroidSchedulers.mainThread()

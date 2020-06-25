@@ -8,7 +8,7 @@
     id<EEIMessageBridge> bridge_;
 }
 
-static NSString* const kLog = @"FirebaseCrashlytics_log";
+static NSString* const kLog = @"FirebaseCrashlyticsBridgeLog";
 
 - (id)init {
     self = [super init];

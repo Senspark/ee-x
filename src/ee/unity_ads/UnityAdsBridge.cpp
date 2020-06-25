@@ -30,7 +30,7 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix       = "UnityAds";
+const std::string kPrefix       = "UnityAdsBridge";
 const auto kInitialize          = kPrefix + "Initialize";
 const auto kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
 const auto kHasRewardedAd       = kPrefix + "HasRewardedAd";

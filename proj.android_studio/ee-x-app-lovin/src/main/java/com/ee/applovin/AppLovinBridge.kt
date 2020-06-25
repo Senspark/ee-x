@@ -17,24 +17,24 @@ import com.ee.core.internal.Utils
 import com.ee.core.registerHandler
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AppLovin(
+class AppLovinBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(AppLovin::class.java.name)
+        private val _logger = Logger(AppLovinBridge::class.java.name)
 
-        private const val kPrefix = "AppLovin"
-        private const val k__initialize = "${kPrefix}_initialize"
-        private const val k__setTestAdsEnabled = "${kPrefix}_setTestAdsEnabled"
-        private const val k__setVerboseLogging = "${kPrefix}_setVerboseLogging"
-        private const val k__setMuted = "${kPrefix}_setMuted"
-        private const val k__hasInterstitialAd = "${kPrefix}_hasInterstitialAd"
-        private const val k__loadInterstitialAd = "${kPrefix}_loadInterstitialAd"
-        private const val k__showInterstitialAd = "${kPrefix}_showInterstitialAd"
-        private const val k__hasRewardedAd = "${kPrefix}_hasRewardedAd"
-        private const val k__loadRewardedAd = "${kPrefix}_loadRewardedAd"
-        private const val k__showRewardedAd = "${kPrefix}_showRewardedAd"
+        private const val kPrefix = "AppLovinBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
+        private const val kSetTestAdsEnabled = "${kPrefix}SetTestAdsEnabled"
+        private const val kSetVerboseLogging = "${kPrefix}SetVerboseLogging"
+        private const val kSetMuted = "${kPrefix}SetMuted"
+        private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
+        private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
+        private const val kShowInterstitialAd = "${kPrefix}ShowInterstitialAd"
+        private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
+        private const val kLoadRewardedAd = "${kPrefix}LoadRewardedAd"
+        private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
     }
 
     private var _initialized = false
@@ -85,41 +85,41 @@ class AppLovin(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__initialize) { message ->
+        _bridge.registerHandler(kInitialize) { message ->
             initialize(message)
             ""
         }
-        _bridge.registerHandler(k__setTestAdsEnabled) { message ->
+        _bridge.registerHandler(kSetTestAdsEnabled) { message ->
             setTestAdEnabled(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__setVerboseLogging) { message ->
+        _bridge.registerHandler(kSetVerboseLogging) { message ->
             setVerboseLogging(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__setMuted) { message ->
+        _bridge.registerHandler(kSetMuted) { message ->
             setMuted(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(k__loadInterstitialAd) {
+        _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
             ""
         }
-        _bridge.registerHandler(k__hasInterstitialAd) {
+        _bridge.registerHandler(kHasInterstitialAd) {
             Utils.toString(hasInterstitialAd)
         }
-        _bridge.registerHandler(k__showInterstitialAd) {
+        _bridge.registerHandler(kShowInterstitialAd) {
             showInterstitialAd()
             ""
         }
-        _bridge.registerHandler(k__hasRewardedAd) {
+        _bridge.registerHandler(kHasRewardedAd) {
             Utils.toString(hasRewardedAd)
         }
-        _bridge.registerHandler(k__loadRewardedAd) {
+        _bridge.registerHandler(kLoadRewardedAd) {
             loadRewardedAd()
             ""
         }
-        _bridge.registerHandler(k__showRewardedAd) {
+        _bridge.registerHandler(kShowRewardedAd) {
             showRewardedAd()
             ""
         }
@@ -127,16 +127,16 @@ class AppLovin(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__initialize)
-        _bridge.deregisterHandler(k__setTestAdsEnabled)
-        _bridge.deregisterHandler(k__setVerboseLogging)
-        _bridge.deregisterHandler(k__setMuted)
-        _bridge.deregisterHandler(k__hasInterstitialAd)
-        _bridge.deregisterHandler(k__loadInterstitialAd)
-        _bridge.deregisterHandler(k__showInterstitialAd)
-        _bridge.deregisterHandler(k__hasRewardedAd)
-        _bridge.deregisterHandler(k__loadRewardedAd)
-        _bridge.deregisterHandler(k__showRewardedAd)
+        _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kSetTestAdsEnabled)
+        _bridge.deregisterHandler(kSetVerboseLogging)
+        _bridge.deregisterHandler(kSetMuted)
+        _bridge.deregisterHandler(kHasInterstitialAd)
+        _bridge.deregisterHandler(kLoadInterstitialAd)
+        _bridge.deregisterHandler(kShowInterstitialAd)
+        _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kLoadRewardedAd)
+        _bridge.deregisterHandler(kShowRewardedAd)
     }
 
     @AnyThread

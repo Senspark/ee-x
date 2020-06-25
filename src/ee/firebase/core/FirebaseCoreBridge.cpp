@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/firebase/core/FirebaseCore.hpp"
+#include "ee/firebase/core/FirebaseCoreBridge.hpp"
 
 #include <firebase/app.h>
 
@@ -18,7 +18,8 @@
 
 namespace ee {
 namespace firebase {
-using Self = Core;
+namespace core {
+using Self = Bridge;
 
 void Self::initialize() {
     static bool initialized = false;
@@ -42,5 +43,6 @@ void Self::initialize() {
 
     initialized = true;
 }
+} // namespace core
 } // namespace firebase
 } // namespace ee

@@ -13,8 +13,7 @@ import com.ee.Utils
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinRewardedAdListener(
-    private val _bridge: IMessageBridge,
-    private val _isLoaded: AtomicBoolean)
+    private val _bridge: IMessageBridge)
     : AppLovinAdLoadListener
     , AppLovinAdDisplayListener
     , AppLovinAdClickListener
@@ -30,7 +29,11 @@ internal class AppLovinRewardedAdListener(
         private const val kOnRewardedAdClosed = "${kPrefix}OnRewardedAdClosed"
     }
 
+    private val _isLoaded = AtomicBoolean(false)
     private var _rewarded = false
+
+    val isLoaded: Boolean
+        get() = _isLoaded.get()
 
     override fun adReceived(ad: AppLovinAd) {
         _logger.info(this::adReceived.name)
@@ -51,11 +54,11 @@ internal class AppLovinRewardedAdListener(
     override fun adDisplayed(ad: AppLovinAd) {
         _logger.info(this::adDisplayed.name)
         Thread.checkMainThread()
+        _rewarded = false
     }
 
     override fun videoPlaybackBegan(ad: AppLovinAd) {
         _logger.info(this::videoPlaybackBegan.name)
-        _rewarded = false
     }
 
     override fun adClicked(ad: AppLovinAd) {

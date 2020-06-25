@@ -17,7 +17,6 @@ ee::AppLovin* getAppLovin() {
     if (not initialized) {
         plugin.initialize(
             R"(gG8pkErh1_fQo-4cNDXGnxGyb9H4qz6VDEJyS8eU8IvxH-XeB4wy0BubKAg97neL0yIT4xyDEs8WqfA0l4zlGr)");
-        plugin.setTestAdsEnabled(true);
         plugin.setVerboseLogging(true);
         initialized = true;
     }

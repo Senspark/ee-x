@@ -11,7 +11,6 @@ import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinInterstitialAdListener
 import com.ee.internal.AppLovinRewardedAdListener
-import java.util.concurrent.atomic.AtomicBoolean
 
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
@@ -22,7 +21,6 @@ class AppLovinBridge(
 
         private const val kPrefix = "AppLovinBridge"
         private const val kInitialize = "${kPrefix}Initialize"
-        private const val kSetTestAdsEnabled = "${kPrefix}SetTestAdsEnabled"
         private const val kSetVerboseLogging = "${kPrefix}SetVerboseLogging"
         private const val kSetMuted = "${kPrefix}SetMuted"
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
@@ -33,12 +31,11 @@ class AppLovinBridge(
         private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
     }
 
+    private var _initializing = false
     private var _initialized = false
     private var _sdk: AppLovinSdk? = null
-    private val _isInterstitialAdLoaded = AtomicBoolean(false)
     private var _interstitialAd: AppLovinInterstitialAdDialog? = null
     private var _interstitialAdListener: AppLovinInterstitialAdListener? = null
-    private val _isRewardedAdLoaded = AtomicBoolean(false)
     private var _rewardedAd: AppLovinIncentivizedInterstitial? = null
     private var _rewardedAdListener: AppLovinRewardedAdListener? = null
 
@@ -85,10 +82,6 @@ class AppLovinBridge(
             initialize(message)
             ""
         }
-        _bridge.registerHandler(kSetTestAdsEnabled) { message ->
-            setTestAdEnabled(Utils.toBoolean(message))
-            ""
-        }
         _bridge.registerHandler(kSetVerboseLogging) { message ->
             setVerboseLogging(Utils.toBoolean(message))
             ""
@@ -97,12 +90,12 @@ class AppLovinBridge(
             setMuted(Utils.toBoolean(message))
             ""
         }
+        _bridge.registerHandler(kHasInterstitialAd) {
+            Utils.toString(hasInterstitialAd)
+        }
         _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
             ""
-        }
-        _bridge.registerHandler(kHasInterstitialAd) {
-            Utils.toString(hasInterstitialAd)
         }
         _bridge.registerHandler(kShowInterstitialAd) {
             showInterstitialAd()
@@ -124,7 +117,6 @@ class AppLovinBridge(
     @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
-        _bridge.deregisterHandler(kSetTestAdsEnabled)
         _bridge.deregisterHandler(kSetVerboseLogging)
         _bridge.deregisterHandler(kSetMuted)
         _bridge.deregisterHandler(kHasInterstitialAd)
@@ -138,35 +130,35 @@ class AppLovinBridge(
     @AnyThread
     fun initialize(key: String) {
         Thread.runOnMainThread(Runnable {
+            if (_initializing) {
+                return@Runnable
+            }
             if (_initialized) {
                 return@Runnable
             }
+            _initializing = true
             val settings = AppLovinSdkSettings()
-            settings.setVerboseLogging(false)
             val sdk = AppLovinSdk.getInstance(key, settings, _context)
-            sdk.initializeSdk()
+            sdk.initializeSdk {
+                _initializing = false
+                _initialized = true
+            }
 
-            val interstitialAdListener = AppLovinInterstitialAdListener(_bridge, _isInterstitialAdLoaded)
+            val interstitialAdListener = AppLovinInterstitialAdListener(_bridge)
             val interstitialAd = AppLovinInterstitialAd.create(sdk, _activity)
             interstitialAd.setAdLoadListener(interstitialAdListener)
             interstitialAd.setAdDisplayListener(interstitialAdListener)
             interstitialAd.setAdClickListener(interstitialAdListener)
 
             val rewardedAd = AppLovinIncentivizedInterstitial.create(sdk)
-            val rewardedAdListener = AppLovinRewardedAdListener(_bridge, _isRewardedAdLoaded)
+            val rewardedAdListener = AppLovinRewardedAdListener(_bridge)
 
             _sdk = sdk
             _interstitialAd = interstitialAd
             _interstitialAdListener = interstitialAdListener
             _rewardedAd = rewardedAd
             _rewardedAdListener = rewardedAdListener
-            _initialized = true
         })
-    }
-
-    @AnyThread
-    fun setTestAdEnabled(enabled: Boolean) {
-        // Removed.
     }
 
     @AnyThread
@@ -185,8 +177,8 @@ class AppLovinBridge(
         })
     }
 
-    val hasInterstitialAd: Boolean
-        @AnyThread get() = _isInterstitialAdLoaded.get()
+    private val hasInterstitialAd: Boolean
+        @AnyThread get() = _interstitialAdListener?.isLoaded ?: false
 
     @AnyThread
     fun loadInterstitialAd() {
@@ -206,7 +198,7 @@ class AppLovinBridge(
     }
 
     val hasRewardedAd: Boolean
-        @AnyThread get() = _isRewardedAdLoaded.get()
+        @AnyThread get() = _rewardedAdListener?.isLoaded ?: false
 
     @AnyThread
     fun loadRewardedAd() {

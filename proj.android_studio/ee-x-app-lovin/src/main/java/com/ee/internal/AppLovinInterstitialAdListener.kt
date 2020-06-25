@@ -1,5 +1,6 @@
 package com.ee.internal
 
+import androidx.annotation.AnyThread
 import com.applovin.sdk.AppLovinAd
 import com.applovin.sdk.AppLovinAdClickListener
 import com.applovin.sdk.AppLovinAdDisplayListener
@@ -10,8 +11,7 @@ import com.ee.Thread
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinInterstitialAdListener(
-    private val _bridge: IMessageBridge,
-    private val _isLoaded: AtomicBoolean)
+    private val _bridge: IMessageBridge)
     : AppLovinAdLoadListener
     , AppLovinAdDisplayListener
     , AppLovinAdClickListener {
@@ -24,6 +24,11 @@ internal class AppLovinInterstitialAdListener(
         private const val kOnInterstitialAdClicked = "${kPrefix}OnInterstitialAdClicked"
         private const val kOnInterstitialAdClosed = "${kPrefix}OnInterstitialAdClosed"
     }
+
+    private val _isLoaded = AtomicBoolean(false)
+
+    val isLoaded: Boolean
+        @AnyThread get() = _isLoaded.get()
 
     override fun adReceived(ad: AppLovinAd) {
         _logger.info(this::adReceived.name)

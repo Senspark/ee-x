@@ -100,7 +100,6 @@ namespace {
 const std::string kPrefix = "AppLovinBridge";
 
 const auto kInitialize         = kPrefix + "Initialize";
-const auto kSetTestAdsEnabled  = kPrefix + "SetTestAdsEnabled";
 const auto kSetVerboseLogging  = kPrefix + "SetVerboseLogging";
 const auto kSetMuted           = kPrefix + "SetMuted";
 
@@ -207,10 +206,6 @@ void Self::destroy() {
 void Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
     bridge_.call(kInitialize, key);
-}
-
-void Self::setTestAdsEnabled(bool enabled) {
-    bridge_.call(kSetTestAdsEnabled, core::toString(enabled));
 }
 
 void Self::setVerboseLogging(bool enabled) {

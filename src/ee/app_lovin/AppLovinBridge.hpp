@@ -22,16 +22,13 @@ namespace app_lovin {
 class Bridge final : public IPlugin {
 public:
     Bridge();
-    ~Bridge();
+    virtual ~Bridge() override;
 
     explicit Bridge(const Logger& logger);
 
     virtual void destroy() override;
 
     void initialize(const std::string& key);
-
-    /// Disabled by default.
-    void setTestAdsEnabled(bool enabled);
 
     /// Disabled by default.
     void setVerboseLogging(bool enabled);

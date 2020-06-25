@@ -26,6 +26,7 @@ public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
     private var _initializing = false
     private var _initialized = false
     private var _rewarded = false
+    private var _loadingAdIds: Set<String> = []
     private var _loadedAdIds: Set<String> = []
 
     public required init(_ bridge: IMessageBridge) {
@@ -79,8 +80,10 @@ public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
     func loadRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
             do {
+                _loadingAdIds.insert(adId)
                 try self._sdk.loadPlacement(withID: adId)
             } catch {
+                _loadingAdIds.remove(adId)
                 self._bridge.callCpp(kOnFailedToLoad, EEJsonUtils.convertDictionary(toString: [
                     "ad_id": adId,
                     "message": error.localizedDescription
@@ -124,8 +127,12 @@ public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
     public func vungleAdPlayabilityUpdate(_ isAdPlayable: Bool, adId: String?, error: Error?) {
         _logger.debug("\(#function): playable = \(isAdPlayable) id = \(adId ?? "") reason \(error?.localizedDescription ?? "")")
         if let adId = adId {
-            if _loadedAdIds.contains(adId) {
+            if isAdPlayable {
+                _loadedAdIds.insert(adId)
+            }
+            if _loadingAdIds.contains(adId) {
                 assert(isAdPlayable)
+                _loadingAdIds.remove(adId)
                 _bridge.callCpp(kOnLoaded, EEJsonUtils.convertDictionary(toString: [
                     "ad_id": adId
                 ]))
@@ -167,6 +174,7 @@ public class Vungle: NSObject, IPlugin, VungleSDKDelegate {
 
     public func vungleDidCloseAd(forPlacementID adId: String) {
         _logger.debug("\(#function): \(adId)")
+        _loadedAdIds.remove(adId)
         _bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
             "ad_id": adId,
             "rewarded": _rewarded

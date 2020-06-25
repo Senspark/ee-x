@@ -42,11 +42,10 @@ public class MessageBridge: NSObject, IMessageBridge {
                                      _ handler: @escaping AsyncMessageHandler) -> Bool {
         return registerHandler(tag) { message -> String in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let callbackTag = dict["callback_tag"] as? String else {
-                assert(false, "Unexpected value")
-                return ""
-            }
-            guard let originalMessage = dict["message"] as? String else {
+            guard
+                let callbackTag = dict["callback_tag"] as? String,
+                let originalMessage = dict["message"] as? String
+            else {
                 assert(false, "Unexpected value")
                 return ""
             }
@@ -98,7 +97,6 @@ public class MessageBridge: NSObject, IMessageBridge {
     private func call(_ tag: String, _ message: String) -> String {
         guard let handler = findHandler(tag) else {
             assert(false, "A handler with tag " + tag + " doesn't exist")
-            return ""
         }
         return handler(message)
     }

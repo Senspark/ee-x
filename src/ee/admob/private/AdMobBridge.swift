@@ -72,10 +72,10 @@ public class AdMobBridge: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateBannerAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["adId"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let sizeId = dict["adSize"] as? Int else {
+            guard
+                let adId = dict["adId"] as? String,
+                let sizeId = dict["adSize"] as? Int
+            else {
                 assert(false, "Invalid argument")
             }
             let adSize = self._bannerHelper.getAdSize(sizeId)
@@ -86,10 +86,10 @@ public class AdMobBridge: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateNativeAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["adId"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let layoutName = dict["layoutName"] as? String else {
+            guard
+                let adId = dict["adId"] as? String,
+                let layoutName = dict["layoutName"] as? String
+            else {
                 assert(false, "Invalid argument")
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))

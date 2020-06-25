@@ -46,10 +46,10 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func registerHandlers() {
         _bridge.registerHandler(kInitialize) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let gameId = dict["gameId"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let testModeEnabled = dict["testModeEnabled"] as? Bool else {
+            guard
+                let gameId = dict["gameId"] as? String,
+                let testModeEnabled = dict["testModeEnabled"] as? Bool
+            else {
                 assert(false, "Invalid argument")
             }
             self.initialize(gameId, testModeEnabled)

@@ -71,10 +71,10 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateBannerAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["ad_id"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let sizeId = dict["ad_size"] as? Int else {
+            guard
+                let adId = dict["ad_id"] as? String,
+                let sizeId = dict["ad_size"] as? Int
+            else {
                 assert(false, "Invalid argument")
             }
             let adSize = self._bannerHelper.getAdSize(sizeId)
@@ -85,10 +85,10 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         }
         _bridge.registerHandler(kCreateNativeAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let adId = dict["ad_id"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let layoutName = dict["layout_name"] as? String else {
+            guard
+                let adId = dict["ad_id"] as? String,
+                let layoutName = dict["layout_name"] as? String
+            else {
                 assert(false, "Invalid argument")
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))

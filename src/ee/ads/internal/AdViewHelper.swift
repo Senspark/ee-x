@@ -37,11 +37,10 @@ class AdViewHelper {
         }
         _bridge.registerHandler(_helper.setPosition) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let x = dict["x"] as? Int else {
-                assert(false, "Invalid argument")
-                return ""
-            }
-            guard let y = dict["y"] as? Int else {
+            guard
+                let x = dict["x"] as? Int,
+                let y = dict["y"] as? Int
+            else {
                 assert(false, "Invalid argument")
                 return ""
             }
@@ -57,11 +56,10 @@ class AdViewHelper {
         }
         _bridge.registerHandler(_helper.setSize) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let width = dict["width"] as? Int else {
-                assert(false, "Invalid argument")
-                return ""
-            }
-            guard let height = dict["height"] as? Int else {
+            guard
+                let width = dict["width"] as? Int,
+                let height = dict["height"] as? Int
+            else {
                 assert(false, "Invalid argument")
                 return ""
             }

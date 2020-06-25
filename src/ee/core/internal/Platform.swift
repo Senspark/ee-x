@@ -45,29 +45,22 @@ public class Platform: NSObject {
         }
         bridge.registerHandler(kSendMail) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let recipient = dict["recipient"] as? String else {
+            guard
+                let recipient = dict["recipient"] as? String,
+                let subject = dict["subject"] as? String,
+                let body = dict["body"] as? String
+            else {
                 assert(false, "Unexpected value")
-                return ""
-            }
-            guard let subject = dict["subject"] as? String else {
-                assert(false, "Unexpected value")
-                return ""
-            }
-            guard let body = dict["body"] as? String else {
-                assert(false, "Unexpected value")
-                return ""
             }
             return Utils.toString(sendMail(recipient, subject, body))
         }
         bridge.registerAsyncHandler(kTestConnection) { message, resolver in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let hostName = dict["host_name"] as? String else {
+            guard
+                let hostName = dict["host_name"] as? String,
+                let timeOut = dict["time_out"] as? Float
+            else {
                 assert(false, "Unexpected value")
-                return
-            }
-            guard let timeOut = dict["time_out"] as? Float else {
-                assert(false, "Unexpected value")
-                return
             }
             testConnection(hostName, timeOut)
                 .subscribe(

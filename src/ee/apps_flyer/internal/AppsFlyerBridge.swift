@@ -37,10 +37,10 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
     func registerHandlers() {
         _bridge.registerHandler(kInitialize) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let devKey = dict["devKey"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let appId = dict["appId"] as? String else {
+            guard
+                let devKey = dict["devKey"] as? String,
+                let appId = dict["appId"] as? String
+            else {
                 assert(false, "Invalid argument")
             }
             self.intialize(devKey, appId)
@@ -63,10 +63,10 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
         }
         _bridge.registerHandler(kTrackEvent) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
-            guard let name = dict["name"] as? String else {
-                assert(false, "Invalid argument")
-            }
-            guard let values = dict["values"] as? [String: Any] else {
+            guard
+                let name = dict["name"] as? String,
+                let values = dict["values"] as? [String: Any]
+            else {
                 assert(false, "Invalid argument")
             }
             self.trackEvent(name, values)

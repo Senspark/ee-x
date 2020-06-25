@@ -99,11 +99,11 @@ internal class FacebookRewardedAd:
     
     func show() {
         Thread.runOnMainThread {
-            guard let ad = self._ad else {
+            guard
+                let ad = self._ad,
+                let rootView = Utils.getCurrentRootViewController()
+            else {
                 assert(false, "Ad is not initialized")
-            }
-            guard let rootView = Utils.getCurrentRootViewController() else {
-                assert(false, "Root view is null")
             }
             self._rewarded = false
             let result = ad.show(fromRootViewController: rootView)

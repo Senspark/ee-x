@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+android {
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    buildFeatures {
+        prefabPublishing true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/ee/core/CMakeLists.txt'
+        }
+    }
+
+    prefab {
+        print "ASDAD"
+        ee_x_core {
+            print ee_x_core.class
+            headers "$projectDir/../../../src/ee/core/??"
+        }
+    }
+
+    sourceSets.main {
+        java.srcDir "$projectDir/../../../proj.android_studio/ee-x-core/src/main/java"
+        manifest.srcFile "$projectDir/../../../proj.android_studio/ee-x-core/src/main/AndroidManifest.xml"
+    }
+}
+
+dependencies {
+    implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
+    implementation 'com.google.android.gms:play-services-instantapps:17.0.0'
+
+    api 'com.google.truth:truth:1.0.1'
+
+    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    api 'io.reactivex.rxjava3:rxjava:3.0.2'
+    api 'io.reactivex.rxjava3:rxkotlin:3.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
+}

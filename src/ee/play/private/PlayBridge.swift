@@ -14,6 +14,7 @@ private let kSubmitScore = "\(kPrefix)SubmitScore"
 @objc(EEPlayBridge)
 public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
     private let _bridge: IMessageBridge
+    private var _isLoggingIn = false
     
     public required init(_ bridge: IMessageBridge) {
         _bridge = bridge
@@ -103,6 +104,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
     }
     
     private func logIn(_ callback: @escaping (_ successful: Bool) -> Void) {
+        _isLoggingIn = true
         GKLocalPlayer.local.authenticateHandler = { viewController, error in
             if let vc = viewController {
                 Utils.getCurrentRootViewController()?.present(vc, animated: true) {
@@ -110,13 +112,22 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
                 }
             }
             if GKLocalPlayer.local.isAuthenticated {
-                callback(true)
-                GKLocalPlayer.local.authenticateHandler = nil
+                if self._isLoggingIn {
+                    callback(true)
+                    self._isLoggingIn = false
+                }
+                
+                // Don't set to nil: will cause exception.
+                // GKLocalPlayer.local.authenticateHandler = nil
                 return
             }
             if error != nil {
-                callback(false)
-                GKLocalPlayer.local.authenticateHandler = nil
+                if self._isLoggingIn {
+                    callback(false)
+                    self._isLoggingIn = false
+                }
+                // Don't set to nil: will cause exception.
+                // GKLocalPlayer.local.authenticateHandler = nil
             }
         }
     }

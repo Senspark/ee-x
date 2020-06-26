@@ -68,11 +68,11 @@ class VungleBridge(
         _bridge.registerHandler(kInitialize) { message ->
             @Serializable
             class Request(
-                val application_id: String
+                val appId: String
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.application_id)
+            initialize(request.appId)
             ""
         }
         _bridge.registerHandler(kHasRewardedAd) { message ->
@@ -97,7 +97,7 @@ class VungleBridge(
     }
 
     @AnyThread
-    fun initialize(applicationId: String) {
+    fun initialize(appId: String) {
         Thread.runOnMainThread(Runnable {
             if (_initializing) {
                 return@Runnable
@@ -107,7 +107,7 @@ class VungleBridge(
             }
             _initializing = true
 
-            Vungle.init(applicationId, _context, object : InitCallback {
+            Vungle.init(appId, _context, object : InitCallback {
                 override fun onSuccess() {
                     _logger.info("${VungleBridge::initialize.name}: ${this::onSuccess.name}")
                     _initializing = false

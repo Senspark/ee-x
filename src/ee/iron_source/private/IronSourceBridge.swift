@@ -50,9 +50,39 @@ public class IronSourceBridge:
         }
     }
 
-    func registerHandlers() {}
+    func registerHandlers() {
+        _bridge.registerHandler(kInitialize) { message in
+            self.initialize(message)
+            return ""
+        }
+        _bridge.registerHandler(kLoadInterstitialAd) { _ in
+            self.loadInterstitialAd()
+            return ""
+        }
+        _bridge.registerHandler(kHasInterstitialAd) { _ in
+            Utils.toString(self.hasInterstitialAd)
+        }
+        _bridge.registerHandler(kShowInterstitialAd) { message in
+            self.showInterstitialAd(message)
+            return ""
+        }
+        _bridge.registerHandler(kHasRewardedAd) { _ in
+            Utils.toString(self.hasRewardedAd)
+        }
+        _bridge.registerHandler(kShowRewardedAd) { message in
+            self.showRewardedAd(message)
+            return ""
+        }
+    }
 
-    func deregisterHandlers() {}
+    func deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kLoadInterstitialAd)
+        _bridge.deregisterHandler(kHasInterstitialAd)
+        _bridge.deregisterHandler(kShowInterstitialAd)
+        _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kShowRewardedAd)
+    }
 
     func initialize(_ appKey: String) {
         Thread.runOnMainThread {

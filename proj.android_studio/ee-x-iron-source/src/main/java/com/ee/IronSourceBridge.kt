@@ -118,12 +118,12 @@ class IronSourceBridge(
     }
 
     @AnyThread
-    fun initialize(gameId: String) {
+    fun initialize(appKey: String) {
         Thread.runOnMainThread(Runnable {
             if (_initialized) {
                 return@Runnable
             }
-            IronSource.init(_activity, gameId, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL)
+            IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL)
             IronSource.shouldTrackNetworkState(_activity, true)
             IronSource.setInterstitialListener(this)
             IronSource.setRewardedVideoListener(this)
@@ -132,7 +132,7 @@ class IronSourceBridge(
         })
     }
 
-    val hasInterstitialAd: Boolean
+    private val hasInterstitialAd: Boolean
         @AnyThread get() = _isInterstitialAdLoaded.get()
 
     @AnyThread

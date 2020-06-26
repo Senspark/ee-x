@@ -31,7 +31,7 @@ public:
     virtual void destroy() override;
 
     /// Initializes Vungle with the specified game ID.
-    void initialize(const std::string& gameId);
+    void initialize(const std::string& appId);
 
     [[deprecated]] void initialize(const std::string& gameId,
                                    const std::string& adId);

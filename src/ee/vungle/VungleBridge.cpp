@@ -93,15 +93,11 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::Vungle);
 }
 
-void Self::initialize(const std::string& gameId) {
-    logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
+void Self::initialize(const std::string& appId) {
+    logger_.debug("%s: appId = %s", __PRETTY_FUNCTION__, appId.c_str());
     nlohmann::json json;
-    json["gameId"] = gameId;
+    json["appId"] = appId;
     bridge_.call(kInitialize, json.dump());
-}
-
-void Self::initialize(const std::string& gameId, const std::string& adId) {
-    initialize(gameId);
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {

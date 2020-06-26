@@ -88,7 +88,17 @@ public class AppLovinBridge: NSObject, IPlugin {
         }
     }
     
-    func deregisterHandlers() {}
+    func deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kSetVerboseLogging)
+        _bridge.deregisterHandler(kSetMuted)
+        _bridge.deregisterHandler(kHasInterstitialAd)
+        _bridge.deregisterHandler(kLoadInterstitialAd)
+        _bridge.deregisterHandler(kShowInterstitialAd)
+        _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kLoadRewardedAd)
+        _bridge.deregisterHandler(kShowRewardedAd)
+    }
     
     func initialize(_ key: String) {
         Thread.runOnMainThread {

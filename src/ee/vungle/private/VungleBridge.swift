@@ -45,7 +45,27 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         }
     }
 
-    func registerHandlers() {}
+    func registerHandlers() {
+        _bridge.registerHandler(kInitialize) { message in
+            let dict = EEJsonUtils.convertString(toDictionary: message)
+            guard let appId = dict["appId"] as? String else {
+                assert(false, "Invalid argument")
+            }
+            self.initialize(appId)
+            return ""
+        }
+        _bridge.registerHandler(kHasRewardedAd) { message in
+            Utils.toString(self.hasRewardedAd(message))
+        }
+        _bridge.registerHandler(kLoadRewardedAd) { message in
+            self.loadRewardedAd(message)
+            return ""
+        }
+        _bridge.registerHandler(kShowRewardedAd) { message in
+            self.showRewardedAd(message)
+            return ""
+        }
+    }
 
     func deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
@@ -54,7 +74,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func initialize(_ applicationId: String) {
+    func initialize(_ appId: String) {
         Thread.runOnMainThread {
             if self._initializing {
                 return
@@ -65,7 +85,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
             self._initializing = true
             self._sdk.delegate = self
             do {
-                try self._sdk.start(withAppId: applicationId)
+                try self._sdk.start(withAppId: appId)
             } catch {
                 self._logger.debug("\(#function): \(error.localizedDescription)")
                 return

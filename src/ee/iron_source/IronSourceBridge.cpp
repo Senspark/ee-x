@@ -22,7 +22,7 @@ using Self = Bridge;
 
 namespace {
 // clang-format off
-const std::string kPrefix                  = "IronSourceBridge";
+const std::string kPrefix                = "IronSourceBridge";
 
 const auto kInitialize                   = kPrefix + "Initialize";
 
@@ -137,9 +137,9 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::IronSource);
 }
 
-void Self::initialize(const std::string& gameId) {
-    logger_.debug("%s: gameId = %s", __PRETTY_FUNCTION__, gameId.c_str());
-    bridge_.call(kInitialize, gameId);
+void Self::initialize(const std::string& appKey) {
+    logger_.debug("%s: appKey = %s", __PRETTY_FUNCTION__, appKey.c_str());
+    bridge_.call(kInitialize, appKey);
 }
 
 std::shared_ptr<IInterstitialAd>

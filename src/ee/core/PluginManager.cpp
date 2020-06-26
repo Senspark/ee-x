@@ -47,13 +47,13 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 #if defined(EE_X_ANDROID)
 bool ee_staticInitializePlugins() {
     auto method = JniUtils::getStaticMethodInfo(
-        "com/ee/core/PluginManagerKt", "ee_staticInitializePlugins", "()Z");
+        "com/ee/PluginManagerKt", "ee_staticInitializePlugins", "()Z");
     return method->getEnv()->CallStaticBooleanMethod(method->getClass(),
                                                      method->getMethodId());
 }
 
 void* ee_staticGetActivity() {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
+    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
                                                 "ee_staticGetActivity",
                                                 "()Ljava/lang/Object;");
     return method->getEnv()->CallStaticObjectMethod(method->getClass(),
@@ -61,7 +61,7 @@ void* ee_staticGetActivity() {
 }
 
 bool ee_staticAddPlugin(const char* name) {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
+    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
                                                 "ee_staticAddPlugin",
                                                 "(Ljava/lang/String;)Z");
     auto name_java = JniUtils::toJavaString(name);
@@ -70,7 +70,7 @@ bool ee_staticAddPlugin(const char* name) {
 }
 
 bool ee_staticRemovePlugin(const char* name) {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/core/PluginManagerKt",
+    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
                                                 "ee_staticRemovePlugin",
                                                 "(Ljava/lang/String;)Z");
     auto name_java = JniUtils::toJavaString(name);

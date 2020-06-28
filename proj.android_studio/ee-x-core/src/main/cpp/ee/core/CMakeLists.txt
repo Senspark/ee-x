@@ -9,5 +9,5 @@ execute_process(COMMAND sh generate.sh WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DI
 include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../../../src
+    PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../../
 )

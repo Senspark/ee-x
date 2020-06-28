@@ -15,6 +15,24 @@ android {
         minSdkVersion 14
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
+
+    if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+        buildFeatures {
+            prefabPublishing true
+        }
+
+        externalNativeBuild {
+            cmake {
+                path 'src/main/cpp/ee/core/CMakeLists.txt'
+            }
+        }
+
+        prefab {
+            ee_x_core {
+                headers 'src/main/cpp/ee/core'
+            }
+        }
+    }
 }
 
 dependencies {

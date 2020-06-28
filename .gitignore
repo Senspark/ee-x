@@ -31,3 +31,5 @@ gradle/
 Gemfile.lock
 _site
 _posts
+.cxx
+.generated_headers

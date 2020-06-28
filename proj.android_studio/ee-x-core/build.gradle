@@ -17,6 +17,14 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_core', [
+        'ee/Macro.hpp',
+        'ee/Core*',
+        'ee/core/*.hpp'
+    ])
+}
+
 dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-instantapps:17.0.0'

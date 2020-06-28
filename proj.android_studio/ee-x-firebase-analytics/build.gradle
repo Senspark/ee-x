@@ -10,6 +10,12 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_firebase_analytics', [
+        'ee/firebase/analytics/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-firebase-core')
     implementation 'com.google.firebase:firebase-analytics:17.4.0'

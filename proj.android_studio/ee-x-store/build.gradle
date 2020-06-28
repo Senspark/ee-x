@@ -17,6 +17,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_store', [
+        'ee/Store*',
+        'ee/store/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'androidx.annotation:annotation:1.1.0'

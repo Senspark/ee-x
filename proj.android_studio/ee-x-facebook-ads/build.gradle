@@ -24,6 +24,10 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'facebook-ads')
+}
+
 dependencies {
     api project(':ee-x-ads')
 

@@ -10,6 +10,12 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_firebase_remote_config', [
+        'ee/firebase/remote_config/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-firebase-core')
     implementation 'com.google.firebase:firebase-config:19.1.4'

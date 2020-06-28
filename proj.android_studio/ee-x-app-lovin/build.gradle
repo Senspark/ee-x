@@ -19,6 +19,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_app_lovin', [
+        'ee/AppLovin*',
+        'ee/app_lovin/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
 

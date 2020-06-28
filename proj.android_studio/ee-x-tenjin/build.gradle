@@ -17,6 +17,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_tenjin', [
+        'ee/Tenjin*',
+        'ee/tenjin/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation fileTree(include: ['*.jar'], dir: 'libs')

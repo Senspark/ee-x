@@ -10,6 +10,12 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_firebase_dynamic_link', [
+        'ee/firebase/dynamic_link/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-firebase-core')
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'

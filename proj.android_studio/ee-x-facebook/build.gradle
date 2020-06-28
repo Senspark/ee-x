@@ -17,6 +17,14 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_facebook', [
+        'ee/Facebook.hpp',
+        'ee/FacebookFwd.hpp',
+        'ee/facebook/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
 

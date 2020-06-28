@@ -17,6 +17,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_play', [
+        'ee/Play*',
+        'ee/play/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'com.google.android.gms:play-services-games:19.0.0'

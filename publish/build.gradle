@@ -27,3 +27,39 @@ ext {
     targetSdkVersion = 29
     buildPrefab = true
 }
+
+def applyPrefabSettings(project, String libraryName, headerPaths) {
+    def projectDir = project.projectDir
+    project.android {
+        buildFeatures {
+            prefabPublishing true
+        }
+
+        externalNativeBuild {
+            cmake {
+                path "$projectDir/CMakeLists.txt"
+            }
+        }
+
+        prefab {
+            "$libraryName" {
+                headers "$projectDir/.generated_headers"
+            }
+        }
+    }
+
+    project.preBuild.dependsOn(tasks.create(name: "${libraryName}CopyHeaders") {
+        doFirst {
+            delete {
+                delete "$projectDir/.generated_headers"
+            }
+            copy {
+                from '../src'
+                into "$projectDir/.generated_headers"
+                headerPaths.each { item ->
+                    include item
+                }
+            }
+        }
+    })
+}

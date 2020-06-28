@@ -12,6 +12,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_firebase_core', [
+        'ee/Firebase*',
+        'ee/firebase/core/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'com.google.firebase:firebase-core:17.4.0'

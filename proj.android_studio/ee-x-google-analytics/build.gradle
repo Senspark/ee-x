@@ -16,6 +16,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
 }
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_google_analytics', [
+        'ee/Google*',
+        'ee/google/*.hpp'
+    ])
+}
 
 dependencies {
     api project(':ee-x-core')

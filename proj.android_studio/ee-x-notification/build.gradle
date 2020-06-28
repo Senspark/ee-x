@@ -17,6 +17,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_notification', [
+        'ee/Notification*',
+        'ee/notification/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'androidx.annotation:annotation:1.1.0'

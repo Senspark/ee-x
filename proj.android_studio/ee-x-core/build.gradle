@@ -18,38 +18,11 @@ android {
 }
 
 if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
-    android {
-        buildFeatures {
-            prefabPublishing true
-        }
-
-        externalNativeBuild {
-            cmake {
-                path '../../src/ee/core/CMakeLists.txt'
-            }
-        }
-
-        prefab {
-            ee_x_core {
-                headers 'generated_headers'
-            }
-        }
-    }
-
-    preBuild.dependsOn(tasks.create(name: 'CopyHeaders') {
-        doFirst {
-            delete {
-                delete 'generated_headers'
-            }
-            copy {
-                from '../../src'
-                into 'generated_headers'
-                include 'ee/Macro.hpp'
-                include 'ee/Core*'
-                include 'ee/core/*.hpp'
-            }
-        }
-    })
+    applyPrefabSettings(this, 'ee_x_core', [
+        'ee/Macro.hpp',
+        'ee/Core*',
+        'ee/core/*.hpp'
+    ])
 }
 
 dependencies {

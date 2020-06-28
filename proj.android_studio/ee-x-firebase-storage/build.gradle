@@ -10,6 +10,12 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_firebase_storage', [
+        'ee/firebase/storage/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-firebase-core')
     implementation 'com.google.firebase:firebase-storage:18.0.0'

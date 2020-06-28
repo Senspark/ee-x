@@ -15,24 +15,41 @@ android {
         minSdkVersion 14
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
+}
 
-    if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+    android {
         buildFeatures {
             prefabPublishing true
         }
 
         externalNativeBuild {
             cmake {
-                path 'src/main/cpp/ee/core/CMakeLists.txt'
+                path '../../src/ee/core/CMakeLists.txt'
             }
         }
 
         prefab {
             ee_x_core {
-                headers 'src/main/cpp/ee/core'
+                headers 'generated_headers'
             }
         }
     }
+
+    preBuild.dependsOn(tasks.create(name: 'CopyHeaders') {
+        doFirst {
+            delete {
+                delete 'generated_headers'
+            }
+            copy {
+                from '../../src'
+                into 'generated_headers'
+                include 'ee/Macro.hpp'
+                include 'ee/Core*'
+                include 'ee/core/*.hpp'
+            }
+        }
+    })
 }
 
 dependencies {

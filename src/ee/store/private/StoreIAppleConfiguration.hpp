@@ -17,7 +17,7 @@ namespace store {
 class IAppleConfiguration : public IStoreConfiguration {
 public:
     virtual std::string appReceipt() const = 0;
-    virtual canMakePayments() const = 0;
+    virtual bool canMakePayments() const = 0;
 };
 } // namespace store
 } // namespace ee

@@ -12,13 +12,16 @@
 
 namespace ee {
 namespace store {
+using PurchasingCallback = std::function<void(
+    const std::string& subject, const std::string& payload,
+    const std::string& receipt, const std::string& transactionId)>;
+
 class INativeAppleStore : public INativeStore {
 public:
+    virtual void setPurchasingCallback(const PurchasingCallback& callback) = 0;
     virtual void restoreTransactions() = 0;
     virtual void refreshAppReceipt() = 0;
     virtual void addTransactionObserver() = 0;
-    virtual void
-    setApplicationUsername(const std::string& applicationUsername) = 0;
     virtual std::string appReceipt() const = 0;
     virtual bool canMakePayments() const = 0;
     virtual bool simulateAskToBuy() const = 0;

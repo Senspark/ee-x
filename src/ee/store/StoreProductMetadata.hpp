@@ -28,6 +28,12 @@ public:
                              const std::string& currencyCode,
                              double localizedPrice);
 
+    ProductMetadata(const Self&) = delete;
+    Self& operator=(const Self&) = delete;
+
+    ProductMetadata(Self&&) = default;
+    Self& operator=(Self&&) = default;
+
     const std::string& localizedPriceString() const;
     const std::string& localizedTitle() const;
     const std::string& localizedDescription() const;

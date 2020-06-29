@@ -35,6 +35,8 @@ class IStoreListener;
 class ITransactionLog;
 
 class PurchasingManager;
+
+class INativeAppleStore;
 } // namespace store
 
 using StoreSkuType = store::SkuType;

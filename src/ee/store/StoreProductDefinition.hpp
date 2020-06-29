@@ -17,12 +17,21 @@
 namespace ee {
 namespace store {
 class ProductDefinition {
+private:
+    using Self = ProductDefinition;
+
 public:
     ProductDefinition();
     explicit ProductDefinition(const std::string& id,
                                const std::string& storeSpecificId,
                                ProductType type);
     explicit ProductDefinition(const std::string& id, ProductType type);
+
+    ProductDefinition(const Self&) = delete;
+    Self& operator=(const Self&) = delete;
+
+    ProductDefinition(Self&&) = default;
+    Self& operator=(Self&&) = default;
 
     const std::string& id() const;
     const std::string& storeSpecificId() const;

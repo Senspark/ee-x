@@ -5,178 +5,105 @@
 //  Created by eps on 6/2/20.
 //
 
-import Foundation
 import StoreKit
 
-private class StoreProductsRequestDelegate: NSObject, SKProductsRequestDelegate {
-    private let _bridge: IMessageBridge
-
-    fileprivate init(_ bridge: IMessageBridge) {
-        _bridge = bridge
-        super.init()
-    }
-
-    fileprivate func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        print(String(format: "%s", #function))
-        let array = response.products.map { [
-            "product_identifier": $0.productIdentifier,
-            "localized_descrption": $0.localizedDescription,
-            "localized_title": $0.localizedTitle,
-            "price": $0.price.stringValue,
-            "subscription_group_identifier": $0.subscriptionGroupIdentifier ?? "",
-            "subscription_period_number_of_units": $0.subscriptionPeriod?.numberOfUnits ?? 0,
-            "subscription_period_unit": $0.subscriptionPeriod?.unit ?? 0,
-            "currency_symbol": $0.priceLocale.currencySymbol ?? "",
-            "currency_code": $0.priceLocale.currencyCode ?? "",
-        ] }
-
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//        [bridge callCpp:k__request_products_succeeded
-//                message:[EEJsonUtils convertArrayToString:arr]];
-    }
-
-    fileprivate func requestDidFinish(_ request: SKRequest) {
-        // OK.
-    }
-
-    fileprivate func request(_ request: SKRequest, didFailWithError error: Error) {
-//            NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//        [bridge callCpp:k__request_products_failed
-//                message:[@([error code]) stringValue]];
-    }
-}
+private let kPrefix = "Store"
+private let kGetAppReceipt = "\(kPrefix)GetAppReceipt"
+private let kCanMakePayments = "\(kPrefix)CanMakePayments"
+private let kGetSimulateAskToBuy = "\(kPrefix)GetSimulateAskToBuy"
+private let kSetSimulateAskToBuy = "\(kPrefix)SetSimulateAskToBuy"
+private let kRetrieveProducts = "\(kPrefix)RetrieveProducts"
+private let kPurchase = "\(kPrefix)Purchase"
+private let kFinishTransaction = "\(kPrefix)FinishTransaction"
+private let kRestoreTransactions = "\(kPrefix)RestoreTransactions"
+private let kRefreshAppReceipt = "\(kPrefix)RefreshAppReceipt"
+private let kAddTransactionObserver = "\(kPrefix)AddTransactionObserver"
+private let kGetTransactionReceiptForProductId = "\(kPrefix)GetTransactionReceiptForProductId"
+private let kCallback = "\(kPrefix)Callback"
 
 @objc(EEStoreBridge)
-public class StoreBridge: NSObject, IPlugin, SKPaymentTransactionObserver {
+public class StoreBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
-    private let _queue: SKPaymentQueue
+    private let _unityPurchasing = StoreUnityPurchasing()
 
     public required init(_ bridge: IMessageBridge) {
         _bridge = bridge
-        _queue = SKPaymentQueue.default()
         super.init()
-        _queue.add(self)
+        _unityPurchasing.messageCallback = { subject, payload, receipt, transactionId in
+            self._bridge.callCpp(kCallback, EEJsonUtils.convertDictionary(toString: [
+                "subject": subject,
+                "payload": payload,
+                "receipt": receipt,
+                "transactionId": transactionId
+            ]))
+        }
         registerHandlers()
     }
 
     public func destroy() {
         deregisterHandlers()
-        _queue.remove(self)
+        _unityPurchasing.messageCallback = nil
     }
 
-    private func registerHandlers() {}
-
-    private func deregisterHandlers() {}
-
-    private func canMakePayments() -> Bool {
-        return SKPaymentQueue.canMakePayments()
-    }
-
-    private func requestProducts(_ identifiers: [String]) {
-        let delegate = StoreProductsRequestDelegate(_bridge)
-        let request = SKProductsRequest(productIdentifiers: Set(identifiers))
-        request.delegate = delegate
-        request.start()
-    }
-
-    private func addPayment(_ productIdentifier: String) {
-//        let payment = SKMutablePayment
-    }
-
-    private func restoreTransactions() {
-        _queue.restoreCompletedTransactions()
-    }
-
-    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                // Ignored.
-                break
-            case .purchased:
-                purchaseTransaction(transaction)
-            case .failed:
-                failTransaction(transaction)
-            case .restored:
-                restoreTransaction(transaction)
-            case .deferred:
-                deferTransaction(transaction)
-                break
-            @unknown default:
-                fatalError()
-            }
+    private func registerHandlers() {
+        _bridge.registerHandler(kGetAppReceipt) { _ in
+            self._unityPurchasing.getAppReceipt()
         }
-        //
+        _bridge.registerHandler(kCanMakePayments) { _ in
+            Utils.toString(self._unityPurchasing.canMakePayments)
+        }
+        _bridge.registerHandler(kGetSimulateAskToBuy) { _ in
+            Utils.toString(self._unityPurchasing.simulateAskToBuyEnabled)
+        }
+        _bridge.registerHandler(kSetSimulateAskToBuy) { message in
+            self._unityPurchasing.simulateAskToBuyEnabled = Utils.toBool(message)
+            return ""
+        }
+        _bridge.registerHandler(kRetrieveProducts) { message in
+            let productDefinitions = self._unityPurchasing.deserializeProductDefinitions(message)
+            let productIds = Set(productDefinitions.map { $0.storeSpecificId })
+            self._unityPurchasing.requestProducts(productIds)
+            return ""
+        }
+        _bridge.registerHandler(kPurchase) { message in
+            let productDefinition = self._unityPurchasing.deserializeProductDefinition(message)
+            self._unityPurchasing.purchaseProduct(productDefinition)
+            return ""
+        }
+        _bridge.registerHandler(kFinishTransaction) { message in
+            if message.count > 0 {
+                self._unityPurchasing.finishTransaction(message)
+            }
+            return ""
+        }
+        _bridge.registerHandler(kRestoreTransactions) { _ in
+            self._unityPurchasing.restorePurchases()
+            return ""
+        }
+        _bridge.registerHandler(kRefreshAppReceipt) { _ in
+            self._unityPurchasing.refreshReceipt()
+            return ""
+        }
+        _bridge.registerHandler(kAddTransactionObserver) { _ in
+            self._unityPurchasing.addTransactionObserver()
+            return ""
+        }
+        _bridge.registerHandler(kGetTransactionReceiptForProductId) { message in
+            self._unityPurchasing.getTransactionReceiptForProductId(message)
+        }
     }
 
-    private func purchaseTransaction(_ transaction: SKPaymentTransaction) {
-        assert(transaction.transactionState == .purchased)
-        _queue.finishTransaction(transaction)
-
-        let payment = transaction.payment
-        let dict: [String: String] = [
-            "product_id": payment.productIdentifier,
-            "transaction_id": transaction.transactionIdentifier ?? "",
-        ]
-
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//        [bridge callCpp:k__transaction_succeeded
-//                message:[EEJsonUtils convertDictionaryToString:dict]];
-    }
-
-    private func failTransaction(_ transaction: SKPaymentTransaction) {
-        assert(transaction.transactionState == .failed)
-        _queue.finishTransaction(transaction)
-
-        let payment = transaction.payment
-        let dict: [String: String] = [
-            "product_id": payment.productIdentifier,
-            "error": transaction.error?.localizedDescription ?? "",
-        ]
-
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//        [bridge callCpp:k__transaction_failed
-//                message:[EEJsonUtils convertDictionaryToString:dict]];
-    }
-
-    private func restoreTransaction(_ transaction: SKPaymentTransaction) {
-        assert(transaction.transactionState == .restored)
-        _queue.finishTransaction(transaction)
-
-        let payment = transaction.payment
-        let dict: [String: String] = [
-            "product_id": payment.productIdentifier,
-            "transaction_id": transaction.transactionIdentifier ?? "",
-        ]
-
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//         [bridge callCpp:k__transaction_restored
-//                 message:[EEJsonUtils convertDictionaryToString:dict]];
-    }
-
-    private func deferTransaction(_ transaction: SKPaymentTransaction) {
-        assert(transaction.transactionState == .deferred)
-        _queue.finishTransaction(transaction)
-
-        // FIXME.
-        // http://stackoverflow.com/questions/26187148/deferred-transactions
-    }
-
-    public func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
-        // FIXME.
-    }
-
-    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        // FIXME.
-//    EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//    [bridge callCpp:k__restore_purchases_succeeded];
-    }
-
-    public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        // FIXME.
-//        EEMessageBridge* bridge = [EEMessageBridge getInstance];
-//        [bridge callCpp:k__restore_purchases_failed
-//                message:[@([error code]) stringValue]];
+    private func deregisterHandlers() {
+        _bridge.deregisterHandler(kGetAppReceipt)
+        _bridge.deregisterHandler(kCanMakePayments)
+        _bridge.deregisterHandler(kGetSimulateAskToBuy)
+        _bridge.deregisterHandler(kSetSimulateAskToBuy)
+        _bridge.deregisterHandler(kRetrieveProducts)
+        _bridge.deregisterHandler(kPurchase)
+        _bridge.deregisterHandler(kFinishTransaction)
+        _bridge.deregisterHandler(kRestoreTransactions)
+        _bridge.deregisterHandler(kRefreshAppReceipt)
+        _bridge.deregisterHandler(kAddTransactionObserver)
+        _bridge.deregisterHandler(kGetTransactionReceiptForProductId)
     }
 }

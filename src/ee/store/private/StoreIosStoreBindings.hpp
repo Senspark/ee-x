@@ -16,6 +16,8 @@ class IosStoreBindings : public INativeAppleStore {
 public:
     IosStoreBindings();
 
+    virtual void
+    setPurchasingCallback(const PurchasingCallback& callback) override;
     virtual std::string appReceipt() const override;
     virtual bool canMakePayments() const override;
     virtual bool simulateAskToBuy() const override;
@@ -29,14 +31,13 @@ public:
     virtual void restoreTransactions() override;
     virtual void refreshAppReceipt() override;
     virtual void addTransactionObserver() override;
-    virtual void
-    setApplicationUsername(const std::string& applicationUsername) override;
 
     virtual std::string
     getTransactionReceiptForProductId(const std::string& productId) override;
 
 private:
     IMessageBridge& bridge_;
+    PurchasingCallback purchasingCallback_;
 };
 } // namespace store
 } // namespace ee

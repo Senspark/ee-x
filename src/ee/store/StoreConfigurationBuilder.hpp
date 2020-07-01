@@ -21,12 +21,22 @@ private:
     using Self = ConfigurationBuilder;
 
 public:
+    static std::shared_ptr<Self>
+    instance(const std::shared_ptr<IPurchasingModule>& first,
+             const std::vector<std::shared_ptr<IPurchasingModule>>& rest);
+
     Self& addProduct(const std::string& id, ProductType type,
                      const std::string& storeIds);
 
-    const std::set<std::shared_ptr<ProductDefinition>>& getProducts() const;
+    const std::set<std::shared_ptr<ProductDefinition>>& products() const;
 
 private:
+    friend UnityPurchasing;
+
+    explicit ConfigurationBuilder(
+        const std::shared_ptr<PurchasingFactory>& factory);
+
+    std::shared_ptr<PurchasingFactory> factory_;
     std::set<std::shared_ptr<ProductDefinition>> products_;
 };
 } // namespace store

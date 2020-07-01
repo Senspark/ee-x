@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_I_NATIVE_APP_STORE_HPP
 #define EE_X_STORE_I_NATIVE_APP_STORE_HPP
 
-#include "StoreINativeStore.hpp"
+#include "ee/store/private/StoreINativeStore.hpp"
 
 namespace ee {
 namespace store {

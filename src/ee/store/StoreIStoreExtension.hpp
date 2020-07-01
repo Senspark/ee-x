@@ -8,6 +8,8 @@
 #ifndef EE_X_STORE_I_STORE_EXTENSION_HPP
 #define EE_X_STORE_I_STORE_EXTENSION_HPP
 
+#ifdef __cplusplus
+
 #include "ee/StoreFwd.hpp"
 
 namespace ee {
@@ -18,5 +20,7 @@ public:
 };
 } // namespace store
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_STORE_I_STORE_EXTENSION_HPP */

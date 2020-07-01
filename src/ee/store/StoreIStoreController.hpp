@@ -20,7 +20,7 @@ class IStoreController {
 public:
     virtual ~IStoreController() = default;
 
-    virtual std::shared_ptr<ProductCollection> getProducts() const = 0;
+    virtual std::shared_ptr<ProductCollection> products() const = 0;
     virtual void initiatePurchase(const std::shared_ptr<Product>& product) = 0;
     virtual void initiatePurchase(const std::string& productId) = 0;
     virtual void

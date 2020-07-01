@@ -20,7 +20,8 @@ class IStore {
 public:
     virtual ~IStore() = default;
 
-    virtual void initialize(const IStoreCallback& callback) = 0;
+    virtual void
+    initialize(const std::shared_ptr<IStoreCallback>& callback) = 0;
     virtual void retrieveProducts(
         const std::vector<std::shared_ptr<ProductDefinition>>& products) = 0;
     virtual void

@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_IOS_STORE_BINDINGS_HPP
 #define EE_X_STORE_IOS_STORE_BINDINGS_HPP
 
-#include "StoreINativeAppleStore.hpp"
+#include "ee/store/private/StoreINativeAppleStore.hpp"
 
 namespace ee {
 namespace store {
@@ -22,16 +22,13 @@ public:
     virtual bool canMakePayments() const override;
     virtual bool simulateAskToBuy() const override;
     virtual void simulateAskToBuy(bool enabled) override;
-
     virtual void retrieveProducts(const std::string& json) override;
     virtual void purchase(const std::string& productJson) override;
     virtual void finishTransaction(const std::string& productJson,
                                    const std::string& transactionId) override;
-
     virtual void restoreTransactions() override;
     virtual void refreshAppReceipt() override;
     virtual void addTransactionObserver() override;
-
     virtual std::string
     getTransactionReceiptForProductId(const std::string& productId) override;
 

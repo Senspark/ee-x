@@ -21,9 +21,10 @@ class IStoreCallback {
 public:
     virtual ~IStoreCallback() = default;
 
+    virtual std::shared_ptr<ProductCollection> products() const = 0;
     virtual void onSetupFailed(InitializationFailureReason reason) = 0;
-    virtual void
-    onProductsRetrieved(const std::vector<ProductDescription>& products) = 0;
+    virtual void onProductsRetrieved(
+        const std::vector<std::shared_ptr<ProductDescription>>& products) = 0;
     virtual void onPurchaseSucceeded(const std::string& storeSpecificId,
                                      const std::string& receipt,
                                      const std::string& transactionId) = 0;

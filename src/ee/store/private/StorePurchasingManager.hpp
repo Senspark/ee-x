@@ -8,14 +8,17 @@
 #ifndef EE_X_STORE_PURCHASING_MANAGER_HPP
 #define EE_X_STORE_PURCHASING_MANAGER_HPP
 
-#ifdef __cplusplus
+#include <set>
 
 #include "ee/store/StoreIStoreCallback.hpp"
 #include "ee/store/StoreIStoreController.hpp"
 
 namespace ee {
 namespace store {
-class PurchasingManager : public IStoreCallback, public IStoreController {
+class PurchasingManager
+    : public std::enable_shared_from_this<PurchasingManager>,
+      public IStoreCallback,
+      public IStoreController {
 public:
     explicit PurchasingManager(
         const std::shared_ptr<ITransactionLog>& transactionLog, //
@@ -32,11 +35,11 @@ public:
     virtual void
     confirmPendingPurchase(const std::shared_ptr<Product>& product) override;
 
-    virtual std::shared_ptr<ProductCollection> getProducts() const override;
+    virtual std::shared_ptr<ProductCollection> products() const override;
 
     void
-    initialize(const std::shared_ptr<IStoreListener>& listener,
-               const std::vector<std::shared_ptr<ProductDefinition>>& products);
+    initialize(const std::shared_ptr<IInternalStoreListener>& listener,
+               const std::set<std::shared_ptr<ProductDefinition>>& products);
 
 private:
     virtual void onPurchaseSucceeded(const std::string& storeSpecificId,
@@ -46,7 +49,8 @@ private:
     virtual void
     onPurchaseFailed(const PurchaseFailureDescription& description) override;
     virtual void onProductsRetrieved(
-        const std::vector<ProductDescription>& products) override;
+        const std::vector<std::shared_ptr<ProductDescription>>& products)
+        override;
 
     void processPurchaseIfNew(const std::shared_ptr<Product>& product);
     void checkForInitialization();
@@ -59,12 +63,10 @@ private:
     std::string storeName_;
     bool useTransactionLog_;
     bool initialized_;
-    std::shared_ptr<IStoreListener> listener_;
+    std::shared_ptr<IInternalStoreListener> listener_;
     std::shared_ptr<ProductCollection> products_;
 };
 } // namespace store
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_STORE_PURCHASING_MANAGER_HPP */

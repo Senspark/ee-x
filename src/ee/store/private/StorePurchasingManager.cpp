@@ -5,13 +5,12 @@
 //  Created by eps on 6/26/20.
 //
 
-#include "ee/store/StorePurchasingManager.hpp"
+#include "ee/store/private/StorePurchasingManager.hpp"
 
 #include <ee/core/Logger.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreIStore.hpp"
-#include "ee/store/StoreIStoreListener.hpp"
 #include "ee/store/StoreITransactionLog.hpp"
 #include "ee/store/StoreInitializationFailureReason.hpp"
 #include "ee/store/StoreProduct.hpp"
@@ -23,6 +22,7 @@
 #include "ee/store/StorePurchaseFailureDescription.hpp"
 #include "ee/store/StorePurchaseFailureReason.hpp"
 #include "ee/store/StorePurchaseProcessingResult.hpp"
+#include "ee/store/private/StoreIInternalStoreListener.hpp"
 
 namespace ee {
 namespace store {
@@ -84,7 +84,7 @@ void Self::confirmPendingPurchase(const std::shared_ptr<Product>& product) {
     }
 }
 
-std::shared_ptr<ProductCollection> Self::getProducts() const {
+std::shared_ptr<ProductCollection> Self::products() const {
     return products_;
 }
 
@@ -122,25 +122,25 @@ void Self::onPurchaseFailed(const PurchaseFailureDescription& description) {
 }
 
 void Self::onProductsRetrieved(
-    const std::vector<ProductDescription>& products) {
+    const std::vector<std::shared_ptr<ProductDescription>>& products) {
     std::set<std::shared_ptr<Product>> productSet;
     for (auto&& description : products) {
         auto&& product =
-            products_->withStoreSpecificId(description.storeSpecificId());
+            products_->withStoreSpecificId(description->storeSpecificId());
         if (product == nullptr) {
             product = std::make_shared<Product>(
                 std::make_shared<ProductDefinition>(
-                    description.storeSpecificId(),
-                    description.storeSpecificId(), description.type()),
-                description.metadata());
+                    description->storeSpecificId(),
+                    description->storeSpecificId(), description->type()),
+                description->metadata());
             productSet.insert(product);
         }
         product->availableToPurchase_ = true;
-        product->metadata_ = description.metadata();
-        product->transactionId_ = description.transactionId();
-        if (not description.receipt().empty()) {
+        product->metadata_ = description->metadata();
+        product->transactionId_ = description->transactionId();
+        if (not description->receipt().empty()) {
             product->receipt_ = FormatUnifiedReceipt(
-                description.receipt(), description.transactionId());
+                description->receipt(), description->transactionId());
         }
     }
     if (not productSet.empty()) {
@@ -184,7 +184,7 @@ void Self::checkForInitialization() {
             }
         }
         if (flag) {
-            listener_->onInitialized(*this);
+            listener_->onInitialized(shared_from_this());
         } else {
             onSetupFailed(InitializationFailureReason::NoProductsAvailable);
         }
@@ -193,10 +193,10 @@ void Self::checkForInitialization() {
 }
 
 void Self::initialize(
-    const std::shared_ptr<IStoreListener>& listener,
-    const std::vector<std::shared_ptr<ProductDefinition>>& products) {
+    const std::shared_ptr<IInternalStoreListener>& listener,
+    const std::set<std::shared_ptr<ProductDefinition>>& products) {
     listener_ = listener;
-    store_->initialize(*this);
+    store_->initialize(shared_from_this());
 
     std::vector<std::shared_ptr<Product>> items;
     std::transform(products.cbegin(), products.cend(),
@@ -205,7 +205,9 @@ void Self::initialize(
                            item, std::make_shared<ProductMetadata>());
                    });
     products_ = std::make_shared<ProductCollection>(items);
-    store_->retrieveProducts(products);
+    std::vector<std::shared_ptr<ProductDefinition>> list(products.cbegin(),
+                                                         products.cend());
+    store_->retrieveProducts(list);
 }
 
 std::string Self::FormatUnifiedReceipt(const std::string& platformReceipt,

@@ -174,11 +174,13 @@ internal class AdMobBannerAd(
         @AnyThread get() = _viewHelper?.isVisible ?: false
         @AnyThread set(value) {
             _viewHelper?.isVisible = value
-            if (value) {
-                // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
-                // -refresh-or-sign-in-to-google-plus
-                _ad?.setBackgroundColor(Color.BLACK)
-            }
+            Thread.runOnMainThread(Runnable {
+                if (value) {
+                    // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
+                    // -refresh-or-sign-in-to-google-plus
+                    _ad?.setBackgroundColor(Color.BLACK)
+                }
+            })
         }
 
     override fun onAdLoaded() {

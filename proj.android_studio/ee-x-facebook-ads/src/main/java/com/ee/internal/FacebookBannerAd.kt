@@ -158,9 +158,11 @@ internal class FacebookBannerAd(
         @AnyThread get() = _viewHelper?.isVisible ?: false
         @AnyThread set(value) {
             _viewHelper?.isVisible = value
-            if (value) {
-                _ad?.setBackgroundColor(Color.BLACK)
-            }
+            Thread.runOnMainThread(Runnable {
+                if (value) {
+                    _ad?.setBackgroundColor(Color.BLACK)
+                }
+            })
         }
 
     override fun onAdLoaded(ad: Ad) {

@@ -8,24 +8,27 @@
 #ifndef EE_X_STORE_JSON_STORE_HPP
 #define EE_X_STORE_JSON_STORE_HPP
 
-#include "StoreIStoreConfiguration.hpp"
-#include "StoreIStoreExtension.hpp"
 #include "ee/store/StoreIStore.hpp"
+#include "ee/store/StoreIStoreConfiguration.hpp"
+#include "ee/store/StoreIStoreExtension.hpp"
+#include "ee/store/StoreITransactionHistoryExtensions.hpp"
+#include "ee/store/private/StoreIStoreInternal.hpp"
 #include "ee/store/private/StoreIUnityCallback.hpp"
 
 namespace ee {
 namespace store {
 class JsonStore : public IStore,
                   public IUnityCallback,
-                  public IStoreExtension,
-                  public IStoreConfiguration {
+                  public virtual IStoreExtension,
+                  public IStoreInternal,
+                  public virtual IStoreConfiguration,
+                  public ITransactionHistoryExtensions {
 public:
     JsonStore();
 
-    bool storeTestEnabled() const;
-    void storeTestEnabled(bool enabled);
-
-    void setNativeStore(const std::shared_ptr<INativeStore>& callback);
+    void setNativeStore(const std::shared_ptr<INativeStore>& native);
+    virtual void
+    setModule(const std::shared_ptr<StandardPurchasingModule>& module) override;
 
     virtual void
     initialize(const std::shared_ptr<IStoreCallback>& callback) override;
@@ -45,7 +48,10 @@ public:
                                      const std::string& transactionId) override;
     virtual void onPurchaseFailed(const std::string& json) override;
 
-    const PurchaseFailureDescription& getLastPurchaseFailureDescription() const;
+    virtual PurchaseFailureDescription
+    getLastPurchaseFailureDescription() const override;
+    virtual StoreSpecificPurchaseErrorCode
+    getLastStoreSPecificPurchaseErrorCode() const override;
 
 protected:
     std::shared_ptr<IStoreCallback> unity_;
@@ -54,12 +60,15 @@ private:
     void onPurchaseFailed(const PurchaseFailureDescription& failure,
                           const std::string& json = "");
 
-    bool isManagedStoreEnabled_;
+    StoreSpecificPurchaseErrorCode
+    parseStoreSpecificPurchaseErrorCode(const std::string& json);
+
     bool isRefreshing_;
     bool isFirstTimeRetrievingProducts_;
-
     StoreSpecificPurchaseErrorCode lastPurchaseErrorCode_;
     std::shared_ptr<INativeStore> store_;
+    std::shared_ptr<StandardPurchasingModule> module_;
+    const Logger& logger_;
     std::shared_ptr<PurchaseFailureDescription> lastPurchaseFailureDescription_;
 };
 } // namespace store

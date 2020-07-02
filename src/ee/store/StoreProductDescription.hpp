@@ -10,6 +10,8 @@
 
 #ifdef __cplusplus
 
+#include <string>
+
 #include "StoreProductType.hpp"
 
 namespace ee {

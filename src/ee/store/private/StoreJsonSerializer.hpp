@@ -24,11 +24,11 @@ public:
     static std::string serializeProductDefinitions(
         const std::vector<std::shared_ptr<ProductDefinition>>& products);
 
-    static std::string
-    serializeProductDescription(const ProductDescription& product);
+    static std::string serializeProductDescription(
+        const std::shared_ptr<ProductDescription>& product);
 
     static std::string serializeProductDescriptions(
-        const std::vector<ProductDescription>& products);
+        const std::vector<std::shared_ptr<ProductDescription>>& products);
 
     static std::vector<std::shared_ptr<ProductDescription>>
     deserializeProductDescriptions(const std::string& json);

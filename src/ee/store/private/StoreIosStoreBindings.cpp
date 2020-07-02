@@ -7,8 +7,8 @@
 
 #include "StoreIosStoreBindings.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
@@ -32,8 +32,8 @@ const auto kCallback = kPrefix + "Callback";
 
 using Self = IosStoreBindings;
 
-Self::IosStoreBindings()
-    : bridge_(MessageBridge::getInstance()) {
+Self::IosStoreBindings(IMessageBridge& bridge)
+    : bridge_(bridge) {
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);

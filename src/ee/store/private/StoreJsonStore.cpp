@@ -7,6 +7,8 @@
 
 #include "ee/store/private/StoreJsonStore.hpp"
 
+#include <ee/core/Logger.hpp>
+
 #include "ee/store/StoreIStoreCallback.hpp"
 #include "ee/store/StoreInitializationFailureReason.hpp"
 #include "ee/store/StoreProductCollection.hpp"
@@ -19,11 +21,22 @@ namespace ee {
 namespace store {
 using Self = JsonStore;
 
-Self::JsonStore() {
-    isManagedStoreEnabled_ = true;
+Self::JsonStore()
+    : logger_(Logger::getSystemLogger()) {
     isRefreshing_ = false;
     isFirstTimeRetrievingProducts_ = true;
     lastPurchaseErrorCode_ = StoreSpecificPurchaseErrorCode::Unknown;
+}
+
+void Self::setNativeStore(const std::shared_ptr<INativeStore>& native) {
+    store_ = native;
+}
+
+void Self::setModule(const std::shared_ptr<StandardPurchasingModule>& module) {
+    if (module == nullptr) {
+        return;
+    }
+    module_ = module;
 }
 
 void Self::initialize(const std::shared_ptr<IStoreCallback>& callback) {
@@ -75,14 +88,24 @@ void Self::onPurchaseFailed(const PurchaseFailureDescription& failure,
                             const std::string& json) {
     lastPurchaseFailureDescription_ =
         std::make_shared<PurchaseFailureDescription>(failure);
-    // FIXME.
-    //  lastPurchaseErrorCode_ =
+    lastPurchaseErrorCode_ = parseStoreSpecificPurchaseErrorCode(json);
     unity_->onPurchaseFailed(failure);
 }
 
-const PurchaseFailureDescription&
-Self::getLastPurchaseFailureDescription() const {
+PurchaseFailureDescription Self::getLastPurchaseFailureDescription() const {
     return *lastPurchaseFailureDescription_;
+}
+
+StoreSpecificPurchaseErrorCode
+Self::getLastStoreSPecificPurchaseErrorCode() const {
+    return lastPurchaseErrorCode_;
+}
+
+StoreSpecificPurchaseErrorCode
+Self::parseStoreSpecificPurchaseErrorCode(const std::string& json) {
+    // FIXME.
+    assert(false);
+    return StoreSpecificPurchaseErrorCode::BILLING_RESPONSE_RESULT_ERROR;
 }
 } // namespace store
 } // namespace ee

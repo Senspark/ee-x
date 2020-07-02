@@ -20,6 +20,7 @@ enum class ProductType;
 enum class PurchaseFailureReason;
 enum class PurchaseProcessingResult;
 enum class StoreSpecificPurchaseErrorCode;
+enum class AppStore;
 
 struct ProductDefinition;
 struct ProductDescription;
@@ -38,18 +39,21 @@ class IExtensionProvider;
 class IInternalStoreListener;
 class IStore;
 class IStoreCallback;
+class IStoreConfiguration;
 class IStoreController;
 class IStoreExtension;
 class IStoreListener;
 class ITransactionLog;
+class IUnityCallback;
 
 class INativeStore;
 class INativeAppleStore;
+class INativeStoreProvider;
 
 class ConfigurationBuilder;
 class PurchasingFactory;
 class PurchasingManager;
-
+class StandardPurchasingModule;
 class UnityPurchasing;
 } // namespace store
 

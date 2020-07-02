@@ -25,6 +25,18 @@ Self::ProductDefinition(const std::string& id,
 Self::ProductDefinition(const std::string& id, ProductType type)
     : Self(id, id, type) {}
 
+const std::string& Self::id() const {
+    return id_;
+}
+
+const std::string& Self::storeSpecificId() const {
+    return storeSpecificId_;
+}
+
+ProductType Self::type() const {
+    return type_;
+}
+
 bool operator<(const Self& lhs, const Self& rhs) {
     return lhs.id() < rhs.id();
 }

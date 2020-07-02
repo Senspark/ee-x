@@ -10,9 +10,7 @@
 
 #ifdef __cplusplus
 
-#include <memory>
-
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreTypeCache.hpp"
 
 namespace ee {
 namespace store {
@@ -21,7 +19,14 @@ public:
     virtual ~IExtensionProvider() = default;
 
     template <class T>
-    std::shared_ptr<T> getExtension();
+    std::shared_ptr<T> getExtension() const {
+        auto key = TypeCache::toString<T>();
+        return std::dynamic_pointer_cast<T>(getExtension(key));
+    }
+
+protected:
+    virtual std::shared_ptr<IStoreExtension>
+    getExtension(const std::string& key) const = 0;
 };
 } // namespace store
 } // namespace ee

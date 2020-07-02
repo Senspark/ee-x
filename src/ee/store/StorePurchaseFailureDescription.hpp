@@ -16,10 +16,20 @@
 
 namespace ee {
 namespace store {
-struct PurchaseFailureDescription {
-    std::string productId;
-    PurchaseFailureReason reason;
-    std::string message;
+class PurchaseFailureDescription {
+public:
+    explicit PurchaseFailureDescription(const std::string& productId,
+                                        PurchaseFailureReason reason,
+                                        const std::string& message);
+
+    const std::string& productId() const;
+    PurchaseFailureReason reason() const;
+    const std::string& message() const;
+
+private:
+    std::string productId_;
+    PurchaseFailureReason reason_;
+    std::string message_;
 };
 } // namespace store
 } // namespace ee

@@ -8,15 +8,17 @@
 #ifndef EE_X_STORE_APPLE_STORE_IMPL_HPP
 #define EE_X_STORE_APPLE_STORE_IMPL_HPP
 
-#include "StoreIAppleConfiguration.hpp"
-#include "StoreIAppleExtensions.hpp"
-#include "StoreJsonStore.hpp"
+#include "ee/store/StoreIAppleConfiguration.hpp"
+#include "ee/store/StoreIAppleExtensions.hpp"
+#include "ee/store/private/StoreJsonStore.hpp"
 
 namespace ee {
 namespace store {
 class AppleStoreImpl : public JsonStore,
                        public IAppleExtensions,
-                       public IAppleConfiguration {
+                       public virtual IStoreExtension,
+                       public IAppleConfiguration,
+                       public virtual IStoreConfiguration {
 public:
     void setNativeStore(const std::shared_ptr<INativeAppleStore>& apple);
 

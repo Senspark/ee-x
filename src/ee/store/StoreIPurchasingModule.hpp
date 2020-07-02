@@ -18,6 +18,7 @@ namespace ee {
 namespace store {
 class IPurchasingModule {
 public:
+    virtual ~IPurchasingModule() = default;
     virtual void
     configure(const std::shared_ptr<IPurchasingBinder>& binder) = 0;
 };

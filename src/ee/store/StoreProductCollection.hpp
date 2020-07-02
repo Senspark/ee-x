@@ -22,6 +22,14 @@ namespace ee {
 namespace store {
 class ProductCollection {
 public:
+    const std::set<std::shared_ptr<Product>>& set() const;
+    const std::vector<std::shared_ptr<Product>>& all() const;
+    std::shared_ptr<Product> withId(const std::string& id) const;
+    std::shared_ptr<Product> withStoreSpecificId(const std::string& id) const;
+
+private:
+    friend PurchasingManager;
+
     template <class T>
     explicit ProductCollection(const T& products) {
         addProducts(products);
@@ -34,16 +42,12 @@ public:
         }
     }
 
-    const std::vector<std::shared_ptr<Product>>& all() const;
-    std::shared_ptr<Product> withId(const std::string& id);
-    std::shared_ptr<Product> withStoreSpecificId(const std::string& id);
-
-private:
     void addProduct(const std::shared_ptr<Product>& product);
 
     std::vector<std::shared_ptr<Product>> products_;
-    std::map<std::string, Product*> idToProduct_;
-    std::map<std::string, Product*> storeSpecificIdToProduct_;
+    std::set<std::shared_ptr<Product>> productSet_;
+    std::map<std::string, std::shared_ptr<Product>> idToProduct_;
+    std::map<std::string, std::shared_ptr<Product>> storeSpecificIdToProduct_;
 };
 } // namespace store
 } // namespace ee

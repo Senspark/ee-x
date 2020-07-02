@@ -26,8 +26,8 @@ public:
         const std::shared_ptr<IStore>& store,                   //
         const std::string& storeName);
 
-    bool useTransactionLog() const;
-    void useTransactionLog(bool enabled);
+    virtual bool useTransactionLog() const override;
+    virtual void useTransactionLog(bool enabled) override;
 
     virtual void
     initiatePurchase(const std::shared_ptr<Product>& product) override;
@@ -54,7 +54,7 @@ private:
 
     void processPurchaseIfNew(const std::shared_ptr<Product>& product);
     void checkForInitialization();
-    std::string FormatUnifiedReceipt(const std::string& platformReceipt,
+    std::string formatUnifiedReceipt(const std::string& platformReceipt,
                                      const std::string& transactionId);
 
     std::shared_ptr<ITransactionLog> transactionLog_;

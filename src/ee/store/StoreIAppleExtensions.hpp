@@ -8,6 +8,8 @@
 #ifndef EE_X_STORE_I_APPLE_EXTENSIONS_HPP
 #define EE_X_STORE_I_APPLE_EXTENSIONS_HPP
 
+#ifdef __cplusplus
+
 #include <functional>
 #include <map>
 
@@ -15,7 +17,7 @@
 
 namespace ee {
 namespace store {
-class IAppleExtensions : IStoreExtension {
+class IAppleExtensions : public virtual IStoreExtension {
 public:
     virtual void refreshAppReceipt(
         const std::function<void(const std::string&)>& successCallback,
@@ -40,5 +42,7 @@ public:
 };
 } // namespace store
 } // namespace ee
+
+#endif // __cplusplus
 
 #endif /* EE_X_STORE_I_APPLE_EXTENSIONS_HPP */

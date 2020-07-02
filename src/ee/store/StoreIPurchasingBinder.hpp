@@ -10,9 +10,7 @@
 
 #ifdef __cplusplus
 
-#include <string>
-
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreTypeCache.hpp"
 
 namespace ee {
 namespace store {
@@ -21,10 +19,28 @@ public:
     virtual ~IPurchasingBinder() = default;
     virtual void registerStore(const std::string& name,
                                const std::shared_ptr<IStore>& store) = 0;
+
+    template <class T>
+    void registerExtension(const std::shared_ptr<IStoreExtension>& instance) {
+        auto key = TypeCache::toString<T>();
+        registerExtension(key, instance);
+    }
+
+    template <class T>
+    void registerConfiguration(
+        const std::shared_ptr<IStoreConfiguration>& instance) {
+        auto key = TypeCache::toString<T>();
+        registerConfiguration(key, instance);
+    }
+
+protected:
     virtual void
-    registerExtension(const std::shared_ptr<IStoreExtension>& instance) = 0;
+    registerExtension(const std::string& key,
+                      const std::shared_ptr<IStoreExtension>& instance) = 0;
+
     virtual void registerConfiguration(
-        const std::shared_ptr<IStoreController>& instance) = 0;
+        const std::string& key,
+        const std::shared_ptr<IStoreConfiguration>& instance) = 0;
 };
 } // namespace store
 } // namespace ee

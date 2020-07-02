@@ -30,6 +30,8 @@ public:
                                      const std::string& transactionId) = 0;
     virtual void
     onPurchaseFailed(const PurchaseFailureDescription& description) = 0;
+    virtual bool useTransactionLog() const = 0;
+    virtual void useTransactionLog(bool value) = 0;
 };
 } // namespace store
 } // namespace ee

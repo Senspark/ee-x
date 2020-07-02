@@ -98,7 +98,7 @@ void Self::onPurchaseSucceeded(const std::string& storeSpecificId,
                                                 ProductType::NonConsumable),
             std::make_shared<ProductMetadata>());
     }
-    product->receipt_ = FormatUnifiedReceipt(receipt, transactionId);
+    product->receipt_ = formatUnifiedReceipt(receipt, transactionId);
     product->transactionId_ = transactionId;
     processPurchaseIfNew(product);
 }
@@ -112,12 +112,14 @@ void Self::onSetupFailed(InitializationFailureReason reason) {
 }
 
 void Self::onPurchaseFailed(const PurchaseFailureDescription& description) {
-    auto&& product = products_->withStoreSpecificId(description.productId);
+    auto&& product = products_->withStoreSpecificId(description.productId());
     if (product == nullptr) {
         logger_.error("Failed to purchase unknown product %s",
-                      description.productId.c_str());
+                      description.productId().c_str());
     } else {
-        listener_->onPurchaseFailed(product, description.reason);
+        logger_.info("onPurchaseFailedEvent(%s)",
+                     product->definition()->id().c_str());
+        listener_->onPurchaseFailed(product, description.reason());
     }
 }
 
@@ -139,15 +141,15 @@ void Self::onProductsRetrieved(
         product->metadata_ = description->metadata();
         product->transactionId_ = description->transactionId();
         if (not description->receipt().empty()) {
-            product->receipt_ = FormatUnifiedReceipt(
+            product->receipt_ = formatUnifiedReceipt(
                 description->receipt(), description->transactionId());
         }
     }
     if (not productSet.empty()) {
-        // products_->addProducts(/* FIXME: productSet */)
+        products_->addProducts(productSet);
     }
     checkForInitialization();
-    for (auto&& product : products_->all()) {
+    for (auto&& product : products_->set()) {
         if (not product->receipt().empty() &&
             not product->transactionId().empty()) {
             processPurchaseIfNew(product);
@@ -174,7 +176,7 @@ void Self::processPurchaseIfNew(const std::shared_ptr<Product>& product) {
 void Self::checkForInitialization() {
     if (not initialized_) {
         auto flag = false;
-        for (auto&& product : products_->all()) {
+        for (auto&& product : products_->set()) {
             if (not product->availableToPurchase()) {
                 logger_.warn("Unavailable product %s - %s",
                              product->definition()->id().c_str(),
@@ -204,13 +206,14 @@ void Self::initialize(
                        return std::make_shared<Product>(
                            item, std::make_shared<ProductMetadata>());
                    });
-    products_ = std::make_shared<ProductCollection>(items);
+    products_ =
+        std::shared_ptr<ProductCollection>(new ProductCollection(items));
     std::vector<std::shared_ptr<ProductDefinition>> list(products.cbegin(),
                                                          products.cend());
     store_->retrieveProducts(list);
 }
 
-std::string Self::FormatUnifiedReceipt(const std::string& platformReceipt,
+std::string Self::formatUnifiedReceipt(const std::string& platformReceipt,
                                        const std::string& transactionId) {
     nlohmann::json json;
     json["Store"] = storeName_;

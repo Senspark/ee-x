@@ -20,7 +20,7 @@ class UnityPurchasing {
 public:
     static void
     initialize(const std::shared_ptr<IStoreListener>& listener,
-               const std::shared_ptr<ConfigurationBuilder>& builder,
+               const ConfigurationBuilder& builder,
                const std::shared_ptr<ITransactionLog>& transactionLog);
 
     static void
@@ -29,7 +29,7 @@ public:
 private:
     static void
     initialize(const std::shared_ptr<IStoreListener>& listener,
-               const std::shared_ptr<ConfigurationBuilder>& builder,
+               const ConfigurationBuilder& builder,
                const std::shared_ptr<ITransactionLog>& transactionLog,
                const Logger& logger);
 };

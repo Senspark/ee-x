@@ -14,7 +14,7 @@ namespace ee {
 namespace store {
 class IosStoreBindings : public INativeAppleStore {
 public:
-    IosStoreBindings();
+    explicit IosStoreBindings(IMessageBridge& bridge);
 
     virtual void
     setPurchasingCallback(const PurchasingCallback& callback) override;

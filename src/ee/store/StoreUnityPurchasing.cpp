@@ -20,7 +20,7 @@ namespace store {
 using Self = UnityPurchasing;
 
 void Self::initialize(const std::shared_ptr<IStoreListener>& listener,
-                      const std::shared_ptr<ConfigurationBuilder>& builder,
+                      const ConfigurationBuilder& builder,
                       const std::shared_ptr<ITransactionLog>& transactionLog) {
     initialize(listener, builder, transactionLog, Logger::getSystemLogger());
 }
@@ -31,15 +31,15 @@ void Self::clearTransactionLog(
 }
 
 void Self::initialize(const std::shared_ptr<IStoreListener>& listener,
-                      const std::shared_ptr<ConfigurationBuilder>& builder,
+                      const ConfigurationBuilder& builder,
                       const std::shared_ptr<ITransactionLog>& transactionLog,
                       const Logger& logger) {
     auto manager = std::make_shared<PurchasingManager>(
-        transactionLog, logger, builder->factory_->service(),
-        builder->factory_->storeName());
+        transactionLog, logger, builder.factory_->service(),
+        builder.factory_->storeName());
     auto proxy =
-        std::make_shared<StoreListenerProxy>(listener, builder->factory_);
-    manager->initialize(proxy, builder->products());
+        std::make_shared<StoreListenerProxy>(listener, builder.factory_);
+    manager->initialize(proxy, builder.products());
 }
 } // namespace store
 } // namespace ee

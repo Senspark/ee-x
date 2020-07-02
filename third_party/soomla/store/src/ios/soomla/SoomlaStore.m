@@ -158,13 +158,15 @@ static NSString* developerPayload = NULL;
     for (SKPaymentTransaction *transaction in transactions)
     {
         __auto_type productIdentifier = transaction.payment.productIdentifier;
-        __auto_type item = [StoreInfo.getInstance purchasableItemWithProductId:productIdentifier];
+        id item = [StoreInfo.getInstance.purchasableItems
+            objectForKey:productIdentifier];
         if (item == nil) {
             // FIXME: workaround to fix confliction with store plugin.
-            NSLog(@"%s: Ignore invalid product %@", __PRETTY_FUNCTION__, productIdentifier);
+            NSLog(@"%s: Ignore invalid product %@", __PRETTY_FUNCTION__,
+                  productIdentifier);
             continue;
         }
-        
+
         switch (transaction.transactionState)
         {
             case SKPaymentTransactionStatePurchased:

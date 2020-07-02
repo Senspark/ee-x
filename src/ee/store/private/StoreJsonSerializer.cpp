@@ -54,11 +54,12 @@ void to_json(nlohmann::json& json,
 
 void from_json(const nlohmann::json& json,
                std::shared_ptr<ProductDescription>& value) {
-    value = std::make_shared<ProductDescription>(json["storeSpecificId"], //
-                                                 json["metadata"],        //
-                                                 json["receipt"],         //
-                                                 json["transactionId"],
-                                                 json["type"]);
+    value = std::make_shared<ProductDescription>(
+        json["storeSpecificId"],   //
+        json["metadata"],          //
+        json.value("receipt", ""), //
+        json.value("transactionId", ""),
+        json.value("type", ProductType::NonConsumable));
 }
 
 std::string Self::serializeProductDefinition(

@@ -307,15 +307,15 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
         unitySendMessage("onTransactionsRestoredFail", error.localizedDescription)
     }
 
-    func decodeProductDefinition(_ hash: [String: String]) -> StoreProductDefinition {
-        let product = StoreProductDefinition(hash["id"] ?? "",
-                                             hash["storeSpecificId"] ?? "",
-                                             hash["type"] ?? "")
+    func decodeProductDefinition(_ hash: [String: Any]) -> StoreProductDefinition {
+        let product = StoreProductDefinition(hash["id"] as? String ?? "",
+                                             hash["storeSpecificId"] as? String ?? "",
+                                             hash["type"] as? Int ?? 0)
         return product
     }
 
     func deserializeProductDefinitions(_ json: String) -> [StoreProductDefinition] {
-        let hashes = EEJsonUtils.convertString(toArray: json) as? [[String: String]] ?? []
+        let hashes = EEJsonUtils.convertString(toArray: json) as? [[String: Any]] ?? []
         var result: [StoreProductDefinition] = []
         for hash in hashes {
             result.append(decodeProductDefinition(hash))
@@ -324,7 +324,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
     }
 
     func deserializeProductDefinition(_ json: String) -> StoreProductDefinition {
-        let hash = EEJsonUtils.convertString(toDictionary: json) as? [String: String] ?? [:]
+        let hash = EEJsonUtils.convertString(toDictionary: json) as? [String: Any] ?? [:]
         return decodeProductDefinition(hash)
     }
 
@@ -332,20 +332,17 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
         var hashes: [[String: Any]] = []
         for product in appleProducts {
             var hash: [String: Any] = [:]
-            hashes.append(hash)
-
             hash["storeSpecificId"] = product.productIdentifier
 
-            var metadata: [String: String] = [:]
-            hash["metadata"] = metadata
-            metadata["localizedPrice"] = "\(product.price)"
+            var metadata: [String: Any] = [:]
+            metadata["localizedPrice"] = product.price
             metadata["isoCurrencyCode"] = product.priceLocale.currencyCode
             if let introductoryPrice = product.introductoryPrice {
-                metadata["introductoryPrice"] = "\(introductoryPrice.price)"
+                metadata["introductoryPrice"] = introductoryPrice.price
                 metadata["introductoryPriceLocale"] = introductoryPrice.priceLocale.currencyCode
-                metadata["introductoryPriceNumberOfPeriods"] = "\(introductoryPrice.numberOfPeriods)"
-                metadata["numberOfUnits"] = "\(introductoryPrice.subscriptionPeriod.numberOfUnits)"
-                metadata["unit"] = "\(introductoryPrice.subscriptionPeriod.unit)"
+                metadata["introductoryPriceNumberOfPeriods"] = introductoryPrice.numberOfPeriods
+                metadata["numberOfUnits"] = introductoryPrice.subscriptionPeriod.numberOfUnits
+                metadata["unit"] = introductoryPrice.subscriptionPeriod.unit
             } else {
                 metadata["introductoryPrice"] = ""
                 metadata["introductoryPriceLocale"] = ""
@@ -354,8 +351,8 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
                 metadata["unit"] = ""
             }
             if let subscriptionPeriod = product.subscriptionPeriod {
-                metadata["subscriptionNumberOfUnits"] = "\(subscriptionPeriod.numberOfUnits)"
-                metadata["subscriptionPeriodUnit"] = "\(subscriptionPeriod.unit)"
+                metadata["subscriptionNumberOfUnits"] = subscriptionPeriod.numberOfUnits
+                metadata["subscriptionPeriodUnit"] = subscriptionPeriod.unit
             } else {
                 metadata["subscriptionNumberOfUnits"] = ""
                 metadata["subscriptionPeriodUnit"] = ""
@@ -372,6 +369,9 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
             }
             metadata["localizedTitle"] = product.localizedTitle
             metadata["localizedDescription"] = product.localizedDescription
+
+            hash["metadata"] = metadata
+            hashes.append(hash)
         }
         return EEJsonUtils.convertArray(toString: hashes)
     }

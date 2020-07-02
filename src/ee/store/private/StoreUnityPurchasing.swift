@@ -256,6 +256,13 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         print("\(#function): UpdatedTransactions")
         for transaction in transactions {
+            let productIdentifier = transaction.payment.productIdentifier
+            if _validProducts[productIdentifier] == nil {
+                // FIXME: workaround to fix confliction with soomla.
+                print("\(#function): Ignore invalid product \(productIdentifier)")
+                continue
+            }
+
             switch transaction.transactionState {
             case SKPaymentTransactionState.purchasing:
                 // Item is still in the process of being purchased.
@@ -266,7 +273,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
                 onTransactionSucceeded(transaction)
             case SKPaymentTransactionState.deferred:
                 print("\(#function): PurchaseDeferred")
-                unitySendMessage("onProductPurchaseDeferred", transaction.payment.productIdentifier)
+                unitySendMessage("onProductPurchaseDeferred", productIdentifier)
             case SKPaymentTransactionState.failed:
                 // Purchase was either cancelled by user or an error occurred.
                 let errorCode = (transaction.error as NSError?)?.code ?? -1
@@ -275,7 +282,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
                 let reason = purchaseErrorCodeToReason(errorCode)
                 let errorCodeString = storeKitErrorCodeNames[errorCode] ?? "SKErrorUnknown"
                 let errorDescription = "APPLE_\(transaction.error?.localizedDescription ?? "")"
-                onPurchaseFailed(transaction.payment.productIdentifier,
+                onPurchaseFailed(productIdentifier,
                                  reason,
                                  errorCodeString,
                                  errorDescription)

@@ -158,11 +158,22 @@ Self::deserializeProductDetails(const std::string& json) {
 
 PurchaseFailureDescription
 Self::deserializeFailureReason(const std::string& json) {
+    using Enum = PurchaseFailureReason;
+    static std::map<std::string, Enum> strToEnum{
+        {"PurchasingUnavailable", Enum::PurchasingUnavailable},
+        {"ExistingPurchasePending", Enum::ExistingPurchasePending},
+        {"ProductUnavailable", Enum::ProductUnavailable},
+        {"SignatureInvalid", Enum::SignatureInvalid},
+        {"UserCancelled", Enum::UserCancelled},
+        {"PaymentDeclined", Enum::PaymentDeclined},
+        {"DuplicateTransaction", Enum::DuplicateTransaction}};
+
     auto dic = nlohmann::json::parse(json);
     auto reason = PurchaseFailureReason::Unknown;
-
-    // FIXME.
-    assert(false);
+    auto iter = strToEnum.find(dic["reason"]);
+    if (iter != strToEnum.cend()) {
+        reason = iter->second;
+    }
     return PurchaseFailureDescription(dic["productId"], reason, dic["message"]);
 }
 } // namespace store

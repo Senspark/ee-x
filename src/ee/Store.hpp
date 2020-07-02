@@ -16,6 +16,7 @@
 #include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductType.hpp"
 #include "ee/store/StorePurchaseProcessingResult.hpp"
+#include "ee/store/StoreSessionTransactionLog.hpp"
 #include "ee/store/StoreStandardPurchasingModule.hpp"
 #include "ee/store/StoreUnityPurchasing.hpp"
 

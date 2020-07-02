@@ -10,7 +10,10 @@
 #include "ee/store/StoreBridge.hpp"
 
 #include "ee/store/StoreConfigurationBuilder.hpp"
+#include "ee/store/StoreIStoreController.hpp"
 #include "ee/store/StoreIStoreListener.hpp"
+#include "ee/store/StoreProduct.hpp"
+#include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductType.hpp"
 #include "ee/store/StorePurchaseProcessingResult.hpp"
 #include "ee/store/StoreStandardPurchasingModule.hpp"

@@ -65,15 +65,15 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
         return ""
     }
 
-    private func UnitySendMessage(_ subject: String, _ payload: String) {
+    private func unitySendMessage(_ subject: String, _ payload: String) {
         _messageCallback?(subject, payload, "", "")
     }
 
-    private func UnitySendMessage(_ subject: String, _ payload: String, _ receipt: String) {
+    private func unitySendMessage(_ subject: String, _ payload: String, _ receipt: String) {
         _messageCallback?(subject, payload, receipt, "")
     }
 
-    private func UnitySendMessage(_ subject: String, _ payload: String, _ receipt: String, _ transactionId: String) {
+    private func unitySendMessage(_ subject: String, _ payload: String, _ receipt: String, _ transactionId: String) {
         _messageCallback?(subject, payload, receipt, transactionId)
     }
 
@@ -81,9 +81,9 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
         let refresher = StoreReceiptRefresher { success in
             print("\(#function): RefreshReceipt status \(success)")
             if success {
-                self.UnitySendMessage("onAppReceiptRefreshed", self.getAppReceipt())
+                self.unitySendMessage("onAppReceiptRefreshed", self.getAppReceipt())
             } else {
-                self.UnitySendMessage("onAppReceiptRefreshFailed", "")
+                self.unitySendMessage("onAppReceiptRefreshFailed", "")
             }
         }
         let request = SKReceiptRefreshRequest()
@@ -115,7 +115,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
             _pendingTransactions[transactionId] = transaction
         }
 
-        UnitySendMessage("OnPurchaseSucceeded",
+        unitySendMessage("OnPurchaseSucceeded",
                          transaction.payment.productIdentifier,
                          getAppReceipt(),
                          transactionId)
@@ -212,7 +212,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
         fetchedProducts.forEach { _validProducts[$0] = $1 }
         let productJson = serializeProductMetadata(response.products)
 
-        UnitySendMessage("OnProductsRetrieved",
+        unitySendMessage("OnProductsRetrieved",
                          productJson,
                          getAppReceipt())
     }
@@ -236,7 +236,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
                           _ reason: String,
                           _ errorCode: String,
                           _ errorDescription: String) {
-        UnitySendMessage("OnPurchaseFailed", EEJsonUtils.convertDictionary(toString: [
+        unitySendMessage("OnPurchaseFailed", EEJsonUtils.convertDictionary(toString: [
             "productId": productId,
             "reason": reason,
             "storeSpecificErrorCode": errorCode,
@@ -266,7 +266,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
                 onTransactionSucceeded(transaction)
             case SKPaymentTransactionState.deferred:
                 print("\(#function): PurchaseDeferred")
-                UnitySendMessage("onProductPurchaseDeferred", transaction.payment.productIdentifier)
+                unitySendMessage("onProductPurchaseDeferred", transaction.payment.productIdentifier)
             case SKPaymentTransactionState.failed:
                 // Purchase was either cancelled by user or an error occurred.
                 let errorCode = (transaction.error as NSError?)?.code ?? -1
@@ -297,14 +297,14 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
     /// Called when SKPaymentQueue has finished sending restored transactions.
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         print("\(#function): PaymentQueueRestoreCompletedTransactionsFinished")
-        UnitySendMessage("onTransactionsRestoredSuccess", "")
+        unitySendMessage("onTransactionsRestoredSuccess", "")
     }
 
     /// Called if an error occurred while restoring transactions.
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         print("\(#function): restoreCompletedTransactionsFailedWithError")
         // Restore was cancelled or an error occurred, so notify user.
-        UnitySendMessage("onTransactionsRestoredFail", error.localizedDescription)
+        unitySendMessage("onTransactionsRestoredFail", error.localizedDescription)
     }
 
     func decodeProductDefinition(_ hash: [String: String]) -> StoreProductDefinition {

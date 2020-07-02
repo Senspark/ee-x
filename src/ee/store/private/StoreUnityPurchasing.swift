@@ -359,7 +359,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
             }
             if let subscriptionPeriod = product.subscriptionPeriod {
                 metadata["subscriptionNumberOfUnits"] = subscriptionPeriod.numberOfUnits
-                metadata["subscriptionPeriodUnit"] = subscriptionPeriod.unit
+                metadata["subscriptionPeriodUnit"] = subscriptionPeriod.unit.rawValue
             } else {
                 metadata["subscriptionNumberOfUnits"] = ""
                 metadata["subscriptionPeriodUnit"] = ""

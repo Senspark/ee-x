@@ -1,0 +1,54 @@
+//
+//  StoreStoreSpecificPurchaseErrorCode.hpp
+//  Pods
+//
+//  Created by eps on 7/1/20.
+//
+
+#ifndef EE_X_STORE_STORE_SPECIFIC_PURCHASE_ERROR_CODE_HPP
+#define EE_X_STORE_STORE_SPECIFIC_PURCHASE_ERROR_CODE_HPP
+
+#include "ee/StoreFwd.hpp"
+
+namespace ee {
+namespace store {
+enum class StoreSpecificPurchaseErrorCode {
+    SKErrorUnknown,
+    SKErrorClientInvalid,
+    SKErrorPaymentCancelled,
+    SKErrorPaymentInvalid,
+    SKErrorPaymentNotAllowed,
+    SKErrorStoreProductNotAvailable,
+    SKErrorCloudServicePermissionDenied,
+    SKErrorCloudServiceNetworkConnectionFailed,
+    SKErrorCloudServiceRevoked,
+    BILLING_RESPONSE_RESULT_OK,
+    BILLING_RESPONSE_RESULT_USER_CANCELED,
+    BILLING_RESPONSE_RESULT_SERVICE_UNAVAILABLE,
+    BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE,
+    BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE,
+    BILLING_RESPONSE_RESULT_DEVELOPER_ERROR,
+    BILLING_RESPONSE_RESULT_ERROR,
+    BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED,
+    BILLING_RESPONSE_RESULT_ITEM_NOT_OWNED,
+    IABHELPER_ERROR_BASE,
+    IABHELPER_REMOTE_EXCEPTION,
+    IABHELPER_BAD_RESPONSE,
+    IABHELPER_VERIFICATION_FAILED,
+    IABHELPER_SEND_INTENT_FAILED,
+    IABHELPER_USER_CANCELLED,
+    IABHELPER_UNKNOWN_PURCHASE_RESPONSE,
+    IABHELPER_MISSING_TOKEN,
+    IABHELPER_UNKNOWN_ERROR,
+    IABHELPER_SUBSCRIPTIONS_NOT_AVAILABLE,
+    IABHELPER_INVALID_CONSUMPTION,
+    Amazon_ALREADY_PURCHASED,
+    Amazon_FAILED,
+    Amazon_INVALID_SKU,
+    Amazon_NOT_SUPPORTED,
+    Unknown,
+};
+} // namespace store
+} // namespace ee
+
+#endif /* EE_X_STORE_STORE_SPECIFIC_PURCHASE_ERROR_CODE_HPP */

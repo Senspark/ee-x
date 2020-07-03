@@ -646,6 +646,7 @@ Pod::Spec.new do |spec|
       'src/ee/store/private/*'
 
     s.dependency 'ee-x/core'
+    s.dependency 'TPInAppReceipt'
   end
 
   spec.subspec 'jsb-core' do |s|

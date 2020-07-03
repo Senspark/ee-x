@@ -21,6 +21,9 @@ enum class PurchaseFailureReason;
 enum class PurchaseProcessingResult;
 enum class StoreSpecificPurchaseErrorCode;
 enum class AppStore;
+enum class SubscriptionPeriodUnit;
+enum class Result;
+enum class AppleStoreProductType;
 
 struct ProductDefinition;
 struct ProductDescription;
@@ -28,6 +31,7 @@ struct ProductMetadata;
 struct PurchaseFailureDescription;
 
 class AppleReceipt;
+class AppleInAppPurchaseReceipt;
 
 class Product;
 class ProductCollection;
@@ -49,6 +53,9 @@ class IUnityCallback;
 class INativeStore;
 class INativeAppleStore;
 class INativeStoreProvider;
+
+class SubscriptionManager;
+class SubscriptionInfo;
 
 class ConfigurationBuilder;
 class PurchasingFactory;

@@ -6,9 +6,11 @@
 //
 
 import StoreKit
+import TPInAppReceipt
 
 private let kPrefix = "Store"
 private let kGetAppReceipt = "\(kPrefix)GetAppReceipt"
+private let kParseAppReceipt = "\(kPrefix)ParseAppReceipt"
 private let kCanMakePayments = "\(kPrefix)CanMakePayments"
 private let kGetSimulateAskToBuy = "\(kPrefix)GetSimulateAskToBuy"
 private let kSetSimulateAskToBuy = "\(kPrefix)SetSimulateAskToBuy"
@@ -48,6 +50,35 @@ public class StoreBridge: NSObject, IPlugin {
     private func registerHandlers() {
         _bridge.registerHandler(kGetAppReceipt) { _ in
             self._unityPurchasing.getAppReceipt()
+        }
+        _bridge.registerHandler(kParseAppReceipt) { message in
+            guard let data = Data(base64Encoded: message, options: .ignoreUnknownCharacters) else {
+                return ""
+            }
+            guard let receipt = try? InAppReceipt.receipt(from: data) else {
+                return ""
+            }
+            let dict: [String: Any] = [
+                "inAppPurchaseReceipts": receipt.purchases.map { [
+                    "quantity": $0.quantity,
+                    "productId": $0.productIdentifier,
+                    "transactionId": $0.transactionIdentifier,
+                    "originalTransactionIdentifier": $0.originalTransactionIdentifier,
+                    "purchaseDate": $0.purchaseDate.timeIntervalSince1970,
+                    "originalPurchaseDate": $0.originalPurchaseDateString.rfc3339date()?.timeIntervalSince1970 ?? 0,
+                    "subscriptionExpirationDate": $0.subscriptionExpirationDate?.timeIntervalSince1970 ?? 0,
+                    "cancellationDate": $0.cancellationDateString?.rfc3339date()?.timeIntervalSince1970 ?? 0,
+                    "isFreeTrial": $0.subscriptionTrialPeriod,
+                    "productType": $0.productType.rawValue,
+                    "isIntroductoryPricePeriod": $0.subscriptionIntroductoryPricePeriod
+                ] },
+                "bundleId": receipt.bundleIdentifier,
+                "appVersion": receipt.appVersion,
+                "expirationDate": receipt.expirationDate?.rfc3339date()?.timeIntervalSince1970 ?? 0,
+                "originalApplicationVersion": receipt.originalAppVersion,
+                "receiptCreationDate": receipt.creationDate.rfc3339date()?.timeIntervalSince1970 ?? 0
+            ]
+            return EEJsonUtils.convertDictionary(toString: dict)
         }
         _bridge.registerHandler(kCanMakePayments) { _ in
             Utils.toString(self._unityPurchasing.canMakePayments)
@@ -95,6 +126,7 @@ public class StoreBridge: NSObject, IPlugin {
 
     private func deregisterHandlers() {
         _bridge.deregisterHandler(kGetAppReceipt)
+        _bridge.deregisterHandler(kParseAppReceipt)
         _bridge.deregisterHandler(kCanMakePayments)
         _bridge.deregisterHandler(kGetSimulateAskToBuy)
         _bridge.deregisterHandler(kSetSimulateAskToBuy)

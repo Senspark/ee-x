@@ -42,7 +42,7 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
             if FileManager.default.fileExists(atPath: receipUrl.path) {
                 do {
                     let receipt = try Data(contentsOf: receipUrl)
-                    let result = receipt.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
+                    let result = receipt.base64EncodedString()
                     return result
                 } catch {
                     print("\(#function): \(error.localizedDescription)")

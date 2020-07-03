@@ -55,6 +55,7 @@ public:
 
 protected:
     std::shared_ptr<IStoreCallback> unity_;
+    const Logger& logger_;
 
 private:
     void onPurchaseFailed(const PurchaseFailureDescription& failure,
@@ -68,7 +69,6 @@ private:
     StoreSpecificPurchaseErrorCode lastPurchaseErrorCode_;
     std::shared_ptr<INativeStore> store_;
     std::shared_ptr<StandardPurchasingModule> module_;
-    const Logger& logger_;
     std::shared_ptr<PurchaseFailureDescription> lastPurchaseFailureDescription_;
 };
 } // namespace store

@@ -58,7 +58,7 @@ private:
 
     std::shared_ptr<AppleReceipt>
     getAppleReceiptFromBase64String(const std::string& receipt) const;
-    bool isValidPurchaseState(const std::shared_ptr<AppleReceipt>& appleReceipt,
+    bool isValidPurchaseState(const std::shared_ptr<AppleReceipt>& receipt,
                               const std::string& id);
 
     std::function<void(const std::shared_ptr<Product>& product)>

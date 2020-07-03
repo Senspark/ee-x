@@ -38,6 +38,7 @@ void Self::destroy() {
 
 void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
+    json["ticker"] = builder.ticker_;
     json["title"] =
         builder.title_.empty() ? getApplicationName() : builder.title_;
     json["body"] = builder.body_;

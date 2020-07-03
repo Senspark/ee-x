@@ -14,15 +14,14 @@
 #include <memory>
 #include <vector>
 
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {
-class MultiInterstitialAd
-    : public IInterstitialAd,
-      public SafeObserverManager<IInterstitialAdObserver> {
+class MultiInterstitialAd : public IInterstitialAd,
+                            public ObserverManager<IInterstitialAdObserver> {
 private:
     using Self = MultiInterstitialAd;
     using Super = IInterstitialAd;

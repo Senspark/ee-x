@@ -12,14 +12,14 @@
 #include <string>
 
 #include <ee/ads/IInterstitialAd.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/IronSourceFwd.hpp"
 
 namespace ee {
 namespace iron_source {
 class InterstitialAd : public IInterstitialAd,
-                       public SafeObserverManager<IInterstitialAdObserver> {
+                       public ObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 

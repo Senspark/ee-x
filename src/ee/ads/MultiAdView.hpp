@@ -16,14 +16,13 @@
 #include <utility>
 #include <vector>
 
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView,
-                    public SafeObserverManager<IAdViewObserver> {
+class MultiAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 private:
     using Self = MultiAdView;
 
@@ -65,7 +64,6 @@ private:
 
     std::shared_ptr<IAdView> activeItem_;
     std::set<std::shared_ptr<IAdView>> loadedItems_;
-    std::unique_ptr<SpinLock> locker_;
 };
 } // namespace ads
 } // namespace ee

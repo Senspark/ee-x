@@ -10,7 +10,6 @@
 
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
-#include <ee/core/SpinLock.hpp>
 #include <ee/core/Task.hpp>
 
 namespace ee {
@@ -22,7 +21,6 @@ Self::MultiAdView() {
     position_ = std::make_pair(0, 0);
     visible_ = false;
     handle_ = std::make_unique<ObserverHandle>();
-    locker_ = std::make_unique<SpinLock>();
 }
 
 Self::~MultiAdView() = default;
@@ -35,9 +33,7 @@ Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
         .addObserver({
             .onLoaded =
                 [this, item] {
-                    std::unique_lock<SpinLock> lk(*locker_);
                     loadedItems_.insert(item);
-                    lk.unlock();
 
                     // Propagation.
                     dispatchEvent([](auto&& observer) {
@@ -83,12 +79,10 @@ Task<bool> Self::load() {
             // Ignore displaying item.
             continue;
         }
-        std::unique_lock<SpinLock> lk(*locker_);
         if (loadedItems_.count(item) != 0) {
             // Already loaded and not displayed.
             continue;
         }
-        lk.unlock();
         if (co_await item->load()) {
             result = true;
         }
@@ -147,7 +141,6 @@ void Self::setVisible(bool visible) {
         item->setVisible(false);
     }
     if (visible) {
-        std::scoped_lock<SpinLock> lk(*locker_);
         if (loadedItems_.empty()) {
             for (auto&& item : items_) {
                 if (item != activeItem_ && item->isLoaded()) {

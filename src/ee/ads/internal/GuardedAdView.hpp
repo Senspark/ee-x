@@ -3,14 +3,13 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IAdView.hpp"
 
 namespace ee {
 namespace ads {
-class GuardedAdView : public IAdView,
-                      public SafeObserverManager<IAdViewObserver> {
+class GuardedAdView : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     explicit GuardedAdView(const std::shared_ptr<IAdView>& ad);
 
@@ -39,7 +38,6 @@ private:
     bool loading_;
     bool loaded_;
     std::unique_ptr<ObserverHandle> handle_;
-    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

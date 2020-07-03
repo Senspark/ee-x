@@ -11,14 +11,13 @@
 
 #include <ee/ads/IAdView.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
-class BannerAd final : public IAdView,
-                       public SafeObserverManager<IAdViewObserver> {
+class BannerAd final : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     virtual ~BannerAd() override;
 

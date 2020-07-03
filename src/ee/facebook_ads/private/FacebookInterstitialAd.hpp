@@ -13,14 +13,14 @@
 
 #include <ee/ads/IInterstitialAd.hpp>
 #include <ee/ads/internal/MessageHelper.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {
 class InterstitialAd : public IInterstitialAd,
-                       public SafeObserverManager<IInterstitialAdObserver> {
+                       public ObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 

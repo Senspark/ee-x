@@ -13,15 +13,14 @@
 
 #include <ee/ads/IInterstitialAd.hpp>
 #include <ee/ads/internal/MessageHelper.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
-class InterstitialAd final
-    : public IInterstitialAd,
-      public SafeObserverManager<IInterstitialAdObserver> {
+class InterstitialAd final : public IInterstitialAd,
+                             public ObserverManager<IInterstitialAdObserver> {
 public:
     virtual ~InterstitialAd() override;
 

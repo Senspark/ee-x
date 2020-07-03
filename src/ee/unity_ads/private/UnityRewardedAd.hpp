@@ -12,14 +12,14 @@
 #include <string>
 
 #include <ee/ads/IRewardedAd.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {
 class RewardedAd : public IRewardedAd,
-                   public SafeObserverManager<IRewardedAdObserver> {
+                   public ObserverManager<IRewardedAdObserver> {
 public:
     virtual ~RewardedAd() override;
 

@@ -321,8 +321,6 @@ class Delay;
 class SwitchToCocosThread;
 
 class CocosAdView;
-class CocosInterstitialAd;
-class CocosRewardedAd;
 } // namespace cocos
 
 using cocos::Dialog;
@@ -333,8 +331,6 @@ using cocos::Delay;
 using cocos::SwitchToCocosThread;
 
 using cocos::CocosAdView;
-using cocos::CocosInterstitialAd;
-using cocos::CocosRewardedAd;
 } // namespace ee
 
 #endif // __cplusplus

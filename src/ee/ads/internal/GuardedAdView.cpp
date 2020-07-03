@@ -3,7 +3,6 @@
 #include <mutex>
 
 #include <ee/core/ObserverHandle.hpp>
-#include <ee/core/SpinLock.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
@@ -20,9 +19,7 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     handle_->bind(*ad_).addObserver({
         .onLoaded =
             [this] {
-                std::unique_lock<SpinLock> lock(*lock_);
                 loaded_ = true;
-                lock.unlock();
 
                 // Propagation.
                 dispatchEvent([](auto&& observer) {
@@ -41,8 +38,6 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
                 });
             },
     });
-
-    lock_ = std::make_unique<SpinLock>();
 }
 
 Self::~GuardedAdView() = default;
@@ -53,27 +48,20 @@ void Self::destroy() {
 }
 
 bool Self::isLoaded() const {
-    std::scoped_lock<SpinLock> lock(*lock_);
     return loaded_;
 }
 
 Task<bool> Self::load() {
-    std::unique_lock<SpinLock> lock(*lock_);
     if (loaded_) {
-        lock.unlock();
         co_return true;
     }
     if (loading_) {
         // Waiting.
-        lock.unlock();
         co_return co_await ad_->load();
     }
     loading_ = true;
-    lock.unlock();
     auto result = co_await ad_->load();
-    lock.lock();
     loading_ = false;
-    lock.unlock();
     co_return result;
 }
 

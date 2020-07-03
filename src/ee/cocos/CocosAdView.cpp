@@ -9,11 +9,10 @@
 
 #include <base/CCDirector.h>
 
-#include <ee/core/MakeAwaiter.hpp>
 #include <ee/core/ObserverHandle.hpp>
+#include <ee/core/Task.hpp>
 
 #include "ee/cocos/Metrics.hpp"
-#include "ee/cocos/SwitchToCocosThread.hpp"
 
 namespace ee {
 namespace cocos {
@@ -23,26 +22,24 @@ Self::CocosAdView(const std::shared_ptr<IAdView>& ad)
     : ad_(ad) {
     handle_ = std::make_unique<ObserverHandle>();
     handle_->bind(*ad_).addObserver({
-        .onLoaded = makeAwaiter([this]() -> Task<> {
-            co_await SwitchToCocosThread();
-
-            // Propagation.
-            dispatchEvent([](auto&& observer) {
-                if (observer.onLoaded) {
-                    observer.onLoaded();
-                }
-            });
-        }),
-        .onClicked = makeAwaiter([this]() -> Task<> {
-            co_await SwitchToCocosThread();
-
-            // Propagation.
-            dispatchEvent([](auto&& observer) {
-                if (observer.onClicked) {
-                    observer.onClicked();
-                }
-            });
-        }),
+        .onLoaded =
+            [this] {
+                // Propagation.
+                dispatchEvent([](auto&& observer) {
+                    if (observer.onLoaded) {
+                        observer.onLoaded();
+                    }
+                });
+            },
+        .onClicked =
+            [this] {
+                // Propagation.
+                dispatchEvent([](auto&& observer) {
+                    if (observer.onClicked) {
+                        observer.onClicked();
+                    }
+                });
+            },
     });
     metrics_ = std::make_unique<Metrics>(Metrics::fromPoint(1));
     sceneHeight_ = cocos2d::Director::getInstance()->getWinSize().height;
@@ -61,7 +58,6 @@ bool Self::isLoaded() const {
 
 Task<bool> Self::load() {
     auto result = co_await ad_->load();
-    co_await SwitchToCocosThread();
     co_return result;
 }
 

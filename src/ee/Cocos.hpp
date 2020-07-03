@@ -77,7 +77,5 @@
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
 #include "ee/cocos/CocosAdView.hpp"
-#include "ee/cocos/CocosInterstitialAd.hpp"
-#include "ee/cocos/CocosRewardedAd.hpp"
 
 #endif // EE_X_COCOS_HPP

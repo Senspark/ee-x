@@ -3,14 +3,14 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/ads/IRewardedAd.hpp"
 
 namespace ee {
 namespace ads {
 class GuardedRewardedAd : public IRewardedAd,
-                          public SafeObserverManager<IRewardedAdObserver> {
+                          public ObserverManager<IRewardedAdObserver> {
 public:
     explicit GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad);
     virtual ~GuardedRewardedAd() override;
@@ -28,7 +28,6 @@ private:
     bool loaded_;
     bool displaying_;
     std::unique_ptr<ObserverHandle> handle_;
-    std::unique_ptr<SpinLock> lock_;
 };
 } // namespace ads
 } // namespace ee

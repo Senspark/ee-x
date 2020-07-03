@@ -11,14 +11,13 @@
 
 #include <ee/ads/IAdView.hpp>
 #include <ee/ads/internal/AdViewHelper.hpp>
-#include <ee/core/SafeObserverManager.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
-class NativeAd final : public IAdView,
-                       public SafeObserverManager<IAdViewObserver> {
+class NativeAd final : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
     virtual ~NativeAd() override;
 

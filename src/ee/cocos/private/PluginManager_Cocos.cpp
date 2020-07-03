@@ -26,13 +26,15 @@ using Self = PluginManager;
 
 template <>
 bool Self::initializePlugins<Library::Cocos>() {
-    if (not initializePlugins<Library::Core>()) {
-        return false;
-    }
 #if defined(EE_X_ANDROID)
+    // Must set JavaVM first.
     auto vm = cocos2d::JniHelper::getJavaVM();
     JniUtils::setVm(vm);
 #endif // defined(EE_X_ANDROID)
+
+    if (not initializePlugins<Library::Core>()) {
+        return false;
+    }
 
     auto id = std::this_thread::get_id();
     Thread::libraryThreadChecker_ = [id] { //

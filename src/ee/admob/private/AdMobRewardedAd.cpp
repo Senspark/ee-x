@@ -8,11 +8,10 @@
 
 #include "ee/admob/private/AdMobRewardedAd.hpp"
 
-#include <cassert>
-
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
@@ -36,25 +35,33 @@ Self::RewardedAd(
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onLoaded();
+            Thread::runOnLibraryThread([this] { //
+                onLoaded();
+            });
             return "";
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailedToLoad(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onFailedToLoad(message);
+            });
             return "";
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailedToShow(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onFailedToShow(message);
+            });
             return "";
         },
         messageHelper_.onFailedToShow());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClosed(core::toBool(message));
+            Thread::runOnLibraryThread([this, message] { //
+                onClosed(core::toBool(message));
+            });
             return "";
         },
         messageHelper_.onClosed());

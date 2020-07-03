@@ -8,8 +8,6 @@
 
 #include "ee/facebook_ads/FacebookAdsBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/ads/internal/GuardedAdView.hpp>
 #include <ee/ads/internal/GuardedInterstitialAd.hpp>
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
@@ -19,6 +17,7 @@
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
 #include "ee/facebook_ads/private/FacebookBannerAd.hpp"

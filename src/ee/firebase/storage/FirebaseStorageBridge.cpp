@@ -8,8 +8,6 @@
 
 #include "ee/firebase/storage/FirebaseStorageBridge.hpp"
 
-#include <cassert>
-
 #include <firebase/storage.h>
 
 #include <ee/core/ScopeGuard.hpp>

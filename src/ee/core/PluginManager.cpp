@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include "ee/core/Platform.hpp"
+#include "ee/core/Thread.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
 
 #ifdef EE_X_ANDROID
@@ -91,9 +92,21 @@ using Self = PluginManager;
 
 template <>
 bool Self::initializePlugins<Library::Core>() {
+    if (not ee_staticInitializePlugins()) {
+        return false;
+    }
     auto&& bridge = MessageBridge::getInstance();
     Platform::registerHandlers(bridge);
-    return ee_staticInitializePlugins();
+
+    // Default implementation: execute on the current thread.
+    Thread::libraryThreadChecker_ = [] { //
+        return true;
+    };
+    Thread::libraryThreadExecuter_ = [](const Runnable<>& runnable) {
+        runnable();
+        return true;
+    };
+    return true;
 }
 
 void* Self::getActivity() {

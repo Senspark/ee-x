@@ -60,8 +60,6 @@ Runnable<> popDelayedRunnable(int key) {
 }
 } // namespace
 
-using Self = Thread;
-
 #ifdef EE_X_ANDROID
 extern "C" {
 JNIEXPORT void JNICALL
@@ -112,6 +110,19 @@ void ee_runOnMainThreadDelayedCallback(int key) {
 }
 } // extern "C"
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
+
+using Self = Thread;
+
+std::function<bool()> Self::libraryThreadChecker_;
+std::function<bool(const Runnable<>& runnable)> Self::libraryThreadExecuter_;
+
+bool Self::isLibraryThread() {
+    return libraryThreadChecker_();
+}
+
+bool Self::runOnLibraryThread(const Runnable<>& runnable) {
+    return libraryThreadExecuter_(runnable);
+}
 
 bool Self::isMainThread() {
     return ee_isMainThread();

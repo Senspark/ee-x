@@ -8,7 +8,6 @@
 
 #include "ee/core/Utils.hpp"
 
-#include <cassert>
 #include <dlfcn.h>
 #include <iomanip>
 #include <iostream>

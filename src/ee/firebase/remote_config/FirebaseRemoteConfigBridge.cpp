@@ -8,14 +8,11 @@
 
 #include "ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp"
 
-#include <cassert>
-
 #include <firebase/remote_config.h>
-
-#include <ee/nlohmann/json.hpp>
 
 #include <ee/core/ScopeGuard.hpp>
 #include <ee/firebase/core/FirebaseCoreBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace firebase {

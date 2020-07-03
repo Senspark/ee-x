@@ -8,11 +8,10 @@
 
 #include "ee/facebook_ads/private/FacebookNativeAd.hpp"
 
-#include <cassert>
-
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/facebook_ads/FacebookAdsBridge.hpp"
@@ -35,19 +34,25 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onLoaded();
+            Thread::runOnLibraryThread([this] { //
+                onLoaded();
+            });
             return "";
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailedToLoad(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onFailedToLoad(message);
+            });
             return "";
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClicked();
+            Thread::runOnLibraryThread([this] { //
+                onClicked();
+            });
             return "";
         },
         messageHelper_.onClicked());

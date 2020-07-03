@@ -7,10 +7,9 @@
 
 #include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace firebase {

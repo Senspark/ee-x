@@ -11,6 +11,7 @@
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/admob/AdMobBridge.hpp"
@@ -33,31 +34,41 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onLoaded();
+            Thread::runOnLibraryThread([this] { //
+                onLoaded();
+            });
             return "";
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailedToLoad(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onFailedToLoad(message);
+            });
             return "";
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onFailedToShow(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onFailedToShow(message);
+            });
             return "";
         },
         messageHelper_.onFailedToShow());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClicked();
+            Thread::runOnLibraryThread([this, message] { //
+                onClicked();
+            });
             return "";
         },
         messageHelper_.onClicked());
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClosed();
+            Thread::runOnLibraryThread([this, message] { //
+                onClosed();
+            });
             return "";
         },
         messageHelper_.onClosed());

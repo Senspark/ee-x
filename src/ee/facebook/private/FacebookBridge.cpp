@@ -5,13 +5,13 @@
 
 #include "ee/facebook/private/FacebookBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/facebook/FacebookGraphRequest.hpp"
 #include "ee/facebook/FacebookRequestContent.hpp"
@@ -55,7 +55,9 @@ Self::Bridge()
     delegateId_ = 0;
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onProfileChanged(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onProfileChanged(message);
+            });
             return "";
         },
         kOnProfileChanged);

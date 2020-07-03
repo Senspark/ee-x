@@ -8,11 +8,10 @@
 
 #include "ee/google/GoogleAnalyticsBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/google/GoogleAnalyticsEventBuilder.hpp"
 #include "ee/google/GoogleAnalyticsExceptionBuilder.hpp"

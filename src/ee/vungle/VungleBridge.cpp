@@ -1,14 +1,14 @@
 #include "ee/vungle/VungleBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/vungle/private/VungleRewardedAd.hpp"
 
@@ -48,35 +48,45 @@ Self::Bridge(const Logger& logger)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            onLoaded(json["ad_id"]);
+            Thread::runOnLibraryThread([this, message] { //
+                auto json = nlohmann::json::parse(message);
+                onLoaded(json["ad_id"]);
+            });
             return "";
         },
         kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            onFailedToLoad(json["ad_id"], json["message"]);
+            Thread::runOnLibraryThread([this, message] { //
+                auto json = nlohmann::json::parse(message);
+                onFailedToLoad(json["ad_id"], json["message"]);
+            });
             return "";
         },
         kOnFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            onFailedToShow(json["ad_id"], json["message"]);
+            Thread::runOnLibraryThread([this, message] { //
+                auto json = nlohmann::json::parse(message);
+                onFailedToShow(json["ad_id"], json["message"]);
+            });
             return "";
         },
         kOnFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            onClicked(message);
+            Thread::runOnLibraryThread([this, message] { //
+                onClicked(message);
+            });
             return "";
         },
         kOnClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            onClosed(json["ad_id"], json["rewarded"]);
+            Thread::runOnLibraryThread([this, message] { //
+                auto json = nlohmann::json::parse(message);
+                onClosed(json["ad_id"], json["rewarded"]);
+            });
             return "";
         },
         kOnClosed);

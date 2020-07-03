@@ -5,12 +5,11 @@
 
 #include "ee/play/PlayBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace play {

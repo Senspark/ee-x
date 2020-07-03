@@ -7,9 +7,9 @@
 
 #include "ee/facebook/private/FacebookRequestDelegate.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Thread.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace facebook {
@@ -34,34 +34,40 @@ Self::RequestDelegate(IMessageBridge& bridge, int tag)
     , tag_(tag) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (successCallback_) {
-                auto json = nlohmann::json::parse(message);
-                auto&& requestId =
-                    json.value("requestId", std::string()); // Null iOS.
-                auto&& requestRecipients =
-                    json.value("requestRecipients",
-                               std::vector<std::string>()); // Null iOS.
-                successCallback_(requestId, requestRecipients);
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (successCallback_) {
+                    auto json = nlohmann::json::parse(message);
+                    auto&& requestId =
+                        json.value("requestId", std::string()); // Null iOS.
+                    auto&& requestRecipients =
+                        json.value("requestRecipients",
+                                   std::vector<std::string>()); // Null iOS.
+                    successCallback_(requestId, requestRecipients);
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onSuccess(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (failureCallback_) {
-                failureCallback_(message);
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (failureCallback_) {
+                    failureCallback_(message);
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onFailure(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (cancelCallback_) {
-                cancelCallback_();
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (cancelCallback_) {
+                    cancelCallback_();
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onCancel(tag_));

@@ -21,6 +21,13 @@ using Runnable = std::function<T()>;
 
 class Thread {
 public:
+    /// Checks whether the current thread is the library thread (cocos2d...).
+    static bool isLibraryThread();
+
+    /// Runs the specified runnable on the library thread.
+    /// @returns Whether the function is executed immediately.
+    static bool runOnLibraryThread(const Runnable<>& runnable);
+
     /// Checks whether the current thread is the UI thread (Android) or Main
     /// thread (iOS).
     static bool isMainThread();
@@ -31,6 +38,13 @@ public:
 
     /// Runs the specifieid runnable on the main thread after a delay.
     static void runOnMainThreadDelayed(const Runnable<>& runnable, float delay);
+
+private:
+    friend PluginManager;
+
+    static std::function<bool()> libraryThreadChecker_;
+    static std::function<bool(const Runnable<>& runnable)>
+        libraryThreadExecuter_;
 };
 
 /// Runs the specified runnable on the main thread and block the current

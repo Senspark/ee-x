@@ -8,7 +8,6 @@
 
 #include "ee/core/internal/MessageBridge.hpp"
 
-#include <cassert>
 #include <mutex>
 
 #include <ee/nlohmann/json.hpp>

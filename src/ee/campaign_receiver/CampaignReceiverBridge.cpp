@@ -8,10 +8,9 @@
 
 #include "ee/campaign_receiver/CampaignReceiverBridge.hpp"
 
-#include <cassert>
-
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
@@ -38,10 +37,12 @@ Self::Bridge(const Logger& logger)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            logger_.debug("OnReceivedLinkCallback: %s", message.c_str());
-            if (callback_) {
-                callback_(message);
-            }
+            Thread::runOnLibraryThread([this, message] {
+                logger_.debug("OnReceivedLinkCallback: %s", message.c_str());
+                if (callback_) {
+                    callback_(message);
+                }
+            });
             return "";
         },
         kOnReceivedLink);

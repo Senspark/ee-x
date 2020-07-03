@@ -8,6 +8,7 @@
 #include "ee/facebook/private/FacebookShareDelegate.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Thread.hpp>
 
 namespace ee {
 namespace facebook {
@@ -32,28 +33,34 @@ Self::ShareDelegate(IMessageBridge& bridge, int tag)
     , tag_(tag) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (successCallback_) {
-                successCallback_(message);
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (successCallback_) {
+                    successCallback_(message);
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onSuccess(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (failureCallback_) {
-                failureCallback_(message);
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (failureCallback_) {
+                    failureCallback_(message);
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onFailure(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            if (cancelCallback_) {
-                cancelCallback_();
-            }
-            self_.reset();
+            Thread::runOnLibraryThread([this, message] {
+                if (cancelCallback_) {
+                    cancelCallback_();
+                }
+                self_.reset();
+            });
             return "";
         },
         k__onCancel(tag_));

@@ -8,8 +8,6 @@
 
 #include "ee/vungle/private/VungleRewardedAd.hpp"
 
-#include <cassert>
-
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Task.hpp>

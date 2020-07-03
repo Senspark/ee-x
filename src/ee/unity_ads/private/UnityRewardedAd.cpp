@@ -8,8 +8,6 @@
 
 #include "ee/unity_ads/private/UnityRewardedAd.hpp"
 
-#include <cassert>
-
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Task.hpp>

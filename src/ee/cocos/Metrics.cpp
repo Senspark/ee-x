@@ -8,8 +8,6 @@
 
 #include "ee/cocos/Metrics.hpp"
 
-#include <cassert>
-
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 

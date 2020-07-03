@@ -8,6 +8,7 @@
 #include "StoreIosStoreBindings.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -36,14 +37,17 @@ Self::IosStoreBindings(IMessageBridge& bridge)
     : bridge_(bridge) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            auto json = nlohmann::json::parse(message);
-            std::string subject = json["subject"];
-            std::string payload = json["payload"];
-            std::string receipt = json["receipt"];
-            std::string transactionId = json["transactionId"];
-            if (purchasingCallback_) {
-                purchasingCallback_(subject, payload, receipt, transactionId);
-            }
+            Thread::runOnLibraryThread([this, message] { //
+                auto json = nlohmann::json::parse(message);
+                std::string subject = json["subject"];
+                std::string payload = json["payload"];
+                std::string receipt = json["receipt"];
+                std::string transactionId = json["transactionId"];
+                if (purchasingCallback_) {
+                    purchasingCallback_(subject, payload, receipt,
+                                        transactionId);
+                }
+            });
             return "";
         },
         kCallback);

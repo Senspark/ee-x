@@ -8,10 +8,9 @@
 
 #include "ee/ads/internal/AdViewHelper.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace ads {

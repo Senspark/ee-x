@@ -8,13 +8,12 @@
 
 #include "ee/store/StoreBridge.hpp"
 
-#include <ee/nlohmann/json.hpp>
-
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/store/Purchase.hpp"
 #include "ee/store/PurchaseHistoryRecord.hpp"

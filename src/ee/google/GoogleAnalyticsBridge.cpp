@@ -28,7 +28,7 @@ using Self = Analytics;
 
 namespace {
 // clang-format off
-const std::string kPrefix = "GoogleAnalyticsBridgeg";
+const std::string kPrefix = "GoogleAnalyticsBridge";
 const auto kSetDispatchInterval          = kPrefix + "SetDispatchInterval";
 const auto kSetDryRun                    = kPrefix + "SetDryRun";
 const auto kSetOptOut                    = kPrefix + "SetOptOut";

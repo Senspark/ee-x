@@ -5,7 +5,6 @@ import android.graphics.Point
 import androidx.annotation.AnyThread
 import com.ee.Utils
 import com.facebook.ads.AdSize
-import com.google.common.truth.Truth.assertThat
 
 internal class FacebookBannerHelper {
     companion object {
@@ -33,13 +32,13 @@ internal class FacebookBannerHelper {
         }
     }
 
-    private val _sizes: MutableMap<Int, Point> = HashMap()
+    private val _indexToSize: MutableMap<Int, Point> = HashMap()
 
     init {
-        for (i in 0..4) {
-            val adSize = getAdSize(i)
+        for (index in 0..4) {
+            val adSize = getAdSize(index)
             val size = convertAdSizeToSize(adSize)
-            _sizes[i] = size
+            _indexToSize[index] = size
         }
     }
 
@@ -60,12 +59,36 @@ internal class FacebookBannerHelper {
         if (index == 4) {
             return AdSize.BANNER_320_50
         }
-        assertThat(false).isTrue()
-        return AdSize.BANNER_320_50
+        throw IllegalArgumentException("Invalid ad index")
+    }
+
+    @AnyThread
+    private fun getIndex(adSize: AdSize): Int {
+        if (adSize == AdSize.BANNER_HEIGHT_50) {
+            return 0
+        }
+        if (adSize == AdSize.BANNER_HEIGHT_90) {
+            return 1
+        }
+        if (adSize == AdSize.INTERSTITIAL) {
+            return 2
+        }
+        if (adSize == AdSize.RECTANGLE_HEIGHT_250) {
+            return 3
+        }
+        if (adSize == AdSize.BANNER_320_50) {
+            return 4
+        }
+        throw IllegalArgumentException("Invalid ad size")
     }
 
     @AnyThread
     fun getSize(index: Int): Point {
-        return _sizes[index] ?: throw IllegalArgumentException("Invalid size index")
+        return _indexToSize[index] ?: throw IllegalArgumentException("Invalid ad index")
+    }
+
+    @AnyThread
+    fun getSize(adSize: AdSize): Point {
+        return getSize(getIndex(adSize))
     }
 }

@@ -5,7 +5,6 @@
 //  Created by eps on 6/24/20.
 //
 
-import Foundation
 import GoogleMobileAds
 
 internal class AdMobBannerHelper {
@@ -15,13 +14,13 @@ internal class AdMobBannerHelper {
                       height: Double(Utils.convertDpToPixels(Float(size.height))))
     }
 
-    private var _sizes: [Int: CGSize] = [:]
+    private var _indexToSize: [Int: CGSize] = [:]
 
     init() {
-        for i in 0...3 {
-            let adSize = getAdSize(i)
+        for index in 0...3 {
+            let adSize = getAdSize(index)
             let size = AdMobBannerHelper.convertAdSizeToSize(adSize)
-            _sizes[i] = size
+            _indexToSize[index] = size
         }
     }
 
@@ -41,14 +40,37 @@ internal class AdMobBannerHelper {
         if index == 3 {
             return kGADAdSizeMediumRectangle
         }
-        assert(false, "Invalid ad size")
+        assert(false, "Invalid ad index")
         return kGADAdSizeInvalid
     }
 
+    private func getIndex(_ adSize: GADAdSize) -> Int {
+        if GADAdSizeEqualToSize(adSize, kGADAdSizeBanner) {
+            return 0
+        }
+        if GADAdSizeEqualToSize(adSize, kGADAdSizeLargeBanner) {
+            return 1
+        }
+        if GADAdSizeEqualToSize(adSize, kGADAdSizeSmartBannerLandscape) ||
+            GADAdSizeEqualToSize(adSize, kGADAdSizeSmartBannerPortrait) {
+            return 2
+        }
+        if GADAdSizeEqualToSize(adSize, kGADAdSizeMediumRectangle) {
+            return 3
+        }
+        assert(false, "Invalid ad size")
+        return 0
+    }
+
     func getSize(index: Int) -> CGSize {
-        guard let size = _sizes[index] else {
-            assert(false, "Invalid size index")
+        guard let size = _indexToSize[index] else {
+            assert(false, "Invalid ad index")
+            return CGSize.zero
         }
         return size
+    }
+
+    func getSize(adSize: GADAdSize) -> CGSize {
+        return getSize(index: getIndex(adSize))
     }
 }

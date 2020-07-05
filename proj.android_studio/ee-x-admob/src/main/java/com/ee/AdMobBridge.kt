@@ -2,15 +2,14 @@ package com.ee
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Point
 import androidx.annotation.AnyThread
-import com.ee.internal.deserialize
-import com.ee.internal.serialize
 import com.ee.internal.AdMobBannerAd
 import com.ee.internal.AdMobBannerHelper
 import com.ee.internal.AdMobInterstitialAd
 import com.ee.internal.AdMobNativeAd
 import com.ee.internal.AdMobRewardedAd
+import com.ee.internal.deserialize
+import com.ee.internal.serialize
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
@@ -138,8 +137,8 @@ class AdMobBridge(
                 val height: Int
             )
 
-            val sizeId = message.toInt()
-            val size = getBannerAdSize(sizeId)
+            val index = message.toInt()
+            val size = _bannerHelper.getSize(index)
             val response = Response(size.x, size.y)
             response.serialize()
         }
@@ -223,16 +222,11 @@ class AdMobBridge(
     }
 
     @AnyThread
-    fun getBannerAdSize(sizeId: Int): Point {
-        return _bannerHelper.getSize(sizeId)
-    }
-
-    @AnyThread
-    fun createBannerAd(adId: String, size: AdSize): Boolean {
+    fun createBannerAd(adId: String, adSize: AdSize): Boolean {
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobBannerAd(_bridge, _context, _activity, adId, size)
+        val ad = AdMobBannerAd(_bridge, _context, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }

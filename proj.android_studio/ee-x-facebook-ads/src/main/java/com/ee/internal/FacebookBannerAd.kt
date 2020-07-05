@@ -2,7 +2,6 @@ package com.ee.internal
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -33,7 +32,8 @@ internal class FacebookBannerAd(
     private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
-    private val _adSize: AdSize)
+    private val _adSize: AdSize,
+    bannerHelper: FacebookBannerHelper)
     : IAdView
     , AdListener {
     companion object {
@@ -42,9 +42,9 @@ internal class FacebookBannerAd(
 
     private val _messageHelper = MessageHelper("FacebookBannerAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
+    private val _viewHelper = ViewHelper(Point(0, 0), bannerHelper.getSize(_adSize), false)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: AdView? = null
-    private var _viewHelper: ViewHelper? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
@@ -96,7 +96,7 @@ internal class FacebookBannerAd(
             params.gravity = Gravity.START or Gravity.TOP
             ad.layoutParams = params
             _ad = ad
-            _viewHelper = ViewHelper(ad)
+            _viewHelper.view = ad
             addToActivity()
         })
     }
@@ -109,7 +109,7 @@ internal class FacebookBannerAd(
             removeFromActivity()
             ad.destroy()
             _ad = null
-            _viewHelper = null
+            _viewHelper.view = null
         })
     }
 
@@ -143,26 +143,21 @@ internal class FacebookBannerAd(
     }
 
     override var position: Point
-        @AnyThread get() = _viewHelper?.position ?: Point(0, 0)
+        @AnyThread get() = _viewHelper.position
         @AnyThread set(value) {
-            _viewHelper?.position = value
+            _viewHelper.position = value
         }
 
     override var size: Point
-        @AnyThread get() = _viewHelper?.size ?: Point(0, 0)
+        @AnyThread get() = _viewHelper.size
         @AnyThread set(value) {
-            _viewHelper?.size = value
+            _viewHelper.size = value
         }
 
     override var isVisible: Boolean
-        @AnyThread get() = _viewHelper?.isVisible ?: false
+        @AnyThread get() = _viewHelper.isVisible
         @AnyThread set(value) {
-            _viewHelper?.isVisible = value
-            Thread.runOnMainThread(Runnable {
-                if (value) {
-                    _ad?.setBackgroundColor(Color.BLACK)
-                }
-            })
+            _viewHelper.isVisible = value
         }
 
     override fun onAdLoaded(ad: Ad) {

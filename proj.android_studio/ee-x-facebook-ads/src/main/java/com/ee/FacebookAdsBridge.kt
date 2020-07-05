@@ -2,7 +2,6 @@ package com.ee
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Point
 import androidx.annotation.AnyThread
 import com.ee.facebook.ads.BuildConfig
 import com.ee.internal.FacebookBannerAd
@@ -129,8 +128,8 @@ class FacebookAdsBridge(
                 val height: Int
             )
 
-            val sizeId = message.toInt()
-            val size = getBannerAdSize(sizeId)
+            val index = message.toInt()
+            val size = _bannerHelper.getSize(index)
             val response = Response(size.x, size.y)
             response.serialize()
         }
@@ -210,16 +209,11 @@ class FacebookAdsBridge(
     }
 
     @AnyThread
-    fun getBannerAdSize(sizeId: Int): Point {
-        return _bannerHelper.getSize(sizeId)
-    }
-
-    @AnyThread
     fun createBannerAd(adId: String, adSize: AdSize): Boolean {
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookBannerAd(_bridge, _context, _activity, adId, adSize)
+        val ad = FacebookBannerAd(_bridge, _context, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }

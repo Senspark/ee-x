@@ -5,7 +5,6 @@
 //  Created by eps on 6/24/20.
 //
 
-import Foundation
 import GoogleMobileAds
 
 private let kPrefix = "AdMobBridge"
@@ -63,8 +62,8 @@ public class AdMobBridge: NSObject, IPlugin {
             return ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message in
-            let sizeId = Int(message) ?? -1
-            let size = self.getBannerAdSize(sizeId)
+            let index = Int(message) ?? -1
+            let size = self._bannerHelper.getSize(index: index)
             return EEJsonUtils.convertDictionary(toString: [
                 "width": size.width,
                 "height": size.height
@@ -74,11 +73,11 @@ public class AdMobBridge: NSObject, IPlugin {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
                 let adId = dict["adId"] as? String,
-                let sizeId = dict["adSize"] as? Int
+                let index = dict["adSize"] as? Int
             else {
                 assert(false, "Invalid argument")
             }
-            let adSize = self._bannerHelper.getAdSize(sizeId)
+            let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
         }
         _bridge.registerHandler(kDestroyBannerAd) { message in
@@ -143,15 +142,11 @@ public class AdMobBridge: NSObject, IPlugin {
         }
     }
 
-    func getBannerAdSize(_ sizeId: Int) -> CGSize {
-        return _bannerHelper.getSize(index: sizeId)
-    }
-
-    func createBannerAd(_ adId: String, _ size: GADAdSize) -> Bool {
+    func createBannerAd(_ adId: String, _ adSize: GADAdSize) -> Bool {
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobBannerAd(_bridge, adId, size)
+        let ad = AdMobBannerAd(_bridge, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }

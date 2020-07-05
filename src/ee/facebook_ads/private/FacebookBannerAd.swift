@@ -6,7 +6,6 @@
 //
 
 import FBAudienceNetwork
-import Foundation
 
 internal class FacebookBannerAd:
     NSObject, IAdView, FBAdViewDelegate {
@@ -16,17 +15,19 @@ internal class FacebookBannerAd:
     private let _adSize: FBAdSize
     private let _messageHelper: MessageHelper
     private var _helper: AdViewHelper?
+    private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: FBAdView?
-    private var _viewHelper: ViewHelper?
     
     init(_ bridge: IMessageBridge,
          _ adId: String,
-         _ adSize: FBAdSize) {
+         _ adSize: FBAdSize,
+         _ bannerHelper: FacebookBannerHelper) {
         _bridge = bridge
         _adId = adId
         _adSize = adSize
         _messageHelper = MessageHelper("FacebookBannerAd", _adId)
+        _viewHelper = ViewHelper(CGPoint.zero, bannerHelper.getSize(adSize: adSize), false)
         super.init()
         _helper = AdViewHelper(_bridge, self, _messageHelper)
         registerHandlers()
@@ -58,7 +59,7 @@ internal class FacebookBannerAd:
                               rootViewController: rootView)
             ad.delegate = self
             self._ad = ad
-            self._viewHelper = ViewHelper(ad)
+            self._viewHelper.view = ad
             rootView?.view.addSubview(ad)
         }
     }
@@ -72,7 +73,7 @@ internal class FacebookBannerAd:
             ad.delegate = nil
             ad.removeFromSuperview()
             self._ad = nil
-            self._viewHelper = nil
+            self._viewHelper.view = nil
         }
     }
     
@@ -90,18 +91,18 @@ internal class FacebookBannerAd:
     }
     
     var position: CGPoint {
-        get { return _viewHelper?.position ?? CGPoint.zero }
-        set(value) { _viewHelper?.position = value }
+        get { return _viewHelper.position }
+        set(value) { _viewHelper.position = value }
     }
     
     var size: CGSize {
-        get { return _viewHelper?.size ?? CGSize.zero }
-        set(value) { _viewHelper?.size = value }
+        get { return _viewHelper.size }
+        set(value) { _viewHelper.size = value }
     }
     
     var isVisible: Bool {
-        get { return _viewHelper?.isVisible ?? false }
-        set(value) { _viewHelper?.isVisible = value }
+        get { return _viewHelper.isVisible }
+        set(value) { _viewHelper.isVisible = value }
     }
     
     func adViewDidLoad(_ adView: FBAdView) {

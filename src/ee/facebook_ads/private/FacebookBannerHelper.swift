@@ -6,7 +6,6 @@
 //
 
 import FBAudienceNetwork
-import Foundation
 
 internal class FacebookBannerHelper {
     private class func getWidthInDp(_ adSize: FBAdSize) -> Float {
@@ -37,13 +36,13 @@ internal class FacebookBannerHelper {
                       height: Double(Utils.convertDpToPixels(Float(size.height))))
     }
 
-    private var _sizes: [Int: CGSize] = [:]
+    private var _indexToSize: [Int: CGSize] = [:]
 
     init() {
-        for i in 0...4 {
-            let adSize = getAdSize(i)
+        for index in 0...4 {
+            let adSize = getAdSize(index)
             let size = FacebookBannerHelper.convertAdSizeToSize(adSize)
-            _sizes[i] = size
+            _indexToSize[index] = size
         }
     }
 
@@ -67,10 +66,35 @@ internal class FacebookBannerHelper {
         return kFBAdSize320x50
     }
 
-    func getSize(_ index: Int) -> CGSize {
-        guard let size = _sizes[index] else {
+    private func getIndex(_ adSize: FBAdSize) -> Int {
+        if adSize.size == kFBAdSizeHeight50Banner.size {
+            return 0
+        }
+        if adSize.size == kFBAdSizeHeight90Banner.size {
+            return 1
+        }
+        if adSize.size == kFBAdSizeInterstitial.size {
+            return 2
+        }
+        if adSize.size == kFBAdSizeHeight250Rectangle.size {
+            return 3
+        }
+        if adSize.size == kFBAdSize320x50.size {
+            return 4
+        }
+        assert(false, "Invalid ad size")
+        return 4
+    }
+
+    func getSize(index: Int) -> CGSize {
+        guard let size = _indexToSize[index] else {
             assert(false, "Invalid size index")
+            return CGSize.zero
         }
         return size
+    }
+
+    func getSize(adSize: FBAdSize) -> CGSize {
+        return getSize(index: getIndex(adSize))
     }
 }

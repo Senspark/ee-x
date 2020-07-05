@@ -61,10 +61,10 @@ internal class FacebookNativeAd(
 
     private val _messageHelper = MessageHelper("FacebookNativeAd", _adId)
     private val _helper = AdViewHelper(_bridge, this, _messageHelper)
+    private val _viewHelper = ViewHelper(Point(0, 0), Point(0, 0), false)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: NativeAd? = null
     private var _view: View? = null
-    private var _viewHelper: ViewHelper? = null
 
     init {
         _logger.info("constructor: adId = %s", _adId)
@@ -151,7 +151,7 @@ internal class FacebookNativeAd(
             params.gravity = Gravity.START or Gravity.TOP
             view.layoutParams = params
             _view = view
-            _viewHelper = ViewHelper(view)
+            _viewHelper.view = view
             addToActivity()
         })
     }
@@ -161,7 +161,7 @@ internal class FacebookNativeAd(
         Thread.runOnMainThread(Runnable {
             removeFromActivity()
             _view = null
-            _viewHelper = null
+            _viewHelper.view = null
         })
     }
 
@@ -189,7 +189,7 @@ internal class FacebookNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load.name}")
+            _logger.info(this::load.name)
 
             ///
             /// Audience Network supports pre-caching video or image assets which enables
@@ -205,21 +205,21 @@ internal class FacebookNativeAd(
     }
 
     override var position: Point
-        @AnyThread get() = _viewHelper?.position ?: Point(0, 0)
+        @AnyThread get() = _viewHelper.position
         @AnyThread set(value) {
-            _viewHelper?.position = value
+            _viewHelper.position = value
         }
 
     override var size: Point
-        @AnyThread get() = _viewHelper?.size ?: Point(0, 0)
+        @AnyThread get() = _viewHelper.size
         @AnyThread set(value) {
-            _viewHelper?.size = value
+            _viewHelper.size = value
         }
 
     override var isVisible: Boolean
-        @AnyThread get() = _viewHelper?.isVisible ?: false
+        @AnyThread get() = _viewHelper.isVisible
         @AnyThread set(value) {
-            _viewHelper?.isVisible = value
+            _viewHelper.isVisible = value
         }
 
     private fun getIdentifier(identifier: String): Int {

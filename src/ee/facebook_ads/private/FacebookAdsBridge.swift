@@ -6,7 +6,6 @@
 //
 
 import FBAudienceNetwork
-import Foundation
 
 private let kPrefix = "FacebookAdsBridge"
 private let kGetTestDeviceHash = "\(kPrefix)GetTestDeviceHash"
@@ -62,8 +61,8 @@ public class FacebookAdsBridge: NSObject, IPlugin {
             return ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message in
-            let sizeId = Int(message) ?? -1
-            let size = self.getBannerAdSize(sizeId)
+            let index = Int(message) ?? -1
+            let size = self._bannerHelper.getSize(index: index)
             return EEJsonUtils.convertDictionary(toString: [
                 "width": size.width,
                 "height": size.height
@@ -73,11 +72,11 @@ public class FacebookAdsBridge: NSObject, IPlugin {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
                 let adId = dict["ad_id"] as? String,
-                let sizeId = dict["ad_size"] as? Int
+                let index = dict["ad_size"] as? Int
             else {
                 assert(false, "Invalid argument")
             }
-            let adSize = self._bannerHelper.getAdSize(sizeId)
+            let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
         }
         _bridge.registerHandler(kDestroyBannerAd) { message in
@@ -141,15 +140,11 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         }
     }
 
-    func getBannerAdSize(_ sizeId: Int) -> CGSize {
-        return _bannerHelper.getSize(sizeId)
-    }
-
     func createBannerAd(_ adId: String, _ size: FBAdSize) -> Bool {
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = FacebookBannerAd(_bridge, adId, size)
+        let ad = FacebookBannerAd(_bridge, adId, size, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }

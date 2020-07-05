@@ -8,25 +8,61 @@
 import Foundation
 
 class ViewHelper {
-    private let _view: UIView
+    private class func applyPosition(_ view: UIView, _ value: CGPoint) {
+        Thread.runOnMainThread {
+            var frame = view.frame
+            frame.origin = value
+            view.frame = frame
+        }
+    }
+
+    private class func applySize(_ view: UIView, _ value: CGSize) {
+        Thread.runOnMainThread {
+            var frame = view.frame
+            frame.size = value
+            view.frame = frame
+        }
+    }
+
+    private class func applyVisible(_ view: UIView, _ value: Bool) {
+        Thread.runOnMainThread {
+            view.isHidden = !value
+        }
+    }
+
+    private var _view: UIView?
     private var _position = CGPoint(x: 0, y: 0)
     private var _size = CGSize(width: 0, height: 0)
     private var _visible = false
 
-    init(_ view: UIView) {
-        _view = view
+    init(_ initialPosition: CGPoint,
+         _ initialSize: CGSize,
+         _ initialVisible: Bool) {
+        position = initialPosition
+        size = initialSize
+        isVisible = initialVisible
+    }
+
+    var view: UIView? {
+        get { return _view }
+        set(value) {
+            _view = value
+            if let view = value {
+                ViewHelper.applyPosition(view, position)
+                ViewHelper.applySize(view, size)
+                ViewHelper.applyVisible(view, isVisible)
+            }
+        }
     }
 
     var position: CGPoint {
         get { return _position }
         set(value) {
-            Thread.runOnMainThread {
-                let position = CGPoint(x: Double(Utils.convertPixelsToDp(Float(value.x))),
-                                       y: Double(Utils.convertPixelsToDp(Float(value.y))))
-                var frame = self._view.frame
-                frame.origin = position
-                self._view.frame = frame
-                self._position = position
+            let position = CGPoint(x: Double(Utils.convertPixelsToDp(Float(value.x))),
+                                   y: Double(Utils.convertPixelsToDp(Float(value.y))))
+            _position = position
+            if let view = view {
+                ViewHelper.applyPosition(view, position)
             }
         }
     }
@@ -34,13 +70,11 @@ class ViewHelper {
     var size: CGSize {
         get { return _size }
         set(value) {
-            Thread.runOnMainThread {
-                let size = CGSize(width: Double(Utils.convertPixelsToDp(Float(value.width))),
-                                  height: Double(Utils.convertPixelsToDp(Float(value.height))))
-                var frame = self._view.frame
-                frame.size = size
-                self._view.frame = frame
-                self._size = size
+            let size = CGSize(width: Double(Utils.convertPixelsToDp(Float(value.width))),
+                              height: Double(Utils.convertPixelsToDp(Float(value.height))))
+            _size = size
+            if let view = view {
+                ViewHelper.applySize(view, size)
             }
         }
     }
@@ -48,9 +82,9 @@ class ViewHelper {
     var isVisible: Bool {
         get { return _visible }
         set(value) {
-            Thread.runOnMainThread {
-                self._view.isHidden = !value
-                self._visible = value
+            _visible = value
+            if let view = view {
+                ViewHelper.applyVisible(view, value)
             }
         }
     }

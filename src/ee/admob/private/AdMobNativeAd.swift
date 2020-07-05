@@ -26,10 +26,10 @@ internal class AdMobNativeAd: NSObject, IAdView,
     private let _layoutName: String
     private let _messageHelper: MessageHelper
     private var _helper: AdViewHelper?
+    private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: GADAdLoader?
     private var _view: GADUnifiedNativeAdView?
-    private var _viewHelper: ViewHelper?
 
     init(_ bridge: IMessageBridge,
          _ adId: String,
@@ -38,6 +38,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
         _adId = adId
         _layoutName = layoutName
         _messageHelper = MessageHelper("AdMobNativeAd", _adId)
+        _viewHelper = ViewHelper(CGPoint.zero, CGSize.zero, false)
         super.init()
         _helper = AdViewHelper(_bridge, self, _messageHelper)
         registerHandlers()
@@ -105,7 +106,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
             assert(self._view == nil)
             let view = self.createAdView()
             self._view = view
-            self._viewHelper = ViewHelper(view)
+            self._viewHelper.view = view
             let rootView = Utils.getCurrentRootViewController()
             rootView?.view.addSubview(view)
         }
@@ -118,7 +119,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
             }
             view.removeFromSuperview()
             self._view = nil
-            self._viewHelper = nil
+            self._viewHelper.view = nil
         }
     }
 
@@ -136,21 +137,23 @@ internal class AdMobNativeAd: NSObject, IAdView,
     }
 
     var position: CGPoint {
-        get { return _viewHelper?.position ?? CGPoint.zero }
-        set(value) { _viewHelper?.position = value }
+        get { return _viewHelper.position }
+        set(value) { _viewHelper.position = value }
     }
 
     var size: CGSize {
-        get { return _viewHelper?.size ?? CGSize.zero }
-        set(value) { _viewHelper?.size = value }
+        get { return _viewHelper.size }
+        set(value) { _viewHelper.size = value }
     }
 
     var isVisible: Bool {
-        get { return _viewHelper?.isVisible ?? false }
+        get { return _viewHelper.isVisible }
         set(value) {
-            _viewHelper?.isVisible = value
+            _viewHelper.isVisible = value
             if value {
-                _view?.subviews.forEach { $0.setNeedsDisplay() }
+                Thread.runOnMainThread {
+                    self._view?.subviews.forEach { $0.setNeedsDisplay() }
+                }
             }
         }
     }

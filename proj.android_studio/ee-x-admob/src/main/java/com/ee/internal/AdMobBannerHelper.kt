@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Point
 import androidx.annotation.AnyThread
 import com.google.android.gms.ads.AdSize
-import com.google.common.truth.Truth.assertThat
 
 internal class AdMobBannerHelper(context: Context) {
     companion object {
@@ -16,13 +15,13 @@ internal class AdMobBannerHelper(context: Context) {
         }
     }
 
-    private val _sizes: MutableMap<Int, Point> = HashMap()
+    private val _indexToSize: MutableMap<Int, Point> = HashMap()
 
     init {
-        for (i in 0..3) {
-            val adSize = getAdSize(i)
+        for (index in 0..3) {
+            val adSize = getAdSize(index)
             val size = convertAdSizeToSize(context, adSize)
-            _sizes[i] = size
+            _indexToSize[index] = size
         }
     }
 
@@ -40,12 +39,33 @@ internal class AdMobBannerHelper(context: Context) {
         if (index == 3) {
             return AdSize.MEDIUM_RECTANGLE
         }
-        assertThat(false).isTrue()
-        return AdSize.INVALID
+        throw IllegalArgumentException("Invalid ad index")
+    }
+
+    @AnyThread
+    private fun getIndex(adSize: AdSize): Int {
+        if (adSize == AdSize.BANNER) {
+            return 0
+        }
+        if (adSize == AdSize.LARGE_BANNER) {
+            return 1
+        }
+        if (adSize == AdSize.SMART_BANNER) {
+            return 2
+        }
+        if (adSize == AdSize.MEDIUM_RECTANGLE) {
+            return 3
+        }
+        throw IllegalArgumentException("Invalid ad size")
     }
 
     @AnyThread
     fun getSize(index: Int): Point {
-        return _sizes[index] ?: throw IllegalArgumentException("Invalid size index")
+        return _indexToSize[index] ?: throw IllegalArgumentException("Invalid ad index")
+    }
+
+    @AnyThread
+    fun getSize(adSize: AdSize): Point {
+        return getSize(getIndex(adSize))
     }
 }

@@ -9,7 +9,6 @@
 #ifndef EE_X_CORE_HPP
 #define EE_X_CORE_HPP
 
-#ifdef __cplusplus
 #include "ee/CoreFwd.hpp"
 #include "ee/core/AsyncMutex.hpp"
 #include "ee/core/DynamicValue.hpp"
@@ -37,6 +36,5 @@
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/VideoPlayerManager.hpp"
 #include "ee/core/WhenAll.hpp"
-#endif // __cplusplus
 
 #endif /* EE_X_CORE_HPP */

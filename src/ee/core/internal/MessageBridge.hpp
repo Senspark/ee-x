@@ -65,6 +65,8 @@ private:
 
 #endif // __cplusplus
 
+#include "ee/Macro.hpp"
+
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 #ifdef __cplusplus
 extern "C" {

@@ -11,7 +11,6 @@
 
 #include <ee/Core.hpp>
 
-#ifdef __cplusplus
 #include "ee/GoogleAnalyticsFwd.hpp"
 #include "ee/google/GoogleAnalyticsBridge.hpp"
 #include "ee/google/GoogleAnalyticsEventBuilder.hpp"
@@ -22,10 +21,5 @@
 #include "ee/google/GoogleAnalyticsSocialBuilder.hpp"
 #include "ee/google/GoogleAnalyticsTimingBuilder.hpp"
 #include "ee/google/GoogleAnalyticsTracker.hpp"
-#endif // __cplusplus
-
-#ifdef __OBJC__
-#import "ee/google/EEGoogleAnalytics.h"
-#endif // __OBJC__
 
 #endif /* EE_X_GOOGLE_ANALYTICS_HPP */

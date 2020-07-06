@@ -11,9 +11,7 @@
 
 #include <ee/Ads.hpp>
 
-#ifdef __cplusplus
 #include "ee/UnityAdsFwd.hpp"
 #include "ee/unity_ads/UnityAdsBridge.hpp"
-#endif // __cplusplus
 
 #endif /* EE_X_UNITY_ADS_HPP */

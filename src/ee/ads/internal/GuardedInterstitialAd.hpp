@@ -5,7 +5,7 @@
 
 #include <ee/core/ObserverManager.hpp>
 
-#include <ee/ads/IInterstitialAd.hpp>
+#include "ee/ads/IInterstitialAd.hpp"
 
 namespace ee {
 namespace ads {

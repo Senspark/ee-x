@@ -1,10 +1,7 @@
 #include "ee/ads/internal/GuardedAdView.hpp"
 
-#include <mutex>
-
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Utils.hpp>
 
 namespace ee {
 namespace ads {

@@ -49,7 +49,7 @@ bool soomla::CCBadgeReward::initWithValueMap(const cocos2d::ValueMap& map) {
 }
 
 cocos2d::ValueMap soomla::CCBadgeReward::toValueMap() {
-    auto&& map = CCReward::toValueMap();
+    auto map = CCReward::toValueMap();
     putIconUrlToValueMap(map);
     return map;
 }

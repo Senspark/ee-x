@@ -10,7 +10,7 @@ Self::SwitchToMainThread() = default;
 Self::~SwitchToMainThread() = default;
 
 void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
-    runOnMainThread([this, handle]() mutable { //
+    runOnMainThread([handle]() mutable { //
         handle.resume();
     });
 }

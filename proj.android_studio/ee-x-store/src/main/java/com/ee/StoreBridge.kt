@@ -26,8 +26,8 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
 
@@ -118,7 +118,7 @@ class StoreBridge(
                 @Suppress("unused")
                 class Response(
                     val successful: Boolean,
-                    val item: List<Map<String, @Polymorphic Any>>
+                    val item: List<Map<String, @ContextualSerialization Any>>
                 )
 
                 val response = Response(true, detailsList.map(StoreUtils::convertSkuDetailsToDictionary))
@@ -141,7 +141,7 @@ class StoreBridge(
                 @Suppress("unused")
                 class Response(
                     val successful: Boolean,
-                    val item: List<Map<String, @Polymorphic Any>>
+                    val item: List<Map<String, @ContextualSerialization Any>>
                 )
 
                 val response = Response(true, purchaseList.map(StoreUtils::convertPurchaseToDictionary))
@@ -164,7 +164,7 @@ class StoreBridge(
                 @Suppress("unused")
                 class Response(
                     val successful: Boolean,
-                    val item: List<Map<String, @Polymorphic Any>>
+                    val item: List<Map<String, @ContextualSerialization Any>>
                 )
 
                 val response = Response(true, recordList.map(StoreUtils::convertRecordToDictionary))
@@ -187,7 +187,7 @@ class StoreBridge(
                 @Suppress("unused")
                 class Response(
                     val successful: Boolean,
-                    val item: Map<String, @Polymorphic Any>
+                    val item: Map<String, @ContextualSerialization Any>
                 )
 
                 val response = Response(true, StoreUtils.convertPurchaseToDictionary(purchase))

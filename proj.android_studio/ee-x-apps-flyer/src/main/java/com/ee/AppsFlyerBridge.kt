@@ -7,8 +7,8 @@ import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.internal.deserialize
+import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
 
@@ -74,7 +74,7 @@ class AppsFlyerBridge(
             @Serializable
             class Request(
                 val name: String,
-                val values: Map<String, @Polymorphic Any>
+                val values: Map<String, @ContextualSerialization Any>
             )
 
             val request = deserialize<Request>(message)

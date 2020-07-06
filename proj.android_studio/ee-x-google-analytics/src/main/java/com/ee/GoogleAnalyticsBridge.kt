@@ -3,8 +3,8 @@ package com.ee
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
-import com.ee.internal.deserialize
 import com.ee.internal.GoogleAnalyticsTracker
+import com.ee.internal.deserialize
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders.EventBuilder
 import com.google.android.gms.analytics.HitBuilders.ExceptionBuilder

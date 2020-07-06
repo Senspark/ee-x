@@ -6,9 +6,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.AnyThread
-import com.ee.internal.deserialize
 import com.ee.internal.NotificationReceiver
 import com.ee.internal.NotificationUtils
+import com.ee.internal.deserialize
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault

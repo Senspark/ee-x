@@ -7,11 +7,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.SparseArray
 import androidx.annotation.AnyThread
-import com.ee.internal.deserialize
-import com.ee.internal.serialize
 import com.ee.internal.FacebookLoginDelegate
 import com.ee.internal.FacebookRequestDelegate
 import com.ee.internal.FacebookShareDelegate
+import com.ee.internal.deserialize
+import com.ee.internal.serialize
 import com.facebook.AccessToken
 import com.facebook.AccessTokenTracker
 import com.facebook.CallbackManager

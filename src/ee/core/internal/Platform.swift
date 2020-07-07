@@ -51,6 +51,7 @@ public class Platform: NSObject {
                 let body = dict["body"] as? String
             else {
                 assert(false, "Unexpected value")
+                return ""
             }
             return Utils.toString(sendMail(recipient, subject, body))
         }
@@ -61,6 +62,7 @@ public class Platform: NSObject {
                 let timeOut = dict["time_out"] as? Float
             else {
                 assert(false, "Unexpected value")
+                return
             }
             testConnection(hostName, timeOut)
                 .subscribe(

@@ -84,6 +84,7 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.load(GADRequest())
         }

@@ -51,6 +51,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 let testModeEnabled = dict["testModeEnabled"] as? Bool
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.initialize(gameId, testModeEnabled)
             return ""
@@ -109,6 +110,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
             }
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
+                return
             }
             UnityAds.show(rootView, placementId: adId)
         }

@@ -75,6 +75,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
                 let index = dict["ad_size"] as? Int
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
@@ -89,6 +90,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
                 let layoutName = dict["layout_name"] as? String
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))
         }

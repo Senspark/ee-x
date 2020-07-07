@@ -83,14 +83,16 @@ internal class FacebookNativeAd:
         }
     }
     
-    func createAdView() -> EEFacebookNativeAdView {
+    func createAdView() -> EEFacebookNativeAdView? {
         guard let nibObjects = Bundle(for: EEFacebookNativeAdView.self).loadNibNamed(_layoutName,
                                                                                      owner: nil,
                                                                                      options: nil) else {
             assert(false, "Invalid layout")
+            return nil
         }
         guard let view = nibObjects[0] as? EEFacebookNativeAdView else {
             assert(false, "Invalid layout class")
+            return nil
         }
         return view
     }
@@ -98,7 +100,10 @@ internal class FacebookNativeAd:
     func createView() {
         Thread.runOnMainThread {
             assert(self._view == nil)
-            let view = self.createAdView()
+            guard let view = self.createAdView() else {
+                assert(false, "Cannot create ad view")
+                return
+            }
             view.adchoicesView.corner = UIRectCorner.topRight
             self._view = view
             self._viewHelper.view = view
@@ -126,6 +131,7 @@ internal class FacebookNativeAd:
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.loadAd(withMediaCachePolicy: FBNativeAdsCachePolicy.all)
         }
@@ -159,6 +165,7 @@ internal class FacebookNativeAd:
         
         guard let view = _view else {
             assert(false, "Ad view is not initialized")
+            return
         }
         
         ad.unregisterView()

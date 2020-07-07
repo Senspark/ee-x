@@ -92,6 +92,7 @@ internal class FacebookRewardedAd:
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             self._logger.debug("\(#function): id = \(self._adId)")
             ad.load()
@@ -105,6 +106,7 @@ internal class FacebookRewardedAd:
                 let rootView = Utils.getCurrentRootViewController()
             else {
                 assert(false, "Ad is not initialized")
+                return
             }
             self._logger.debug("\(#function): id = \(self._adId)")
             self._rewarded = false

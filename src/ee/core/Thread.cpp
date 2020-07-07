@@ -74,24 +74,26 @@ JNIEXPORT void JNICALL Java_com_ee_ThreadKt_ee_1runOnMainThreadDelayedCallback(
 } // extern "C"
 
 bool ee_isMainThread() {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/ThreadKt",
-                                                "ee_isMainThread", "()Z");
-    return method->getEnv()->CallStaticBooleanMethod(method->getClass(),
-                                                     method->getMethodId());
+    return JniUtils::callStaticBooleanMethod( //
+        "com/ee/ThreadKt",                    //
+        "ee_isMainThread",                    //
+        "()Z");
 }
 
 bool ee_runOnMainThread() {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/ThreadKt",
-                                                "ee_runOnMainThread", "()Z");
-    return method->getEnv()->CallStaticBooleanMethod(method->getClass(),
-                                                     method->getMethodId());
+    return JniUtils::callStaticBooleanMethod( //
+        "com/ee/ThreadKt",                    //
+        "ee_runOnMainThread",                 //
+        "()Z");
 }
 
 void ee_runOnMainThreadDelayed(int key, float delay) {
-    auto method = JniUtils::getStaticMethodInfo(
-        "com/ee/ThreadKt", "ee_runOnMainThreadDelayed", "(IF)V");
-    method->getEnv()->CallStaticVoidMethod(method->getClass(),
-                                           method->getMethodId());
+    return JniUtils::callStaticVoidMethod( //
+        "com/ee/ThreadKt",                 //
+        "ee_runOnMainThreadDelayed",       //
+        "(IF)V",                           //
+        key,                               //
+        delay);
 }
 #endif // EE_X_ANDROID
 

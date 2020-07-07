@@ -47,36 +47,33 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 
 #if defined(EE_X_ANDROID)
 bool ee_staticInitializePlugins() {
-    auto method = JniUtils::getStaticMethodInfo(
-        "com/ee/PluginManagerKt", "ee_staticInitializePlugins", "()Z");
-    return method->getEnv()->CallStaticBooleanMethod(method->getClass(),
-                                                     method->getMethodId());
+    return JniUtils::callStaticBooleanMethod( //
+        "com/ee/PluginManagerKt",             //
+        "ee_staticInitializePlugins",         //
+        "()Z");
 }
 
 void* ee_staticGetActivity() {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
-                                                "ee_staticGetActivity",
-                                                "()Ljava/lang/Object;");
-    return method->getEnv()->CallStaticObjectMethod(method->getClass(),
-                                                    method->getMethodId());
+    return JniUtils::callStaticObjectMethod( //
+        "com/ee/PluginManagerKt",            //
+        "ee_staticGetActivity",              //
+        "()Ljava/lang/Object;");
 }
 
 bool ee_staticAddPlugin(const char* name) {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
-                                                "ee_staticAddPlugin",
-                                                "(Ljava/lang/String;)Z");
-    auto name_java = JniUtils::toJavaString(name);
-    return method->getEnv()->CallStaticBooleanMethod(
-        method->getClass(), method->getMethodId(), name_java->get());
+    return JniUtils::callStaticBooleanMethod(
+        "com/ee/PluginManagerKt", //
+        "ee_staticAddPlugin",     //
+        "(Ljava/lang/String;)Z",  //
+        JniUtils::toJavaString(name)->get());
 }
 
 bool ee_staticRemovePlugin(const char* name) {
-    auto method = JniUtils::getStaticMethodInfo("com/ee/PluginManagerKt",
-                                                "ee_staticRemovePlugin",
-                                                "(Ljava/lang/String;)Z");
-    auto name_java = JniUtils::toJavaString(name);
-    return method->getEnv()->CallStaticBooleanMethod(
-        method->getClass(), method->getMethodId(), name_java->get());
+    return JniUtils::callStaticBooleanMethod(
+        "com/ee/PluginManagerKt", //
+        "ee_staticRemovePlugin",  //
+        "(Ljava/lang/String;)Z",  //
+        JniUtils::toJavaString(name)->get());
 }
 #endif // EE_X_ANDROID
 

@@ -11,28 +11,41 @@
 
 #include <memory>
 
-#include <jni.h>
-
-#include "ee/CoreFwd.hpp"
+#include "ee/core/internal/JniExceptionChecker.hpp"
 
 namespace ee {
 namespace core {
 /// RAII class for encapsulating jclass and jmethodID.
 class JniMethodInfo final {
+private:
+    using Self = JniMethodInfo;
+
 public:
-    static std::unique_ptr<JniMethodInfo> create(JNIEnv* env, jclass clazz,
-                                                 jmethodID methodId);
+    static std::unique_ptr<Self> create(JNIEnv* env, jclass clazz,
+                                        jmethodID methodId);
 
     ~JniMethodInfo();
 
-    /// Gets the pointer to the jclass.
-    jclass getClass() const noexcept;
+    template <class... Args>
+    void callStaticVoidMethod(Args&&... args) {
+        JniExceptionChecker checker(env_);
+        return env_->CallStaticVoidMethod(clazz_, methodId_,
+                                          std::forward<Args>(args)...);
+    }
 
-    /// Gets the method id.
-    jmethodID getMethodId() const noexcept;
+    template <class... Args>
+    jboolean callStaticBooleanMethod(Args&&... args) {
+        JniExceptionChecker checker(env_);
+        return env_->CallStaticBooleanMethod(clazz_, methodId_,
+                                             std::forward<Args>(args)...);
+    }
 
-    /// Gets the pointer to the JNIEnv.
-    JNIEnv* getEnv() const noexcept;
+    template <class... Args>
+    jobject callStaticObjectMethod(Args&&... args) {
+        JniExceptionChecker checker(env_);
+        return env_->CallStaticObjectMethod(clazz_, methodId_,
+                                            std::forward<Args>(args)...);
+    }
 
 private:
     explicit JniMethodInfo(JNIEnv* env, jclass clazz, jmethodID methodId);

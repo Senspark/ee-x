@@ -3,6 +3,7 @@ package com.ee.internal
 import androidx.annotation.AnyThread
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -12,6 +13,15 @@ import kotlinx.serialization.serializer
 @UnstableDefault
 inline fun <reified T : Any> deserialize(string: String): T {
     return Json.parse(T::class.serializer(), string)
+}
+
+@AnyThread
+@ImplicitReflectionSerializer
+@UnstableDefault
+inline fun <reified T : Any> deserializeList(string: String): List<T> {
+    val valueSerializer = T::class.serializer()
+    val serializer = ListSerializer(valueSerializer)
+    return Json.parse(serializer, string)
 }
 
 @AnyThread

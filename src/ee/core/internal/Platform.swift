@@ -160,7 +160,7 @@ public class Platform: NSObject {
     }
 
     private class func sendMail(_ recipient: String, _ subject: String, _ body: String) -> Bool {
-        let str = String("mailto:" + recipient + "?subject=" + subject + "&body=" + body)
+        let str = String("mailto:\(recipient)?subject=\(subject)&body=\(body)")
         guard let encodedStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             return false
         }

@@ -28,7 +28,7 @@ public class Utils: NSObject {
 
     @objc
     public class func toBool(_ value: String) -> Bool {
-        assert(value == "true" || value == "false", "Unexpected value: " + value)
+        assert(value == "true" || value == "false", "Unexpected value: \(value)")
         return value == "true"
     }
 

@@ -5,6 +5,7 @@ import com.ee.AsyncMessageResolver
 import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.MessageHandler
+import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
@@ -52,6 +53,7 @@ class MessageBridge private constructor() : IMessageBridge {
         synchronized(_handlerLock) {
             if (_handlers.containsKey(tag)) {
                 _logger.error("registerHandler: $tag already exists!")
+                assertThat(false).isTrue()
                 return false
             }
             _handlers[tag] = handler
@@ -85,6 +87,7 @@ class MessageBridge private constructor() : IMessageBridge {
         synchronized(_handlerLock) {
             if (!_handlers.containsKey(tag)) {
                 _logger.error("deregisterHandler: $tag doesn't exist!")
+                assertThat(false).isTrue()
                 return false
             }
             _handlers.remove(tag)
@@ -118,6 +121,7 @@ class MessageBridge private constructor() : IMessageBridge {
         val handler = findHandler(tag)
         if (handler == null) {
             _logger.error("call: $tag doesn't exist!")
+            assertThat(false).isTrue()
             return ""
         }
         return handler.handle(message)

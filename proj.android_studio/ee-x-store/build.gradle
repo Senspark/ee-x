@@ -28,6 +28,9 @@ dependencies {
     api project(':ee-x-core')
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'com.android.billingclient:billing:2.2.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.2'
+    implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

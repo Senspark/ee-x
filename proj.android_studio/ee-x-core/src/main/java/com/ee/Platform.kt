@@ -18,8 +18,12 @@ import com.ee.internal.serialize
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.common.truth.Truth.assertThat
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
@@ -27,7 +31,7 @@ import java.lang.reflect.InvocationTargetException
 import java.net.InetAddress
 import java.net.UnknownHostException
 import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.CancellationException
 
 object Platform {
     private val _logger = Logger(Platform::class.java.name)
@@ -82,10 +86,10 @@ object Platform {
         bridge.registerHandler(kIsTablet) { Utils.toString(isTablet()) }
         bridge.registerHandler(kGetDensity) { getDensity().toString() }
         bridge.registerAsyncHandler(kGetDeviceId) { _, resolver ->
-            getDeviceId(context)
-                .subscribe(
-                    { message -> resolver.resolve(message) },
-                    { resolver.resolve("") })
+            GlobalScope.launch(Dispatchers.Main) {
+                val result = getDeviceId(context)
+                resolver.resolve(result)
+            }
         }
         bridge.registerHandler(kGetSafeInset) {
             @Serializable
@@ -130,10 +134,10 @@ object Platform {
             )
 
             val request = deserialize<Request>(message)
-            testConnection(context, request.host_name, request.time_out)
-                .subscribe(
-                    { result -> resolver.resolve(Utils.toString(result)) },
-                    { resolver.resolve(Utils.toString(false)) })
+            GlobalScope.launch(Dispatchers.Main) {
+                val result = testConnection(context, request.host_name, request.time_out)
+                resolver.resolve(Utils.toString(result))
+            }
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable
@@ -321,17 +325,16 @@ object Platform {
         return metrics.densityDpi
     }
 
-    private fun getDeviceId(context: Context): Single<String> {
-        return Single
-            .fromCallable {
-                val info = AdvertisingIdClient
-                    .getAdvertisingIdInfo(context.applicationContext)
-                if (info.isLimitAdTrackingEnabled) {
-                    ""
-                } else {
-                    info.id
-                }
+    private suspend fun getDeviceId(context: Context): String {
+        val task = GlobalScope.async(Dispatchers.IO) {
+            val info = AdvertisingIdClient.getAdvertisingIdInfo(context.applicationContext)
+            if (info.isLimitAdTrackingEnabled) {
+                ""
+            } else {
+                info.id
             }
+        }
+        return task.await()
     }
 
     class SafeInset {
@@ -459,27 +462,28 @@ object Platform {
 
     /// https://stackoverflow.com/questions/9570237/android-check-internet-connection
     /// https://stackoverflow.com/questions/2758612/executorservice-that-interrupts-tasks-after-a-timeout
-    private fun testConnection(context: Context, hostName: String, timeOut: Float): Single<Boolean> {
-        return Single
-            .create<Boolean> { emitter ->
-                try {
-                    val isAvailable = isInternetAvailable(context)
-                    if (!isAvailable) {
-                        emitter.onSuccess(false)
-                        return@create
-                    }
-                    val address = InetAddress.getByName(hostName)
-                    emitter.onSuccess(address.toString() != "")
-                } catch (ex: UnknownHostException) {
-                    if (emitter.isDisposed) {
-                        // Time-out.
-                    } else {
-                        emitter.onError(ex)
+    private suspend fun testConnection(context: Context, hostName: String, timeOut: Float): Boolean {
+        var result = false
+        try {
+            result = withContext(Dispatchers.IO) {
+                withTimeout((timeOut * 1000).toLong()) {
+                    try {
+                        val isAvailable = isInternetAvailable(context)
+                        if (!isAvailable) {
+                            return@withTimeout false
+                        }
+                        @Suppress("BlockingMethodInNonBlockingContext")
+                        val address = InetAddress.getByName(hostName)
+                        address.toString() != ""
+                    } catch (ex: UnknownHostException) {
+                        false
                     }
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .timeout((timeOut * 1000).toLong(), TimeUnit.MILLISECONDS)
+        } catch (ex: CancellationException) {
+            // Time-out.
+        }
+        return result
     }
 
     private fun showInstantPrompt(url: String, referrer: String, activity: Activity) {

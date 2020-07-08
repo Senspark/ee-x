@@ -21,7 +21,6 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -61,10 +60,18 @@ object Platform {
         bridge.registerHandler(kOpenApplication) { message ->
             Utils.toString(openApplication(context, message))
         }
-        bridge.registerHandler(kGetApplicationId) { getApplicationId(context) }
-        bridge.registerHandler(kGetApplicationName) { getApplicationName(context) }
-        bridge.registerHandler(kGetVersionName) { getVersionName(context) }
-        bridge.registerHandler(kGetVersionCode) { getVersionCode(context) }
+        bridge.registerHandler(kGetApplicationId) {
+            getApplicationId(context)
+        }
+        bridge.registerHandler(kGetApplicationName) {
+            getApplicationName(context)
+        }
+        bridge.registerHandler(kGetVersionName) {
+            getVersionName(context)
+        }
+        bridge.registerHandler(kGetVersionCode) {
+            getVersionCode(context)
+        }
         bridge.registerHandler(kGetApplicationSignatures) { message ->
             @Serializable
             class Request(
@@ -82,14 +89,17 @@ object Platform {
             val response = Response(signatures)
             response.serialize()
         }
-        bridge.registerHandler(kIsInstantApp) { Utils.toString(isInstantApp(context)) }
-        bridge.registerHandler(kIsTablet) { Utils.toString(isTablet()) }
-        bridge.registerHandler(kGetDensity) { getDensity().toString() }
-        bridge.registerAsyncHandler(kGetDeviceId) { _, resolver ->
-            GlobalScope.launch(Dispatchers.Main) {
-                val result = getDeviceId(context)
-                resolver.resolve(result)
-            }
+        bridge.registerHandler(kIsInstantApp) {
+            Utils.toString(isInstantApp(context))
+        }
+        bridge.registerHandler(kIsTablet) {
+            Utils.toString(isTablet())
+        }
+        bridge.registerHandler(kGetDensity) {
+            getDensity().toString()
+        }
+        bridge.registerAsyncHandler(kGetDeviceId) {
+            getDeviceId(context)
         }
         bridge.registerHandler(kGetSafeInset) {
             @Serializable
@@ -126,7 +136,7 @@ object Platform {
             val request = deserialize<Request>(message)
             Utils.toString(sendMail(context, request.recipient, request.subject, request.body))
         }
-        bridge.registerAsyncHandler(kTestConnection) { message, resolver ->
+        bridge.registerAsyncHandler(kTestConnection) { message ->
             @Serializable
             class Request(
                 val host_name: String,
@@ -134,10 +144,8 @@ object Platform {
             )
 
             val request = deserialize<Request>(message)
-            GlobalScope.launch(Dispatchers.Main) {
-                val result = testConnection(context, request.host_name, request.time_out)
-                resolver.resolve(Utils.toString(result))
-            }
+            val result = testConnection(context, request.host_name, request.time_out)
+            Utils.toString(result)
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable

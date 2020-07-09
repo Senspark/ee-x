@@ -5,7 +5,7 @@
 //  Created by eps on 6/26/20.
 //
 
-#include "StoreIosStoreBindings.hpp"
+#include "ee/store/private/StoreIosStoreBindings.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Thread.hpp>
@@ -15,7 +15,7 @@
 namespace ee {
 namespace store {
 namespace {
-const std::string kPrefix = "Store";
+const std::string kPrefix = "StoreBridge";
 const auto kGetAppReceipt = kPrefix + "GetAppReceipt";
 const auto kCanMakePayments = kPrefix + "CanMakePayments";
 const auto kGetSimulateAskToBuy = kPrefix + "GetSimulateAskToBuy";
@@ -39,20 +39,18 @@ Self::IosStoreBindings(IMessageBridge& bridge)
         [this](const std::string& message) {
             Thread::runOnLibraryThread([this, message] { //
                 auto json = nlohmann::json::parse(message);
-                std::string subject = json["subject"];
-                std::string payload = json["payload"];
-                std::string receipt = json["receipt"];
-                std::string transactionId = json["transactionId"];
                 if (purchasingCallback_) {
-                    purchasingCallback_(subject, payload, receipt,
-                                        transactionId);
+                    purchasingCallback_(json["subject"], json["payload"],
+                                        json["receipt"], json["transactionId"]);
                 }
             });
             return "";
         },
         kCallback);
+}
 
-    // FIXME: leak handler.
+Self::~IosStoreBindings() {
+    bridge_.deregisterHandler(kCallback);
 }
 
 void Self::setPurchasingCallback(const PurchasingCallback& callback) {

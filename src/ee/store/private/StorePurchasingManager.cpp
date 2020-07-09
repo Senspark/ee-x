@@ -60,11 +60,11 @@ void Self::initiatePurchase(const std::shared_ptr<Product>& product) {
     }
 }
 
-void Self::initiatePurchase(const std::string& productId) {
-    auto&& product = products_->withId(productId);
+void Self::initiatePurchase(const std::string& itemId) {
+    auto&& product = products_->withId(itemId);
     if (product == nullptr) {
         logger_.warn("Unable to purchase unknown product with id: %s",
-                     productId.c_str());
+                     itemId.c_str());
     }
     initiatePurchase(product);
 }

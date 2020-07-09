@@ -1,6 +1,7 @@
 package com.ee
 
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.FeatureType
 import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
@@ -11,6 +12,7 @@ import io.reactivex.rxjava3.core.Single
 
 interface IStoreBridge {
     suspend fun connect(): BillingClient
+    suspend fun isFeatureSupported(@FeatureType featureType: String): Boolean
     suspend fun getSkuDetails(@SkuType skuType: String, skuList: List<String>): List<SkuDetails>
     suspend fun getPurchases(@SkuType skuType: String): List<Purchase>
     suspend fun getPurchaseHistory(@SkuType skuType: String): List<PurchaseHistoryRecord>

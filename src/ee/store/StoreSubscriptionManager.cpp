@@ -36,9 +36,9 @@ std::shared_ptr<SubscriptionInfo> Self::getSubscriptionInfo() {
         assert(false);
         return nullptr;
     }
-    auto dictionary = nlohmann::json::parse(receipt_);
-    auto store = dictionary["Store"].get<std::string>();
-    auto payload = dictionary["Payload"].get<std::string>();
+    auto&& dictionary = nlohmann::json::parse(receipt_);
+    auto&& store = dictionary["Store"].get<std::string>();
+    auto&& payload = dictionary["Payload"].get<std::string>();
     if (store == "GooglePlay") {
         return getGooglePlayStoreSubInfo(payload);
     }
@@ -75,8 +75,24 @@ Self::getAppleAppStoreSubInfo(const std::string& payload,
 
 std::shared_ptr<SubscriptionInfo>
 Self::getGooglePlayStoreSubInfo(const std::string& payload) {
-    // FIXME.
-    return nullptr;
+    auto&& dictionary1 = nlohmann::json::parse(payload);
+    auto&& skuDetails = dictionary1["skuDetails"].get<std::string>();
+    auto&& purchaseHistorySupported =
+        dictionary1["isPurchaseHistorySupported"].get<bool>();
+    auto&& dictionary2 = dictionary1["json"];
+    auto&& isAutoRenewing = dictionary2["autoReviewing"].get<bool>();
+    auto&& purchaseDate = dictionary2["purchaseTime"].get<int>();
+    auto&& dictionary3 = dictionary2["developerPayload"];
+    auto&& isFreeTrial = dictionary3["is_free_trial"].get<bool>();
+    auto&& hasIntroductoryPriceTrial =
+        dictionary3["has_introductory_price_trial"].get<bool>();
+    std::string updateMetadata;
+    if (dictionary3["is_updated"].get<bool>()) {
+        updateMetadata = dictionary3["update_subscription_metadata"];
+    }
+    return std::make_shared<SubscriptionInfo>(
+        skuDetails, isAutoRenewing, purchaseDate, isFreeTrial,
+        hasIntroductoryPriceTrial, purchaseHistorySupported, updateMetadata);
 }
 } // namespace store
 } // namespace ee

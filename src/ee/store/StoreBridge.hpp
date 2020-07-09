@@ -21,11 +21,6 @@
 
 namespace ee {
 namespace store {
-enum class SkuType {
-    InApp,
-    Subscription,
-};
-
 class Bridge final : public IPlugin {
 public:
     Bridge();
@@ -35,25 +30,44 @@ public:
 
     virtual void destroy() override;
 
-    void initialize();
+    /// Initializes store plugin.
+    [[nodiscard]] Task<bool>
+    initialize(const ConfigurationBuilder& builder,
+               const std::shared_ptr<ITransactionLog>& transactionLog);
 
-    Task<std::optional<std::vector<SkuDetails>>>
-    getSkuDetails(SkuType type, const std::vector<std::string>& skuList);
+    /// Gets all registered products.
+    std::shared_ptr<ProductCollection> getProducts() const;
 
-    Task<std::optional<std::vector<Purchase>>> getPurchases(SkuType type);
+    /// Gets subscription for the specified item.
+    std::shared_ptr<SubscriptionInfo>
+    getSubscriptionInfo(const std::string& itemId);
 
-    Task<std::optional<std::vector<PurchaseHistoryRecord>>>
-    getPurchaseHistory(SkuType type);
+    /// Asynchronously purchases an item.
+    [[nodiscard]] Task<bool> purchase(const std::string& itemId);
 
-    Task<std::optional<Purchase>> purchase(const std::string& sku);
-
-    Task<bool> consume(const std::string& purchaseToken);
-
-    Task<bool> acknowledge(const std::string& purchaseToken);
+    /// Asynchronously restore transactions.
+    [[nodiscard]] Task<bool> restoreTransactions();
 
 private:
+    class Listener;
+
+    void initializeListener();
+
     IMessageBridge& bridge_;
     const Logger& logger_;
+
+    std::shared_ptr<Listener> listener_;
+    std::shared_ptr<IStoreController> controller_;
+    std::shared_ptr<IExtensionProvider> extensions_;
+
+    bool initialized_;
+    std::unique_ptr<LambdaAwaiter<bool>> initializationAwaiter_;
+    std::function<void(bool successful)> initializationResolver_;
+
+    std::unique_ptr<LambdaAwaiter<bool>> purchaseAwaiter_;
+    std::function<void(bool successful)> purchaseResolver_;
+
+    std::unique_ptr<LambdaAwaiter<bool>> restoreTransactionsAwaiter_;
 };
 } // namespace store
 } // namespace ee

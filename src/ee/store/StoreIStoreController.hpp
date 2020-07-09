@@ -22,7 +22,7 @@ public:
 
     virtual std::shared_ptr<ProductCollection> products() const = 0;
     virtual void initiatePurchase(const std::shared_ptr<Product>& product) = 0;
-    virtual void initiatePurchase(const std::string& productId) = 0;
+    virtual void initiatePurchase(const std::string& itemId) = 0;
     virtual void
     confirmPendingPurchase(const std::shared_ptr<Product>& product) = 0;
 };

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class PurchaseFailureDescription(
     val productId: String,
     val reason: PurchaseFailureReason,
-    val message: String,
-    val storeSpecificErrorCode: String)
+    val message: String = "",
+    val storeSpecificErrorCode: String = "")

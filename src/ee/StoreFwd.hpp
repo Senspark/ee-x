@@ -7,13 +7,7 @@
 
 namespace ee {
 namespace store {
-enum class SkuType;
-
 class Bridge;
-
-struct Purchase;
-struct PurchaseHistoryRecord;
-struct SkuDetails;
 
 enum class InitializationFailureReason;
 enum class ProductType;
@@ -61,14 +55,20 @@ class ConfigurationBuilder;
 class PurchasingFactory;
 class PurchasingManager;
 class StandardPurchasingModule;
+class SessionTransactionLog;
 class UnityPurchasing;
 } // namespace store
 
-using StoreSkuType = store::SkuType;
 using Store = store::Bridge;
-using StorePurchase = store::Purchase;
-using StorePurchaseHistoryRecord = store::PurchaseHistoryRecord;
-using StoreSkuDetails = store::SkuDetails;
+using StoreConfigurationBuilder = store::ConfigurationBuilder;
+using StoreITransactionLog = store::ITransactionLog;
+using StoreProduct = store::Product;
+using StoreProductCollection = store::ProductCollection;
+using StoreProductDefinition = store::ProductDefinition;
+using StoreProductMetadata = store::ProductMetadata;
+using StoreProductType = store::ProductType;
+using StoreSessionTransactionLog = store::SessionTransactionLog;
+using StoreSubscriptionInfo = store::SubscriptionInfo;
 } // namespace ee
 
 #endif // __cplusplus

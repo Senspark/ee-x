@@ -14,6 +14,7 @@
 
 #include "ee/core/Logger.hpp"
 #include "ee/core/Utils.hpp"
+#include "ee/core/internal/JniExceptionChecker.hpp"
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
 
@@ -91,25 +92,16 @@ JNIEnv* Self::getEnv() {
     return env;
 }
 
-void Self::checkException() {
-    auto env = getEnv();
-    if (env->ExceptionCheck()) {
-        env->ExceptionDescribe();
-        env->ExceptionClear();
-    }
-}
-
 std::string Self::toString(jstring str) {
+    JNIEnv* env = getEnv();
+    JniExceptionChecker checker(env);
     if (str == nullptr) {
         return "";
     }
-
-    JNIEnv* env = getEnv();
     jboolean isCopy;
     const char* chars = env->GetStringUTFChars(str, &isCopy);
     std::string result{chars};
     env->ReleaseStringUTFChars(str, chars);
-    checkException();
     return result;
 }
 
@@ -127,26 +119,20 @@ std::unique_ptr<JniMethodInfo>
 Self::getStaticMethodInfo(const char* className, const char* methodName,
                           const char* signature) {
     JNIEnv* env = getEnv();
-
+    JniExceptionChecker checker(env);
     jclass clazz = env->FindClass(className);
-    checkException();
-
     if (clazz == nullptr) {
         Logger::getSystemLogger().error("%s: can not find class %s",
                                         __PRETTY_FUNCTION__, className);
         return nullptr;
     }
-
     jmethodID methodId = env->GetStaticMethodID(clazz, methodName, signature);
-    checkException();
-
     if (methodId == nullptr) {
         Logger::getSystemLogger().error(
             "%s: can not find static method %s in %s with signature %s",
             __PRETTY_FUNCTION__, methodName, className, signature);
         return nullptr;
     }
-
     return JniMethodInfo::create(env, clazz, methodId);
 }
 } // namespace core

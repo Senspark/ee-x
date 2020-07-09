@@ -8,13 +8,7 @@
 
 #include <ee/Core.hpp>
 
-#ifdef __cplusplus
 #include "ee/RecorderFwd.hpp"
 #include "ee/recorder/RecorderBridge.hpp"
-#endif // __cplusplus
-
-#ifdef __OBJC__
-#import "ee/recorder/EERecorder.h"
-#endif // __OBJC__
 
 #endif /* EE_X_RECORDER_HPP */

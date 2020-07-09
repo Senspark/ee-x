@@ -111,6 +111,7 @@ public class AppLovinBridge: NSObject, IPlugin {
             self._initializing = true
             guard let sdk = ALSdk.shared(withKey: key) else {
                 assert(false, "Invalid key")
+                return
             }
             sdk.initializeSdk(completionHandler: { _ in
                 self._initializing = false
@@ -139,6 +140,7 @@ public class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             guard let sdk = self._sdk else {
                 assert(false, "Please call initialize() first")
+                return
             }
             sdk.settings.isVerboseLogging = enabled
         }
@@ -148,6 +150,7 @@ public class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             guard let sdk = self._sdk else {
                 assert(false, "Please call initialize() first")
+                return
             }
             sdk.settings.muted = enabled
         }
@@ -164,6 +167,7 @@ public class AppLovinBridge: NSObject, IPlugin {
                 let listener = self._interstitialAdListener
             else {
                 assert(false, "Please call initialize() first")
+                return
             }
             sdk.adService.loadNextAd(ALAdSize.interstitial, andNotify: listener)
         }
@@ -173,6 +177,7 @@ public class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             guard let ad = self._interstitialAd else {
                 assert(false, "Please call initialize() first")
+                return
             }
             ad.show()
         }
@@ -186,6 +191,7 @@ public class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             guard let ad = self._rewardedAd else {
                 assert(false, "Please call initialize() first")
+                return
             }
             ad.preloadAndNotify(self._rewardedAdListener)
         }
@@ -195,6 +201,7 @@ public class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             guard let ad = self._rewardedAd else {
                 assert(false, "Please call initialize() first")
+                return
             }
             ad.showAndNotify(self._rewardedAdListener)
         }

@@ -50,6 +50,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard let appId = dict["appId"] as? String else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.initialize(appId)
             return ""
@@ -118,6 +119,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         Thread.runOnMainThread {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
+                return
             }
             self._rewarded = false
             do {

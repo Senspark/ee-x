@@ -88,6 +88,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.load(GADRequest(), completionHandler: { error in
                 if let error = error {
@@ -107,6 +108,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
                 let rootView = Utils.getCurrentRootViewController()
             else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.present(fromRootViewController: rootView, delegate: self)
         }

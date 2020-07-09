@@ -13,53 +13,15 @@
 #include <ee/Ads.hpp>
 #include <ee/Cocos.hpp>
 
-#include "AdMob.hpp"
-#include "AppLovin.hpp"
-#include "CrashlyticsAgent.hpp"
-#include "FacebookAds.hpp"
-#include "IronSource.hpp"
-#include "MultiNativeAdTestScene.hpp"
-#include "NotificationAgent.hpp"
-#include "TwitterShareTestScene.hpp"
-#include "UnityAds.hpp"
+#include "CoreTester.hpp"
+#include "FirebaseCrashlyticsTester.hpp"
+#include "GoogleAnalyticsTester.hpp"
 #include "Utils.hpp"
 #include "VideoPlayerTestScene.hpp"
-#include "Vungle.hpp"
 
 namespace eetest {
 namespace {
 const auto DesignResolution = cocos2d::Size(480, 320);
-} // namespace
-
-namespace {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
-// Nothing.
-#else
-void testMultiAds() {
-    auto ad = std::make_shared<ee::MultiRewardedAd>();
-    ad->addItem(getAdMob()->createRewardedAd(getAdMobRewardedAdTestId()));
-    ad->addItem(getAppLovin()->createRewardedAd());
-    ad->addItem(getIronSource()->createRewardedAd(getIronSourceRewardedAdId()));
-    ad->addItem(getUnityAds()->createRewardedAd(getUnityRewardedAdId()));
-    ad->addItem(getVungle()->createRewardedAd(getVungleRewardedAdId()));
-
-    scheduleForever(1.0f, 3.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
-                        getLogger().info("Load rewarded ad");
-                        auto result = co_await ad->load();
-                        logCurrentThread();
-                        getLogger().info("Load rewarded ad: result = %d",
-                                         static_cast<int>(result));
-                    }));
-
-    scheduleForever(2.0f, 3.0f, ee::makeAwaiter([ad]() -> ee::Task<> {
-                        getLogger().info("Show rewarded ad");
-                        auto result = co_await ad->show();
-                        logCurrentThread();
-                        getLogger().info("Show rewarded ad result = %d",
-                                         static_cast<int>(result));
-                    }));
-}
-#endif
 } // namespace
 
 AppDelegate::AppDelegate() {}
@@ -117,59 +79,24 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ee::Logger::setSystemLogger(getLogger());
 
-    // CrashlyticsAgent::getInstance()->initialize();
-    // CrashlyticsAgent::getInstance()->logDebug("debug_message");
-    // CrashlyticsAgent::getInstance()->logInfo("info_message");
-
-    getLogger().info("Cocos thread ID: %s", getCurrentThreadId().c_str());
-    getLogger().info("SHA1: %s", ee::getSHA1CertificateFingerprint().c_str());
-    getLogger().info("Version name: %s", ee::getVersionName().c_str());
-    getLogger().info("Version code: %s", ee::getVersionCode().c_str());
-    getLogger().info("isTablet: %s", ee::isTablet() ? "true" : "false");
-
-    ee::noAwait([]() -> ee::Task<> {
-        auto isConnected = co_await ee::testConnection("www.google.com", 1.0f);
-        getLogger().info("isConnected: %s", isConnected ? "true" : "false");
-    });
-
-    // NotificationAgent::getInstance()->initialize();
-    // testAdMobBannerAd();
-    // testAdMobNativeAd();
-    // testAdMobInterstitial();
-    // testAdMobRewardedAd();
-    // testAppLovin();
-    // testUnityAdsRewardedAd();
-    // testIronSourceRewardedAd();
-    // testVungle();
-    // testMultiAds();
-    // testFacebookInterstitialAd();
-    // testFacebookNativeAd();
-
-    cocos2d::log("Create scene");
-    // director->runWithScene(VideoPlayerTestScene::create());
-    // director->runWithScene(createMultiNativeAdTestScene());
-
-    // Deprecated.
-    // director->runWithScene(TwitterShareTestScene::create());
-
+    static std::vector<std::shared_ptr<ITester>> testers;
+    testers.push_back(std::make_shared<CoreTester>());
+    testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
+    testers.push_back(std::make_shared<GoogleAnalyticsTester>());
+    for (auto&& tester : testers) {
+        tester->initialize();
+        tester->start();
+    }
     return true;
 }
 
 void AppDelegate::applicationDidEnterBackground() {
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->stopAnimation();
-#ifndef EE_X_DESKTOP
-    // FIXME.
-    // NotificationAgent::getInstance()->scheduleAll();
-#endif // EE_X_DESKTOP
 }
 
 void AppDelegate::applicationWillEnterForeground() {
     cocos2d::log(__PRETTY_FUNCTION__);
     cocos2d::Director::getInstance()->startAnimation();
-#ifndef EE_X_DESKTOP
-    // FIXME.
-    // NotificationAgent::getInstance()->unscheduleAll();
-#endif // EE_X_DESKTOP
 }
 } // namespace eetest

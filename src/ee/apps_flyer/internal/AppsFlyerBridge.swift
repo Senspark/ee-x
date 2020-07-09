@@ -42,6 +42,7 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
                 let appId = dict["appId"] as? String
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.intialize(devKey, appId)
             return ""
@@ -68,6 +69,7 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
                 let values = dict["values"] as? [String: Any]
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.trackEvent(name, values)
             return ""

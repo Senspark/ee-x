@@ -30,7 +30,7 @@ public class MessageBridge: NSObject, IMessageBridge {
         objc_sync_enter(_handleLock)
         defer { objc_sync_exit(_handleLock) }
         if _handlers.contains(where: { key, _ -> Bool in key == tag }) {
-            assert(false, "A handler with tag " + tag + " already exists")
+            assert(false, "A handler with tag \(tag) already exists")
             return false
         }
         _handlers[tag] = handler
@@ -61,7 +61,7 @@ public class MessageBridge: NSObject, IMessageBridge {
         objc_sync_enter(_handleLock)
         defer { objc_sync_exit(_handleLock) }
         if !_handlers.contains(where: { key, _ -> Bool in key == tag }) {
-            assert(false, "A handler with tag " + tag + " doesn't exist")
+            assert(false, "A handler with tag \(tag) doesn't exist")
             return false
         }
         _handlers.removeValue(forKey: tag)
@@ -96,7 +96,8 @@ public class MessageBridge: NSObject, IMessageBridge {
     /// @return Reply message from Objective-C.
     private func call(_ tag: String, _ message: String) -> String {
         guard let handler = findHandler(tag) else {
-            assert(false, "A handler with tag " + tag + " doesn't exist")
+            assert(false, "A handler with tag \(tag) doesn't exist")
+            return ""
         }
         return handler(message)
     }

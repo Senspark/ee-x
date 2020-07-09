@@ -121,26 +121,17 @@ Java_com_ee_internal_MessageBridgeKt_ee_1callCppInternal(JNIEnv* env,
 } // extern "C"
 
 std::string Self::call(const std::string& tag, const std::string& message) {
-    auto method = JniUtils::getStaticMethodInfo(
-        "com/ee/internal/MessageBridgeKt", "ee_staticCall",
-        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-
-    if (method == nullptr) {
-        throw std::runtime_error("Method not found!");
-    }
-
-    auto tag_java = JniUtils::toJavaString(tag);
-    auto message_java = JniUtils::toJavaString(message);
-
-    jobject response = method->getEnv()->CallStaticObjectMethod(
-        method->getClass(), method->getMethodId(), tag_java->get(),
-        message_java->get());
+    jobject response = JniUtils::callStaticObjectMethod(
+        "com/ee/internal/MessageBridgeKt", //
+        "ee_staticCall",                   //
+        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+        JniUtils::toJavaString(tag)->get(),
+        JniUtils::toJavaString(message)->get());
 
     jstring response_java = static_cast<jstring>(response);
     auto result = JniUtils::toString(response_java);
 
-    method->getEnv()->DeleteLocalRef(response);
-
+    JniUtils::getEnv()->DeleteLocalRef(response);
     return result;
 }
 #endif // EE_X_ANDROID

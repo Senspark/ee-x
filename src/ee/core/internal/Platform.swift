@@ -51,6 +51,7 @@ public class Platform: NSObject {
                 let body = dict["body"] as? String
             else {
                 assert(false, "Unexpected value")
+                return ""
             }
             return Utils.toString(sendMail(recipient, subject, body))
         }
@@ -61,6 +62,7 @@ public class Platform: NSObject {
                 let timeOut = dict["time_out"] as? Float
             else {
                 assert(false, "Unexpected value")
+                return
             }
             testConnection(hostName, timeOut)
                 .subscribe(
@@ -158,7 +160,7 @@ public class Platform: NSObject {
     }
 
     private class func sendMail(_ recipient: String, _ subject: String, _ body: String) -> Bool {
-        let str = String("mailto:" + recipient + "?subject=" + subject + "&body=" + body)
+        let str = String("mailto:\(recipient)?subject=\(subject)&body=\(body)")
         guard let encodedStr = str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             return false
         }

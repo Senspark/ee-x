@@ -57,7 +57,7 @@ class GoogleAnalyticsTracker(
             ""
         }
         _bridge.registerHandler(k__send) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             send(params)
             ""
         }

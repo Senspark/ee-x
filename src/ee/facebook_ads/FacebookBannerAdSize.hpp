@@ -11,6 +11,8 @@
 
 #ifdef __cplusplus
 
+#include "ee/FacebookAdsFwd.hpp"
+
 namespace ee {
 namespace facebook_ads {
 enum class BannerAdSize {
@@ -28,7 +30,6 @@ enum class BannerAdSize {
 
     /// kFBAdSize320x50
     Size320x50,
-
 };
 } // namespace facebook_ads
 } // namespace ee

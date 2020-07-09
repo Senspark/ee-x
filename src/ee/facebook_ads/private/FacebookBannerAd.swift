@@ -85,6 +85,7 @@ internal class FacebookBannerAd:
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.loadAd()
         }

@@ -11,11 +11,9 @@
 
 #include <ee/Ads.hpp>
 
-#ifdef __cplusplus
 #include "ee/FacebookAdsFwd.hpp"
 #include "ee/facebook_ads/FacebookAdsBridge.hpp"
 #include "ee/facebook_ads/FacebookBannerAdSize.hpp"
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
-#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_ADS_HPP */

@@ -115,6 +115,7 @@ public class IronSourceBridge:
         Thread.runOnMainThread {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
+                return
             }
             IronSource.showInterstitial(with: rootView, placement: adId)
         }
@@ -128,6 +129,7 @@ public class IronSourceBridge:
         Thread.runOnMainThread {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
+                return
             }
             self._rewarded = false
             IronSource.showRewardedVideo(with: rootView, placement: adId)

@@ -10,9 +10,7 @@
 
 #include <ee/Core.hpp>
 
-#ifdef __cplusplus
 #include "ee/AppsFlyerFwd.hpp"
 #include "ee/apps_flyer/IAppsFlyerBridge.hpp"
-#endif // __cplusplus
 
 #endif /* EE_X_APPS_FLYER_HPP */

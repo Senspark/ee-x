@@ -9,8 +9,6 @@
 
 #include "ee/ads/internal/MediationManager.hpp"
 
-#include <mutex>
-
 #include "ee/ads/internal/AsyncHelper.hpp"
 
 namespace ee {

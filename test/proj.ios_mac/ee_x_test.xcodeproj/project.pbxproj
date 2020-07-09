@@ -7,18 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		062C6393216F640D0079C553 /* TwitterShareTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */; };
 		1B2C1B6D411EAC74A9F056A6 /* libPods-common-ee_x_test_desktop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52167163293AEFE6F03BAF78 /* libPods-common-ee_x_test_desktop.a */; };
 		4B120C1C23D0780900528149 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B120C1723D077FD00528149 /* libcocos2d iOS.a */; };
 		4B120C1F23D0781000528149 /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B120C1523D077FD00528149 /* libcocos2d Mac.a */; };
 		6F2580241ECBFC9A00B910F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580231ECBFC9A00B910F9 /* main.mm */; };
-		6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */; };
 		6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802B1ECBFF8C00B910F9 /* AppController.mm */; };
 		6F25802F1ECBFFAE00B910F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F25802E1ECBFFAE00B910F9 /* main.m */; };
-		6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationAgent.cpp */; };
+		6F2580321ECC019000B910F9 /* NotificationTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationTester.cpp */; };
 		6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
 		6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */; };
-		6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */; };
 		6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */; };
 		6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F426E1F1F8B56B2009E202A /* RootViewController.mm */; };
 		6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F426E2B1F8B5978009E202A /* fb_native_pause.xib */; };
@@ -26,20 +23,35 @@
 		6F54B3C01FB0153800D821F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 6F54B3BF1FB0153800D821F1 /* images */; };
 		6F54B3C11FB0153800D821F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 6F54B3BF1FB0153800D821F1 /* images */; };
 		6F54B3C41FB0207C00D821F1 /* NativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */; };
-		6F54B3C71FB0215F00D821F1 /* MultiNativeAdTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */; };
 		6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
-		6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */; };
-		6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */; };
-		6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */; };
-		6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */; };
-		6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */; };
-		6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */; };
+		6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */; };
+		6FDD65A91F94A7DF00BAEA66 /* AppLovinTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */; };
+		6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */; };
+		6FDD65B11F94A93D00BAEA66 /* IronSourceTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */; };
+		6FDD65B51F94A9C800BAEA66 /* VungleTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */; };
+		6FDD65B91F94AB4700BAEA66 /* AdMobTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */; };
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
+		AD2CA22624B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */; };
+		AD2CA22724B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */; };
+		AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
+		AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
+		AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
+		AD2CA23024B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
+		AD2CA23524B308D400542CB2 /* NotificationTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationTester.cpp */; };
+		AD2CA23624B309CE00542CB2 /* AdMobTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */; };
+		AD2CA23D24B311CD00542CB2 /* BannerAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */; };
+		AD2CA23E24B311CD00542CB2 /* BannerAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */; };
+		AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
+		AD2CA24224B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
+		AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
+		AD2CA24624B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
+		AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
+		AD2CA24A24B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
@@ -86,8 +98,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TwitterShareTestScene.cpp; sourceTree = "<group>"; };
-		062C6392216F640D0079C553 /* TwitterShareTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TwitterShareTestScene.hpp; sourceTree = "<group>"; };
 		1A9EE02AF42BD8282D9A8F6F /* Pods-common-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* ee_x_test_mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ee_x_test_mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2ED7E810414428AC01BFBD /* Pods-ee_x_test_mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.debug.xcconfig"; sourceTree = "<group>"; };
@@ -100,13 +110,11 @@
 		6D25545ECF195B5DA0EB9CB5 /* libPods-ee_x_test_desktop.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_desktop.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F2580221ECBFBAC00B910F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ios/Info.plist; sourceTree = SOURCE_ROOT; };
 		6F2580231ECBFC9A00B910F9 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashlyticsAgent.cpp; sourceTree = "<group>"; };
-		6F2580261ECBFE3E00B910F9 /* CrashlyticsAgent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CrashlyticsAgent.hpp; sourceTree = "<group>"; };
 		6F25802B1ECBFF8C00B910F9 /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
 		6F25802C1ECBFF8C00B910F9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		6F25802E1ECBFFAE00B910F9 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6F2580301ECC019000B910F9 /* NotificationAgent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotificationAgent.cpp; sourceTree = "<group>"; };
-		6F2580311ECC019000B910F9 /* NotificationAgent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotificationAgent.hpp; sourceTree = "<group>"; };
+		6F2580301ECC019000B910F9 /* NotificationTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotificationTester.cpp; sourceTree = "<group>"; };
+		6F2580311ECC019000B910F9 /* NotificationTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotificationTester.hpp; sourceTree = "<group>"; };
 		6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppDelegate.hpp; sourceTree = "<group>"; };
 		6F25804B1ECC4E7200B910F9 /* main */ = {isa = PBXFileReference; lastKnownFileType = folder; name = main; path = ../proj.android_studio/app/src/main; sourceTree = "<group>"; };
@@ -117,25 +125,23 @@
 		6F54B3BF1FB0153800D821F1 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeAdTestScene.cpp; sourceTree = "<group>"; };
 		6F54B3C31FB0207C00D821F1 /* NativeAdTestScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NativeAdTestScene.hpp; sourceTree = "<group>"; };
-		6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiNativeAdTestScene.cpp; sourceTree = "<group>"; };
-		6F54B3C61FB0215F00D821F1 /* MultiNativeAdTestScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MultiNativeAdTestScene.hpp; sourceTree = "<group>"; };
 		6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionLogger.cpp; sourceTree = "<group>"; };
 		6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionLogger.hpp; sourceTree = "<group>"; };
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		6FDD659F1F94A3B400BAEA66 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6FDD65A01F94A3B400BAEA66 /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
-		6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAds.cpp; sourceTree = "<group>"; };
-		6FDD65A41F94A4DB00BAEA66 /* FacebookAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAds.hpp; sourceTree = "<group>"; };
-		6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovin.cpp; sourceTree = "<group>"; };
-		6FDD65A81F94A7DF00BAEA66 /* AppLovin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovin.hpp; sourceTree = "<group>"; };
-		6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityAds.cpp; sourceTree = "<group>"; };
-		6FDD65AC1F94A86B00BAEA66 /* UnityAds.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAds.hpp; sourceTree = "<group>"; };
-		6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IronSource.cpp; sourceTree = "<group>"; };
-		6FDD65B01F94A93D00BAEA66 /* IronSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSource.hpp; sourceTree = "<group>"; };
-		6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vungle.cpp; sourceTree = "<group>"; };
-		6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vungle.hpp; sourceTree = "<group>"; };
-		6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMob.cpp; sourceTree = "<group>"; };
-		6FDD65B81F94AB4700BAEA66 /* AdMob.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMob.hpp; sourceTree = "<group>"; };
+		6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAdsTester.cpp; sourceTree = "<group>"; };
+		6FDD65A41F94A4DB00BAEA66 /* FacebookAdsTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAdsTester.hpp; sourceTree = "<group>"; };
+		6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinTester.cpp; sourceTree = "<group>"; };
+		6FDD65A81F94A7DF00BAEA66 /* AppLovinTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinTester.hpp; sourceTree = "<group>"; };
+		6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityAdsTester.cpp; sourceTree = "<group>"; };
+		6FDD65AC1F94A86B00BAEA66 /* UnityAdsTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAdsTester.hpp; sourceTree = "<group>"; };
+		6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IronSourceTester.cpp; sourceTree = "<group>"; };
+		6FDD65B01F94A93D00BAEA66 /* IronSourceTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceTester.hpp; sourceTree = "<group>"; };
+		6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VungleTester.cpp; sourceTree = "<group>"; };
+		6FDD65B41F94A9C800BAEA66 /* VungleTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleTester.hpp; sourceTree = "<group>"; };
+		6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMobTester.cpp; sourceTree = "<group>"; };
+		6FDD65B81F94AB4700BAEA66 /* AdMobTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMobTester.hpp; sourceTree = "<group>"; };
 		6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = admob_native_spin.xib; sourceTree = "<group>"; };
 		82B010BBDE4CA3D417D178FF /* Pods-common-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +150,22 @@
 		AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseDynamicLink.cpp; sourceTree = "<group>"; };
 		AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FirebaseDynamicLink.hpp; sourceTree = "<group>"; };
 		AD18E4062449C177002C7EEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "ios/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsTester.cpp; sourceTree = "<group>"; };
+		AD2CA22524B2E45100542CB2 /* GoogleAnalyticsTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsTester.hpp; sourceTree = "<group>"; };
+		AD2CA22924B3071C00542CB2 /* CoreTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreTester.cpp; sourceTree = "<group>"; };
+		AD2CA22A24B3071C00542CB2 /* CoreTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CoreTester.hpp; sourceTree = "<group>"; };
+		AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseCrashlyticsTester.cpp; sourceTree = "<group>"; };
+		AD2CA22E24B3073D00542CB2 /* FirebaseCrashlyticsTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FirebaseCrashlyticsTester.hpp; sourceTree = "<group>"; };
+		AD2CA23224B3077E00542CB2 /* ITester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ITester.hpp; sourceTree = "<group>"; };
+		AD2CA23824B30A1400542CB2 /* AppMacro.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppMacro.hpp; sourceTree = "<group>"; };
+		AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BannerAdTester.cpp; sourceTree = "<group>"; };
+		AD2CA23C24B311CD00542CB2 /* BannerAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BannerAdTester.hpp; sourceTree = "<group>"; };
+		AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NativeAdTester.cpp; sourceTree = "<group>"; };
+		AD2CA24024B3135300542CB2 /* NativeAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NativeAdTester.hpp; sourceTree = "<group>"; };
+		AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterstitialAdTester.cpp; sourceTree = "<group>"; };
+		AD2CA24424B316FD00542CB2 /* InterstitialAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InterstitialAdTester.hpp; sourceTree = "<group>"; };
+		AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardedAdTester.cpp; sourceTree = "<group>"; };
+		AD2CA24824B3183900542CB2 /* RewardedAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardedAdTester.hpp; sourceTree = "<group>"; };
 		AD56EF792021647A00DC9B56 /* videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = videos; sourceTree = "<group>"; };
 		AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerTestScene.cpp; sourceTree = "<group>"; };
 		AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerTestScene.hpp; sourceTree = "<group>"; };
@@ -194,7 +216,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA = {
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				4B120C0E23D077FD00528149 /* cocos2d_libs.xcodeproj */,
@@ -237,38 +259,20 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				6F2580251ECBFE3E00B910F9 /* CrashlyticsAgent.cpp */,
-				6F2580261ECBFE3E00B910F9 /* CrashlyticsAgent.hpp */,
-				6F2580301ECC019000B910F9 /* NotificationAgent.cpp */,
-				6F2580311ECC019000B910F9 /* NotificationAgent.hpp */,
+				AD2CA23824B30A1400542CB2 /* AppMacro.hpp */,
+				AD2CA22224B2E44100542CB2 /* tester */,
 				6F25803D1ECC2DC400B910F9 /* AppDelegate.cpp */,
 				6F25803E1ECC2DC400B910F9 /* AppDelegate.hpp */,
 				6FDD659F1F94A3B400BAEA66 /* Utils.cpp */,
 				6FDD65A01F94A3B400BAEA66 /* Utils.hpp */,
-				6FDD65B71F94AB4700BAEA66 /* AdMob.cpp */,
-				6FDD65B81F94AB4700BAEA66 /* AdMob.hpp */,
-				6FDD65A71F94A7DF00BAEA66 /* AppLovin.cpp */,
-				6FDD65A81F94A7DF00BAEA66 /* AppLovin.hpp */,
-				6FDD65A31F94A4DB00BAEA66 /* FacebookAds.cpp */,
-				6FDD65A41F94A4DB00BAEA66 /* FacebookAds.hpp */,
-				6FDD65AF1F94A93D00BAEA66 /* IronSource.cpp */,
-				6FDD65B01F94A93D00BAEA66 /* IronSource.hpp */,
-				6FDD65AB1F94A86B00BAEA66 /* UnityAds.cpp */,
-				6FDD65AC1F94A86B00BAEA66 /* UnityAds.hpp */,
-				6FDD65B31F94A9C800BAEA66 /* Vungle.cpp */,
-				6FDD65B41F94A9C800BAEA66 /* Vungle.hpp */,
 				6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */,
 				6F59E6FA1FA6E75E007D3070 /* FunctionLogger.hpp */,
 				6F54B3C21FB0207C00D821F1 /* NativeAdTestScene.cpp */,
 				6F54B3C31FB0207C00D821F1 /* NativeAdTestScene.hpp */,
-				6F54B3C51FB0215F00D821F1 /* MultiNativeAdTestScene.cpp */,
-				6F54B3C61FB0215F00D821F1 /* MultiNativeAdTestScene.hpp */,
 				AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */,
 				AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */,
 				AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */,
 				AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */,
-				062C6391216F640D0079C553 /* TwitterShareTestScene.cpp */,
-				062C6392216F640D0079C553 /* TwitterShareTestScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -325,6 +329,42 @@
 			path = ios/src;
 			sourceTree = SOURCE_ROOT;
 		};
+		AD2CA22224B2E44100542CB2 /* tester */ = {
+			isa = PBXGroup;
+			children = (
+				AD2CA23224B3077E00542CB2 /* ITester.hpp */,
+				AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */,
+				AD2CA23C24B311CD00542CB2 /* BannerAdTester.hpp */,
+				AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */,
+				AD2CA24024B3135300542CB2 /* NativeAdTester.hpp */,
+				AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */,
+				AD2CA24424B316FD00542CB2 /* InterstitialAdTester.hpp */,
+				AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */,
+				AD2CA24824B3183900542CB2 /* RewardedAdTester.hpp */,
+				AD2CA22924B3071C00542CB2 /* CoreTester.cpp */,
+				AD2CA22A24B3071C00542CB2 /* CoreTester.hpp */,
+				6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */,
+				6FDD65B81F94AB4700BAEA66 /* AdMobTester.hpp */,
+				6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */,
+				6FDD65A81F94A7DF00BAEA66 /* AppLovinTester.hpp */,
+				6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */,
+				6FDD65A41F94A4DB00BAEA66 /* FacebookAdsTester.hpp */,
+				AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */,
+				AD2CA22E24B3073D00542CB2 /* FirebaseCrashlyticsTester.hpp */,
+				AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */,
+				AD2CA22524B2E45100542CB2 /* GoogleAnalyticsTester.hpp */,
+				6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */,
+				6FDD65B01F94A93D00BAEA66 /* IronSourceTester.hpp */,
+				6F2580301ECC019000B910F9 /* NotificationTester.cpp */,
+				6F2580311ECC019000B910F9 /* NotificationTester.hpp */,
+				6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */,
+				6FDD65AC1F94A86B00BAEA66 /* UnityAdsTester.hpp */,
+				6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */,
+				6FDD65B41F94A9C800BAEA66 /* VungleTester.hpp */,
+			);
+			path = tester;
+			sourceTree = "<group>";
+		};
 		C76671CF600AAB2EDD769DA6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,11 +389,9 @@
 			buildPhases = (
 				87F46DAB172BF0BEB80321B9 /* [CP] Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
-				53F7DACE0C970E563076FC85 /* [CP] Prepare Artifacts */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 				C016B096895296658D09BD50 /* [CP] Copy Pods Resources */,
-				8D1A28453BC97346E6E062E5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -459,7 +497,7 @@
 				zh_CN,
 				zh_TW,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -526,24 +564,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		53F7DACE0C970E563076FC85 /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-artifacts.sh",
-				"${PODS_ROOT}/AppsFlyerFramework/Mac Catalyst/AppsFlyerLib.xcframework",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputPaths = (
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-artifacts.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7972B1E67F2A6BB2D98900DC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -580,23 +600,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8D1A28453BC97346E6E062E5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C016B096895296658D09BD50 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -604,8 +607,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
-				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.12.8/AppLovinSDKResources.bundle",
+				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-6.13.0/AppLovinSDKResources.bundle",
 				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/TPInAppReceipt/TPInAppReceipt/AppleIncRootCertificate.cer",
 				"${PODS_ROOT}/../../../res/stars_3_5.png",
 				"${PODS_ROOT}/../../../res/stars_4.png",
 				"${PODS_ROOT}/../../../res/stars_4_5.png",
@@ -615,6 +619,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppLovinSDKResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppleIncRootCertificate.cer",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
@@ -632,22 +637,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F54B3C71FB0215F00D821F1 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F54B3C41FB0207C00D821F1 /* NativeAdTestScene.cpp in Sources */,
-				062C6393216F640D0079C553 /* TwitterShareTestScene.cpp in Sources */,
-				6F2580321ECC019000B910F9 /* NotificationAgent.cpp in Sources */,
+				AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */,
+				6F2580321ECC019000B910F9 /* NotificationTester.cpp in Sources */,
 				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
-				6F2580271ECBFE3E00B910F9 /* CrashlyticsAgent.cpp in Sources */,
-				6FDD65B11F94A93D00BAEA66 /* IronSource.cpp in Sources */,
+				6FDD65B11F94A93D00BAEA66 /* IronSourceTester.cpp in Sources */,
 				AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
-				6FDD65A91F94A7DF00BAEA66 /* AppLovin.cpp in Sources */,
-				6FDD65A51F94A4DB00BAEA66 /* FacebookAds.cpp in Sources */,
-				6FDD65AD1F94A86B00BAEA66 /* UnityAds.cpp in Sources */,
+				6FDD65A91F94A7DF00BAEA66 /* AppLovinTester.cpp in Sources */,
+				AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */,
+				AD2CA22624B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */,
+				AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */,
+				6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */,
+				6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */,
 				AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */,
+				AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */,
 				6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
-				6FDD65B91F94AB4700BAEA66 /* AdMob.cpp in Sources */,
-				6FDD65B51F94A9C800BAEA66 /* Vungle.cpp in Sources */,
+				6FDD65B91F94AB4700BAEA66 /* AdMobTester.cpp in Sources */,
+				AD2CA23D24B311CD00542CB2 /* BannerAdTester.cpp in Sources */,
+				AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */,
+				6FDD65B51F94A9C800BAEA66 /* VungleTester.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
 				6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */,
 				6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */,
@@ -658,13 +667,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD2CA24624B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */,
 				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
-				6F2C62141FB2E27B000CEA38 /* MultiNativeAdTestScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
+				AD2CA23E24B311CD00542CB2 /* BannerAdTester.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
+				AD2CA23024B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */,
+				AD2CA23624B309CE00542CB2 /* AdMobTester.cpp in Sources */,
+				AD2CA23524B308D400542CB2 /* NotificationTester.cpp in Sources */,
+				AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */,
+				AD2CA22724B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
+				AD2CA24224B3135300542CB2 /* NativeAdTester.cpp in Sources */,
 				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,
+				AD2CA24A24B3183900542CB2 /* RewardedAdTester.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

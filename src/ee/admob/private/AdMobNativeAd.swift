@@ -89,14 +89,16 @@ internal class AdMobNativeAd: NSObject, IAdView,
         }
     }
 
-    func createAdView() -> GADUnifiedNativeAdView {
+    func createAdView() -> GADUnifiedNativeAdView? {
         guard let nibObjects = Bundle(for: GADUnifiedNativeAdView.self).loadNibNamed(_layoutName,
                                                                                      owner: nil,
                                                                                      options: nil) else {
             assert(false, "Invalid layout")
+            return nil
         }
         guard let view = nibObjects[0] as? GADUnifiedNativeAdView else {
             assert(false, "Invalid layout class")
+            return nil
         }
         return view
     }
@@ -104,7 +106,10 @@ internal class AdMobNativeAd: NSObject, IAdView,
     func createView() {
         Thread.runOnMainThread {
             assert(self._view == nil)
-            let view = self.createAdView()
+            guard let view = self.createAdView() else {
+                assert(false, "Cannot create ad view")
+                return
+            }
             self._view = view
             self._viewHelper.view = view
             let rootView = Utils.getCurrentRootViewController()
@@ -131,6 +136,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.load(GADRequest())
         }
@@ -173,6 +179,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
     func adLoader(_ adLoader: GADAdLoader, didReceive ad: GADUnifiedNativeAd) {
         guard let view = _view else {
             assert(false, "Ad view is not initialized")
+            return
         }
 
         // Populate the native ad view with the native ad assets.

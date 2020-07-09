@@ -81,6 +81,7 @@ internal class FacebookInterstitialAd:
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.load()
         }
@@ -93,6 +94,7 @@ internal class FacebookInterstitialAd:
                 let rootView = Utils.getCurrentRootViewController()
             else {
                 assert(false, "Ad is not initialized")
+                return
             }
             let result = ad.show(fromRootViewController: rootView)
             if result {

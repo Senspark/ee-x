@@ -76,6 +76,7 @@ public class AdMobBridge: NSObject, IPlugin {
                 let index = dict["adSize"] as? Int
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
@@ -90,6 +91,7 @@ public class AdMobBridge: NSObject, IPlugin {
                 let layoutName = dict["layoutName"] as? String
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))
         }

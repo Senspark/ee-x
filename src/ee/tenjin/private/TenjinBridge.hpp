@@ -5,7 +5,6 @@
 #ifndef EE_X_TENJIN_BRIDGE_HPP
 #define EE_X_TENJIN_BRIDGE_HPP
 
-#include "ee/CoreFwd.hpp"
 #include "ee/tenjin/ITenjinBridge.hpp"
 
 namespace ee {

@@ -92,7 +92,7 @@ internal class AdMobInterstitialAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread(Runnable {
-            _logger.info("${this::load.name}")
+            _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         })

@@ -80,6 +80,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         Thread.runOnMainThread {
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.load(GADRequest())
         }
@@ -92,6 +93,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
                 let rootView = Utils.getCurrentRootViewController()
             else {
                 assert(false, "Ad is not initialized")
+                return
             }
             ad.present(fromRootViewController: rootView)
         }

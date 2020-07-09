@@ -50,6 +50,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
                 let increment = dict["increment"] as? Double
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.incrementAchievement(achievementId, increment)
             return ""
@@ -58,6 +59,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard let achievementId = dict["achievement_id"] as? String else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.unlockAchievement(achievementId)
             return ""
@@ -66,6 +68,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard let leaderboardId = dict["leaderboard_id"] as? String else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.showLeaderboard(leaderboardId)
             return ""
@@ -81,6 +84,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
                 let score = dict["score"] as? Int64
             else {
                 assert(false, "Invalid argument")
+                return ""
             }
             self.submitScore(leaderboardId, score)
             return ""

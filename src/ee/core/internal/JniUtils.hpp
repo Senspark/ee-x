@@ -12,9 +12,7 @@
 #include <string>
 #include <thread>
 
-#include <jni.h>
-
-#include "ee/CoreFwd.hpp"
+#include "ee/core/internal/JniMethodInfo.hpp"
 
 namespace ee {
 namespace core {
@@ -27,9 +25,6 @@ public:
     /// current thread.
     static JNIEnv* getEnv();
 
-    /// Checks and print any JNI exception.
-    static void checkException();
-
     /// Converts Java string to C++ string.
     static std::string toString(jstring str);
 
@@ -38,13 +33,37 @@ public:
 
     static std::unique_ptr<JniString> toJavaString(const std::u16string& str);
 
+    template <class... Args>
+    static jboolean
+    callStaticBooleanMethod(const char* className, const char* methodName,
+                            const char* signature, Args&&... args) {
+        auto method = getStaticMethodInfo(className, methodName, signature);
+        return method->callStaticBooleanMethod(std::forward<Args>(args)...);
+    }
+
+    template <class... Args>
+    static void callStaticVoidMethod(const char* className,
+                                     const char* methodName,
+                                     const char* signature, Args&&... args) {
+        auto method = getStaticMethodInfo(className, methodName, signature);
+        return method->callStaticVoidMethod(std::forward<Args>(args)...);
+    }
+
+    template <class... Args>
+    static jobject
+    callStaticObjectMethod(const char* className, const char* methodName,
+                           const char* signature, Args&&... args) {
+        auto method = getStaticMethodInfo(className, methodName, signature);
+        return method->callStaticObjectMethod(std::forward<Args>(args)...);
+    }
+
+private:
+    static JavaVM* getVm();
+
     /// Retrieves the Java static method information.
     static std::unique_ptr<JniMethodInfo>
     getStaticMethodInfo(const char* className, const char* methodName,
                         const char* signature);
-
-private:
-    static JavaVM* getVm();
 
     static JavaVM* vm_;
 };

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.internal.GoogleAnalyticsTracker
-import com.ee.internal.deserialize
+import com.ee.internal.deserializeMap
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.HitBuilders.EventBuilder
 import com.google.android.gms.analytics.HitBuilders.ExceptionBuilder
@@ -100,35 +100,35 @@ class GoogleAnalyticsBridge(
             Utils.toString(destroyTracker(message))
         }
         _bridge.registerHandler(kTestTrackEvent) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackEvent(params))
         }
         _bridge.registerHandler(kTestTrackException) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackException(params))
         }
         _bridge.registerHandler(kTestTrackScreenView) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackScreenView(params))
         }
         _bridge.registerHandler(kTestTrackSocial) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackSocial(params))
         }
         _bridge.registerHandler(kTestTrackTiming) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackTiming(params))
         }
         _bridge.registerHandler(kTestCustomDimensionAndMetric) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testCustomDimensionAndMetric(params))
         }
         _bridge.registerHandler(kTestTrackEcommerceAction) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackEcommerceAction(params))
         }
         _bridge.registerHandler(kTestTrackEcommerceImpression) { message ->
-            val params = deserialize<Map<String, String>>(message)
+            val params = deserializeMap<String, String>(message)
             Utils.toString(testTrackEcommerceImpression(params))
         }
     }

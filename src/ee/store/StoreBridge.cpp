@@ -69,7 +69,7 @@ const std::string kPrefix      = "StoreBridge";
 const auto kGetSkuDetails      = kPrefix + "GetSkuDetails";
 const auto kGetPurchases       = kPrefix + "GetPurchases";
 const auto kGetPurchaseHistory = kPrefix + "GetPurchaseHistory";
-const auto kPurchase           = kPrefix + "Ppurchase";
+const auto kPurchase           = kPrefix + "Purchase";
 const auto kConsume            = kPrefix + "Consume";
 const auto kAcknowledge        = kPrefix + "Acknowledge";
 // clang-format on

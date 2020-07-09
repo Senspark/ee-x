@@ -59,6 +59,7 @@ private class PluginManager: NSObject {
             // Objective-C plugins.
             (NSClassFromString("EE\(name)") as? NSObject.Type)?.init() as? IPlugin else {
             assert(false, "Invalid plugin: \(name)")
+            return false
         }
         _plugins[name] = plugin
         return false

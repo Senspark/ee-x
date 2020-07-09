@@ -22,6 +22,12 @@ public:
         const std::shared_ptr<AppleInAppPurchaseReceipt>& receipt,
         const std::string& introJson);
 
+    explicit SubscriptionInfo(const std::string& skuDetails,
+                              bool isAutoRenewing, int purchaseDate,
+                              bool isFreeTrial, bool hasIntroductoryPriceTrial,
+                              bool purchaseHistorySupported,
+                              const std::string& updateMetadata);
+
     const std::string& getProductId() const;
     int getPurchaseDate() const;
     Result isSubscribed() const;

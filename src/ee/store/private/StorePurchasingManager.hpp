@@ -31,7 +31,7 @@ public:
 
     virtual void
     initiatePurchase(const std::shared_ptr<Product>& product) override;
-    virtual void initiatePurchase(const std::string& productId) override;
+    virtual void initiatePurchase(const std::string& itemId) override;
     virtual void
     confirmPendingPurchase(const std::shared_ptr<Product>& product) override;
 

@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "StoreProductType.hpp"
+#include "ee/store/StoreProductType.hpp"
 
 namespace ee {
 namespace store {

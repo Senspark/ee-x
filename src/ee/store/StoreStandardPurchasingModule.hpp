@@ -42,6 +42,7 @@ private:
         AppStore android);
 
     std::shared_ptr<StoreInstance> instantiateStore();
+    std::shared_ptr<IStore> instantiateAndroid();
     std::shared_ptr<IStore> instantiateApple();
     std::shared_ptr<IStore> instantiateFakeStore();
 

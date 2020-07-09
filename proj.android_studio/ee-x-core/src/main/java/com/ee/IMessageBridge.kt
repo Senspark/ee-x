@@ -6,12 +6,8 @@ interface MessageHandler {
     fun handle(message: String): String
 }
 
-interface AsyncMessageResolver {
-    fun resolve(message: String)
-}
-
 interface AsyncMessageHandler {
-    fun handle(message: String, resolver: AsyncMessageResolver)
+    suspend fun handle(message: String): String
 }
 
 /**
@@ -80,10 +76,10 @@ inline fun IMessageBridge.registerHandler(
 
 @AnyThread
 inline fun IMessageBridge.registerAsyncHandler(
-    tag: String, crossinline handler: (message: String, resolver: AsyncMessageResolver) -> Unit): Boolean {
+    tag: String, crossinline handler: suspend (message: String) -> String): Boolean {
     return registerAsyncHandler(tag, object : AsyncMessageHandler {
-        override fun handle(message: String, resolver: AsyncMessageResolver) {
-            handler(message, resolver)
+        override suspend fun handle(message: String): String {
+            return handler(message)
         }
     })
 }

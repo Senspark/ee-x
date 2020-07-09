@@ -17,6 +17,8 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @ImplicitReflectionSerializer
 @UnstableDefault
@@ -73,20 +75,24 @@ class PlayBridge(
         _bridge.registerHandler(kIsLoggedIn) {
             Utils.toString(isLoggedIn)
         }
-        _bridge.registerAsyncHandler(kLogIn) { message, resolver ->
+        _bridge.registerAsyncHandler(kLogIn) { message ->
             @Serializable
             class Request(
                 val silently: Boolean
             )
 
             val request = deserialize<Request>(message)
-            logIn(request.silently) { successful ->
-                resolver.resolve(Utils.toString(successful))
+            suspendCoroutine { cont ->
+                logIn(request.silently) { successful ->
+                    cont.resume(Utils.toString(successful))
+                }
             }
         }
-        _bridge.registerAsyncHandler(kLogOut) { _, resolver ->
-            logOut { successful ->
-                resolver.resolve(Utils.toString(successful))
+        _bridge.registerAsyncHandler(kLogOut) {
+            suspendCoroutine { cont ->
+                logOut { successful ->
+                    cont.resume(Utils.toString(successful))
+                }
             }
         }
         _bridge.registerHandler(kShowAchievements) {

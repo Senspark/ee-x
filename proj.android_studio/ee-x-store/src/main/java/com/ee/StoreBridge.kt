@@ -6,6 +6,7 @@ import androidx.annotation.AnyThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
+import com.android.billingclient.api.BillingClient.FeatureType
 import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -15,9 +16,12 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.ee.internal.GooglePlayPurchasing
+import com.ee.internal.IUnityCallback
+import com.ee.internal.IabHelper
 import com.ee.internal.PurchasesUpdate
 import com.ee.internal.StoreException
-import com.ee.internal.StoreUtils
+import com.ee.internal.UnityPurchasing
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -26,10 +30,15 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.serialization.ContextualSerialization
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 5/16/17.
@@ -39,20 +48,28 @@ import kotlinx.serialization.UnstableDefault
 class StoreBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
-    private var _activity: Activity?) : IPlugin {
+    private var _activity: Activity?)
+    : IPlugin
+    , IStoreBridge
+    , IUnityCallback {
     companion object {
         private val _logger = Logger(StoreBridge::class.java.name)
 
         private const val kPrefix = "StoreBridge"
-        private const val kConnect = "${kPrefix}Connect"
-        private const val kGetSkuDetails = "${kPrefix}GetSkuDetails"
-        private const val kGetPurchases = "${kPrefix}GetPurchases"
-        private const val kGetPurchaseHistory = "${kPrefix}GetPurchaseHistory"
+        private const val kRetrieveProducts = "${kPrefix}RetrieveProducts"
         private const val kPurchase = "${kPrefix}Purchase"
-        private const val kConsume = "${kPrefix}Consume"
-        private const val kAcknowledge = "${kPrefix}Acknowledge"
+        private const val kFinishTransaction = "${kPrefix}FinishTransaction"
+        private const val kOnSetupFailed = "${kPrefix}OnSetupFailed"
+        private const val kOnProductsRetrieved = "${kPrefix}OnProductsRetrieved"
+        private const val kOnPurchaseSucceeded = "${kPrefix}OnPurchaseSucceeded"
+        private const val kOnPurchaseFailed = "${kPrefix}OnPurchaseFailed"
+        private const val kGetProductJson = "${kPrefix}GetProductJson"
+        private const val kRestoreTransactions = "${kPrefix}RestoreTransactions"
+        private const val kFinishAdditionalTransaction = "${kPrefix}FinishAdditionalTransaction"
     }
 
+    private val _scope = MainScope()
+    private val _purchasing = GooglePlayPurchasing(this, IabHelper(this), UnityPurchasing(this))
     private val _scheduler = AndroidSchedulers.mainThread()
     private val _disposable = CompositeDisposable()
     private val _purchaseSubject = PublishSubject.create<PurchasesUpdate>()
@@ -79,188 +96,98 @@ class StoreBridge(
         deregisterHandlers()
         _disposable.dispose()
         _connectObservable = null
+        _scope.cancel()
     }
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerAsyncHandler(kConnect) { _, resolver ->
-            _disposable.add(connect().subscribe({
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val result: Boolean
-                )
-
-                val response = Response(true)
-                resolver.resolve(response.serialize())
-            }) { exception ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val result: Boolean,
-                    val message: String
-                )
-
-                val response = Response(false, exception.localizedMessage ?: "")
-                resolver.resolve(response.serialize())
-            })
+        _bridge.registerHandler(kRetrieveProducts) { message ->
+            _purchasing.retrieveProducts(message)
+            ""
         }
-        _bridge.registerAsyncHandler(kGetSkuDetails) { message, resolver ->
+        _bridge.registerHandler(kPurchase) { message ->
+            _purchasing.purchase(message)
+            ""
+        }
+        _bridge.registerHandler(kFinishTransaction) { message ->
             @Serializable
             class Request(
-                val sku_type: String,
-                val sku_list: List<String>
+                val productJson: String,
+                val transactionId: String
             )
 
             val request = deserialize<Request>(message)
-            _disposable.add(getSkuDetails(request.sku_type, request.sku_list).subscribe({ detailsList ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val item: List<Map<String, @ContextualSerialization Any>>
-                )
-
-                val response = Response(true, detailsList.map(StoreUtils::convertSkuDetailsToDictionary))
-                resolver.resolve(response.serialize())
-            }) { exception ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val error: String
-                )
-
-                val response = Response(false, exception.localizedMessage ?: "")
-                resolver.resolve(response.serialize())
-            })
+            _purchasing.finishTransaction(request.productJson, request.transactionId)
+            ""
         }
-        _bridge.registerAsyncHandler(kGetPurchases) { message, resolver ->
-            _disposable.add(getPurchases(message).subscribe({ purchaseList ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val item: List<Map<String, @ContextualSerialization Any>>
-                )
-
-                val response = Response(true, purchaseList.map(StoreUtils::convertPurchaseToDictionary))
-                resolver.resolve(response.serialize())
-            }) { exception ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val error: String
-                )
-
-                val response = Response(false, exception.localizedMessage ?: "")
-                resolver.resolve(response.serialize())
-            })
+        _bridge.registerHandler(kGetProductJson) {
+            _purchasing.productJson
         }
-        _bridge.registerAsyncHandler(kGetPurchaseHistory) { message, resolver ->
-            _disposable.add(getPurchaseHistory(message).subscribe({ recordList ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val item: List<Map<String, @ContextualSerialization Any>>
-                )
-
-                val response = Response(true, recordList.map(StoreUtils::convertRecordToDictionary))
-                resolver.resolve(response.serialize())
-            }) { exception ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val error: String
-                )
-
-                val response = Response(false, exception.localizedMessage ?: "")
-                resolver.resolve(response.serialize())
-            })
+        _bridge.registerAsyncHandler(kRestoreTransactions) {
+            Utils.toString(_purchasing.restoreTransactions())
         }
-        _bridge.registerAsyncHandler(kPurchase) { message, resolver ->
-            _disposable.add(purchase(message).subscribe({ purchase ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val item: Map<String, @ContextualSerialization Any>
-                )
+        _bridge.registerHandler(kFinishAdditionalTransaction) { message ->
+            @Serializable
+            class Request(
+                val productJson: String,
+                val transactionId: String
+            )
 
-                val response = Response(true, StoreUtils.convertPurchaseToDictionary(purchase))
-                resolver.resolve(response.serialize())
-            }) { exception ->
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean,
-                    val error: String
-                )
-
-                val response = Response(false, exception.localizedMessage ?: "")
-                resolver.resolve(response.serialize())
-            })
-        }
-        _bridge.registerAsyncHandler(kConsume) { message, resolver ->
-            _disposable.add(consume(message).subscribe({
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean
-                )
-
-                val response = Response(true)
-                resolver.resolve(response.serialize())
-            }) {
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean
-                )
-
-                val response = Response(false)
-                resolver.resolve(response.serialize())
-            })
-        }
-        _bridge.registerAsyncHandler(kAcknowledge) { message, resolver ->
-            _disposable.add(acknowledge(message).subscribe({
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean
-                )
-
-                val response = Response(true)
-                resolver.resolve(response.serialize())
-            }) {
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val successful: Boolean
-                )
-
-                val response = Response(false)
-                resolver.resolve(response.serialize())
-            })
+            val request = deserialize<Request>(message)
+            _scope.launch {
+                _purchasing.finishAdditionalTransaction(request.productJson, request.transactionId)
+            }
+            ""
         }
     }
 
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(kConnect)
-        _bridge.deregisterHandler(kGetSkuDetails)
-        _bridge.deregisterHandler(kGetPurchases)
-        _bridge.deregisterHandler(kGetPurchaseHistory)
+        _bridge.deregisterHandler(kRetrieveProducts)
         _bridge.deregisterHandler(kPurchase)
-        _bridge.deregisterHandler(kConsume)
-        _bridge.deregisterHandler(kAcknowledge)
+        _bridge.deregisterHandler(kFinishTransaction)
+        _bridge.deregisterHandler(kGetProductJson)
+        _bridge.deregisterHandler(kRestoreTransactions)
+        _bridge.deregisterHandler(kFinishAdditionalTransaction)
     }
 
-    fun connect(): Observable<BillingClient> {
+    override fun onSetupFailed(json: String) {
+        _bridge.callCpp(kOnSetupFailed, json)
+    }
+
+    override fun onProductsRetrieved(json: String) {
+        _bridge.callCpp(kOnProductsRetrieved, json)
+    }
+
+    override fun onPurchaseSucceeded(id: String, receipt: String, transactionId: String) {
+        @Serializable
+        @Suppress("unused")
+        class Response(
+            val id: String,
+            val receipt: String,
+            val transactionId: String
+        )
+
+        val response = Response(id, receipt, transactionId)
+        _bridge.callCpp(kOnPurchaseSucceeded, response.serialize())
+    }
+
+    override fun onPurchaseFailed(json: String) {
+        _bridge.callCpp(kOnPurchaseFailed, json)
+    }
+
+    override suspend fun connect(): BillingClient {
+        return suspendCoroutine { cont ->
+            _disposable.add(connectRx().subscribe({ client ->
+                cont.resume(client)
+            }) { exception ->
+                cont.resumeWithException(exception)
+            })
+        }
+    }
+
+    override fun connectRx(): Observable<BillingClient> {
         _connectObservable?.let { observable ->
-            return@connect observable
+            return@connectRx observable
         }
         val observable = Observable.create<BillingClient> { emitter ->
             val client = BillingClient
@@ -312,8 +239,14 @@ class StoreBridge(
         return observable
     }
 
-    fun getSkuDetails(@SkuType skuType: String,
-                      skuList: List<String>): Single<List<SkuDetails>> {
+    override suspend fun isFeatureSupported(@FeatureType featureType: String): Boolean {
+        val client = connect()
+        val result = client.isFeatureSupported(featureType)
+        return result.responseCode == BillingResponseCode.OK
+    }
+
+    override suspend fun getSkuDetails(@SkuType skuType: String,
+                                       skuList: List<String>): List<SkuDetails> {
         return getSkuDetails(SkuDetailsParams
             .newBuilder()
             .setSkusList(skuList)
@@ -321,70 +254,101 @@ class StoreBridge(
             .build())
     }
 
-    private fun getSkuDetails(params: SkuDetailsParams): Single<List<SkuDetails>> {
-        return Single.create<List<SkuDetails>> { emitter ->
-            emitter.setDisposable(connect().subscribe({ client ->
-                client.querySkuDetailsAsync(params) { result, detailsList ->
-                    if (emitter.isDisposed) {
-                        // Fix UndeliverableException.
-                        return@querySkuDetailsAsync
-                    }
-                    if (result.responseCode == BillingResponseCode.OK) {
-                        // https://stackoverflow.com/questions/56832130/skudetailslist-returning-null
-                        if (detailsList != null) {
-                            for (details in detailsList) {
-                                _skuDetailsList[details.sku] = details
-                            }
-                        }
-                        emitter.onSuccess(detailsList ?: ArrayList())
-                    } else {
-                        emitter.onError(StoreException(result.responseCode))
-                    }
-                }
-            }, emitter::onError))
-        }.subscribeOn(_scheduler)
-    }
-
-    fun getPurchases(@SkuType skuType: String): Single<List<Purchase>> {
-        return Single.create<List<Purchase>> { emitter ->
-            emitter.setDisposable(connect().subscribe({ client ->
-                val result = client.queryPurchases(skuType)
+    private suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> {
+        val client = connect()
+        return suspendCoroutine { cont ->
+            client.querySkuDetailsAsync(params) { result, detailsList ->
                 if (result.responseCode == BillingResponseCode.OK) {
-                    val purchaseList = result.purchasesList
-                    emitter.onSuccess(purchaseList ?: ArrayList())
-                } else {
-                    emitter.onError(StoreException(result.responseCode))
-                }
-            }, emitter::onError))
-        }.subscribeOn(_scheduler)
-    }
-
-    private fun getPurchaseHistory(@SkuType skuType: String): Single<List<PurchaseHistoryRecord>> {
-        return Single.create<List<PurchaseHistoryRecord>> { emitter ->
-            emitter.setDisposable(connect().subscribe({ client ->
-                client.queryPurchaseHistoryAsync(skuType) { result, recordList ->
-                    if (result.responseCode == BillingResponseCode.OK) {
-                        emitter.onSuccess(recordList ?: ArrayList())
-                    } else {
-                        emitter.onError(StoreException(result.responseCode))
+                    // https://stackoverflow.com/questions/56832130/skudetailslist-returning-null
+                    if (detailsList != null) {
+                        for (details in detailsList) {
+                            _skuDetailsList[details.sku] = details
+                        }
                     }
+                    cont.resume(detailsList ?: ArrayList())
+                } else {
+                    cont.resumeWithException(StoreException(result.responseCode))
                 }
-            }, emitter::onError))
-        }.subscribeOn(_scheduler)
-    }
-
-    fun purchase(sku: String): Single<Purchase> {
-        return Single.create<Purchase> { emitter ->
-            val details = _skuDetailsList[sku]
-            if (details == null) {
-                emitter.onError(IllegalStateException("Cannot find sku details"))
-                return@create
             }
-            emitter.setDisposable(purchase(details).subscribe(emitter::onSuccess, emitter::onError))
-        }.subscribeOn(_scheduler)
+        }
     }
 
-    private fun purchase(details: SkuDetails): Single<Purchase> {
+    override fun getSkuDetailsRx(skuType: String, skuList: List<String>): Single<List<SkuDetails>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getSkuDetails(skuType, skuList)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
+        val client = connect()
+        val result = client.queryPurchases(skuType)
+        if (result.responseCode == BillingResponseCode.OK) {
+            val purchaseList = result.purchasesList
+            return purchaseList ?: ArrayList()
+        } else {
+            throw StoreException(result.responseCode)
+        }
+    }
+
+    override fun getPurchasesRx(skuType: String): Single<List<Purchase>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getPurchases(skuType)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override suspend fun getPurchaseHistory(@SkuType skuType: String): List<PurchaseHistoryRecord> {
+        val client = connect()
+        return suspendCoroutine { cont ->
+            client.queryPurchaseHistoryAsync(skuType) { result, recordList ->
+                if (result.responseCode == BillingResponseCode.OK) {
+                    cont.resume(recordList ?: ArrayList())
+                } else {
+                    cont.resumeWithException(StoreException(result.responseCode))
+                }
+            }
+        }
+    }
+
+    override fun getPurchaseHistoryRx(skuType: String): Single<List<PurchaseHistoryRecord>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getPurchaseHistory(skuType)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override suspend fun purchase(sku: String): Purchase {
+        val details = _skuDetailsList[sku]
+            ?: throw IllegalStateException("Cannot find sku details")
+        return suspendCoroutine { cont ->
+            _disposable.add(purchaseImpl(details).subscribe({ purchase ->
+                cont.resume(purchase)
+            }) { exception ->
+                cont.resumeWithException(exception)
+            })
+        }
+    }
+
+    private fun purchaseImpl(details: SkuDetails): Single<Purchase> {
         return launchBillingFlow(details).andThen(
             Single.create<Purchase> { emitter ->
                 emitter.setDisposable(_purchaseSubject
@@ -408,6 +372,19 @@ class StoreBridge(
             }).subscribeOn(_scheduler)
     }
 
+    override fun purchaseRx(sku: String): Single<Purchase> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = purchase(sku)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
     private fun launchBillingFlow(details: SkuDetails): Completable {
         return launchBillingFlow(BillingFlowParams
             .newBuilder()
@@ -417,7 +394,7 @@ class StoreBridge(
 
     private fun launchBillingFlow(params: BillingFlowParams): Completable {
         return Completable.create { emitter ->
-            emitter.setDisposable(connect().subscribe { client ->
+            emitter.setDisposable(connectRx().subscribe { client ->
                 if (_activity == null) {
                     emitter.onError(IllegalStateException("Activity is not available"))
                     return@subscribe
@@ -432,45 +409,69 @@ class StoreBridge(
         }.subscribeOn(_scheduler)
     }
 
-    fun consume(purchaseToken: String): Completable {
+    override suspend fun consume(purchaseToken: String) {
         return consume(ConsumeParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)
             .build())
     }
 
-    private fun consume(params: ConsumeParams): Completable {
-        return Completable.create { emitter ->
-            emitter.setDisposable(connect().subscribe { client ->
-                client.consumeAsync(params) { result, _ ->
-                    if (result.responseCode == BillingResponseCode.OK) {
-                        emitter.onComplete()
-                    } else {
-                        emitter.onError(StoreException(result.responseCode))
-                    }
+    private suspend fun consume(params: ConsumeParams) {
+        val client = connect()
+        return suspendCoroutine { cont ->
+            client.consumeAsync(params) { result, _ ->
+                if (result.responseCode == BillingResponseCode.OK) {
+                    cont.resume(Unit)
+                } else {
+                    cont.resumeWithException(StoreException(result.responseCode))
                 }
-            })
-        }.subscribeOn(_scheduler)
+            }
+        }
     }
 
-    fun acknowledge(purchaseToken: String): Completable {
+    override fun consumeRx(purchaseToken: String): Completable {
+        return Completable.create { emitter ->
+            _scope.launch {
+                try {
+                    consume(purchaseToken)
+                    emitter.onComplete()
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override suspend fun acknowledge(purchaseToken: String) {
         return acknowledge(AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(purchaseToken)
             .build())
     }
 
-    private fun acknowledge(params: AcknowledgePurchaseParams): Completable {
-        return Completable.create { emitter ->
-            emitter.setDisposable(connect().subscribe { client ->
-                client.acknowledgePurchase(params) { result ->
-                    if (result.responseCode == BillingResponseCode.OK) {
-                        emitter.onComplete()
-                    } else {
-                        emitter.onError(StoreException(result.responseCode))
-                    }
+    private suspend fun acknowledge(params: AcknowledgePurchaseParams) {
+        val client = connect()
+        return suspendCoroutine { cont ->
+            client.acknowledgePurchase(params) { result ->
+                if (result.responseCode == BillingResponseCode.OK) {
+                    cont.resume(Unit)
+                } else {
+                    cont.resumeWithException(StoreException(result.responseCode))
                 }
-            })
-        }.subscribeOn(_scheduler)
+            }
+        }
+    }
+
+    override fun acknowledgeRx(purchaseToken: String): Completable {
+        return Completable.create { emitter ->
+            _scope.launch {
+                try {
+                    acknowledge(purchaseToken)
+                    emitter.onComplete()
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
     }
 }

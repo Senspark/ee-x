@@ -115,6 +115,17 @@ std::shared_ptr<Self::StoreInstance> Self::instantiateStore() {
 #ifdef EE_X_IOS
     return std::make_shared<StoreInstance>("AppleAppStore", instantiateApple());
 #endif // EE_X_IOS
+#ifdef EE_X_ANDROID
+    return std::make_shared<StoreInstance>("GooglePlay", instantiateAndroid());
+#endif // EE_X_ANDROID
+}
+
+std::shared_ptr<IStore> Self::instantiateAndroid() {
+    auto store = std::make_shared<JsonStore>();
+    auto androidStore = nativeStoreProvider_->getAndroidStore(
+        store, appStorePlatform_, binder_);
+    store->setNativeStore(androidStore);
+    return store;
 }
 
 std::shared_ptr<IStore> Self::instantiateApple() {

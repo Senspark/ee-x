@@ -13,7 +13,7 @@
 #include <functional>
 #include <map>
 
-#include "StoreIStoreExtension.hpp"
+#include "ee/store/StoreIStoreExtension.hpp"
 
 namespace ee {
 namespace store {

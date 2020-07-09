@@ -8,6 +8,7 @@
 
 #include "ee/store/StoreBridge.hpp"
 
+#include <ee/core/LambdaAwaiter.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
@@ -15,67 +16,62 @@
 #include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/store/Purchase.hpp"
-#include "ee/store/PurchaseHistoryRecord.hpp"
-#include "ee/store/SkuDetails.hpp"
+#include "ee/store/StoreConfigurationBuilder.hpp"
+#include "ee/store/StoreIAppleExtensions.hpp"
+#include "ee/store/StoreIExtensionProvider.hpp"
+#include "ee/store/StoreIGooglePlayStoreExtensions.hpp"
+#include "ee/store/StoreIStoreController.hpp"
+#include "ee/store/StoreIStoreListener.hpp"
+#include "ee/store/StoreProduct.hpp"
+#include "ee/store/StoreProductCollection.hpp"
+#include "ee/store/StoreProductDefinition.hpp"
+#include "ee/store/StoreProductType.hpp"
+#include "ee/store/StorePurchaseProcessingResult.hpp"
+#include "ee/store/StoreSubscriptionManager.hpp"
+#include "ee/store/StoreUnityPurchasing.hpp"
 
 namespace ee {
 namespace store {
-std::string toString(SkuType data) {
-    if (data == SkuType::InApp) {
-        return "inapp";
-    }
-    if (data == SkuType::Subscription) {
-        return "subs";
-    }
-    assert(false);
-    return "";
-}
-
-void to_json(nlohmann::json& json, SkuType data) {
-    json = toString(data);
-}
-
-void from_json(const nlohmann::json& json, SkuDetails& data) {
-    data.description = json.at("description");
-    data.freeTrialPeriod = json.at("free_trial_period");
-    data.price = json.at("price");
-    data.priceAmountMicros = json.at("price_amount_micros");
-    data.sku = json.at("sku");
-    data.subscriptionPeriod = json.at("subscription_period");
-    data.title = json.at("title");
-}
-
-void from_json(const nlohmann::json& json, Purchase& data) {
-    data.packageName = json.at("package_name");
-    data.purchaseState = json.at("purchase_state");
-    data.purchaseToken = json.at("purchase_token");
-    data.signature = json.at("signature");
-    data.sku = json.at("sku");
-    data.isAcknowledged = json.at("is_acknowledged");
-    data.isAutoRenewing = json.at("is_auto_renewing");
-}
-
-void from_json(const nlohmann::json& json, PurchaseHistoryRecord& data) {
-    data.purchaseTime = json.at("purchase_time");
-    data.purchaseToken = json.at("purchase_token");
-    data.signature = json.at("signature");
-    data.sku = json.at("sku");
-}
-
-namespace {
-// clang-format off
-const std::string kPrefix      = "StoreBridge";
-const auto kGetSkuDetails      = kPrefix + "GetSkuDetails";
-const auto kGetPurchases       = kPrefix + "GetPurchases";
-const auto kGetPurchaseHistory = kPrefix + "GetPurchaseHistory";
-const auto kPurchase           = kPrefix + "Purchase";
-const auto kConsume            = kPrefix + "Consume";
-const auto kAcknowledge        = kPrefix + "Acknowledge";
-// clang-format on
-} // namespace
-
 using Self = Bridge;
+
+class Self::Listener : public IStoreListener {
+public:
+    virtual void
+    onInitializeFailed(InitializationFailureReason reason) override {
+        onInitializedFailed_(reason);
+    }
+
+    virtual PurchaseProcessingResult
+    processPurchase(const std::shared_ptr<Product>& product) override {
+        return processPurchase_(product);
+    }
+
+    virtual void onPurchaseFailed(const std::shared_ptr<Product>& product,
+                                  PurchaseFailureReason reason) override {
+        onPurchaseFailed_(product, reason);
+    }
+
+    virtual void onInitialized(
+        const std::shared_ptr<IStoreController>& controller,
+        const std::shared_ptr<IExtensionProvider>& extensions) override {
+        onInitialized_(controller, extensions);
+    }
+
+private:
+    friend Bridge;
+
+    std::function<void(InitializationFailureReason reason)>
+        onInitializedFailed_;
+    std::function<PurchaseProcessingResult(
+        const std::shared_ptr<Product>& product)>
+        processPurchase_;
+    std::function<void(const std::shared_ptr<Product>& product,
+                       PurchaseFailureReason reason)>
+        onPurchaseFailed_;
+    std::function<void(const std::shared_ptr<IStoreController>& controller,
+                       const std::shared_ptr<IExtensionProvider>& extensions)>
+        onInitialized_;
+};
 
 Self::Bridge()
     : Self(Logger::getSystemLogger()) {}
@@ -83,6 +79,7 @@ Self::Bridge()
 Self::Bridge(const Logger& logger)
     : bridge_(MessageBridge::getInstance())
     , logger_(logger) {
+    initialized_ = false;
     PluginManager::addPlugin(Plugin::Store);
 }
 
@@ -92,81 +89,145 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::Store);
 }
 
-void Self::initialize() {
-    // TODO.
-}
-
-Task<std::optional<std::vector<SkuDetails>>>
-Self::getSkuDetails(SkuType type, const std::vector<std::string>& skuList) {
-    nlohmann::json json;
-    json["sku_type"] = type;
-    json["sku_list"] = skuList;
-    auto response = co_await bridge_.callAsync(kGetSkuDetails, json.dump());
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    if (successful) {
-        auto items = responseJson.at("item").get<std::vector<SkuDetails>>();
-        co_return items;
+Task<bool>
+Self::initialize(const ConfigurationBuilder& builder,
+                 const std::shared_ptr<ITransactionLog>& transactionLog) {
+    if (initialized_) {
+        co_return false;
     }
-    auto error = responseJson.at("error").get<std::string>();
-    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
-    co_return std::nullopt;
-}
-
-Task<std::optional<std::vector<Purchase>>> Self::getPurchases(SkuType type) {
-    auto response = co_await bridge_.callAsync(kGetPurchases, toString(type));
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    if (successful) {
-        auto items = responseJson.at("item").get<std::vector<Purchase>>();
-        co_return items;
+    if (initializationAwaiter_) {
+        // Waiting.
+    } else {
+        initializationAwaiter_ = std::make_unique<LambdaAwaiter<bool>>(
+            [this, builder, transactionLog](auto&& resolver) {
+                initializationResolver_ = [this, resolver](auto&& result) {
+                    resolver(result);
+                    initializationAwaiter_.reset();
+                };
+                initializeListener();
+                UnityPurchasing::initialize(listener_, builder, transactionLog);
+            });
     }
-    auto error = responseJson.at("error").get<std::string>();
-    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
-    co_return std::nullopt;
+    auto result = co_await(*initializationAwaiter_);
+    co_return result;
 }
 
-Task<std::optional<std::vector<PurchaseHistoryRecord>>>
-Self::getPurchaseHistory(SkuType type) {
-    auto response =
-        co_await bridge_.callAsync(kGetPurchaseHistory, toString(type));
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    if (successful) {
-        auto items =
-            responseJson.at("item").get<std::vector<PurchaseHistoryRecord>>();
-        co_return items;
+void Self::initializeListener() {
+    listener_ = std::make_shared<Listener>();
+    listener_->onInitializedFailed_ = [this](auto&& reason) {
+        logger_.error("%s: onInitializedFailed: %d", __PRETTY_FUNCTION__,
+                      static_cast<int>(reason));
+        initializationResolver_(false);
+    };
+    listener_->processPurchase_ = [this](auto&& product) {
+        if (purchaseResolver_) {
+            purchaseResolver_(true);
+        }
+        return PurchaseProcessingResult::Complete;
+    };
+    listener_->onPurchaseFailed_ = [this](auto&& product, auto&& reason) {
+        logger_.error("%s: onPurchaseFailed: %s %d",
+                      product->definition()->id().c_str(),
+                      static_cast<int>(reason));
+        if (purchaseResolver_) {
+            purchaseResolver_(false);
+        }
+    };
+    listener_->onInitialized_ = [this](auto&& controller, auto&& extensions) {
+        controller_ = controller;
+        extensions_ = extensions;
+        initializationResolver_(true);
+    };
+}
+
+std::shared_ptr<ProductCollection> Self::getProducts() const {
+    return controller_ ? controller_->products() : nullptr;
+}
+
+std::shared_ptr<SubscriptionInfo>
+Self::getSubscriptionInfo(const std::string& itemId) {
+    if (not initialized_) {
+        return nullptr;
     }
-    auto error = responseJson.at("error").get<std::string>();
-    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
-    co_return std::nullopt;
-}
-
-Task<std::optional<Purchase>> Self::purchase(const std::string& sku) {
-    auto response = co_await bridge_.callAsync(kPurchase, sku);
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    if (successful) {
-        auto item = responseJson.at("item").get<Purchase>();
-        co_return item;
+    auto&& product = controller_->products()->withId(itemId);
+    if (not product->availableToPurchase()) {
+        return nullptr;
     }
-    auto error = responseJson.at("error").get<std::string>();
-    logger_.debug("%s: error = %s", __PRETTY_FUNCTION__, error.c_str());
-    co_return std::nullopt;
+    if (product->receipt().empty()) {
+        return nullptr;
+    }
+    if (product->definition()->type() != ProductType::Subscription) {
+        return nullptr;
+    }
+    std::shared_ptr<SubscriptionManager> manager;
+    if (auto extensions = extensions_->getExtension<IAppleExtensions>();
+        extensions != nullptr) {
+        auto&& dict = extensions->getIntroductoryPriceDictionary();
+        auto&& introJson = dict[product->definition()->storeSpecificId()];
+        manager = std::make_shared<SubscriptionManager>(product, introJson);
+    } else {
+        // Google Play.
+        manager = std::make_shared<SubscriptionManager>(
+            product->receipt(), product->definition()->storeSpecificId(), "");
+    }
+    return manager->getSubscriptionInfo();
 }
 
-Task<bool> Self::consume(const std::string& purchaseToken) {
-    auto response = co_await bridge_.callAsync(kConsume, purchaseToken);
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    co_return successful;
+Task<bool> Self::purchase(const std::string& itemId) {
+    if (not initialized_) {
+        co_return false;
+    }
+    if (purchaseAwaiter_) {
+        co_return false;
+    }
+    purchaseAwaiter_ =
+        std::make_unique<LambdaAwaiter<bool>>([this, itemId](auto&& resolver) {
+            purchaseResolver_ = [this, resolver](auto&& result) {
+                resolver(result);
+                purchaseAwaiter_.reset();
+            };
+            controller_->initiatePurchase(itemId);
+        });
+    auto result = co_await(*purchaseAwaiter_);
+    co_return result;
 }
 
-Task<bool> Self::acknowledge(const std::string& purchaseToken) {
-    auto response = co_await bridge_.callAsync(kAcknowledge, purchaseToken);
-    auto responseJson = nlohmann::json::parse(response);
-    auto successful = responseJson.at("successful").get<bool>();
-    co_return successful;
+Task<bool> Self::restoreTransactions() {
+    if (not initialized_) {
+        co_return false;
+    }
+    if (restoreTransactionsAwaiter_) {
+        // Waiting.
+    } else {
+        restoreTransactionsAwaiter_ =
+            std::make_unique<LambdaAwaiter<bool>>([this](auto&& resolver) {
+                if (auto extensions =
+                        extensions_->getExtension<IGooglePlayStoreExtensions>();
+                    extensions != nullptr) {
+                    extensions->restoreTransactions(
+                        [this, resolver](auto&& result) {
+                            resolver(result);
+                            restoreTransactionsAwaiter_.reset();
+                        });
+                    return;
+                }
+                if (auto extensions =
+                        extensions_->getExtension<IAppleExtensions>();
+                    extensions != nullptr) {
+                    extensions->restoreTransactions(
+                        [this, resolver](auto&& result) {
+                            resolver(result);
+                            restoreTransactionsAwaiter_.reset();
+                        });
+                    return;
+                }
+                assert(false);
+                resolver(false);
+                restoreTransactionsAwaiter_.reset();
+            });
+    }
+    auto result = co_await(*restoreTransactionsAwaiter_);
+    co_return result;
 }
 } // namespace store
 } // namespace ee

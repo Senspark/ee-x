@@ -17,7 +17,7 @@ namespace store {
 enum class ProductType {
     Consumable,
     NonConsumable,
-    Subsription,
+    Subscription,
 };
 } // namespace store
 } // namespace ee

@@ -17,6 +17,45 @@
 
 namespace ee {
 namespace store {
+namespace {
+int getUtcNow() {
+    return static_cast<int>(std::chrono::time_point_cast<std::chrono::seconds>(
+                                std::chrono::system_clock::now())
+                                .time_since_epoch()
+                                .count());
+}
+
+/// Parses ISO 8601 period.
+int parsePeriodTimeUnits(const std::string& duration) {
+    if (duration == "P1W") {
+        return 86400;
+    }
+    if (duration == "P1M") {
+        return 86400 * 30;
+    }
+    if (duration == "P3M") {
+        return 86400 * 90;
+    }
+    if (duration == "P6M") {
+        return 86400 * 180;
+    }
+    if (duration == "P1Y") {
+        return 86400 * 365;
+    }
+    assert(false);
+    return 0;
+}
+
+int nextBillingDate(int billingBeginDate, int units) {
+    auto t1 = billingBeginDate;
+    auto now = getUtcNow();
+    while (t1 <= now) {
+        t1 += units;
+    }
+    return t1;
+}
+} // namespace
+
 using Self = SubscriptionInfo;
 
 Self::SubscriptionInfo(
@@ -74,11 +113,7 @@ Self::SubscriptionInfo(
     productId_ = receipt->productId();
     subscriptionExpireDate_ = receipt->subscriptionExpirationDate();
     subscriptionCancelDate_ = receipt->cancellationDate();
-    auto utcNow =
-        static_cast<int>(std::chrono::time_point_cast<std::chrono::seconds>(
-                             std::chrono::system_clock::now())
-                             .time_since_epoch()
-                             .count());
+    auto utcNow = getUtcNow();
     if (receipt->productType() ==
         AppleStoreProductType::NonRenewingSubscription) {
         isSubscribed_ = Result::Unsupported;
@@ -130,6 +165,79 @@ Self::SubscriptionInfo(
     // Google only.
     freeTrialPeriod_ = 0;
     subscriptionPeriod_ = 0;
+}
+
+Self::SubscriptionInfo(const std::string& skuDetails, bool isAutoRenewing,
+                       int purchaseDate, bool isFreeTrial,
+                       bool hasIntroductoryPriceTrial,
+                       bool purchaseHistorySupported,
+                       const std::string& updateMetadata)
+    : logger_(Logger::getSystemLogger()) {
+    auto dictionary = nlohmann::json::parse(skuDetails);
+    if (dictionary["type"] == "inapp") {
+        throw std::runtime_error("Invalid product type");
+    }
+    productId_ = dictionary["productId"];
+    purchaseDate_ = purchaseDate;
+    isSubscribed_ = Result::True;
+    isAutoRenewing_ = isAutoRenewing ? Result::True : Result::False;
+    isExpired_ = Result::False;
+    isCancelled_ = isAutoRenewing ? Result::False : Result::True;
+    isFreeTrial_ = Result::False;
+    freeTrialPeriodString_ = dictionary.value("freeTrialPeriod", "");
+    subscriptionPeriod_ =
+        parsePeriodTimeUnits(dictionary.value("subscriptionPeriod", ""));
+    freeTrialPeriod_ = 0;
+    if (isFreeTrial) {
+        freeTrialPeriod_ =
+            parsePeriodTimeUnits(dictionary.value("freeTrialPeriod", ""));
+    }
+    introductoryPrice_ = dictionary.value("introductoryPrice", "");
+    introductoryPriceCycles_ = dictionary.value("introductoryPriceCycles", 0);
+    introductoryPricePeriod_ = 0;
+    isIntroductoryPricePeriod_ = Result::False;
+    int ts1 = 0;
+    if (hasIntroductoryPriceTrial) {
+        if (dictionary.contains("introductoryPricePeriod")) {
+            introductoryPricePeriod_ =
+                parsePeriodTimeUnits(dictionary["introductoryPricePeriod"]);
+        } else {
+            introductoryPricePeriod_ = subscriptionPeriod_;
+        }
+        ts1 = introductoryPricePeriod_ * introductoryPriceCycles_;
+    }
+    // FIXME.
+    // Subscription update is not supported.
+    assert(updateMetadata.empty());
+    int ts2 = 0;
+    auto utcNow = getUtcNow();
+    auto timeSpan = utcNow - purchaseDate;
+    if (timeSpan <= ts2) {
+        subscriptionExpireDate_ = purchaseDate + ts2;
+    } else if (timeSpan <= freeTrialPeriod_ + ts2) {
+        isFreeTrial_ = Result::True;
+        subscriptionExpireDate_ = purchaseDate + freeTrialPeriod_ + ts2;
+    } else if (timeSpan < freeTrialPeriod_ + ts2 + ts1) {
+        isIntroductoryPricePeriod_ = Result::True;
+        subscriptionExpireDate_ = nextBillingDate(
+            purchaseDate + freeTrialPeriod_ + ts2, introductoryPricePeriod_);
+    } else {
+        subscriptionExpireDate_ = nextBillingDate(
+            purchaseDate + freeTrialPeriod_ + ts2 + ts1, subscriptionPeriod_);
+    }
+    remainedTime_ = subscriptionExpireDate_ - utcNow;
+    skuDetails_ = skuDetails;
+    if (purchaseHistorySupported) {
+        // OK.
+    } else {
+        isFreeTrial_ = Result::Unsupported;
+        subscriptionExpireDate_ = std::numeric_limits<int>::max();
+        remainedTime_ = std::numeric_limits<int>::max();
+        isIntroductoryPricePeriod_ = Result::Unsupported;
+    }
+
+    // iOS.
+    subscriptionCancelDate_ = 0;
 }
 
 const std::string& Self::getProductId() const {

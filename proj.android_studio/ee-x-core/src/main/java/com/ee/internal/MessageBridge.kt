@@ -1,11 +1,12 @@
 package com.ee.internal
 
 import com.ee.AsyncMessageHandler
-import com.ee.AsyncMessageResolver
 import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.MessageHandler
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
@@ -43,6 +44,7 @@ class MessageBridge private constructor() : IMessageBridge {
      */
     private val _handlers: MutableMap<String, MessageHandler>
     private val _handlerLock: Any
+    private val _scope = MainScope()
 
     init {
         _handlers = HashMap()
@@ -73,11 +75,10 @@ class MessageBridge private constructor() : IMessageBridge {
                 )
 
                 val request = deserialize<Request>(message)
-                handler.handle(request.message, object : AsyncMessageResolver {
-                    override fun resolve(message: String) {
-                        callCpp(request.callback_tag, message)
-                    }
-                })
+                _scope.launch {
+                    val response = handler.handle(request.message)
+                    callCpp(request.callback_tag, response)
+                }
                 return ""
             }
         })

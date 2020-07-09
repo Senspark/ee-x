@@ -8,7 +8,7 @@
 import StoreKit
 import TPInAppReceipt
 
-private let kPrefix = "Store"
+private let kPrefix = "StoreBridge"
 private let kGetAppReceipt = "\(kPrefix)GetAppReceipt"
 private let kParseAppReceipt = "\(kPrefix)ParseAppReceipt"
 private let kCanMakePayments = "\(kPrefix)CanMakePayments"

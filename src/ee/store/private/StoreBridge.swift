@@ -66,7 +66,9 @@ public class StoreBridge: NSObject, IPlugin {
                     "originalTransactionIdentifier": $0.originalTransactionIdentifier,
                     "purchaseDate": $0.purchaseDate.timeIntervalSince1970,
                     "originalPurchaseDate": $0.originalPurchaseDateString.rfc3339date()?.timeIntervalSince1970 ?? 0,
-                    "subscriptionExpirationDate": $0.subscriptionExpirationDate?.timeIntervalSince1970 ?? 0,
+                    // subscriptionExpirationDate will trigger assertion.
+                    // Use subscriptionExpirationDateString?.rfc3339date() instead.
+                    "subscriptionExpirationDate": $0.subscriptionExpirationDateString?.rfc3339date()?.timeIntervalSince1970 ?? 0,
                     "cancellationDate": $0.cancellationDateString?.rfc3339date()?.timeIntervalSince1970 ?? 0,
                     "isFreeTrial": $0.subscriptionTrialPeriod,
                     "productType": $0.productType.rawValue,

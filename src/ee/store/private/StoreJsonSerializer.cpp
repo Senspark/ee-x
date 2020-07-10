@@ -10,10 +10,10 @@
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreProductDefinition.hpp"
-#include "ee/store/StoreProductDescription.hpp"
 #include "ee/store/StoreProductMetadata.hpp"
-#include "ee/store/StorePurchaseFailureDescription.hpp"
-#include "ee/store/StorePurchaseFailureReason.hpp"
+#include "ee/store/private/StoreProductDescription.hpp"
+#include "ee/store/private/StorePurchaseFailureDescription.hpp"
+#include "ee/store/private/StorePurchaseFailureReason.hpp"
 
 namespace ee {
 namespace store {

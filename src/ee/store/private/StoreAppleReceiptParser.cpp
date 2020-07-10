@@ -11,13 +11,13 @@
 
 #include <ee/core/internal/MessageBridge.hpp>
 
-#include "ee/store/StoreAppleInAppPurchaseReceipt.hpp"
-#include "ee/store/StoreAppleReceipt.hpp"
+#include "ee/store/private/StoreAppleInAppPurchaseReceipt.hpp"
+#include "ee/store/private/StoreAppleReceipt.hpp"
 
 namespace ee {
 namespace store {
 namespace {
-const std::string kPrefix = "Store";
+const std::string kPrefix = "StoreBridge";
 const auto kParseAppReceipt = kPrefix + "ParseAppReceipt";
 } // namespace
 

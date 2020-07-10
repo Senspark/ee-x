@@ -9,19 +9,19 @@
 
 #include <ee/core/Logger.hpp>
 
-#include "ee/store/StoreAppleInAppPurchaseReceipt.hpp"
-#include "ee/store/StoreAppleReceipt.hpp"
-#include "ee/store/StoreAppleStoreProductType.hpp"
-#include "ee/store/StoreIStoreCallback.hpp"
 #include "ee/store/StoreProduct.hpp"
 #include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductDefinition.hpp"
-#include "ee/store/StoreProductDescription.hpp"
 #include "ee/store/StoreResult.hpp"
 #include "ee/store/StoreSubscriptionInfo.hpp"
+#include "ee/store/private/StoreAppleInAppPurchaseReceipt.hpp"
+#include "ee/store/private/StoreAppleReceipt.hpp"
 #include "ee/store/private/StoreAppleReceiptParser.hpp"
+#include "ee/store/private/StoreAppleStoreProductType.hpp"
 #include "ee/store/private/StoreINativeAppleStore.hpp"
+#include "ee/store/private/StoreIStoreCallback.hpp"
 #include "ee/store/private/StoreJsonSerializer.hpp"
+#include "ee/store/private/StoreProductDescription.hpp"
 
 namespace ee {
 namespace store {

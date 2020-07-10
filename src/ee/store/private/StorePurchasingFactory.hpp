@@ -10,8 +10,8 @@
 
 #include <map>
 
-#include "ee/store/StoreIExtensionProvider.hpp"
-#include "ee/store/StoreIPurchasingBinder.hpp"
+#include "ee/store/private/StoreIExtensionProvider.hpp"
+#include "ee/store/private/StoreIPurchasingBinder.hpp"
 
 namespace ee {
 namespace store {

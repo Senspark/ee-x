@@ -11,9 +11,7 @@
 
 #ifdef __cplusplus
 
-#include <optional>
 #include <string>
-#include <vector>
 
 #include <ee/core/IPlugin.hpp>
 

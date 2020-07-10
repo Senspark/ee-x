@@ -10,12 +10,12 @@
 #include <ee/core/Logger.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/store/StoreIStoreCallback.hpp"
-#include "ee/store/StoreInitializationFailureReason.hpp"
 #include "ee/store/StoreProductCollection.hpp"
-#include "ee/store/StorePurchaseFailureDescription.hpp"
 #include "ee/store/private/StoreINativeStore.hpp"
+#include "ee/store/private/StoreIStoreCallback.hpp"
+#include "ee/store/private/StoreInitializationFailureReason.hpp"
 #include "ee/store/private/StoreJsonSerializer.hpp"
+#include "ee/store/private/StorePurchaseFailureDescription.hpp"
 #include "ee/store/private/StoreStoreSpecificPurchaseErrorCode.hpp"
 
 namespace ee {
@@ -102,7 +102,7 @@ PurchaseFailureDescription Self::getLastPurchaseFailureDescription() const {
 }
 
 StoreSpecificPurchaseErrorCode
-Self::getLastStoreSPecificPurchaseErrorCode() const {
+Self::getLastStoreSpecificPurchaseErrorCode() const {
     return lastPurchaseErrorCode_;
 }
 

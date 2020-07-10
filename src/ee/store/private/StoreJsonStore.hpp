@@ -8,11 +8,11 @@
 #ifndef EE_X_STORE_JSON_STORE_HPP
 #define EE_X_STORE_JSON_STORE_HPP
 
-#include "ee/store/StoreIStore.hpp"
-#include "ee/store/StoreIStoreConfiguration.hpp"
-#include "ee/store/StoreIStoreExtension.hpp"
-#include "ee/store/StoreITransactionHistoryExtensions.hpp"
+#include "ee/store/private/StoreIStore.hpp"
+#include "ee/store/private/StoreIStoreConfiguration.hpp"
+#include "ee/store/private/StoreIStoreExtension.hpp"
 #include "ee/store/private/StoreIStoreInternal.hpp"
+#include "ee/store/private/StoreITransactionHistoryExtensions.hpp"
 #include "ee/store/private/StoreIUnityCallback.hpp"
 
 namespace ee {
@@ -51,7 +51,7 @@ public:
     virtual PurchaseFailureDescription
     getLastPurchaseFailureDescription() const override;
     virtual StoreSpecificPurchaseErrorCode
-    getLastStoreSPecificPurchaseErrorCode() const override;
+    getLastStoreSpecificPurchaseErrorCode() const override;
 
 protected:
     std::shared_ptr<IStoreCallback> unity_;

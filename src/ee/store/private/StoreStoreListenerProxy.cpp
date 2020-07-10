@@ -7,7 +7,7 @@
 
 #include "ee/store/private/StoreStoreListenerProxy.hpp"
 
-#include "ee/store/StoreIStoreListener.hpp"
+#include "ee/store/private/StoreIStoreListener.hpp"
 
 namespace ee {
 namespace store {

@@ -8,8 +8,8 @@
 #ifndef EE_X_STORE_APPLE_STORE_IMPL_HPP
 #define EE_X_STORE_APPLE_STORE_IMPL_HPP
 
-#include "ee/store/StoreIAppleConfiguration.hpp"
-#include "ee/store/StoreIAppleExtensions.hpp"
+#include "ee/store/private/StoreIAppleConfiguration.hpp"
+#include "ee/store/private/StoreIAppleExtensions.hpp"
 #include "ee/store/private/StoreJsonStore.hpp"
 
 namespace ee {

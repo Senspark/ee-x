@@ -8,8 +8,8 @@
 #include "ee/store/private/StoreNativeStoreProvider.hpp"
 
 #include "ee/store/StoreAppStore.hpp"
-#include "ee/store/StoreIPurchasingBinder.hpp"
 #include "ee/store/private/StoreAndroidJavaStore.hpp"
+#include "ee/store/private/StoreIPurchasingBinder.hpp"
 #include "ee/store/private/StoreIosStoreBindings.hpp"
 #include "ee/store/private/StoreScriptingUnityCallback.hpp"
 

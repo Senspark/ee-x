@@ -10,19 +10,19 @@
 #include <ee/core/Logger.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/store/StoreIStore.hpp"
 #include "ee/store/StoreITransactionLog.hpp"
-#include "ee/store/StoreInitializationFailureReason.hpp"
 #include "ee/store/StoreProduct.hpp"
 #include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductDefinition.hpp"
-#include "ee/store/StoreProductDescription.hpp"
 #include "ee/store/StoreProductMetadata.hpp"
 #include "ee/store/StoreProductType.hpp"
-#include "ee/store/StorePurchaseFailureDescription.hpp"
-#include "ee/store/StorePurchaseFailureReason.hpp"
-#include "ee/store/StorePurchaseProcessingResult.hpp"
 #include "ee/store/private/StoreIInternalStoreListener.hpp"
+#include "ee/store/private/StoreIStore.hpp"
+#include "ee/store/private/StoreInitializationFailureReason.hpp"
+#include "ee/store/private/StoreProductDescription.hpp"
+#include "ee/store/private/StorePurchaseFailureDescription.hpp"
+#include "ee/store/private/StorePurchaseFailureReason.hpp"
+#include "ee/store/private/StorePurchaseProcessingResult.hpp"
 
 namespace ee {
 namespace store {

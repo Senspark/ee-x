@@ -8,8 +8,8 @@
 #ifndef EE_X_STORE_ANDROID_JAVA_STORE_HPP
 #define EE_X_STORE_ANDROID_JAVA_STORE_HPP
 
-#include "ee/store/StoreIGooglePlayConfiguration.hpp"
-#include "ee/store/StoreIGooglePlayStoreExtensions.hpp"
+#include "ee/store/private/StoreIGooglePlayConfiguration.hpp"
+#include "ee/store/private/StoreIGooglePlayStoreExtensions.hpp"
 #include "ee/store/private/StoreINativeStore.hpp"
 #include "ee/store/private/StoreIUnityCallback.hpp"
 

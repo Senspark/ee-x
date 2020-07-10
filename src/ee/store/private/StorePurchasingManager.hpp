@@ -10,8 +10,8 @@
 
 #include <set>
 
-#include "ee/store/StoreIStoreCallback.hpp"
-#include "ee/store/StoreIStoreController.hpp"
+#include "ee/store/private/StoreIStoreCallback.hpp"
+#include "ee/store/private/StoreIStoreController.hpp"
 
 namespace ee {
 namespace store {

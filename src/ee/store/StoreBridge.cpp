@@ -17,18 +17,18 @@
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreConfigurationBuilder.hpp"
-#include "ee/store/StoreIAppleExtensions.hpp"
-#include "ee/store/StoreIExtensionProvider.hpp"
-#include "ee/store/StoreIGooglePlayStoreExtensions.hpp"
-#include "ee/store/StoreIStoreController.hpp"
-#include "ee/store/StoreIStoreListener.hpp"
 #include "ee/store/StoreProduct.hpp"
 #include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductDefinition.hpp"
 #include "ee/store/StoreProductType.hpp"
-#include "ee/store/StorePurchaseProcessingResult.hpp"
-#include "ee/store/StoreSubscriptionManager.hpp"
-#include "ee/store/StoreUnityPurchasing.hpp"
+#include "ee/store/private/StoreIAppleExtensions.hpp"
+#include "ee/store/private/StoreIExtensionProvider.hpp"
+#include "ee/store/private/StoreIGooglePlayStoreExtensions.hpp"
+#include "ee/store/private/StoreIStoreController.hpp"
+#include "ee/store/private/StoreIStoreListener.hpp"
+#include "ee/store/private/StorePurchaseProcessingResult.hpp"
+#include "ee/store/private/StoreSubscriptionManager.hpp"
+#include "ee/store/private/StoreUnityPurchasing.hpp"
 
 namespace ee {
 namespace store {

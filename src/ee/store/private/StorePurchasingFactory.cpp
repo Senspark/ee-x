@@ -7,8 +7,8 @@
 
 #include "ee/store/private/StorePurchasingFactory.hpp"
 
-#include "ee/store/StoreIPurchasingModule.hpp"
-#include "ee/store/StoreIStore.hpp"
+#include "ee/store/private/StoreIPurchasingModule.hpp"
+#include "ee/store/private/StoreIStore.hpp"
 
 namespace ee {
 namespace store {

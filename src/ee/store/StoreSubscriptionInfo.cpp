@@ -10,10 +10,10 @@
 #include <ee/core/Logger.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/store/StoreAppleInAppPurchaseReceipt.hpp"
-#include "ee/store/StoreAppleStoreProductType.hpp"
 #include "ee/store/StoreResult.hpp"
-#include "ee/store/StoreSubscriptionPeriodUnit.hpp"
+#include "ee/store/private/StoreAppleInAppPurchaseReceipt.hpp"
+#include "ee/store/private/StoreAppleStoreProductType.hpp"
+#include "ee/store/private/StoreSubscriptionPeriodUnit.hpp"
 
 namespace ee {
 namespace store {

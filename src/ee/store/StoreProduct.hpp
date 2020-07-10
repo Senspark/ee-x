@@ -10,7 +10,6 @@
 
 #ifdef __cplusplus
 
-#include <memory>
 #include <string>
 
 #include "ee/StoreFwd.hpp"

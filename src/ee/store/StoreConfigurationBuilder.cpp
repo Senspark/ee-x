@@ -9,6 +9,7 @@
 
 #include "ee/store/StoreProductDefinition.hpp"
 #include "ee/store/private/StorePurchasingFactory.hpp"
+#include "ee/store/private/StoreStandardPurchasingModule.hpp"
 
 namespace ee {
 namespace store {
@@ -19,6 +20,10 @@ Self::ConfigurationBuilder(const std::shared_ptr<PurchasingFactory>& factory)
 
 const std::set<std::shared_ptr<ProductDefinition>>& Self::products() const {
     return products_;
+}
+
+Self Self::standardInstance() {
+    return instance(StandardPurchasingModule::instance());
 }
 
 Self Self::instance(

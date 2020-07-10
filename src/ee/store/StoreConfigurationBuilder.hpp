@@ -23,16 +23,19 @@ private:
 
 public:
     const std::set<std::shared_ptr<ProductDefinition>>& products() const;
-
-    static Self
-    instance(const std::shared_ptr<IPurchasingModule>& first,
-             const std::vector<std::shared_ptr<IPurchasingModule>>& rest = {});
+    
+    static Self standardInstance();
 
     Self& addProduct(const std::string& id, ProductType type,
                      const std::string& storeIds);
 
 private:
+    friend Bridge;
     friend UnityPurchasing;
+
+    static Self
+    instance(const std::shared_ptr<IPurchasingModule>& first,
+             const std::vector<std::shared_ptr<IPurchasingModule>>& rest = {});
 
     explicit ConfigurationBuilder(
         const std::shared_ptr<PurchasingFactory>& factory);

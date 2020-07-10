@@ -395,11 +395,12 @@ class StoreBridge(
     private fun launchBillingFlow(params: BillingFlowParams): Completable {
         return Completable.create { emitter ->
             emitter.setDisposable(connectRx().subscribe { client ->
-                if (_activity == null) {
+                val activity = _activity
+                if (activity == null) {
                     emitter.onError(IllegalStateException("Activity is not available"))
                     return@subscribe
                 }
-                val result = client.launchBillingFlow(_activity, params)
+                val result = client.launchBillingFlow(activity, params)
                 if (result.responseCode == BillingResponseCode.OK) {
                     emitter.onComplete()
                 } else {

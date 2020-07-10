@@ -11,6 +11,7 @@
 #include "ee/store/StoreProductDefinition.hpp"
 #include "ee/store/StoreProductMetadata.hpp"
 #include "ee/store/StoreProductType.hpp"
+#include "ee/store/StoreResult.hpp"
 #include "ee/store/StoreSessionTransactionLog.hpp"
 #include "ee/store/StoreSubscriptionInfo.hpp"
 

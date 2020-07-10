@@ -53,12 +53,6 @@ void Self::simulateAskToBuy(bool value) {
     native_->simulateAskToBuy(value);
 }
 
-std::string
-Self::getTransactionReceiptForProduct(const std::shared_ptr<Product>& product) {
-    return native_->getTransactionReceiptForProductId(
-        product->definition()->storeSpecificId());
-}
-
 void Self::onProductsRetrieved(const std::string& json) {
     auto descriptionList1 =
         JsonSerializer::deserializeProductDescriptions(json);

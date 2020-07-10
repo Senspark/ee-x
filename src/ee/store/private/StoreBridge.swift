@@ -20,7 +20,6 @@ private let kFinishTransaction = "\(kPrefix)FinishTransaction"
 private let kRestoreTransactions = "\(kPrefix)RestoreTransactions"
 private let kRefreshAppReceipt = "\(kPrefix)RefreshAppReceipt"
 private let kAddTransactionObserver = "\(kPrefix)AddTransactionObserver"
-private let kGetTransactionReceiptForProductId = "\(kPrefix)GetTransactionReceiptForProductId"
 private let kCallback = "\(kPrefix)Callback"
 
 @objc(EEStoreBridge)
@@ -121,9 +120,6 @@ public class StoreBridge: NSObject, IPlugin {
             self._unityPurchasing.addTransactionObserver()
             return ""
         }
-        _bridge.registerHandler(kGetTransactionReceiptForProductId) { message in
-            self._unityPurchasing.getTransactionReceiptForProductId(message)
-        }
     }
 
     private func deregisterHandlers() {
@@ -138,6 +134,5 @@ public class StoreBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kRestoreTransactions)
         _bridge.deregisterHandler(kRefreshAppReceipt)
         _bridge.deregisterHandler(kAddTransactionObserver)
-        _bridge.deregisterHandler(kGetTransactionReceiptForProductId)
     }
 }

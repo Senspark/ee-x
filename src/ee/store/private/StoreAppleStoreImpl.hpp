@@ -26,8 +26,6 @@ public:
     virtual bool canMakePayments() const override;
     virtual bool simulateAskToBuy() const override;
     virtual void simulateAskToBuy(bool value) override;
-    virtual std::string getTransactionReceiptForProduct(
-        const std::shared_ptr<Product>& product) override;
     virtual void onProductsRetrieved(const std::string& json) override;
     virtual void
     restoreTransactions(const std::function<void(bool)>& callback) override;

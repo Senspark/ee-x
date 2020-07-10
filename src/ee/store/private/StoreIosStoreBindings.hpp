@@ -30,8 +30,6 @@ public:
     virtual void restoreTransactions() override;
     virtual void refreshAppReceipt() override;
     virtual void addTransactionObserver() override;
-    virtual std::string
-    getTransactionReceiptForProductId(const std::string& productId) override;
 
 private:
     IMessageBridge& bridge_;

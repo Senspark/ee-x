@@ -21,9 +21,6 @@ public:
         const std::function<void(const std::string&)>& successCallback,
         const std::function<void()>& errorCallback) = 0;
 
-    virtual std::string getTransactionReceiptForProduct(
-        const std::shared_ptr<Product>& product) = 0;
-
     virtual void
     restoreTransactions(const std::function<void(bool)>& callback) = 0;
 

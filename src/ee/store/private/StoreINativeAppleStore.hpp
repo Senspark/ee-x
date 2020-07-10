@@ -26,8 +26,6 @@ public:
     virtual bool canMakePayments() const = 0;
     virtual bool simulateAskToBuy() const = 0;
     virtual void simulateAskToBuy(bool enabled) = 0;
-    virtual std::string
-    getTransactionReceiptForProductId(const std::string& productId) = 0;
 };
 } // namespace store
 } // namespace ee

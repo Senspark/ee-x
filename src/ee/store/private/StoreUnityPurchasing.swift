@@ -20,7 +20,6 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
     private var _request: SKProductsRequest?
     private var _pendingTransactions: [String: SKPaymentTransaction] = [:]
     private var _finishedTransactions: Set<String> = []
-    private var _transactionReceipts: [String: String] = [:]
     private var _receiptRefresher: StoreReceiptRefresher?
     private var _refreshRequest: SKReceiptRefreshRequest?
     private var _simulateAskToBuyEnabled = false
@@ -55,14 +54,6 @@ internal class StoreUnityPurchasing: NSObject, SKProductsRequestDelegate, SKPaym
 
     var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
-    }
-
-    func getTransactionReceiptForProductId(_ productId: String) -> String {
-        if let result = _transactionReceipts[productId] {
-            return result
-        }
-        print("No Transaction Recipt found for product \(productId)")
-        return ""
     }
 
     private func unitySendMessage(_ subject: String, _ payload: String) {

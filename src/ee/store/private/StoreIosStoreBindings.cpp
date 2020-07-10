@@ -26,8 +26,6 @@ const auto kFinishTransaction = kPrefix + "FinishTransaction";
 const auto kRestoreTransactions = kPrefix + "RestoreTransactions";
 const auto kRefreshAppReceipt = kPrefix + "RefreshAppReceipt";
 const auto kAddTransactionObserver = kPrefix + "AddTransactionObserver";
-const auto kGetTransactionReceiptForProductId =
-    kPrefix + "GetTransactionReceiptForProductId";
 const auto kCallback = kPrefix + "Callback";
 } // namespace
 
@@ -96,11 +94,6 @@ void Self::refreshAppReceipt() {
 
 void Self::addTransactionObserver() {
     bridge_.call(kAddTransactionObserver);
-}
-
-std::string
-Self::getTransactionReceiptForProductId(const std::string& productId) {
-    return bridge_.call(kGetTransactionReceiptForProductId, productId);
 }
 } // namespace store
 } // namespace ee

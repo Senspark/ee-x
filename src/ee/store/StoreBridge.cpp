@@ -152,6 +152,10 @@ Self::getSubscriptionInfo(const std::string& itemId) {
         return nullptr;
     }
     auto&& product = controller_->products()->withId(itemId);
+    if (product == nullptr) {
+        // Invalid item ID.
+        return nullptr;
+    }
     if (not product->availableToPurchase()) {
         return nullptr;
     }

@@ -101,6 +101,7 @@ Self::initialize(const ConfigurationBuilder& builder,
         initializationAwaiter_ = std::make_unique<LambdaAwaiter<bool>>(
             [this, builder, transactionLog](auto&& resolver) {
                 initializationResolver_ = [this, resolver](auto&& result) {
+                    initialized_ = result;
                     resolver(result);
                     initializationAwaiter_.reset();
                 };
@@ -127,6 +128,7 @@ void Self::initializeListener() {
     };
     listener_->onPurchaseFailed_ = [this](auto&& product, auto&& reason) {
         logger_.error("%s: onPurchaseFailed: %s %d",
+                      __PRETTY_FUNCTION__,
                       product->definition()->id().c_str(),
                       static_cast<int>(reason));
         if (purchaseResolver_) {

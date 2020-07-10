@@ -124,7 +124,7 @@ void Self::onProductsRetrieved(const std::string& json) {
                           appPurchaseReceipt->subscriptionExpirationDate());
         }
     } while (false);
-    unity_->onProductsRetrieved(descriptionList1);
+    unity_->onProductsRetrieved(descriptionList2.value_or(descriptionList1));
     native_->addTransactionObserver();
 }
 

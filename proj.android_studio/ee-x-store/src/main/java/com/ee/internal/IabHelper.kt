@@ -89,6 +89,18 @@ class IabHelper(private val _bridge: IStoreBridge) {
         }
     }
 
+    suspend fun acknowledge(token: String, sku: String) {
+        if (token.isNotEmpty()) {
+            try {
+                _bridge.acknowledge(token)
+            } catch (ex: StoreException) {
+                throw IabException(ex.responseCode, "Error acknowledging sku $sku")
+            }
+        } else {
+            throw IabException(-1007, "PurchaseInfo is missing token for sku $sku")
+        }
+    }
+
     private suspend fun queryPurchaseHistory(inv: Inventory, @SkuType itemType: String): Int {
         var responseCode = BillingClient.BillingResponseCode.OK
         try {

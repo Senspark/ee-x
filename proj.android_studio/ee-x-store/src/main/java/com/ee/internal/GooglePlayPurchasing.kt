@@ -8,6 +8,7 @@ import com.android.billingclient.api.SkuDetails
 import com.ee.IStoreBridge
 import com.ee.Logger
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -55,6 +56,10 @@ class GooglePlayPurchasing(
     private var _productJson: String? = null
     private var _offlineBackOffTime = 5000L
     private var _purchaseInProgress = false
+
+    fun destroy() {
+        _scope.cancel()
+    }
 
     val productJson: String
         get() = _productJson ?: "{}"
@@ -299,14 +304,19 @@ class GooglePlayPurchasing(
 
     override fun finishTransaction(product: ProductDefinition, transactionId: String) {
         _logger.debug("finishTransaction: $transactionId")
+        val item = findPurchaseByOrderId(transactionId) ?: return
+        val type = item.first
+        val purchase = item.second
         if (product.type == ProductType.Consumable) {
-            val item = findPurchaseByOrderId(transactionId) ?: return
-            val type = item.first
-            val purchase = item.second
             _logger.debug("finishTransaction: consuming ${purchase.sku}")
             _inventory.erasePurchase(purchase.sku)
             _scope.launch {
                 _helper.consume(type, purchase.purchaseToken, purchase.sku)
+            }
+        } else {
+            _logger.debug("finishTransaction: acknowledging ${purchase.sku}")
+            _scope.launch {
+                _helper.acknowledge(purchase.purchaseToken, purchase.sku)
             }
         }
     }

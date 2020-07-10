@@ -96,6 +96,7 @@ class StoreBridge(
         deregisterHandlers()
         _disposable.dispose()
         _connectObservable = null
+        _purchasing.destroy()
         _scope.cancel()
     }
 

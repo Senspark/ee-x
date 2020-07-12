@@ -6,6 +6,11 @@ Cross-platform library for cocos2d-x
 
 Visit [https://senspark.github.io/ee-x](https://senspark.github.io/ee-x/) for installation methods and configuration options
 
+## Requirements
+- Android NDK r21+
+- Android Studio 4.0+
+- Xcode 11+
+
 ## Plugins
 - AdMob
 - AppLovin

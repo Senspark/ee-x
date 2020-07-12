@@ -1,0 +1,62 @@
+# Project information
+site_name: EE-x | Crossplatform library for cocos2d-x
+site_author: enrevol
+site_url: https://senspark.com
+
+# Repository
+repo_name: Senspark/ee-x
+repo_url: https://github.com/Senspark/ee-x
+
+# Copyright
+copyright: Copyright &copy; 2017 - 2020 Senspark
+
+# Configuration
+theme:
+  name: material
+  language: en
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - tabs
+
+nav:
+  - Home:
+    - home/getting-started.md
+  - Plugins:
+    - plugins/admob.md 
+    - plugins/app-lovin.md
+    - plugins/facebook-ads.md
+    - plugins/iron-source.md
+    - plugins/unity-ads.md
+    - plugins/vungle.md
+    - plugins/firebase-analytics.md
+    - plugins/firebase-crashlytics.md
+
+# Extras
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Senspark
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/TeamSenspark
+    - icon: fontawesome/brands/google-play
+      link: https://play.google.com/store/apps/dev?id=7830868662152106484
+    - icon: fontawesome/brands/app-store-ios
+      link: https://apps.apple.com/us/developer/id560842775
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+
+plugins:
+  - minify:
+      minify_html: true
+      minify_js: true

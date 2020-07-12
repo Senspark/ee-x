@@ -1,5 +1,5 @@
 # Project information
-site_name: EE-x | Crossplatform library for cocos2d-x
+site_name: EE-x | Cross-platform library for cocos2d-x
 site_author: enrevol
 site_url: https://senspark.com
 
@@ -25,7 +25,7 @@ theme:
 
 nav:
   - Home:
-    - home/getting-started.md
+    - index.md
   - Plugins:
     - plugins/admob.md 
     - plugins/app-lovin.md

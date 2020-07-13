@@ -278,8 +278,8 @@ class GooglePlayPurchasing(
                     purchase.orderId.ifEmpty {
                         purchase.purchaseToken
                     })
-            } catch (ex: IabException) {
-                val responseCode = ex.result.response
+            } catch (ex: StoreException) {
+                val responseCode = ex.responseCode
                 _logger.debug("Purchase response code: $responseCode")
                 _suspectFailedConsumableSkus.add(productId)
                 val reason = when (responseCode) {

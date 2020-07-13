@@ -315,9 +315,10 @@ Pod::Spec.new do |spec|
     }
 
     s.library = 'iconv'
-    s.framework = 'OpenAL'
+    s.framework = 
+      'GameController',
+      'OpenAL'
     s.osx.library = 'z'
-    s.osx.framework = 'GameController'
     s.dependency 'ee-x/core'
   end
 

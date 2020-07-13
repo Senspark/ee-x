@@ -23,7 +23,7 @@ class IronSourceBridge(
     companion object {
         private val _logger = Logger(IronSourceBridge::class.java.name)
 
-        private const val kPrefix = "IronSource"
+        private const val kPrefix = "IronSourceBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
         private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"

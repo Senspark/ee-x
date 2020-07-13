@@ -1,6 +1,7 @@
 package com.ee.internal
 
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.FeatureType
 import com.android.billingclient.api.BillingClient.SkuType
 import com.ee.IStoreBridge
 
@@ -20,13 +21,23 @@ class IabHelper(private val _bridge: IStoreBridge) {
         return finishSetup()
     }
 
+    private suspend fun isFeatureSupported(@FeatureType type: String): Boolean {
+        var result = false
+        try {
+            result = _bridge.isFeatureSupported(type)
+        } catch (ex: StoreException) {
+            ex.printStackTrace()
+        }
+        return result
+    }
+
     private suspend fun finishSetup(): IabResult {
-        if (_bridge.isFeatureSupported("inapp")) {
+        if (isFeatureSupported("inapp")) {
             _subscriptionsSupported = false
             _subscriptionPurchaseHistorySupported = false
             return IabResult(BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED, "Billing V3 not supported")
         }
-        if (_bridge.isFeatureSupported(BillingClient.FeatureType.SUBSCRIPTIONS)) {
+        if (isFeatureSupported(FeatureType.SUBSCRIPTIONS)) {
             _subscriptionsSupported = true
             _subscriptionPurchaseHistorySupported = true
         }

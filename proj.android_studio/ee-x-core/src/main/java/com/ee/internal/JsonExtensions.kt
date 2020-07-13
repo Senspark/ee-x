@@ -1,7 +1,10 @@
 package com.ee.internal
 
 import androidx.annotation.AnyThread
+import kotlinx.serialization.Decoder
+import kotlinx.serialization.Encoder
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -39,4 +42,23 @@ inline fun <reified K : Any, reified V : Any> deserializeMap(string: String): Ma
 @UnstableDefault
 inline fun <reified T : Any> T.serialize(): String {
     return Json.stringify(T::class.serializer(), this)
+}
+
+@AnyThread
+@ImplicitReflectionSerializer
+@UnstableDefault
+inline fun <reified T : Any> List<T>.serialize(): String {
+    val valueSerializer = T::class.serializer()
+    val serializer = ListSerializer(valueSerializer)
+    return Json.stringify(serializer, this)
+}
+
+@AnyThread
+@ImplicitReflectionSerializer
+@UnstableDefault
+inline fun <reified K : Any, reified V: Any> Map<K, V>.serialize(): String {
+    val keySerializer = K::class.serializer()
+    val valueSerializer = V::class.serializer()
+    val serializer = MapSerializer(keySerializer, valueSerializer)
+    return Json.stringify(serializer, this)
 }

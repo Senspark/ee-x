@@ -47,6 +47,12 @@ public:
     /// @param[in] key The observer's key.
     virtual bool removeObserver(const std::string& key) = 0;
 
+    /// Loads the specified language from the specified map.
+    /// @param[in] language The language to load.
+    /// @param[in] map The map which contains the language dictionary.
+    virtual void loadLanguage(const Language& language,
+                              const cocos2d::ValueMap& map) = 0;
+
     /// Get supported languages
     virtual std::vector<Language> getSupportedLanguages() const = 0;
 };

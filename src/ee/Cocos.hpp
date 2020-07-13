@@ -73,6 +73,10 @@
 #include "ee/cocos/EEDataUtils.hpp"
 #include "ee/cocos/EEPreferences.hpp"
 
+#include "ee/cocos/EELanguage.hpp"
+#include "ee/cocos/EELanguageFormatter.hpp"
+#include "ee/cocos/EELanguageSwitcher.hpp"
+
 #include "ee/cocos/Delay.hpp"
 #include "ee/cocos/SwitchToCocosThread.hpp"
 

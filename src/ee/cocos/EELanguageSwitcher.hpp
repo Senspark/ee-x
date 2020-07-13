@@ -20,7 +20,7 @@
 
 namespace ee {
 namespace language {
-class Switcher : public ISwitcher {
+class Switcher : public virtual ISwitcher {
 private:
     using Self = Switcher;
 
@@ -46,12 +46,10 @@ public:
     /// @see Super.
     virtual bool removeObserver(const std::string& key) override;
 
-    /// Loads the specified language from the specified map.
-    /// @param[in] language The language to load.
-    /// @param[in] map The map which contains the language dictionary.
-    void loadLanguage(const Language& language, const cocos2d::ValueMap& map);
+    virtual void loadLanguage(const Language& language,
+                              const cocos2d::ValueMap& map) override;
 
-    std::vector<Language> getSupportedLanguages() const override;
+    virtual std::vector<Language> getSupportedLanguages() const override;
 
 private:
     std::unique_ptr<Language> currentLanguage_;

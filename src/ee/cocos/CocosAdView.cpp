@@ -66,7 +66,7 @@ std::pair<float, float> Self::getAnchor() const {
 }
 
 void Self::setAnchor(float x, float y) {
-    ad_->setAnchor(x, y);
+    ad_->setAnchor(x, 1.0f - y);
 }
 
 std::pair<float, float> Self::getPosition() const {

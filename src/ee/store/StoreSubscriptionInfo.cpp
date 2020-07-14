@@ -28,7 +28,7 @@ int getUtcNow() {
 /// Parses ISO 8601 period.
 int parsePeriodTimeUnits(const std::string& duration) {
     if (duration == "P1W") {
-        return 86400;
+        return 86400 * 7;
     }
     if (duration == "P1M") {
         return 86400 * 30;

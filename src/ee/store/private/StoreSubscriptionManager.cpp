@@ -79,17 +79,22 @@ Self::getGooglePlayStoreSubInfo(const std::string& payload) {
     auto&& skuDetails = dictionary1["skuDetails"].get<std::string>();
     auto&& purchaseHistorySupported =
         dictionary1["isPurchaseHistorySupported"].get<bool>();
-    auto&& dictionary2 = dictionary1["json"];
-    auto&& isAutoRenewing = dictionary2["autoReviewing"].get<bool>();
+    auto&& dictionary2 = nlohmann::json::parse(dictionary1["json"].get<std::string>());
+    auto&& isAutoRenewing = dictionary2["autoRenewing"].get<bool>();
     auto&& purchaseDate = dictionary2["purchaseTime"].get<int>();
-    auto&& dictionary3 = dictionary2["developerPayload"];
-    auto&& isFreeTrial = dictionary3["is_free_trial"].get<bool>();
-    auto&& hasIntroductoryPriceTrial =
-        dictionary3["has_introductory_price_trial"].get<bool>();
-    std::string updateMetadata;
-    if (dictionary3["is_updated"].get<bool>()) {
-        updateMetadata = dictionary3["update_subscription_metadata"];
-    }
+
+    // FIXME: developerPayload key not exist.
+    // auto&& dictionary3 = nlohmann::json::parse(dictionary2["developerPayload"].get<std::string>());
+    // auto&& isFreeTrial = dictionary3["is_free_trial"].get<bool>();
+    // auto&& hasIntroductoryPriceTrial =
+    //     dictionary3["has_introductory_price_trial"].get<bool>();
+    // std::string updateMetadata;
+    // if (dictionary3["is_updated"].get<bool>()) {
+    //     updateMetadata = dictionary3["update_subscription_metadata"];
+    // }
+    const auto isFreeTrial = false;
+    const auto hasIntroductoryPriceTrial = false;
+    const auto updateMetadata = "";
     return std::make_shared<SubscriptionInfo>(
         skuDetails, isAutoRenewing, purchaseDate, isFreeTrial,
         hasIntroductoryPriceTrial, purchaseHistorySupported, updateMetadata);

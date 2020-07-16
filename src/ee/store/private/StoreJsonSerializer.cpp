@@ -159,19 +159,19 @@ Self::deserializeProductDetails(const std::string& json) {
 PurchaseFailureDescription
 Self::deserializeFailureReason(const std::string& json) {
     using Enum = PurchaseFailureReason;
-    static std::map<std::string, Enum> strToEnum{
-        {"PurchasingUnavailable", Enum::PurchasingUnavailable},
-        {"ExistingPurchasePending", Enum::ExistingPurchasePending},
-        {"ProductUnavailable", Enum::ProductUnavailable},
-        {"SignatureInvalid", Enum::SignatureInvalid},
-        {"UserCancelled", Enum::UserCancelled},
-        {"PaymentDeclined", Enum::PaymentDeclined},
-        {"DuplicateTransaction", Enum::DuplicateTransaction}};
+    static std::map<int, Enum> intToEnum{
+        {0, Enum::PurchasingUnavailable},
+        {1, Enum::ExistingPurchasePending},
+        {2, Enum::ProductUnavailable},
+        {3, Enum::SignatureInvalid},
+        {4, Enum::UserCancelled},
+        {5, Enum::PaymentDeclined},
+        {6, Enum::DuplicateTransaction}};
 
     auto dic = nlohmann::json::parse(json);
     auto reason = PurchaseFailureReason::Unknown;
-    auto iter = strToEnum.find(dic["reason"]);
-    if (iter != strToEnum.cend()) {
+    auto iter = intToEnum.find(dic["reason"]);
+    if (iter != intToEnum.cend()) {
         reason = iter->second;
     }
     return PurchaseFailureDescription(dic["productId"], reason, dic["message"]);

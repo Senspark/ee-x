@@ -335,11 +335,16 @@ object Platform {
 
     private suspend fun getDeviceId(context: Context): String {
         val task = GlobalScope.async(Dispatchers.IO) {
-            val info = AdvertisingIdClient.getAdvertisingIdInfo(context.applicationContext)
-            if (info.isLimitAdTrackingEnabled) {
+            try {
+                val info = AdvertisingIdClient.getAdvertisingIdInfo(context.applicationContext)
+                if (info.isLimitAdTrackingEnabled) {
+                    ""
+                } else {
+                    info.id
+                }
+            } catch (ex: Exception) {
+                // java.io.IOException: java.util.concurrent.TimeoutException: Timed out waiting for the service connection
                 ""
-            } else {
-                info.id
             }
         }
         return task.await()

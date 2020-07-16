@@ -279,6 +279,7 @@ class GooglePlayPurchasing(
                         purchase.purchaseToken
                     })
             } catch (ex: StoreException) {
+                _purchaseInProgress = false
                 val responseCode = ex.responseCode
                 _logger.debug("Purchase response code: $responseCode")
                 _suspectFailedConsumableSkus.add(productId)

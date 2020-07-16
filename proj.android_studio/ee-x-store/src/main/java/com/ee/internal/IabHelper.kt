@@ -32,11 +32,9 @@ class IabHelper(private val _bridge: IStoreBridge) {
     }
 
     private suspend fun finishSetup(): IabResult {
-        if (isFeatureSupported("inapp")) {
-            _subscriptionsSupported = false
-            _subscriptionPurchaseHistorySupported = false
-            return IabResult(BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED, "Billing V3 not supported")
-        }
+        // Always support inapp feature.
+        _subscriptionsSupported = false
+        _subscriptionPurchaseHistorySupported = false
         if (isFeatureSupported(FeatureType.SUBSCRIPTIONS)) {
             _subscriptionsSupported = true
             _subscriptionPurchaseHistorySupported = true

@@ -178,7 +178,7 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: adId = %s displaying = %s  message = %s",
+    logger_.debug("%s: adId = %s displaying = %s message = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());

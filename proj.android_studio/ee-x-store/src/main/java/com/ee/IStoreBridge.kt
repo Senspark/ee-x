@@ -7,7 +7,6 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.SkuDetails
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 interface IStoreBridge {
@@ -21,7 +20,7 @@ interface IStoreBridge {
     suspend fun acknowledge(purchaseToken: String)
 
     /// Legacy functions use by Java side.
-    fun connectRx(): Observable<BillingClient>
+    fun connectRx(): Single<BillingClient>
     fun getSkuDetailsRx(@SkuType skuType: String, skuList: List<String>): Single<List<SkuDetails>>
     fun getPurchasesRx(@SkuType skuType: String): Single<List<Purchase>>
     fun getPurchaseHistoryRx(@SkuType skuType: String): Single<List<PurchaseHistoryRecord>>

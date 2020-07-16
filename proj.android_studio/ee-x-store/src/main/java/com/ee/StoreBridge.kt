@@ -24,14 +24,13 @@ import com.ee.internal.StoreException
 import com.ee.internal.UnityPurchasing
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
@@ -70,11 +69,10 @@ class StoreBridge(
 
     private val _scope = MainScope()
     private val _purchasing = GooglePlayPurchasing(this, IabHelper(this), UnityPurchasing(this))
-    private val _scheduler = AndroidSchedulers.mainThread()
-    private val _disposable = CompositeDisposable()
-    private val _purchaseSubject = PublishSubject.create<PurchasesUpdate>()
-    private var _connectObservable: Observable<BillingClient>? = null
+    private val _updateChannel = Channel<PurchasesUpdate>()
     private val _skuDetailsList: MutableMap<String, SkuDetails> = HashMap()
+    private var _client: BillingClient? = null
+    private var _clientAwaiter: Deferred<Unit>? = null
 
     init {
         registerHandlers()
@@ -94,9 +92,9 @@ class StoreBridge(
 
     override fun destroy() {
         deregisterHandlers()
-        _disposable.dispose()
-        _connectObservable = null
         _purchasing.destroy()
+        _client = null
+        _clientAwaiter?.cancel()
         _scope.cancel()
     }
 
@@ -177,67 +175,50 @@ class StoreBridge(
     }
 
     override suspend fun connect(): BillingClient {
-        return suspendCoroutine { cont ->
-            _disposable.add(connectRx().subscribe({ client ->
-                cont.resume(client)
-            }) { exception ->
-                cont.resumeWithException(exception)
-            })
-        }
-    }
+        // Wait for the current connection to be completed.
+        _clientAwaiter?.await()
 
-    override fun connectRx(): Observable<BillingClient> {
-        _connectObservable?.let { observable ->
-            return@connectRx observable
+        // Check if client exists.
+        _client?.let {
+            return@connect it
         }
-        val observable = Observable.create<BillingClient> { emitter ->
-            val client = BillingClient
-                .newBuilder(_context)
-                .enablePendingPurchases()
-                .setListener { result, purchases ->
-                    _purchaseSubject.onNext(
-                        PurchasesUpdate(result.responseCode, purchases
-                            ?: ArrayList()))
-                }
-                .build()
-            client.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(result: BillingResult) {
-                    if (emitter.isDisposed) {
-                        if (client.isReady) {
-                            client.endConnection()
+
+        // Asynchronously create a connection.
+        _clientAwaiter = _scope.async {
+            suspendCoroutine<Unit> { cont ->
+                val client = BillingClient
+                    .newBuilder(_context)
+                    .enablePendingPurchases()
+                    .setListener { result, purchases ->
+                        _scope.launch {
+                            _updateChannel.send(
+                                PurchasesUpdate(result.responseCode, purchases ?: ArrayList()))
                         }
-                    } else {
+                    }
+                    .build()
+                client.startConnection(object : BillingClientStateListener {
+                    override fun onBillingSetupFinished(result: BillingResult) {
                         if (result.responseCode == BillingResponseCode.OK) {
                             _logger.info("Connected to BillingClient.")
-                            emitter.onNext(client)
+                            _client = client
+                            cont.resume(Unit)
                         } else {
                             _logger.info("Could not connect to BillingClient. Response code = ${result.responseCode}")
-                            emitter.onError(StoreException(result.responseCode))
+                            cont.resumeWithException(StoreException(result.responseCode))
                         }
                     }
-                }
 
-                override fun onBillingServiceDisconnected() {
-                    if (emitter.isDisposed) {
-                        // Fix UndeliverableException.
-                    } else {
-                        emitter.onComplete()
+                    override fun onBillingServiceDisconnected() {
+                        _client = null
                     }
-                }
-            })
-            emitter.setCancellable {
-                if (client.isReady) {
-                    client.endConnection()
-                }
+                })
             }
         }
-        _connectObservable = observable
-            .share()
-            .repeat()
-            .replay()
-            .refCount()
-            .subscribeOn(_scheduler)
-        return observable
+
+        // Await.
+        _clientAwaiter?.await()
+        _clientAwaiter = null
+        return _client ?: throw IllegalStateException("Client is not connected")
     }
 
     override suspend fun isFeatureSupported(@FeatureType featureType: String): Boolean {
@@ -274,19 +255,6 @@ class StoreBridge(
         }
     }
 
-    override fun getSkuDetailsRx(skuType: String, skuList: List<String>): Single<List<SkuDetails>> {
-        return Single.create { emitter ->
-            _scope.launch {
-                try {
-                    val response = getSkuDetails(skuType, skuList)
-                    emitter.onSuccess(response)
-                } catch (ex: Exception) {
-                    emitter.onError(ex)
-                }
-            }
-        }
-    }
-
     override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
         val client = connect()
         val result = client.queryPurchases(skuType)
@@ -295,19 +263,6 @@ class StoreBridge(
             return purchaseList ?: ArrayList()
         } else {
             throw StoreException(result.responseCode)
-        }
-    }
-
-    override fun getPurchasesRx(skuType: String): Single<List<Purchase>> {
-        return Single.create { emitter ->
-            _scope.launch {
-                try {
-                    val response = getPurchases(skuType)
-                    emitter.onSuccess(response)
-                } catch (ex: Exception) {
-                    emitter.onError(ex)
-                }
-            }
         }
     }
 
@@ -324,91 +279,46 @@ class StoreBridge(
         }
     }
 
-    override fun getPurchaseHistoryRx(skuType: String): Single<List<PurchaseHistoryRecord>> {
-        return Single.create { emitter ->
-            _scope.launch {
-                try {
-                    val response = getPurchaseHistory(skuType)
-                    emitter.onSuccess(response)
-                } catch (ex: Exception) {
-                    emitter.onError(ex)
-                }
-            }
-        }
-    }
-
     override suspend fun purchase(sku: String): Purchase {
         val details = _skuDetailsList[sku]
             ?: throw IllegalStateException("Cannot find sku details")
-        return suspendCoroutine { cont ->
-            _disposable.add(purchaseImpl(details).subscribe({ purchase ->
-                cont.resume(purchase)
-            }) { exception ->
-                cont.resumeWithException(exception)
-            })
-        }
+        return purchaseImpl(details)
     }
 
-    private fun purchaseImpl(details: SkuDetails): Single<Purchase> {
-        return launchBillingFlow(details).andThen(
-            Single.create<Purchase> { emitter ->
-                emitter.setDisposable(_purchaseSubject
-                    .takeUntil { update ->
-                        update.purchases.any { item ->
-                            item.sku == details.sku
-                        }
-                    }
-                    .firstOrError()
-                    .subscribeOn(_scheduler)
-                    .subscribe({ update: PurchasesUpdate ->
-                        if (update.code == BillingResponseCode.OK) {
-                            val purchase = update.purchases.first { item ->
-                                item.sku == details.sku
-                            }
-                            emitter.onSuccess(purchase)
-                        } else {
-                            emitter.onError(StoreException(update.code))
-                        }
-                    }, emitter::onError))
-            }).subscribeOn(_scheduler)
-    }
-
-    override fun purchaseRx(sku: String): Single<Purchase> {
-        return Single.create { emitter ->
-            _scope.launch {
-                try {
-                    val response = purchase(sku)
-                    emitter.onSuccess(response)
-                } catch (ex: Exception) {
-                    emitter.onError(ex)
-                }
+    private suspend fun purchaseImpl(details: SkuDetails): Purchase {
+        launchBillingFlow(details)
+        while (true) {
+            val update = _updateChannel.receive()
+            if (update.code != BillingResponseCode.OK) {
+                throw StoreException(update.code)
+            }
+            if (update.purchases.all { it.sku != details.sku }) {
+                continue
+            }
+            if (update.code == BillingResponseCode.OK) {
+                return update.purchases.first { it.sku == details.sku }
+            } else {
+                throw StoreException(update.code)
             }
         }
     }
 
-    private fun launchBillingFlow(details: SkuDetails): Completable {
+    private suspend fun launchBillingFlow(details: SkuDetails) {
         return launchBillingFlow(BillingFlowParams
             .newBuilder()
             .setSkuDetails(details)
             .build())
     }
 
-    private fun launchBillingFlow(params: BillingFlowParams): Completable {
-        return Completable.create { emitter ->
-            emitter.setDisposable(connectRx().subscribe { client ->
-                val activity = _activity
-                if (activity == null) {
-                    emitter.onError(IllegalStateException("Activity is not available"))
-                    return@subscribe
-                }
-                val result = client.launchBillingFlow(activity, params)
-                if (result.responseCode == BillingResponseCode.OK) {
-                    emitter.onComplete()
-                } else {
-                    emitter.onError(StoreException(result.responseCode))
-                }
-            })
-        }.subscribeOn(_scheduler)
+    private suspend fun launchBillingFlow(params: BillingFlowParams) {
+        val activity = _activity ?: throw IllegalStateException("Activity is not available")
+        val client = connect()
+        val result = client.launchBillingFlow(activity, params)
+        if (result.responseCode == BillingResponseCode.OK) {
+            // OK.
+        } else {
+            throw StoreException(result.responseCode)
+        }
     }
 
     override suspend fun consume(purchaseToken: String) {
@@ -431,19 +341,6 @@ class StoreBridge(
         }
     }
 
-    override fun consumeRx(purchaseToken: String): Completable {
-        return Completable.create { emitter ->
-            _scope.launch {
-                try {
-                    consume(purchaseToken)
-                    emitter.onComplete()
-                } catch (ex: Exception) {
-                    emitter.onError(ex)
-                }
-            }
-        }
-    }
-
     override suspend fun acknowledge(purchaseToken: String) {
         return acknowledge(AcknowledgePurchaseParams
             .newBuilder()
@@ -459,6 +356,84 @@ class StoreBridge(
                     cont.resume(Unit)
                 } else {
                     cont.resumeWithException(StoreException(result.responseCode))
+                }
+            }
+        }
+    }
+
+    override fun connectRx(): Single<BillingClient> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = connect()
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override fun getSkuDetailsRx(skuType: String, skuList: List<String>): Single<List<SkuDetails>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getSkuDetails(skuType, skuList)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override fun getPurchasesRx(skuType: String): Single<List<Purchase>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getPurchases(skuType)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override fun getPurchaseHistoryRx(skuType: String): Single<List<PurchaseHistoryRecord>> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = getPurchaseHistory(skuType)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override fun purchaseRx(sku: String): Single<Purchase> {
+        return Single.create { emitter ->
+            _scope.launch {
+                try {
+                    val response = purchase(sku)
+                    emitter.onSuccess(response)
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
+                }
+            }
+        }
+    }
+
+    override fun consumeRx(purchaseToken: String): Completable {
+        return Completable.create { emitter ->
+            _scope.launch {
+                try {
+                    consume(purchaseToken)
+                    emitter.onComplete()
+                } catch (ex: Exception) {
+                    emitter.onError(ex)
                 }
             }
         }

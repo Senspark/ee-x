@@ -10,6 +10,7 @@
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/core/IMessageBridge.hpp"
+#include "ee/core/SwitchToLibraryThread.hpp"
 #include "ee/core/Task.hpp"
 #include "ee/core/Utils.hpp"
 
@@ -108,6 +109,7 @@ float Self::getDensity() {
 
 Task<std::string> Self::getDeviceId() {
     auto response = co_await bridge_->callAsync(kGetDeviceId);
+    co_await SwitchToLibraryThread();
     co_return response;
 }
 
@@ -146,6 +148,7 @@ Task<bool> Self::testConnection(const std::string& hostName, float timeOut) {
     json["host_name"] = hostName;
     json["time_out"] = timeOut;
     auto response = co_await bridge_->callAsync(kTestConnection, json.dump());
+    co_await SwitchToLibraryThread();
     co_return toBool(response);
 }
 

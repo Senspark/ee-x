@@ -75,6 +75,7 @@ using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;
 using AsyncMutexScopedLockOperation =
     cppcoro::async_mutex_scoped_lock_operation;
 
+class SwitchToLibraryThread;
 class SwitchToMainThread;
 
 #if defined(EE_X_ANDROID)
@@ -120,6 +121,7 @@ using core::AsyncMutex;
 using core::AsyncMutexLockOperation;
 using core::AsyncMutexScopedLockOperation;
 using core::LambdaAwaiter;
+using core::SwitchToLibraryThread;
 using core::SwitchToMainThread;
 using core::Task;
 

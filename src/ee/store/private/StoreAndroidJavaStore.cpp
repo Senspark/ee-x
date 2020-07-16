@@ -9,6 +9,7 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/NoAwait.hpp>
+#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -118,6 +119,7 @@ std::map<std::string, std::string> Self::getProductJsonDictionary() const {
 void Self::restoreTransactions(const std::function<void(bool)>& callback) {
     noAwait([this, callback]() -> Task<> {
         auto response = co_await bridge_.callAsync(kRestoreTransactions);
+        co_await SwitchToLibraryThread();
         callback(core::toBool(response));
     });
 }

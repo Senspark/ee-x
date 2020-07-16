@@ -29,6 +29,7 @@
 #include "ee/core/ScopeGuard.hpp"
 #include "ee/core/ServiceLocator.hpp"
 #include "ee/core/SpinLock.hpp"
+#include "ee/core/SwitchToLibraryThread.hpp"
 #include "ee/core/SwitchToMainThread.hpp"
 #include "ee/core/Task.hpp"
 #include "ee/core/Thread.hpp"

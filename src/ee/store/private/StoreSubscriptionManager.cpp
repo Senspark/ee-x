@@ -81,7 +81,7 @@ Self::getGooglePlayStoreSubInfo(const std::string& payload) {
         dictionary1["isPurchaseHistorySupported"].get<bool>();
     auto&& dictionary2 = nlohmann::json::parse(dictionary1["json"].get<std::string>());
     auto&& isAutoRenewing = dictionary2["autoRenewing"].get<bool>();
-    auto&& purchaseDate = dictionary2["purchaseTime"].get<int>();
+    auto&& purchaseDate = dictionary2["purchaseTime"].get<std::int64_t>() / 1000;
 
     // FIXME: developerPayload key not exist.
     // auto&& dictionary3 = nlohmann::json::parse(dictionary2["developerPayload"].get<std::string>());

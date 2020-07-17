@@ -36,12 +36,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 5/16/17.
@@ -189,7 +189,9 @@ class StoreBridge(
 
         // Asynchronously create a connection.
         _clientAwaiter = _scope.async {
-            suspendCoroutine<Unit> { cont ->
+            // https://stackoverflow.com/questions/61217073/crash-in-android-billingclient-with-coroutines
+            // https://stackoverflow.com/questions/61388646/billingclient-billingclientstatelistener-onbillingsetupfinished-is-called-multip
+            suspendCancellableCoroutine<Unit> { cont ->
                 val client = BillingClient
                     .newBuilder(_context)
                     .enablePendingPurchases()
@@ -202,17 +204,22 @@ class StoreBridge(
                     .build()
                 client.startConnection(object : BillingClientStateListener {
                     override fun onBillingSetupFinished(result: BillingResult) {
-                        if (result.responseCode == BillingResponseCode.OK) {
-                            _logger.info("Connected to BillingClient.")
-                            _client = client
-                            cont.resume(Unit)
+                        if (cont.isActive) {
+                            if (result.responseCode == BillingResponseCode.OK) {
+                                _logger.info("${this::onBillingSetupFinished.name}: connected")
+                                _client = client
+                                cont.resume(Unit)
+                            } else {
+                                _logger.info("${this::onBillingSetupFinished}: failed to connect, code = ${result.responseCode}")
+                                cont.resumeWithException(StoreException(result.responseCode))
+                            }
                         } else {
-                            _logger.info("Could not connect to BillingClient. Response code = ${result.responseCode}")
-                            cont.resumeWithException(StoreException(result.responseCode))
+                            _logger.info("${this::onBillingSetupFinished.name}: already resumed, code = ${result.responseCode}")
                         }
                     }
 
                     override fun onBillingServiceDisconnected() {
+                        _logger.info(this::onBillingServiceDisconnected.name)
                         _client = null
                     }
                 })

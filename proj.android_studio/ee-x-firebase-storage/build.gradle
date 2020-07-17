@@ -18,5 +18,5 @@ if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
 
 dependencies {
     api project(':ee-x-firebase-core')
-    implementation 'com.google.firebase:firebase-storage:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
 }

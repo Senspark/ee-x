@@ -16,6 +16,10 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.acknowledgePurchase
+import com.android.billingclient.api.consumePurchase
+import com.android.billingclient.api.queryPurchaseHistory
+import com.android.billingclient.api.querySkuDetails
 import com.ee.internal.GooglePlayPurchasing
 import com.ee.internal.IUnityCallback
 import com.ee.internal.IabHelper
@@ -69,7 +73,7 @@ class StoreBridge(
 
     private val _scope = MainScope()
     private val _purchasing = GooglePlayPurchasing(this, IabHelper(this), UnityPurchasing(this))
-    private val _updateChannel = Channel<PurchasesUpdate>()
+    private val _updateChannel = Channel<PurchasesUpdate>(Channel.UNLIMITED)
     private val _skuDetailsList: MutableMap<String, SkuDetails> = HashMap()
     private var _client: BillingClient? = null
     private var _clientAwaiter: Deferred<Unit>? = null
@@ -238,21 +242,20 @@ class StoreBridge(
 
     private suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> {
         val client = connect()
-        return suspendCoroutine { cont ->
-            client.querySkuDetailsAsync(params) { result, detailsList ->
-                if (result.responseCode == BillingResponseCode.OK) {
-                    // https://stackoverflow.com/questions/56832130/skudetailslist-returning-null
-                    if (detailsList != null) {
-                        for (details in detailsList) {
-                            _skuDetailsList[details.sku] = details
-                        }
-                    }
-                    cont.resume(detailsList ?: ArrayList())
-                } else {
-                    cont.resumeWithException(StoreException(result.responseCode))
+        val response = client.querySkuDetails(params)
+        var result: List<SkuDetails> = ArrayList()
+        if (response.billingResult.responseCode == BillingResponseCode.OK) {
+            val detailsList = response.skuDetailsList
+            if (detailsList != null) {
+                for (details in detailsList) {
+                    _skuDetailsList[details.sku] = details
                 }
+                result = detailsList
             }
+        } else {
+            throw StoreException(response.billingResult.responseCode)
         }
+        return result
     }
 
     override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
@@ -268,15 +271,14 @@ class StoreBridge(
 
     override suspend fun getPurchaseHistory(@SkuType skuType: String): List<PurchaseHistoryRecord> {
         val client = connect()
-        return suspendCoroutine { cont ->
-            client.queryPurchaseHistoryAsync(skuType) { result, recordList ->
-                if (result.responseCode == BillingResponseCode.OK) {
-                    cont.resume(recordList ?: ArrayList())
-                } else {
-                    cont.resumeWithException(StoreException(result.responseCode))
-                }
-            }
+        val response = client.queryPurchaseHistory(skuType)
+        var result: List<PurchaseHistoryRecord> = ArrayList()
+        if (response.billingResult.responseCode == BillingResponseCode.OK) {
+            result = response.purchaseHistoryRecordList ?: result
+        } else {
+            throw StoreException(response.billingResult.responseCode)
         }
+        return result
     }
 
     override suspend fun purchase(sku: String): Purchase {
@@ -330,14 +332,11 @@ class StoreBridge(
 
     private suspend fun consume(params: ConsumeParams) {
         val client = connect()
-        return suspendCoroutine { cont ->
-            client.consumeAsync(params) { result, _ ->
-                if (result.responseCode == BillingResponseCode.OK) {
-                    cont.resume(Unit)
-                } else {
-                    cont.resumeWithException(StoreException(result.responseCode))
-                }
-            }
+        val response = client.consumePurchase(params)
+        if (response.billingResult.responseCode == BillingResponseCode.OK) {
+            // OK.
+        } else {
+            throw StoreException(response.billingResult.responseCode)
         }
     }
 
@@ -350,14 +349,11 @@ class StoreBridge(
 
     private suspend fun acknowledge(params: AcknowledgePurchaseParams) {
         val client = connect()
-        return suspendCoroutine { cont ->
-            client.acknowledgePurchase(params) { result ->
-                if (result.responseCode == BillingResponseCode.OK) {
-                    cont.resume(Unit)
-                } else {
-                    cont.resumeWithException(StoreException(result.responseCode))
-                }
-            }
+        val response = client.acknowledgePurchase(params)
+        if (response.responseCode == BillingResponseCode.OK) {
+            // OK.
+        } else {
+            throw StoreException(response.responseCode)
         }
     }
 

@@ -126,18 +126,24 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    @ImplicitReflectionSerializer
-    @UnstableDefault
-    internal fun initializePlugins(activity: Activity): Boolean {
+    fun setActivity(activity: Activity) {
         val context = activity.applicationContext
-        if (context == null) {
-            assertThat(false).isTrue()
-            return false
-        }
         _context = context
         _activity = activity
         _activityClass = activity::class.java
         activity.application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
+    }
+
+    @AnyThread
+    @ImplicitReflectionSerializer
+    @UnstableDefault
+    internal fun initializePlugins(): Boolean {
+        val context = _context
+        if (context == null) {
+            _logger.error("Please set activity via PluginManager.getInstance().setActivity")
+            assertThat(false).isTrue()
+            return false
+        }
         Platform.registerHandlers(_bridge, context)
         return true
     }
@@ -220,12 +226,14 @@ class PluginManager private constructor() {
 @Suppress("unused")
 @UnstableDefault
 private fun ee_staticInitializePlugins(): Boolean {
+    /* Has defect.
     val activity = Utils.getCurrentActivity()
     if (activity == null) {
         assertThat(false).isTrue()
         return false
     }
-    return PluginManager.getInstance().initializePlugins(activity)
+     */
+    return PluginManager.getInstance().initializePlugins()
 }
 
 @NativeThread

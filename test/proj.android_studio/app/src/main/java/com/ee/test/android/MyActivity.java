@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ee.Logger;
+import com.ee.PluginManager;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -18,6 +19,7 @@ public class MyActivity extends Cocos2dxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         _logger.debug("onCreate: begin.");
         super.onCreate(savedInstanceState);
+        PluginManager.getInstance().setActivity(this);
         _logger.debug("onCreate: end.");
     }
 

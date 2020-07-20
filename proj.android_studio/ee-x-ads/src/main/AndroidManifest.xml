@@ -1,4 +1,1 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ee.ads">
-</manifest>
+<manifest package="com.ee.ads" />

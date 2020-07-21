@@ -60,6 +60,14 @@ void* ee_staticGetActivity() {
         "()Ljava/lang/Object;");
 }
 
+void ee_staticSetActivity(void* activity) {
+    JniUtils::callStaticVoidMethod( //
+        "com/ee/PluginManagerKt",   //
+        "ee_staticSetActivity",     //
+        "(Ljava/lang/Object;)V",    //
+        activity);
+}
+
 bool ee_staticAddPlugin(const char* name) {
     return JniUtils::callStaticBooleanMethod(
         "com/ee/PluginManagerKt", //
@@ -81,6 +89,7 @@ bool ee_staticRemovePlugin(const char* name) {
 extern "C" {
 bool ee_staticInitializePlugins();
 void* ee_staticGetActivity();
+void ee_staticSetActivity(void* activity);
 bool ee_staticAddPlugin(const char* name);
 bool ee_staticRemovePlugin(const char* name);
 } // extern "C"
@@ -108,6 +117,10 @@ bool Self::initializePlugins<Library::Core>() {
 
 void* Self::getActivity() {
     return ee_staticGetActivity();
+}
+
+void Self::setActivity(void* activity) {
+    ee_staticSetActivity(activity);
 }
 
 bool Self::addPlugin(Plugin plugin) {

@@ -27,9 +27,12 @@ using Self = PluginManager;
 template <>
 bool Self::initializePlugins<Library::Cocos>() {
 #if defined(EE_X_ANDROID)
-    // Must set JavaVM first.
+    // Must set JavaVM and activity first.
     auto vm = cocos2d::JniHelper::getJavaVM();
     JniUtils::setVm(vm);
+
+    auto activity = cocos2d::JniHelper::getActivity();
+    setActivity(activity);
 #endif // defined(EE_X_ANDROID)
 
     if (not initializePlugins<Library::Core>()) {

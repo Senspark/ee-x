@@ -52,8 +52,11 @@ public:
     template <class T>
     static std::unique_ptr<T> createPlugin();
 
-    /// Gets the current acitivity.
+    /// Gets the current activity.
     static void* getActivity();
+
+    /// Sets the current activity.
+    static void setActivity(void* activity);
 
     /// Adds a cross-platform plugin.
     /// @note Internal uses.

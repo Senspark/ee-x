@@ -184,6 +184,11 @@ public func ee_staticGetActivity() -> Any? {
     return nil
 }
 
+@_cdecl("ee_staticSetActivity")
+public func ee_staticSetActivity(_ activity: UnsafeRawPointer) {
+    // No-op.
+}
+
 @_cdecl("ee_staticAddPlugin")
 public func ee_staticAddPlugin(_ name: UnsafePointer<CChar>) -> Bool {
     return PluginManager.staticAddPlugin(name)

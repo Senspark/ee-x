@@ -140,7 +140,11 @@ class PluginManager private constructor() {
     internal fun initializePlugins(): Boolean {
         val context = _context
         if (context == null) {
-            _logger.error("Please set activity via PluginManager.getInstance().setActivity")
+            _logger.error("""
+                Please set activity via
+                PluginManager.getInstance().setActivity() (kotlin) or
+                ee::PluginManager::setActivity() (c++)
+            """.trimIndent())
             assertThat(false).isTrue()
             return false
         }
@@ -252,6 +256,13 @@ private fun ee_staticRemovePlugin(name: String): Boolean {
 @Suppress("unused")
 private fun ee_staticGetActivity(): Any? {
     return PluginManager.getInstance().getActivity()
+}
+
+@NativeThread
+@Suppress("unused")
+private fun ee_staticSetActivity(activity: Any) {
+    val item = activity as? Activity ?: throw IllegalArgumentException("Invalid activity")
+    PluginManager.getInstance().setActivity(item)
 }
 
 /// Legacy method used by Soomla.

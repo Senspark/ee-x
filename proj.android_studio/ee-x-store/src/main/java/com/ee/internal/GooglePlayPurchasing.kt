@@ -312,12 +312,20 @@ class GooglePlayPurchasing(
             _logger.debug("finishTransaction: consuming ${purchase.sku}")
             _inventory.erasePurchase(purchase.sku)
             _scope.launch {
-                _helper.consume(type, purchase.purchaseToken, purchase.sku)
+                try {
+                    _helper.consume(type, purchase.purchaseToken, purchase.sku)
+                } catch (ex: IabException) {
+                    _logger.error("finishTransaction: failed to consume: ${ex.localizedMessage ?: ""}")
+                }
             }
         } else {
             _logger.debug("finishTransaction: acknowledging ${purchase.sku}")
             _scope.launch {
-                _helper.acknowledge(purchase.purchaseToken, purchase.sku)
+                try {
+                    _helper.acknowledge(purchase.purchaseToken, purchase.sku)
+                } catch (ex: IabException) {
+                    _logger.error("finishTransaction: failed to acknowledge: ${ex.localizedMessage ?: ""}")
+                }
             }
         }
     }
@@ -326,8 +334,12 @@ class GooglePlayPurchasing(
         val item = findPurchaseByOrderId(transactionId) ?: return
         val type = item.first
         val purchase = item.second
-        _logger.debug("finishTransaction: consuming ${purchase.sku}")
+        _logger.debug("${this::finishAdditionalTransaction.name}: consuming ${purchase.sku}")
         _inventory.erasePurchase(purchase.sku)
-        _helper.consume(type, purchase.purchaseToken, purchase.sku)
+        try {
+            _helper.consume(type, purchase.purchaseToken, purchase.sku)
+        } catch (ex: IabException) {
+            _logger.error("${this::finishAdditionalTransaction.name}: failed to consume: ${ex.localizedMessage ?: ""}")
+        }
     }
 }

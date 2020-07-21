@@ -2,11 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
-repositories {
-    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
-    maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
-}
-
 android {
     buildToolsVersion rootProject.buildToolsVersion
     compileSdkVersion rootProject.compileSdkVersion
@@ -29,20 +24,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 dependencies {
     api project(':ee-x-ads')
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads:19.1.0'
-
-    // https://bintray.com/google/mobile-ads-adapters-android
-    if (rootProject.ext.has('useAdmobMediation') && rootProject.useAdmobMediation) {
-        // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-        implementation 'com.google.ads.mediation:facebook:5.9.0.1'
-
-        // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-        implementation 'com.google.ads.mediation:ironsource:6.17.0.0'
-
-        // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-        implementation 'com.google.ads.mediation:unity:3.4.6.1'
-    }
-
+    implementation 'com.google.android.gms:play-services-ads:19.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

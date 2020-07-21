@@ -111,7 +111,29 @@ Pod::Spec.new do |spec|
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
-    s.dependency 'Google-Mobile-Ads-SDK'
+
+    # https://developers.google.com/admob/ios/rel-notes
+    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+  end
+
+  spec.subspec 'admob-mediation' do |s|
+    s.dependency 'ee-x/admob'
+
+    # https://bintray.com/google/mobile-ads-adapters-ios
+    # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.13.0.0'
+
+    # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationFacebook', '5.9.0.1'
+    
+    # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationIronSource', '6.17.0.0'
+
+    # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.6.0'
+
+    # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
   end
 
   spec.subspec 'app-lovin' do |s|
@@ -130,13 +152,9 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'AppLovinSDK'
-  end
 
-  spec.subspec 'app-lovin-mediation' do |s|
-    s.dependency 'ee-x/app-lovin'
-    s.dependency 'ee-x/iron-source-mediation-base'
-    s.dependency 'IronSourceAppLovinAdapter'
+    # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
+    s.dependency 'AppLovinSDK', '6.13.0'
   end
 
   spec.subspec 'facebook-ads' do |s|
@@ -155,17 +173,9 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/sourcelist.cmake'
       
     s.dependency 'ee-x/ads'
-    s.dependency 'FBAudienceNetwork'
-  end
 
-  spec.subspec 'iron-source-mediation-base' do |s|
-    s.preserve_path = 'dummy_path'
-    s.pod_target_xcconfig = {
-      'GCC_PREPROCESSOR_DEFINITIONS' => [
-        # Used to determine which headers to include.
-        'EE_X_USE_IRON_SOURCE_MEDIATION'
-      ].join(' ')
-    }
+    # https://developers.facebook.com/docs/audience-network/changelog-ios/
+    s.dependency 'FBAudienceNetwork', '5.9.0'
   end
 
   spec.subspec 'iron-source' do |s|
@@ -184,10 +194,32 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
-    s.dependency 'IronSourceSDK'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
+    s.dependency 'IronSourceSDK', '6.17.0'
   end
 
-  spec.subspec 'unity-ads-base' do |s|
+  spec.subspec 'iron-source-mediation' do |s|
+    s.dependency 'ee-x/iron-source'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
+    # FIXME: require Google-Mobile-Ads-SDK = 7.61.0
+    # s.dependency 'IronSourceAdMobAdapter', '4.3.13'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.14'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
+    s.dependency 'IronSourceFacebookAdapter', '4.3.16'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.3'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
+    s.dependency 'IronSourceVungleAdapter', '4.3.2'
+  end
+
+  spec.subspec 'unity-ads' do |s|
     s.source_files =
       'src/ee/UnityAds*',
       'src/ee/unity_ads/**/*'
@@ -203,22 +235,12 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
+
+    # https://github.com/Unity-Technologies/unity-ads-ios/releases
+    s.dependency 'UnityAds', '3.4.6'
   end
 
-  spec.subspec 'unity-ads' do |s|
-    s.dependency 'ee-x/unity-ads-base'
-    s.dependency 'UnityAds'
-  end
-
-  spec.subspec 'unity-ads-mediation' do |s|
-    s.dependency 'ee-x/unity-ads-base'
-    s.dependency 'ee-x/iron-source-mediation-base'
-
-    # UnityAds is included in IronSourceUnityAdsAdapter.
-    s.dependency 'IronSourceUnityAdsAdapter'
-  end
-
-  spec.subspec 'vungle-base' do |s|
+  spec.subspec 'vungle' do |s|
     s.source_files =
       'src/ee/Vungle*',
       'src/ee/vungle/**/*'
@@ -234,19 +256,9 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
-  end
 
-  spec.subspec 'vungle' do |s|
-    s.dependency 'ee-x/vungle-base'
-    s.dependency 'VungleSDK-iOS'
-  end
-
-  spec.subspec 'vungle-mediation' do |s|
-    s.dependency 'ee-x/vungle-base'
-    s.dependency 'ee-x/iron-source-mediation-base'
-
-    # VungleSDK-iOS is included in IronSourceVungleAdapter.
-    s.dependency 'IronSourceVungleAdapter'
+    # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
+    s.dependency 'VungleSDK-iOS', '6.7.0'
   end
 
   spec.subspec 'apps-flyer' do |s|

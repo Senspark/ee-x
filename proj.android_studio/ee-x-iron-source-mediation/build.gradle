@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-iron-source')
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
+    implementation 'com.ironsource.adapters:admobadapter:4.3.11'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
+    implementation 'com.ironsource.adapters:applovinadapter:4.3.14'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.17'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
+    implementation 'com.ironsource.adapters:unityadsadapter:4.3.5'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
+    implementation 'com.ironsource.adapters:vungleadapter:4.3.2'
+}

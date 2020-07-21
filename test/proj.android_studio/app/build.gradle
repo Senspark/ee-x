@@ -167,6 +167,7 @@ dependencies {
 
     implementation project(':libcocos2dx')
     implementation project(':ee-x-admob')
+    implementation project(':ee-x-admob-mediation')
     implementation project(':ee-x-app-lovin')
     implementation project(':ee-x-apps-flyer')
     implementation project(':ee-x-campaign-receiver')
@@ -181,6 +182,7 @@ dependencies {
     implementation project(':ee-x-firebase-storage')
     implementation project(':ee-x-google-analytics')
     implementation project(':ee-x-iron-source')
+    implementation project(':ee-x-iron-source-mediation')
     implementation project(':ee-x-notification')
     implementation project(':ee-x-play')
     implementation project(':ee-x-recorder')

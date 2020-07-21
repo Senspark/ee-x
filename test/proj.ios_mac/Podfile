@@ -12,6 +12,7 @@ abstract_target 'common' do
         platform :ios, '12.0'
 
         pod_ee_x('admob')
+        pod_ee_x('admob-mediation')
         pod_ee_x('app-lovin')
         pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')
@@ -26,6 +27,7 @@ abstract_target 'common' do
         pod_ee_x('firebase-storage')
         pod_ee_x('google-analytics')
         pod_ee_x('iron-source')
+        pod_ee_x('iron-source-mediation')
         pod_ee_x('notification')
         pod_ee_x('play')
         pod_ee_x('recorder')
@@ -33,8 +35,6 @@ abstract_target 'common' do
         pod_ee_x('tenjin')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
-        
-        pod 'FBAudienceNetwork', '5.9.0' # Fix invalid bitcode version.
     end
 
     target 'ee_x_test_desktop' do

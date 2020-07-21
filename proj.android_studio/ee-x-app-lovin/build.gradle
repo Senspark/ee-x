@@ -29,8 +29,9 @@ if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
 dependencies {
     api project(':ee-x-core')
 
-    // https://dash.applovin.com/docs/integration#androidIntegration
     // https://bintray.com/applovin/Android/sdk_android
+    // https://dash.applovin.com/docs/integration#androidIntegration
+    // https://github.com/AppLovin/AppLovin-MAX-SDK-Android/releases
     implementation 'com.applovin:applovin-sdk:9.13.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

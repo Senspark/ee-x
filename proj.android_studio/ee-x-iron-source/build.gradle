@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 repositories {
-    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
 }
 
@@ -28,17 +27,6 @@ dependencies {
 
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     implementation 'com.ironsource.sdk:mediationsdk:6.17.0'
-
-    if (rootProject.ext.has('useIronsourceMediation') && rootProject.useIronsourceMediation) {
-        // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-        implementation 'com.ironsource.adapters:facebookadapter:4.3.16'
-
-        // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-        implementation 'com.ironsource.adapters:unityadsadapter:4.3.5'
-
-        // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-        implementation 'com.ironsource.adapters:admobadapter:4.3.10'
-    }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'

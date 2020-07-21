@@ -1,0 +1,36 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+dependencies {
+    api project(':ee-x-admob')
+
+    // https://bintray.com/google/mobile-ads-adapters-android
+    // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
+    implementation 'com.google.ads.mediation:applovin:9.13.1.0'
+
+    // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
+    implementation 'com.google.ads.mediation:facebook:5.9.1.0'
+
+    // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
+    implementation 'com.google.ads.mediation:ironsource:6.17.0.0'
+
+    // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
+    implementation 'com.google.ads.mediation:unity:3.4.6.1'
+
+    // https://developers.google.com/admob/android/mediation/vungle
+    implementation 'com.google.ads.mediation:vungle:6.7.0.0'
+}

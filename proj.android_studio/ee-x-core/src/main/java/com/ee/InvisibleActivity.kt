@@ -27,48 +27,57 @@ class InvisibleActivity : Activity() {
                 ?: throw IllegalArgumentException("StartHandler not set")
             val finishHandler = _finishHandler
                 ?: throw IllegalArgumentException("FinishHandler not set")
-            _sharedStartHandler = startHandler
-            _sharedFinishHandler = finishHandler
-            val intent = Intent(_activity, InvisibleActivity::class.java)
-            _activity.startActivity(intent)
+            Thread.runOnMainThread(Runnable {
+                val id = _handleCounter++
+                _handlers[id] = Pair(startHandler, finishHandler)
+                val intent = Intent(_activity, InvisibleActivity::class.java)
+                intent.putExtra("handle_id", id)
+                _activity.startActivity(intent)
+            })
         }
     }
 
     companion object {
         private val _logger = Logger(InvisibleActivity::class.java.name)
-        private var _sharedStartHandler: StartHandler? = null
-        private var _sharedFinishHandler: FinishHandler? = null
+        private var _handleCounter = 0
+        private var _handlers: MutableMap<Int, Pair<StartHandler, FinishHandler>> = HashMap()
     }
+
+    private var _id = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _id = intent.getIntExtra("handle_id", -1)
         if (savedInstanceState == null) {
-            _logger.debug("Launching FacebookLoginActivity flow")
+            _logger.debug("Launching InvisibleActivity flow")
             try {
-                val handler = _sharedStartHandler
+                val handler = _handlers[_id]?.first
                     ?: throw IllegalArgumentException("Handler is null")
                 handler(this)
             } catch (ex: Exception) {
                 ex.printStackTrace()
-            } finally {
-                _sharedStartHandler = null
+                finishAndClear()
             }
         } else {
-            _logger.debug("Launching FacebookLoginActivity flow from savedInstanceState")
+            _logger.debug("Launching InvisibleActivity flow from savedInstanceState")
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val handler = _sharedFinishHandler
+        val handler = _handlers[_id]?.second
             ?: throw IllegalStateException("Handler is null")
         try {
             handler(requestCode, resultCode, data)
         } catch (ex: Exception) {
             ex.printStackTrace()
         } finally {
-            _sharedFinishHandler = null
-            finish()
+            finishAndClear()
         }
+    }
+
+    private fun finishAndClear() {
+        _handlers.remove(_id)
+        finish()
     }
 }

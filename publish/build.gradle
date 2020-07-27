@@ -31,6 +31,8 @@ ext {
 def applyPrefabSettings(project, String libraryName, headerPaths) {
     def projectDir = project.projectDir
     project.android {
+        ndkVersion '21.3.6528147'
+
         buildFeatures {
             prefabPublishing true
         }

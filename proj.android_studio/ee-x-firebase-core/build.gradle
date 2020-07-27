@@ -3,16 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     applyPrefabSettings(this, 'ee_x_firebase_core', [
         'ee/Firebase*',
         'ee/firebase/core/*.hpp'

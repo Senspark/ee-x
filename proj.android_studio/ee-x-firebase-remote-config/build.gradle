@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     applyPrefabSettings(this, 'ee_x_firebase_remote_config', [
         'ee/firebase/remote_config/*.hpp'
     ])

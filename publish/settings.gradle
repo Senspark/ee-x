@@ -4,13 +4,14 @@ def include_lib(name) {
 }
 
 include_lib('ads')
-// include_lib('admob') FIXME
+include_lib('admob')
+include_lib('admob-mediation')
 include_lib('app-lovin')
 include_lib('apps-flyer')
 include_lib('campaign-receiver')
 include_lib('core')
 include_lib('facebook')
-// include_lib('facebook-ads') FIXME
+include_lib('facebook-ads')
 include_lib('firebase-core')
 include_lib('firebase-analytics')
 include_lib('firebase-crashlytics')
@@ -20,12 +21,13 @@ include_lib('firebase-performance')
 include_lib('firebase-remote-config')
 include_lib('firebase-storage')
 include_lib('google-analytics')
-// include_lib('iron-source') FIXME
+include_lib('iron-source')
+include_lib('iron-source-mediation')
 include_lib('notification')
 include_lib('play')
 include_lib('recorder')
 include_lib('soomla-store')
 include_lib('store')
 include_lib('tenjin')
-// include_lib('unity-ads') FIXME
-// include_lib('vungle') FIXME
+include_lib('unity-ads')
+include_lib('vungle')

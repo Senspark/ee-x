@@ -19,6 +19,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_vungle', [
+        'ee/Vungle*',
+        'ee/vungle/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
 

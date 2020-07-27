@@ -17,6 +17,13 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_unity_ads', [
+        'ee/UnityAds*',
+        'ee/unity_ads/*.hpp'
+    ])
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'androidx.annotation:annotation:1.1.0'

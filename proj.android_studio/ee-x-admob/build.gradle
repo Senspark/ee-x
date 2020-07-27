@@ -18,7 +18,10 @@ android {
 }
 
 if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
-    applyPrefabSettings(this, 'admob')
+    applyPrefabSettings(this, 'ee_x_admob', [
+        'ee/AdMob*',
+        'ee/admob/*.hpp'
+    ])
 }
 
 dependencies {

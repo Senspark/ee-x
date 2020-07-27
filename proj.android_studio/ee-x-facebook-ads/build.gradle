@@ -19,8 +19,11 @@ android {
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
-    applyPrefabSettings(this, 'facebook-ads')
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_facebook_ads', [
+        'ee/FacebookAds*',
+        'ee/facebook_ads/*.hpp'
+    ])
 }
 
 dependencies {

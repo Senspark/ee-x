@@ -49,7 +49,7 @@ class InvisibleActivity : Activity() {
         super.onCreate(savedInstanceState)
         _id = intent.getIntExtra("handle_id", -1)
         if (savedInstanceState == null) {
-            _logger.debug("Launching InvisibleActivity flow")
+            _logger.info("onCreate: id = $_id")
             try {
                 val handler = _handlers[_id]?.first
                     ?: throw IllegalArgumentException("Handler is null")
@@ -59,11 +59,12 @@ class InvisibleActivity : Activity() {
                 finishAndClear()
             }
         } else {
-            _logger.debug("Launching InvisibleActivity flow from savedInstanceState")
+            _logger.info("onCreate: from saved state, id = $_id")
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        _logger.info("${this::onActivityResult.name}: requestCode = $requestCode resultCode = $resultCode")
         super.onActivityResult(requestCode, resultCode, data)
         val handler = _handlers[_id]?.second
             ?: throw IllegalStateException("Handler is null")
@@ -77,6 +78,7 @@ class InvisibleActivity : Activity() {
     }
 
     private fun finishAndClear() {
+        _logger.info("${this::finishAndClear.name}: id = $_id")
         _handlers.remove(_id)
         finish()
     }

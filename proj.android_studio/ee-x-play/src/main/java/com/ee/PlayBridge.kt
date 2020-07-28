@@ -182,150 +182,169 @@ class PlayBridge(
     private val isLoggedIn: Boolean
         @UiThread get() = GoogleSignIn.hasPermissions(signInAccount, *_options.scopeArray)
 
-    @UiThread
+    @AnyThread
     private fun logIn(silently: Boolean, callback: (successful: Boolean) -> Unit) {
         _logger.debug("${this::logIn.name}: silently = $silently")
-        val activity = _activity ?: return
-        val client = _client ?: throw IllegalArgumentException("Client is null")
-        if (silently) {
-            client.silentSignIn().addOnCompleteListener { task ->
-                callback(task.isSuccessful)
+        Thread.runOnMainThread(Runnable {
+            val activity = _activity ?: return@Runnable
+            val client = _client ?: throw IllegalArgumentException("Client is null")
+            if (silently) {
+                client.silentSignIn().addOnCompleteListener { task ->
+                    callback(task.isSuccessful)
+                }
+            } else {
+                val code = 1
+                InvisibleActivity.Builder(activity)
+                    .onStart { innerActivity ->
+                        innerActivity.startActivityForResult(client.signInIntent, code)
+                    }
+                    .onFinish { requestCode, resultCode, _ ->
+                        assertThat(requestCode == code)
+                        val successful = resultCode == Activity.RESULT_OK
+                        callback(successful)
+                    }
+                    .process()
             }
-        } else {
-            val code = 1
-            InvisibleActivity.Builder(activity)
-                .onStart { innerActivity ->
-                    innerActivity.startActivityForResult(client.signInIntent, code)
-                }
-                .onFinish { requestCode, resultCode, _ ->
-                    assertThat(requestCode == code)
-                    val successful = resultCode == Activity.RESULT_OK
-                    callback(successful)
-                }
-                .process()
-        }
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun logOut(callback: (successful: Boolean) -> Unit) {
         _logger.debug(this::logOut.name)
-        val client = _client ?: throw IllegalArgumentException("Client is null")
-        client.signOut().addOnCompleteListener { task ->
-            callback(task.isSuccessful)
-        }
+        Thread.runOnMainThread(Runnable {
+            val client = _client ?: throw IllegalArgumentException("Client is null")
+            client.signOut().addOnCompleteListener { task ->
+                callback(task.isSuccessful)
+            }
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun showAchievements() {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = achievementsClient ?: return
-        client.achievementsIntent.addOnSuccessListener { intent ->
-            val activity = _activity ?: return@addOnSuccessListener
-            val code = 1
-            InvisibleActivity.Builder(activity)
-                .onStart { innerActivity ->
-                    innerActivity.startActivityForResult(intent, code)
-                }
-                .onFinish { requestCode, _, _ ->
-                    assertThat(requestCode == code)
-                    // OK.
-                }
-                .process()
-        }
+        _logger.debug(this::showAchievements.name)
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
+            }
+            val client = achievementsClient ?: return@Runnable
+            client.achievementsIntent.addOnSuccessListener { intent ->
+                val activity = _activity ?: return@addOnSuccessListener
+                val code = 1
+                InvisibleActivity.Builder(activity)
+                    .onStart { innerActivity ->
+                        innerActivity.startActivityForResult(intent, code)
+                    }
+                    .onFinish { requestCode, _, _ ->
+                        assertThat(requestCode == code)
+                        // OK.
+                    }
+                    .process()
+            }
+        })
     }
 
     // Load all achievements and check increment
     // Ref: https://stackoverflow.com/questions/23848014/google-play-game-services-unlock
     // -achievement-store-unlock-in-game-or-call-unlo/23853222#23853222
-    @UiThread
+    @AnyThread
     private fun incrementAchievement(achievementId: String, percent: Double) {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = achievementsClient ?: return
-        client.load(true).addOnCompleteListener { task ->
-            val buffer = task.result?.get() ?: return@addOnCompleteListener
-            val bufferSize = buffer.count
-            for (i in 0 until bufferSize) {
-                val achievement = buffer[i]
-                if (achievement.type != Achievement.TYPE_INCREMENTAL) {
-                    continue
-                }
-                if (achievement.achievementId != achievementId) {
-                    continue
-                }
-                val currStep = achievement.currentSteps
-                val totalStep = achievement.totalSteps
-                val reportStep = (percent * totalStep).toInt()
-                val increment = reportStep - currStep
-                if (increment > 0) {
-                    client.increment(achievementId, increment)
-                }
-                break
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
             }
-            buffer.release()
-        }
+            val client = achievementsClient ?: return@Runnable
+            client.load(true).addOnCompleteListener { task ->
+                val buffer = task.result?.get() ?: return@addOnCompleteListener
+                val bufferSize = buffer.count
+                for (i in 0 until bufferSize) {
+                    val achievement = buffer[i]
+                    if (achievement.type != Achievement.TYPE_INCREMENTAL) {
+                        continue
+                    }
+                    if (achievement.achievementId != achievementId) {
+                        continue
+                    }
+                    val currStep = achievement.currentSteps
+                    val totalStep = achievement.totalSteps
+                    val reportStep = (percent * totalStep).toInt()
+                    val increment = reportStep - currStep
+                    if (increment > 0) {
+                        client.increment(achievementId, increment)
+                    }
+                    break
+                }
+                buffer.release()
+            }
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun unlockAchievement(achievementId: String) {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = achievementsClient ?: return
-        client.unlock(achievementId)
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
+            }
+            val client = achievementsClient ?: return@Runnable
+            client.unlock(achievementId)
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun showLeaderboard(leaderboardId: String) {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = leaderboardsClient ?: return
-        client.getLeaderboardIntent(leaderboardId).addOnSuccessListener { intent ->
-            val activity = _activity ?: return@addOnSuccessListener
-            val code = 1
-            InvisibleActivity.Builder(activity)
-                .onStart { innerActivity ->
-                    innerActivity.startActivityForResult(intent, code)
-                }
-                .onFinish { requestCode, _, _ ->
-                    assertThat(requestCode).isEqualTo(code)
-                    // OK.
-                }
-                .process()
-        }
+        _logger.debug("${this::showLeaderboard.name}: id = $leaderboardId")
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
+            }
+            val client = leaderboardsClient ?: return@Runnable
+            client.getLeaderboardIntent(leaderboardId).addOnSuccessListener { intent ->
+                val activity = _activity ?: return@addOnSuccessListener
+                val code = 1
+                InvisibleActivity.Builder(activity)
+                    .onStart { innerActivity ->
+                        innerActivity.startActivityForResult(intent, code)
+                    }
+                    .onFinish { requestCode, _, _ ->
+                        assertThat(requestCode).isEqualTo(code)
+                        // OK.
+                    }
+                    .process()
+            }
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun showAllLeaderboards() {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = leaderboardsClient ?: return
-        client.allLeaderboardsIntent.addOnSuccessListener { intent ->
-            val activity = _activity ?: return@addOnSuccessListener
-            val code = 1
-            InvisibleActivity.Builder(activity)
-                .onStart { innerActivity ->
-                    innerActivity.startActivityForResult(intent, code)
-                }
-                .onFinish { requestCode, _, _ ->
-                    assertThat(requestCode).isEqualTo(code)
-                    // OK.
-                }
-                .process()
-        }
+        _logger.debug(this::showAllLeaderboards.name)
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
+            }
+            val client = leaderboardsClient ?: return@Runnable
+            client.allLeaderboardsIntent.addOnSuccessListener { intent ->
+                val activity = _activity ?: return@addOnSuccessListener
+                val code = 1
+                InvisibleActivity.Builder(activity)
+                    .onStart { innerActivity ->
+                        innerActivity.startActivityForResult(intent, code)
+                    }
+                    .onFinish { requestCode, _, _ ->
+                        assertThat(requestCode).isEqualTo(code)
+                        // OK.
+                    }
+                    .process()
+            }
+        })
     }
 
-    @UiThread
+    @AnyThread
     private fun submitScore(leaderboardId: String, score: Long) {
-        if (!isLoggedIn) {
-            return
-        }
-        val client = leaderboardsClient ?: return
-        client.submitScore(leaderboardId, score)
+        Thread.runOnMainThread(Runnable {
+            if (!isLoggedIn) {
+                return@Runnable
+            }
+            val client = leaderboardsClient ?: return@Runnable
+            client.submitScore(leaderboardId, score)
+        })
     }
 }

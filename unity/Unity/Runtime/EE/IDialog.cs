@@ -1,5 +1,4 @@
-namespace Senspark.EE {
-
-    interface IDialog : MonoBehaviour {
+namespace EE {
+    public interface IDialog {
     }
 }

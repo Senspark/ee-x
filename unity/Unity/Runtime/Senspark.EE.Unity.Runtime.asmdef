@@ -1,11 +1,7 @@
 {
-    "name": "Senspark.EE.Unity",
+    "name": "Senspark.EE.Unity.Runtime",
     "references": [],
-    "includePlatforms": [
-        "Android",
-        "iOS",
-        "macOSStandalone"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

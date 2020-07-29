@@ -1,11 +1,7 @@
 {
     "name": "Senspark.EE.Core.Runtime",
     "references": [],
-    "includePlatforms": [
-        "Android",
-        "iOS",
-        "macOSStandalone"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

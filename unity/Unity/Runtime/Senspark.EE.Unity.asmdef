@@ -1,0 +1,17 @@
+{
+    "name": "Senspark.EE.Unity",
+    "references": [],
+    "includePlatforms": [
+        "Android",
+        "iOS",
+        "macOSStandalone"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

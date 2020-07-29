@@ -1,0 +1,14 @@
+{
+    "name": "com.senspark.ee.unity",
+    "version": "0.1.0",
+    "displayName": "Senspark EE-x Unity",
+    "unity": "2018.4",
+    "author": {
+        "name": "Senspark",
+        "email": "contact@senspark.com",
+        "url": "https://senspark.com"
+    },
+    "dependencies": {
+        "com.senspark.ee.core": "file:../ee-x/unity/Core"
+    }
+}

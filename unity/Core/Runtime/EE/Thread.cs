@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Threading;
 
-using UnityEngine;
+using EE.Internal;
 
 namespace EE {
     public static class Thread {
@@ -13,6 +12,15 @@ namespace EE {
         private static int _queueCounter;
         private static readonly Dictionary<int, Action> _delayedQueue = new Dictionary<int, Action>();
         private static SpinLock _delayedLock = new SpinLock();
+
+        private static readonly IThreadImpl _impl =
+#if UNITY_EDITOR
+            new ThreadImplEditor();
+#elif UNITY_ANDROID
+            new ThreadImplAndroid();
+#elif UNITY_IOS
+            new ThreadImplIos();
+#endif
 
         private static void PushInstantRunnable(Action runnable) {
             var lockTaken = false;
@@ -68,31 +76,6 @@ namespace EE {
             return null;
         }
 
-#if UNITY_ANDROID
-        private static readonly AndroidJavaClass _clazz = new AndroidJavaClass("com.ee.ThreadKt");
-
-        private static bool ee_isMainThread() {
-            return _clazz.CallStatic<bool>("ee_isMainThread");
-        }
-
-        private static bool ee_runOnMainThread() {
-            return _clazz.CallStatic<bool>("ee_runOnMainThread");
-        }
-
-        private static void ee_runOnMainThreadDelayed(int key, float delay) {
-            _clazz.CallStatic("ee_runOnMainThreadDelayed", key, delay);
-        }
-#else // UNITY_ANDROID
-        [DllImport("__Internal")]
-        private static extern bool ee_isMainThread();
-
-        [DllImport("__Internal")]
-        private static extern bool ee_runOnMainThread();
-
-        [DllImport("__Internal")]
-        private static extern void ee_runOnMainThreadDelayed(int key, float delay);
-#endif // UNITY_ANDROID
-
         private static void ee_runOnMainThreadCallback() {
             PopInstantRunnable()();
         }
@@ -102,7 +85,7 @@ namespace EE {
         }
 
         public static bool IsMainThread() {
-            return ee_isMainThread();
+            return _impl.IsMainThread();
         }
 
         public static bool RunOnMainThread(Action runnable) {
@@ -111,12 +94,12 @@ namespace EE {
                 return true;
             }
             PushInstantRunnable(runnable);
-            return ee_runOnMainThread();
+            return _impl.RunOnMainThread();
         }
 
         public static void RunOnMainThreadDelayed(Action runnable, float delay) {
             var key = PushDelayedRunnable(runnable);
-            ee_runOnMainThreadDelayed(key, delay);
+            _impl.RunOnMainThreadDelayed(key, delay);
         }
     }
 }

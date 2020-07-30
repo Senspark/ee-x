@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,10 +15,20 @@ namespace EE.Internal {
         private SpinLock _handlerLock;
         private readonly Dictionary<string, MessageHandler> _handlers;
 
+        private readonly IMessageBridgeImpl _impl =
+#if UNITY_EDITOR
+            new MessageBridgeImplEditor();
+#elif UNITY_ANDROID
+            new MessageBridgeImplAndroid();
+#elif UNITY_IOS
+            new MessageBridgeImplIos();
+#endif
+
         private MessageBridge() {
             _callbackCounter = 0;
             _handlerLock = new SpinLock();
             _handlers = new Dictionary<string, MessageHandler>();
+            _impl.SetCallCppCallback(CallCpp);
         }
 
         public bool RegisterHandler(MessageHandler handler, string tag) {
@@ -71,25 +80,8 @@ namespace EE.Internal {
             return null;
         }
 
-#if UNITY_ANDROID
-        private static readonly AndroidJavaClass _clazz = new AndroidJavaClass("com.ee.internal.MessageBridgeKt");
-
         public string Call(string tag, string message = "") {
-            return _clazz.CallStatic<string>("ee_staticCall", tag, message);
-        }
-#else // UNITY_ANDROID
-        [DllImport("__Internal")]
-        private static extern string ee_staticCall(string tag, string message);
-
-        public string Call(string tag, string message = "") {
-            return ee_staticCall(tag, message);
-        }
-#endif // UNITY_ANDROID
-
-        private static string ee_callCppInternal(string tag, string message) {
-            var bridge = Instance;
-            var result = bridge.CallCpp(tag, message);
-            return result;
+            return _impl.Call(tag, message);
         }
 
         public Task<string> CallAsync(string tag, string message = "") {

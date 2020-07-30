@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include "ee/core/SpinLock.hpp"
+#include "ee/core/internal/SwiftBridge.hpp"
 
 #ifdef EE_X_ANDROID
 #include "ee/core/internal/JniMethodInfo.hpp"

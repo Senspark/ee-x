@@ -65,19 +65,4 @@ private:
 
 #endif // __cplusplus
 
-#include "ee/Macro.hpp"
-
-#if defined(EE_X_IOS) || defined(EE_X_OSX)
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-/// Required for Swift.
-extern char* ee_callCppInternal(const char* tag, const char* message);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
-#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
-
 #endif /* EE_X_CORE_MESSAGE_BRIDGE_HPP_ */

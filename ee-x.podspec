@@ -801,6 +801,37 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/soomla-cocos2dx-store'
   end
+
+  spec.subspec 'unity-core' do |s|
+    s.source_files =
+      'src/ee/ee.h',
+      'src/ee/Macro.hpp',
+      'src/ee/core/**/*.swift',
+      'src/ee/core/**/EE*',
+      'src/ee/core/internal/SwiftBridge*'
+
+    s.xcconfig = {
+      'GCC_PREPROCESSOR_DEFINITIONS' => [
+        '$(inherited)',
+        'EE_X_UNITY'
+      ].join(' ')
+    }
+
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' '),
+      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
+      'DEAD_CODE_STRIPPING' => 'YES'
+    }
+
+    s.dependency 'ReachabilitySwift'
+    s.dependency 'RxSwift'
+  end
 end
 
 #  post_install do |installer_representation|

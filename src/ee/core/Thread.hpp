@@ -73,19 +73,4 @@ using core::runOnUiThreadAndWaitResult;
 
 #endif // __cplusplus
 
-#include "ee/Macro.hpp"
-
-#if defined(EE_X_IOS) || defined(EE_X_OSX)
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-extern void ee_runOnMainThreadCallback();
-extern void ee_runOnMainThreadDelayedCallback(int key);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
-#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
-
 #endif /* EE_X_THREAD_HPP */

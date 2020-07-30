@@ -14,21 +14,20 @@ namespace EE.Internal {
         private int _callbackCounter;
         private SpinLock _handlerLock;
         private readonly Dictionary<string, MessageHandler> _handlers;
-
-        private readonly IMessageBridgeImpl _impl =
-#if UNITY_EDITOR
-            new MessageBridgeImplEditor();
-#elif UNITY_ANDROID
-            new MessageBridgeImplAndroid();
-#elif UNITY_IOS
-            new MessageBridgeImplIos();
-#endif
+        private readonly IMessageBridgeImpl _impl;
 
         private MessageBridge() {
             _callbackCounter = 0;
             _handlerLock = new SpinLock();
             _handlers = new Dictionary<string, MessageHandler>();
-            _impl.SetCallCppCallback(CallCpp);
+            _impl =
+#if UNITY_EDITOR
+                new MessageBridgeImplEditor();
+#elif UNITY_ANDROID
+                new MessageBridgeImplAndroid(CallCpp);
+#elif UNITY_IOS
+                new MessageBridgeImplIos(CallCpp);
+#endif
         }
 
         public bool RegisterHandler(MessageHandler handler, string tag) {

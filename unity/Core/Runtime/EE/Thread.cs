@@ -19,7 +19,7 @@ namespace EE {
 #elif UNITY_ANDROID
             new ThreadImplAndroid();
 #elif UNITY_IOS
-            new ThreadImplIos();
+            new ThreadImplIos(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);
 #endif
 
         private static void PushInstantRunnable(Action runnable) {

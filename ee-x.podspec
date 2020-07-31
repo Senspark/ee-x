@@ -802,7 +802,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/soomla-cocos2dx-store'
   end
 
-  spec.subspec 'unity-core' do |s|
+  spec.subspec 'cs-core' do |s|
     s.source_files =
       'src/ee/ee.h',
       'src/ee/Macro.hpp',
@@ -831,6 +831,17 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
+  end
+
+  spec.subspec 'cs-ads' do |s|
+    s.source_files =
+      'src/ee/ads/**/*.swift'
+
+    s.private_header_files =
+      'src/ee/ads/internal/*',
+      'src/ee/ads/private/*'
+
+    s.dependency 'ee-x/cs-core'
   end
 end
 

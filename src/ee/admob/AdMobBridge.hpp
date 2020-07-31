@@ -35,8 +35,7 @@ public:
     /// Calls this method for faster ads loading.
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/N5okpElFHZs
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/kayQ3VZJqkU
-    /// @param[in] applicationId The AdMob application code.
-    void initialize(const std::string& applicationId);
+    void initialize();
 
     /// kGADSimulatorID or AdRequest.DEVICE_ID_EMULATOR.
     std::string getEmulatorTestDeviceHash() const;

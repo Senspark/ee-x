@@ -76,11 +76,15 @@ void Self::destroy() {
     for (auto&& [key, value] : rewardedAds_) {
         value->destroy();
     }
+    bannerAds_.clear();
+    nativeAds_.clear();
+    interstitialAds_.clear();
+    rewardedAds_.clear();
     PluginManager::removePlugin(Plugin::AdMob);
 }
 
-void Self::initialize(const std::string& applicationId) {
-    bridge_.call(kInitialize, applicationId);
+void Self::initialize() {
+    bridge_.call(kInitialize);
 }
 
 std::string Self::getEmulatorTestDeviceHash() const {

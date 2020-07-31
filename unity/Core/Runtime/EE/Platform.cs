@@ -7,21 +7,21 @@ using UnityEngine;
 namespace EE {
     public static class Platform {
         private const string kPrefix = "Platform_";
-        private static readonly string kIsApplicationInstalled = $"{kPrefix}isApplicationInstalled";
-        private static readonly string kOpenApplication = $"{kPrefix}openApplication";
-        private static readonly string kGetApplicationId = $"{kPrefix}getApplicationId";
-        private static readonly string kGetApplicationName = $"{kPrefix}getApplicationName";
-        private static readonly string kGetVersionName = $"{kPrefix}getVersionName";
-        private static readonly string kGetVersionCode = $"{kPrefix}getVersionCode";
-        private static readonly string kGetApplicationSignatures = $"{kPrefix}getApplicationSignatures";
-        private static readonly string kIsInstantApp = $"{kPrefix}isInstantApp";
-        private static readonly string kIsTablet = $"{kPrefix}isTablet";
-        private static readonly string kGetDensity = $"{kPrefix}getDensity";
-        private static readonly string kGetDeviceId = $"{kPrefix}getDeviceId";
-        private static readonly string kGetSafeInset = $"{kPrefix}getSafeInset";
-        private static readonly string kSendMail = $"{kPrefix}sendMail";
-        private static readonly string kTestConnection = $"{kPrefix}testConnection";
-        private static readonly string kShowInstallPrompt = $"{kPrefix}showInstallPrompt";
+        private const string kIsApplicationInstalled = kPrefix + "isApplicationInstalled";
+        private const string kOpenApplication = kPrefix + "openApplication";
+        private const string kGetApplicationId = kPrefix + "getApplicationId";
+        private const string kGetApplicationName = kPrefix + "getApplicationName";
+        private const string kGetVersionName = kPrefix + "getVersionName";
+        private const string kGetVersionCode = kPrefix + "getVersionCode";
+        private const string kGetApplicationSignatures = kPrefix + "getApplicationSignatures";
+        private const string kIsInstantApp = kPrefix + "isInstantApp";
+        private const string kIsTablet = kPrefix + "isTablet";
+        private const string kGetDensity = kPrefix + "getDensity";
+        private const string kGetDeviceId = kPrefix + "getDeviceId";
+        private const string kGetSafeInset = kPrefix + "getSafeInset";
+        private const string kSendMail = kPrefix + "sendMail";
+        private const string kTestConnection = kPrefix + "testConnection";
+        private const string kShowInstallPrompt = kPrefix + "showInstallPrompt";
 
         private static IMessageBridge _bridge;
 

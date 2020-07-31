@@ -8,7 +8,5 @@
     "email": "contact@senspark.com",
     "url": "https://senspark.com"
   },
-  "dependencies": {
-    "com.senspark.ee.core": "file:../ee-x/unity/Core"
-  }
+  "description": "Unity Module"
 }

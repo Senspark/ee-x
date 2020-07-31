@@ -1,0 +1,16 @@
+{
+    "name": "Senspark.EE.AdMob.Runtime",
+    "references": [
+        "GUID:bc9158ab87d424c42abc876fc9226ba7",
+        "GUID:c13a18c21ad544c019302df94a2f9ee0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

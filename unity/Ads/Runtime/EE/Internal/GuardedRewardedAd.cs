@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class GuardedRewardedAd
+    public class GuardedRewardedAd
         : ObserverManager<IRewardedAdObserver>, IRewardedAd {
         private readonly IRewardedAd _ad;
         private bool _loading;

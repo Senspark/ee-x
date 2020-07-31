@@ -83,6 +83,12 @@ namespace EE.Internal {
             return _impl.Call(tag, message);
         }
 
+        [Serializable]
+        private struct CallAsyncRequest {
+            public string callback_tag;
+            public string message;
+        }
+
         public Task<string> CallAsync(string tag, string message = "") {
             var source = new TaskCompletionSource<string>();
             var callbackTag = $"{tag}{_callbackCounter++}";
@@ -91,9 +97,9 @@ namespace EE.Internal {
                 source.SetResult(callbackMessage);
                 return "";
             }, callbackTag);
-            var request = new {
+            var request = new CallAsyncRequest {
                 callback_tag = callbackTag,
-                message
+                message = message
             };
             Call(tag, JsonUtility.ToJson(request));
             return source.Task;

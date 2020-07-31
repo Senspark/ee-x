@@ -56,17 +56,22 @@ namespace EE {
         }
 
         [Serializable]
-        private struct Response {
+        private struct GetSha1SignatureRequest {
+            public string algorithm;
+        }
+
+        [Serializable]
+        private struct GetSha1SignatureResponse {
             public List<string> signatures;
         }
 
         public static string GetSha1Signature() {
 #if UNITY_ANDROID
-            var request = new {
+            var request = new GetSha1SignatureRequest {
                 algorithm = "SHA1",
             };
             var response = _bridge.Call(kGetApplicationSignatures, JsonUtility.ToJson(request));
-            var json = JsonUtility.FromJson<Response>(response);
+            var json = JsonUtility.FromJson<GetSha1SignatureResponse>(response);
             var signatures = json.signatures;
             return signatures.Count == 0 ? "" : signatures[0];
 #else // UNITY_ANDROID
@@ -98,18 +103,31 @@ namespace EE {
             return response;
         }
 
+        [Serializable]
+        private struct SendMailRequest {
+            public string recipient;
+            public string subject;
+            public string body;
+        }
+
         public static bool SendMail(string recipient, string subject, string body) {
-            var request = new {
-                recipient,
-                subject,
-                body
+            var request = new SendMailRequest {
+                recipient = recipient,
+                subject = subject,
+                body = body
             };
             var response = _bridge.Call(kSendMail, JsonUtility.ToJson(recipient));
             return Utils.ToBool(response);
         }
 
+        [Serializable]
+        private struct TestConnectionRequest {
+            public string host_name;
+            public float time_out;
+        }
+
         public static async Task<bool> TestConnection(string hostName, float timeOut) {
-            var request = new {
+            var request = new TestConnectionRequest {
                 host_name = hostName,
                 time_out = timeOut,
             };

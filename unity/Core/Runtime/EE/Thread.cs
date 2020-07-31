@@ -13,6 +13,9 @@ namespace EE {
         private static readonly Dictionary<int, Action> _delayedQueue = new Dictionary<int, Action>();
         private static SpinLock _delayedLock = new SpinLock();
 
+        private static Func<bool> _libraryThreadChecker;
+        private static Func<Action, bool> _libraryThreadExecuter;
+
         private static readonly IThreadImpl _impl =
 #if UNITY_EDITOR
             new ThreadImplEditor();
@@ -82,6 +85,14 @@ namespace EE {
 
         private static void ee_runOnMainThreadDelayedCallback(int key) {
             PopDelayedRunnable(key)();
+        }
+
+        public static bool IsLibraryThread() {
+            return _libraryThreadChecker();
+        }
+
+        public static bool RunOnLibraryThread(Action runnable) {
+            return _libraryThreadExecuter(runnable);
         }
 
         public static bool IsMainThread() {

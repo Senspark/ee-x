@@ -5,8 +5,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -15,8 +15,15 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
+}
+
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_vungle', [
+        'ee/Vungle*',
+        'ee/vungle/*.hpp'
+    ])
 }
 
 dependencies {

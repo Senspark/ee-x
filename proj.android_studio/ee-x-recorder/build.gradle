@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -11,11 +11,11 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.ext.buildPrefab) {
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     applyPrefabSettings(this, 'ee_x_recorder', [
         'ee/Recorder*',
         'ee/recorder/*.hpp'

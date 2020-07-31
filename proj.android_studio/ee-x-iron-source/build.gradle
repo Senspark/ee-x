@@ -17,8 +17,15 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
+}
+
+if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
+    applyPrefabSettings(this, 'ee_x_iron_source', [
+        'ee/IronSource*',
+        'ee/iron_source/*.hpp'
+    ])
 }
 
 dependencies {

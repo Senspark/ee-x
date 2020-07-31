@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0-beta02'
+        classpath 'com.android.tools.build:gradle:4.1.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
     }
@@ -22,15 +22,17 @@ allprojects {
 }
 
 ext {
-    compileSdkVersion = 29
-    buildToolsVersion = '29.0.2'
-    targetSdkVersion = 29
+    compileSdkVersion = 30
+    buildToolsVersion = '30.0.1'
+    targetSdkVersion = 30
     buildPrefab = true
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
     def projectDir = project.projectDir
     project.android {
+        ndkVersion '21.3.6528147'
+
         buildFeatures {
             prefabPublishing true
         }

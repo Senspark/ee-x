@@ -41,6 +41,7 @@ Self::CocosAdView(const std::shared_ptr<IAdView>& ad)
                 });
             },
     });
+    ad_->setAnchor(0.0f, 1.0f); // Reserved anchor.
     metrics_ = std::make_unique<Metrics>(Metrics::fromPoint(1));
     sceneHeight_ = cocos2d::Director::getInstance()->getWinSize().height;
 }

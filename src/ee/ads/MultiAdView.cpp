@@ -61,6 +61,8 @@ void Self::destroy() {
     }
     items_.clear();
     handle_->clear();
+    activeItem_.reset();
+    loadedItems_.clear();
 }
 
 bool Self::isLoaded() const {

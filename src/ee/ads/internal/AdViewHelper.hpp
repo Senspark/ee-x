@@ -18,10 +18,8 @@ namespace ee {
 namespace ads {
 class AdViewHelper {
 public:
-    using SizeProvider = std::function<std::pair<int, int>()>;
-
     explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
-                          const std::pair<int, int>& size);
+                          const std::pair<float, float>& size);
 
     bool isLoaded() const;
     void load();
@@ -29,27 +27,27 @@ public:
     std::pair<float, float> getAnchor() const;
     void setAnchor(float x, float y);
 
-    std::pair<int, int> getPosition() const;
-    void setPosition(int x, int y);
+    std::pair<float, float> getPosition() const;
+    void setPosition(float x, float y);
 
-    std::pair<int, int> getSize() const;
-    void setSize(int width, int height);
+    std::pair<float, float> getSize() const;
+    void setSize(float width, float height);
 
     bool isVisible() const;
     void setVisible(bool visible);
 
 private:
-    std::pair<int, int> getPositionTopLeft() const;
-    void setPositionTopLeft(int x, int y);
+    std::pair<float, float> getPositionTopLeft() const;
+    void setPositionTopLeft(float x, float y);
 
-    const std::pair<int, int> getSizeInternal() const;
-    void setSizeInternal(int width, int height);
+    const std::pair<float, float> getSizeInternal() const;
+    void setSizeInternal(float width, float height);
 
     const std::pair<float, float> getAnchorInternal() const;
     void setAnchorInternal(float x, float y);
 
-    const std::pair<int, int> getPositionInternal() const;
-    void setPositionInternal(int x, int y);
+    const std::pair<float, float> getPositionInternal() const;
+    void setPositionInternal(float x, float y);
 
     bool isVisibleInternal() const;
     void setVisibleInternal(bool visible);
@@ -58,8 +56,8 @@ private:
     MessageHelper helper_;
 
     std::pair<float, float> anchor_;
-    std::pair<int, int> position_; ///< @note Top left position.
-    std::pair<int, int> size_;
+    std::pair<float, float> position_; ///< @note Top left position.
+    std::pair<float, float> size_;
     bool visible_;
 };
 } // namespace ads

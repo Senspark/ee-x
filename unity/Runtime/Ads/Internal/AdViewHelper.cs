@@ -4,7 +4,7 @@ using System.Drawing;
 using UnityEngine;
 
 namespace EE.Internal {
-    public class AdViewHelper {
+    internal class AdViewHelper {
         private readonly IMessageBridge _bridge;
         private readonly MessageHelper _helper;
         private PointF _anchor;

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public class AsyncHelper<Result> : IAsyncHelper<Result> {
+    internal class AsyncHelper<Result> : IAsyncHelper<Result> {
         private TaskCompletionSource<Result> _source;
         private Action<Result> _finalizer;
 

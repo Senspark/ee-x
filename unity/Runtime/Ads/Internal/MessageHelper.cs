@@ -1,5 +1,5 @@
 namespace EE.Internal {
-    public class MessageHelper {
+    internal class MessageHelper {
         private readonly string _prefix;
         private readonly string _adId;
 

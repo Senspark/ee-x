@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public class GuardedAdView
+    internal class GuardedAdView
         : ObserverManager<IAdViewObserver>, IAdView {
         private readonly IAdView _ad;
         private bool _loading;

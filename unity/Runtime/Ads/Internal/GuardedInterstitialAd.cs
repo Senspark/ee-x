@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public class GuardedInterstitialAd
+    internal class GuardedInterstitialAd
         : ObserverManager<IInterstitialAdObserver>, IInterstitialAd {
         private readonly IInterstitialAd _ad;
         private bool _loading;

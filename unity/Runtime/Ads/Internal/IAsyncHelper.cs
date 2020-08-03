@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public interface IAsyncHelper<Result> {
+    internal interface IAsyncHelper<Result> {
         /// <summary>
         /// Checks whether this helper is processing.
         /// </summary>

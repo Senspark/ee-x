@@ -8,7 +8,7 @@ using UnityEngine;
 namespace EE.Internal {
     using MessageHandler = Func<string, string>;
 
-    public class MessageBridge : IMessageBridge {
+    internal class MessageBridge : IMessageBridge {
         public static MessageBridge Instance { get; } = new MessageBridge();
 
         private int _callbackCounter;

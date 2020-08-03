@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_PLAY_FWD_HPP_
-#define EE_X_PLAY_FWD_HPP_
+#ifndef EE_X_PLAY_FWD_HPP
+#define EE_X_PLAY_FWD_HPP
 
 #ifdef __cplusplus
 
@@ -23,4 +23,4 @@ using Play = play::Bridge;
 
 #endif // __cplusplus
 
-#endif /* EE_X_PLAY_FWD_HPP_ */
+#endif /* EE_X_PLAY_FWD_HPP */

@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef EE_X_FACEBOOK_FWD_HPP_
-#define EE_X_FACEBOOK_FWD_HPP_
+#ifndef EE_X_FACEBOOK_FWD_HPP
+#define EE_X_FACEBOOK_FWD_HPP
 
 #ifdef __cplusplus
 
@@ -57,4 +57,4 @@ using FacebookGraphRequest = facebook::GraphRequest;
 
 #endif // __cplusplus
 
-#endif /* EE_X_FACEBOOK_FWD_HPP_ */
+#endif /* EE_X_FACEBOOK_FWD_HPP */

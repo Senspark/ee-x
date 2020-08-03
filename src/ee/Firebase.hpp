@@ -9,6 +9,8 @@
 #ifndef EE_X_FIREBASE_HPP
 #define EE_X_FIREBASE_HPP
 
+#ifdef __cplusplus
+
 #include <ee/Core.hpp>
 
 #include "ee/FirebaseFwd.hpp"
@@ -45,5 +47,7 @@
 #if __has_include("ee/firebase/storage/FirebaseStorageBridge.hpp")
 #include "ee/firebase/storage/FirebaseStorageBridge.hpp"
 #endif
+
+#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_HPP */

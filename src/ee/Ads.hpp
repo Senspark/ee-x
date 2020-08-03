@@ -9,6 +9,8 @@
 #ifndef EE_X_ADS_HPP
 #define EE_X_ADS_HPP
 
+#ifdef __cplusplus
+
 #include <ee/Core.hpp>
 
 #include "ee/ads/IAdView.hpp"
@@ -20,5 +22,7 @@
 #include "ee/ads/NullAdView.hpp"
 #include "ee/ads/NullInterstitialAd.hpp"
 #include "ee/ads/NullRewardedAd.hpp"
+
+#endif // __cplusplus
 
 #endif /* EE_X_ADS_HPP */

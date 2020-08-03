@@ -20,6 +20,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.framework = 'Foundation'
+  spec.static_framework = true
 
   spec.requires_arc = false
 
@@ -63,7 +64,8 @@ Pod::Spec.new do |spec|
       'LD_RUNPATH_SEARCH_PATHS' => [
         '/usr/lib/swift',
         # Fix: dyld: Library not loaded: @rpath/libswiftCore.dylib
-        '@executable_path/Frameworks'
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
@@ -305,7 +307,8 @@ Pod::Spec.new do |spec|
       'src/ee/cocos/Android.mk',
       'src/ee/cocos/CMakeLists.txt',
       'src/ee/cocos/generate.sh',
-      'src/ee/cocos/sourcelist.cmake'
+      'src/ee/cocos/sourcelist.cmake',
+      'src/ee/cocos/*.{frag,vert}'
 
     s.xcconfig = {
       'GCC_PREPROCESSOR_DEFINITIONS' => [
@@ -591,6 +594,7 @@ Pod::Spec.new do |spec|
       'src/ee/tenjin/generate.sh',
       'src/ee/tenjin/sourcelist.cmake'
 
+    s.platform = :ios
     s.dependency 'ee-x/core'
     s.dependency 'TenjinSDK'
   end
@@ -660,10 +664,17 @@ Pod::Spec.new do |spec|
       'src/ee/store/internal/*',
       'src/ee/store/private/*'
 
+    s.exclude_files =
+      'src/ee/store/Android.mk',
+      'src/ee/store/CMakeLists.txt',
+      'src/ee/store/generate.sh',
+      'src/ee/store/sourcelist.cmake'
+
     s.dependency 'ee-x/core'
     s.dependency 'TPInAppReceipt'
   end
 
+=begin
   spec.subspec 'jsb-core' do |s|
     s.source_files =
       'src/ee/jsb/jsb_core*',

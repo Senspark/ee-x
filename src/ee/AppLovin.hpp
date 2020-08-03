@@ -6,12 +6,16 @@
 //
 //
 
-#ifndef EE_X_APP_LOVIN_ADS_HPP
-#define EE_X_APP_LOVIN_ADS_HPP
+#ifndef EE_X_APP_LOVIN_HPP
+#define EE_X_APP_LOVIN_HPP
+
+#ifdef __cplusplus
 
 #include <ee/Ads.hpp>
 
 #include "ee/AppLovinFwd.hpp"
 #include "ee/app_lovin/AppLovinBridge.hpp"
 
-#endif /* EE_X_APP_LOVIN_ADS_HPP */
+#endif // __cplusplus
+
+#endif /* EE_X_APP_LOVIN_HPP */

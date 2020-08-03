@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_MACRO_HPP_
-#define EE_X_MACRO_HPP_
+#ifndef EE_X_MACRO_HPP
+#define EE_X_MACRO_HPP
 
 #if defined(__ANDROID__)
 #define EE_X_ANDROID
@@ -26,4 +26,4 @@
 #endif // TARGET_IPHONE_SIMULATOR
 #endif // __ANDROID__
 
-#endif /* EE_X_MACRO_HPP_ */
+#endif /* EE_X_MACRO_HPP */

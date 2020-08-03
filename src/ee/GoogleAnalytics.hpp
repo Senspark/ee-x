@@ -9,6 +9,8 @@
 #ifndef EE_X_GOOGLE_ANALYTICS_HPP
 #define EE_X_GOOGLE_ANALYTICS_HPP
 
+#ifdef __cplusplus
+
 #include <ee/Core.hpp>
 
 #include "ee/GoogleAnalyticsFwd.hpp"
@@ -21,5 +23,7 @@
 #include "ee/google/GoogleAnalyticsSocialBuilder.hpp"
 #include "ee/google/GoogleAnalyticsTimingBuilder.hpp"
 #include "ee/google/GoogleAnalyticsTracker.hpp"
+
+#endif // __cplusplus
 
 #endif /* EE_X_GOOGLE_ANALYTICS_HPP */

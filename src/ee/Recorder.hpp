@@ -6,9 +6,13 @@
 #ifndef EE_X_RECORDER_HPP
 #define EE_X_RECORDER_HPP
 
+#ifdef __cplusplus
+
 #include <ee/Core.hpp>
 
 #include "ee/RecorderFwd.hpp"
 #include "ee/recorder/RecorderBridge.hpp"
+
+#endif // __cplusplus
 
 #endif /* EE_X_RECORDER_HPP */

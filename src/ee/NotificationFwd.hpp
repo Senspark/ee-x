@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_NOTIFICATION_FWD_HPP_
-#define EE_X_NOTIFICATION_FWD_HPP_
+#ifndef EE_X_NOTIFICATION_FWD_HPP
+#define EE_X_NOTIFICATION_FWD_HPP
 
 #ifdef __cplusplus
 
@@ -25,4 +25,4 @@ using notification::NotificationBuilder;
 
 #endif // __cplusplus
 
-#endif /* EE_X_NOTIFICATION_FWD_HPP_ */
+#endif /* EE_X_NOTIFICATION_FWD_HPP */

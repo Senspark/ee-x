@@ -63,7 +63,8 @@ Pod::Spec.new do |spec|
       'LD_RUNPATH_SEARCH_PATHS' => [
         '/usr/lib/swift',
         # Fix: dyld: Library not loaded: @rpath/libswiftCore.dylib
-        '@executable_path/Frameworks'
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',

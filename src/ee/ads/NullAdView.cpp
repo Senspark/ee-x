@@ -63,6 +63,8 @@ std::pair<float, float> Self::getSize() const {
 void Self::setSize(float width, float height) {
     positionX_ = positionX_ - static_cast<int>((width - width_) * anchorX_);
     positionY_ = positionY_ - static_cast<int>((height - height_) * anchorY_);
+    width_ = width;
+    height_ = height;
 }
 
 bool Self::isVisible() const {

@@ -17,7 +17,7 @@ namespace ads {
 using Self = AdViewHelper;
 
 Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
-                   const std::pair<int, int>& size)
+                   const std::pair<float, float>& size)
     : bridge_(bridge)
     , helper_(helper)
     , anchor_(0, 0)
@@ -25,11 +25,11 @@ Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
     , size_(size)
     , visible_(false) {}
 
-const std::pair<int, int> Self::getSizeInternal() const {
+const std::pair<float, float> Self::getSizeInternal() const {
     return size_;
 }
 
-void Self::setSizeInternal(int width, int height) {
+void Self::setSizeInternal(float width, float height) {
     size_ = std::pair(width, height);
 }
 
@@ -41,11 +41,11 @@ void Self::setAnchorInternal(float x, float y) {
     anchor_ = std::pair(x, y);
 }
 
-const std::pair<int, int> Self::getPositionInternal() const {
+const std::pair<float, float> Self::getPositionInternal() const {
     return position_;
 }
 
-void Self::setPositionInternal(int x, int y) {
+void Self::setPositionInternal(float x, float y) {
     position_ = std::pair(x, y);
 }
 
@@ -73,26 +73,25 @@ void Self::setAnchor(float x, float y) {
     auto [width, height] = getSizeInternal();
     auto [anchorX, anchorY] = getAnchorInternal();
     auto [positionX, positionY] = getPositionInternal();
-    setPositionTopLeft(positionX - static_cast<int>((x - anchorX) * width),
-                       positionY - static_cast<int>((y - anchorY) * height));
+    setPositionTopLeft(positionX - (x - anchorX) * width,
+                       positionY - (y - anchorY) * height);
     setAnchorInternal(x, y);
 }
 
-std::pair<int, int> Self::getPosition() const {
+std::pair<float, float> Self::getPosition() const {
     auto [width, height] = getSizeInternal();
     auto [anchorX, anchorY] = getAnchorInternal();
     auto [x, y] = getPositionInternal();
     return std::pair(x + anchorX * width, y + anchorY * height);
 }
 
-void Self::setPosition(int x, int y) {
+void Self::setPosition(float x, float y) {
     auto [width, height] = getSizeInternal();
     auto [anchorX, anchorY] = getAnchorInternal();
-    setPositionTopLeft(x - static_cast<int>(anchorX * width),
-                       y - static_cast<int>(anchorY * height));
+    setPositionTopLeft(x - anchorX * width, y - anchorY * height);
 }
 
-std::pair<int, int> Self::getPositionTopLeft() const {
+std::pair<float, float> Self::getPositionTopLeft() const {
     return getPositionInternal();
     /* Direct call.
     assert(isMainThread());
@@ -104,15 +103,15 @@ std::pair<int, int> Self::getPositionTopLeft() const {
      */
 }
 
-void Self::setPositionTopLeft(int x, int y) {
+void Self::setPositionTopLeft(float x, float y) {
     nlohmann::json json;
-    json["x"] = x;
-    json["y"] = y;
+    json["x"] = static_cast<int>(x);
+    json["y"] = static_cast<int>(y);
     bridge_.call(helper_.setPosition(), json.dump());
     setPositionInternal(x, y);
 }
 
-std::pair<int, int> Self::getSize() const {
+std::pair<float, float> Self::getSize() const {
     return getSizeInternal();
     /* Direct call.
     assert(isMainThread());
@@ -124,17 +123,16 @@ std::pair<int, int> Self::getSize() const {
      */
 }
 
-void Self::setSize(int width, int height) {
+void Self::setSize(float width, float height) {
     auto [currentWidth, currentHeight] = getSizeInternal();
     auto [anchorX, anchorY] = getAnchorInternal();
     auto [x, y] = getPositionInternal();
-    setPositionTopLeft(
-        x - static_cast<int>((width - currentWidth) * anchorX),
-        y - static_cast<int>((height - currentHeight) * anchorY));
+    setPositionTopLeft(x - (width - currentWidth) * anchorX,
+                       y - (height - currentHeight) * anchorY);
 
     nlohmann::json json;
-    json["width"] = width;
-    json["height"] = height;
+    json["width"] = static_cast<int>(width);
+    json["height"] = static_cast<int>(height);
     bridge_.call(helper_.setSize(), json.dump());
     setSizeInternal(width, height);
 }

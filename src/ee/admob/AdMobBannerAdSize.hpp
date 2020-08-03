@@ -30,7 +30,7 @@ enum class BannerAdSize {
 
     /// kGADAdSizeMediumRectangle.
     /// Typically 300x250.
-    MediumReactangle,
+    MediumRectangle,
 };
 } // namespace admob
 } // namespace ee

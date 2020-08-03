@@ -814,6 +814,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/soomla-cocos2dx-store'
   end
+=end
 end
 
 #  post_install do |installer_representation|

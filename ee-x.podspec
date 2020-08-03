@@ -822,7 +822,9 @@ Pod::Spec.new do |spec|
 
     s.user_target_xcconfig = {
       'LD_RUNPATH_SEARCH_PATHS' => [
-        '/usr/lib/swift'
+        '/usr/lib/swift',
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
@@ -845,6 +847,27 @@ Pod::Spec.new do |spec|
       'src/ee/ads/private/*'
 
     s.dependency 'ee-x/cs-core'
+  end
+
+  spec.subspec 'cs-admob' do |s|
+    s.source_files =
+      'src/ee/admob/**/*.swfit'
+
+    s.private_header_files =
+      'src/ee/admob/internal/*',
+      'src/ee/admob/private/*'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+  end
+
+  spec.subspec 'cs-admob-mediation' do |s|
+    s.dependency 'ee-x/cs-admob'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.13.0.0'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '5.9.0.1'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '6.17.0.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.6.0'
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
   end
 end
 

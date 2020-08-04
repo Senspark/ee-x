@@ -30,8 +30,8 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif // __cplusplus
-
 #include "ee/core/SafeObserverManager.inl"
+
+#endif // __cplusplus
 
 #endif // EE_X_SAFE_OBSERVER_MANAGER_HPP

@@ -3,8 +3,10 @@
 //
 //
 
-#ifndef EE_X_FACEBOOK_HEADER_HPP_
-#define EE_X_FACEBOOK_HEADER_HPP_
+#ifndef EE_X_FACEBOOK_HPP
+#define EE_X_FACEBOOK_HPP
+
+#ifdef __cplusplus
 
 #include <ee/Core.hpp>
 
@@ -15,4 +17,6 @@
 #include "ee/facebook/IFacebookBridge.hpp"
 #include "ee/facebook/IFacebookDelegate.hpp"
 
-#endif /* EE_X_FACEBOOK_HEADER_HPP_ */
+#endif // __cplusplus
+
+#endif /* EE_X_FACEBOOK_HPP */

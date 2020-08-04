@@ -22,8 +22,8 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif // __cplusplus
-
 #include "ee/core/ObserverBinder.inl"
+
+#endif // __cplusplus
 
 #endif // EE_X_OBSERVER_BINDER_HPP

@@ -1,6 +1,8 @@
 #ifndef EE_X_COCOS_HPP
 #define EE_X_COCOS_HPP
 
+#ifdef __cplusplus
+
 #include <ee/Core.hpp>
 
 #include "ee/CocosFwd.hpp"
@@ -81,5 +83,7 @@
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
 #include "ee/cocos/CocosAdView.hpp"
+
+#endif // __cplusplus
 
 #endif // EE_X_COCOS_HPP

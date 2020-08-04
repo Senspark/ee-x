@@ -20,6 +20,7 @@ Pod::Spec.new do |spec|
   }
 
   spec.framework = 'Foundation'
+  spec.static_framework = true
 
   spec.requires_arc = false
 
@@ -39,7 +40,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/*'
 
     s.private_header_files =
-      'src/ee/core/private/**'
+      'src/ee/core/private/*.{h,hpp,inl}'
     
     s.exclude_files =
       'src/ee/core/Android.mk',
@@ -63,7 +64,8 @@ Pod::Spec.new do |spec|
       'LD_RUNPATH_SEARCH_PATHS' => [
         '/usr/lib/swift',
         # Fix: dyld: Library not loaded: @rpath/libswiftCore.dylib
-        '@executable_path/Frameworks'
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
@@ -84,8 +86,8 @@ Pod::Spec.new do |spec|
       'src/ee/ads/**/*'
 
     s.private_header_files =
-      'src/ee/ads/internal/*',
-      'src/ee/ads/private/*'
+      'src/ee/ads/internal/*.{h,hpp,inl}',
+      'src/ee/ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/ads/Android.mk',
@@ -102,8 +104,8 @@ Pod::Spec.new do |spec|
       'src/ee/admob/**/*'
 
     s.private_header_files =
-      'src/ee/admob/internal/*',
-      'src/ee/admob/private/*'
+      'src/ee/admob/internal/*.{h,hpp,inl}',
+      'src/ee/admob/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/admob/Android.mk',
@@ -144,8 +146,8 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/**/*'
 
     s.private_header_files =
-      'src/ee/app_lovin/internal/*',
-      'src/ee/app_lovin/private/*'
+      'src/ee/app_lovin/internal/*.{h,hpp,inl}',
+      'src/ee/app_lovin/private/*.{h,hpp,inl}'
     
     s.exclude_files =
       'src/ee/app_lovin/Android.mk',
@@ -165,8 +167,8 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/**/*'
 
     s.private_header_files =
-      'src/ee/facebook_ads/internal/*',
-      'src/ee/facebook_ads/private/*'
+      'src/ee/facebook_ads/internal/*.{h,hpp,inl}',
+      'src/ee/facebook_ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/facebook_ads/Android.mk',
@@ -186,8 +188,8 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/**/*'
 
     s.private_header_files =
-      'src/ee/iron_source/internal/*',
-      'src/ee/iron_source/private/*'
+      'src/ee/iron_source/internal/*.{h,hpp,inl}',
+      'src/ee/iron_source/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/iron_source/Android.mk',
@@ -227,8 +229,8 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/**/*'
 
     s.private_header_files =
-      'src/ee/unity_ads/internal/*',
-      'src/ee/unity_ads/private/*'
+      'src/ee/unity_ads/internal/*.{h,hpp,inl}',
+      'src/ee/unity_ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/unity_ads/Android.mk',
@@ -248,8 +250,8 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/**/*'
 
     s.private_header_files =
-      'src/ee/vungle/internal/*',
-      'src/ee/vungle/private/*'
+      'src/ee/vungle/internal/*.{h,hpp,inl}',
+      'src/ee/vungle/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/vungle/Android.mk',
@@ -269,8 +271,8 @@ Pod::Spec.new do |spec|
       'src/ee/apps_flyer/**/*'
 
     s.private_header_files =
-      'src/ee/apps_flyer/internal/*',
-      'src/ee/apps_flyer/private/*'
+      'src/ee/apps_flyer/internal/*.{h,hpp,inl}',
+      'src/ee/apps_flyer/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/apps_flyer/Android.mk',
@@ -305,7 +307,8 @@ Pod::Spec.new do |spec|
       'src/ee/cocos/Android.mk',
       'src/ee/cocos/CMakeLists.txt',
       'src/ee/cocos/generate.sh',
-      'src/ee/cocos/sourcelist.cmake'
+      'src/ee/cocos/sourcelist.cmake',
+      'src/ee/cocos/*.{frag,vert}'
 
     s.xcconfig = {
       'GCC_PREPROCESSOR_DEFINITIONS' => [
@@ -342,8 +345,8 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/**/*'
 
     s.private_header_files =
-      'src/ee/facebook/internal/*',
-      'src/ee/facebook/private/*'
+      'src/ee/facebook/internal/*.{h,hpp,inl}',
+      'src/ee/facebook/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/facebook/Android.mk',
@@ -377,7 +380,7 @@ Pod::Spec.new do |spec|
       # Conflict google_play_services/availability.h and macOS Availability.h
       # 'third_party/firebase_cpp_sdk/include/google_play_services/availability.h'
 
-    s.private_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
+    s.private_header_files = 'third_party/firebase_cpp_sdk/include/firebase/**/*'
 
     s.exclude_files =
       'third_party/firebase_cpp_sdk/include/firebase/auth/*',
@@ -398,7 +401,7 @@ Pod::Spec.new do |spec|
       'src/ee/firebase/core/**/*'
 
     s.private_header_files =
-      'src/ee/firebase/core/private/*'
+      'src/ee/firebase/core/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/core/Android.mk',
@@ -428,7 +431,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
-    s.private_header_files = 'src/ee/firebase/crashlytics/private/*'
+    s.private_header_files = 'src/ee/firebase/crashlytics/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/crashlytics/Android.mk',
@@ -498,7 +501,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ee/firebase/performance/**/*'
-    s.private_header_files = 'src/ee/firebase/performance/private/*'
+    s.private_header_files = 'src/ee/firebase/performance/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/performance/Android.mk',
@@ -516,8 +519,8 @@ Pod::Spec.new do |spec|
       'src/ee/google/**/*'
 
     s.private_header_files =
-      'src/ee/google/internal/*',
-      'src/ee/google/private/*'
+      'src/ee/google/internal/*.{h,hpp,inl}',
+      'src/ee/google/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/google/Android.mk',
@@ -551,8 +554,8 @@ Pod::Spec.new do |spec|
       'src/ee/play/**/*'
 
     s.private_header_files =
-      'src/ee/play/internal/*',
-      'src/ee/play/private/*'
+      'src/ee/play/internal/*.{h,hpp,inl}',
+      'src/ee/play/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/play/Android.mk',
@@ -583,7 +586,7 @@ Pod::Spec.new do |spec|
       'src/ee/tenjin/**/*'
 
     s.private_header_files =
-      'src/ee/tenjin/private/*'
+      'src/ee/tenjin/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/tenjin/Android.mk',
@@ -591,25 +594,26 @@ Pod::Spec.new do |spec|
       'src/ee/tenjin/generate.sh',
       'src/ee/tenjin/sourcelist.cmake'
 
+    s.platform = :ios
     s.dependency 'ee-x/core'
     s.dependency 'TenjinSDK'
   end
 
   spec.subspec 'jansson' do |s| 
     s.source_files = 'third_party/jansson/src/**/*'
-    s.private_header_files = 'third_party/jansson/src/**/*'
+    s.private_header_files = 'third_party/jansson/src/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/jansson/src'
   end
 
   spec.subspec 'keeva' do |s|
     s.source_files = 'third_party/keeva/src/**/*'
-    s.private_header_files = 'third_party/keeva/src/**/*'
+    s.private_header_files = 'third_party/keeva/src/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/keeva/src'
   end
 
   spec.subspec 'soomla-core-ios' do |s|
     s.source_files = 'third_party/soomla/core/src/ios/**/*'
-    s.private_header_files = 'third_party/soomla/core/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/core/src/ios/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/soomla/core/src'
     s.dependency 'ee-x/keeva'
   end
@@ -636,7 +640,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-store-ios' do |s| 
     s.source_files = 'third_party/soomla/store/src/ios/**/*'
-    s.private_header_files = 'third_party/soomla/store/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/store/src/ios/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.dependency 'ee-x/soomla-core-ios'
   end
@@ -657,13 +661,20 @@ Pod::Spec.new do |spec|
       'src/ee/store/**/*'
 
     s.private_header_files =
-      'src/ee/store/internal/*',
-      'src/ee/store/private/*'
+      'src/ee/store/internal/*.{h,hpp,inl}',
+      'src/ee/store/private/*.{h,hpp,inl}'
+
+    s.exclude_files =
+      'src/ee/store/Android.mk',
+      'src/ee/store/CMakeLists.txt',
+      'src/ee/store/generate.sh',
+      'src/ee/store/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
     s.dependency 'TPInAppReceipt'
   end
 
+=begin
   spec.subspec 'jsb-core' do |s|
     s.source_files =
       'src/ee/jsb/jsb_core*',
@@ -802,6 +813,64 @@ Pod::Spec.new do |spec|
     
     s.dependency 'ee-x/jsb-core'
     s.dependency 'ee-x/soomla-cocos2dx-store'
+  end
+=end
+
+  spec.subspec 'cs-core' do |s|
+    s.source_files =
+      'src/ee/ee.h',
+      'src/ee/Macro.hpp',
+      'src/ee/core/**/*.swift',
+      'src/ee/core/**/EE*',
+      'src/ee/core/internal/SwiftBridge*'
+
+    s.xcconfig = {
+      'GCC_PREPROCESSOR_DEFINITIONS' => [
+        '$(inherited)',
+        'EE_X_UNITY'
+      ].join(' ')
+    }
+
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift',
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+      ].join(' '),
+      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
+      'DEAD_CODE_STRIPPING' => 'YES'
+    }
+
+    s.dependency 'ReachabilitySwift'
+    s.dependency 'RxSwift'
+  end
+
+  spec.subspec 'cs-ads' do |s|
+    s.source_files =
+      'src/ee/ads/**/*.swift'
+
+    s.dependency 'ee-x/cs-core'
+  end
+
+  spec.subspec 'cs-admob' do |s|
+    s.source_files =
+      'src/ee/admob/**/*.swift'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+  end
+
+  spec.subspec 'cs-admob-mediation' do |s|
+    s.dependency 'ee-x/cs-admob'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.13.0.0'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '5.9.0.1'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '6.17.0.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.6.0'
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
   end
 end
 

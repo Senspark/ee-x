@@ -15,6 +15,7 @@
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/SpinLock.hpp"
+#include "ee/core/internal/SwiftBridge.hpp"
 
 #ifdef EE_X_ANDROID
 #include "ee/core/internal/JniMethodInfo.hpp"

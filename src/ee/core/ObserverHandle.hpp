@@ -31,8 +31,8 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif // __cplusplus
-
 #include "ee/core/ObserverHandle.inl"
+
+#endif // __cplusplus
 
 #endif // EE_X_OBSERVER_HANDLE_HPP

@@ -17,11 +17,16 @@ android {
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
     publishToMaven(this, 'admob-mediation')
+    dependencies {
+        api 'com.senspark.ee:admob:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-admob')
+    }
 }
 
 dependencies {
-    api project(':ee-x-admob')
-
     // https://bintray.com/google/mobile-ads-adapters-android
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
     implementation 'com.google.ads.mediation:applovin:9.13.1.0'

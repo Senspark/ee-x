@@ -26,10 +26,16 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
     publishToMaven(this, 'admob')
+    dependencies {
+        api 'com.senspark.ee:ads:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-ads')
+    }
 }
 
 dependencies {
-    api project(':ee-x-ads')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:19.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

@@ -40,7 +40,7 @@ Pod::Spec.new do |spec|
       'src/ee/core/**/*'
 
     s.private_header_files =
-      'src/ee/core/private/**'
+      'src/ee/core/private/*.{h,hpp,inl}'
     
     s.exclude_files =
       'src/ee/core/Android.mk',
@@ -86,8 +86,8 @@ Pod::Spec.new do |spec|
       'src/ee/ads/**/*'
 
     s.private_header_files =
-      'src/ee/ads/internal/*',
-      'src/ee/ads/private/*'
+      'src/ee/ads/internal/*.{h,hpp,inl}',
+      'src/ee/ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/ads/Android.mk',
@@ -104,8 +104,8 @@ Pod::Spec.new do |spec|
       'src/ee/admob/**/*'
 
     s.private_header_files =
-      'src/ee/admob/internal/*',
-      'src/ee/admob/private/*'
+      'src/ee/admob/internal/*.{h,hpp,inl}',
+      'src/ee/admob/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/admob/Android.mk',
@@ -146,8 +146,8 @@ Pod::Spec.new do |spec|
       'src/ee/app_lovin/**/*'
 
     s.private_header_files =
-      'src/ee/app_lovin/internal/*',
-      'src/ee/app_lovin/private/*'
+      'src/ee/app_lovin/internal/*.{h,hpp,inl}',
+      'src/ee/app_lovin/private/*.{h,hpp,inl}'
     
     s.exclude_files =
       'src/ee/app_lovin/Android.mk',
@@ -167,8 +167,8 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/**/*'
 
     s.private_header_files =
-      'src/ee/facebook_ads/internal/*',
-      'src/ee/facebook_ads/private/*'
+      'src/ee/facebook_ads/internal/*.{h,hpp,inl}',
+      'src/ee/facebook_ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/facebook_ads/Android.mk',
@@ -188,8 +188,8 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/**/*'
 
     s.private_header_files =
-      'src/ee/iron_source/internal/*',
-      'src/ee/iron_source/private/*'
+      'src/ee/iron_source/internal/*.{h,hpp,inl}',
+      'src/ee/iron_source/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/iron_source/Android.mk',
@@ -229,8 +229,8 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/**/*'
 
     s.private_header_files =
-      'src/ee/unity_ads/internal/*',
-      'src/ee/unity_ads/private/*'
+      'src/ee/unity_ads/internal/*.{h,hpp,inl}',
+      'src/ee/unity_ads/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/unity_ads/Android.mk',
@@ -250,8 +250,8 @@ Pod::Spec.new do |spec|
       'src/ee/vungle/**/*'
 
     s.private_header_files =
-      'src/ee/vungle/internal/*',
-      'src/ee/vungle/private/*'
+      'src/ee/vungle/internal/*.{h,hpp,inl}',
+      'src/ee/vungle/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/vungle/Android.mk',
@@ -271,8 +271,8 @@ Pod::Spec.new do |spec|
       'src/ee/apps_flyer/**/*'
 
     s.private_header_files =
-      'src/ee/apps_flyer/internal/*',
-      'src/ee/apps_flyer/private/*'
+      'src/ee/apps_flyer/internal/*.{h,hpp,inl}',
+      'src/ee/apps_flyer/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/apps_flyer/Android.mk',
@@ -345,8 +345,8 @@ Pod::Spec.new do |spec|
       'src/ee/facebook/**/*'
 
     s.private_header_files =
-      'src/ee/facebook/internal/*',
-      'src/ee/facebook/private/*'
+      'src/ee/facebook/internal/*.{h,hpp,inl}',
+      'src/ee/facebook/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/facebook/Android.mk',
@@ -380,7 +380,7 @@ Pod::Spec.new do |spec|
       # Conflict google_play_services/availability.h and macOS Availability.h
       # 'third_party/firebase_cpp_sdk/include/google_play_services/availability.h'
 
-    s.private_header_files = 'third_party/firebase_cpp_sdk/include/**/*'
+    s.private_header_files = 'third_party/firebase_cpp_sdk/include/firebase/**/*'
 
     s.exclude_files =
       'third_party/firebase_cpp_sdk/include/firebase/auth/*',
@@ -401,7 +401,7 @@ Pod::Spec.new do |spec|
       'src/ee/firebase/core/**/*'
 
     s.private_header_files =
-      'src/ee/firebase/core/private/*'
+      'src/ee/firebase/core/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/core/Android.mk',
@@ -431,7 +431,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ee/firebase/crashlytics/**/*'
-    s.private_header_files = 'src/ee/firebase/crashlytics/private/*'
+    s.private_header_files = 'src/ee/firebase/crashlytics/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/crashlytics/Android.mk',
@@ -501,7 +501,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ee/firebase/performance/**/*'
-    s.private_header_files = 'src/ee/firebase/performance/private/*'
+    s.private_header_files = 'src/ee/firebase/performance/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/firebase/performance/Android.mk',
@@ -519,8 +519,8 @@ Pod::Spec.new do |spec|
       'src/ee/google/**/*'
 
     s.private_header_files =
-      'src/ee/google/internal/*',
-      'src/ee/google/private/*'
+      'src/ee/google/internal/*.{h,hpp,inl}',
+      'src/ee/google/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/google/Android.mk',
@@ -554,8 +554,8 @@ Pod::Spec.new do |spec|
       'src/ee/play/**/*'
 
     s.private_header_files =
-      'src/ee/play/internal/*',
-      'src/ee/play/private/*'
+      'src/ee/play/internal/*.{h,hpp,inl}',
+      'src/ee/play/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/play/Android.mk',
@@ -586,7 +586,7 @@ Pod::Spec.new do |spec|
       'src/ee/tenjin/**/*'
 
     s.private_header_files =
-      'src/ee/tenjin/private/*'
+      'src/ee/tenjin/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/tenjin/Android.mk',
@@ -601,19 +601,19 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'jansson' do |s| 
     s.source_files = 'third_party/jansson/src/**/*'
-    s.private_header_files = 'third_party/jansson/src/**/*'
+    s.private_header_files = 'third_party/jansson/src/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/jansson/src'
   end
 
   spec.subspec 'keeva' do |s|
     s.source_files = 'third_party/keeva/src/**/*'
-    s.private_header_files = 'third_party/keeva/src/**/*'
+    s.private_header_files = 'third_party/keeva/src/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/keeva/src'
   end
 
   spec.subspec 'soomla-core-ios' do |s|
     s.source_files = 'third_party/soomla/core/src/ios/**/*'
-    s.private_header_files = 'third_party/soomla/core/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/core/src/ios/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/soomla/core/src'
     s.dependency 'ee-x/keeva'
   end
@@ -640,7 +640,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'soomla-store-ios' do |s| 
     s.source_files = 'third_party/soomla/store/src/ios/**/*'
-    s.private_header_files = 'third_party/soomla/store/src/ios/**/*'
+    s.private_header_files = 'third_party/soomla/store/src/ios/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.dependency 'ee-x/soomla-core-ios'
   end
@@ -661,8 +661,8 @@ Pod::Spec.new do |spec|
       'src/ee/store/**/*'
 
     s.private_header_files =
-      'src/ee/store/internal/*',
-      'src/ee/store/private/*'
+      'src/ee/store/internal/*.{h,hpp,inl}',
+      'src/ee/store/private/*.{h,hpp,inl}'
 
     s.exclude_files =
       'src/ee/store/Android.mk',
@@ -853,20 +853,12 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/ads/**/*.swift'
 
-    s.private_header_files =
-      'src/ee/ads/internal/*',
-      'src/ee/ads/private/*'
-
     s.dependency 'ee-x/cs-core'
   end
 
   spec.subspec 'cs-admob' do |s|
     s.source_files =
-      'src/ee/admob/**/*.swfit'
-
-    s.private_header_files =
-      'src/ee/admob/internal/*',
-      'src/ee/admob/private/*'
+      'src/ee/admob/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'
     s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'

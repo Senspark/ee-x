@@ -78,16 +78,28 @@ namespace EE.Editor {
                 iosPods = new XElement("iosPods");
                 dependencies.Add(iosPods);
             }
+            var androidPackages = dependencies.Element("androidPackages");
+            if (androidPackages == null) {
+                androidPackages = new XElement("androidPackages");
+                dependencies.Add(androidPackages);
+            }
             iosPods.RemoveAll();
+            androidPackages.RemoveAll();
             if (IsCoreEnabled) {
                 var iosPod = new XElement("iosPod");
                 iosPod.Add(new XAttribute("name", "ee-x/cs-core"));
                 iosPods.Add(iosPod);
+                var androidPackage = new XElement("androidPackage");
+                androidPackage.Add(new XAttribute("spec", "com.senspark.ee:core:1.0.0"));
+                androidPackages.Add(androidPackage);
             }
             if (IsAdMobEnabled) {
                 var iosPod = new XElement("iosPod");
                 iosPod.Add(new XAttribute("name", "ee-x/cs-admob"));
                 iosPods.Add(iosPod);
+                var androidPackage = new XElement("androidPackage");
+                androidPackage.Add(new XAttribute("spec", "com.senspark.ee:admob:1.0.0"));
+                androidPackages.Add(androidPackage);
             }
             document.Save(LibraryDependenciesFile);
         }

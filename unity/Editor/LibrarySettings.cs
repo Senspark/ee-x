@@ -81,12 +81,12 @@ namespace EE.Editor {
             iosPods.RemoveAll();
             if (IsCoreEnabled) {
                 var iosPod = new XElement("iosPod");
-                iosPod.Add(new XAttribute("name", "ee-x/core"));
+                iosPod.Add(new XAttribute("name", "ee-x/cs-core"));
                 iosPods.Add(iosPod);
             }
             if (IsAdMobEnabled) {
                 var iosPod = new XElement("iosPod");
-                iosPod.Add(new XAttribute("name", "ee-x/admob"));
+                iosPod.Add(new XAttribute("name", "ee-x/cs-admob"));
                 iosPods.Add(iosPod);
             }
             document.Save(LibraryDependenciesFile);

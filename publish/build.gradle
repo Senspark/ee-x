@@ -1,3 +1,5 @@
+apply plugin: 'maven-publish'
+
 buildscript {
     ext.kotlinVersion = '1.3.72'
     repositories {
@@ -5,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0-beta05'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
     }
@@ -26,9 +28,13 @@ ext {
     buildToolsVersion = '30.0.1'
     targetSdkVersion = 30
     buildPrefab = true
+    buildMaven = true
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
+    /*
+    Wait for AndroidStudio4.1
+    
     def projectDir = project.projectDir
     project.android {
         ndkVersion '21.3.6528147'
@@ -64,4 +70,28 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
             }
         }
     })
+     */
+}
+
+def publishToMaven(project, String libraryName) {
+    project.afterEvaluate {
+        publishing {
+            publications {
+                create(libraryName, MavenPublication) {
+                    from project.components.release
+                    groupId = 'com.senspark.ee'
+                    artifactId = libraryName
+                    version = '1.0.0'
+                }
+            }
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
+    }
 }

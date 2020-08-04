@@ -15,6 +15,10 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven(this, 'admob-mediation')
+}
+
 dependencies {
     api project(':ee-x-admob')
 

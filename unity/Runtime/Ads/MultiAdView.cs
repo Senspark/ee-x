@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EE {
     public class MultiAdView : ObserverManager<IAdViewObserver>, IAdView {
-        private PointF _anchor;
-        private PointF _position;
+        private (float, float) _anchor;
+        private (float, float) _position;
         private bool _visible;
         private readonly List<IAdView> _items;
         private readonly ObserverHandle _handle;
@@ -62,7 +61,7 @@ namespace EE {
             return result;
         }
 
-        public PointF Anchor {
+        public (float, float) Anchor {
             get => _anchor;
             set {
                 _anchor = value;
@@ -72,7 +71,7 @@ namespace EE {
             }
         }
 
-        public PointF Position {
+        public (float, float) Position {
             get => _position;
             set {
                 _position = value;
@@ -82,17 +81,17 @@ namespace EE {
             }
         }
 
-        public SizeF Size {
+        public (float, float) Size {
             get {
                 // Combined size of all ad views.
                 var width = 0.0f;
                 var height = 0.0f;
                 foreach (var item in _items) {
-                    var size = item.Size;
-                    width = Math.Max(width, size.Width);
-                    height = Math.Max(height, size.Height);
+                    var (itemWidth, itemHeight) = item.Size;
+                    width = Math.Max(width, itemWidth);
+                    height = Math.Max(height, itemHeight);
                 }
-                return new SizeF(width, height);
+                return (width, height);
             }
             set {
                 foreach (var item in _items) {

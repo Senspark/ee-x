@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE {
@@ -34,17 +33,17 @@ namespace EE {
         /// <summary>
         /// Gets or sets the anchor of this ad.
         /// </summary>
-        PointF Anchor { get; set; }
+        (float, float) Anchor { get; set; }
 
         /// <summary>
         /// Gets or set the position of this ad.
         /// </summary>
-        PointF Position { get; set; }
+        (float, float) Position { get; set; }
 
         /// <summary>
         /// Gets or set the size of this ad.
         /// </summary>
-        SizeF Size { get; set; }
+        (float, float) Size { get; set; }
 
         /// <summary>
         /// Gets or set the visibility of this ad.

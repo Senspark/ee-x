@@ -820,16 +820,10 @@ Pod::Spec.new do |spec|
     s.source_files =
       'src/ee/ee.h',
       'src/ee/Macro.hpp',
+      'src/ee/core/Thread.hpp',
+      'src/ee/core/internal/MessageBridge.hpp',
       'src/ee/core/**/*.swift',
-      'src/ee/core/**/EE*',
-      'src/ee/core/internal/SwiftBridge*'
-
-    s.xcconfig = {
-      'GCC_PREPROCESSOR_DEFINITIONS' => [
-        '$(inherited)',
-        'EE_X_UNITY'
-      ].join(' ')
-    }
+      'src/ee/core/**/EE*'
 
     s.user_target_xcconfig = {
       'LD_RUNPATH_SEARCH_PATHS' => [

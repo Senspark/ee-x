@@ -5,11 +5,8 @@
 //  Created by eps on 7/30/20.
 //
 
-#include "ee/core/internal/SwiftBridge.hpp"
-
 #include <string>
 
-#if defined(EE_X_UNITY)
 extern "C" {
 using CallCppPointer = const char* (*)(const char*, const char*);
 using RunOnMainThreadCallbackPointer = void (*)();
@@ -45,4 +42,3 @@ void ee_runOnMainThreadDelayedCallback(int key) {
     runOnMainThreadDelayedCallbackPointer_(key);
 }
 } // extern "C"
-#endif // defined(EE_X_UNITY)

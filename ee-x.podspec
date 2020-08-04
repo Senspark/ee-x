@@ -1,13 +1,13 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '0.1.5'
+  spec.version        = '1.0.0'
   spec.summary        = 'ee-x'
-  spec.description    = 'ee-x'
+  spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
 
   spec.homepage       = 'https://github.com/Senspark/ee-x'
 
-  # spec.license        = { :type => 'MIT', :file => 'FILE_LICENSE' }
+  spec.license        = { :type => 'MIT', :file => 'LICENSE' }
   spec.author         = 'Hai Hoang'
 
   spec.swift_version = '5.0'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :branch => 'master'
+    :tag => 'v1.0.0'
   }
 
   spec.framework = 'Foundation'

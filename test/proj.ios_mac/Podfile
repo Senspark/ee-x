@@ -39,7 +39,5 @@ abstract_target 'common' do
 
     target 'ee_x_test_desktop' do
         platform :osx, '10.14'
-
-        pod_ee_x('ads')
     end
 end

@@ -86,6 +86,12 @@ namespace EE.Editor {
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
             if (IsCoreEnabled) {
+                // Add MultiDex support.
+                var androidPackage = new XElement("androidPackage");
+                androidPackage.Add(new XAttribute("spec", "androidx.multidex:multidex:2.0.1"));
+                androidPackages.Add(androidPackage);
+            }
+            if (IsCoreEnabled) {
                 var iosPod = new XElement("iosPod");
                 iosPod.Add(new XAttribute("name", "ee-x/cs-core"));
                 iosPods.Add(iosPod);

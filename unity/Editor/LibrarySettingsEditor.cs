@@ -17,6 +17,11 @@ namespace EE.Editor {
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
             settings.IsCoreEnabled = EditorGUILayout.Toggle(new GUIContent("Core"), settings.IsCoreEnabled);
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField("AdMob App ID");
+            settings.AdMobAndroidAppId = EditorGUILayout.TextField("Android", settings.AdMobAndroidAppId);
+            settings.AdMobIosAppId = EditorGUILayout.TextField("iOS", settings.AdMobIosAppId);
+            EditorGUILayout.Separator();
             if (GUI.changed) {
                 OnSettingsChanged();
             }

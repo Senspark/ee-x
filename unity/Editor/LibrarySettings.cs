@@ -24,6 +24,12 @@ namespace EE.Editor {
         [SerializeField]
         private bool _isAdMobEnabled = false;
 
+        [SerializeField]
+        private string _adMobAndroidAppId;
+
+        [SerializeField]
+        private string _adMobIosAppId;
+
         public bool IsCoreEnabled {
             get => _isCoreEnabled;
             set => _isCoreEnabled = value;
@@ -32,6 +38,16 @@ namespace EE.Editor {
         public bool IsAdMobEnabled {
             get => _isAdMobEnabled;
             set => _isAdMobEnabled = value;
+        }
+
+        public string AdMobAndroidAppId {
+            get => _adMobAndroidAppId;
+            set => _adMobAndroidAppId = value;
+        }
+
+        public string AdMobIosAppId {
+            get => _adMobIosAppId;
+            set => _adMobIosAppId = value;
         }
 
         public static LibrarySettings Instance {
@@ -86,26 +102,16 @@ namespace EE.Editor {
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
             if (IsCoreEnabled) {
-                // Add MultiDex support.
-                var androidPackage = new XElement("androidPackage");
-                androidPackage.Add(new XAttribute("spec", "androidx.multidex:multidex:2.0.1"));
-                androidPackages.Add(androidPackage);
-            }
-            if (IsCoreEnabled) {
-                var iosPod = new XElement("iosPod");
-                iosPod.Add(new XAttribute("name", "ee-x/cs-core"));
-                iosPods.Add(iosPod);
-                var androidPackage = new XElement("androidPackage");
-                androidPackage.Add(new XAttribute("spec", "com.senspark.ee:core:1.0.0"));
-                androidPackages.Add(androidPackage);
+                iosPods.Add(new XElement("iosPod", new XAttribute("name", "ee-x/cs-core")));
+                androidPackages.Add(
+                    new XElement("androidPackage", new XAttribute("spec", "androidx.multidex:multidex:2.0.1")));
+                androidPackages.Add(
+                    new XElement("androidPackage", new XAttribute("spec", "com.senspark.ee:core:1.0.0")));
             }
             if (IsAdMobEnabled) {
-                var iosPod = new XElement("iosPod");
-                iosPod.Add(new XAttribute("name", "ee-x/cs-admob"));
-                iosPods.Add(iosPod);
-                var androidPackage = new XElement("androidPackage");
-                androidPackage.Add(new XAttribute("spec", "com.senspark.ee:admob:1.0.0"));
-                androidPackages.Add(androidPackage);
+                iosPods.Add(new XElement("iosPod", new XAttribute("name", "ee-x/cs-admob")));
+                androidPackages.Add(
+                    new XElement("androidPackage", new XAttribute("spec", "com.senspark.ee:admob:1.0.0")));
             }
             document.Save(LibraryDependenciesFile);
         }

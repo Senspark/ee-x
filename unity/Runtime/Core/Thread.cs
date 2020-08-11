@@ -20,7 +20,7 @@ namespace EE {
 #if UNITY_EDITOR
             new ThreadImplEditor();
 #elif UNITY_ANDROID
-            new ThreadImplAndroid();
+            new ThreadImplAndroid(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);
 #elif UNITY_IOS
             new ThreadImplIos(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);
 #endif

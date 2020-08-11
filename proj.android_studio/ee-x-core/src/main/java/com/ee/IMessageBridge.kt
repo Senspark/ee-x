@@ -44,6 +44,16 @@ interface IMessageBridge {
     fun deregisterHandler(tag: String): Boolean
 
     /**
+     * Calls a handler from Java with a message.
+     *
+     * @param tag     The unique tag of the handler.
+     * @param message The message.
+     * @return Reply message from Java.
+     */
+    @AnyThread
+    fun call(tag: String, message: String): String
+
+    /**
      * Calls a handler from C++ without a message.
      *
      * @param tag The unique tag of the handler.

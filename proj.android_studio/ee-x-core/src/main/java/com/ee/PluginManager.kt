@@ -6,7 +6,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.MessageBridge
+import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
+import com.ee.internal.ee_callCppInternal
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -32,10 +34,10 @@ class PluginManager private constructor() {
         fun execute(plugin: IPlugin)
     }
 
-    private val _bridge: IMessageBridge = MessageBridge.getInstance()
     private val _plugins: MutableMap<String, IPlugin> = ConcurrentHashMap()
     private val _lifecycleCallbacks: ActivityLifecycleCallbacks
 
+    private var _bridge: IMessageBridge? = null
     private var _context: Context? = null
     private var _activity: Activity? = null
     private var _activityClass: Class<out Activity>? = null
@@ -126,6 +128,11 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
+    fun getBridge(): IMessageBridge? {
+        return _bridge
+    }
+
+    @AnyThread
     fun setActivity(activity: Activity) {
         val context = activity.applicationContext
         _context = context
@@ -137,7 +144,7 @@ class PluginManager private constructor() {
     @AnyThread
     @ImplicitReflectionSerializer
     @UnstableDefault
-    internal fun initializePlugins(): Boolean {
+    fun initializePlugins(bridge: IMessageBridge): Boolean {
         val context = _context
         if (context == null) {
             _logger.error("""
@@ -148,15 +155,16 @@ class PluginManager private constructor() {
             assertThat(false).isTrue()
             return false
         }
-        Platform.registerHandlers(_bridge, context)
+        _bridge = bridge
+        Platform.registerHandlers(bridge, context)
         return true
     }
 
     @AnyThread
-    internal fun addPlugin(name: String): Boolean {
-        _logger.info("addPlugin: $name")
+    fun addPlugin(name: String): Boolean {
+        _logger.info("${this::addPlugin.name}: $name")
         if (_plugins.containsKey(name)) {
-            _logger.error("addPlugin: $name already exists!")
+            _logger.error("${this::addPlugin.name}: $name already exists!")
             return false
         }
         val className = "com.ee.${name}Bridge"
@@ -184,11 +192,11 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    internal fun removePlugin(name: String): Boolean {
-        _logger.info("removePlugin: $name")
+    fun removePlugin(name: String): Boolean {
+        _logger.info("${this::removePlugin.name}: $name")
         val plugin = _plugins[name]
         if (plugin == null) {
-            _logger.error("removePlugin: $name doesn't exist!")
+            _logger.error("${this::removePlugin.name}: $name doesn't exist!")
             return false
         }
         plugin.destroy()
@@ -203,7 +211,9 @@ class PluginManager private constructor() {
 
     @AnyThread
     private fun destroy() {
-        Platform.deregisterHandlers(_bridge)
+        val bridge = _bridge
+            ?: throw IllegalArgumentException("${this::destroy.name}: bridge is null")
+        Platform.deregisterHandlers(bridge)
         for (entry in _plugins) {
             entry.value.destroy()
         }
@@ -237,7 +247,12 @@ private fun ee_staticInitializePlugins(): Boolean {
         return false
     }
      */
-    return PluginManager.getInstance().initializePlugins()
+    val bridge = MessageBridge(object : MessageBridgeHandler {
+        override fun callCpp(tag: String, message: String): String {
+            return ee_callCppInternal(tag, message)
+        }
+    })
+    return PluginManager.getInstance().initializePlugins(bridge)
 }
 
 @NativeThread

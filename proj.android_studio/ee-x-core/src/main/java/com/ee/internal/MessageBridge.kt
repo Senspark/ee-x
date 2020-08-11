@@ -4,6 +4,7 @@ import com.ee.AsyncMessageHandler
 import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.MessageHandler
+import com.ee.PluginManager
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -11,32 +12,16 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UnstableDefault
 
+interface MessageBridgeHandler {
+    fun callCpp(tag: String, message: String): String
+}
+
 /**
  * Created by Zinge on 3/29/17.
  */
-class MessageBridge private constructor() : IMessageBridge {
+class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IMessageBridge {
     companion object {
         private val _logger = Logger(MessageBridge::class.java.name)
-
-        /**
-         * Thread-safe singleton pattern.
-         * https://stackoverflow.com/questions/51834996/singleton-class-in-kotlin
-         */
-        private val _sharedInstance = MessageBridge()
-
-        /**
-         * Gets a message bridge instance.
-         *
-         * @return A message bridge instance.
-         */
-        @JvmStatic
-        fun getInstance(): IMessageBridge {
-            return _sharedInstance;
-        }
-
-        fun staticCall(tag: String, message: String): String {
-            return _sharedInstance.call(tag, message)
-        }
     }
 
     /**
@@ -102,23 +87,7 @@ class MessageBridge private constructor() : IMessageBridge {
         }
     }
 
-    override fun callCpp(tag: String): String {
-        return callCpp(tag, "")
-    }
-
-
-    override fun callCpp(tag: String, message: String): String {
-        return ee_callCppInternal(tag, message)
-    }
-
-    /**
-     * Calls a handler from Java with a message.
-     *
-     * @param tag     The unique tag of the handler.
-     * @param message The message.
-     * @return Reply message from Java.
-     */
-    private fun call(tag: String, message: String): String {
+    override fun call(tag: String, message: String): String {
         val handler = findHandler(tag)
         if (handler == null) {
             _logger.error("call: $tag doesn't exist!")
@@ -127,12 +96,22 @@ class MessageBridge private constructor() : IMessageBridge {
         }
         return handler.handle(message)
     }
+
+    override fun callCpp(tag: String): String {
+        return callCpp(tag, "")
+    }
+
+    override fun callCpp(tag: String, message: String): String {
+        return _handler.callCpp(tag, message)
+    }
 }
 
-private external fun ee_callCppInternal(tag: String, message: String): String
+internal external fun ee_callCppInternal(tag: String, message: String): String
 
 @NativeThread
 @Suppress("unused")
 private fun ee_staticCall(tag: String, message: String): String {
-    return MessageBridge.staticCall(tag, message)
+    val bridge = PluginManager.getInstance().getBridge()
+        ?: throw IllegalStateException("Bridge is null")
+    return bridge.call(tag, message)
 }

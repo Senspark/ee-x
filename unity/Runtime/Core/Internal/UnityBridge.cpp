@@ -7,7 +7,6 @@
 
 #include <string>
 
-extern "C" {
 using CallCppPointer = const char* (*)(const char*, const char*);
 using RunOnMainThreadCallbackPointer = void (*)();
 using RunOnMainThreadDelayedCallbackPointer = void (*)(int);
@@ -18,6 +17,7 @@ RunOnMainThreadCallbackPointer runOnMainThreadCallbackPointer_;
 RunOnMainThreadDelayedCallbackPointer runOnMainThreadDelayedCallbackPointer_;
 } // namespace
 
+extern "C" {
 void ee_initializeMessageBridge(CallCppPointer pointer) {
     callCppPointer_ = pointer;
 }

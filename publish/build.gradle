@@ -36,7 +36,7 @@ ext {
 
 project.bintray {
     user = "${BINTRAY_USER}"
-    key = "${BINATRY_API_KEY}"
+    key = "${BINTRAY_API_KEY}"
     publications = ['core', 'ads', 'admob', 'admob-mediation']
 }
 

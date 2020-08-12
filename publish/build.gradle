@@ -1,3 +1,4 @@
+apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
 buildscript {
@@ -8,6 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
     }
@@ -30,6 +32,12 @@ ext {
     targetSdkVersion = 30
     buildPrefab = true
     buildMaven = true
+}
+
+project.bintray {
+    user = "${BINTRAY_USER}"
+    key = "${BINATRY_API_KEY}"
+    publications = ['core', 'ads', 'admob', 'admob-mediation']
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
@@ -83,6 +91,17 @@ def publishToMaven(project, String libraryName) {
                     groupId = 'com.senspark.ee'
                     artifactId = libraryName
                     version = '1.0.0'
+                }
+            }
+        }
+        project.bintray {
+            pkg {
+                repo = 'ee-x'
+                name = libraryName
+                licenses = ['MIT']
+                vcsUrl = 'https://github.com/Senspark/ee-x.git'
+                version {
+                    name = '1.0.0'
                 }
             }
         }

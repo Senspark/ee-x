@@ -14,6 +14,10 @@ namespace EE.Editor {
 
         public override void OnInspectorGUI() {
             var settings = LibrarySettings.Instance;
+            EditorGUILayout.LabelField("Utilities", EditorStyles.boldLabel);
+            settings.InjectMultiDex =
+                EditorGUILayout.Toggle(new GUIContent("Inject MultiDex"), settings.InjectMultiDex);
+            EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
             settings.IsCoreEnabled = EditorGUILayout.Toggle(new GUIContent("Core"), settings.IsCoreEnabled);
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);

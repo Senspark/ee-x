@@ -19,37 +19,44 @@ public class AndroidProcessor : IPostGenerateGradleAndroidProject {
     public int callbackOrder { get; }
 
     public void OnPostGenerateGradleAndroidProject(string path) {
-        AddAdMobAppId(path);
-        EnableMultiDex(path);
+        var gradlePath = Path.Combine(path, "..", "launcher", "build.gradle");
+        var gradleConfig = new GradleConfig(gradlePath);
+        var manifestPath = Path.Combine(path, "src", "main", "AndroidManifest.xml");
+        var manifest = XDocument.Load(manifestPath);
+        var settings = LibrarySettings.Instance;
+        if (settings.InjectMultiDex) {
+            SetMultiDexEnabled(gradleConfig, true);
+        }
+        if (settings.IsAdMobEnabled) {
+            AddAdMobAppId(manifest);
+        }
+        gradleConfig.Save();
     }
 
-    private static void AddAdMobAppId(string path) {
-        var manifestPath = Path.Combine(path, "src", "main", "AndroidManifest.xml");
+    private static void AddAdMobAppId(XContainer manifest) {
         var settings = LibrarySettings.Instance;
-        var document = XDocument.Load(manifestPath);
-        var manifest = document.Element("manifest");
-        Assert.IsNotNull(manifest);
-        var application = manifest.Element("application");
-        Assert.IsNotNull(application);
-        var metas = application
+        var manifestElement = manifest.Element("manifest");
+        Assert.IsNotNull(manifestElement);
+        var applicationElement = manifestElement.Element("application");
+        Assert.IsNotNull(applicationElement);
+        var metaElements = applicationElement
             .Descendants()
             .Where(item => item.Name.LocalName == "meta-data");
-        var meta = GetMetaElement(metas, MetaAdMobApplicationId);
+        var metaElement = GetMetaElement(metaElements, MetaAdMobApplicationId);
         if (settings.IsAdMobEnabled) {
             var appId = settings.AdMobAndroidAppId;
             if (appId.Length == 0) {
                 Debug.LogError("AdMob iOS App Id is missing");
             } else {
-                if (meta == null) {
-                    application.Add(CreateMetaElement(MetaAdMobApplicationId, appId));
+                if (metaElement == null) {
+                    applicationElement.Add(CreateMetaElement(MetaAdMobApplicationId, appId));
                 } else {
-                    meta.SetAttributeValue(ManifestNamespace + "value", appId);
+                    metaElement.SetAttributeValue(ManifestNamespace + "value", appId);
                 }
             }
         } else {
-            meta?.Remove();
+            metaElement?.Remove();
         }
-        document.Save(manifestPath);
     }
 
     private static XElement CreateMetaElement(string name, object value) {
@@ -72,13 +79,11 @@ public class AndroidProcessor : IPostGenerateGradleAndroidProject {
         return null;
     }
 
-    private static void EnableMultiDex(string path) {
-        var gradlePath = Path.Combine(path, "..", "launcher", "build.gradle");
-        var file = new GradleConfig(gradlePath);
-        var android = file.Root.TryGetNode("android");
+    private static void SetMultiDexEnabled(GradleConfig config, bool enabled) {
+        var android = config.Root.TryGetNode("android");
         var defaultConfig = android.TryGetNode("defaultConfig");
+        defaultConfig.RemoveContentNode("multiDexEnabled false");
         defaultConfig.AppendContentNode("multiDexEnabled true");
-        file.Save();
     }
 }
 

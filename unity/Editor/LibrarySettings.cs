@@ -19,6 +19,9 @@ namespace EE.Editor {
         private static LibrarySettings _sharedInstance;
 
         [SerializeField]
+        private bool _injectMultiDex = false;
+
+        [SerializeField]
         private bool _isCoreEnabled = false;
 
         [SerializeField]
@@ -29,6 +32,11 @@ namespace EE.Editor {
 
         [SerializeField]
         private string _adMobIosAppId;
+
+        public bool InjectMultiDex {
+            get => _injectMultiDex;
+            set => _injectMultiDex = value;
+        }
 
         public bool IsCoreEnabled {
             get => _isCoreEnabled;
@@ -101,10 +109,12 @@ namespace EE.Editor {
             }
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
-            if (IsCoreEnabled) {
-                iosPods.Add(new XElement("iosPod", new XAttribute("name", "ee-x/cs-core")));
+            if (InjectMultiDex) {
                 androidPackages.Add(
                     new XElement("androidPackage", new XAttribute("spec", "androidx.multidex:multidex:2.0.1")));
+            }
+            if (IsCoreEnabled) {
+                iosPods.Add(new XElement("iosPod", new XAttribute("name", "ee-x/cs-core")));
                 androidPackages.Add(
                     new XElement("androidPackage", new XAttribute("spec", "com.senspark.ee:core:1.0.0")));
             }

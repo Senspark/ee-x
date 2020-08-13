@@ -33,7 +33,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
-    implementation 'com.ironsource.sdk:mediationsdk:6.17.0'
+    implementation 'com.ironsource.sdk:mediationsdk:6.18.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'

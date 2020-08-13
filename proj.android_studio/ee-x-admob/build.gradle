@@ -36,8 +36,8 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads:19.2.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.gms:play-services-ads:19.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
 }

@@ -24,6 +24,17 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     ])
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('campaign-receiver', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:core:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-core')
+    }
+}
+
 dependencies {
     api project(':ee-x-core')
     implementation 'androidx.annotation:annotation:1.1.0'

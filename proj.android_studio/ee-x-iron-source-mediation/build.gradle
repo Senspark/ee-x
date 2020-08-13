@@ -19,6 +19,17 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('iron-source-mediation', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:iron-source:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-iron-source')
+    }
+}
+
 dependencies {
     api project(':ee-x-iron-source')
 

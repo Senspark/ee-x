@@ -13,6 +13,7 @@ abstract_target 'common' do
 
         pod_ee_x('admob')
         pod_ee_x('admob-mediation')
+        pod_ee_x('adjust')
         pod_ee_x('app-lovin')
         pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')

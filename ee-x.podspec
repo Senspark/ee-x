@@ -140,6 +140,27 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
   end
 
+  spec.subspec 'adjust' do |s|
+    s.source_files =
+      'src/ee/Adjust*',
+      'src/ee/adjust/**/*'
+
+    s.private_header_files =
+      'src/ee/adjust/internal/*{h,hpp,inl}',
+      'src/ee/adjust/private/*.{h,hpp,inl}'
+
+    s.exclude_files =
+      'src/ee/adjust/Android.mk',
+      'src/ee/adjust/CMakeLists.txt',
+      'src/ee/adjust/generate.sh',
+      'src/ee/adjust/sourcelist.cmake'
+
+    s.dependency 'ee-x/core'
+
+    # https://github.com/adjust/ios_sdk
+    s.dependency 'Adjust'
+  end
+
   spec.subspec 'app-lovin' do |s|
     s.source_files =
       'src/ee/AppLovin*',

@@ -11,7 +11,7 @@ namespace ee {
 namespace tenjin {
 class Bridge final : public IBridge {
 public:
-    Bridge();
+    explicit Bridge(IMessageBridge& bridge);
     virtual ~Bridge() override;
 
     virtual void destroy() override;

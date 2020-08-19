@@ -50,7 +50,13 @@ public:
     static bool initializePlugins();
 
     template <class T>
-    static std::unique_ptr<T> createPlugin();
+    static std::shared_ptr<T> createPlugin() {
+        auto&& bridge = getBridge();
+        return createPluginImpl<T>(bridge);
+    }
+
+    /// Gets the current message bridge.
+    static IMessageBridge& getBridge();
 
     /// Gets the current activity.
     static void* getActivity();
@@ -65,6 +71,10 @@ public:
     /// Remove a cross-platform plugin.
     /// @note Internal uses.
     static bool removePlugin(Plugin plugin);
+
+private:
+    template <class T>
+    static std::shared_ptr<T> createPluginImpl(IMessageBridge& bridge);
 };
 } // namespace core
 } // namespace ee

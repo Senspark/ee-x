@@ -4,14 +4,15 @@
 
 #include "ee/tenjin/private/TenjinBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 
 namespace ee {
 namespace core {
 template <>
-std::unique_ptr<ITenjin> PluginManager::createPlugin() {
-    return std::make_unique<tenjin::Bridge>();
+std::shared_ptr<ITenjin>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    return std::make_shared<tenjin::Bridge>(bridge);
 }
 } // namespace core
 
@@ -25,8 +26,8 @@ const auto kInitialize = kPrefix + "Initialize";
 
 using Self = Bridge;
 
-Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge) {
     PluginManager::addPlugin(Plugin::Tenjin);
 }
 

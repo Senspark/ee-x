@@ -5,11 +5,11 @@
 
 #include "ee/facebook/private/FacebookBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -24,8 +24,9 @@
 namespace ee {
 namespace core {
 template <>
-std::unique_ptr<IFacebook> PluginManager::createPlugin() {
-    return std::make_unique<facebook::Bridge>();
+std::shared_ptr<IFacebook>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    return std::make_shared<facebook::Bridge>(bridge);
 }
 } // namespace core
 
@@ -49,8 +50,8 @@ const auto kShareVideoContent     = kPrefix + "ShareVideoContent";
 
 using Self = Bridge;
 
-Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge) {
     PluginManager::addPlugin(Plugin::Facebook);
     delegateId_ = 0;
     bridge_.registerHandler(

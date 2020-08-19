@@ -19,13 +19,26 @@ namespace EE.Editor {
                 EditorGUILayout.Toggle(new GUIContent("Inject MultiDex"), settings.InjectMultiDex);
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
+
+            // Core plugin is always enabled.
+            // Prevent user from changing.
+            EditorGUI.BeginDisabledGroup(true);
             settings.IsCoreEnabled = EditorGUILayout.Toggle(new GUIContent("Core"), settings.IsCoreEnabled);
+            EditorGUI.EndDisabledGroup();
+
+            // AdMob plugin.
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);
             EditorGUILayout.Separator();
+            EditorGUI.BeginDisabledGroup(!settings.IsAdMobEnabled);
             EditorGUILayout.LabelField("AdMob App ID");
             settings.AdMobAndroidAppId = EditorGUILayout.TextField("Android", settings.AdMobAndroidAppId);
             settings.AdMobIosAppId = EditorGUILayout.TextField("iOS", settings.AdMobIosAppId);
+            EditorGUI.EndDisabledGroup();
             EditorGUILayout.Separator();
+
+            // Adjust plugin.
+            settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
+
             if (GUI.changed) {
                 OnSettingsChanged();
             }

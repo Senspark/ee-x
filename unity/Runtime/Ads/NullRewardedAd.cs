@@ -1,9 +1,10 @@
+using System;
 using System.Threading.Tasks;
 
 namespace EE {
     public class NullRewardedAd : ObserverManager<IRewardedAdObserver>, IRewardedAd {
         public void Destroy() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public bool IsLoaded { get; } = false;

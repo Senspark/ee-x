@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 using EE.Internal;
 
 namespace EE {
     public enum Plugin {
+        Adjust,
         AdMob,
         AppLovin,
         AppsFlyer,
@@ -17,6 +19,7 @@ namespace EE {
 
     public static class PluginManager {
         private static readonly Dictionary<Plugin, string> _pluginNames = new Dictionary<Plugin, string> {
+            [Plugin.Adjust] = "Adjust",
             [Plugin.AdMob] = "AdMob",
             [Plugin.AppLovin] = "AppLovin",
             [Plugin.AppsFlyer] = "AppsFlyer",
@@ -28,6 +31,13 @@ namespace EE {
             [Plugin.Vungle] = "Vungle"
         };
 
+        private static readonly Dictionary<Type, (Plugin, Type)> _pluginTypes = new Dictionary<Type, (Plugin, Type)> {
+            [typeof(IAdjust)] = (Plugin.Adjust, typeof(Adjust)),
+            [typeof(IAdMob)] = (Plugin.AdMob, typeof(AdMob))
+        };
+
+        private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();
+
         private static readonly IPluginManagerImpl _impl =
 #if UNITY_EDITOR
             new PluginManagerImplEditor();
@@ -37,13 +47,35 @@ namespace EE {
             new PluginManagerImplIos();
 #endif
 
+        private static IMessageBridge _bridge;
+
         public static bool InitializePlugins() {
             if (!_impl.InitializePlugins()) {
                 return false;
             }
-            var bridge = MessageBridge.Instance;
-            Platform.RegisterHandlers(bridge);
+            _bridge = MessageBridge.Instance;
+            Platform.RegisterHandlers(_bridge);
             return true;
+        }
+
+        public static T CreatePlugin<T>() where T : IPlugin {
+            var type = typeof(T);
+            var (plugin, pluginType) = _pluginTypes[type];
+            if (!AddPlugin(plugin)) {
+                throw new Exception($"Can not add plugin {plugin}");
+            }
+            var instance = (T) Activator.CreateInstance(pluginType, _bridge);
+            _plugins.Add(plugin, instance);
+            return instance;
+        }
+
+        public static void DestroyPlugin<T>() where T : IPlugin {
+            var type = typeof(T);
+            var (plugin, pluginType) = _pluginTypes[type];
+            if (!RemovePlugin(plugin)) {
+                throw new Exception($"Can not remove plugin {plugin}");
+            }
+            _plugins.Remove(plugin);
         }
 
         public static object GetActivity() {
@@ -54,12 +86,12 @@ namespace EE {
             _impl.SetActivity(activity);
         }
 
-        public static bool AddPlugin(Plugin plugin) {
+        private static bool AddPlugin(Plugin plugin) {
             var name = _pluginNames[plugin];
             return _impl.AddPlugin(name);
         }
 
-        public static bool RemovePlugin(Plugin plugin) {
+        private static bool RemovePlugin(Plugin plugin) {
             var name = _pluginNames[plugin];
             return _impl.RemovePlugin(name);
         }

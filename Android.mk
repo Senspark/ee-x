@@ -2,6 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 $(call import-add-path, $(LOCAL_PATH))
 
+$(call import-module, src/ee/adjust)
 $(call import-module, src/ee/admob)
 $(call import-module, src/ee/ads)
 $(call import-module, src/ee/app_lovin)

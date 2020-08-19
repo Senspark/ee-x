@@ -36,6 +36,8 @@ abstract_target 'common' do
         pod_ee_x('tenjin')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
+        
+        pod 'Adjust', :modular_headers => true
     end
 
     target 'ee_x_test_desktop' do

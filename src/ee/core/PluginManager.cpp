@@ -24,6 +24,7 @@ namespace ee {
 namespace core {
 namespace {
 std::unordered_map<Plugin, std::string> pluginNames_ = {{
+    {Plugin::Adjust, "Adjust"},
     {Plugin::AdMob, "AdMob"},
     {Plugin::AppLovin, "AppLovin"},
     {Plugin::AppsFlyer, "AppsFlyer"},

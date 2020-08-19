@@ -21,8 +21,21 @@ namespace adjust {
 class IBridge : public IPlugin {
 public:
     virtual void initialize(const AdjustConfig& config) = 0;
+
+    /// Enables/disables the Adjust SDK from tracking any activities of the
+    /// current device. This setting is remembered between sessions.
     virtual void setEnabled(bool enabled) = 0;
-    virtual void trackEvent(const std::string& eventName) = 0;
+
+    /// Gets iOS advertising identifier or Google Play Services advertising
+    /// identifier
+    virtual Task<std::string> getAdvertisingIdentifier() const = 0;
+
+    /// Gets Adjust device identifier.
+    /// Only available after the app's installation has been tracked by the
+    /// Adjust backend.
+    virtual std::string getDeviceIdentifier() const = 0;
+
+    virtual void trackEvent(const std::string& token) = 0;
 };
 } // namespace adjust
 } // namespace ee

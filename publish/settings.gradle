@@ -4,6 +4,7 @@ def include_lib(name) {
 }
 
 include_lib('ads')
+include_lib('adjust')
 include_lib('admob')
 include_lib('admob-mediation')
 include_lib('app-lovin')

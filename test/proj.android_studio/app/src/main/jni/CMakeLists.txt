@@ -30,6 +30,7 @@ target_link_libraries(${PROJECT_NAME}
     -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive
     cocos2d
     soomla_store
+    ee_x_adjust
     ee_x_admob
     ee_x_app_lovin
     ee_x_apps_flyer

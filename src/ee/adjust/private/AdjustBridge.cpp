@@ -9,6 +9,7 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -28,6 +29,8 @@ namespace {
 const std::string kPrefix = "AdjustBridge";
 const auto kInitialize = kPrefix + "Initialize";
 const auto kSetEnabled = kPrefix + "SetEnabled";
+const auto kGetAdvertisingIdentifier = kPrefix + "GetAdvertisingIdentifier";
+const auto kGetDeviceIdentifier = kPrefix + "GetDeviceIdentifier";
 const auto kTrackEvent = kPrefix + "TrackEvent";
 } // namespace
 
@@ -56,8 +59,18 @@ void Self::setEnabled(bool enabled) {
     bridge_.call(kSetEnabled, core::toString(enabled));
 }
 
-void Self::trackEvent(const std::string& eventName) {
-    bridge_.call(kTrackEvent, eventName);
+Task<std::string> Self::getAdvertisingIdentifier() const {
+    auto response = co_await bridge_.callAsync(kGetAdvertisingIdentifier);
+    co_return response;
+}
+
+std::string Self::getDeviceIdentifier() const {
+    auto response = bridge_.call(kGetDeviceIdentifier);
+    return response;
+}
+
+void Self::trackEvent(const std::string& token) {
+    bridge_.call(kTrackEvent, token);
 }
 } // namespace adjust
 } // namespace ee

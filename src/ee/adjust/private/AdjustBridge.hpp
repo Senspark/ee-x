@@ -19,7 +19,9 @@ public:
     virtual void destroy() override;
     virtual void initialize(const AdjustConfig& config) override;
     virtual void setEnabled(bool enabled) override;
-    virtual void trackEvent(const std::string& eventName) override;
+    virtual Task<std::string> getAdvertisingIdentifier() const override;
+    virtual std::string getDeviceIdentifier() const override;
+    virtual void trackEvent(const std::string& token) override;
 
 private:
     IMessageBridge& bridge_;

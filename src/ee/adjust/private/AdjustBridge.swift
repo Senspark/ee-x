@@ -10,6 +10,8 @@ import Adjust
 private let kPrefix = "AdjustBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kSetEnabled = "\(kPrefix)SetEnabled"
+private let kGetAdvertisingIdentifier = "\(kPrefix)GetAdvertisingIdentifier"
+private let kGetDeviceIdentifier = "\(kPrefix)GetDeviceIdentifier"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAdjustBridge)
@@ -37,14 +39,18 @@ public class AdjustBridge: NSObject, IPlugin {
                 assert(false, "Invalid argument")
                 return ""
             }
-            let _environment = environment == 0 ? ADJEnvironmentSandbox : ADJEnvironmentProduction
-            let _logLevel = ADJLogLevel(rawValue: UInt32(logLevel))
-            self.initialize(token, _environment, _logLevel)
+            self.initialize(token, self.parseEnvironment(environment), self.parseLogLevel(logLevel))
             return ""
         }
         _bridge.registerHandler(kSetEnabled) { message in
             self.setEnabled(Utils.toBool(message))
             return ""
+        }
+        _bridge.registerAsyncHandler(kGetAdvertisingIdentifier) { _, resolver in
+            resolver(Adjust.adid() ?? "")
+        }
+        _bridge.registerHandler(kGetDeviceIdentifier) { _ in
+            Adjust.adid() ?? ""
         }
         _bridge.registerHandler(kTrackEvent) { message in
             self.trackEvent(message)
@@ -55,7 +61,33 @@ public class AdjustBridge: NSObject, IPlugin {
     func deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetEnabled)
+        _bridge.deregisterHandler(kGetAdvertisingIdentifier)
+        _bridge.deregisterHandler(kGetDeviceIdentifier)
         _bridge.deregisterHandler(kTrackEvent)
+    }
+    
+    func parseEnvironment(_ environment: Int) -> String {
+        if environment == 0 {
+            return ADJEnvironmentSandbox
+        }
+        if environment == 1 {
+            return ADJEnvironmentProduction
+        }
+        assert(false, "Invalid argument")
+        return ""
+    }
+    
+    func parseLogLevel(_ logLevel: Int) -> ADJLogLevel {
+        let dict = [
+            0: ADJLogLevelVerbose,
+            1: ADJLogLevelDebug,
+            2: ADJLogLevelInfo,
+            3: ADJLogLevelWarn,
+            4: ADJLogLevelError,
+            5: ADJLogLevelAssert,
+            6: ADJLogLevelSuppress,
+        ]
+        return dict[logLevel] ?? ADJLogLevelVerbose
     }
     
     func initialize(_ token: String, _ environment: String, _ logLevel: ADJLogLevel) {

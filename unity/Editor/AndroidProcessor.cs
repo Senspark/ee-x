@@ -24,7 +24,7 @@ public class AndroidProcessor : IPostGenerateGradleAndroidProject {
         var manifestPath = Path.Combine(path, "src", "main", "AndroidManifest.xml");
         var manifest = XDocument.Load(manifestPath);
         var settings = LibrarySettings.Instance;
-        if (settings.InjectMultiDex) {
+        if (settings.IsMultiDexEnabled) {
             SetMultiDexEnabled(gradleConfig, true);
         }
         if (settings.IsAdMobEnabled) {

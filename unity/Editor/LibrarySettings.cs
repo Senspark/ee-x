@@ -20,13 +20,16 @@ namespace EE.Editor {
         private static LibrarySettings _sharedInstance;
 
         [SerializeField]
-        private bool _injectMultiDex = false;
+        private bool _isMultiDexEnabled = false;
 
         [SerializeField]
         private bool _isCoreEnabled = true;
 
         [SerializeField]
         private bool _isAdMobEnabled = false;
+
+        [SerializeField]
+        private bool _isAdMobMediationEnabled = false;
 
         [SerializeField]
         private string _adMobAndroidAppId;
@@ -40,9 +43,12 @@ namespace EE.Editor {
         [SerializeField]
         private bool _isIronSourceEnabled = false;
 
-        public bool InjectMultiDex {
-            get => _injectMultiDex;
-            set => _injectMultiDex = value;
+        [SerializeField]
+        private bool _isIronSourceMediationEnabled = false;
+
+        public bool IsMultiDexEnabled {
+            get => _isMultiDexEnabled;
+            set => _isMultiDexEnabled = value;
         }
 
         public bool IsCoreEnabled {
@@ -53,6 +59,11 @@ namespace EE.Editor {
         public bool IsAdMobEnabled {
             get => _isAdMobEnabled;
             set => _isAdMobEnabled = value;
+        }
+
+        public bool IsAdMobMediationEnabled {
+            get => _isAdMobMediationEnabled;
+            set => _isAdMobMediationEnabled = value;
         }
 
         public string AdMobAndroidAppId {
@@ -73,6 +84,11 @@ namespace EE.Editor {
         public bool IsIronSourceEnabled {
             get => _isIronSourceEnabled;
             set => _isIronSourceEnabled = value;
+        }
+
+        public bool IsIronSourceMediationEnabled {
+            get => _isIronSourceMediationEnabled;
+            set => _isIronSourceMediationEnabled = value;
         }
 
         public static LibrarySettings Instance {
@@ -128,7 +144,7 @@ namespace EE.Editor {
             androidPackages.RemoveAll();
             var androidLibraries = new List<string>();
             var iosLibraries = new List<string>();
-            if (InjectMultiDex) {
+            if (IsMultiDexEnabled) {
                 androidLibraries.Add("androidx.multidex:multidex:2.0.1");
             }
             if (IsCoreEnabled) {
@@ -136,16 +152,26 @@ namespace EE.Editor {
                 iosLibraries.Add("ee-x/cs-core");
             }
             if (IsAdMobEnabled) {
-                androidLibraries.Add("com.senspark.ee:admob:1.0.0");
-                iosLibraries.Add("ee-x/cs-admob");
+                if (IsAdMobMediationEnabled) {
+                    androidLibraries.Add("com.senspark.ee:admob-mediation:1.0.0");
+                    iosLibraries.Add("ee-x/cs-admob-mediation");
+                } else {
+                    androidLibraries.Add("com.senspark.ee:admob:1.0.0");
+                    iosLibraries.Add("ee-x/cs-admob");
+                }
             }
             if (IsAdjustEnabled) {
                 androidLibraries.Add("com.senspark.ee:adjust:1.0.0");
                 iosLibraries.Add("ee-x/cs-adjust");
             }
             if (IsIronSourceEnabled) {
-                androidLibraries.Add("com.senspark.ee:iron-source:1.0.0");
-                iosLibraries.Add("ee-x/cs-iron-source");
+                if (IsIronSourceMediationEnabled) {
+                    androidLibraries.Add("com.senspark.ee:iron-source-mediation:1.0.0");
+                    iosLibraries.Add("ee-x/cs-iron-source-mediation");
+                } else {
+                    androidLibraries.Add("com.senspark.ee:iron-source:1.0.0");
+                    iosLibraries.Add("ee-x/cs-iron-source");
+                }
             }
             foreach (var library in androidLibraries) {
                 androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));

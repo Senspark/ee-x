@@ -15,8 +15,8 @@ namespace EE.Editor {
         public override void OnInspectorGUI() {
             var settings = LibrarySettings.Instance;
             EditorGUILayout.LabelField("Utilities", EditorStyles.boldLabel);
-            settings.InjectMultiDex =
-                EditorGUILayout.Toggle(new GUIContent("Inject MultiDex"), settings.InjectMultiDex);
+            settings.IsMultiDexEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Use MultiDex"), settings.IsMultiDexEnabled);
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
 
@@ -31,17 +31,24 @@ namespace EE.Editor {
 
             // AdMob plugin.
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);
-            EditorGUILayout.Separator();
             EditorGUI.BeginDisabledGroup(!settings.IsAdMobEnabled);
-            EditorGUILayout.LabelField("AdMob App ID");
-            settings.AdMobAndroidAppId = EditorGUILayout.TextField("Android", settings.AdMobAndroidAppId);
-            settings.AdMobIosAppId = EditorGUILayout.TextField("iOS", settings.AdMobIosAppId);
+            ++EditorGUI.indentLevel;
+            settings.IsAdMobMediationEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Use Mediation"), settings.IsAdMobMediationEnabled);
+            settings.AdMobAndroidAppId = EditorGUILayout.TextField("Android App ID", settings.AdMobAndroidAppId);
+            settings.AdMobIosAppId = EditorGUILayout.TextField("iOS App ID", settings.AdMobIosAppId);
+            --EditorGUI.indentLevel;
             EditorGUI.EndDisabledGroup();
-            EditorGUILayout.Separator();
 
             // IronSource plugin.
             settings.IsIronSourceEnabled =
-                EditorGUILayout.Toggle(new GUIContent("IronSource"), settings.IsAdjustEnabled);
+                EditorGUILayout.Toggle(new GUIContent("IronSource"), settings.IsIronSourceEnabled);
+            EditorGUI.BeginDisabledGroup(!settings.IsIronSourceEnabled);
+            ++EditorGUI.indentLevel;
+            settings.IsIronSourceMediationEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Use Mediation"), settings.IsIronSourceMediationEnabled);
+            --EditorGUI.indentLevel;
+            EditorGUI.EndDisabledGroup();
 
             if (GUI.changed) {
                 OnSettingsChanged();

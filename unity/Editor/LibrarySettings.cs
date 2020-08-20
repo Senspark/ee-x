@@ -142,40 +142,46 @@ namespace EE.Editor {
             }
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
-            var repositories = new XElement("repositories");
-            repositories.Add(new XElement("repository", "https://dl.bintray.com/enrevol/ee-x"));
-            androidPackages.Add(repositories);
             var androidLibraries = new List<string>();
+            var androidRepositories = new List<string>();
             var iosLibraries = new List<string>();
             if (IsMultiDexEnabled) {
-                androidLibraries.Add("androidx.multidex:multidex:2.0.1");
+                androidLibraries.Add("androidx.multidex:multidex:[2.0.1]");
             }
             if (IsCoreEnabled) {
-                androidLibraries.Add("com.senspark.ee:core:1.0.0");
+                androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
+                androidLibraries.Add("com.senspark.ee:core:[1.0.0]");
                 iosLibraries.Add("ee-x/cs-core");
-            }
-            if (IsAdMobEnabled) {
-                if (IsAdMobMediationEnabled) {
-                    androidLibraries.Add("com.senspark.ee:admob-mediation:1.0.0");
-                    iosLibraries.Add("ee-x/cs-admob-mediation");
-                } else {
-                    androidLibraries.Add("com.senspark.ee:admob:1.0.0");
-                    iosLibraries.Add("ee-x/cs-admob");
+                if (IsAdMobEnabled) {
+                    if (IsAdMobMediationEnabled) {
+                        androidLibraries.Add("com.senspark.ee:admob-mediation:[1.0.0]");
+                        iosLibraries.Add("ee-x/cs-admob-mediation");
+                    } else {
+                        androidLibraries.Add("com.senspark.ee:admob:[1.0.0]");
+                        iosLibraries.Add("ee-x/cs-admob");
+                    }
+                }
+                if (IsAdjustEnabled) {
+                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.0]");
+                    iosLibraries.Add("ee-x/cs-adjust");
+                }
+                if (IsIronSourceEnabled) {
+                    androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
+                    if (IsIronSourceMediationEnabled) {
+                        androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
+                        androidLibraries.Add("com.senspark.ee:iron-source-mediation:[1.0.0]");
+                        iosLibraries.Add("ee-x/cs-iron-source-mediation");
+                    } else {
+                        androidLibraries.Add("com.senspark.ee:iron-source:[1.0.0]");
+                        iosLibraries.Add("ee-x/cs-iron-source");
+                    }
                 }
             }
-            if (IsAdjustEnabled) {
-                androidLibraries.Add("com.senspark.ee:adjust:1.0.0");
-                iosLibraries.Add("ee-x/cs-adjust");
+            var repositories = new XElement("repositories");
+            foreach (var repository in androidRepositories) {
+                repositories.Add(new XElement("repository", repository));
             }
-            if (IsIronSourceEnabled) {
-                if (IsIronSourceMediationEnabled) {
-                    androidLibraries.Add("com.senspark.ee:iron-source-mediation:1.0.0");
-                    iosLibraries.Add("ee-x/cs-iron-source-mediation");
-                } else {
-                    androidLibraries.Add("com.senspark.ee:iron-source:1.0.0");
-                    iosLibraries.Add("ee-x/cs-iron-source");
-                }
-            }
+            androidPackages.Add(repositories);
             foreach (var library in androidLibraries) {
                 androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));
             }

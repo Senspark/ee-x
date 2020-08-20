@@ -21,6 +21,7 @@ public:
     virtual void setEnabled(bool enabled) override;
     virtual Task<std::string> getAdvertisingIdentifier() const override;
     virtual std::string getDeviceIdentifier() const override;
+    virtual void setPushToken(const std::string& token) override;
     virtual void trackEvent(const std::string& token) override;
 
 private:

@@ -10,6 +10,7 @@ namespace EE.Internal {
         private const string kSetEnabled = kPrefix + "SetEnabled";
         private const string kGetAdvertisingIdentifier = kPrefix + "GetAdvertisingIdentifier";
         private const string kGetDeviceIdentifier = kPrefix + "GetDeviceIdentifier";
+        private const string kSetPushToken = kPrefix + "SetPushToken";
         private const string kTrackEvent = kPrefix + "TrackEvent";
 
         private readonly IMessageBridge _bridge;
@@ -49,6 +50,10 @@ namespace EE.Internal {
         public string GetDeviceIdentifier() {
             var response = _bridge.Call(kGetDeviceIdentifier);
             return response;
+        }
+
+        public void SetPushToken(string token) {
+            _bridge.Call(kSetPushToken, token);
         }
 
         public void TrackEvent(string token) {

@@ -12,6 +12,7 @@ private let kInitialize = "\(kPrefix)Initialize"
 private let kSetEnabled = "\(kPrefix)SetEnabled"
 private let kGetAdvertisingIdentifier = "\(kPrefix)GetAdvertisingIdentifier"
 private let kGetDeviceIdentifier = "\(kPrefix)GetDeviceIdentifier"
+private let kSetPushToken = "\(kPrefix)SetPushToken"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAdjustBridge)
@@ -52,6 +53,10 @@ public class AdjustBridge: NSObject, IPlugin {
         _bridge.registerHandler(kGetDeviceIdentifier) { _ in
             Adjust.adid() ?? ""
         }
+        _bridge.registerHandler(kSetPushToken) { message in
+            Adjust.setPushToken(message)
+            return ""
+        }
         _bridge.registerHandler(kTrackEvent) { message in
             self.trackEvent(message)
             return ""
@@ -63,6 +68,7 @@ public class AdjustBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kSetEnabled)
         _bridge.deregisterHandler(kGetAdvertisingIdentifier)
         _bridge.deregisterHandler(kGetDeviceIdentifier)
+        _bridge.deregisterHandler(kSetPushToken)
         _bridge.deregisterHandler(kTrackEvent)
     }
     

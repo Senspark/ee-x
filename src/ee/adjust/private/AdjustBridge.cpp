@@ -34,6 +34,7 @@ const auto kInitialize = kPrefix + "Initialize";
 const auto kSetEnabled = kPrefix + "SetEnabled";
 const auto kGetAdvertisingIdentifier = kPrefix + "GetAdvertisingIdentifier";
 const auto kGetDeviceIdentifier = kPrefix + "GetDeviceIdentifier";
+const auto kSetPushToken = kPrefix + "SetPushToken";
 const auto kTrackEvent = kPrefix + "TrackEvent";
 } // namespace
 
@@ -68,6 +69,10 @@ Task<std::string> Self::getAdvertisingIdentifier() const {
 std::string Self::getDeviceIdentifier() const {
     auto response = bridge_.call(kGetDeviceIdentifier);
     return response;
+}
+
+void Self::setPushToken(const std::string& token) {
+    bridge_.call(kSetPushToken, token);
 }
 
 void Self::trackEvent(const std::string& token) {

@@ -142,6 +142,9 @@ namespace EE.Editor {
             }
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
+            var repositories = new XElement("repositories");
+            repositories.Add(new XElement("repository", "https://dl.bintray.com/enrevol/ee-x"));
+            androidPackages.Add(repositories);
             var androidLibraries = new List<string>();
             var iosLibraries = new List<string>();
             if (IsMultiDexEnabled) {

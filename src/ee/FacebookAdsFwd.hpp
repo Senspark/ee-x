@@ -17,6 +17,7 @@ namespace ee {
 namespace facebook_ads {
 enum class BannerAdSize;
 
+class IBridge;
 class Bridge;
 class BannerAd;
 class NativeAd;
@@ -25,7 +26,7 @@ class InterstitialAd;
 class RewardedAd;
 } // namespace facebook_ads
 
-using FacebookAds = facebook_ads::Bridge;
+using IFacebookAds = facebook_ads::IBridge;
 using FacebookBannerAdSize = facebook_ads::BannerAdSize;
 using FacebookNativeAdLayout = facebook_ads::NativeAdLayout;
 } // namespace ee

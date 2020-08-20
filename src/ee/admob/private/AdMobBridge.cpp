@@ -37,8 +37,6 @@ PluginManager::createPluginImpl(IMessageBridge& bridge) {
 } // namespace core
 
 namespace admob {
-using Self = Bridge;
-
 namespace {
 // clang-format off
 const std::string kPrefix             = "AdMobBridge";
@@ -56,6 +54,8 @@ const auto kCreateRewardedAd          = kPrefix + "CreateRewardedAd";
 const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
 // clang-format on
 } // namespace
+
+using Self = Bridge;
 
 Self::Bridge(IMessageBridge& bridge)
     : bridge_(bridge)

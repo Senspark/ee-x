@@ -1,30 +1,29 @@
 //
-//  AdMob.hpp
+//  FacebookAds.hpp
 //  ee_x
 //
-//  Created by Zinge on 10/11/17.
+//  Created by Pham Xuan Han on 5/12/17.
 //
 //
 
-#ifndef EE_X_ADMOB_BRIDGE_HPP
-#define EE_X_ADMOB_BRIDGE_HPP
+#ifndef EE_X_FACEBOOK_ADS_BRIDGE_HPP
+#define EE_X_FACEBOOK_ADS_BRIDGE_HPP
 
 #include <map>
 
-#include "ee/admob/IAdMobBridge.hpp"
+#include "ee/facebook_ads/IFacebookAdsBridge.hpp"
 
 namespace ee {
-namespace admob {
+namespace facebook_ads {
 class Bridge final : public IBridge {
 public:
     explicit Bridge(IMessageBridge& bridge);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
-
-    virtual void initialize() override;
-    virtual std::string getEmulatorTestDeviceHash() const override;
+    virtual std::string getTestDeviceHash() const override;
     virtual void addTestDevice(const std::string& hash) override;
+    virtual void clearTestDevices() override;
     virtual std::shared_ptr<IAdView>
     createBannerAd(const std::string& adId, BannerAdSize adSize) override;
     virtual std::shared_ptr<IAdView>
@@ -59,7 +58,7 @@ private:
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };
-} // namespace admob
+} // namespace facebook_ads
 } // namespace ee
 
-#endif /* EE_X_ADMOB_BRIDGE_HPP */
+#endif /* EE_X_FACEBOOK_ADS_BRIDGE_HPP */

@@ -6,17 +6,17 @@
 //
 //
 
-#include "ee/facebook_ads/FacebookAdsBridge.hpp"
+#include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
 
 #include <ee/ads/internal/GuardedAdView.hpp>
 #include <ee/ads/internal/GuardedInterstitialAd.hpp>
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
@@ -26,9 +26,18 @@
 #include "ee/facebook_ads/private/FacebookRewardedAd.hpp"
 
 namespace ee {
-namespace facebook_ads {
-using Self = Bridge;
+namespace core {
+template <>
+std::shared_ptr<IFacebookAds>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::FacebookAds)) {
+        return nullptr;
+    }
+    return std::make_shared<facebook_ads::Bridge>(bridge);
+}
+} // namespace core
 
+namespace facebook_ads {
 namespace {
 // clang-format off
 const std::string kPrefix         = "FacebookAdsBridge";
@@ -60,15 +69,12 @@ constexpr auto k__identifiers = "identifiers";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
+using Self = Bridge;
 
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::FacebookAds);
-
     auto&& mediation = ads::MediationManager::getInstance();
     interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();

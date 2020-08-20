@@ -14,9 +14,9 @@
 #include <ee/Ads.hpp>
 
 #include "ee/FacebookAdsFwd.hpp"
-#include "ee/facebook_ads/FacebookAdsBridge.hpp"
 #include "ee/facebook_ads/FacebookBannerAdSize.hpp"
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
+#include "ee/facebook_ads/IFacebookAdsBridge.hpp"
 
 #endif // __cplusplus
 

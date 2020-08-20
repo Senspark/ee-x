@@ -38,7 +38,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::FacebookAds> plugin_;
+    std::shared_ptr<ee::IFacebookAds> plugin_;
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace facebook_ads

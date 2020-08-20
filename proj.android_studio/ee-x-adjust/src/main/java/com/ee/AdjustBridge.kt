@@ -64,11 +64,18 @@ class AdjustBridge(
             class Request(
                 val token: String,
                 val environment: Int,
-                val logLevel: Int
+                val logLevel: Int,
+                val useAppSecret: Boolean,
+                val secretId: Long,
+                val info1: Long,
+                val info2: Long,
+                val info3: Long,
+                val info4: Long
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.token, parseEnvironment(request.environment), parseLogLevel(request.logLevel))
+            initialize(request.token, parseEnvironment(request.environment), parseLogLevel(request.logLevel),
+                request.useAppSecret, request.secretId, request.info1, request.info2, request.info3, request.info4)
             ""
         }
         _bridge.registerHandler(kSetEnabled) { message ->
@@ -126,9 +133,13 @@ class AdjustBridge(
     }
 
     @AnyThread
-    fun initialize(token: String, environment: String, logLevel: LogLevel) {
+    fun initialize(token: String, environment: String, logLevel: LogLevel,
+                   useAppSecret: Boolean, secretId: Long, info1: Long, info2: Long, info3: Long, info4: Long) {
         val config = AdjustConfig(_context, token, environment)
         config.setLogLevel(logLevel)
+        if (useAppSecret) {
+            config.setAppSecret(secretId, info1, info2, info3, info4)
+        }
         Adjust.onCreate(config)
     }
 

@@ -24,6 +24,9 @@ public:
     Self& setToken(const std::string& token);
     Self& setEnvironment(Environment environment);
     Self& setLogLevel(LogLevel logLevel);
+    Self& setAppSecret(std::uint64_t secretId, //
+                       std::uint64_t info1, std::uint64_t info2,
+                       std::uint64_t info3, std::uint64_t info4);
 
 private:
     friend Bridge;
@@ -31,6 +34,12 @@ private:
     std::string token_;
     Environment environment_;
     LogLevel logLevel_;
+    bool useAppSecret_;
+    std::uint64_t secretId_;
+    std::uint64_t info1_;
+    std::uint64_t info2_;
+    std::uint64_t info3_;
+    std::uint64_t info4_;
 };
 } // namespace adjust
 } // namespace ee

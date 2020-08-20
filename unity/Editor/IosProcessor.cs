@@ -1,4 +1,6 @@
 #if UNITY_IOS
+#if UNITY_EDITOR
+
 using System.IO;
 
 using UnityEditor.Build;
@@ -29,4 +31,5 @@ namespace EE.Editor {
     }
 }
 
+#endif // UNITY_EDITOR
 #endif // UNITY_IOS

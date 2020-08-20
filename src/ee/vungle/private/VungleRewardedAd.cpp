@@ -13,7 +13,7 @@
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/vungle/VungleBridge.hpp"
+#include "ee/vungle/private/VungleBridge.hpp"
 
 namespace ee {
 namespace vungle {

@@ -1,4 +1,4 @@
-#include "ee/iron_source/IronSourceBridge.hpp"
+#include "ee/iron_source/private/IronSourceBridge.hpp"
 
 #include <ee/ads/internal/GuardedInterstitialAd.hpp>
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
@@ -15,9 +15,18 @@
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
 namespace ee {
-namespace iron_source {
-using Self = Bridge;
+namespace core {
+template <>
+std::shared_ptr<IIronSource>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::IronSource)) {
+        return nullptr;
+    }
+    return std::make_shared<iron_source::Bridge>(bridge);
+}
+} // namespace core
 
+namespace iron_source {
 namespace {
 // clang-format off
 const std::string kPrefix                = "IronSourceBridge";
@@ -44,15 +53,12 @@ const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
+using Self = Bridge;
 
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::IronSource);
-
     auto&& mediation = ads::MediationManager::getInstance();
     interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();

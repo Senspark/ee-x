@@ -13,7 +13,7 @@
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/unity_ads/UnityAdsBridge.hpp"
+#include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
 namespace ee {
 namespace unity_ads {

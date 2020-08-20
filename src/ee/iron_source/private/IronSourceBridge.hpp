@@ -1,40 +1,29 @@
 #ifndef EE_X_IRON_SOURCE_BRIDGE_HPP
 #define EE_X_IRON_SOURCE_BRIDGE_HPP
 
-#ifdef __OBJC__
-#import <IronSource/IronSource.h>
-#endif // __OBJC__
-
-#ifdef __cplusplus
-
 #include <map>
-#include <memory>
-#include <string>
 
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/IronSourceFwd.hpp"
+#include "ee/iron_source/IIronSourceBridge.hpp"
 
 namespace ee {
 namespace iron_source {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
-    ~Bridge();
-
-    explicit Bridge(const Logger& logger);
+    explicit Bridge(IMessageBridge& bridge);
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
 
     /// Initializes ironSource with the specified game ID.
-    void initialize(const std::string& appKey);
+    virtual void initialize(const std::string& appKey) override;
 
     /// Creates an interstitial ad with the specified placement ID.
-    std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::string& adId);
+    virtual std::shared_ptr<IInterstitialAd>
+    createInterstitialAd(const std::string& adId) override;
 
     /// Creates a rewarded vided with the specifie placement ID.
-    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
+    virtual std::shared_ptr<IRewardedAd>
+    createRewardedAd(const std::string& adId) override;
 
 private:
     friend InterstitialAd;
@@ -77,7 +66,5 @@ private:
 };
 } // namespace iron_source
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_IRON_SOURCE_BRIDGE_HPP */

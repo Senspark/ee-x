@@ -7,11 +7,12 @@
 
 namespace ee {
 namespace vungle {
+class IBridge;
 class Bridge;
 class RewardedAd;
 } // namespace vungle
 
-using Vungle = vungle::Bridge;
+using IVungle = vungle::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

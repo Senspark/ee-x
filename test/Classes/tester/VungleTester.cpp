@@ -19,7 +19,7 @@ namespace vungle {
 using Self = Tester;
 
 void Self::initialize() {
-    plugin_ = std::make_shared<ee::Vungle>();
+    plugin_ = ee::PluginManager::createPlugin<ee::IVungle>();
     plugin_->initialize(config::app_id);
 }
 

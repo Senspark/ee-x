@@ -34,7 +34,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::IronSource> plugin_;
+    std::shared_ptr<ee::IIronSource> plugin_;
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace iron_source

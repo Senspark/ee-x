@@ -6,7 +6,7 @@
 #include <ee/Ads.hpp>
 
 #include "ee/VungleFwd.hpp"
-#include "ee/vungle/VungleBridge.hpp"
+#include "ee/vungle/IVungleBridge.hpp"
 
 #endif // __cplusplus
 

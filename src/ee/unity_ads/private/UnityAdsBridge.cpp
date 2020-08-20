@@ -6,26 +6,35 @@
 //
 //
 
-#include "ee/unity_ads/UnityAdsBridge.hpp"
+#include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
 #include <ee/ads/internal/GuardedInterstitialAd.hpp>
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/unity_ads/private/UnityInterstitialAd.hpp"
 #include "ee/unity_ads/private/UnityRewardedAd.hpp"
 
 namespace ee {
-namespace unity_ads {
-using Self = Bridge;
+namespace core {
+template <>
+std::shared_ptr<IUnityAds>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::UnityAds)) {
+        return nullptr;
+    }
+    return std::make_shared<unity_ads::Bridge>(bridge);
+}
+} // namespace core
 
+namespace unity_ads {
 namespace {
 // clang-format off
 const std::string kPrefix       = "UnityAdsBridge";
@@ -39,15 +48,12 @@ const auto kOnClosed            = kPrefix + "OnClosed";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
+using Self = Bridge;
 
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::UnityAds);
-
     displaying_ = false;
 
     auto&& mediation = ads::MediationManager::getInstance();

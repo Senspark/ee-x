@@ -1,39 +1,21 @@
 #ifndef EE_X_VUNGLE_BRIDGE_HPP
 #define EE_X_VUNGLE_BRIDGE_HPP
 
-#ifdef __OBJC__
-/// https://support.vungle.com/hc/en-us/articles/360002925791-Integrate-Vungle-SDK-for-iOS
-/// Step 3: Swift Only: Create a Bridging Header File.
-#import <VungleSDK/VungleSDK.h>
-#endif // __OBJC__
-
-#ifdef __cplusplus
-
 #include <map>
 
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/VungleFwd.hpp"
+#include "ee/vungle/IVungleBridge.hpp"
 
 namespace ee {
 namespace vungle {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
-    ~Bridge();
-
-    explicit Bridge(const Logger& logger);
+    explicit Bridge(IMessageBridge& bridge);
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
-
-    /// Initializes Vungle with the specified game ID.
-    void initialize(const std::string& appId);
-
-    [[deprecated]] void initialize(const std::string& gameId,
-                                   const std::string& adId);
-
-    /// Creates a rewarded video.
-    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
+    virtual void initialize(const std::string& appId) override;
+    virtual std::shared_ptr<IRewardedAd>
+    createRewardedAd(const std::string& adId) override;
 
 private:
     friend RewardedAd;
@@ -71,7 +53,5 @@ private:
 };
 } // namespace vungle
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_VUNGLE_BRIDGE_HPP */

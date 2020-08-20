@@ -21,7 +21,7 @@ using Self = Tester;
 
 void Self::initialize() {
     FunctionLogger logger(__PRETTY_FUNCTION__);
-    plugin_ = std::make_shared<ee::UnityAds>();
+    plugin_ = ee::PluginManager::createPlugin<ee::IUnityAds>();
     plugin_->initialize(config::app_id, true);
 }
 

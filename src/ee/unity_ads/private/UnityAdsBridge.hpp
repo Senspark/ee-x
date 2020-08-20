@@ -9,41 +9,25 @@
 #ifndef EE_X_UNITY_ADS_BRIDGE_HPP
 #define EE_X_UNITY_ADS_BRIDGE_HPP
 
-#ifdef __cplusplus
-
 #include <map>
-#include <memory>
-#include <string>
 
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/UnityAdsFwd.hpp"
+#include "ee/unity_ads/IUnityAdsBridge.hpp"
 
 namespace ee {
 namespace unity_ads {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
-    ~Bridge();
-
-    explicit Bridge(const Logger& logger);
+    explicit Bridge(IMessageBridge& bridge);
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
-
-    /// Initializes Unity Ads.
-    /// @param[in] gameId Unity Ads game ID.
-    /// @param[in] testModeEnabled Whether test mode is enabled.
-    void initialize(const std::string& gameId, bool testModeEnabled);
-
-    /// Sets debug mode enabled.
-    void setDebugModeEnabled(bool enabled);
-
-    /// Creates an interstitial ad with the specified placement ID.
-    std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::string& adId);
-
-    /// Creates a rewarded video with the specified placement ID.
-    std::shared_ptr<IRewardedAd> createRewardedAd(const std::string& adId);
+    virtual void initialize(const std::string& gameId,
+                            bool testModeEnabled) override;
+    virtual void setDebugModeEnabled(bool enabled) override;
+    virtual std::shared_ptr<IInterstitialAd>
+    createInterstitialAd(const std::string& adId) override;
+    virtual std::shared_ptr<IRewardedAd>
+    createRewardedAd(const std::string& adId) override;
 
 private:
     friend InterstitialAd;
@@ -90,7 +74,5 @@ private:
 };
 } // namespace unity_ads
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_FACEBOOK_ADS_BRIDGE_HPP_ */

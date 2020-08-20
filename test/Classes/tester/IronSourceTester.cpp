@@ -19,7 +19,7 @@ using Self = Tester;
 
 void Self::initialize() {
     FunctionLogger logger(__PRETTY_FUNCTION__);
-    plugin_ = std::make_shared<ee::IronSource>();
+    plugin_ = ee::PluginManager::createPlugin<ee::IIronSource>();
 }
 
 void Self::destroy() {}

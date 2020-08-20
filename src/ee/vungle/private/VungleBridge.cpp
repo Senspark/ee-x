@@ -1,21 +1,30 @@
-#include "ee/vungle/VungleBridge.hpp"
+#include "ee/vungle/private/VungleBridge.hpp"
 
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/vungle/private/VungleRewardedAd.hpp"
 
 namespace ee {
-namespace vungle {
-using Self = Bridge;
+namespace core {
+template <>
+std::shared_ptr<IVungle>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::Vungle)) {
+        return nullptr;
+    }
+    return std::make_shared<vungle::Bridge>(bridge);
+}
+} // namespace core
 
+namespace vungle {
 namespace {
 // clang-format off
 const std::string kPrefix    = "VungleBridge";
@@ -34,15 +43,12 @@ const auto kOnClosed       = kPrefix + "OnClosed";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
+using Self = Bridge;
 
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug(__PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::Vungle);
-
     auto&& mediation = ads::MediationManager::getInstance();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
 

@@ -26,6 +26,11 @@ Self& Self::setLogLevel(LogLevel logLevel) {
     return *this;
 }
 
+Self& Self::setEventBufferingEnabled(bool enabled) {
+    eventBufferingEnabled_ = enabled;
+    return *this;
+}
+
 Self& Self::setAppSecret(std::uint64_t secretId, //
                          std::uint64_t info1, std::uint64_t info2,
                          std::uint64_t info3, std::uint64_t info4) {

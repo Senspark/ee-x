@@ -65,6 +65,7 @@ class AdjustBridge(
                 val token: String,
                 val environment: Int,
                 val logLevel: Int,
+                val eventBufferingEnabled: Boolean,
                 val useAppSecret: Boolean,
                 val secretId: Long,
                 val info1: Long,
@@ -74,7 +75,8 @@ class AdjustBridge(
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.token, parseEnvironment(request.environment), parseLogLevel(request.logLevel),
+            initialize(request.token, parseEnvironment(request.environment),
+                parseLogLevel(request.logLevel), request.eventBufferingEnabled,
                 request.useAppSecret, request.secretId, request.info1, request.info2, request.info3, request.info4)
             ""
         }
@@ -133,10 +135,12 @@ class AdjustBridge(
     }
 
     @AnyThread
-    fun initialize(token: String, environment: String, logLevel: LogLevel,
+    fun initialize(token: String, environment: String,
+                   logLevel: LogLevel, eventBufferingEnabled: Boolean,
                    useAppSecret: Boolean, secretId: Long, info1: Long, info2: Long, info3: Long, info4: Long) {
         val config = AdjustConfig(_context, token, environment)
         config.setLogLevel(logLevel)
+        config.setEventBufferingEnabled(eventBufferingEnabled)
         if (useAppSecret) {
             config.setAppSecret(secretId, info1, info2, info3, info4)
         }

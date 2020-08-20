@@ -54,6 +54,7 @@ void Self::initialize(const AdjustConfig& config) {
     json["token"] = config.token_;
     json["environment"] = config.environment_;
     json["logLevel"] = config.logLevel_;
+    json["eventBufferingEnabled"] = config.eventBufferingEnabled_;
     json["useAppSecret"] = config.useAppSecret_;
     json["secretId"] = config.secretId_;
     json["info1"] = config.info1_;

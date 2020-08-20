@@ -37,6 +37,7 @@ public class AdjustBridge: NSObject, IPlugin {
                 let environment = dict["environment"] as? Int,
                 let logLevel = dict["logLevel"] as? Int,
                 let useAppSecret = dict["useAppSecret"] as? Bool,
+                let eventBufferingEnabled = dict["eventBufferingEnabled"] as? Bool,
                 let secretId = dict["secretId"] as? UInt64,
                 let info1 = dict["info1"] as? UInt64,
                 let info2 = dict["info2"] as? UInt64,
@@ -47,7 +48,8 @@ public class AdjustBridge: NSObject, IPlugin {
                 return ""
             }
             self.initialize(
-                token, self.parseEnvironment(environment), self.parseLogLevel(logLevel),
+                token, self.parseEnvironment(environment),
+                self.parseLogLevel(logLevel), eventBufferingEnabled,
                 useAppSecret, secretId, info1, info2, info3, info4)
             return ""
         }
@@ -104,10 +106,12 @@ public class AdjustBridge: NSObject, IPlugin {
         return dict[logLevel] ?? ADJLogLevelVerbose
     }
     
-    func initialize(_ token: String, _ environment: String, _ logLevel: ADJLogLevel,
+    func initialize(_ token: String, _ environment: String,
+                    _ logLevel: ADJLogLevel, _ eventBufferingEnabled: Bool,
                     _ useAppSecret: Bool, _ secretId: UInt64, _ info1: UInt64, _ info2: UInt64, _ info3: UInt64, _ info4: UInt64) {
         let config = ADJConfig(appToken: token, environment: environment)
         config?.logLevel = logLevel
+        config?.eventBufferingEnabled = eventBufferingEnabled
         if useAppSecret {
             config?.setAppSecret(
                 UInt(secretId),

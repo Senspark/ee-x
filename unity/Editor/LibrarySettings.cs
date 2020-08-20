@@ -172,6 +172,8 @@ namespace EE.Editor {
                 if (IsAdjustEnabled) {
                     androidLibraries.Add("com.senspark.ee:adjust:[1.0.0]");
                     iosLibraries.Add("ee-x/cs-adjust");
+                    iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
+                        new XAttribute("modular_headers", true)));
                 }
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");

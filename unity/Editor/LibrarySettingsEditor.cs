@@ -14,9 +14,16 @@ namespace EE.Editor {
 
         public override void OnInspectorGUI() {
             var settings = LibrarySettings.Instance;
+
+            EditorGUILayout.LabelField("Config", EditorStyles.boldLabel);
+            settings.IsDeveloperModeEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Developer Mode"), settings.IsDeveloperModeEnabled);
+
+            EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Utilities", EditorStyles.boldLabel);
             settings.IsMultiDexEnabled =
                 EditorGUILayout.Toggle(new GUIContent("Use MultiDex"), settings.IsMultiDexEnabled);
+
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
 

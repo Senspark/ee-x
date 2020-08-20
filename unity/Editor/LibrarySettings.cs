@@ -20,6 +20,9 @@ namespace EE.Editor {
         private static LibrarySettings _sharedInstance;
 
         [SerializeField]
+        private bool _isDeveloperModeEnabled = false;
+
+        [SerializeField]
         private bool _isMultiDexEnabled = false;
 
         [SerializeField]
@@ -45,6 +48,11 @@ namespace EE.Editor {
 
         [SerializeField]
         private bool _isIronSourceMediationEnabled = false;
+
+        public bool IsDeveloperModeEnabled {
+            get => _isDeveloperModeEnabled;
+            set => _isDeveloperModeEnabled = value;
+        }
 
         public bool IsMultiDexEnabled {
             get => _isMultiDexEnabled;
@@ -186,7 +194,11 @@ namespace EE.Editor {
                 androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));
             }
             foreach (var library in iosLibraries) {
-                iosPods.Add(new XElement("iosPod", new XAttribute("name", library)));
+                var pod = new XElement("iosPod", new XAttribute("name", library));
+                if (IsDeveloperModeEnabled) {
+                    pod.Add(new XAttribute("path", "ee-x"));
+                }
+                iosPods.Add(pod);
             }
             document.Save(LibraryDependenciesFile);
         }

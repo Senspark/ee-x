@@ -20,6 +20,9 @@ namespace core {
 template <>
 std::shared_ptr<IAdjust>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::Adjust)) {
+        return nullptr;
+    }
     return std::make_shared<adjust::Bridge>(bridge);
 }
 } // namespace core
@@ -37,9 +40,7 @@ const auto kTrackEvent = kPrefix + "TrackEvent";
 using Self = Bridge;
 
 Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {
-    PluginManager::addPlugin(Plugin::Adjust);
-}
+    : bridge_(bridge) {}
 
 Self::~Bridge() = default;
 

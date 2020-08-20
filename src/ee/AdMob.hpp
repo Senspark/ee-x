@@ -15,8 +15,8 @@
 
 #include "ee/AdMobFwd.hpp"
 #include "ee/admob/AdMobBannerAdSize.hpp"
-#include "ee/admob/AdMobBridge.hpp"
 #include "ee/admob/AdMobNativeAdLayout.hpp"
+#include "ee/admob/IAdMobBridge.hpp"
 
 #endif // __cplusplus
 

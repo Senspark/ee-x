@@ -20,7 +20,7 @@ namespace admob {
 using Self = Tester;
 
 void Self::initialize() {
-    plugin_ = std::make_shared<ee::AdMob>();
+    plugin_ = ee::PluginManager::createPlugin<ee::IAdMob>();
     plugin_->initialize();
     plugin_->addTestDevice(plugin_->getEmulatorTestDeviceHash());
     plugin_->addTestDevice("930A5959F4325BAA45E24449B03CB221"); // BlueStacks

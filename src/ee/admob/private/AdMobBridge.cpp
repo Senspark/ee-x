@@ -6,16 +6,16 @@
 //
 //
 
-#include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/private/AdMobBridge.hpp"
 
 #include <ee/ads/internal/GuardedAdView.hpp>
 #include <ee/ads/internal/GuardedInterstitialAd.hpp>
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/admob/AdMobNativeAdLayout.hpp"
@@ -25,6 +25,17 @@
 #include "ee/admob/private/AdMobRewardedAd.hpp"
 
 namespace ee {
+namespace core {
+template <>
+std::shared_ptr<IAdMob>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::AdMob)) {
+        return nullptr;
+    }
+    return std::make_shared<admob::Bridge>(bridge);
+}
+} // namespace core
+
 namespace admob {
 using Self = Bridge;
 
@@ -46,15 +57,10 @@ const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
-
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::AdMob);
-
     auto&& mediation = ads::MediationManager::getInstance();
     interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();

@@ -17,6 +17,7 @@ namespace ee {
 namespace admob {
 enum class BannerAdSize;
 
+class IBridge;
 class Bridge;
 class BannerAd;
 class NativeAd;
@@ -25,7 +26,7 @@ class InterstitialAd;
 class RewardedAd;
 } // namespace admob
 
-using AdMob = admob::Bridge;
+using IAdMob = admob::IBridge;
 using AdMobBannerAdSize = admob::BannerAdSize;
 using AdMobNativeAdLayout = admob::NativeAdLayout;
 } // namespace ee

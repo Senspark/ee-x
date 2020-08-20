@@ -14,13 +14,13 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/private/AdMobBridge.hpp"
 
 namespace ee {
 namespace admob {
 using Self = BannerAd;
 
-Self::BannerAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
+Self::BannerAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
                const std::string& adId, const std::pair<int, int>& size)
     : bridge_(bridge)
     , logger_(logger)

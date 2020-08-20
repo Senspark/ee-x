@@ -14,7 +14,7 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/private/AdMobBridge.hpp"
 
 namespace ee {
 namespace admob {
@@ -22,7 +22,7 @@ using Self = InterstitialAd;
 
 Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
                      const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-                     AdMob* plugin, const std::string& adId)
+                     Bridge* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)

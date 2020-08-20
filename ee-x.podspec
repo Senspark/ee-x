@@ -115,14 +115,20 @@ Pod::Spec.new do |spec|
 
     s.resources = 'res/*'
     s.dependency 'ee-x/ads'
-
-    # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+    s.dependency 'ee-x/admob-dependencies'
   end
 
   spec.subspec 'admob-mediation' do |s|
     s.dependency 'ee-x/admob'
+    s.dependency 'ee-x/admob-mediation-dependencies'
+  end
 
+  spec.subspec 'admob-dependencies' do |s|
+    # https://developers.google.com/admob/ios/rel-notes
+    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+  end
+
+  spec.subspec 'admob-mediation-dependencies' do |s|
     # https://bintray.com/google/mobile-ads-adapters-ios
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationAppLovin', '6.13.0.0'
@@ -138,27 +144,6 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
-  end
-
-  spec.subspec 'adjust' do |s|
-    s.source_files =
-      'src/ee/Adjust*',
-      'src/ee/adjust/**/*'
-
-    s.private_header_files =
-      'src/ee/adjust/internal/*{h,hpp,inl}',
-      'src/ee/adjust/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/adjust/Android.mk',
-      'src/ee/adjust/CMakeLists.txt',
-      'src/ee/adjust/generate.sh',
-      'src/ee/adjust/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-
-    # https://github.com/adjust/ios_sdk
-    s.dependency 'Adjust'
   end
 
   spec.subspec 'app-lovin' do |s|
@@ -219,14 +204,20 @@ Pod::Spec.new do |spec|
       'src/ee/iron_source/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '6.17.0'
+    s.dependency 'ee-x/iron-source-dependencies'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
     s.dependency 'ee-x/iron-source'
+    s.dependency 'ee-x/iron-source-mediation-dependencies'
+  end
 
+  spec.subspec 'iron-source-dependencies' do |s|
+    # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
+    s.dependency 'IronSourceSDK', '6.17.0'
+  end
+
+  spec.subspec 'iron-source-mediation-dependencies' do |s|
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     # FIXME: require Google-Mobile-Ads-SDK = 7.61.0
     # s.dependency 'IronSourceAdMobAdapter', '4.3.13'
@@ -284,6 +275,30 @@ Pod::Spec.new do |spec|
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
     s.dependency 'VungleSDK-iOS', '6.7.0'
+  end
+
+  spec.subspec 'adjust' do |s|
+    s.source_files =
+      'src/ee/Adjust*',
+      'src/ee/adjust/**/*'
+
+    s.private_header_files =
+      'src/ee/adjust/internal/*{h,hpp,inl}',
+      'src/ee/adjust/private/*.{h,hpp,inl}'
+
+    s.exclude_files =
+      'src/ee/adjust/Android.mk',
+      'src/ee/adjust/CMakeLists.txt',
+      'src/ee/adjust/generate.sh',
+      'src/ee/adjust/sourcelist.cmake'
+
+    s.dependency 'ee-x/core'
+    s.dependency 'ee-x/adjust-dependencies'
+  end
+
+  spec.subspec 'adjust-dependencies' do |s|
+    # https://github.com/adjust/ios_sdk
+    s.dependency 'Adjust'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -876,16 +891,33 @@ Pod::Spec.new do |spec|
       'src/ee/admob/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'
-    s.dependency 'Google-Mobile-Ads-SDK', '7.62.0'
+    s.dependency 'ee-x/admob-dependencies'
   end
 
   spec.subspec 'cs-admob-mediation' do |s|
     s.dependency 'ee-x/cs-admob'
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.13.0.0'
-    s.dependency 'GoogleMobileAdsMediationFacebook', '5.9.0.1'
-    s.dependency 'GoogleMobileAdsMediationIronSource', '6.17.0.0'
-    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.6.0'
-    s.dependency 'GoogleMobileAdsMediationVungle', '6.7.0.0'
+    s.dependency 'ee-x/admob-mediation-dependencies'
+  end
+
+  spec.subspec 'cs-iron-source' do |s|
+    s.source_files =
+      'src/ee/iron_source/**/*.swift'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'ee-x/iron-source-dependencies'
+  end
+
+  spec.subspec 'cs-iron-source-mediation' do |s|
+    s.dependency 'ee-x/cs-iron-source'
+    s.dependency 'ee-x/cs-iron-source-mediation-dependencies'
+  end
+
+  spec.subspec 'cs-adjust' do |s|
+    s.source_files =
+      'src/ee/adjust/**/*.swift'
+    
+    s.dependency 'ee-x/cs-core'
+    s.dependency 'ee-x/adjust-dependencies'
   end
 end
 

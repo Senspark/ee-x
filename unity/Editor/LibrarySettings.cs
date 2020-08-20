@@ -23,6 +23,9 @@ namespace EE.Editor {
         private bool _isDeveloperModeEnabled = false;
 
         [SerializeField]
+        private string _libraryPath = "ee-x";
+
+        [SerializeField]
         private bool _isMultiDexEnabled = false;
 
         [SerializeField]
@@ -52,6 +55,11 @@ namespace EE.Editor {
         public bool IsDeveloperModeEnabled {
             get => _isDeveloperModeEnabled;
             set => _isDeveloperModeEnabled = value;
+        }
+
+        public string LibraryPath {
+            get => _libraryPath;
+            set => _libraryPath = value;
         }
 
         public bool IsMultiDexEnabled {
@@ -198,7 +206,7 @@ namespace EE.Editor {
             foreach (var library in iosLibraries) {
                 var pod = new XElement("iosPod", new XAttribute("name", library));
                 if (IsDeveloperModeEnabled) {
-                    pod.Add(new XAttribute("path", "ee-x"));
+                    pod.Add(new XAttribute("path", LibraryPath));
                 }
                 iosPods.Add(pod);
             }

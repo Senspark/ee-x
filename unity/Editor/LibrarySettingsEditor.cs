@@ -18,6 +18,11 @@ namespace EE.Editor {
             EditorGUILayout.LabelField("Config", EditorStyles.boldLabel);
             settings.IsDeveloperModeEnabled =
                 EditorGUILayout.Toggle(new GUIContent("Developer Mode"), settings.IsDeveloperModeEnabled);
+            EditorGUI.BeginDisabledGroup(!settings.IsDeveloperModeEnabled);
+            ++EditorGUI.indentLevel;
+            settings.LibraryPath = EditorGUILayout.TextField("Library path", settings.LibraryPath);
+            --EditorGUI.indentLevel;
+            EditorGUI.EndDisabledGroup();
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Utilities", EditorStyles.boldLabel);

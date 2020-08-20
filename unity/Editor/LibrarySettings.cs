@@ -37,6 +37,9 @@ namespace EE.Editor {
         [SerializeField]
         private bool _isAdjustEnabled = false;
 
+        [SerializeField]
+        private bool _isIronSourceEnabled = false;
+
         public bool InjectMultiDex {
             get => _injectMultiDex;
             set => _injectMultiDex = value;
@@ -65,6 +68,11 @@ namespace EE.Editor {
         public bool IsAdjustEnabled {
             get => _isAdjustEnabled;
             set => _isAdjustEnabled = value;
+        }
+
+        public bool IsIronSourceEnabled {
+            get => _isIronSourceEnabled;
+            set => _isIronSourceEnabled = value;
         }
 
         public static LibrarySettings Instance {
@@ -134,6 +142,10 @@ namespace EE.Editor {
             if (IsAdjustEnabled) {
                 androidLibraries.Add("com.senspark.ee:adjust:1.0.0");
                 iosLibraries.Add("ee-x/cs-adjust");
+            }
+            if (IsIronSourceEnabled) {
+                androidLibraries.Add("com.senspark.ee:iron-source:1.0.0");
+                iosLibraries.Add("ee-x/cs-iron-source");
             }
             foreach (var library in androidLibraries) {
                 androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));

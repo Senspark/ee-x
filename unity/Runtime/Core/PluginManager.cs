@@ -33,7 +33,8 @@ namespace EE {
 
         private static readonly Dictionary<Type, (Plugin, Type)> _pluginTypes = new Dictionary<Type, (Plugin, Type)> {
             [typeof(IAdjust)] = (Plugin.Adjust, typeof(Adjust)),
-            [typeof(IAdMob)] = (Plugin.AdMob, typeof(AdMob))
+            [typeof(IAdMob)] = (Plugin.AdMob, typeof(AdMob)),
+            [typeof(IIronSource)] = (Plugin.IronSource, typeof(IronSource))
         };
 
         private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();

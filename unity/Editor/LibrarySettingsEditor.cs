@@ -26,6 +26,9 @@ namespace EE.Editor {
             settings.IsCoreEnabled = EditorGUILayout.Toggle(new GUIContent("Core"), settings.IsCoreEnabled);
             EditorGUI.EndDisabledGroup();
 
+            // Adjust plugin.
+            settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
+
             // AdMob plugin.
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);
             EditorGUILayout.Separator();
@@ -36,8 +39,9 @@ namespace EE.Editor {
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.Separator();
 
-            // Adjust plugin.
-            settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
+            // IronSource plugin.
+            settings.IsIronSourceEnabled =
+                EditorGUILayout.Toggle(new GUIContent("IronSource"), settings.IsAdjustEnabled);
 
             if (GUI.changed) {
                 OnSettingsChanged();

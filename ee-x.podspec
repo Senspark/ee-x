@@ -909,7 +909,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cs-iron-source-mediation' do |s|
     s.dependency 'ee-x/cs-iron-source'
-    s.dependency 'ee-x/cs-iron-source-mediation-dependencies'
+    s.dependency 'ee-x/iron-source-mediation-dependencies'
   end
 
   spec.subspec 'cs-adjust' do |s|

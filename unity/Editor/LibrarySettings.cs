@@ -32,6 +32,9 @@ namespace EE.Editor {
         private bool _isCoreEnabled = true;
 
         [SerializeField]
+        private bool _isAdjustEnabled = false;
+
+        [SerializeField]
         private bool _isAdMobEnabled = false;
 
         [SerializeField]
@@ -44,7 +47,7 @@ namespace EE.Editor {
         private string _adMobIosAppId;
 
         [SerializeField]
-        private bool _isAdjustEnabled = false;
+        private bool _isFacebookAdsEnabled = false;
 
         [SerializeField]
         private bool _isIronSourceEnabled = false;
@@ -95,6 +98,11 @@ namespace EE.Editor {
         public bool IsAdjustEnabled {
             get => _isAdjustEnabled;
             set => _isAdjustEnabled = value;
+        }
+
+        public bool IsFacebookAdsEnabled {
+            get => _isFacebookAdsEnabled;
+            set => _isFacebookAdsEnabled = value;
         }
 
         public bool IsIronSourceEnabled {
@@ -168,6 +176,12 @@ namespace EE.Editor {
                 androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
                 androidLibraries.Add("com.senspark.ee:core:[1.0.0]");
                 iosLibraries.Add("ee-x/cs-core");
+                if (IsAdjustEnabled) {
+                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.0]");
+                    iosLibraries.Add("ee-x/cs-adjust");
+                    iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
+                        new XAttribute("modular_headers", true)));
+                }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
                         androidLibraries.Add("com.senspark.ee:admob-mediation:[1.0.0]");
@@ -177,11 +191,9 @@ namespace EE.Editor {
                         iosLibraries.Add("ee-x/cs-admob");
                     }
                 }
-                if (IsAdjustEnabled) {
-                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.0]");
-                    iosLibraries.Add("ee-x/cs-adjust");
-                    iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
-                        new XAttribute("modular_headers", true)));
+                if (IsFacebookAdsEnabled) {
+                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.0.0]");
+                    iosLibraries.Add("ee-x/cs-facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");

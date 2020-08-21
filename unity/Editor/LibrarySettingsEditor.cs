@@ -52,6 +52,10 @@ namespace EE.Editor {
             --EditorGUI.indentLevel;
             EditorGUI.EndDisabledGroup();
 
+            // FacebookAds plugin.
+            settings.IsFacebookAdsEnabled =
+                EditorGUILayout.Toggle(new GUIContent("FacebookAds"), settings.IsFacebookAdsEnabled);
+
             // IronSource plugin.
             settings.IsIronSourceEnabled =
                 EditorGUILayout.Toggle(new GUIContent("IronSource"), settings.IsIronSourceEnabled);

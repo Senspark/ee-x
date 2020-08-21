@@ -183,7 +183,10 @@ Pod::Spec.new do |spec|
       'src/ee/facebook_ads/sourcelist.cmake'
       
     s.dependency 'ee-x/ads'
+    s.dependency 'ee-x/facebook-ads-dependencies'
+  end
 
+  spec.subspec 'facebook-ads-dependencies' do |s|
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
     s.dependency 'FBAudienceNetwork', '5.9.0'
   end
@@ -897,6 +900,14 @@ Pod::Spec.new do |spec|
   spec.subspec 'cs-admob-mediation' do |s|
     s.dependency 'ee-x/cs-admob'
     s.dependency 'ee-x/admob-mediation-dependencies'
+  end
+
+  spec.subspec 'cs-facebook-ads' do |s|
+    s.source_files =
+      'src/ee/facebook_ads/**/*.swift'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'ee-x/facebook-ads-dependencies'
   end
 
   spec.subspec 'cs-iron-source' do |s|

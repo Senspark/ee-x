@@ -254,7 +254,10 @@ Pod::Spec.new do |spec|
       'src/ee/unity_ads/sourcelist.cmake'
 
     s.dependency 'ee-x/ads'
+    s.dependency 'ee-x/unity-ads-dependencies'
+  end
 
+  spec.subspec 'unity-ads-dependencies' do |s|
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
     s.dependency 'UnityAds', '3.4.6'
   end
@@ -921,6 +924,14 @@ Pod::Spec.new do |spec|
   spec.subspec 'cs-iron-source-mediation' do |s|
     s.dependency 'ee-x/cs-iron-source'
     s.dependency 'ee-x/iron-source-mediation-dependencies'
+  end
+
+  spec.subspec 'cs-unity' do |s|
+    s.source_files =
+      'src/ee/unity_ads/**/*.swift'
+    
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'ee-x/unity-ads-dependencies'
   end
 
   spec.subspec 'cs-adjust' do |s|

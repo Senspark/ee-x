@@ -62,7 +62,7 @@ private class PluginManager: NSObject {
             return false
         }
         _plugins[name] = plugin
-        return false
+        return true
     }
     
     /// Removes and deinitialize a plugin.

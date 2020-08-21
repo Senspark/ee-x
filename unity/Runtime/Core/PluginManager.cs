@@ -31,13 +31,14 @@ namespace EE {
             [Plugin.Vungle] = "Vungle"
         };
 
-        private static readonly Dictionary<Type, (Plugin, Type)> _pluginTypes = new Dictionary<Type, (Plugin, Type)> {
-            [typeof(IAdjust)] = (Plugin.Adjust, typeof(Adjust)),
-            [typeof(IAdMob)] = (Plugin.AdMob, typeof(AdMob)),
-            [typeof(IFacebookAds)] = (Plugin.IronSource, typeof(FacebookAds)),
-            [typeof(IIronSource)] = (Plugin.IronSource, typeof(IronSource)),
-            [typeof(IUnityAds)] = (Plugin.IronSource, typeof(UnityAds))
-        };
+        private static readonly Dictionary<Type, (Plugin, Func<IMessageBridge, IPlugin>)> _pluginTypes
+            = new Dictionary<Type, (Plugin, Func<IMessageBridge, IPlugin>)> {
+                [typeof(IAdjust)] = (Plugin.Adjust, bridge => new Adjust(bridge)),
+                [typeof(IAdMob)] = (Plugin.AdMob, bridge => new AdMob(bridge)),
+                [typeof(IFacebookAds)] = (Plugin.IronSource, bridge => new FacebookAds(bridge)),
+                [typeof(IIronSource)] = (Plugin.IronSource, bridge => new IronSource(bridge)),
+                [typeof(IUnityAds)] = (Plugin.IronSource, bridge => new UnityAds(bridge)),
+            };
 
         private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();
 
@@ -63,11 +64,11 @@ namespace EE {
 
         public static T CreatePlugin<T>() where T : IPlugin {
             var type = typeof(T);
-            var (plugin, pluginType) = _pluginTypes[type];
+            var (plugin, constructor) = _pluginTypes[type];
             if (!AddPlugin(plugin)) {
                 throw new Exception($"Can not add plugin {plugin}");
             }
-            var instance = (T) Activator.CreateInstance(pluginType, _bridge);
+            var instance = (T) constructor(_bridge);
             _plugins.Add(plugin, instance);
             return instance;
         }

@@ -66,6 +66,9 @@ namespace EE.Editor {
             --EditorGUI.indentLevel;
             EditorGUI.EndDisabledGroup();
 
+            // UnityAds plugin.
+            settings.IsUnityAdsEnabled = EditorGUILayout.Toggle(new GUIContent("UnityAds"), settings.IsUnityAdsEnabled);
+
             if (GUI.changed) {
                 OnSettingsChanged();
             }

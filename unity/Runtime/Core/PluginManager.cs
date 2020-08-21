@@ -34,7 +34,9 @@ namespace EE {
         private static readonly Dictionary<Type, (Plugin, Type)> _pluginTypes = new Dictionary<Type, (Plugin, Type)> {
             [typeof(IAdjust)] = (Plugin.Adjust, typeof(Adjust)),
             [typeof(IAdMob)] = (Plugin.AdMob, typeof(AdMob)),
-            [typeof(IIronSource)] = (Plugin.IronSource, typeof(IronSource))
+            [typeof(IFacebookAds)] = (Plugin.IronSource, typeof(FacebookAds)),
+            [typeof(IIronSource)] = (Plugin.IronSource, typeof(IronSource)),
+            [typeof(IUnityAds)] = (Plugin.IronSource, typeof(UnityAds))
         };
 
         private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();

@@ -55,6 +55,9 @@ namespace EE.Editor {
         [SerializeField]
         private bool _isIronSourceMediationEnabled = false;
 
+        [SerializeField]
+        private bool _isUnityAdsEnabled = false;
+
         public bool IsDeveloperModeEnabled {
             get => _isDeveloperModeEnabled;
             set => _isDeveloperModeEnabled = value;
@@ -113,6 +116,11 @@ namespace EE.Editor {
         public bool IsIronSourceMediationEnabled {
             get => _isIronSourceMediationEnabled;
             set => _isIronSourceMediationEnabled = value;
+        }
+
+        public bool IsUnityAdsEnabled {
+            get => _isUnityAdsEnabled;
+            set => _isUnityAdsEnabled = value;
         }
 
         public static LibrarySettings Instance {
@@ -205,6 +213,10 @@ namespace EE.Editor {
                         androidLibraries.Add("com.senspark.ee:iron-source:[1.0.0]");
                         iosLibraries.Add("ee-x/cs-iron-source");
                     }
+                }
+                if (IsUnityAdsEnabled) {
+                    androidLibraries.Add("com.senspark.ee:unity-ads:[1.0.0]");
+                    iosLibraries.Add("ee-x/cs-unity-ads");
                 }
             }
             var repositories = new XElement("repositories");

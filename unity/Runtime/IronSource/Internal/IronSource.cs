@@ -29,8 +29,8 @@ namespace EE.Internal {
 
         public IronSource(IMessageBridge bridge) {
             _bridge = bridge;
-            _interstitialAdDisplayer = new AsyncHelper<bool>();
-            _rewardedAdDisplayer = new AsyncHelper<IRewardedAdResult>();
+            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
+            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
 
             _bridge.RegisterHandler(_ => {
                 Thread.RunOnLibraryThread(OnInterstitialAdLoaded);
@@ -90,7 +90,6 @@ namespace EE.Internal {
             if (_sharedInterstitialAd != null) {
                 return _sharedInterstitialAd;
             }
-
             _interstitialAd = new IronSourceInterstitialAd(_interstitialAdDisplayer, this, adId);
             _sharedInterstitialAd = new GuardedInterstitialAd(_interstitialAd);
             return _sharedInterstitialAd;
@@ -100,7 +99,6 @@ namespace EE.Internal {
             if (_sharedInterstitialAd == null) {
                 return false;
             }
-
             _interstitialAd = null;
             _sharedInterstitialAd = null;
             return true;
@@ -110,7 +108,6 @@ namespace EE.Internal {
             if (_sharedRewardedAd != null) {
                 return _sharedRewardedAd;
             }
-
             _rewardedAd = new IronSourceRewardedAd(_rewardedAdDisplayer, this, adId);
             _sharedRewardedAd = new GuardedRewardedAd(_rewardedAd);
             return _sharedRewardedAd;
@@ -120,7 +117,6 @@ namespace EE.Internal {
             if (_sharedRewardedAd == null) {
                 return false;
             }
-
             _rewardedAd = null;
             _sharedRewardedAd = null;
             return true;
@@ -225,14 +221,12 @@ namespace EE.Internal {
                 _interstitialAdDisplayer.Resolve(true);
                 return;
             }
-
             if (_rewardedAdDisplayer.IsProcessing) {
                 _rewardedAdDisplayer.Resolve(rewarded
                     ? IRewardedAdResult.Completed
                     : IRewardedAdResult.Canceled);
                 return;
             }
-
             Assert.IsTrue(false);
         }
     }

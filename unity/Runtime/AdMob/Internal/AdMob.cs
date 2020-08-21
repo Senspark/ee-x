@@ -32,8 +32,8 @@ namespace EE.Internal {
             _bannerAds = new Dictionary<string, IAdView>();
             _interstitialAds = new Dictionary<string, IInterstitialAd>();
             _rewardedAds = new Dictionary<string, IRewardedAd>();
-            _interstitialAdDisplayer = new AsyncHelper<bool>();
-            _rewardedAdDisplayer = new AsyncHelper<IRewardedAdResult>();
+            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
+            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
         }
 
         public void Destroy() {

@@ -27,13 +27,26 @@ namespace EE.Internal {
             public string token;
             public int environment;
             public int logLevel;
+            public bool eventBufferingEnabled;
+            public bool useAppSecret;
+            public long secretId;
+            public long info1;
+            public long info2;
+            public long info3;
+            public long info4;
         }
 
         public void Initialize(AdjustConfig config) {
             var request = new InitializeRequest {
                 token = config._token,
                 environment = (int) config._environment,
-                logLevel = (int) config._logLevel
+                logLevel = (int) config._logLevel,
+                eventBufferingEnabled = config._eventBufferingEnabled,
+                useAppSecret = config._useAppSecret,
+                info1 = config._info1,
+                info2 = config._info2,
+                info3 = config._info3,
+                info4 = config._info4,
             };
             _bridge.Call(kInitialize, JsonUtility.ToJson(request));
         }

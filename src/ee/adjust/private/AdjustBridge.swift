@@ -58,7 +58,7 @@ public class AdjustBridge: NSObject, IPlugin {
             return ""
         }
         _bridge.registerAsyncHandler(kGetAdvertisingIdentifier) { _, resolver in
-            resolver(Adjust.adid() ?? "")
+            resolver(Adjust.idfa() ?? "")
         }
         _bridge.registerHandler(kGetDeviceIdentifier) { _ in
             Adjust.adid() ?? ""

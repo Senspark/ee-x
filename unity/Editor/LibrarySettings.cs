@@ -185,7 +185,7 @@ namespace EE.Editor {
                 androidLibraries.Add("com.senspark.ee:core:[1.0.0]");
                 iosLibraries.Add("ee-x/cs-core");
                 if (IsAdjustEnabled) {
-                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.0]");
+                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.1]");
                     iosLibraries.Add("ee-x/cs-adjust");
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));

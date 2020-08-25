@@ -26,8 +26,9 @@ class AdjustBridge(
         private const val kPrefix = "AdjustBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetEnabled = "${kPrefix}SetEnabled"
-        private const val kGetAdvertisingIdentifier = "${kPrefix}GetAdvertisingIdentifier";
-        private const val kGetDeviceIdentifier = "${kPrefix}GetDeviceIdentifier";
+        private const val kGetAdvertisingIdentifier = "${kPrefix}GetAdvertisingIdentifier"
+        private const val kGetDeviceIdentifier = "${kPrefix}GetDeviceIdentifier"
+        private const val kSetPushToken = "${kPrefix}SetPushToken"
         private const val kTrackEvent = "${kPrefix}TrackEvent"
     }
 
@@ -94,6 +95,10 @@ class AdjustBridge(
         _bridge.registerHandler(kGetDeviceIdentifier) {
             Adjust.getAdid()
         }
+        _bridge.registerHandler(kSetPushToken) { message ->
+            Adjust.setPushToken(message, _context)
+            ""
+        }
         _bridge.registerHandler(kTrackEvent) { message ->
             trackEvent(message)
             ""
@@ -106,6 +111,7 @@ class AdjustBridge(
         _bridge.deregisterHandler(kSetEnabled)
         _bridge.deregisterHandler(kGetAdvertisingIdentifier)
         _bridge.deregisterHandler(kGetDeviceIdentifier)
+        _bridge.deregisterHandler(kSetPushToken)
         _bridge.deregisterHandler(kTrackEvent)
     }
 

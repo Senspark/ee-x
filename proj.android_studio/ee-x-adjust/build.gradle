@@ -20,7 +20,7 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('adjust', '1.0.1')
+    publishToMaven('adjust', '1.0.2')
     dependencies {
         api 'com.senspark.ee:core:1.0.0'
     }

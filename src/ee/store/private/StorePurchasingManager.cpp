@@ -91,7 +91,7 @@ std::shared_ptr<ProductCollection> Self::products() const {
 void Self::onPurchaseSucceeded(const std::string& storeSpecificId,
                                const std::string& receipt,
                                const std::string& transactionId) {
-    auto&& product = products_->withId(storeSpecificId);
+    auto&& product = products_->withStoreSpecificId(storeSpecificId);
     if (product == nullptr) {
         product = std::make_shared<Product>(
             std::make_shared<ProductDefinition>(storeSpecificId,

@@ -14,7 +14,7 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/facebook_ads/FacebookAdsBridge.hpp"
+#include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
 
 namespace ee {
 namespace facebook_ads {

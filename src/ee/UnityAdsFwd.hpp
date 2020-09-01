@@ -15,12 +15,13 @@
 
 namespace ee {
 namespace unity_ads {
+class IBridge;
 class Bridge;
 class InterstitialAd;
 class RewardedAd;
 } // namespace unity_ads
 
-using UnityAds = unity_ads::Bridge;
+using IUnityAds = unity_ads::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

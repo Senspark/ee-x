@@ -40,7 +40,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::UnityAds> plugin_;
+    std::shared_ptr<ee::IUnityAds> plugin_;
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace unity_ads

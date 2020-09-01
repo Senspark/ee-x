@@ -24,6 +24,7 @@ namespace ee {
 namespace core {
 namespace {
 std::unordered_map<Plugin, std::string> pluginNames_ = {{
+    {Plugin::Adjust, "Adjust"},
     {Plugin::AdMob, "AdMob"},
     {Plugin::AppLovin, "AppLovin"},
     {Plugin::AppsFlyer, "AppsFlyer"},
@@ -39,10 +40,11 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
     {Plugin::Play, "Play"},
     {Plugin::Recorder, "Recorder"},
     {Plugin::Store, "Store"},
-    {Plugin::Tenjin, "Tenjin"},
     {Plugin::UnityAds, "UnityAds"},
     {Plugin::Vungle, "Vungle"},
 }};
+
+IMessageBridge* bridge_ = nullptr;
 } // namespace
 
 #if defined(EE_X_ANDROID)
@@ -101,8 +103,8 @@ bool Self::initializePlugins<Library::Core>() {
     if (not ee_staticInitializePlugins()) {
         return false;
     }
-    auto&& bridge = MessageBridge::getInstance();
-    Platform::registerHandlers(bridge);
+    bridge_ = &MessageBridge::getInstance();
+    Platform::registerHandlers(*bridge_);
 
     // Default implementation: execute on the current thread.
     Thread::libraryThreadChecker_ = [] { //
@@ -113,6 +115,10 @@ bool Self::initializePlugins<Library::Core>() {
         return true;
     };
     return true;
+}
+
+IMessageBridge& Self::getBridge() {
+    return *bridge_;
 }
 
 void* Self::getActivity() {

@@ -9,6 +9,7 @@ def include_lib(name) {
     project(':ee-x-' + name).projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-' + name)
 }
 
+include_lib('adjust')
 include_lib('ads')
 include_lib('admob')
 include_lib('admob-mediation')
@@ -34,6 +35,5 @@ include_lib('play')
 include_lib('recorder')
 include_lib('soomla-store')
 include_lib('store')
-include_lib('tenjin')
 include_lib('unity-ads')
 include_lib('vungle')

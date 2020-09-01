@@ -5,7 +5,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0-beta05'
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
     }
@@ -16,6 +17,7 @@ allprojects {
         google()
         jcenter()
         flatDir { dirs 'libs' }
+        maven { url 'https://dl.bintray.com/enrevol/ee-x' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
     }
@@ -26,9 +28,13 @@ ext {
     buildToolsVersion = '30.0.1'
     targetSdkVersion = 30
     buildPrefab = true
+    buildMaven = true
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
+    /*
+    Wait for AndroidStudio4.1
+    
     def projectDir = project.projectDir
     project.android {
         ndkVersion '21.3.6528147'
@@ -64,4 +70,51 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
             }
         }
     })
+     */
+}
+
+
+def publishToMaven(String libraryName, String libraryVersion) {
+    project("ee-x-$libraryName") {
+        apply plugin: 'com.jfrog.bintray'
+        apply plugin: 'maven-publish'
+        task androidSourcesJar(type: Jar) {
+            from android.sourceSets.main.java.srcDirs
+            archiveClassifier.set('sources')
+        }
+        afterEvaluate {
+            publishing {
+                publications {
+                    create(libraryName, MavenPublication) {
+                        from project.components.release
+                        artifact androidSourcesJar
+                        groupId = 'com.senspark.ee'
+                        artifactId = libraryName
+                        version = libraryVersion
+                    }
+                }
+                repositories {
+                    maven {
+                        url "$buildDir/repo"
+                    }
+                }
+            }
+            bintray {
+                user = "${BINTRAY_USER}"
+                key = "${BINTRAY_API_KEY}"
+                override = true
+                publications = [libraryName]
+                pkg {
+                    repo = 'ee-x'
+                    name = libraryName
+                    licenses = ['MIT']
+                    publish = true
+                    vcsUrl = 'https://github.com/Senspark/ee-x.git'
+                    version {
+                        name = libraryVersion
+                    }
+                }
+            }
+        }
+    }
 }

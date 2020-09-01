@@ -25,11 +25,13 @@ object Thread {
     }
 
     @AnyThread
+    @JvmStatic // Used by UnityThread.
     fun isMainThread(): Boolean {
         return java.lang.Thread.currentThread() === Looper.getMainLooper().thread
     }
 
     @AnyThread
+    @JvmStatic // Used by UnityThread.
     fun runOnMainThread(callback: Runnable): Boolean {
         if (isMainThread()) {
             callback.run()

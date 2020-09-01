@@ -17,6 +17,7 @@ LOCAL_C_INCLUDES := ${shell find $(PROJECT_DIR)/Classes -type d -print}
 LOCAL_STATIC_LIBRARIES := cc_static
 LOCAL_STATIC_LIBRARIES := ccui
 LOCAL_STATIC_LIBRARIES += soomla_store
+LOCAL_STATIC_LIBRARIES += ee_x_adjust
 LOCAL_STATIC_LIBRARIES += ee_x_admob
 LOCAL_STATIC_LIBRARIES += ee_x_app_lovin
 LOCAL_STATIC_LIBRARIES += ee_x_apps_flyer
@@ -36,7 +37,6 @@ LOCAL_STATIC_LIBRARIES += ee_x_iron_source
 LOCAL_STATIC_LIBRARIES += ee_x_notification
 LOCAL_STATIC_LIBRARIES += ee_x_play
 LOCAL_STATIC_LIBRARIES += ee_x_recorder
-LOCAL_STATIC_LIBRARIES += ee_x_tenjin
 LOCAL_STATIC_LIBRARIES += ee_x_unity_ads
 LOCAL_STATIC_LIBRARIES += ee_x_vungle
 

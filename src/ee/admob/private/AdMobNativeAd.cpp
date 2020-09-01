@@ -14,13 +14,13 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/private/AdMobBridge.hpp"
 
 namespace ee {
 namespace admob {
 using Self = NativeAd;
 
-Self::NativeAd(IMessageBridge& bridge, const Logger& logger, AdMob* plugin,
+Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
                const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)

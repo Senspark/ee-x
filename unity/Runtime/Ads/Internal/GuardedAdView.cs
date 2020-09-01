@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
@@ -41,17 +40,17 @@ namespace EE.Internal {
             return result;
         }
 
-        public PointF Anchor {
+        public (float, float) Anchor {
             get => _ad.Anchor;
             set => _ad.Anchor = value;
         }
 
-        public PointF Position {
+        public (float, float) Position {
             get => _ad.Position;
             set => _ad.Position = value;
         }
 
-        public SizeF Size {
+        public (float, float) Size {
             get => _ad.Size;
             set => _ad.Size = value;
         }

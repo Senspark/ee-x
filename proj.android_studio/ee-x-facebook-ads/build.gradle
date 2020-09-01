@@ -26,11 +26,22 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     ])
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('facebook-ads', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:ads:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-ads')
+    }
+}
+
 dependencies {
     api project(':ee-x-ads')
 
     // https://developers.facebook.com/docs/audience-network/changelog-android/
-    implementation 'com.facebook.android:audience-network-sdk:5.9.1'
+    implementation 'com.facebook.android:audience-network-sdk:5.11.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'

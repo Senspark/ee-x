@@ -48,7 +48,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::AdMob> plugin_;
+    std::shared_ptr<ee::IAdMob> plugin_;
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace admob

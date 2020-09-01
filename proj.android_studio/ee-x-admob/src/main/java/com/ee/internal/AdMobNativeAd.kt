@@ -21,6 +21,7 @@ import com.ee.Utils
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.VideoController.VideoLifecycleCallbacks
 import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
@@ -347,10 +348,10 @@ internal class AdMobNativeAd(
         // native ad loads successfully.
     }
 
-    override fun onAdFailedToLoad(errorCode: Int) {
-        _logger.info("${this::onAdFailedToLoad.name}: code = $errorCode")
+    override fun onAdFailedToLoad(error: LoadAdError?) {
+        _logger.info("onAdFailedToLoad: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
     }
 
     override fun onAdOpened() {

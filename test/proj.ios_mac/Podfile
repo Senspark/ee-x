@@ -13,6 +13,7 @@ abstract_target 'common' do
 
         pod_ee_x('admob')
         pod_ee_x('admob-mediation')
+        pod_ee_x('adjust')
         pod_ee_x('app-lovin')
         pod_ee_x('apps-flyer')
         pod_ee_x('campaign-receiver')
@@ -32,14 +33,13 @@ abstract_target 'common' do
         pod_ee_x('play')
         pod_ee_x('recorder')
         pod_ee_x('store')
-        pod_ee_x('tenjin')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
+        
+        pod 'Adjust', :modular_headers => true
     end
 
     target 'ee_x_test_desktop' do
         platform :osx, '10.14'
-
-        pod_ee_x('ads')
     end
 end

@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-
-using EE.Internal;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -36,8 +32,8 @@ namespace EE.Internal {
             _bannerAds = new Dictionary<string, IAdView>();
             _interstitialAds = new Dictionary<string, IInterstitialAd>();
             _rewardedAds = new Dictionary<string, IRewardedAd>();
-            _interstitialAdDisplayer = new AsyncHelper<bool>();
-            _rewardedAdDisplayer = new AsyncHelper<IRewardedAdResult>();
+            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
+            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
         }
 
         public void Destroy() {
@@ -73,10 +69,10 @@ namespace EE.Internal {
             public int height;
         }
 
-        private Size GetBannerAdSize(AdMobBannerAdSize adSize) {
+        private (int, int) GetBannerAdSize(AdMobBannerAdSize adSize) {
             var response = _bridge.Call(kGetBannerAdSize, ((int) adSize).ToString());
             var json = JsonUtility.FromJson<GetBannerAdSizeResponse>(response);
-            return new Size(json.width, json.height);
+            return (json.width, json.height);
         }
 
         [Serializable]

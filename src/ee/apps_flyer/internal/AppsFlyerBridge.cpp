@@ -7,16 +7,17 @@
 
 #include "ee/apps_flyer/internal/AppsFlyerBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace core {
 template <>
-std::unique_ptr<IAppsFlyer> PluginManager::createPlugin() {
-    return std::make_unique<apps_flyer::Bridge>();
+std::shared_ptr<IAppsFlyer>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    return std::make_shared<apps_flyer::Bridge>(bridge);
 }
 } // namespace core
 
@@ -35,8 +36,8 @@ const auto kTrackEvent      = kPrefix + "TrackEvent";
 
 using Self = Bridge;
 
-Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge) {
     PluginManager::addPlugin(Plugin::AppsFlyer);
 }
 

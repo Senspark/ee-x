@@ -25,6 +25,10 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     ])
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('core', '1.0.0')
+}
+
 dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-instantapps:17.0.0'

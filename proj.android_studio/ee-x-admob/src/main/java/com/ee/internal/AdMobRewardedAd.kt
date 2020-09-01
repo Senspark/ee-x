@@ -8,6 +8,7 @@ import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
 import com.ee.registerHandler
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -142,10 +143,10 @@ internal class AdMobRewardedAd(
         })
     }
 
-    override fun onRewardedAdFailedToShow(errorCode: Int) {
-        _logger.info(this::onRewardedAdFailedToShow.name)
+    override fun onRewardedAdFailedToShow(error: AdError?) {
+        _logger.info("onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToShow, errorCode.toString())
+        _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
     }
 
     override fun onRewardedAdOpened() {

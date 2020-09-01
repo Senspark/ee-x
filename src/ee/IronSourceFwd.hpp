@@ -7,12 +7,13 @@
 
 namespace ee {
 namespace iron_source {
+class IBridge;
 class Bridge;
 class InterstitialAd;
 class RewardedAd;
 } // namespace iron_source
 
-using IronSource = iron_source::Bridge;
+using IIronSource = iron_source::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

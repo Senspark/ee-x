@@ -12,7 +12,7 @@ namespace EE.Internal {
         private readonly IAsyncHelper<bool> _loader;
 
         public AdMobBannerAd(
-            IMessageBridge bridge, AdMob plugin, string adId, Size size) {
+            IMessageBridge bridge, AdMob plugin, string adId, (int, int) size) {
             _bridge = bridge;
             _plugin = plugin;
             _adId = adId;
@@ -51,17 +51,17 @@ namespace EE.Internal {
                 });
         }
 
-        public PointF Anchor {
+        public (float, float) Anchor {
             get => _helper.Anchor;
             set => _helper.Anchor = value;
         }
 
-        public PointF Position {
+        public (float, float) Position {
             get => _helper.Position;
             set => _helper.Position = value;
         }
 
-        public SizeF Size {
+        public (float, float) Size {
             get => _helper.Size;
             set => _helper.Size = value;
         }

@@ -166,6 +166,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libcocos2dx')
+    implementation project(':ee-x-adjust')
     implementation project(':ee-x-admob')
     implementation project(':ee-x-admob-mediation')
     implementation project(':ee-x-app-lovin')
@@ -188,7 +189,6 @@ dependencies {
     implementation project(':ee-x-recorder')
     implementation project(':ee-x-soomla-store')
     implementation project(':ee-x-store')
-    implementation project(':ee-x-tenjin')
     implementation project(':ee-x-unity-ads')
     implementation project(':ee-x-vungle')
 

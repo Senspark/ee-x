@@ -37,7 +37,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::Vungle> plugin_;
+    std::shared_ptr<ee::IVungle> plugin_;
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace vungle

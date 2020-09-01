@@ -14,7 +14,7 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/admob/AdMobBridge.hpp"
+#include "ee/admob/private/AdMobBridge.hpp"
 
 namespace ee {
 namespace admob {
@@ -23,7 +23,7 @@ using Self = RewardedAd;
 Self::RewardedAd(
     IMessageBridge& bridge, const Logger& logger,
     const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
-    AdMob* plugin, const std::string& adId)
+    Bridge* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)

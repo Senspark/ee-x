@@ -1,7 +1,7 @@
 namespace EE.Internal {
     internal class PluginManagerImplEditor : IPluginManagerImpl {
         public bool InitializePlugins() {
-            return false;
+            return true;
         }
 
         public object GetActivity() {
@@ -12,11 +12,11 @@ namespace EE.Internal {
         }
 
         public bool AddPlugin(string name) {
-            return false;
+            return true;
         }
 
         public bool RemovePlugin(string name) {
-            return false;
+            return true;
         }
     }
 }

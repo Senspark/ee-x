@@ -1,11 +1,10 @@
-using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE {
     public class NullAdView : ObserverManager<IAdViewObserver>, IAdView {
-        private PointF _anchor;
-        private PointF _position;
-        private SizeF _size;
+        private (float, float) _anchor;
+        private (float, float) _position;
+        private (float, float) _size;
 
         public void Destroy() {
         }
@@ -18,29 +17,29 @@ namespace EE {
             return true;
         }
 
-        public PointF Anchor {
+        public (float, float) Anchor {
             get => _anchor;
             set {
-                _position.X -= (value.X - _anchor.X) * _size.Width;
-                _position.Y -= (value.Y - _anchor.Y) * _size.Height;
+                _position.Item1 -= (value.Item1 - _anchor.Item1) * _size.Item1;
+                _position.Item2 -= (value.Item2 - _anchor.Item2) * _size.Item2;
                 _anchor = value;
             }
         }
 
-        public PointF Position {
-            get => new PointF(
-                _position.X + _anchor.X * _size.Width,
-                _position.Y + _anchor.Y * _size.Height);
-            set => _position = new PointF(
-                value.X - _anchor.X * _size.Width,
-                value.Y - _anchor.Y * _size.Height);
+        public (float, float) Position {
+            get => (
+                _position.Item1 + _anchor.Item1 * _size.Item1,
+                _position.Item2 + _anchor.Item2 * _size.Item2);
+            set => _position = (
+                value.Item1 - _anchor.Item1 * _size.Item1,
+                value.Item2 - _anchor.Item2 * _size.Item2);
         }
 
-        public SizeF Size {
+        public (float, float) Size {
             get => _size;
             set {
-                _position.X -= (value.Width - _size.Width) * _anchor.X;
-                _position.Y -= (value.Height - _size.Height) * _anchor.Y;
+                _position.Item1 -= (value.Item1 - _size.Item1) * _anchor.Item1;
+                _position.Item2 -= (value.Item2 - _size.Item2) * _anchor.Item2;
                 _size = value;
             }
         }

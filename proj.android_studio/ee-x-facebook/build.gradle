@@ -25,9 +25,18 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     ])
 }
 
-dependencies {
-    api project(':ee-x-core')
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('facebook', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:core:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-core')
+    }
+}
 
+dependencies {
     // https://github.com/facebook/facebook-android-sdk/blob/master/CHANGELOG.md
     // TODO: com.facebook.FacebookContentProvider dependency.
     api 'com.facebook.android:facebook-share:7.0.0'

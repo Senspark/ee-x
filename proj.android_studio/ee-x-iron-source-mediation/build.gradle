@@ -19,17 +19,28 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('iron-source-mediation', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:iron-source:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-iron-source')
+    }
+}
+
 dependencies {
     api project(':ee-x-iron-source')
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-    implementation 'com.ironsource.adapters:admobadapter:4.3.11'
+    implementation 'com.ironsource.adapters:admobadapter:4.3.12'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
-    implementation 'com.ironsource.adapters:applovinadapter:4.3.14'
+    implementation 'com.ironsource.adapters:applovinadapter:4.3.15'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    implementation 'com.ironsource.adapters:facebookadapter:4.3.17'
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.19'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     implementation 'com.ironsource.adapters:unityadsadapter:4.3.5'

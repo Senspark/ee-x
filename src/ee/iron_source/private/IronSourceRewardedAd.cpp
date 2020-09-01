@@ -13,7 +13,7 @@
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/iron_source/IronSourceBridge.hpp"
+#include "ee/iron_source/private/IronSourceBridge.hpp"
 
 namespace ee {
 namespace iron_source {

@@ -1,4 +1,4 @@
-# ironSource
+# IronSource
 ## Configuration
 ### Android
 Modify `build.gradle`

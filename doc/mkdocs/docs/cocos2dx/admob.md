@@ -35,12 +35,12 @@ pod ee-x/admob, :git => 'https://github.com/Senspark/ee-x'
 ```
 
 ## Basic usage
-Initializes with application ID
+Initialization
 ```cpp
 #include <ee/AdMob.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
-plugin->initialize("your_app_id");
+plugin->initialize();
 ```
 
 Creates an show a banner ad

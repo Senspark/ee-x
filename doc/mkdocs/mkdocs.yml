@@ -50,6 +50,8 @@ nav:
     - cocos2dx/store.md
   - Unity:
     - unity/getting-started.md
+    - unity/admob.md
+    - unity/adjust.md
 
 # Extras
 extra:

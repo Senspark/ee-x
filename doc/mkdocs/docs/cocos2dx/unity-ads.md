@@ -1,18 +1,10 @@
 # Unity Ads
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-unity-ads'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-unity-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-unity-ads')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-unity-ads')
+    implementation 'com.senspark.ee:unity-ads:1.0.0'
 }
 ```
 
@@ -31,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_unity_ads)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/unity-ads, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/unity-ads
 ```
 
 ## Basic usage

@@ -1,18 +1,10 @@
 # AppLovin
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-app-lovin'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-app-lovin').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-app-lovin')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-app-lovin')
+    implementation 'com.senspark.ee:app-lovin:1.0.0'
 }
 ```
 
@@ -23,14 +15,14 @@ LOCAL_STATIC_LIBRARIES += ee_x_app_lovin
 ```
 
 #### For `cmake` users
-- Modify `CMakeLists.txt`
+Modify `CMakeLists.txt`
 ```
 target_link_libraries(${PROJECT_NAME} ee_x_app_lovin)
 ```
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/app-lovin, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/app-lovin
 ```
 
 ## Basic usage

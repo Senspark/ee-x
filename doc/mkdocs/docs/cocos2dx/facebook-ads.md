@@ -1,18 +1,10 @@
 # Facebook Ads
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-facebook-ads'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-facebook-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-facebook-ads')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-facebook-ads')
+    implementation 'com.senspark.ee:facebook-ads:1.0.0'
 }
 ```
 
@@ -31,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_facebook_ads)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/facebook-ads, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/facebook-ads
 ```
 
 ## Basic usage

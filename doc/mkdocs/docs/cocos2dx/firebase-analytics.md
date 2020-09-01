@@ -1,18 +1,10 @@
 # Firebase Analytics
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-firebase-core'
-include ':ee-x-firebase-analytics'
-project(':ee-x-firebase-core').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-firebase-core')
-project(':ee-x-firebase-analytics').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-firebase-analytics')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-firebase-analytics')
+    implementation 'com.senspark.ee:firebase-analytics:1.0.0'
 }
 ```
 
@@ -31,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_analytics)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-analytics, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/firebase-analytics
 ```
 
 ## Basic usage

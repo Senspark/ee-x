@@ -1,18 +1,18 @@
 # ironSource
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-iron-source'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-iron-source').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-iron-source')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-iron-source')
+    implementation 'com.senspark.ee:iron-source:1.0.0'
+
+    // Includes:
+    // - AdMob mediation.
+    // - AppLovin mediation.
+    // - FacebookAds mediation.
+    // - Unity mediation.
+    // - Vungle mediation.
+    implementation 'com.senspark.ee:iron-source-mediation:1.0.0'
 }
 ```
 
@@ -31,7 +31,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_iron_source)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/iron-source, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/iron-source
 ```
 
 ## Basic usage

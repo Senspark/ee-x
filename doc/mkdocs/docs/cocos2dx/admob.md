@@ -1,18 +1,18 @@
 # AdMob
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-admob'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-admob').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-admob')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-admob')
+    implementation 'com.senspark.ee:admob:1.0.0'
+
+    // Includes:
+    // - AppLovin mediation.
+    // - FacebookAds mediation.
+    // - IronSource mediation.
+    // - Unity mediation.
+    // - Vungle mediation.
+    implementation 'com.senspark.ee:admob-mediation:1.0.0'
 }
 ```
 

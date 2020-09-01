@@ -1,18 +1,10 @@
 # Vungle
 ## Configuration
 ### Android
-Modify `settings.gradle`
-```java
-include ':ee-x-ads'
-include ':ee-x-vungle'
-project(':ee-x-ads').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-ads')
-project(':ee-x-vungle').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-vungle')
-```
-
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation project(':ee-x-vungle')
+    implementation 'com.senspark.ee:vungle:1.0.0'
 }
 ```
 
@@ -31,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_vungle)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/vungle, :git => 'https://github.com/Senspark/ee-x'
+pod ee-x/vungle
 ```
 
 ## Basic usage

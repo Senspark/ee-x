@@ -30,7 +30,7 @@ Initializes with dev key and app ID
 ```cpp
 #include <ee/AppsFlyer.hpp>
 
-auto plugin = ee::PluginManager::createPlugin<IAppsFlyer>();
+auto plugin = ee::PluginManager::createPlugin<ee::IAppsFlyer>();
 plugin->initialize("your_dev_key", "your_app_id");
 ```
 

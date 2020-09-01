@@ -30,7 +30,7 @@ Initialization
 ```cpp
 #include <ee/CampaignReceiver.hpp>
 
-auto plugin = ee::PluginManager::createPlugin<ICampaignReceiver>();
+auto plugin = ee::PluginManager::createPlugin<ee::ICampaignReceiver>();
 plugin->initialize([](const std::string& link) {
     // Handle the received link.
 });

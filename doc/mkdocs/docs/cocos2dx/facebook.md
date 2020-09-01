@@ -30,5 +30,5 @@ Initialization
 ```cpp
 #include <ee/Facebook.hpp>
 
-auto plugin = ee::PluginManager::createPlugin<IFacebook>();
+auto plugin = ee::PluginManager::createPlugin<ee::IFacebook>();
 ```

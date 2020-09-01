@@ -30,7 +30,7 @@ Initialization
 ```cpp
 #include <ee/Adjust.hpp>
 
-auto plugin = ee::PluginManager::createPlugin<IAdjust>();
+auto plugin = ee::PluginManager::createPlugin<ee::IAdjust>();
 plugin->initialize(ee::AdjustConfig()
     .setToken("your_app_token")
     .setEnvironment(ee::AdjustEnvironment::Production));

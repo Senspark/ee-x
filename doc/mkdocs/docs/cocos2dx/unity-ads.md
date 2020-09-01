@@ -31,7 +31,7 @@ Initializes with game ID
 ```cpp
 #include <ee/UnityAds.hpp>
 
-auto plugin = std::make_shared<ee::UnityAds>();
+auto plugin = ee::PluginManager::createPlugin<ee::IUnityAds>();
 plugin->initialize("your_game_id", false)
 ```
 

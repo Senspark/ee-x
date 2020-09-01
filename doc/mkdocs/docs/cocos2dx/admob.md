@@ -39,7 +39,7 @@ Initializes with application ID
 ```cpp
 #include <ee/AdMob.hpp>
 
-auto plugin = std::make_shared<ee::AdMob>();
+auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
 plugin->initialize("your_app_id");
 ```
 

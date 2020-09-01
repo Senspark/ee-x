@@ -28,14 +28,26 @@ nav:
     - index.md
   - Cocos2d-x:
     - cocos2dx/getting-started.md
+    - cocos2dx/firebase-analytics.md
+    - cocos2dx/firebase-crashlytics.md
+    - cocos2dx/firebase-dynamic-link.md
+    - cocos2dx/firebase-messaging.md
+    - cocos2dx/firebase-remote-config.md
+    - cocos2dx/firebase-storage.md
     - cocos2dx/admob.md 
     - cocos2dx/app-lovin.md
     - cocos2dx/facebook-ads.md
     - cocos2dx/iron-source.md
     - cocos2dx/unity-ads.md
     - cocos2dx/vungle.md
-    - cocos2dx/firebase-analytics.md
-    - cocos2dx/firebase-crashlytics.md
+    - cocos2dx/adjust.md
+    - cocos2dx/apps-flyer.md
+    - cocos2dx/campaign-receiver.md
+    - cocos2dx/google-analytics.md
+    - cocos2dx/notification.md
+    - cocos2dx/play.md
+    - cocos2dx/soomla-store.md
+    - cocos2dx/store.md
   - Unity:
     - unity/getting-started.md
 

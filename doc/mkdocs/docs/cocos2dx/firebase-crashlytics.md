@@ -31,7 +31,7 @@ Initialization
 ```cpp
 #include <ee/Firebase.hpp>
 
-auto plugin = std::make_shared<ee::FirebaseCrashlytics>();
+auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseCrashlytics>();
 ```
 
 Logs a message

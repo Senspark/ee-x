@@ -31,7 +31,7 @@ Initialization
 ```cpp
 #include <ee/FacebookAds.hpp>
 
-auto plugin = std::make_shared<ee::FacebookAds>();
+auto plugin = ee::PluginManager::createPlugin<ee::IFacebookAds>();
 ```
 
 Creates and show a banner ad

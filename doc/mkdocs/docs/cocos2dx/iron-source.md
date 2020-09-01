@@ -39,7 +39,7 @@ Initializes with game ID
 ```cpp
 #include <ee/IronSource.hpp>
 
-auto plugin = std::make_shared<ee::IronSource>();
+auto plugin = ee::PluginManager::createPlugin<ee::IIronSource>();
 plugin->initialize("your_game_id")
 ```
 

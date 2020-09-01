@@ -31,7 +31,7 @@ Initializes with game ID
 ```cpp
 #include <ee/Vungle.hpp>
 
-auto plugin = std::make_shared<ee::Vungle>();
+auto plugin = ee::PluginManager::createPlugin<ee::IVungle>();
 plugin->initialize("your_game_id")
 ```
 

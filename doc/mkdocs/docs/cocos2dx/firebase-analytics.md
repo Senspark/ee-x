@@ -31,7 +31,7 @@ Initialization
 ```cpp
 #include <ee/Firebase.hpp>
 
-auto plugin = std::make_shared<ee::FirebaseAnalytics>();
+auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseAnalytics>();
 ```
 
 Tracks current screen

@@ -50,7 +50,6 @@ target_link_libraries(${PROJECT_NAME}
     ee_x_notification
     ee_x_play
     ee_x_recorder
-    ee_x_tenjin
     ee_x_unity_ads
     ee_x_vungle
 )

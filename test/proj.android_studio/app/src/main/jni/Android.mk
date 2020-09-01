@@ -37,7 +37,6 @@ LOCAL_STATIC_LIBRARIES += ee_x_iron_source
 LOCAL_STATIC_LIBRARIES += ee_x_notification
 LOCAL_STATIC_LIBRARIES += ee_x_play
 LOCAL_STATIC_LIBRARIES += ee_x_recorder
-LOCAL_STATIC_LIBRARIES += ee_x_tenjin
 LOCAL_STATIC_LIBRARIES += ee_x_unity_ads
 LOCAL_STATIC_LIBRARIES += ee_x_vungle
 

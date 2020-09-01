@@ -38,7 +38,6 @@ enum class Plugin {
     Play,
     Recorder,
     Store,
-    Tenjin,
     UnityAds,
     Vungle,
 };

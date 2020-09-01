@@ -40,7 +40,6 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
     {Plugin::Play, "Play"},
     {Plugin::Recorder, "Recorder"},
     {Plugin::Store, "Store"},
-    {Plugin::Tenjin, "Tenjin"},
     {Plugin::UnityAds, "UnityAds"},
     {Plugin::Vungle, "Vungle"},
 }};

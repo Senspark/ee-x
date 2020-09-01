@@ -622,25 +622,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'tenjin' do |s|
-    s.source_files =
-      'src/ee/Tenjin*',
-      'src/ee/tenjin/**/*'
-
-    s.private_header_files =
-      'src/ee/tenjin/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/tenjin/Android.mk',
-      'src/ee/tenjin/CMakeLists.txt',
-      'src/ee/tenjin/generate.sh',
-      'src/ee/tenjin/sourcelist.cmake'
-
-    s.platform = :ios
-    s.dependency 'ee-x/core'
-    s.dependency 'TenjinSDK'
-  end
-
   spec.subspec 'jansson' do |s| 
     s.source_files = 'third_party/jansson/src/**/*'
     s.private_header_files = 'third_party/jansson/src/**/*.{h,hpp,inl}'

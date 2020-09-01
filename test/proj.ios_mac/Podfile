@@ -33,7 +33,6 @@ abstract_target 'common' do
         pod_ee_x('play')
         pod_ee_x('recorder')
         pod_ee_x('store')
-        pod_ee_x('tenjin')
         pod_ee_x('unity-ads')
         pod_ee_x('vungle')
         

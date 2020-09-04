@@ -58,6 +58,7 @@ namespace EE {
                 return false;
             }
             _bridge = MessageBridge.Instance;
+            Thread.Initialize();
             Platform.RegisterHandlers(_bridge);
             return true;
         }

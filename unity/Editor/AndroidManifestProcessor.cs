@@ -1,43 +1,63 @@
-#if UNITY_EDITOR
-
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using UnityEditor.Android;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
 
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace EE.Editor {
-    public class AndroidProcessor : IPostGenerateGradleAndroidProject {
+    public class AndroidManifestProcessor : IPreprocessBuildWithReport {
         private static readonly XNamespace ManifestNamespace = "http://schemas.android.com/apk/res/android";
         private const string MetaAdMobApplicationId = "com.google.android.gms.ads.APPLICATION_ID";
 
         public int callbackOrder { get; }
 
-        public void OnPostGenerateGradleAndroidProject(string path) {
-            var gradlePath = Path.Combine(path, "..", "launcher", "build.gradle");
-            var gradleConfig = new GradleConfig(gradlePath);
-            var manifestPath = Path.Combine(path, "src", "main", "AndroidManifest.xml");
-            var manifest = XDocument.Load(manifestPath);
+        public void OnPreprocessBuild(BuildReport report) {
+            var projectDir = Path.Combine(Application.dataPath, "Plugins", "Android", "EE");
+            Directory.CreateDirectory(projectDir);
+            EnsureProjectProperties(projectDir);
+            var manifestPath = Path.Combine(projectDir, "AndroidManifest.xml");
+            XDocument manifest;
+            try {
+                manifest = XDocument.Load(manifestPath);
+            } catch (IOException ex) {
+                manifest = new XDocument();
+            }
             var settings = LibrarySettings.Instance;
-            if (settings.IsMultiDexEnabled) {
-                SetMultiDexEnabled(gradleConfig, true);
-            }
             if (settings.IsAdMobEnabled) {
-                AddAdMobAppId(manifest);
+                AddAdMobAppId(settings, manifest);
             }
-            gradleConfig.Save();
+            manifest.Save(manifestPath);
         }
 
-        private static void AddAdMobAppId(XContainer manifest) {
-            var settings = LibrarySettings.Instance;
+        private static void EnsureProjectProperties(string projectDir) {
+            var propertiesPath = Path.Combine(projectDir, "project.properties");
+            if (File.Exists(propertiesPath)) {
+                // OK.
+            } else {
+                File.WriteAllLines(propertiesPath, new[] {
+                    "target=android-19",
+                    "android.library=true",
+                });
+            }
+        }
+
+        private static void AddAdMobAppId(LibrarySettings settings, XContainer manifest) {
             var manifestElement = manifest.Element("manifest");
-            Assert.IsNotNull(manifestElement);
+            if (manifestElement == null) {
+                manifestElement = new XElement("manifest",
+                    new XAttribute(XNamespace.Xmlns + "android", ManifestNamespace),
+                    new XAttribute("package", "com.senspark.ee"));
+                manifest.Add(manifestElement);
+            }
             var applicationElement = manifestElement.Element("application");
-            Assert.IsNotNull(applicationElement);
+            if (applicationElement == null) {
+                applicationElement = new XElement("application");
+                manifestElement.Add(applicationElement);
+            }
             var metaElements = applicationElement
                 .Descendants()
                 .Where(item => item.Name.LocalName == "meta-data");
@@ -77,14 +97,5 @@ namespace EE.Editor {
             }
             return null;
         }
-
-        private static void SetMultiDexEnabled(GradleConfig config, bool enabled) {
-            var android = config.Root.TryGetNode("android");
-            var defaultConfig = android.TryGetNode("defaultConfig");
-            defaultConfig.RemoveContentNode("multiDexEnabled false");
-            defaultConfig.AppendContentNode("multiDexEnabled true");
-        }
     }
 }
-
-#endif // UNITY_EDITOR

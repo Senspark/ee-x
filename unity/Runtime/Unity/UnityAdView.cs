@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 
-namespace EE.Internal {
-    internal class GuardedAdView
+namespace EE {
+    public class UnityAdView
         : ObserverManager<IAdViewObserver>, IAdView {
         private readonly IAdView _ad;
-        private bool _loading;
         private readonly ObserverHandle _handle;
 
-        public GuardedAdView(IAdView ad) {
+        public UnityAdView(IAdView ad) {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new IAdViewObserver {
@@ -21,30 +20,32 @@ namespace EE.Internal {
             _handle.Clear();
         }
 
-        public bool IsLoaded { get; private set; }
+        public bool IsLoaded => _ad.IsLoaded;
 
-        public async Task<bool> Load() {
-            if (IsLoaded) {
-                return true;
-            }
-            if (_loading) {
-                // Waiting.
-                return await _ad.Load();
-            }
-            _loading = true;
-            IsLoaded = await _ad.Load();
-            _loading = false;
-            return IsLoaded;
+        public Task<bool> Load() {
+            return _ad.Load();
         }
 
         public (float, float) Anchor {
-            get => _ad.Anchor;
-            set => _ad.Anchor = value;
+            get {
+                var (x, y) = _ad.Anchor;
+                return (x, 1 - y);
+            }
+            set {
+                var (x, y) = value;
+                _ad.Anchor = (x, 1 - y);
+            }
         }
 
         public (float, float) Position {
-            get => _ad.Position;
-            set => _ad.Position = value;
+            get {
+                var (x, y) = _ad.Position;
+                return (x, 1 - y);
+            }
+            set {
+                var (x, y) = value;
+                _ad.Position = (x, 1 - y);
+            }
         }
 
         public (float, float) Size {

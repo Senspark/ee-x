@@ -888,6 +888,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cs-facebook-ads' do |s|
     s.source_files =
+      'src/ee/facebook_ads/EEFacebookNativeAdView*',
       'src/ee/facebook_ads/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'
@@ -896,6 +897,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cs-iron-source' do |s|
     s.source_files =
+      'src/ee/iron_source/EEIronSourceBridge.h',
       'src/ee/iron_source/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'

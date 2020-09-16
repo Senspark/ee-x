@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 
+using UnityEngine;
+
 namespace EE {
     public class UnityAdView
         : ObserverManager<IAdViewObserver>, IAdView {
@@ -40,11 +42,11 @@ namespace EE {
         public (float, float) Position {
             get {
                 var (x, y) = _ad.Position;
-                return (x, 1 - y);
+                return (x, Screen.height - y);
             }
             set {
                 var (x, y) = value;
-                _ad.Position = (x, 1 - y);
+                _ad.Position = (x, Screen.height - y);
             }
         }
 

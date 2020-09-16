@@ -8,10 +8,6 @@
 #ifndef EE_X_I_IRON_SOURCE_BRIDGE_HPP
 #define EE_X_I_IRON_SOURCE_BRIDGE_HPP
 
-#ifdef __OBJC__
-#import <IronSource/IronSource.h>
-#endif // __OBJC__
-
 #ifdef __cplusplus
 
 #include <memory>

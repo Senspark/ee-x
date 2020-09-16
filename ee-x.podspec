@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.1.1'
+  spec.version        = '1.1.2'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.1.1'
+    :tag => 'v1.1.2'
   }
 
   spec.framework = 'Foundation'
@@ -888,6 +888,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cs-facebook-ads' do |s|
     s.source_files =
+      'src/ee/facebook_ads/EEFacebookNativeAdView*',
       'src/ee/facebook_ads/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'
@@ -896,6 +897,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'cs-iron-source' do |s|
     s.source_files =
+      'src/ee/iron_source/EEIronSourceBridge.h',
       'src/ee/iron_source/**/*.swift'
 
     s.dependency 'ee-x/cs-ads'

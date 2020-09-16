@@ -907,7 +907,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source-mediation-dependencies'
   end
 
-  spec.subspec 'cs-unity' do |s|
+  spec.subspec 'cs-unity-ads' do |s|
     s.source_files =
       'src/ee/unity_ads/**/*.swift'
     

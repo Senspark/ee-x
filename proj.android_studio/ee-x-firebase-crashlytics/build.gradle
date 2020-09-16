@@ -23,8 +23,18 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
     ])
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('firebase-crashlytics', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:firebase-core:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-firebase-core')
+    }
+}
+
 dependencies {
-    api project(':ee-x-firebase-core')
     implementation 'com.google.firebase:firebase-analytics:17.4.0'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

@@ -4,6 +4,8 @@ using System.Threading;
 
 using EE.Internal;
 
+using UnityEngine;
+
 namespace EE {
     public static class Thread {
         private static readonly Queue<Action> _instantQueue = new Queue<Action>();
@@ -24,6 +26,29 @@ namespace EE {
 #elif UNITY_IOS
             new ThreadImplIos(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);
 #endif
+
+        private static int _mainThreadId = -1;
+        private static IDispatcher _dispatcher;
+
+        public static void Initialize() {
+            _mainThreadId = GetCurrentThreadId();
+            var go = new GameObject("EE-x Main Thread Dispatcher");
+            UnityEngine.Object.DontDestroyOnLoad(go);
+            _dispatcher = go.AddComponent<MainThreadDispatcher>();
+            _libraryThreadChecker = () => _mainThreadId == GetCurrentThreadId();
+            _libraryThreadExecuter = action => {
+                if (_mainThreadId == GetCurrentThreadId()) {
+                    action();
+                    return true;
+                }
+                _dispatcher.Dispatch(action);
+                return false;
+            };
+        }
+
+        private static int GetCurrentThreadId() {
+            return System.Threading.Thread.CurrentThread.ManagedThreadId;
+        }
 
         private static void PushInstantRunnable(Action runnable) {
             var lockTaken = false;

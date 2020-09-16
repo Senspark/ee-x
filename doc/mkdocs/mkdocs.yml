@@ -1,5 +1,5 @@
 # Project information
-site_name: EE-x | Cross-platform library for cocos2d-x
+site_name: EE-x | Cross-platform library for Cocos2d-x / Unity
 site_author: enrevol
 site_url: https://senspark.com
 
@@ -26,15 +26,34 @@ theme:
 nav:
   - Home:
     - index.md
-  - Plugins:
-    - plugins/admob.md 
-    - plugins/app-lovin.md
-    - plugins/facebook-ads.md
-    - plugins/iron-source.md
-    - plugins/unity-ads.md
-    - plugins/vungle.md
-    - plugins/firebase-analytics.md
-    - plugins/firebase-crashlytics.md
+  - Cocos2d-x:
+    - cocos2dx/getting-started.md
+    - cocos2dx/firebase-analytics.md
+    - cocos2dx/firebase-crashlytics.md
+    - cocos2dx/firebase-dynamic-link.md
+    - cocos2dx/firebase-messaging.md
+    - cocos2dx/firebase-performance.md
+    - cocos2dx/firebase-remote-config.md
+    - cocos2dx/firebase-storage.md
+    - cocos2dx/admob.md 
+    - cocos2dx/app-lovin.md
+    - cocos2dx/facebook-ads.md
+    - cocos2dx/iron-source.md
+    - cocos2dx/unity-ads.md
+    - cocos2dx/vungle.md
+    - cocos2dx/adjust.md
+    - cocos2dx/apps-flyer.md
+    - cocos2dx/campaign-receiver.md
+    - cocos2dx/facebook.md
+    - cocos2dx/google-analytics.md
+    - cocos2dx/notification.md
+    - cocos2dx/play.md
+    - cocos2dx/soomla-store.md
+    - cocos2dx/store.md
+  - Unity:
+    - unity/getting-started.md
+    - unity/admob.md
+    - unity/adjust.md
 
 # Extras
 extra:

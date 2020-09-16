@@ -11,10 +11,7 @@ namespace EE.Internal {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new IAdViewObserver {
-                OnLoaded = () => {
-                    IsLoaded = true;
-                    DispatchEvent(observer => observer.OnLoaded?.Invoke());
-                },
+                OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });
         }
@@ -35,9 +32,9 @@ namespace EE.Internal {
                 return await _ad.Load();
             }
             _loading = true;
-            var result = await _ad.Load();
+            IsLoaded = await _ad.Load();
             _loading = false;
-            return result;
+            return IsLoaded;
         }
 
         public (float, float) Anchor {

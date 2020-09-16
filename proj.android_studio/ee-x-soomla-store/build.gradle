@@ -17,8 +17,18 @@ android {
     }
 }
 
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    publishToMaven('soomla-store', '1.0.0')
+    dependencies {
+        api 'com.senspark.ee:store:1.0.0'
+    }
+} else {
+    dependencies {
+        api project(':ee-x-store')
+    }
+}
+
 dependencies {
-    api project(':ee-x-store')
     implementation 'com.android.billingclient:billing:3.0.0'
 
     // OkHttp3 3.13.x requires Android 5+ API 21.

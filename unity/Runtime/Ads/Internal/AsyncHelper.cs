@@ -14,6 +14,8 @@ namespace EE.Internal {
             } else {
                 _source = new TaskCompletionSource<Result>();
                 IsProcessing = true;
+                _finalizer = finalizer;
+                processor();
             }
             return _source.Task;
         }

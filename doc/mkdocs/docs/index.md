@@ -1,49 +1,13 @@
-# Getting Started
-## Configuration
-### Android
-Clone the repository and let `PATH` be where you cloned the repository to
+# Libraries
+## [Cocos2d-x](cocos2dx/getting-started)
+Requirements
 
-Modify `settings.gradle`
-```java
-include ':ee-x-core'
-project(':ee-x-core').projectDir = new File('PATH/ee-x/proj.android_studio/ee-x-core')
-```
+- Cocos2d-x v3: <https://github.com/Senspark/cocos2d-x-lite-source>
+- Android NDK r21+: <https://developer.android.com/ndk/downloads>
+- Xcode 11+: <https://developer.apple.com/download/more>
+- Android Studio 4+: <https://developer.android.com/studio>
 
-Modify `build.gradle`
-```java
-dependencies {
-    implementation project(':ee-x-core')
-}
-```
+## [Unity](unity/getting-started)
+Requirements
 
-#### For `ndk-build` users
-Modify `Android.mk`
-```
-$(call import-add-path, PATH)
-$(call import-module, ee-x)
-LOCAL_STATIC_LIBRARIES += ee_x_core
-```
-
-#### For `cmake` users
-Modify `CMakeLists.txt`
-```
-add_subdirectory(PATH/ee-x ${PROJECT_BINARY_DIR}/ee-x)
-target_link_libraries(${PROJECT_NAME} ee_x_core)
-```
-
-### iOS
-Install CocoaPods and modify `Podfile`
-```ruby
-pod ee-x/core, :git => 'https://github.com/Senspark/ee-x'
-```
-
-## Initialization
-Modify `AppDelegate.cpp`
-```cpp
-#include <ee/Core.hpp>
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    ee::PluginManager::initializePlugins<ee::Library::Cocos>();
-    return true;
-}
-```
+- Unity 2019.4+: <https://unity3d.com/get-unity/download>

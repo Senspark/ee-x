@@ -63,7 +63,8 @@ Task<bool> Self::load() {
 }
 
 std::pair<float, float> Self::getAnchor() const {
-    return ad_->getAnchor();
+    auto&& [x, y] = ad_->getAnchor();
+    return std::pair(x, 1 - y);
 }
 
 void Self::setAnchor(float x, float y) {

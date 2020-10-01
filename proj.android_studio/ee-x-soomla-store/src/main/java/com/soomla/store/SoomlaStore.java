@@ -593,6 +593,7 @@ public class SoomlaStore {
                                 purchase.getVerificationErrorCode() != null ?
                                     purchase.getVerificationErrorCode() :
                                     UnexpectedStoreErrorEvent.ErrorCode.GENERAL));
+                        emitter.onComplete();
                     }
 
                     break;
@@ -604,6 +605,7 @@ public class SoomlaStore {
                         pvi.take(1);
                     }
                     BusProvider.getInstance().post(new MarketRefundEvent(pvi, purchase.getDeveloperPayload()));
+                    emitter.onComplete();
                     break;
             }
         }).subscribeOn(_scheduler);
@@ -733,6 +735,7 @@ public class SoomlaStore {
             // TODO: update on the issue in github
             if (StoreInfo.isItemNonConsumable(pvi)) {
                 if (StorageManager.getVirtualItemStorage(pvi).getBalance(pvi.getItemId()) == 1) {
+                    emitter.onComplete();
                     return;
                 }
             }

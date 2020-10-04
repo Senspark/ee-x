@@ -204,7 +204,6 @@
 				6F5B40CE1E8E346600137F30 /* src */,
 			);
 			name = ios;
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {

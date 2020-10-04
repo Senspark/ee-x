@@ -81,8 +81,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     static std::vector<std::shared_ptr<ITester>> testers;
     testers.push_back(std::make_shared<CoreTester>());
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
+    CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
     testers.push_back(std::make_shared<GoogleAnalyticsTester>());
+#endif
     for (auto&& tester : testers) {
         tester->initialize();
         tester->start();

@@ -37,21 +37,13 @@
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
 		AD2CA22624B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */; };
-		AD2CA22724B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */; };
 		AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
-		AD2CA23024B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
-		AD2CA23524B308D400542CB2 /* NotificationTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2580301ECC019000B910F9 /* NotificationTester.cpp */; };
-		AD2CA23624B309CE00542CB2 /* AdMobTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */; };
 		AD2CA23D24B311CD00542CB2 /* BannerAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */; };
-		AD2CA23E24B311CD00542CB2 /* BannerAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */; };
 		AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
-		AD2CA24224B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
 		AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
-		AD2CA24624B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
 		AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
-		AD2CA24A24B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
@@ -666,21 +658,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD2CA24624B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */,
 				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
-				AD2CA23E24B311CD00542CB2 /* BannerAdTester.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
-				AD2CA23024B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */,
-				AD2CA23624B309CE00542CB2 /* AdMobTester.cpp in Sources */,
-				AD2CA23524B308D400542CB2 /* NotificationTester.cpp in Sources */,
 				AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */,
-				AD2CA22724B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
-				AD2CA24224B3135300542CB2 /* NativeAdTester.cpp in Sources */,
 				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,
-				AD2CA24A24B3183900542CB2 /* RewardedAdTester.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

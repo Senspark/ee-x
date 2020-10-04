@@ -75,9 +75,9 @@ public class StoreBridge: NSObject, IPlugin {
                 ] },
                 "bundleId": receipt.bundleIdentifier,
                 "appVersion": receipt.appVersion,
-                "expirationDate": receipt.expirationDate?.rfc3339date()?.timeIntervalSince1970 ?? 0,
+                "expirationDate": receipt.expirationDate?.timeIntervalSince1970 ?? 0,
                 "originalApplicationVersion": receipt.originalAppVersion,
-                "receiptCreationDate": receipt.creationDate.rfc3339date()?.timeIntervalSince1970 ?? 0
+                "receiptCreationDate": receipt.creationDate.timeIntervalSince1970
             ]
             return EEJsonUtils.convertDictionary(toString: dict)
         }

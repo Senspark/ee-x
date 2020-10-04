@@ -8,13 +8,11 @@
 
 #include "ee/cocos/EEPreferences.hpp"
 
+#include <ee/nlohmann/json.hpp>
+
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>
 #include <platform/CCFileUtils.h>
-
-#include <json/document.h>
-#include <json/stringbuffer.h>
-#include <json/writer.h>
 
 #include "ee/cocos/EEDataHandler.hpp"
 
@@ -22,20 +20,11 @@ namespace ee {
 namespace {
 void writeData(const DataStorage& data, const std::string& filePath) {
     auto fileUtils = cocos2d::FileUtils::getInstance();
-    rapidjson::Document document;
-    document.SetObject();
+    nlohmann::json document;
     for (auto&& elt : data) {
-        document.AddMember(rapidjson::StringRef(elt.first.c_str()),
-                           rapidjson::StringRef(elt.second.c_str()),
-                           document.GetAllocator());
+        document[elt.first] = elt.second;
     }
-    rapidjson::StringBuffer buffer;
-    buffer.Clear();
-
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    document.Accept(writer);
-
-    fileUtils->writeStringToFile(buffer.GetString(), filePath);
+    fileUtils->writeStringToFile(document.dump(), filePath);
 }
 
 DataStorage readData(const std::string& filePath) {
@@ -43,13 +32,12 @@ DataStorage readData(const std::string& filePath) {
     auto content = fileUtils->getStringFromFile(filePath);
     DataStorage data;
     if (not content.empty()) {
-        rapidjson::Document document;
-        document.Parse(content.c_str());
-        if (not document.HasParseError()) {
-            for (auto iter = document.MemberBegin();
-                 iter != document.MemberEnd(); ++iter) {
-                data[iter->name.GetString()] = iter->value.GetString();
+        try {
+            auto document = nlohmann::json::parse(content);
+            for (auto&& iter : document.items()) {
+                data[iter.key()] = iter.value();
             }
+        } catch (const std::exception& ex) {
         }
     }
     return data;

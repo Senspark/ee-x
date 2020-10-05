@@ -56,7 +56,6 @@ class FacebookAdsBridge(
                 AdSettings.setDebugBuild(true)
             }
             AudienceNetworkAds.initialize(_context)
-            AudienceNetworkAds.isInAdsProcess(_context)
         }
         registerHandlers()
     }

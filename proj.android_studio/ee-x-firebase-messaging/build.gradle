@@ -29,5 +29,5 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     // FIXME.
-    api "com.google.firebase:firebase-messaging:20.1.5"
+    api 'com.google.firebase:firebase-messaging:20.3.0'
 }

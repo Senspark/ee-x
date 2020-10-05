@@ -43,7 +43,7 @@ dependencies {
     // https://bintray.com/applovin/Android/sdk_android
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://github.com/AppLovin/AppLovin-MAX-SDK-Android/releases
-    implementation 'com.applovin:applovin-sdk:9.13.1'
+    implementation 'com.applovin:applovin-sdk:9.13.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'

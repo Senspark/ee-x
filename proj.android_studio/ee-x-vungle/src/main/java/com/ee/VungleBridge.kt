@@ -11,17 +11,15 @@ import com.vungle.warren.LoadAdCallback
 import com.vungle.warren.PlayAdCallback
 import com.vungle.warren.Vungle
 import com.vungle.warren.error.VungleException
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class VungleBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -98,12 +96,12 @@ class VungleBridge(
 
     @AnyThread
     fun initialize(appId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_initializing) {
-                return@Runnable
+                return@runOnMainThread
             }
             if (_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             _initializing = true
 
@@ -121,7 +119,7 @@ class VungleBridge(
 
                 override fun onAutoCacheAdAvailable(adId: String) {}
             })
-        })
+        }
     }
 
     @AnyThread
@@ -131,7 +129,7 @@ class VungleBridge(
 
     @AnyThread
     private fun loadRewardedAd(adId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             Vungle.loadAd(adId, object : LoadAdCallback {
                 override fun onAdLoad(adId: String) {
                     _logger.info("${VungleBridge::loadRewardedAd.name}: ${this::onAdLoad.name}: $adId")
@@ -160,12 +158,12 @@ class VungleBridge(
                     _bridge.callCpp(kOnFailedToLoad, response.serialize())
                 }
             })
-        })
+        }
     }
 
     @AnyThread
     private fun showRewardedAd(adId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _rewarded = false
             Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
                 override fun onError(adId: String, exception: VungleException) {
@@ -217,6 +215,6 @@ class VungleBridge(
                     // Deprecated.
                 }
             })
-        })
+        }
     }
 }

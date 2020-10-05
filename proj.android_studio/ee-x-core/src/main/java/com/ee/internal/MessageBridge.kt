@@ -8,13 +8,10 @@ import com.ee.PluginManager
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
-interface MessageBridgeHandler {
-    fun callCpp(tag: String, message: String): String
-}
+typealias MessageBridgeHandler = (tag: String, message: String) -> String
 
 /**
  * Created by Zinge on 3/29/17.
@@ -48,25 +45,22 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
         }
     }
 
-    @UnstableDefault
-    @ImplicitReflectionSerializer
+    @InternalSerializationApi
     override fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler): Boolean {
-        return registerHandler(tag, object : MessageHandler {
-            override fun handle(message: String): String {
-                @Serializable
-                class Request(
-                    val callback_tag: String,
-                    val message: String
-                )
+        return registerHandler(tag) { message ->
+            @Serializable
+            class Request(
+                val callback_tag: String,
+                val message: String
+            )
 
-                val request = deserialize<Request>(message)
-                _scope.launch {
-                    val response = handler.handle(request.message)
-                    callCpp(request.callback_tag, response)
-                }
-                return ""
+            val request = deserialize<Request>(message)
+            _scope.launch {
+                val response = handler(request.message)
+                callCpp(request.callback_tag, response)
             }
-        })
+            ""
+        }
     }
 
     override fun deregisterHandler(tag: String): Boolean {
@@ -94,7 +88,7 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
             assertThat(false).isTrue()
             return ""
         }
-        return handler.handle(message)
+        return handler(message)
     }
 
     override fun callCpp(tag: String): String {
@@ -102,7 +96,7 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
     }
 
     override fun callCpp(tag: String, message: String): String {
-        return _handler.callCpp(tag, message)
+        return _handler(tag, message)
     }
 }
 

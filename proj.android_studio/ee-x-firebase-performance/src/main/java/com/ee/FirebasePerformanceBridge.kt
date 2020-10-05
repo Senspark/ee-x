@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.internal.FirebasePerformanceTrace
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class FirebasePerformanceBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,

@@ -66,9 +66,9 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
     }
 
     fun initialize() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             _initialized = true
             val client = InstallReferrerClient.newBuilder(_context).build()
@@ -101,6 +101,6 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
                 }
             })
             _client = client
-        })
+        }
     }
 }

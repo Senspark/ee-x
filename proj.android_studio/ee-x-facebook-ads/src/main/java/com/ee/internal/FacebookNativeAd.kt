@@ -18,7 +18,6 @@ import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
-import com.ee.registerHandler
 import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.AdOptionsView
@@ -27,8 +26,7 @@ import com.facebook.ads.NativeAd
 import com.facebook.ads.NativeAdBase
 import com.facebook.ads.NativeAdListener
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
 private typealias ViewProcessor<T> = (view: T) -> Unit
@@ -36,8 +34,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 /**
  * Created by Zinge on 10/9/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class FacebookNativeAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -45,8 +42,7 @@ internal class FacebookNativeAd(
     private val _adId: String,
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
-    : IAdView
-    , NativeAdListener {
+    : IAdView, NativeAdListener {
     companion object {
         private val _logger = Logger(FacebookNativeAd::class.java.name)
 
@@ -116,29 +112,29 @@ internal class FacebookNativeAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _isLoaded.set(false)
             _ad = NativeAd(_context, _adId)
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             _isLoaded.set(false)
             ad.unregisterView()
             ad.destroy()
             _ad = null
-        })
+        }
     }
 
     @AnyThread
     private fun createView() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val layoutId = _context.resources
                 .getIdentifier(_layoutName, "layout", _context.packageName)
             val view = LayoutInflater
@@ -153,34 +149,34 @@ internal class FacebookNativeAd(
             _view = view
             _viewHelper.view = view
             addToActivity()
-        })
+        }
     }
 
     @AnyThread
     private fun destroyView() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             removeFromActivity()
             _view = null
             _viewHelper.view = null
-        })
+        }
     }
 
     @AnyThread
     private fun addToActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.addView(_view)
-        })
+        }
     }
 
     @AnyThread
     private fun removeFromActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.removeView(_view)
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -188,7 +184,7 @@ internal class FacebookNativeAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::load.name)
 
             ///
@@ -201,7 +197,7 @@ internal class FacebookNativeAd(
                 .withAdListener(this)
                 .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL)
                 .build())
-        })
+        }
     }
 
     override var position: Point

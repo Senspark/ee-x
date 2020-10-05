@@ -6,12 +6,10 @@ import android.content.Context
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.MessageBridge
-import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
 import com.ee.internal.ee_callCppInternal
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.ConcurrentHashMap
 
@@ -142,8 +140,7 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    @ImplicitReflectionSerializer
-    @UnstableDefault
+    @InternalSerializationApi
     fun initializePlugins(bridge: IMessageBridge): Boolean {
         val context = _context
         if (context == null) {
@@ -235,10 +232,9 @@ class PluginManager private constructor() {
     }
 }
 
-@ImplicitReflectionSerializer
+@InternalSerializationApi
 @NativeThread
 @Suppress("unused")
-@UnstableDefault
 private fun ee_staticInitializePlugins(): Boolean {
     /* Has defect.
     val activity = Utils.getCurrentActivity()
@@ -247,11 +243,9 @@ private fun ee_staticInitializePlugins(): Boolean {
         return false
     }
      */
-    val bridge = MessageBridge(object : MessageBridgeHandler {
-        override fun callCpp(tag: String, message: String): String {
-            return ee_callCppInternal(tag, message)
-        }
-    })
+    val bridge = MessageBridge { tag, message ->
+        ee_callCppInternal(tag, message)
+    }
     return PluginManager.getInstance().initializePlugins(bridge)
 }
 

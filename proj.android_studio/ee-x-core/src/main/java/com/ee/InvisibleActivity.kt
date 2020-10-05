@@ -27,13 +27,13 @@ class InvisibleActivity : Activity() {
                 ?: throw IllegalArgumentException("StartHandler not set")
             val finishHandler = _finishHandler
                 ?: throw IllegalArgumentException("FinishHandler not set")
-            Thread.runOnMainThread(Runnable {
+            Thread.runOnMainThread {
                 val id = _handleCounter++
                 _handlers[id] = Pair(startHandler, finishHandler)
                 val intent = Intent(_activity, InvisibleActivity::class.java)
                 intent.putExtra("handle_id", id)
                 _activity.startActivity(intent)
-            })
+            }
         }
     }
 

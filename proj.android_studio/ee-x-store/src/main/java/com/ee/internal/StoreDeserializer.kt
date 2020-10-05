@@ -1,10 +1,8 @@
 package com.ee.internal
 
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 abstract class StoreDeserializer : INativeStore, IStore {
     override fun retrieveProducts(json: String) {
         val products = deserializeList<ProductDefinition>(json)

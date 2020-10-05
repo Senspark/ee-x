@@ -8,14 +8,12 @@ import com.adjust.sdk.AdjustConfig
 import com.adjust.sdk.AdjustEvent
 import com.adjust.sdk.LogLevel
 import com.ee.internal.deserialize
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AdjustBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,

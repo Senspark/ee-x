@@ -6,7 +6,6 @@ import com.ee.IInterstitialAd
 import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.Thread
-import com.ee.registerHandler
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -20,8 +19,7 @@ internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private val _adId: String)
-    : IInterstitialAd
-    , AdListener() {
+    : IInterstitialAd, AdListener() {
     private val _messageHelper = MessageHelper("AdMobInterstitialAd", _adId)
     private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
 
@@ -67,24 +65,24 @@ internal class AdMobInterstitialAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             val ad = InterstitialAd(_context)
             ad.adUnitId = _adId
             ad.adListener = this
             _ad = ad
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             ad.adListener = null
             _ad = null
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -92,19 +90,19 @@ internal class AdMobInterstitialAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
-        })
+        }
     }
 
     @AnyThread
     override fun show() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.show()
-        })
+        }
     }
 
     override fun onAdLoaded() {

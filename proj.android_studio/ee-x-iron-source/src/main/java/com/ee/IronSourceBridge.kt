@@ -17,9 +17,7 @@ class IronSourceBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?)
-    : IPlugin
-    , RewardedVideoListener
-    , InterstitialListener {
+    : IPlugin, RewardedVideoListener, InterstitialListener {
     companion object {
         private val _logger = Logger(IronSourceBridge::class.java.name)
 
@@ -72,13 +70,13 @@ class IronSourceBridge(
 
     override fun destroy() {
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             IronSource.setInterstitialListener(null)
             IronSource.setRewardedVideoListener(null)
-        })
+        }
     }
 
     @AnyThread
@@ -119,9 +117,9 @@ class IronSourceBridge(
 
     @AnyThread
     fun initialize(appKey: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL)
             IronSource.shouldTrackNetworkState(_activity, true)
@@ -129,7 +127,7 @@ class IronSourceBridge(
             IronSource.setRewardedVideoListener(this)
             IronSource.setUserId(IronSource.getAdvertiserId(_context))
             _initialized = true
-        })
+        }
     }
 
     private val hasInterstitialAd: Boolean
@@ -137,18 +135,18 @@ class IronSourceBridge(
 
     @AnyThread
     fun loadInterstitialAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.debug(this::loadInterstitialAd.name)
             IronSource.loadInterstitial()
-        })
+        }
     }
 
     @AnyThread
     fun showInterstitialAd(adId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.debug("${this::showInterstitialAd.name}: $adId")
             IronSource.showInterstitial(adId)
-        })
+        }
     }
 
     val hasRewardedAd: Boolean
@@ -156,11 +154,11 @@ class IronSourceBridge(
 
     @AnyThread
     fun showRewardedAd(adId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.debug("${this::showRewardedAd.name}: $adId")
             _rewarded = false
             IronSource.showRewardedVideo(adId)
-        })
+        }
     }
 
     private fun handleRewardedAdResult() {
@@ -245,9 +243,9 @@ class IronSourceBridge(
         } else {
             // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
             // asynchronous.
-            Thread.runOnMainThreadDelayed(1.0f, Runnable {
+            Thread.runOnMainThreadDelayed(1.0f) {
                 handleRewardedAdResult()
-            })
+            }
         }
     }
 }

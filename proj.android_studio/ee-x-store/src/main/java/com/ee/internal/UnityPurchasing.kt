@@ -1,15 +1,13 @@
 package com.ee.internal
 
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 
 class UnityPurchasing(private val _bridge: IUnityCallback) : IStoreCallback {
     override fun onSetupFailed(reason: InitializationFailureReason) {
         _bridge.onSetupFailed("$reason")
     }
 
-    @ImplicitReflectionSerializer
-    @UnstableDefault
+    @InternalSerializationApi
     override fun onProductsRetrieved(products: List<ProductDescription>) {
         _bridge.onProductsRetrieved(products.serialize())
     }
@@ -18,8 +16,7 @@ class UnityPurchasing(private val _bridge: IUnityCallback) : IStoreCallback {
         _bridge.onPurchaseSucceeded(storeSpecificId, receipt, transactionId)
     }
 
-    @ImplicitReflectionSerializer
-    @UnstableDefault
+    @InternalSerializationApi
     override fun onPurchaseFailed(description: PurchaseFailureDescription) {
         _bridge.onPurchaseFailed(description.serialize())
     }

@@ -7,14 +7,12 @@ import com.ee.Thread
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 
 /**
  * Created by eps on 3/21/18.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class FacebookLoginDelegate(
     private val _bridge: IMessageBridge,
     private val _tag: Int) : FacebookCallback<LoginResult> {

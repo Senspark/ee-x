@@ -27,8 +27,7 @@ import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
 private typealias ViewProcessor<T> = (view: T) -> Unit
@@ -36,8 +35,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 /**
  * Created by Zinge on 10/16/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class AdMobNativeAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -45,9 +43,7 @@ internal class AdMobNativeAd(
     private val _adId: String,
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
-    : IAdView
-    , UnifiedNativeAd.OnUnifiedNativeAdLoadedListener
-    , AdListener() {
+    : IAdView, UnifiedNativeAd.OnUnifiedNativeAdLoadedListener, AdListener() {
     companion object {
         private val _logger = Logger(AdMobNativeAd::class.java.name)
         private const val k__body = "body"
@@ -106,32 +102,32 @@ internal class AdMobNativeAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _isLoaded.set(false)
             _ad = AdLoader.Builder(_context, _adId)
                 .forUnifiedNativeAd(this)
                 .withAdListener(this)
                 .build()
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad == null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _isLoaded.set(false)
             _ad = null
-        })
+        }
     }
 
     @AnyThread
     private fun createView() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val layoutId = _context.resources
                 .getIdentifier(_layoutName, "layout", _context.packageName)
             val view = LayoutInflater
@@ -146,34 +142,34 @@ internal class AdMobNativeAd(
             _view = view as UnifiedNativeAdView
             _viewHelper.view = view
             addToActivity()
-        })
+        }
     }
 
     @AnyThread
     private fun destroyView() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             removeFromActivity()
             _view = null
             _viewHelper.view = null
-        })
+        }
     }
 
     @AnyThread
     private fun addToActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.addView(_view)
-        })
+        }
     }
 
     @UiThread
     private fun removeFromActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.removeView(_view)
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -181,11 +177,11 @@ internal class AdMobNativeAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
-        })
+        }
     }
 
     override var position: Point

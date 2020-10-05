@@ -6,9 +6,8 @@ import com.ee.Thread
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.share.widget.GameRequestDialog
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
 /**
  * Created by eps on 3/21/18.
@@ -25,8 +24,7 @@ internal class FacebookRequestDelegate(
     private val k__onCancel: String
         @AnyThread get() = "FacebookRequestDelegate_onCancel_$_tag"
 
-    @ImplicitReflectionSerializer
-    @UnstableDefault
+    @InternalSerializationApi
     override fun onSuccess(result: GameRequestDialog.Result) {
         Thread.checkMainThread()
         @Serializable

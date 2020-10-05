@@ -9,6 +9,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.AnyThread
+import androidx.annotation.RequiresApi
 import com.ee.internal.RecordService
 import com.ee.internal.RecordService.ServiceBinder
 import java.text.SimpleDateFormat
@@ -17,6 +18,7 @@ import java.util.*
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class RecorderBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -108,10 +110,10 @@ class RecorderBridge(
         _bridge.deregisterHandler(kGetRecordingUrl)
     }
 
-    val isSupported: Boolean
+    private val isSupported: Boolean
         @AnyThread get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
-    fun startRecording() {
+    private fun startRecording() {
         if (!isSupported) {
             return
         }
@@ -140,7 +142,7 @@ class RecorderBridge(
             }
     }
 
-    fun stopRecording() {
+    private fun stopRecording() {
         if (!isSupported) {
             return
         }

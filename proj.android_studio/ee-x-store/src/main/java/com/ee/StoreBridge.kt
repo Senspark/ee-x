@@ -37,24 +37,20 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
  * Created by Zinge on 5/16/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class StoreBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private var _activity: Activity?)
-    : IPlugin
-    , IStoreBridge
-    , IUnityCallback {
+    : IPlugin, IStoreBridge, IUnityCallback {
     companion object {
         private val _logger = Logger(StoreBridge::class.java.name)
 

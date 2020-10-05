@@ -10,14 +10,12 @@ import com.unity3d.ads.IUnityAdsListener
 import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAds.FinishState
 import com.unity3d.ads.UnityAds.UnityAdsError
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class UnityAdsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -60,12 +58,12 @@ class UnityAdsBridge(
 
     override fun destroy() {
         deregisterHandlers()
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             UnityAds.removeListener(_listener)
-        })
+        }
     }
 
     @AnyThread
@@ -104,12 +102,12 @@ class UnityAdsBridge(
 
     @AnyThread
     fun initialize(gameId: String, testModeEnabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
-            if (!com.unity3d.ads.UnityAds.isSupported()) {
-                return@Runnable
+            if (!UnityAds.isSupported()) {
+                return@runOnMainThread
             }
             _listener = object : IUnityAdsListener {
                 override fun onUnityAdsReady(adId: String) {
@@ -176,17 +174,17 @@ class UnityAdsBridge(
             UnityAds.initialize(_activity, gameId, testModeEnabled)
             UnityAds.addListener(_listener)
             _initialized = true
-        })
+        }
     }
 
     @AnyThread
     private fun setDebugModeEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!_initialized) {
                 throw IllegalStateException("Please call initialize() first")
             }
-            com.unity3d.ads.UnityAds.setDebugMode(enabled)
-        })
+            UnityAds.setDebugMode(enabled)
+        }
     }
 
     @AnyThread
@@ -200,11 +198,11 @@ class UnityAdsBridge(
 
     @AnyThread
     fun showRewardedAd(adId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!_initialized) {
                 throw IllegalStateException("Please call initialize() first")
             }
             UnityAds.show(_activity, adId)
-        })
+        }
     }
 }

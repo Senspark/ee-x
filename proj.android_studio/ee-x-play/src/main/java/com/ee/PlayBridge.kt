@@ -14,14 +14,12 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.achievement.Achievement
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class PlayBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -46,11 +44,11 @@ class PlayBridge(
 
     init {
         registerHandlers()
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _activity?.let { activity ->
                 _client = GoogleSignIn.getClient(activity, _options)
             }
-        })
+        }
     }
 
     override fun onCreate(activity: Activity) {
@@ -185,8 +183,8 @@ class PlayBridge(
     @AnyThread
     private fun logIn(silently: Boolean, callback: (successful: Boolean) -> Unit) {
         _logger.debug("${this::logIn.name}: silently = $silently")
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val client = _client ?: throw IllegalArgumentException("Client is null")
             if (silently) {
                 client.silentSignIn().addOnCompleteListener { task ->
@@ -205,28 +203,28 @@ class PlayBridge(
                     }
                     .process()
             }
-        })
+        }
     }
 
     @AnyThread
     private fun logOut(callback: (successful: Boolean) -> Unit) {
         _logger.debug(this::logOut.name)
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val client = _client ?: throw IllegalArgumentException("Client is null")
             client.signOut().addOnCompleteListener { task ->
                 callback(task.isSuccessful)
             }
-        })
+        }
     }
 
     @AnyThread
     private fun showAchievements() {
         _logger.debug(this::showAchievements.name)
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = achievementsClient ?: return@Runnable
+            val client = achievementsClient ?: return@runOnMainThread
             client.achievementsIntent.addOnSuccessListener { intent ->
                 val activity = _activity ?: return@addOnSuccessListener
                 val code = 1
@@ -240,7 +238,7 @@ class PlayBridge(
                     }
                     .process()
             }
-        })
+        }
     }
 
     // Load all achievements and check increment
@@ -248,11 +246,11 @@ class PlayBridge(
     // -achievement-store-unlock-in-game-or-call-unlo/23853222#23853222
     @AnyThread
     private fun incrementAchievement(achievementId: String, percent: Double) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = achievementsClient ?: return@Runnable
+            val client = achievementsClient ?: return@runOnMainThread
             client.load(true).addOnCompleteListener { task ->
                 val buffer = task.result?.get() ?: return@addOnCompleteListener
                 val bufferSize = buffer.count
@@ -275,28 +273,28 @@ class PlayBridge(
                 }
                 buffer.release()
             }
-        })
+        }
     }
 
     @AnyThread
     private fun unlockAchievement(achievementId: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = achievementsClient ?: return@Runnable
+            val client = achievementsClient ?: return@runOnMainThread
             client.unlock(achievementId)
-        })
+        }
     }
 
     @AnyThread
     private fun showLeaderboard(leaderboardId: String) {
         _logger.debug("${this::showLeaderboard.name}: id = $leaderboardId")
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = leaderboardsClient ?: return@Runnable
+            val client = leaderboardsClient ?: return@runOnMainThread
             client.getLeaderboardIntent(leaderboardId).addOnSuccessListener { intent ->
                 val activity = _activity ?: return@addOnSuccessListener
                 val code = 1
@@ -310,17 +308,17 @@ class PlayBridge(
                     }
                     .process()
             }
-        })
+        }
     }
 
     @AnyThread
     private fun showAllLeaderboards() {
         _logger.debug(this::showAllLeaderboards.name)
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = leaderboardsClient ?: return@Runnable
+            val client = leaderboardsClient ?: return@runOnMainThread
             client.allLeaderboardsIntent.addOnSuccessListener { intent ->
                 val activity = _activity ?: return@addOnSuccessListener
                 val code = 1
@@ -334,17 +332,17 @@ class PlayBridge(
                     }
                     .process()
             }
-        })
+        }
     }
 
     @AnyThread
     private fun submitScore(leaderboardId: String, score: Long) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (!isLoggedIn) {
-                return@Runnable
+                return@runOnMainThread
             }
-            val client = leaderboardsClient ?: return@Runnable
+            val client = leaderboardsClient ?: return@runOnMainThread
             client.submitScore(leaderboardId, score)
-        })
+        }
     }
 }

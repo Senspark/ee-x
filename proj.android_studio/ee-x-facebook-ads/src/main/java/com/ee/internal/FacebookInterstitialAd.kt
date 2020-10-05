@@ -6,7 +6,6 @@ import com.ee.IInterstitialAd
 import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.Thread
-import com.ee.registerHandler
 import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
@@ -20,8 +19,7 @@ internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
     private val _adId: String)
-    : IInterstitialAd
-    , InterstitialAdListener {
+    : IInterstitialAd, InterstitialAdListener {
     companion object {
         private val _logger = Logger(FacebookInterstitialAd::class.java.name)
     }
@@ -66,21 +64,21 @@ internal class FacebookInterstitialAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _ad = InterstitialAd(_context, _adId)
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             ad.destroy()
             _ad = null
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -88,16 +86,16 @@ internal class FacebookInterstitialAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
-        })
+        }
     }
 
     @AnyThread
     override fun show() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val result = ad.show(ad.buildShowAdConfig().build())
             if (result) {
@@ -105,7 +103,7 @@ internal class FacebookInterstitialAd(
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
-        })
+        }
     }
 
     override fun onAdLoaded(ad: Ad) {

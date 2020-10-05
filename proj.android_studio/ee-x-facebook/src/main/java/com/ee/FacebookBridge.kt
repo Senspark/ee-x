@@ -33,16 +33,14 @@ import com.facebook.share.model.ShareVideo
 import com.facebook.share.model.ShareVideoContent
 import com.facebook.share.widget.GameRequestDialog
 import com.facebook.share.widget.ShareDialog
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.io.File
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class FacebookBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -64,8 +62,7 @@ class FacebookBridge(
         private const val kShareVideoContent = "${kPrefix}ShareVideoContent"
 
         @AnyThread
-        @ImplicitReflectionSerializer
-        @UnstableDefault
+        @InternalSerializationApi
         fun convertAccessTokenToString(token: AccessToken?): String {
             if (token == null) {
                 return ""

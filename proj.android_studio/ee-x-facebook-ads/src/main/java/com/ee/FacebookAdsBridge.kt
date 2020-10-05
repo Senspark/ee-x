@@ -14,16 +14,14 @@ import com.ee.internal.serialize
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSize
 import com.facebook.ads.AudienceNetworkAds
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class FacebookAdsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -195,16 +193,16 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun addTestDevice(hash: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             AdSettings.addTestDevice(hash)
-        })
+        }
     }
 
     @AnyThread
     fun clearTestDevices() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             AdSettings.clearTestDevices()
-        })
+        }
     }
 
     @AnyThread

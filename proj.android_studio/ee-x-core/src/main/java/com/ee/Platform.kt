@@ -23,9 +23,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.lang.reflect.InvocationTargetException
 import java.net.InetAddress
 import java.net.UnknownHostException
@@ -51,8 +50,7 @@ object Platform {
     private const val kTestConnection = kPrefix + "testConnection"
     private const val kShowInstallPrompt = kPrefix + "showInstallPrompt"
 
-    @ImplicitReflectionSerializer
-    @UnstableDefault
+    @InternalSerializationApi
     fun registerHandlers(bridge: IMessageBridge, context: Context) {
         bridge.registerHandler(kIsApplicationInstalled) { message ->
             Utils.toString(isApplicationInstalled(context, message))

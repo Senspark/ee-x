@@ -11,14 +11,12 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.JsonException
+import kotlinx.serialization.SerializationException
 import kotlin.math.min
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class GooglePlayPurchasing(
     private val _plugin: IStoreBridge,
     private val _helper: IabHelper,
@@ -108,7 +106,7 @@ class GooglePlayPurchasing(
             if (!notified) {
                 _unityPurchasing.onPurchaseFailed(suspectBadPurchase)
             }
-        } catch (ex: JsonException) {
+        } catch (ex: SerializationException) {
             ex.printStackTrace()
             if (!notified) {
                 _unityPurchasing.onPurchaseFailed(suspectBadPurchase)

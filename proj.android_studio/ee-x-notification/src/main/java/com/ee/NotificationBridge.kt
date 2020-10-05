@@ -9,15 +9,13 @@ import androidx.annotation.AnyThread
 import com.ee.internal.NotificationReceiver
 import com.ee.internal.NotificationUtils
 import com.ee.internal.deserialize
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
 /**
  * Created by Zinge on 3/29/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class NotificationBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,

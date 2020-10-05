@@ -14,16 +14,14 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AdMobBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -202,9 +200,9 @@ class AdMobBridge(
 
     @AnyThread
     fun initialize() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             MobileAds.initialize(_context)
-        })
+        }
     }
 
     private val emulatorTestDeviceHash: String
@@ -212,13 +210,13 @@ class AdMobBridge(
 
     @AnyThread
     fun addTestDevice(hash: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _testDevices.add(hash)
             val configuration = RequestConfiguration.Builder()
                 .setTestDeviceIds(_testDevices)
                 .build()
             MobileAds.setRequestConfiguration(configuration)
-        })
+        }
     }
 
     @AnyThread

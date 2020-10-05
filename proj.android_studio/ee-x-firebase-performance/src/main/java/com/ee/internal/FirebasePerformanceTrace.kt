@@ -2,14 +2,11 @@ package com.ee.internal
 
 import androidx.annotation.AnyThread
 import com.ee.IMessageBridge
-import com.ee.registerHandler
 import com.google.firebase.perf.metrics.Trace
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class FirebasePerformanceTrace(
     private val _bridge: IMessageBridge,
     private val _trace: Trace,

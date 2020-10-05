@@ -1,64 +1,54 @@
 package com.ee.internal
 
 import androidx.annotation.AnyThread
-import kotlinx.serialization.Decoder
-import kotlinx.serialization.Encoder
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 inline fun <reified T : Any> deserialize(string: String): T {
-    return Json.parse(T::class.serializer(), string)
+    return Json.decodeFromString(T::class.serializer(), string)
 }
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 inline fun <reified T : Any> deserializeList(string: String): List<T> {
     val valueSerializer = T::class.serializer()
     val serializer = ListSerializer(valueSerializer)
-    return Json.parse(serializer, string)
+    return Json.decodeFromString(serializer, string)
 }
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 inline fun <reified K : Any, reified V : Any> deserializeMap(string: String): Map<K, V> {
     val keySerializer = K::class.serializer()
     val valueSerializer = V::class.serializer()
     val serializer = MapSerializer(keySerializer, valueSerializer)
-    return Json.parse(serializer, string)
+    return Json.decodeFromString(serializer, string)
 }
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 inline fun <reified T : Any> T.serialize(): String {
-    return Json.stringify(T::class.serializer(), this)
+    return Json.encodeToString(T::class.serializer(), this)
 }
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 inline fun <reified T : Any> List<T>.serialize(): String {
     val valueSerializer = T::class.serializer()
     val serializer = ListSerializer(valueSerializer)
-    return Json.stringify(serializer, this)
+    return Json.encodeToString(serializer, this)
 }
 
 @AnyThread
-@ImplicitReflectionSerializer
-@UnstableDefault
-inline fun <reified K : Any, reified V: Any> Map<K, V>.serialize(): String {
+@InternalSerializationApi
+inline fun <reified K : Any, reified V : Any> Map<K, V>.serialize(): String {
     val keySerializer = K::class.serializer()
     val valueSerializer = V::class.serializer()
     val serializer = MapSerializer(keySerializer, valueSerializer)
-    return Json.stringify(serializer, this)
+    return Json.encodeToString(serializer, this)
 }

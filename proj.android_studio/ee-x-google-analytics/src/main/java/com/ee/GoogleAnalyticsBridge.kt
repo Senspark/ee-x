@@ -13,15 +13,13 @@ import com.google.android.gms.analytics.HitBuilders.SocialBuilder
 import com.google.android.gms.analytics.HitBuilders.TimingBuilder
 import com.google.android.gms.analytics.ecommerce.Product
 import com.google.android.gms.analytics.ecommerce.ProductAction
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class GoogleAnalyticsBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -154,40 +152,40 @@ class GoogleAnalyticsBridge(
 
     @AnyThread
     private fun setLocalDispatchInterval(interval: Int) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.setLocalDispatchPeriod(interval)
-        })
+        }
     }
 
     @AnyThread
     private fun setDryRun(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.setDryRun(enabled)
-        })
+        }
     }
 
     @AnyThread
     private fun setAppOptOut(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.appOptOut = enabled
-        })
+        }
     }
 
     @AnyThread
     private fun setExceptionReportingEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _exceptionReportingEnabled = enabled
             for (tracker in _trackers.values) {
                 tracker.setExceptionReportingEnabled(enabled)
             }
-        })
+        }
     }
 
     @AnyThread
     private fun dispatchLocalHits() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.dispatchLocalHits()
-        })
+        }
     }
 
     @AnyThread

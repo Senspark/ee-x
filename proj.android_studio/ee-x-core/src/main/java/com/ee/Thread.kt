@@ -66,14 +66,14 @@ private fun ee_isMainThread(): Boolean {
 
 @Suppress("unused")
 private fun ee_runOnMainThread(): Boolean {
-    return Thread.runOnMainThread(Runnable {
+    return Thread.runOnMainThread {
         ee_runOnMainThreadCallback()
-    })
+    }
 }
 
 @Suppress("unused")
 private fun ee_runOnMainThreadDelayed(key: Int, delay: Float) {
-    Thread.runOnMainThreadDelayed(delay, Runnable {
+    Thread.runOnMainThreadDelayed(delay) {
         ee_runOnMainThreadDelayedCallback(key)
-    })
+    }
 }

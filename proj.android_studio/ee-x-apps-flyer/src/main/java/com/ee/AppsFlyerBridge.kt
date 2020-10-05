@@ -1,19 +1,16 @@
 package com.ee
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.internal.deserialize
-import kotlinx.serialization.ContextualSerialization
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -74,7 +71,7 @@ class AppsFlyerBridge(
             @Serializable
             class Request(
                 val name: String,
-                val values: Map<String, @ContextualSerialization Any>
+                val values: Map<String, @Contextual Any>
             )
 
             val request = deserialize<Request>(message)
@@ -95,7 +92,7 @@ class AppsFlyerBridge(
 
     @AnyThread
     fun initialize(devKey: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val listener = object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
                     for (key in conversionData.keys) {
@@ -120,14 +117,14 @@ class AppsFlyerBridge(
             _tracker.init(devKey, listener, _context)
             _tracker.setDeviceTrackingDisabled(true)
             _tracker.enableLocationCollection(true)
-        })
+        }
     }
 
     @AnyThread
     fun startTracking() {
-        Thread.runOnMainThread(Runnable {
-            _tracker.startTracking(_context as Application?)
-        })
+        Thread.runOnMainThread {
+            _tracker.startTracking(_context)
+        }
     }
 
     val deviceId: String
@@ -135,22 +132,22 @@ class AppsFlyerBridge(
 
     @AnyThread
     fun setDebugEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.setDebugLog(enabled)
-        })
+        }
     }
 
     @AnyThread
     fun setStopTracking(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.stopTracking(enabled, _context)
-        })
+        }
     }
 
     @AnyThread
     fun trackEvent(name: String, values: Map<String, Any>) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.trackEvent(_context, name, values)
-        })
+        }
     }
 }

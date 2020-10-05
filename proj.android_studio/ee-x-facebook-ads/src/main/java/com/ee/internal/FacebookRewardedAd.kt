@@ -6,7 +6,6 @@ import com.ee.IMessageBridge
 import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
-import com.ee.registerHandler
 import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.RewardedVideoAd
@@ -76,21 +75,21 @@ internal class FacebookRewardedAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _ad = RewardedVideoAd(_context, _adId)
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             ad.destroy()
             _ad = null
-        })
+        }
     }
 
     private val isLoaded: Boolean
@@ -98,16 +97,16 @@ internal class FacebookRewardedAd(
 
     @AnyThread
     private fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::load.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
-        })
+        }
     }
 
     @AnyThread
     private fun show() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _logger.info(this::show.name)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             _rewarded = false
@@ -117,7 +116,7 @@ internal class FacebookRewardedAd(
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
-        })
+        }
     }
 
     override fun onError(ad: Ad, adError: AdError) {

@@ -18,15 +18,13 @@ import com.facebook.ads.AdListener
 import com.facebook.ads.AdSize
 import com.facebook.ads.AdView
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/9/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class FacebookBannerAd(
     private val _bridge: IMessageBridge,
     private val _context: Context,
@@ -34,8 +32,7 @@ internal class FacebookBannerAd(
     private val _adId: String,
     private val _adSize: AdSize,
     bannerHelper: FacebookBannerHelper)
-    : IAdView
-    , AdListener {
+    : IAdView, AdListener {
     companion object {
         private val _logger = Logger(FacebookBannerAd::class.java.name)
     }
@@ -84,9 +81,9 @@ internal class FacebookBannerAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _isLoaded.set(false)
             val ad = AdView(_context, _adId, _adSize)
@@ -98,37 +95,37 @@ internal class FacebookBannerAd(
             _ad = ad
             _viewHelper.view = ad
             addToActivity()
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             _isLoaded.set(false)
             removeFromActivity()
             ad.destroy()
             _ad = null
             _viewHelper.view = null
-        })
+        }
     }
 
     @AnyThread
     private fun addToActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.addView(_ad)
-        })
+        }
     }
 
     @AnyThread
     private fun removeFromActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = Utils.getRootView(activity)
             rootView.removeView(_ad)
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -136,10 +133,10 @@ internal class FacebookBannerAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
-        })
+        }
     }
 
     override var position: Point

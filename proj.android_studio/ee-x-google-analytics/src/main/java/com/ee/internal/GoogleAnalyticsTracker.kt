@@ -4,17 +4,14 @@ import androidx.annotation.AnyThread
 import com.ee.IMessageBridge
 import com.ee.Thread
 import com.ee.Utils
-import com.ee.registerHandler
 import com.google.android.gms.analytics.GoogleAnalytics
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
 /**
  * Created by Zinge on 10/25/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class GoogleAnalyticsTracker(
     private val _bridge: IMessageBridge,
     private val _analytics: GoogleAnalytics,
@@ -72,29 +69,29 @@ class GoogleAnalyticsTracker(
 
     @AnyThread
     fun setParameter(key: String, value: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker[key] = value
-        })
+        }
     }
 
     @AnyThread
     private fun setAdvertisingIdCollectionEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.enableAdvertisingIdCollection(enabled)
-        })
+        }
     }
 
     @AnyThread
     fun setExceptionReportingEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.enableExceptionReporting(enabled)
-        })
+        }
     }
 
     @AnyThread
     fun send(params: Map<String, String>) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _tracker.send(params)
-        })
+        }
     }
 }

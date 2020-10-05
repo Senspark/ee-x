@@ -16,10 +16,7 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('admob-mediation', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:admob:1.0.0'
-    }
+    configureAndPublish('admob-mediation')
 } else {
     dependencies {
         api project(':ee-x-admob')

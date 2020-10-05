@@ -25,10 +25,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('store', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:core:1.0.0'
-    }
+    configureAndPublish('store')
 } else {
     dependencies {
         api project(':ee-x-core')

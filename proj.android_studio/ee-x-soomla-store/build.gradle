@@ -18,10 +18,7 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('soomla-store', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:store:1.0.0'
-    }
+    configureAndPublish('soomla-store')
 } else {
     dependencies {
         api project(':ee-x-store')

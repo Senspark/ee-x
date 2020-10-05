@@ -16,10 +16,10 @@ private let kSetStopTracking = "\(kPrefix)SetStopTracking"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAppsFlyerBridge)
-public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
+public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
     private let _logger = Logger("\(AppsFlyerBridge.self)")
     private let _bridge: IMessageBridge
-    private let _tracker = AppsFlyerTracker.shared()
+    private let _tracker = AppsFlyerLib.shared()
 
     public required init(_ bridge: IMessageBridge) {
         _bridge = bridge
@@ -91,13 +91,13 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
             self._tracker.appleAppID = appId
             self._tracker.delegate = self
             self._tracker.shouldCollectDeviceName = true
-            self._tracker.deviceTrackingDisabled = false
+            self._tracker.anonymizeUser = false
         }
     }
 
     func startTracking() {
         Thread.runOnMainThread {
-            self._tracker.trackAppLaunch()
+            self._tracker.start()
         }
     }
 
@@ -113,13 +113,13 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerTrackerDelegate {
 
     func setStopTracking(_ enabled: Bool) {
         Thread.runOnMainThread {
-            self._tracker.isStopTracking = enabled
+            self._tracker.isStopped = enabled
         }
     }
 
     func trackEvent(_ name: String, _ values: [String: Any]) {
         Thread.runOnMainThread {
-            self._tracker.trackEvent(name, withValues: values)
+            self._tracker.logEvent(name, withValues: values)
         }
     }
 

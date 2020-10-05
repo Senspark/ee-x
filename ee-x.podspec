@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.1.2'
+  spec.version        = '1.1.3'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.1.2'
+    :tag => 'v1.1.3'
   }
 
   spec.framework = 'Foundation'
@@ -75,6 +75,7 @@ Pod::Spec.new do |spec|
       'DEAD_CODE_STRIPPING' => 'YES'
     }
 
+    s.library = 'swiftCore'
     s.dependency 'ee-x/json'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
@@ -373,12 +374,15 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
-    s.library = 'iconv'
+    s.library =
+      'iconv',
+      'z'
     s.framework = 
       'GameController',
       'OpenAL'
-    s.osx.library = 'z'
-    s.dependency 'ee-x/core'
+    s.ios.framework =
+      'CoreMotion'
+    s.dependency 'ee-x/ads'
   end
 
   spec.subspec 'facebook' do |s|

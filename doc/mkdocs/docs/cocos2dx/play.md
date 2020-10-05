@@ -1,4 +1,4 @@
-# Notification
+# Play
 ## Configuration
 ### Android
 Modify `build.gradle`

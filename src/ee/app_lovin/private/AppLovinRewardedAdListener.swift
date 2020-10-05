@@ -9,7 +9,7 @@ import AppLovinSDK
 
 private let kPrefix = "AppLovinBridge"
 private let kOnRewardedAdLoaded = "\(kPrefix)OnRewardedAdLoaded"
-private let kOnRewardedAdFailedToLoad = "${kPrefix}OnRewardedAdFailedToLoad"
+private let kOnRewardedAdFailedToLoad = "\(kPrefix)OnRewardedAdFailedToLoad"
 private let kOnRewardedAdClicked = "\(kPrefix)OnRewardedAdClicked"
 private let kOnRewardedAdClosed = "\(kPrefix)OnRewardedAdClosed"
 

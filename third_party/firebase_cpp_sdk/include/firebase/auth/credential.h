@@ -63,6 +63,7 @@ class Credential {
   friend class PlayGamesAuthProvider;
   friend class TwitterAuthProvider;
   friend class YahooAuthProvider;
+  friend class ServiceUpdatedCredentialProvider;
   /// @endcond
 
  private:
@@ -214,6 +215,18 @@ class OAuthProvider {
   /// @param access_token TODO(jsanmiya) add explanation (currently missing
   ///    from Android and iOS implementations).
   static Credential GetCredential(const char* provider_id, const char* id_token,
+                                  const char* access_token);
+
+  /// Generate a credential for an OAuth2 provider.
+  ///
+  /// @param provider_id Name of the OAuth2 provider.
+  /// @param id_token The authentication token (OIDC only).
+  /// @param raw_nonce The raw nonce associated with the Auth credential being
+  /// created.
+  /// @param access_token The access token associated with the Auth credential
+  /// to be created, if available.  This value may be null.
+  static Credential GetCredential(const char* provider_id, const char* id_token,
+                                  const char* raw_nonce,
                                   const char* access_token);
 };
 

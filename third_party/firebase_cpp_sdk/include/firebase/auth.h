@@ -45,7 +45,7 @@ class PhoneAuthProvider;
 struct AuthCompletionHandle;
 class FederatedAuthProvider;
 class FederatedOAuthProvider;
-class SignInResult;
+struct SignInResult;
 
 /// @brief Firebase authentication object.
 ///
@@ -197,8 +197,8 @@ class Auth {
 
   /// Asynchronously logs into Firebase with the given credentials.
   ///
-  /// For example, the credential could wrap a Facebook login access token,
-  /// a Twitter token/token-secret pair).
+  /// For example, the credential could wrap a Facebook login access token or
+  /// a Twitter token/token-secret pair.
   ///
   /// The SignInResult contains both a reference to the User (which can be null
   /// if the sign in failed), and AdditionalUserInfo, which holds details
@@ -534,162 +534,6 @@ class IdTokenListener {
 /// types in the future, with support for OAuth to start.
 class FederatedAuthProvider {
  public:
-  /// @brief Contains resulting information of a user authenticated by a
-  /// Federated Auth Provider.  This information will be used by the internal
-  /// implementation to construct a corresponding User object.
-  struct AuthenticatedUserData {
-    /// The unique ID identifies the IdP account.
-    const char* uid;
-
-    /// [opt] The email of the account.
-    const char* email;
-
-    /// Whether the sign-in email is verified.
-    bool is_email_verified;
-
-    /// [opt] The display name for the account.
-    const char* display_name;
-
-    /// [opt] The username for the account.
-    const char* user_name;
-
-    /// [opt] The photo Url for the account, if one exists.
-    const char* photo_url;
-
-    /// The linked provider ID (e.g. "google.com" for the Google provider).
-    const char* provider_id;
-
-    /// A Firebase Auth ID token for the authenticated user.
-    const char* access_token;
-
-    /// A Firebase Auth refresh token for the authenticated user.
-    const char* refresh_token;
-
-    /// [opt] IdP user profile data corresponding to the provided credential.
-    std::map<Variant, Variant> raw_user_info;
-
-    /// The number of seconds in which the ID token expires.
-    uint64_t token_expires_in_seconds;
-  };
-
-  /// @brief Handlers for client applications to facilitate federated auth
-  /// requests on non-mobile systems.
-  template <class T>
-  class Handler {
-   public:
-    virtual ~Handler() {}
-
-    /// @brief Application sign-in handler.
-    ///
-    /// The application must implement this method to handle federated auth user
-    /// sign-in requests on non-mobile systems.
-    ///
-    /// @param[in] provider_data Contains information on the provider to
-    /// authenticate with.
-    /// @param[in] completion_handle Internal data pertaining to this operation
-    /// which must be passed to SignInComplete once the handler has completed
-    /// the sign in operation.
-    ///
-    /// @see Auth#SignInWithProvider
-    /// @see SignInComplete
-    virtual void OnSignIn(const T& provider_data,
-                          AuthCompletionHandle* completion_handle) = 0;
-
-    /// Completion for OnSignIn events.
-    ///
-    /// Invoke this method once the corresponding OnSignIn has been fulfilled.
-    /// This method will trigger the associated Future<SignInResult> previously
-    /// returned from the Auth::SignInWithProvider method.
-    ///
-    /// @param[in] completion_handle The handle provided to the application's
-    /// FederatedAuthProvider::Handler::OnSignIn method.
-    /// @param[in] user_data The application's resulting Firebase user
-    /// values following the authorization request.
-    /// @param[in] auth_error The enumerated status code of the authorization
-    /// request.
-    /// @param[in] error_message An optional error message to be set in the
-    ///  Future.
-    ///
-    /// @see OnSignIn
-    /// @see Auth::SignInWithProvider
-    void SignInComplete(AuthCompletionHandle* completion_handle,
-                        const AuthenticatedUserData& user_data,
-                        AuthError auth_error, const char* error_message);
-
-    /// @brief Application user account link handler.
-    ///
-    /// The application must implement this method to handle federated auth user
-    /// link requests on non-mobile systems.
-    ///
-    /// @param[in] provider_data Contains information on the provider to
-    /// authenticate with.
-    /// @param[in] completion_handle Internal data pertaining to this operation
-    /// which must be passed to LinkComplete once the handler has completed the
-    /// user link operation.
-    ///
-    /// @see User#LinkWithProvider
-    virtual void OnLink(const T& provider_data,
-                        AuthCompletionHandle* completion_handle) = 0;
-
-    /// Completion for non-mobile user authorization handlers.
-    ///
-    /// Invoke this method once the OnLine process has been fulfilled. This
-    /// method will trigger the associated Future<SignInResult> previously
-    /// returned from an invocation of User::LinkWithProvider.
-    ///
-    /// @param[in] completion_handle The handle provided to the
-    /// application's FederatedAuthProvider::Handler::OnLink method.
-    /// @param[in] user_data The application's resulting Firebase user
-    /// values following the user link request.
-    /// @param[in] auth_error The enumerated status code of the user link
-    /// request.
-    /// @param[in] error_message An optional error message to be set in the
-    ///  Future.
-    ///
-    /// @see OnLink
-    /// @see User#LinkWithProvider
-    void LinkComplete(AuthCompletionHandle* completion_handle,
-                      const AuthenticatedUserData& user_data,
-                      AuthError auth_error, const char* error_message);
-
-    /// @brief Application user re-authentication handler.
-    ///
-    /// The application must implement this method to handle federated auth user
-    /// re-authentication requests on non-mobile systems.
-    ///
-    /// @param[in] provider_data Contains information on the provider to
-    /// authenticate with.
-    /// @param[in] completion_handle Internal data pertaining to this operation
-    /// which must be passed to ReauthenticateComplete once the handler has
-    /// completed the reauthentication operation.
-    ///
-    /// @see User#ReauthenticateWithProviderComplete
-    virtual void OnReauthenticate(const T& provider_data,
-                                  AuthCompletionHandle* completion_handle) = 0;
-
-    /// Completion for non-mobile user authorization handlers.
-    ///
-    /// Invoke this method once the OnReauthenticate process has been
-    /// fulfilled. This method will trigger the associated Future<SignInResult>
-    /// previously returned from an invocation of
-    /// User::ReauthenticateWithProvider.
-    ///
-    /// @param[in] completion_handle The handle provided to the application's
-    /// FederatedAuthProvider::Handler::OnReauthenticate method.
-    /// @param[in] user_data The application's resulting Firebase user
-    /// values following the user re-authentication request.
-    /// @param[in] auth_error The enumerated status code of the reauthentication
-    /// request.
-    /// @param[in] error_message An optional error message to be set in the
-    ///  Future.
-    ///
-    /// @see OnReauthenticate
-    /// @see User#ReuthenticateWithProvider
-    void ReauthenticateComplete(AuthCompletionHandle* completion_handle,
-                                const AuthenticatedUserData& user_data,
-                                AuthError auth_error,
-                                const char* error_message);
-  };
 
   FederatedAuthProvider() {}
   virtual ~FederatedAuthProvider() {}
@@ -712,13 +556,6 @@ class FederatedAuthProvider {
 /// account linking and user reauthentication, respectively.
 class FederatedOAuthProvider : public FederatedAuthProvider {
  public:
-  /// @brief A FederatedAuthProvider typed specifically for OAuth Authentication
-  /// handling.
-  ///
-  /// To be used on non-mobile environments for custom OAuth implementations and
-  /// UI flows.
-  typedef FederatedAuthProvider::Handler<FederatedOAuthProviderData>
-      AuthHandler;
 
   /// Constructs an unconfigured provider.
   FederatedOAuthProvider();
@@ -731,21 +568,6 @@ class FederatedOAuthProvider : public FederatedAuthProvider {
   explicit FederatedOAuthProvider(
       const FederatedOAuthProviderData& provider_data);
 
-  /// @brief Constructs a provider with the required information to authenticate
-  /// using an OAuth Provider.
-  ///
-  /// An AuthHandler is required on desktop platforms to facilitate custom
-  /// implementations of OAuth authentication. The AuthHandler must outlive the
-  /// instance of this OAuthProvider on desktop systems and is ignored on iOS
-  /// and Android platforms.
-  ///
-  /// @param[in] provider_data Contains information on the provider to
-  /// authenticate with.
-  /// @param[in] handler An FederatedOAuthProviderData typed
-  /// FederatedAuthProvider::Handler which be invoked on non-mobile systems
-  /// to handle authentication requests.
-  FederatedOAuthProvider(const FederatedOAuthProviderData& provider_data,
-                         AuthHandler* handler);
 
   ~FederatedOAuthProvider() override;
 
@@ -765,7 +587,6 @@ class FederatedOAuthProvider : public FederatedAuthProvider {
   Future<SignInResult> Reauthenticate(AuthData* auth_data) override;
 
   FederatedOAuthProviderData provider_data_;
-  AuthHandler* handler_;
 };
 
 }  // namespace auth

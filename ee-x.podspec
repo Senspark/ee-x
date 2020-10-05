@@ -378,7 +378,7 @@ Pod::Spec.new do |spec|
       'GameController',
       'OpenAL'
     s.osx.library = 'z'
-    s.dependency 'ee-x/core'
+    s.dependency 'ee-x/ads'
   end
 
   spec.subspec 'facebook' do |s|

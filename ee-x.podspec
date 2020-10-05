@@ -75,6 +75,7 @@ Pod::Spec.new do |spec|
       'DEAD_CODE_STRIPPING' => 'YES'
     }
 
+    s.library = 'swiftCore'
     s.dependency 'ee-x/json'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
@@ -373,11 +374,14 @@ Pod::Spec.new do |spec|
       ].join(' ')
     }
 
-    s.library = 'iconv'
+    s.library =
+      'iconv',
+      'z'
     s.framework = 
       'GameController',
       'OpenAL'
-    s.osx.library = 'z'
+    s.ios.framework =
+      'CoreMotion'
     s.dependency 'ee-x/ads'
   end
 

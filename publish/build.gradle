@@ -104,14 +104,16 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
 }
 
 def configureAndPublish(String libraryName) {
-    def plugins = ext.plugins[libraryName]
-    for (int i = 1; i < plugins.length; ++i) {
-        def plugin = plugins[i]
-        dependencies {
-            api "com.senspark.ee:${plugin}:${ext.plugins[plugin][0]}"
+    project("ee-x-$libraryName") {
+        def plugins = rootProject.ext.plugins[libraryName]
+        for (int i = 1; i < plugins.size(); ++i) {
+            def plugin = plugins[i]
+            dependencies {
+                api "com.senspark.ee:$plugin:${rootProject.ext.plugins[plugin][0]}"
+            }
         }
+        publishToMaven(libraryName, plugins[0])
     }
-    publishToMaven(libraryName, plugins[0])
 }
 
 def publishToMaven(String libraryName, String libraryVersion) {

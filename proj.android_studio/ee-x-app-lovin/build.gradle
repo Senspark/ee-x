@@ -46,5 +46,5 @@ dependencies {
     implementation 'com.applovin:applovin-sdk:9.13.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
 }

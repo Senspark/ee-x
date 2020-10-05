@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_storage)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-storage
+pod 'ee-x/firebase-storage'
 ```
 
 ## Basic usage

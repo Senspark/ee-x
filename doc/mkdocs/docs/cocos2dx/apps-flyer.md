@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_apps_flyer)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/apps-flyer
+pod 'ee-x/apps-flyer'
 ```
 
 ## Basic usage

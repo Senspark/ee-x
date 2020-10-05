@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_remote_config)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-remote-config
+pod 'ee-x/firebase-remote-config'
 ```
 
 ## Basic usage

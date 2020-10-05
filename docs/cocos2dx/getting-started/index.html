@@ -10,7 +10,7 @@ $(call import-module, ee-x)
 LOCAL_STATIC_LIBRARIES += ee_x_core
 </code></pre></div> <h4 id=for-cmake-users>For <code>cmake</code> users<a class=headerlink href=#for-cmake-users title="Permanent link">&para;</a></h4> <p>Modify <code>CMakeLists.txt</code></p> <div class=codehilite><pre><span></span><code>add_subdirectory(PATH/ee-x ${PROJECT_BINARY_DIR}/ee-x)
 target_link_libraries(${PROJECT_NAME} ee_x_core)
-</code></pre></div> <h3 id=ios>iOS<a class=headerlink href=#ios title="Permanent link">&para;</a></h3> <p>Install CocoaPods and modify <code>Podfile</code></p> <div class=codehilite><pre><span></span><code><span class=n>pod</span> <span class=n>ee</span><span class=o>-</span><span class=n>x</span><span class=o>/</span><span class=n>core</span>
+</code></pre></div> <h3 id=ios>iOS<a class=headerlink href=#ios title="Permanent link">&para;</a></h3> <p>Install CocoaPods and modify <code>Podfile</code></p> <div class=codehilite><pre><span></span><code><span class=n>pod</span> <span class=s1>&#39;ee-x/core&#39;</span>
 </code></pre></div> <h2 id=initialization>Initialization<a class=headerlink href=#initialization title="Permanent link">&para;</a></h2> <p>Modify <code>AppDelegate.cpp</code></p> <div class=codehilite><pre><span></span><code><span class=cp>#include</span> <span class=cpf>&lt;ee/Core.hpp&gt;</span><span class=cp></span>
 
 <span class=kt>bool</span> <span class=n>AppDelegate</span><span class=o>::</span><span class=n>applicationDidFinishLaunching</span><span class=p>()</span> <span class=p>{</span>

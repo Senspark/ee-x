@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_messaging)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-messaging
+pod 'ee-x/firebase-messaging'
 ```
 
 ## Basic usage

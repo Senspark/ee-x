@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_dynamic_link)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-dynamic-link
+pod 'ee-x/firebase-dynamic-link'
 ```
 
 ## Basic usage

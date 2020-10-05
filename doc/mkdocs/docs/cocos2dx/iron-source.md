@@ -31,7 +31,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_iron_source)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/iron-source
+pod 'ee-x/iron-source'
 ```
 
 ## Basic usage

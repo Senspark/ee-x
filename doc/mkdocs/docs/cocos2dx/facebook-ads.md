@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_facebook_ads)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/facebook-ads
+pod 'ee-x/facebook-ads'
 ```
 
 ## Basic usage

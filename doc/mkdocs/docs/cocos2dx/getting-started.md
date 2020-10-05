@@ -31,7 +31,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_core)
 ### iOS
 Install CocoaPods and modify `Podfile`
 ```ruby
-pod ee-x/core
+pod 'ee-x/core'
 ```
 
 ## Initialization

@@ -31,7 +31,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_admob)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/admob, :git => 'https://github.com/Senspark/ee-x'
+pod 'ee-x/admob', :git => 'https://github.com/Senspark/ee-x'
 ```
 
 ## Basic usage

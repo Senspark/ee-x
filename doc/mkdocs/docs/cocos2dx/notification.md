@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_notification)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/notification
+pod 'ee-x/notification'
 ```
 
 ## Basic usage

@@ -23,5 +23,5 @@ target_link_libraries(${PROJECT_NAME} ee_x_soomla_store)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/soomla-store
+pod 'ee-x/soomla-store'
 ```

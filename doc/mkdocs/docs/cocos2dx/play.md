@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_play)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/play
+pod 'ee-x/play'
 ```
 
 ## Basic usage

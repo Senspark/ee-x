@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_analytics)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-analytics
+pod 'ee-x/firebase-analytics'
 ```
 
 ## Basic usage

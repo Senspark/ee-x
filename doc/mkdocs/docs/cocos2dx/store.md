@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_store)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/store
+pod 'ee-x/store'
 ```
 
 ## Basic usage

@@ -47,7 +47,11 @@ private class PluginManager: NSObject {
     }
     #endif // os(iOS)
     
-    fileprivate func setLogLevel(_ level: Int) {}
+    fileprivate func setLogLevel(_ level: Int) {
+        if let logLevel = LogLevel(rawValue: level) {
+            _logger.logLevel = logLevel
+        }
+    }
     
     /// Adds and initialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.

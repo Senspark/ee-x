@@ -83,6 +83,10 @@ namespace EE {
             _plugins.Remove(plugin);
         }
 
+        public static void SetLogLevel(LogLevel level) {
+            _impl.SetLogLevel(level);
+        }
+
         public static object GetActivity() {
             return _impl.GetActivity();
         }

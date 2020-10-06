@@ -6,6 +6,9 @@ namespace EE.Internal {
         private static extern bool ee_staticInitializePlugins();
 
         [DllImport("__Internal")]
+        private static extern void ee_staticSetLogLevel(int level);
+
+        [DllImport("__Internal")]
         private static extern object ee_staticGetActivity();
 
         [DllImport("__Internal")]
@@ -19,6 +22,10 @@ namespace EE.Internal {
 
         public bool InitializePlugins() {
             return ee_staticInitializePlugins();
+        }
+
+        public void SetLogLevel(LogLevel level) {
+            ee_staticSetLogLevel((int) level);
         }
 
         public object GetActivity() {

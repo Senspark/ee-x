@@ -13,6 +13,10 @@ namespace EE.Internal {
             return _clazz.CallStatic<bool>("initializePlugins");
         }
 
+        public void SetLogLevel(LogLevel level) {
+            _clazz.CallStatic("setLogLevel", (int) level);
+        }
+
         public object GetActivity() {
             return _clazz.CallStatic<object>("getActivity");
         }

@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_app_lovin)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/app-lovin
+pod 'ee-x/app-lovin'
 ```
 
 ## Basic usage

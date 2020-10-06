@@ -46,35 +46,6 @@ void CheckCompilerString(const char* input);
 namespace internal {
 class AppInternal;
 }  // namespace internal
-namespace auth {
-class Auth;
-}  // namespace auth
-namespace crashlytics {
-namespace internal {
-class CrashlyticsInternal;
-}  // namespace internal
-}  // namespace crashlytics
-namespace database {
-namespace internal {
-class DatabaseInternal;
-}  // namespace internal
-}  // namespace database
-namespace functions {
-namespace internal {
-class FunctionsInternal;
-}  // namespace internal
-}  // namespace functions
-namespace internal {
-class InstanceId;
-}  // namespace internal
-namespace instance_id {
-class InstanceId;
-}  // namespace instance_id
-namespace storage {
-namespace internal {
-class StorageInternal;
-}  // namespace internal
-}  // namespace storage
 
 /// @brief Reports whether a Firebase module initialized successfully.
 enum InitResult {
@@ -212,17 +183,6 @@ class AppOptions {
   /// file or PROJECT_ID in the GoogleService-Info.plist.
   const char* project_id() const { return project_id_.c_str(); }
 
-#if INTERNAL_EXPERIMENTAL
-  /// @brief set the iOS client ID.
-  ///
-  /// This is the clientID in the GoogleService-Info.plist.
-  void set_client_id(const char* client_id) { client_id_ = client_id; }
-
-  /// @brief Get the iOS client ID.
-  ///
-  /// This is the client_id in the GoogleService-Info.plist.
-  const char* client_id() const { return client_id_.c_str(); }
-#endif  // INTERNAL_EXPERIMENTAL
 
 
   /// @brief Load options from a config string.

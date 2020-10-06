@@ -207,8 +207,8 @@ enum AuthError {
   /// @note This error is only reported on Android.
   kAuthErrorMissingPassword,
 
-  /// Indicates that the quota of SMS messages for a given project has been
-  /// exceeded.
+  /// Indicates that the project's quota for this operation (SMS messages,
+  /// sign-ins, account creation) has been exceeded. Try again later.
   kAuthErrorQuotaExceeded,
 
   /// Thrown when one or more of the credentials passed to a method fail to

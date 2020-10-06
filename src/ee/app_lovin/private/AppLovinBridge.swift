@@ -21,6 +21,7 @@ private let kShowRewardedAd = "\(kPrefix)ShowRewardedAd"
 @objc(EEAppLovinBridge)
 public class AppLovinBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private var _initializing = false
     private var _initialized = false
     private var _sdk: ALSdk?
@@ -29,8 +30,9 @@ public class AppLovinBridge: NSObject, IPlugin {
     private var _rewardedAd: ALIncentivizedInterstitialAd?
     private var _rewardedAdListener: AppLovinRewardedAdListener?
     
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -118,12 +120,12 @@ public class AppLovinBridge: NSObject, IPlugin {
                 self._initialized = true
             })
             
-            let interstitialAdListener = AppLovinInterstitialAdListener(self._bridge)
+            let interstitialAdListener = AppLovinInterstitialAdListener(self._bridge, self._logger)
             let interstitialAd = ALInterstitialAd(sdk: sdk)
             interstitialAd.adLoadDelegate = interstitialAdListener
             interstitialAd.adDisplayDelegate = interstitialAdListener
             
-            let rewardedAdListener = AppLovinRewardedAdListener(self._bridge)
+            let rewardedAdListener = AppLovinRewardedAdListener(self._bridge, self._logger)
             let rewardedAd = ALIncentivizedInterstitialAd(sdk: sdk)
             rewardedAd.adDisplayDelegate = rewardedAdListener
             rewardedAd.adVideoPlaybackDelegate = rewardedAdListener

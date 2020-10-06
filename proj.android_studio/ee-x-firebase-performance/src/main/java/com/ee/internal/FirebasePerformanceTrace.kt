@@ -2,18 +2,19 @@ package com.ee.internal
 
 import androidx.annotation.AnyThread
 import com.ee.IMessageBridge
-import com.ee.registerHandler
 import com.google.firebase.perf.metrics.Trace
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class FirebasePerformanceTrace(
     private val _bridge: IMessageBridge,
     private val _trace: Trace,
     private val _traceName: String) {
+    companion object {
+        private const val kPrefix = "FirebasePerformance"
+    }
+
     init {
         registerHandlers()
     }
@@ -22,32 +23,32 @@ internal class FirebasePerformanceTrace(
         deregisterHandlers()
     }
 
-    private val k__start: String
-        @AnyThread get() = "FirebasePerformance_start_$_traceName"
+    private val kStart: String
+        @AnyThread get() = "${kPrefix}_start_$_traceName"
 
-    private val k__stop: String
-        @AnyThread get() = "FirebasePerformance_stop_$_traceName"
+    private val kStop: String
+        @AnyThread get() = "${kPrefix}_stop_$_traceName"
 
-    private val k__incrementMetric: String
-        @AnyThread get() = "FirebasePerformance_incrementMetric_$_traceName"
+    private val kIncrementMetric: String
+        @AnyThread get() = "${kPrefix}_incrementMetric_$_traceName"
 
-    private val k__getLongMetric: String
-        @AnyThread get() = "FirebasePerformance_getLongMetric_$_traceName"
+    private val kGetLongMetric: String
+        @AnyThread get() = "${kPrefix}_getLongMetric_$_traceName"
 
-    private val k__putMetric: String
-        @AnyThread get() = "FirebasePerformance_putMetric_$_traceName"
+    private val kPutMetric: String
+        @AnyThread get() = "${kPrefix}_putMetric_$_traceName"
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(k__start) {
+        _bridge.registerHandler(kStart) {
             start()
             ""
         }
-        _bridge.registerHandler(k__stop) {
+        _bridge.registerHandler(kStop) {
             stop()
             ""
         }
-        _bridge.registerHandler(k__incrementMetric) { message ->
+        _bridge.registerHandler(kIncrementMetric) { message ->
             @Serializable
             class Request(
                 val key: String,
@@ -58,7 +59,7 @@ internal class FirebasePerformanceTrace(
             incrementMetric(request.key, request.value)
             ""
         }
-        _bridge.registerHandler(k__putMetric) { message ->
+        _bridge.registerHandler(kPutMetric) { message ->
             @Serializable
             class Request(
                 val key: String,
@@ -69,18 +70,18 @@ internal class FirebasePerformanceTrace(
             putMetric(request.key, request.value)
             ""
         }
-        _bridge.registerHandler(k__getLongMetric) { message ->
+        _bridge.registerHandler(kGetLongMetric) { message ->
             getLongMetric(message).toString()
         }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(k__start)
-        _bridge.deregisterHandler(k__stop)
-        _bridge.deregisterHandler(k__incrementMetric)
-        _bridge.deregisterHandler(k__putMetric)
-        _bridge.deregisterHandler(k__getLongMetric)
+        _bridge.deregisterHandler(kStart)
+        _bridge.deregisterHandler(kStop)
+        _bridge.deregisterHandler(kIncrementMetric)
+        _bridge.deregisterHandler(kPutMetric)
+        _bridge.deregisterHandler(kGetLongMetric)
     }
 
     @AnyThread

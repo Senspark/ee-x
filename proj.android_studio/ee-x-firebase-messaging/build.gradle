@@ -17,10 +17,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('firebase-messaging', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:firebase-core:1.0.0'
-    }
+    configureAndPublish('firebase-messaging')
 } else {
     dependencies {
         api project(':ee-x-firebase-core')
@@ -29,5 +26,5 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     // FIXME.
-    api "com.google.firebase:firebase-messaging:20.1.5"
+    api 'com.google.firebase:firebase-messaging:20.3.0'
 }

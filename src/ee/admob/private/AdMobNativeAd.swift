@@ -8,6 +8,8 @@
 import Foundation
 import GoogleMobileAds
 
+private let kTag = "\(AdMobNativeAd.self)"
+
 /// https://stackoverflow.com/a/24592029
 func dictionaryOfNames(_ arr: UIView...) -> [String: UIView] {
     var d = [String: UIView]()
@@ -20,8 +22,8 @@ func dictionaryOfNames(_ arr: UIView...) -> [String: UIView] {
 internal class AdMobNativeAd: NSObject, IAdView,
     GADUnifiedNativeAdLoaderDelegate,
     GADUnifiedNativeAdDelegate {
-    private let _logger = Logger("\(AdMobNativeAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _layoutName: String
     private let _messageHelper: MessageHelper
@@ -32,9 +34,11 @@ internal class AdMobNativeAd: NSObject, IAdView,
     private var _view: GADUnifiedNativeAdView?
 
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String,
          _ layoutName: String) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _layoutName = layoutName
         _messageHelper = MessageHelper("AdMobNativeAd", _adId)
@@ -225,36 +229,36 @@ internal class AdMobNativeAd: NSObject, IAdView,
     }
 
     func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
 
     func adLoaderDidFinishLoading(_ adLoader: GADAdLoader) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func nativeAdDidRecordClick(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 }

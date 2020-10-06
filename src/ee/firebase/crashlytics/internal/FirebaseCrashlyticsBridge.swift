@@ -13,7 +13,7 @@ public class FirebaseCrashlyticsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _crashlytics = Crashlytics.crashlytics()
     
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         super.init()
         registerHandlers()

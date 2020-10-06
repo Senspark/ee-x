@@ -8,10 +8,10 @@ import androidx.annotation.AnyThread
 import com.ee.internal.MessageBridge
 import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
+import com.ee.internal.ThreadImpl
 import com.ee.internal.ee_callCppInternal
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.ConcurrentHashMap
 
@@ -20,8 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class PluginManager private constructor() {
     companion object {
-        private val _logger = Logger(PluginManager::class.java.name)
-
+        private val kTag = PluginManager::class.java.name
         private val _sharedInstance = PluginManager()
 
         @JvmStatic
@@ -34,6 +33,7 @@ class PluginManager private constructor() {
         fun execute(plugin: IPlugin)
     }
 
+    private val _logger = Logger("ee-x")
     private val _plugins: MutableMap<String, IPlugin> = ConcurrentHashMap()
     private val _lifecycleCallbacks: ActivityLifecycleCallbacks
 
@@ -52,10 +52,10 @@ class PluginManager private constructor() {
                             _activity = activity
                             executePlugins { plugin -> plugin.onCreate(activity) }
                         } else {
-                            _logger.warn("onActivityCreated: is not root activity")
+                            _logger.warn("$kTag: onActivityCreated: is not root activity")
                         }
                     } else {
-                        _logger.warn("onActivityCreated: invalid activity")
+                        _logger.warn("$kTag: onActivityCreated: invalid activity")
                     }
                 }
             }
@@ -65,7 +65,7 @@ class PluginManager private constructor() {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onStart)
                     } else {
-                        _logger.warn("onActivityStarted: invalid activity")
+                        _logger.warn("$kTag: onActivityStarted: invalid activity")
                     }
                 }
             }
@@ -75,7 +75,7 @@ class PluginManager private constructor() {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onResume)
                     } else {
-                        _logger.warn("onActivityResumed: invalid activity")
+                        _logger.warn("$kTag: onActivityResumed: invalid activity")
                     }
                 }
             }
@@ -85,7 +85,7 @@ class PluginManager private constructor() {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onPause)
                     } else {
-                        _logger.warn("onActivityPaused: invalid activity")
+                        _logger.warn("$kTag: onActivityPaused: invalid activity")
                     }
                 }
             }
@@ -95,7 +95,7 @@ class PluginManager private constructor() {
                     if (_activity === activity) {
                         executePlugins(IPlugin::onStop)
                     } else {
-                        _logger.warn("onActivityStopped: invalid activity")
+                        _logger.warn("$kTag: onActivityStopped: invalid activity")
                     }
                 }
             }
@@ -110,7 +110,7 @@ class PluginManager private constructor() {
                         _activity = null
                         executePlugins(IPlugin::onDestroy)
                     } else {
-                        _logger.warn("onActivityDestroyed: invalid activity")
+                        _logger.warn("$kTag: onActivityDestroyed: invalid activity")
                     }
                 }
             }
@@ -142,29 +142,35 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    @ImplicitReflectionSerializer
-    @UnstableDefault
-    fun initializePlugins(bridge: IMessageBridge): Boolean {
+    @InternalSerializationApi
+    fun initializePlugins(messageHandler: MessageBridgeHandler): Boolean {
         val context = _context
         if (context == null) {
             _logger.error("""
-                Please set activity via
+                $kTag: Please set activity via
                 PluginManager.getInstance().setActivity() (kotlin) or
                 ee::PluginManager::setActivity() (c++)
             """.trimIndent())
             assertThat(false).isTrue()
             return false
         }
+        val bridge = MessageBridge(_logger, messageHandler)
         _bridge = bridge
+        Thread.registerImpl(ThreadImpl(_logger))
         Platform.registerHandlers(bridge, context)
         return true
     }
 
     @AnyThread
+    fun setLogLevel(level: Int) {
+        _logger.logLevel = level
+    }
+
+    @AnyThread
     fun addPlugin(name: String): Boolean {
-        _logger.info("${this::addPlugin.name}: $name")
+        _logger.info("$kTag: ${this::addPlugin.name}: $name")
         if (_plugins.containsKey(name)) {
-            _logger.error("${this::addPlugin.name}: $name already exists!")
+            _logger.error("$kTag: ${this::addPlugin.name}: $name already exists!")
             return false
         }
         val className = "com.ee.${name}Bridge"
@@ -172,9 +178,10 @@ class PluginManager private constructor() {
             val clazz = Class.forName(className)
             val constructor = clazz.getConstructor(
                 IMessageBridge::class.java,
+                ILogger::class.java,
                 Context::class.java,
                 Activity::class.java)
-            val plugin = constructor.newInstance(_bridge, _context, _activity)
+            val plugin = constructor.newInstance(_bridge, _logger, _context, _activity)
             _plugins[name] = plugin as IPlugin
             return true
         } catch (ex: ClassNotFoundException) {
@@ -193,10 +200,10 @@ class PluginManager private constructor() {
 
     @AnyThread
     fun removePlugin(name: String): Boolean {
-        _logger.info("${this::removePlugin.name}: $name")
+        _logger.info("$kTag: ${this::removePlugin.name}: $name")
         val plugin = _plugins[name]
         if (plugin == null) {
-            _logger.error("${this::removePlugin.name}: $name doesn't exist!")
+            _logger.error("$kTag: ${this::removePlugin.name}: $name doesn't exist!")
             return false
         }
         plugin.destroy()
@@ -235,10 +242,9 @@ class PluginManager private constructor() {
     }
 }
 
-@ImplicitReflectionSerializer
+@InternalSerializationApi
 @NativeThread
-@Suppress("unused")
-@UnstableDefault
+@Suppress("FunctionName", "unused")
 private fun ee_staticInitializePlugins(): Boolean {
     /* Has defect.
     val activity = Utils.getCurrentActivity()
@@ -247,40 +253,44 @@ private fun ee_staticInitializePlugins(): Boolean {
         return false
     }
      */
-    val bridge = MessageBridge(object : MessageBridgeHandler {
-        override fun callCpp(tag: String, message: String): String {
-            return ee_callCppInternal(tag, message)
-        }
-    })
-    return PluginManager.getInstance().initializePlugins(bridge)
+    return PluginManager.getInstance().initializePlugins { tag, message ->
+        ee_callCppInternal(tag, message)
+    }
 }
 
 @NativeThread
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
+private fun ee_staticSetLogLevel(level: Int) {
+    PluginManager.getInstance().setLogLevel(level)
+}
+
+@NativeThread
+@Suppress("FunctionName", "unused")
 private fun ee_staticAddPlugin(name: String): Boolean {
     return PluginManager.getInstance().addPlugin(name)
 }
 
 @NativeThread
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_staticRemovePlugin(name: String): Boolean {
     return PluginManager.getInstance().removePlugin(name)
 }
 
 @NativeThread
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_staticGetActivity(): Any? {
     return PluginManager.getInstance().getActivity()
 }
 
 @NativeThread
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_staticSetActivity(activity: Any) {
     val item = activity as? Activity ?: throw IllegalArgumentException("Invalid activity")
     PluginManager.getInstance().setActivity(item)
 }
 
 /// Legacy method used by Soomla.
+@Suppress("FunctionName")
 fun ee_getStorePlugin(): IPlugin? {
     return PluginManager.getInstance().getPlugin("Store")
 }

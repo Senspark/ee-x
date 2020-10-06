@@ -8,8 +8,8 @@ import android.widget.FrameLayout
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.IAdView
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils.getRootView
 import com.google.android.gms.ads.AdListener
@@ -18,26 +18,24 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.common.truth.Truth
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 internal class AdMobBannerAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize,
     bannerHelper: AdMobBannerHelper)
-    : IAdView
-    , AdListener() {
+    : IAdView, AdListener() {
     companion object {
-        private val _logger = Logger(AdMobBannerAd::class.java.name)
+        private val kTag = AdMobBannerAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("AdMobBannerAd", _adId)
@@ -47,7 +45,7 @@ internal class AdMobBannerAd(
     private var _ad: AdView? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
     }
@@ -79,7 +77,7 @@ internal class AdMobBannerAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy.name}: adId = $_adId")
+        _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
     }
@@ -96,9 +94,9 @@ internal class AdMobBannerAd(
 
     @AnyThread
     private fun createInternalAd() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_ad != null) {
-                return@Runnable
+                return@runOnMainThread
             }
             _isLoaded.set(false)
             val ad = AdView(_context)
@@ -113,38 +111,38 @@ internal class AdMobBannerAd(
             _ad = ad
             _viewHelper.view = ad
             addToActivity()
-        })
+        }
     }
 
     @AnyThread
     private fun destroyInternalAd() {
-        Thread.runOnMainThread(Runnable {
-            val ad = _ad ?: return@Runnable
+        Thread.runOnMainThread {
+            val ad = _ad ?: return@runOnMainThread
             _isLoaded.set(false)
             removeFromActivity()
             ad.adListener = null
             ad.destroy()
             _ad = null
             _viewHelper.view = null
-        })
+        }
     }
 
     @AnyThread
     private fun addToActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = getRootView(activity)
             rootView.addView(_ad)
-        })
+        }
     }
 
     @AnyThread
     private fun removeFromActivity() {
-        Thread.runOnMainThread(Runnable {
-            val activity = _activity ?: return@Runnable
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
             val rootView = getRootView(activity)
             rootView.removeView(_ad)
-        })
+        }
     }
 
     override val isLoaded: Boolean
@@ -152,11 +150,11 @@ internal class AdMobBannerAd(
 
     @AnyThread
     override fun load() {
-        Thread.runOnMainThread(Runnable {
-            _logger.info(this::load.name)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
-        })
+        }
     }
 
     override var position: Point
@@ -178,41 +176,41 @@ internal class AdMobBannerAd(
         }
 
     override fun onAdLoaded() {
-        _logger.info(this::onAdLoaded.name)
+        _logger.debug("$kTag: ${this::onAdLoaded.name}")
         Thread.checkMainThread()
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.info("onAdFailedToLoad: message = ${error?.message ?: ""}")
+        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
     }
 
     override fun onAdOpened() {
-        _logger.info(this::onAdOpened.name)
+        _logger.debug("$kTag: ${this::onAdOpened.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdImpression() {
-        _logger.info(this::onAdImpression.name)
+        _logger.debug("$kTag: ${this::onAdImpression.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdClicked() {
-        _logger.info(this::onAdClicked.name)
+        _logger.debug("$kTag: ${this::onAdClicked.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdLeftApplication() {
-        _logger.info(this::onAdLeftApplication.name)
+        _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     override fun onAdClosed() {
-        _logger.info(this::onAdClosed.name)
+        _logger.debug("$kTag: ${this::onAdClosed.name}")
         Thread.checkMainThread()
     }
 }

@@ -27,10 +27,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('vungle', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:ads:1.0.0'
-    }
+    configureAndPublish('vungle')
 } else {
     dependencies {
         api project(':ee-x-ads')
@@ -43,8 +40,8 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
     // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
-    implementation 'com.vungle:publisher-sdk-android:6.7.0'
+    implementation 'com.vungle:publisher-sdk-android:6.7.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
 }

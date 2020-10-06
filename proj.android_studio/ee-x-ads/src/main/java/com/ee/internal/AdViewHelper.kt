@@ -5,16 +5,13 @@ import androidx.annotation.AnyThread
 import com.ee.IAdView
 import com.ee.IMessageBridge
 import com.ee.Utils
-import com.ee.registerHandler
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 
 /**
  * Created by Zinge on 10/12/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AdViewHelper(private val _bridge: IMessageBridge,
                    private val _view: IAdView,
                    private val _helper: MessageHelper) {

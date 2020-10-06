@@ -8,21 +8,19 @@ import com.adjust.sdk.AdjustConfig
 import com.adjust.sdk.AdjustEvent
 import com.adjust.sdk.LogLevel
 import com.ee.internal.deserialize
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AdjustBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(AdjustBridge::class.java.name)
-
+        private val kTag = AdjustBridge::class.java.name
         private const val kPrefix = "AdjustBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetEnabled = "${kPrefix}SetEnabled"
@@ -33,11 +31,10 @@ class AdjustBridge(
     }
 
     init {
-        _logger.debug("constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
-        _logger.debug("constructor end.")
+        _logger.info("$kTag: constructor end.")
     }
-
 
     override fun onCreate(activity: Activity) {}
 

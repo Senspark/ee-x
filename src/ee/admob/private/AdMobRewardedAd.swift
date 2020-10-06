@@ -8,9 +8,11 @@
 import Foundation
 import GoogleMobileAds
 
+private let kTag = "\(AdMobRewardedAd.self)"
+
 internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
-    private let _logger = Logger("\(AdMobRewardedAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
     private var _isLoaded = false
@@ -18,8 +20,10 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     private var _ad: GADRewardedAd?
     
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
         super.init()

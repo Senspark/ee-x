@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_campaign_receiver)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/campaign-receiver
+pod 'ee-x/campaign-receiver'
 ```
 
 ## Basic usage

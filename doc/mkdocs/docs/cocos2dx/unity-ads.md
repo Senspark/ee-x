@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_unity_ads)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/unity-ads
+pod 'ee-x/unity-ads'
 ```
 
 ## Basic usage

@@ -8,12 +8,12 @@ import com.android.installreferrer.api.InstallReferrerStateListener
 
 class CampaignReceiverBridge /* extends BroadcastReceiver */(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?)
     : IPlugin {
     companion object {
-        private val _logger = Logger(CampaignReceiverBridge::class.java.name)
-
+        private val kTag = CampaignReceiverBridge::class.java.name
         private const val kPrefix = "CampaignReceiverBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kOnReceivedLink = "${kPrefix}OnReceivedLink"
@@ -23,9 +23,9 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
     private var _client: InstallReferrerClient? = null
 
     init {
-        _logger.debug("constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
-        _logger.debug("constructor begin: end.")
+        _logger.info("$kTag: constructor begin: end.")
     }
 
     // FIXME: legacy Java code.
@@ -66,9 +66,9 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
     }
 
     fun initialize() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             if (_initialized) {
-                return@Runnable
+                return@runOnMainThread
             }
             _initialized = true
             val client = InstallReferrerClient.newBuilder(_context).build()
@@ -76,11 +76,11 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
                 override fun onInstallReferrerSetupFinished(responseCode: Int) {
                     when (responseCode) {
                         InstallReferrerClient.InstallReferrerResponse.OK -> {
-                            _logger.debug("${this::onInstallReferrerSetupFinished.name}: OK")
+                            _logger.debug("$kTag: ${this::onInstallReferrerSetupFinished.name}: OK")
                             try {
                                 val response = client.installReferrer
                                 val referral = response.installReferrer
-                                _logger.debug("${this::onInstallReferrerSetupFinished.name}: referral = $referral")
+                                _logger.debug("$kTag: ${this::onInstallReferrerSetupFinished.name}: referral = $referral")
                                 _bridge.callCpp(kOnReceivedLink, referral)
                                 client.endConnection()
                             } catch (ex: RemoteException) {
@@ -88,19 +88,19 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
                             }
                         }
                         InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED ->
-                            _logger.debug("${this::onInstallReferrerSetupFinished.name}: FEATURE_NOT_SUPPORTED")
+                            _logger.debug("$kTag: ${this::onInstallReferrerSetupFinished.name}: FEATURE_NOT_SUPPORTED")
                         InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE ->
-                            _logger.debug("${this::onInstallReferrerSetupFinished.name}: SERVICE_UNAVAILABLE")
+                            _logger.debug("$kTag: ${this::onInstallReferrerSetupFinished.name}: SERVICE_UNAVAILABLE")
                         else ->
-                            _logger.debug("${this::onInstallReferrerSetupFinished.name}: invalid response code")
+                            _logger.debug("$kTag: ${this::onInstallReferrerSetupFinished.name}: invalid response code")
                     }
                 }
 
                 override fun onInstallReferrerServiceDisconnected() {
-                    _logger.debug(this::onInstallReferrerServiceDisconnected.name)
+                    _logger.debug("$kTag: ${this::onInstallReferrerServiceDisconnected.name}")
                 }
             })
             _client = client
-        })
+        }
     }
 }

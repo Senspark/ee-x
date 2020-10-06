@@ -58,6 +58,10 @@ public:
     /// Gets the current message bridge.
     static IMessageBridge& getBridge();
 
+    /// Sets the log level for the logger on Android/iOS.
+    /// @param level The desired log level.
+    static void setLogLevel(const LogLevel& level);
+
     /// Gets the current activity.
     static void* getActivity();
 

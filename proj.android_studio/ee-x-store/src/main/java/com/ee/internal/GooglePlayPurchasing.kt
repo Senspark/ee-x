@@ -5,27 +5,26 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.ee.ILogger
 import com.ee.IStoreBridge
-import com.ee.Logger
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.JsonException
+import kotlinx.serialization.SerializationException
 import kotlin.math.min
 
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class GooglePlayPurchasing(
+    private val _logger: ILogger,
     private val _plugin: IStoreBridge,
     private val _helper: IabHelper,
     private val _unityPurchasing: IStoreCallback)
     : StoreDeserializer() {
     companion object {
-        private val _logger = Logger(GooglePlayPurchasing::class.java.name)
+        private val kTag = GooglePlayPurchasing::class.java.name
         private val _billingResponseCodeNames = mapOf(
             0 to "BILLING_RESPONSE_RESULT_OK",
             1 to "BILLING_RESPONSE_RESULT_USER_CANCELED",
@@ -68,11 +67,11 @@ class GooglePlayPurchasing(
         var result = false
         try {
             val inventory = _helper.queryInventory(true, ArrayList())
-            _logger.debug("${this::restoreTransactions.name}: successful")
+            _logger.debug("$kTag: ${this::restoreTransactions.name}: successful")
             _inventory = inventory
             result = true
         } catch (ex: IabException) {
-            _logger.debug("${this::restoreTransactions.name}: failed: ${ex.localizedMessage}")
+            _logger.debug("$kTag: ${this::restoreTransactions.name}: failed: ${ex.localizedMessage}")
         }
         return result
     }
@@ -83,7 +82,7 @@ class GooglePlayPurchasing(
             val hadPurchase = _inventory.hasPurchase(suspectBadPurchase.productId)
             val response = _helper.queryPurchases(_inventory, SkuType.INAPP)
             if (response != BillingResponseCode.OK) {
-                _logger.debug("Received bad response from queryPurchases")
+                _logger.debug("$kTag: Received bad response from queryPurchases")
             }
             val hasPurchase = _inventory.hasPurchase(suspectBadPurchase.productId)
             if (!hadPurchase && !hasPurchase || hadPurchase && hasPurchase) {
@@ -108,7 +107,7 @@ class GooglePlayPurchasing(
             if (!notified) {
                 _unityPurchasing.onPurchaseFailed(suspectBadPurchase)
             }
-        } catch (ex: JsonException) {
+        } catch (ex: SerializationException) {
             ex.printStackTrace()
             if (!notified) {
                 _unityPurchasing.onPurchaseFailed(suspectBadPurchase)
@@ -120,7 +119,7 @@ class GooglePlayPurchasing(
         delay(delayDuration)
         try {
             val inventory = _helper.queryInventory(true, skus)
-            _logger.debug("${this::queryInventory.name}: successful")
+            _logger.debug("$kTag: ${this::queryInventory.name}: successful")
             _inventory = inventory
             skus.forEach { sku ->
                 if (_inventory.hasPurchase(sku)) {
@@ -140,7 +139,7 @@ class GooglePlayPurchasing(
         } catch (ex: IabException) {
             val delay = _offlineBackOffTime
             _offlineBackOffTime = min(300000, delay * 2)
-            _logger.info("${this::queryInventory.name}: failed ${ex.localizedMessage}, retry in ${delay}ms")
+            _logger.info("$kTag: ${this::queryInventory.name}: failed ${ex.localizedMessage}, retry in ${delay}ms")
             queryInventory(skus, delay)
         }
     }
@@ -204,16 +203,16 @@ class GooglePlayPurchasing(
         val skus = products.map { it.storeSpecificId }
         _scope.launch {
             if (_helper.setupDone) {
-                _logger.debug("retrieveProducts: request ${skus.size} products")
+                _logger.debug("$kTag: retrieveProducts: request ${skus.size} products")
                 queryInventory(skus, 0)
             } else {
                 val result = _helper.startSetup()
-                _logger.debug("retrieveProducts: setup ${result.response}")
+                _logger.debug("$kTag: retrieveProducts: setup ${result.response}")
                 if (result.isFailure) {
-                    _logger.debug("retrieveProducts: failed to setup")
+                    _logger.debug("$kTag: retrieveProducts: failed to setup")
                     _unityPurchasing.onSetupFailed(InitializationFailureReason.PurchasingUnavailable)
                 } else {
-                    _logger.debug("retrieveProducts: request ${skus.size} products")
+                    _logger.debug("$kTag: retrieveProducts: request ${skus.size} products")
                     queryInventory(skus, 0)
                 }
             }
@@ -240,7 +239,7 @@ class GooglePlayPurchasing(
         } catch (ex: IabException) {
             val delay = _offlineBackOffTime
             _offlineBackOffTime = min(300000, delay * 2)
-            _logger.info("${this::consumeSuspectFailedPurchase}: failed ${ex.localizedMessage}, retry in ${delay}ms")
+            _logger.info("$kTag: ${this::consumeSuspectFailedPurchase}: failed ${ex.localizedMessage}, retry in ${delay}ms")
             queryInventory(_inventory.getAllSkus(SkuType.INAPP), delay)
         }
     }
@@ -263,12 +262,12 @@ class GooglePlayPurchasing(
         val productId = product.storeSpecificId
         val details = _inventory.getSkuDetails(productId)
             ?: throw IllegalStateException("Product not found ${product.storeSpecificId}")
-        _logger.debug("purchase: sku = $productId type = ${details.type}")
+        _logger.debug("$kTag: purchase: sku = $productId type = ${details.type}")
         _purchaseInProgress = true
         _scope.launch {
             try {
                 val purchase = _plugin.purchase(productId)
-                _logger.debug("purchase: successful")
+                _logger.debug("$kTag: purchase: successful")
                 _purchaseInProgress = false
                 _inventory.addPurchase(details.type, purchase)
                 if (details.type == SkuType.SUBS) {
@@ -281,7 +280,7 @@ class GooglePlayPurchasing(
             } catch (ex: StoreException) {
                 _purchaseInProgress = false
                 val responseCode = ex.responseCode
-                _logger.debug("Purchase response code: $responseCode")
+                _logger.debug("$kTag: Purchase response code: $responseCode")
                 _suspectFailedConsumableSkus.add(productId)
                 val reason = when (responseCode) {
                     -1005, 1 -> PurchaseFailureReason.UserCancelled
@@ -294,7 +293,7 @@ class GooglePlayPurchasing(
                     productId, reason, "GOOGLEPLAY_${ex.message}",
                     _billingResponseCodeNames[responseCode] ?: "")
                 if (responseCode == -1002) {
-                    _logger.debug("Received bad response, polling for successful purchases to investigate failure more deeply")
+                    _logger.debug("$kTag: Received bad response, polling for successful purchases to investigate failure more deeply")
                     reconcileFailedPurchaseWithInventory(description)
                 } else {
                     _unityPurchasing.onPurchaseFailed(description)
@@ -304,27 +303,27 @@ class GooglePlayPurchasing(
     }
 
     override fun finishTransaction(product: ProductDefinition, transactionId: String) {
-        _logger.debug("finishTransaction: $transactionId")
+        _logger.debug("$kTag: finishTransaction: $transactionId")
         val item = findPurchaseByOrderId(transactionId) ?: return
         val type = item.first
         val purchase = item.second
         if (product.type == ProductType.Consumable) {
-            _logger.debug("finishTransaction: consuming ${purchase.sku}")
+            _logger.debug("$kTag: finishTransaction: consuming ${purchase.sku}")
             _inventory.erasePurchase(purchase.sku)
             _scope.launch {
                 try {
                     _helper.consume(type, purchase.purchaseToken, purchase.sku)
                 } catch (ex: IabException) {
-                    _logger.error("finishTransaction: failed to consume: ${ex.localizedMessage ?: ""}")
+                    _logger.error("$kTag: finishTransaction: failed to consume: ${ex.localizedMessage ?: ""}")
                 }
             }
         } else {
-            _logger.debug("finishTransaction: acknowledging ${purchase.sku}")
+            _logger.debug("$kTag: finishTransaction: acknowledging ${purchase.sku}")
             _scope.launch {
                 try {
                     _helper.acknowledge(purchase.purchaseToken, purchase.sku)
                 } catch (ex: IabException) {
-                    _logger.error("finishTransaction: failed to acknowledge: ${ex.localizedMessage ?: ""}")
+                    _logger.error("$kTag: finishTransaction: failed to acknowledge: ${ex.localizedMessage ?: ""}")
                 }
             }
         }
@@ -334,12 +333,12 @@ class GooglePlayPurchasing(
         val item = findPurchaseByOrderId(transactionId) ?: return
         val type = item.first
         val purchase = item.second
-        _logger.debug("${this::finishAdditionalTransaction.name}: consuming ${purchase.sku}")
+        _logger.debug("$kTag: ${this::finishAdditionalTransaction.name}: consuming ${purchase.sku}")
         _inventory.erasePurchase(purchase.sku)
         try {
             _helper.consume(type, purchase.purchaseToken, purchase.sku)
         } catch (ex: IabException) {
-            _logger.error("${this::finishAdditionalTransaction.name}: failed to consume: ${ex.localizedMessage ?: ""}")
+            _logger.error("$kTag: ${this::finishAdditionalTransaction.name}: failed to consume: ${ex.localizedMessage ?: ""}")
         }
     }
 }

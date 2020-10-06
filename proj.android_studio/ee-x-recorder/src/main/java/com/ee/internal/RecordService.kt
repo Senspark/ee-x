@@ -45,6 +45,7 @@ class RecordService : Service() {
     private var _screenHeight = 0
     private var _screenDensity = 0
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate() {
         super.onCreate()
         _logger.debug(this::onCreate.name)
@@ -54,6 +55,7 @@ class RecordService : Service() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDestroy() {
         super.onDestroy()
         _logger.debug(this::onDestroy.name)
@@ -116,6 +118,7 @@ class RecordService : Service() {
     private val isLollipop: Boolean
         get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         _logger.debug("${this::onStartCommand.name}: intent = $intent")
         if (!isLollipop) {

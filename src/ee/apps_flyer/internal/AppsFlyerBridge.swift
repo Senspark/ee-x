@@ -7,6 +7,7 @@
 
 import AppsFlyerLib
 
+private let kTag = "\(AppsFlyerBridge.self)"
 private let kPrefix = "AppsFlyerBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kStartTracking = "\(kPrefix)StartTracking"
@@ -17,12 +18,13 @@ private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAppsFlyerBridge)
 public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
-    private let _logger = Logger("\(AppsFlyerBridge.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _tracker = AppsFlyerLib.shared()
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -124,19 +126,19 @@ public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
     }
 
     public func onConversionDataSuccess(_ conversionInfo: [AnyHashable: Any]) {
-        _logger.debug("\(#function): \(conversionInfo)")
+        _logger.debug("\(kTag): \(#function): \(conversionInfo)")
     }
 
     public func onConversionDataFail(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
     }
 
     public func onAppOpenAttribution(_ attributionData: [AnyHashable: Any]) {
-        _logger.debug("\(#function): \(attributionData)")
+        _logger.debug("\(kTag): \(#function): \(attributionData)")
     }
 
     public func onAppOpenAttributionFailure(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
     }
 
     public func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {

@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_vungle)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/vungle
+pod 'ee-x/vungle'
 ```
 
 ## Basic usage

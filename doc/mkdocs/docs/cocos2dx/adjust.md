@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_adjust)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/adjust
+pod 'ee-x/adjust'
 pod 'Adjust', :modular_headers => true
 ```
 

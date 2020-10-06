@@ -19,7 +19,7 @@ private let kTrackEvent = "\(kPrefix)TrackEvent"
 public class AdjustBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         super.init()
         registerHandlers()

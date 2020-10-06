@@ -14,21 +14,21 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class AdMobBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
+        private val kTag = AdMobBridge::class.java.name
         private const val kPrefix = "AdMobBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kGetEmulatorTestDeviceHash = "${kPrefix}GetEmulatorTestDeviceHash"
@@ -52,7 +52,9 @@ class AdMobBridge(
     private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = ConcurrentHashMap()
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -202,9 +204,9 @@ class AdMobBridge(
 
     @AnyThread
     fun initialize() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             MobileAds.initialize(_context)
-        })
+        }
     }
 
     private val emulatorTestDeviceHash: String
@@ -212,13 +214,13 @@ class AdMobBridge(
 
     @AnyThread
     fun addTestDevice(hash: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _testDevices.add(hash)
             val configuration = RequestConfiguration.Builder()
                 .setTestDeviceIds(_testDevices)
                 .build()
             MobileAds.setRequestConfiguration(configuration)
-        })
+        }
     }
 
     @AnyThread
@@ -226,7 +228,7 @@ class AdMobBridge(
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobBannerAd(_bridge, _context, _activity, adId, adSize, _bannerHelper)
+        val ad = AdMobBannerAd(_bridge, _logger, _context, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -245,7 +247,7 @@ class AdMobBridge(
         if (_nativeAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobNativeAd(_bridge, _context, _activity, adId, layoutName, identifiers)
+        val ad = AdMobNativeAd(_bridge, _logger, _context, _activity, adId, layoutName, identifiers)
         _nativeAds[adId] = ad
         return true
     }
@@ -263,7 +265,7 @@ class AdMobBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobInterstitialAd(_bridge, _context, adId)
+        val ad = AdMobInterstitialAd(_bridge, _logger, _context, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -281,7 +283,7 @@ class AdMobBridge(
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobRewardedAd(_bridge, _context, _activity, adId)
+        val ad = AdMobRewardedAd(_bridge, _logger, _context, _activity, adId)
         _rewardedAds[adId] = ad
         return true
     }

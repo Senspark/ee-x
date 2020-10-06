@@ -7,11 +7,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class FirebaseCrashlyticsBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FirebaseCrashlyticsBridge::class.java.name)
-
+        private val kTag = FirebaseCrashlyticsBridge::class.java.name
         private const val kPrefix = "FirebaseCrashlyticsBridge"
         private const val kLog = "${kPrefix}Log"
     }
@@ -19,7 +19,9 @@ class FirebaseCrashlyticsBridge(
     private val _crashlytics = FirebaseCrashlytics.getInstance()
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {}

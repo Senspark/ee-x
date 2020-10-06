@@ -4,6 +4,9 @@ namespace EE.Internal {
             return true;
         }
 
+        public void SetLogLevel(LogLevel level) {
+        }
+
         public object GetActivity() {
             return null;
         }

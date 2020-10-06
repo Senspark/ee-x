@@ -2,13 +2,8 @@ package com.ee
 
 import androidx.annotation.AnyThread
 
-interface MessageHandler {
-    fun handle(message: String): String
-}
-
-interface AsyncMessageHandler {
-    suspend fun handle(message: String): String
-}
+typealias MessageHandler = (message: String) -> String
+typealias AsyncMessageHandler = suspend (message: String) -> String
 
 /**
  * Created by eps on 3/20/18.
@@ -71,25 +66,4 @@ interface IMessageBridge {
      */
     @AnyThread
     fun callCpp(tag: String, message: String): String
-}
-
-// https://stackoverflow.com/questions/33590646/kotlin-use-a-lambda-in-place-of-a-functional-interface
-@AnyThread
-inline fun IMessageBridge.registerHandler(
-    tag: String, crossinline handler: (string: String) -> String): Boolean {
-    return registerHandler(tag, object : MessageHandler {
-        override fun handle(message: String): String {
-            return handler(message)
-        }
-    })
-}
-
-@AnyThread
-inline fun IMessageBridge.registerAsyncHandler(
-    tag: String, crossinline handler: suspend (message: String) -> String): Boolean {
-    return registerAsyncHandler(tag, object : AsyncMessageHandler {
-        override suspend fun handle(message: String): String {
-            return handler(message)
-        }
-    })
 }

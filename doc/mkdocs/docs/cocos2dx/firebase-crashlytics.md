@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_crashlytics)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-crashlytics
+pod 'ee-x/firebase-crashlytics'
 ```
 
 ## Basic usage

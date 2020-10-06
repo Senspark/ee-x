@@ -7,6 +7,7 @@
 
 import Foundation
 
+private let kTag = "\(VungleBridge.self)"
 private let kPrefix = "VungleBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kHasRewardedAd = "\(kPrefix)HasRewardedAd"
@@ -20,8 +21,8 @@ private let kOnClosed = "\(kPrefix)OnClosed"
 
 @objc(EEVungleBridge)
 public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
-    private let _logger = Logger("\(VungleBridge.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _sdk = VungleSDK.shared()
     private var _initializing = false
     private var _initialized = false
@@ -29,8 +30,9 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     private var _loadingAdIds: Set<String> = []
     private var _loadedAdIds: Set<String> = []
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -88,7 +90,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
             do {
                 try self._sdk.start(withAppId: appId)
             } catch {
-                self._logger.debug("\(#function): \(error.localizedDescription)")
+                self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
                 return
             }
         }
@@ -136,18 +138,18 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     }
 
     public func vungleSDKDidInitialize() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _initializing = false
         _initialized = false
     }
 
     public func vungleSDKFailedToInitializeWithError(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _initializing = false
     }
 
     public func vungleAdPlayabilityUpdate(_ isAdPlayable: Bool, adId: String?, error: Error?) {
-        _logger.debug("\(#function): playable = \(isAdPlayable) id = \(adId ?? "") reason \(error?.localizedDescription ?? "")")
+        _logger.debug("\(kTag): \(#function): playable = \(isAdPlayable) id = \(adId ?? "") reason \(error?.localizedDescription ?? "")")
         if let adId = adId {
             if isAdPlayable {
                 _loadedAdIds.insert(adId)
@@ -169,33 +171,33 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     }
 
     public func vungleWillShowAd(forPlacementID adId: String?) {
-        _logger.debug("\(#function): \(adId ?? "")")
+        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
     }
 
     public func vungleDidShowAd(forPlacementID adId: String?) {
-        _logger.debug("\(#function): \(adId ?? "")")
+        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
     }
 
     public func vungleTrackClick(forPlacementID adId: String?) {
-        _logger.debug("\(#function): \(adId ?? "")")
+        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
         _bridge.callCpp(kOnClicked, adId ?? "")
     }
 
     public func vungleWillLeaveApplication(forPlacementID adId: String?) {
-        _logger.debug("\(#function): \(adId ?? "")")
+        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
     }
 
     public func vungleRewardUser(forPlacementID adId: String?) {
-        _logger.debug("\(#function): \(adId ?? "")")
+        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
         _rewarded = true
     }
 
     public func vungleWillCloseAd(forPlacementID adId: String) {
-        _logger.debug("\(#function): \(adId)")
+        _logger.debug("\(kTag): \(#function): \(adId)")
     }
 
     public func vungleDidCloseAd(forPlacementID adId: String) {
-        _logger.debug("\(#function): \(adId)")
+        _logger.debug("\(kTag): \(#function): \(adId)")
         _loadedAdIds.remove(adId)
         _bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
             "ad_id": adId,

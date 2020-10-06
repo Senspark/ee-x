@@ -7,8 +7,7 @@ import com.ee.PluginManager;
 
 public class UnityPluginManager {
     public static boolean initializePlugins() {
-        IMessageBridge bridge = new MessageBridge(UnityMessageBridge::callCpp);
-        return PluginManager.getInstance().initializePlugins(bridge);
+        return PluginManager.getInstance().initializePlugins(UnityMessageBridge::callCpp);
     }
     
     public static Activity getActivity() {

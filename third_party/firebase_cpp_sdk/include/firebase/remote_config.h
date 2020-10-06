@@ -145,6 +145,7 @@ struct ConfigKeyValueVariant {
   Variant value;
 };
 
+
 /// @brief Initialize the RemoteConfig API.
 ///
 /// This must be called prior to calling any other methods in the
@@ -233,7 +234,7 @@ void SetConfigSetting(ConfigSetting setting, const char* value);
 ///
 /// @param[in] key Key of the value to be retrieved.
 ///
-/// @returns Value associated with the specified key converted to a boolean
+/// @return Value associated with the specified key converted to a boolean
 /// value.
 bool GetBoolean(const char* key);
 
@@ -247,7 +248,7 @@ bool GetBoolean(const char* key);
 /// @param[out] info A return value, specifying the source of the returned
 /// value.
 ///
-/// @returns Value associated with the specified key converted to a boolean
+/// @return Value associated with the specified key converted to a boolean
 /// value.
 bool GetBoolean(const char* key, ValueInfo* info);
 
@@ -256,7 +257,7 @@ bool GetBoolean(const char* key, ValueInfo* info);
 ///
 /// @param[in] key Key of the value to be retrieved.
 ///
-/// @returns Value associated with the specified key converted to a 64-bit
+/// @return Value associated with the specified key converted to a 64-bit
 /// integer.
 int64_t GetLong(const char* key);
 
@@ -267,7 +268,7 @@ int64_t GetLong(const char* key);
 /// @param[out] info A return value, specifying the source of the returned
 /// value.
 ///
-/// @returns Value associated with the specified key converted to a 64-bit
+/// @return Value associated with the specified key converted to a 64-bit
 /// integer.
 int64_t GetLong(const char* key, ValueInfo* info);
 
@@ -275,7 +276,7 @@ int64_t GetLong(const char* key, ValueInfo* info);
 ///
 /// @param[in] key Key of the value to be retrieved.
 ///
-/// @returns Value associated with the specified key converted to a double.
+/// @return Value associated with the specified key converted to a double.
 double GetDouble(const char* key);
 
 /// @brief Returns the value associated with a key, converted to a double.
@@ -284,7 +285,7 @@ double GetDouble(const char* key);
 /// @param[out] info A return value, specifying the source of the returned
 /// value.
 ///
-/// @returns Value associated with the specified key converted to a double.
+/// @return Value associated with the specified key converted to a double.
 double GetDouble(const char* key, ValueInfo* info);
 
 /// @brief Returns the value associated with a key, converted to a string.
@@ -308,7 +309,7 @@ std::string GetString(const char* key, ValueInfo* info);
 ///
 /// @param[in] key Key of the value to be retrieved.
 ///
-/// @returns Vector of bytes.
+/// @return Vector of bytes.
 std::vector<unsigned char> GetData(const char* key);
 
 /// @brief Returns the value associated with a key, as a vector of raw
@@ -318,7 +319,7 @@ std::vector<unsigned char> GetData(const char* key);
 /// @param[out] info A return value, specifying the source of the returned
 /// value.
 ///
-/// @returns Vector of bytes.
+/// @return Vector of bytes.
 std::vector<unsigned char> GetData(const char* key, ValueInfo* info);
 
 /// @brief Gets the set of keys that start with the given prefix.
@@ -326,14 +327,14 @@ std::vector<unsigned char> GetData(const char* key, ValueInfo* info);
 /// @param[in] prefix The key prefix to look for. If empty or null, this
 /// method will return all keys.
 ///
-/// @returns Set of Remote Config parameter keys that start with the specified
+/// @return Set of Remote Config parameter keys that start with the specified
 /// prefix. Will return an empty set if there are no keys with the given
 /// prefix.
 std::vector<std::string> GetKeysByPrefix(const char* prefix);
 
 /// @brief Gets the set of all keys.
 ///
-/// @returns Set of all Remote Config parameter keys.
+/// @return Set of all Remote Config parameter keys.
 std::vector<std::string> GetKeys();
 
 /// @brief Fetches config data from the server.
@@ -344,7 +345,7 @@ std::vector<std::string> GetKeys();
 /// Note that this function is asynchronous, and will normally take an
 /// unspecified amount of time before completion.
 ///
-/// @returns A Future which can be used to determine when the fetch is
+/// @return A Future which can be used to determine when the fetch is
 /// complete.
 Future<void> Fetch();
 
@@ -362,7 +363,7 @@ Future<void> Fetch();
 /// and does not fetch any data. A cache_expiration_in_seconds of zero will
 /// always cause a fetch.
 ///
-/// @returns A Future which can be used to determine when the fetch is
+/// @return A Future which can be used to determine when the fetch is
 /// complete.
 Future<void> Fetch(uint64_t cache_expiration_in_seconds);
 
@@ -380,7 +381,7 @@ Future<void> FetchLastResult();
 /// until @ref ActivateFetched() is called.  This gives the developer control
 /// over when newly fetched data is visible to their application.
 ///
-/// @returns true if a previously fetch configuration was activated, false
+/// @return true if a previously fetch configuration was activated, false
 /// if a fetched configuration wasn't found or the configuration was previously
 /// activated.
 bool ActivateFetched();
@@ -388,9 +389,10 @@ bool ActivateFetched();
 /// @brief Returns information about the last fetch request, in the form
 /// of a ConfigInfo struct.
 ///
-/// @returns A ConfigInfo struct, containing fields reflecting the state
+/// @return A ConfigInfo struct, containing fields reflecting the state
 /// of the most recent fetch request.
 const ConfigInfo& GetInfo();
+
 
 }  // namespace remote_config
 }  // namespace firebase

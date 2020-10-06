@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_performance)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/firebase-performance
+pod 'ee-x/firebase-performance'
 ```
 
 ## Basic usage

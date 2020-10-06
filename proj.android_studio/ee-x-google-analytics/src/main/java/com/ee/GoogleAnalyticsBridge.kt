@@ -13,22 +13,20 @@ import com.google.android.gms.analytics.HitBuilders.SocialBuilder
 import com.google.android.gms.analytics.HitBuilders.TimingBuilder
 import com.google.android.gms.analytics.ecommerce.Product
 import com.google.android.gms.analytics.ecommerce.ProductAction
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class GoogleAnalyticsBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(GoogleAnalyticsBridge::class.java.name)
-
+        private val kTag = GoogleAnalyticsBridge::class.java.name
         private const val kPrefix = "GoogleAnalyticsBridge"
         private const val kSetDispatchInterval = "${kPrefix}SetDispatchInterval"
         private const val kSetDryRun = "${kPrefix}SetDryRun"
@@ -52,7 +50,9 @@ class GoogleAnalyticsBridge(
     private var _exceptionReportingEnabled = false
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {}
@@ -154,40 +154,40 @@ class GoogleAnalyticsBridge(
 
     @AnyThread
     private fun setLocalDispatchInterval(interval: Int) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.setLocalDispatchPeriod(interval)
-        })
+        }
     }
 
     @AnyThread
     private fun setDryRun(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.setDryRun(enabled)
-        })
+        }
     }
 
     @AnyThread
     private fun setAppOptOut(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.appOptOut = enabled
-        })
+        }
     }
 
     @AnyThread
     private fun setExceptionReportingEnabled(enabled: Boolean) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _exceptionReportingEnabled = enabled
             for (tracker in _trackers.values) {
                 tracker.setExceptionReportingEnabled(enabled)
             }
-        })
+        }
     }
 
     @AnyThread
     private fun dispatchLocalHits() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             _analytics.dispatchLocalHits()
-        })
+        }
     }
 
     @AnyThread
@@ -218,7 +218,7 @@ class GoogleAnalyticsBridge(
     private fun checkDictionary(builtDict: Map<String, String>,
                                 expectedDict: Map<String, String>): Boolean {
         if (builtDict.size != expectedDict.size) {
-            _logger.error("Dictionary size mismatched: expected ${expectedDict.size} found ${builtDict.size}")
+            _logger.error("$kTag: Dictionary size mismatched: expected ${expectedDict.size} found ${builtDict.size}")
             return false
         }
         val allKeys = expectedDict.keys
@@ -227,7 +227,7 @@ class GoogleAnalyticsBridge(
             val expectedValue = expectedDict[key]
             val value = builtDict[key]
             if (expectedValue != value) {
-                _logger.error("Element value mismatched: expected $expectedValue found $value")
+                _logger.error("$kTag: Element value mismatched: expected $expectedValue found $value")
                 matched = false
             }
         }

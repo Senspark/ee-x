@@ -10,6 +10,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "ee/core/LogLevel.hpp"
 #include "ee/core/Platform.hpp"
 #include "ee/core/Thread.hpp"
 #include "ee/core/internal/MessageBridge.hpp"
@@ -55,6 +56,14 @@ bool ee_staticInitializePlugins() {
         "()Z");
 }
 
+void ee_staticSetLogLevel(int level) {
+    JniUtils::callStaticVoidMethod( //
+        "com/ee/PluginManagerKt",   //
+        "ee_staticSetLogLevel",     //
+        "(I)V",                     //
+        level);                     //
+}
+
 void* ee_staticGetActivity() {
     return JniUtils::callStaticObjectMethod( //
         "com/ee/PluginManagerKt",            //
@@ -90,6 +99,7 @@ bool ee_staticRemovePlugin(const char* name) {
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
 bool ee_staticInitializePlugins();
+void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();
 void ee_staticSetActivity(void* activity);
 bool ee_staticAddPlugin(const char* name);
@@ -119,6 +129,10 @@ bool Self::initializePlugins<Library::Core>() {
 
 IMessageBridge& Self::getBridge() {
     return *bridge_;
+}
+
+void Self::setLogLevel(const LogLevel& level) {
+    ee_staticSetLogLevel(level.priority);
 }
 
 void* Self::getActivity() {

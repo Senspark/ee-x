@@ -62,9 +62,9 @@ const auto kDestroyRewardedAd     = kPrefix + "DestroyRewardedAd";
 
 namespace {
 // clang-format off
-constexpr auto k__ad_id       = "ad_id";
-constexpr auto k__ad_size     = "ad_size";
-constexpr auto k__layout_name = "layout_name";
+constexpr auto k__ad_id       = "adId";
+constexpr auto k__ad_size     = "adSize";
+constexpr auto k__layout_name = "layoutName";
 constexpr auto k__identifiers = "identifiers";
 // clang-format on
 } // namespace

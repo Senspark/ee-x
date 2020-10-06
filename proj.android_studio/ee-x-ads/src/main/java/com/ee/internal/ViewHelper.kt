@@ -15,25 +15,25 @@ class ViewHelper(
     initialVisible: Boolean) {
     companion object {
         private fun applyPosition(view: View, value: Point) {
-            Thread.runOnMainThread(Runnable {
+            Thread.runOnMainThread {
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.leftMargin = value.x
                 params.topMargin = value.y
                 view.layoutParams = params
-            })
+            }
         }
 
         private fun applySize(view: View, value: Point) {
-            Thread.runOnMainThread(Runnable {
+            Thread.runOnMainThread {
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.width = value.x
                 params.height = value.y
                 view.layoutParams = params
-            })
+            }
         }
 
         private fun applyVisible(view: View, value: Boolean) {
-            Thread.runOnMainThread(Runnable {
+            Thread.runOnMainThread {
                 if (value) {
                     view.visibility = View.VISIBLE
                     // https://stackoverflow.com/questions/21408178/admob-wont-show-the-banner-until
@@ -44,7 +44,7 @@ class ViewHelper(
                     // Production: load and then call setVisible(true) doesn't show the native ad.
                     view.visibility = View.GONE
                 }
-            })
+            }
         }
     }
 

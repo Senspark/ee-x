@@ -25,10 +25,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('unity-ads', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:ads:1.0.0'
-    }
+    configureAndPublish('unity-ads')
 } else {
     dependencies {
         api project(':ee-x-ads')
@@ -40,8 +37,8 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
     // https://github.com/Unity-Technologies/unity-ads-android/releases
-    implementation 'com.unity3d.ads:unity-ads:3.4.6'
+    implementation 'com.unity3d.ads:unity-ads:3.4.8'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
 }

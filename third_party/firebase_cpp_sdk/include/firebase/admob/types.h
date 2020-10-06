@@ -69,6 +69,8 @@ enum AdMobError {
   /// An attempt has been made to show an ad on an Android Activity that has
   /// no window token (such as one that's not done initializing).
   kAdMobErrorNoWindowToken,
+  /// Fallback error for any unidentified cases.
+  kAdMobErrorUnknown,
 };
 
 /// @brief Types of ad sizes.

@@ -8,9 +8,11 @@
 import Foundation
 import GoogleMobileAds
 
+private let kTag = "\(AdMobInterstitialAd.self)"
+
 internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDelegate {
-    private let _logger = Logger("\(AdMobInterstitialAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
     private var _helper: InterstitialAdHelper?
@@ -18,8 +20,10 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     private var _ad: GADInterstitial?
     
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _messageHelper = MessageHelper("AdMobInterstitialAd", _adId)
         super.init()
@@ -100,35 +104,35 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     }
     
     func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onFailedToShow)
     }
     
     func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
     }

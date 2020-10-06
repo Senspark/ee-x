@@ -20,10 +20,7 @@ if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('firebase-core', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:core:1.0.0'
-    }
+    configureAndPublish('firebase-core')
 } else {
     dependencies {
         api project(':ee-x-core')
@@ -31,7 +28,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-core:17.4.0'
+    implementation 'com.google.firebase:firebase-core:17.5.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
 }

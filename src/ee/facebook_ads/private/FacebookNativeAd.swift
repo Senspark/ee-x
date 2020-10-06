@@ -7,10 +7,12 @@
 
 import FBAudienceNetwork
 
+private let kTag = "\(FacebookNativeAd.self)"
+
 internal class FacebookNativeAd:
     NSObject, IAdView, FBNativeAdDelegate {
-    private let _logger = Logger("\(FacebookNativeAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _layoutName: String
     private let _messageHelper: MessageHelper
@@ -21,9 +23,11 @@ internal class FacebookNativeAd:
     private var _view: EEFacebookNativeAdView?
     
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String,
          _ layoutName: String) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _layoutName = layoutName
         _messageHelper = MessageHelper("FacebookNativeAd", _adId)
@@ -160,7 +164,7 @@ internal class FacebookNativeAd:
     }
     
     func nativeAdDidLoad(_ ad: FBNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         assert(ad == _ad)
         
         guard let view = _view else {
@@ -190,21 +194,21 @@ internal class FacebookNativeAd:
     }
     
     func nativeAd(_ nativeAd: FBNativeAd, didFailWithError error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func nativeAdWillLogImpression(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func nativeAdDidClick(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func nativeAdDidFinishHandlingClick(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func nativeAdDidDownloadMedia(_ nativeAd: FBNativeAd) {

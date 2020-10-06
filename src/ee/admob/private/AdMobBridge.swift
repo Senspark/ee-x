@@ -24,6 +24,7 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 @objc(EEAdMobBridge)
 public class AdMobBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
     private var _bannerAds: [String: AdMobBannerAd] = [:]
@@ -31,8 +32,9 @@ public class AdMobBridge: NSObject, IPlugin {
     private var _interstitialAds: [String: AdMobInterstitialAd] = [:]
     private var _rewardedAds: [String: AdMobRewardedAd] = [:]
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -148,7 +150,7 @@ public class AdMobBridge: NSObject, IPlugin {
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobBannerAd(_bridge, adId, adSize, _bannerHelper)
+        let ad = AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -166,7 +168,7 @@ public class AdMobBridge: NSObject, IPlugin {
         if _nativeAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobNativeAd(_bridge, adId, layoutName)
+        let ad = AdMobNativeAd(_bridge, _logger, adId, layoutName)
         _nativeAds[adId] = ad
         return true
     }
@@ -184,7 +186,7 @@ public class AdMobBridge: NSObject, IPlugin {
         if _interstitialAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobInterstitialAd(_bridge, adId)
+        let ad = AdMobInterstitialAd(_bridge, _logger, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -202,7 +204,7 @@ public class AdMobBridge: NSObject, IPlugin {
         if _rewardedAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobRewardedAd(_bridge, adId)
+        let ad = AdMobRewardedAd(_bridge, _logger, adId)
         _rewardedAds[adId] = ad
         return true
     }

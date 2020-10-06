@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_google_analytics)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod ee-x/google-analytics
+pod 'ee-x/google-analytics'
 ```
 
 ## Basic usage

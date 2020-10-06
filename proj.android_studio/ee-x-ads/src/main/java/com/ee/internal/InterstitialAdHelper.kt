@@ -4,7 +4,6 @@ import androidx.annotation.AnyThread
 import com.ee.IInterstitialAd
 import com.ee.IMessageBridge
 import com.ee.Utils
-import com.ee.registerHandler
 
 /**
  * Created by Zinge on 10/13/17.

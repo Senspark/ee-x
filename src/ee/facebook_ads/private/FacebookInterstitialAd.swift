@@ -8,10 +8,12 @@
 import FBAudienceNetwork
 import Foundation
 
+private let kTag = "\(FacebookInterstitialAd.self)"
+
 internal class FacebookInterstitialAd:
     NSObject, IInterstitialAd, FBInterstitialAdDelegate {
-    private let _logger = Logger("\(FacebookInterstitialAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
     private var _helper: InterstitialAdHelper?
@@ -19,8 +21,10 @@ internal class FacebookInterstitialAd:
     private var _ad: FBInterstitialAd?
     
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
         super.init()
@@ -106,30 +110,30 @@ internal class FacebookInterstitialAd:
     }
     
     func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func interstitialAdWillLogImpression(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func interstitialAdDidClick(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func interstitialAdWillClose(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
     }

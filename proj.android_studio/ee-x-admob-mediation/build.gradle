@@ -16,10 +16,7 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    publishToMaven('admob-mediation', '1.0.0')
-    dependencies {
-        api 'com.senspark.ee:admob:1.0.0'
-    }
+    configureAndPublish('admob-mediation')
 } else {
     dependencies {
         api project(':ee-x-admob')
@@ -29,17 +26,17 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     // https://bintray.com/google/mobile-ads-adapters-android
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
-    implementation 'com.google.ads.mediation:applovin:9.13.1.0'
+    implementation 'com.google.ads.mediation:applovin:9.13.4.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-    implementation 'com.google.ads.mediation:facebook:5.11.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.0.0.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    implementation 'com.google.ads.mediation:ironsource:6.18.0.0'
+    implementation 'com.google.ads.mediation:ironsource:7.0.1.1.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-    implementation 'com.google.ads.mediation:unity:3.4.6.1'
+    implementation 'com.google.ads.mediation:unity:3.4.8.0'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
-    implementation 'com.google.ads.mediation:vungle:6.7.0.0'
+    implementation 'com.google.ads.mediation:vungle:6.7.1.0'
 }

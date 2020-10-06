@@ -14,21 +14,21 @@ import com.ee.internal.serialize
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSize
 import com.facebook.ads.AudienceNetworkAds
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@ImplicitReflectionSerializer
-@UnstableDefault
+@InternalSerializationApi
 class FacebookAdsBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
+        private val kTag = FacebookAdsBridge::class.java.name
         private const val kPrefix = "FacebookAdsBridge"
         private const val kGetTestDeviceHash = "${kPrefix}GetTestDeviceHash"
         private const val kAddTestDevice = "${kPrefix}AddTestDevice"
@@ -51,14 +51,15 @@ class FacebookAdsBridge(
     private val _rewardedAds: MutableMap<String, FacebookRewardedAd> = ConcurrentHashMap()
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         if (!AudienceNetworkAds.isInitialized(_context)) {
             if (BuildConfig.DEBUG) {
                 AdSettings.setDebugBuild(true)
             }
             AudienceNetworkAds.initialize(_context)
-            AudienceNetworkAds.isInAdsProcess(_context)
         }
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -136,13 +137,13 @@ class FacebookAdsBridge(
         _bridge.registerHandler(kCreateBannerAd) { message ->
             @Serializable
             class Request(
-                val ad_id: String,
-                val ad_size: Int
+                val adId: String,
+                val adSize: Int
             )
 
             val request = deserialize<Request>(message)
-            val adSize = _bannerHelper.getAdSize(request.ad_size)
-            Utils.toString(createBannerAd(request.ad_id, adSize))
+            val adSize = _bannerHelper.getAdSize(request.adSize)
+            Utils.toString(createBannerAd(request.adId, adSize))
         }
         _bridge.registerHandler(kDestroyBannerAd) { message ->
             Utils.toString(destroyBannerAd(message))
@@ -150,13 +151,13 @@ class FacebookAdsBridge(
         _bridge.registerHandler(kCreateNativeAd) { message ->
             @Serializable
             class Request(
-                val ad_id: String,
-                val layout_name: String,
+                val adId: String,
+                val layoutName: String,
                 val identifiers: Map<String, String>
             )
 
             val request = deserialize<Request>(message)
-            Utils.toString(createNativeAd(request.ad_id, request.layout_name, request.identifiers))
+            Utils.toString(createNativeAd(request.adId, request.layoutName, request.identifiers))
         }
         _bridge.registerHandler(kDestroyNativeAd) { message ->
             Utils.toString(destroyNativeAd(message))
@@ -196,16 +197,16 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun addTestDevice(hash: String) {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             AdSettings.addTestDevice(hash)
-        })
+        }
     }
 
     @AnyThread
     fun clearTestDevices() {
-        Thread.runOnMainThread(Runnable {
+        Thread.runOnMainThread {
             AdSettings.clearTestDevices()
-        })
+        }
     }
 
     @AnyThread
@@ -213,7 +214,8 @@ class FacebookAdsBridge(
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookBannerAd(_bridge, _context, _activity, adId, adSize, _bannerHelper)
+        val ad = FacebookBannerAd(
+            _bridge, _logger, _context, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -232,7 +234,8 @@ class FacebookAdsBridge(
         if (_nativeAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookNativeAd(_bridge, _context, _activity, adId, layoutName, identifiers)
+        val ad = FacebookNativeAd(
+            _bridge, _logger, _context, _activity, adId, layoutName, identifiers)
         _nativeAds[adId] = ad
         return true
     }
@@ -250,7 +253,7 @@ class FacebookAdsBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookInterstitialAd(_bridge, _context, adId)
+        val ad = FacebookInterstitialAd(_bridge, _logger, _context, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -268,7 +271,7 @@ class FacebookAdsBridge(
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookRewardedAd(_bridge, _context, adId)
+        val ad = FacebookRewardedAd(_bridge, _logger, _context, adId)
         _rewardedAds[adId] = ad
         return true
     }

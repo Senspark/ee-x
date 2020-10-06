@@ -180,40 +180,40 @@ namespace EE.Editor {
             }
             if (IsCoreEnabled) {
                 androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
-                androidLibraries.Add("com.senspark.ee:core:[1.0.0]");
+                androidLibraries.Add("com.senspark.ee:core:[1.1.0]");
                 iosLibraries.Add("ee-x/cs-core");
                 if (IsAdjustEnabled) {
-                    androidLibraries.Add("com.senspark.ee:adjust:[1.0.2]");
+                    androidLibraries.Add("com.senspark.ee:adjust:[1.1.0]");
                     iosLibraries.Add("ee-x/cs-adjust");
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
-                        androidLibraries.Add("com.senspark.ee:admob-mediation:[1.0.0]");
+                        androidLibraries.Add("com.senspark.ee:admob-mediation:[1.1.0]");
                         iosLibraries.Add("ee-x/cs-admob-mediation");
                     } else {
-                        androidLibraries.Add("com.senspark.ee:admob:[1.0.0]");
+                        androidLibraries.Add("com.senspark.ee:admob:[1.1.0]");
                         iosLibraries.Add("ee-x/cs-admob");
                     }
                 }
                 if (IsFacebookAdsEnabled) {
-                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.0.0]");
+                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.1.0]");
                     iosLibraries.Add("ee-x/cs-facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
-                        androidLibraries.Add("com.senspark.ee:iron-source-mediation:[1.0.0]");
+                        androidLibraries.Add("com.senspark.ee:iron-source-mediation:[1.1.0]");
                         iosLibraries.Add("ee-x/cs-iron-source-mediation");
                     } else {
-                        androidLibraries.Add("com.senspark.ee:iron-source:[1.0.0]");
+                        androidLibraries.Add("com.senspark.ee:iron-source:[1.1.0]");
                         iosLibraries.Add("ee-x/cs-iron-source");
                     }
                 }
                 if (IsUnityAdsEnabled) {
-                    androidLibraries.Add("com.senspark.ee:unity-ads:[1.0.0]");
+                    androidLibraries.Add("com.senspark.ee:unity-ads:[1.1.0]");
                     iosLibraries.Add("ee-x/cs-unity-ads");
                 }
             }

@@ -35,7 +35,7 @@ ext {
         'admob'                 : ['1.1.0', 'ads'],
         'admob-mediation'       : ['1.1.0', 'admob'],
         'app-lovin'             : ['1.1.0', 'ads'],
-        'facebook-ads'          : ['1.1.0', 'ads'],
+        'facebook-ads'          : ['1.1.1', 'ads'],
         'iron-source'           : ['1.1.0', 'ads'],
         'iron-source-mediation' : ['1.1.0', 'iron-source'],
         'unity-ads'             : ['1.1.0', 'ads'],

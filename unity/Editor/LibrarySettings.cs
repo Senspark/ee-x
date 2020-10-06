@@ -198,7 +198,7 @@ namespace EE.Editor {
                     }
                 }
                 if (IsFacebookAdsEnabled) {
-                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.1.0]");
+                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.1.1]");
                     iosLibraries.Add("ee-x/cs-facebook-ads");
                 }
                 if (IsIronSourceEnabled) {

@@ -137,13 +137,13 @@ class FacebookAdsBridge(
         _bridge.registerHandler(kCreateBannerAd) { message ->
             @Serializable
             class Request(
-                val ad_id: String,
-                val ad_size: Int
+                val adId: String,
+                val adSize: Int
             )
 
             val request = deserialize<Request>(message)
-            val adSize = _bannerHelper.getAdSize(request.ad_size)
-            Utils.toString(createBannerAd(request.ad_id, adSize))
+            val adSize = _bannerHelper.getAdSize(request.adSize)
+            Utils.toString(createBannerAd(request.adId, adSize))
         }
         _bridge.registerHandler(kDestroyBannerAd) { message ->
             Utils.toString(destroyBannerAd(message))
@@ -151,13 +151,13 @@ class FacebookAdsBridge(
         _bridge.registerHandler(kCreateNativeAd) { message ->
             @Serializable
             class Request(
-                val ad_id: String,
-                val layout_name: String,
+                val adId: String,
+                val layoutName: String,
                 val identifiers: Map<String, String>
             )
 
             val request = deserialize<Request>(message)
-            Utils.toString(createNativeAd(request.ad_id, request.layout_name, request.identifiers))
+            Utils.toString(createNativeAd(request.adId, request.layoutName, request.identifiers))
         }
         _bridge.registerHandler(kDestroyNativeAd) { message ->
             Utils.toString(destroyNativeAd(message))

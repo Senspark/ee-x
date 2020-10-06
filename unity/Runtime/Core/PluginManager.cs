@@ -35,9 +35,9 @@ namespace EE {
             = new Dictionary<Type, (Plugin, Func<IMessageBridge, IPlugin>)> {
                 [typeof(IAdjust)] = (Plugin.Adjust, bridge => new Adjust(bridge)),
                 [typeof(IAdMob)] = (Plugin.AdMob, bridge => new AdMob(bridge)),
-                [typeof(IFacebookAds)] = (Plugin.IronSource, bridge => new FacebookAds(bridge)),
+                [typeof(IFacebookAds)] = (Plugin.FacebookAds, bridge => new FacebookAds(bridge)),
                 [typeof(IIronSource)] = (Plugin.IronSource, bridge => new IronSource(bridge)),
-                [typeof(IUnityAds)] = (Plugin.IronSource, bridge => new UnityAds(bridge)),
+                [typeof(IUnityAds)] = (Plugin.UnityAds, bridge => new UnityAds(bridge)),
             };
 
         private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();

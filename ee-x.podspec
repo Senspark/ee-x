@@ -69,7 +69,8 @@ Pod::Spec.new do |spec|
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
+        '$(SDKROOT)/usr/lib/swift' # Fix __swift_FORCE_LOAD_$_swiftCoreMIDI (XCode 12).
       ].join(' '),
       # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
       'DEAD_CODE_STRIPPING' => 'YES'
@@ -861,7 +862,8 @@ Pod::Spec.new do |spec|
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)'
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
+        '$(SDKROOT)/usr/lib/swift'
       ].join(' '),
       # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
       'DEAD_CODE_STRIPPING' => 'YES'

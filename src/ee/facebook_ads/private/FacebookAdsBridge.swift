@@ -24,14 +24,16 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 @objc(EEFacebookAdsBridge)
 public class FacebookAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _bannerHelper = FacebookBannerHelper()
     private var _bannerAds: [String: FacebookBannerAd] = [:]
     private var _nativeAds: [String: FacebookNativeAd] = [:]
     private var _interstitialAds: [String: FacebookInterstitialAd] = [:]
     private var _rewardedAds: [String: FacebookRewardedAd] = [:]
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -146,7 +148,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = FacebookBannerAd(_bridge, adId, size, _bannerHelper)
+        let ad = FacebookBannerAd(_bridge, _logger, adId, size, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -164,7 +166,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         if _nativeAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = FacebookNativeAd(_bridge, adId, layoutName)
+        let ad = FacebookNativeAd(_bridge, _logger, adId, layoutName)
         _nativeAds[adId] = ad
         return true
     }
@@ -182,7 +184,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         if _interstitialAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = FacebookInterstitialAd(_bridge, adId)
+        let ad = FacebookInterstitialAd(_bridge, _logger, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -200,7 +202,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         if _rewardedAds.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = FacebookRewardedAd(_bridge, adId)
+        let ad = FacebookRewardedAd(_bridge, _logger, adId)
         _rewardedAds[adId] = ad
         return true
     }

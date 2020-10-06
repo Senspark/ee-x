@@ -27,7 +27,7 @@ public class StoreBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _unityPurchasing = StoreUnityPurchasing()
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         super.init()
         _unityPurchasing.messageCallback = { subject, payload, receipt, transactionId in

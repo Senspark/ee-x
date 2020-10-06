@@ -9,16 +9,17 @@ import com.google.firebase.FirebaseApp
  */
 class FirebaseCoreBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FirebaseCoreBridge::class.java.name)
+        private val kTag = FirebaseCoreBridge::class.java.name
     }
 
     init {
-        _logger.debug("constructor begin.")
+        _logger.info("$kTag: constructor begin.")
         FirebaseApp.initializeApp(_context)
-        _logger.debug("constructor end.")
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {}

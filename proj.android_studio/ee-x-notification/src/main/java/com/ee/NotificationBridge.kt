@@ -18,11 +18,11 @@ import kotlinx.serialization.Serializable
 @InternalSerializationApi
 class NotificationBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(NotificationBridge::class.java.name)
-
+        private val kTag = NotificationBridge::class.java.name
         private const val kPrefix = "NotificationBridge"
         private const val kSchedule = "${kPrefix}Schedule"
         private const val kUnschedule = "${kPrefix}Unschedule"
@@ -31,9 +31,9 @@ class NotificationBridge(
     }
 
     init {
-        _logger.debug("constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
-        _logger.debug("constructor end.")
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -111,13 +111,13 @@ class NotificationBridge(
     }
 
     fun unschedule(tag: Int) {
-        _logger.debug("${this::unschedule.name}: tag = $tag")
+        _logger.debug("$kTag: ${this::unschedule.name}: tag = $tag")
         val intent = Intent(_context, NotificationReceiver::class.java)
         NotificationUtils.unscheduleAlarm(_context, intent, tag)
     }
 
     fun unscheduleAll() {
-        _logger.debug("${this::unscheduleAll.name}: not supported.")
+        _logger.debug("$kTag: ${this::unscheduleAll.name}: not supported.")
     }
 
     fun clearAll() {

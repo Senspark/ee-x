@@ -7,9 +7,11 @@
 
 import GoogleMobileAds
 
+private let kTag = "\(AdMobBannerAd.self)"
+
 internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
-    private let _logger = Logger("\(AdMobBannerAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _adSize: GADAdSize
     private let _messageHelper: MessageHelper
@@ -19,10 +21,12 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
     private var _ad: GADBannerView?
 
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String,
          _ adSize: GADAdSize,
          _ bannerHelper: AdMobBannerHelper) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _adSize = adSize
         _messageHelper = MessageHelper("AdMobBannerAd", _adId)
@@ -106,30 +110,30 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
     }
 
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
 
     func adViewWillPresentScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     func adViewWillDismissScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 }

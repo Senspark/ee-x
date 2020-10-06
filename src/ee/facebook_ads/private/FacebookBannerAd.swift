@@ -7,10 +7,12 @@
 
 import FBAudienceNetwork
 
+private let kTag = "\(FacebookBannerAd.self)"
+
 internal class FacebookBannerAd:
     NSObject, IAdView, FBAdViewDelegate {
-    private let _logger = Logger("\(FacebookBannerAd.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private let _adId: String
     private let _adSize: FBAdSize
     private let _messageHelper: MessageHelper
@@ -20,10 +22,12 @@ internal class FacebookBannerAd:
     private var _ad: FBAdView?
     
     init(_ bridge: IMessageBridge,
+         _ logger: ILogger,
          _ adId: String,
          _ adSize: FBAdSize,
          _ bannerHelper: FacebookBannerHelper) {
         _bridge = bridge
+        _logger = logger
         _adId = adId
         _adSize = adSize
         _messageHelper = MessageHelper("FacebookBannerAd", _adId)
@@ -107,26 +111,26 @@ internal class FacebookBannerAd:
     }
     
     func adViewDidLoad(_ adView: FBAdView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func adView(_ adView: FBAdView, didFailWithError error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
     func adViewDidClick(_ adView: FBAdView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(_messageHelper.onClicked)
     }
     
     func adViewDidFinishHandlingClick(_ adView: FBAdView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
     
     func adViewWillLogImpression(_ adView: FBAdView) {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 }

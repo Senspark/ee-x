@@ -43,11 +43,11 @@ import java.io.File
 @InternalSerializationApi
 class FacebookBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FacebookBridge::class.java.name)
-
+        private val kTag = FacebookBridge::class.java.name
         private const val kPrefix = "FacebookBridge"
         private const val kRegisterNotifications = "${kPrefix}RegisterNotifications"
         private const val kIsLoggedIn = "${kPrefix}IsLoggedIn"
@@ -86,15 +86,16 @@ class FacebookBridge(
     private val _profileTracker: ProfileTracker
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         _accessTokenTracker = object : AccessTokenTracker() {
             override fun onCurrentAccessTokenChanged(oldAccessToken: AccessToken?,
                                                      currentAccessToken: AccessToken?) {
-                _logger.debug(this::onCurrentAccessTokenChanged.name)
+                _logger.debug("$kTag: ${this::onCurrentAccessTokenChanged.name}")
             }
         }
         _profileTracker = object : ProfileTracker() {
             override fun onCurrentProfileChanged(oldProfile: Profile?, currentProfile: Profile?) {
-                _logger.debug(this::onCurrentProfileChanged.name)
+                _logger.debug("$kTag: ${this::onCurrentProfileChanged.name}")
                 val dict: MutableMap<String, Any> = HashMap()
                 if (currentProfile != null) {
                     dict["userId"] = currentProfile.id
@@ -121,6 +122,7 @@ class FacebookBridge(
         // Learn more: https://developers.facebook.com/docs/app-events/getting-started-app-events-android#disable-auto-events.
         FacebookSdk.setAdvertiserIDCollectionEnabled(true)
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {

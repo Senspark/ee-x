@@ -13,11 +13,11 @@ import kotlinx.serialization.Serializable
 @InternalSerializationApi
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(AppsFlyerBridge::class.java.name)
-
+        private val kTag = AppsFlyerBridge::class.java.name
         private const val kPrefix = "AppsFlyerBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kStartTracking = "${kPrefix}StartTracking"
@@ -30,9 +30,9 @@ class AppsFlyerBridge(
     private val _tracker = AppsFlyerLib.getInstance()
 
     init {
-        _logger.debug("constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
-        _logger.debug("constructor end.")
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {}
@@ -96,22 +96,22 @@ class AppsFlyerBridge(
             val listener = object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
                     for (key in conversionData.keys) {
-                        _logger.debug("${this::onConversionDataSuccess.name}: $key = ${conversionData[key]}")
+                        _logger.debug("$kTag: ${this::onConversionDataSuccess.name}: $key = ${conversionData[key]}")
                     }
                 }
 
                 override fun onConversionDataFail(errorMessage: String) {
-                    _logger.debug("${this::onConversionDataFail.name}: $errorMessage")
+                    _logger.debug("$kTag: ${this::onConversionDataFail.name}: $errorMessage")
                 }
 
                 override fun onAppOpenAttribution(conversionData: Map<String, String>) {
                     for (key in conversionData.keys) {
-                        _logger.debug("${this::onAppOpenAttribution.name}: $key = ${conversionData[key]}")
+                        _logger.debug("$kTag: ${this::onAppOpenAttribution.name}: $key = ${conversionData[key]}")
                     }
                 }
 
                 override fun onAttributionFailure(errorMessage: String) {
-                    _logger.debug("${this::onAttributionFailure.name}: $errorMessage")
+                    _logger.debug("$kTag: ${this::onAttributionFailure.name}: $errorMessage")
                 }
             }
             _tracker.init(devKey, listener, _context)

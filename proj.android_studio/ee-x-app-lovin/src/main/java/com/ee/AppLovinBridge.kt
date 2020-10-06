@@ -14,11 +14,11 @@ import com.ee.internal.AppLovinRewardedAdListener
 
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(AppLovinBridge::class.java.name)
-
+        private val kTag = AppLovinBridge::class.java.name
         private const val kPrefix = "AppLovinBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetVerboseLogging = "${kPrefix}SetVerboseLogging"
@@ -40,9 +40,9 @@ class AppLovinBridge(
     private var _rewardedAdListener: AppLovinRewardedAdListener? = null
 
     init {
-        _logger.debug("constructor begin: context = $_context")
+        _logger.info("constructor begin: context = $_context")
         registerHandlers()
-        _logger.debug("constructor end.")
+        _logger.info("constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -144,14 +144,14 @@ class AppLovinBridge(
                 _initialized = true
             }
 
-            val interstitialAdListener = AppLovinInterstitialAdListener(_bridge)
+            val interstitialAdListener = AppLovinInterstitialAdListener(_bridge, _logger)
             val interstitialAd = AppLovinInterstitialAd.create(sdk, _activity)
             interstitialAd.setAdLoadListener(interstitialAdListener)
             interstitialAd.setAdDisplayListener(interstitialAdListener)
             interstitialAd.setAdClickListener(interstitialAdListener)
 
             val rewardedAd = AppLovinIncentivizedInterstitial.create(sdk)
-            val rewardedAdListener = AppLovinRewardedAdListener(_bridge)
+            val rewardedAdListener = AppLovinRewardedAdListener(_bridge, _logger)
 
             _sdk = sdk
             _interstitialAd = interstitialAd

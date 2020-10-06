@@ -3,8 +3,8 @@ package com.ee.internal
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.IInterstitialAd
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.facebook.ads.Ad
 import com.facebook.ads.AdError
@@ -17,11 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private val _adId: String)
     : IInterstitialAd, InterstitialAdListener {
     companion object {
-        private val _logger = Logger(FacebookInterstitialAd::class.java.name)
+        private val kTag = FacebookInterstitialAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
@@ -30,14 +31,14 @@ internal class FacebookInterstitialAd(
     private var _ad: InterstitialAd? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
     }
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy.name}: adId = $_adId")
+        _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
     }
@@ -107,36 +108,36 @@ internal class FacebookInterstitialAd(
     }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.info(this::onAdLoaded.name)
+        _logger.debug("$kTag: ${this::onAdLoaded.name}")
         Thread.checkMainThread()
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError.name}: ${adError.errorMessage}")
+        _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onInterstitialDisplayed(ad: Ad) {
-        _logger.info(this::onInterstitialDisplayed.name)
+        _logger.debug("$kTag: ${this::onInterstitialDisplayed.name}")
         Thread.checkMainThread()
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info(this::onLoggingImpression.name)
+        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.info(this::onAdClicked.name)
+        _logger.debug("$kTag: ${this::onAdClicked.name}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     override fun onInterstitialDismissed(ad: Ad) {
-        _logger.info(this::onInterstitialDismissed.name)
+        _logger.debug("$kTag: ${this::onInterstitialDismissed.name}")
         Thread.checkMainThread()
         _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed)

@@ -7,28 +7,27 @@
 
 import UnityAds
 
+private let kTag = "\(UnityAdsBridge.self)"
 private let kPrefix = "UnityAdsBridge"
-
 private let kInitialize = "\(kPrefix)Initialize"
 private let kSetDebugModeEnabled = "\(kPrefix)SetDebugModeEnabled"
-
 private let kHasRewardedAd = "\(kPrefix)HasRewardedAd"
 private let kShowRewardedAd = "\(kPrefix)ShowRewardedAd"
-
 private let kOnLoaded = "\(kPrefix)OnLoaded"
 private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
 @objc(EEUnityAdsBridge)
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
-    private let _logger = Logger("\(UnityAdsBridge.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private var _initialized = false
     private var _displayed = false
     private var _loadedAdIds: Set<String> = []
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -117,17 +116,17 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     }
 
     func unityAdsReady(_ adId: String) {
-        _logger.debug("\(#function): \(adId)")
+        _logger.debug("\(kTag): \(#function): \(adId)")
         _loadedAdIds.insert(adId)
         _bridge.callCpp(kOnLoaded, adId)
     }
 
     func unityAdsDidStart(_ adId: String) {
-        _logger.debug("\(#function): \(adId)")
+        _logger.debug("\(kTag): \(#function): \(adId)")
     }
 
     func unityAdsDidFinish(_ adId: String, with state: UnityAdsFinishState) {
-        _logger.debug("\(#function): \(adId) state = \(state)")
+        _logger.debug("\(kTag): \(#function): \(adId) state = \(state)")
         if state == UnityAdsFinishState.error {
             _bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
                 "ad_id": adId,
@@ -153,6 +152,6 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     }
 
     func unityAdsDidError(_ error: UnityAdsError, withMessage message: String) {
-        _logger.debug("\(#function): error = \(error) message = \(message)")
+        _logger.debug("\(kTag): \(#function): error = \(error) message = \(message)")
     }
 }

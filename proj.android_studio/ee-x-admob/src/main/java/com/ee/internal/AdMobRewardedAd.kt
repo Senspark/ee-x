@@ -3,8 +3,8 @@ package com.ee.internal
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
 import com.google.android.gms.ads.AdError
@@ -21,11 +21,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 internal class AdMobRewardedAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String) : RewardedAdCallback() {
     companion object {
-        private val _logger = Logger(AdMobRewardedAd::class.java.name)
+        private val kTag = AdMobRewardedAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
@@ -34,7 +35,7 @@ internal class AdMobRewardedAd(
     private var _ad: RewardedAd? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
     }
@@ -50,7 +51,7 @@ internal class AdMobRewardedAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("destroy: adId = %s", _adId)
+        _logger.info("$kTag: destroy: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
     }
@@ -113,7 +114,7 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread {
-            _logger.info(this::load.name)
+            _logger.debug("$kTag: ${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
@@ -136,31 +137,31 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun show() {
         Thread.runOnMainThread {
-            _logger.info(this::show.name)
+            _logger.debug("$kTag: ${this::show.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.show(_activity, this)
         }
     }
 
     override fun onRewardedAdFailedToShow(error: AdError?) {
-        _logger.info("onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
+        _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
     }
 
     override fun onRewardedAdOpened() {
-        _logger.info(this::onRewardedAdOpened.name)
+        _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
         Thread.checkMainThread()
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        _logger.info(this::onUserEarnedReward.name)
+        _logger.debug("$kTag: ${this::onUserEarnedReward.name}")
         Thread.checkMainThread()
         _rewarded = true
     }
 
     override fun onRewardedAdClosed() {
-        _logger.info(this::onRewardedAdClosed.name)
+        _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
         Thread.checkMainThread()
         _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))

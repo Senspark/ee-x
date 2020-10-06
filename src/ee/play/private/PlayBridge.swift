@@ -16,7 +16,7 @@ public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
     private let _bridge: IMessageBridge
     private var _isLoggingIn = false
     
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         super.init()
         registerHandlers()

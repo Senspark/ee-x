@@ -14,8 +14,8 @@ import android.widget.TextView
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.IAdView
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
 import com.facebook.ads.Ad
@@ -37,6 +37,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 @InternalSerializationApi
 internal class FacebookNativeAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
@@ -44,8 +45,7 @@ internal class FacebookNativeAd(
     private val _identifiers: Map<String, String>)
     : IAdView, NativeAdListener {
     companion object {
-        private val _logger = Logger(FacebookNativeAd::class.java.name)
-
+        private val kTag = FacebookNativeAd::class.java.name
         private const val k__ad_choices = "ad_choices"
         private const val k__body = "body"
         private const val k__call_to_action = "call_to_action"
@@ -63,7 +63,7 @@ internal class FacebookNativeAd(
     private var _view: View? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
         createView()
@@ -84,7 +84,7 @@ internal class FacebookNativeAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy.name}: adId = $_adId")
+        _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyView()
         destroyInternalAd()
@@ -185,7 +185,7 @@ internal class FacebookNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.info(this::load.name)
+            _logger.debug("$kTag: ${this::load.name}")
 
             ///
             /// Audience Network supports pre-caching video or image assets which enables
@@ -232,12 +232,12 @@ internal class FacebookNativeAd(
                                        processor: ViewProcessor<T>): Boolean {
         val id = getIdentifier(key)
         if (id == 0) {
-            _logger.error("Can not find identifier for key: $key")
+            _logger.error("$kTag: Can not find identifier for key: $key")
             return false
         }
         val subView = view.findViewById<View>(id)
         if (subView == null) {
-            _logger.error("Can not find view for key: $key")
+            _logger.error("$kTag: Can not find view for key: $key")
             return false
         }
         processor(subView as T)
@@ -245,13 +245,13 @@ internal class FacebookNativeAd(
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError.name}: ${adError.errorMessage}")
+        _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onAdLoaded(nativeAd: Ad) {
-        _logger.info(this::onAdLoaded.name)
+        _logger.debug("$kTag: ${this::onAdLoaded.name}")
         Thread.checkMainThread()
         assertThat(_ad === nativeAd)
         val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
@@ -288,16 +288,16 @@ internal class FacebookNativeAd(
     }
 
     override fun onMediaDownloaded(ad: Ad) {
-        _logger.info(this::onMediaDownloaded.name)
+        _logger.debug("$kTag: ${this::onMediaDownloaded.name}")
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info(this::onLoggingImpression.name)
+        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.info(this::onAdClicked.name)
+        _logger.debug("$kTag: ${this::onAdClicked.name}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onClicked)
     }

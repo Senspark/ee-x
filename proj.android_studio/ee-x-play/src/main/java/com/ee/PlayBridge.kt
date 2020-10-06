@@ -22,11 +22,11 @@ import kotlin.coroutines.suspendCoroutine
 @InternalSerializationApi
 class PlayBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(PlayBridge::class.java.name)
-
+        private val kTag = PlayBridge::class.java.name
         private const val kPrefix = "PlayBridge"
         private const val kIsLoggedIn = "${kPrefix}IsLoggedIn"
         private const val kLogIn = "${kPrefix}LogIn"
@@ -43,12 +43,14 @@ class PlayBridge(
     private var _client: GoogleSignInClient? = null
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
         Thread.runOnMainThread {
             _activity?.let { activity ->
                 _client = GoogleSignIn.getClient(activity, _options)
             }
         }
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -182,7 +184,7 @@ class PlayBridge(
 
     @AnyThread
     private fun logIn(silently: Boolean, callback: (successful: Boolean) -> Unit) {
-        _logger.debug("${this::logIn.name}: silently = $silently")
+        _logger.debug("$kTag: ${this::logIn.name}: silently = $silently")
         Thread.runOnMainThread {
             val activity = _activity ?: return@runOnMainThread
             val client = _client ?: throw IllegalArgumentException("Client is null")
@@ -208,7 +210,7 @@ class PlayBridge(
 
     @AnyThread
     private fun logOut(callback: (successful: Boolean) -> Unit) {
-        _logger.debug(this::logOut.name)
+        _logger.debug("$kTag: ${this::logOut.name}")
         Thread.runOnMainThread {
             val client = _client ?: throw IllegalArgumentException("Client is null")
             client.signOut().addOnCompleteListener { task ->
@@ -219,7 +221,7 @@ class PlayBridge(
 
     @AnyThread
     private fun showAchievements() {
-        _logger.debug(this::showAchievements.name)
+        _logger.debug("$kTag: ${this::showAchievements.name}")
         Thread.runOnMainThread {
             if (!isLoggedIn) {
                 return@runOnMainThread
@@ -289,7 +291,7 @@ class PlayBridge(
 
     @AnyThread
     private fun showLeaderboard(leaderboardId: String) {
-        _logger.debug("${this::showLeaderboard.name}: id = $leaderboardId")
+        _logger.debug("$kTag: ${this::showLeaderboard.name}: id = $leaderboardId")
         Thread.runOnMainThread {
             if (!isLoggedIn) {
                 return@runOnMainThread
@@ -313,7 +315,7 @@ class PlayBridge(
 
     @AnyThread
     private fun showAllLeaderboards() {
-        _logger.debug(this::showAllLeaderboards.name)
+        _logger.debug("$kTag: ${this::showAllLeaderboards.name}")
         Thread.runOnMainThread {
             if (!isLoggedIn) {
                 return@runOnMainThread

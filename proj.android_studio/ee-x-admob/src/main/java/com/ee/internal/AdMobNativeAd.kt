@@ -14,8 +14,8 @@ import android.widget.TextView
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.IAdView
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
 import com.google.android.gms.ads.AdListener
@@ -38,6 +38,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 @InternalSerializationApi
 internal class AdMobNativeAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
@@ -45,7 +46,7 @@ internal class AdMobNativeAd(
     private val _identifiers: Map<String, String>)
     : IAdView, UnifiedNativeAd.OnUnifiedNativeAdLoadedListener, AdListener() {
     companion object {
-        private val _logger = Logger(AdMobNativeAd::class.java.name)
+        private val kTag = AdMobNativeAd::class.java.name
         private const val k__body = "body"
         private const val k__call_to_action = "call_to_action"
         private const val k__headline = "headline"
@@ -65,7 +66,7 @@ internal class AdMobNativeAd(
     private var _view: UnifiedNativeAdView? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
         createView()
@@ -84,7 +85,7 @@ internal class AdMobNativeAd(
 
     @AnyThread
     fun destroy() {
-        _logger.info("${this::destroy.name}: adId = $_adId")
+        _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyView()
         destroyInternalAd()
@@ -178,7 +179,7 @@ internal class AdMobNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.info(this::load.name)
+            _logger.debug("$kTag: ${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         }
@@ -216,12 +217,12 @@ internal class AdMobNativeAd(
                                        processor: ViewProcessor<T>): Boolean {
         val id = getIdentifier(key)
         if (id == 0) {
-            _logger.error("Can not find identifier for key: $key")
+            _logger.error("$kTag: Can not find identifier for key: $key")
             return false
         }
         val subView = view.findViewById<View>(id)
         if (subView == null) {
-            _logger.error("Can not find view for key: $key")
+            _logger.error("$kTag: Can not find view for key: $key")
             return false
         }
         processor(subView as T)
@@ -229,7 +230,7 @@ internal class AdMobNativeAd(
     }
 
     override fun onUnifiedNativeAdLoaded(ad: UnifiedNativeAd) {
-        _logger.info(this::onUnifiedNativeAdLoaded.name)
+        _logger.debug("$kTag: ${this::onUnifiedNativeAdLoaded.name}")
         val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
 
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
@@ -243,7 +244,7 @@ internal class AdMobNativeAd(
             override fun onVideoEnd() {
                 // Publishers should allow native ads to complete video playback before refreshing
                 // or replacing them with another ad in the same UI location.
-                _logger.debug(this::onVideoEnd.name)
+                _logger.debug("$kTag: ${this::onVideoEnd.name}")
                 super.onVideoEnd()
             }
         }
@@ -335,7 +336,7 @@ internal class AdMobNativeAd(
     }
 
     override fun onAdLoaded() {
-        _logger.info(this::onAdLoaded.name)
+        _logger.debug("$kTag: ${this::onAdLoaded.name}")
         Thread.checkMainThread()
         // There is one important difference between the way AdListener objects work with native ads
         // and the way they work with banners and interstitials. Because the AdLoader has its own
@@ -345,34 +346,34 @@ internal class AdMobNativeAd(
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.info("onAdFailedToLoad: message = ${error?.message ?: ""}")
+        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
     }
 
     override fun onAdOpened() {
-        _logger.info(this::onAdOpened.name)
+        _logger.info("$kTag: ${this::onAdOpened.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdImpression() {
-        _logger.info(this::onAdImpression.name)
+        _logger.info("$kTag: ${this::onAdImpression.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdClicked() {
-        _logger.info(this::onAdClicked.name)
+        _logger.info("$kTag: ${this::onAdClicked.name}")
         Thread.checkMainThread()
     }
 
     override fun onAdLeftApplication() {
-        _logger.info(this::onAdLeftApplication.name)
+        _logger.info("$kTag: ${this::onAdLeftApplication.name}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     override fun onAdClosed() {
-        _logger.info(this::onAdClosed.name)
+        _logger.info("$kTag: ${this::onAdClosed.name}")
         Thread.checkMainThread()
     }
 }

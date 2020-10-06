@@ -10,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap
 @InternalSerializationApi
 class FirebasePerformanceBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(FirebasePerformanceBridge::class.java.name)
-
+        private val kTag = FirebasePerformanceBridge::class.java.name
         private const val kPrefix = "FirebasePerformanceBridge"
         private const val kSetDataCollectionEnabled = "${kPrefix}SetDataCollectionEnabled"
         private const val kIsDataCollectionEnabled = "${kPrefix}IsDataCollectionEnabled"
@@ -26,7 +26,9 @@ class FirebasePerformanceBridge(
     private val _traces: MutableMap<String, FirebasePerformanceTrace> = ConcurrentHashMap()
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {}

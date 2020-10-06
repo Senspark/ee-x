@@ -11,8 +11,6 @@ import com.google.common.truth.Truth.assertThat
  * Created by Zinge on 10/9/17.
  */
 object Utils {
-    private val _logger = Logger(Utils::class.java.name)
-
     @JvmStatic
     @AnyThread
     fun getCurrentActivity(): Activity? {

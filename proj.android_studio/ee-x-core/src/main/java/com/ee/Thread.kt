@@ -1,58 +1,38 @@
 package com.ee
 
-import android.os.Handler
-import android.os.Looper
 import androidx.annotation.AnyThread
-import com.google.common.truth.Truth.assertThat
+import com.ee.internal.IThreadImpl
 
 object Thread {
-    private val _logger = Logger(Thread::class.java.name)
+    private var _impl: IThreadImpl? = null
 
-    /// https://stackoverflow.com/questions/1069066/get-current-stack-trace-in-java
-    private val currentStackTrace: Array<StackTraceElement>
-        @AnyThread get() = java.lang.Thread.currentThread().stackTrace
+    @AnyThread
+    fun registerImpl(impl: IThreadImpl) {
+        _impl = impl
+    }
 
     @AnyThread
     @JvmStatic
     fun checkMainThread() {
-        if (!isMainThread()) {
-            _logger.error("Current thread is not the main thread")
-            for (e in currentStackTrace) {
-                _logger.warn(e.toString())
-            }
-            assertThat(false).isTrue()
-        }
+        _impl?.checkMainThread()
     }
 
     @AnyThread
     @JvmStatic // Used by UnityThread.
     fun isMainThread(): Boolean {
-        return java.lang.Thread.currentThread() === Looper.getMainLooper().thread
+        return _impl?.isMainThread() ?: false
     }
 
     @AnyThread
     @JvmStatic // Used by UnityThread.
     fun runOnMainThread(callback: Runnable): Boolean {
-        if (isMainThread()) {
-            callback.run()
-            return true
-        }
-        val handler = Handler(Looper.getMainLooper())
-        val result = handler.post(callback)
-        if (!result) {
-            _logger.error("runOnUiThread: failed to post the runnable")
-        }
-        return false
+        return _impl?.runOnMainThread(callback) ?: false
     }
 
     @AnyThread
     @JvmStatic
     fun runOnMainThreadDelayed(seconds: Float, callback: Runnable) {
-        val handler = Handler(Looper.getMainLooper())
-        val result = handler.postDelayed(callback, seconds.toLong() * 1000)
-        if (!result) {
-            _logger.error("runOnUiThread: failed to post the runnable")
-        }
+        _impl?.runOnMainThreadDelayed(seconds, callback)
     }
 }
 

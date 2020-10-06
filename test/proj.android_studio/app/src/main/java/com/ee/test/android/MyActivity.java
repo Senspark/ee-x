@@ -3,6 +3,7 @@ package com.ee.test.android;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.ee.ILogger;
 import com.ee.Logger;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
@@ -12,7 +13,7 @@ import org.cocos2dx.lib.Cocos2dxActivity;
  */
 
 public class MyActivity extends Cocos2dxActivity {
-    private static final Logger _logger = new Logger(MyActivity.class.getName());
+    private static final ILogger _logger = new Logger(MyActivity.class.getName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

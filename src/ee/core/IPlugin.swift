@@ -9,7 +9,7 @@ import Foundation
 
 @objc(EEIPlugin)
 public protocol IPlugin: NSObjectProtocol {
-    init(_ bridge: IMessageBridge)
+    init(_ bridge: IMessageBridge, _ logger: ILogger)
 
     /// Destroys this plugin.
     func destroy()

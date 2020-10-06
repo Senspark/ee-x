@@ -24,9 +24,11 @@ import java.util.concurrent.ConcurrentHashMap
 @InternalSerializationApi
 class FacebookAdsBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
+        private val kTag = FacebookAdsBridge::class.java.name
         private const val kPrefix = "FacebookAdsBridge"
         private const val kGetTestDeviceHash = "${kPrefix}GetTestDeviceHash"
         private const val kAddTestDevice = "${kPrefix}AddTestDevice"
@@ -49,6 +51,7 @@ class FacebookAdsBridge(
     private val _rewardedAds: MutableMap<String, FacebookRewardedAd> = ConcurrentHashMap()
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         if (!AudienceNetworkAds.isInitialized(_context)) {
             if (BuildConfig.DEBUG) {
                 AdSettings.setDebugBuild(true)
@@ -56,6 +59,7 @@ class FacebookAdsBridge(
             AudienceNetworkAds.initialize(_context)
         }
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -210,7 +214,8 @@ class FacebookAdsBridge(
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookBannerAd(_bridge, _context, _activity, adId, adSize, _bannerHelper)
+        val ad = FacebookBannerAd(
+            _bridge, _logger, _context, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -229,7 +234,8 @@ class FacebookAdsBridge(
         if (_nativeAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookNativeAd(_bridge, _context, _activity, adId, layoutName, identifiers)
+        val ad = FacebookNativeAd(
+            _bridge, _logger, _context, _activity, adId, layoutName, identifiers)
         _nativeAds[adId] = ad
         return true
     }
@@ -247,7 +253,7 @@ class FacebookAdsBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookInterstitialAd(_bridge, _context, adId)
+        val ad = FacebookInterstitialAd(_bridge, _logger, _context, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -265,7 +271,7 @@ class FacebookAdsBridge(
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookRewardedAd(_bridge, _context, adId)
+        val ad = FacebookRewardedAd(_bridge, _logger, _context, adId)
         _rewardedAds[adId] = ad
         return true
     }

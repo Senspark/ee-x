@@ -13,7 +13,8 @@ import androidx.annotation.RequiresApi
 import com.ee.internal.RecordService
 import com.ee.internal.RecordService.ServiceBinder
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -21,11 +22,11 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class RecorderBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?) : IPlugin {
     companion object {
-        private val _logger = Logger(RecorderBridge::class.java.name)
-
+        private val kTag = RecorderBridge::class.java.name
         private const val kPrefix = "RecorderBridge"
         private const val kIsSupported = "${kPrefix}IsSupported"
         private const val kStartRecording = "${kPrefix}StartRecording"
@@ -40,10 +41,12 @@ class RecorderBridge(
     private var _recordingUrl: String? = null
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
         if (isSupported) {
             _mediaProjectionManager = _context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         }
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {

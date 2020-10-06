@@ -16,27 +16,31 @@ import kotlinx.serialization.InternalSerializationApi
 internal class FacebookLoginDelegate(
     private val _bridge: IMessageBridge,
     private val _tag: Int) : FacebookCallback<LoginResult> {
-    private val k__onSuccess: String
-        @AnyThread get() = "FacebookLoginDelegate_onSuccess_$_tag"
+    companion object {
+        private const val kPrefix = "FacebookLoginDelegate"
+    }
 
-    private val k__onFailure: String
-        @AnyThread get() = "FacebookLoginDelegate_onFailure_$_tag"
+    private val kOnSuccess: String
+        @AnyThread get() = "${kPrefix}_onSuccess_$_tag"
 
-    private val k__onCancel: String
-        @AnyThread get() = "FacebookLoginDelegate_onCancel_$_tag"
+    private val kOnFailure: String
+        @AnyThread get() = "${kPrefix}_onFailure_$_tag"
+
+    private val kOnCancel: String
+        @AnyThread get() = "${kPrefix}_onCancel_$_tag"
 
     override fun onSuccess(result: LoginResult) {
         Thread.checkMainThread()
-        _bridge.callCpp(k__onSuccess, FacebookBridge.convertAccessTokenToString(result.accessToken))
+        _bridge.callCpp(kOnSuccess, FacebookBridge.convertAccessTokenToString(result.accessToken))
     }
 
     override fun onError(error: FacebookException) {
         Thread.checkMainThread()
-        _bridge.callCpp(k__onFailure, error.localizedMessage ?: "")
+        _bridge.callCpp(kOnFailure, error.localizedMessage ?: "")
     }
 
     override fun onCancel() {
         Thread.checkMainThread()
-        _bridge.callCpp(k__onCancel)
+        _bridge.callCpp(kOnCancel)
     }
 }

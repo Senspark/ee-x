@@ -12,6 +12,7 @@ private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 private class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
+    private let _logger = Logger("ee-x")
     private let _bridge = MessageBridge.getInstance()
     private var _plugins: [String: IPlugin]
     
@@ -46,6 +47,8 @@ private class PluginManager: NSObject {
     }
     #endif // os(iOS)
     
+    fileprivate func setLogLevel(_ level: Int) {}
+    
     /// Adds and initialize a plugin.
     /// @param[in] name The plugin's name, e.g. AdMob, Vungle.
     fileprivate func addPlugin(_ name: String) -> Bool {
@@ -55,7 +58,7 @@ private class PluginManager: NSObject {
         }
         guard let plugin =
             // Swift plugins.
-            (NSClassFromString("EE\(name)Bridge") as? IPlugin.Type)?.init(_bridge) ??
+            (NSClassFromString("EE\(name)Bridge") as? IPlugin.Type)?.init(_bridge, _logger) ??
             // Objective-C plugins.
             (NSClassFromString("EE\(name)") as? NSObject.Type)?.init() as? IPlugin else {
             assert(false, "Invalid plugin: \(name)")
@@ -177,6 +180,11 @@ public func ee_staticInitializePlugins() -> Bool {
     #else // os(iOS)
     return PluginManager.getInstance().initializePlugins()
     #endif // os(iOS)
+}
+
+@_cdecl("ee_staticSetLogLevel")
+public func ee_staticSetLogLevel(_ level: Int) {
+    PluginManager.getInstance().setLogLevel(level)
 }
 
 @_cdecl("ee_staticGetActivity")

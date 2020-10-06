@@ -1,8 +1,8 @@
 package com.ee.internal
 
 import com.ee.AsyncMessageHandler
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.MessageHandler
 import com.ee.PluginManager
 import com.google.common.truth.Truth.assertThat
@@ -16,9 +16,12 @@ typealias MessageBridgeHandler = (tag: String, message: String) -> String
 /**
  * Created by Zinge on 3/29/17.
  */
-class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IMessageBridge {
+class MessageBridge(
+    private val _logger: ILogger,
+    private val _handler: MessageBridgeHandler)
+    : IMessageBridge {
     companion object {
-        private val _logger = Logger(MessageBridge::class.java.name)
+        private val kTag = MessageBridge::class.java.name
     }
 
     /**
@@ -36,7 +39,7 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
     override fun registerHandler(tag: String, handler: MessageHandler): Boolean {
         synchronized(_handlerLock) {
             if (_handlers.containsKey(tag)) {
-                _logger.error("registerHandler: $tag already exists!")
+                _logger.error("$kTag: registerHandler: $tag already exists!")
                 assertThat(false).isTrue()
                 return false
             }
@@ -66,7 +69,7 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
     override fun deregisterHandler(tag: String): Boolean {
         synchronized(_handlerLock) {
             if (!_handlers.containsKey(tag)) {
-                _logger.error("deregisterHandler: $tag doesn't exist!")
+                _logger.error("$kTag: deregisterHandler: $tag doesn't exist!")
                 assertThat(false).isTrue()
                 return false
             }
@@ -84,7 +87,7 @@ class MessageBridge constructor(private val _handler: MessageBridgeHandler) : IM
     override fun call(tag: String, message: String): String {
         val handler = findHandler(tag)
         if (handler == null) {
-            _logger.error("call: $tag doesn't exist!")
+            _logger.error("$kTag: call: $tag doesn't exist!")
             assertThat(false).isTrue()
             return ""
         }

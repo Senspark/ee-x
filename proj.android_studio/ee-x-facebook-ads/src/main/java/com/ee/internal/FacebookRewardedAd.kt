@@ -2,8 +2,8 @@ package com.ee.internal
 
 import android.content.Context
 import androidx.annotation.AnyThread
+import com.ee.ILogger
 import com.ee.IMessageBridge
-import com.ee.Logger
 import com.ee.Thread
 import com.ee.Utils
 import com.facebook.ads.Ad
@@ -17,10 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 internal class FacebookRewardedAd(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private val _adId: String) : RewardedVideoAdListener {
     companion object {
-        private val _logger = Logger(FacebookRewardedAd::class.java.name)
+        private val kTag = FacebookRewardedAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookRewardedAd", _adId)
@@ -29,14 +30,14 @@ internal class FacebookRewardedAd(
     private var _ad: RewardedVideoAd? = null
 
     init {
-        _logger.info("constructor: adId = %s", _adId)
+        _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
     }
 
     @AnyThread
     fun destroy() {
-        _logger.info("destroy: adId = %s", _adId)
+        _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
     }
@@ -98,7 +99,7 @@ internal class FacebookRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread {
-            _logger.info(this::load.name)
+            _logger.debug("$kTag: ${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
         }
@@ -107,7 +108,7 @@ internal class FacebookRewardedAd(
     @AnyThread
     private fun show() {
         Thread.runOnMainThread {
-            _logger.info(this::show.name)
+            _logger.debug("$kTag: ${this::show.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             _rewarded = false
             val result = ad.show(ad.buildShowAdConfig().build())
@@ -120,27 +121,27 @@ internal class FacebookRewardedAd(
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.info("${this::onError.name}: ${adError.errorMessage}")
+        _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
         _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
     }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.info(this::onAdLoaded.name)
+        _logger.debug("$kTag: ${this::onAdLoaded.name}")
         _isLoaded.set(true)
         _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.info(this::onLoggingImpression.name)
+        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.info(this::onAdClicked.name)
+        _logger.debug("$kTag: ${this::onAdClicked.name}")
         _bridge.callCpp(_messageHelper.onClicked)
     }
 
     override fun onRewardedVideoCompleted() {
-        _logger.info(this::onRewardedVideoCompleted.name)
+        _logger.debug("$kTag: ${this::onRewardedVideoCompleted.name}")
         _rewarded = true
     }
 

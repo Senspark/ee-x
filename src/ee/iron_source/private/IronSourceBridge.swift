@@ -7,6 +7,7 @@
 
 import Foundation
 
+private let kTag = "\(IronSourceBridge.self)"
 private let kPrefix = "IronSourceBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kHasInterstitialAd = "\(kPrefix)HasInterstitialAd"
@@ -27,15 +28,16 @@ private let kOnRewardedAdClosed = "\(kPrefix)OnRewardedAdClosed"
 @objc(EEIronSourceBridge)
 public class IronSourceBridge:
     NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstitialDelegate {
-    private let _logger = Logger("\(IronSourceBridge.self)")
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
     private var _initialized = false
     private var _isInterstitialAdLoaded = false
     private var _isRewardedAdLoaded = false
     private var _rewarded = false
 
-    public required init(_ bridge: IMessageBridge) {
+    public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -142,42 +144,42 @@ public class IronSourceBridge:
     }
 
     public func interstitialDidLoad() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isInterstitialAdLoaded = true
         _bridge.callCpp(kOnInterstitialAdLoaded)
     }
 
     public func interstitialDidFailToLoadWithError(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(kOnInterstitialAdFailedToLoad, error.localizedDescription)
     }
 
     public func interstitialDidShow() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     public func interstitialDidFailToShowWithError(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(kOnInterstitialAdFailedToShow, error.localizedDescription)
     }
 
     public func interstitialDidOpen() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     public func didClickInterstitial() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _bridge.callCpp(kOnInterstitialAdClicked)
     }
 
     public func interstitialDidClose() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         _isInterstitialAdLoaded = false
         _bridge.callCpp(kOnInterstitialAdClosed)
     }
 
     public func rewardedVideoHasChangedAvailability(_ available: Bool) {
-        _logger.debug("\(#function): \(available)")
+        _logger.debug("\(kTag): \(#function): \(available)")
         if available {
             _isRewardedAdLoaded = true
             _bridge.callCpp(kOnRewardedAdLoaded)
@@ -185,34 +187,34 @@ public class IronSourceBridge:
     }
 
     public func rewardedVideoDidFailToShowWithError(_ error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
+        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _bridge.callCpp(kOnRewardedAdFailedToShow, error.localizedDescription)
     }
 
     public func rewardedVideoDidOpen() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     public func rewardedVideoDidStart() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     public func didClickRewardedVideo(_ placementInfo: ISPlacementInfo) {
-        _logger.debug("\(#function): \(placementInfo.placementName ?? "")")
+        _logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
         _bridge.callCpp(kOnRewardedAdClicked)
     }
 
     public func rewardedVideoDidEnd() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
     }
 
     public func didReceiveReward(forPlacement placementInfo: ISPlacementInfo) {
-        _logger.debug("\(#function): \(placementInfo.placementName ?? "")")
+        _logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
         _rewarded = true
     }
 
     public func rewardedVideoDidClose() {
-        _logger.debug("\(#function)")
+        _logger.debug("\(kTag): \(#function)")
         // Note: The didReceiveReward and rewardedVideoDidClose events are
         // asynchronous.
         if _rewarded {

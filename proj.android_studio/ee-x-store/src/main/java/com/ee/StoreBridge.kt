@@ -48,12 +48,12 @@ import kotlin.coroutines.resumeWithException
 @InternalSerializationApi
 class StoreBridge(
     private val _bridge: IMessageBridge,
+    private val _logger: ILogger,
     private val _context: Context,
     private var _activity: Activity?)
     : IPlugin, IStoreBridge, IUnityCallback {
     companion object {
-        private val _logger = Logger(StoreBridge::class.java.name)
-
+        private val kTag = StoreBridge::class.java.name
         private const val kPrefix = "StoreBridge"
         private const val kRetrieveProducts = "${kPrefix}RetrieveProducts"
         private const val kPurchase = "${kPrefix}Purchase"
@@ -68,14 +68,16 @@ class StoreBridge(
     }
 
     private val _scope = MainScope()
-    private val _purchasing = GooglePlayPurchasing(this, IabHelper(this), UnityPurchasing(this))
+    private val _purchasing = GooglePlayPurchasing(_logger, this, IabHelper(this), UnityPurchasing(this))
     private val _updateChannel = Channel<PurchasesUpdate>(Channel.UNLIMITED)
     private val _skuDetailsList: MutableMap<String, SkuDetails> = HashMap()
     private var _client: BillingClient? = null
     private var _clientAwaiter: Deferred<Unit>? = null
 
     init {
+        _logger.info("$kTag: constructor begin: context = $_context")
         registerHandlers()
+        _logger.info("$kTag: constructor end.")
     }
 
     override fun onCreate(activity: Activity) {
@@ -202,20 +204,20 @@ class StoreBridge(
                     override fun onBillingSetupFinished(result: BillingResult) {
                         if (cont.isActive) {
                             if (result.responseCode == BillingResponseCode.OK) {
-                                _logger.info("${this::onBillingSetupFinished.name}: connected")
+                                _logger.debug("$kTag: ${this::onBillingSetupFinished.name}: connected")
                                 _client = client
                                 cont.resume(Unit)
                             } else {
-                                _logger.info("${this::onBillingSetupFinished}: failed to connect, code = ${result.responseCode}")
+                                _logger.debug("$kTag: ${this::onBillingSetupFinished}: failed to connect, code = ${result.responseCode}")
                                 cont.resumeWithException(StoreException(result.responseCode))
                             }
                         } else {
-                            _logger.info("${this::onBillingSetupFinished.name}: already resumed, code = ${result.responseCode}")
+                            _logger.debug("$kTag: ${this::onBillingSetupFinished.name}: already resumed, code = ${result.responseCode}")
                         }
                     }
 
                     override fun onBillingServiceDisconnected() {
-                        _logger.info(this::onBillingServiceDisconnected.name)
+                        _logger.debug("$kTag: ${this::onBillingServiceDisconnected.name}")
                         _client = null
                     }
                 })

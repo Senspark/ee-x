@@ -43,6 +43,7 @@ internal class AppLovinInterstitialAdListener:
 
     func ad(_ ad: ALAd, wasDisplayedIn view: UIView) {
         _logger.debug("\(kTag): \(#function)")
+        _isLoaded = false
     }
 
     func ad(_ ad: ALAd, wasClickedIn view: UIView) {
@@ -52,7 +53,6 @@ internal class AppLovinInterstitialAdListener:
 
     func ad(_ ad: ALAd, wasHiddenIn view: UIView) {
         _logger.debug("\(kTag): \(#function)")
-        _isLoaded = false
         _bridge.callCpp(kOnInterstitialAdClosed)
     }
 }

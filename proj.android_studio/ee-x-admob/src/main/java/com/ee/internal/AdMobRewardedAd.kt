@@ -155,6 +155,7 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdOpened() {
         _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
         Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
@@ -166,7 +167,6 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdClosed() {
         _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
         Thread.checkMainThread()
-        _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

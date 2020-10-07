@@ -162,7 +162,6 @@ class IronSourceBridge(
     }
 
     private fun handleRewardedAdResult() {
-        _isRewardedAdLoaded.set(false)
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
@@ -179,6 +178,7 @@ class IronSourceBridge(
 
     override fun onInterstitialAdShowSucceeded() {
         _logger.debug("$kTag: ${this::onInterstitialAdShowSucceeded.name}")
+        _isInterstitialAdLoaded.set(false)
     }
 
     override fun onInterstitialAdShowFailed(ironSourceError: IronSourceError) {
@@ -197,7 +197,6 @@ class IronSourceBridge(
 
     override fun onInterstitialAdClosed() {
         _logger.debug("$kTag: ${this::onInterstitialAdClosed.name}")
-        _isInterstitialAdLoaded.set(false)
         _bridge.callCpp(kOnInterstitialAdClosed)
     }
 
@@ -215,6 +214,7 @@ class IronSourceBridge(
     }
 
     override fun onRewardedVideoAdOpened() {
+        _isRewardedAdLoaded.set(false)
         _logger.debug("$kTag: ${this::onRewardedVideoAdOpened.name}")
     }
 

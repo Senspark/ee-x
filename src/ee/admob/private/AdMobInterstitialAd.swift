@@ -115,6 +115,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         _logger.debug("\(kTag): \(#function)")
+        _isLoaded = false
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
@@ -133,7 +134,6 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         _logger.debug("\(kTag): \(#function)")
-        _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

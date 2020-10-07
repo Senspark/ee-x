@@ -139,7 +139,6 @@ public class IronSourceBridge:
     }
 
     func handleRewardedAdResult() {
-        _isRewardedAdLoaded = false
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
@@ -156,6 +155,7 @@ public class IronSourceBridge:
 
     public func interstitialDidShow() {
         _logger.debug("\(kTag): \(#function)")
+        _isRewardedAdLoaded = false
     }
 
     public func interstitialDidFailToShowWithError(_ error: Error) {

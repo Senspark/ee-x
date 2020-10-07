@@ -114,6 +114,7 @@ internal class FacebookRewardedAd(
             val result = ad.show(ad.buildShowAdConfig().build())
             if (result) {
                 // OK.
+                _isLoaded.set(false)
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
@@ -147,7 +148,6 @@ internal class FacebookRewardedAd(
 
     override fun onRewardedVideoClosed() {
         _logger.info(this::onRewardedVideoClosed.name)
-        _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

@@ -121,6 +121,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
         _logger.debug("\(#function)")
+        _isLoaded = false
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
@@ -135,7 +136,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
         _logger.debug("\(#function)")
-        _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

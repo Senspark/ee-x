@@ -120,6 +120,7 @@ class UnityAdsBridge(
                 override fun onUnityAdsStart(adId: String) {
                     _logger.debug("$kTag: ${this::onUnityAdsStart.name}: $adId")
                     Thread.checkMainThread()
+                    _loadedAdIds.remove(adId)
                 }
 
                 override fun onUnityAdsFinish(adId: String, state: FinishState) {
@@ -145,7 +146,6 @@ class UnityAdsBridge(
                             val rewarded: Boolean
                         )
 
-                        _loadedAdIds.remove(adId)
                         val response = ResponseB(adId, false)
                         _bridge.callCpp(kOnClosed, response.serialize())
                         return
@@ -158,7 +158,6 @@ class UnityAdsBridge(
                             val rewarded: Boolean
                         )
 
-                        _loadedAdIds.remove(adId)
                         val response = ResponseC(adId, true)
                         _bridge.callCpp(kOnClosed, response.serialize())
                         return

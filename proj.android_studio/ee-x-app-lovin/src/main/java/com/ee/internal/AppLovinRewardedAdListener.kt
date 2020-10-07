@@ -51,6 +51,7 @@ internal class AppLovinRewardedAdListener(
         _logger.debug("$kTag: ${this::adDisplayed.name}")
         Thread.checkMainThread()
         _rewarded = false
+        _isLoaded.set(false)
     }
 
     override fun videoPlaybackBegan(ad: AppLovinAd) {
@@ -91,7 +92,6 @@ internal class AppLovinRewardedAdListener(
     override fun adHidden(ad: AppLovinAd) {
         _logger.info("$kTag: ${this::adHidden.name}")
         Thread.checkMainThread()
-        _isLoaded.set(false)
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 }

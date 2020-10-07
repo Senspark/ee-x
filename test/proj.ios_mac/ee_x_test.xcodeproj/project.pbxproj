@@ -44,6 +44,7 @@
 		AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
 		AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
 		AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
+		AD4AE9A9252D68DD00FBA32C /* RewardedAdSceneTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
@@ -158,6 +159,8 @@
 		AD2CA24424B316FD00542CB2 /* InterstitialAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InterstitialAdTester.hpp; sourceTree = "<group>"; };
 		AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardedAdTester.cpp; sourceTree = "<group>"; };
 		AD2CA24824B3183900542CB2 /* RewardedAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardedAdTester.hpp; sourceTree = "<group>"; };
+		AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardedAdSceneTester.cpp; sourceTree = "<group>"; };
+		AD4AE9A8252D68DD00FBA32C /* RewardedAdSceneTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardedAdSceneTester.hpp; sourceTree = "<group>"; };
 		AD56EF792021647A00DC9B56 /* videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = videos; sourceTree = "<group>"; };
 		AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerTestScene.cpp; sourceTree = "<group>"; };
 		AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerTestScene.hpp; sourceTree = "<group>"; };
@@ -352,6 +355,8 @@
 				6FDD65AC1F94A86B00BAEA66 /* UnityAdsTester.hpp */,
 				6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */,
 				6FDD65B41F94A9C800BAEA66 /* VungleTester.hpp */,
+				AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */,
+				AD4AE9A8252D68DD00FBA32C /* RewardedAdSceneTester.hpp */,
 			);
 			path = tester;
 			sourceTree = "<group>";
@@ -643,6 +648,7 @@
 				6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */,
 				6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */,
 				AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */,
+				AD4AE9A9252D68DD00FBA32C /* RewardedAdSceneTester.cpp in Sources */,
 				AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */,
 				6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,

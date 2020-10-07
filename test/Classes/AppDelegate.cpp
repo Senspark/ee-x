@@ -14,10 +14,15 @@
 #include <ee/Cocos.hpp>
 
 #include "CoreTester.hpp"
-#include "FirebaseCrashlyticsTester.hpp"
-#include "GoogleAnalyticsTester.hpp"
 #include "Utils.hpp"
 #include "VideoPlayerTestScene.hpp"
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
+    CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#include "FirebaseCrashlyticsTester.hpp"
+#include "GoogleAnalyticsTester.hpp"
+#include "RewardedAdSceneTester.hpp"
+#endif
 
 namespace eetest {
 namespace {
@@ -85,6 +90,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
     testers.push_back(std::make_shared<GoogleAnalyticsTester>());
+    testers.push_back(std::make_shared<RewardedAdSceneTester>());
 #endif
     for (auto&& tester : testers) {
         tester->initialize();

@@ -42,8 +42,8 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    // No op.
-    co_return false;
+    // Should return whether this ad is loaded.
+    co_return isLoaded();
 }
 
 Task<IRewardedAdResult> Self::show() {

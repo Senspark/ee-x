@@ -18,8 +18,6 @@ Self::GuardedInterstitialAd(const std::shared_ptr<IInterstitialAd>& ad)
     handle_->bind(*ad_).addObserver({
         .onLoaded =
             [this] {
-                loaded_ = true;
-
                 // Propagation.
                 dispatchEvent([](auto&& observer) {
                     if (observer.onLoaded) {
@@ -62,9 +60,9 @@ Task<bool> Self::load() {
         co_return co_await ad_->load();
     }
     loading_ = true;
-    auto result = co_await ad_->load();
+    loaded_ = co_await ad_->load();
     loading_ = false;
-    co_return result;
+    co_return loaded_;
 }
 
 Task<bool> Self::show() {

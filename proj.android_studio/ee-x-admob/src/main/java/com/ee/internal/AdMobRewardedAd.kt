@@ -139,6 +139,7 @@ internal class AdMobRewardedAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            _rewarded = false
             ad.show(_activity, this)
         }
     }

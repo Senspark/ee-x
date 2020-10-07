@@ -1,5 +1,6 @@
 package com.ee.internal
 
+import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.IInterstitialAd
@@ -19,6 +20,7 @@ internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _context: Context,
+    private val _activity: Activity?,
     private val _adId: String)
     : IInterstitialAd, AdListener() {
     companion object {
@@ -69,7 +71,7 @@ internal class AdMobInterstitialAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
-            val ad = InterstitialAd(_context)
+            val ad = InterstitialAd(_activity)
             ad.adUnitId = _adId
             ad.adListener = this
             _ad = ad

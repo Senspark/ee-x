@@ -265,7 +265,7 @@ class AdMobBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobInterstitialAd(_bridge, _logger, _context, adId)
+        val ad = AdMobInterstitialAd(_bridge, _logger, _context, _activity, adId)
         _interstitialAds[adId] = ad
         return true
     }

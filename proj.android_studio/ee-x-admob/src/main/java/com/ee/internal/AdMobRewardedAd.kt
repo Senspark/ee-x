@@ -94,7 +94,9 @@ internal class AdMobRewardedAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
-            _ad = RewardedAd(_context, _adId)
+            // https://github.com/googleads/googleads-mobile-android-mediation/issues/113
+            // https://developers.google.com/admob/android/mediate#initialize_your_ad_object_with_an_activity_instance
+            _ad = RewardedAd(_activity, _adId)
         }
     }
 

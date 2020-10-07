@@ -114,6 +114,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
                 assert(false, "Ad is not initialized")
                 return
             }
+            self._rewarded = false
             ad.present(fromRootViewController: rootView, delegate: self)
         }
     }

@@ -117,6 +117,7 @@ internal class FacebookRewardedAd:
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
+                self._isLoaded = false
             } else {
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
@@ -162,7 +163,6 @@ internal class FacebookRewardedAd:
     
     func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
         _logger.debug("\(#function): id = \(_adId)")
-        _isLoaded = false
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

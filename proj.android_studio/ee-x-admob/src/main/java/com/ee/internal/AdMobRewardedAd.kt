@@ -94,7 +94,9 @@ internal class AdMobRewardedAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
-            _ad = RewardedAd(_context, _adId)
+            // https://github.com/googleads/googleads-mobile-android-mediation/issues/113
+            // https://developers.google.com/admob/android/mediate#initialize_your_ad_object_with_an_activity_instance
+            _ad = RewardedAd(_activity, _adId)
         }
     }
 
@@ -139,6 +141,7 @@ internal class AdMobRewardedAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            _rewarded = false
             ad.show(_activity, this)
         }
     }
@@ -152,6 +155,7 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdOpened() {
         _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
         Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
@@ -163,7 +167,6 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdClosed() {
         _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
         Thread.checkMainThread()
-        _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

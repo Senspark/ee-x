@@ -9,7 +9,7 @@ matrix:
 
       os: osx
 
-      osx_image: xcode11.3
+      osx_image: xcode12
 
       cache:
         - cocoapods
@@ -48,8 +48,8 @@ matrix:
         components:
           - tools
           - platform-tools
-          - build-tools-29.0.2
-          - android-29
+          - build-tools-30.0.2
+          - android-30
           - extra-android-m2repository
           - extra-google-m2repository
 
@@ -75,7 +75,7 @@ matrix:
         # https://stackoverflow.com/questions/47782349/ndk-cmake-and-android-in-travisci
         # https://github.com/android/ndk-samples/blob/master/.travis.yml
         - echo y | sdkmanager "ndk-bundle"
-        - echo y | sdkmanager "ndk;21.2.6472646"
+        - echo y | sdkmanager "ndk;21.3.6528147"
         - echo y | sdkmanager "cmake;3.10.2.4988404"
         - travis_retry bash test/download_deps.sh
 

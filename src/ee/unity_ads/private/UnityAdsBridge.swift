@@ -123,6 +123,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func unityAdsDidStart(_ adId: String) {
         _logger.debug("\(kTag): \(#function): \(adId)")
+        _loadedAdIds.remove(adId)
     }
 
     func unityAdsDidFinish(_ adId: String, with state: UnityAdsFinishState) {

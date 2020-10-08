@@ -99,7 +99,7 @@ internal class AdMobBannerAd(
                 return@runOnMainThread
             }
             _isLoaded.set(false)
-            val ad = AdView(_context)
+            val ad = AdView(_activity)
             ad.adSize = _adSize
             ad.adUnitId = _adId
             ad.adListener = this

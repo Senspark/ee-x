@@ -123,6 +123,7 @@ internal class FacebookInterstitialAd(
     override fun onInterstitialDisplayed(ad: Ad) {
         _logger.debug("$kTag: ${this::onInterstitialDisplayed.name}")
         Thread.checkMainThread()
+        _isLoaded.set(false)
     }
 
     override fun onLoggingImpression(ad: Ad) {
@@ -139,7 +140,6 @@ internal class FacebookInterstitialAd(
     override fun onInterstitialDismissed(ad: Ad) {
         _logger.debug("$kTag: ${this::onInterstitialDismissed.name}")
         Thread.checkMainThread()
-        _isLoaded.set(false)
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

@@ -29,7 +29,7 @@ constexpr auto admob_rewarded_ad = "ca-app-pub-2101587572072038/7027872422";
 constexpr auto facebook_ads_rewarded_ad = "1095721240884103_1095724794217081";
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 constexpr auto unity_ads_rewarded_ad = "rewardedVideo";
-constexpr auto iron_source_rewarded_ad = "0";
+constexpr auto iron_source_rewarded_ad = "DefaultRewardedVideo";
 } // namespace config
 
 using Self = RewardedAdSceneTester;

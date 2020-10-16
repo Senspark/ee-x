@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:unity-ads:1.0.0'
+    implementation 'com.senspark.ee:unity-ads:1.1.2'
 }
 ```
 

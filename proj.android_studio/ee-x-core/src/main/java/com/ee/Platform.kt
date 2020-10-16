@@ -8,11 +8,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Point
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Surface
+import android.view.WindowManager
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
@@ -44,6 +46,8 @@ object Platform {
     private const val kIsInstantApp = kPrefix + "isInstantApp"
     private const val kIsTablet = kPrefix + "isTablet"
     private const val kGetDensity = kPrefix + "getDensity"
+    private const val kGetViewSize = kPrefix + "getViewSize"
+    private const val kGetScreenSize = kPrefix + "getScreenSize"
     private const val kGetDeviceId = kPrefix + "getDeviceId"
     private const val kGetSafeInset = kPrefix + "getSafeInset"
     private const val kSendMail = kPrefix + "sendMail"
@@ -95,6 +99,35 @@ object Platform {
         }
         bridge.registerHandler(kGetDensity) {
             getDensity().toString()
+        }
+        bridge.registerHandler(kGetViewSize) {
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val width: Int,
+                val height: Int
+            )
+
+            val activity = PluginManager.getInstance().getActivity()
+            if (activity == null) {
+                assertThat(false).isTrue()
+                return@registerHandler ""
+            }
+            val size = getViewSize(activity)
+            val response = Response(size.x, size.y)
+            response.serialize()
+        }
+        bridge.registerHandler(kGetScreenSize) {
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val width: Int,
+                val height: Int
+            )
+
+            val size = getScreenSize(context)
+            val response = Response(size.x, size.y)
+            response.serialize()
         }
         bridge.registerAsyncHandler(kGetDeviceId) {
             getDeviceId(context)
@@ -174,6 +207,7 @@ object Platform {
         bridge.deregisterHandler(kIsInstantApp)
         bridge.deregisterHandler(kIsTablet)
         bridge.deregisterHandler(kGetDensity)
+        bridge.deregisterHandler(kGetScreenSize)
         bridge.deregisterHandler(kGetDeviceId)
         bridge.deregisterHandler(kGetSafeInset)
         bridge.deregisterHandler(kSendMail)
@@ -324,6 +358,19 @@ object Platform {
     fun getDensity(): Double {
         val metrics = Resources.getSystem().displayMetrics
         return metrics.density.toDouble()
+    }
+
+    fun getViewSize(activity: Activity): Point {
+        val view = activity.window.decorView
+        return Point(view.width, view.height)
+    }
+
+    fun getScreenSize(context: Context): Point {
+        val manager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = manager.defaultDisplay
+        val metrics = DisplayMetrics()
+        display.getRealMetrics(metrics)
+        return Point(metrics.widthPixels, metrics.heightPixels)
     }
 
     private fun getDensityDpi(): Int {

@@ -76,7 +76,7 @@ android {
 
     defaultConfig {
         applicationId 'com.ee.test.android'
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '1.0.0'

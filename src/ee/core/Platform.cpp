@@ -32,6 +32,8 @@ const auto kGetApplicationSignatures = kPrefix + "getApplicationSignatures";
 const auto kIsInstantApp             = kPrefix + "isInstantApp";
 const auto kIsTablet                 = kPrefix + "isTablet";
 const auto kGetDensity               = kPrefix + "getDensity";
+const auto kGetViewSize              = kPrefix + "getViewSize";
+const auto kGetScreenSize            = kPrefix + "getScreenSize";
 const auto kGetDeviceId              = kPrefix + "getDeviceId";
 const auto kGetSafeInset             = kPrefix + "getSafeInset";
 
@@ -105,6 +107,18 @@ bool Self::isTablet() {
 float Self::getDensity() {
     auto response = bridge_->call(kGetDensity);
     return std::stof(response);
+}
+
+std::pair<int, int> Self::getViewSize() {
+    auto response = bridge_->call(kGetViewSize);
+    auto json = nlohmann::json::parse(response);
+    return std::pair(json["width"], json["height"]);
+}
+
+std::pair<int, int> Self::getScreenSize() {
+    auto response = bridge_->call(kGetScreenSize);
+    auto json = nlohmann::json::parse(response);
+    return std::pair(json["width"], json["height"]);
 }
 
 Task<std::string> Self::getDeviceId() {

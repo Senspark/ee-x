@@ -21,6 +21,8 @@ public class Platform: NSObject {
     private static let kGetVersionCode = kPrefix + "getVersionCode"
     private static let kIsTablet = kPrefix + "isTablet"
     private static let kGetDensity = kPrefix + "getDensity"
+    private static let kGetViewSize = kPrefix + "getViewSize"
+    private static let kGetScreenSize = kPrefix + "getScreenSize"
     private static let kGetDeviceId = kPrefix + "getDeviceId"
     private static let kSendMail = kPrefix + "sendMail"
     private static let kTestConnection = kPrefix + "testConnection"
@@ -40,6 +42,20 @@ public class Platform: NSObject {
         bridge.registerHandler(kGetVersionCode) { _ in getVersionCode() }
         bridge.registerHandler(kIsTablet) { _ in Utils.toString(isTablet()) }
         bridge.registerHandler(kGetDensity) { _ in "\(getDensity())" }
+        bridge.registerHandler(kGetViewSize) { _ in
+            let size = self.getViewSize()
+            return EEJsonUtils.convertDictionary(toString: [
+                "width": size.width,
+                "height": size.height
+            ])
+        }
+        bridge.registerHandler(kGetScreenSize) { _ in
+            let size = self.getScreenSize()
+            return EEJsonUtils.convertDictionary(toString: [
+                "width": size.width,
+                "height": size.height
+            ])
+        }
         bridge.registerAsyncHandler(kGetDeviceId) { _, resolver in
             resolver(getDeviceId())
         }
@@ -136,6 +152,16 @@ public class Platform: NSObject {
         }
         return Float(screen?.backingScaleFactor ?? 1)
         #endif
+    }
+
+    public class func getViewSize() -> CGSize {
+        return getScreenSize()
+    }
+
+    public class func getScreenSize() -> CGSize {
+        let scale = getDensity()
+        let size = UIScreen.main.bounds.size
+        return CGSize(width: size.width * CGFloat(scale), height: size.height * CGFloat(scale))
     }
 
     private class func getDeviceId() -> String {

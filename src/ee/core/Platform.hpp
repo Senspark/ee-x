@@ -69,6 +69,12 @@ public:
     /// Gets the screen density, i.e. pixel to dp ratio.
     static float getDensity();
 
+    /// Gets the application size in pixels.
+    static std::pair<int, int> getViewSize();
+
+    /// Gets the screen size in pixels.
+    static std::pair<int, int> getScreenSize();
+
     /// Gets device's unique ID.
     [[nodiscard]] static Task<std::string> getDeviceId();
 
@@ -93,6 +99,8 @@ private:
 constexpr auto getApplicationId = &Platform::getApplicationId;
 constexpr auto getApplicationName = &Platform::getApplicationName;
 constexpr auto getDensity = &Platform::getDensity;
+constexpr auto getViewSize = &Platform::getViewSize;
+constexpr auto getScreenSize = &Platform::getScreenSize;
 constexpr auto getDeviceId = &Platform::getDeviceId;
 constexpr auto getSafeInset = &Platform::getSafeInset;
 constexpr auto getSHA1CertificateFingerprint =

@@ -82,6 +82,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto pixels = metrics.toPixel();
     getLogger().info("%f pt = %f pixels = %f dp", points, pixels, dp);
 
+    auto [viewWidth, viewHeight] = ee::getViewSize();
+    auto [screenWidth, screenHeight] = ee::getScreenSize();
+    getLogger().info("View size = %d %d", viewWidth, viewHeight);
+    getLogger().info("Screen size = %d %d", screenWidth, screenHeight);
+
     ee::Logger::setSystemLogger(getLogger());
 
     static std::vector<std::shared_ptr<ITester>> testers;

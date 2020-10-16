@@ -44,6 +44,14 @@ namespace EE.Internal {
             return Screen.dpi;
         }
 
+        public (int, int) GetViewSize() {
+            return GetScreenSize();
+        }
+
+        public (int, int) GetScreenSize() {
+            return (Screen.width, Screen.height);
+        }
+
         public Task<string> GetDeviceId() {
             return Task.FromResult("");
         }

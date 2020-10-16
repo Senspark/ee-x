@@ -54,6 +54,14 @@ namespace EE {
             return _impl.GetDensity();
         }
 
+        public static (int, int) GetViewSize() {
+            return _impl.GetViewSize();
+        }
+
+        public static (int, int) GetScreenSize() {
+            return _impl.GetScreenSize();
+        }
+
         public static async Task<string> GetDeviceId() {
             return await _impl.GetDeviceId();
         }

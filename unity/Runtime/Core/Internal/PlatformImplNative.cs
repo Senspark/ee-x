@@ -17,6 +17,8 @@ namespace EE.Internal {
         private const string kIsInstantApp = kPrefix + "isInstantApp";
         private const string kIsTablet = kPrefix + "isTablet";
         private const string kGetDensity = kPrefix + "getDensity";
+        private const string kGetViewSize = kPrefix + "getViewSize";
+        private const string kGetScreenSize = kPrefix + "getScreenSize";
         private const string kGetDeviceId = kPrefix + "getDeviceId";
         private const string kGetSafeInset = kPrefix + "getSafeInset";
         private const string kSendMail = kPrefix + "sendMail";
@@ -96,6 +98,30 @@ namespace EE.Internal {
         public float GetDensity() {
             var response = _bridge.Call(kGetDensity);
             return float.Parse(response);
+        }
+
+        [Serializable]
+        private struct ViewSizeResponse {
+            public int width;
+            public int height;
+        }
+
+        public (int, int) GetViewSize() {
+            var response = _bridge.Call(kGetViewSize);
+            var json = JsonUtility.FromJson<ViewSizeResponse>(response);
+            return (json.width, json.height);
+        }
+
+        [Serializable]
+        private struct ScreenSizeResponse {
+            public int width;
+            public int height;
+        }
+
+        public (int, int) GetScreenSize() {
+            var response = _bridge.Call(kGetScreenSize);
+            var json = JsonUtility.FromJson<ScreenSizeResponse>(response);
+            return (json.width, json.height);
         }
 
         public async Task<string> GetDeviceId() {

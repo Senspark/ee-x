@@ -3,14 +3,15 @@
 Prerequisite:
 
 - External Dependency Manager: <https://github.com/googlesamples/unity-jar-resolver>
-- How to install package from a Git URL: <https://docs.unity3d.com/Manual/upm-ui-giturl.html>
 
 Installation:
 
-- Install package from this Git URL:
-```
-https://github.com/Senspark/ee-x.git?path=/unity#develop
-```
+- Go to **Edit/Project Settings/Package Manager** and add **Senspark** scoped registry:
+![](getting-started-1.png)
+
+- Go to **Window/Package Manager** and install **Senspark EE-x** package in **My Registries** packages:
+![](getting-started-2.png)
+
 - Go to **Assets/Senspark EE-x/Settings** to customize plugin settings
 
 ## Initialization

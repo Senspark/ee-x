@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:app-lovin:1.1.2'
+    implementation 'com.senspark.ee:app-lovin:1.2.0'
 }
 ```
 

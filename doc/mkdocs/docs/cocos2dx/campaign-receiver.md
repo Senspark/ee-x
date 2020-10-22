@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:campaign-receiver:1.0.0'
+    implementation 'com.senspark.ee:campaign-receiver:1.2.0'
 }
 ```
 

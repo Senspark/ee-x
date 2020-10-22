@@ -29,35 +29,36 @@ ext {
     targetSdkVersion = 30
     buildPrefab = true
     buildMaven = true
-    plugins = [
-        'core'                  : ['1.1.1'],
-        'ads'                   : ['1.1.1', 'core'],
-        'admob'                 : ['1.1.2', 'ads'],
-        'admob-mediation'       : ['1.1.2', 'admob'],
-        'app-lovin'             : ['1.1.2', 'ads'],
-        'facebook-ads'          : ['1.1.3', 'ads'],
-        'iron-source'           : ['1.1.2', 'ads'],
-        'iron-source-mediation' : ['1.1.2', 'iron-source'],
-        'unity-ads'             : ['1.1.2', 'ads'],
-        'vungle'                : ['1.1.1', 'ads'],
-        'adjust'                : ['1.1.1', 'core'],
-        'apps-flyer'            : ['1.1.1', 'core'],
-        'campaign-receiver'     : ['1.1.1', 'core'],
-        'facebook'              : ['1.1.1', 'core'],
-        'firebase-core'         : ['1.1.1', 'core'],
-        'firebase-analytics'    : ['1.1.1', 'firebase-core'],
-        'firebase-crashlytics'  : ['1.1.1', 'firebase-core'],
-        'firebase-dynamic-link' : ['1.1.1', 'firebase-core'],
-        'firebase-messaging'    : ['1.1.1', 'firebase-core'],
-        'firebase-remote-config': ['1.1.1', 'firebase-core'],
-        'firebase-storage'      : ['1.1.1', 'firebase-core'],
-        'firebase-performance'  : ['1.1.1', 'firebase-core'],
-        'google-analytics'      : ['1.1.1', 'core'],
-        'notification'          : ['1.1.1', 'core'],
-        'play'                  : ['1.1.1', 'core'],
-        'recorder'              : ['1.1.1', 'core'],
-        'soomla-store'          : ['1.1.1', 'store'],
-        'store'                 : ['1.1.1', 'core'],
+    pluginVersion = '1.2.0'
+    pluginDependencies = [
+        'core'                  : [],
+        'ads'                   : ['core'],
+        'admob'                 : ['ads'],
+        'admob-mediation'       : ['admob'],
+        'app-lovin'             : ['ads'],
+        'facebook-ads'          : ['ads'],
+        'iron-source'           : ['ads'],
+        'iron-source-mediation' : ['iron-source'],
+        'unity-ads'             : ['ads'],
+        'vungle'                : ['ads'],
+        'adjust'                : ['core'],
+        'apps-flyer'            : ['core'],
+        'campaign-receiver'     : ['core'],
+        'facebook'              : ['core'],
+        'firebase-core'         : ['core'],
+        'firebase-analytics'    : ['firebase-core'],
+        'firebase-crashlytics'  : ['firebase-core'],
+        'firebase-dynamic-link' : ['firebase-core'],
+        'firebase-messaging'    : ['firebase-core'],
+        'firebase-remote-config': ['firebase-core'],
+        'firebase-storage'      : ['firebase-core'],
+        'firebase-performance'  : ['firebase-core'],
+        'google-analytics'      : ['core'],
+        'notification'          : ['core'],
+        'play'                  : ['core'],
+        'recorder'              : ['core'],
+        'soomla-store'          : ['store'],
+        'store'                 : ['core'],
     ]
 }
 
@@ -105,14 +106,15 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
 
 def configureAndPublish(String libraryName) {
     project("ee-x-$libraryName") {
-        def plugins = rootProject.ext.plugins[libraryName]
-        for (int i = 1; i < plugins.size(); ++i) {
+        def version = rootProject.ext.pluginVersion
+        def plugins = rootProject.ext.pluginDependencies[libraryName]
+        for (int i = 0; i < plugins.size(); ++i) {
             def plugin = plugins[i]
             dependencies {
-                api "com.senspark.ee:$plugin:${rootProject.ext.plugins[plugin][0]}"
+                api "com.senspark.ee:$plugin:${version}"
             }
         }
-        publishToMaven(libraryName, plugins[0])
+        publishToMaven(libraryName, version)
     }
 }
 

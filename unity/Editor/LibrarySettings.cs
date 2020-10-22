@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
+        private const string LibraryVersion = "1.2.0";
+        
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
         private const string LibrarySettingsFile = "Assets/EE/Resources/EESettings.asset";
@@ -180,40 +182,40 @@ namespace EE.Editor {
             }
             if (IsCoreEnabled) {
                 androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
-                androidLibraries.Add("com.senspark.ee:core:[1.1.1]");
+                androidLibraries.Add($"com.senspark.ee:core:[{LibraryVersion}]");
                 iosLibraries.Add("ee-x/cs-core");
                 if (IsAdjustEnabled) {
-                    androidLibraries.Add("com.senspark.ee:adjust:[1.1.1]");
+                    androidLibraries.Add($"com.senspark.ee:adjust:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/cs-adjust");
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
-                        androidLibraries.Add("com.senspark.ee:admob-mediation:[1.1.2]");
+                        androidLibraries.Add($"com.senspark.ee:admob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-admob-mediation");
                     } else {
-                        androidLibraries.Add("com.senspark.ee:admob:[1.1.2]");
+                        androidLibraries.Add($"com.senspark.ee:admob:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-admob");
                     }
                 }
                 if (IsFacebookAdsEnabled) {
-                    androidLibraries.Add("com.senspark.ee:facebook-ads:[1.1.3]");
+                    androidLibraries.Add($"com.senspark.ee:facebook-ads:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/cs-facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
-                        androidLibraries.Add("com.senspark.ee:iron-source-mediation:[1.1.2]");
+                        androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-iron-source-mediation");
                     } else {
-                        androidLibraries.Add("com.senspark.ee:iron-source:[1.1.2]");
+                        androidLibraries.Add($"com.senspark.ee:iron-source:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-iron-source");
                     }
                 }
                 if (IsUnityAdsEnabled) {
-                    androidLibraries.Add("com.senspark.ee:unity-ads:[1.1.2]");
+                    androidLibraries.Add($"com.senspark.ee:unity-ads:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/cs-unity-ads");
                 }
             }
@@ -227,6 +229,7 @@ namespace EE.Editor {
             }
             foreach (var library in iosLibraries) {
                 var pod = new XElement("iosPod", new XAttribute("name", library));
+                pod.Add(new XAttribute("version", LibraryVersion));
                 if (IsDeveloperModeEnabled) {
                     pod.Add(new XAttribute("path", LibraryPath));
                 }

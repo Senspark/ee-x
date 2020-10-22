@@ -26,6 +26,7 @@ theme:
 nav:
   - Home:
     - index.md
+    - contributions.md
   - Cocos2d-x:
     - cocos2dx/getting-started.md
     - cocos2dx/firebase-analytics.md
@@ -54,6 +55,9 @@ nav:
     - unity/getting-started.md
     - unity/admob.md
     - unity/adjust.md
+  - Contributions:
+    - contributions/update-documents.md
+    - contributions/add-more-features.md
 
 # Extras
 extra:

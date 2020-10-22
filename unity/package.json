@@ -8,5 +8,22 @@
     "email": "contact@senspark.com",
     "url": "https://senspark.com"
   },
-  "description": "Cross-platform utility library for Unity"
+  "license": "MIT",
+  "keywords": [
+    "senspark",
+    "unity",
+    "unity2d",
+    "utility",
+    "utils"
+  ],
+  "description": "Cross-platform utility library for Unity",
+  "repository": {
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Senspark/ee-x.git"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/Senspark/ee-x/issues"
+  }
 }

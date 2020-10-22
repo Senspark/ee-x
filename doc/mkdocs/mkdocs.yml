@@ -29,6 +29,9 @@ nav:
     - contributions.md
   - Cocos2d-x:
     - cocos2dx/getting-started.md
+    - cocos2dx/design-patterns.md
+    - cocos2dx/utils.md
+    - cocos2dx/multi-ad.md
     - cocos2dx/firebase-analytics.md
     - cocos2dx/firebase-crashlytics.md
     - cocos2dx/firebase-dynamic-link.md
@@ -53,6 +56,9 @@ nav:
     - cocos2dx/store.md
   - Unity:
     - unity/getting-started.md
+    - unity/design-patterns.md
+    - unity/utils.md
+    - unity/multi-ad.md
     - unity/admob.md
     - unity/adjust.md
   - Contributions:

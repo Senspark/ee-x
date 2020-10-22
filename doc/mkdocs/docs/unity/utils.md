@@ -47,7 +47,7 @@ EE.Thread.RunOnMainThread(() => {
 });
 ```
 
-## Other Utils.
+## Other Utils
 ```csharp
 // Runs an async action inside a synced action.
 EE.NoAwait(async () => {

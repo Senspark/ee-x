@@ -6,10 +6,10 @@ Prerequisite:
 
 Installation:
 
-- Go to **Edit/Project Settings/Package Manager** and add **Senspark** scoped registry:
+- Go to **Edit/Project Settings/Package Manager** and add **Senspark** scoped registry
 ![](getting-started-1.png)
 
-- Go to **Window/Package Manager** and install **Senspark EE-x** package in **My Registries** packages:
+- Go to **Window/Package Manager** and install **Senspark EE-x** package in **My Registries** packages
 ![](getting-started-2.png)
 
 - Go to **Assets/Senspark EE-x/Settings** to customize plugin settings

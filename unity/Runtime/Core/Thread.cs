@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -136,6 +137,10 @@ namespace EE {
         public static void RunOnMainThreadDelayed(Action runnable, float delay) {
             var key = PushDelayedRunnable(runnable);
             _impl.RunOnMainThreadDelayed(key, delay);
+        }
+
+        public static void Dispatch(IEnumerator coroutine) {
+            _dispatcher.Dispatch(coroutine);
         }
     }
 }

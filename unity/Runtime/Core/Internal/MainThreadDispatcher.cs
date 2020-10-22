@@ -16,6 +16,10 @@ namespace EE.Internal {
             }
         }
 
+        public void Dispatch(IEnumerator coroutine) {
+            StartCoroutine(coroutine);
+        }
+
         private static IEnumerator ActionWrapper(Action action) {
             action();
             yield return null;

@@ -7,6 +7,7 @@ namespace EE {
         : ObserverManager<IAdViewObserver>, IAdView {
         private readonly IAdView _ad;
         private readonly ObserverHandle _handle;
+        private readonly int _screenHeight;
 
         public UnityAdView(IAdView ad) {
             _ad = ad;
@@ -15,6 +16,7 @@ namespace EE {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });
+            (_, _screenHeight) = Platform.GetViewSize();
         }
 
         public void Destroy() {
@@ -42,11 +44,11 @@ namespace EE {
         public (float, float) Position {
             get {
                 var (x, y) = _ad.Position;
-                return (x, Screen.height - y);
+                return (x, _screenHeight - y);
             }
             set {
                 var (x, y) = value;
-                _ad.Position = (x, Screen.height - y);
+                _ad.Position = (x, _screenHeight - y);
             }
         }
 

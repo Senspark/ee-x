@@ -229,9 +229,10 @@ namespace EE.Editor {
             }
             foreach (var library in iosLibraries) {
                 var pod = new XElement("iosPod", new XAttribute("name", library));
-                pod.Add(new XAttribute("version", LibraryVersion));
                 if (IsDeveloperModeEnabled) {
                     pod.Add(new XAttribute("path", LibraryPath));
+                } else {
+                    pod.Add(new XAttribute("version", LibraryVersion));
                 }
                 iosPods.Add(pod);
             }

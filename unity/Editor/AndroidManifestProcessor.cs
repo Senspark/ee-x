@@ -7,6 +7,7 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace EE.Editor {
     public class AndroidManifestProcessor : IPreprocessBuildWithReport {
@@ -25,6 +26,10 @@ namespace EE.Editor {
                 manifest = XDocument.Load(manifestPath);
             } catch (IOException ex) {
                 manifest = new XDocument();
+                var manifestElement = new XElement("manifest",
+                    new XAttribute(XNamespace.Xmlns + "android", ManifestNamespace),
+                    new XAttribute("package", "com.senspark.ee"));
+                manifest.Add(manifestElement);
             }
             var settings = LibrarySettings.Instance;
             if (settings.IsAdMobEnabled) {
@@ -47,12 +52,7 @@ namespace EE.Editor {
 
         private static void AddAdMobAppId(LibrarySettings settings, XContainer manifest) {
             var manifestElement = manifest.Element("manifest");
-            if (manifestElement == null) {
-                manifestElement = new XElement("manifest",
-                    new XAttribute(XNamespace.Xmlns + "android", ManifestNamespace),
-                    new XAttribute("package", "com.senspark.ee"));
-                manifest.Add(manifestElement);
-            }
+            Assert.IsNotNull(manifestElement);
             var applicationElement = manifestElement.Element("application");
             if (applicationElement == null) {
                 applicationElement = new XElement("application");

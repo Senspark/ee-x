@@ -40,6 +40,7 @@ Modify `AppDelegate.cpp`
 #include <ee/Core.hpp>
 
 bool AppDelegate::applicationDidFinishLaunching() {
+    // Call this method only once.
     ee::PluginManager::initializePlugins<ee::Library::Cocos>();
     return true;
 }

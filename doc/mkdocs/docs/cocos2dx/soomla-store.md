@@ -11,13 +11,13 @@ dependencies {
 #### For `ndk-build` users
 Modify `Android.mk`
 ```
-LOCAL_STATIC_LIBRARIES += ee_x_soomla_store
+LOCAL_STATIC_LIBRARIES += soomla_store
 ```
 
 #### For `cmake` users
 Modify `CMakeLists.txt`
 ```
-target_link_libraries(${PROJECT_NAME} ee_x_soomla_store)
+target_link_libraries(${PROJECT_NAME} soomla_store)
 ```
 
 ### iOS

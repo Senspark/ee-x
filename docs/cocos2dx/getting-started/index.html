@@ -14,6 +14,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_core)
 </code></pre></div> <h2 id=initialization>Initialization<a class=headerlink href=#initialization title="Permanent link">&para;</a></h2> <p>Modify <code>AppDelegate.cpp</code></p> <div class=codehilite><pre><span></span><code><span class=cp>#include</span> <span class=cpf>&lt;ee/Core.hpp&gt;</span><span class=cp></span>
 
 <span class=kt>bool</span> <span class=n>AppDelegate</span><span class=o>::</span><span class=n>applicationDidFinishLaunching</span><span class=p>()</span> <span class=p>{</span>
+    <span class=c1>// Call this method only once.</span>
     <span class=n>ee</span><span class=o>::</span><span class=n>PluginManager</span><span class=o>::</span><span class=n>initializePlugins</span><span class=o>&lt;</span><span class=n>ee</span><span class=o>::</span><span class=n>Library</span><span class=o>::</span><span class=n>Cocos</span><span class=o>&gt;</span><span class=p>();</span>
     <span class=k>return</span> <span class=nb>true</span><span class=p>;</span>
 <span class=p>}</span>

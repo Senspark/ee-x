@@ -92,12 +92,13 @@ public class PluginManager: NSObject {
     }
     
     private func executePlugins(_ executor: PluginExecutor) -> Bool {
+        var response = false
         for entry in _plugins {
             if executor(entry.value) {
-                return true
+                response = true
             }
         }
-        return false
+        return response
     }
     
     #if os(iOS)
@@ -127,11 +128,14 @@ public class PluginManager: NSObject {
         // https://stackoverflow.com/questions/39003876/calling-original-function-from-swizzled-function
         typealias Func = @convention(c) (AnyObject, Selector, UIApplication, URL, [UIApplication.OpenURLOptionsKey: Any]) -> Bool
         let closure = ee_closureCast(#selector(PluginManager.application(_:open:options:)), Func.self)
-        let response = closure(self, #selector(UIApplicationDelegate.application(_:open:options:)),
+        var response = closure(self, #selector(UIApplicationDelegate.application(_:open:options:)),
                                application, url, options)
-        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                                        open: url,
-                                                                                        options: options) ?? false }
+        if (PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                         open: url,
+                                                                         options: options) ?? false }) {
+            response = true
+        }
+        return response
     }
     
     @objc
@@ -141,12 +145,15 @@ public class PluginManager: NSObject {
                              annotation: Any) -> Bool {
         typealias Func = @convention(c) (AnyObject, Selector, UIApplication, URL, String?, Any) -> Bool
         let closure = ee_closureCast(#selector(PluginManager.application(_:open:sourceApplication:annotation:)), Func.self)
-        let response = closure(self, #selector(UIApplicationDelegate.application(_:open:sourceApplication:annotation:)),
+        var response = closure(self, #selector(UIApplicationDelegate.application(_:open:sourceApplication:annotation:)),
                                application, url, sourceApplication, annotation)
-        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                                        open: url,
-                                                                                        sourceApplication: sourceApplication,
-                                                                                        annotation: annotation) ?? false }
+        if (PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                         open: url,
+                                                                         sourceApplication: sourceApplication,
+                                                                         annotation: annotation) ?? false }) {
+            response = true
+        }
+        return response
     }
     
     @objc
@@ -155,11 +162,14 @@ public class PluginManager: NSObject {
                              restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         typealias Func = @convention(c) (AnyObject, Selector, UIApplication, NSUserActivity, @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool
         let closure = ee_closureCast(#selector(PluginManager.application(_:continue:restorationHandler:)), Func.self)
-        let response = closure(self, #selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
+        var response = closure(self, #selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
                                application, userActivity, restorationHandler)
-        return response || PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                                        continue: userActivity,
-                                                                                        restorationHandler: restorationHandler) ?? false }
+        if (PluginManager.getInstance().executePlugins { $0.application?(application,
+                                                                         continue: userActivity,
+                                                                         restorationHandler: restorationHandler) ?? false }) {
+            response = true
+        }
+        return response
     }
     #endif // os(iOS)
     

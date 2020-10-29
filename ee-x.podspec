@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.2.0'
+  spec.version        = '1.2.1'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.2.0'
+    :tag => 'v1.2.1'
   }
 
   spec.framework = 'Foundation'

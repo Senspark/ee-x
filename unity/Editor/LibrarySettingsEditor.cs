@@ -13,6 +13,10 @@ namespace EE.Editor {
         public override void OnInspectorGUI() {
             var settings = LibrarySettings.Instance;
 
+            if (GUILayout.Button("Update Dependencies")) {
+                UpdateDependencies();
+            }
+
             EditorGUILayout.LabelField("Config", EditorStyles.boldLabel);
             settings.IsDeveloperModeEnabled =
                 EditorGUILayout.Toggle(new GUIContent("Developer Mode"), settings.IsDeveloperModeEnabled);
@@ -74,6 +78,10 @@ namespace EE.Editor {
 
         private void OnSettingsChanged() {
             EditorUtility.SetDirty(target);
+            UpdateDependencies();
+        }
+
+        private void UpdateDependencies() {
             LibrarySettings.Instance.WriteSettingsToFile();
         }
     }

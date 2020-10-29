@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:play:1.2.1'
+    implementation 'com.senspark.ee:play:1.2.2'
 }
 ```
 

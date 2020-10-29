@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "1.2.0";
+        private const string LibraryVersion = "1.2.1";
         
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
@@ -229,9 +229,10 @@ namespace EE.Editor {
             }
             foreach (var library in iosLibraries) {
                 var pod = new XElement("iosPod", new XAttribute("name", library));
-                pod.Add(new XAttribute("version", LibraryVersion));
                 if (IsDeveloperModeEnabled) {
                     pod.Add(new XAttribute("path", LibraryPath));
+                } else {
+                    pod.Add(new XAttribute("version", LibraryVersion));
                 }
                 iosPods.Add(pod);
             }

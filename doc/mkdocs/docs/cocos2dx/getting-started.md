@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:1.2.0'
+    implementation 'com.senspark.ee:core:1.2.1'
 }
 ```
 
@@ -40,6 +40,7 @@ Modify `AppDelegate.cpp`
 #include <ee/Core.hpp>
 
 bool AppDelegate::applicationDidFinishLaunching() {
+    // Call this method only once.
     ee::PluginManager::initializePlugins<ee::Library::Cocos>();
     return true;
 }

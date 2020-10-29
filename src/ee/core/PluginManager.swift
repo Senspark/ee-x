@@ -9,7 +9,8 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-private class PluginManager: NSObject {
+@objc(EEPluginManager)
+public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _logger = Logger("ee-x")
@@ -20,12 +21,18 @@ private class PluginManager: NSObject {
     private var _delegate: UIApplicationDelegate?
     #endif // os(iOS)
     
-    fileprivate class func getInstance() -> PluginManager {
+    @objc
+    public class func getInstance() -> PluginManager {
         return _sharedInstance
     }
     
     override private init() {
         _plugins = [:]
+    }
+    
+    @objc
+    public func getBridge() -> IMessageBridge {
+        return _bridge
     }
     
     #if os(iOS)

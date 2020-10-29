@@ -222,8 +222,8 @@ class IronSourceBridge(
         _logger.debug("$kTag: ${this::onRewardedVideoAdStarted.name}")
     }
 
-    override fun onRewardedVideoAdClicked(placement: Placement) {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdClicked.name}: ${placement.placementName}")
+    override fun onRewardedVideoAdClicked(placement: Placement?) {
+        _logger.debug("$kTag: ${this::onRewardedVideoAdClicked.name}: ${placement?.placementName ?: ""}")
         _bridge.callCpp(kOnRewardedAdClicked)
     }
 
@@ -231,8 +231,8 @@ class IronSourceBridge(
         _logger.debug("$kTag: ${this::onRewardedVideoAdEnded.name}")
     }
 
-    override fun onRewardedVideoAdRewarded(placement: Placement) {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdRewarded.name}: ${placement.placementName}")
+    override fun onRewardedVideoAdRewarded(placement: Placement?) {
+        _logger.debug("$kTag: ${this::onRewardedVideoAdRewarded.name}: ${placement?.placementName ?: ""}")
         _rewarded = true
     }
 

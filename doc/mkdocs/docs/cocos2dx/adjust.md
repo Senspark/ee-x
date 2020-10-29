@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:adjust:1.2.0'
+    implementation 'com.senspark.ee:adjust:1.2.1'
 }
 ```
 

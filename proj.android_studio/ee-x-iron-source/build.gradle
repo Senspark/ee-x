@@ -44,5 +44,5 @@ dependencies {
     implementation 'com.ironsource.sdk:mediationsdk:7.0.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 }

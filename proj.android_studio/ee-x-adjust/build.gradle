@@ -35,5 +35,5 @@ dependencies {
     implementation 'com.android.installreferrer:installreferrer:2.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 }

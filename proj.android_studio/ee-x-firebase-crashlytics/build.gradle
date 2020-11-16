@@ -35,5 +35,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:17.2.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 }

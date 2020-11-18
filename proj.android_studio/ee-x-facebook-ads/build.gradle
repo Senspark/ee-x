@@ -38,7 +38,7 @@ dependencies {
     api project(':ee-x-ads')
 
     // https://developers.facebook.com/docs/audience-network/changelog-android/
-    implementation 'com.facebook.android:audience-network-sdk:6.0.0'
+    implementation 'com.facebook.android:audience-network-sdk:6.2.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'

@@ -34,14 +34,14 @@ dependencies {
     implementation 'com.ironsource.adapters:admobadapter:4.3.14'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
-    implementation 'com.ironsource.adapters:applovinadapter:4.3.16'
+    implementation 'com.ironsource.adapters:applovinadapter:4.3.20'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    implementation 'com.ironsource.adapters:facebookadapter:4.3.20'
+    implementation 'com.ironsource.adapters:facebookadapter:4.3.23'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-    implementation 'com.ironsource.adapters:unityadsadapter:4.3.6'
+    implementation 'com.ironsource.adapters:unityadsadapter:4.3.7'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
-    implementation 'com.ironsource.adapters:vungleadapter:4.3.3'
+    implementation 'com.ironsource.adapters:vungleadapter:4.3.7'
 }

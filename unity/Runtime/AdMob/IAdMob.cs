@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
+
 namespace EE {
     public interface IAdMob : IPlugin {
-        void Initialize();
+        Task<bool> Initialize();
         string GetEmulatorTestDeviceHash();
         void AddTestDevice(string hash);
         IAdView CreateBannerAd(string adId, AdMobBannerAdSize adSize);

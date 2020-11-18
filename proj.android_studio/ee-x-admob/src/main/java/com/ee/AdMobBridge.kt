@@ -17,6 +17,8 @@ import com.google.android.gms.ads.RequestConfiguration
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 10/13/17.
@@ -120,9 +122,8 @@ class AdMobBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) {
-            initialize()
-            ""
+        _bridge.registerAsyncHandler(kInitialize) {
+            Utils.toString(initialize())
         }
         _bridge.registerHandler(kGetEmulatorTestDeviceHash) {
             emulatorTestDeviceHash
@@ -203,9 +204,13 @@ class AdMobBridge(
     }
 
     @AnyThread
-    fun initialize() {
-        Thread.runOnMainThread {
-            MobileAds.initialize(_context)
+    suspend fun initialize(): Boolean {
+        return suspendCoroutine<Boolean> { cont ->
+            Thread.runOnMainThread {
+                MobileAds.initialize(_context) {
+                    cont.resume(true)
+                }
+            }
         }
     }
 

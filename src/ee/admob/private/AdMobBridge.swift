@@ -6,6 +6,7 @@
 //
 
 import GoogleMobileAds
+import RxSwift
 
 private let kPrefix = "AdMobBridge"
 private let kInitialize = "\(kPrefix)Initialize"
@@ -52,9 +53,14 @@ public class AdMobBridge: NSObject, IPlugin {
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { _ in
+        _bridge.registerAsyncHandler(kInitialize) { _, resolver in
             self.initialize()
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kGetEmulatorTestDeviceHash) { _ in
             self.emulatorTestDeviceHash
@@ -129,10 +135,16 @@ public class AdMobBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
-    func initialize() {
-        Thread.runOnMainThread {
-            GADMobileAds.sharedInstance().start(completionHandler: nil)
+    func initialize() -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                GADMobileAds.sharedInstance().start { _ in
+                    single(.success(true))
+                }
+            }
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
 
     var emulatorTestDeviceHash: String {

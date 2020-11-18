@@ -40,7 +40,10 @@ Initialization
 #include <ee/AdMob.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
-plugin->initialize();
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize();
+    // Handle initialization result.
+});
 ```
 
 Creates an show a banner ad

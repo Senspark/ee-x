@@ -21,7 +21,9 @@ using Self = Tester;
 
 void Self::initialize() {
     plugin_ = ee::PluginManager::createPlugin<ee::IAdMob>();
-    plugin_->initialize();
+    ee::noAwait([this]() -> ee::Task<> { //
+        auto result = co_await plugin_->initialize();
+    });
     plugin_->addTestDevice(plugin_->getEmulatorTestDeviceHash());
     plugin_->addTestDevice("930A5959F4325BAA45E24449B03CB221"); // BlueStacks
     plugin_->addTestDevice("137E2FB99476DB666A99FC3C9F585D65"); // Nexus 5.

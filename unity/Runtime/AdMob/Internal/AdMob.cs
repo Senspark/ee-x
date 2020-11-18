@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -51,8 +52,9 @@ namespace EE.Internal {
             _rewardedAds.Clear();
         }
 
-        public void Initialize() {
-            _bridge.Call(kInitialize);
+        public async Task<bool> Initialize() {
+            var response = await _bridge.CallAsync(kInitialize);
+            return Utils.ToBool(response);
         }
 
         public string GetEmulatorTestDeviceHash() {

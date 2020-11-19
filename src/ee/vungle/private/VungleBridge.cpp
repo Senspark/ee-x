@@ -6,6 +6,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -109,11 +110,12 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::Vungle);
 }
 
-void Self::initialize(const std::string& appId) {
+Task<bool> Self::initialize(const std::string& appId) {
     logger_.debug("%s: appId = %s", __PRETTY_FUNCTION__, appId.c_str());
     nlohmann::json json;
     json["appId"] = appId;
-    bridge_.call(kInitialize, json.dump());
+    auto response = co_await bridge_.callAsync(kInitialize, json.dump());
+    co_return core::toBool(response);
 }
 
 std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {

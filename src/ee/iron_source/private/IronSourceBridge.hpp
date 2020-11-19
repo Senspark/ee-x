@@ -15,7 +15,7 @@ public:
     virtual void destroy() override;
 
     /// Initializes ironSource with the specified game ID.
-    virtual void initialize(const std::string& appKey) override;
+    virtual Task<bool> initialize(const std::string& appKey) override;
 
     /// Creates an interstitial ad with the specified placement ID.
     virtual std::shared_ptr<IInterstitialAd>

@@ -32,6 +32,10 @@ Initialization
 #include <ee/FacebookAds.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFacebookAds>();
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize();
+    // Handle initialization result.
+});
 ```
 
 Creates and show a banner ad

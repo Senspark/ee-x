@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
@@ -82,8 +84,9 @@ namespace EE.Internal {
             _bridge.DeregisterHandler(kOnRewardedAdClosed);
         }
 
-        public void Initialize(string appKey) {
-            _bridge.Call(kInitialize, appKey);
+        public async Task<bool> Initialize(string appKey) {
+            var response = await _bridge.CallAsync(kInitialize, appKey);
+            return Utils.ToBool(response);
         }
 
         public IInterstitialAd CreateInterstitialAd(string adId) {

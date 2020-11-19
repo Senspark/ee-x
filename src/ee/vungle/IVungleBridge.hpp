@@ -19,7 +19,7 @@ namespace vungle {
 class IBridge : public IPlugin {
 public:
     /// Initializes Vungle with the specified game ID.
-    virtual void initialize(const std::string& appId) = 0;
+    [[nodiscard]] virtual Task<bool> initialize(const std::string& appId) = 0;
 
     /// Creates a rewarded video.
     virtual std::shared_ptr<IRewardedAd>

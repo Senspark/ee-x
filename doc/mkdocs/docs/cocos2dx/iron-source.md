@@ -40,7 +40,10 @@ Initializes with game ID
 #include <ee/IronSource.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IIronSource>();
-plugin->initialize("your_game_id")
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_game_id")
+    // Handle initialization result.
+});
 ```
 
 Creates and show an interstitial ad

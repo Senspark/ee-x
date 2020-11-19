@@ -32,7 +32,10 @@ Initializes with game ID
 #include <ee/UnityAds.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IUnityAds>();
-plugin->initialize("your_game_id", false)
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_game_id", false);
+    // Handle initialization result.
+});
 ```
 
 Creates and show an interstitial ad

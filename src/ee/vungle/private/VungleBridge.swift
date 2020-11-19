@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 private let kTag = "\(VungleBridge.self)"
 private let kPrefix = "VungleBridge"
@@ -26,6 +27,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     private let _sdk = VungleSDK.shared()
     private var _initializing = false
     private var _initialized = false
+    private var _initializationAwaiter: (() -> Void)?
     private var _rewarded = false
     private var _loadingAdIds: Set<String> = []
     private var _loadedAdIds: Set<String> = []
@@ -48,14 +50,19 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message in
+        _bridge.registerAsyncHandler(kInitialize) { message, resolver in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard let appId = dict["appId"] as? String else {
                 assert(false, "Invalid argument")
-                return ""
+                return
             }
             self.initialize(appId)
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kHasRewardedAd) { message in
             Utils.toString(self.hasRewardedAd(message))
@@ -77,23 +84,32 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func initialize(_ appId: String) {
-        Thread.runOnMainThread {
-            if self._initializing {
-                return
+    func initialize(_ appId: String) -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                self._initializing = true
+                self._sdk.delegate = self
+                do {
+                    self._initializationAwaiter = {
+                        single(.success(true))
+                    }
+                    try self._sdk.start(withAppId: appId)
+                } catch {
+                    self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+                    return
+                }
             }
-            if self._initialized {
-                return
-            }
-            self._initializing = true
-            self._sdk.delegate = self
-            do {
-                try self._sdk.start(withAppId: appId)
-            } catch {
-                self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-                return
-            }
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
 
     func hasRewardedAd(_ adId: String) -> Bool {
@@ -141,6 +157,9 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _logger.debug("\(kTag): \(#function)")
         _initializing = false
         _initialized = false
+        if let awaiter = _initializationAwaiter {
+            awaiter()
+        }
     }
 
     public func vungleSDKFailedToInitializeWithError(_ error: Error) {

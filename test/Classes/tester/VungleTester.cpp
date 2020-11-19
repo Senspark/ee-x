@@ -20,7 +20,9 @@ using Self = Tester;
 
 void Self::initialize() {
     plugin_ = ee::PluginManager::createPlugin<ee::IVungle>();
-    plugin_->initialize(config::app_id);
+    ee::noAwait([this]() -> ee::Task<> { //
+        auto result = co_await plugin_->initialize(config::app_id);
+    });
 }
 
 void Self::destroy() {

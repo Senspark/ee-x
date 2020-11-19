@@ -9,6 +9,8 @@ import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.InterstitialListener
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -81,9 +83,8 @@ class IronSourceBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message ->
-            initialize(message)
-            ""
+        _bridge.registerAsyncHandler(kInitialize) { message ->
+            Utils.toString(initialize(message))
         }
         _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
@@ -116,17 +117,21 @@ class IronSourceBridge(
     }
 
     @AnyThread
-    fun initialize(appKey: String) {
-        Thread.runOnMainThread {
-            if (_initialized) {
-                return@runOnMainThread
+    suspend fun initialize(appKey: String): Boolean {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL, IronSource.AD_UNIT.BANNER)
+                IronSource.shouldTrackNetworkState(_activity, true)
+                IronSource.setInterstitialListener(this)
+                IronSource.setRewardedVideoListener(this)
+                IronSource.setUserId(IronSource.getAdvertiserId(_context))
+                _initialized = true
+                cont.resume(true)
             }
-            IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL, IronSource.AD_UNIT.BANNER)
-            IronSource.shouldTrackNetworkState(_activity, true)
-            IronSource.setInterstitialListener(this)
-            IronSource.setRewardedVideoListener(this)
-            IronSource.setUserId(IronSource.getAdvertiserId(_context))
-            _initialized = true
         }
     }
 

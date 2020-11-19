@@ -6,6 +6,7 @@
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
@@ -159,9 +160,10 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::IronSource);
 }
 
-void Self::initialize(const std::string& appKey) {
+Task<bool> Self::initialize(const std::string& appKey) {
     logger_.debug("%s: appKey = %s", __PRETTY_FUNCTION__, appKey.c_str());
-    bridge_.call(kInitialize, appKey);
+    auto response = co_await bridge_.callAsync(kInitialize, appKey);
+    co_return core::toBool(response);
 }
 
 std::shared_ptr<IInterstitialAd>

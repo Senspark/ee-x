@@ -93,7 +93,8 @@ public class IronSourceBridge:
             }
             IronSource.initWithAppKey(appKey, adUnits: [
                 IS_REWARDED_VIDEO,
-                IS_INTERSTITIAL
+                IS_INTERSTITIAL,
+                IS_BANNER
             ])
             IronSource.shouldTrackReachability(true)
             IronSource.setInterstitialDelegate(self)

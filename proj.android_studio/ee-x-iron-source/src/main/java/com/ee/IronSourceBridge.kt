@@ -121,7 +121,7 @@ class IronSourceBridge(
             if (_initialized) {
                 return@runOnMainThread
             }
-            IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL)
+            IronSource.init(_activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO, IronSource.AD_UNIT.INTERSTITIAL, IronSource.AD_UNIT.BANNER)
             IronSource.shouldTrackNetworkState(_activity, true)
             IronSource.setInterstitialListener(this)
             IronSource.setRewardedVideoListener(this)

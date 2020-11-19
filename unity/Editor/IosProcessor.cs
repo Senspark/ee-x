@@ -23,6 +23,10 @@ namespace EE.Editor {
                 } else {
                     plist.root.SetString("GADApplicationIdentifier", appId);
                 }
+                // Add SKAdNetworkItems
+                var items = plist.root.CreateArray("SKAdNetworkItems");
+                var dict = items.AddDict();
+                dict.SetString("SKAdNetworkIdentifier", "cstr6suwn9.skadnetwork");
             }
             plist.WriteToFile(plistPath);
         }

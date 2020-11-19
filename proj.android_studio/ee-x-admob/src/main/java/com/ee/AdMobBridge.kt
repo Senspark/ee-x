@@ -205,7 +205,7 @@ class AdMobBridge(
 
     @AnyThread
     suspend fun initialize(): Boolean {
-        return suspendCoroutine<Boolean> { cont ->
+        return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 MobileAds.initialize(_context) {
                     cont.resume(true)

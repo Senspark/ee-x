@@ -15,11 +15,12 @@
 
 namespace ee {
 namespace app_lovin {
+class IBridge;
 class Bridge;
 class RewardedAd;
 } // namespace app_lovin
 
-using AppLovin = app_lovin::Bridge;
+using IAppLovin = app_lovin::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

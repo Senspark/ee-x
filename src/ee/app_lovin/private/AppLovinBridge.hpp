@@ -9,34 +9,23 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
-#ifdef __cplusplus
-
 #include <string>
 
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/AppLovinFwd.hpp"
+#include "ee/app_lovin/IAppLovinBridge.hpp"
 
 namespace ee {
 namespace app_lovin {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
+    explicit Bridge(IMessageBridge& bridge);
     virtual ~Bridge() override;
-
-    explicit Bridge(const Logger& logger);
 
     virtual void destroy() override;
 
-    void initialize(const std::string& key);
-
-    /// Disabled by default.
-    void setVerboseLogging(bool enabled);
-
-    /// Disabled by default.
-    void setMuted(bool enabled);
-
-    std::shared_ptr<IRewardedAd> createRewardedAd();
+    virtual Task<bool> initialize(const std::string& key) override;
+    virtual void setVerboseLogging(bool enabled) override;
+    virtual void setMuted(bool enabled) override;
+    virtual std::shared_ptr<IRewardedAd> createRewardedAd() override;
 
 private:
     friend RewardedAd;
@@ -72,7 +61,5 @@ private:
 };
 } // namespace app_lovin
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_APP_LOVIN_BRIDGE_HPP */

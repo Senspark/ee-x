@@ -17,8 +17,10 @@ namespace app_lovin {
 using Self = Tester;
 
 void Self::initialize() {
-    plugin_ = std::make_shared<ee::AppLovin>();
-    plugin_->initialize(config::app_id);
+    plugin_ = ee::PluginManager::createPlugin<ee::IAppLovin>();
+    ee::noAwait([this]() -> ee::Task<> { //
+        auto result = co_await plugin_->initialize(config::app_id);
+    });
     plugin_->setMuted(false);
     plugin_->setVerboseLogging(true);
 }

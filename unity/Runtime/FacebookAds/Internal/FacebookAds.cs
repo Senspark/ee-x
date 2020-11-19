@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,6 +8,7 @@ using UnityEngine.Assertions;
 namespace EE.Internal {
     internal class FacebookAds : IFacebookAds {
         private const string kPrefix = "FacebookAdsBridge";
+        private const string kInitialize = kPrefix + "Initialize";
         private const string kGetTestDeviceHash = kPrefix + "GetTestDeviceHash";
         private const string kAddTestDevice = kPrefix + "AddTestDevice";
         private const string kClearTestDevices = kPrefix + "ClearTestDevices";
@@ -49,6 +51,11 @@ namespace EE.Internal {
             _bannerAds.Clear();
             _interstitialAds.Clear();
             _rewardedAds.Clear();
+        }
+
+        public async Task<bool> Initialize() {
+            var response = await _bridge.CallAsync(kInitialize);
+            return Utils.ToBool(response);
         }
 
         public string GetTestDeviceHash() {

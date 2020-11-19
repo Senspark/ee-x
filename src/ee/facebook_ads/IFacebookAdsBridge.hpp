@@ -21,6 +21,8 @@ namespace ee {
 namespace facebook_ads {
 class IBridge : public IPlugin {
 public:
+    virtual Task<bool> initialize() = 0;
+
     /// Gets the current device's hash, iOS only, for Android search for
     /// AdSettings tag.
     virtual std::string getTestDeviceHash() const = 0;

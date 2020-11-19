@@ -16,6 +16,7 @@
 #include <ee/core/LogLevel.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -41,6 +42,8 @@ namespace facebook_ads {
 namespace {
 // clang-format off
 const std::string kPrefix         = "FacebookAdsBridge";
+
+const auto kInitialize            = kPrefix + "Initialize";
 
 const auto kGetTestDeviceHash     = kPrefix + "GetTestDeviceHash";
 const auto kAddTestDevice         = kPrefix + "AddTestDevice";
@@ -97,6 +100,11 @@ void Self::destroy() {
         value->destroy();
     }
     PluginManager::removePlugin(Plugin::FacebookAds);
+}
+
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    co_return core::toBool(response);
 }
 
 std::string Self::getTestDeviceHash() const {

@@ -23,10 +23,18 @@ namespace EE.Editor {
                 } else {
                     plist.root.SetString("GADApplicationIdentifier", appId);
                 }
-                // Add SKAdNetworkItems
-                var items = plist.root.CreateArray("SKAdNetworkItems");
-                var dict = items.AddDict();
-                dict.SetString("SKAdNetworkIdentifier", "cstr6suwn9.skadnetwork");
+            }
+            if (settings.IsAdMobEnabled ||
+                settings.IsIronSourceMediationEnabled) {
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "cstr6suwn9.skadnetwork");
+            }
+            if (settings.IsAdMobMediationEnabled ||
+                settings.IsFacebookAdsEnabled ||
+                settings.IsIronSourceMediationEnabled) {
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "v9wttpbfk9.skadnetwork");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "n38lu8286q.skadnetwork");
             }
             plist.WriteToFile(plistPath);
         }

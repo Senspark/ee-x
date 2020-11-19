@@ -116,7 +116,7 @@ public class AppLovinBridge: NSObject, IPlugin {
                     return
                 }
                 if self._initialized {
-                    single(.success(false))
+                    single(.success(true))
                     return
                 }
                 self._initializing = true

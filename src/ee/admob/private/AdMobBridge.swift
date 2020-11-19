@@ -26,6 +26,8 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 public class AdMobBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
+    private var _initializing = false
+    private var _initialized = false
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
     private var _bannerAds: [String: AdMobBannerAd] = [:]
@@ -138,7 +140,17 @@ public class AdMobBridge: NSObject, IPlugin {
     func initialize() -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
                 GADMobileAds.sharedInstance().start { _ in
+                    self._initializing = false
+                    self._initialized = true
                     single(.success(true))
                 }
             }

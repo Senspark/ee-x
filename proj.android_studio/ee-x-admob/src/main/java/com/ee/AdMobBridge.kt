@@ -46,6 +46,8 @@ class AdMobBridge(
         private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
     }
 
+    private var _initializing = false
+    private var _initialized = false
     private val _bannerHelper = AdMobBannerHelper(_context)
     private val _testDevices: MutableList<String> = ArrayList()
     private val _bannerAds: MutableMap<String, AdMobBannerAd> = ConcurrentHashMap()
@@ -207,7 +209,18 @@ class AdMobBridge(
     suspend fun initialize(): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
+                }
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                _initializing = true
                 MobileAds.initialize(_context) {
+                    _initializing = false
+                    _initialized = true
                     cont.resume(true)
                 }
             }

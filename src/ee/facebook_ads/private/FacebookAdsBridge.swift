@@ -28,6 +28,8 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 public class FacebookAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
+    private var _initializing = false
+    private var _initialized = false
     private let _bannerHelper = FacebookBannerHelper()
     private var _bannerAds: [String: FacebookBannerAd] = [:]
     private var _nativeAds: [String: FacebookNativeAd] = [:]
@@ -143,10 +145,27 @@ public class FacebookAdsBridge: NSObject, IPlugin {
 
     func initialize() -> Single<Bool> {
         return Single<Bool>.create { single in
-            FBAudienceNetworkAds.initialize(with: nil) { result in
-                self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
-                FBAdSettings.setAdvertiserTrackingEnabled(true)
-                single(.success(result.isSuccess))
+            Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                self._initializing = true
+                FBAudienceNetworkAds.initialize(with: nil) { result in
+                    self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
+                    self._initializing = false
+                    if result.isSuccess {
+                        FBAdSettings.setAdvertiserTrackingEnabled(true)
+                        self._initialized = true
+                        single(.success(true))
+                    } else {
+                        single(.success(false))
+                    }
+                }
             }
             return Disposables.create()
         }

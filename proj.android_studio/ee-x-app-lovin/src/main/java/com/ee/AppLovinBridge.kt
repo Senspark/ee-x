@@ -137,7 +137,7 @@ class AppLovinBridge(
                     return@runOnMainThread
                 }
                 if (_initialized) {
-                    cont.resume(false)
+                    cont.resume(true)
                     return@runOnMainThread
                 }
                 _initializing = true

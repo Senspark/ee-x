@@ -21,8 +21,8 @@ public:
     virtual ~Bridge() override;
 
     virtual void destroy() override;
-    virtual void initialize(const std::string& gameId,
-                            bool testModeEnabled) override;
+    virtual Task<bool> initialize(const std::string& gameId,
+                                  bool testModeEnabled) override;
     virtual void setDebugModeEnabled(bool enabled) override;
     virtual std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId) override;

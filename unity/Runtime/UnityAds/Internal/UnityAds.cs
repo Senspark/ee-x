@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -75,12 +76,13 @@ namespace EE.Internal {
             public bool testModeEnabled;
         }
 
-        public void Initialize(string gameId, bool testModeEnabled) {
+        public async Task<bool> Initialize(string gameId, bool testModeEnabled) {
             var request = new InitializeRequest {
                 gameId = gameId,
                 testModeEnabled = testModeEnabled
             };
-            _bridge.Call(kInitialize, JsonUtility.ToJson(request));
+            var response = await _bridge.CallAsync(kInitialize, JsonUtility.ToJson(request));
+            return Utils.ToBool(response);
         }
 
         public void SetDebugModeEnabled(bool enabled) {

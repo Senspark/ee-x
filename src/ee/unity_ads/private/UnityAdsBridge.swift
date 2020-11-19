@@ -5,6 +5,7 @@
 //  Created by eps on 6/25/20.
 //
 
+import RxSwift
 import UnityAds
 
 private let kTag = "\(UnityAdsBridge.self)"
@@ -21,6 +22,7 @@ private let kOnClosed = "\(kPrefix)OnClosed"
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
+    private var _initializing = false
     private var _initialized = false
     private var _displayed = false
     private var _loadedAdIds: Set<String> = []
@@ -43,17 +45,22 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message in
+        _bridge.registerAsyncHandler(kInitialize) { message, resolver in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
                 let gameId = dict["gameId"] as? String,
                 let testModeEnabled = dict["testModeEnabled"] as? Bool
             else {
                 assert(false, "Invalid argument")
-                return ""
+                return
             }
             self.initialize(gameId, testModeEnabled)
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kSetDebugModeEnabled) { message in
             self.setDebugModeEnabled(Utils.toBool(message))
@@ -75,18 +82,32 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func initialize(_ gameId: String, _ testModeEnabled: Bool) {
-        Thread.runOnMainThread {
-            if self._initialized {
-                return
+    func initialize(_ gameId: String, _ testModeEnabled: Bool) -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if !UnityAds.isSupported() {
+                    single(.success(false))
+                    return
+                }
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                self._initializing = true
+                UnityAds.add(self)
+                UnityAds.initialize(gameId, testMode: testModeEnabled)
+                // TODO: Wait for UnityAds 3.5.1.
+                self._initializing = false
+                self._initialized = true
+                single(.success(true))
             }
-            if !UnityAds.isSupported() {
-                return
-            }
-            UnityAds.initialize(gameId, testMode: testModeEnabled)
-            UnityAds.add(self)
-            self._initialized = true
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
 
     func setDebugModeEnabled(_ enabled: Bool) {

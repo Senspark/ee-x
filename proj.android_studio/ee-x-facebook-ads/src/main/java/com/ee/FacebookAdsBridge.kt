@@ -47,6 +47,8 @@ class FacebookAdsBridge(
         private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
     }
 
+    private var _initializing = false
+    private var _initialized = false
     private val _bannerHelper = FacebookBannerHelper()
     private val _bannerAds: MutableMap<String, FacebookBannerAd> = ConcurrentHashMap()
     private val _nativeAds: MutableMap<String, FacebookNativeAd> = ConcurrentHashMap()
@@ -201,15 +203,30 @@ class FacebookAdsBridge(
                     cont.resume(true)
                     return@runOnMainThread
                 }
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
+                }
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                _initializing = true
                 AudienceNetworkAds
                     .buildInitSettings(_context)
                     .withInitListener { result ->
                         _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
-                        if (BuildConfig.DEBUG) {
-                            AdSettings.setDebugBuild(true)
+                        _initializing = false
+                        if (result.isSuccess) {
+                            if (BuildConfig.DEBUG) {
+                                AdSettings.setDebugBuild(true)
+                            }
+                            AdSettings.setTestMode(false)
+                            _initialized = true
+                            cont.resume(true)
+                        } else {
+                            cont.resume(false)
                         }
-                        AdSettings.setTestMode(false)
-                        cont.resume(result.isSuccess)
                     }
                     .initialize()
             }

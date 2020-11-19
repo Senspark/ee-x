@@ -15,6 +15,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -98,13 +99,14 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::UnityAds);
 }
 
-void Self::initialize(const std::string& gameId, bool testModeEnabled) {
+Task<bool> Self::initialize(const std::string& gameId, bool testModeEnabled) {
     logger_.debug("%s: gameId = %s test = %s", __PRETTY_FUNCTION__,
                   gameId.c_str(), core::toString(testModeEnabled).c_str());
     nlohmann::json json;
     json["gameId"] = gameId;
     json["testModeEnabled"] = testModeEnabled;
-    bridge_.call(kInitialize, json.dump());
+    auto response = co_await bridge_.callAsync(kInitialize, json.dump());
+    co_return core::toBool(response);
 }
 
 void Self::setDebugModeEnabled(bool enabled) {

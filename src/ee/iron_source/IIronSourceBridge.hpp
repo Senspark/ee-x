@@ -22,7 +22,7 @@ namespace iron_source {
 class IBridge : public IPlugin {
 public:
     /// Initializes ironSource with the specified game ID.
-    virtual void initialize(const std::string& appKey) = 0;
+    [[nodiscard]] virtual Task<bool> initialize(const std::string& appKey) = 0;
 
     /// Creates an interstitial ad with the specified placement ID.
     virtual std::shared_ptr<IInterstitialAd>

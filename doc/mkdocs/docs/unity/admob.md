@@ -6,7 +6,10 @@ Go to **Assets/Senspark EE-x/Settings** and enable AdMob plugin
 Initialization
 ```csharp
 var plugin = EE.PluginManager.CreatePlugin<EE.IAdMob>();
-plugin.Initialize();
+EE.Utils.NoAwait(async () => {
+    var result = await plugin.Initialize();
+    // Handle initialization result.
+});
 ```
 
 Creates and show a banner ad.

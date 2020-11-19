@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:facebook-ads:1.2.2'
+    implementation 'com.senspark.ee:facebook-ads:1.3.0'
 }
 ```
 
@@ -32,6 +32,10 @@ Initialization
 #include <ee/FacebookAds.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFacebookAds>();
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize();
+    // Handle initialization result.
+});
 ```
 
 Creates and show a banner ad

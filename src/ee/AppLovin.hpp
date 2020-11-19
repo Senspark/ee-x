@@ -14,7 +14,7 @@
 #include <ee/Ads.hpp>
 
 #include "ee/AppLovinFwd.hpp"
-#include "ee/app_lovin/AppLovinBridge.hpp"
+#include "ee/app_lovin/IAppLovinBridge.hpp"
 
 #endif // __cplusplus
 

@@ -36,21 +36,14 @@ public class AdjustBridge: NSObject, IPlugin {
                 let token = dict["token"] as? String,
                 let environment = dict["environment"] as? Int,
                 let logLevel = dict["logLevel"] as? Int,
-                let useAppSecret = dict["useAppSecret"] as? Bool,
-                let eventBufferingEnabled = dict["eventBufferingEnabled"] as? Bool,
-                let secretId = dict["secretId"] as? UInt64,
-                let info1 = dict["info1"] as? UInt64,
-                let info2 = dict["info2"] as? UInt64,
-                let info3 = dict["info3"] as? UInt64,
-                let info4 = dict["info4"] as? UInt64
+                let eventBufferingEnabled = dict["eventBufferingEnabled"] as? Bool
             else {
                 assert(false, "Invalid argument")
                 return ""
             }
             self.initialize(
                 token, self.parseEnvironment(environment),
-                self.parseLogLevel(logLevel), eventBufferingEnabled,
-                useAppSecret, secretId, info1, info2, info3, info4)
+                self.parseLogLevel(logLevel), eventBufferingEnabled)
             return ""
         }
         _bridge.registerHandler(kSetEnabled) { message in
@@ -107,19 +100,10 @@ public class AdjustBridge: NSObject, IPlugin {
     }
     
     func initialize(_ token: String, _ environment: String,
-                    _ logLevel: ADJLogLevel, _ eventBufferingEnabled: Bool,
-                    _ useAppSecret: Bool, _ secretId: UInt64, _ info1: UInt64, _ info2: UInt64, _ info3: UInt64, _ info4: UInt64) {
+                    _ logLevel: ADJLogLevel, _ eventBufferingEnabled: Bool) {
         let config = ADJConfig(appToken: token, environment: environment)
         config?.logLevel = logLevel
         config?.eventBufferingEnabled = eventBufferingEnabled
-        if useAppSecret {
-            config?.setAppSecret(
-                UInt(secretId),
-                info1: UInt(info1),
-                info2: UInt(info2),
-                info3: UInt(info3),
-                info4: UInt(info4))
-        }
         Adjust.appDidLaunch(config)
     }
     

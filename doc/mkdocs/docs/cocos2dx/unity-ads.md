@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:unity-ads:1.2.2'
+    implementation 'com.senspark.ee:unity-ads:1.3.0'
 }
 ```
 
@@ -32,7 +32,10 @@ Initializes with game ID
 #include <ee/UnityAds.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IUnityAds>();
-plugin->initialize("your_game_id", false)
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_game_id", false);
+    // Handle initialization result.
+});
 ```
 
 Creates and show an interstitial ad

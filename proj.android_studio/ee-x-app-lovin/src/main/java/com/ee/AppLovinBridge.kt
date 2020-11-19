@@ -11,6 +11,8 @@ import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinInterstitialAdListener
 import com.ee.internal.AppLovinRewardedAdListener
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
@@ -78,9 +80,8 @@ class AppLovinBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message ->
-            initialize(message)
-            ""
+        _bridge.registerAsyncHandler(kInitialize) { message ->
+            Utils.toString(initialize(message))
         }
         _bridge.registerHandler(kSetVerboseLogging) { message ->
             setVerboseLogging(Utils.toBoolean(message))
@@ -128,36 +129,41 @@ class AppLovinBridge(
     }
 
     @AnyThread
-    fun initialize(key: String) {
-        Thread.runOnMainThread {
-            if (_initializing) {
-                return@runOnMainThread
-            }
-            if (_initialized) {
-                return@runOnMainThread
-            }
-            _initializing = true
-            val settings = AppLovinSdkSettings()
-            val sdk = AppLovinSdk.getInstance(key, settings, _context)
-            sdk.initializeSdk {
-                _initializing = false
-                _initialized = true
-            }
+    suspend fun initialize(key: String): Boolean {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
+                }
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                _initializing = true
+                val settings = AppLovinSdkSettings()
+                val sdk = AppLovinSdk.getInstance(key, settings, _context)
+                sdk.initializeSdk {
+                    _initializing = false
+                    _initialized = true
+                    cont.resume(true)
+                }
 
-            val interstitialAdListener = AppLovinInterstitialAdListener(_bridge, _logger)
-            val interstitialAd = AppLovinInterstitialAd.create(sdk, _activity)
-            interstitialAd.setAdLoadListener(interstitialAdListener)
-            interstitialAd.setAdDisplayListener(interstitialAdListener)
-            interstitialAd.setAdClickListener(interstitialAdListener)
+                val interstitialAdListener = AppLovinInterstitialAdListener(_bridge, _logger)
+                val interstitialAd = AppLovinInterstitialAd.create(sdk, _activity)
+                interstitialAd.setAdLoadListener(interstitialAdListener)
+                interstitialAd.setAdDisplayListener(interstitialAdListener)
+                interstitialAd.setAdClickListener(interstitialAdListener)
 
-            val rewardedAd = AppLovinIncentivizedInterstitial.create(sdk)
-            val rewardedAdListener = AppLovinRewardedAdListener(_bridge, _logger)
+                val rewardedAd = AppLovinIncentivizedInterstitial.create(sdk)
+                val rewardedAdListener = AppLovinRewardedAdListener(_bridge, _logger)
 
-            _sdk = sdk
-            _interstitialAd = interstitialAd
-            _interstitialAdListener = interstitialAdListener
-            _rewardedAd = rewardedAd
-            _rewardedAdListener = rewardedAdListener
+                _sdk = sdk
+                _interstitialAd = interstitialAd
+                _interstitialAdListener = interstitialAdListener
+                _rewardedAd = rewardedAd
+                _rewardedAdListener = rewardedAdListener
+            }
         }
     }
 

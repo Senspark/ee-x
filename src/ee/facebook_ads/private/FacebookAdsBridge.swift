@@ -6,8 +6,11 @@
 //
 
 import FBAudienceNetwork
+import RxSwift
 
+private let kTag = "\(FacebookAdsBridge.self)"
 private let kPrefix = "FacebookAdsBridge"
+private let kInitialize = "\(kPrefix)Initialize"
 private let kGetTestDeviceHash = "\(kPrefix)GetTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
 private let kClearTestDevices = "\(kPrefix)ClearTestDevices"
@@ -25,6 +28,8 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 public class FacebookAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
+    private var _initializing = false
+    private var _initialized = false
     private let _bannerHelper = FacebookBannerHelper()
     private var _bannerAds: [String: FacebookBannerAd] = [:]
     private var _nativeAds: [String: FacebookNativeAd] = [:]
@@ -51,6 +56,15 @@ public class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) { _, resolver in
+            self.initialize()
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
+        }
         _bridge.registerHandler(kGetTestDeviceHash) { _ in
             self.testDeviceHash
         }
@@ -114,6 +128,7 @@ public class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kGetTestDeviceHash)
         _bridge.deregisterHandler(kAddTestDevice)
         _bridge.deregisterHandler(kClearTestDevices)
@@ -126,6 +141,35 @@ public class FacebookAdsBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyInterstitialAd)
         _bridge.deregisterHandler(kCreateRewardedAd)
         _bridge.deregisterHandler(kDestroyRewardedAd)
+    }
+
+    func initialize() -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                self._initializing = true
+                FBAudienceNetworkAds.initialize(with: nil) { result in
+                    self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
+                    self._initializing = false
+                    if result.isSuccess {
+                        FBAdSettings.setAdvertiserTrackingEnabled(true)
+                        self._initialized = true
+                        single(.success(true))
+                    } else {
+                        single(.success(false))
+                    }
+                }
+            }
+            return Disposables.create()
+        }
+        .subscribeOn(MainScheduler())
     }
 
     var testDeviceHash: String {

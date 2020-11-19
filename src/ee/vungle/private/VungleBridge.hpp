@@ -13,7 +13,7 @@ public:
     virtual ~Bridge() override;
 
     virtual void destroy() override;
-    virtual void initialize(const std::string& appId) override;
+    virtual Task<bool> initialize(const std::string& appId) override;
     virtual std::shared_ptr<IRewardedAd>
     createRewardedAd(const std::string& adId) override;
 

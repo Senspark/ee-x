@@ -12,7 +12,7 @@
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/app_lovin/AppLovinBridge.hpp"
+#include "ee/app_lovin/private/AppLovinBridge.hpp"
 
 namespace ee {
 namespace app_lovin {
@@ -21,7 +21,7 @@ using Self = RewardedAd;
 Self::RewardedAd(
     const Logger& logger,
     const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
-    AppLovin* plugin)
+    Bridge* plugin)
     : logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin) {

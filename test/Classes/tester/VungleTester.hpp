@@ -41,6 +41,8 @@ private:
     std::vector<std::shared_ptr<ITester>> testers_;
 };
 } // namespace vungle
+
+using VungleTester = vungle::Tester;
 } // namespace eetest
 
 #endif /* EE_X_TEST_VUNGLE_HPP */

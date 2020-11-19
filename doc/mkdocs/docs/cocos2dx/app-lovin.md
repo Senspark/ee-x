@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:app-lovin:1.2.2'
+    implementation 'com.senspark.ee:app-lovin:1.3.0'
 }
 ```
 
@@ -31,7 +31,10 @@ Initializes with sdk key
 #include <ee/AppLovin.hpp>
 
 auto plugin = std::make_shared<ee::AppLovin>();
-plugin->initialize("your_key");
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_key");
+    // Handle initialization result.
+});
 ```
 
 Creates and show a rewarded ad

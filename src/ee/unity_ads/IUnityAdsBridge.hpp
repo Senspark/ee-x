@@ -24,8 +24,8 @@ public:
     /// Initializes Unity Ads.
     /// @param[in] gameId Unity Ads game ID.
     /// @param[in] testModeEnabled Whether test mode is enabled.
-    virtual void initialize(const std::string& gameId,
-                            bool testModeEnabled) = 0;
+    [[nodiscard]] virtual Task<bool> initialize(const std::string& gameId,
+                                                bool testModeEnabled) = 0;
 
     /// Sets debug mode enabled.
     virtual void setDebugModeEnabled(bool enabled) = 0;

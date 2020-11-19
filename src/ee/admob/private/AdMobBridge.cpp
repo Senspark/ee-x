@@ -15,6 +15,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -89,8 +90,9 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::AdMob);
 }
 
-void Self::initialize() {
-    bridge_.call(kInitialize);
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    co_return core::toBool(response);
 }
 
 std::string Self::getEmulatorTestDeviceHash() const {

@@ -20,6 +20,9 @@ using Self = Tester;
 
 void Self::initialize() {
     plugin_ = ee::PluginManager::createPlugin<ee::IFacebookAds>();
+    ee::noAwait([this]() -> ee::Task<> { //
+        auto result = co_await plugin_->initialize();
+    });
     plugin_->clearTestDevices();
     plugin_->addTestDevice(plugin_->getTestDeviceHash());
     plugin_->addTestDevice("ad45c323f6a9b07f7a9c072549efb279"); // BlueStacks.

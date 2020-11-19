@@ -24,6 +24,31 @@ namespace EE.Editor {
                     plist.root.SetString("GADApplicationIdentifier", appId);
                 }
             }
+            if (settings.IsAdMobEnabled ||
+                settings.IsIronSourceMediationEnabled) {
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "cstr6suwn9.skadnetwork");
+            }
+            if (settings.IsAdMobMediationEnabled ||
+                settings.IsFacebookAdsEnabled ||
+                settings.IsIronSourceMediationEnabled) {
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "v9wttpbfk9.skadnetwork");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "n38lu8286q.skadnetwork");
+            }
+            if (settings.IsAdMobMediationEnabled ||
+                settings.IsIronSourceMediationEnabled ||
+                settings.IsUnityAdsEnabled) {
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "4DZT52R2T5.skadnetwork");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "bvpn9ufa9b.skadnetwork");
+            }
+            if (settings.IsAdMobMediationEnabled ||
+                settings.IsIronSourceEnabled) {
+                // IronSource.
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "SU67R6K2V3.skadnetwork");
+            }
             plist.WriteToFile(plistPath);
         }
     }

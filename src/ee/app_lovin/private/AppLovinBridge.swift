@@ -6,6 +6,7 @@
 //
 
 import AppLovinSDK
+import RxSwift
 
 private let kPrefix = "AppLovinBridge"
 private let kInitialize = "\(kPrefix)Initialize"
@@ -54,9 +55,14 @@ public class AppLovinBridge: NSObject, IPlugin {
     }
     
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message in
+        _bridge.registerAsyncHandler(kInitialize) { message, resolver in
             self.initialize(message)
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kSetVerboseLogging) { message in
             self.setVerboseLogging(Utils.toBool(message))
@@ -102,40 +108,48 @@ public class AppLovinBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
     
-    func initialize(_ key: String) {
-        Thread.runOnMainThread {
-            if self._initializing {
-                return
+    func initialize(_ key: String) -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                self._initializing = true
+                guard let sdk = ALSdk.shared(withKey: key) else {
+                    assert(false, "Invalid key")
+                    single(.success(false))
+                    return
+                }
+                sdk.initializeSdk(completionHandler: { _ in
+                    self._initializing = false
+                    self._initialized = true
+                    single(.success(true))
+                })
+                
+                let interstitialAdListener = AppLovinInterstitialAdListener(self._bridge, self._logger)
+                let interstitialAd = ALInterstitialAd(sdk: sdk)
+                interstitialAd.adLoadDelegate = interstitialAdListener
+                interstitialAd.adDisplayDelegate = interstitialAdListener
+                
+                let rewardedAdListener = AppLovinRewardedAdListener(self._bridge, self._logger)
+                let rewardedAd = ALIncentivizedInterstitialAd(sdk: sdk)
+                rewardedAd.adDisplayDelegate = rewardedAdListener
+                rewardedAd.adVideoPlaybackDelegate = rewardedAdListener
+                
+                self._sdk = sdk
+                self._interstitialAd = interstitialAd
+                self._interstitialAdListener = interstitialAdListener
+                self._rewardedAd = rewardedAd
+                self._rewardedAdListener = rewardedAdListener
             }
-            if self._initialized {
-                return
-            }
-            self._initializing = true
-            guard let sdk = ALSdk.shared(withKey: key) else {
-                assert(false, "Invalid key")
-                return
-            }
-            sdk.initializeSdk(completionHandler: { _ in
-                self._initializing = false
-                self._initialized = true
-            })
-            
-            let interstitialAdListener = AppLovinInterstitialAdListener(self._bridge, self._logger)
-            let interstitialAd = ALInterstitialAd(sdk: sdk)
-            interstitialAd.adLoadDelegate = interstitialAdListener
-            interstitialAd.adDisplayDelegate = interstitialAdListener
-            
-            let rewardedAdListener = AppLovinRewardedAdListener(self._bridge, self._logger)
-            let rewardedAd = ALIncentivizedInterstitialAd(sdk: sdk)
-            rewardedAd.adDisplayDelegate = rewardedAdListener
-            rewardedAd.adVideoPlaybackDelegate = rewardedAdListener
-            
-            self._sdk = sdk
-            self._interstitialAd = interstitialAd
-            self._interstitialAdListener = interstitialAdListener
-            self._rewardedAd = rewardedAd
-            self._rewardedAdListener = rewardedAdListener
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
     
     func setVerboseLogging(_ enabled: Bool) {

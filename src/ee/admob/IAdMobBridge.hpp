@@ -25,7 +25,7 @@ public:
     /// Calls this method for faster ads loading.
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/N5okpElFHZs
     /// https://groups.google.com/forum/#!topic/google-admob-ads-sdk/kayQ3VZJqkU
-    virtual void initialize() = 0;
+    [[nodiscard]] virtual Task<bool> initialize() = 0;
 
     /// kGADSimulatorID or AdRequest.DEVICE_ID_EMULATOR.
     virtual std::string getEmulatorTestDeviceHash() const = 0;

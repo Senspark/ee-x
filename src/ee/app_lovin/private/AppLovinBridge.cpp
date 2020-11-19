@@ -6,22 +6,32 @@
 //
 //
 
-#include "ee/app_lovin/AppLovinBridge.hpp"
+#include "ee/app_lovin/private/AppLovinBridge.hpp"
 
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
 namespace ee {
-namespace app_lovin {
-using Self = Bridge;
+namespace core {
+template <>
+std::shared_ptr<IAppLovin>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    if (not addPlugin(Plugin::AppLovin)) {
+        return nullptr;
+    }
+    return std::make_shared<app_lovin::Bridge>(bridge);
+}
+} // namespace core
 
+namespace app_lovin {
 enum class Error {
     // Loading & Displaying Ads
 
@@ -122,15 +132,12 @@ const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 // clang-format on
 } // namespace
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
+using Self = Bridge;
 
-Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge)
+    , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::addPlugin(Plugin::AppLovin);
-
     auto&& mediation = ads::MediationManager::getInstance();
     rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
     rewardedAd_ = nullptr;
@@ -218,9 +225,10 @@ void Self::destroy() {
     PluginManager::removePlugin(Plugin::AppLovin);
 }
 
-void Self::initialize(const std::string& key) {
+Task<bool> Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    bridge_.call(kInitialize, key);
+    auto response = co_await bridge_.callAsync(kInitialize, key);
+    co_return core::toBool(response);
 }
 
 void Self::setVerboseLogging(bool enabled) {

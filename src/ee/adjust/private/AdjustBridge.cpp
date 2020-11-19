@@ -55,12 +55,6 @@ void Self::initialize(const AdjustConfig& config) {
     json["environment"] = config.environment_;
     json["logLevel"] = config.logLevel_;
     json["eventBufferingEnabled"] = config.eventBufferingEnabled_;
-    json["useAppSecret"] = config.useAppSecret_;
-    json["secretId"] = config.secretId_;
-    json["info1"] = config.info1_;
-    json["info2"] = config.info2_;
-    json["info3"] = config.info3_;
-    json["info4"] = config.info4_;
     bridge_.call(kInitialize, json.dump());
 }
 

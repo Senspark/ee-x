@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:admob:1.2.2'
+    implementation 'com.senspark.ee:admob:1.3.0'
 
     // Includes:
     // - AppLovin mediation.
@@ -12,7 +12,7 @@ dependencies {
     // - IronSource mediation.
     // - Unity mediation.
     // - Vungle mediation.
-    implementation 'com.senspark.ee:admob-mediation:1.2.2'
+    implementation 'com.senspark.ee:admob-mediation:1.3.0'
 }
 ```
 
@@ -40,7 +40,10 @@ Initialization
 #include <ee/AdMob.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
-plugin->initialize();
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize();
+    // Handle initialization result.
+});
 ```
 
 Creates an show a banner ad

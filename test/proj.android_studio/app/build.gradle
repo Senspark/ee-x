@@ -3,7 +3,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
 /// Used to switch between ndkBuild and cmake.
-def USE_CMAKE = false
+def USE_CMAKE = true
 
 def CPP_FLAGS = [
     '-DCC_USE_PHYSICS=0',
@@ -132,6 +132,7 @@ android {
         exclude 'META-INF/LGPL2.1'
         exclude 'lib/x86/libcrashlytics.so'
         exclude 'lib/x86_64/libcrashlytics.so'
+        exclude 'lib/arm64-v8a/libcrashlytics.so'
     }
 
     sourceSets {

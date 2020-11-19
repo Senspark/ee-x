@@ -22,7 +22,7 @@ public:
 
     virtual void destroy() override;
 
-    virtual void initialize() override;
+    virtual Task<bool> initialize() override;
     virtual std::string getEmulatorTestDeviceHash() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual std::shared_ptr<IAdView>

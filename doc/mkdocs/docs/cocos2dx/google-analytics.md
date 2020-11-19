@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:google-analytics:1.2.2'
+    implementation 'com.senspark.ee:google-analytics:1.3.0'
 }
 ```
 

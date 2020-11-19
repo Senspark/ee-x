@@ -6,6 +6,7 @@ import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.common.truth.Truth.assertThat
+import com.unity3d.ads.IUnityAdsInitializationListener
 import com.unity3d.ads.IUnityAdsListener
 import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAds.FinishState
@@ -14,6 +15,8 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @InternalSerializationApi
 class UnityAdsBridge(
@@ -33,6 +36,7 @@ class UnityAdsBridge(
         private const val kOnClosed = "${kPrefix}OnClosed"
     }
 
+    private var _initializing = false
     private var _initialized = false
     private var _listener: IUnityAdsListener? = null
     private val _loadedAdIds: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
@@ -68,7 +72,7 @@ class UnityAdsBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message ->
+        _bridge.registerAsyncHandler(kInitialize) { message ->
             @Serializable
             class Request(
                 val gameId: String,
@@ -76,8 +80,7 @@ class UnityAdsBridge(
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.gameId, request.testModeEnabled)
-            ""
+            Utils.toString(initialize(request.gameId, request.testModeEnabled))
         }
         _bridge.registerHandler(kSetDebugModeEnabled) { message ->
             setDebugModeEnabled(Utils.toBoolean(message))
@@ -101,78 +104,99 @@ class UnityAdsBridge(
     }
 
     @AnyThread
-    fun initialize(gameId: String, testModeEnabled: Boolean) {
-        Thread.runOnMainThread {
-            if (_initialized) {
-                return@runOnMainThread
-            }
-            if (!UnityAds.isSupported()) {
-                return@runOnMainThread
-            }
-            _listener = object : IUnityAdsListener {
-                override fun onUnityAdsReady(adId: String) {
-                    _logger.debug("$kTag: ${this::onUnityAdsReady.name}: $adId")
-                    Thread.checkMainThread()
-                    _loadedAdIds.add(adId)
-                    _bridge.callCpp(kOnLoaded, adId)
+    suspend fun initialize(gameId: String, testModeEnabled: Boolean): Boolean {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                if (!UnityAds.isSupported()) {
+                    cont.resume(false)
+                    return@runOnMainThread
                 }
-
-                override fun onUnityAdsStart(adId: String) {
-                    _logger.debug("$kTag: ${this::onUnityAdsStart.name}: $adId")
-                    Thread.checkMainThread()
-                    _loadedAdIds.remove(adId)
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
                 }
-
-                override fun onUnityAdsFinish(adId: String, state: FinishState) {
-                    _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: $adId state = $state")
-                    Thread.checkMainThread()
-                    if (state == FinishState.ERROR) {
-                        @Serializable
-                        @Suppress("unused")
-                        class ResponseA(
-                            val ad_id: String,
-                            val message: String
-                        )
-
-                        val response = ResponseA(adId, "")
-                        _bridge.callCpp(kOnFailedToShow, response.serialize())
-                        return
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                _listener = object : IUnityAdsListener {
+                    override fun onUnityAdsReady(adId: String) {
+                        _logger.debug("$kTag: ${this::onUnityAdsReady.name}: $adId")
+                        Thread.checkMainThread()
+                        _loadedAdIds.add(adId)
+                        _bridge.callCpp(kOnLoaded, adId)
                     }
-                    if (state == FinishState.SKIPPED) {
-                        @Serializable
-                        @Suppress("unused")
-                        class ResponseB(
-                            val ad_id: String,
-                            val rewarded: Boolean
-                        )
 
-                        val response = ResponseB(adId, false)
-                        _bridge.callCpp(kOnClosed, response.serialize())
-                        return
+                    override fun onUnityAdsStart(adId: String) {
+                        _logger.debug("$kTag: ${this::onUnityAdsStart.name}: $adId")
+                        Thread.checkMainThread()
+                        _loadedAdIds.remove(adId)
                     }
-                    if (state == FinishState.COMPLETED) {
-                        @Serializable
-                        @Suppress("unused")
-                        class ResponseC(
-                            val ad_id: String,
-                            val rewarded: Boolean
-                        )
 
-                        val response = ResponseC(adId, true)
-                        _bridge.callCpp(kOnClosed, response.serialize())
-                        return
+                    override fun onUnityAdsFinish(adId: String, state: FinishState) {
+                        _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: $adId state = $state")
+                        Thread.checkMainThread()
+                        if (state == FinishState.ERROR) {
+                            @Serializable
+                            @Suppress("unused")
+                            class ResponseA(
+                                val ad_id: String,
+                                val message: String
+                            )
+
+                            val response = ResponseA(adId, "")
+                            _bridge.callCpp(kOnFailedToShow, response.serialize())
+                            return
+                        }
+                        if (state == FinishState.SKIPPED) {
+                            @Serializable
+                            @Suppress("unused")
+                            class ResponseB(
+                                val ad_id: String,
+                                val rewarded: Boolean
+                            )
+
+                            val response = ResponseB(adId, false)
+                            _bridge.callCpp(kOnClosed, response.serialize())
+                            return
+                        }
+                        if (state == FinishState.COMPLETED) {
+                            @Serializable
+                            @Suppress("unused")
+                            class ResponseC(
+                                val ad_id: String,
+                                val rewarded: Boolean
+                            )
+
+                            val response = ResponseC(adId, true)
+                            _bridge.callCpp(kOnClosed, response.serialize())
+                            return
+                        }
+                        assertThat(false).isTrue()
                     }
-                    assertThat(false).isTrue()
-                }
 
-                override fun onUnityAdsError(unityAdsError: UnityAdsError, message: String) {
-                    _logger.debug("$kTag: ${this::onUnityAdsError.name}: error = $unityAdsError message = $message")
-                    Thread.checkMainThread()
+                    override fun onUnityAdsError(unityAdsError: UnityAdsError, message: String) {
+                        _logger.debug("$kTag: ${this::onUnityAdsError.name}: error = $unityAdsError message = $message")
+                        Thread.checkMainThread()
+                    }
                 }
+                _initializing = true
+                UnityAds.addListener(_listener)
+                UnityAds.initialize(_context, gameId, testModeEnabled, object : IUnityAdsInitializationListener {
+                    override fun onInitializationComplete() {
+                        _logger.info("onInitializationComplete")
+                        _initializing = false
+                        _initialized = true
+                        cont.resume(true)
+                    }
+
+                    override fun onInitializationFailed(error: UnityAds.UnityAdsInitializationError?, message: String?) {
+                        _logger.error("onInitializationFailed: ${message ?: ""}")
+                        _initializing = false
+                        cont.resume(false)
+                    }
+                })
             }
-            UnityAds.initialize(_activity, gameId, testModeEnabled)
-            UnityAds.addListener(_listener)
-            _initialized = true
         }
     }
 

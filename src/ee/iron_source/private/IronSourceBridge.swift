@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 private let kTag = "\(IronSourceBridge.self)"
 private let kPrefix = "IronSourceBridge"
@@ -53,9 +54,14 @@ public class IronSourceBridge:
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message in
+        _bridge.registerAsyncHandler(kInitialize) { message, resolver in
             self.initialize(message)
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kLoadInterstitialAd) { _ in
             self.loadInterstitialAd()
@@ -86,21 +92,28 @@ public class IronSourceBridge:
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func initialize(_ appKey: String) {
-        Thread.runOnMainThread {
-            if self._initialized {
-                return
+    func initialize(_ appKey: String) -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                IronSource.initWithAppKey(appKey, adUnits: [
+                    IS_REWARDED_VIDEO,
+                    IS_INTERSTITIAL,
+                    IS_BANNER
+                ])
+                IronSource.shouldTrackReachability(true)
+                IronSource.setInterstitialDelegate(self)
+                IronSource.setRewardedVideoDelegate(self)
+                IronSource.setUserId(IronSource.advertiserId())
+                self._initialized = true
+                single(.success(true))
             }
-            IronSource.initWithAppKey(appKey, adUnits: [
-                IS_REWARDED_VIDEO,
-                IS_INTERSTITIAL
-            ])
-            IronSource.shouldTrackReachability(true)
-            IronSource.setInterstitialDelegate(self)
-            IronSource.setRewardedVideoDelegate(self)
-            IronSource.setUserId(IronSource.advertiserId())
-            self._initialized = true
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
 
     var hasInterstitialAd: Bool {

@@ -17,6 +17,8 @@ import com.facebook.ads.AudienceNetworkAds
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -30,6 +32,7 @@ class FacebookAdsBridge(
     companion object {
         private val kTag = FacebookAdsBridge::class.java.name
         private const val kPrefix = "FacebookAdsBridge"
+        private const val kInitialize = "${kPrefix}Initialize";
         private const val kGetTestDeviceHash = "${kPrefix}GetTestDeviceHash"
         private const val kAddTestDevice = "${kPrefix}AddTestDevice"
         private const val kClearTestDevices = "${kPrefix}ClearTestDevices"
@@ -44,6 +47,8 @@ class FacebookAdsBridge(
         private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
     }
 
+    private var _initializing = false
+    private var _initialized = false
     private val _bannerHelper = FacebookBannerHelper()
     private val _bannerAds: MutableMap<String, FacebookBannerAd> = ConcurrentHashMap()
     private val _nativeAds: MutableMap<String, FacebookNativeAd> = ConcurrentHashMap()
@@ -52,12 +57,6 @@ class FacebookAdsBridge(
 
     init {
         _logger.info("$kTag: constructor begin: context = $_context")
-        if (!AudienceNetworkAds.isInitialized(_context)) {
-            if (BuildConfig.DEBUG) {
-                AdSettings.setDebugBuild(true)
-            }
-            AudienceNetworkAds.initialize(_context)
-        }
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -110,6 +109,9 @@ class FacebookAdsBridge(
 
     @AnyThread
     private fun registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) {
+            Utils.toString(initialize())
+        }
         _bridge.registerHandler(kGetTestDeviceHash) {
             testDeviceHash
         }
@@ -178,6 +180,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     private fun deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kGetTestDeviceHash)
         _bridge.deregisterHandler(kAddTestDevice)
         _bridge.deregisterHandler(kClearTestDevices)
@@ -190,6 +193,44 @@ class FacebookAdsBridge(
         _bridge.deregisterHandler(kDestroyInterstitialAd)
         _bridge.deregisterHandler(kCreateRewardedAd)
         _bridge.deregisterHandler(kDestroyRewardedAd)
+    }
+
+    @AnyThread
+    suspend fun initialize(): Boolean {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                if (AudienceNetworkAds.isInitialized(_context)) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
+                }
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
+                _initializing = true
+                AudienceNetworkAds
+                    .buildInitSettings(_context)
+                    .withInitListener { result ->
+                        _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
+                        _initializing = false
+                        if (result.isSuccess) {
+                            if (BuildConfig.DEBUG) {
+                                AdSettings.setDebugBuild(true)
+                            }
+                            AdSettings.setTestMode(false)
+                            _initialized = true
+                            cont.resume(true)
+                        } else {
+                            cont.resume(false)
+                        }
+                    }
+                    .initialize()
+            }
+        }
     }
 
     private val testDeviceHash: String

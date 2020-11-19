@@ -15,6 +15,8 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -63,14 +65,14 @@ class VungleBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message ->
+        _bridge.registerAsyncHandler(kInitialize) { message ->
             @Serializable
             class Request(
                 val appId: String
             )
 
             val request = deserialize<Request>(message)
-            initialize(request.appId)
+            Utils.toString(initialize(request.appId))
             ""
         }
         _bridge.registerHandler(kHasRewardedAd) { message ->
@@ -95,30 +97,35 @@ class VungleBridge(
     }
 
     @AnyThread
-    fun initialize(appId: String) {
-        Thread.runOnMainThread {
-            if (_initializing) {
-                return@runOnMainThread
-            }
-            if (_initialized) {
-                return@runOnMainThread
-            }
-            _initializing = true
-
-            Vungle.init(appId, _context, object : InitCallback {
-                override fun onSuccess() {
-                    _logger.debug("$kTag: ${VungleBridge::initialize.name}: ${this::onSuccess.name}")
-                    _initializing = false
-                    _initialized = true
+    suspend fun initialize(appId: String): Boolean {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                if (_initializing) {
+                    cont.resume(false)
+                    return@runOnMainThread
                 }
-
-                override fun onError(throwable: VungleException) {
-                    _logger.info("$kTag: ${VungleBridge::initialize.name}: ${this::onError.name}: message = ${throwable.localizedMessage}")
-                    _initializing = false
+                if (_initialized) {
+                    cont.resume(true)
+                    return@runOnMainThread
                 }
+                _initializing = true
+                Vungle.init(appId, _context, object : InitCallback {
+                    override fun onSuccess() {
+                        _logger.debug("$kTag: initialize: ${this::onSuccess.name}")
+                        _initializing = false
+                        _initialized = true
+                        cont.resume(true)
+                    }
 
-                override fun onAutoCacheAdAvailable(adId: String) {}
-            })
+                    override fun onError(throwable: VungleException) {
+                        _logger.info("$kTag: initialize: ${this::onError.name}: message = ${throwable.localizedMessage}")
+                        _initializing = false
+                        cont.resume(false)
+                    }
+
+                    override fun onAutoCacheAdAvailable(adId: String) {}
+                })
+            }
         }
     }
 
@@ -177,6 +184,10 @@ class VungleBridge(
 
                     val response = Response(adId, exception.localizedMessage ?: "")
                     _bridge.callCpp(kOnFailedToShow, response.serialize())
+                }
+
+                override fun onAdViewed(id: String?) {
+                    _logger.debug("$kTag: ${VungleBridge::showRewardedAd.name}: ${this::onAdViewed.name}: $adId")
                 }
 
                 override fun onAdStart(adId: String) {

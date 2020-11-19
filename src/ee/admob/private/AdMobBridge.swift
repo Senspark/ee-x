@@ -6,6 +6,7 @@
 //
 
 import GoogleMobileAds
+import RxSwift
 
 private let kPrefix = "AdMobBridge"
 private let kInitialize = "\(kPrefix)Initialize"
@@ -25,6 +26,8 @@ private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 public class AdMobBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
+    private var _initializing = false
+    private var _initialized = false
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
     private var _bannerAds: [String: AdMobBannerAd] = [:]
@@ -52,9 +55,14 @@ public class AdMobBridge: NSObject, IPlugin {
     }
 
     func registerHandlers() {
-        _bridge.registerHandler(kInitialize) { _ in
+        _bridge.registerAsyncHandler(kInitialize) { _, resolver in
             self.initialize()
-            return ""
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
         }
         _bridge.registerHandler(kGetEmulatorTestDeviceHash) { _ in
             self.emulatorTestDeviceHash
@@ -129,10 +137,26 @@ public class AdMobBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
-    func initialize() {
-        Thread.runOnMainThread {
-            GADMobileAds.sharedInstance().start(completionHandler: nil)
+    func initialize() -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                if self._initializing {
+                    single(.success(false))
+                    return
+                }
+                if self._initialized {
+                    single(.success(true))
+                    return
+                }
+                GADMobileAds.sharedInstance().start { _ in
+                    self._initializing = false
+                    self._initialized = true
+                    single(.success(true))
+                }
+            }
+            return Disposables.create()
         }
+        .subscribeOn(MainScheduler())
     }
 
     var emulatorTestDeviceHash: String {

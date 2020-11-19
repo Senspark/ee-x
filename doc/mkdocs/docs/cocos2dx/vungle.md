@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:vungle:1.2.2'
+    implementation 'com.senspark.ee:vungle:1.3.0'
 }
 ```
 
@@ -32,7 +32,10 @@ Initializes with game ID
 #include <ee/Vungle.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IVungle>();
-plugin->initialize("your_game_id")
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_game_id");
+    // Handle initialization result.
+});
 ```
 
 Creates and show a rewarded ad

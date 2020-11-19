@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:iron-source:1.2.2'
+    implementation 'com.senspark.ee:iron-source:1.3.0'
 
     // Includes:
     // - AdMob mediation.
@@ -12,7 +12,7 @@ dependencies {
     // - FacebookAds mediation.
     // - Unity mediation.
     // - Vungle mediation.
-    implementation 'com.senspark.ee:iron-source-mediation:1.2.2'
+    implementation 'com.senspark.ee:iron-source-mediation:1.3.0'
 }
 ```
 
@@ -40,7 +40,10 @@ Initializes with game ID
 #include <ee/IronSource.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IIronSource>();
-plugin->initialize("your_game_id")
+ee::noAwait([plugin]() -> ee::Task<> {
+    auto result = co_await plugin->initialize("your_game_id")
+    // Handle initialization result.
+});
 ```
 
 Creates and show an interstitial ad

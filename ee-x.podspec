@@ -132,6 +132,10 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'admob-mediation-dependencies' do |s|
     # https://bintray.com/google/mobile-ads-adapters-ios
+
+    # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
+
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.4.0'
 
@@ -223,6 +227,10 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'iron-source-mediation-dependencies' do |s|
+    # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
+    s.dependency 'AdColony', '4.4.0'
+
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
 

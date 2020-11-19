@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+repositories {
+    maven { url 'https://adcolony.bintray.com/AdColony' }
+}
+
 android {
     buildToolsVersion rootProject.buildToolsVersion
     compileSdkVersion rootProject.compileSdkVersion
@@ -25,6 +29,9 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     // https://bintray.com/google/mobile-ads-adapters-android
+    // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
+    implementation 'com.google.ads.mediation:adcolony:4.2.4.0'
+
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
     implementation 'com.google.ads.mediation:applovin:9.14.5.0'
 

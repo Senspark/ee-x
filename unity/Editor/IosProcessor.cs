@@ -43,6 +43,12 @@ namespace EE.Editor {
                 items.AddDict().SetString("SKAdNetworkIdentifier", "4DZT52R2T5.skadnetwork");
                 items.AddDict().SetString("SKAdNetworkIdentifier", "bvpn9ufa9b.skadnetwork");
             }
+            if (settings.IsAdMobMediationEnabled ||
+                settings.IsIronSourceEnabled) {
+                // IronSource.
+                var items = plist.root["SKAdNetworkItems"]?.AsArray() ?? plist.root.CreateArray("SKAdNetworkItems");
+                items.AddDict().SetString("SKAdNetworkIdentifier", "SU67R6K2V3.skadnetwork");
+            }
             plist.WriteToFile(plistPath);
         }
     }

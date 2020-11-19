@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 repositories {
+    maven { url 'https://adcolony.bintray.com/AdColony' }
     maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
 }
 
@@ -29,6 +30,9 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     api project(':ee-x-iron-source')
+    
+    // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
+    implementation 'com.ironsource.adapters:adcolonyadapter:4.3.4'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
     implementation 'com.ironsource.adapters:admobadapter:4.3.14'

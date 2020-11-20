@@ -64,11 +64,22 @@ namespace EETest {
             EE.Utils.NoAwait(async () => {
                 var ad = plugin.CreateBannerAd(
                     "ca-app-pub-2101587572072038/6118633101",
-                    EE.AdMobBannerAdSize.MediumRectangle);
+                    EE.AdMobBannerAdSize.Normal);
                 var (width, height) = ad.Size;
                 Debug.Log($"Ad size = {width} x {height}");
-                await ad.Load();
-                ad.IsVisible = true;
+                ad.IsVisible = false;
+                EE.Utils.NoAwait(async () => {
+                    while (true) {
+                        Debug.Log($"Load begin");
+                        var result = await ad.Load();
+                        Debug.Log($"Load end: {result}");
+                        if (result) {
+                            ad.IsVisible = true;
+                            break;
+                        }
+                        await Task.Delay(5000);
+                    }
+                });
                 while (true) {
                     ad.Anchor = (0, 0);
                     ad.Position = (0, 0);

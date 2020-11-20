@@ -35,6 +35,7 @@ ext {
     pluginDependencies = [
         'core'                  : [],
         'ads'                   : ['core'],
+        'ad-colony'             : ['ads'],
         'admob'                 : ['ads'],
         'admob-mediation'       : ['admob'],
         'app-lovin'             : ['ads'],

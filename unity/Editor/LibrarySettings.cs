@@ -9,7 +9,7 @@ using UnityEngine;
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
         private const string LibraryVersion = "1.3.0";
-        
+
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
         private const string LibrarySettingsFile = "Assets/EE/Resources/EESettings.asset";
@@ -192,6 +192,7 @@ namespace EE.Editor {
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
+                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidLibraries.Add($"com.senspark.ee:admob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-admob-mediation");
                     } else {
@@ -207,6 +208,7 @@ namespace EE.Editor {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
+                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-iron-source-mediation");
                     } else {

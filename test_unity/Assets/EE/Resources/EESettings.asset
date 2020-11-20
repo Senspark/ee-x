@@ -23,5 +23,5 @@ MonoBehaviour:
   _adMobIosAppId: ca-app-pub-2101587572072038~7063009104
   _isFacebookAdsEnabled: 1
   _isIronSourceEnabled: 1
-  _isIronSourceMediationEnabled: 0
+  _isIronSourceMediationEnabled: 1
   _isUnityAdsEnabled: 1

@@ -100,6 +100,30 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
   end
 
+  spec.subspec 'ad-colony' do |s|
+    s.source_files =
+      'src/ee/AdColony*',
+      'src/ee/ad_colony/**/*'
+
+    s.private_header_files =
+      'src/ee/ad_colony/internal/*.{h,hpp,inl}',
+      'src/ee/ad_colony/private/*.{h,hpp,inl}'
+
+    s.exclude_files =
+      'src/ee/ad_colony/Android.mk',
+      'src/ee/ad_colony/CMakeLists.txt',
+      'src/ee/ad_colony/generate.sh',
+      'src/ee/ad_colony/sourcelist.cmake'
+
+    s.dependency 'ee-x/ads'
+    s.dependency 'ee-x/ad-colony-dependencies'
+  end
+
+  spec.subspec 'ad-colony-dependencies' do |s|
+    # https://github.com/AdColony/AdColony-iOS-SDK
+    s.dependency 'AdColony', '4.4.0'
+  end
+
   spec.subspec 'admob' do |s|
     s.source_files =
       'src/ee/AdMob*',
@@ -229,7 +253,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'iron-source-mediation-dependencies' do |s|
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
     s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'ee-x/ad-colony-dependencies'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'

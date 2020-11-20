@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 using EE.Internal;
 
@@ -119,6 +120,12 @@ namespace EE {
 
         public static bool RunOnLibraryThread(Action runnable) {
             return _libraryThreadExecuter(runnable);
+        }
+
+        public static async Task SwitchToLibraryThread() {
+            var source = new TaskCompletionSource<object>();
+            RunOnLibraryThread(() => { source.SetResult(null); });
+            await source.Task;
         }
 
         public static bool IsMainThread() {

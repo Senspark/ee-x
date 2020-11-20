@@ -22,6 +22,7 @@ enum class Library {
 };
 
 enum class Plugin {
+    AdColony,
     Adjust,
     AdMob,
     AppLovin,

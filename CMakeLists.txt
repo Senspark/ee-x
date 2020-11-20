@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(ee_x)
 
+add_subdirectory(src/ee/ad_colony)
 add_subdirectory(src/ee/adjust)
 add_subdirectory(src/ee/admob)
 add_subdirectory(src/ee/ads)

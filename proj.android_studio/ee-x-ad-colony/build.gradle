@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+repositories {
+    maven { url 'https://adcolony.bintray.com/AdColony' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('ad-colony')
+} else {
+    dependencies {
+        api project(':ee-x-ads')
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    // https://github.com/AdColony/AdColony-Android-SDK
+    implementation 'com.adcolony:sdk:4.2.4'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+}

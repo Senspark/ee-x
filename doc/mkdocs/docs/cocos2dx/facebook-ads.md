@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:facebook-ads:1.3.0'
+    implementation 'com.senspark.ee:facebook-ads:1.3.1'
 }
 ```
 

@@ -9,9 +9,12 @@
 <span class=k>auto</span> <span class=n>ironsource</span> <span class=o>=</span> <span class=n>ee</span><span class=o>::</span><span class=n>PluginManager</span><span class=o>::</span><span class=n>createPlugin</span><span class=o>&lt;</span><span class=n>ee</span><span class=o>::</span><span class=n>IIronSource</span><span class=o>&gt;</span><span class=p>();</span>
 <span class=k>auto</span> <span class=n>unity</span> <span class=o>=</span> <span class=n>ee</span><span class=o>::</span><span class=n>PluginManager</span><span class=o>::</span><span class=n>createPlugin</span><span class=o>&lt;</span><span class=n>ee</span><span class=o>::</span><span class=n>IUnityAds</span><span class=o>&gt;</span><span class=p>();</span>
 
-<span class=n>admob</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>();</span>
-<span class=n>ironsource</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>);</span>
-<span class=n>unity</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>,</span> <span class=nb>false</span><span class=p>);</span>
+<span class=n>ee</span><span class=o>::</span><span class=n>noAwait</span><span class=p>([</span><span class=n>admob</span><span class=p>,</span> <span class=n>facebook</span><span class=p>,</span> <span class=n>ironsource</span><span class=p>,</span> <span class=n>unity</span><span class=p>]()</span> <span class=o>-&gt;</span> <span class=n>ee</span><span class=o>::</span><span class=n>Task</span><span class=o>&lt;&gt;</span> <span class=p>{</span>
+    <span class=k>co_await</span> <span class=n>admob</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>();</span>
+    <span class=k>co_await</span> <span class=n>facebook</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>();</span>
+    <span class=k>co_await</span> <span class=n>ironsource</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>);</span>
+    <span class=k>co_await</span> <span class=n>unity</span><span class=o>-&gt;</span><span class=n>initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>,</span> <span class=nb>false</span><span class=p>);</span>
+<span class=p>});</span>
 
 <span class=c1>// Create a banner ad.</span>
 <span class=k>auto</span> <span class=n>ad</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>make_shared</span><span class=o>&lt;</span><span class=n>ee</span><span class=o>::</span><span class=n>MultiAdView</span><span class=o>&gt;</span><span class=p>();</span>

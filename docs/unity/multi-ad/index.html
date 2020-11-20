@@ -9,9 +9,12 @@
 <span class=kt>var</span> <span class=n>ironsource</span> <span class=p>=</span> <span class=n>EE</span><span class=p>.</span><span class=n>PluginManager</span><span class=p>.</span><span class=n>CreatePlugin</span><span class=p>&lt;</span><span class=n>EE</span><span class=p>.</span><span class=n>IIronSource</span><span class=p>&gt;();</span>
 <span class=kt>var</span> <span class=n>unity</span> <span class=p>=</span> <span class=n>EE</span><span class=p>.</span><span class=n>PluginManager</span><span class=p>.</span><span class=n>CreatePlugin</span><span class=p>&lt;</span><span class=n>EE</span><span class=p>.</span><span class=n>IUnityAds</span><span class=p>&gt;();</span>
 
-<span class=n>admob</span><span class=p>.</span><span class=n>Initialize</span><span class=p>();</span>
-<span class=n>ironsource</span><span class=p>.</span><span class=n>Initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>);</span>
-<span class=n>unity</span><span class=p>.</span><span class=n>Initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>,</span> <span class=k>false</span><span class=p>);</span>
+<span class=n>EE</span><span class=p>.</span><span class=n>Utils</span><span class=p>.</span><span class=n>NoAwait</span><span class=p>(</span><span class=k>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+    <span class=k>await</span> <span class=n>admob</span><span class=p>.</span><span class=n>Initialize</span><span class=p>();</span>
+    <span class=k>await</span> <span class=n>facebook</span><span class=p>.</span><span class=n>Initialize</span><span class=p>();</span>
+    <span class=k>await</span> <span class=n>ironsource</span><span class=p>.</span><span class=n>Initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>);</span>
+    <span class=k>await</span> <span class=n>unity</span><span class=p>.</span><span class=n>Initialize</span><span class=p>(</span><span class=s>&quot;app_id&quot;</span><span class=p>,</span> <span class=k>false</span><span class=p>);</span>
+<span class=p>});</span>
 
 <span class=c1>// Create a banner ad.</span>
 <span class=kt>var</span> <span class=n>ad</span> <span class=p>=</span> <span class=k>new</span> <span class=n>EE</span><span class=p>.</span><span class=n>MultiAdView</span><span class=p>()</span>

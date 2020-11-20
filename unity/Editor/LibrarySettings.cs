@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "1.3.0";
-        
+        private const string LibraryVersion = "1.3.1";
+
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
         private const string LibrarySettingsFile = "Assets/EE/Resources/EESettings.asset";
@@ -33,6 +33,9 @@ namespace EE.Editor {
 
         [SerializeField]
         private bool _isAdjustEnabled = false;
+
+        [SerializeField]
+        private bool _isAdColonyEnabled = false;
 
         [SerializeField]
         private bool _isAdMobEnabled = false;
@@ -76,6 +79,11 @@ namespace EE.Editor {
         public bool IsCoreEnabled {
             get => _isCoreEnabled;
             set => _isCoreEnabled = value;
+        }
+
+        public bool IsAdColonyEnabled {
+            get => _isAdColonyEnabled;
+            set => _isAdColonyEnabled = value;
         }
 
         public bool IsAdMobEnabled {
@@ -190,8 +198,14 @@ namespace EE.Editor {
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));
                 }
+                if (IsAdColonyEnabled) {
+                    androidRepositories.Add("https://adcolony.bintray.com/AdColony");
+                    androidLibraries.Add($"com.senspark.ee:ad-colony:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/cs-ad-colony");
+                }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
+                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidLibraries.Add($"com.senspark.ee:admob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-admob-mediation");
                     } else {
@@ -207,6 +221,7 @@ namespace EE.Editor {
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
+                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/cs-iron-source-mediation");
                     } else {

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.3.0'
+  spec.version        = '1.3.1'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.3.0'
+    :tag => 'v1.3.1'
   }
 
   spec.framework = 'Foundation'
@@ -98,6 +98,30 @@ Pod::Spec.new do |spec|
       'src/ee/ads/sourcelist.cmake'
 
     s.dependency 'ee-x/core'
+  end
+
+  spec.subspec 'ad-colony' do |s|
+    s.source_files =
+      'src/ee/AdColony*',
+      'src/ee/ad_colony/**/*'
+
+    s.private_header_files =
+      'src/ee/ad_colony/internal/*.{h,hpp,inl}',
+      'src/ee/ad_colony/private/*.{h,hpp,inl}'
+
+    s.exclude_files =
+      'src/ee/ad_colony/Android.mk',
+      'src/ee/ad_colony/CMakeLists.txt',
+      'src/ee/ad_colony/generate.sh',
+      'src/ee/ad_colony/sourcelist.cmake'
+
+    s.dependency 'ee-x/ads'
+    s.dependency 'ee-x/ad-colony-dependencies'
+  end
+
+  spec.subspec 'ad-colony-dependencies' do |s|
+    # https://github.com/AdColony/AdColony-iOS-SDK
+    s.dependency 'AdColony', '4.4.0'
   end
 
   spec.subspec 'admob' do |s|
@@ -229,7 +253,7 @@ Pod::Spec.new do |spec|
   spec.subspec 'iron-source-mediation-dependencies' do |s|
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
     s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'ee-x/ad-colony-dependencies'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
@@ -886,6 +910,14 @@ Pod::Spec.new do |spec|
       'src/ee/ads/**/*.swift'
 
     s.dependency 'ee-x/cs-core'
+  end
+  
+  spec.subspec 'cs-ad-colony' do |s|
+    s.source_files =
+      'src/ee/ad_colony/**/*.swift'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'ee-x/ad-colony-dependencies'
   end
 
   spec.subspec 'cs-admob' do |s|

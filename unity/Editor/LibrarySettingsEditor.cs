@@ -43,6 +43,9 @@ namespace EE.Editor {
             // Adjust plugin.
             settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
 
+            // AdColony plugin.
+            settings.IsAdColonyEnabled = EditorGUILayout.Toggle(new GUIContent("AdColony"), settings.IsAdColonyEnabled);
+
             // AdMob plugin.
             settings.IsAdMobEnabled = EditorGUILayout.Toggle(new GUIContent("AdMob"), settings.IsAdMobEnabled);
             EditorGUI.BeginDisabledGroup(!settings.IsAdMobEnabled);

@@ -76,7 +76,7 @@ android {
 
     defaultConfig {
         applicationId 'com.ee.test.android'
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '1.0.0'
@@ -167,6 +167,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':libcocos2dx')
+    implementation project(':ee-x-ad-colony')
     implementation project(':ee-x-adjust')
     implementation project(':ee-x-admob')
     implementation project(':ee-x-admob-mediation')

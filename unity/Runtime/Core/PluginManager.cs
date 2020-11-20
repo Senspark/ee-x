@@ -5,6 +5,7 @@ using EE.Internal;
 
 namespace EE {
     public enum Plugin {
+        AdColony,
         Adjust,
         AdMob,
         AppLovin,
@@ -19,6 +20,7 @@ namespace EE {
 
     public static class PluginManager {
         private static readonly Dictionary<Plugin, string> _pluginNames = new Dictionary<Plugin, string> {
+            [Plugin.AdColony] = "AdColony",
             [Plugin.Adjust] = "Adjust",
             [Plugin.AdMob] = "AdMob",
             [Plugin.AppLovin] = "AppLovin",
@@ -33,6 +35,7 @@ namespace EE {
 
         private static readonly Dictionary<Type, (Plugin, Func<IMessageBridge, IPlugin>)> _pluginTypes
             = new Dictionary<Type, (Plugin, Func<IMessageBridge, IPlugin>)> {
+                [typeof(IAdColony)] = (Plugin.AdColony, bridge => new AdColony(bridge)),
                 [typeof(IAdjust)] = (Plugin.Adjust, bridge => new Adjust(bridge)),
                 [typeof(IAdMob)] = (Plugin.AdMob, bridge => new AdMob(bridge)),
                 [typeof(IFacebookAds)] = (Plugin.FacebookAds, bridge => new FacebookAds(bridge)),

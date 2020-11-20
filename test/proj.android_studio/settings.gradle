@@ -9,6 +9,7 @@ def include_lib(name) {
     project(':ee-x-' + name).projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-' + name)
 }
 
+include_lib('ad-colony')
 include_lib('adjust')
 include_lib('ads')
 include_lib('admob')

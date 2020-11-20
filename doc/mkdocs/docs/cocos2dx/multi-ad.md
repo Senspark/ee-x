@@ -17,9 +17,12 @@ auto facebook = ee::PluginManager::createPlugin<ee::IFacebookAds>();
 auto ironsource = ee::PluginManager::createPlugin<ee::IIronSource>();
 auto unity = ee::PluginManager::createPlugin<ee::IUnityAds>();
 
-admob->initialize();
-ironsource->initialize("app_id");
-unity->initialize("app_id", false);
+ee::noAwait([admob, facebook, ironsource, unity]() -> ee::Task<> {
+    co_await admob->initialize();
+    co_await facebook->initialize();
+    co_await ironsource->initialize("app_id");
+    co_await unity->initialize("app_id", false);
+});
 
 // Create a banner ad.
 auto ad = std::make_shared<ee::MultiAdView>();

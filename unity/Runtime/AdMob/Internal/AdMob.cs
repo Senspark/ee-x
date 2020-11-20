@@ -54,6 +54,7 @@ namespace EE.Internal {
 
         public async Task<bool> Initialize() {
             var response = await _bridge.CallAsync(kInitialize);
+            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 

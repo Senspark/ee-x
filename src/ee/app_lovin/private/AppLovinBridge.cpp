@@ -13,6 +13,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
@@ -228,6 +229,7 @@ void Self::destroy() {
 Task<bool> Self::initialize(const std::string& key) {
     logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
     auto response = co_await bridge_.callAsync(kInitialize, key);
+    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 

@@ -82,6 +82,7 @@ namespace EE.Internal {
                 testModeEnabled = testModeEnabled
             };
             var response = await _bridge.CallAsync(kInitialize, JsonUtility.ToJson(request));
+            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 

@@ -6,6 +6,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
+#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
@@ -115,6 +116,7 @@ Task<bool> Self::initialize(const std::string& appId) {
     nlohmann::json json;
     json["appId"] = appId;
     auto response = co_await bridge_.callAsync(kInitialize, json.dump());
+    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 

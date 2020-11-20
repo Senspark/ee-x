@@ -35,6 +35,9 @@ namespace EE.Editor {
         private bool _isAdjustEnabled = false;
 
         [SerializeField]
+        private bool _isAdColonyEnabled = false;
+
+        [SerializeField]
         private bool _isAdMobEnabled = false;
 
         [SerializeField]
@@ -76,6 +79,11 @@ namespace EE.Editor {
         public bool IsCoreEnabled {
             get => _isCoreEnabled;
             set => _isCoreEnabled = value;
+        }
+
+        public bool IsAdColonyEnabled {
+            get => _isAdColonyEnabled;
+            set => _isAdColonyEnabled = value;
         }
 
         public bool IsAdMobEnabled {
@@ -189,6 +197,11 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/cs-adjust");
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));
+                }
+                if (IsAdColonyEnabled) {
+                    androidRepositories.Add("https://adcolony.bintray.com/AdColony");
+                    androidLibraries.Add($"com.senspark.ee:ad-colony:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/cs-ad-colony");
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {

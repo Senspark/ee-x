@@ -1,12 +1,9 @@
+package com.ee
+
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.adcolony.sdk.AdColony
-import com.ee.ILogger
-import com.ee.IMessageBridge
-import com.ee.IPlugin
-import com.ee.Thread
-import com.ee.Utils
 import kotlinx.serialization.InternalSerializationApi
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -74,7 +71,7 @@ class AdColonyBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                AdColony.configure(_activity, appId);
+                AdColony.configure(_activity, appId)
                 _initializing = false
                 _initialized = true
                 cont.resume(true)

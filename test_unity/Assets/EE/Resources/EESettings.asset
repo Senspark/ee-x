@@ -17,6 +17,7 @@ MonoBehaviour:
   _isMultiDexEnabled: 1
   _isCoreEnabled: 1
   _isAdjustEnabled: 0
+  _isAdColonyEnabled: 1
   _isAdMobEnabled: 1
   _isAdMobMediationEnabled: 1
   _adMobAndroidAppId: ca-app-pub-2101587572072038~4641899906

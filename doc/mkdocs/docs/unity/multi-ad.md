@@ -18,9 +18,12 @@ var facebook = EE.PluginManager.CreatePlugin<EE.IFacebookAds>();
 var ironsource = EE.PluginManager.CreatePlugin<EE.IIronSource>();
 var unity = EE.PluginManager.CreatePlugin<EE.IUnityAds>();
 
-admob.Initialize();
-ironsource.Initialize("app_id");
-unity.Initialize("app_id", false);
+EE.Utils.NoAwait(async () => {
+    await admob.Initialize();
+    await facebook.Initialize();
+    await ironsource.Initialize("app_id");
+    await unity.Initialize("app_id", false);
+});
 
 // Create a banner ad.
 var ad = new EE.MultiAdView()

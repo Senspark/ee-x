@@ -911,6 +911,14 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/cs-core'
   end
+  
+  spec.subspec 'cs-ad-colony' do |s|
+    s.source_files =
+      'src/ee/ad_colony/**/*.swift'
+
+    s.dependency 'ee-x/cs-ads'
+    s.dependency 'ee-x/ad-colony-dependencies'
+  end
 
   spec.subspec 'cs-admob' do |s|
     s.source_files =

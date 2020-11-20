@@ -37,7 +37,7 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::removePlugin(Plugin::AdMob);
+    PluginManager::removePlugin(Plugin::AdColony);
 }
 
 Task<bool> Self::initialize(const std::string& appId) {

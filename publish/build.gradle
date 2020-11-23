@@ -66,6 +66,23 @@ ext {
     ]
 }
 
+rootProject.ext.pluginDependencies.each { plugin, dependencies ->
+    task "publish_plugin_$plugin" {
+        group 'publishing helper'
+        dependencies.each { dependency ->
+            dependsOn "publish_plugin_$dependency"
+        }
+        dependsOn ":ee-x-$plugin:publishToMavenLocal"
+    }
+}
+
+task "publish_all_plugins" {
+    group 'publishing helper'
+    rootProject.ext.pluginDependencies.each { plugin, _ ->
+        dependsOn "publish_plugin_$plugin"
+    }
+}
+
 def applyPrefabSettings(project, String libraryName, headerPaths) {
     /*
     Wait for AndroidStudio4.1

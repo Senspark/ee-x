@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.ironsource.adapters:facebookadapter:4.3.23'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-    implementation 'com.ironsource.adapters:unityadsadapter:4.3.7'
+    implementation 'com.ironsource.adapters:unityadsadapter:4.3.8'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
     implementation 'com.ironsource.adapters:vungleadapter:4.3.7'

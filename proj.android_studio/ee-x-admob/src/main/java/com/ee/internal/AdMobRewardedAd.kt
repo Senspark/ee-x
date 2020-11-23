@@ -9,6 +9,7 @@ import com.ee.Thread
 import com.ee.Utils
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
@@ -120,16 +121,16 @@ internal class AdMobRewardedAd(
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
-                    // Ad successfully loaded.
+                    _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}")
                     Thread.checkMainThread()
                     _isLoaded.set(true)
                     _bridge.callCpp(_messageHelper.onLoaded)
                 }
 
-                override fun onRewardedAdFailedToLoad(errorCode: Int) {
-                    // Ad failed to load.
+                override fun onRewardedAdFailedToLoad(error: LoadAdError?) {
+                    _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
                     Thread.checkMainThread()
-                    _bridge.callCpp(_messageHelper.onFailedToLoad, errorCode.toString())
+                    _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
                 }
             }
             ad.loadAd(AdRequest.Builder().build(), callback)

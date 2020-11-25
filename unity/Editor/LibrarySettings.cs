@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "1.3.2";
+        private const string LibraryVersion = "1.3.3";
 
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";

@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-performance:1.3.2'
+    implementation 'com.senspark.ee:firebase-performance:1.3.3'
 }
 ```
 

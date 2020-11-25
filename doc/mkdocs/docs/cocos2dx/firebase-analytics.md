@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-analytics:1.3.2'
+    implementation 'com.senspark.ee:firebase-analytics:1.3.3'
 }
 ```
 

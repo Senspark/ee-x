@@ -31,7 +31,15 @@ public class AdColonyBridge: NSObject, IPlugin {
 
     func registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message, resolver in
-            self.initialize(message)
+            let dict = EEJsonUtils.convertString(toDictionary: message)
+            guard
+                let appId = dict["appId"] as? String,
+                let zoneIds = dict["zoneIds"] as? [String]
+            else {
+                assert(false, "Unexpected value")
+                return
+            }
+            self.initialize(appId, zoneIds)
                 .subscribe(
                     onSuccess: {
                         result in resolver(Utils.toString(result))
@@ -45,7 +53,7 @@ public class AdColonyBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kInitialize)
     }
 
-    func initialize(_ appId: String) -> Single<Bool> {
+    func initialize(_ appId: String, _ zoneIds: [String]) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 if self._initializing {
@@ -56,7 +64,7 @@ public class AdColonyBridge: NSObject, IPlugin {
                     single(.success(true))
                     return
                 }
-                AdColony.configure(withAppID: appId, zoneIDs: [], options: nil) { _ in
+                AdColony.configure(withAppID: appId, zoneIDs: zoneIds, options: nil) { _ in
                     self._initializing = false
                     self._initialized = true
                     single(.success(true))

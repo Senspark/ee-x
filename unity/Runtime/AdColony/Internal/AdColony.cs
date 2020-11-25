@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+
+using UnityEngine;
 
 namespace EE.Internal {
     internal class AdColony : IAdColony {
@@ -14,8 +19,18 @@ namespace EE.Internal {
         public void Destroy() {
         }
 
-        public async Task<bool> Initialize(string appId) {
-            var response = await _bridge.CallAsync(kInitialize, appId);
+        [Serializable]
+        private struct InitializeRequest {
+            public string appId;
+            public List<string> zoneIds;
+        }
+
+        public async Task<bool> Initialize(string appId, params string[] zoneIds) {
+            var request = new InitializeRequest {
+                appId = appId,
+                zoneIds = zoneIds.ToList()
+            };
+            var response = await _bridge.CallAsync(kInitialize, JsonUtility.ToJson(request));
             await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }

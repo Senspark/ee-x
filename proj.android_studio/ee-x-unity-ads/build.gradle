@@ -37,7 +37,8 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
     // https://github.com/Unity-Technologies/unity-ads-android/releases
-    implementation 'com.unity3d.ads:unity-ads:3.5.1'
+    // Use "api" to inherit manifest elements.
+    api 'com.unity3d.ads:unity-ads:3.5.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'

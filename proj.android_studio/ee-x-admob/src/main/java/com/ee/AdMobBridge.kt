@@ -218,9 +218,13 @@ class AdMobBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                MobileAds.initialize(_context) {
+                MobileAds.initialize(_activity) { status ->
                     _initializing = false
                     _initialized = true
+                    _logger.info("$kTag: initialize: done")
+                    for ((key, value) in status.adapterStatusMap) {
+                        _logger.info("$kTag: adapter = $key state = ${value.initializationState} latency = ${value.latency} description = ${value.description}")
+                    }
                     cont.resume(true)
                 }
             }

@@ -8,6 +8,7 @@
 import GoogleMobileAds
 import RxSwift
 
+private let kTag = "\(AdMobBridge.self)"
 private let kPrefix = "AdMobBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kGetEmulatorTestDeviceHash = "\(kPrefix)GetEmulatorTestDeviceHash"
@@ -148,9 +149,13 @@ public class AdMobBridge: NSObject, IPlugin {
                     single(.success(true))
                     return
                 }
-                GADMobileAds.sharedInstance().start { _ in
+                GADMobileAds.sharedInstance().start { status in
                     self._initializing = false
                     self._initialized = true
+                    self._logger.info("\(kTag): initialize: done")
+                    for (key, value) in status.adapterStatusesByClassName {
+                        self._logger.info("\(kTag): adapter = \(key) state = \(value.state) latency = \(value.latency) description = \(value.description)")
+                    }
                     single(.success(true))
                 }
             }

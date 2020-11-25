@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-remote-config:1.3.1'
+    implementation 'com.senspark.ee:firebase-remote-config:1.3.2'
 }
 ```
 

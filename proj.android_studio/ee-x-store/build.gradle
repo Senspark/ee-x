@@ -34,7 +34,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'com.android.billingclient:billing-ktx:3.0.1'
+    implementation 'com.android.billingclient:billing-ktx:3.0.2'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.2'
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'

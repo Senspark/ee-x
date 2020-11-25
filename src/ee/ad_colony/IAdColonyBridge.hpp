@@ -15,7 +15,9 @@ namespace ee {
 namespace ad_colony {
 class IBridge : public IPlugin {
 public:
-    [[nodiscard]] virtual Task<bool> initialize(const std::string& appId) = 0;
+    [[nodiscard]] virtual Task<bool>
+    initialize(const std::string& appId,
+               const std::vector<std::string>& zoneIds) = 0;
 };
 } // namespace ad_colony
 } // namespace ee

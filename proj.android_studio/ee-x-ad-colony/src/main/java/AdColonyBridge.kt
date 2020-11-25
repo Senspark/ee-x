@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Context
 import androidx.annotation.AnyThread
 import com.adcolony.sdk.AdColony
+import com.ee.internal.deserialize
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -49,7 +51,14 @@ class AdColonyBridge(
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
-            Utils.toString(initialize(message))
+            @Serializable
+            class Request(
+                val appId: String,
+                val zoneIds: List<String>
+            )
+
+            val request = deserialize<Request>(message)
+            Utils.toString(initialize(request.appId, request.zoneIds))
         }
     }
 
@@ -59,7 +68,7 @@ class AdColonyBridge(
     }
 
     @AnyThread
-    suspend fun initialize(appId: String): Boolean {
+    suspend fun initialize(appId: String, zoneIds: List<String>): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
@@ -71,9 +80,12 @@ class AdColonyBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                AdColony.configure(_activity, appId)
+                val result = AdColony.configure(_activity, appId, *zoneIds.toTypedArray())
                 _initializing = false
-                _initialized = true
+                if (result) {
+                    _initialized = true
+                }
+                _logger.info("$kTag: initialize: result = $result version = ${AdColony.getSDKVersion()}")
                 cont.resume(true)
             }
         }

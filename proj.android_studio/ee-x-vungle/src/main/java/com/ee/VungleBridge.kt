@@ -73,7 +73,6 @@ class VungleBridge(
 
             val request = deserialize<Request>(message)
             Utils.toString(initialize(request.appId))
-            ""
         }
         _bridge.registerHandler(kHasRewardedAd) { message ->
             Utils.toString(hasRewardedAd(message))

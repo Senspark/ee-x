@@ -191,7 +191,7 @@ class UnityAdsBridge(
                     }
 
                     override fun onInitializationFailed(error: UnityAds.UnityAdsInitializationError?, message: String?) {
-                        _logger.error("onInitializationFailed: ${message ?: ""}")
+                        _logger.error("onInitializationFailed: error = ${error ?: ""} message = ${message ?: ""}")
                         _initializing = false
                         cont.resume(false)
                     }

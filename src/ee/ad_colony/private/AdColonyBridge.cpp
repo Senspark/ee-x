@@ -6,6 +6,7 @@
 #include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/nlohmann/json.hpp>
 
 namespace ee {
 namespace core {
@@ -37,11 +38,15 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::removePlugin(Plugin::AdMob);
+    PluginManager::removePlugin(Plugin::AdColony);
 }
 
-Task<bool> Self::initialize(const std::string& appId) {
-    auto response = co_await bridge_.callAsync(kInitialize, appId);
+Task<bool> Self::initialize(const std::string& appId,
+                            const std::vector<std::string>& zoneIds) {
+    nlohmann::json json;
+    json["appId"] = appId;
+    json["zoneIds"] = zoneIds;
+    auto response = co_await bridge_.callAsync(kInitialize, json.dump());
     co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }

@@ -183,7 +183,7 @@ internal class AdMobBannerAd(
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
+        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
         Thread.checkMainThread()
         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
     }

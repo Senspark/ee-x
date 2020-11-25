@@ -126,6 +126,7 @@ namespace EE.Internal {
 
         public async Task<string> GetDeviceId() {
             var response = await _bridge.CallAsync(kGetDeviceId);
+            await Thread.SwitchToLibraryThread();
             return response;
         }
 
@@ -158,6 +159,7 @@ namespace EE.Internal {
                 time_out = timeOut,
             };
             var response = await _bridge.CallAsync(kTestConnection, JsonUtility.ToJson(request));
+            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
     }

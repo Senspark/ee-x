@@ -19,7 +19,6 @@ Makefile
 gradlew
 gradlew.bat
 .gradle/
-gradle/
 .settings
 .project
 .classpath

@@ -11,7 +11,7 @@ import RxSwift
 private let kPrefix = "AdColonyBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 
-@objc(EEAdColony)
+@objc(EEAdColonyBridge)
 public class AdColonyBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger

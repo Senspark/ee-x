@@ -16,6 +16,8 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.ee.internal.InstallReferrerBridge
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
@@ -180,6 +182,9 @@ object Platform {
             val request = deserialize<Request>(message)
             val result = testConnection(context, request.host_name, request.time_out)
             Utils.toString(result)
+        }
+        bridge.registerAsyncHandler(kGetInstallReferrerUrl) {
+            getInstallReferrerUrl();
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable
@@ -554,7 +559,6 @@ object Platform {
     }
 
     private suspend fun getInstallReferrerUrl(): String {
-        Log.w("mylog", "get install referrer.")
         return InstallReferrerBridge.getUrl()
     }
 }

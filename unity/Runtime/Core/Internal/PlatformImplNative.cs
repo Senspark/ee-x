@@ -166,6 +166,7 @@ namespace EE.Internal {
 
         public async Task<string> GetInstallReferrerUrl() {
             var result = await _bridge.CallAsync(kGetInstallReferrerUrl);
+            await Thread.SwitchToLibraryThread();
             return result;
         }
     }

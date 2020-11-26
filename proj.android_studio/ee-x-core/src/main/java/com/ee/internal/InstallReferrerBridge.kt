@@ -3,7 +3,7 @@ package com.ee.internal
 import android.util.Log
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
-import com.ee.Utils.getCurrentActivity
+import com.ee.PluginManager
 import kotlinx.coroutines.delay
 
 object InstallReferrerBridge {
@@ -14,7 +14,7 @@ object InstallReferrerBridge {
             return@onConnect it
         }
 
-        var activity = getCurrentActivity()
+        var activity = PluginManager.getInstance().getActivity()
         if (activity != null) {
             referrerClient = InstallReferrerClient.newBuilder(activity).build()
             referrerClient?.startConnection(object : InstallReferrerStateListener {

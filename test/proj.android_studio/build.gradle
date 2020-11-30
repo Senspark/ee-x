@@ -28,5 +28,5 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.2'
     targetSdkVersion = 30
-    firebaseVersion = '26.1.0'
+    firebaseVersion = '25.13.0'
 }

@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.android.installreferrer:installreferrer:1.0'
 
     // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
-    implementation 'com.appsflyer:af-android-sdk:5.4.4'
+    api 'com.appsflyer:af-android-sdk:5.4.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'

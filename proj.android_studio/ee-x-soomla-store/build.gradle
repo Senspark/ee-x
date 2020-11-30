@@ -26,7 +26,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:3.0.2'
+    api 'com.android.billingclient:billing:3.0.2'
 
     // OkHttp3 3.13.x requires Android 5+ API 21.
     // https://stackoverflow.com/questions/55813654/exception-android-java-util-objects-in-android-version-4-3

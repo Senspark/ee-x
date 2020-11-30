@@ -32,7 +32,8 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+    api 'com.google.android.gms:play-services-analytics:17.0.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 }

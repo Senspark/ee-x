@@ -44,7 +44,7 @@ bool Self::isLoaded() const {
 
 Task<bool> Self::load() {
     noAwait([this]() -> Task<> { //
-        co_await plugin_->loadRewardedAd(adId_)
+        co_await plugin_->loadRewardedAd(adId_);
     });
     // Should return whether this ad is loaded.
     co_return isLoaded();

@@ -27,7 +27,7 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     private let _sdk = VungleSDK.shared()
     private var _initializing = false
     private var _initialized = false
-    private var _initializationAwaiter: (() -> Void)?
+    private var _initializationAwaiter: ((Bool) -> Void)?
     private var _rewarded = false
     private var _loadingAdIds: Set<String> = []
     private var _loadedAdIds: Set<String> = []
@@ -98,12 +98,13 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
                 self._initializing = true
                 self._sdk.delegate = self
                 do {
-                    self._initializationAwaiter = {
-                        single(.success(true))
+                    self._initializationAwaiter = { result in
+                        single(.success(result))
                     }
                     try self._sdk.start(withAppId: appId)
                 } catch {
                     self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+                    single(.success(false))
                     return
                 }
             }
@@ -158,13 +159,16 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _initializing = false
         _initialized = false
         if let awaiter = _initializationAwaiter {
-            awaiter()
+            awaiter(true)
         }
     }
 
     public func vungleSDKFailedToInitializeWithError(_ error: Error) {
         _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
         _initializing = false
+        if let awaiter = _initializationAwaiter {
+            awaiter(false)
+        }
     }
 
     public func vungleAdPlayabilityUpdate(_ isAdPlayable: Bool, adId: String?, error: Error?) {

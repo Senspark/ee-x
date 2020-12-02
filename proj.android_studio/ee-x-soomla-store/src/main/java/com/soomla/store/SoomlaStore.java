@@ -407,7 +407,15 @@ public class SoomlaStore {
 
                             @Override
                             public void success(IabPurchase purchase) {
-                                handleSuccessfulPurchase(purchase, false).subscribe();
+                                handleSuccessfulPurchase(purchase, false).subscribe(
+                                    () -> {
+                                        // OK.
+                                    },
+                                    exception -> {
+                                        SoomlaUtils.LogError(TAG, exception.getMessage());
+                                        BusProvider.getInstance().post(new UnexpectedStoreErrorEvent(UnexpectedStoreErrorEvent.ErrorCode.PURCHASE_FAIL));
+                                    }
+                                );
                             }
 
                             @Override

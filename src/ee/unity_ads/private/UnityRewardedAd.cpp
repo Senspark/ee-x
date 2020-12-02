@@ -10,6 +10,7 @@
 
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
+#include <ee/core/NoAwait.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
@@ -42,6 +43,9 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
+    noAwait([this]() -> Task<> { //
+        co_await plugin_->loadRewardedAd(adId_);
+    });
     // Should return whether this ad is loaded.
     co_return isLoaded();
 }

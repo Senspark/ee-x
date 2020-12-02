@@ -13,10 +13,49 @@ private let kPrefix = "UnityAdsBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kSetDebugModeEnabled = "\(kPrefix)SetDebugModeEnabled"
 private let kHasRewardedAd = "\(kPrefix)HasRewardedAd"
+private let kLoadRewardedAd = "\(kPrefix)LoadRewardedAd"
 private let kShowRewardedAd = "\(kPrefix)ShowRewardedAd"
 private let kOnLoaded = "\(kPrefix)OnLoaded"
 private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClosed = "\(kPrefix)OnClosed"
+
+private class InitializeDelegate: NSObject, UnityAdsInitializationDelegate {
+    private let _onCompleted: () -> Void
+    private let _onFailed: (UnityAdsInitializationError, String) -> Void
+
+    public init(_ onCompleted: @escaping () -> Void,
+                _ onFailed: @escaping (UnityAdsInitializationError, String) -> Void) {
+        _onCompleted = onCompleted
+        _onFailed = onFailed
+    }
+
+    func initializationComplete() {
+        _onCompleted()
+    }
+
+    func initializationFailed(_ error: UnityAdsInitializationError, withMessage message: String) {
+        _onFailed(error, message)
+    }
+}
+
+private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
+    private let _onLoaded: (String) -> Void
+    private let _onFailed: (String) -> Void
+
+    public init(_ onLoaded: @escaping (String) -> Void,
+                _ onFailed: @escaping (String) -> Void) {
+        _onLoaded = onLoaded
+        _onFailed = onFailed
+    }
+
+    func unityAdsAdLoaded(_ placementId: String) {
+        _onLoaded(placementId)
+    }
+
+    func unityAdsAdFailed(toLoad placementId: String) {
+        _onFailed(placementId)
+    }
+}
 
 @objc(EEUnityAdsBridge)
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
@@ -69,6 +108,15 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         _bridge.registerHandler(kHasRewardedAd) { message in
             Utils.toString(self.hasRewardedAd(message))
         }
+        _bridge.registerAsyncHandler(kLoadRewardedAd) { message, resolver in
+            self.loadRewardedAd(message)
+                .subscribe(
+                    onSuccess: {
+                        result in resolver(Utils.toString(result))
+                    }, onError: {
+                        _ in resolver(Utils.toString(false))
+                    })
+        }
         _bridge.registerHandler(kShowRewardedAd) { message in
             self.showRewardedAd(message)
             return ""
@@ -79,6 +127,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetDebugModeEnabled)
         _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kLoadRewardedAd)
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
@@ -99,11 +148,16 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 }
                 self._initializing = true
                 UnityAds.add(self)
-                UnityAds.initialize(gameId, testMode: testModeEnabled)
-                // TODO: Wait for UnityAds 3.5.1.
-                self._initializing = false
-                self._initialized = true
-                single(.success(true))
+                UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
+                    self._logger.debug("\(kTag): initializationComplete")
+                    self._initializing = false
+                    self._initialized = true
+                    single(.success(true))
+                } _: { error, message in
+                    self._logger.debug("\(kTag): initializationFailed: error = \(error) message = \(message)")
+                    self._initializing = false
+                    single(.success(false))
+                })
             }
             return Disposables.create()
         }
@@ -120,12 +174,36 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     }
 
     func hasRewardedAd(_ adId: String) -> Bool {
+        if !_initialized {
+            return false
+        }
         return _loadedAdIds.contains(adId)
+    }
+
+    func loadRewardedAd(_ adId: String) -> Single<Bool> {
+        return Single<Bool>.create { single in
+            Thread.runOnMainThread {
+                self._logger.debug("\(kTag): \(#function): \(adId)")
+                if !UnityAds.isInitialized() {
+                    assert(false, "Please call initialize() first")
+                }
+                UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
+                    self._logger.debug("\(kTag): unityAdsAdLoaded: \(adId)")
+                    single(.success(true))
+                } _: { _ in
+                    self._logger.debug("\(kTag): unityAdsAdFailed: \(adId)")
+                    single(.success(false))
+                })
+            }
+            return Disposables.create()
+        }
+        .subscribeOn(MainScheduler())
     }
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
-            if !self._initialized {
+            self._logger.debug("\(kTag): \(#function): \(adId)")
+            if !UnityAds.isInitialized() {
                 assert(false, "Please call initialize() first")
             }
             guard let rootView = Utils.getCurrentRootViewController() else {

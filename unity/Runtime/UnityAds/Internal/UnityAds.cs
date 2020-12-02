@@ -11,6 +11,7 @@ namespace EE.Internal {
         private const string kInitialize = kPrefix + "Initialize";
         private const string kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
         private const string kHasRewardedAd = kPrefix + "HasRewardedAd";
+        private const string kLoadRewardedAd = kPrefix + "LoadRewardedAd";
         private const string kShowRewardedAd = kPrefix + "ShowRewardedAd";
         private const string kOnLoaded = kPrefix + "OnLoaded";
         private const string kOnFailedToShow = kPrefix + "OnFailedToShow";
@@ -128,6 +129,11 @@ namespace EE.Internal {
 
         internal bool HasRewardedAd(string adId) {
             var response = _bridge.Call(kHasRewardedAd, adId);
+            return Utils.ToBool(response);
+        }
+
+        internal async Task<bool> LoadRewardedAd(string adId) {
+            var response = await _bridge.CallAsync(kLoadRewardedAd, adId);
             return Utils.ToBool(response);
         }
 

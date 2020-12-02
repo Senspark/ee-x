@@ -23,8 +23,7 @@ namespace EE.Internal {
         public bool IsLoaded => _plugin.HasRewardedAd();
 
         public Task<bool> Load() {
-            // No op.
-            return Task.FromResult(false);
+            return Task.FromResult(IsLoaded);
         }
 
         public Task<IRewardedAdResult> Show() {

@@ -125,7 +125,7 @@ class UnityAdsBridge(
                 }
                 _initializing = true
                 UnityAds.addListener(this)
-                UnityAds.initialize(_context, gameId, testModeEnabled, object : IUnityAdsInitializationListener {
+                UnityAds.initialize(_context, gameId, testModeEnabled, true, object : IUnityAdsInitializationListener {
                     override fun onInitializationComplete() {
                         _logger.info(this::onInitializationComplete.name)
                         _initializing = false

@@ -37,6 +37,7 @@ private:
     bool destroyRewardedAd(const std::string& adId);
 
     bool hasRewardedAd(const std::string& adId) const;
+    Task<bool> loadRewardedAd(const std::string& adId);
     void showRewardedAd(const std::string& adId);
 
     void onLoaded(const std::string& adId);

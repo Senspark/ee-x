@@ -43,6 +43,7 @@ const std::string kPrefix       = "UnityAdsBridge";
 const auto kInitialize          = kPrefix + "Initialize";
 const auto kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
 const auto kHasRewardedAd       = kPrefix + "HasRewardedAd";
+const auto kLoadRewardedAd      = kPrefix + "LoadRewardedAd";
 const auto kShowRewardedAd      = kPrefix + "ShowRewardedAd";
 const auto kOnLoaded            = kPrefix + "OnLoaded";
 const auto kOnFailedToShow      = kPrefix + "OnFailedToShow";
@@ -166,6 +167,13 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 bool Self::hasRewardedAd(const std::string& adId) const {
     auto response = bridge_.call(kHasRewardedAd, adId);
     return core::toBool(response);
+}
+
+Task<bool> Self::loadRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto response = co_await bridge_.callAsync(kLoadRewardedAd, adId);
+    co_await SwitchToLibraryThread();
+    co_return core::toBool(response);
 }
 
 void Self::showRewardedAd(const std::string& adId) {

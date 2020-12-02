@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-messaging:1.3.4'
+    implementation 'com.senspark.ee:firebase-messaging:1.3.5'
 }
 ```
 

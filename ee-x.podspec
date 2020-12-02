@@ -151,7 +151,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'admob-dependencies' do |s|
     # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '7.66.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '7.68.0'
   end
 
   spec.subspec 'admob-mediation-dependencies' do |s|
@@ -161,16 +161,16 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.4.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.6.0'
 
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationFacebook', '6.0.0.0'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '6.2.0.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.0.2.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.0.3.0'
 
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.8.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.5.1.0'
 
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationVungle', '6.8.1.0'
@@ -194,7 +194,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    s.dependency 'AppLovinSDK', '6.14.4'
+    s.dependency 'AppLovinSDK', '6.14.6'
   end
 
   spec.subspec 'facebook-ads' do |s|
@@ -218,7 +218,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook-ads-dependencies' do |s|
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    s.dependency 'FBAudienceNetwork', '6.0.0'
+    s.dependency 'FBAudienceNetwork', '6.2.0'
   end
 
   spec.subspec 'iron-source' do |s|
@@ -247,28 +247,29 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'iron-source-dependencies' do |s|
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.0.2.0'
+    s.dependency 'IronSourceSDK', '7.0.3.0'
   end
 
   spec.subspec 'iron-source-mediation-dependencies' do |s|
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.1'
     s.dependency 'ee-x/ad-colony-dependencies'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
+    # Wait for supported adapter.
+    # s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.19.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.20.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.20.0'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.21.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.4.3'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.6.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.7.0'
+    s.dependency 'IronSourceVungleAdapter', '4.3.7.1'
   end
 
   spec.subspec 'unity-ads' do |s|
@@ -292,7 +293,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'unity-ads-dependencies' do |s|
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    s.dependency 'UnityAds', '3.4.8'
+    s.dependency 'UnityAds', '3.5.1'
   end
 
   spec.subspec 'vungle' do |s|

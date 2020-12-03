@@ -52,14 +52,6 @@ namespace EE.Internal {
             _plugin.DestroyInterstitialAd(_adId);
         }
 
-        private void CreateInternalAd() {
-            _bridge.Call(_messageHelper.CreateInternalAd);
-        }
-
-        private void DestroyInternalAd() {
-            _bridge.Call(_messageHelper.DestroyInternalAd);
-        }
-
         public bool IsLoaded {
             get {
                 var response = _bridge.Call(_messageHelper.IsLoaded);
@@ -79,10 +71,7 @@ namespace EE.Internal {
             return _displayer.Process(
                 () => _bridge.Call(_messageHelper.Show),
                 result => {
-                    if (result) {
-                        DestroyInternalAd();
-                        CreateInternalAd();
-                    }
+                    // OK.
                 });
         }
 

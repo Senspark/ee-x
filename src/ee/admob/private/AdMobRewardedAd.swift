@@ -37,14 +37,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     }
     
     func registerHandlers() {
-        _bridge.registerHandler(_messageHelper.createInternalAd) { _ in
-            self.createInternalAd()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) { _ in
-            self.destroyInternalAd()
-            return ""
-        }
         _bridge.registerHandler(_messageHelper.isLoaded) { _ in
             Utils.toString(self.isLoaded)
         }
@@ -59,8 +51,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     }
     
     func deregisterHandlers() {
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
         _bridge.deregisterHandler(_messageHelper.isLoaded)
         _bridge.deregisterHandler(_messageHelper.load)
         _bridge.deregisterHandler(_messageHelper.show)
@@ -96,9 +86,12 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
             }
             ad.load(GADRequest(), completionHandler: { error in
                 if let error = error {
+                    self.destroyInternalAd()
+                    self.createInternalAd()
                     self._bridge.callCpp(self._messageHelper.onFailedToLoad,
                                          error.localizedDescription)
                 } else {
+                    self._isLoaded = true
                     self._bridge.callCpp(self._messageHelper.onLoaded)
                 }
             })
@@ -126,6 +119,8 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
         _logger.debug("\(#function): \(error.localizedDescription)")
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
     }
     
@@ -136,6 +131,8 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
         _logger.debug("\(#function)")
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

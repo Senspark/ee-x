@@ -180,7 +180,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 self._logger.debug("\(kTag): \(#function): \(adId)")
-                if !_initialized {
+                if !self._initialized {
                     assert(false, "Please call initialize() first")
                 }
                 UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
@@ -199,14 +199,14 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(adId)")
-            if !_initialized {
+            if !self._initialized {
                 assert(false, "Please call initialize() first")
             }
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return
             }
-            UnityAds.add(this)
+            UnityAds.add(self)
             UnityAds.show(rootView, placementId: adId)
         }
     }

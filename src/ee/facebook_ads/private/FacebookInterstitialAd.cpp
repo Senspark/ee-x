@@ -88,16 +88,6 @@ void Self::destroy() {
     plugin_->destroyInterstitialAd(adId_);
 }
 
-void Self::createInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.createInternalAd());
-}
-
-void Self::destroyInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.destroyInternalAd());
-}
-
 bool Self::isLoaded() const {
     auto response = bridge_.call(messageHelper_.isLoaded());
     return core::toBool(response);
@@ -126,10 +116,7 @@ Task<bool> Self::show() {
             bridge_.call(messageHelper_.show());
         },
         [this](bool result) {
-            if (result) {
-                destroyInternalAd();
-                createInternalAd();
-            }
+            // OK.
         });
     co_return result;
 }

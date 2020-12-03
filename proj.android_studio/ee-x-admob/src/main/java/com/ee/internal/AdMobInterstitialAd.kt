@@ -48,21 +48,11 @@ internal class AdMobInterstitialAd(
     @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
-        _bridge.registerHandler(_messageHelper.createInternalAd) {
-            createInternalAd()
-            ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            destroyInternalAd()
-            ""
-        }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
         _helper.deregisterHandlers()
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
     @AnyThread
@@ -117,6 +107,8 @@ internal class AdMobInterstitialAd(
     override fun onAdFailedToLoad(error: LoadAdError?) {
         _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
         Thread.checkMainThread()
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
     }
 
@@ -147,6 +139,8 @@ internal class AdMobInterstitialAd(
     override fun onAdClosed() {
         _logger.debug("$kTag: ${this::onAdClosed.name}")
         Thread.checkMainThread()
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

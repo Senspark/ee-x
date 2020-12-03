@@ -39,20 +39,10 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func registerHandlers() {
         _helper?.registerHandlers()
-        _bridge.registerHandler(_messageHelper.createInternalAd) { _ in
-            self.createInternalAd()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) { _ in
-            self.destroyInternalAd()
-            return ""
-        }
     }
     
     func deregisterHandlers() {
         _helper?.deregisterHandlers()
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
     
     func createInternalAd() {
@@ -105,11 +95,14 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidReceiveAd(_ ad: GADInterstitial) {
         _logger.debug("\(kTag): \(#function)")
+        _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
         _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
     }
     
@@ -120,6 +113,8 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         _logger.debug("\(kTag): \(#function)")
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onFailedToShow)
     }
     
@@ -134,6 +129,8 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         _logger.debug("\(kTag): \(#function)")
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

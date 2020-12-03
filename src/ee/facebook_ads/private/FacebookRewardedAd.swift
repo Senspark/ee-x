@@ -17,6 +17,7 @@ internal class FacebookRewardedAd:
     private let _adId: String
     private let _messageHelper: MessageHelper
     private var _isLoaded = false
+    private var _displaying = false
     private var _rewarded = false
     private var _ad: FBRewardedVideoAd?
     
@@ -38,14 +39,6 @@ internal class FacebookRewardedAd:
     }
     
     func registerHandlers() {
-        _bridge.registerHandler(_messageHelper.createInternalAd) { _ in
-            self.createInternalAd()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) { _ in
-            self.destroyInternalAd()
-            return ""
-        }
         _bridge.registerHandler(_messageHelper.isLoaded) { _ in
             Utils.toString(self.isLoaded)
         }
@@ -60,8 +53,6 @@ internal class FacebookRewardedAd:
     }
     
     func deregisterHandlers() {
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
         _bridge.deregisterHandler(_messageHelper.isLoaded)
         _bridge.deregisterHandler(_messageHelper.load)
         _bridge.deregisterHandler(_messageHelper.show)
@@ -113,12 +104,15 @@ internal class FacebookRewardedAd:
                 return
             }
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._displaying = true
             self._rewarded = false
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
                 self._isLoaded = false
             } else {
+                self.destroyInternalAd()
+                self.createInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
         }
@@ -132,7 +126,14 @@ internal class FacebookRewardedAd:
     
     func rewardedVideoAd(_ rewardedVideoAd: FBRewardedVideoAd, didFailWithError error: Error) {
         _logger.debug("\(kTag): \(#function): id = \(_adId) error = \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        destroyInternalAd()
+        createInternalAd()
+        if _displaying {
+            _displaying = false
+            _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
+        } else {
+            _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
     
     func rewardedVideoAdDidClick(_ rewardedVideoAd: FBRewardedVideoAd) {
@@ -163,6 +164,9 @@ internal class FacebookRewardedAd:
     
     func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
         _logger.debug("\(#function): id = \(_adId)")
+        _displaying = false
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

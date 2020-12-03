@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:admob:1.3.5'
+    implementation 'com.senspark.ee:admob:1.3.6'
 
     // Includes:
     // - AppLovin mediation.
@@ -12,7 +12,7 @@ dependencies {
     // - IronSource mediation.
     // - Unity mediation.
     // - Vungle mediation.
-    implementation 'com.senspark.ee:admob-mediation:1.3.5'
+    implementation 'com.senspark.ee:admob-mediation:1.3.6'
 }
 ```
 

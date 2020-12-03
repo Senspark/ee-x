@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:notification:1.3.5'
+    implementation 'com.senspark.ee:notification:1.3.6'
 }
 ```
 

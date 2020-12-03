@@ -59,14 +59,6 @@ internal class AdMobRewardedAd(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(_messageHelper.createInternalAd) {
-            createInternalAd()
-            ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            destroyInternalAd()
-            ""
-        }
         _bridge.registerHandler(_messageHelper.isLoaded) {
             Utils.toString(isLoaded)
         }
@@ -82,8 +74,6 @@ internal class AdMobRewardedAd(
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
         _bridge.deregisterHandler(_messageHelper.isLoaded)
         _bridge.deregisterHandler(_messageHelper.load)
         _bridge.deregisterHandler(_messageHelper.show)
@@ -130,6 +120,8 @@ internal class AdMobRewardedAd(
                 override fun onRewardedAdFailedToLoad(error: LoadAdError?) {
                     _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
                     Thread.checkMainThread()
+                    destroyInternalAd()
+                    createInternalAd()
                     _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
                 }
             }
@@ -150,6 +142,8 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdFailedToShow(error: AdError?) {
         _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
         Thread.checkMainThread()
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
     }
 
@@ -168,6 +162,8 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdClosed() {
         _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
         Thread.checkMainThread()
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

@@ -18,6 +18,7 @@ internal class FacebookInterstitialAd:
     private let _messageHelper: MessageHelper
     private var _helper: InterstitialAdHelper?
     private var _isLoaded = false
+    private var _displaying = false
     private var _ad: FBInterstitialAd?
     
     init(_ bridge: IMessageBridge,
@@ -40,20 +41,10 @@ internal class FacebookInterstitialAd:
     
     func registerHandlers() {
         _helper?.registerHandlers()
-        _bridge.registerHandler(_messageHelper.createInternalAd) { _ in
-            self.createInternalAd()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) { _ in
-            self.destroyInternalAd()
-            return ""
-        }
     }
     
     func deregisterHandlers() {
         _helper?.deregisterHandlers()
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
     
     func createInternalAd() {
@@ -100,11 +91,14 @@ internal class FacebookInterstitialAd:
                 assert(false, "Ad is not initialized")
                 return
             }
+            self._displaying = true
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
                 self._isLoaded = false
             } else {
+                self.destroyInternalAd()
+                self.createInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
         }
@@ -112,12 +106,20 @@ internal class FacebookInterstitialAd:
     
     func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
         _logger.debug("\(kTag): \(#function)")
+        _isLoaded = true
         _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
         _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        destroyInternalAd()
+        createInternalAd()
+        if _displaying {
+            _displaying = false
+            _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
+        } else {
+            _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
     
     func interstitialAdWillLogImpression(_ interstitialAd: FBInterstitialAd) {
@@ -135,6 +137,9 @@ internal class FacebookInterstitialAd:
     
     func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
         _logger.debug("\(kTag): \(#function)")
+        _displaying = false
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

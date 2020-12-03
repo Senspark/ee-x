@@ -28,6 +28,7 @@ internal class FacebookInterstitialAd(
     private val _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
     private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
+    private var _displaying = false
     private var _ad: InterstitialAd? = null
 
     init {
@@ -46,21 +47,11 @@ internal class FacebookInterstitialAd(
     @AnyThread
     private fun registerHandlers() {
         _helper.registerHandlers()
-        _bridge.registerHandler(_messageHelper.createInternalAd) {
-            createInternalAd()
-            ""
-        }
-        _bridge.registerHandler(_messageHelper.destroyInternalAd) {
-            destroyInternalAd()
-            ""
-        }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
         _helper.deregisterHandlers()
-        _bridge.deregisterHandler(_messageHelper.createInternalAd)
-        _bridge.deregisterHandler(_messageHelper.destroyInternalAd)
     }
 
     @AnyThread
@@ -98,10 +89,13 @@ internal class FacebookInterstitialAd(
     override fun show() {
         Thread.runOnMainThread {
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            _displaying = true
             val result = ad.show(ad.buildShowAdConfig().build())
             if (result) {
                 // OK.
             } else {
+                destroyInternalAd()
+                createInternalAd()
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
         }
@@ -117,7 +111,14 @@ internal class FacebookInterstitialAd(
     override fun onError(ad: Ad, adError: AdError) {
         _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        destroyInternalAd()
+        createInternalAd()
+        if (_displaying) {
+            _displaying = false
+            _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
+        } else {
+            _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        }
     }
 
     override fun onInterstitialDisplayed(ad: Ad) {
@@ -140,6 +141,9 @@ internal class FacebookInterstitialAd(
     override fun onInterstitialDismissed(ad: Ad) {
         _logger.debug("$kTag: ${this::onInterstitialDismissed.name}")
         Thread.checkMainThread()
+        _displaying = false
+        destroyInternalAd()
+        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed)
     }
 }

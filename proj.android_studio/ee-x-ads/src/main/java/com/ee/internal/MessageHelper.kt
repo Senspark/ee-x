@@ -18,6 +18,4 @@ class MessageHelper(private val _prefix: String,
     val setSize @AnyThread get() = "${_prefix}_setSize_${_adId}"
     val isVisible @AnyThread get() = "${_prefix}_isVisible_${_adId}"
     val setVisible @AnyThread get() = "${_prefix}_setVisible_${_adId}"
-    val createInternalAd @AnyThread get() = "${_prefix}_createInternalAd_${_adId}"
-    val destroyInternalAd @AnyThread get() = "${_prefix}_destroyInternalAd_${_adId}"
 }

@@ -52,14 +52,6 @@ namespace EE.Internal {
             _plugin.DestroyRewardedAd(_adId);
         }
 
-        private void CreateInternalAd() {
-            _bridge.Call(_messageHelper.CreateInternalAd);
-        }
-
-        private void DestroyInternalAd() {
-            _bridge.Call(_messageHelper.DestroyInternalAd);
-        }
-
         public bool IsLoaded {
             get {
                 var response = _bridge.Call(_messageHelper.IsLoaded);
@@ -71,13 +63,7 @@ namespace EE.Internal {
             return _loader.Process(
                 () => _bridge.Call(_messageHelper.Load),
                 result => {
-                    if (result) {
-                        // OK.
-                    } else {
-                        // Reinitialize internal ad if it was failed to load.
-                        DestroyInternalAd();
-                        CreateInternalAd();
-                    }
+                    // OK.
                 });
         }
 
@@ -85,12 +71,7 @@ namespace EE.Internal {
             return _displayer.Process(
                 () => _bridge.Call(_messageHelper.Show),
                 result => {
-                    if (result == IRewardedAdResult.Failed) {
-                        // Failed.
-                    } else {
-                        DestroyInternalAd();
-                        CreateInternalAd();
-                    }
+                    // OK.
                 });
         }
 

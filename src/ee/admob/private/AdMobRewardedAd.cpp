@@ -81,16 +81,6 @@ void Self::destroy() {
     assert(succeeded);
 }
 
-void Self::createInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.createInternalAd());
-}
-
-void Self::destroyInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.destroyInternalAd());
-}
-
 bool Self::isLoaded() const {
     auto response = bridge_.call(messageHelper_.isLoaded());
     return core::toBool(response);
@@ -119,12 +109,7 @@ Task<IRewardedAdResult> Self::show() {
             bridge_.call(messageHelper_.show());
         },
         [this](IRewardedAdResult result) {
-            if (result == IRewardedAdResult::Failed) {
-                // Failed.
-            } else {
-                destroyInternalAd();
-                createInternalAd();
-            }
+            // OK.
         });
     co_return result;
 }

@@ -383,8 +383,7 @@ Pod::Spec.new do |spec|
       'src/ee/cocos/Android.mk',
       'src/ee/cocos/CMakeLists.txt',
       'src/ee/cocos/generate.sh',
-      'src/ee/cocos/sourcelist.cmake',
-      'src/ee/cocos/*.{frag,vert}'
+      'src/ee/cocos/sourcelist.cmake'
 
     s.xcconfig = {
       'GCC_PREPROCESSOR_DEFINITIONS' => [

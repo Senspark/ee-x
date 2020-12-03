@@ -64,9 +64,6 @@ class UnityAdsBridge(
     override fun destroy() {
         deregisterHandlers()
         Thread.runOnMainThread {
-            if (!_initialized) {
-                return@runOnMainThread
-            }
             UnityAds.removeListener(this)
         }
     }
@@ -124,7 +121,6 @@ class UnityAdsBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                UnityAds.addListener(this)
                 UnityAds.initialize(_context, gameId, testModeEnabled, true, object : IUnityAdsInitializationListener {
                     override fun onInitializationComplete() {
                         _logger.info(this::onInitializationComplete.name)
@@ -167,7 +163,7 @@ class UnityAdsBridge(
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 _logger.debug("$kTag: loadRewardedAd: $adId")
-                if (!UnityAds.isInitialized()) {
+                if (!_initialized) {
                     throw IllegalStateException("Please call initialize() first")
                 }
                 UnityAds.load(adId, object : IUnityAdsLoadListener {
@@ -192,6 +188,7 @@ class UnityAdsBridge(
             if (!_initialized) {
                 throw IllegalStateException("Please call initialize() first")
             }
+            UnityAds.addListener(this)
             UnityAds.show(_activity, adId)
         }
     }
@@ -212,6 +209,7 @@ class UnityAdsBridge(
     override fun onUnityAdsFinish(adId: String, state: FinishState) {
         _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: $adId state = $state")
         Thread.checkMainThread()
+        UnityAds.removeListener(this)
         if (state == FinishState.ERROR) {
             @Serializable
             @Suppress("unused")
@@ -254,5 +252,6 @@ class UnityAdsBridge(
     override fun onUnityAdsError(unityAdsError: UnityAdsError, message: String) {
         _logger.debug("$kTag: ${this::onUnityAdsError.name}: error = $unityAdsError message = $message")
         Thread.checkMainThread()
+        UnityAds.removeListener(this)
     }
 }

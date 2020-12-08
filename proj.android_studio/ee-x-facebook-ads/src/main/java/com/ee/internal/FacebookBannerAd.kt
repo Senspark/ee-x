@@ -157,26 +157,30 @@ internal class FacebookBannerAd(
         }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.debug("$kTag: ${this::onError.name} ${adError.errorMessage}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onError.name} ${adError.errorMessage}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        }
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+        }
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 }

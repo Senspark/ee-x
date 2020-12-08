@@ -106,49 +106,56 @@ internal class AdMobInterstitialAd(
     }
 
     override fun onAdLoaded() {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-        Thread.checkMainThread()
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+            destroyInternalAd()
+            createInternalAd()
+            _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        }
     }
 
     override fun onAdOpened() {
-        _logger.debug("$kTag: ${this::onAdOpened.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(false)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdOpened.name}")
+            _isLoaded.set(false)
+        }
     }
 
     override fun onAdImpression() {
-        _logger.debug("$kTag: ${this::onAdImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdImpression.name}")
+        }
     }
 
     override fun onAdClicked() {
-        _logger.debug("$kTag: ${this::onAdClosed.name}")
-        Thread.checkMainThread()
-        // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
-        // Use onAdLeftApplication instead.
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClosed.name}")
+            // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
+            // Use onAdLeftApplication instead.
+        }
     }
 
     override fun onAdLeftApplication() {
-        _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 
     override fun onAdClosed() {
-        _logger.debug("$kTag: ${this::onAdClosed.name}")
-        Thread.checkMainThread()
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClosed.name}")
+            destroyInternalAd()
+            createInternalAd()
+            _bridge.callCpp(_messageHelper.onClosed)
+        }
     }
 }

@@ -29,31 +29,38 @@ internal class AppLovinInterstitialAdListener(
         @AnyThread get() = _isLoaded.get()
 
     override fun adReceived(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::adReceived.name}")
-        _isLoaded.set(true)
-        _bridge.callCpp(kOnInterstitialAdLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::adReceived.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(kOnInterstitialAdLoaded)
+        }
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
-        _logger.info("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
-        _bridge.callCpp(kOnInterstitialAdFailedToLoad, errorCode.toString())
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
+            _bridge.callCpp(kOnInterstitialAdFailedToLoad, errorCode.toString())
+        }
     }
 
     override fun adDisplayed(ad: AppLovinAd) {
-        _logger.info("$kTag: ${this::adDisplayed.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(false)
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::adDisplayed.name}")
+            _isLoaded.set(false)
+        }
     }
 
     override fun adClicked(ad: AppLovinAd) {
-        _logger.info("$kTag: ${this::adClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(kOnInterstitialAdClicked)
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::adClicked.name}")
+            _bridge.callCpp(kOnInterstitialAdClicked)
+        }
     }
 
     override fun adHidden(ad: AppLovinAd) {
-        _logger.info(this::adHidden.name)
-        Thread.checkMainThread()
-        _bridge.callCpp(kOnInterstitialAdClosed)
+        Thread.runOnMainThread {
+            _logger.info(this::adHidden.name)
+            _bridge.callCpp(kOnInterstitialAdClosed)
+        }
     }
 }

@@ -164,54 +164,66 @@ internal class FacebookNativeAd:
     }
     
     func nativeAdDidLoad(_ ad: FBNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
-        assert(ad == _ad)
-        
-        guard let view = _view else {
-            assert(false, "Ad view is not initialized")
-            return
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            assert(ad == self._ad)
+            
+            guard let view = self._view else {
+                assert(false, "Ad view is not initialized")
+                return
+            }
+            
+            ad.unregisterView()
+            if view.callToActionButton != nil {
+                let rootView = Utils.getCurrentRootViewController()
+                ad.registerView(forInteraction: view,
+                                mediaView: view.mediaView,
+                                iconView: view.iconView,
+                                viewController: rootView,
+                                clickableViews: [view.callToActionButton])
+            }
+            view.adchoicesView.nativeAd = ad
+            view.bodyLabel.text = ad.bodyText
+            view.callToActionButton.setTitle(ad.callToAction,
+                                             for: UIControl.State.normal)
+            view.socialContextLabel.text = ad.socialContext
+            view.sponsorLabel.text = ad.sponsoredTranslation
+            view.titleLabel.text = ad.headline
+            
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
         }
-        
-        ad.unregisterView()
-        if view.callToActionButton != nil {
-            let rootView = Utils.getCurrentRootViewController()
-            ad.registerView(forInteraction: view,
-                            mediaView: view.mediaView,
-                            iconView: view.iconView,
-                            viewController: rootView,
-                            clickableViews: [view.callToActionButton])
-        }
-        view.adchoicesView.nativeAd = ad
-        view.bodyLabel.text = ad.bodyText
-        view.callToActionButton.setTitle(ad.callToAction,
-                                         for: UIControl.State.normal)
-        view.socialContextLabel.text = ad.socialContext
-        view.sponsorLabel.text = ad.sponsoredTranslation
-        view.titleLabel.text = ad.headline
-        
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
     }
     
     func nativeAd(_ nativeAd: FBNativeAd, didFailWithError error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
     
     func nativeAdWillLogImpression(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func nativeAdDidClick(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
     
     func nativeAdDidFinishHandlingClick(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func nativeAdDidDownloadMedia(_ nativeAd: FBNativeAd) {
-        _logger.debug("\(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function)")
+        }
     }
 }

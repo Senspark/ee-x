@@ -32,66 +32,82 @@ internal class AppLovinRewardedAdListener(
         get() = _isLoaded.get()
 
     override fun adReceived(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::adReceived.name}")
-        _isLoaded.set(true)
-        _bridge.callCpp(kOnRewardedAdLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::adReceived.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(kOnRewardedAdLoaded)
+        }
     }
 
     override fun failedToReceiveAd(errorCode: Int) {
-        _logger.debug("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
-        _bridge.callCpp(kOnRewardedAdFailedToLoad, errorCode.toString())
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
+            _bridge.callCpp(kOnRewardedAdFailedToLoad, errorCode.toString())
+        }
     }
 
     override fun userDeclinedToViewAd(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::userDeclinedToViewAd.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::userDeclinedToViewAd.name}")
+        }
     }
 
     override fun adDisplayed(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::adDisplayed.name}")
-        Thread.checkMainThread()
-        _rewarded = false
-        _isLoaded.set(false)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::adDisplayed.name}")
+            _rewarded = false
+            _isLoaded.set(false)
+        }
     }
 
     override fun videoPlaybackBegan(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::videoPlaybackBegan.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::videoPlaybackBegan.name}")
+        }
     }
 
     override fun adClicked(ad: AppLovinAd) {
-        _logger.debug("$kTag: ${this::adClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(kOnRewardedAdClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::adClicked.name}")
+            _bridge.callCpp(kOnRewardedAdClicked)
+        }
     }
 
     override fun videoPlaybackEnded(ad: AppLovinAd, percentViewed: Double, fullyWatched: Boolean) {
-        _logger.debug("$kTag: ${this::videoPlaybackEnded.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::videoPlaybackEnded.name}")
+        }
     }
 
     override fun userRewardVerified(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("$kTag: ${this::userRewardVerified.name}: $response")
-        Thread.checkMainThread()
-        _rewarded = true
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::userRewardVerified.name}: $response")
+            _rewarded = true
+        }
     }
 
     override fun userRewardRejected(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("$kTag: ${this::userRewardRejected.name}: $response")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::userRewardRejected.name}: $response")
+        }
     }
 
     override fun userOverQuota(ad: AppLovinAd, response: Map<String, String>) {
-        _logger.info("$kTag: ${this::userOverQuota.name}: $response")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::userOverQuota.name}: $response")
+        }
     }
 
     override fun validationRequestFailed(ad: AppLovinAd, responseCode: Int) {
-        _logger.info("$kTag: ${this::validationRequestFailed.name}: code = $responseCode")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::validationRequestFailed.name}: code = $responseCode")
+        }
     }
 
     override fun adHidden(ad: AppLovinAd) {
-        _logger.info("$kTag: ${this::adHidden.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::adHidden.name}")
+            _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
+        }
     }
 }

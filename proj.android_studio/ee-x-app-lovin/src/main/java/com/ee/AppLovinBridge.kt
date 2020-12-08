@@ -144,9 +144,11 @@ class AppLovinBridge(
                 val settings = AppLovinSdkSettings()
                 val sdk = AppLovinSdk.getInstance(key, settings, _application)
                 sdk.initializeSdk {
-                    _initializing = false
-                    _initialized = true
-                    cont.resume(true)
+                    Thread.runOnMainThread {
+                        _initializing = false
+                        _initialized = true
+                        cont.resume(true)
+                    }
                 }
 
                 val interstitialAdListener = AppLovinInterstitialAdListener(_bridge, _logger)

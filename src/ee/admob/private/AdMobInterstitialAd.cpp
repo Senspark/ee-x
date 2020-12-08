@@ -116,7 +116,7 @@ Task<bool> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [this](bool result) {
+        [](bool result) {
             // OK.
         });
     co_return result;

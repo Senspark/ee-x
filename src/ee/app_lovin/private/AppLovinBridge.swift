@@ -126,9 +126,11 @@ public class AppLovinBridge: NSObject, IPlugin {
                     return
                 }
                 sdk.initializeSdk(completionHandler: { _ in
-                    self._initializing = false
-                    self._initialized = true
-                    single(.success(true))
+                    Thread.runOnMainThread {
+                        self._initializing = false
+                        self._initialized = true
+                        single(.success(true))
+                    }
                 })
                 
                 let interstitialAdListener = AppLovinInterstitialAdListener(self._bridge, self._logger)

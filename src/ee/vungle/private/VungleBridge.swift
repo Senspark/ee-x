@@ -99,7 +99,9 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
                 self._sdk.delegate = self
                 do {
                     self._initializationAwaiter = { result in
-                        single(.success(result))
+                        Thread.runOnMainThread {
+                            single(.success(result))
+                        }
                     }
                     try self._sdk.start(withAppId: appId)
                 } catch {
@@ -155,76 +157,96 @@ public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     }
 
     public func vungleSDKDidInitialize() {
-        _logger.debug("\(kTag): \(#function)")
-        _initializing = false
-        _initialized = false
-        if let awaiter = _initializationAwaiter {
-            awaiter(true)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._initializing = false
+            self._initialized = false
+            if let awaiter = self._initializationAwaiter {
+                awaiter(true)
+            }
         }
     }
 
     public func vungleSDKFailedToInitializeWithError(_ error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _initializing = false
-        if let awaiter = _initializationAwaiter {
-            awaiter(false)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._initializing = false
+            if let awaiter = self._initializationAwaiter {
+                awaiter(false)
+            }
         }
     }
 
     public func vungleAdPlayabilityUpdate(_ isAdPlayable: Bool, adId: String?, error: Error?) {
-        _logger.debug("\(kTag): \(#function): playable = \(isAdPlayable) id = \(adId ?? "") reason \(error?.localizedDescription ?? "")")
-        if let adId = adId {
-            if isAdPlayable {
-                _loadedAdIds.insert(adId)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): playable = \(isAdPlayable) id = \(adId ?? "") reason \(error?.localizedDescription ?? "")")
+            if let adId = adId {
+                if isAdPlayable {
+                    self._loadedAdIds.insert(adId)
+                }
+                if self._loadingAdIds.contains(adId) {
+                    assert(isAdPlayable)
+                    self._loadingAdIds.remove(adId)
+                    self._bridge.callCpp(kOnLoaded, EEJsonUtils.convertDictionary(toString: [
+                        "ad_id": adId
+                    ]))
+                    return
+                }
             }
-            if _loadingAdIds.contains(adId) {
-                assert(isAdPlayable)
-                _loadingAdIds.remove(adId)
-                _bridge.callCpp(kOnLoaded, EEJsonUtils.convertDictionary(toString: [
-                    "ad_id": adId
-                ]))
+            if error != nil {
+                assert(adId == nil)
                 return
             }
+            // Mediation ???
         }
-        if error != nil {
-            assert(adId == nil)
-            return
-        }
-        // Mediation ???
     }
 
     public func vungleWillShowAd(forPlacementID adId: String?) {
-        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        }
     }
 
     public func vungleDidShowAd(forPlacementID adId: String?) {
-        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        }
     }
 
     public func vungleTrackClick(forPlacementID adId: String?) {
-        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
-        _bridge.callCpp(kOnClicked, adId ?? "")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId ?? "")")
+            self._bridge.callCpp(kOnClicked, adId ?? "")
+        }
     }
 
     public func vungleWillLeaveApplication(forPlacementID adId: String?) {
-        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId ?? "")")
+        }
     }
 
     public func vungleRewardUser(forPlacementID adId: String?) {
-        _logger.debug("\(kTag): \(#function): \(adId ?? "")")
-        _rewarded = true
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId ?? "")")
+            self._rewarded = true
+        }
     }
 
     public func vungleWillCloseAd(forPlacementID adId: String) {
-        _logger.debug("\(kTag): \(#function): \(adId)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId)")
+        }
     }
 
     public func vungleDidCloseAd(forPlacementID adId: String) {
-        _logger.debug("\(kTag): \(#function): \(adId)")
-        _loadedAdIds.remove(adId)
-        _bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
-            "ad_id": adId,
-            "rewarded": _rewarded
-        ]))
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._loadedAdIds.remove(adId)
+            self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
+                "ad_id": adId,
+                "rewarded": self._rewarded
+            ]))
+        }
     }
 }

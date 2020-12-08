@@ -20,45 +20,45 @@ private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
 /*
- FIXME: should use UnityAds 3.5.1
-private class InitializeDelegate: NSObject, UnityAdsInitializationDelegate {
-    private let _onCompleted: () -> Void
-    private let _onFailed: (UnityAdsInitializationError, String) -> Void
+  FIXME: should use UnityAds 3.5.1
+ private class InitializeDelegate: NSObject, UnityAdsInitializationDelegate {
+     private let _onCompleted: () -> Void
+     private let _onFailed: (UnityAdsInitializationError, String) -> Void
 
-    public init(_ onCompleted: @escaping () -> Void,
-                _ onFailed: @escaping (UnityAdsInitializationError, String) -> Void) {
-        _onCompleted = onCompleted
-        _onFailed = onFailed
-    }
+     public init(_ onCompleted: @escaping () -> Void,
+                 _ onFailed: @escaping (UnityAdsInitializationError, String) -> Void) {
+         _onCompleted = onCompleted
+         _onFailed = onFailed
+     }
 
-    func initializationComplete() {
-        _onCompleted()
-    }
+     func initializationComplete() {
+         _onCompleted()
+     }
 
-    func initializationFailed(_ error: UnityAdsInitializationError, withMessage message: String) {
-        _onFailed(error, message)
-    }
-}
+     func initializationFailed(_ error: UnityAdsInitializationError, withMessage message: String) {
+         _onFailed(error, message)
+     }
+ }
 
-private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
-    private let _onLoaded: (String) -> Void
-    private let _onFailed: (String) -> Void
+ private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
+     private let _onLoaded: (String) -> Void
+     private let _onFailed: (String) -> Void
 
-    public init(_ onLoaded: @escaping (String) -> Void,
-                _ onFailed: @escaping (String) -> Void) {
-        _onLoaded = onLoaded
-        _onFailed = onFailed
-    }
+     public init(_ onLoaded: @escaping (String) -> Void,
+                 _ onFailed: @escaping (String) -> Void) {
+         _onLoaded = onLoaded
+         _onFailed = onFailed
+     }
 
-    func unityAdsAdLoaded(_ placementId: String) {
-        _onLoaded(placementId)
-    }
+     func unityAdsAdLoaded(_ placementId: String) {
+         _onLoaded(placementId)
+     }
 
-    func unityAdsAdFailed(toLoad placementId: String) {
-        _onFailed(placementId)
-    }
-}
- */
+     func unityAdsAdFailed(toLoad placementId: String) {
+         _onFailed(placementId)
+     }
+ }
+  */
 
 @objc(EEUnityAdsBridge)
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
@@ -138,6 +138,11 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                     single(.success(false))
                     return
                 }
+                if UnityAds.isInitialized() {
+                    self._initialized = true
+                    single(.success(true))
+                    return
+                }
                 if self._initializing {
                     single(.success(false))
                     return
@@ -152,18 +157,18 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 self._initialized = true
                 single(.success(true))
                 /*
-                 Use UnityAds 3.5.1
-                UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
-                    self._logger.debug("\(kTag): initializationComplete")
-                    self._initializing = false
-                    self._initialized = true
-                    single(.success(true))
-                } _: { error, message in
-                    self._logger.debug("\(kTag): initializationFailed: error = \(error) message = \(message)")
-                    self._initializing = false
-                    single(.success(false))
-                })
-                */
+                  Use UnityAds 3.5.1
+                 UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
+                     self._logger.debug("\(kTag): initializationComplete")
+                     self._initializing = false
+                     self._initialized = true
+                     single(.success(true))
+                 } _: { error, message in
+                     self._logger.debug("\(kTag): initializationFailed: error = \(error) message = \(message)")
+                     self._initializing = false
+                     single(.success(false))
+                 })
+                 */
             }
             return Disposables.create()
         }
@@ -195,15 +200,15 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 }
                 single(.success(false))
                 /*
-                 FIXME: use UnityAds 3.5.1
-                UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
-                    self._logger.debug("\(kTag): unityAdsAdLoaded: \(adId)")
-                    single(.success(true))
-                } _: { _ in
-                    self._logger.debug("\(kTag): unityAdsAdFailed: \(adId)")
-                    single(.success(false))
-                })
-                 */
+                  FIXME: use UnityAds 3.5.1
+                 UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
+                     self._logger.debug("\(kTag): unityAdsAdLoaded: \(adId)")
+                     single(.success(true))
+                 } _: { _ in
+                     self._logger.debug("\(kTag): unityAdsAdFailed: \(adId)")
+                     single(.success(false))
+                 })
+                  */
             }
             return Disposables.create()
         }
@@ -226,45 +231,53 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     }
 
     func unityAdsReady(_ adId: String) {
-        _logger.debug("\(kTag): \(#function): \(adId)")
-        _loadedAdIds.insert(adId)
-        _bridge.callCpp(kOnLoaded, adId)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._loadedAdIds.insert(adId)
+            self._bridge.callCpp(kOnLoaded, adId)
+        }
     }
 
     func unityAdsDidStart(_ adId: String) {
-        _logger.debug("\(kTag): \(#function): \(adId)")
-        _loadedAdIds.remove(adId)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._loadedAdIds.remove(adId)
+        }
     }
 
     func unityAdsDidFinish(_ adId: String, with state: UnityAdsFinishState) {
-        _logger.debug("\(kTag): \(#function): \(adId) state = \(state)")
-        UnityAds.remove(self)
-        if state == UnityAdsFinishState.error {
-            _bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
-                "ad_id": adId,
-                "message": ""
-            ]))
-            return
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(adId) state = \(state)")
+            UnityAds.remove(self)
+            if state == UnityAdsFinishState.error {
+                self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "message": ""
+                ]))
+                return
+            }
+            if state == UnityAdsFinishState.skipped {
+                self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "rewarded": false
+                ]))
+                return
+            }
+            if state == UnityAdsFinishState.completed {
+                self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "rewarded": true
+                ]))
+                return
+            }
+            assert(false)
         }
-        if state == UnityAdsFinishState.skipped {
-            _bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
-                "ad_id": adId,
-                "rewarded": false
-            ]))
-            return
-        }
-        if state == UnityAdsFinishState.completed {
-            _bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
-                "ad_id": adId,
-                "rewarded": true
-            ]))
-            return
-        }
-        assert(false)
     }
 
     func unityAdsDidError(_ error: UnityAdsError, withMessage message: String) {
-        _logger.debug("\(kTag): \(#function): error = \(error) message = \(message)")
-        UnityAds.remove(self)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): error = \(error) message = \(message)")
+            UnityAds.remove(self)
+        }
     }
 }

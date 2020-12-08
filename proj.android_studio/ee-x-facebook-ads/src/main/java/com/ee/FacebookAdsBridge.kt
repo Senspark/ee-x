@@ -215,6 +215,11 @@ class FacebookAdsBridge(
                     cont.resume(true)
                     return@runOnMainThread
                 }
+                if (AudienceNetworkAds.isInitialized(_application)) {
+                    _initialized = true
+                    cont.resume(true)
+                    return@runOnMainThread
+                }
                 if (_initializing) {
                     cont.resume(false)
                     return@runOnMainThread
@@ -227,17 +232,19 @@ class FacebookAdsBridge(
                 AudienceNetworkAds
                     .buildInitSettings(_application)
                     .withInitListener { result ->
-                        _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
-                        _initializing = false
-                        if (result.isSuccess) {
-                            if (BuildConfig.DEBUG) {
-                                AdSettings.setDebugBuild(true)
+                        Thread.runOnMainThread {
+                            _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
+                            _initializing = false
+                            if (result.isSuccess) {
+                                if (BuildConfig.DEBUG) {
+                                    AdSettings.setDebugBuild(true)
+                                }
+                                AdSettings.setTestMode(false)
+                                _initialized = true
+                                cont.resume(true)
+                            } else {
+                                cont.resume(false)
                             }
-                            AdSettings.setTestMode(false)
-                            _initialized = true
-                            cont.resume(true)
-                        } else {
-                            cont.resume(false)
                         }
                     }
                     .initialize()

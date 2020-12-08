@@ -171,85 +171,115 @@ class IronSourceBridge(
     }
 
     override fun onInterstitialAdReady() {
-        _logger.debug("$kTag: ${this::onInterstitialAdReady.name}")
-        _isInterstitialAdLoaded.set(true)
-        _bridge.callCpp(kOnInterstitialAdLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdReady.name}")
+            _isInterstitialAdLoaded.set(true)
+            _bridge.callCpp(kOnInterstitialAdLoaded)
+        }
     }
 
     override fun onInterstitialAdLoadFailed(ironSourceError: IronSourceError) {
-        _logger.debug("$kTag: ${this::onInterstitialAdLoadFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(kOnInterstitialAdFailedToLoad, ironSourceError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdLoadFailed.name}: ${ironSourceError.errorMessage}")
+            _bridge.callCpp(kOnInterstitialAdFailedToLoad, ironSourceError.errorMessage)
+        }
     }
 
     override fun onInterstitialAdShowSucceeded() {
-        _logger.debug("$kTag: ${this::onInterstitialAdShowSucceeded.name}")
-        _isInterstitialAdLoaded.set(false)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdShowSucceeded.name}")
+            _isInterstitialAdLoaded.set(false)
+        }
     }
 
     override fun onInterstitialAdShowFailed(ironSourceError: IronSourceError) {
-        _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(kOnInterstitialAdFailedToShow, ironSourceError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _bridge.callCpp(kOnInterstitialAdFailedToShow, ironSourceError.errorMessage)
+        }
     }
 
     override fun onInterstitialAdOpened() {
-        _logger.debug("$kTag: ${this::onInterstitialAdOpened.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdOpened.name}")
+        }
     }
 
     override fun onInterstitialAdClicked() {
-        _logger.debug("$kTag: ${this::onInterstitialAdClicked.name}")
-        _bridge.callCpp(kOnInterstitialAdClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdClicked.name}")
+            _bridge.callCpp(kOnInterstitialAdClicked)
+        }
     }
 
     override fun onInterstitialAdClosed() {
-        _logger.debug("$kTag: ${this::onInterstitialAdClosed.name}")
-        _bridge.callCpp(kOnInterstitialAdClosed)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onInterstitialAdClosed.name}")
+            _bridge.callCpp(kOnInterstitialAdClosed)
+        }
     }
 
     override fun onRewardedVideoAvailabilityChanged(available: Boolean) {
-        _logger.info("$kTag: ${this::onRewardedVideoAvailabilityChanged.name}: $available")
-        if (available) {
-            _isRewardedAdLoaded.set(true)
-            _bridge.callCpp(kOnRewardedAdLoaded)
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onRewardedVideoAvailabilityChanged.name}: $available")
+            if (available) {
+                _isRewardedAdLoaded.set(true)
+                _bridge.callCpp(kOnRewardedAdLoaded)
+            }
         }
     }
 
     override fun onRewardedVideoAdShowFailed(ironSourceError: IronSourceError) {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
-        _bridge.callCpp(kOnRewardedAdFailedToShow, ironSourceError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _bridge.callCpp(kOnRewardedAdFailedToShow, ironSourceError.errorMessage)
+        }
     }
 
     override fun onRewardedVideoAdOpened() {
-        _isRewardedAdLoaded.set(false)
-        _logger.debug("$kTag: ${this::onRewardedVideoAdOpened.name}")
+        Thread.runOnMainThread {
+            _isRewardedAdLoaded.set(false)
+            _logger.debug("$kTag: ${this::onRewardedVideoAdOpened.name}")
+        }
     }
 
     override fun onRewardedVideoAdStarted() {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdStarted.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdStarted.name}")
+        }
     }
 
     override fun onRewardedVideoAdClicked(placement: Placement?) {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdClicked.name}: ${placement?.placementName ?: ""}")
-        _bridge.callCpp(kOnRewardedAdClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdClicked.name}: ${placement?.placementName ?: ""}")
+            _bridge.callCpp(kOnRewardedAdClicked)
+        }
     }
 
     override fun onRewardedVideoAdEnded() {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdEnded.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdEnded.name}")
+        }
     }
 
     override fun onRewardedVideoAdRewarded(placement: Placement?) {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdRewarded.name}: ${placement?.placementName ?: ""}")
-        _rewarded = true
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdRewarded.name}: ${placement?.placementName ?: ""}")
+            _rewarded = true
+        }
     }
 
     override fun onRewardedVideoAdClosed() {
-        _logger.debug("$kTag: ${this::onRewardedVideoAdClosed.name}")
-        if (_rewarded) {
-            handleRewardedAdResult()
-        } else {
-            // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
-            // asynchronous.
-            Thread.runOnMainThreadDelayed(1.0f) {
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoAdClosed.name}")
+            if (_rewarded) {
                 handleRewardedAdResult()
+            } else {
+                // Note: The onRewardedVideoAdRewarded and onRewardedVideoAdClosed events are
+                // asynchronous.
+                Thread.runOnMainThreadDelayed(1.0f) {
+                    handleRewardedAdResult()
+                }
             }
         }
     }

@@ -105,7 +105,10 @@ internal class FacebookRewardedAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-            ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
+            ad.loadAd(ad.buildLoadAdConfig()
+                .withFailOnCacheFailureEnabled(true)
+                .withAdListener(this)
+                .build())
         }
     }
 

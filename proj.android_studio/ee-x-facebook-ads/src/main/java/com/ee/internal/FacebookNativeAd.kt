@@ -251,54 +251,59 @@ internal class FacebookNativeAd(
     }
 
     override fun onAdLoaded(nativeAd: Ad) {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        assertThat(_ad === nativeAd)
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.unregisterView()
-        processView<Button>(view, k__call_to_action) { item ->
-            item.visibility = if (ad.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-            item.text = ad.adCallToAction
-        }
-        processView<TextView>(view, k__title) { item ->
-            item.text = ad.advertiserName
-        }
-        processView<TextView>(view, k__body) { item ->
-            item.text = ad.adBodyText
-        }
-        processView<TextView>(view, k__social_context) { item ->
-            item.text = ad.adSocialContext
-        }
-        processView<LinearLayout>(view, k__ad_choices) { item ->
-            // Remove old icons.
-            item.removeAllViews()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            assertThat(_ad === nativeAd)
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.unregisterView()
+            processView<Button>(view, k__call_to_action) { item ->
+                item.visibility = if (ad.hasCallToAction()) View.VISIBLE else View.INVISIBLE
+                item.text = ad.adCallToAction
+            }
+            processView<TextView>(view, k__title) { item ->
+                item.text = ad.advertiserName
+            }
+            processView<TextView>(view, k__body) { item ->
+                item.text = ad.adBodyText
+            }
+            processView<TextView>(view, k__social_context) { item ->
+                item.text = ad.adSocialContext
+            }
+            processView<LinearLayout>(view, k__ad_choices) { item ->
+                // Remove old icons.
+                item.removeAllViews()
 
-            // Add the AdChoices icon.
-            val adOptionsView = AdOptionsView(_activity, _ad, null)
-            item.addView(adOptionsView)
+                // Add the AdChoices icon.
+                val adOptionsView = AdOptionsView(_activity, _ad, null)
+                item.addView(adOptionsView)
+            }
+            processView<MediaView>(view, k__media) { item ->
+                val callToAction = view.findViewById<Button>(getIdentifier(k__call_to_action))
+                val icon = view.findViewById<ImageView>(getIdentifier(k__icon))
+                ad.registerViewForInteraction(view, item, icon, listOf(callToAction, item))
+            }
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
         }
-        processView<MediaView>(view, k__media) { item ->
-            val callToAction = view.findViewById<Button>(getIdentifier(k__call_to_action))
-            val icon = view.findViewById<ImageView>(getIdentifier(k__icon))
-            ad.registerViewForInteraction(view, item, icon, listOf(callToAction, item))
-        }
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onMediaDownloaded(ad: Ad) {
-        _logger.debug("$kTag: ${this::onMediaDownloaded.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onMediaDownloaded.name}")
+        }
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+        }
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 }

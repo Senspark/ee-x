@@ -103,7 +103,7 @@ Task<bool> Self::load() {
         [this] { //
             bridge_.call(messageHelper_.load());
         },
-        [this](bool result) {
+        [](bool result) {
             // OK.
         });
     co_return result;
@@ -117,7 +117,7 @@ Task<IRewardedAdResult> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [this](IRewardedAdResult result) {
+        [](IRewardedAdResult result) {
             // OK.
         });
     co_return result;

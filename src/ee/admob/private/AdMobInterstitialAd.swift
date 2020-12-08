@@ -94,43 +94,57 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     }
     
     func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
+        }
     }
     
     func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = false
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = false
+        }
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onFailedToShow)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onFailedToShow)
+        }
     }
     
     func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
-        _logger.debug("\(kTag): \(#function)")
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onClosed)
+        }
     }
 }

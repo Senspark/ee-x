@@ -111,26 +111,36 @@ internal class FacebookBannerAd:
     }
     
     func adViewDidLoad(_ adView: FBAdView) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
+        }
     }
     
     func adView(_ adView: FBAdView, didFailWithError error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
     
     func adViewDidClick(_ adView: FBAdView) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
     
     func adViewDidFinishHandlingClick(_ adView: FBAdView) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func adViewWillLogImpression(_ adView: FBAdView) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 }

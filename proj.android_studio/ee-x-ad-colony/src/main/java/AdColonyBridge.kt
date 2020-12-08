@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.adcolony.sdk.AdColony
 import com.ee.internal.deserialize
@@ -14,7 +14,7 @@ import kotlin.coroutines.suspendCoroutine
 class AdColonyBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = AdColonyBridge::class.java.name
@@ -26,7 +26,7 @@ class AdColonyBridge(
     private var _initialized = false
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }

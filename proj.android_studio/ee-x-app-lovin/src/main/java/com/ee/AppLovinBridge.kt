@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.applovin.adview.AppLovinIncentivizedInterstitial
 import com.applovin.adview.AppLovinInterstitialAd
@@ -17,7 +17,7 @@ import kotlin.coroutines.suspendCoroutine
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = AppLovinBridge::class.java.name
@@ -42,7 +42,7 @@ class AppLovinBridge(
     private var _rewardedAdListener: AppLovinRewardedAdListener? = null
 
     init {
-        _logger.info("constructor begin: context = $_context")
+        _logger.info("constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("constructor end.")
     }
@@ -142,7 +142,7 @@ class AppLovinBridge(
                 }
                 _initializing = true
                 val settings = AppLovinSdkSettings()
-                val sdk = AppLovinSdk.getInstance(key, settings, _context)
+                val sdk = AppLovinSdk.getInstance(key, settings, _application)
                 sdk.initializeSdk {
                     _initializing = false
                     _initialized = true
@@ -218,7 +218,7 @@ class AppLovinBridge(
     fun showRewardedAd() {
         Thread.runOnMainThread {
             val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
-            ad.show(_context, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener)
+            ad.show(_application, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener)
         }
     }
 }

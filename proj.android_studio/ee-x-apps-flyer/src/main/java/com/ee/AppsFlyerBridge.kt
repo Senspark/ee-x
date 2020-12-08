@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = AppsFlyerBridge::class.java.name
@@ -30,7 +30,7 @@ class AppsFlyerBridge(
     private val _tracker = AppsFlyerLib.getInstance()
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -114,7 +114,7 @@ class AppsFlyerBridge(
                     _logger.debug("$kTag: ${this::onAttributionFailure.name}: $errorMessage")
                 }
             }
-            _tracker.init(devKey, listener, _context)
+            _tracker.init(devKey, listener, _application)
             _tracker.setDeviceTrackingDisabled(true)
             _tracker.enableLocationCollection(true)
         }
@@ -123,12 +123,12 @@ class AppsFlyerBridge(
     @AnyThread
     fun startTracking() {
         Thread.runOnMainThread {
-            _tracker.startTracking(_context)
+            _tracker.startTracking(_application)
         }
     }
 
     val deviceId: String
-        @AnyThread get() = _tracker.getAppsFlyerUID(_context)
+        @AnyThread get() = _tracker.getAppsFlyerUID(_application)
 
     @AnyThread
     fun setDebugEnabled(enabled: Boolean) {
@@ -140,14 +140,14 @@ class AppsFlyerBridge(
     @AnyThread
     fun setStopTracking(enabled: Boolean) {
         Thread.runOnMainThread {
-            _tracker.stopTracking(enabled, _context)
+            _tracker.stopTracking(enabled, _application)
         }
     }
 
     @AnyThread
     fun trackEvent(name: String, values: Map<String, Any>) {
         Thread.runOnMainThread {
-            _tracker.trackEvent(_context, name, values)
+            _tracker.trackEvent(_application, name, values)
         }
     }
 }

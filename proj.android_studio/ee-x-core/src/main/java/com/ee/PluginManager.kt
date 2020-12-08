@@ -1,8 +1,8 @@
 package com.ee
 
 import android.app.Activity
+import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
-import android.content.Context
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.MessageBridge
@@ -38,7 +38,7 @@ class PluginManager private constructor() {
     private val _lifecycleCallbacks: ActivityLifecycleCallbacks
 
     private var _bridge: IMessageBridge? = null
-    private var _context: Context? = null
+    private var _application: Application? = null
     private var _activity: Activity? = null
     private var _activityClass: Class<out Activity>? = null
 
@@ -118,8 +118,8 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    fun getContext(): Context? {
-        return _context
+    fun getApplication(): Application? {
+        return _application
     }
 
     @AnyThread
@@ -134,18 +134,18 @@ class PluginManager private constructor() {
 
     @AnyThread
     fun setActivity(activity: Activity) {
-        val context = activity.applicationContext
-        _context = context
+        val application = activity.application
+        _application = application
         _activity = activity
         _activityClass = activity::class.java
-        activity.application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
+        application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
     }
 
     @AnyThread
     @InternalSerializationApi
     fun initializePlugins(messageHandler: MessageBridgeHandler): Boolean {
-        val context = _context
-        if (context == null) {
+        val application = _application
+        if (application == null) {
             _logger.error("""
                 $kTag: Please set activity via
                 PluginManager.getInstance().setActivity() (kotlin) or
@@ -157,7 +157,7 @@ class PluginManager private constructor() {
         val bridge = MessageBridge(_logger, messageHandler)
         _bridge = bridge
         Thread.registerImpl(ThreadImpl(_logger))
-        Platform.registerHandlers(bridge, context)
+        Platform.registerHandlers(bridge, application)
         return true
     }
 
@@ -179,9 +179,9 @@ class PluginManager private constructor() {
             val constructor = clazz.getConstructor(
                 IMessageBridge::class.java,
                 ILogger::class.java,
-                Context::class.java,
+                Application::class.java,
                 Activity::class.java)
-            val plugin = constructor.newInstance(_bridge, _logger, _context, _activity)
+            val plugin = constructor.newInstance(_bridge, _logger, _application, _activity)
             _plugins[name] = plugin as IPlugin
             return true
         } catch (ex: ClassNotFoundException) {
@@ -224,7 +224,7 @@ class PluginManager private constructor() {
         for (entry in _plugins) {
             entry.value.destroy()
         }
-        _context = null
+        _application = null
     }
 
     private fun executePlugins(executor: PluginExecutor) {

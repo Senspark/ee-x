@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -28,7 +27,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AdMobBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize,

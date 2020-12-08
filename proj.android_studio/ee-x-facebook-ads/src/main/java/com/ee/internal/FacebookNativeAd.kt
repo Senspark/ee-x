@@ -1,7 +1,7 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.graphics.Point
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -38,7 +38,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 internal class FacebookNativeAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?,
     private val _adId: String,
     private val _layoutName: String,
@@ -117,7 +117,7 @@ internal class FacebookNativeAd(
                 return@runOnMainThread
             }
             _isLoaded.set(false)
-            _ad = NativeAd(_context, _adId)
+            _ad = NativeAd(_activity, _adId)
         }
     }
 
@@ -135,10 +135,10 @@ internal class FacebookNativeAd(
     @AnyThread
     private fun createView() {
         Thread.runOnMainThread {
-            val layoutId = _context.resources
-                .getIdentifier(_layoutName, "layout", _context.packageName)
+            val layoutId = _application.resources
+                .getIdentifier(_layoutName, "layout", _application.packageName)
             val view = LayoutInflater
-                .from(_context)
+                .from(_activity)
                 .inflate(layoutId, null, false)
             view.visibility = View.INVISIBLE
             val params = FrameLayout.LayoutParams(
@@ -222,8 +222,8 @@ internal class FacebookNativeAd(
         if (!_identifiers.containsKey(identifier)) {
             return 0
         }
-        val resources = _context.resources
-        return resources.getIdentifier(_identifiers[identifier], "id", _context.packageName)
+        val resources = _application.resources
+        return resources.getIdentifier(_identifiers[identifier], "id", _application.packageName)
     }
 
     @UiThread
@@ -275,7 +275,7 @@ internal class FacebookNativeAd(
             item.removeAllViews()
 
             // Add the AdChoices icon.
-            val adOptionsView = AdOptionsView(_context, _ad, null)
+            val adOptionsView = AdOptionsView(_activity, _ad, null)
             item.addView(adOptionsView)
         }
         processView<MediaView>(view, k__media) { item ->

@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
@@ -25,7 +25,7 @@ import kotlin.coroutines.suspendCoroutine
 class VungleBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = VungleBridge::class.java.name
@@ -47,7 +47,7 @@ class VungleBridge(
     private val _loadedAdIds: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
 
     init {
-        _logger.debug("$kTag: constructor begin: context = $_context activity = $_activity")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -108,7 +108,7 @@ class VungleBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                Vungle.init(appId, _context, object : InitCallback {
+                Vungle.init(appId, _application, object : InitCallback {
                     override fun onSuccess() {
                         _logger.debug("$kTag: initialize: ${this::onSuccess.name}")
                         _initializing = false

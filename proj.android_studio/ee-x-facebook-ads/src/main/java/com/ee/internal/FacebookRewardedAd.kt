@@ -1,7 +1,8 @@
 package com.ee.internal
 
-import android.content.Context
+import android.app.Activity
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -10,6 +11,7 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.RewardedVideoAd
 import com.facebook.ads.RewardedVideoAdListener
+import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -18,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class FacebookRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private var _activity: Activity?,
     private val _adId: String) : RewardedVideoAdListener {
     companion object {
         private val kTag = FacebookRewardedAd::class.java.name
@@ -34,6 +36,17 @@ internal class FacebookRewardedAd(
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
+    }
+
+    @UiThread
+    fun onCreate(activity: Activity) {
+        _activity = activity
+    }
+
+    @UiThread
+    fun onDestroy(activity: Activity) {
+        assertThat(_activity).isEqualTo(activity)
+        _activity = null
     }
 
     @AnyThread
@@ -71,7 +84,7 @@ internal class FacebookRewardedAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
-            _ad = RewardedVideoAd(_context, _adId)
+            _ad = RewardedVideoAd(_activity, _adId)
         }
     }
 

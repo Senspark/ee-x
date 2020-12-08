@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.facebook.ads.BuildConfig
 import com.ee.internal.FacebookBannerAd
@@ -27,7 +27,7 @@ import kotlin.coroutines.suspendCoroutine
 class FacebookAdsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = FacebookAdsBridge::class.java.name
@@ -56,7 +56,7 @@ class FacebookAdsBridge(
     private val _rewardedAds: MutableMap<String, FacebookRewardedAd> = ConcurrentHashMap()
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -67,6 +67,12 @@ class FacebookAdsBridge(
             ad.onCreate(activity)
         }
         for (ad in _nativeAds.values) {
+            ad.onCreate(activity)
+        }
+        for (ad in _interstitialAds.values) {
+            ad.onCreate(activity)
+        }
+        for (ad in _rewardedAds.values) {
             ad.onCreate(activity)
         }
     }
@@ -82,6 +88,12 @@ class FacebookAdsBridge(
             ad.onDestroy(activity)
         }
         for (ad in _nativeAds.values) {
+            ad.onDestroy(activity)
+        }
+        for (ad in _interstitialAds.values) {
+            ad.onDestroy(activity)
+        }
+        for (ad in _rewardedAds.values) {
             ad.onDestroy(activity)
         }
         _activity = null
@@ -199,7 +211,7 @@ class FacebookAdsBridge(
     suspend fun initialize(): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                if (AudienceNetworkAds.isInitialized(_context)) {
+                if (AudienceNetworkAds.isInitialized(_application)) {
                     cont.resume(true)
                     return@runOnMainThread
                 }
@@ -213,7 +225,7 @@ class FacebookAdsBridge(
                 }
                 _initializing = true
                 AudienceNetworkAds
-                    .buildInitSettings(_context)
+                    .buildInitSettings(_application)
                     .withInitListener { result ->
                         _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
                         _initializing = false
@@ -255,8 +267,7 @@ class FacebookAdsBridge(
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookBannerAd(
-            _bridge, _logger, _context, _activity, adId, adSize, _bannerHelper)
+        val ad = FacebookBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -275,8 +286,7 @@ class FacebookAdsBridge(
         if (_nativeAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookNativeAd(
-            _bridge, _logger, _context, _activity, adId, layoutName, identifiers)
+        val ad = FacebookNativeAd(_bridge, _logger, _application, _activity, adId, layoutName, identifiers)
         _nativeAds[adId] = ad
         return true
     }
@@ -294,7 +304,7 @@ class FacebookAdsBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookInterstitialAd(_bridge, _logger, _context, adId)
+        val ad = FacebookInterstitialAd(_bridge, _logger, _activity, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -312,7 +322,7 @@ class FacebookAdsBridge(
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
-        val ad = FacebookRewardedAd(_bridge, _logger, _context, adId)
+        val ad = FacebookRewardedAd(_bridge, _logger, _activity, adId)
         _rewardedAds[adId] = ad
         return true
     }

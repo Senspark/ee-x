@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.IInterstitialAd
 import com.ee.ILogger
@@ -11,6 +10,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.LoadAdError
+import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -19,8 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
-    private val _activity: Activity?,
+    private var _activity: Activity?,
     private val _adId: String)
     : IInterstitialAd, AdListener() {
     companion object {
@@ -36,6 +35,15 @@ internal class AdMobInterstitialAd(
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
+    }
+
+    fun onCreate(activity: Activity) {
+        _activity = activity
+    }
+
+    fun onDestroy(activity: Activity) {
+        assertThat(_activity).isEqualTo(activity)
+        _activity = null
     }
 
     @AnyThread

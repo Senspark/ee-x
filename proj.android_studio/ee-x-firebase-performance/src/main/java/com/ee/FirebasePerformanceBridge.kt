@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.FirebasePerformanceTrace
 import kotlinx.serialization.InternalSerializationApi
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap
 class FirebasePerformanceBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = FirebasePerformanceBridge::class.java.name
@@ -26,7 +26,7 @@ class FirebasePerformanceBridge(
     private val _traces: MutableMap<String, FirebasePerformanceTrace> = ConcurrentHashMap()
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }

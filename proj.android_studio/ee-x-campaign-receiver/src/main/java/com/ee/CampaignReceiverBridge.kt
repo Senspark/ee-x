@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.os.RemoteException
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
@@ -9,7 +9,7 @@ import com.android.installreferrer.api.InstallReferrerStateListener
 class CampaignReceiverBridge /* extends BroadcastReceiver */(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?)
     : IPlugin {
     companion object {
@@ -23,7 +23,7 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
     private var _client: InstallReferrerClient? = null
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor begin: end.")
     }
@@ -71,7 +71,7 @@ class CampaignReceiverBridge /* extends BroadcastReceiver */(
                 return@runOnMainThread
             }
             _initialized = true
-            val client = InstallReferrerClient.newBuilder(_context).build()
+            val client = InstallReferrerClient.newBuilder(_application).build()
             client.startConnection(object : InstallReferrerStateListener {
                 override fun onInstallReferrerSetupFinished(responseCode: Int) {
                     when (responseCode) {

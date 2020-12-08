@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -23,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AdMobRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String) : RewardedAdCallback() {
     companion object {

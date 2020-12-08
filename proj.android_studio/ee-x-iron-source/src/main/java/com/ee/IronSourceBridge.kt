@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.logger.IronSourceError
@@ -18,7 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 class IronSourceBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?)
     : IPlugin, RewardedVideoListener, InterstitialListener {
     companion object {
@@ -47,7 +47,7 @@ class IronSourceBridge(
     private var _rewarded = false
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -128,7 +128,7 @@ class IronSourceBridge(
                 IronSource.shouldTrackNetworkState(_activity, true)
                 IronSource.setInterstitialListener(this)
                 IronSource.setRewardedVideoListener(this)
-                IronSource.setUserId(IronSource.getAdvertiserId(_context))
+                IronSource.setUserId(IronSource.getAdvertiserId(_application))
                 _initialized = true
                 cont.resume(true)
             }

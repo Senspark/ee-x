@@ -1,14 +1,14 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class FirebaseCrashlyticsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = FirebaseCrashlyticsBridge::class.java.name
@@ -19,7 +19,7 @@ class FirebaseCrashlyticsBridge(
     private val _crashlytics = FirebaseCrashlytics.getInstance()
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }

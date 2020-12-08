@@ -1,7 +1,8 @@
 package com.ee.internal
 
-import android.content.Context
+import android.app.Activity
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.IInterstitialAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -10,6 +11,7 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
+import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -18,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private var _activity: Activity?,
     private val _adId: String)
     : IInterstitialAd, InterstitialAdListener {
     companion object {
@@ -35,6 +37,17 @@ internal class FacebookInterstitialAd(
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
         createInternalAd()
+    }
+
+    @UiThread
+    fun onCreate(activity: Activity) {
+        _activity = activity
+    }
+
+    @UiThread
+    fun onDestroy(activity: Activity) {
+        assertThat(_activity).isEqualTo(activity)
+        _activity = null
     }
 
     @AnyThread
@@ -60,7 +73,7 @@ internal class FacebookInterstitialAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
-            _ad = InterstitialAd(_context, _adId)
+            _ad = InterstitialAd(_activity, _adId)
         }
     }
 

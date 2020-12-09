@@ -21,6 +21,7 @@
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/admob/AdMobNativeAdLayout.hpp"
+#include "ee/admob/private/AdMobAppOpenAd.hpp"
 #include "ee/admob/private/AdMobBannerAd.hpp"
 #include "ee/admob/private/AdMobInterstitialAd.hpp"
 #include "ee/admob/private/AdMobNativeAd.hpp"
@@ -54,6 +55,8 @@ const auto kCreateInterstitialAd      = kPrefix + "CreateInterstitialAd";
 const auto kDestroyInterstitialAd     = kPrefix + "DestroyInterstitialAd";
 const auto kCreateRewardedAd          = kPrefix + "CreateRewardedAd";
 const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
+const auto kCreateAppOpenAd           = kPrefix + "CreateAppOpenAd";
+const auto kDestroyAppOpenAd          = kPrefix + "DestroyAppOpenAd";
 // clang-format on
 } // namespace
 
@@ -84,10 +87,14 @@ void Self::destroy() {
     for (auto&& [key, value] : rewardedAds_) {
         value->destroy();
     }
+    for (auto&& [key, value] : appOpenAds_) {
+        value->destroy();
+    }
     bannerAds_.clear();
     nativeAds_.clear();
     interstitialAds_.clear();
     rewardedAds_.clear();
+    appOpenAds_.clear();
     PluginManager::removePlugin(Plugin::AdMob);
 }
 
@@ -270,6 +277,46 @@ bool Self::destroyRewardedAd(const std::string& adId) {
         return false;
     }
     rewardedAds_.erase(iter);
+    return true;
+}
+
+std::shared_ptr<IInterstitialAd>
+Self::createAppOpenAd(const std::string& adId,
+                      AppOpenAdOrientation orientation) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = appOpenAds_.find(adId);
+    if (iter != appOpenAds_.cend()) {
+        return iter->second;
+    }
+    auto response = bridge_.call(kCreateAppOpenAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to create an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return nullptr;
+    }
+    auto ad = std::make_shared<ads::GuardedInterstitialAd>(
+        std::shared_ptr<IInterstitialAd>(
+            new AppOpenAd(bridge_, logger_, interstitialAdDisplayer_, this,
+                          adId, orientation)));
+    appOpenAds_.emplace(adId, ad);
+    return ad;
+}
+
+bool Self::destroyAppOpenAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = appOpenAds_.find(adId);
+    if (iter == appOpenAds_.cend()) {
+        return false;
+    }
+    auto&& response = bridge_.call(kDestroyAppOpenAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return false;
+    }
+    appOpenAds_.erase(iter);
     return true;
 }
 } // namespace admob

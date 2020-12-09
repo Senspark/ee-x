@@ -34,6 +34,9 @@ public:
     createInterstitialAd(const std::string& adId) override;
     virtual std::shared_ptr<IRewardedAd>
     createRewardedAd(const std::string& adId) override;
+    virtual std::shared_ptr<IInterstitialAd>
+    createAppOpenAd(const std::string& adId,
+                    AppOpenAdOrientation orientation) override;
 
 private:
     friend BannerAd;
@@ -47,6 +50,7 @@ private:
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
+    bool destroyAppOpenAd(const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
@@ -55,6 +59,7 @@ private:
     std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
     std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
     std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
+    std::map<std::string, std::shared_ptr<IInterstitialAd>> appOpenAds_;
 
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;

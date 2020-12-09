@@ -3,6 +3,7 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
+import com.ee.internal.AdMobAppOpenAd
 import com.ee.internal.AdMobBannerAd
 import com.ee.internal.AdMobBannerHelper
 import com.ee.internal.AdMobInterstitialAd
@@ -14,6 +15,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.appopen.AppOpenAd
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
@@ -44,6 +46,8 @@ class AdMobBridge(
         private const val kDestroyInterstitialAd = "${kPrefix}DestroyInterstitialAd"
         private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
         private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
+        private const val kCreateAppOpenAd = "${kPrefix}CreateAppOpenAd"
+        private const val kDestroyAppOpenAd = "${kPrefix}DestroyAppOpenAd"
     }
 
     private var _initializing = false
@@ -54,6 +58,7 @@ class AdMobBridge(
     private val _nativeAds: MutableMap<String, AdMobNativeAd> = ConcurrentHashMap()
     private val _interstitialAds: MutableMap<String, AdMobInterstitialAd> = ConcurrentHashMap()
     private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = ConcurrentHashMap()
+    private val _appOpenAds: MutableMap<String, AdMobAppOpenAd> = ConcurrentHashMap()
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -73,6 +78,9 @@ class AdMobBridge(
             ad.onCreate(activity)
         }
         for (ad in _rewardedAds.values) {
+            ad.onCreate(activity)
+        }
+        for (ad in _appOpenAds.values) {
             ad.onCreate(activity)
         }
     }
@@ -106,6 +114,9 @@ class AdMobBridge(
         for (ad in _rewardedAds.values) {
             ad.onDestroy(activity)
         }
+        for (ad in _appOpenAds.values) {
+            ad.onDestroy(activity)
+        }
     }
 
     override fun destroy() {
@@ -123,6 +134,10 @@ class AdMobBridge(
         }
         _interstitialAds.clear()
         for (ad in _rewardedAds.values) {
+            ad.destroy()
+        }
+        _rewardedAds.clear()
+        for (ad in _appOpenAds.values) {
             ad.destroy()
         }
         _rewardedAds.clear()
@@ -192,6 +207,16 @@ class AdMobBridge(
         }
         _bridge.registerHandler(kDestroyRewardedAd) { message ->
             Utils.toString(destroyRewardedAd(message))
+        }
+        _bridge.registerHandler(kCreateAppOpenAd) { message ->
+            @Serializable
+            class Request(
+                val adId: String,
+                val orientation: Int
+            )
+
+            val request = deserialize<Request>(message)
+            Utils.toString(createAppOpenAd(request.adId, request.orientation))
         }
     }
 
@@ -323,6 +348,24 @@ class AdMobBridge(
         val ad = _rewardedAds[adId] ?: return false
         ad.destroy()
         _rewardedAds.remove(adId)
+        return true
+    }
+
+    @AnyThread
+    fun createAppOpenAd(adId: String, @AppOpenAd.AppOpenAdOrientation orientation: Int): Boolean {
+        if (_appOpenAds.containsKey(adId)) {
+            return false
+        }
+        val ad = AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId, orientation)
+        _appOpenAds[adId] = ad
+        return true
+    }
+
+    @AnyThread
+    fun destroyAppOpenAd(adId: String): Boolean {
+        val ad = _appOpenAds[adId] ?: return false
+        ad.destroy()
+        _appOpenAds.remove(adId)
         return true
     }
 }

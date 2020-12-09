@@ -16,6 +16,7 @@
 namespace ee {
 namespace admob {
 enum class BannerAdSize;
+enum class AppOpenAdOrientation;
 
 class IBridge;
 class Bridge;
@@ -27,6 +28,7 @@ class RewardedAd;
 } // namespace admob
 
 using IAdMob = admob::IBridge;
+using AdMobAppOpenAdOrientation = admob::AppOpenAdOrientation;
 using AdMobBannerAdSize = admob::BannerAdSize;
 using AdMobNativeAdLayout = admob::NativeAdLayout;
 } // namespace ee

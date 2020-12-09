@@ -12,13 +12,12 @@ import android.graphics.Point
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.os.RemoteException
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
-import com.ee.internal.InstallReferrerBridge
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
@@ -36,6 +35,8 @@ import java.net.InetAddress
 import java.net.UnknownHostException
 import java.security.MessageDigest
 import java.util.concurrent.CancellationException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object Platform {
     private val _logger = Logger(Platform::class.java.name)
@@ -184,7 +185,12 @@ object Platform {
             Utils.toString(result)
         }
         bridge.registerAsyncHandler(kGetInstallReferrerUrl) {
-            getInstallReferrerUrl();
+            val activity = PluginManager.getInstance().getActivity()
+            if (activity == null) {
+                assertThat(false).isTrue()
+                return@registerAsyncHandler ""
+            }
+            getInstallReferrerUrl(activity);
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable
@@ -558,7 +564,39 @@ object Platform {
         com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
     }
 
-    private suspend fun getInstallReferrerUrl(): String {
-        return InstallReferrerBridge.getUrl()
+    private suspend fun getInstallReferrerUrl(activity: Activity): String {
+        return suspendCoroutine { cont ->
+            val client = InstallReferrerClient.newBuilder(activity).build()
+            client.startConnection(object : InstallReferrerStateListener {
+                override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                    when (responseCode) {
+                        InstallReferrerClient.InstallReferrerResponse.OK -> {
+                            _logger.info("getInstallReferrerUrl: onInstallReferrerSetupFinished: OK")
+                            try {
+                                val response = client.installReferrer
+                                val referrer = response.installReferrer
+                                client.endConnection()
+                                cont.resume(referrer)
+                            } catch (ex: RemoteException) {
+                                _logger.error("getInstallReferrerUrl: onInstallReferrerSetupFinished: ${ex.message}")
+                                cont.resume("")
+                            }
+                        }
+                        InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
+                            _logger.info("getInstallReferrerUrl: onInstallReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
+                            cont.resume("")
+                        }
+                        InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> {
+                            _logger.info("getInstallReferrerUrl: onInstallReferrerSetupFinished: SERVICE_UNAVAILABLE")
+                            cont.resume("")
+                        }
+                    }
+                }
+
+                override fun onInstallReferrerServiceDisconnected() {
+                    _logger.info("getInstallReferrerUrl: onInstallReferrerServiceDisconnected")
+                }
+            })
+        }
     }
 }

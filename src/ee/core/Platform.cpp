@@ -40,6 +40,7 @@ const auto kGetSafeInset             = kPrefix + "getSafeInset";
 const auto kSendMail                 = kPrefix + "sendMail";
 const auto kTestConnection           = kPrefix + "testConnection";
 const auto kShowInstallPrompt        = kPrefix + "showInstallPrompt";
+const auto kGetInstallReferrerUrl    = kPrefix + "getInstallReferrerUrl";
 // clang-format on
 } // namespace
 
@@ -173,6 +174,16 @@ void Self::showInstallPrompt(const std::string& url,
     json["url"] = url;
     json["referrer"] = referrer;
     bridge_->call(kShowInstallPrompt, json.dump());
+#endif // EE_X_ANDROID
+}
+
+Task<std::string> Self::getInstallReferrerUrl() {
+#ifdef EE_X_ANDROID
+    auto response = co_await bridge_->call(kGetInstallReferrerUrl);
+    co_await SwitchToLibraryThread();
+    co_return response;
+#else  // EE_X_ANDROID
+    co_return "";
 #endif // EE_X_ANDROID
 }
 } // namespace core

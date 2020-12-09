@@ -65,7 +65,7 @@ namespace EE.Internal {
         }
 
         public Task<string> GetInstallReferrerUrl() {
-            return Task.FromResult("NotSupportPlatform");
+            return Task.FromResult("");
         }
     }
 }

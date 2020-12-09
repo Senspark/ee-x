@@ -17,7 +17,6 @@ abstract_target 'common' do
         pod_ee_x('adjust')
         pod_ee_x('app-lovin')
         pod_ee_x('apps-flyer')
-        pod_ee_x('campaign-receiver')
         pod_ee_x('facebook')
         pod_ee_x('facebook-ads')
         pod_ee_x('firebase-analytics')

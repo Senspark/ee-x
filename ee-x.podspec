@@ -374,20 +374,6 @@ Pod::Spec.new do |spec|
     s.dependency 'AppsFlyerFramework', '6.1.1'
   end
 
-  spec.subspec 'campaign-receiver' do |s|
-    s.source_files =
-      'src/ee/CampaignReceiver*',
-      'src/ee/campaign_receiver/**/*'
-
-    s.exclude_files =
-      'src/ee/campaign_receiver/Android.mk',
-      'src/ee/campaign_receiver/CMakeLists.txt',
-      'src/ee/campaign_receiver/generate.sh',
-      'src/ee/campaign_receiver/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-  end
-
   spec.subspec 'cocos' do |s|
     s.source_files =
       'src/ee/Cocos*',

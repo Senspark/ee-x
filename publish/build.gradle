@@ -47,7 +47,6 @@ ext {
         'vungle'                : ['ads'],
         'adjust'                : ['core'],
         'apps-flyer'            : ['core'],
-        'campaign-receiver'     : ['core'],
         'facebook'              : ['core'],
         'firebase-core'         : ['core'],
         'firebase-analytics'    : ['firebase-core'],

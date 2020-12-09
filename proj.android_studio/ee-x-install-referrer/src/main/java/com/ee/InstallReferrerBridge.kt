@@ -6,14 +6,14 @@ import android.os.RemoteException
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 
-class CampaignReceiverBridge /* extends BroadcastReceiver */(
+class InstallReferrerBridge /* extends BroadcastReceiver */(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _application: Application,
     private var _activity: Activity?)
     : IPlugin {
     companion object {
-        private val kTag = CampaignReceiverBridge::class.java.name
+        private val kTag = InstallReferrerBridge::class.java.name
         private const val kPrefix = "CampaignReceiverBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kOnReceivedLink = "${kPrefix}OnReceivedLink"

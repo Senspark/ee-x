@@ -173,7 +173,6 @@ dependencies {
     implementation project(':ee-x-admob-mediation')
     implementation project(':ee-x-app-lovin')
     implementation project(':ee-x-apps-flyer')
-    implementation project(':ee-x-campaign-receiver')
     implementation project(':ee-x-facebook')
     implementation project(':ee-x-facebook-ads')
     implementation project(':ee-x-firebase-analytics')

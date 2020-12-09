@@ -42,6 +42,11 @@ namespace EETest {
                 var result = await EE.Platform.TestConnection("www.google.com", 1.0f);
                 Debug.Log($"TestConnection = {result}");
             });
+
+            EE.Utils.NoAwait(async () => {
+                var result = await EE.Platform.GetInstallReferrerUrl();
+                Debug.Log($"GetInstallReferrerUrl = {result}");
+            });
         }
 
         private void TestAdjust() {

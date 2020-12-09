@@ -1,6 +1,7 @@
 package com.ee
 
 import android.app.Activity
+import android.app.Application
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -19,7 +20,7 @@ import kotlinx.serialization.Serializable
 class NotificationBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = NotificationBridge::class.java.name
@@ -31,7 +32,7 @@ class NotificationBridge(
     }
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -100,20 +101,20 @@ class NotificationBridge(
 
     fun schedule(ticker: String, title: String, body: String, delay: Int, interval: Int, tag: Int) {
         val activity = _activity ?: return
-        val intent = Intent(_context, NotificationReceiver::class.java)
+        val intent = Intent(_application, NotificationReceiver::class.java)
         intent.putExtra("ticker", ticker)
         intent.putExtra("title", title)
         intent.putExtra("body", body)
         intent.putExtra("tag", tag)
         intent.putExtra("className", activity::class.java.name)
-        NotificationUtils.scheduleAlarm(_context, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
+        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
             delay, interval)
     }
 
     fun unschedule(tag: Int) {
         _logger.debug("$kTag: ${this::unschedule.name}: tag = $tag")
-        val intent = Intent(_context, NotificationReceiver::class.java)
-        NotificationUtils.unscheduleAlarm(_context, intent, tag)
+        val intent = Intent(_application, NotificationReceiver::class.java)
+        NotificationUtils.unscheduleAlarm(_application, intent, tag)
     }
 
     fun unscheduleAll() {
@@ -121,7 +122,7 @@ class NotificationBridge(
     }
 
     fun clearAll() {
-        val manager = _context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = _application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancelAll()
     }
 }

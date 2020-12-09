@@ -22,7 +22,9 @@ using Self = Tester;
 void Self::initialize() {
     FunctionLogger logger(__PRETTY_FUNCTION__);
     plugin_ = ee::PluginManager::createPlugin<ee::IUnityAds>();
-    plugin_->initialize(config::app_id, true);
+    ee::noAwait([this]() -> ee::Task<> {
+        auto result = co_await plugin_->initialize(config::app_id, true);
+    });
 }
 
 void Self::destroy() {

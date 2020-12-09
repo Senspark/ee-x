@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -28,7 +27,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class FacebookBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize,
@@ -87,7 +85,7 @@ internal class FacebookBannerAd(
                 return@runOnMainThread
             }
             _isLoaded.set(false)
-            val ad = AdView(_context, _adId, _adSize)
+            val ad = AdView(_activity, _adId, _adSize)
             val params = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT)
@@ -159,26 +157,30 @@ internal class FacebookBannerAd(
         }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.debug("$kTag: ${this::onError.name} ${adError.errorMessage}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onError.name} ${adError.errorMessage}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        }
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+        }
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 }

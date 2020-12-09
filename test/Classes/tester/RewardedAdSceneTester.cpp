@@ -43,9 +43,11 @@ void Self::initialize() {
     ironSource_ = ee::PluginManager::createPlugin<ee::IIronSource>();
     unityAds_ = ee::PluginManager::createPlugin<ee::IUnityAds>();
 
-    adMob_->initialize();
-    ironSource_->initialize(config::iron_source_app);
-    unityAds_->initialize(config::unity_ads_app, false);
+    ee::noAwait([this]() -> ee::Task<> {
+        co_await adMob_->initialize();
+        co_await ironSource_->initialize(config::iron_source_app);
+        co_await unityAds_->initialize(config::unity_ads_app, false);
+    });
 
     handle_ = std::make_unique<ee::ObserverHandle>();
 

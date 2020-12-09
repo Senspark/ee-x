@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:store:1.3.6'
+    implementation 'com.senspark.ee:store:1.4.0'
 }
 ```
 

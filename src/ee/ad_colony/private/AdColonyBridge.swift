@@ -65,9 +65,11 @@ public class AdColonyBridge: NSObject, IPlugin {
                     return
                 }
                 AdColony.configure(withAppID: appId, zoneIDs: zoneIds, options: nil) { _ in
-                    self._initializing = false
-                    self._initialized = true
-                    single(.success(true))
+                    Thread.runOnMainThread {
+                        self._initializing = false
+                        self._initialized = true
+                        single(.success(true))
+                    }
                 }
             }
             return Disposables.create()

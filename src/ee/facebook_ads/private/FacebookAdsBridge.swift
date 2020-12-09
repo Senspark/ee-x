@@ -156,14 +156,16 @@ public class FacebookAdsBridge: NSObject, IPlugin {
                 }
                 self._initializing = true
                 FBAudienceNetworkAds.initialize(with: nil) { result in
-                    self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
-                    self._initializing = false
-                    if result.isSuccess {
-                        FBAdSettings.setAdvertiserTrackingEnabled(true)
-                        self._initialized = true
-                        single(.success(true))
-                    } else {
-                        single(.success(false))
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
+                        self._initializing = false
+                        if result.isSuccess {
+                            FBAdSettings.setAdvertiserTrackingEnabled(true)
+                            self._initialized = true
+                            single(.success(true))
+                        } else {
+                            single(.success(false))
+                        }
                     }
                 }
             }

@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustConfig
@@ -17,7 +17,7 @@ import kotlin.coroutines.suspendCoroutine
 class AdjustBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = AdjustBridge::class.java.name
@@ -31,7 +31,7 @@ class AdjustBridge(
     }
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -77,7 +77,7 @@ class AdjustBridge(
         }
         _bridge.registerAsyncHandler(kGetAdvertisingIdentifier) {
             suspendCoroutine { cont ->
-                Adjust.getGoogleAdId(_context) { googleAdId ->
+                Adjust.getGoogleAdId(_application) { googleAdId ->
                     cont.resume(googleAdId ?: "")
                 }
             }
@@ -86,7 +86,7 @@ class AdjustBridge(
             Adjust.getAdid()
         }
         _bridge.registerHandler(kSetPushToken) { message ->
-            Adjust.setPushToken(message, _context)
+            Adjust.setPushToken(message, _application)
             ""
         }
         _bridge.registerHandler(kTrackEvent) { message ->
@@ -133,7 +133,7 @@ class AdjustBridge(
     @AnyThread
     fun initialize(token: String, environment: String,
                    logLevel: LogLevel, eventBufferingEnabled: Boolean) {
-        val config = AdjustConfig(_context, token, environment)
+        val config = AdjustConfig(_application, token, environment)
         config.setLogLevel(logLevel)
         config.setEventBufferingEnabled(eventBufferingEnabled)
         Adjust.onCreate(config)

@@ -30,7 +30,6 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
     {Plugin::AdMob, "AdMob"},
     {Plugin::AppLovin, "AppLovin"},
     {Plugin::AppsFlyer, "AppsFlyer"},
-    {Plugin::CampaignReceiver, "CampaignReceiver"},
     {Plugin::Facebook, "Facebook"},
     {Plugin::FacebookAds, "FacebookAds"},
     {Plugin::FirebaseCore, "FirebaseCore"},

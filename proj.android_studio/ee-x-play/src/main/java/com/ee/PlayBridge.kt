@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.internal.deserialize
@@ -23,7 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 class PlayBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = PlayBridge::class.java.name
@@ -43,7 +43,7 @@ class PlayBridge(
     private var _client: GoogleSignInClient? = null
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         Thread.runOnMainThread {
             _activity?.let { activity ->
@@ -161,7 +161,7 @@ class PlayBridge(
     }
 
     private val signInAccount: GoogleSignInAccount?
-        @UiThread get() = GoogleSignIn.getLastSignedInAccount(_context)
+        @UiThread get() = GoogleSignIn.getLastSignedInAccount(_application)
 
     private val achievementsClient: AchievementsClient?
         @UiThread get() {

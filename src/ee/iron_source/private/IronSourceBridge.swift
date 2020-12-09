@@ -156,86 +156,116 @@ public class IronSourceBridge:
     }
 
     public func interstitialDidLoad() {
-        _logger.debug("\(kTag): \(#function)")
-        _isInterstitialAdLoaded = true
-        _bridge.callCpp(kOnInterstitialAdLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isInterstitialAdLoaded = true
+            self._bridge.callCpp(kOnInterstitialAdLoaded)
+        }
     }
 
     public func interstitialDidFailToLoadWithError(_ error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(kOnInterstitialAdFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(kOnInterstitialAdFailedToLoad, error.localizedDescription)
+        }
     }
 
     public func interstitialDidShow() {
-        _logger.debug("\(kTag): \(#function)")
-        _isRewardedAdLoaded = false
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isRewardedAdLoaded = false
+        }
     }
 
     public func interstitialDidFailToShowWithError(_ error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(kOnInterstitialAdFailedToShow, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(kOnInterstitialAdFailedToShow, error.localizedDescription)
+        }
     }
 
     public func interstitialDidOpen() {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     public func didClickInterstitial() {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(kOnInterstitialAdClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(kOnInterstitialAdClicked)
+        }
     }
 
     public func interstitialDidClose() {
-        _logger.debug("\(kTag): \(#function)")
-        _isInterstitialAdLoaded = false
-        _bridge.callCpp(kOnInterstitialAdClosed)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isInterstitialAdLoaded = false
+            self._bridge.callCpp(kOnInterstitialAdClosed)
+        }
     }
 
     public func rewardedVideoHasChangedAvailability(_ available: Bool) {
-        _logger.debug("\(kTag): \(#function): \(available)")
-        if available {
-            _isRewardedAdLoaded = true
-            _bridge.callCpp(kOnRewardedAdLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(available)")
+            if available {
+                self._isRewardedAdLoaded = true
+                self._bridge.callCpp(kOnRewardedAdLoaded)
+            }
         }
     }
 
     public func rewardedVideoDidFailToShowWithError(_ error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(kOnRewardedAdFailedToShow, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(kOnRewardedAdFailedToShow, error.localizedDescription)
+        }
     }
 
     public func rewardedVideoDidOpen() {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     public func rewardedVideoDidStart() {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     public func didClickRewardedVideo(_ placementInfo: ISPlacementInfo) {
-        _logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
-        _bridge.callCpp(kOnRewardedAdClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
+            self._bridge.callCpp(kOnRewardedAdClicked)
+        }
     }
 
     public func rewardedVideoDidEnd() {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     public func didReceiveReward(forPlacement placementInfo: ISPlacementInfo) {
-        _logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
-        _rewarded = true
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(placementInfo.placementName ?? "")")
+            self._rewarded = true
+        }
     }
 
     public func rewardedVideoDidClose() {
-        _logger.debug("\(kTag): \(#function)")
-        // Note: The didReceiveReward and rewardedVideoDidClose events are
-        // asynchronous.
-        if _rewarded {
-            // Already has result.
-            handleRewardedAdResult()
-        } else {
-            Thread.runOnMainThreadDelayed(1.0) {
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            // Note: The didReceiveReward and rewardedVideoDidClose events are
+            // asynchronous.
+            if self._rewarded {
+                // Already has result.
                 self.handleRewardedAdResult()
+            } else {
+                Thread.runOnMainThreadDelayed(1.0) {
+                    self.handleRewardedAdResult()
+                }
             }
         }
     }

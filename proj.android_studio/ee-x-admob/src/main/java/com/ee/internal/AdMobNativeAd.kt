@@ -230,150 +230,159 @@ internal class AdMobNativeAd(
     }
 
     override fun onUnifiedNativeAdLoaded(ad: UnifiedNativeAd) {
-        _logger.debug("$kTag: ${this::onUnifiedNativeAdLoaded.name}")
-        val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onUnifiedNativeAdLoaded.name}")
+            val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
 
-        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-        // have a video asset.
-        val vc = ad.videoController
+            // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+            // have a video asset.
+            val vc = ad.videoController
 
-        // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-        // VideoController will call methods on this object when events occur in the video
-        // lifecycle.
-        vc.videoLifecycleCallbacks = object : VideoLifecycleCallbacks() {
-            override fun onVideoEnd() {
-                // Publishers should allow native ads to complete video playback before refreshing
-                // or replacing them with another ad in the same UI location.
-                _logger.debug("$kTag: ${this::onVideoEnd.name}")
-                super.onVideoEnd()
-            }
-        }
-
-        // Some assets are guaranteed to be in every NativeAppInstallAd.
-        processView<TextView>(view, k__body) { item ->
-            view.bodyView = item
-            item.text = ad.body
-        }
-        processView<Button>(view, k__call_to_action) { item ->
-            view.callToActionView = item
-            item.text = ad.callToAction
-        }
-        processView<TextView>(view, k__headline) { item ->
-            view.headlineView = item
-            item.text = ad.headline
-        }
-        processView<ImageView>(view, k__icon) { item ->
-            view.iconView = item
-            if (ad.icon != null) {
-                item.setImageDrawable(ad.icon.drawable)
-            }
-        }
-
-        // Apps can check the VideoController's hasVideoContent property to determine if the
-        // NativeAppInstallAd has a video asset.
-        if (vc.hasVideoContent()) {
-            processView<ImageView>(view, k__image) { item ->
-                item.visibility = View.GONE
-            }
-            processView<MediaView>(view, k__media) { item ->
-                view.mediaView = item
-            }
-        } else {
-            processView<ImageView>(view, k__image) { item ->
-                val images = ad.images
-                item.visibility = View.GONE
-                for (image in images) {
-                    if (image != null) {
-                        item.visibility = View.VISIBLE
-                        item.setImageDrawable(image.drawable)
-                        break
-                    }
+            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+            // VideoController will call methods on this object when events occur in the video
+            // lifecycle.
+            vc.videoLifecycleCallbacks = object : VideoLifecycleCallbacks() {
+                override fun onVideoEnd() {
+                    // Publishers should allow native ads to complete video playback before refreshing
+                    // or replacing them with another ad in the same UI location.
+                    _logger.debug("$kTag: ${this::onVideoEnd.name}")
+                    super.onVideoEnd()
                 }
             }
-            processView<MediaView>(view, k__media) { item ->
-                item.visibility = View.GONE
-            }
-        }
 
-        // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
-        // check before trying to display them.
-        processView<TextView>(view, k__price) { item ->
-            view.priceView = item
-            val price: CharSequence? = ad.price
-            if (price != null) {
-                item.visibility = View.VISIBLE
-                item.text = price
-            } else {
-                item.visibility = View.INVISIBLE
+            // Some assets are guaranteed to be in every NativeAppInstallAd.
+            processView<TextView>(view, k__body) { item ->
+                view.bodyView = item
+                item.text = ad.body
             }
-        }
-        processView<RatingBar>(view, k__star_rating) { item ->
-            view.starRatingView = item
-            val starRating = ad.starRating
-            if (starRating != null) {
-                item.rating = starRating.toFloat()
-                item.visibility = View.VISIBLE
-            } else {
-                item.visibility = View.INVISIBLE
+            processView<Button>(view, k__call_to_action) { item ->
+                view.callToActionView = item
+                item.text = ad.callToAction
             }
-        }
-        processView<TextView>(view, k__store) { item ->
-            view.storeView = item
-            val store: CharSequence? = ad.store
-            if (store != null) {
-                item.visibility = View.VISIBLE
-                item.text = store
-            } else {
-                item.visibility = View.INVISIBLE
+            processView<TextView>(view, k__headline) { item ->
+                view.headlineView = item
+                item.text = ad.headline
             }
-        }
+            processView<ImageView>(view, k__icon) { item ->
+                view.iconView = item
+                if (ad.icon != null) {
+                    item.setImageDrawable(ad.icon.drawable)
+                }
+            }
 
-        // Assign native ad object to the native view.
-        view.setNativeAd(ad)
+            // Apps can check the VideoController's hasVideoContent property to determine if the
+            // NativeAppInstallAd has a video asset.
+            if (vc.hasVideoContent()) {
+                processView<ImageView>(view, k__image) { item ->
+                    item.visibility = View.GONE
+                }
+                processView<MediaView>(view, k__media) { item ->
+                    view.mediaView = item
+                }
+            } else {
+                processView<ImageView>(view, k__image) { item ->
+                    val images = ad.images
+                    item.visibility = View.GONE
+                    for (image in images) {
+                        if (image != null) {
+                            item.visibility = View.VISIBLE
+                            item.setImageDrawable(image.drawable)
+                            break
+                        }
+                    }
+                }
+                processView<MediaView>(view, k__media) { item ->
+                    item.visibility = View.GONE
+                }
+            }
 
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+            // These assets aren't guaranteed to be in every NativeAppInstallAd, so it's important to
+            // check before trying to display them.
+            processView<TextView>(view, k__price) { item ->
+                view.priceView = item
+                val price: CharSequence? = ad.price
+                if (price != null) {
+                    item.visibility = View.VISIBLE
+                    item.text = price
+                } else {
+                    item.visibility = View.INVISIBLE
+                }
+            }
+            processView<RatingBar>(view, k__star_rating) { item ->
+                view.starRatingView = item
+                val starRating = ad.starRating
+                if (starRating != null) {
+                    item.rating = starRating.toFloat()
+                    item.visibility = View.VISIBLE
+                } else {
+                    item.visibility = View.INVISIBLE
+                }
+            }
+            processView<TextView>(view, k__store) { item ->
+                view.storeView = item
+                val store: CharSequence? = ad.store
+                if (store != null) {
+                    item.visibility = View.VISIBLE
+                    item.text = store
+                } else {
+                    item.visibility = View.INVISIBLE
+                }
+            }
+
+            // Assign native ad object to the native view.
+            view.setNativeAd(ad)
+
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onAdLoaded() {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        // There is one important difference between the way AdListener objects work with native ads
-        // and the way they work with banners and interstitials. Because the AdLoader has its own
-        // format-specific listeners (i.e., UnifiedNativeAd.OnUnifiedNativeAdLoadedListener) to use
-        // when an ad has loaded, the onAdLoaded() method from AdListener is not called when a
-        // native ad loads successfully.
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            // There is one important difference between the way AdListener objects work with native ads
+            // and the way they work with banners and interstitials. Because the AdLoader has its own
+            // format-specific listeners (i.e., UnifiedNativeAd.OnUnifiedNativeAdLoadedListener) to use
+            // when an ad has loaded, the onAdLoaded() method from AdListener is not called when a
+            // native ad loads successfully.
+        }
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        }
     }
 
     override fun onAdOpened() {
-        _logger.info("$kTag: ${this::onAdOpened.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onAdOpened.name}")
+        }
     }
 
     override fun onAdImpression() {
-        _logger.info("$kTag: ${this::onAdImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onAdImpression.name}")
+        }
     }
 
     override fun onAdClicked() {
-        _logger.info("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onAdClicked.name}")
+        }
     }
 
     override fun onAdLeftApplication() {
-        _logger.info("$kTag: ${this::onAdLeftApplication.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onAdLeftApplication.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 
     override fun onAdClosed() {
-        _logger.info("$kTag: ${this::onAdClosed.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onAdClosed.name}")
+        }
     }
 }

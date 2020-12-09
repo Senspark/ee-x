@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import androidx.annotation.AnyThread
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -23,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AdMobRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String) : RewardedAdCallback() {
     companion object {
@@ -111,18 +109,20 @@ internal class AdMobRewardedAd(
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
-                    _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}")
-                    Thread.checkMainThread()
-                    _isLoaded.set(true)
-                    _bridge.callCpp(_messageHelper.onLoaded)
+                    Thread.runOnMainThread {
+                        _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}")
+                        _isLoaded.set(true)
+                        _bridge.callCpp(_messageHelper.onLoaded)
+                    }
                 }
 
                 override fun onRewardedAdFailedToLoad(error: LoadAdError?) {
-                    _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-                    Thread.checkMainThread()
-                    destroyInternalAd()
-                    createInternalAd()
-                    _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+                    Thread.runOnMainThread {
+                        _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+                        destroyInternalAd()
+                        createInternalAd()
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+                    }
                 }
             }
             ad.loadAd(AdRequest.Builder().build(), callback)
@@ -140,30 +140,34 @@ internal class AdMobRewardedAd(
     }
 
     override fun onRewardedAdFailedToShow(error: AdError?) {
-        _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
-        Thread.checkMainThread()
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
+            destroyInternalAd()
+            createInternalAd()
+            _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
+        }
     }
 
     override fun onRewardedAdOpened() {
-        _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(false)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
+            _isLoaded.set(false)
+        }
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
-        _logger.debug("$kTag: ${this::onUserEarnedReward.name}")
-        Thread.checkMainThread()
-        _rewarded = true
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onUserEarnedReward.name}")
+            _rewarded = true
+        }
     }
 
     override fun onRewardedAdClosed() {
-        _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
-        Thread.checkMainThread()
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
+            destroyInternalAd()
+            createInternalAd()
+            _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        }
     }
 }

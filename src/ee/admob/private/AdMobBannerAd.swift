@@ -110,30 +110,42 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
     }
 
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
+        }
     }
 
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
 
     func adViewWillPresentScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
 
     func adViewWillDismissScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 }

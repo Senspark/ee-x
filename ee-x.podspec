@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.3.6'
+  spec.version        = '1.4.0'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.3.6'
+    :tag => 'v1.4.0'
   }
 
   spec.framework = 'Foundation'
@@ -372,20 +372,6 @@ Pod::Spec.new do |spec|
 
     s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework', '6.1.1'
-  end
-
-  spec.subspec 'campaign-receiver' do |s|
-    s.source_files =
-      'src/ee/CampaignReceiver*',
-      'src/ee/campaign_receiver/**/*'
-
-    s.exclude_files =
-      'src/ee/campaign_receiver/Android.mk',
-      'src/ee/campaign_receiver/CMakeLists.txt',
-      'src/ee/campaign_receiver/generate.sh',
-      'src/ee/campaign_receiver/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
   end
 
   spec.subspec 'cocos' do |s|

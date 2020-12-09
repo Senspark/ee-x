@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -44,7 +44,7 @@ import java.io.File
 class FacebookBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = FacebookBridge::class.java.name
@@ -86,7 +86,7 @@ class FacebookBridge(
     private val _profileTracker: ProfileTracker
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         _accessTokenTracker = object : AccessTokenTracker() {
             override fun onCurrentAccessTokenChanged(oldAccessToken: AccessToken?,
                                                      currentAccessToken: AccessToken?) {

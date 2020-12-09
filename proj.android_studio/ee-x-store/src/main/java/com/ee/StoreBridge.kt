@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -49,7 +49,7 @@ import kotlin.coroutines.resumeWithException
 class StoreBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?)
     : IPlugin, IStoreBridge, IUnityCallback {
     companion object {
@@ -75,7 +75,7 @@ class StoreBridge(
     private var _clientAwaiter: Deferred<Unit>? = null
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -191,7 +191,7 @@ class StoreBridge(
             // https://stackoverflow.com/questions/61388646/billingclient-billingclientstatelistener-onbillingsetupfinished-is-called-multip
             suspendCancellableCoroutine<Unit> { cont ->
                 val client = BillingClient
-                    .newBuilder(_context)
+                    .newBuilder(_application)
                     .enablePendingPurchases()
                     .setListener { result, purchases ->
                         _scope.launch {

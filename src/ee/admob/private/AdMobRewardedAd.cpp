@@ -108,7 +108,7 @@ Task<IRewardedAdResult> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [this](IRewardedAdResult result) {
+        [](IRewardedAdResult result) {
             // OK.
         });
     co_return result;

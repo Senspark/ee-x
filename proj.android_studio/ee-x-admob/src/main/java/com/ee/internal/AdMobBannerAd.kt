@@ -1,7 +1,6 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
@@ -28,7 +27,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AdMobBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize,
@@ -176,41 +174,48 @@ internal class AdMobBannerAd(
         }
 
     override fun onAdLoaded() {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
-        _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+        }
     }
 
     override fun onAdOpened() {
-        _logger.debug("$kTag: ${this::onAdOpened.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdOpened.name}")
+        }
     }
 
     override fun onAdImpression() {
-        _logger.debug("$kTag: ${this::onAdImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdImpression.name}")
+        }
     }
 
     override fun onAdClicked() {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
+        }
     }
 
     override fun onAdLeftApplication() {
-        _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 
     override fun onAdClosed() {
-        _logger.debug("$kTag: ${this::onAdClosed.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClosed.name}")
+        }
     }
 }

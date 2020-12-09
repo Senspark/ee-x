@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.GoogleAnalyticsTracker
 import com.ee.internal.deserializeMap
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 class GoogleAnalyticsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = GoogleAnalyticsBridge::class.java.name
@@ -45,12 +45,12 @@ class GoogleAnalyticsBridge(
         private const val kTestTrackEcommerceImpression = "${kPrefix}TestTrackEcommerceImpression"
     }
 
-    private val _analytics = GoogleAnalytics.getInstance(_context)
+    private val _analytics = GoogleAnalytics.getInstance(_application)
     private val _trackers: MutableMap<String, GoogleAnalyticsTracker> = ConcurrentHashMap()
     private var _exceptionReportingEnabled = false
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }

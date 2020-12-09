@@ -119,54 +119,72 @@ internal class FacebookRewardedAd:
     }
     
     func rewardedVideoAdDidLoad(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId)")
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
+        }
     }
     
     func rewardedVideoAd(_ rewardedVideoAd: FBRewardedVideoAd, didFailWithError error: Error) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId) error = \(error.localizedDescription)")
-        destroyInternalAd()
-        createInternalAd()
-        if _displaying {
-            _displaying = false
-            _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
-        } else {
-            _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) error = \(error.localizedDescription)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            if self._displaying {
+                self._displaying = false
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
+            } else {
+                self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+            }
         }
     }
     
     func rewardedVideoAdDidClick(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
     
     func rewardedVideoAdWillLogImpression(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+        }
     }
     
     func rewardedVideoAdVideoComplete(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId)")
-        _rewarded = true
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._rewarded = true
+        }
     }
     
     func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(kTag): \(#function): id = \(_adId)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+        }
     }
     
     func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(#function): id = \(_adId)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function): id = \(self._adId)")
+        }
     }
     
     func rewardedVideoAdWillClose(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(#function): id = \(_adId)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function): id = \(self._adId)")
+        }
     }
     
     func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
-        _logger.debug("\(#function): id = \(_adId)")
-        _displaying = false
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function): id = \(self._adId)")
+            self._displaying = false
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
+        }
     }
 }

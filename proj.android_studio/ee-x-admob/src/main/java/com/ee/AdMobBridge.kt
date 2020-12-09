@@ -1,7 +1,7 @@
 package com.ee
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.AdMobBannerAd
 import com.ee.internal.AdMobBannerHelper
@@ -27,7 +27,7 @@ import kotlin.coroutines.suspendCoroutine
 class AdMobBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = AdMobBridge::class.java.name
@@ -48,7 +48,7 @@ class AdMobBridge(
 
     private var _initializing = false
     private var _initialized = false
-    private val _bannerHelper = AdMobBannerHelper(_context)
+    private val _bannerHelper = AdMobBannerHelper(_application)
     private val _testDevices: MutableList<String> = ArrayList()
     private val _bannerAds: MutableMap<String, AdMobBannerAd> = ConcurrentHashMap()
     private val _nativeAds: MutableMap<String, AdMobNativeAd> = ConcurrentHashMap()
@@ -56,7 +56,7 @@ class AdMobBridge(
     private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = ConcurrentHashMap()
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         _logger.info("$kTag: constructor end.")
     }
@@ -67,6 +67,9 @@ class AdMobBridge(
             ad.onCreate(activity)
         }
         for (ad in _nativeAds.values) {
+            ad.onCreate(activity)
+        }
+        for (ad in _interstitialAds.values) {
             ad.onCreate(activity)
         }
         for (ad in _rewardedAds.values) {
@@ -95,6 +98,9 @@ class AdMobBridge(
             ad.onDestroy(activity)
         }
         for (ad in _nativeAds.values) {
+            ad.onDestroy(activity)
+        }
+        for (ad in _interstitialAds.values) {
             ad.onDestroy(activity)
         }
         for (ad in _rewardedAds.values) {
@@ -219,13 +225,15 @@ class AdMobBridge(
                 }
                 _initializing = true
                 MobileAds.initialize(_activity) { status ->
-                    _initializing = false
-                    _initialized = true
-                    _logger.info("$kTag: initialize: done")
-                    for ((key, value) in status.adapterStatusMap) {
-                        _logger.info("$kTag: adapter = $key state = ${value.initializationState} latency = ${value.latency} description = ${value.description}")
+                    Thread.runOnMainThread {
+                        _initializing = false
+                        _initialized = true
+                        _logger.info("$kTag: initialize: done")
+                        for ((key, value) in status.adapterStatusMap) {
+                            _logger.info("$kTag: adapter = $key state = ${value.initializationState} latency = ${value.latency} description = ${value.description}")
+                        }
+                        cont.resume(true)
                     }
-                    cont.resume(true)
                 }
             }
         }
@@ -250,7 +258,7 @@ class AdMobBridge(
         if (_bannerAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobBannerAd(_bridge, _logger, _context, _activity, adId, adSize, _bannerHelper)
+        val ad = AdMobBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
         _bannerAds[adId] = ad
         return true
     }
@@ -269,7 +277,7 @@ class AdMobBridge(
         if (_nativeAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobNativeAd(_bridge, _logger, _context, _activity, adId, layoutName, identifiers)
+        val ad = AdMobNativeAd(_bridge, _logger, _application, _activity, adId, layoutName, identifiers)
         _nativeAds[adId] = ad
         return true
     }
@@ -287,7 +295,7 @@ class AdMobBridge(
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobInterstitialAd(_bridge, _logger, _context, _activity, adId)
+        val ad = AdMobInterstitialAd(_bridge, _logger, _activity, adId)
         _interstitialAds[adId] = ad
         return true
     }
@@ -305,7 +313,7 @@ class AdMobBridge(
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobRewardedAd(_bridge, _logger, _context, _activity, adId)
+        val ad = AdMobRewardedAd(_bridge, _logger, _activity, adId)
         _rewardedAds[adId] = ad
         return true
     }

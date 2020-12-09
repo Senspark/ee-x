@@ -1,7 +1,7 @@
 package com.ee.internal
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.graphics.Point
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -38,7 +38,7 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 internal class FacebookNativeAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?,
     private val _adId: String,
     private val _layoutName: String,
@@ -117,7 +117,7 @@ internal class FacebookNativeAd(
                 return@runOnMainThread
             }
             _isLoaded.set(false)
-            _ad = NativeAd(_context, _adId)
+            _ad = NativeAd(_activity, _adId)
         }
     }
 
@@ -135,10 +135,10 @@ internal class FacebookNativeAd(
     @AnyThread
     private fun createView() {
         Thread.runOnMainThread {
-            val layoutId = _context.resources
-                .getIdentifier(_layoutName, "layout", _context.packageName)
+            val layoutId = _application.resources
+                .getIdentifier(_layoutName, "layout", _application.packageName)
             val view = LayoutInflater
-                .from(_context)
+                .from(_activity)
                 .inflate(layoutId, null, false)
             view.visibility = View.INVISIBLE
             val params = FrameLayout.LayoutParams(
@@ -222,8 +222,8 @@ internal class FacebookNativeAd(
         if (!_identifiers.containsKey(identifier)) {
             return 0
         }
-        val resources = _context.resources
-        return resources.getIdentifier(_identifiers[identifier], "id", _context.packageName)
+        val resources = _application.resources
+        return resources.getIdentifier(_identifiers[identifier], "id", _application.packageName)
     }
 
     @UiThread
@@ -251,54 +251,59 @@ internal class FacebookNativeAd(
     }
 
     override fun onAdLoaded(nativeAd: Ad) {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        Thread.checkMainThread()
-        assertThat(_ad === nativeAd)
-        val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
-        val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
-        ad.unregisterView()
-        processView<Button>(view, k__call_to_action) { item ->
-            item.visibility = if (ad.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-            item.text = ad.adCallToAction
-        }
-        processView<TextView>(view, k__title) { item ->
-            item.text = ad.advertiserName
-        }
-        processView<TextView>(view, k__body) { item ->
-            item.text = ad.adBodyText
-        }
-        processView<TextView>(view, k__social_context) { item ->
-            item.text = ad.adSocialContext
-        }
-        processView<LinearLayout>(view, k__ad_choices) { item ->
-            // Remove old icons.
-            item.removeAllViews()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            assertThat(_ad === nativeAd)
+            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
+            ad.unregisterView()
+            processView<Button>(view, k__call_to_action) { item ->
+                item.visibility = if (ad.hasCallToAction()) View.VISIBLE else View.INVISIBLE
+                item.text = ad.adCallToAction
+            }
+            processView<TextView>(view, k__title) { item ->
+                item.text = ad.advertiserName
+            }
+            processView<TextView>(view, k__body) { item ->
+                item.text = ad.adBodyText
+            }
+            processView<TextView>(view, k__social_context) { item ->
+                item.text = ad.adSocialContext
+            }
+            processView<LinearLayout>(view, k__ad_choices) { item ->
+                // Remove old icons.
+                item.removeAllViews()
 
-            // Add the AdChoices icon.
-            val adOptionsView = AdOptionsView(_context, _ad, null)
-            item.addView(adOptionsView)
+                // Add the AdChoices icon.
+                val adOptionsView = AdOptionsView(_activity, _ad, null)
+                item.addView(adOptionsView)
+            }
+            processView<MediaView>(view, k__media) { item ->
+                val callToAction = view.findViewById<Button>(getIdentifier(k__call_to_action))
+                val icon = view.findViewById<ImageView>(getIdentifier(k__icon))
+                ad.registerViewForInteraction(view, item, icon, listOf(callToAction, item))
+            }
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
         }
-        processView<MediaView>(view, k__media) { item ->
-            val callToAction = view.findViewById<Button>(getIdentifier(k__call_to_action))
-            val icon = view.findViewById<ImageView>(getIdentifier(k__icon))
-            ad.registerViewForInteraction(view, item, icon, listOf(callToAction, item))
-        }
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     override fun onMediaDownloaded(ad: Ad) {
-        _logger.debug("$kTag: ${this::onMediaDownloaded.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onMediaDownloaded.name}")
+        }
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
-        Thread.checkMainThread()
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+        }
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 }

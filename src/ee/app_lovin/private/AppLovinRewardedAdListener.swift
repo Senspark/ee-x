@@ -32,53 +32,75 @@ internal class AppLovinRewardedAdListener:
     }
 
     func adService(_ adService: ALAdService, didLoad ad: ALAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = true
-        _bridge.callCpp(kOnRewardedAdLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = true
+            self._bridge.callCpp(kOnRewardedAdLoaded)
+        }
     }
 
     func adService(_ adService: ALAdService, didFailToLoadAdWithError code: Int32) {
-        _logger.debug("\(kTag): \(#function): code \(code)")
-        _bridge.callCpp(kOnRewardedAdFailedToLoad, "\(code)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): code \(code)")
+            self._bridge.callCpp(kOnRewardedAdFailedToLoad, "\(code)")
+        }
     }
 
     func ad(_ ad: ALAd, wasDisplayedIn view: UIView) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = false
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = false
+        }
     }
 
     func videoPlaybackBegan(in ad: ALAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func ad(_ ad: ALAd, wasClickedIn view: UIView) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(kOnRewardedAdClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(kOnRewardedAdClicked)
+        }
     }
 
     func videoPlaybackEnded(in ad: ALAd, atPlaybackPercent percentPlayed: NSNumber, fullyWatched wasFullyWatched: Bool) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func rewardValidationRequest(for ad: ALAd, didSucceedWithResponse response: [AnyHashable: Any]) {
-        _logger.debug("\(kTag): \(#function)")
-        _rewarded = true
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._rewarded = true
+        }
     }
 
     func rewardValidationRequest(for ad: ALAd, wasRejectedWithResponse response: [AnyHashable: Any]) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func rewardValidationRequest(for ad: ALAd, didExceedQuotaWithResponse response: [AnyHashable: Any]) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func rewardValidationRequest(for ad: ALAd, didFailWithError responseCode: Int) {
-        _logger.debug("\(kTag): \(#function): code \(responseCode)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): code \(responseCode)")
+        }
     }
 
     func ad(_ ad: ALAd, wasHiddenIn view: UIView) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(kOnRewardedAdClosed, Utils.toString(self._rewarded))
+        }
     }
 }

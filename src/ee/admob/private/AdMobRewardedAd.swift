@@ -85,14 +85,16 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
                 return
             }
             ad.load(GADRequest(), completionHandler: { error in
-                if let error = error {
-                    self.destroyInternalAd()
-                    self.createInternalAd()
-                    self._bridge.callCpp(self._messageHelper.onFailedToLoad,
-                                         error.localizedDescription)
-                } else {
-                    self._isLoaded = true
-                    self._bridge.callCpp(self._messageHelper.onLoaded)
+                Thread.runOnMainThread {
+                    if let error = error {
+                        self.destroyInternalAd()
+                        self.createInternalAd()
+                        self._bridge.callCpp(self._messageHelper.onFailedToLoad,
+                                             error.localizedDescription)
+                    } else {
+                        self._isLoaded = true
+                        self._bridge.callCpp(self._messageHelper.onLoaded)
+                    }
                 }
             })
         }
@@ -113,26 +115,34 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     }
     
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
-        _logger.debug("\(#function)")
-        _isLoaded = false
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function)")
+            self._isLoaded = false
+        }
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
-        _logger.debug("\(#function): \(error.localizedDescription)")
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function): \(error.localizedDescription)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
+        }
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
-        _logger.debug("\(#function)")
-        _rewarded = true
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function)")
+            self._rewarded = true
+        }
     }
     
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
-        _logger.debug("\(#function)")
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            self._logger.debug("\(#function)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
+        }
     }
 }

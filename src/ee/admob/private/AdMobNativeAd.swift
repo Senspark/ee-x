@@ -181,84 +181,102 @@ internal class AdMobNativeAd: NSObject, IAdView,
     }
 
     func adLoader(_ adLoader: GADAdLoader, didReceive ad: GADUnifiedNativeAd) {
-        guard let view = _view else {
-            assert(false, "Ad view is not initialized")
-            return
+        Thread.runOnMainThread {
+            guard let view = self._view else {
+                assert(false, "Ad view is not initialized")
+                return
+            }
+
+            // Populate the native ad view with the native ad assets.
+            // The headline and mediaContent are guaranteed to be present in every
+            // native ad.
+            (view.headlineView as? UILabel)?.text = ad.headline
+            view.mediaView?.mediaContent = ad.mediaContent
+
+            // These assets are not guaranteed to be present. Check that they are before
+            // showing or hiding them.
+            (view.bodyView as? UILabel)?.text = ad.body
+            view.bodyView?.isHidden = ad.body == nil
+
+            (view.callToActionView as? UIButton)?.setTitle(ad.callToAction, for: UIControl.State.normal)
+            view.callToActionView?.isHidden = ad.callToAction == nil
+
+            (view.iconView as? UIImageView)?.image = ad.icon?.image
+            view.iconView?.isHidden = ad.icon == nil
+
+            (view.starRatingView as? UIImageView)?.image = self.imageForStars(ad.starRating?.floatValue ?? 0)
+            view.starRatingView?.isHidden = ad.starRating == nil
+
+            (view.storeView as? UILabel)?.text = ad.store
+            view.storeView?.isHidden = ad.store == nil
+
+            (view.priceView as? UILabel)?.text = ad.price
+            view.priceView?.isHidden = ad.price == nil
+
+            (view.advertiserView as? UILabel)?.text = ad.advertiser
+            view.advertiserView?.isHidden = ad.advertiser == nil
+
+            // In order for the SDK to process touch events properly, user interaction
+            // should be disabled.
+            view.callToActionView?.isUserInteractionEnabled = false
+
+            // Set ourselves as the ad delegate to be notified of native ad events.
+            ad.delegate = self
+
+            view.nativeAd = ad
+
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
         }
-
-        // Populate the native ad view with the native ad assets.
-        // The headline and mediaContent are guaranteed to be present in every
-        // native ad.
-        (view.headlineView as? UILabel)?.text = ad.headline
-        view.mediaView?.mediaContent = ad.mediaContent
-
-        // These assets are not guaranteed to be present. Check that they are before
-        // showing or hiding them.
-        (view.bodyView as? UILabel)?.text = ad.body
-        view.bodyView?.isHidden = ad.body == nil
-
-        (view.callToActionView as? UIButton)?.setTitle(ad.callToAction, for: UIControl.State.normal)
-        view.callToActionView?.isHidden = ad.callToAction == nil
-
-        (view.iconView as? UIImageView)?.image = ad.icon?.image
-        view.iconView?.isHidden = ad.icon == nil
-
-        (view.starRatingView as? UIImageView)?.image = imageForStars(ad.starRating?.floatValue ?? 0)
-        view.starRatingView?.isHidden = ad.starRating == nil
-
-        (view.storeView as? UILabel)?.text = ad.store
-        view.storeView?.isHidden = ad.store == nil
-
-        (view.priceView as? UILabel)?.text = ad.price
-        view.priceView?.isHidden = ad.price == nil
-
-        (view.advertiserView as? UILabel)?.text = ad.advertiser
-        view.advertiserView?.isHidden = ad.advertiser == nil
-
-        // In order for the SDK to process touch events properly, user interaction
-        // should be disabled.
-        view.callToActionView?.isUserInteractionEnabled = false
-
-        // Set ourselves as the ad delegate to be notified of native ad events.
-        ad.delegate = self
-
-        view.nativeAd = ad
-
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
     }
 
     func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: GADRequestError) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+        }
     }
 
     func adLoaderDidFinishLoading(_ adLoader: GADAdLoader) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func nativeAdDidRecordClick(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
 
     func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 
     func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
 }

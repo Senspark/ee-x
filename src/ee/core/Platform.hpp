@@ -91,6 +91,8 @@ public:
     static void showInstallPrompt(const std::string& url,
                                   const std::string& referrer);
 
+    [[nodiscard]] static Task<std::string> getInstallReferrerUrl();
+
 private:
     static IMessageBridge* bridge_;
 };
@@ -113,6 +115,7 @@ constexpr auto isTablet = &Platform::isTablet;
 constexpr auto openApplication = &Platform::openApplication;
 constexpr auto sendMail = &Platform::sendMail;
 constexpr auto testConnection = &Platform::testConnection;
+constexpr auto getInstallReferrerUrl = &Platform::getInstallReferrerUrl;
 } // namespace ee
 
 #endif // __cplusplus

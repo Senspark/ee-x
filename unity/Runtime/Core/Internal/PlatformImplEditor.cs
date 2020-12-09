@@ -63,5 +63,9 @@ namespace EE.Internal {
         public Task<bool> TestConnection(string hostName, float timeOut) {
             return Task.FromResult(false);
         }
+
+        public Task<string> GetInstallReferrerUrl() {
+            return Task.FromResult("");
+        }
     }
 }

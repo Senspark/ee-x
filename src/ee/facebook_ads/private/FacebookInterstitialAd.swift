@@ -105,41 +105,53 @@ internal class FacebookInterstitialAd:
     }
     
     func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _isLoaded = true
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = true
+            self._bridge.callCpp(self._messageHelper.onLoaded)
+        }
     }
     
     func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
-        _logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-        destroyInternalAd()
-        createInternalAd()
-        if _displaying {
-            _displaying = false
-            _bridge.callCpp(_messageHelper.onFailedToShow, error.localizedDescription)
-        } else {
-            _bridge.callCpp(_messageHelper.onFailedToLoad, error.localizedDescription)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self.destroyInternalAd()
+            self.createInternalAd()
+            if self._displaying {
+                self._displaying = false
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
+            } else {
+                self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+            }
         }
     }
     
     func interstitialAdWillLogImpression(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func interstitialAdDidClick(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._bridge.callCpp(self._messageHelper.onClicked)
+        }
     }
     
     func interstitialAdWillClose(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(kTag): \(#function)")
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+        }
     }
     
     func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
-        _logger.debug("\(kTag): \(#function)")
-        _displaying = false
-        destroyInternalAd()
-        createInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed)
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
+            self._displaying = false
+            self.destroyInternalAd()
+            self.createInternalAd()
+            self._bridge.callCpp(self._messageHelper.onClosed)
+        }
     }
 }

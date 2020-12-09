@@ -1,6 +1,7 @@
 package com.ee
 
 import android.app.Activity
+import android.app.Application
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -23,7 +24,7 @@ import java.util.Locale
 class RecorderBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _context: Context,
+    private val _application: Application,
     private var _activity: Activity?) : IPlugin {
     companion object {
         private val kTag = RecorderBridge::class.java.name
@@ -41,10 +42,10 @@ class RecorderBridge(
     private var _recordingUrl: String? = null
 
     init {
-        _logger.info("$kTag: constructor begin: context = $_context")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
         if (isSupported) {
-            _mediaProjectionManager = _context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            _mediaProjectionManager = _application.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         }
         _logger.info("$kTag: constructor end.")
     }

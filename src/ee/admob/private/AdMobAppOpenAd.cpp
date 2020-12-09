@@ -12,14 +12,17 @@ namespace ee {
 namespace admob {
 using Self = AppOpenAd;
 
-Self::AppOpenAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
-                const std::string& adId, AppOpenAdOrientation orientation)
+Self::AppOpenAd(IMessageBridge& bridge, const Logger& logger,
+                const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+                Bridge* plugin, const std::string& adId,
+                AppOpenAdOrientation orientation)
     : bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId)
-    , orientation_(orientation) {
+    , orientation_(orientation)
+    , messageHelper_("AdMobInterstitialAd", adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 

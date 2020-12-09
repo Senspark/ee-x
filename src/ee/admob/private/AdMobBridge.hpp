@@ -43,6 +43,7 @@ private:
     friend NativeAd;
     friend InterstitialAd;
     friend RewardedAd;
+    friend AppOpenAd;
 
     std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
 

@@ -25,6 +25,7 @@ class NativeAd;
 class NativeAdLayout;
 class InterstitialAd;
 class RewardedAd;
+class AppOpenAd;
 } // namespace admob
 
 using IAdMob = admob::IBridge;

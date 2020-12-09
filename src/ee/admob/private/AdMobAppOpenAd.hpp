@@ -45,7 +45,7 @@ private:
     ads::MessageHelper messageHelper_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
-}
+};
 } // namespace admob
 } // namespace ee
 

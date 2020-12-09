@@ -27,7 +27,6 @@ enum class Plugin {
     AdMob,
     AppLovin,
     AppsFlyer,
-    CampaignReceiver,
     Facebook,
     FacebookAds,
     FirebaseCore,

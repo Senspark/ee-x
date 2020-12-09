@@ -43,6 +43,10 @@ void Self::start() {
         auto response = co_await ee::testConnection("www.google.com", 1.0f);
         getLogger().info("testConnection: %d", response);
     });
+    ee::noAwait([]() -> ee::Task<> {
+        auto url = co_await ee::getInstallReferrerUrl();
+        getLogger().info("getInstallReferrerUrl: %s", url.c_str());
+    });
 }
 
 void Self::stop() {}

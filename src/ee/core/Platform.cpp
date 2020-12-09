@@ -179,7 +179,7 @@ void Self::showInstallPrompt(const std::string& url,
 
 Task<std::string> Self::getInstallReferrerUrl() {
 #ifdef EE_X_ANDROID
-    auto response = co_await bridge_->call(kGetInstallReferrerUrl);
+    auto response = co_await bridge_->callAsync(kGetInstallReferrerUrl);
     co_await SwitchToLibraryThread();
     co_return response;
 #else  // EE_X_ANDROID

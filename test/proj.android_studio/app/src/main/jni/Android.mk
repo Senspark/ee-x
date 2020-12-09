@@ -22,7 +22,6 @@ LOCAL_STATIC_LIBRARIES += ee_x_adjust
 LOCAL_STATIC_LIBRARIES += ee_x_admob
 LOCAL_STATIC_LIBRARIES += ee_x_app_lovin
 LOCAL_STATIC_LIBRARIES += ee_x_apps_flyer
-LOCAL_STATIC_LIBRARIES += ee_x_campaign_receiver
 LOCAL_STATIC_LIBRARIES += ee_x_cocos
 LOCAL_STATIC_LIBRARIES += ee_x_facebook
 LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads

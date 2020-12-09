@@ -35,7 +35,6 @@ target_link_libraries(${PROJECT_NAME}
     ee_x_admob
     ee_x_app_lovin
     ee_x_apps_flyer
-    ee_x_campaign_receiver
     ee_x_cocos
     ee_x_facebook
     ee_x_facebook_ads

@@ -13,8 +13,12 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
+import com.ee.internal.InstallReferrerBridge
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
@@ -53,6 +57,7 @@ object Platform {
     private const val kSendMail = kPrefix + "sendMail"
     private const val kTestConnection = kPrefix + "testConnection"
     private const val kShowInstallPrompt = kPrefix + "showInstallPrompt"
+    private const val kGetInstallReferrerUrl = kPrefix + "getInstallReferrerUrl"
 
     @InternalSerializationApi
     fun registerHandlers(bridge: IMessageBridge, context: Context) {
@@ -177,6 +182,9 @@ object Platform {
             val request = deserialize<Request>(message)
             val result = testConnection(context, request.host_name, request.time_out)
             Utils.toString(result)
+        }
+        bridge.registerAsyncHandler(kGetInstallReferrerUrl) {
+            getInstallReferrerUrl();
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable
@@ -548,5 +556,9 @@ object Platform {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
         val requestCode = 10;
         com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
+    }
+
+    private suspend fun getInstallReferrerUrl(): String {
+        return InstallReferrerBridge.getUrl()
     }
 }

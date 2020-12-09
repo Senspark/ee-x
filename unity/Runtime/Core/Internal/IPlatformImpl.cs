@@ -17,5 +17,6 @@ namespace EE.Internal {
         Task<string> GetDeviceId();
         bool SendMail(string recipient, string subject, string body);
         Task<bool> TestConnection(string hostName, float timeOut);
+        Task<string> GetInstallReferrerUrl();
     }
 }

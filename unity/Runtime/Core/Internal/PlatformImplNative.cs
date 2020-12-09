@@ -24,6 +24,7 @@ namespace EE.Internal {
         private const string kSendMail = kPrefix + "sendMail";
         private const string kTestConnection = kPrefix + "testConnection";
         private const string kShowInstallPrompt = kPrefix + "showInstallPrompt";
+        private const string kGetInstallReferrerUrl = kPrefix + "getInstallReferrerUrl";
 
         private readonly IMessageBridge _bridge;
 
@@ -161,6 +162,12 @@ namespace EE.Internal {
             var response = await _bridge.CallAsync(kTestConnection, JsonUtility.ToJson(request));
             await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
+        }
+
+        public async Task<string> GetInstallReferrerUrl() {
+            var result = await _bridge.CallAsync(kGetInstallReferrerUrl);
+            await Thread.SwitchToLibraryThread();
+            return result;
         }
     }
 }

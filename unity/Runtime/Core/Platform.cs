@@ -73,5 +73,9 @@ namespace EE {
         public static async Task<bool> TestConnection(string hostName, float timeOut) {
             return await _impl.TestConnection(hostName, timeOut);
         }
+
+        public static async Task<string> GetInstallReferrerUrl() {
+            return await _impl.GetInstallReferrerUrl();
+        }
     }
 }

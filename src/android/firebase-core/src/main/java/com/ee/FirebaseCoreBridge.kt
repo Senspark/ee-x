@@ -19,7 +19,7 @@ class FirebaseCoreBridge(
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         FirebaseApp.initializeApp(_application)
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {}

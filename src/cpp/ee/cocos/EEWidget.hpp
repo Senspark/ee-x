@@ -11,7 +11,7 @@
 #ifdef __cplusplus
 
 // Must be included first.
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 #include <cocosbuilder/CCNodeLoaderListener.h>
 #include <ui/UIWidget.h>

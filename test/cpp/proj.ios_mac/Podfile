@@ -1,6 +1,6 @@
 def pod_ee_x(name)
     full_name = 'ee-x/' + name
-    pod full_name, :path => '../../'
+    pod full_name, :path => '../../../'
     # pod full_name, :git => 'https://github.com/Senspark/ee-x'
 end
 

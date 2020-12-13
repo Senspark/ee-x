@@ -18,7 +18,7 @@
 
 #include <platform/CCPlatformMacros.h> // CC_SAFE_DELETE
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Reference guard.

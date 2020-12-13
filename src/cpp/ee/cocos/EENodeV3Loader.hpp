@@ -13,7 +13,7 @@
 
 #include <cocosbuilder/CCNodeLoader.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Cocosbuilder loader for @c cocos2d::Node with color and opacity.

@@ -12,7 +12,7 @@
 #ifdef __cplusplus
 
 #warning "Use #include <ee/CocosFwd.hpp> instead"
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 #endif // __cplusplus
 

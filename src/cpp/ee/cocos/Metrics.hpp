@@ -13,7 +13,7 @@
 
 #include <string>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 namespace cocos {

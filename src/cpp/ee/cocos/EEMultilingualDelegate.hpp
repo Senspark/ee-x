@@ -12,7 +12,7 @@
 #ifdef __cplusplus
 
 // Must included first.
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 #include <cocosbuilder/CCBMemberVariableAssigner.h>
 #include <cocosbuilder/CCNodeLoaderListener.h>

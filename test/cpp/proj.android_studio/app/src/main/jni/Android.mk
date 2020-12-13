@@ -19,10 +19,8 @@ LOCAL_STATIC_LIBRARIES := ccui
 LOCAL_STATIC_LIBRARIES += soomla_store
 LOCAL_STATIC_LIBRARIES += ee_x
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_crashlytics
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_dynamic_link
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_performance
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage
 

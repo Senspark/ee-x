@@ -16,7 +16,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 struct spAtlas;
 struct spSkeletonData;

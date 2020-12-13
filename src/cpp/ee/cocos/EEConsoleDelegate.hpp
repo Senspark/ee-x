@@ -13,7 +13,7 @@
 
 #include <ui/UIEditBox/UIEditBox.h>
 
-#include <ee/CocosFwd.hpp>
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 namespace detail {

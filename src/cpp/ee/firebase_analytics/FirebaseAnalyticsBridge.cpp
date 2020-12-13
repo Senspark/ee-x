@@ -6,12 +6,12 @@
 //
 //
 
-#include "ee/firebase/analytics/FirebaseAnalyticsBridge.hpp"
+#include "ee/firebase_analytics/FirebaseAnalyticsBridge.hpp"
 
 #include <firebase/analytics.h>
 #include <firebase/analytics/parameter_names.h>
 
-#include <ee/firebase/core/FirebaseCoreBridge.hpp>
+#include <ee/firebase_core/FirebaseCoreBridge.hpp>
 
 namespace ee {
 namespace firebase {

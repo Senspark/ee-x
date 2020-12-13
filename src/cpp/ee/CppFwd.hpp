@@ -3,8 +3,6 @@
 
 #ifdef __cplusplus
 
-#include "ee/core/Macro.hpp"
-
 #include "ee/ad_colony/AdColonyFwd.hpp"
 #include "ee/ad_mob/AdMobFwd.hpp"
 #include "ee/adjust/AdjustFwd.hpp"

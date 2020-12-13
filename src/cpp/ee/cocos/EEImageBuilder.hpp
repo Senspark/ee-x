@@ -15,7 +15,7 @@
 
 #include <platform/CCGL.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class ImageBuilder {

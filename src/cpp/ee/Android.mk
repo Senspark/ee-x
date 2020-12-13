@@ -30,11 +30,11 @@ LOCAL_SRC_FILES := \
 EE_X_ROOT_DIR = $(LOCAL_PATH)/../../..
 
 LOCAL_C_INCLUDES := \
-	$(EE_X_ROOT_DIR)/src \
+	$(EE_X_ROOT_DIR)/src/cpp \
 	$(EE_X_ROOT_DIR)/third_party/nlohmann/include
 
 LOCAL_EXPORT_C_INCLUDES := \
-	$(EE_X_ROOT_DIR)/src \
+	$(EE_X_ROOT_DIR)/src/cpp \
 	$(EE_X_ROOT_DIR)/third_party/nlohmann/include
 
 ifeq ($(filter $(modules-get-list), cc_static),)

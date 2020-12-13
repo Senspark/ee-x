@@ -8,7 +8,7 @@
 
 #include "AppLovinTester.hpp"
 
-#include <ee/AppLovin.hpp>
+#include <ee/Cpp.hpp>
 
 #include "RewardedAdTester.hpp"
 

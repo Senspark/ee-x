@@ -13,7 +13,7 @@
 
 #include <2d/CCNode.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class SkeletonBone : public cocos2d::Node {

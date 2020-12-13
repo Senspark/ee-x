@@ -8,7 +8,7 @@
 
 #include "NotificationTester.hpp"
 
-#include <ee/Notification.hpp>
+#include <ee/Cpp.hpp>
 
 namespace eetest {
 namespace notification {

@@ -11,6 +11,8 @@
 
 #ifdef __cplusplus
 
+#include "ee/core/Macro.hpp"
+
 namespace cppcoro {
 class async_mutex;
 class async_mutex_lock;

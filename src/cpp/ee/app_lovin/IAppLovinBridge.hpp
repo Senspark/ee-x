@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/AppLovinFwd.hpp"
+#include "ee/app_lovin/AppLovinFwd.hpp"
 
 namespace ee {
 namespace app_lovin {

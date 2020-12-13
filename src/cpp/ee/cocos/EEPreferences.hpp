@@ -15,7 +15,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 using DataStorage = std::unordered_map<std::string, std::string>;

@@ -17,7 +17,7 @@
 
 #include <base/CCRefPtr.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Be careful with objects that are not added to scene.

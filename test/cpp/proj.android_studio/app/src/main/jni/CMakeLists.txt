@@ -32,10 +32,8 @@ target_link_libraries(${PROJECT_NAME}
     soomla_store
     ee_x
     ee_x_firebase_analytics
-    ee_x_firebase_crashlytics
     ee_x_firebase_dynamic_link
     ee_x_firebase_messaging
-    ee_x_firebase_performance
     ee_x_firebase_remote_config
     ee_x_firebase_storage
 )

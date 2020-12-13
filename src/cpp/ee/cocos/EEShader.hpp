@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Wraps a shader and automatically rebinds when the renderer is recreated on

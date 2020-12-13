@@ -13,7 +13,7 @@
 
 #include <math/Mat4.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class HsvProtocol {

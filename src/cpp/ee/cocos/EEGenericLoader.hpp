@@ -14,7 +14,7 @@
 #include <tuple>
 #include <type_traits>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Generic template loader for cocosbuilder.

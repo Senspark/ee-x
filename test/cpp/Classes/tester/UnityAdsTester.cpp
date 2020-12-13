@@ -8,7 +8,7 @@
 
 #include "UnityAdsTester.hpp"
 
-#include <ee/UnityAds.hpp>
+#include <ee/Cpp.hpp>
 
 #include "FunctionLogger.hpp"
 #include "InterstitialAdTester.hpp"

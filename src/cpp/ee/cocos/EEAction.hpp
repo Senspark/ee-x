@@ -13,7 +13,7 @@
 
 #include <2d/CCActionInterval.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class Sequence : public cocos2d::Sequence {

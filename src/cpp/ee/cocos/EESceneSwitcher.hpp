@@ -15,7 +15,7 @@
 
 #include <2d/CCTransition.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Layout:

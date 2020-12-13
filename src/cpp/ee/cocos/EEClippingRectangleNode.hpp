@@ -14,7 +14,7 @@
 #include <2d/CCClippingRectangleNode.h>
 #include <renderer/CCCustomCommand.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class ClippingRectangleNode : public cocos2d::ClippingRectangleNode {

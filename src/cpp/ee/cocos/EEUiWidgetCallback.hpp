@@ -14,7 +14,7 @@
 #include <GUI/CCControlExtension/CCControl.h>
 #include <ui/UIWidget.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 namespace detail {

@@ -6,12 +6,12 @@
 //
 //
 
-#include "ee/firebase/storage/FirebaseStorageBridge.hpp"
+#include "ee/firebase_storage/FirebaseStorageBridge.hpp"
 
 #include <firebase/storage.h>
 
 #include <ee/core/ScopeGuard.hpp>
-#include <ee/firebase/core/FirebaseCoreBridge.hpp>
+#include <ee/firebase_core/FirebaseCoreBridge.hpp>
 
 namespace ee {
 namespace firebase {

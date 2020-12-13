@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/AppsFlyerFwd.hpp"
+#include "ee/apps_flyer/AppsFlyerFwd.hpp"
 
 namespace ee {
 namespace apps_flyer {

@@ -8,7 +8,7 @@
 
 #include "AdMobTester.hpp"
 
-#include <ee/AdMob.hpp>
+#include <ee/Cpp.hpp>
 
 #include "BannerAdTester.hpp"
 #include "InterstitialAdTester.hpp"

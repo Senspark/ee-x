@@ -10,7 +10,7 @@
 
 #include <cocos2d.h>
 
-#include <ee/CoreFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 namespace eetest {
 class VideoPlayerTestScene : public cocos2d::Scene {

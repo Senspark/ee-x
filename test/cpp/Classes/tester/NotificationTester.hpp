@@ -11,7 +11,7 @@
 
 #include <memory>
 
-#include <ee/NotificationFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 #include "ITester.hpp"
 

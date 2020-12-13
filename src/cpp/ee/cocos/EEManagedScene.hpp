@@ -13,7 +13,7 @@
 
 #include <2d/CCScene.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class ManagedScene : public cocos2d::Scene {

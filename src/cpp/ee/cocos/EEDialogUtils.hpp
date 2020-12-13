@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Adds a transition action for the specified dialog that:

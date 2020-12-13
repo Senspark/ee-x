@@ -8,7 +8,7 @@
 
 #include "FacebookAdsTester.hpp"
 
-#include <ee/FacebookAds.hpp>
+#include <ee/Cpp.hpp>
 
 #include "InterstitialAdTester.hpp"
 #include "NativeAdTester.hpp"

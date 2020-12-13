@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 #include "ee/cocos/Dialog.hpp"
 #include "ee/cocos/IDialogManager.hpp"

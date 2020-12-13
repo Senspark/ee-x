@@ -13,7 +13,7 @@
 
 #include <2d/CCComponent.h>
 
-#include "ee/CocosFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class BackButtonComponent : public cocos2d::Component {

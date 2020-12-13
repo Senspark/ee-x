@@ -20,10 +20,10 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('admob-mediation')
+    configureAndPublish('ad-mob-mediation')
 } else {
     dependencies {
-        api project(':ee-x-admob')
+        api project(':ee-x-ad-mob')
     }
 }
 

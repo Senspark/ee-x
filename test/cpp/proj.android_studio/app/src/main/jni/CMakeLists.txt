@@ -24,20 +24,13 @@ target_include_directories(${PROJECT_NAME}
 
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
-add_subdirectory(${PROJECT_ROOT_DIR}/.. ${ENGINE_BINARY_PATH}/ee-x)
+add_subdirectory(${PROJECT_ROOT_DIR}/../.. ${ENGINE_BINARY_PATH}/ee-x)
 
 target_link_libraries(${PROJECT_NAME}
     -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive
     cocos2d
     soomla_store
-    ee_x_ad_colony
-    ee_x_adjust
-    ee_x_admob
-    ee_x_app_lovin
-    ee_x_apps_flyer
-    ee_x_cocos
-    ee_x_facebook
-    ee_x_facebook_ads
+    ee_x
     ee_x_firebase_analytics
     ee_x_firebase_crashlytics
     ee_x_firebase_dynamic_link
@@ -45,13 +38,6 @@ target_link_libraries(${PROJECT_NAME}
     ee_x_firebase_performance
     ee_x_firebase_remote_config
     ee_x_firebase_storage
-    ee_x_google_analytics
-    ee_x_iron_source
-    ee_x_notification
-    ee_x_play
-    ee_x_recorder
-    ee_x_unity_ads
-    ee_x_vungle
 )
 
 setup_cocos_app_config(${PROJECT_NAME})

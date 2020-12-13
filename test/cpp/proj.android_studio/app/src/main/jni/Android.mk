@@ -17,14 +17,7 @@ LOCAL_C_INCLUDES := ${shell find $(PROJECT_DIR)/Classes -type d -print}
 LOCAL_STATIC_LIBRARIES := cc_static
 LOCAL_STATIC_LIBRARIES := ccui
 LOCAL_STATIC_LIBRARIES += soomla_store
-LOCAL_STATIC_LIBRARIES += ee_x_ad_colony
-LOCAL_STATIC_LIBRARIES += ee_x_adjust
-LOCAL_STATIC_LIBRARIES += ee_x_admob
-LOCAL_STATIC_LIBRARIES += ee_x_app_lovin
-LOCAL_STATIC_LIBRARIES += ee_x_apps_flyer
-LOCAL_STATIC_LIBRARIES += ee_x_cocos
-LOCAL_STATIC_LIBRARIES += ee_x_facebook
-LOCAL_STATIC_LIBRARIES += ee_x_facebook_ads
+LOCAL_STATIC_LIBRARIES += ee_x
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_analytics
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_crashlytics
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_dynamic_link
@@ -32,13 +25,6 @@ LOCAL_STATIC_LIBRARIES += ee_x_firebase_messaging
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_performance
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config
 LOCAL_STATIC_LIBRARIES += ee_x_firebase_storage
-LOCAL_STATIC_LIBRARIES += ee_x_google_analytics
-LOCAL_STATIC_LIBRARIES += ee_x_iron_source
-LOCAL_STATIC_LIBRARIES += ee_x_notification
-LOCAL_STATIC_LIBRARIES += ee_x_play
-LOCAL_STATIC_LIBRARIES += ee_x_recorder
-LOCAL_STATIC_LIBRARIES += ee_x_unity_ads
-LOCAL_STATIC_LIBRARIES += ee_x_vungle
 
 include $(BUILD_SHARED_LIBRARY)
 

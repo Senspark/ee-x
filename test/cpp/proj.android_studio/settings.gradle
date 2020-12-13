@@ -1,19 +1,19 @@
 include ':libcocos2dx'
 project(':libcocos2dx').projectDir = new File(settingsDir, '../cocos2d/cocos/platform/android/libcocos2dx')
 
-include ':ee_x_test'
-project(':ee_x_test').projectDir = new File(settingsDir, 'app')
+include ':app'
+project(':app').projectDir = new File(settingsDir, 'app')
 
 def include_lib(name) {
-    include ':ee-x-' + name
-    project(':ee-x-' + name).projectDir = new File(settingsDir, '../../proj.android_studio/ee-x-' + name)
+    include ":ee-x-$name"
+    project(":ee-x-$name").projectDir = new File(settingsDir, "../../../src/android/${name.replace('-', '_')}")
 }
 
 include_lib('ad-colony')
+include_lib('ad-mob')
+include_lib('ad-mob-mediation')
 include_lib('adjust')
 include_lib('ads')
-include_lib('admob')
-include_lib('admob-mediation')
 include_lib('app-lovin')
 include_lib('apps-flyer')
 include_lib('core')
@@ -27,7 +27,6 @@ include_lib('firebase-messaging')
 include_lib('firebase-performance')
 include_lib('firebase-remote-config')
 include_lib('firebase-storage')
-include_lib('google-analytics')
 include_lib('iron-source')
 include_lib('iron-source-mediation')
 include_lib('notification')

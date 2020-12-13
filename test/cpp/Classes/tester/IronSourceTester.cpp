@@ -8,7 +8,7 @@
 
 #include "IronSourceTester.hpp"
 
-#include <ee/IronSource.hpp>
+#include <ee/Cpp.hpp>
 
 #include "FunctionLogger.hpp"
 #include "RewardedAdTester.hpp"

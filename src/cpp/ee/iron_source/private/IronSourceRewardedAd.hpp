@@ -14,7 +14,7 @@
 #include <ee/ads/IRewardedAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/IronSourceFwd.hpp"
+#include "ee/iron_source/IronSourceFwd.hpp"
 
 namespace ee {
 namespace iron_source {

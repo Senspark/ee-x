@@ -1,4 +1,4 @@
-#include "ee/firebase/crashlytics/FirebaseCrashlyticsBridge.hpp"
+#include "ee/firebase_crashlytics/FirebaseCrashlyticsBridge.hpp"
 
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/internal/MessageBridge.hpp>

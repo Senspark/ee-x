@@ -16,7 +16,7 @@
 
 #include <ee/core/IObserverManager.hpp>
 
-#include "ee/AdsFwd.hpp"
+#include "ee/ads/AdsFwd.hpp"
 
 namespace ee {
 namespace ads {

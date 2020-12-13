@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 
-#include <ee/IronSourceFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 #include "ITester.hpp"
 

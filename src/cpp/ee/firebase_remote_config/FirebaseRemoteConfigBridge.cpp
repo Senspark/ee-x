@@ -6,12 +6,12 @@
 //
 //
 
-#include "ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp"
+#include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
 
 #include <firebase/remote_config.h>
 
 #include <ee/core/ScopeGuard.hpp>
-#include <ee/firebase/core/FirebaseCoreBridge.hpp>
+#include <ee/firebase_core/FirebaseCoreBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {

@@ -36,7 +36,6 @@
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
-		AD2CA22624B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */; };
 		AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
@@ -143,8 +142,6 @@
 		AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseDynamicLink.cpp; sourceTree = "<group>"; };
 		AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FirebaseDynamicLink.hpp; sourceTree = "<group>"; };
 		AD18E4062449C177002C7EEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "ios/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
-		AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleAnalyticsTester.cpp; sourceTree = "<group>"; };
-		AD2CA22524B2E45100542CB2 /* GoogleAnalyticsTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GoogleAnalyticsTester.hpp; sourceTree = "<group>"; };
 		AD2CA22924B3071C00542CB2 /* CoreTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreTester.cpp; sourceTree = "<group>"; };
 		AD2CA22A24B3071C00542CB2 /* CoreTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CoreTester.hpp; sourceTree = "<group>"; };
 		AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirebaseCrashlyticsTester.cpp; sourceTree = "<group>"; };
@@ -345,8 +342,6 @@
 				6FDD65A41F94A4DB00BAEA66 /* FacebookAdsTester.hpp */,
 				AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */,
 				AD2CA22E24B3073D00542CB2 /* FirebaseCrashlyticsTester.hpp */,
-				AD2CA22424B2E45100542CB2 /* GoogleAnalyticsTester.cpp */,
-				AD2CA22524B2E45100542CB2 /* GoogleAnalyticsTester.hpp */,
 				6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */,
 				6FDD65B01F94A93D00BAEA66 /* IronSourceTester.hpp */,
 				6F2580301ECC019000B910F9 /* NotificationTester.cpp */,
@@ -680,7 +675,6 @@
 				AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
 				6FDD65A91F94A7DF00BAEA66 /* AppLovinTester.cpp in Sources */,
 				AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */,
-				AD2CA22624B2E45100542CB2 /* GoogleAnalyticsTester.cpp in Sources */,
 				AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */,
 				6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */,
 				6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */,

@@ -11,7 +11,7 @@
 
 #include <map>
 
-#include "ee/admob/IAdMobBridge.hpp"
+#include "ee/ad_mob/IAdMobBridge.hpp"
 
 namespace ee {
 namespace admob {

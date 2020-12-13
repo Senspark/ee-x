@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include <ee/FirebaseFwd.hpp>
+#include "ee/firebase_performance/FirebasePerformanceFwd.hpp"
 
 /// Wrapper for Firebase Performance.
 /// https://firebase.google.com/docs/perf-mon/get-started-ios

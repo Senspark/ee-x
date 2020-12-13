@@ -1,20 +1,6 @@
-#ifndef EE_X_VUNGLE_FWD_HPP
-#define EE_X_VUNGLE_FWD_HPP
-
 #ifdef __cplusplus
 
-#include <ee/AdsFwd.hpp>
-
-namespace ee {
-namespace vungle {
-class IBridge;
-class Bridge;
-class RewardedAd;
-} // namespace vungle
-
-using IVungle = vungle::IBridge;
-} // namespace ee
+#warning "Use #include <ee/CppFwd.hpp> instead"
+#include "ee/CppFwd.hpp"
 
 #endif // __cplusplus
-
-#endif /* EE_X_VUNGLE_FWD_HPP */

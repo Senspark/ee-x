@@ -6,12 +6,12 @@
 //
 //
 
-#include "ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp"
+#include "ee/firebase_dynamic_link/FirebaseDynamicLinkBridge.hpp"
 
 #include <firebase/dynamic_links.h>
 
 #include <ee/core/Logger.hpp>
-#include <ee/firebase/core/FirebaseCoreBridge.hpp>
+#include <ee/firebase_core/FirebaseCoreBridge.hpp>
 
 namespace ee {
 namespace firebase {

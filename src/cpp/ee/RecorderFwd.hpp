@@ -1,23 +1,6 @@
-//
-//  Created by Zinge on 5/9/17.
-//
-//
-
-#ifndef EE_X_RECORDER_FWD_HPP
-#define EE_X_RECORDER_FWD_HPP
-
 #ifdef __cplusplus
 
-#include <ee/CoreFwd.hpp>
-
-namespace ee {
-namespace recorder {
-class Bridge;
-} // namespace recorder
-
-using Recorder = recorder::Bridge;
-} // namespace ee
+#warning "Use #include <ee/CppFwd.hpp> instead"
+#include "ee/CppFwd.hpp"
 
 #endif // __cplusplus
-
-#endif /* EE_X_RECORDER_FWD_HPP */

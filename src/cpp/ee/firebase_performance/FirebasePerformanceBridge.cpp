@@ -5,13 +5,13 @@
 //  Created by Nguyen Dinh Phuoc Duc on 3/8/19.
 //
 
-#include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
+#include "ee/firebase_performance/FirebasePerformanceBridge.hpp"
 
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/MessageBridge.hpp>
 
-#include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
+#include "ee/firebase_performance/FirebasePerformanceTrace.hpp"
 
 namespace ee {
 namespace firebase {

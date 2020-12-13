@@ -10,11 +10,7 @@
 
 #include <memory>
 
-#include <ee/AdMobFwd.hpp>
-#include <ee/CocosFwd.hpp>
-#include <ee/FacebookAdsFwd.hpp>
-#include <ee/IronSourceFwd.hpp>
-#include <ee/UnityAdsFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 #include "ITester.hpp"
 

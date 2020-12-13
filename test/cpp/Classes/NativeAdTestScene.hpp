@@ -11,7 +11,7 @@
 
 #include <cocos2d.h>
 
-#include <ee/AdsFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 namespace eetest {
 class NativeAdTestScene : public cocos2d::Scene {

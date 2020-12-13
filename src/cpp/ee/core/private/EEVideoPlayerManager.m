@@ -11,6 +11,7 @@
 
 #import "ee/core/private/EEVideoPlayer.h"
 
+/*
 @implementation EEVideoPlayerManager {
     id<EEIMessageBridge> bridge_;
     NSMutableDictionary<NSString*, EEVideoPlayer*>* players_;
@@ -72,3 +73,4 @@ static NSString* const k__destroy = @"VideoPlayerManager_destroy";
 }
 
 @end
+*/

@@ -9,7 +9,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/AdColonyFwd.hpp"
+#include "ee/ad_colony/AdColonyFwd.hpp"
 
 namespace ee {
 namespace ad_colony {

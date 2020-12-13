@@ -7,7 +7,7 @@
 
 #include "FirebaseCrashlyticsTester.hpp"
 
-#include <ee/Firebase.hpp>
+#include <ee/Cpp.hpp>
 
 namespace eetest {
 namespace firebase {

@@ -1,18 +1,6 @@
-//
-//  Created by Zinge on 5/9/17.
-//
-//
-
-#ifndef EE_X_RECORDER_HPP
-#define EE_X_RECORDER_HPP
-
 #ifdef __cplusplus
 
-#include <ee/Core.hpp>
-
-#include "ee/RecorderFwd.hpp"
-#include "ee/recorder/RecorderBridge.hpp"
+#warning "Use #include <ee/Cpp.hpp> instead"
+#include "ee/Cpp.hpp"
 
 #endif // __cplusplus
-
-#endif /* EE_X_RECORDER_HPP */

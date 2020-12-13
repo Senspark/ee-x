@@ -24,12 +24,315 @@ Pod::Spec.new do |spec|
 
   spec.requires_arc = false
 
-  spec.header_mappings_dir = 'src'
-
   spec.subspec 'json' do |s|
     s.source_files = 'third_party/nlohmann/include/**/*'
     s.private_header_files = 'third_party/nlohmann/include/**/*'
     s.header_mappings_dir = 'third_party/nlohmann/include'
+  end
+
+  spec.subspec 'cpp' do |s|
+    s.source_files =
+      'src/cpp/ee/Cpp*',
+      'src/cpp/ee/ad_colony/**/*',
+      'src/cpp/ee/ad_mob/**/*',
+      'src/cpp/ee/adjust/**/*',
+      'src/cpp/ee/ads/**/*',
+      'src/cpp/ee/app_lovin/**/*',
+      'src/cpp/ee/apps_flyer/**/*',
+      'src/cpp/ee/cocos/**/*',
+      'src/cpp/ee/core/**/*',
+      'src/cpp/ee/facebook/**/*',
+      'src/cpp/ee/facebook_ads/**/*',
+      'src/cpp/ee/firebase_crashlytics/**/*',
+      'src/cpp/ee/firebase_performance/**/*',
+      'src/cpp/ee/iron_source/**/*',
+      'src/cpp/ee/notification/**/*',
+      'src/cpp/ee/play/**/*',
+      'src/cpp/ee/recorder/**/*',
+      'src/cpp/ee/store/**/*',
+      'src/cpp/ee/unity_ads/**/*',
+      'src/cpp/ee/vungle/**/*',
+      # Legacy.
+      'src/cpp/ee/AdMob*',
+      'src/cpp/ee/Adjust*',
+      'src/cpp/ee/AppLovin*',
+      'src/cpp/ee/AppsFlyer*',
+      'src/cpp/ee/Cocos*',
+      'src/cpp/ee/Core*',
+      'src/cpp/ee/Facebook*',
+      'src/cpp/ee/Notification*',
+      'src/cpp/ee/Play*',
+      'src/cpp/ee/Recorder*',
+      'src/cpp/ee/Store*',
+      'src/cpp/ee/UnityAds*',
+      'src/cpp/ee/Vungle*'
+    
+    s.private_header_files =
+      'src/cpp/ee/**/internal/*',
+      'src/cpp/ee/**/private/*'
+
+    s.exclude_files =
+      'src/cpp/ee/core/**/*Android*',
+      'src/cpp/ee/core/**/Jni*',
+      'src/cpp/ee/**/Android.mk',
+      'src/cpp/ee/**/CMakeLists.txt',
+      'src/cpp/ee/**/generate.sh',
+      'src/cpp/ee/**/sourcelist.cmake'
+
+    s.header_mappings_dir = 'src/cpp'
+
+    s.xcconfig = {
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
+      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
+      'GCC_PREPROCESSOR_DEFINITIONS' => [
+        'USE_FILE32API' # Used in unzip library in cocos2d-x.
+      ].join(' '),
+      'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => [
+        '$(inherited)',
+        'COCOS2D_DEBUG=1'
+      ].join(' '),
+      'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => [
+        '$(inherited)',
+        'NDEBUG'
+      ].join(' '),
+      'HEADER_SEARCH_PATHS' => [
+        '${PODS_ROOT}/../../cocos2d',
+        '${PODS_ROOT}/../../cocos2d/cocos',
+        '${PODS_ROOT}/../../cocos2d/cocos/editor-support',
+        '${PODS_ROOT}/../../cocos2d/external',
+        '${PODS_ROOT}/../../cocos2d/extensions',
+
+        # For macos.
+        '${PODS_ROOT}/../../cocos2d/external/mac/include/glfw3', # Cocos Creator
+        '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac' # Cocos2d-x
+      ].join(' ')
+    }
+
+    s.resources = 'res/*' # For AdMob native ad.
+    s.library =
+      'iconv',
+      'z'
+    s.framework = 
+      'GameController',
+      'OpenAL'
+    s.ios.framework =
+      'CoreMotion'
+
+    s.dependency 'ee-x/json'
+  end
+
+  spec.subspec 'ios-ad-colony' do |s|
+    s.source_files = 'src/ios/ee/ad_colony/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://github.com/AdColony/AdColony-iOS-SDK
+    s.dependency 'AdColony', '4.4.0'
+  end
+
+  spec.subspec 'ios-ad-mob' do |s|
+    s.source_files = 'src/ios/ee/ad_mob/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://developers.google.com/admob/ios/rel-notes
+    # FIXME: use 7.68.0
+    s.dependency 'Google-Mobile-Ads-SDK', '7.67.0'
+  end
+
+  spec.subspec 'ios-ad-mob-mediation' do |s|
+    s.dependency 'ee-x/ios-ad-mob'
+
+    # https://bintray.com/google/mobile-ads-adapters-ios
+
+    # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
+
+    # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
+    # FIXME: use 6.14.6.0
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.4.0'
+
+    # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
+    # FIXME: use 6.2.0.0
+    s.dependency 'GoogleMobileAdsMediationFacebook', '6.0.0.0'
+    
+    # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
+    # FIXME: use 7.0.3.0
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.0.2.0'
+
+    # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
+    # FIXME: use 3.5.1.0
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.8.0'
+
+    # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.8.1.0'
+  end
+
+  spec.subspec 'ios-ads' do |s|
+    s.source_files = 'src/ios/ee/ads/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+  end
+
+  spec.subspec 'ios-adjust' do |s|
+    s.source_files = 'src/ios/ee/adjust/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+
+    # https://github.com/adjust/ios_sdk
+    s.dependency 'Adjust', '4.23.2'
+  end
+
+  spec.subspec 'ios-app-lovin' do |s|
+    s.source_files = 'src/ios/ee/app_lovin/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+
+    # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
+    # FIXME: use 6.14.6
+    s.dependency 'AppLovinSDK', '6.14.4'
+  end
+
+  spec.subspec 'ios-apps-flyer' do |s|
+    s.source_files = 'src/ios/ee/apps_flyer/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+    s.dependency 'AppsFlyerFramework', '6.1.1'
+  end
+
+  spec.subspec 'ios-core' do |s|
+    s.source_files =
+      'src/ios/ee/ee.h',
+      'src/ios/ee/core/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.library = 'swiftCore'
+    s.dependency 'ReachabilitySwift'
+    s.dependency 'RxSwift'
+  end
+
+  spec.subspec 'ios-facebook' do |s|
+    s.source_files = 'src/ios/ee/facebook/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+
+    # https://github.com/facebook/facebook-ios-sdk/releases
+    s.dependency 'FBSDKCoreKit', '8.2.0'
+    s.dependency 'FBSDKLoginKit', '8.2.0'
+    s.dependency 'FBSDKShareKit', '8.2.0'
+  end
+
+  spec.subspec 'ios-facebook-ads' do |s|
+    s.source_files = 'src/ios/ee/facebook_ads/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://developers.facebook.com/docs/audience-network/changelog-ios/
+    # FIXME: use 6.2.0
+    s.dependency 'FBAudienceNetwork', '6.0.0'
+  end
+
+  spec.subspec 'ios-firebase-core' do |s|
+    s.source_files = 'src/ios/ee/firebase_core/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+    s.dependency 'Firebase/Core', '6.34'
+  end
+
+  spec.subspec 'ios-firebase-crashlytics' do |s|
+    s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-firebase-core'
+    s.dependency 'Firebase/Crashlytics', '6.34'
+  end
+
+  spec.subspec 'ios-firebase-performance' do |s|
+    s.source_files = 'src/ios/ee/firebase_performance/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-firebase-core'
+    s.dependency 'Firebase/Performance', '6.34'
+  end
+
+  spec.subspec 'ios-iron-source' do |s|
+    s.source_files = 'src/ios/ee/iron_source/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
+    # FIXME: use 7.0.3.0
+    s.dependency 'IronSourceSDK', '7.0.2.0'
+  end
+
+  spec.subspec 'ios-iron-source-mediation' do |s|
+    s.dependency 'ee-x/ios-iron-source'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
+    # FIXME: use 4.3.4.1
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
+    s.dependency 'ee-x/ios-ad-colony'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
+    # Wait for supported adapter.
+    # s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
+    # FIXME: use 4.3.20.0
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.19.0'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
+    # FIXME: use 4.3.21.0
+    s.dependency 'IronSourceFacebookAdapter', '4.3.20.0'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
+    # FIXME: use 4.3.6.0
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.4.3'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
+    # FIXME: use 4.3.7.1
+    s.dependency 'IronSourceVungleAdapter', '4.3.7.0'
+  end
+
+  spec.subspec 'ios-notification' do |s|
+    s.source_files = 'src/ios/ee/notification/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+  end
+
+  spec.subspec 'ios-play' do |s|
+    s.source_files = 'src/ios/ee/play/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+  end
+
+  spec.subspec 'ios-recorder' do |s|
+    s.source_files = 'src/ios/ee/recorder/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+  end
+
+  spec.subspec 'ios-store' do |s|
+    s.source_files = 'src/ios/ee/store/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-core'
+    s.dependency 'TPInAppReceipt'
+  end
+
+  spec.subspec 'ios-unity-ads' do |s|
+    s.source_files = 'src/ios/ee/unity_ads/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://github.com/Unity-Technologies/unity-ads-ios/releases
+    # FIXME: use 3.5.1
+    s.dependency 'UnityAds', '3.4.8'
+  end
+
+  spec.subspec 'ios-vungle' do |s|
+    s.source_files = 'src/ios/ee/vungle/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/ios-ads'
+
+    # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
+    s.dependency 'VungleSDK-iOS', '6.8.0'
   end
 
   spec.subspec 'core' do |s|
@@ -82,364 +385,6 @@ Pod::Spec.new do |spec|
     s.dependency 'RxSwift'
   end
 
-  spec.subspec 'ads' do |s|
-    s.source_files =
-      'src/ee/Ads*',
-      'src/ee/ads/**/*'
-
-    s.private_header_files =
-      'src/ee/ads/internal/*.{h,hpp,inl}',
-      'src/ee/ads/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/ads/Android.mk',
-      'src/ee/ads/CMakeLists.txt',
-      'src/ee/ads/generate.sh',
-      'src/ee/ads/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-  end
-
-  spec.subspec 'ad-colony' do |s|
-    s.source_files =
-      'src/ee/AdColony*',
-      'src/ee/ad_colony/**/*'
-
-    s.private_header_files =
-      'src/ee/ad_colony/internal/*.{h,hpp,inl}',
-      'src/ee/ad_colony/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/ad_colony/Android.mk',
-      'src/ee/ad_colony/CMakeLists.txt',
-      'src/ee/ad_colony/generate.sh',
-      'src/ee/ad_colony/sourcelist.cmake'
-
-    s.dependency 'ee-x/ads'
-    s.dependency 'ee-x/ad-colony-dependencies'
-  end
-
-  spec.subspec 'ad-colony-dependencies' do |s|
-    # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.4.0'
-  end
-
-  spec.subspec 'admob' do |s|
-    s.source_files =
-      'src/ee/AdMob*',
-      'src/ee/admob/**/*'
-
-    s.private_header_files =
-      'src/ee/admob/internal/*.{h,hpp,inl}',
-      'src/ee/admob/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/admob/Android.mk',
-      'src/ee/admob/CMakeLists.txt',
-      'src/ee/admob/generate.sh',
-      'src/ee/admob/sourcelist.cmake'
-
-    s.resources = 'res/*'
-    s.dependency 'ee-x/ads'
-    s.dependency 'ee-x/admob-dependencies'
-  end
-
-  spec.subspec 'admob-mediation' do |s|
-    s.dependency 'ee-x/admob'
-    s.dependency 'ee-x/admob-mediation-dependencies'
-  end
-
-  spec.subspec 'admob-dependencies' do |s|
-    # https://developers.google.com/admob/ios/rel-notes
-    # FIXME: use 7.68.0
-    s.dependency 'Google-Mobile-Ads-SDK', '7.67.0'
-  end
-
-  spec.subspec 'admob-mediation-dependencies' do |s|
-    # https://bintray.com/google/mobile-ads-adapters-ios
-
-    # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
-
-    # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    # FIXME: use 6.14.6.0
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.4.0'
-
-    # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
-    # FIXME: use 6.2.0.0
-    s.dependency 'GoogleMobileAdsMediationFacebook', '6.0.0.0'
-    
-    # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    # FIXME: use 7.0.3.0
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.0.2.0'
-
-    # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    # FIXME: use 3.5.1.0
-    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.8.0'
-
-    # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationVungle', '6.8.1.0'
-  end
-
-  spec.subspec 'app-lovin' do |s|
-    s.source_files =
-      'src/ee/AppLovin*',
-      'src/ee/app_lovin/**/*'
-
-    s.private_header_files =
-      'src/ee/app_lovin/internal/*.{h,hpp,inl}',
-      'src/ee/app_lovin/private/*.{h,hpp,inl}'
-    
-    s.exclude_files =
-      'src/ee/app_lovin/Android.mk',
-      'src/ee/app_lovin/CMakeLists.txt',
-      'src/ee/app_lovin/generate.sh',
-      'src/ee/app_lovin/sourcelist.cmake'
-
-    s.dependency 'ee-x/ads'
-
-    # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    # FIXME: use 6.14.6
-    s.dependency 'AppLovinSDK', '6.14.4'
-  end
-
-  spec.subspec 'facebook-ads' do |s|
-    s.source_files =
-      'src/ee/FacebookAds*',
-      'src/ee/facebook_ads/**/*'
-
-    s.private_header_files =
-      'src/ee/facebook_ads/internal/*.{h,hpp,inl}',
-      'src/ee/facebook_ads/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/facebook_ads/Android.mk',
-      'src/ee/facebook_ads/CMakeLists.txt',
-      'src/ee/facebook_ads/generate.sh',
-      'src/ee/facebook_ads/sourcelist.cmake'
-      
-    s.dependency 'ee-x/ads'
-    s.dependency 'ee-x/facebook-ads-dependencies'
-  end
-
-  spec.subspec 'facebook-ads-dependencies' do |s|
-    # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    # FIXME: use 6.2.0
-    s.dependency 'FBAudienceNetwork', '6.0.0'
-  end
-
-  spec.subspec 'iron-source' do |s|
-    s.source_files =
-      'src/ee/IronSource*',
-      'src/ee/iron_source/**/*'
-
-    s.private_header_files =
-      'src/ee/iron_source/internal/*.{h,hpp,inl}',
-      'src/ee/iron_source/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/iron_source/Android.mk',
-      'src/ee/iron_source/CMakeLists.txt',
-      'src/ee/iron_source/generate.sh',
-      'src/ee/iron_source/sourcelist.cmake'
-
-    s.dependency 'ee-x/ads'
-    s.dependency 'ee-x/iron-source-dependencies'
-  end
-
-  spec.subspec 'iron-source-mediation' do |s|
-    s.dependency 'ee-x/iron-source'
-    s.dependency 'ee-x/iron-source-mediation-dependencies'
-  end
-
-  spec.subspec 'iron-source-dependencies' do |s|
-    # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    # FIXME: use 7.0.3.0
-    s.dependency 'IronSourceSDK', '7.0.2.0'
-  end
-
-  spec.subspec 'iron-source-mediation-dependencies' do |s|
-    # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    # FIXME: use 4.3.4.1
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'ee-x/ad-colony-dependencies'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    # Wait for supported adapter.
-    # s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
-    # FIXME: use 4.3.20.0
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.19.0'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
-    # FIXME: use 4.3.21.0
-    s.dependency 'IronSourceFacebookAdapter', '4.3.20.0'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    # FIXME: use 4.3.6.0
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.4.3'
-
-    # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
-    # FIXME: use 4.3.7.1
-    s.dependency 'IronSourceVungleAdapter', '4.3.7.0'
-  end
-
-  spec.subspec 'unity-ads' do |s|
-    s.source_files =
-      'src/ee/UnityAds*',
-      'src/ee/unity_ads/**/*'
-
-    s.private_header_files =
-      'src/ee/unity_ads/internal/*.{h,hpp,inl}',
-      'src/ee/unity_ads/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/unity_ads/Android.mk',
-      'src/ee/unity_ads/CMakeLists.txt',
-      'src/ee/unity_ads/generate.sh',
-      'src/ee/unity_ads/sourcelist.cmake'
-
-    s.dependency 'ee-x/ads'
-    s.dependency 'ee-x/unity-ads-dependencies'
-  end
-
-  spec.subspec 'unity-ads-dependencies' do |s|
-    # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    # FIXME: use 3.5.1
-    s.dependency 'UnityAds', '3.4.8'
-  end
-
-  spec.subspec 'vungle' do |s|
-    s.source_files =
-      'src/ee/Vungle*',
-      'src/ee/vungle/**/*'
-
-    s.private_header_files =
-      'src/ee/vungle/internal/*.{h,hpp,inl}',
-      'src/ee/vungle/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/vungle/Android.mk',
-      'src/ee/vungle/CMakeLists.txt',
-      'src/ee/vungle/generate.sh',
-      'src/ee/vungle/sourcelist.cmake'
-
-    s.dependency 'ee-x/ads'
-
-    # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
-    s.dependency 'VungleSDK-iOS', '6.8.0'
-  end
-
-  spec.subspec 'adjust' do |s|
-    s.source_files =
-      'src/ee/Adjust*',
-      'src/ee/adjust/**/*'
-
-    s.private_header_files =
-      'src/ee/adjust/internal/*{h,hpp,inl}',
-      'src/ee/adjust/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/adjust/Android.mk',
-      'src/ee/adjust/CMakeLists.txt',
-      'src/ee/adjust/generate.sh',
-      'src/ee/adjust/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'ee-x/adjust-dependencies'
-  end
-
-  spec.subspec 'adjust-dependencies' do |s|
-    # https://github.com/adjust/ios_sdk
-    s.dependency 'Adjust', '4.23.2'
-  end
-
-  spec.subspec 'apps-flyer' do |s|
-    s.source_files =
-      'src/ee/AppsFlyer*',
-      'src/ee/apps_flyer/**/*'
-
-    s.private_header_files =
-      'src/ee/apps_flyer/internal/*.{h,hpp,inl}',
-      'src/ee/apps_flyer/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/apps_flyer/Android.mk',
-      'src/ee/apps_flyer/CMakeLists.txt',
-      'src/ee/apps_flyer/generate.sh',
-      'src/ee/apps_flyer/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'AppsFlyerFramework', '6.1.1'
-  end
-
-  spec.subspec 'cocos' do |s|
-    s.source_files =
-      'src/ee/Cocos*',
-      'src/ee/cocos/**/*'
-
-    s.exclude_files =
-      'src/ee/cocos/Android.mk',
-      'src/ee/cocos/CMakeLists.txt',
-      'src/ee/cocos/generate.sh',
-      'src/ee/cocos/sourcelist.cmake'
-
-    s.xcconfig = {
-      'GCC_PREPROCESSOR_DEFINITIONS' => [
-        'USE_FILE32API' # Used in unzip library in cocos2d-x.
-      ].join(' '),
-      'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => [
-        '$(inherited)',
-        'COCOS2D_DEBUG=1'
-      ].join(' '),
-      'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../cocos2d',
-        '${PODS_ROOT}/../../cocos2d/cocos',
-        '${PODS_ROOT}/../../cocos2d/cocos/editor-support',
-        '${PODS_ROOT}/../../cocos2d/external',
-        '${PODS_ROOT}/../../cocos2d/extensions',
-
-        # For macos.
-        '${PODS_ROOT}/../../cocos2d/external/mac/include/glfw3', # Cocos Creator
-        '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac' # Cocos2d-x
-      ].join(' ')
-    }
-
-    s.library =
-      'iconv',
-      'z'
-    s.framework = 
-      'GameController',
-      'OpenAL'
-    s.ios.framework =
-      'CoreMotion'
-    s.dependency 'ee-x/ads'
-  end
-
-  spec.subspec 'facebook' do |s|
-    s.source_files =
-      'src/ee/Facebook{,Fwd}.*',
-      'src/ee/facebook/**/*'
-
-    s.private_header_files =
-      'src/ee/facebook/internal/*.{h,hpp,inl}',
-      'src/ee/facebook/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/facebook/Android.mk',
-      'src/ee/facebook/CMakeLists.txt',
-      'src/ee/facebook/generate.sh',
-      'src/ee/facebook/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-
-    # https://github.com/facebook/facebook-ios-sdk/releases
-    s.dependency 'FBSDKCoreKit', '8.2.0'
-    s.dependency 'FBSDKLoginKit', '8.2.0'
-    s.dependency 'FBSDKShareKit', '8.2.0'
-  end
-
   # Fix duplicated UUID since there are many common.h files.
   spec.subspec 'firebase-headers-internal' do |s|
     s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/internal/*'
@@ -477,18 +422,20 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'firebase-core' do |s|
     s.source_files =
-      'src/ee/Firebase*',
-      'src/ee/firebase/core/**/*'
+      'src/cpp/ee/Firebase*',
+      'src/cpp/ee/firebase_core/**/*'
 
     s.private_header_files =
-      'src/ee/firebase/core/private/*.{h,hpp,inl}'
+      'src/cpp/ee/firebase_core/private/*.{h,hpp,inl}'
 
     s.exclude_files =
-      'src/ee/firebase/core/Android.mk',
-      'src/ee/firebase/core/CMakeLists.txt',
-      'src/ee/firebase/core/generate.sh',
-      'src/ee/firebase/core/sourcelist.cmake',
-      'src/ee/firebase/core/*Android*'
+      'src/cpp/ee/firebase_core/Android.mk',
+      'src/cpp/ee/firebase_core/CMakeLists.txt',
+      'src/cpp/ee/firebase_core/generate.sh',
+      'src/cpp/ee/firebase_core/sourcelist.cmake',
+      'src/cpp/ee/firebase_core/*Android*'
+
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_app.a'
     s.dependency 'ee-x/core'
@@ -497,40 +444,30 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-analytics' do |s|
-    s.source_files = 'src/ee/firebase/analytics/*'
+    s.source_files = 'src/cpp/ee/firebase_analytics/*'
 
     s.exclude_files =
-      'src/ee/firebase/analytics/Android.mk',
-      'src/ee/firebase/analytics/CMakeLists.txt',
-      'src/ee/firebase/analytics/generate.sh',
-      'src/ee/firebase/analytics/sourcelist.cmake'
+      'src/cpp/ee/firebase_analytics/Android.mk',
+      'src/cpp/ee/firebase_analytics/CMakeLists.txt',
+      'src/cpp/ee/firebase_analytics/generate.sh',
+      'src/cpp/ee/firebase_analytics/sourcelist.cmake'
+
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
     s.dependency 'ee-x/firebase-core'
   end
 
-  spec.subspec 'firebase-crashlytics' do |s|
-    s.source_files = 'src/ee/firebase/crashlytics/**/*'
-    s.private_header_files = 'src/ee/firebase/crashlytics/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/firebase/crashlytics/Android.mk',
-      'src/ee/firebase/crashlytics/CMakeLists.txt',
-      'src/ee/firebase/crashlytics/generate.sh',
-      'src/ee/firebase/crashlytics/sourcelist.cmake'
-
-    s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Crashlytics', '6.34'
-  end
-
   spec.subspec 'firebase-dynamic-link' do |s|
-    s.source_files = 'src/ee/firebase/dynamic_link/*'
+    s.source_files = 'src/cpp/ee/firebase_dynamic_link/*'
 
     s.exclude_files =
-      'src/ee/firebase/dynamic_link/Android.mk',
-      'src/ee/firebase/dynamic_link/CMakeLists.txt',
-      'src/ee/firebase/dynamic_link/generate.sh',
-      'src/ee/firebase/dynamic_link/sourcelist.cmake'
+      'src/cpp/ee/firebase_dynamic_link/Android.mk',
+      'src/cpp/ee/firebase_dynamic_link/CMakeLists.txt',
+      'src/cpp/ee/firebase_dynamic_link/generate.sh',
+      'src/cpp/ee/firebase_dynamic_link/sourcelist.cmake'
+
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
@@ -538,13 +475,15 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-messaging' do |s|
-    s.source_files = 'src/ee/firebase/messaging/*'
+    s.source_files = 'src/cpp/ee/firebase_messaging/*'
 
     s.exclude_files =
-      'src/ee/firebase/messaging/Android.mk',
-      'src/ee/firebase/messaging/CMakeLists.txt',
-      'src/ee/firebase/messaging/generate.sh',
-      'src/ee/firebase/messaging/sourcelist.cmake'
+      'src/cpp/ee/firebase_messaging/Android.mk',
+      'src/cpp/ee/firebase_messaging/CMakeLists.txt',
+      'src/cpp/ee/firebase_messaging/generate.sh',
+      'src/cpp/ee/firebase_messaging/sourcelist.cmake'
+    
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
@@ -552,13 +491,15 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-remote-config' do |s|
-    s.source_files = 'src/ee/firebase/remote_config/*'
+    s.source_files = 'src/cpp/ee/firebase_remote_config/*'
 
     s.exclude_files =
-      'src/ee/firebase/remote_config/Android.mk',
-      'src/ee/firebase/remote_config/CMakeLists.txt',
-      'src/ee/firebase/remote_config/generate.sh',
-      'src/ee/firebase/remote_config/sourcelist.cmake'
+      'src/cpp/ee/firebase_remote_config/Android.mk',
+      'src/cpp/ee/firebase_remote_config/CMakeLists.txt',
+      'src/cpp/ee/firebase_remote_config/generate.sh',
+      'src/cpp/ee/firebase_remote_config/sourcelist.cmake'
+
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
     s.dependency 'ee-x/firebase-core'
@@ -566,101 +507,22 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'firebase-storage' do |s|
-    s.source_files = 'src/ee/firebase/storage/*'
+    s.source_files = 'src/cpp/ee/firebase/storage/*'
 
     s.exclude_files =
-      'src/ee/firebase/storage/Android.mk',
-      'src/ee/firebase/storage/CMakeLists.txt',
-      'src/ee/firebase/storage/generate.sh',
-      'src/ee/firebase/storage/sourcelist.cmake'
+      'src/cpp/ee/firebase_storage/Android.mk',
+      'src/cpp/ee/firebase_storage/CMakeLists.txt',
+      'src/cpp/ee/firebase_storage/generate.sh',
+      'src/cpp/ee/firebase_storage/sourcelist.cmake'
+
+    s.header_mappings_dir = 'src/cpp'
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Storage', '6.34'
   end
 
-  spec.subspec 'firebase-performance' do |s|
-    s.source_files = 'src/ee/firebase/performance/**/*'
-    s.private_header_files = 'src/ee/firebase/performance/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/firebase/performance/Android.mk',
-      'src/ee/firebase/performance/CMakeLists.txt',
-      'src/ee/firebase/performance/generate.sh',
-      'src/ee/firebase/performance/sourcelist.cmake'
-    
-    s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Performance', '6.34'
-  end
-
-  spec.subspec 'google-analytics' do |s|
-    s.source_files =
-      'src/ee/GoogleAnalytics*',
-      'src/ee/google/**/*'
-
-    s.private_header_files =
-      'src/ee/google/internal/*.{h,hpp,inl}',
-      'src/ee/google/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/google/Android.mk',
-      'src/ee/google/CMakeLists.txt',
-      'src/ee/google/generate.sh',
-      'src/ee/google/sourcelist.cmake'
-
-    s.platform = :ios
-    s.dependency 'ee-x/core'
-    s.dependency 'GoogleAnalytics'
-  end
-
-  spec.subspec 'notification' do |s|
-    s.source_files =
-      'src/ee/Notification*',
-      'src/ee/notification/**/*'
-
-    s.exclude_files =
-      'src/ee/notification/Android.mk',
-      'src/ee/notification/CMakeLists.txt',
-      'src/ee/notification/generate.sh',
-      'src/ee/notification/sourcelist.cmake'
-
-    s.platform = :ios
-    s.dependency 'ee-x/core'
-  end
-
-  spec.subspec 'play' do |s|
-    s.source_files =
-      'src/ee/Play*',
-      'src/ee/play/**/*'
-
-    s.private_header_files =
-      'src/ee/play/internal/*.{h,hpp,inl}',
-      'src/ee/play/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/play/Android.mk',
-      'src/ee/play/CMakeLists.txt',
-      'src/ee/play/generate.sh',
-      'src/ee/play/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-  end
-
-  spec.subspec 'recorder' do |s|
-    s.source_files =
-      'src/ee/Recorder*',
-      'src/ee/recorder/*'
-
-    s.exclude_files =
-      'src/ee/recorder/Android.mk',
-      'src/ee/recorder/CMakeLists.txt',
-      'src/ee/recorder/generate.sh',
-      'src/ee/recorder/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-  end
-
-  spec.subspec 'jansson' do |s| 
+  spec.subspec 'jansson' do |s|
     s.source_files = 'third_party/jansson/src/**/*'
     s.private_header_files = 'third_party/jansson/src/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/jansson/src'
@@ -699,14 +561,14 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/jansson'
   end
 
-  spec.subspec 'soomla-store-ios' do |s| 
+  spec.subspec 'soomla-store-ios' do |s|
     s.source_files = 'third_party/soomla/store/src/ios/**/*'
     s.private_header_files = 'third_party/soomla/store/src/ios/**/*.{h,hpp,inl}'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.dependency 'ee-x/soomla-core-ios'
   end
 
-  spec.subspec 'soomla-store' do |s| 
+  spec.subspec 'soomla-store' do |s|
     s.source_files = 'third_party/soomla/store/src/soomla/**/*'
     s.header_mappings_dir = 'third_party/soomla/store/src'
     s.xcconfig = {
@@ -714,25 +576,6 @@ Pod::Spec.new do |spec|
     }
     s.dependency 'ee-x/soomla-core'
     s.ios.dependency 'ee-x/soomla-store-ios'
-  end
-
-  spec.subspec 'store' do |s|
-    s.source_files =
-      'src/ee/Store*',
-      'src/ee/store/**/*'
-
-    s.private_header_files =
-      'src/ee/store/internal/*.{h,hpp,inl}',
-      'src/ee/store/private/*.{h,hpp,inl}'
-
-    s.exclude_files =
-      'src/ee/store/Android.mk',
-      'src/ee/store/CMakeLists.txt',
-      'src/ee/store/generate.sh',
-      'src/ee/store/sourcelist.cmake'
-
-    s.dependency 'ee-x/core'
-    s.dependency 'TPInAppReceipt'
   end
 
 =begin
@@ -876,109 +719,4 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/soomla-cocos2dx-store'
   end
 =end
-
-  spec.subspec 'cs-core' do |s|
-    s.source_files =
-      'src/ee/ee.h',
-      'src/ee/Macro.hpp',
-      'src/ee/core/Thread.hpp',
-      'src/ee/core/internal/MessageBridge.hpp',
-      'src/ee/core/**/*.swift',
-      'src/ee/core/**/EE*'
-
-    s.user_target_xcconfig = {
-      'LD_RUNPATH_SEARCH_PATHS' => [
-        '/usr/lib/swift',
-        '@executable_path/Frameworks',
-        '@loader_path/Frameworks'
-      ].join(' '),
-      'LIBRARY_SEARCH_PATHS' => [
-        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
-        '$(SDKROOT)/usr/lib/swift'
-      ].join(' '),
-      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
-      'DEAD_CODE_STRIPPING' => 'YES'
-    }
-
-    s.dependency 'ReachabilitySwift'
-    s.dependency 'RxSwift'
-  end
-
-  spec.subspec 'cs-ads' do |s|
-    s.source_files =
-      'src/ee/ads/**/*.swift'
-
-    s.dependency 'ee-x/cs-core'
-  end
-  
-  spec.subspec 'cs-ad-colony' do |s|
-    s.source_files =
-      'src/ee/ad_colony/**/*.swift'
-
-    s.dependency 'ee-x/cs-ads'
-    s.dependency 'ee-x/ad-colony-dependencies'
-  end
-
-  spec.subspec 'cs-admob' do |s|
-    s.source_files =
-      'src/ee/admob/**/*.swift'
-
-    s.dependency 'ee-x/cs-ads'
-    s.dependency 'ee-x/admob-dependencies'
-  end
-
-  spec.subspec 'cs-admob-mediation' do |s|
-    s.dependency 'ee-x/cs-admob'
-    s.dependency 'ee-x/admob-mediation-dependencies'
-  end
-
-  spec.subspec 'cs-facebook-ads' do |s|
-    s.source_files =
-      'src/ee/facebook_ads/EEFacebookNativeAdView*',
-      'src/ee/facebook_ads/**/*.swift'
-
-    s.dependency 'ee-x/cs-ads'
-    s.dependency 'ee-x/facebook-ads-dependencies'
-  end
-
-  spec.subspec 'cs-iron-source' do |s|
-    s.source_files =
-      'src/ee/iron_source/EEIronSourceBridge.h',
-      'src/ee/iron_source/**/*.swift'
-
-    s.dependency 'ee-x/cs-ads'
-    s.dependency 'ee-x/iron-source-dependencies'
-  end
-
-  spec.subspec 'cs-iron-source-mediation' do |s|
-    s.dependency 'ee-x/cs-iron-source'
-    s.dependency 'ee-x/iron-source-mediation-dependencies'
-  end
-
-  spec.subspec 'cs-unity-ads' do |s|
-    s.source_files =
-      'src/ee/unity_ads/**/*.swift'
-    
-    s.dependency 'ee-x/cs-ads'
-    s.dependency 'ee-x/unity-ads-dependencies'
-  end
-
-  spec.subspec 'cs-adjust' do |s|
-    s.source_files =
-      'src/ee/adjust/**/*.swift'
-    
-    s.dependency 'ee-x/cs-core'
-    s.dependency 'ee-x/adjust-dependencies'
-  end
 end
-
-#  post_install do |installer_representation|
-#    installer_representation.project.targets.each do |target|
-#      if target.name == "FBSDKShareKit"
-#        target.build_configurations.each do |config|
-#          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'BUCK']
-#        end
-#      end
-#    end
-#  end

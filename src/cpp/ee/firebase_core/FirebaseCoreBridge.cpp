@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/firebase/core/FirebaseCoreBridge.hpp"
+#include "ee/firebase_core/FirebaseCoreBridge.hpp"
 
 #include <firebase/app.h>
 

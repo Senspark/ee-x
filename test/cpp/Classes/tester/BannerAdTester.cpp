@@ -10,7 +10,7 @@
 #include <base/CCDirector.h>
 #include <platform/CCGLView.h>
 
-#include <ee/Ads.hpp>
+#include <ee/CppFwd.hpp>
 
 #include "Utils.hpp"
 

@@ -5,7 +5,7 @@
 //  Created by eps on 6/26/18.
 //
 
-#include "ee/apps_flyer/internal/AppsFlyerBridge.hpp"
+#include "ee/apps_flyer/private/AppsFlyerBridge.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>

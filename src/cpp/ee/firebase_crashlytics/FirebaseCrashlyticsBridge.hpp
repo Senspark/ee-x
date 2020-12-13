@@ -1,16 +1,13 @@
 #ifndef EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 
-#ifdef __OBJC__
-#import <FirebaseCrashlytics/FIRCrashlytics.h>
-#endif // __OBJC__
-
 #ifdef __cplusplus
 
 #include <string>
 
-#include <ee/FirebaseFwd.hpp>
 #include <ee/core/IPlugin.hpp>
+
+#include "ee/firebase_crashlytics/FirebaseCrashlyticsFwd.hpp"
 
 namespace ee {
 namespace firebase {

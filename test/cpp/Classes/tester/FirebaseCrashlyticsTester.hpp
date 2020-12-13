@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include <ee/FirebaseFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 #include "ITester.hpp"
 

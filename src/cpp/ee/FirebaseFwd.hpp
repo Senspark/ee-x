@@ -23,10 +23,6 @@ namespace analytics {
 class Bridge;
 } // namespace analytics
 
-namespace crashlytics {
-class Bridge;
-} // namespace crashlytics
-
 namespace dynamic_link {
 class Bridge;
 } // namespace dynamic_link
@@ -36,11 +32,6 @@ class Notification;
 class Message;
 class Bridge;
 } // namespace messaging
-
-namespace performance {
-class Bridge;
-class Trace;
-} // namespace performance
 
 namespace remote_config {
 enum class LastFetchStatus;
@@ -56,12 +47,9 @@ class Bridge;
 
 using FirebaseCore = firebase::core::Bridge;
 using FirebaseAnalytics = firebase::analytics::Bridge;
-using FirebaseCrashlytics = firebase::crashlytics::Bridge;
 using FirebaseDynamicLink = firebase::dynamic_link::Bridge;
 using FirebaseMessaging = firebase::messaging::Bridge;
 using firebase::messaging::Message;
-using FirebasePerformance = firebase::performance::Bridge;
-using FirebasePerformanceTrace = firebase::performance::Trace;
 using FirebaseLastFetchStatus = firebase::remote_config::LastFetchStatus;
 using FirebaseFetchFailureReason = firebase::remote_config::FetchFailureReason;
 using FirebaseConfigInfo = firebase::remote_config::ConfigInfo;

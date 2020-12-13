@@ -15,37 +15,28 @@
 
 #include "ee/FirebaseFwd.hpp"
 
-#if __has_include("ee/firebase/core/FirebaseCoreBridge.hpp")
-#include "ee/firebase/core/FirebaseCoreBridge.hpp"
+#if __has_include("ee/firebase_core/FirebaseCoreBridge.hpp")
+#include "ee/firebase_core/FirebaseCoreBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/analytics/FirebaseAnalyticsBridge.hpp")
-#include "ee/firebase/analytics/FirebaseAnalyticsBridge.hpp"
+#if __has_include("ee/firebase_analytics/FirebaseAnalyticsBridge.hpp")
+#include "ee/firebase_analytics/FirebaseAnalyticsBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/crashlytics/FirebaseCrashlyticsBridge.hpp")
-#include "ee/firebase/crashlytics/FirebaseCrashlyticsBridge.hpp"
+#if __has_include("ee/firebase_dynamic_link/FirebaseDynamicLinkBridge.hpp")
+#include "ee/firebase_dynamic_link/FirebaseDynamicLinkBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp")
-#include "ee/firebase/dynamic_link/FirebaseDynamicLinkBridge.hpp"
+#if __has_include("ee/firebase_messaging/FirebaseMessagingBridge.hpp")
+#include "ee/firebase_messaging/FirebaseMessagingBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/messaging/FirebaseMessagingBridge.hpp")
-#include "ee/firebase/messaging/FirebaseMessagingBridge.hpp"
+#if __has_include("ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp")
+#include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
 #endif
 
-#if __has_include("ee/firebase/performance/FirebasePerformanceBridge.hpp")
-#include "ee/firebase/performance/FirebasePerformanceBridge.hpp"
-#include "ee/firebase/performance/FirebasePerformanceTrace.hpp"
-#endif
-
-#if __has_include("ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp")
-#include "ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp"
-#endif
-
-#if __has_include("ee/firebase/storage/FirebaseStorageBridge.hpp")
-#include "ee/firebase/storage/FirebaseStorageBridge.hpp"
+#if __has_include("ee/firebase_storage/FirebaseStorageBridge.hpp")
+#include "ee/firebase_storage/FirebaseStorageBridge.hpp"
 #endif
 
 #endif // __cplusplus

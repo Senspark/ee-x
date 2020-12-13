@@ -7,7 +7,7 @@
 
 #include "RewardedAdTester.hpp"
 
-#include <ee/Ads.hpp>
+#include <ee/Cpp.hpp>
 
 #include "Utils.hpp"
 

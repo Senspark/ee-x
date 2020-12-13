@@ -10,8 +10,7 @@
 
 #include <cocos2d.h>
 
-#include <ee/Ads.hpp>
-#include <ee/Cocos.hpp>
+#include <ee/Cpp.hpp>
 
 #include "CoreTester.hpp"
 #include "Utils.hpp"
@@ -20,7 +19,6 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include "FirebaseCrashlyticsTester.hpp"
-#include "GoogleAnalyticsTester.hpp"
 #include "RewardedAdSceneTester.hpp"
 #endif
 
@@ -94,7 +92,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
-    testers.push_back(std::make_shared<GoogleAnalyticsTester>());
     testers.push_back(std::make_shared<RewardedAdSceneTester>());
 #endif
     for (auto&& tester : testers) {

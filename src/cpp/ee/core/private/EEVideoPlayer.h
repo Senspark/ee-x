@@ -5,6 +5,7 @@
 //  Created by eps on 1/30/18.
 //
 
+/*
 #import <CoreGraphics/CGGeometry.h>
 #import <Foundation/Foundation.h>
 
@@ -44,3 +45,4 @@
 - (void)setFullScreenEnabled:(BOOL)enabled;
 
 @end
+*/

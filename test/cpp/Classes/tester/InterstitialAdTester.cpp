@@ -7,7 +7,7 @@
 
 #include "InterstitialAdTester.hpp"
 
-#include <ee/Ads.hpp>
+#include <ee/Cpp.hpp>
 
 #include "Utils.hpp"
 

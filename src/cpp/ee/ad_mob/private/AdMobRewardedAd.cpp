@@ -14,7 +14,7 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/admob/private/AdMobBridge.hpp"
+#include "ee/ad_mob/private/AdMobBridge.hpp"
 
 namespace ee {
 namespace admob {

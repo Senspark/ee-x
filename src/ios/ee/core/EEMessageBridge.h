@@ -1,0 +1,1 @@
+extern char* ee_callCppInternal(const char* tag, const char* message);

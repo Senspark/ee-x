@@ -11,8 +11,7 @@
 #include <cocos2d.h>
 #include <ui/CocosGUI.h>
 
-#include <ee/Ads.hpp>
-#include <ee/Cocos.hpp>
+#include <ee/Cpp.hpp>
 
 namespace eetest {
 using Self = NativeAdTestScene;

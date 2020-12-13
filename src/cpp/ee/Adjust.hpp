@@ -1,23 +1,6 @@
-//
-//  Adjust.hpp
-//  Adjust
-//
-//  Created by eps on 8/19/20.
-//
-
-#ifndef EE_X_ADJUST_HPP
-#define EE_X_ADJUST_HPP
-
 #ifdef __cplusplus
 
-#include <ee/Core.hpp>
-
-#include "ee/AdjustFwd.hpp"
-#include "ee/adjust/AdjustConfig.hpp"
-#include "ee/adjust/AdjustEnvironment.hpp"
-#include "ee/adjust/AdjustLogLevel.hpp"
-#include "ee/adjust/IAdjustBridge.hpp"
+#warning "Use #include <ee/Cpp.hpp> instead"
+#include "ee/Cpp.hpp"
 
 #endif // __cplusplus
-
-#endif /* EE_X_ADJUST_HPP */

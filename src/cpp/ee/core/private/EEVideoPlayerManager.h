@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
+/*
 @class EEVideoPlayer;
 
 @interface EEVideoPlayerManager : NSObject
@@ -20,3 +21,4 @@
 - (BOOL)destroyVideoPlayer:(NSString* _Nonnull)tag;
 
 @end
+*/

@@ -10,10 +10,7 @@
 #include <cocos2d.h>
 #include <ui/CocosGUI.h>
 
-#include <ee/AdMob.hpp>
-#include <ee/FacebookAds.hpp>
-#include <ee/IronSource.hpp>
-#include <ee/UnityAds.hpp>
+#include <ee/Cpp.hpp>
 
 namespace eetest {
 namespace config {

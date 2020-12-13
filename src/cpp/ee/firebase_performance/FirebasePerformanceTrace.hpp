@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <string>
 
-#include <ee/FirebaseFwd.hpp>
+#include "ee/firebase_performance/FirebasePerformanceFwd.hpp"
 
 namespace ee {
 namespace firebase {

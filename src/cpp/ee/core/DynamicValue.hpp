@@ -14,7 +14,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "ee/CoreFwd.hpp"
+#include "ee/core/CoreFwd.hpp"
 
 namespace ee {
 namespace core {

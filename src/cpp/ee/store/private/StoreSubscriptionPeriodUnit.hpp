@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_SUBSCRIPTION_PERIOD_UNIT_HPP
 #define EE_X_STORE_SUBSCRIPTION_PERIOD_UNIT_HPP
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

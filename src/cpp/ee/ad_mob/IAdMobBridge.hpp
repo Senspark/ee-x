@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/AdMobFwd.hpp"
+#include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {

@@ -14,7 +14,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/AdjustFwd.hpp"
+#include "ee/adjust/AdjustFwd.hpp"
 
 namespace ee {
 namespace adjust {

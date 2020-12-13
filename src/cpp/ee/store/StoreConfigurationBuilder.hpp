@@ -13,7 +13,7 @@
 #include <set>
 #include <vector>
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

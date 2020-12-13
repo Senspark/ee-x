@@ -11,7 +11,7 @@
 
 #include <functional>
 
-#include <ee/Core.hpp>
+#include <ee/Cpp.hpp>
 
 namespace eetest {
 namespace detail {

@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_STORE_SPECIFIC_PURCHASE_ERROR_CODE_HPP
 #define EE_X_STORE_STORE_SPECIFIC_PURCHASE_ERROR_CODE_HPP
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

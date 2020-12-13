@@ -12,7 +12,7 @@
 #include <ee/ads/IRewardedAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/AppLovinFwd.hpp"
+#include "ee/app_lovin/AppLovinFwd.hpp"
 
 namespace ee {
 namespace app_lovin {

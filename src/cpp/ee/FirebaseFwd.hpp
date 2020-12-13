@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include <ee/CoreFwd.hpp>
+#include <ee/CppFwd.hpp>
 
 namespace ee {
 namespace firebase {

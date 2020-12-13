@@ -12,7 +12,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/RecorderFwd.hpp"
+#include "ee/recorder/RecorderFwd.hpp"
 
 namespace ee {
 namespace recorder {

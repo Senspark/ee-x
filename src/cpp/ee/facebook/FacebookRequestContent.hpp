@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "ee/FacebookFwd.hpp"
+#include "ee/facebook/FacebookFwd.hpp"
 
 namespace ee {
 namespace facebook {

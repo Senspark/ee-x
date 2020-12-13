@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_PURCHASE_FAILURE_REASON_HPP
 #define EE_X_STORE_PURCHASE_FAILURE_REASON_HPP
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

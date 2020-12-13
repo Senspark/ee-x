@@ -14,7 +14,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "ee/FacebookAdsFwd.hpp"
+#include "ee/facebook_ads/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {

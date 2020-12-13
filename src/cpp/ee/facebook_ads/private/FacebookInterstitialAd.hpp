@@ -15,7 +15,7 @@
 #include <ee/ads/internal/MessageHelper.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/FacebookAdsFwd.hpp"
+#include "ee/facebook_ads/FacebookAdsFwd.hpp"
 
 namespace ee {
 namespace facebook_ads {

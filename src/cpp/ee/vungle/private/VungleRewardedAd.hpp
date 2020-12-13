@@ -14,7 +14,7 @@
 #include <ee/ads/IRewardedAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/VungleFwd.hpp"
+#include "ee/vungle/VungleFwd.hpp"
 
 namespace ee {
 namespace vungle {

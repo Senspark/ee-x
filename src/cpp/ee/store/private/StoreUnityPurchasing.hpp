@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

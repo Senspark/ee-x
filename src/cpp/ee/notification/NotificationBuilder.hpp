@@ -13,7 +13,7 @@
 
 #include <string>
 
-#include "ee/NotificationFwd.hpp"
+#include "ee/notification/NotificationFwd.hpp"
 
 namespace ee {
 namespace notification {

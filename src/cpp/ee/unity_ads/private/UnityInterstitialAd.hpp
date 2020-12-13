@@ -14,7 +14,7 @@
 #include <ee/ads/IInterstitialAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/UnityAdsFwd.hpp"
+#include "ee/unity_ads/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {

@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include <ee/Core.hpp>
+#include <ee/Cpp.hpp>
 
 #include "ee/FirebaseFwd.hpp"
 

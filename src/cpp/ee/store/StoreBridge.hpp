@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

@@ -8,7 +8,7 @@
 
 #include "VungleTester.hpp"
 
-#include <ee/Vungle.hpp>
+#include <ee/Cpp.hpp>
 
 #include "FunctionLogger.hpp"
 #include "RewardedAdTester.hpp"

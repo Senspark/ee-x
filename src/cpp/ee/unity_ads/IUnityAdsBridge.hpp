@@ -15,7 +15,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/UnityAdsFwd.hpp"
+#include "ee/unity_ads/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {

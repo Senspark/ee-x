@@ -5,7 +5,7 @@
 
 #include <type_traits>
 
-#include "ee/CoreFwd.hpp"
+#include "ee/core/CoreFwd.hpp"
 
 namespace cppcoro {
 namespace detail {

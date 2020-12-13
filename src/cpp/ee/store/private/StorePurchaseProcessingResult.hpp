@@ -8,7 +8,7 @@
 #ifndef EE_X_STORE_PURCHASE_PROCESSING_RESULT_HPP
 #define EE_X_STORE_PURCHASE_PROCESSING_RESULT_HPP
 
-#include "ee/StoreFwd.hpp"
+#include "ee/store/StoreFwd.hpp"
 
 namespace ee {
 namespace store {

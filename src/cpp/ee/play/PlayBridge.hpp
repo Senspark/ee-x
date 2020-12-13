@@ -13,7 +13,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/PlayFwd.hpp"
+#include "ee/play/PlayFwd.hpp"
 
 namespace ee {
 namespace play {

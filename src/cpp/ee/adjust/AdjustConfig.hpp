@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "ee/AdjustFwd.hpp"
+#include "ee/adjust/AdjustFwd.hpp"
 
 namespace ee {
 namespace adjust {

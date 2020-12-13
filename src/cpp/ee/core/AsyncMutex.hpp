@@ -8,7 +8,7 @@
 #include <experimental/coroutine>
 #include <mutex> // for std::adopt_lock_t
 
-#include "ee/CoreFwd.hpp"
+#include "ee/core/CoreFwd.hpp"
 
 /// https://github.com/lewissbaker/cppcoro/blob/master/include/cppcoro/async_mutex.hpp
 namespace cppcoro {

@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 
-#include "ee/AdMobFwd.hpp"
+#include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {

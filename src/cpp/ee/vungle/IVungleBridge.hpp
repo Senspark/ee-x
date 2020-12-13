@@ -12,7 +12,7 @@
 
 #include <ee/core/IPlugin.hpp>
 
-#include "ee/VungleFwd.hpp"
+#include "ee/vungle/VungleFwd.hpp"
 
 namespace ee {
 namespace vungle {

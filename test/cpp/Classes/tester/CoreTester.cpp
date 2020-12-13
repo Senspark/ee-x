@@ -7,7 +7,7 @@
 
 #include "CoreTester.hpp"
 
-#include <ee/Core.hpp>
+#include <ee/Cpp.hpp>
 
 #include "Utils.hpp"
 

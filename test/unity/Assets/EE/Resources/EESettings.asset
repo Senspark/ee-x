@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55d283bc0ce4e93b4243a3edd67d44b, type: 3}
   m_Name: EESettings
   m_EditorClassIdentifier: 
-  _isDeveloperModeEnabled: 0
-  _libraryPath: ee-x
+  _isDeveloperModeEnabled: 1
+  _libraryPath: ../../
   _isMultiDexEnabled: 1
   _isCoreEnabled: 1
   _isAdjustEnabled: 0

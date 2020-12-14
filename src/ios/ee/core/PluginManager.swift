@@ -43,6 +43,7 @@ public class PluginManager: NSObject {
             assert(false)
             return false
         }
+        _logger.info("Initialize ee-x plugin version \(version)")
         _delegate = delegate
         swizzle(#selector(UIApplicationDelegate.application(_:open:options:)),
                 #selector(PluginManager.application(_:open:options:)))

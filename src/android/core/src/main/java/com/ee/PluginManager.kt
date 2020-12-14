@@ -150,6 +150,7 @@ class PluginManager private constructor() {
             assertThat(false).isTrue()
             return false
         }
+        _logger.info("Initialize ee-x plugin version $version")
         val application = _application
         if (application == null) {
             _logger.error("""

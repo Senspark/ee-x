@@ -1,12 +1,12 @@
 <dependencies>
   <packages>
     <package>androidx.multidex:multidex:[2.0.1]</package>
-    <package>com.senspark.ee:ad-colony:[1.3.2]</package>
-    <package>com.senspark.ee:admob-mediation:[1.3.2]</package>
-    <package>com.senspark.ee:core:[1.3.2]</package>
-    <package>com.senspark.ee:facebook-ads:[1.3.2]</package>
-    <package>com.senspark.ee:iron-source-mediation:[1.3.2]</package>
-    <package>com.senspark.ee:unity-ads:[1.3.2]</package>
+    <package>com.senspark.ee:ad-colony:[2.0.0]</package>
+    <package>com.senspark.ee:ad-mob-mediation:[2.0.0]</package>
+    <package>com.senspark.ee:core:[2.0.0]</package>
+    <package>com.senspark.ee:facebook-ads:[2.0.0]</package>
+    <package>com.senspark.ee:iron-source-mediation:[2.0.0]</package>
+    <package>com.senspark.ee:unity-ads:[2.0.0]</package>
   </packages>
   <files>
     <file>Assets/Plugins/Android/androidx.activity.activity-1.0.0.aar</file>
@@ -51,13 +51,14 @@
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.work.work-runtime-2.1.0.aar</file>
     <file>Assets/Plugins/Android/com.adcolony.sdk-4.2.4.aar</file>
-    <file>Assets/Plugins/Android/com.applovin.applovin-sdk-9.14.5.aar</file>
+    <file>Assets/Plugins/Android/com.android.installreferrer.installreferrer-2.1.aar</file>
+    <file>Assets/Plugins/Android/com.applovin.applovin-sdk-9.14.6.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.audience-network-sdk-6.2.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.adcolony-4.2.4.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.ads.mediation.applovin-9.14.5.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.ads.mediation.applovin-9.14.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.facebook-6.2.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.ironsource-7.0.3.1.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.ads.mediation.unity-3.5.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.ads.mediation.unity-3.5.1.1.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.vungle-6.8.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-19.5.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-base-19.5.0.aar</file>
@@ -87,15 +88,15 @@
     <file>Assets/Plugins/Android/com.ironsource.adapters.unityadsadapter-4.3.8.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.adapters.vungleadapter-4.3.7.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.sdk.mediationsdk-7.0.3.1.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ad-colony-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.admob-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.admob-mediation-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ads-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.core-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.facebook-ads-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-mediation-1.3.2.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.unity-ads-1.3.2.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-colony-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-mediation-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ads-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.core-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.facebook-ads-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-mediation-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.unity-ads-2.0.0.aar</file>
     <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-3.12.12.jar</file>
     <file>Assets/Plugins/Android/com.squareup.okio.okio-1.15.0.jar</file>
     <file>Assets/Plugins/Android/com.unity3d.ads.unity-ads-3.5.1.aar</file>
@@ -106,8 +107,8 @@
     <file>Assets/Plugins/Android/org.hamcrest.hamcrest-core-1.3.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.annotations-13.0.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-android-extensions-runtime-1.3.50.jar</file>
-    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-1.4.10.jar</file>
-    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-common-1.4.10.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-1.4.20.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-common-1.4.20.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlinx.kotlinx-coroutines-android-1.3.9.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlinx.kotlinx-coroutines-core-1.3.9.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlinx.kotlinx-serialization-core-jvm-1.0.1.jar</file>

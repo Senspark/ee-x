@@ -143,7 +143,13 @@ class PluginManager private constructor() {
 
     @AnyThread
     @InternalSerializationApi
-    fun initializePlugins(messageHandler: MessageBridgeHandler): Boolean {
+    fun initializePlugins(version: String, messageHandler: MessageBridgeHandler): Boolean {
+        val expectedVersion = "1.4.0"
+        if (version != expectedVersion) {
+            _logger.error("Version mismatched: found $version expected $expectedVersion")
+            assertThat(false).isTrue()
+            return false
+        }
         val application = _application
         if (application == null) {
             _logger.error("""
@@ -245,15 +251,8 @@ class PluginManager private constructor() {
 @InternalSerializationApi
 @NativeThread
 @Suppress("FunctionName", "unused")
-private fun ee_staticInitializePlugins(): Boolean {
-    /* Has defect.
-    val activity = Utils.getCurrentActivity()
-    if (activity == null) {
-        assertThat(false).isTrue()
-        return false
-    }
-     */
-    return PluginManager.getInstance().initializePlugins { tag, message ->
+private fun ee_staticInitializePlugins(version: String): Boolean {
+    return PluginManager.getInstance().initializePlugins(version) { tag, message ->
         ee_callCppInternal(tag, message)
     }
 }

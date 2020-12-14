@@ -6,8 +6,8 @@ import com.ee.IMessageBridge;
 import com.ee.PluginManager;
 
 public class UnityPluginManager {
-    public static boolean initializePlugins() {
-        return PluginManager.getInstance().initializePlugins(UnityMessageBridge::callCpp);
+    public static boolean initializePlugins(String version) {
+        return PluginManager.getInstance().initializePlugins(version, UnityMessageBridge::callCpp);
     }
     
     public static Activity getActivity() {

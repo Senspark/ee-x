@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace EE.Internal {
     internal class PluginManagerImplIos : IPluginManagerImpl {
         [DllImport("__Internal")]
-        private static extern bool ee_staticInitializePlugins();
+        private static extern bool ee_staticInitializePlugins(string version);
 
         [DllImport("__Internal")]
         private static extern void ee_staticSetLogLevel(int level);
@@ -20,8 +20,8 @@ namespace EE.Internal {
         [DllImport("__Internal")]
         private static extern bool ee_staticRemovePlugin(string name);
 
-        public bool InitializePlugins() {
-            return ee_staticInitializePlugins();
+        public bool InitializePlugins(string version) {
+            return ee_staticInitializePlugins(version);
         }
 
         public void SetLogLevel(LogLevel level) {

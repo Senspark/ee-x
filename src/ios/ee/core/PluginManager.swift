@@ -36,7 +36,13 @@ public class PluginManager: NSObject {
     }
     
     #if os(iOS)
-    fileprivate func initializePlugins(_ delegate: UIApplicationDelegate) -> Bool {
+    fileprivate func initializePlugins(_ version: String, _ delegate: UIApplicationDelegate) -> Bool {
+        let expectedVersion = "1.4.0"
+        if version != expectedVersion {
+            _logger.error("Version mismatched: found \(version) expected \(expectedVersion)")
+            assert(false)
+            return false
+        }
         _delegate = delegate
         swizzle(#selector(UIApplicationDelegate.application(_:open:options:)),
                 #selector(PluginManager.application(_:open:options:)))
@@ -191,15 +197,16 @@ private func ee_closureCast<T>(_ swizzledSelector: Selector,
 }
 
 @_cdecl("ee_staticInitializePlugins")
-public func ee_staticInitializePlugins() -> Bool {
+public func ee_staticInitializePlugins(_ version: UnsafePointer<CChar>) -> Bool {
+    let version_str = String(cString: version)
     #if os(iOS)
     guard let delegate = UIApplication.shared.delegate else {
         assert(false, "Delegate not assigned")
         return false
     }
-    return PluginManager.getInstance().initializePlugins(delegate)
+    return PluginManager.getInstance().initializePlugins(version_str, delegate)
     #else // os(iOS)
-    return PluginManager.getInstance().initializePlugins()
+    return PluginManager.getInstance().initializePlugins(version_str)
     #endif // os(iOS)
 }
 

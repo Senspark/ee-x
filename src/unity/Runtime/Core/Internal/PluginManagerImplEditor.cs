@@ -1,6 +1,6 @@
 namespace EE.Internal {
     internal class PluginManagerImplEditor : IPluginManagerImpl {
-        public bool InitializePlugins() {
+        public bool InitializePlugins(string version) {
             return true;
         }
 

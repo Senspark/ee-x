@@ -98,7 +98,7 @@ bool ee_staticRemovePlugin(const char* name) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-bool ee_staticInitializePlugins();
+bool ee_staticInitializePlugins(const char* version);
 void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();
 void ee_staticSetActivity(void* activity);
@@ -110,7 +110,7 @@ using Self = PluginManager;
 
 template <>
 bool Self::initializePlugins<Library::Core>() {
-    if (not ee_staticInitializePlugins()) {
+    if (not ee_staticInitializePlugins("1.4.0")) {
         return false;
     }
     bridge_ = &MessageBridge::getInstance();

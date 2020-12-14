@@ -4,13 +4,13 @@ namespace EE.Internal {
     internal class PluginManagerImplAndroid : IPluginManagerImpl {
         private readonly AndroidJavaClass _clazz = new AndroidJavaClass("com.ee.internal.UnityPluginManager");
 
-        public bool InitializePlugins() {
+        public bool InitializePlugins(string version) {
             using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {
                 using (var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")) {
                     SetActivity(activity);
                 }
             }
-            return _clazz.CallStatic<bool>("initializePlugins");
+            return _clazz.CallStatic<bool>("initializePlugins", version);
         }
 
         public void SetLogLevel(LogLevel level) {

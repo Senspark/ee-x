@@ -5,7 +5,6 @@ def pod_ee_x(name)
 end
 
 abstract_target 'common' do
-    pod_ee_x('cocos')
     pod_ee_x('soomla-store')
     
     target 'ee_x_test_mobile' do

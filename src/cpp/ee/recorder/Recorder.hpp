@@ -10,7 +10,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/recorder/RecorderFwd.hpp"
 #include "ee/recorder/RecorderBridge.hpp"
 
 #endif // __cplusplus

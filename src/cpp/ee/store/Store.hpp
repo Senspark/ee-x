@@ -5,7 +5,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/store/StoreFwd.hpp"
 #include "ee/store/StoreBridge.hpp"
 #include "ee/store/StoreConfigurationBuilder.hpp"
 #include "ee/store/StoreProduct.hpp"

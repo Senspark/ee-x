@@ -13,7 +13,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/play/PlayFwd.hpp"
 #include "ee/play/PlayBridge.hpp"
 
 #endif // __cplusplus

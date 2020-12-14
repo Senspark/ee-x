@@ -13,7 +13,6 @@
 
 #include <ee/ads/Ads.hpp>
 
-#include "ee/ad_mob/AdMobFwd.hpp"
 #include "ee/ad_mob/AdMobBannerAdSize.hpp"
 #include "ee/ad_mob/AdMobNativeAdLayout.hpp"
 #include "ee/ad_mob/IAdMobBridge.hpp"

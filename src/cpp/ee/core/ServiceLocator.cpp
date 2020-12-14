@@ -1,4 +1,4 @@
-#include <ee/core/ServiceLocator.hpp>
+#include "ee/core/ServiceLocator.hpp"
 
 namespace ee {
 namespace core {

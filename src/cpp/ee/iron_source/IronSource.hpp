@@ -5,7 +5,6 @@
 
 #include <ee/ads/Ads.hpp>
 
-#include "ee/iron_source/IronSourceFwd.hpp"
 #include "ee/iron_source/IIronSourceBridge.hpp"
 
 #endif // __cplusplus

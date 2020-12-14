@@ -10,7 +10,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/facebook/FacebookFwd.hpp"
 #include "ee/facebook/FacebookGraphRequest.hpp"
 #include "ee/facebook/FacebookRequestContent.hpp"
 #include "ee/facebook/IFacebookAccessToken.hpp"

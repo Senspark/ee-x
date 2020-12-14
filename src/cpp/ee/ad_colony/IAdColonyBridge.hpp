@@ -5,8 +5,6 @@
 
 #include <string>
 
-#include <string>
-
 #include <ee/core/IPlugin.hpp>
 
 #include "ee/ad_colony/AdColonyFwd.hpp"

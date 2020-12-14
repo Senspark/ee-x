@@ -51,21 +51,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/recorder/**/*',
       'src/cpp/ee/store/**/*',
       'src/cpp/ee/unity_ads/**/*',
-      'src/cpp/ee/vungle/**/*',
-      # Legacy.
-      'src/cpp/ee/AdMob*',
-      'src/cpp/ee/Adjust*',
-      'src/cpp/ee/AppLovin*',
-      'src/cpp/ee/AppsFlyer*',
-      'src/cpp/ee/Cocos*',
-      'src/cpp/ee/Core*',
-      'src/cpp/ee/Facebook*',
-      'src/cpp/ee/Notification*',
-      'src/cpp/ee/Play*',
-      'src/cpp/ee/Recorder*',
-      'src/cpp/ee/Store*',
-      'src/cpp/ee/UnityAds*',
-      'src/cpp/ee/Vungle*'
+      'src/cpp/ee/vungle/**/*'
     
     s.private_header_files =
       'src/cpp/ee/**/internal/*',

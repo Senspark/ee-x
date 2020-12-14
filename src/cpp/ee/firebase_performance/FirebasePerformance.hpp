@@ -5,7 +5,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/firebase_performance/FirebasePerformanceFwd.hpp"
 #include "ee/firebase_performance/FirebasePerformanceBridge.hpp"
 #include "ee/firebase_performance/FirebasePerformanceTrace.hpp"
 

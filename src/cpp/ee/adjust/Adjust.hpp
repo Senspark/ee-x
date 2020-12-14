@@ -12,7 +12,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/adjust/AdjustFwd.hpp"
 #include "ee/adjust/AdjustConfig.hpp"
 #include "ee/adjust/AdjustEnvironment.hpp"
 #include "ee/adjust/AdjustLogLevel.hpp"

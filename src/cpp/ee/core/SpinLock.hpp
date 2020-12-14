@@ -13,6 +13,8 @@
 
 #include <atomic>
 
+#include "ee/core/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 /// http://stackoverflow.com/questions/26583433/c11-implementation-of-spinlock-using-atomic

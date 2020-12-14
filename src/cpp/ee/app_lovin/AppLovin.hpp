@@ -13,7 +13,6 @@
 
 #include <ee/ads/Ads.hpp>
 
-#include "ee/app_lovin/AppLovinFwd.hpp"
 #include "ee/app_lovin/IAppLovinBridge.hpp"
 
 #endif // __cplusplus

@@ -13,7 +13,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/notification/NotificationFwd.hpp"
 #include "ee/notification/NotificationBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 

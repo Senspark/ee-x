@@ -5,8 +5,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/cocos/CocosFwd.hpp"
-
 #include "ee/cocos/EEMacro.hpp"
 
 #include "ee/cocos/Metrics.hpp"

@@ -15,6 +15,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "ee/core/CoreFwd.hpp"
+
 namespace ee {
 namespace core {
 template <class T>

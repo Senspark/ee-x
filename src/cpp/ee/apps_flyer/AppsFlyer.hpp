@@ -12,7 +12,6 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/apps_flyer/AppsFlyerFwd.hpp"
 #include "ee/apps_flyer/IAppsFlyerBridge.hpp"
 
 #endif // __cplusplus

@@ -13,7 +13,6 @@
 
 #include <ee/ads/Ads.hpp>
 
-#include "ee/facebook_ads/FacebookAdsFwd.hpp"
 #include "ee/facebook_ads/FacebookBannerAdSize.hpp"
 #include "ee/facebook_ads/FacebookNativeAdLayout.hpp"
 #include "ee/facebook_ads/IFacebookAdsBridge.hpp"

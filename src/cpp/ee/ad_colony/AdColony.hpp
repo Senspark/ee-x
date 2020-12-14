@@ -5,7 +5,6 @@
 
 #include <ee/ads/Ads.hpp>
 
-#include "ee/ad_colony/AdColonyFwd.hpp"
 #include "ee/ad_colony/IAdColonyBridge.hpp"
 
 #endif // __cplusplus

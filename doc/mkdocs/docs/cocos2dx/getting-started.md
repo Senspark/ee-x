@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:1.4.0'
+    implementation 'com.senspark.ee:core:2.0.0'
 }
 ```
 
@@ -18,20 +18,20 @@ Modify `Android.mk`
 ```
 $(call import-add-path, PATH)
 $(call import-module, ee-x)
-LOCAL_STATIC_LIBRARIES += ee_x_core
+LOCAL_STATIC_LIBRARIES += ee_x
 ```
 
 #### For `cmake` users
 Modify `CMakeLists.txt`
 ```
 add_subdirectory(PATH/ee-x ${PROJECT_BINARY_DIR}/ee-x)
-target_link_libraries(${PROJECT_NAME} ee_x_core)
+target_link_libraries(${PROJECT_NAME} ee_x)
 ```
 
 ### iOS
 Install CocoaPods and modify `Podfile`
 ```ruby
-pod 'ee-x/core'
+pod 'ee-x/cpp'
 ```
 
 ## Initialization

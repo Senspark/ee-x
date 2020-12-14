@@ -4,34 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:admob:1.4.0'
-
-    // Includes:
-    // - AppLovin mediation.
-    // - FacebookAds mediation.
-    // - IronSource mediation.
-    // - Unity mediation.
-    // - Vungle mediation.
-    implementation 'com.senspark.ee:admob-mediation:1.4.0'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.0.0'
 }
-```
-
-#### For `ndk-build` users
-Modify `Android.mk`
-```
-LOCAL_STATIC_LIBRARIES += ee_x_admob
-```
-
-#### For `cmake` users
-Modify `CMakeLists.txt`
-```
-target_link_libraries(${PROJECT_NAME} ee_x_admob)
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/admob', :git => 'https://github.com/Senspark/ee-x'
+pod 'ee-x/ad-mob-mediation'
 ```
 
 ## Basic usage

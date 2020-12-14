@@ -4,34 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:iron-source:1.4.0'
-
-    // Includes:
-    // - AdMob mediation.
-    // - AppLovin mediation.
-    // - FacebookAds mediation.
-    // - Unity mediation.
-    // - Vungle mediation.
-    implementation 'com.senspark.ee:iron-source-mediation:1.4.0'
+    implementation 'com.senspark.ee:iron-source-mediation:2.0.0'
 }
-```
-
-#### For `ndk-build` users
-Modify `Android.mk`
-```
-LOCAL_STATIC_LIBRARIES += ee_x_iron_source
-```
-
-#### For `cmake` users
-Modify `CMakeLists.txt`
-```
-target_link_libraries(${PROJECT_NAME} ee_x_iron_source)
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/iron-source'
+pod 'ee-x/iron-source-mediation'
 ```
 
 ## Basic usage

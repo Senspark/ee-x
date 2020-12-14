@@ -4,20 +4,8 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-performance:1.4.0'
+    implementation 'com.senspark.ee:firebase-performance:2.0.0'
 }
-```
-
-#### For `ndk-build` users
-Modify `Android.mk`
-```
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_performance
-```
-
-#### For `cmake` users
-Modify `CMakeLists.txt`
-```
-target_link_libraries(${PROJECT_NAME} ee_x_firebase_performance)
 ```
 
 ### iOS

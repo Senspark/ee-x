@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '1.4.0'
+  spec.version        = '2.0.0'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v1.4.0'
+    :tag => 'v2.0.0'
   }
 
   spec.framework = 'Foundation'
@@ -107,27 +107,27 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/json'
   end
 
-  spec.subspec 'ios-ad-colony' do |s|
+  spec.subspec 'ad-colony' do |s|
     s.source_files = 'src/ios/ee/ad_colony/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
     s.dependency 'AdColony', '4.4.0'
   end
 
-  spec.subspec 'ios-ad-mob' do |s|
+  spec.subspec 'ad-mob' do |s|
     s.source_files = 'src/ios/ee/ad_mob/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
     # FIXME: use 7.68.0
     s.dependency 'Google-Mobile-Ads-SDK', '7.67.0'
   end
 
-  spec.subspec 'ios-ad-mob-mediation' do |s|
-    s.dependency 'ee-x/ios-ad-mob'
+  spec.subspec 'ad-mob-mediation' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://bintray.com/google/mobile-ads-adapters-ios
 
@@ -154,50 +154,65 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationVungle', '6.8.1.0'
   end
 
-  spec.subspec 'ios-ads' do |s|
+  spec.subspec 'ads' do |s|
     s.source_files = 'src/ios/ee/ads/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'ios-adjust' do |s|
+  spec.subspec 'adjust' do |s|
     s.source_files = 'src/ios/ee/adjust/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
 
     # https://github.com/adjust/ios_sdk
     s.dependency 'Adjust', '4.23.2'
   end
 
-  spec.subspec 'ios-app-lovin' do |s|
+  spec.subspec 'app-lovin' do |s|
     s.source_files = 'src/ios/ee/app_lovin/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
     # FIXME: use 6.14.6
     s.dependency 'AppLovinSDK', '6.14.4'
   end
 
-  spec.subspec 'ios-apps-flyer' do |s|
+  spec.subspec 'apps-flyer' do |s|
     s.source_files = 'src/ios/ee/apps_flyer/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
     s.dependency 'AppsFlyerFramework', '6.1.1'
   end
 
-  spec.subspec 'ios-core' do |s|
+  spec.subspec 'core' do |s|
     s.source_files = 'src/ios/ee/core/**/*'
     s.header_mappings_dir = 'src/ios'
+    s.user_target_xcconfig = {
+      'LD_RUNPATH_SEARCH_PATHS' => [
+        '/usr/lib/swift',
+        # Fix: dyld: Library not loaded: @rpath/libswiftCore.dylib
+        '@executable_path/Frameworks',
+        '@loader_path/Frameworks'
+      ].join(' '),
+      'LIBRARY_SEARCH_PATHS' => [
+        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
+        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
+        '$(SDKROOT)/usr/lib/swift' # Fix __swift_FORCE_LOAD_$_swiftCoreMIDI (XCode 12).
+      ].join(' '),
+      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
+      'DEAD_CODE_STRIPPING' => 'YES'
+    }
     s.library = 'swiftCore'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift'
   end
 
-  spec.subspec 'ios-facebook' do |s|
+  spec.subspec 'facebook' do |s|
     s.source_files = 'src/ios/ee/facebook/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
 
     # https://github.com/facebook/facebook-ios-sdk/releases
     s.dependency 'FBSDKCoreKit', '8.2.0'
@@ -205,54 +220,54 @@ Pod::Spec.new do |spec|
     s.dependency 'FBSDKShareKit', '8.2.0'
   end
 
-  spec.subspec 'ios-facebook-ads' do |s|
+  spec.subspec 'facebook-ads' do |s|
     s.source_files = 'src/ios/ee/facebook_ads/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
     # FIXME: use 6.2.0
     s.dependency 'FBAudienceNetwork', '6.0.0'
   end
 
-  spec.subspec 'ios-firebase-core' do |s|
+  spec.subspec 'firebase-x-core' do |s|
     s.source_files = 'src/ios/ee/firebase_core/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
     s.dependency 'Firebase/Core', '6.34'
   end
 
-  spec.subspec 'ios-firebase-crashlytics' do |s|
+  spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-firebase-core'
+    s.dependency 'ee-x/firebase-x-core'
     s.dependency 'Firebase/Crashlytics', '6.34'
   end
 
-  spec.subspec 'ios-firebase-performance' do |s|
+  spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ios/ee/firebase_performance/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-firebase-core'
+    s.dependency 'ee-x/firebase-x-core'
     s.dependency 'Firebase/Performance', '6.34'
   end
 
-  spec.subspec 'ios-iron-source' do |s|
+  spec.subspec 'iron-source' do |s|
     s.source_files = 'src/ios/ee/iron_source/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
     # FIXME: use 7.0.3.0
     s.dependency 'IronSourceSDK', '7.0.2.0'
   end
 
-  spec.subspec 'ios-iron-source-mediation' do |s|
-    s.dependency 'ee-x/ios-iron-source'
+  spec.subspec 'iron-source-mediation' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
     # FIXME: use 4.3.4.1
     s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'ee-x/ios-ad-colony'
+    s.dependency 'ee-x/ad-colony'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     # Wait for supported adapter.
@@ -275,98 +290,48 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceVungleAdapter', '4.3.7.0'
   end
 
-  spec.subspec 'ios-notification' do |s|
+  spec.subspec 'notification' do |s|
     s.source_files = 'src/ios/ee/notification/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'ios-play' do |s|
+  spec.subspec 'play' do |s|
     s.source_files = 'src/ios/ee/play/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'ios-recorder' do |s|
+  spec.subspec 'recorder' do |s|
     s.source_files = 'src/ios/ee/recorder/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
   end
 
-  spec.subspec 'ios-store' do |s|
+  spec.subspec 'store' do |s|
     s.source_files = 'src/ios/ee/store/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-core'
+    s.dependency 'ee-x/core'
     s.dependency 'TPInAppReceipt'
   end
 
-  spec.subspec 'ios-unity-ads' do |s|
+  spec.subspec 'unity-ads' do |s|
     s.source_files = 'src/ios/ee/unity_ads/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
     # FIXME: use 3.5.1
     s.dependency 'UnityAds', '3.4.8'
   end
 
-  spec.subspec 'ios-vungle' do |s|
+  spec.subspec 'vungle' do |s|
     s.source_files = 'src/ios/ee/vungle/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/ios-ads'
+    s.dependency 'ee-x/ads'
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
     s.dependency 'VungleSDK-iOS', '6.8.0'
-  end
-
-  spec.subspec 'core' do |s|
-    s.source_files =
-      'src/ee/ee.h',
-      'src/ee/Macro.hpp',
-      'src/ee/Core*',
-      'src/ee/core/**/*'
-
-    s.private_header_files =
-      'src/ee/core/private/*.{h,hpp,inl}'
-    
-    s.exclude_files =
-      'src/ee/core/Android.mk',
-      'src/ee/core/CMakeLists.txt',
-      'src/ee/core/generate.sh',
-      'src/ee/core/sourcelist.cmake',
-      'src/ee/core/**/*Android*',
-      'src/ee/core/**/Jni*'
-
-    s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a',
-      'OTHER_CPLUSPLUSFLAGS' => '-fcoroutines-ts',
-      'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => [
-        '$(inherited)',
-        'NDEBUG'
-      ].join(' ')
-    }
-
-    # Fix linking errors with Facebook SDK 7.
-    s.user_target_xcconfig = {
-      'LD_RUNPATH_SEARCH_PATHS' => [
-        '/usr/lib/swift',
-        # Fix: dyld: Library not loaded: @rpath/libswiftCore.dylib
-        '@executable_path/Frameworks',
-        '@loader_path/Frameworks'
-      ].join(' '),
-      'LIBRARY_SEARCH_PATHS' => [
-        '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
-        '$(SDKROOT)/usr/lib/swift' # Fix __swift_FORCE_LOAD_$_swiftCoreMIDI (XCode 12).
-      ].join(' '),
-      # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
-      'DEAD_CODE_STRIPPING' => 'YES'
-    }
-
-    s.library = 'swiftCore'
-    s.dependency 'ee-x/json'
-    s.dependency 'ReachabilitySwift'
-    s.dependency 'RxSwift'
   end
 
   # Fix duplicated UUID since there are many common.h files.

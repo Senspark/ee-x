@@ -16,7 +16,7 @@ private let kSetPushToken = "\(kPrefix)SetPushToken"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAdjustBridge)
-public class AdjustBridge: NSObject, IPlugin {
+class AdjustBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {

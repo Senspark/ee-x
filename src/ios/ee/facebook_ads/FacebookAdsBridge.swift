@@ -25,7 +25,7 @@ private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
 @objc(EEFacebookAdsBridge)
-public class FacebookAdsBridge: NSObject, IPlugin {
+class FacebookAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initializing = false

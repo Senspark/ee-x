@@ -12,7 +12,7 @@ private let kShowAllLeaderboards = "\(kPrefix)ShowAllLeaderboards"
 private let kSubmitScore = "\(kPrefix)SubmitScore"
 
 @objc(EEPlayBridge)
-public class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
+class PlayBridge: NSObject, IPlugin, GKGameCenterControllerDelegate {
     private let _bridge: IMessageBridge
     private var _isLoggingIn = false
     

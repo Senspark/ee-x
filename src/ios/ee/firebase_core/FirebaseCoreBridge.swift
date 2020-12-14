@@ -6,7 +6,7 @@
 //
 
 @objc(EEFirebaseCoreBridge)
-public class FirebaseCoreBridge: NSObject, IPlugin {
+class FirebaseCoreBridge: NSObject, IPlugin {
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         super.init()
         FirebaseApp.configure()

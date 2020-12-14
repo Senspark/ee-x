@@ -20,7 +20,7 @@ private let kLoadRewardedAd = "\(kPrefix)LoadRewardedAd"
 private let kShowRewardedAd = "\(kPrefix)ShowRewardedAd"
 
 @objc(EEAppLovinBridge)
-public class AppLovinBridge: NSObject, IPlugin {
+class AppLovinBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initializing = false

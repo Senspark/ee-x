@@ -9,10 +9,6 @@
 #ifndef EE_X_FIREBASE_CORE_BRIDGE_HPP
 #define EE_X_FIREBASE_CORE_BRIDGE_HPP
 
-#ifdef __OBJC__
-#import <FirebaseCore/FIRApp.h>
-#endif // __OBJC__
-
 #ifdef __cplusplus
 
 #include "ee/FirebaseFwd.hpp"

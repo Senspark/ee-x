@@ -9,7 +9,7 @@ private let kPrefix = "FirebaseCrashlyticsBridge"
 private let kLog = "\(kPrefix)Log"
 
 @objc(EEFirebaseCrashlyticsBridge)
-public class FirebaseCrashlyticsBridge: NSObject, IPlugin {
+class FirebaseCrashlyticsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _crashlytics = Crashlytics.crashlytics()
     

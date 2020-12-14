@@ -21,7 +21,7 @@ private let kOnClicked = "\(kPrefix)OnClicked"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
 @objc(EEVungleBridge)
-public class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
+class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _sdk = VungleSDK.shared()

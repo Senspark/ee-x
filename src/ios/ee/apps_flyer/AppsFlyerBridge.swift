@@ -17,7 +17,7 @@ private let kSetStopTracking = "\(kPrefix)SetStopTracking"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAppsFlyerBridge)
-public class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
+class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _tracker = AppsFlyerLib.shared()

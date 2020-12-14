@@ -23,7 +23,7 @@ private let kAddTransactionObserver = "\(kPrefix)AddTransactionObserver"
 private let kCallback = "\(kPrefix)Callback"
 
 @objc(EEStoreBridge)
-public class StoreBridge: NSObject, IPlugin {
+class StoreBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _unityPurchasing = StoreUnityPurchasing()
 

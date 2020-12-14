@@ -24,7 +24,7 @@ private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 
 @objc(EEAdMobBridge)
-public class AdMobBridge: NSObject, IPlugin {
+class AdMobBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initializing = false

@@ -187,9 +187,7 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'ios-core' do |s|
-    s.source_files =
-      'src/ios/ee/ee.h',
-      'src/ios/ee/core/**/*'
+    s.source_files = 'src/ios/ee/core/**/*'
     s.header_mappings_dir = 'src/ios'
     s.library = 'swiftCore'
     s.dependency 'ReachabilitySwift'

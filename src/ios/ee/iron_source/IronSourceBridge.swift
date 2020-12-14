@@ -27,8 +27,7 @@ private let kOnRewardedAdClicked = "\(kPrefix)OnRewardedAdClicked"
 private let kOnRewardedAdClosed = "\(kPrefix)OnRewardedAdClosed"
 
 @objc(EEIronSourceBridge)
-public class IronSourceBridge:
-    NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstitialDelegate {
+class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstitialDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initialized = false

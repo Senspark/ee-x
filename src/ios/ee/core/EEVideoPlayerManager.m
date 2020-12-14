@@ -5,11 +5,11 @@
 //  Created by eps on 1/31/18.
 //
 
-#import "ee/core/private/EEVideoPlayerManager.h"
+#import "ee/core/EEVideoPlayerManager.h"
 
 #import <ee-Swift.h>
 
-#import "ee/core/private/EEVideoPlayer.h"
+#import "ee/core/EEVideoPlayer.h"
 
 /*
 @implementation EEVideoPlayerManager {

@@ -12,7 +12,7 @@ private let kPrefix = "AdColonyBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 
 @objc(EEAdColonyBridge)
-public class AdColonyBridge: NSObject, IPlugin {
+class AdColonyBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initializing = false

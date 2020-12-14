@@ -57,8 +57,7 @@ public:
     /// Creates an app open ad.
     /// @param[in] adId The ad unit ID.
     virtual std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::string& adId,
-                    AppOpenAdOrientation orientation) = 0;
+    createAppOpenAd(const std::string& adId) = 0;
 };
 } // namespace admob
 } // namespace ee

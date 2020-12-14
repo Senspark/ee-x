@@ -28,8 +28,7 @@ private:
     explicit AppOpenAd(
         IMessageBridge& bridge, const Logger& logger,
         const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-        Bridge* plugin, const std::string& adId,
-        AppOpenAdOrientation orientation);
+        Bridge* plugin, const std::string& adId);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);
@@ -41,7 +40,6 @@ private:
     std::shared_ptr<ads::IAsyncHelper<bool>> displayer_;
     Bridge* plugin_;
     std::string adId_;
-    AppOpenAdOrientation orientation_;
     ads::MessageHelper messageHelper_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;

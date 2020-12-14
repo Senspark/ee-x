@@ -281,8 +281,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
 }
 
 std::shared_ptr<IInterstitialAd>
-Self::createAppOpenAd(const std::string& adId,
-                      AppOpenAdOrientation orientation) {
+Self::createAppOpenAd(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = appOpenAds_.find(adId);
     if (iter != appOpenAds_.cend()) {
@@ -296,9 +295,8 @@ Self::createAppOpenAd(const std::string& adId,
         return nullptr;
     }
     auto ad = std::make_shared<ads::GuardedInterstitialAd>(
-        std::shared_ptr<IInterstitialAd>(
-            new AppOpenAd(bridge_, logger_, interstitialAdDisplayer_, this,
-                          adId, orientation)));
+        std::shared_ptr<IInterstitialAd>(new AppOpenAd(
+            bridge_, logger_, interstitialAdDisplayer_, this, adId)));
     appOpenAds_.emplace(adId, ad);
     return ad;
 }

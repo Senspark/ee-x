@@ -20,11 +20,14 @@ namespace EE.Internal {
         private const string kDestroyInterstitialAd = kPrefix + "DestroyInterstitialAd";
         private const string kCreateRewardedAd = kPrefix + "CreateRewardedAd";
         private const string kDestroyRewardedAd = kPrefix + "DestroyRewardedAd";
+        private const string kCreateAppOpenAd = kPrefix + "CreateAppOpenAd";
+        private const string kDestroyAppOpenAd = kPrefix + "DestroyAppOpenAd";
 
         private readonly IMessageBridge _bridge;
         private readonly Dictionary<string, IAdView> _bannerAds;
         private readonly Dictionary<string, IInterstitialAd> _interstitialAds;
         private readonly Dictionary<string, IRewardedAd> _rewardedAds;
+        private readonly Dictionary<string, IInterstitialAd> _appOpenAds;
         private readonly IAsyncHelper<bool> _interstitialAdDisplayer;
         private readonly IAsyncHelper<IRewardedAdResult> _rewardedAdDisplayer;
 
@@ -33,6 +36,7 @@ namespace EE.Internal {
             _bannerAds = new Dictionary<string, IAdView>();
             _interstitialAds = new Dictionary<string, IInterstitialAd>();
             _rewardedAds = new Dictionary<string, IRewardedAd>();
+            _appOpenAds = new Dictionary<string, IInterstitialAd>();
             _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
             _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
         }
@@ -47,9 +51,13 @@ namespace EE.Internal {
             foreach (var ad in _rewardedAds.Values) {
                 ad.Destroy();
             }
+            foreach (var ad in _appOpenAds.Values) {
+                ad.Destroy();
+            }
             _bannerAds.Clear();
             _interstitialAds.Clear();
             _rewardedAds.Clear();
+            _appOpenAds.Clear();
         }
 
         public async Task<bool> Initialize() {
@@ -167,6 +175,33 @@ namespace EE.Internal {
                 return false;
             }
             _rewardedAds.Remove(adId);
+            return true;
+        }
+
+        public IInterstitialAd CreateAppOpenAd(string adId) {
+            if (_appOpenAds.TryGetValue(adId, out var result)) {
+                return result;
+            }
+            var response = _bridge.Call(kCreateAppOpenAd, adId);
+            if (!Utils.ToBool(response)) {
+                Assert.IsTrue(false);
+                return null;
+            }
+            var ad = new GuardedInterstitialAd(new AdMobAppOpenAd(_bridge, _interstitialAdDisplayer, this, adId));
+            _appOpenAds.Add(adId, ad);
+            return ad;
+        }
+
+        internal bool DestroyAppOpenAd(string adId) {
+            if (!_appOpenAds.ContainsKey(adId)) {
+                return false;
+            }
+            var response = _bridge.Call(kDestroyAppOpenAd, adId);
+            if (!Utils.ToBool(response)) {
+                Assert.IsTrue(false);
+                return false;
+            }
+            _appOpenAds.Remove(adId);
             return true;
         }
     }

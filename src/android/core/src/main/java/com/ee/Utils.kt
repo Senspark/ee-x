@@ -1,6 +1,8 @@
 package com.ee
 
 import android.app.Activity
+import android.app.Application
+import android.content.res.Configuration
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
@@ -43,6 +45,10 @@ object Utils {
     @UiThread
     fun getRootView(activity: Activity): FrameLayout {
         return activity.findViewById<View>(android.R.id.content).rootView as FrameLayout
+    }
+
+    fun isLandscape(application: Application): Boolean {
+        return application.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
     @AnyThread

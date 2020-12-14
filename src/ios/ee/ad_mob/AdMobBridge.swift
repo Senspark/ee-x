@@ -22,6 +22,8 @@ private let kCreateInterstitialAd = "\(kPrefix)CreateInterstitialAd"
 private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
+private let kCreateAppOpenAd = "\(kPrefix)CreateAppOpenAd"
+private let kDestroyAppOpenAd = "\(kPrefix)DestroyAppOpenAd"
 
 @objc(EEAdMobBridge)
 class AdMobBridge: NSObject, IPlugin {
@@ -35,6 +37,7 @@ class AdMobBridge: NSObject, IPlugin {
     private var _nativeAds: [String: AdMobNativeAd] = [:]
     private var _interstitialAds: [String: AdMobInterstitialAd] = [:]
     private var _rewardedAds: [String: AdMobRewardedAd] = [:]
+    private var _appOpenAds: [String: AdMobAppOpenAd] = [:]
 
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
@@ -53,6 +56,8 @@ class AdMobBridge: NSObject, IPlugin {
         _interstitialAds.removeAll()
         _rewardedAds.values.forEach { $0.destroy() }
         _rewardedAds.removeAll()
+        _appOpenAds.values.forEach { $0.destroy() }
+        _appOpenAds.removeAll()
     }
 
     func registerHandlers() {
@@ -121,6 +126,12 @@ class AdMobBridge: NSObject, IPlugin {
         _bridge.registerHandler(kDestroyRewardedAd) { message in
             Utils.toString(self.destroyRewardedAd(message))
         }
+        _bridge.registerHandler(kCreateAppOpenAd) { message in
+            Utils.toString(self.createAppOpenAd(message))
+        }
+        _bridge.registerHandler(kDestroyRewardedAd) { message in
+            Utils.toString(self.destroyAppOpenAd(message))
+        }
     }
 
     func deregisterHandlers() {
@@ -136,6 +147,8 @@ class AdMobBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyInterstitialAd)
         _bridge.deregisterHandler(kCreateRewardedAd)
         _bridge.deregisterHandler(kDestroyRewardedAd)
+        _bridge.deregisterHandler(kCreateAppOpenAd)
+        _bridge.deregisterHandler(kDestroyAppOpenAd)
     }
 
     func initialize() -> Single<Bool> {
@@ -244,6 +257,24 @@ class AdMobBridge: NSObject, IPlugin {
         }
         ad.destroy()
         _rewardedAds.removeValue(forKey: adId)
+        return true
+    }
+
+    func createAppOpenAd(_ adId: String) -> Bool {
+        if _appOpenAds.contains(where: { key, _ in key == adId }) {
+            return false
+        }
+        let ad = AdMobAppOpenAd(_bridge, _logger, adId)
+        _appOpenAds[adId] = ad
+        return true
+    }
+
+    func destroyAppOpenAd(_ adId: String) -> Bool {
+        guard let ad = _appOpenAds[adId] else {
+            return false
+        }
+        ad.destroy()
+        _appOpenAds.removeValue(forKey: adId)
         return true
     }
 }

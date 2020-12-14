@@ -15,7 +15,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import com.google.android.gms.ads.appopen.AppOpenAd
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
@@ -209,14 +208,10 @@ class AdMobBridge(
             Utils.toString(destroyRewardedAd(message))
         }
         _bridge.registerHandler(kCreateAppOpenAd) { message ->
-            @Serializable
-            class Request(
-                val adId: String,
-                val orientation: Int
-            )
-
-            val request = deserialize<Request>(message)
-            Utils.toString(createAppOpenAd(request.adId, request.orientation))
+            Utils.toString(createAppOpenAd(message))
+        }
+        _bridge.registerHandler(kDestroyAppOpenAd) { message ->
+            Utils.toString(destroyAppOpenAd(message))
         }
     }
 
@@ -352,11 +347,11 @@ class AdMobBridge(
     }
 
     @AnyThread
-    fun createAppOpenAd(adId: String, @AppOpenAd.AppOpenAdOrientation orientation: Int): Boolean {
+    fun createAppOpenAd(adId: String): Boolean {
         if (_appOpenAds.containsKey(adId)) {
             return false
         }
-        val ad = AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId, orientation)
+        val ad = AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId)
         _appOpenAds[adId] = ad
         return true
     }

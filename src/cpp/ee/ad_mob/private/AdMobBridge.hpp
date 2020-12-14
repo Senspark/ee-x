@@ -35,8 +35,7 @@ public:
     virtual std::shared_ptr<IRewardedAd>
     createRewardedAd(const std::string& adId) override;
     virtual std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::string& adId,
-                    AppOpenAdOrientation orientation) override;
+    createAppOpenAd(const std::string& adId) override;
 
 private:
     friend BannerAd;

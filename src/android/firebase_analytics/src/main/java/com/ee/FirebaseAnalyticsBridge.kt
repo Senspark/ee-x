@@ -7,6 +7,7 @@ import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
@@ -53,7 +54,7 @@ class FirebaseAnalyticsBridge(
             @Serializable
             class Request(
                 val name: String,
-                val parameters: Map<String, FirebaseEventParameter>
+                val parameters: Map<String, @Contextual FirebaseEventParameter>
             )
 
             val request = deserialize<Request>(message)

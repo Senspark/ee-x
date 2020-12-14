@@ -49,11 +49,12 @@ IMessageBridge* bridge_ = nullptr;
 } // namespace
 
 #if defined(EE_X_ANDROID)
-bool ee_staticInitializePlugins() {
+bool ee_staticInitializePlugins(const char* version) {
     return JniUtils::callStaticBooleanMethod( //
         "com/ee/PluginManagerKt",             //
         "ee_staticInitializePlugins",         //
-        "()Z");
+        "(Ljava/lang/String;)Z",              //
+        JniUtils::toJavaString(version)->get());
 }
 
 void ee_staticSetLogLevel(int level) {
@@ -61,7 +62,7 @@ void ee_staticSetLogLevel(int level) {
         "com/ee/PluginManagerKt",   //
         "ee_staticSetLogLevel",     //
         "(I)V",                     //
-        level);                     //
+        level);
 }
 
 void* ee_staticGetActivity() {

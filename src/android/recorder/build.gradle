@@ -15,13 +15,6 @@ android {
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
-    applyPrefabSettings(this, 'ee_x_recorder', [
-        'ee/Recorder*',
-        'ee/recorder/*.hpp'
-    ])
-}
-
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
     configureAndPublish('recorder')
 } else {

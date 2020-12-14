@@ -17,12 +17,6 @@ android {
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
-    applyPrefabSettings(this, 'ee_x_firebase_remote_config', [
-        'ee/firebase/remote_config/*.hpp'
-    ])
-}
-
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
     configureAndPublish('firebase-remote-config')
 } else {

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.buildToolsVersion
@@ -8,12 +10,11 @@ android {
         minSdkVersion 16
         targetSdkVersion rootProject.targetSdkVersion
     }
-}
 
-if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
-    applyPrefabSettings(this, 'ee_x_firebase_analytics', [
-        'ee/firebase/analytics/*.hpp'
-    ])
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {

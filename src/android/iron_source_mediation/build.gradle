@@ -29,8 +29,6 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    api project(':ee-x-iron-source')
-
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
     api 'com.ironsource.adapters:adcolonyadapter:4.3.4'

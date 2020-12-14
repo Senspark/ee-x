@@ -1,6 +1,3 @@
-// https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
-// https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
@@ -20,13 +17,6 @@ android {
     }
 }
 
-if (rootProject.ext.has('buildPrefab') && rootProject.buildPrefab) {
-    applyPrefabSettings(this, 'ee_x_apps_flyer', [
-        'ee/AppsFlyer*',
-        'ee/apps_flyer/*.hpp'
-    ])
-}
-
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
     configureAndPublish('apps-flyer')
 } else {
@@ -43,6 +33,8 @@ dependencies {
     api 'com.android.installreferrer:installreferrer:2.1'
 
     // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
+    // https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
+    // https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
     api 'com.appsflyer:af-android-sdk:5.4.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

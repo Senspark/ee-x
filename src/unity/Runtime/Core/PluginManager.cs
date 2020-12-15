@@ -13,6 +13,7 @@ namespace EE {
         Facebook,
         FacebookAds,
         FirebaseCrashlytics,
+        FirebasePerformance,
         IronSource,
         Play,
         UnityAds,
@@ -41,9 +42,12 @@ namespace EE {
                 [typeof(IAdjust)] = (Plugin.Adjust, bridge => new Adjust(bridge)),
                 [typeof(IAdMob)] = (Plugin.AdMob, bridge => new AdMob(bridge)),
                 [typeof(IFacebookAds)] = (Plugin.FacebookAds, bridge => new FacebookAds(bridge)),
-                [typeof(IFirebaseCrashlytics)] = (Plugin.FirebaseCrashlytics, bridge => new FirebaseCrashlytics(bridge)),
+                [typeof(IFirebaseCrashlytics)] =
+                    (Plugin.FirebaseCrashlytics, bridge => new FirebaseCrashlytics(bridge)),
+                [typeof(IFirebasePerformance)] =
+                    (Plugin.FirebasePerformance, bridge => new FirebasePerformance(bridge)),
                 [typeof(IIronSource)] = (Plugin.IronSource, bridge => new IronSource(bridge)),
-                [typeof(IUnityAds)] = (Plugin.UnityAds, bridge => new UnityAds(bridge)),
+                [typeof(IUnityAds)] = (Plugin.UnityAds, bridge => new UnityAds(bridge))
             };
 
         private static readonly Dictionary<Plugin, IPlugin> _plugins = new Dictionary<Plugin, IPlugin>();

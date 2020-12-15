@@ -5,8 +5,8 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/firebase_performance/FirebasePerformanceBridge.hpp"
-#include "ee/firebase_performance/FirebasePerformanceTrace.hpp"
+#include "ee/firebase_performance/IFirebasePerformanceBridge.hpp"
+#include "ee/firebase_performance/IFirebasePerformanceTrace.hpp"
 
 #endif // __cplusplus
 

@@ -28,7 +28,6 @@
 // clang-format off
 static NSString* const k__setDataCollectionEnabled  = kPrefix "SetDataCollectionEnabled";
 static NSString* const k__isDataCollectionEnabled   = kPrefix "IsDataCollectionEnabled";
-static NSString* const k__startTrace                = kPrefix "StartTrace";
 static NSString* const k__newTrace                  = kPrefix "NewTrace";
 // clang-format on
 
@@ -62,12 +61,6 @@ static NSString* const k__newTrace                  = kPrefix "NewTrace";
         }];
 
     [bridge registerHandler:
-              k__startTrace:^(NSString* message) {
-                  NSString* traceName = message;
-                  return [EEUtils toString:[self startTrace:traceName]];
-              }];
-
-    [bridge registerHandler:
                 k__newTrace:^(NSString* message) {
                     NSString* traceName = message;
                     return [EEUtils toString:[self newTrace:traceName]];
@@ -79,7 +72,6 @@ static NSString* const k__newTrace                  = kPrefix "NewTrace";
 
     [bridge deregisterHandler:k__setDataCollectionEnabled];
     [bridge deregisterHandler:k__isDataCollectionEnabled];
-    [bridge deregisterHandler:k__startTrace];
     [bridge deregisterHandler:k__newTrace];
 }
 
@@ -96,18 +88,6 @@ static NSString* const k__newTrace                  = kPrefix "NewTrace";
         return NO;
     }
     FIRTrace* trace = [[FIRPerformance sharedInstance] traceWithName:traceName];
-    EEFirebasePerformanceTrace* wrapper = [[[EEFirebasePerformanceTrace alloc]
-        initWithTraceName:traceName
-                    trace:trace] autorelease];
-    [traces_ setObject:wrapper forKey:traceName];
-    return YES;
-}
-
-- (BOOL)startTrace:(NSString*)traceName {
-    if ([traces_ objectForKey:traceName] != nil) {
-        return NO;
-    }
-    FIRTrace* trace = [FIRPerformance startTraceWithName:traceName];
     EEFirebasePerformanceTrace* wrapper = [[[EEFirebasePerformanceTrace alloc]
         initWithTraceName:traceName
                     trace:trace] autorelease];

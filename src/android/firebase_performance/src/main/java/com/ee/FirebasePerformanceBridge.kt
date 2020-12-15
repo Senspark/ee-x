@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.FirebasePerformanceTrace
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.perf.ktx.performance
 import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
@@ -18,11 +20,10 @@ class FirebasePerformanceBridge(
         private const val kPrefix = "FirebasePerformanceBridge"
         private const val kSetDataCollectionEnabled = "${kPrefix}SetDataCollectionEnabled"
         private const val kIsDataCollectionEnabled = "${kPrefix}IsDataCollectionEnabled"
-        private const val kStartTrace = "${kPrefix}StartTrace"
         private const val kNewTrace = "${kPrefix}NewTrace"
     }
 
-    private val _performance = com.google.firebase.perf.FirebasePerformance.getInstance()
+    private val _performance = Firebase.performance
     private val _traces: MutableMap<String, FirebasePerformanceTrace> = ConcurrentHashMap()
 
     init {
@@ -55,9 +56,6 @@ class FirebasePerformanceBridge(
         _bridge.registerHandler(kIsDataCollectionEnabled) {
             Utils.toString(isDataCollectionEnabled)
         }
-        _bridge.registerHandler(kStartTrace) { message ->
-            Utils.toString(startTrace(message))
-        }
         _bridge.registerHandler(kNewTrace) { message ->
             Utils.toString(newTrace(message))
         }
@@ -68,7 +66,6 @@ class FirebasePerformanceBridge(
         _bridge.deregisterHandler(kSetDataCollectionEnabled)
         _bridge.deregisterHandler(kIsDataCollectionEnabled)
         _bridge.deregisterHandler(kNewTrace)
-        _bridge.deregisterHandler(kStartTrace)
     }
 
     private var isDataCollectionEnabled: Boolean
@@ -76,16 +73,6 @@ class FirebasePerformanceBridge(
         @AnyThread set(value) {
             _performance.isPerformanceCollectionEnabled = value
         }
-
-    @AnyThread
-    fun startTrace(traceName: String): Boolean {
-        if (_traces.containsKey(traceName)) {
-            return false
-        }
-        val trace = com.google.firebase.perf.FirebasePerformance.startTrace(traceName)
-        _traces[traceName] = FirebasePerformanceTrace(_bridge, trace, traceName)
-        return true
-    }
 
     @AnyThread
     fun newTrace(traceName: String): Boolean {

@@ -11,7 +11,6 @@
 
 - (void)setDataCollectionEnabled:(bool)enabled;
 - (BOOL)isDataCollectionEnabled;
-- (BOOL)startTrace:(NSString* _Nonnull)traceName;
 - (BOOL)newTrace:(NSString* _Nonnull)traceName;
 
 @end

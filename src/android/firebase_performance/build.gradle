@@ -27,7 +27,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     api platform("com.google.firebase:firebase-bom:$firebaseVersion")
-    api 'com.google.firebase:firebase-perf'
+    api 'com.google.firebase:firebase-perf-ktx'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'

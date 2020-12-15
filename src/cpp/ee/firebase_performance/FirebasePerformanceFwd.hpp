@@ -8,13 +8,15 @@
 namespace ee {
 namespace firebase {
 namespace performance {
+class IBridge;
+class ITrace;
 class Bridge;
 class Trace;
 } // namespace performance
 } // namespace firebase
 
-using FirebasePerformance = firebase::performance::Bridge;
-using FirebasePerformanceTrace = firebase::performance::Trace;
+using IFirebasePerformance = firebase::performance::IBridge;
+using IFirebasePerformanceTrace = firebase::performance::ITrace;
 } // namespace ee
 
 #endif // __cplusplus

@@ -35,6 +35,8 @@ class FirebaseCrashlyticsBridge: NSObject, IPlugin {
     }
     
     func log(_ message: String) {
-        _crashlytics.log(message)
+        Thread.runOnMainThread {
+            self._crashlytics.log(message)
+        }
     }
 }

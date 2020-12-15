@@ -50,6 +50,8 @@ class FirebaseCrashlyticsBridge(
 
     @AnyThread
     fun log(message: String) {
-        _crashlytics.log(message)
+        Thread.runOnMainThread {
+            _crashlytics.log(message)
+        }
     }
 }

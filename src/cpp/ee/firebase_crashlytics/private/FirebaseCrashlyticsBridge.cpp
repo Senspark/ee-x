@@ -25,9 +25,7 @@ const auto kLog = kPrefix + "Log";
 using Self = Bridge;
 
 Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {
-    PluginManager::addPlugin(Plugin::FirebaseCrashlytics);
-}
+    : bridge_(bridge) {}
 
 Self::~Bridge() = default;
 

@@ -12,6 +12,7 @@ namespace EE {
         AppsFlyer,
         Facebook,
         FacebookAds,
+        FirebaseCrashlytics,
         IronSource,
         Play,
         UnityAds,
@@ -27,6 +28,7 @@ namespace EE {
             [Plugin.AppsFlyer] = "AppsFlyer",
             [Plugin.Facebook] = "Facebook",
             [Plugin.FacebookAds] = "FacebookAds",
+            [Plugin.FirebaseCrashlytics] = "FirebaseCrashlytics",
             [Plugin.IronSource] = "IronSource",
             [Plugin.Play] = "Play",
             [Plugin.UnityAds] = "UnityAds",
@@ -39,6 +41,7 @@ namespace EE {
                 [typeof(IAdjust)] = (Plugin.Adjust, bridge => new Adjust(bridge)),
                 [typeof(IAdMob)] = (Plugin.AdMob, bridge => new AdMob(bridge)),
                 [typeof(IFacebookAds)] = (Plugin.FacebookAds, bridge => new FacebookAds(bridge)),
+                [typeof(IFirebaseCrashlytics)] = (Plugin.FirebaseCrashlytics, bridge => new FirebaseCrashlytics(bridge)),
                 [typeof(IIronSource)] = (Plugin.IronSource, bridge => new IronSource(bridge)),
                 [typeof(IUnityAds)] = (Plugin.UnityAds, bridge => new UnityAds(bridge)),
             };

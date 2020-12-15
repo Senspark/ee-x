@@ -81,10 +81,13 @@ class AdColonyBridge(
                 }
                 _initializing = true
                 val result = AdColony.configure(_activity, appId, *zoneIds.toTypedArray())
-                _initializing = false
                 if (result) {
-                    _initialized = true
+                    // OK.
+                } else {
+                    _logger.error("$kTag: initialize: result = $result")
                 }
+                _initializing = false
+                _initialized = true
                 _logger.info("$kTag: initialize: result = $result version = ${AdColony.getSDKVersion()}")
                 cont.resume(true)
             }

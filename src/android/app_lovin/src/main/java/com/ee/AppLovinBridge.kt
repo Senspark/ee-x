@@ -11,8 +11,8 @@ import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinInterstitialAdListener
 import com.ee.internal.AppLovinRewardedAdListener
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
@@ -128,9 +128,15 @@ class AppLovinBridge(
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(key: String): Boolean {
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
                     cont.resume(false)
@@ -144,6 +150,11 @@ class AppLovinBridge(
                 val settings = AppLovinSdkSettings()
                 val sdk = AppLovinSdk.getInstance(key, settings, _application)
                 sdk.initializeSdk {
+                    if (cont.isActive) {
+                        // OK.
+                    } else {
+                        return@initializeSdk
+                    }
                     Thread.runOnMainThread {
                         _initializing = false
                         _initialized = true
@@ -172,7 +183,8 @@ class AppLovinBridge(
     @AnyThread
     fun setVerboseLogging(enabled: Boolean) {
         Thread.runOnMainThread {
-            val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val sdk = _sdk ?: return@runOnMainThread
             sdk.settings.setVerboseLogging(enabled)
         }
     }
@@ -180,7 +192,8 @@ class AppLovinBridge(
     @AnyThread
     fun setMuted(enabled: Boolean) {
         Thread.runOnMainThread {
-            val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val sdk = _sdk ?: return@runOnMainThread
             sdk.settings.isMuted = enabled
         }
     }
@@ -191,7 +204,8 @@ class AppLovinBridge(
     @AnyThread
     fun loadInterstitialAd() {
         Thread.runOnMainThread {
-            val sdk = _sdk ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val sdk = _sdk ?: return@runOnMainThread
             sdk.adService.loadNextAd(AppLovinAdSize.INTERSTITIAL, _interstitialAdListener)
         }
     }
@@ -199,8 +213,8 @@ class AppLovinBridge(
     @AnyThread
     fun showInterstitialAd() {
         Thread.runOnMainThread {
-            val ad = _interstitialAd
-                ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val ad = _interstitialAd ?: return@runOnMainThread
             ad.show()
         }
     }
@@ -211,7 +225,8 @@ class AppLovinBridge(
     @AnyThread
     fun loadRewardedAd() {
         Thread.runOnMainThread {
-            val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val ad = _rewardedAd ?: return@runOnMainThread
             ad.preload(_rewardedAdListener)
         }
     }
@@ -219,7 +234,8 @@ class AppLovinBridge(
     @AnyThread
     fun showRewardedAd() {
         Thread.runOnMainThread {
-            val ad = _rewardedAd ?: throw IllegalStateException("Please call initialize() first")
+            checkInitialized()
+            val ad = _rewardedAd ?: return@runOnMainThread
             ad.show(_application, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener)
         }
     }

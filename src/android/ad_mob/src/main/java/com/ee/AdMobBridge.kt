@@ -15,11 +15,11 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 10/13/17.
@@ -231,9 +231,15 @@ class AdMobBridge(
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(): Boolean {
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
                     cont.resume(false)
@@ -244,7 +250,12 @@ class AdMobBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                MobileAds.initialize(_activity) { status ->
+                MobileAds.initialize(_activity) innerInitialize@{ status ->
+                    if (cont.isActive) {
+                        // OK.
+                    } else {
+                        return@innerInitialize
+                    }
                     Thread.runOnMainThread {
                         _initializing = false
                         _initialized = true
@@ -265,6 +276,7 @@ class AdMobBridge(
     @AnyThread
     fun addTestDevice(hash: String) {
         Thread.runOnMainThread {
+            checkInitialized()
             _testDevices.add(hash)
             val configuration = RequestConfiguration.Builder()
                 .setTestDeviceIds(_testDevices)
@@ -275,6 +287,7 @@ class AdMobBridge(
 
     @AnyThread
     fun createBannerAd(adId: String, adSize: AdSize): Boolean {
+        checkInitialized()
         if (_bannerAds.containsKey(adId)) {
             return false
         }
@@ -285,6 +298,7 @@ class AdMobBridge(
 
     @AnyThread
     fun destroyBannerAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _bannerAds[adId] ?: return false
         ad.destroy()
         _bannerAds.remove(adId)
@@ -294,6 +308,7 @@ class AdMobBridge(
     @AnyThread
     fun createNativeAd(adId: String, layoutName: String,
                        identifiers: Map<String, String>): Boolean {
+        checkInitialized()
         if (_nativeAds.containsKey(adId)) {
             return false
         }
@@ -304,6 +319,7 @@ class AdMobBridge(
 
     @AnyThread
     fun destroyNativeAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _nativeAds[adId] ?: return false
         ad.destroy()
         _nativeAds.remove(adId)
@@ -312,6 +328,7 @@ class AdMobBridge(
 
     @AnyThread
     fun createInterstitialAd(adId: String): Boolean {
+        checkInitialized()
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
@@ -322,6 +339,7 @@ class AdMobBridge(
 
     @AnyThread
     fun destroyInterstitialAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _interstitialAds[adId] ?: return false
         ad.destroy()
         _interstitialAds.remove(adId)
@@ -330,6 +348,7 @@ class AdMobBridge(
 
     @AnyThread
     fun createRewardedAd(adId: String): Boolean {
+        checkInitialized()
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
@@ -340,6 +359,7 @@ class AdMobBridge(
 
     @AnyThread
     fun destroyRewardedAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _rewardedAds[adId] ?: return false
         ad.destroy()
         _rewardedAds.remove(adId)
@@ -348,6 +368,7 @@ class AdMobBridge(
 
     @AnyThread
     fun createAppOpenAd(adId: String): Boolean {
+        checkInitialized()
         if (_appOpenAds.containsKey(adId)) {
             return false
         }
@@ -358,6 +379,7 @@ class AdMobBridge(
 
     @AnyThread
     fun destroyAppOpenAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _appOpenAds[adId] ?: return false
         ad.destroy()
         _appOpenAds.remove(adId)

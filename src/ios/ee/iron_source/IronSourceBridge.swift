@@ -91,6 +91,12 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+
     func initialize(_ appKey: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -121,12 +127,14 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func loadInterstitialAd() {
         Thread.runOnMainThread {
+            self.checkInitialized()
             IronSource.loadInterstitial()
         }
     }
 
     func showInterstitialAd(_ adId: String) {
         Thread.runOnMainThread {
+            self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return
@@ -141,6 +149,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
+            self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return

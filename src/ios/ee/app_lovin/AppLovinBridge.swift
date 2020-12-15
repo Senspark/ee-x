@@ -108,6 +108,12 @@ class AppLovinBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
     
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+    
     func initialize(_ key: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -156,20 +162,16 @@ class AppLovinBridge: NSObject, IPlugin {
     
     func setVerboseLogging(_ enabled: Bool) {
         Thread.runOnMainThread {
-            guard let sdk = self._sdk else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            self.checkInitialized()
+            guard let sdk = self._sdk else { return }
             sdk.settings.isVerboseLogging = enabled
         }
     }
     
     func setMuted(_ enabled: Bool) {
         Thread.runOnMainThread {
-            guard let sdk = self._sdk else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            self.checkInitialized()
+            guard let sdk = self._sdk else { return }
             sdk.settings.muted = enabled
         }
     }
@@ -180,47 +182,42 @@ class AppLovinBridge: NSObject, IPlugin {
     
     func loadInterstitialAd() {
         Thread.runOnMainThread {
+            self.checkInitialized()
             guard
                 let sdk = self._sdk,
                 let listener = self._interstitialAdListener
-            else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            else { return }
             sdk.adService.loadNextAd(ALAdSize.interstitial, andNotify: listener)
         }
     }
     
     func showInterstitialAd() {
         Thread.runOnMainThread {
-            guard let ad = self._interstitialAd else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            self.checkInitialized()
+            guard let ad = self._interstitialAd else { return }
             ad.show()
         }
     }
     
     var hasRewardedAd: Bool {
+        if !_initialized {
+            return false
+        }
         return _rewardedAdListener?.isLoaded ?? false
     }
     
     func loadRewardedAd() {
         Thread.runOnMainThread {
-            guard let ad = self._rewardedAd else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            self.checkInitialized()
+            guard let ad = self._rewardedAd else { return }
             ad.preloadAndNotify(self._rewardedAdListener)
         }
     }
     
     func showRewardedAd() {
         Thread.runOnMainThread {
-            guard let ad = self._rewardedAd else {
-                assert(false, "Please call initialize() first")
-                return
-            }
+            self.checkInitialized()
+            guard let ad = self._rewardedAd else { return }
             ad.showAndNotify(self._rewardedAdListener)
         }
     }

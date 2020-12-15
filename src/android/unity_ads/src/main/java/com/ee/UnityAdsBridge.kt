@@ -12,6 +12,7 @@ import com.unity3d.ads.IUnityAdsLoadListener
 import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAds.FinishState
 import com.unity3d.ads.UnityAds.UnityAdsError
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
@@ -104,9 +105,15 @@ class UnityAdsBridge(
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(gameId: String, testModeEnabled: Boolean): Boolean {
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (!UnityAds.isSupported()) {
                     cont.resume(false)
@@ -124,6 +131,11 @@ class UnityAdsBridge(
                 _initializing = true
                 UnityAds.initialize(_application, gameId, testModeEnabled, true, object : IUnityAdsInitializationListener {
                     override fun onInitializationComplete() {
+                        if (cont.isActive) {
+                            // OK.
+                        } else {
+                            return
+                        }
                         Thread.runOnMainThread {
                             _logger.info(this::onInitializationComplete.name)
                             _initializing = false
@@ -133,10 +145,16 @@ class UnityAdsBridge(
                     }
 
                     override fun onInitializationFailed(error: UnityAds.UnityAdsInitializationError?, message: String?) {
+                        if (cont.isActive) {
+                            // OK.
+                        } else {
+                            return
+                        }
                         Thread.runOnMainThread {
                             _logger.error("${this::onInitializationFailed.name}: error = ${error ?: ""} message = ${message ?: ""}")
                             _initializing = false
-                            cont.resume(false)
+                            _initialized = true
+                            cont.resume(true)
                         }
                     }
                 })
@@ -147,9 +165,7 @@ class UnityAdsBridge(
     @AnyThread
     private fun setDebugModeEnabled(enabled: Boolean) {
         Thread.runOnMainThread {
-            if (!_initialized) {
-                throw IllegalStateException("Please call initialize() first")
-            }
+            checkInitialized()
             UnityAds.setDebugMode(enabled)
         }
     }
@@ -168,9 +184,7 @@ class UnityAdsBridge(
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 _logger.debug("$kTag: loadRewardedAd: $adId")
-                if (!_initialized) {
-                    throw IllegalStateException("Please call initialize() first")
-                }
+                checkInitialized()
                 UnityAds.load(adId, object : IUnityAdsLoadListener {
                     override fun onUnityAdsAdLoaded(placementId: String?) {
                         Thread.runOnMainThread {
@@ -194,9 +208,7 @@ class UnityAdsBridge(
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::showRewardedAd.name}")
-            if (!_initialized) {
-                throw IllegalStateException("Please call initialize() first")
-            }
+            checkInitialized()
             UnityAds.addListener(this)
             UnityAds.show(_activity, adId)
         }

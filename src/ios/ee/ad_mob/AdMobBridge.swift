@@ -151,6 +151,12 @@ class AdMobBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyAppOpenAd)
     }
 
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+
     func initialize() -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -183,12 +189,14 @@ class AdMobBridge: NSObject, IPlugin {
 
     func addTestDevice(_ hash: String) {
         Thread.runOnMainThread {
+            self.checkInitialized()
             self._testDevices.append(hash)
             GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = self._testDevices
         }
     }
 
     func createBannerAd(_ adId: String, _ adSize: GADAdSize) -> Bool {
+        checkInitialized()
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -198,6 +206,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func destroyBannerAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _bannerAds[adId] else {
             return false
         }
@@ -207,6 +216,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createNativeAd(_ adId: String, _ layoutName: String) -> Bool {
+        checkInitialized()
         if _nativeAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -216,6 +226,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func destroyNativeAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _nativeAds[adId] else {
             return false
         }
@@ -225,6 +236,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createInterstitialAd(_ adId: String) -> Bool {
+        checkInitialized()
         if _interstitialAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -234,6 +246,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func destroyInterstitialAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _interstitialAds[adId] else {
             return false
         }
@@ -243,6 +256,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createRewardedAd(_ adId: String) -> Bool {
+        checkInitialized()
         if _rewardedAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -252,6 +266,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func destroyRewardedAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _rewardedAds[adId] else {
             return false
         }
@@ -261,6 +276,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createAppOpenAd(_ adId: String) -> Bool {
+        checkInitialized()
         if _appOpenAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -270,6 +286,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func destroyAppOpenAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _appOpenAds[adId] else {
             return false
         }

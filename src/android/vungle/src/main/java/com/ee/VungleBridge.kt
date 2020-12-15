@@ -11,12 +11,12 @@ import com.vungle.warren.LoadAdCallback
 import com.vungle.warren.PlayAdCallback
 import com.vungle.warren.Vungle
 import com.vungle.warren.error.VungleException
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -95,9 +95,15 @@ class VungleBridge(
         _bridge.deregisterHandler(kLoadRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(appId: String): Boolean {
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
                     cont.resume(false)
@@ -110,6 +116,11 @@ class VungleBridge(
                 _initializing = true
                 Vungle.init(appId, _application, object : InitCallback {
                     override fun onSuccess() {
+                        if (cont.isActive) {
+                            // OK.
+                        } else {
+                            return
+                        }
                         Thread.runOnMainThread {
                             _logger.debug("$kTag: initialize: ${this::onSuccess.name}")
                             _initializing = false
@@ -119,10 +130,16 @@ class VungleBridge(
                     }
 
                     override fun onError(throwable: VungleException) {
+                        if (cont.isActive) {
+                            // OK.
+                        } else {
+                            return
+                        }
                         Thread.runOnMainThread {
-                            _logger.info("$kTag: initialize: ${this::onError.name}: message = ${throwable.localizedMessage}")
+                            _logger.error("$kTag: initialize: ${this::onError.name}: message = ${throwable.localizedMessage}")
                             _initializing = false
-                            cont.resume(false)
+                            _initialized = true
+                            cont.resume(true)
                         }
                     }
 
@@ -134,12 +151,16 @@ class VungleBridge(
 
     @AnyThread
     private fun hasRewardedAd(adId: String): Boolean {
+        if (!_initialized) {
+            return false
+        }
         return _loadedAdIds.contains(adId)
     }
 
     @AnyThread
     private fun loadRewardedAd(adId: String) {
         Thread.runOnMainThread {
+            checkInitialized()
             Vungle.loadAd(adId, object : LoadAdCallback {
                 override fun onAdLoad(adId: String) {
                     Thread.runOnMainThread {
@@ -178,6 +199,7 @@ class VungleBridge(
     @AnyThread
     private fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
+            checkInitialized()
             _rewarded = false
             Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
                 override fun onError(adId: String, exception: VungleException) {

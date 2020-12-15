@@ -143,6 +143,12 @@ class FacebookAdsBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+
     func initialize() -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -159,13 +165,13 @@ class FacebookAdsBridge: NSObject, IPlugin {
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): initialize: result = \(result.isSuccess) message = \(result.message)")
                         self._initializing = false
+                        self._initialized = true
                         if result.isSuccess {
                             FBAdSettings.setAdvertiserTrackingEnabled(true)
-                            self._initialized = true
-                            single(.success(true))
                         } else {
-                            single(.success(false))
+                            self._logger.error("\(kTag): initialize: result = \(result.isSuccess)")
                         }
+                        single(.success(true))
                     }
                 }
             }
@@ -186,11 +192,13 @@ class FacebookAdsBridge: NSObject, IPlugin {
 
     func clearTestDevice() {
         Thread.runOnMainThread {
+            self.checkInitialized()
             FBAdSettings.clearTestDevices()
         }
     }
 
     func createBannerAd(_ adId: String, _ size: FBAdSize) -> Bool {
+        checkInitialized()
         if _bannerAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -200,6 +208,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func destroyBannerAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _bannerAds[adId] else {
             return false
         }
@@ -209,6 +218,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func createNativeAd(_ adId: String, _ layoutName: String) -> Bool {
+        checkInitialized()
         if _nativeAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -218,6 +228,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func destroyNativeAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _nativeAds[adId] else {
             return false
         }
@@ -227,6 +238,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func createInterstitialAd(_ adId: String) -> Bool {
+        checkInitialized()
         if _interstitialAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -236,6 +248,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func destroyInterstitialAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _interstitialAds[adId] else {
             return false
         }
@@ -245,6 +258,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func createRewardedAd(_ adId: String) -> Bool {
+        checkInitialized()
         if _rewardedAds.contains(where: { key, _ in key == adId }) {
             return false
         }
@@ -254,6 +268,7 @@ class FacebookAdsBridge: NSObject, IPlugin {
     }
 
     func destroyRewardedAd(_ adId: String) -> Bool {
+        checkInitialized()
         guard let ad = _rewardedAds[adId] else {
             return false
         }

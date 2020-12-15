@@ -84,6 +84,12 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+
     func initialize(_ appId: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -121,6 +127,7 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
 
     func loadRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
+            self.checkInitialized()
             do {
                 self._loadingAdIds.insert(adId)
                 try self._sdk.loadPlacement(withID: adId)
@@ -138,6 +145,7 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
+            self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return

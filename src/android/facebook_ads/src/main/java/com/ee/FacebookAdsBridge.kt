@@ -14,11 +14,11 @@ import com.ee.internal.serialize
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSize
 import com.facebook.ads.AudienceNetworkAds
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -207,14 +207,16 @@ class FacebookAdsBridge(
         _bridge.deregisterHandler(kDestroyRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(): Boolean {
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
-                if (AudienceNetworkAds.isInitialized(_application)) {
-                    cont.resume(true)
-                    return@runOnMainThread
-                }
                 if (AudienceNetworkAds.isInitialized(_application)) {
                     _initialized = true
                     cont.resume(true)
@@ -232,19 +234,24 @@ class FacebookAdsBridge(
                 AudienceNetworkAds
                     .buildInitSettings(_application)
                     .withInitListener { result ->
+                        if (cont.isActive) {
+                            // OK.
+                        } else {
+                            return@withInitListener
+                        }
                         Thread.runOnMainThread {
                             _logger.info("$kTag: initialize: result = ${result.isSuccess} message = ${result.message ?: ""}")
                             _initializing = false
+                            _initialized = true
                             if (result.isSuccess) {
                                 if (BuildConfig.DEBUG) {
                                     AdSettings.setDebugBuild(true)
                                 }
                                 AdSettings.setTestMode(false)
-                                _initialized = true
-                                cont.resume(true)
                             } else {
-                                cont.resume(false)
+                                _logger.error("$kTag: initialize: result = $result")
                             }
+                            cont.resume(true)
                         }
                     }
                     .initialize()
@@ -258,6 +265,7 @@ class FacebookAdsBridge(
     @AnyThread
     fun addTestDevice(hash: String) {
         Thread.runOnMainThread {
+            checkInitialized()
             AdSettings.addTestDevice(hash)
         }
     }
@@ -265,12 +273,14 @@ class FacebookAdsBridge(
     @AnyThread
     fun clearTestDevices() {
         Thread.runOnMainThread {
+            checkInitialized()
             AdSettings.clearTestDevices()
         }
     }
 
     @AnyThread
     fun createBannerAd(adId: String, adSize: AdSize): Boolean {
+        checkInitialized()
         if (_bannerAds.containsKey(adId)) {
             return false
         }
@@ -281,6 +291,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun destroyBannerAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _bannerAds[adId] ?: return false
         ad.destroy()
         _bannerAds.remove(adId)
@@ -290,6 +301,7 @@ class FacebookAdsBridge(
     @AnyThread
     fun createNativeAd(adId: String, layoutName: String,
                        identifiers: Map<String, String>): Boolean {
+        checkInitialized()
         if (_nativeAds.containsKey(adId)) {
             return false
         }
@@ -300,6 +312,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun destroyNativeAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _nativeAds[adId] ?: return false
         ad.destroy()
         _nativeAds.remove(adId)
@@ -308,6 +321,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     private fun createInterstitialAd(adId: String): Boolean {
+        checkInitialized()
         if (_interstitialAds.containsKey(adId)) {
             return false
         }
@@ -318,6 +332,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun destroyInterstitialAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _interstitialAds[adId] ?: return false
         ad.destroy()
         _interstitialAds.remove(adId)
@@ -326,6 +341,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     private fun createRewardedAd(adId: String): Boolean {
+        checkInitialized()
         if (_rewardedAds.containsKey(adId)) {
             return false
         }
@@ -336,6 +352,7 @@ class FacebookAdsBridge(
 
     @AnyThread
     fun destroyRewardedAd(adId: String): Boolean {
+        checkInitialized()
         val ad = _rewardedAds[adId] ?: return false
         ad.destroy()
         _rewardedAds.remove(adId)

@@ -131,6 +131,12 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    func checkInitialized() {
+        if !_initialized {
+            assert(false, "Please call initialize() first")
+        }
+    }
+
     func initialize(_ gameId: String, _ testModeEnabled: Bool) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -177,9 +183,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func setDebugModeEnabled(_ enabled: Bool) {
         Thread.runOnMainThread {
-            if !self._initialized {
-                assert(false, "Please call initialize() first")
-            }
+            self.checkInitialized()
             UnityAds.setDebugMode(enabled)
         }
     }
@@ -195,9 +199,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 self._logger.debug("\(kTag): \(#function): \(adId)")
-                if !self._initialized {
-                    assert(false, "Please call initialize() first")
-                }
+                self.checkInitialized()
                 single(.success(false))
                 /*
                   FIXME: use UnityAds 3.5.1
@@ -218,9 +220,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(adId)")
-            if !self._initialized {
-                assert(false, "Please call initialize() first")
-            }
+            self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return

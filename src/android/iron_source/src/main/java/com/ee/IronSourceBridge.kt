@@ -116,6 +116,12 @@ class IronSourceBridge(
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
+    private fun checkInitialized() {
+        if (!_initialized) {
+            throw IllegalStateException("Please call initialize() first")
+        }
+    }
+
     @AnyThread
     suspend fun initialize(appKey: String): Boolean {
         return suspendCoroutine { cont ->
@@ -142,6 +148,7 @@ class IronSourceBridge(
     fun loadInterstitialAd() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::loadInterstitialAd.name}")
+            checkInitialized()
             IronSource.loadInterstitial()
         }
     }
@@ -150,6 +157,7 @@ class IronSourceBridge(
     fun showInterstitialAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::showInterstitialAd.name}: $adId")
+            checkInitialized()
             IronSource.showInterstitial(adId)
         }
     }
@@ -161,6 +169,7 @@ class IronSourceBridge(
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag:${this::showRewardedAd.name}: $adId")
+            checkInitialized()
             _rewarded = false
             IronSource.showRewardedVideo(adId)
         }

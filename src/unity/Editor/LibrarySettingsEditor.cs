@@ -40,6 +40,25 @@ namespace EE.Editor {
             settings.IsCoreEnabled = EditorGUILayout.Toggle(new GUIContent("Core"), settings.IsCoreEnabled);
             EditorGUI.EndDisabledGroup();
 
+            // Firebase
+            EditorGUILayout.LabelField("Firebase");
+            ++EditorGUI.indentLevel;
+            settings.IsFirebaseAnalyticsEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Analytics"), settings.IsFirebaseAnalyticsEnabled);
+            settings.IsFirebaseCrashlyticsEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Crashlytics"), settings.IsFirebaseCrashlyticsEnabled);
+            settings.IsFirebaseDynamicLinksEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Dynamic Links"), settings.IsFirebaseDynamicLinksEnabled);
+            settings.IsFirebaseMessagingEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Messaging"), settings.IsFirebaseMessagingEnabled);
+            settings.IsFirebasePerformanceEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Performance"), settings.IsFirebasePerformanceEnabled);
+            settings.IsFirebaseRemoteConfigEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Remote Config"), settings.IsFirebaseRemoteConfigEnabled);
+            settings.IsFirebaseStorageEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Storage"), settings.IsFirebaseStorageEnabled);
+            --EditorGUI.indentLevel;
+
             // Adjust plugin.
             settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
 

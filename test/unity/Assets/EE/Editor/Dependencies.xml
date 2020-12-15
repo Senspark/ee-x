@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <dependencies>
   <iosPods>
-    <iosPod name="ee-x/ios-core" path="../../" />
-    <iosPod name="ee-x/ios-ad-colony" path="../../" />
-    <iosPod name="ee-x/ios-ad-mob-mediation" path="../../" />
-    <iosPod name="ee-x/ios-facebook-ads" path="../../" />
-    <iosPod name="ee-x/ios-iron-source-mediation" path="../../" />
-    <iosPod name="ee-x/ios-unity-ads" path="../../" />
+    <iosPod name="ee-x/core" path="../../" />
+    <iosPod name="ee-x/ad-colony" path="../../" />
+    <iosPod name="ee-x/ad-mob-mediation" path="../../" />
+    <iosPod name="ee-x/facebook-ads" path="../../" />
+    <iosPod name="ee-x/iron-source-mediation" path="../../" />
+    <iosPod name="ee-x/unity-ads" path="../../" />
   </iosPods>
   <androidPackages>
     <repositories>

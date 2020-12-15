@@ -140,8 +140,8 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
         return nullptr;
     }
     auto size = getBannerAdSize(adSize);
-    auto ad = std::make_shared<ads::GuardedAdView>(std::shared_ptr<IAdView>(
-        new BannerAd(bridge_, logger_, this, adId, size)));
+    auto ad = std::make_shared<ads::GuardedAdView>(
+        std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
     bannerAds_.emplace(adId, ad);
     return ad;
 }
@@ -183,7 +183,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
         return nullptr;
     }
     auto ad = std::make_shared<ads::GuardedAdView>(
-        std::shared_ptr<IAdView>(new NativeAd(bridge_, logger_, this, adId)));
+        std::make_shared<NativeAd>(bridge_, logger_, this, adId));
     nativeAds_.emplace(adId, ad);
     return ad;
 }
@@ -220,8 +220,8 @@ Self::createInterstitialAd(const std::string& adId) {
         return nullptr;
     }
     auto ad = std::make_shared<ads::GuardedInterstitialAd>(
-        std::shared_ptr<IInterstitialAd>(new InterstitialAd(
-            bridge_, logger_, interstitialAdDisplayer_, this, adId)));
+        std::make_shared<InterstitialAd>(bridge_, logger_,
+                                         interstitialAdDisplayer_, this, adId));
     interstitialAds_.emplace(adId, ad);
     return ad;
 }
@@ -256,9 +256,9 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedRewardedAd>(
-        std::shared_ptr<IRewardedAd>(new RewardedAd(
-            bridge_, logger_, rewardedAdDisplayer_, this, adId)));
+    auto ad =
+        std::make_shared<ads::GuardedRewardedAd>(std::make_shared<RewardedAd>(
+            bridge_, logger_, rewardedAdDisplayer_, this, adId));
     rewardedAds_.emplace(adId, ad);
     return ad;
 }
@@ -295,8 +295,8 @@ Self::createAppOpenAd(const std::string& adId) {
         return nullptr;
     }
     auto ad = std::make_shared<ads::GuardedInterstitialAd>(
-        std::shared_ptr<IInterstitialAd>(new AppOpenAd(
-            bridge_, logger_, interstitialAdDisplayer_, this, adId)));
+        std::make_shared<AppOpenAd>(bridge_, logger_, interstitialAdDisplayer_,
+                                    this, adId));
     appOpenAds_.emplace(adId, ad);
     return ad;
 }

@@ -21,15 +21,10 @@ public:
 
     virtual void initialize(const std::string& devKey,
                             const std::string& appId) override;
-
     virtual void startTracking() override;
-
     virtual std::string getDeviceId() const override;
-
     virtual void setDebugEnabled(bool enabled) override;
-
     virtual void setStopTracking(bool enabled) override;
-
     virtual void
     trackEvent(const std::string& name,
                const std::map<std::string, std::string>& values) override;

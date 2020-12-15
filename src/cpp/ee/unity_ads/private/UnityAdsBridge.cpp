@@ -121,14 +121,13 @@ Self::createInterstitialAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = interstitialAds_.find(adId);
     if (iter != interstitialAds_.cend()) {
-        return iter->second.strong;
+        return iter->second.ad;
     }
-    auto weak =
-        new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId);
-    auto strong = std::make_shared<ads::GuardedInterstitialAd>(
-        std::shared_ptr<InterstitialAd>(weak));
-    interstitialAds_.try_emplace(adId, strong, weak);
-    return strong;
+    auto raw = std::make_shared<InterstitialAd>(
+        logger_, interstitialAdDisplayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedInterstitialAd>(raw);
+    interstitialAds_.try_emplace(adId, ad, raw);
+    return ad;
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
@@ -145,13 +144,13 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        return iter->second.strong;
+        return iter->second.ad;
     }
-    auto weak = new RewardedAd(logger_, rewardedAdDisplayer_, this, adId);
-    auto strong = std::make_shared<ads::GuardedRewardedAd>(
-        std::shared_ptr<RewardedAd>(weak));
-    rewardedAds_.try_emplace(adId, strong, weak);
-    return strong;
+    auto raw =
+        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
+    rewardedAds_.try_emplace(adId, ad, raw);
+    return ad;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
@@ -187,11 +186,11 @@ void Self::onLoaded(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (auto iter = interstitialAds_.find(adId);
         iter != interstitialAds_.cend()) {
-        iter->second.weak->onLoaded();
+        iter->second.raw->onLoaded();
         return;
     }
     if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-        iter->second.weak->onLoaded();
+        iter->second.raw->onLoaded();
         return;
     }
     // Mediation.
@@ -206,10 +205,10 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
         assert(adId_ == adId);
         if (auto iter = interstitialAds_.find(adId);
             iter != interstitialAds_.cend()) {
-            iter->second.weak->onFailedToShow(message);
+            iter->second.raw->onFailedToShow(message);
         }
         if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-            iter->second.weak->onFailedToShow(message);
+            iter->second.raw->onFailedToShow(message);
         }
         displaying_ = false;
     } else {
@@ -226,10 +225,10 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
         assert(adId_ == adId);
         if (auto iter = interstitialAds_.find(adId);
             iter != interstitialAds_.cend()) {
-            iter->second.weak->onClosed();
+            iter->second.raw->onClosed();
         }
         if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-            iter->second.weak->onClosed(rewarded);
+            iter->second.raw->onClosed(rewarded);
         }
     } else {
         // Mediation.

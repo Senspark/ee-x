@@ -14,6 +14,10 @@ namespace admob {
 class AppOpenAd final : public IInterstitialAd,
                         public ObserverManager<IInterstitialAdObserver> {
 public:
+    explicit AppOpenAd(
+        IMessageBridge& bridge, const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        Bridge* plugin, const std::string& adId);
     virtual ~AppOpenAd() override;
 
     virtual void destroy() override;
@@ -22,14 +26,7 @@ public:
     virtual Task<bool> load() override;
     virtual Task<bool> show() override;
 
-    friend Bridge;
-
 private:
-    explicit AppOpenAd(
-        IMessageBridge& bridge, const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-        Bridge* plugin, const std::string& adId);
-
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onFailedToShow(const std::string& message);

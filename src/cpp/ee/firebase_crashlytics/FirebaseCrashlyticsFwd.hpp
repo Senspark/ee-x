@@ -8,11 +8,12 @@
 namespace ee {
 namespace firebase {
 namespace crashlytics {
+class IBridge;
 class Bridge;
 } // namespace crashlytics
 } // namespace firebase
 
-using FirebaseCrashlytics = firebase::crashlytics::Bridge;
+using IFirebaseCrashlytics = firebase::crashlytics::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

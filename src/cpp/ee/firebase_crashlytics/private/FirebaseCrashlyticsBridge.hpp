@@ -1,25 +1,19 @@
 #ifndef EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP
 
-#ifdef __cplusplus
-
-#include <string>
-
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/firebase_crashlytics/FirebaseCrashlyticsFwd.hpp"
+#include "ee/firebase_crashlytics/IFirebaseCrashlyticsBridge.hpp"
 
 namespace ee {
 namespace firebase {
 namespace crashlytics {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
-    ~Bridge();
+    explicit Bridge(IMessageBridge& bridge);
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
 
-    void log(const std::string& message);
+    virtual void log(const std::string& message) override;
 
 private:
     IMessageBridge& bridge_;
@@ -27,7 +21,5 @@ private:
 } // namespace crashlytics
 } // namespace firebase
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif // EE_X_FIREBASE_CRASHLYTICS_BRIDGE_HPP

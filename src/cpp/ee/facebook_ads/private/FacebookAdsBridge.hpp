@@ -21,6 +21,7 @@ public:
     virtual ~Bridge() override;
 
     virtual void destroy() override;
+
     virtual Task<bool> initialize() override;
     virtual std::string getTestDeviceHash() const override;
     virtual void addTestDevice(const std::string& hash) override;

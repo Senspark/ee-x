@@ -175,10 +175,10 @@ Self::createInterstitialAd(const std::string& adId) {
     if (sharedInterstitialAd_) {
         return sharedInterstitialAd_;
     }
-    interstitialAd_ =
-        new InterstitialAd(logger_, interstitialAdDisplayer_, this, adId);
-    sharedInterstitialAd_ = std::make_shared<ads::GuardedInterstitialAd>(
-        std::shared_ptr<InterstitialAd>(interstitialAd_));
+    interstitialAd_ = std::make_shared<InterstitialAd>(
+        logger_, interstitialAdDisplayer_, this, adId);
+    sharedInterstitialAd_ =
+        std::make_shared<ads::GuardedInterstitialAd>(interstitialAd_);
     return sharedInterstitialAd_;
 }
 
@@ -187,7 +187,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     if (sharedInterstitialAd_ == nullptr) {
         return false;
     }
-    interstitialAd_ = nullptr;
+    interstitialAd_.reset();
     sharedInterstitialAd_.reset();
     return true;
 }
@@ -198,9 +198,9 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
-    rewardedAd_ = new RewardedAd(logger_, rewardedAdDisplayer_, this, adId);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(
-        std::shared_ptr<RewardedAd>(rewardedAd_));
+    rewardedAd_ =
+        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(rewardedAd_);
     return sharedRewardedAd_;
 }
 
@@ -209,7 +209,7 @@ bool Self::destroyRewardedAd(const std::string& adId) {
     if (sharedRewardedAd_ == nullptr) {
         return false;
     }
-    rewardedAd_ = nullptr;
+    rewardedAd_.reset();
     sharedRewardedAd_.reset();
     return true;
 }

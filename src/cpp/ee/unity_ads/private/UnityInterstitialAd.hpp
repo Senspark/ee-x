@@ -21,6 +21,11 @@ namespace unity_ads {
 class InterstitialAd : public IInterstitialAd,
                        public ee::ObserverManager<IInterstitialAdObserver> {
 public:
+    explicit InterstitialAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        Bridge* plugin, const std::string& adId);
+
     virtual ~InterstitialAd() override;
 
     virtual void destroy() override;
@@ -31,11 +36,6 @@ public:
 
 private:
     friend Bridge;
-
-    explicit InterstitialAd(
-        const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-        Bridge* plugin, const std::string& adId);
 
     void onLoaded();
     void onFailedToShow(const std::string& message);

@@ -19,6 +19,9 @@ namespace ee {
 namespace admob {
 class BannerAd final : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
+    explicit BannerAd(IMessageBridge& bridge, const Logger& logger,
+                      Bridge* plugin, const std::string& adId,
+                      const std::pair<int, int>& size);
     virtual ~BannerAd() override;
 
     virtual void destroy() override;
@@ -39,12 +42,6 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    friend Bridge;
-
-    explicit BannerAd(IMessageBridge& bridge, const Logger& logger,
-                      Bridge* plugin, const std::string& adId,
-                      const std::pair<int, int>& size);
-
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onClicked();

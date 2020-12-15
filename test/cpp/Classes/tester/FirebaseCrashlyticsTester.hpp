@@ -25,7 +25,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::FirebaseCrashlytics> plugin_;
+    std::shared_ptr<ee::IFirebaseCrashlytics> plugin_;
 };
 } // namespace crashlytics
 } // namespace firebase

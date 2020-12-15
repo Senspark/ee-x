@@ -13,6 +13,7 @@ public:
     virtual ~Bridge() override;
 
     virtual void destroy() override;
+
     virtual Task<bool> initialize(const std::string& appId) override;
     virtual std::shared_ptr<IRewardedAd>
     createRewardedAd(const std::string& adId) override;
@@ -37,17 +38,18 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    template <class Strong, class Weak>
-    struct Ad {
-        std::shared_ptr<Strong> strong;
-        Weak* weak;
+    template <class Ad, class Raw>
+    struct Entry {
+        std::shared_ptr<Ad> ad;
+        std::shared_ptr<Raw> raw;
 
-        explicit Ad(const std::shared_ptr<Strong>& strong_, Weak* weak_)
-            : strong(strong_)
-            , weak(weak_) {}
+        explicit Entry(const std::shared_ptr<Ad>& ad_,
+                       const std::shared_ptr<Raw>& raw_)
+            : ad(ad_)
+            , raw(raw_) {}
     };
 
-    std::map<std::string, Ad<IRewardedAd, RewardedAd>> rewardedAds_;
+    std::map<std::string, Entry<IRewardedAd, RewardedAd>> rewardedAds_;
 
     std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
 };

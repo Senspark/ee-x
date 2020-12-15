@@ -124,13 +124,13 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        return iter->second.strong;
+        return iter->second.ad;
     }
-    auto weak = new RewardedAd(logger_, rewardedAdDisplayer_, this, adId);
-    auto strong = std::make_shared<ads::GuardedRewardedAd>(
-        std::shared_ptr<RewardedAd>(weak));
-    rewardedAds_.try_emplace(adId, strong, weak);
-    return strong;
+    auto raw =
+        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
+    rewardedAds_.try_emplace(adId, ad, raw);
+    return ad;
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
@@ -162,7 +162,7 @@ void Self::onLoaded(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.weak->onLoaded();
+        iter->second.raw->onLoaded();
     } else {
         // Mediation.
         assert(false);
@@ -173,7 +173,7 @@ void Self::onFailedToLoad(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.weak->onFailedToLoad(message);
+        iter->second.raw->onFailedToLoad(message);
     } else {
         // Mediation.
         assert(false);
@@ -184,7 +184,7 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.weak->onFailedToShow(message);
+        iter->second.raw->onFailedToShow(message);
     } else {
         // Mediation.
         assert(false);
@@ -195,7 +195,7 @@ void Self::onClicked(const std::string& adId) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.weak->onClicked();
+        iter->second.raw->onClicked();
     } else {
         // Mediation.
         assert(false);
@@ -206,7 +206,7 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
-        iter->second.weak->onClosed(rewarded);
+        iter->second.raw->onClosed(rewarded);
     } else {
         // Mediation.
         assert(false);

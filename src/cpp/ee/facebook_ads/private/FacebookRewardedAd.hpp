@@ -22,6 +22,10 @@ namespace facebook_ads {
 class RewardedAd : public IRewardedAd,
                    public ObserverManager<IRewardedAdObserver> {
 public:
+    explicit RewardedAd(
+        IMessageBridge& bridge, const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        Bridge* plugin, const std::string& adId);
     virtual ~RewardedAd() override;
 
     virtual void destroy() override;
@@ -31,13 +35,6 @@ public:
     virtual Task<IRewardedAdResult> show() override;
 
 private:
-    friend Bridge;
-
-    explicit RewardedAd(
-        IMessageBridge& bridge, const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
-        Bridge* plugin, const std::string& adId);
-
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onFailedToShow(const std::string& message);

@@ -11,6 +11,7 @@ public:
     virtual ~Bridge() override;
 
     virtual void destroy() override;
+
     virtual Task<bool>
     initialize(const std::string& appId,
                const std::vector<std::string>& zoneIds) override;

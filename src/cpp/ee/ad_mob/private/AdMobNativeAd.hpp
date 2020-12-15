@@ -19,6 +19,8 @@ namespace ee {
 namespace admob {
 class NativeAd final : public IAdView, public ObserverManager<IAdViewObserver> {
 public:
+    explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
+                      Bridge* plugin, const std::string& adId);
     virtual ~NativeAd() override;
 
     virtual void destroy() override;
@@ -39,11 +41,6 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    friend Bridge;
-
-    explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
-                      Bridge* plugin, const std::string& adId);
-
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onClicked();

@@ -14,14 +14,9 @@ public:
 
     virtual void destroy() override;
 
-    /// Initializes ironSource with the specified game ID.
     virtual Task<bool> initialize(const std::string& appKey) override;
-
-    /// Creates an interstitial ad with the specified placement ID.
     virtual std::shared_ptr<IInterstitialAd>
     createInterstitialAd(const std::string& adId) override;
-
-    /// Creates a rewarded vided with the specifie placement ID.
     virtual std::shared_ptr<IRewardedAd>
     createRewardedAd(const std::string& adId) override;
 
@@ -56,9 +51,9 @@ private:
     const Logger& logger_;
 
     /// Share the same ad instance.
-    InterstitialAd* interstitialAd_;
+    std::shared_ptr<InterstitialAd> interstitialAd_;
     std::shared_ptr<IInterstitialAd> sharedInterstitialAd_;
-    RewardedAd* rewardedAd_;
+    std::shared_ptr<RewardedAd> rewardedAd_;
     std::shared_ptr<IRewardedAd> sharedRewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;

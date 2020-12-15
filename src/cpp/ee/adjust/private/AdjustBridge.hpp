@@ -16,7 +16,9 @@ class Bridge final : public IBridge {
 public:
     explicit Bridge(IMessageBridge& bridge);
     virtual ~Bridge() override;
+
     virtual void destroy() override;
+
     virtual void initialize(const AdjustConfig& config) override;
     virtual void setEnabled(bool enabled) override;
     virtual Task<std::string> getAdvertisingIdentifier() const override;

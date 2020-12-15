@@ -21,6 +21,10 @@ namespace iron_source {
 class InterstitialAd : public IInterstitialAd,
                        public ObserverManager<IInterstitialAdObserver> {
 public:
+    explicit InterstitialAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        Bridge* plugin, const std::string& adId);
     virtual ~InterstitialAd() override;
 
     virtual void destroy() override;
@@ -31,11 +35,6 @@ public:
 
 private:
     friend Bridge;
-
-    explicit InterstitialAd(
-        const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-        Bridge* plugin, const std::string& adId);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

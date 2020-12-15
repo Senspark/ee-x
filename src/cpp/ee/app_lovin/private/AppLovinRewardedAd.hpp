@@ -19,6 +19,10 @@ namespace app_lovin {
 class RewardedAd : public IRewardedAd,
                    public ObserverManager<IRewardedAdObserver> {
 public:
+    explicit RewardedAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        Bridge* plugin);
     virtual ~RewardedAd() override;
 
     virtual void destroy() override;
@@ -29,11 +33,6 @@ public:
 
 private:
     friend Bridge;
-
-    explicit RewardedAd(
-        const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
-        Bridge* plugin);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

@@ -21,6 +21,10 @@ namespace vungle {
 class RewardedAd : public IRewardedAd,
                    public ObserverManager<IRewardedAdObserver> {
 public:
+    explicit RewardedAd(
+        const Logger& logger,
+        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        Bridge* plugin, const std::string& adId);
     virtual ~RewardedAd() override;
 
     virtual void destroy() override;
@@ -31,11 +35,6 @@ public:
 
 private:
     friend Bridge;
-
-    explicit RewardedAd(
-        const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
-        Bridge* plugin, const std::string& adId);
 
     void onLoaded();
     void onFailedToLoad(const std::string& message);

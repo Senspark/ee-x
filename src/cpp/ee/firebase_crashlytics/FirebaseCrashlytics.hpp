@@ -5,7 +5,7 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/firebase_crashlytics/FirebaseCrashlyticsBridge.hpp"
+#include "ee/firebase_crashlytics/IFirebaseCrashlyticsBridge.hpp"
 
 #endif // __cplusplus
 

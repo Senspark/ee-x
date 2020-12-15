@@ -15,7 +15,7 @@ namespace crashlytics {
 using Self = Tester;
 
 void Self::initialize() {
-    plugin_ = std::make_shared<ee::FirebaseCrashlytics>();
+    plugin_ = ee::PluginManager::createPlugin<ee::IFirebaseCrashlytics>();
 }
 
 void Self::destroy() {

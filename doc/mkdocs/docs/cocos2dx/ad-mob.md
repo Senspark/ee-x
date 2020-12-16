@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:ad-mob-mediation:2.0.0'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.0.1'
 }
 ```
 

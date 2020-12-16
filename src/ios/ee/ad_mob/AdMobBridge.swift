@@ -129,7 +129,7 @@ class AdMobBridge: NSObject, IPlugin {
         _bridge.registerHandler(kCreateAppOpenAd) { message in
             Utils.toString(self.createAppOpenAd(message))
         }
-        _bridge.registerHandler(kDestroyRewardedAd) { message in
+        _bridge.registerHandler(kDestroyAppOpenAd) { message in
             Utils.toString(self.destroyAppOpenAd(message))
         }
     }

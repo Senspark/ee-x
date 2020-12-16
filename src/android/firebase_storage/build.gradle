@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('firebase-storage')
+} else {
+    dependencies {
+        api project(':ee-x-firebase-core')
+    }
+}
+
+dependencies {
+    api platform("com.google.firebase:firebase-bom:$firebaseVersion")
+    api 'com.google.firebase:firebase-storage'
+}

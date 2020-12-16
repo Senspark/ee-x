@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://adcolony.bintray.com/AdColony' }
+    maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('iron-source-mediation')
+} else {
+    dependencies {
+        api project(':ee-x-iron-source')
+    }
+}
+
+dependencies {
+    // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
+    // Use "api" to inherit manifest elements.
+    api 'com.ironsource.adapters:adcolonyadapter:4.3.4'
+    api 'com.adcolony:sdk:4.2.4'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
+    api 'com.ironsource.adapters:admobadapter:4.3.14'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
+    api 'com.ironsource.adapters:applovinadapter:4.3.20'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
+    api 'com.ironsource.adapters:facebookadapter:4.3.23'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
+    api 'com.ironsource.adapters:unityadsadapter:4.3.8'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
+    api 'com.ironsource.adapters:vungleadapter:4.3.7'
+}

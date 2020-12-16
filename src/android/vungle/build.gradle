@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('vungle')
+} else {
+    dependencies {
+        api project(':ee-x-ads')
+    }
+}
+
+dependencies {
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    // https://support.vungle.com/hc/en-us/articles/115000468071-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-5-
+    // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
+    // Use "api" to inherit manifest elements.
+    api 'com.vungle:publisher-sdk-android:6.8.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+}

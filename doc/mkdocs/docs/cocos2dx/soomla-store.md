@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:soomla-store:1.4.0'
+    implementation 'com.senspark.ee:soomla-store:2.0.0'
 }
 ```
 

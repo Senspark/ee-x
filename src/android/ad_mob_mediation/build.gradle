@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://adcolony.bintray.com/AdColony' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('ad-mob-mediation')
+} else {
+    dependencies {
+        api project(':ee-x-ad-mob')
+    }
+}
+
+dependencies {
+    // https://bintray.com/google/mobile-ads-adapters-android
+    // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
+    // Use "api" to inherit manifest elements.
+    api 'com.google.ads.mediation:adcolony:4.2.4.0'
+
+    // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:applovin:9.14.6.0'
+
+    // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:facebook:6.2.0.0'
+
+    // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:ironsource:7.0.4.0'
+
+    // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:unity:3.5.1.1'
+
+    // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:vungle:6.8.1.0'
+}

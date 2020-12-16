@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55d283bc0ce4e93b4243a3edd67d44b, type: 3}
+  m_Name: EESettings
+  m_EditorClassIdentifier: 
+  _isDeveloperModeEnabled: 1
+  _libraryPath: ../../
+  _isMultiDexEnabled: 1
+  _isCoreEnabled: 1
+  _isFirebaseAnalyticsEnabled: 0
+  _isFirebaseCrashlyticsEnabled: 0
+  _isFirebaseDynamicLinksEnabled: 0
+  _isFirebaseMessagingEnabled: 0
+  _isFirebasePerformanceEnabled: 0
+  _isFirebaseRemoteConfigEnabled: 0
+  _isFirebaseStorageEnabled: 0
+  _isAdjustEnabled: 0
+  _isAdColonyEnabled: 1
+  _isAdMobEnabled: 1
+  _isAdMobMediationEnabled: 1
+  _adMobAndroidAppId: ca-app-pub-2101587572072038~4641899906
+  _adMobIosAppId: ca-app-pub-2101587572072038~7063009104
+  _isFacebookAdsEnabled: 1
+  _isIronSourceEnabled: 1
+  _isIronSourceMediationEnabled: 1
+  _isUnityAdsEnabled: 1

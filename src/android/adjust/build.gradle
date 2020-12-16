@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('adjust')
+} else {
+    dependencies {
+        api project(':ee-x-core')
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.1.0'
+
+    api 'com.android.installreferrer:installreferrer:2.1'
+
+    // https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md
+    api 'com.adjust.sdk:adjust-android:4.24.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+}

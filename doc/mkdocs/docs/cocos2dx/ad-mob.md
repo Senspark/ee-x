@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:ad-mob-mediation:2.0.0'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/ad-mob-mediation'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/AdMob.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
 ee::noAwait([plugin]() -> ee::Task<> {

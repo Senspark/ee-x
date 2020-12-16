@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:adjust:2.0.0'
+    implementation 'com.senspark.ee:adjust:2.0.1'
 }
 ```
 
@@ -18,7 +18,7 @@ pod 'Adjust', :modular_headers => true
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Adjust.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdjust>();
 plugin->initialize(ee::AdjustConfig()

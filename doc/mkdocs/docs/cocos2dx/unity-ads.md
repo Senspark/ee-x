@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:unity-ads:2.0.0'
+    implementation 'com.senspark.ee:unity-ads:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/unity-ads'
 ## Basic usage
 Initializes with game ID
 ```cpp
-#include <ee/UnityAds.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IUnityAds>();
 ee::noAwait([plugin]() -> ee::Task<> {

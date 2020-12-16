@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:app-lovin:2.0.0'
+    implementation 'com.senspark.ee:app-lovin:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/app-lovin'
 ## Basic usage
 Initializes with sdk key
 ```cpp
-#include <ee/AppLovin.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = std::make_shared<ee::AppLovin>();
 ee::noAwait([plugin]() -> ee::Task<> {

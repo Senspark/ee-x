@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:facebook-ads:2.0.0'
+    implementation 'com.senspark.ee:facebook-ads:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/facebook-ads'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/FacebookAds.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFacebookAds>();
 ee::noAwait([plugin]() -> ee::Task<> {

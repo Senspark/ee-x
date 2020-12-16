@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:2.0.0'
+    implementation 'com.senspark.ee:core:2.0.1'
 }
 ```
 
@@ -37,7 +37,7 @@ pod 'ee-x/cpp'
 ## Initialization
 Modify `AppDelegate.cpp`
 ```cpp
-#include <ee/Core.hpp>
+#include <ee/Cpp.hpp>
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // Call this method only once.

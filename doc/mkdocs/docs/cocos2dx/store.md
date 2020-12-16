@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:store:2.0.0'
+    implementation 'com.senspark.ee:store:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/store'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Store.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IStore>();
 ```

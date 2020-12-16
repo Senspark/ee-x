@@ -61,7 +61,7 @@ std::shared_ptr<ITrace> Self::newTrace(const std::string& name) {
     if (not core::toBool(response)) {
         return nullptr;
     }
-    return std::make_shared<Trace>(this, name);
+    return std::make_shared<Trace>(bridge_, this, name);
 }
 } // namespace performance
 } // namespace firebase

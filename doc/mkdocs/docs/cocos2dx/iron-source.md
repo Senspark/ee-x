@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:iron-source-mediation:2.0.0'
+    implementation 'com.senspark.ee:iron-source-mediation:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/iron-source-mediation'
 ## Basic usage
 Initializes with game ID
 ```cpp
-#include <ee/IronSource.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IIronSource>();
 ee::noAwait([plugin]() -> ee::Task<> {

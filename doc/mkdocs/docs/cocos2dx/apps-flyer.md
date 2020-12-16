@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:apps-flyer:2.0.0'
+    implementation 'com.senspark.ee:apps-flyer:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/apps-flyer'
 ## Basic usage
 Initializes with dev key and app ID
 ```cpp
-#include <ee/AppsFlyer.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAppsFlyer>();
 plugin->initialize("your_dev_key", "your_app_id");

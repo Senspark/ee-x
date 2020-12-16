@@ -22,9 +22,9 @@ public:
 
     virtual void destroy() override;
 
-    virtual void setDataCollectionEnabled(bool enabled) = 0;
-    virtual bool isDataCollectionEnabled() = 0;
-    virtual std::shared_ptr<ITrace> newTrace(const std::string& name) = 0;
+    virtual void setDataCollectionEnabled(bool enabled) override;
+    virtual bool isDataCollectionEnabled() override;
+    virtual std::shared_ptr<ITrace> newTrace(const std::string& name) override;
 
 private:
     IMessageBridge& bridge_;

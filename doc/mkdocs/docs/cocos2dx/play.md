@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:play:2.0.0'
+    implementation 'com.senspark.ee:play:2.0.1'
 }
 ```
 
@@ -17,7 +17,7 @@ pod 'ee-x/play'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Play.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IPlay>();
 ```

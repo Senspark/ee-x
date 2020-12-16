@@ -229,6 +229,8 @@ class AdMobBridge(
         _bridge.deregisterHandler(kDestroyInterstitialAd)
         _bridge.deregisterHandler(kCreateRewardedAd)
         _bridge.deregisterHandler(kDestroyRewardedAd)
+        _bridge.deregisterHandler(kCreateAppOpenAd)
+        _bridge.deregisterHandler(kDestroyAppOpenAd)
     }
 
     private fun checkInitialized() {

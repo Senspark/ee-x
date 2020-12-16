@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-dynamic-link:2.0.1'
+    implementation 'com.senspark.ee:firebase-dynamic-link:2.0.2'
 }
 ```
 

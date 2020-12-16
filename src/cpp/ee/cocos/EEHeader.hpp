@@ -11,8 +11,8 @@
 
 #ifdef __cplusplus
 
-#warning "Use #include <ee/Cocos.hpp> instead"
-#include "ee/Cocos.hpp"
+#warning "Use #include <ee/Cpp.hpp> instead"
+#include "ee/Cpp.hpp"
 
 #endif // __cplusplus
 

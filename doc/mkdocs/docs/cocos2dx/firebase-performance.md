@@ -17,7 +17,7 @@ pod 'ee-x/firebase-performance'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Firebase.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebasePerformance>();
 auto trace = plugin->startTrace("default");

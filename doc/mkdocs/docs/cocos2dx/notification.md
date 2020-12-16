@@ -17,7 +17,7 @@ pod 'ee-x/notification'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Notification.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::INotification>();
 ```

@@ -17,7 +17,7 @@ pod 'ee-x/play'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Play.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IPlay>();
 ```

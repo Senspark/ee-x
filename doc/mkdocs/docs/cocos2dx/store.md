@@ -17,7 +17,7 @@ pod 'ee-x/store'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Store.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IStore>();
 ```

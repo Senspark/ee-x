@@ -18,7 +18,7 @@ pod 'Adjust', :modular_headers => true
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Adjust.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdjust>();
 plugin->initialize(ee::AdjustConfig()

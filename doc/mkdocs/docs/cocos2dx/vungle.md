@@ -17,7 +17,7 @@ pod 'ee-x/vungle'
 ## Basic usage
 Initializes with game ID
 ```cpp
-#include <ee/Vungle.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IVungle>();
 ee::noAwait([plugin]() -> ee::Task<> {

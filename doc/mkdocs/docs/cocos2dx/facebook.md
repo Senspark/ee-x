@@ -17,7 +17,7 @@ pod 'ee-x/facebook'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Facebook.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFacebook>();
 ```

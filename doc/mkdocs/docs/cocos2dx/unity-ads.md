@@ -17,7 +17,7 @@ pod 'ee-x/unity-ads'
 ## Basic usage
 Initializes with game ID
 ```cpp
-#include <ee/UnityAds.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IUnityAds>();
 ee::noAwait([plugin]() -> ee::Task<> {

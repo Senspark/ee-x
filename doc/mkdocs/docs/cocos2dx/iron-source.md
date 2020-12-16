@@ -17,7 +17,7 @@ pod 'ee-x/iron-source-mediation'
 ## Basic usage
 Initializes with game ID
 ```cpp
-#include <ee/IronSource.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IIronSource>();
 ee::noAwait([plugin]() -> ee::Task<> {

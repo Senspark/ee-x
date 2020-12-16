@@ -17,7 +17,7 @@ pod 'ee-x/app-lovin'
 ## Basic usage
 Initializes with sdk key
 ```cpp
-#include <ee/AppLovin.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = std::make_shared<ee::AppLovin>();
 ee::noAwait([plugin]() -> ee::Task<> {

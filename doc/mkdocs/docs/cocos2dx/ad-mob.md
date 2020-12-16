@@ -17,7 +17,7 @@ pod 'ee-x/ad-mob-mediation'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/AdMob.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IAdMob>();
 ee::noAwait([plugin]() -> ee::Task<> {

@@ -203,12 +203,6 @@ internal class AdMobBannerAd(
     override fun onAdClicked() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClicked.name}")
-        }
-    }
-
-    override fun onAdLeftApplication() {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }

@@ -40,7 +40,7 @@ dependencies {
     api 'com.google.ads.mediation:facebook:6.2.0.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.0.3.1.0'
+    api 'com.google.ads.mediation:ironsource:7.0.4.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:unity:3.5.1.1'

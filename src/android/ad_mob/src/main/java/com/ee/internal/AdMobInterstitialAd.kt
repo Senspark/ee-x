@@ -138,14 +138,6 @@ internal class AdMobInterstitialAd(
     override fun onAdClicked() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClosed.name}")
-            // https://stackoverflow.com/questions/47814295/interstitialad-listener-onadclicked-not-working
-            // Use onAdLeftApplication instead.
-        }
-    }
-
-    override fun onAdLeftApplication() {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLeftApplication.name}")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }

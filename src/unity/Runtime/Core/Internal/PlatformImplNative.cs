@@ -178,7 +178,7 @@ namespace EE.Internal {
             foreach (var parameter in parameters) {
                 var entries = parameter.Split('=');
                 if (entries.Length >= 2) {
-                    m[entries[0]] = m[entries[1]];
+                    m[entries[0]] = entries[1];
                 }
             }
             result.utm_source = m.TryGetValue("utm_source", out var source) ? source : "";

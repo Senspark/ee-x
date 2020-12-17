@@ -191,7 +191,7 @@ Task<InstallReferrer> Self::getInstallReferrer() {
     for (auto&& param : params) {
         auto entries = core::split(param, "=");
         if (entries.size() >= 2) {
-            m[entries[0]] = m[entries[1]];
+            m[entries[0]] = entries[1];
         }
     }
     result.utm_source = m["utm_source"];

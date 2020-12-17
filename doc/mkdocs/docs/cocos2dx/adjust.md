@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:adjust:2.0.2'
+    implementation 'com.senspark.ee:adjust:2.0.3'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/adjust'
+pod 'ee-x/adjust', '2.0.3'
 pod 'Adjust', :modular_headers => true
 ```
 

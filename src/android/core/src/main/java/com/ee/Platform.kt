@@ -58,7 +58,7 @@ object Platform {
     private const val kSendMail = kPrefix + "sendMail"
     private const val kTestConnection = kPrefix + "testConnection"
     private const val kShowInstallPrompt = kPrefix + "showInstallPrompt"
-    private const val kGetInstallReferrerUrl = kPrefix + "getInstallReferrerUrl"
+    private const val kGetInstallReferrer = kPrefix + "getInstallReferrer"
 
     @InternalSerializationApi
     fun registerHandlers(bridge: IMessageBridge, context: Context) {
@@ -184,13 +184,13 @@ object Platform {
             val result = testConnection(context, request.host_name, request.time_out)
             Utils.toString(result)
         }
-        bridge.registerAsyncHandler(kGetInstallReferrerUrl) {
+        bridge.registerAsyncHandler(kGetInstallReferrer) {
             val activity = PluginManager.getInstance().getActivity()
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerAsyncHandler ""
             }
-            getInstallReferrerUrl(activity);
+            getInstallReferrer(activity);
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
             @Serializable
@@ -564,7 +564,7 @@ object Platform {
         com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
     }
 
-    private suspend fun getInstallReferrerUrl(activity: Activity): String {
+    private suspend fun getInstallReferrer(activity: Activity): String {
         return suspendCoroutine { cont ->
             val client = InstallReferrerClient.newBuilder(activity).build()
             client.startConnection(object : InstallReferrerStateListener {

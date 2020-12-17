@@ -24,7 +24,7 @@ namespace EE.Internal {
         private const string kSendMail = kPrefix + "sendMail";
         private const string kTestConnection = kPrefix + "testConnection";
         private const string kShowInstallPrompt = kPrefix + "showInstallPrompt";
-        private const string kGetInstallReferrerUrl = kPrefix + "getInstallReferrerUrl";
+        private const string kGetInstallReferrer = kPrefix + "getInstallReferrer";
 
         private readonly IMessageBridge _bridge;
 
@@ -164,9 +164,28 @@ namespace EE.Internal {
             return Utils.ToBool(response);
         }
 
-        public async Task<string> GetInstallReferrerUrl() {
-            var result = await _bridge.CallAsync(kGetInstallReferrerUrl);
+        public async Task<InstallReferrer> GetInstallReferrer() {
+            var result = new InstallReferrer();
+#if UNITY_ANDROID
+            var response = await _bridge.CallAsync(kGetInstallReferrer);
             await Thread.SwitchToLibraryThread();
+            result.raw = response;
+#else // UNITY_ANDROID
+            result.raw = "";
+#endif // UNITY_ANDROID
+            var parameters = result.raw.Split('&');
+            var m = new Dictionary<string, string>();
+            foreach (var parameter in parameters) {
+                var entries = parameter.Split('=');
+                if (entries.Length >= 2) {
+                    m[entries[0]] = entries[1];
+                }
+            }
+            result.utm_source = m.TryGetValue("utm_source", out var source) ? source : "";
+            result.utm_medium = m.TryGetValue("utm_medium", out var medium) ? medium : "";
+            result.utm_term = m.TryGetValue("utm_medium", out var term) ? term : "";
+            result.utm_content = m.TryGetValue("utm_content", out var content) ? content : "";
+            result.utm_campaign = m.TryGetValue("utm_campaign", out var campaign) ? campaign : "";
             return result;
         }
     }

@@ -40,7 +40,7 @@ const auto kGetSafeInset             = kPrefix + "getSafeInset";
 const auto kSendMail                 = kPrefix + "sendMail";
 const auto kTestConnection           = kPrefix + "testConnection";
 const auto kShowInstallPrompt        = kPrefix + "showInstallPrompt";
-const auto kGetInstallReferrerUrl    = kPrefix + "getInstallReferrerUrl";
+const auto kGetInstallReferrer       = kPrefix + "getInstallReferrer";
 // clang-format on
 } // namespace
 
@@ -177,14 +177,29 @@ void Self::showInstallPrompt(const std::string& url,
 #endif // EE_X_ANDROID
 }
 
-Task<std::string> Self::getInstallReferrerUrl() {
+Task<InstallReferrer> Self::getInstallReferrer() {
+    InstallReferrer result;
 #ifdef EE_X_ANDROID
-    auto response = co_await bridge_->callAsync(kGetInstallReferrerUrl);
+    auto response = co_await bridge_->callAsync(kGetInstallReferrer);
     co_await SwitchToLibraryThread();
-    co_return response;
+    result.raw = response;
 #else  // EE_X_ANDROID
-    co_return "";
+    result.raw = "";
 #endif // EE_X_ANDROID
+    auto params = core::split(result.raw, "&");
+    std::map<std::string, std::string> m;
+    for (auto&& param : params) {
+        auto entries = core::split(param, "=");
+        if (entries.size() >= 2) {
+            m[entries[0]] = entries[1];
+        }
+    }
+    result.utm_source = m["utm_source"];
+    result.utm_medium = m["utm_medium"];
+    result.utm_term = m["utm_term"];
+    result.utm_content = m["utm_content"];
+    result.utm_campaign = m["utm_campaign"];
+    co_return result;
 }
 } // namespace core
 } // namespace ee

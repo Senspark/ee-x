@@ -44,8 +44,14 @@ namespace EETest {
             });
 
             EE.Utils.NoAwait(async () => {
-                var result = await EE.Platform.GetInstallReferrerUrl();
-                Debug.Log($"GetInstallReferrerUrl = {result}");
+                var result = await EE.Platform.GetInstallReferrer();
+                Debug.Log(
+                    $"GetInstallReferrer: raw = {result.raw} " +
+                    $"utm_source = {result.utm_source} " +
+                    $"utm_medium = {result.utm_medium} " +
+                    $"utm_term = {result.utm_term}" +
+                    $"utm_content = {result.utm_content} " +
+                    $"utm_campaign = {result.utm_campaign}");
             });
         }
 

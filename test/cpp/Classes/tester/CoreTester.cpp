@@ -25,8 +25,8 @@ void Self::start() {
                      ee::getApplicationName().c_str());
     getLogger().info("getDensity: %f", ee::getDensity());
     ee::noAwait([]() -> ee::Task<> {
-        auto response = co_await ee::getDeviceId();
-        getLogger().info("getDeviceId: %s", response.c_str());
+        auto result = co_await ee::getDeviceId();
+        getLogger().info("getDeviceId: %s", result.c_str());
     });
     auto inset = ee::getSafeInset();
     getLogger().info("getSafeInset: %d %d %d %d", inset.right, inset.top,
@@ -40,12 +40,23 @@ void Self::start() {
                      ee::isApplicationInstalled("com.ee.test"));
     getLogger().info("isTablet: %d", ee::isTablet());
     ee::noAwait([]() -> ee::Task<> {
-        auto response = co_await ee::testConnection("www.google.com", 1.0f);
-        getLogger().info("testConnection: %d", response);
+        auto result = co_await ee::testConnection("www.google.com", 1.0f);
+        getLogger().info("testConnection: %d", result);
     });
     ee::noAwait([]() -> ee::Task<> {
-        auto url = co_await ee::getInstallReferrerUrl();
-        getLogger().info("getInstallReferrerUrl: %s", url.c_str());
+        auto result = co_await ee::getInstallReferrer();
+        getLogger().info("getInstallReferrer: raw = %s "
+                         "utm_source = %s "
+                         "utm_medium = %s "
+                         "utm_term = %s "
+                         "utm_content = %s "
+                         "utm_campaign = %s",
+                         result.raw.c_str(),        //
+                         result.utm_source.c_str(), //
+                         result.utm_medium.c_str(), //
+                         result.utm_term.c_str(),   //
+                         result.utm_content.c_str(),
+                         result.utm_campaign.c_str());
     });
 }
 

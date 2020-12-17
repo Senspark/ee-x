@@ -31,6 +31,15 @@ struct SafeInset {
     int bottom;
 };
 
+struct InstallReferrer {
+    std::string raw;
+    std::string utm_source;
+    std::string utm_medium;
+    std::string utm_term;
+    std::string utm_content;
+    std::string utm_campaign;
+};
+
 class Platform {
 public:
     static void registerHandlers(IMessageBridge& bridge);
@@ -91,7 +100,7 @@ public:
     static void showInstallPrompt(const std::string& url,
                                   const std::string& referrer);
 
-    [[nodiscard]] static Task<std::string> getInstallReferrerUrl();
+    [[nodiscard]] static Task<InstallReferrer> getInstallReferrer();
 
 private:
     static IMessageBridge* bridge_;
@@ -115,7 +124,7 @@ constexpr auto isTablet = &Platform::isTablet;
 constexpr auto openApplication = &Platform::openApplication;
 constexpr auto sendMail = &Platform::sendMail;
 constexpr auto testConnection = &Platform::testConnection;
-constexpr auto getInstallReferrerUrl = &Platform::getInstallReferrerUrl;
+constexpr auto getInstallReferrer = &Platform::getInstallReferrer;
 } // namespace ee
 
 #endif // __cplusplus

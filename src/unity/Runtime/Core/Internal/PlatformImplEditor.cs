@@ -64,8 +64,8 @@ namespace EE.Internal {
             return Task.FromResult(false);
         }
 
-        public Task<string> GetInstallReferrerUrl() {
-            return Task.FromResult("");
+        public Task<InstallReferrer> GetInstallReferrer() {
+            return Task.FromResult(new InstallReferrer());
         }
     }
 }

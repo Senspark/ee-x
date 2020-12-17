@@ -31,6 +31,9 @@ std::string toString(bool value);
 /// Convert string to bool, used internally.
 bool toBool(const std::string& value);
 
+/// https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+std::vector<std::string> split(std::string text, const std::string& delimiter);
+
 /// http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 std::string format(std::string formatString, ...);
 std::string format(std::string formatString, std::va_list args);

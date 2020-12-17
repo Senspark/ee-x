@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include <unwind.h>
+#include <vector>
 
 #ifdef EE_X_ANDROID
 #include <android/log.h>
@@ -42,6 +43,18 @@ std::string toString(bool value) {
 bool toBool(const std::string& value) {
     assert(value == "true" || value == "false");
     return value == "true";
+}
+
+std::vector<std::string> split(std::string text, const std::string& delimiter) {
+    std::vector<std::string> args;
+    std::size_t pos = 0;
+    while ((pos = text.find(delimiter)) != std::string::npos) {
+        auto token = text.substr(0, pos);
+        args.push_back(token);
+        text.erase(0, pos + delimiter.size());
+    }
+    args.push_back(text);
+    return args;
 }
 
 std::string format(std::string formatString, ...) {

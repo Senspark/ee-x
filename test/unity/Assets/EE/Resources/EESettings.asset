@@ -23,7 +23,7 @@ MonoBehaviour:
   _isFirebasePerformanceEnabled: 0
   _isFirebaseRemoteConfigEnabled: 0
   _isFirebaseStorageEnabled: 0
-  _isAdjustEnabled: 0
+  _isAdjustEnabled: 1
   _isAdColonyEnabled: 1
   _isAdMobEnabled: 1
   _isAdMobMediationEnabled: 1

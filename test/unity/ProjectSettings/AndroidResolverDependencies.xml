@@ -1,12 +1,13 @@
 <dependencies>
   <packages>
     <package>androidx.multidex:multidex:[2.0.1]</package>
-    <package>com.senspark.ee:ad-colony:[2.0.0]</package>
-    <package>com.senspark.ee:ad-mob-mediation:[2.0.0]</package>
-    <package>com.senspark.ee:core:[2.0.0]</package>
-    <package>com.senspark.ee:facebook-ads:[2.0.0]</package>
-    <package>com.senspark.ee:iron-source-mediation:[2.0.0]</package>
-    <package>com.senspark.ee:unity-ads:[2.0.0]</package>
+    <package>com.senspark.ee:ad-colony:[2.0.4]</package>
+    <package>com.senspark.ee:adjust:[2.0.4]</package>
+    <package>com.senspark.ee:ad-mob-mediation:[2.0.4]</package>
+    <package>com.senspark.ee:core:[2.0.4]</package>
+    <package>com.senspark.ee:facebook-ads:[2.0.4]</package>
+    <package>com.senspark.ee:iron-source-mediation:[2.0.4]</package>
+    <package>com.senspark.ee:unity-ads:[2.0.4]</package>
   </packages>
   <files>
     <file>Assets/Plugins/Android/androidx.activity.activity-1.0.0.aar</file>
@@ -51,25 +52,26 @@
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.work.work-runtime-2.1.0.aar</file>
     <file>Assets/Plugins/Android/com.adcolony.sdk-4.2.4.aar</file>
+    <file>Assets/Plugins/Android/com.adjust.sdk.adjust-android-4.24.1.jar</file>
     <file>Assets/Plugins/Android/com.android.installreferrer.installreferrer-2.1.aar</file>
     <file>Assets/Plugins/Android/com.applovin.applovin-sdk-9.14.6.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.audience-network-sdk-6.2.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.adcolony-4.2.4.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.applovin-9.14.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.facebook-6.2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.ads.mediation.ironsource-7.0.3.1.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.ads.mediation.ironsource-7.0.4.0.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.unity-3.5.1.1.aar</file>
     <file>Assets/Plugins/Android/com.google.ads.mediation.vungle-6.8.1.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-19.5.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-base-19.5.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-19.6.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-base-19.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-identifier-17.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-lite-19.5.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-lite-19.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-base-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-17.3.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-gass-19.5.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-gass-19.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-instantapps-17.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-17.2.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-17.2.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-17.5.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-17.5.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-tasks-17.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.auto.value.auto-value-annotations-1.6.3.jar</file>
     <file>Assets/Plugins/Android/com.google.code.findbugs.jsr305-3.0.2.jar</file>
@@ -87,16 +89,17 @@
     <file>Assets/Plugins/Android/com.ironsource.adapters.facebookadapter-4.3.23.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.adapters.unityadsadapter-4.3.8.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.adapters.vungleadapter-4.3.7.aar</file>
-    <file>Assets/Plugins/Android/com.ironsource.sdk.mediationsdk-7.0.3.1.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ad-colony-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-mediation-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.ads-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.core-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.facebook-ads-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-mediation-2.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.senspark.ee.unity-ads-2.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.ironsource.sdk.mediationsdk-7.0.4.1.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-colony-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.adjust-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ad-mob-mediation-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.ads-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.core-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.facebook-ads-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.iron-source-mediation-2.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.senspark.ee.unity-ads-2.0.4.aar</file>
     <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-3.12.12.jar</file>
     <file>Assets/Plugins/Android/com.squareup.okio.okio-1.15.0.jar</file>
     <file>Assets/Plugins/Android/com.unity3d.ads.unity-ads-3.5.1.aar</file>

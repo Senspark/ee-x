@@ -17,7 +17,7 @@ namespace EE.Editor {
         public int callbackOrder { get; }
 
         public void OnPreprocessBuild(BuildReport report) {
-            var projectDir = Path.Combine(Application.dataPath, "Plugins", "Android", "EE");
+            var projectDir = Path.Combine(Application.dataPath, "Plugins", "Android", "EE.androidlib");
             Directory.CreateDirectory(projectDir);
             EnsureProjectProperties(projectDir);
             var manifestPath = Path.Combine(projectDir, "AndroidManifest.xml");

@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <dependencies>
   <iosPods>
+    <iosPod name="Adjust" modular_headers="true" />
     <iosPod name="ee-x/core" path="../../" />
+    <iosPod name="ee-x/adjust" path="../../" />
     <iosPod name="ee-x/ad-colony" path="../../" />
     <iosPod name="ee-x/ad-mob-mediation" path="../../" />
     <iosPod name="ee-x/facebook-ads" path="../../" />
@@ -18,11 +20,12 @@
       <repository>https://adcolony.bintray.com/AdColony</repository>
     </repositories>
     <androidPackage spec="androidx.multidex:multidex:[2.0.1]" />
-    <androidPackage spec="com.senspark.ee:core:[2.0.0]" />
-    <androidPackage spec="com.senspark.ee:ad-colony:[2.0.0]" />
-    <androidPackage spec="com.senspark.ee:ad-mob-mediation:[2.0.0]" />
-    <androidPackage spec="com.senspark.ee:facebook-ads:[2.0.0]" />
-    <androidPackage spec="com.senspark.ee:iron-source-mediation:[2.0.0]" />
-    <androidPackage spec="com.senspark.ee:unity-ads:[2.0.0]" />
+    <androidPackage spec="com.senspark.ee:core:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:adjust:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:ad-colony:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:ad-mob-mediation:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:facebook-ads:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:iron-source-mediation:[2.0.4]" />
+    <androidPackage spec="com.senspark.ee:unity-ads:[2.0.4]" />
   </androidPackages>
 </dependencies>

@@ -267,7 +267,7 @@ Pod::Spec.new do |spec|
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
     # FIXME: use 4.3.4.1
     s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'ee-x/ad-colony'
+    s.dependency 'AdColony', '4.4.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     # Wait for supported adapter.

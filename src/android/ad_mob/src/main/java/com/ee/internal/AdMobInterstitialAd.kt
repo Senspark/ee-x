@@ -2,6 +2,7 @@ package com.ee.internal
 
 import android.app.Activity
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.IInterstitialAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -34,7 +35,6 @@ internal class AdMobInterstitialAd(
     init {
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
-        createInternalAd()
     }
 
     fun onCreate(activity: Activity) {
@@ -63,17 +63,16 @@ internal class AdMobInterstitialAd(
         _helper.deregisterHandlers()
     }
 
-    @AnyThread
-    private fun createInternalAd() {
-        Thread.runOnMainThread {
-            if (_ad != null) {
-                return@runOnMainThread
-            }
-            val ad = InterstitialAd(_activity)
-            ad.adUnitId = _adId
-            ad.adListener = this
-            _ad = ad
+    @UiThread
+    private fun createInternalAd(): InterstitialAd {
+        _ad?.let {
+            return@createInternalAd it
         }
+        val ad = InterstitialAd(_activity)
+        ad.adUnitId = _adId
+        ad.adListener = this
+        _ad = ad
+        return ad
     }
 
     @AnyThread
@@ -92,7 +91,7 @@ internal class AdMobInterstitialAd(
     override fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             ad.loadAd(AdRequest.Builder().build())
         }
     }
@@ -100,7 +99,7 @@ internal class AdMobInterstitialAd(
     @AnyThread
     override fun show() {
         Thread.runOnMainThread {
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             ad.show()
         }
     }
@@ -117,7 +116,6 @@ internal class AdMobInterstitialAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
             destroyInternalAd()
-            createInternalAd()
             _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
         }
     }
@@ -146,7 +144,6 @@ internal class AdMobInterstitialAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClosed.name}")
             destroyInternalAd()
-            createInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }
     }

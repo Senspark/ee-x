@@ -31,7 +31,6 @@ internal class FacebookInterstitialAd:
         super.init()
         _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
-        createInternalAd()
     }
     
     func destroy() {
@@ -47,15 +46,14 @@ internal class FacebookInterstitialAd:
         _helper?.deregisterHandlers()
     }
     
-    func createInternalAd() {
-        Thread.runOnMainThread {
-            if self._ad != nil {
-                return
-            }
-            let ad = FBInterstitialAd(placementID: self._adId)
-            ad.delegate = self
-            self._ad = ad
+    func createInternalAd() -> FBInterstitialAd {
+        if let currentAd = _ad {
+            return currentAd
         }
+        let ad = FBInterstitialAd(placementID: _adId)
+        ad.delegate = self
+        _ad = ad
+        return ad
     }
     
     func destroyInternalAd() {
@@ -74,31 +72,26 @@ internal class FacebookInterstitialAd:
     
     func load() {
         Thread.runOnMainThread {
-            guard let ad = self._ad else {
-                assert(false, "Ad is not initialized")
-                return
-            }
+            let ad = self.createInternalAd()
             ad.load()
         }
     }
     
     func show() {
         Thread.runOnMainThread {
-            guard
-                let ad = self._ad,
-                let rootView = Utils.getCurrentRootViewController()
-            else {
-                assert(false, "Ad is not initialized")
+            guard let rootView = Utils.getCurrentRootViewController() else {
+                assert(false, "Current rootView is null")
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
                 return
             }
             self._displaying = true
+            let ad = self.createInternalAd()
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
                 self._isLoaded = false
             } else {
                 self.destroyInternalAd()
-                self.createInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
         }
@@ -116,7 +109,6 @@ internal class FacebookInterstitialAd:
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
             self.destroyInternalAd()
-            self.createInternalAd()
             if self._displaying {
                 self._displaying = false
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
@@ -150,7 +142,6 @@ internal class FacebookInterstitialAd:
             self._logger.debug("\(kTag): \(#function)")
             self._displaying = false
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }
     }

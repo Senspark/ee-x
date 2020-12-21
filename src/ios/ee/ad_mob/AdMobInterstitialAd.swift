@@ -29,7 +29,6 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         super.init()
         _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
-        createInternalAd()
     }
     
     func destroy() {
@@ -45,15 +44,14 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         _helper?.deregisterHandlers()
     }
     
-    func createInternalAd() {
-        Thread.runOnMainThread {
-            if self._ad != nil {
-                return
-            }
-            let ad = GADInterstitial(adUnitID: self._adId)
-            ad.delegate = self
-            self._ad = ad
+    func createInternalAd() -> GADInterstitial {
+        if let currentAd = _ad {
+            return currentAd
         }
+        let ad = GADInterstitial(adUnitID: _adId)
+        ad.delegate = self
+        _ad = ad
+        return ad
     }
     
     func destroyInternalAd() {
@@ -72,23 +70,19 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func load() {
         Thread.runOnMainThread {
-            guard let ad = self._ad else {
-                assert(false, "Ad is not initialized")
-                return
-            }
+            let ad = self.createInternalAd()
             ad.load(GADRequest())
         }
     }
     
     func show() {
         Thread.runOnMainThread {
-            guard
-                let ad = self._ad,
-                let rootView = Utils.getCurrentRootViewController()
-            else {
-                assert(false, "Ad is not initialized")
+            guard let rootView = Utils.getCurrentRootViewController() else {
+                assert(false, "Current rootView is null")
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
                 return
             }
+            let ad = self.createInternalAd()
             ad.present(fromRootViewController: rootView)
         }
     }
@@ -105,7 +99,6 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
         }
     }
@@ -121,7 +114,6 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function)")
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow)
         }
     }
@@ -143,7 +135,6 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function)")
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }
     }

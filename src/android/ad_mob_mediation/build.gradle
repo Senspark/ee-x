@@ -34,13 +34,13 @@ dependencies {
     api 'com.google.ads.mediation:adcolony:4.2.4.0'
 
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:applovin:9.14.6.0'
+    api 'com.google.ads.mediation:applovin:9.14.7.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:facebook:6.2.0.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.0.4.0'
+    api 'com.google.ads.mediation:ironsource:7.0.4.1.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:unity:3.5.1.1'

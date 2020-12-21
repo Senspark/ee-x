@@ -111,7 +111,7 @@ using Self = PluginManager;
 
 template <>
 bool Self::initializePlugins<Library::Core>() {
-    if (not ee_staticInitializePlugins("2.0.4")) {
+    if (not ee_staticInitializePlugins("2.0.5")) {
         return false;
     }
     bridge_ = &MessageBridge::getInstance();

@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-remote-config:2.0.4'
+    implementation 'com.senspark.ee:firebase-remote-config:2.0.5'
 }
 ```
 
@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_remote_config)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-remote-config', '2.0.4'
+pod 'ee-x/firebase-remote-config', '2.0.5'
 ```
 
 ## Basic usage

@@ -28,7 +28,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
         _messageHelper = MessageHelper("AdMobRewardedAd", _adId)
         super.init()
         registerHandlers()
-        createInternalAd()
     }
     
     func destroy() {
@@ -56,13 +55,13 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
         _bridge.deregisterHandler(_messageHelper.show)
     }
     
-    func createInternalAd() {
-        Thread.runOnMainThread {
-            if self._ad != nil {
-                return
-            }
-            self._ad = GADRewardedAd(adUnitID: self._adId)
+    func createInternalAd() -> GADRewardedAd {
+        if let currentAd = _ad {
+            return currentAd
         }
+        let ad = GADRewardedAd(adUnitID: _adId)
+        _ad = ad
+        return ad
     }
     
     func destroyInternalAd() {
@@ -80,15 +79,11 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func load() {
         Thread.runOnMainThread {
-            guard let ad = self._ad else {
-                assert(false, "Ad is not initialized")
-                return
-            }
+            let ad = self.createInternalAd()
             ad.load(GADRequest(), completionHandler: { error in
                 Thread.runOnMainThread {
                     if let error = error {
                         self.destroyInternalAd()
-                        self.createInternalAd()
                         self._bridge.callCpp(self._messageHelper.onFailedToLoad,
                                              error.localizedDescription)
                     } else {
@@ -102,14 +97,13 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func show() {
         Thread.runOnMainThread {
-            guard
-                let ad = self._ad,
-                let rootView = Utils.getCurrentRootViewController()
-            else {
-                assert(false, "Ad is not initialized")
+            guard let rootView = Utils.getCurrentRootViewController() else {
+                assert(false, "Current rootView is null")
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
                 return
             }
             self._rewarded = false
+            let ad = self.createInternalAd()
             ad.present(fromRootViewController: rootView, delegate: self)
         }
     }
@@ -125,7 +119,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
         Thread.runOnMainThread {
             self._logger.debug("\(#function): \(error.localizedDescription)")
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
         }
     }
@@ -141,7 +134,6 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
         Thread.runOnMainThread {
             self._logger.debug("\(#function)")
             self.destroyInternalAd()
-            self.createInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }
     }

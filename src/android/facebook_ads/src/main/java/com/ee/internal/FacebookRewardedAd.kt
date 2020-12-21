@@ -35,7 +35,6 @@ internal class FacebookRewardedAd(
     init {
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
-        createInternalAd()
     }
 
     @UiThread
@@ -78,14 +77,14 @@ internal class FacebookRewardedAd(
         _bridge.deregisterHandler(_messageHelper.show)
     }
 
-    @AnyThread
-    private fun createInternalAd() {
-        Thread.runOnMainThread {
-            if (_ad != null) {
-                return@runOnMainThread
-            }
-            _ad = RewardedVideoAd(_activity, _adId)
+    @UiThread
+    private fun createInternalAd(): RewardedVideoAd {
+        _ad?.let {
+            return@createInternalAd it
         }
+        val ad = RewardedVideoAd(_activity, _adId)
+        _ad = ad
+        return ad
     }
 
     @AnyThread
@@ -104,7 +103,7 @@ internal class FacebookRewardedAd(
     private fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             ad.loadAd(ad.buildLoadAdConfig()
                 .withFailOnCacheFailureEnabled(true)
                 .withAdListener(this)
@@ -116,7 +115,7 @@ internal class FacebookRewardedAd(
     private fun show() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             _displaying = true
             _rewarded = false
             val result = ad.show(ad.buildShowAdConfig().build())
@@ -125,7 +124,6 @@ internal class FacebookRewardedAd(
                 _isLoaded.set(false)
             } else {
                 destroyInternalAd()
-                createInternalAd()
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
         }
@@ -134,7 +132,6 @@ internal class FacebookRewardedAd(
     override fun onError(ad: Ad, adError: AdError) {
         _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
         destroyInternalAd()
-        createInternalAd()
         if (_displaying) {
             _displaying = false
             _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
@@ -167,7 +164,6 @@ internal class FacebookRewardedAd(
         _logger.info(this::onRewardedVideoClosed.name)
         _displaying = false
         destroyInternalAd()
-        createInternalAd()
         _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
     }
 }

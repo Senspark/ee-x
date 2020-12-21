@@ -2,6 +2,7 @@ package com.ee.internal
 
 import android.app.Activity
 import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -36,7 +37,6 @@ internal class AdMobRewardedAd(
     init {
         _logger.info("$kTag: constructor: adId = $_adId")
         registerHandlers()
-        createInternalAd()
     }
 
     fun onCreate(activity: Activity) {
@@ -77,16 +77,16 @@ internal class AdMobRewardedAd(
         _bridge.deregisterHandler(_messageHelper.show)
     }
 
-    @AnyThread
-    private fun createInternalAd() {
-        Thread.runOnMainThread {
-            if (_ad != null) {
-                return@runOnMainThread
-            }
-            // https://github.com/googleads/googleads-mobile-android-mediation/issues/113
-            // https://developers.google.com/admob/android/mediate#initialize_your_ad_object_with_an_activity_instance
-            _ad = RewardedAd(_activity, _adId)
+    @UiThread
+    private fun createInternalAd(): RewardedAd {
+        _ad?.let {
+            return@createInternalAd it
         }
+        // https://github.com/googleads/googleads-mobile-android-mediation/issues/113
+        // https://developers.google.com/admob/android/mediate#initialize_your_ad_object_with_an_activity_instance
+        val ad = RewardedAd(_activity, _adId)
+        _ad = ad
+        return ad
     }
 
     @AnyThread
@@ -106,7 +106,7 @@ internal class AdMobRewardedAd(
     private fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
                     Thread.runOnMainThread {
@@ -120,7 +120,6 @@ internal class AdMobRewardedAd(
                     Thread.runOnMainThread {
                         _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
                         destroyInternalAd()
-                        createInternalAd()
                         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
                     }
                 }
@@ -133,7 +132,7 @@ internal class AdMobRewardedAd(
     private fun show() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = createInternalAd()
             _rewarded = false
             ad.show(_activity, this)
         }
@@ -143,7 +142,6 @@ internal class AdMobRewardedAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
             destroyInternalAd()
-            createInternalAd()
             _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
         }
     }
@@ -166,7 +164,6 @@ internal class AdMobRewardedAd(
         Thread.runOnMainThread {
             _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
             destroyInternalAd()
-            createInternalAd()
             _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
         }
     }

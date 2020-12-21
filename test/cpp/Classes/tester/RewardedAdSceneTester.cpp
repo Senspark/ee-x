@@ -40,25 +40,10 @@ void Self::initialize() {
     ironSource_ = ee::PluginManager::createPlugin<ee::IIronSource>();
     unityAds_ = ee::PluginManager::createPlugin<ee::IUnityAds>();
 
-    ee::noAwait([this]() -> ee::Task<> {
-        co_await adMob_->initialize();
-        co_await ironSource_->initialize(config::iron_source_app);
-        co_await unityAds_->initialize(config::unity_ads_app, false);
-    });
-
     handle_ = std::make_unique<ee::ObserverHandle>();
 
     scene_ = cocos2d::Scene::create();
     scene_->retain();
-
-    auto ad = std::make_shared<ee::MultiRewardedAd>();
-    (*ad)
-        .addItem(adMob_->createRewardedAd(config::admob_rewarded_ad))
-        .addItem(
-            facebookAds_->createRewardedAd(config::facebook_ads_rewarded_ad))
-        .addItem(ironSource_->createRewardedAd(config::iron_source_rewarded_ad))
-        .addItem(unityAds_->createRewardedAd(config::unity_ads_rewarded_ad));
-    rewardedAd_ = ad;
 
     auto winSize = cocos2d::Director::getInstance()->getWinSize();
 
@@ -73,11 +58,11 @@ void Self::initialize() {
     loadButton->setPosition(
         cocos2d::Point(winSize.width / 2, winSize.height / 2 + 50));
     loadButton->setTitleText("Load");
-    loadButton->addClickEventListener(std::bind([ad, statusLabel] { //
-        if (ad->isLoaded()) {
+    loadButton->addClickEventListener(std::bind([this, statusLabel] { //
+        if (rewardedAd_->isLoaded()) {
             statusLabel->setString("Loaded");
         } else {
-            ee::noAwait(ad->load());
+            ee::noAwait(rewardedAd_->load());
         }
     }));
 
@@ -93,10 +78,10 @@ void Self::initialize() {
         cocos2d::Point(winSize.width / 2, winSize.height / 2 - 50));
     watchButton->setTitleText("Watch");
     watchButton->addClickEventListener(
-        std::bind([ad, statusLabel, resultLabel] { //
-            ee::noAwait([ad, statusLabel, resultLabel]() -> ee::Task<> {
+        std::bind([this, statusLabel, resultLabel] { //
+            ee::noAwait([this, statusLabel, resultLabel]() -> ee::Task<> {
                 statusLabel->setString("---");
-                auto result = co_await ad->show();
+                auto result = co_await rewardedAd_->show();
                 switch (result) {
                 case ee::IRewardedAdResult::Canceled: {
                     resultLabel->setString("Canceled");
@@ -111,7 +96,7 @@ void Self::initialize() {
                     break;
                 }
                 }
-                if (ad->isLoaded()) {
+                if (rewardedAd_->isLoaded()) {
                     statusLabel->setString("Loaded");
                 }
             });
@@ -122,11 +107,27 @@ void Self::initialize() {
     scene_->addChild(resultLabel);
     scene_->addChild(watchButton);
 
-    handle_->bind(*ad).addObserver({
-        .onLoaded =
-            [statusLabel] { //
-                statusLabel->setString("Loaded");
-            },
+    ee::noAwait([this, statusLabel]() -> ee::Task<> {
+        co_await adMob_->initialize();
+        co_await facebookAds_->initialize();
+        co_await ironSource_->initialize(config::iron_source_app);
+        co_await unityAds_->initialize(config::unity_ads_app, false);
+        auto ad = std::make_shared<ee::MultiRewardedAd>();
+        (*ad)
+            .addItem(adMob_->createRewardedAd(config::admob_rewarded_ad))
+            .addItem(facebookAds_->createRewardedAd(
+                config::facebook_ads_rewarded_ad))
+            .addItem(
+                ironSource_->createRewardedAd(config::iron_source_rewarded_ad))
+            .addItem(
+                unityAds_->createRewardedAd(config::unity_ads_rewarded_ad));
+        handle_->bind(*ad).addObserver({
+            .onLoaded =
+                [statusLabel] { //
+                    statusLabel->setString("Loaded");
+                },
+        });
+        rewardedAd_ = ad;
     });
 }
 

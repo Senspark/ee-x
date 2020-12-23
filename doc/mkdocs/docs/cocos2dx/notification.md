@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:notification:2.0.5'
+    implementation 'com.senspark.ee:notification:2.0.6'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/notification', '2.0.5'
+pod 'ee-x/notification', '2.0.6'
 ```
 
 ## Basic usage

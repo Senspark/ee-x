@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '2.0.5'
+  spec.version        = '2.0.6'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v2.0.5'
+    :tag => 'v2.0.6'
   }
 
   spec.framework = 'Foundation'
@@ -132,7 +132,8 @@ Pod::Spec.new do |spec|
     # https://bintray.com/google/mobile-ads-adapters-ios
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
+    # FIXME: hanging on iPad iOS 13.5.1.
+    # s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
     # FIXME: use 6.14.6.0

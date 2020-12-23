@@ -132,7 +132,8 @@ Pod::Spec.new do |spec|
     # https://bintray.com/google/mobile-ads-adapters-ios
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
+    # FIXME: hanging on iPad iOS 13.5.1.
+    # s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
     # FIXME: use 6.14.6.0

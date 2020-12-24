@@ -20,7 +20,7 @@ Self::AppOpenAd(IMessageBridge& bridge, const Logger& logger,
     , displayer_(displayer)
     , plugin_(plugin)
     , adId_(adId)
-    , messageHelper_("AdMobInterstitialAd", adId) {
+    , messageHelper_("AdMobAppOpenAd", adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 

@@ -75,6 +75,7 @@ using AsyncMutexLockOperation = cppcoro::async_mutex_lock_operation;
 using AsyncMutexScopedLockOperation =
     cppcoro::async_mutex_scoped_lock_operation;
 
+class Delay;
 class SwitchToLibraryThread;
 class SwitchToMainThread;
 
@@ -120,6 +121,7 @@ using core::SafeObserverManager;
 using core::AsyncMutex;
 using core::AsyncMutexLockOperation;
 using core::AsyncMutexScopedLockOperation;
+using core::Delay;
 using core::LambdaAwaiter;
 using core::SwitchToLibraryThread;
 using core::SwitchToMainThread;

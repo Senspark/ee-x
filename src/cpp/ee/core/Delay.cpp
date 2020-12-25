@@ -1,10 +1,10 @@
-#include "ee/cocos/Delay.hpp"
+#include "ee/core/Delay.hpp"
 
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>
 
 namespace ee {
-namespace cocos {
+namespace core {
 using Self = Delay;
 
 Self::Delay(float duration)
@@ -36,5 +36,5 @@ bool Self::await_ready() {
 }
 
 void Self::await_resume() {}
-} // namespace cocos
+} // namespace core
 } // namespace ee

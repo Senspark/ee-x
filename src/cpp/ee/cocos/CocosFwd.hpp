@@ -317,7 +317,6 @@ class IDialogManager;
 
 class Metrics;
 
-class Delay;
 class SwitchToCocosThread;
 
 class CocosAdView;
@@ -327,7 +326,6 @@ using cocos::Dialog;
 using cocos::DialogComponent;
 using cocos::Metrics;
 
-using cocos::Delay;
 using cocos::SwitchToCocosThread;
 
 using cocos::CocosAdView;

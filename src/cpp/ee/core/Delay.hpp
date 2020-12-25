@@ -5,10 +5,10 @@
 
 #include <experimental/coroutine>
 
-#include "ee/cocos/CocosFwd.hpp"
+#include "ee/core/CoreFwd.hpp"
 
 namespace ee {
-namespace cocos {
+namespace core {
 class Delay {
 private:
     using Self = Delay;
@@ -27,7 +27,7 @@ private:
     float duration_;
     bool ready_;
 };
-} // namespace cocos
+} // namespace core
 } // namespace ee
 
 #endif // __cplusplus

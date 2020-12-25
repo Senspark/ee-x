@@ -7,6 +7,7 @@ namespace EE.Internal {
         private bool _loading;
         private bool _displaying;
         private readonly ObserverHandle _handle;
+        private readonly Retrier _retrier;
 
         public GuardedInterstitialAd(IInterstitialAd ad) {
             _ad = ad;
@@ -15,6 +16,7 @@ namespace EE.Internal {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });
+            _retrier = new Retrier(1, 2, 64);
         }
 
         public void Destroy() {
@@ -32,11 +34,19 @@ namespace EE.Internal {
                 return false;
             }
             if (_loading) {
-                // Waiting.
-                return await _ad.Load();
+                return false;
             }
             _loading = true;
             IsLoaded = await _ad.Load();
+            if (IsLoaded) {
+                _retrier.Stop();
+            } else {
+                Utils.NoAwait(async () => {
+                    await _retrier.Process(async () => { //
+                        return IsLoaded = await _ad.Load();
+                    });
+                });
+            }
             _loading = false;
             return IsLoaded;
         }
@@ -49,17 +59,12 @@ namespace EE.Internal {
                 return false;
             }
             if (_displaying) {
-                // Waiting.
-                return await _ad.Show();
+                return false;
             }
             _displaying = true;
+            IsLoaded = false;
             var result = await _ad.Show();
             _displaying = false;
-            if (!result) {
-                // Failed to show, can use this ad again.
-            } else {
-                IsLoaded = false;
-            }
             return result;
         }
     }

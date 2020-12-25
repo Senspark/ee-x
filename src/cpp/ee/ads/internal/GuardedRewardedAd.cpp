@@ -1,8 +1,11 @@
 #include "ee/ads/internal/GuardedRewardedAd.hpp"
 
-#include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
+#include <ee/core/Utils.hpp>
+
+#include "ee/ads/internal/Retrier.hpp"
 
 namespace ee {
 namespace ads {
@@ -35,6 +38,8 @@ Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
                 });
             },
     });
+
+    retrier_ = std::make_unique<Retrier>(1, 2, 64);
 }
 
 Self::~GuardedRewardedAd() = default;
@@ -42,6 +47,7 @@ Self::~GuardedRewardedAd() = default;
 void Self::destroy() {
     ad_->destroy();
     handle_->clear();
+    retrier_->stop();
 }
 
 bool Self::isLoaded() const {
@@ -56,11 +62,19 @@ Task<bool> Self::load() {
         co_return false;
     }
     if (loading_) {
-        // Waiting.
-        co_return co_await ad_->load();
+        co_return false;
     }
     loading_ = true;
     loaded_ = co_await ad_->load();
+    if (loaded_) {
+        retrier_->stop();
+    } else {
+        noAwait([this]() -> Task<> {
+            co_await retrier_->process([this]() -> Task<bool> {
+                co_return loaded_ = co_await ad_->load();
+            });
+        });
+    }
     loading_ = false;
     co_return loaded_;
 }
@@ -73,17 +87,12 @@ Task<IRewardedAdResult> Self::show() {
         co_return IRewardedAdResult::Failed;
     }
     if (displaying_) {
-        // Waiting.
-        co_return co_await ad_->show();
+        co_return IRewardedAdResult::Failed;
     }
     displaying_ = true;
+    loaded_ = false;
     auto result = co_await ad_->show();
     displaying_ = false;
-    if (result == IRewardedAdResult::Failed) {
-        // Failed to show, can use this ad again.
-    } else {
-        loaded_ = false;
-    }
     co_return result;
 }
 } // namespace ads

@@ -28,6 +28,7 @@ private:
     bool loaded_;
     bool displaying_;
     std::unique_ptr<ObserverHandle> handle_;
+    std::unique_ptr<Retrier> retrier_;
 };
 } // namespace ads
 } // namespace ee

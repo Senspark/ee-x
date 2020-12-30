@@ -7,6 +7,7 @@
 
 #include "ee/core/Thread.hpp"
 
+#include <cassert>
 #include <queue>
 #include <unordered_map>
 

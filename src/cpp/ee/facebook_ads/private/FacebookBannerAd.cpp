@@ -8,6 +8,8 @@
 
 #include "ee/facebook_ads/private/FacebookBannerAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>

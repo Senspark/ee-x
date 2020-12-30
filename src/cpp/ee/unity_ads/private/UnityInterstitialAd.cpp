@@ -8,6 +8,8 @@
 
 #include "ee/unity_ads/private/UnityInterstitialAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/NoAwait.hpp>

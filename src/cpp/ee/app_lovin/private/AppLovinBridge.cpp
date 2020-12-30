@@ -8,6 +8,8 @@
 
 #include "ee/app_lovin/private/AppLovinBridge.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/GuardedRewardedAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>

@@ -7,6 +7,8 @@
 
 #include "ee/store/private/StoreNativeStoreProvider.hpp"
 
+#include <cassert>
+
 #include "ee/store/StoreAppStore.hpp"
 #include "ee/store/private/StoreAndroidJavaStore.hpp"
 #include "ee/store/private/StoreIPurchasingBinder.hpp"

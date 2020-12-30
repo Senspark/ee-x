@@ -8,6 +8,8 @@
 
 #include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>

@@ -8,6 +8,8 @@
 
 #include "ee/ad_mob/private/AdMobInterstitialAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>

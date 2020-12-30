@@ -24,7 +24,7 @@ public:
             return std::experimental::suspend_always();
         }
 
-        auto final_suspend() {
+        auto final_suspend() noexcept {
             struct Awaiter {
                 promise_type* me_;
 
@@ -32,8 +32,8 @@ public:
                     return false;
                 }
 
-                void
-                await_suspend(std::experimental::coroutine_handle<> handle) {
+                void await_suspend(
+                    std::experimental::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 
@@ -107,7 +107,7 @@ public:
             return std::experimental::suspend_always();
         }
 
-        auto final_suspend() {
+        auto final_suspend() noexcept {
             struct Awaiter {
                 promise_type* me_;
 
@@ -115,8 +115,8 @@ public:
                     return false;
                 }
 
-                void
-                await_suspend(std::experimental::coroutine_handle<> handle) {
+                void await_suspend(
+                    std::experimental::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 

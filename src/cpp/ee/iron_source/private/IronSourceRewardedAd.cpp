@@ -8,6 +8,8 @@
 
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Task.hpp>

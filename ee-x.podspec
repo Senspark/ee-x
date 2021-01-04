@@ -207,7 +207,7 @@ Pod::Spec.new do |spec|
     }
     s.library = 'swiftCore'
     s.dependency 'ReachabilitySwift'
-    s.dependency 'RxSwift'
+    s.dependency 'RxSwift', '5.1.1'
   end
 
   spec.subspec 'facebook' do |s|

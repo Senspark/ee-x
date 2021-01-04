@@ -64,7 +64,7 @@ namespace EE {
         private static IMessageBridge _bridge;
 
         public static bool InitializePlugins() {
-            if (!_impl.InitializePlugins("2.0.6")) {
+            if (!_impl.InitializePlugins("2.1.0")) {
                 return false;
             }
             _bridge = MessageBridge.Instance;

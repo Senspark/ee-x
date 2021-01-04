@@ -77,7 +77,6 @@
 #include "ee/cocos/EELanguageFormatter.hpp"
 #include "ee/cocos/EELanguageSwitcher.hpp"
 
-#include "ee/cocos/Delay.hpp"
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
 #include "ee/cocos/CocosAdView.hpp"

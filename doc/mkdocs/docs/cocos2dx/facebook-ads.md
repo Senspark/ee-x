@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:facebook-ads:2.0.6'
+    implementation 'com.senspark.ee:facebook-ads:2.1.0'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/facebook-ads', '2.0.6'
+pod 'ee-x/facebook-ads', '2.1.0'
 ```
 
 ## Basic usage

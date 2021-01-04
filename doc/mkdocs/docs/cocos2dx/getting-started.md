@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:2.0.6'
+    implementation 'com.senspark.ee:core:2.1.0'
 }
 ```
 

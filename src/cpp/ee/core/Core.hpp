@@ -12,6 +12,7 @@
 #ifdef __cplusplus
 
 #include "ee/core/AsyncMutex.hpp"
+#include "ee/core/Delay.hpp"
 #include "ee/core/DynamicValue.hpp"
 #include "ee/core/IMessageBridge.hpp"
 #include "ee/core/IService.hpp"

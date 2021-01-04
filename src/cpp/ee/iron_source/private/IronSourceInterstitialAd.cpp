@@ -8,6 +8,8 @@
 
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
 
+#include <cassert>
+
 #include <ee/ads/internal/AsyncHelper.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>

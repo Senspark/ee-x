@@ -45,6 +45,7 @@ class IAsyncHelper;
 template <class Result>
 class AsyncHelper;
 
+class Retrier;
 class MediationManager;
 } // namespace ads
 

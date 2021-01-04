@@ -4,7 +4,7 @@ using System.Linq;
 
 using SimpleJSON;
 
-namespace EE {
+namespace EE.Internal {
     internal class AdsConfig {
         internal enum Network {
             AdMob,

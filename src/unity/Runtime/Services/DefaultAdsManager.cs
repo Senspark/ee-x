@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using EE.Internal;
+
 namespace EE {
     public class DefaultAdsManager : IAdsManager {
         private Task<bool> _initializer;

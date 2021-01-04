@@ -122,7 +122,7 @@ class FacebookBridge(
         // Learn more: https://developers.facebook.com/docs/app-events/getting-started-app-events-android#disable-auto-events.
         FacebookSdk.setAdvertiserIDCollectionEnabled(true)
         registerHandlers()
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {

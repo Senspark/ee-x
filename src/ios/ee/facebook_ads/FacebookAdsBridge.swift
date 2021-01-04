@@ -153,10 +153,12 @@ class FacebookAdsBridge: NSObject, IPlugin {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 if self._initializing {
+                    self._logger.info("\(kTag): \(#function): initializing")
                     single(.success(false))
                     return
                 }
                 if self._initialized {
+                    self._logger.info("\(kTag): \(#function): initialized")
                     single(.success(true))
                     return
                 }

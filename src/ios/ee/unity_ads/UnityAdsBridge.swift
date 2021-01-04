@@ -141,19 +141,23 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 if !UnityAds.isSupported() {
+                    self._logger.info("\(kTag): \(#function): not supported")
                     single(.success(false))
                     return
                 }
                 if UnityAds.isInitialized() {
                     self._initialized = true
+                    self._logger.info("\(kTag): \(#function): initialized")
                     single(.success(true))
                     return
                 }
                 if self._initializing {
+                    self._logger.info("\(kTag): \(#function): initializing")
                     single(.success(false))
                     return
                 }
                 if self._initialized {
+                    self._logger.info("\(kTag): \(#function): initialized")
                     single(.success(true))
                     return
                 }
@@ -161,6 +165,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true)
                 self._initializing = false
                 self._initialized = true
+                self._logger.info("\(kTag): \(#function): done")
                 single(.success(true))
                 /*
                   Use UnityAds 3.5.1
@@ -198,7 +203,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func loadRewardedAd(_ adId: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
-                self._logger.debug("\(kTag): \(#function): \(adId)")
+                self._logger.debug("\(kTag): \(#function): id = \(adId)")
                 self.checkInitialized()
                 single(.success(false))
                 /*
@@ -219,7 +224,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
             self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
@@ -232,7 +237,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func unityAdsReady(_ adId: String) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
             self._loadedAdIds.insert(adId)
             self._bridge.callCpp(kOnLoaded, adId)
         }
@@ -240,14 +245,14 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func unityAdsDidStart(_ adId: String) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
             self._loadedAdIds.remove(adId)
         }
     }
 
     func unityAdsDidFinish(_ adId: String, with state: UnityAdsFinishState) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(adId) state = \(state)")
+            self._logger.debug("\(kTag): \(#function): id = \(adId) state = \(state)")
             UnityAds.remove(self)
             if state == UnityAdsFinishState.error {
                 self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [

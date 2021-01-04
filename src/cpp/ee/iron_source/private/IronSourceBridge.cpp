@@ -277,7 +277,6 @@ void Self::onInterstitialAdClosed() {
     if (interstitialAd_) {
         interstitialAd_->onClosed();
     } else {
-        assert(false);
         onMediationAdClosed(false);
     }
 }
@@ -313,7 +312,6 @@ void Self::onRewardedAdClosed(bool rewarded) {
     if (rewardedAd_) {
         rewardedAd_->onClosed(rewarded);
     } else {
-        assert(false);
         onMediationAdClosed(rewarded);
     }
 }

@@ -44,7 +44,7 @@ class AppLovinBridge(
     init {
         _logger.info("constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _logger.info("constructor end.")
+        _logger.info("constructor end")
     }
 
     override fun onCreate(activity: Activity) {

@@ -133,6 +133,7 @@ internal class FacebookBannerAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(ad.buildLoadAdConfig().withAdListener(this).build())
         }
@@ -158,7 +159,7 @@ internal class FacebookBannerAd(
 
     override fun onAdLoaded(ad: Ad) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
             _isLoaded.set(true)
             _bridge.callCpp(_messageHelper.onLoaded)
         }
@@ -166,20 +167,20 @@ internal class FacebookBannerAd(
 
     override fun onError(ad: Ad, adError: AdError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onError.name} ${adError.errorMessage}")
+            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${adError.errorMessage}")
             _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
         }
     }
 
     override fun onLoggingImpression(ad: Ad) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}: id = $_adId")
         }
     }
 
     override fun onAdClicked(ad: Ad) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _logger.debug("$kTag: ${this::onAdClicked.name}: id = $_adId")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }

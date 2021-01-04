@@ -102,7 +102,7 @@ internal class FacebookRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = createInternalAd()
             ad.loadAd(ad.buildLoadAdConfig()
                 .withFailOnCacheFailureEnabled(true)
@@ -114,7 +114,7 @@ internal class FacebookRewardedAd(
     @AnyThread
     private fun show() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::show.name}")
+            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = createInternalAd()
             _displaying = true
             _rewarded = false
@@ -130,40 +130,52 @@ internal class FacebookRewardedAd(
     }
 
     override fun onError(ad: Ad, adError: AdError) {
-        _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
-        destroyInternalAd()
-        if (_displaying) {
-            _displaying = false
-            _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
-        } else {
-            _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${adError.errorMessage}")
+            destroyInternalAd()
+            if (_displaying) {
+                _displaying = false
+                _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
+            } else {
+                _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+            }
         }
     }
 
     override fun onAdLoaded(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdLoaded.name}")
-        _isLoaded.set(true)
-        _bridge.callCpp(_messageHelper.onLoaded)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
+            _isLoaded.set(true)
+            _bridge.callCpp(_messageHelper.onLoaded)
+        }
     }
 
     override fun onLoggingImpression(ad: Ad) {
-        _logger.debug("$kTag: ${this::onLoggingImpression.name}")
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onLoggingImpression.name}: id = $_adId")
+        }
     }
 
     override fun onAdClicked(ad: Ad) {
-        _logger.debug("$kTag: ${this::onAdClicked.name}")
-        _bridge.callCpp(_messageHelper.onClicked)
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onAdClicked.name}: id = $_adId")
+            _bridge.callCpp(_messageHelper.onClicked)
+        }
     }
 
     override fun onRewardedVideoCompleted() {
-        _logger.debug("$kTag: ${this::onRewardedVideoCompleted.name}")
-        _rewarded = true
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoCompleted.name}: id = $_adId")
+            _rewarded = true
+        }
     }
 
     override fun onRewardedVideoClosed() {
-        _logger.info(this::onRewardedVideoClosed.name)
-        _displaying = false
-        destroyInternalAd()
-        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::onRewardedVideoClosed.name}: id = $_adId")
+            _displaying = false
+            destroyInternalAd()
+            _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+        }
     }
 }

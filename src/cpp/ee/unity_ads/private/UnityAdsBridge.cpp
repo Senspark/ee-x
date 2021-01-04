@@ -213,7 +213,6 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
         displaying_ = false;
     } else {
         // Mediation.
-        assert(false);
         onMediationAdFailedToShow(adId, message);
     }
 }
@@ -232,7 +231,6 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
         }
     } else {
         // Mediation.
-        assert(false);
         onMediationAdClosed(adId, rewarded);
     }
 }

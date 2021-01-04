@@ -70,6 +70,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func load() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             let ad = self.createInternalAd()
             ad.load(GADRequest())
         }
@@ -77,6 +78,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func show() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Current rootView is null")
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
@@ -89,7 +91,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialDidReceiveAd(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = true
             self._bridge.callCpp(self._messageHelper.onLoaded)
         }
@@ -97,7 +99,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
         }
@@ -105,14 +107,14 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = false
         }
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow)
         }
@@ -120,20 +122,20 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     
     func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._bridge.callCpp(self._messageHelper.onClicked)
         }
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
     
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

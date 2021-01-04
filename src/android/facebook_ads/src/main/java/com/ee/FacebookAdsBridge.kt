@@ -58,7 +58,7 @@ class FacebookAdsBridge(
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {
@@ -218,15 +218,18 @@ class FacebookAdsBridge(
         return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (AudienceNetworkAds.isInitialized(_application)) {
+                    _logger.info("$kTag: initialize: initialized")
                     _initialized = true
                     cont.resume(true)
                     return@runOnMainThread
                 }
                 if (_initializing) {
+                    _logger.info("$kTag: initialize: initializing")
                     cont.resume(false)
                     return@runOnMainThread
                 }
                 if (_initialized) {
+                    _logger.info("$kTag: initialize: initialized")
                     cont.resume(true)
                     return@runOnMainThread
                 }

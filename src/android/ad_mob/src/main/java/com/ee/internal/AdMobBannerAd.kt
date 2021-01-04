@@ -149,7 +149,7 @@ internal class AdMobBannerAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         }
@@ -183,33 +183,33 @@ internal class AdMobBannerAd(
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
             _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
         }
     }
 
     override fun onAdOpened() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdOpened.name}")
+            _logger.debug("$kTag: ${this::onAdOpened.name}: id = $_adId")
         }
     }
 
     override fun onAdImpression() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdImpression.name}")
+            _logger.debug("$kTag: ${this::onAdImpression.name}: id = $_adId")
         }
     }
 
     override fun onAdClicked() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdClicked.name}")
+            _logger.debug("$kTag: ${this::onAdClicked.name}: id = $_adId")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }
 
     override fun onAdClosed() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdClosed.name}")
+            _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
         }
     }
 }

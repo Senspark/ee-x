@@ -87,6 +87,7 @@ internal class FacebookBannerAd:
     
     func load() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
                 return
@@ -112,7 +113,7 @@ internal class FacebookBannerAd:
     
     func adViewDidLoad(_ adView: FBAdView) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = true
             self._bridge.callCpp(self._messageHelper.onLoaded)
         }
@@ -120,27 +121,27 @@ internal class FacebookBannerAd:
     
     func adView(_ adView: FBAdView, didFailWithError error: Error) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
         }
     }
     
     func adViewDidClick(_ adView: FBAdView) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._bridge.callCpp(self._messageHelper.onClicked)
         }
     }
     
     func adViewDidFinishHandlingClick(_ adView: FBAdView) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
     
     func adViewWillLogImpression(_ adView: FBAdView) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
 }

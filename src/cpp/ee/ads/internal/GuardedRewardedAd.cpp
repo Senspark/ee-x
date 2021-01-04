@@ -66,6 +66,7 @@ Task<bool> Self::load() {
     }
     loading_ = true;
     loaded_ = co_await ad_->load();
+    /*
     if (loaded_) {
         retrier_->stop();
     } else {
@@ -75,6 +76,7 @@ Task<bool> Self::load() {
             });
         });
     }
+    */
     loading_ = false;
     co_return loaded_;
 }

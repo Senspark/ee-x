@@ -197,6 +197,7 @@ class UnityAdsBridge(
                     override fun onUnityAdsAdLoaded(placementId: String?) {
                         Thread.runOnMainThread {
                             _logger.debug("$kTag: ${this::onUnityAdsAdLoaded.name}: id = $adId")
+                            _loadedAdIds.add(adId)
                             cont.resume(true)
                         }
                     }

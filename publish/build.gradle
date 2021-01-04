@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlinVersion = '1.4.20'
+    ext.kotlinVersion = '1.4.21'
     repositories {
         google()
         jcenter()
@@ -32,7 +32,7 @@ ext {
     firebaseVersion = '25.13.0'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.1.1'
+    pluginVersion = '2.1.2'
     pluginDependencies = [
         'core'                  : [],
         'ads'                   : ['core'],

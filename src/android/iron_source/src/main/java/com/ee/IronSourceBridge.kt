@@ -49,7 +49,7 @@ class IronSourceBridge(
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {
@@ -127,6 +127,7 @@ class IronSourceBridge(
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initialized) {
+                    _logger.info("$kTag: initialize: initialized")
                     cont.resume(true)
                     return@runOnMainThread
                 }
@@ -136,6 +137,7 @@ class IronSourceBridge(
                 IronSource.setRewardedVideoListener(this)
                 IronSource.setUserId(IronSource.getAdvertiserId(_application))
                 _initialized = true
+                _logger.info("$kTag: initialize: done")
                 cont.resume(true)
             }
         }
@@ -156,7 +158,7 @@ class IronSourceBridge(
     @AnyThread
     fun showInterstitialAd(adId: String) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::showInterstitialAd.name}: $adId")
+            _logger.debug("$kTag: ${this::showInterstitialAd.name}: id = $adId")
             checkInitialized()
             IronSource.showInterstitial(adId)
         }
@@ -168,7 +170,7 @@ class IronSourceBridge(
     @AnyThread
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag:${this::showRewardedAd.name}: $adId")
+            _logger.debug("$kTag:${this::showRewardedAd.name}: id = $adId")
             checkInitialized()
             _rewarded = false
             IronSource.showRewardedVideo(adId)

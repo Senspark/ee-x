@@ -46,7 +46,7 @@ class UnityAdsBridge(
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {
@@ -116,16 +116,24 @@ class UnityAdsBridge(
         return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (!UnityAds.isSupported()) {
+                    _logger.info("$kTag: initialize: not supported")
                     cont.resume(false)
                     return@runOnMainThread
                 }
                 if (UnityAds.isInitialized()) {
                     _initialized = true
+                    _logger.info("$kTag: initialize: initialized")
                     cont.resume(true)
                     return@runOnMainThread
                 }
                 if (_initializing) {
+                    _logger.info("$kTag: initialize: initializing")
                     cont.resume(false)
+                    return@runOnMainThread
+                }
+                if (_initialized) {
+                    _logger.info("$kTag: initialize: initialized")
+                    cont.resume(true)
                     return@runOnMainThread
                 }
                 _initializing = true
@@ -137,7 +145,7 @@ class UnityAdsBridge(
                             return
                         }
                         Thread.runOnMainThread {
-                            _logger.info(this::onInitializationComplete.name)
+                            _logger.info("$kTag: initialize: done")
                             _initializing = false
                             _initialized = true
                             cont.resume(true)
@@ -183,19 +191,19 @@ class UnityAdsBridge(
     suspend fun loadRewardedAd(adId: String): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _logger.debug("$kTag: loadRewardedAd: $adId")
+                _logger.debug("$kTag: loadRewardedAd: id = $adId")
                 checkInitialized()
                 UnityAds.load(adId, object : IUnityAdsLoadListener {
                     override fun onUnityAdsAdLoaded(placementId: String?) {
                         Thread.runOnMainThread {
-                            _logger.debug("$kTag: ${this::onUnityAdsAdLoaded.name}: $adId")
+                            _logger.debug("$kTag: ${this::onUnityAdsAdLoaded.name}: id = $adId")
                             cont.resume(true)
                         }
                     }
 
                     override fun onUnityAdsFailedToLoad(placementId: String?) {
                         Thread.runOnMainThread {
-                            _logger.debug("$kTag: ${this::onUnityAdsFailedToLoad.name}: $adId")
+                            _logger.debug("$kTag: ${this::onUnityAdsFailedToLoad.name}: id = $adId")
                             cont.resume(false)
                         }
                     }
@@ -207,7 +215,7 @@ class UnityAdsBridge(
     @AnyThread
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::showRewardedAd.name}")
+            _logger.debug("$kTag: ${this::showRewardedAd.name}: id = $adId")
             checkInitialized()
             UnityAds.addListener(this)
             UnityAds.show(_activity, adId)
@@ -216,7 +224,7 @@ class UnityAdsBridge(
 
     override fun onUnityAdsReady(adId: String) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onUnityAdsReady.name}: $adId")
+            _logger.debug("$kTag: ${this::onUnityAdsReady.name}: id = $adId")
             _loadedAdIds.add(adId)
             _bridge.callCpp(kOnLoaded, adId)
         }
@@ -224,14 +232,14 @@ class UnityAdsBridge(
 
     override fun onUnityAdsStart(adId: String) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onUnityAdsStart.name}: $adId")
+            _logger.debug("$kTag: ${this::onUnityAdsStart.name}: id = $adId")
             _loadedAdIds.remove(adId)
         }
     }
 
     override fun onUnityAdsFinish(adId: String, state: FinishState) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: $adId state = $state")
+            _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: id = $adId state = $state")
             UnityAds.removeListener(this)
             if (state == FinishState.ERROR) {
                 @Serializable

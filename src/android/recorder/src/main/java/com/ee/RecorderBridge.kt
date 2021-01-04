@@ -47,7 +47,7 @@ class RecorderBridge(
         if (isSupported) {
             _mediaProjectionManager = _application.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         }
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {

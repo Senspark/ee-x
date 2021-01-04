@@ -30,7 +30,6 @@ internal class FacebookRewardedAd:
         _messageHelper = MessageHelper("FacebookRewardedAd", _adId)
         super.init()
         registerHandlers()
-        createInternalAd()
     }
     
     func destroy() {
@@ -92,12 +91,12 @@ internal class FacebookRewardedAd:
     
     func show() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Current rootView is null")
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
                 return
             }
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = true
             self._rewarded = false
             let ad = self.createInternalAd()
@@ -122,7 +121,7 @@ internal class FacebookRewardedAd:
     
     func rewardedVideoAd(_ rewardedVideoAd: FBRewardedVideoAd, didFailWithError error: Error) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId) error = \(error.localizedDescription)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self.destroyInternalAd()
             if self._displaying {
                 self._displaying = false
@@ -161,19 +160,19 @@ internal class FacebookRewardedAd:
     
     func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: FBRewardedVideoAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function): id = \(self._adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
     
     func rewardedVideoAdWillClose(_ rewardedVideoAd: FBRewardedVideoAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function): id = \(self._adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
     
     func rewardedVideoAdDidClose(_ rewardedVideoAd: FBRewardedVideoAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function): id = \(self._adId)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))

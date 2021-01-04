@@ -244,10 +244,12 @@ class AdMobBridge(
         return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
+                    _logger.info("$kTag: initialize: initializing")
                     cont.resume(false)
                     return@runOnMainThread
                 }
                 if (_initialized) {
+                    _logger.info("$kTag: initialize: initialized")
                     cont.resume(true)
                     return@runOnMainThread
                 }

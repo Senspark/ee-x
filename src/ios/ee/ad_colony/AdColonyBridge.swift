@@ -57,10 +57,12 @@ class AdColonyBridge: NSObject, IPlugin {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 if self._initializing {
+                    self._logger.info("\(#function): initializing")
                     single(.success(false))
                     return
                 }
                 if self._initialized {
+                    self._logger.info("\(#function): initialized")
                     single(.success(true))
                     return
                 }
@@ -68,6 +70,7 @@ class AdColonyBridge: NSObject, IPlugin {
                     Thread.runOnMainThread {
                         self._initializing = false
                         self._initialized = true
+                        self._logger.info("\(#function): initialize: done")
                         single(.success(true))
                     }
                 }

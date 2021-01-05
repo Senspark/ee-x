@@ -101,6 +101,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 if self._initialized {
+                    self._logger.info("\(kTag): \(#function): initialized")
                     single(.success(true))
                     return
                 }
@@ -114,6 +115,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
                 IronSource.setRewardedVideoDelegate(self)
                 IronSource.setUserId(IronSource.advertiserId())
                 self._initialized = true
+                self._logger.info("\(kTag): \(#function): done")
                 single(.success(true))
             }
             return Disposables.create()
@@ -127,6 +129,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func loadInterstitialAd() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function)")
             self.checkInitialized()
             IronSource.loadInterstitial()
         }
@@ -134,6 +137,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func showInterstitialAd(_ adId: String) {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
             self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
@@ -149,6 +153,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
             self.checkInitialized()
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")

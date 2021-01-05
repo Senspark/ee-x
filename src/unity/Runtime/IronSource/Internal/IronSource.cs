@@ -145,7 +145,7 @@ namespace EE.Internal {
         }
 
         internal void ShowRewardedAd(string adId) {
-            _bridge.Call(kShowRewardedAd);
+            _bridge.Call(kShowRewardedAd, adId);
         }
 
         private void OnInterstitialAdLoaded() {

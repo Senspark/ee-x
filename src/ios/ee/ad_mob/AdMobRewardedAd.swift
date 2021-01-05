@@ -79,14 +79,17 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func load() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             let ad = self.createInternalAd()
             ad.load(GADRequest(), completionHandler: { error in
                 Thread.runOnMainThread {
                     if let error = error {
+                        self._logger.debug("\(kTag): onRewardedAdFailedToLoad: id = \(self._adId) message = \(error.localizedDescription)")
                         self.destroyInternalAd()
                         self._bridge.callCpp(self._messageHelper.onFailedToLoad,
                                              error.localizedDescription)
                     } else {
+                        self._logger.debug("\(kTag): onRewardedAdLoaded: id = \(self._adId)")
                         self._isLoaded = true
                         self._bridge.callCpp(self._messageHelper.onLoaded)
                     }
@@ -97,6 +100,7 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func show() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Current rootView is null")
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
@@ -110,14 +114,14 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = false
         }
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function): \(error.localizedDescription)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
         }
@@ -125,14 +129,14 @@ internal class AdMobRewardedAd: NSObject, GADRewardedAdDelegate {
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._rewarded = true
         }
     }
     
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }

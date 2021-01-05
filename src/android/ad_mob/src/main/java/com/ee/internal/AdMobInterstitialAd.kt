@@ -90,7 +90,7 @@ internal class AdMobInterstitialAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = createInternalAd()
             ad.loadAd(AdRequest.Builder().build())
         }
@@ -99,6 +99,7 @@ internal class AdMobInterstitialAd(
     @AnyThread
     override fun show() {
         Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = createInternalAd()
             ad.show()
         }
@@ -106,7 +107,7 @@ internal class AdMobInterstitialAd(
 
     override fun onAdLoaded() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
             _isLoaded.set(true)
             _bridge.callCpp(_messageHelper.onLoaded)
         }
@@ -114,7 +115,7 @@ internal class AdMobInterstitialAd(
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
         }
@@ -122,27 +123,27 @@ internal class AdMobInterstitialAd(
 
     override fun onAdOpened() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdOpened.name}")
+            _logger.debug("$kTag: ${this::onAdOpened.name}: id = $_adId")
             _isLoaded.set(false)
         }
     }
 
     override fun onAdImpression() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdImpression.name}")
+            _logger.debug("$kTag: ${this::onAdImpression.name}: id = $_adId")
         }
     }
 
     override fun onAdClicked() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdClosed.name}")
+            _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }
 
     override fun onAdClosed() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdClosed.name}")
+            _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }

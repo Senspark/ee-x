@@ -134,6 +134,7 @@ namespace EE.Internal {
 
         internal async Task<bool> LoadRewardedAd(string adId) {
             var response = await _bridge.CallAsync(kLoadRewardedAd, adId);
+            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 

@@ -50,7 +50,7 @@ class PlayBridge(
                 _client = GoogleSignIn.getClient(activity, _options)
             }
         }
-        _logger.info("$kTag: constructor end.")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {

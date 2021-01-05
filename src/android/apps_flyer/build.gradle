@@ -30,7 +30,7 @@ dependencies {
 
     // https://stackoverflow.com/questions/59263642/install-referrer-library-v1-1-adds-permissions
     // https://developer.android.com/google/play/installreferrer/release-notes
-    api 'com.android.installreferrer:installreferrer:2.1'
+    api 'com.android.installreferrer:installreferrer:2.2'
 
     // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
     // https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android

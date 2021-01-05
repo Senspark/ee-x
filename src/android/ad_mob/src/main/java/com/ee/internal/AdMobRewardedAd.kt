@@ -105,12 +105,12 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = createInternalAd()
             val callback = object : RewardedAdLoadCallback() {
                 override fun onRewardedAdLoaded() {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}")
+                        _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}: id = $_adId")
                         _isLoaded.set(true)
                         _bridge.callCpp(_messageHelper.onLoaded)
                     }
@@ -118,7 +118,7 @@ internal class AdMobRewardedAd(
 
                 override fun onRewardedAdFailedToLoad(error: LoadAdError?) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: onRewardedAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+                        _logger.debug("${kTag}: onRewardedAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
                         destroyInternalAd()
                         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
                     }
@@ -131,7 +131,7 @@ internal class AdMobRewardedAd(
     @AnyThread
     private fun show() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::show.name}")
+            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = createInternalAd()
             _rewarded = false
             ad.show(_activity, this)
@@ -140,7 +140,7 @@ internal class AdMobRewardedAd(
 
     override fun onRewardedAdFailedToShow(error: AdError?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onRewardedAdFailedToShow: message = ${error?.message ?: ""}")
+            _logger.debug("$kTag: onRewardedAdFailedToShow: id = $_adId message = ${error?.message ?: ""}")
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
         }
@@ -148,21 +148,21 @@ internal class AdMobRewardedAd(
 
     override fun onRewardedAdOpened() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onRewardedAdOpened.name}")
+            _logger.debug("$kTag: ${this::onRewardedAdOpened.name}: id = $_adId")
             _isLoaded.set(false)
         }
     }
 
     override fun onUserEarnedReward(reward: RewardItem) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onUserEarnedReward.name}")
+            _logger.debug("$kTag: ${this::onUserEarnedReward.name}: id = $_adId")
             _rewarded = true
         }
     }
 
     override fun onRewardedAdClosed() {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onRewardedAdClosed.name}")
+            _logger.debug("$kTag: ${this::onRewardedAdClosed.name}: id = $_adId")
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
         }

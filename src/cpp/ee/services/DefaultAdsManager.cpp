@@ -95,7 +95,7 @@ void Self::createAds() {
 }
 
 void Self::createAd(const std::shared_ptr<BannerConfig>& config) {
-    if (bannerAd_ == nullptr) {
+    if (bannerAd_ != nullptr) {
         return;
     }
     bannerAd_ =
@@ -113,6 +113,28 @@ void Self::createAd(const std::shared_ptr<BannerConfig>& config) {
             bannerAd_->setVisible(true);
         }
     });
+}
+
+void Self::createAd(const std::shared_ptr<InterstitialConfig>& config) {
+    if (interstitialAd_ != nullptr) {
+        return;
+    }
+    interstitialAd_ = createInterstitialAd(config->instance());
+    noAwait(interstitialAd_->load());
+    interstitialAdInterval_ = config->interval();
+    isInterstitialAdCapped_ = true;
+    noAwait([this]() -> Task<> {
+        co_await Delay(interstitialAdInterval_);
+        isInterstitialAdCapped_ = false;
+    });
+}
+
+void Self::createAd(const std::shared_ptr<RewardedConfig>& config) {
+    if (rewardedAd_ != nullptr) {
+        return;
+    }
+    rewardedAd_ = createRewardedAd(config->instance());
+    noAwait(rewardedAd_->load());
 }
 
 std::shared_ptr<IAdView>

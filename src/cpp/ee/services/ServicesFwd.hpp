@@ -24,6 +24,7 @@ class IAdsManager;
 class DefaultAdsManager;
 } // namespace services
 
+using services::AdResult;
 using services::DefaultAdsManager;
 using services::IAdsManager;
 } // namespace ee

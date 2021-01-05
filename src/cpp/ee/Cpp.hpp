@@ -19,6 +19,7 @@
 #include "ee/notification/Notification.hpp"
 #include "ee/play/Play.hpp"
 #include "ee/recorder/Recorder.hpp"
+#include "ee/services/Services.hpp"
 #include "ee/store/Store.hpp"
 #include "ee/unity_ads/UnityAds.hpp"
 #include "ee/vungle/Vungle.hpp"

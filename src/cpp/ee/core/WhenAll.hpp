@@ -11,31 +11,27 @@
 
 namespace ee {
 namespace core {
-namespace detail {
-template <class T>
-Task<> toVoidTask(T&& task) {
-    co_await task;
-    co_return;
-}
-} // namespace detail
-
 template <class... Args>
 Task<> whenAll(Args&&... args) {
-    std::vector<Task<>> tasks = {
-        detail::toVoidTask(std::forward<Args>(args))...};
-    auto counter = std::make_shared<std::size_t>(tasks.size());
-    co_await LambdaAwaiter<>([&tasks, counter](auto&& resolve) { //
-        for (auto&& task : tasks) {
-            noAwait([&task, counter, resolve]() -> Task<> {
-                co_await task;
-                --(*counter);
-                if (*counter == 0) {
-                    resolve();
-                }
-            });
-        }
+    auto taskTuple = std::forward_as_tuple(std::forward<Args>(args)...);
+    auto counter = std::make_shared<int>(sizeof...(Args));
+    co_await LambdaAwaiter<>([&taskTuple, counter](auto&& resolve) {
+        std::apply(
+            [counter, resolve](auto&&... taskList) {
+                (([counter, resolve](auto&& task) {
+                     noAwait([counter, resolve,
+                              t = std::move(task)]() mutable -> Task<> {
+                         co_await t;
+                         --(*counter);
+                         if (*counter == 0) {
+                             resolve();
+                         }
+                     });
+                 }(taskList)),
+                 ...);
+            },
+            taskTuple);
     });
-    co_return;
 }
 } // namespace core
 

@@ -49,6 +49,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/notification/**/*',
       'src/cpp/ee/play/**/*',
       'src/cpp/ee/recorder/**/*',
+      'src/cpp/ee/services/**/*',
       'src/cpp/ee/store/**/*',
       'src/cpp/ee/unity_ads/**/*',
       'src/cpp/ee/vungle/**/*'

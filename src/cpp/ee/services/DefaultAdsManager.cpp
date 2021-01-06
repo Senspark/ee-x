@@ -7,6 +7,7 @@
 #include <ee/ads/MultiAdView.hpp>
 #include <ee/ads/MultiInterstitialAd.hpp>
 #include <ee/ads/MultiRewardedAd.hpp>
+#include <ee/app_lovin/IAppLovinBridge.hpp>
 #include <ee/cocos/CocosAdView.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/NoAwait.hpp>
@@ -18,6 +19,7 @@
 #include <ee/facebook_ads/IFacebookAdsBridge.hpp>
 #include <ee/iron_source/IIronSourceBridge.hpp>
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
+#include <ee/vungle/IVungleBridge.hpp>
 
 #include "ee/services/internal/AdsConfig.hpp"
 
@@ -44,6 +46,12 @@ Task<> Self::initializeNetworks() {
             co_await adMob_->initialize();
             break;
         }
+        case Network::AppLovin: {
+            auto&& config = std::dynamic_pointer_cast<AppLovinConfig>(network);
+            appLovin_ = PluginManager::createPlugin<IAppLovin>();
+            co_await appLovin_->initialize(config->appId());
+            break;
+        }
         case Network::FacebookAds: {
             facebookAds_ = PluginManager::createPlugin<IFacebookAds>();
             co_await facebookAds_->initialize();
@@ -62,6 +70,12 @@ Task<> Self::initializeNetworks() {
             co_await unityAds_->initialize(config->appId(), false);
             break;
         }
+        case Network::Vungle: {
+            auto&& config = std::dynamic_pointer_cast<VungleConfig>(network);
+            vungle_ = PluginManager::createPlugin<IVungle>();
+            co_await vungle_->initialize(config->appId());
+            break;
+        }
         default:
             assert(false);
             break;
@@ -74,6 +88,11 @@ void Self::createAds() {
         switch (ad->adFormat()) {
         case AdFormat::Banner: {
             auto config = std::dynamic_pointer_cast<BannerConfig>(ad);
+            createAd(config);
+            break;
+        }
+        case AdFormat::AppOpen: {
+            auto config = std::dynamic_pointer_cast<AppOpenConfig>(ad);
             createAd(config);
             break;
         }
@@ -112,6 +131,20 @@ void Self::createAd(const std::shared_ptr<BannerConfig>& config) {
             bannerAd_->setVisible(false);
             bannerAd_->setVisible(true);
         }
+    });
+}
+
+void Self::createAd(const std::shared_ptr<AppOpenConfig>& config) {
+    if (appOpenAd_ != nullptr) {
+        return;
+    }
+    appOpenAd_ = createAppOpenAd(config->instance());
+    noAwait(appOpenAd_->load());
+    appOpenAdInterval_ = config->interval();
+    isAppOpenAdCapped_ = true;
+    noAwait([this]() -> Task<> {
+        co_await Delay(appOpenAdInterval_);
+        isAppOpenAdCapped_ = false;
     });
 }
 
@@ -171,6 +204,41 @@ Self::createBannerAd(const std::shared_ptr<WaterfallInstanceConfig>& config) {
     auto ad = std::make_shared<MultiAdView>();
     for (auto&& instance : config->instances()) {
         ad->addItem(createBannerAd(instance));
+    }
+    return ad;
+}
+
+std::shared_ptr<IInterstitialAd>
+Self::createAppOpenAd(const std::shared_ptr<AdInstanceConfig>& config) {
+    if (auto instance = std::dynamic_pointer_cast<SingleInstanceConfig>(config);
+        instance != nullptr) {
+        return createAppOpenAd(instance);
+    }
+    if (auto instance =
+            std::dynamic_pointer_cast<WaterfallInstanceConfig>(config);
+        instance != nullptr) {
+        return createAppOpenAd(instance);
+    }
+    assert(false);
+    return nullptr;
+}
+
+std::shared_ptr<IInterstitialAd>
+Self::createAppOpenAd(const std::shared_ptr<SingleInstanceConfig>& config) {
+    switch (config->network()) {
+    case Network::AdMob:
+        return adMob_->createAppOpenAd(config->id());
+    default:
+        assert(false);
+        return nullptr;
+    }
+}
+
+std::shared_ptr<IInterstitialAd>
+Self::createAppOpenAd(const std::shared_ptr<WaterfallInstanceConfig>& config) {
+    auto ad = std::make_shared<MultiInterstitialAd>();
+    for (auto&& instance : config->instances()) {
+        ad->addItem(createAppOpenAd(instance));
     }
     return ad;
 }

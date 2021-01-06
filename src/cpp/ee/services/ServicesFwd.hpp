@@ -4,15 +4,18 @@
 #ifdef __cplusplus
 
 #include <ee/ad_mob/AdMobFwd.hpp>
+#include <ee/app_lovin/AppLovinFwd.hpp>
 #include <ee/facebook_ads/FacebookAdsFwd.hpp>
 #include <ee/iron_source/IronSourceFwd.hpp>
 #include <ee/unity_ads/UnityAdsFwd.hpp>
+#include <ee/vungle/VungleFwd.hpp>
 
 namespace ee {
 namespace services {
 enum class AdResult;
 
 class AdsConfig;
+class AppOpenConfig;
 class BannerConfig;
 class InterstitialConfig;
 class RewardedConfig;

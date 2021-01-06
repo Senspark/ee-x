@@ -12,6 +12,9 @@ NetworkConfig::parseImpl(const nlohmann::json& node) {
     if (network == "ad_mob") {
         return std::make_shared<AdMobConfig>(node);
     }
+    if (network == "app_lovin") {
+        return std::make_shared<AppLovinConfig>(node);
+    }
     if (network == "facebook_ads") {
         return std::make_shared<FacebookAdsConfig>(node);
     }
@@ -20,6 +23,9 @@ NetworkConfig::parseImpl(const nlohmann::json& node) {
     }
     if (network == "unity_ads") {
         return std::make_shared<UnityAdsConfig>(node);
+    }
+    if (network == "vungle") {
+        return std::make_shared<VungleConfig>(node);
     }
     assert(false);
     return nullptr;
@@ -31,6 +37,15 @@ Network NetworkConfig::network() const {
 
 AdMobConfig::AdMobConfig(const nlohmann::json& node) {
     network_ = Network::AdMob;
+}
+
+AppLovinConfig::AppLovinConfig(const nlohmann::json& node) {
+    network_ = Network::AppLovin;
+    appId_ = node["app_id"];
+}
+
+const std::string& AppLovinConfig::appId() const {
+    return appId_;
 }
 
 FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {
@@ -55,10 +70,22 @@ const std::string& UnityAdsConfig::appId() const {
     return appId_;
 }
 
+VungleConfig::VungleConfig(const nlohmann::json& node) {
+    network_ = Network::Vungle;
+    appId_ = node["app_id"];
+}
+
+const std::string& VungleConfig::appId() const {
+    return appId_;
+}
+
 std::shared_ptr<AdConfig> AdConfig::parseImpl(const nlohmann::json& node) {
     auto&& format = node["format"];
     if (format == "banner") {
         return std::make_shared<BannerConfig>(node);
+    }
+    if (format == "app_open") {
+        return std::make_shared<AppOpenConfig>(node);
     }
     if (format == "interstitial") {
         return std::make_shared<InterstitialConfig>(node);
@@ -81,6 +108,16 @@ const std::shared_ptr<AdInstanceConfig>& AdConfig::instance() const {
 BannerConfig::BannerConfig(const nlohmann::json& node) {
     adFormat_ = AdFormat::Banner;
     instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+}
+
+AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
+    adFormat_ = AdFormat::AppOpen;
+    interval_ = node.value("interval", 0);
+    instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+}
+
+int AppOpenConfig::interval() const {
+    return interval_;
 }
 
 InterstitialConfig::InterstitialConfig(const nlohmann::json& node) {
@@ -109,9 +146,11 @@ AdInstanceConfig::parseImpl(const nlohmann::json& node) {
 SingleInstanceConfig::SingleInstanceConfig(const nlohmann::json& node) {
     std::map<std::string, Network> networks = {
         {"ad_mob", Network::AdMob},
+        {"app_lovin", Network::AppLovin},
         {"facebook_ads", Network::FacebookAds},
         {"iron_source", Network::IronSource},
         {"unity_ads", Network::UnityAds},
+        {"vungle", Network::Vungle},
     };
     auto&& network = node["network"];
     network_ = networks[network];

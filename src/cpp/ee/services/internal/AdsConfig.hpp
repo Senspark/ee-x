@@ -9,13 +9,16 @@ namespace ee {
 namespace services {
 enum class Network {
     AdMob,
+    AppLovin,
     FacebookAds,
     IronSource,
     UnityAds,
+    Vungle,
 };
 
 enum class AdFormat {
     Banner,
+    AppOpen,
     Interstitial,
     Rewarded,
 };
@@ -35,6 +38,16 @@ protected:
 class AdMobConfig : public NetworkConfig {
 public:
     explicit AdMobConfig(const nlohmann::json& node);
+};
+
+class AppLovinConfig : public NetworkConfig {
+public:
+    explicit AppLovinConfig(const nlohmann::json& node);
+
+    const std::string& appId() const;
+
+private:
+    std::string appId_;
 };
 
 class FacebookAdsConfig : public NetworkConfig {
@@ -62,6 +75,16 @@ private:
     std::string appId_;
 };
 
+class VungleConfig : public NetworkConfig {
+public:
+    explicit VungleConfig(const nlohmann::json& node);
+
+    const std::string& appId() const;
+
+private:
+    std::string appId_;
+};
+
 class AdConfig {
 public:
     static std::shared_ptr<AdConfig> parseImpl(const nlohmann::json& node);
@@ -79,6 +102,16 @@ protected:
 class BannerConfig : public AdConfig {
 public:
     explicit BannerConfig(const nlohmann::json& node);
+};
+
+class AppOpenConfig : public AdConfig {
+public:
+    explicit AppOpenConfig(const nlohmann::json& node);
+
+    int interval() const;
+
+private:
+    int interval_;
 };
 
 class InterstitialConfig : public AdConfig {

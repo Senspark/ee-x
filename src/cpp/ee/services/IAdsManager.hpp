@@ -31,6 +31,7 @@ public:
     virtual void setBannerAdSize(float x, float y) = 0;
     virtual Task<AdResult> showInterstitialAd() = 0;
     virtual Task<AdResult> showRewardedAd() = 0;
+    virtual Task<AdResult> showAppOpenAd() = 0;
 };
 } // namespace services
 } // namespace ee

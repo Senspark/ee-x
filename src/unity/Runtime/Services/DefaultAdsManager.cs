@@ -15,9 +15,12 @@ namespace EE {
         private IIronSource _ironSource;
         private IUnityAds _unityAds;
         private IAdView _bannerAd;
+        private IInterstitialAd _appOpenAd;
         private IInterstitialAd _interstitialAd;
         private IRewardedAd _rewardedAd;
 
+        private bool _isAppOpenAdCapped;
+        private int _appOpenAdInterval;
         private bool _isInterstitialAdCapped;
         private int _interstitialAdInterval;
         private bool _isBannerAdVisible;
@@ -69,6 +72,9 @@ namespace EE {
                     case AdsConfig.BannerConfig config:
                         CreateAd(config);
                         break;
+                    case AdsConfig.AppOpenConfig config:
+                        CreateAd(config);
+                        break;
                     case AdsConfig.InterstitialConfig config:
                         CreateAd(config);
                         break;
@@ -99,6 +105,20 @@ namespace EE {
                     _bannerAd.IsVisible = false;
                     _bannerAd.IsVisible = true;
                 }
+            });
+        }
+
+        private void CreateAd(AdsConfig.AppOpenConfig config) {
+            if (_appOpenAd != null) {
+                return;
+            }
+            _appOpenAd = CreateAppOpenAd(config.Instance);
+            Utils.NoAwait(_appOpenAd.Load);
+            _appOpenAdInterval = config.Interval;
+            _isAppOpenAdCapped = true;
+            Utils.NoAwait(async () => {
+                await Task.Delay(_appOpenAdInterval * 1000);
+                _isAppOpenAdCapped = false;
             });
         }
 
@@ -150,6 +170,34 @@ namespace EE {
             var ad = new MultiAdView();
             foreach (var instance in config.Instances) {
                 ad.AddItem(CreateBannerAd(instance));
+            }
+            return ad;
+        }
+
+        private IInterstitialAd CreateAppOpenAd(AdsConfig.AdInstanceConfig config) {
+            switch (config) {
+                case AdsConfig.SingleInstanceConfig instance:
+                    return CreateAppOpenAd(instance);
+                case AdsConfig.WaterfallInstanceConfig instance:
+                    return CreateAppOpenAd(instance);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private IInterstitialAd CreateAppOpenAd(AdsConfig.SingleInstanceConfig config) {
+            switch (config.Network) {
+                case AdsConfig.Network.AdMob:
+                    return _adMob.CreateAppOpenAd(config.Id);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private IInterstitialAd CreateAppOpenAd(AdsConfig.WaterfallInstanceConfig config) {
+            var ad = new MultiInterstitialAd();
+            foreach (var instance in config.Instances) {
+                ad.AddItem(CreateAppOpenAd(instance));
             }
             return ad;
         }
@@ -265,6 +313,10 @@ namespace EE {
                     _bannerAd.Size = value;
                 }
             }
+        }
+
+        public async Task<AdResult> ShowAppOpenAd() {
+            
         }
 
         public async Task<AdResult> ShowInterstitialAd() {

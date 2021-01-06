@@ -15,6 +15,7 @@ namespace EE.Internal {
 
         internal enum AdFormat {
             Banner,
+            AppOpen,
             Interstitial,
             Rewarded
         }
@@ -73,6 +74,7 @@ namespace EE.Internal {
                 var format = node["format"].Value;
                 switch (format) {
                     case "banner": return new BannerConfig(node);
+                    case "app_open": return new AppOpenConfig(node);
                     case "interstitial": return new InterstitialConfig(node);
                     case "rewarded": return new RewardedConfig(node);
                     default:
@@ -84,6 +86,16 @@ namespace EE.Internal {
         internal class BannerConfig : AdConfig {
             internal BannerConfig(JSONNode node) {
                 AdFormat = AdFormat.Banner;
+                Instance = AdInstanceConfig.ParseImpl(node["instance"]);
+            }
+        }
+
+        internal class AppOpenConfig : AdConfig {
+            public int Interval { get; }
+
+            internal AppOpenConfig(JSONNode node) {
+                AdFormat = AdFormat.Interstitial;
+                Interval = node["interval"] ?? 0;
                 Instance = AdInstanceConfig.ParseImpl(node["instance"]);
             }
         }

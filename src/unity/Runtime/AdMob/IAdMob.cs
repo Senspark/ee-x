@@ -8,5 +8,6 @@ namespace EE {
         IAdView CreateBannerAd(string adId, AdMobBannerAdSize adSize);
         IInterstitialAd CreateInterstitialAd(string adId);
         IRewardedAd CreateRewardedAd(string adId);
+        IInterstitialAd CreateAppOpenAd(string adId);
     }
 }

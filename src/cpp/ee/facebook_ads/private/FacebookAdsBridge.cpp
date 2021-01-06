@@ -9,8 +9,7 @@
 #include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
 
 #include <ee/ads/internal/GuardedAdView.hpp>
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LogLevel.hpp>
@@ -80,8 +79,7 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 }
 
 Self::~Bridge() = default;
@@ -227,9 +225,9 @@ Self::createInterstitialAd(const std::string& adId) {
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedInterstitialAd>(
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
         std::make_shared<InterstitialAd>(bridge_, logger_,
-                                         interstitialAdDisplayer_, this, adId));
+                                         displayer_, this, adId));
     interstitialAds_.emplace(adId, ad);
     return ad;
 }
@@ -265,8 +263,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
         return nullptr;
     }
     auto ad =
-        std::make_shared<ads::GuardedRewardedAd>(std::make_shared<RewardedAd>(
-            bridge_, logger_, rewardedAdDisplayer_, this, adId));
+        std::make_shared<ads::GuardedFullScreenAd>(std::make_shared<RewardedAd>(
+            bridge_, logger_, displayer_, this, adId));
     rewardedAds_.emplace(adId, ad);
     return ad;
 }

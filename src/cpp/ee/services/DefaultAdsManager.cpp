@@ -5,8 +5,7 @@
 #include <ee/ad_mob/AdMobBannerAdSize.hpp>
 #include <ee/ad_mob/IAdMobBridge.hpp>
 #include <ee/ads/MultiAdView.hpp>
-#include <ee/ads/MultiInterstitialAd.hpp>
-#include <ee/ads/MultiRewardedAd.hpp>
+#include <ee/ads/MultiFullScreenAd.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
 #include <ee/cocos/CocosAdView.hpp>
 #include <ee/core/Delay.hpp>
@@ -407,7 +406,7 @@ Task<AdResult> Self::showInterstitialAd() {
     auto result = co_await interstitialAd_->show();
     noAwait(interstitialAd_->load());
     switch (result) {
-    case true:
+    case FullScreenAdResult::Completed:
         if (interstitialAdInterval_ > 0) {
             isInterstitialAdCapped_ = true;
             noAwait([this]() -> Task<> {

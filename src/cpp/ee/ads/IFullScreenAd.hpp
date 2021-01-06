@@ -1,25 +1,15 @@
-//
-//  IRewardedVideo.hpp
-//  ee_x
-//
-//  Created by Zinge on 10/5/17.
-//
-//
-
-#ifndef EE_X_I_REWARDED_AD_HPP
-#define EE_X_I_REWARDED_AD_HPP
+#ifndef EE_X_I_FULL_SCREEN_AD_HPP
+#define EE_X_I_FULL_SCREEN_AD_HPP
 
 #ifdef __cplusplus
 
-#include <functional>
-
 #include <ee/core/IObserverManager.hpp>
 
-#include "ee/ads/AdsFwd.hpp"
+#include "ee/ads/AdObserver.hpp"
 
 namespace ee {
 namespace ads {
-enum class IRewardedAdResult {
+enum class FullScreenAdResult {
     /// Failed to display the ad.
     Failed,
 
@@ -30,17 +20,9 @@ enum class IRewardedAdResult {
     Completed,
 };
 
-struct IRewardedAdObserver {
-    /// Occurs when this ad is loaded.
-    std::function<void()> onLoaded;
-
-    /// Occurs when the user clicks this ad.
-    std::function<void()> onClicked;
-};
-
-class IRewardedAd : public virtual IObserverManager<IRewardedAdObserver> {
+class IFullScreenAd : public virtual IObserverManager<AdObserver> {
 public:
-    virtual ~IRewardedAd() = default;
+    virtual ~IFullScreenAd() = default;
 
     /// Destroys this ad.
     virtual void destroy() = 0;
@@ -52,11 +34,11 @@ public:
     [[nodiscard]] virtual Task<bool> load() = 0;
 
     /// Attempts to show this ad.
-    [[nodiscard]] virtual Task<IRewardedAdResult> show() = 0;
+    [[nodiscard]] virtual Task<FullScreenAdResult> show() = 0;
 };
 } // namespace ads
 } // namespace ee
 
 #endif // __cplusplus
 
-#endif /* EE_X_I_REWARDED_AD_HPP */
+#endif // EE_X_I_FULL_SCREEN_AD_HPP

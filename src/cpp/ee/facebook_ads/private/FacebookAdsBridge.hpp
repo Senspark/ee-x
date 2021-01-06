@@ -31,9 +31,9 @@ public:
     virtual std::shared_ptr<IAdView>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers) override;
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
@@ -54,11 +54,9 @@ private:
 
     std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
     std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
-    std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
-    std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
+    std::map<std::string, std::shared_ptr<IFullScreenAd>> fullScreenAds_;
 
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

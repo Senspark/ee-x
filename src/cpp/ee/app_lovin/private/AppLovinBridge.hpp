@@ -55,9 +55,9 @@ private:
 
     /// Share the same instance.
     RewardedAd* rewardedAd_;
-    std::shared_ptr<IRewardedAd> sharedRewardedAd_;
+    std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace app_lovin
 } // namespace ee

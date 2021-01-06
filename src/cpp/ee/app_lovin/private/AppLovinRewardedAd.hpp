@@ -9,19 +9,18 @@
 #ifndef EE_X_APP_LOVIN_REWARDED_AD_HPP
 #define EE_X_APP_LOVIN_REWARDED_AD_HPP
 
-#include <ee/ads/IRewardedAd.hpp>
+#include <ee/ads/IFullScreenAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/app_lovin/AppLovinFwd.hpp"
 
 namespace ee {
 namespace app_lovin {
-class RewardedAd : public IRewardedAd,
-                   public ObserverManager<IRewardedAdObserver> {
+class RewardedAd : public IFullScreenAd, public ObserverManager<AdObserver> {
 public:
     explicit RewardedAd(
         const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+        const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin);
     virtual ~RewardedAd() override;
 
@@ -29,7 +28,7 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<IRewardedAdResult> show() override;
+    virtual Task<FullScreenAdResult> show() override;
 
 private:
     friend Bridge;
@@ -40,7 +39,7 @@ private:
     void onClosed(bool rewarded);
 
     const Logger& logger_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;

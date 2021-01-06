@@ -22,9 +22,10 @@ namespace ee {
 namespace unity_ads {
 using Self = InterstitialAd;
 
-Self::InterstitialAd(const Logger& logger,
-                     const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-                     Bridge* plugin, const std::string& adId)
+Self::InterstitialAd(
+    const Logger& logger,
+    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
+    Bridge* plugin, const std::string& adId)
     : logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin)
@@ -51,7 +52,7 @@ Task<bool> Self::load() {
     co_return isLoaded();
 }
 
-Task<bool> Self::show() {
+Task<FullScreenAdResult> Self::show() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -59,7 +60,7 @@ Task<bool> Self::show() {
         [this] { //
             plugin_->showRewardedAd(adId_);
         },
-        [](bool result) {
+        [](FullScreenAdResult result) {
             // OK.
         });
     co_return result;
@@ -80,7 +81,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(false);
+        displayer_->resolve(FullScreenAdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -93,7 +94,7 @@ void Self::onClosed() {
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(true);
+        displayer_->resolve(FullScreenAdResult::Completed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);

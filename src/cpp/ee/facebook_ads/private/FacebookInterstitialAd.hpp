@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <ee/ads/IInterstitialAd.hpp>
+#include <ee/ads/IFullScreenAd.hpp>
 #include <ee/ads/internal/MessageHelper.hpp>
 #include <ee/core/ObserverManager.hpp>
 
@@ -19,12 +19,12 @@
 
 namespace ee {
 namespace facebook_ads {
-class InterstitialAd : public IInterstitialAd,
-                       public ObserverManager<IInterstitialAdObserver> {
+class InterstitialAd : public IFullScreenAd,
+                       public ObserverManager<AdObserver> {
 public:
     explicit InterstitialAd(
         IMessageBridge& bridge, const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
     virtual ~InterstitialAd() override;
 
@@ -32,7 +32,7 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<bool> show() override;
+    virtual Task<FullScreenAdResult> show() override;
 
 private:
     void onLoaded();
@@ -43,7 +43,7 @@ private:
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-    std::shared_ptr<ads::IAsyncHelper<bool>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;
     ads::MessageHelper messageHelper_;

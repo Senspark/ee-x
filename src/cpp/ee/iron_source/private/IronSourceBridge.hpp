@@ -56,8 +56,7 @@ private:
     std::shared_ptr<RewardedAd> rewardedAd_;
     std::shared_ptr<IRewardedAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace iron_source
 } // namespace ee

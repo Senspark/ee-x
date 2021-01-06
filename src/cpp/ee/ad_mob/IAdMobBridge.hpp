@@ -44,20 +44,20 @@ public:
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers) = 0;
 
+    /// Creates an app open ad.
+    /// @param[in] adId The ad unit ID.
+    virtual std::shared_ptr<IFullScreenAd>
+    createAppOpenAd(const std::string& adId) = 0;
+
     /// Creates an interstitial ad.
     /// @param[in] adId The ad unit ID.
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;
 
     /// Creates an rewarded ad.
     /// @param[in] adId The ad unit ID.
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) = 0;
-
-    /// Creates an app open ad.
-    /// @param[in] adId The ad unit ID.
-    virtual std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::string& adId) = 0;
 };
 } // namespace admob
 } // namespace ee

@@ -1,18 +1,10 @@
-//
-//  NullInterstitialAd.cpp
-//  ee_x
-//
-//  Created by Zinge on 10/27/17.
-//
-//
-
-#include "ee/ads/NullInterstitialAd.hpp"
+#include "ee/ads/NullFullScreenAd.hpp"
 
 #include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {
-using Self = NullInterstitialAd;
+using Self = NullFullScreenAd;
 
 void Self::destroy() {}
 
@@ -24,8 +16,8 @@ Task<bool> Self::load() {
     co_return false;
 }
 
-Task<bool> Self::show() {
-    co_return false;
+Task<FullScreenAdResult> Self::show() {
+    co_return FullScreenAdResult::Failed;
 }
 } // namespace ads
 } // namespace ee

@@ -50,10 +50,10 @@ public:
 
     /// Creates an interstitial ad.
     /// @param[in] adId The ad placement ID>
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;
 
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) = 0;
 };
 } // namespace facebook_ads

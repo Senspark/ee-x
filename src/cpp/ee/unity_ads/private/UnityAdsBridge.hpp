@@ -73,8 +73,7 @@ private:
         interstitialAds_;
     std::map<std::string, Entry<IRewardedAd, RewardedAd>> rewardedAds_;
 
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace unity_ads
 } // namespace ee

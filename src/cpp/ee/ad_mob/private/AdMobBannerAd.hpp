@@ -17,7 +17,7 @@
 
 namespace ee {
 namespace admob {
-class BannerAd final : public IAdView, public ObserverManager<IAdViewObserver> {
+class BannerAd final : public IAdView, public ObserverManager<AdObserver> {
 public:
     explicit BannerAd(IMessageBridge& bridge, const Logger& logger,
                       Bridge* plugin, const std::string& adId,

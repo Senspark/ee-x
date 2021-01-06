@@ -14,14 +14,11 @@
 #include <ee/core/Core.hpp>
 
 #include "ee/ads/IAdView.hpp"
-#include "ee/ads/IInterstitialAd.hpp"
-#include "ee/ads/IRewardedAd.hpp"
+#include "ee/ads/IFullScreenAd.hpp"
 #include "ee/ads/MultiAdView.hpp"
-#include "ee/ads/MultiInterstitialAd.hpp"
-#include "ee/ads/MultiRewardedAd.hpp"
+#include "ee/ads/MultiFullScreenAd.hpp"
 #include "ee/ads/NullAdView.hpp"
-#include "ee/ads/NullInterstitialAd.hpp"
-#include "ee/ads/NullRewardedAd.hpp"
+#include "ee/ads/NullFullScreenAd.hpp"
 
 #endif // __cplusplus
 

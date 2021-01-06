@@ -10,7 +10,7 @@
 
 #include <cassert>
 
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
@@ -142,7 +142,7 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
     rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
@@ -256,13 +256,13 @@ void Self::showInterstitialAd() {
     bridge_.call(kShowInterstitialAd);
 }
 
-std::shared_ptr<IRewardedAd> Self::createRewardedAd() {
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
     rewardedAd_ = new RewardedAd(logger_, rewardedAdDisplayer_, this);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
         std::shared_ptr<RewardedAd>(rewardedAd_));
     return sharedRewardedAd_;
 }

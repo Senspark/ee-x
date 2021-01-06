@@ -8,8 +8,7 @@
 
 #include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
@@ -60,8 +59,7 @@ Self::Bridge(IMessageBridge& bridge)
     displaying_ = false;
 
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -123,9 +121,9 @@ Self::createInterstitialAd(const std::string& adId) {
     if (iter != interstitialAds_.cend()) {
         return iter->second.ad;
     }
-    auto raw = std::make_shared<InterstitialAd>(
-        logger_, interstitialAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedInterstitialAd>(raw);
+    auto raw =
+        std::make_shared<InterstitialAd>(logger_, displayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     interstitialAds_.try_emplace(adId, ad, raw);
     return ad;
 }
@@ -146,9 +144,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     if (iter != rewardedAds_.cend()) {
         return iter->second.ad;
     }
-    auto raw =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
+    auto raw = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     rewardedAds_.try_emplace(adId, ad, raw);
     return ad;
 }
@@ -237,25 +234,17 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
 
 void Self::onMediationAdFailedToShow(const std::string& adId,
                                      const std::string& message) {
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(false);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(IRewardedAdResult::Failed);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(FullScreenAdResult::Failed);
         return;
     }
     assert(false);
 }
 
 void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(true);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
         return;
     }
     assert(false);

@@ -1,4 +1,4 @@
-#include "ee/ads/internal/GuardedRewardedAd.hpp"
+#include "ee/ads/internal/GuardedFullScreenAd.hpp"
 
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
@@ -9,9 +9,9 @@
 
 namespace ee {
 namespace ads {
-using Self = GuardedRewardedAd;
+using Self = GuardedFullScreenAd;
 
-Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
+Self::GuardedFullScreenAd(const std::shared_ptr<IFullScreenAd>& ad)
     : ad_(ad) {
     loading_ = false;
     loaded_ = false;
@@ -42,7 +42,7 @@ Self::GuardedRewardedAd(const std::shared_ptr<IRewardedAd>& ad)
     retrier_ = std::make_unique<Retrier>(1, 2, 64);
 }
 
-Self::~GuardedRewardedAd() = default;
+Self::~GuardedFullScreenAd() = default;
 
 void Self::destroy() {
     ad_->destroy();
@@ -81,15 +81,15 @@ Task<bool> Self::load() {
     co_return loaded_;
 }
 
-Task<IRewardedAdResult> Self::show() {
+Task<FullScreenAdResult> Self::show() {
     if (not loaded_) {
-        co_return IRewardedAdResult::Failed;
+        co_return FullScreenAdResult::Failed;
     }
     if (loading_) {
-        co_return IRewardedAdResult::Failed;
+        co_return FullScreenAdResult::Failed;
     }
     if (displaying_) {
-        co_return IRewardedAdResult::Failed;
+        co_return FullScreenAdResult::Failed;
     }
     displaying_ = true;
     loaded_ = false;

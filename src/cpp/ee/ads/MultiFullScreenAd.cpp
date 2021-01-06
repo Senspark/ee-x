@@ -1,12 +1,4 @@
-//
-//  MultiInterstitialAd.cpp
-//  ee_x
-//
-//  Created by Zinge on 10/11/17.
-//
-//
-
-#include "ee/ads/MultiInterstitialAd.hpp"
+#include "ee/ads/MultiFullScreenAd.hpp"
 
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
@@ -14,15 +6,15 @@
 
 namespace ee {
 namespace ads {
-using Self = MultiInterstitialAd;
+using Self = MultiFullScreenAd;
 
-Self::MultiInterstitialAd() {
+Self::MultiFullScreenAd() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiInterstitialAd() = default;
+Self::~MultiFullScreenAd() = default;
 
-Self& Self::addItem(const std::shared_ptr<IInterstitialAd>& item) {
+Self& Self::addItem(const std::shared_ptr<IFullScreenAd>& item) {
     items_.push_back(item);
     (*handle_).bind(*item).addObserver({
         .onLoaded =
@@ -77,10 +69,11 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<bool> Self::show() {
-    bool result = false;
+Task<FullScreenAdResult> Self::show() {
+    auto result = FullScreenAdResult::Failed;
     for (auto&& item : items_) {
-        if (not result) {
+        if (result == FullScreenAdResult::Failed) {
+            // Only process if there isn't any successfully displayed ad.
             result = co_await item->show();
         }
         if (not item->isLoaded()) {

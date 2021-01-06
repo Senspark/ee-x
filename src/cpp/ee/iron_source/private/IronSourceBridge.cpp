@@ -1,7 +1,6 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
@@ -62,8 +61,7 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
     interstitialAd_ = nullptr;
     rewardedAd_ = nullptr;
 
@@ -175,10 +173,10 @@ Self::createInterstitialAd(const std::string& adId) {
     if (sharedInterstitialAd_) {
         return sharedInterstitialAd_;
     }
-    interstitialAd_ = std::make_shared<InterstitialAd>(
-        logger_, interstitialAdDisplayer_, this, adId);
+    interstitialAd_ =
+        std::make_shared<InterstitialAd>(logger_, displayer_, this, adId);
     sharedInterstitialAd_ =
-        std::make_shared<ads::GuardedInterstitialAd>(interstitialAd_);
+        std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
     return sharedInterstitialAd_;
 }
 
@@ -198,9 +196,8 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
-    rewardedAd_ =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(rewardedAd_);
+    rewardedAd_ = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(rewardedAd_);
     return sharedRewardedAd_;
 }
 
@@ -320,13 +317,9 @@ void Self::onRewardedAdClosed(bool rewarded) {
 
 void Self::onMediationAdClosed(bool rewarded) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(true);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
         return;
     }
     assert(false);

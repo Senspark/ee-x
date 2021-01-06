@@ -11,24 +11,15 @@
 
 #ifdef __cplusplus
 
-#include <functional>
 #include <utility>
 
 #include <ee/core/IObserverManager.hpp>
 
-#include "ee/ads/AdsFwd.hpp"
+#include "ee/ads/AdObserver.hpp"
 
 namespace ee {
 namespace ads {
-struct IAdViewObserver {
-    /// Occurs when this ad is loaded.
-    std::function<void()> onLoaded;
-
-    /// Occurs when the user clicks this ad.
-    std::function<void()> onClicked;
-};
-
-class IAdView : public virtual IObserverManager<IAdViewObserver> {
+class IAdView : public virtual IObserverManager<AdObserver> {
 public:
     virtual ~IAdView() = default;
 

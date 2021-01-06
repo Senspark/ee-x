@@ -1,6 +1,6 @@
 #include "ee/vungle/private/VungleBridge.hpp"
 
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
@@ -52,7 +52,7 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    rewardedAdDisplayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -128,7 +128,7 @@ std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
     }
     auto raw =
         std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     rewardedAds_.try_emplace(adId, ad, raw);
     return ad;
 }

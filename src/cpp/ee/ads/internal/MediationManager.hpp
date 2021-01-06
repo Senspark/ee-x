@@ -23,11 +23,8 @@ private:
 public:
     static Self& getInstance();
 
-    const std::shared_ptr<IAsyncHelper<bool>>&
-    getInterstitialAdDisplayer() const;
-
-    const std::shared_ptr<IAsyncHelper<IRewardedAdResult>>&
-    getRewardedAdDisplayer() const;
+    const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>&
+    getAdDisplayer() const;
 
 private:
     MediationManager();
@@ -36,8 +33,7 @@ private:
     MediationManager(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    std::shared_ptr<IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<IAsyncHelper<FullScreenAdResult>> adDisplayer_;
 };
 } // namespace ads
 } // namespace ee

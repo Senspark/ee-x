@@ -322,13 +322,13 @@ Task<AdResult> Self::showInterstitialAd() {
     } else {
         noAwait(interstitialAd_->load());
         auto hasInternet = false;
-        co_await whenAll(     //
-            ([]() -> Task<> { //
+        co_await whenAll(    //
+            []() -> Task<> { //
                 co_await Delay(0.1f);
-            })(),
-            ([&hasInternet]() -> Task<> {
+            },
+            [&hasInternet]() -> Task<> {
                 hasInternet = co_await testConnection(0.2f);
-            })());
+            });
         if (!hasInternet) {
             co_return AdResult::NoInternet;
         }
@@ -368,13 +368,13 @@ Task<AdResult> Self::showRewardedAd() {
     } else {
         noAwait(rewardedAd_->load());
         auto hasInternet = false;
-        co_await whenAll(     //
-            ([]() -> Task<> { //
+        co_await whenAll(    //
+            []() -> Task<> { //
                 co_await Delay(0.1f);
-            })(),
-            ([&hasInternet]() -> Task<> {
+            },
+            [&hasInternet]() -> Task<> {
                 hasInternet = co_await testConnection(0.2f);
-            })());
+            });
         if (!hasInternet) {
             co_return AdResult::NoInternet;
         }

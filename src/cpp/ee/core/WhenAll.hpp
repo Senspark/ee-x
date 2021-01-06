@@ -11,26 +11,30 @@
 
 namespace ee {
 namespace core {
+namespace detail {
+template <class T>
+void whenOne(const std::shared_ptr<int>& counter,
+             const std::function<void()>& resolve, T&& callable) {
+    noAwait([counter, resolve, callable]() -> Task<> {
+        co_await callable();
+        --(*counter);
+        if (*counter == 0) {
+            resolve();
+        }
+    });
+}
+} // namespace detail
+
 template <class... Args>
 Task<> whenAll(Args&&... args) {
-    auto taskTuple = std::forward_as_tuple(std::forward<Args>(args)...);
+    auto callableTuple = std::forward_as_tuple(std::forward<Args>(args)...);
     auto counter = std::make_shared<int>(sizeof...(Args));
-    co_await LambdaAwaiter<>([&taskTuple, counter](auto&& resolve) {
+    co_await LambdaAwaiter<>([&callableTuple, counter](auto&& resolve) {
         std::apply(
-            [counter, resolve](auto&&... taskList) {
-                (([counter, resolve](auto&& task) {
-                     noAwait([counter, resolve,
-                              t = std::move(task)]() mutable -> Task<> {
-                         co_await t;
-                         --(*counter);
-                         if (*counter == 0) {
-                             resolve();
-                         }
-                     });
-                 }(taskList)),
-                 ...);
+            [counter, resolve](auto&&... callables) {
+                ((detail::whenOne(counter, resolve, callables)), ...);
             },
-            taskTuple);
+            callableTuple);
     });
 }
 } // namespace core

@@ -23,7 +23,13 @@ namespace EE.Internal {
                 _handle.Clear();
                 _handle.Bind(value)
                     .AddObserver(new AdObserver {
-                        OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
+                        OnLoaded = () => {
+                            if (_visible) {
+                                _ad.IsVisible = false;
+                                _ad.IsVisible = true;
+                            }
+                            DispatchEvent(observer => observer.OnLoaded?.Invoke());
+                        },
                         OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
                     });
                 _ad = value;

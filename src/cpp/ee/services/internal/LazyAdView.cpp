@@ -32,6 +32,11 @@ void Self::setAd(const std::shared_ptr<IAdView>& ad) {
         .addObserver({
             .onLoaded =
                 [this] {
+                    if (visible_) {
+                        ad_->setVisible(false);
+                        ad_->setVisible(true);
+                    }
+
                     // Propagation.
                     dispatchEvent([](auto&& observer) {
                         if (observer.onLoaded) {

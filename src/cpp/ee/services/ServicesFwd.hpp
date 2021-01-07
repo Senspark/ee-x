@@ -12,16 +12,26 @@
 
 namespace ee {
 namespace services {
+enum class AdFormat;
 enum class AdResult;
+enum class Network;
 
 class AdsConfig;
-class AppOpenConfig;
+class NetworkConfig;
+class AdMobConfig;
+class AppLovinConfig;
+class FacebookAdsConfig;
+class IronSourceConfig;
+class UnityAdsConfig;
+class VungleConfig;
 class BannerConfig;
+class AppOpenConfig;
 class InterstitialConfig;
 class RewardedConfig;
+template <class Ad>
 class AdInstanceConfig;
-class SingleInstanceConfig;
-class WaterfallInstanceConfig;
+//class SingleInstanceConfig;
+//class WaterfallInstanceConfig;
 
 class IAdsManager;
 class DefaultAdsManager;

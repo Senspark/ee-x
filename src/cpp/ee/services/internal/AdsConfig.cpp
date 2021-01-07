@@ -2,12 +2,24 @@
 
 #include <cassert>
 
+#include <ee/ad_mob/AdMobBannerAdSize.hpp>
+#include <ee/ad_mob/IAdMobBridge.hpp>
+#include <ee/ads/MultiAdView.hpp>
+#include <ee/ads/MultiFullScreenAd.hpp>
+#include <ee/app_lovin/IAppLovinBridge.hpp>
+#include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
+#include <ee/facebook_ads/FacebookBannerAdSize.hpp>
+#include <ee/facebook_ads/IFacebookAdsBridge.hpp>
+#include <ee/iron_source/IIronSourceBridge.hpp>
 #include <ee/nlohmann/json.hpp>
+#include <ee/unity_ads/IUnityAdsBridge.hpp>
+#include <ee/vungle/IVungleBridge.hpp>
 
 namespace ee {
 namespace services {
 std::shared_ptr<NetworkConfig>
-NetworkConfig::parseImpl(const nlohmann::json& node) {
+NetworkConfig::parse(const nlohmann::json& node) {
     auto&& network = node["network"];
     if (network == "ad_mob") {
         return std::make_shared<AdMobConfig>(node);
@@ -31,55 +43,162 @@ NetworkConfig::parseImpl(const nlohmann::json& node) {
     return nullptr;
 }
 
-Network NetworkConfig::network() const {
-    return network_;
+AdMobConfig::AdMobConfig(const nlohmann::json& node) {}
+
+Task<> AdMobConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IAdMob>();
+    co_await plugin_->initialize();
 }
 
-AdMobConfig::AdMobConfig(const nlohmann::json& node) {
-    network_ = Network::AdMob;
+Network AdMobConfig::network() const {
+    return Network::AdMob;
+}
+
+std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
+                                           const std::string& id) {
+    switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, AdMobBannerAdSize::Normal);
+    case AdFormat::AppOpen:
+        return plugin_->createAppOpenAd(id);
+    case AdFormat::Interstitial:
+        return plugin_->createInterstitialAd(id);
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
+    default:
+        assert(false);
+        return nullptr;
+    }
 }
 
 AppLovinConfig::AppLovinConfig(const nlohmann::json& node) {
-    network_ = Network::AppLovin;
     appId_ = node["app_id"];
 }
 
-const std::string& AppLovinConfig::appId() const {
-    return appId_;
+Task<> AppLovinConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IAppLovin>();
+    co_await plugin_->initialize(appId_);
 }
 
-FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {
-    network_ = Network::FacebookAds;
+Network AppLovinConfig::network() const {
+    return Network::AppLovin;
+}
+
+std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
+                                              const std::string& id) {
+    switch (format) {
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd();
+    default:
+        assert(false);
+        return nullptr;
+    }
+}
+
+FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {}
+
+Task<> FacebookAdsConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IFacebookAds>();
+    co_await plugin_->initialize();
+}
+
+Network FacebookAdsConfig::network() const {
+    return Network::FacebookAds;
+}
+
+std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
+                                                 const std::string& id) {
+    switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id,
+                                       FacebookBannerAdSize::BannerHeight50);
+    case AdFormat::Interstitial:
+        return plugin_->createInterstitialAd(id);
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
+    default:
+        assert(false);
+        return nullptr;
+    }
 }
 
 IronSourceConfig::IronSourceConfig(const nlohmann::json& node) {
-    network_ = Network::IronSource;
     appId_ = node["app_id"];
 }
 
-const std::string& IronSourceConfig::appId() const {
-    return appId_;
+Task<> IronSourceConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IIronSource>();
+    co_await plugin_->initialize(appId_);
+}
+
+Network IronSourceConfig::network() const {
+    return Network::IronSource;
+}
+
+std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
+                                                const std::string& id) {
+    switch (format) {
+    case AdFormat::Interstitial:
+        return plugin_->createInterstitialAd(id);
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
+    default:
+        assert(false);
+        return nullptr;
+    }
 }
 
 UnityAdsConfig::UnityAdsConfig(const nlohmann::json& node) {
-    network_ = Network::UnityAds;
     appId_ = node["app_id"];
 }
 
-const std::string& UnityAdsConfig::appId() const {
-    return appId_;
+Task<> UnityAdsConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IUnityAds>();
+    co_await plugin_->initialize(appId_, false);
+}
+
+Network UnityAdsConfig::network() const {
+    return Network::UnityAds;
+}
+
+std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
+                                              const std::string& id) {
+    switch (format) {
+    case AdFormat::Interstitial:
+        return plugin_->createInterstitialAd(id);
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
+    default:
+        assert(false);
+        return nullptr;
+    }
 }
 
 VungleConfig::VungleConfig(const nlohmann::json& node) {
-    network_ = Network::Vungle;
     appId_ = node["app_id"];
 }
 
-const std::string& VungleConfig::appId() const {
-    return appId_;
+Task<> VungleConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IVungle>();
+    co_await plugin_->initialize(appId_);
 }
 
-std::shared_ptr<AdConfig> AdConfig::parseImpl(const nlohmann::json& node) {
+Network VungleConfig::network() const {
+    return Network::Vungle;
+}
+
+std::shared_ptr<IAd> VungleConfig::createAd(AdFormat format,
+                                            const std::string& id) {
+    switch (format) {
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
+    default:
+        assert(false);
+        return nullptr;
+    }
+}
+
+std::shared_ptr<AdConfig> AdConfig::parse(const nlohmann::json& node) {
     auto&& format = node["format"];
     if (format == "banner") {
         return std::make_shared<BannerConfig>(node);
@@ -97,23 +216,23 @@ std::shared_ptr<AdConfig> AdConfig::parseImpl(const nlohmann::json& node) {
     return nullptr;
 }
 
-AdFormat AdConfig::adFormat() const {
-    return adFormat_;
-}
-
-const std::shared_ptr<AdInstanceConfig>& AdConfig::instance() const {
-    return instance_;
-}
-
 BannerConfig::BannerConfig(const nlohmann::json& node) {
-    adFormat_ = AdFormat::Banner;
-    instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+    instance_ = AdInstanceConfig<IAdView>::parse<MultiAdView>(AdFormat::Banner,
+                                                              node["instance"]);
+}
+
+AdFormat BannerConfig::format() const {
+    return AdFormat::Banner;
 }
 
 AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
-    adFormat_ = AdFormat::AppOpen;
     interval_ = node.value("interval", 0);
-    instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+        AdFormat::AppOpen, node["instance"]);
+}
+
+AdFormat AppOpenConfig::format() const {
+    return AdFormat::AppOpen;
 }
 
 int AppOpenConfig::interval() const {
@@ -121,9 +240,13 @@ int AppOpenConfig::interval() const {
 }
 
 InterstitialConfig::InterstitialConfig(const nlohmann::json& node) {
-    adFormat_ = AdFormat::Interstitial;
     interval_ = node.value("interval", 0);
-    instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+        AdFormat::Interstitial, node["instance"]);
+}
+
+AdFormat InterstitialConfig::format() const {
+    return AdFormat::Interstitial;
 }
 
 int InterstitialConfig::interval() const {
@@ -131,19 +254,29 @@ int InterstitialConfig::interval() const {
 }
 
 RewardedConfig::RewardedConfig(const nlohmann::json& node) {
-    adFormat_ = AdFormat::Rewarded;
-    instance_ = AdInstanceConfig::parseImpl(node["instance"]);
+    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+        AdFormat::Rewarded, node["instance"]);
 }
 
-std::shared_ptr<AdInstanceConfig>
-AdInstanceConfig::parseImpl(const nlohmann::json& node) {
+AdFormat RewardedConfig::format() const {
+    return AdFormat::Rewarded;
+}
+
+template <class Ad>
+template <class MultiAd>
+std::shared_ptr<AdInstanceConfig<Ad>>
+AdInstanceConfig<Ad>::parse(AdFormat format, const nlohmann::json& node) {
     if (node.is_array()) {
-        return std::make_shared<WaterfallInstanceConfig>(node);
+        return std::make_shared<WaterfallInstanceConfig<Ad, MultiAd>>(format,
+                                                                      node);
     }
-    return std::make_shared<SingleInstanceConfig>(node);
+    return std::make_shared<SingleInstanceConfig<Ad>>(format, node);
 }
 
-SingleInstanceConfig::SingleInstanceConfig(const nlohmann::json& node) {
+template <class Ad>
+SingleInstanceConfig<Ad>::SingleInstanceConfig(AdFormat format,
+                                               const nlohmann::json& node) {
+    format_ = format;
     std::map<std::string, Network> networks = {
         {"ad_mob", Network::AdMob},
         {"app_lovin", Network::AppLovin},
@@ -157,23 +290,30 @@ SingleInstanceConfig::SingleInstanceConfig(const nlohmann::json& node) {
     id_ = node.value("id", "");
 }
 
-Network SingleInstanceConfig::network() const {
-    return network_;
+template <class Ad>
+std::shared_ptr<Ad>
+SingleInstanceConfig<Ad>::createAd(INetworkConfigManager& manager) const {
+    auto ad = manager.createAd(network_, format_, id_);
+    return std::dynamic_pointer_cast<Ad>(ad);
 }
 
-const std::string& SingleInstanceConfig::id() const {
-    return id_;
-}
-
-WaterfallInstanceConfig::WaterfallInstanceConfig(const nlohmann::json& node) {
+template <class Ad, class MultiAd>
+WaterfallInstanceConfig<Ad, MultiAd>::WaterfallInstanceConfig(
+    AdFormat format, const nlohmann::json& node) {
     for (auto&& [key, value] : node.items()) {
-        instances_.push_back(parseImpl(value));
+        instances_.push_back(
+            AdInstanceConfig<Ad>::template parse<MultiAd>(format, value));
     }
 }
 
-const std::vector<std::shared_ptr<AdInstanceConfig>>&
-WaterfallInstanceConfig::instances() const {
-    return instances_;
+template <class Ad, class MultiAd>
+std::shared_ptr<Ad> WaterfallInstanceConfig<Ad, MultiAd>::createAd(
+    INetworkConfigManager& manager) const {
+    auto ad = std::make_shared<MultiAd>();
+    for (auto&& instance : instances_) {
+        ad->addItem(instance->createAd(manager));
+    }
+    return ad;
 }
 
 using Self = AdsConfig;
@@ -186,20 +326,28 @@ std::shared_ptr<AdsConfig> Self::parse(const std::string& text) {
 std::shared_ptr<AdsConfig> Self::parse(const nlohmann::json& node) {
     auto result = std::make_shared<AdsConfig>();
     for (auto&& [key, value] : node["networks"].items()) {
-        result->networks_.push_back(NetworkConfig::parseImpl(value));
+        auto network = NetworkConfig::parse(value);
+        result->networks_[network->network()] = network;
     }
     for (auto&& [key, value] : node["ads"].items()) {
-        result->ads_.push_back(AdConfig::parseImpl(value));
+        result->ads_.push_back(AdConfig::parse(value));
     }
     return result;
 }
 
-const std::vector<std::shared_ptr<NetworkConfig>>& Self::networks() const {
-    return networks_;
+Task<> Self::initialize() {
+    for (auto&& [key, value] : networks_) {
+        co_await value->initialize();
+    }
 }
 
-const std::vector<std::shared_ptr<AdConfig>>& Self::ads() const {
-    return ads_;
+std::shared_ptr<IAd> Self::createAd(AdFormat format) {
+    for (auto&& ad : ads_) {
+        if (ad->format() == format) {
+            return ad->createAd(*this);
+        }
+    }
+    return nullptr;
 }
 } // namespace services
 } // namespace ee

@@ -3,6 +3,7 @@
 
 #ifdef __cplusplus
 
+#include <map>
 #include <optional>
 #include <string>
 
@@ -30,54 +31,19 @@ public:
 
 private:
     Task<> initializeNetworks();
-    void createAds();
-    void createAd(const std::shared_ptr<BannerConfig>& config);
-    void createAd(const std::shared_ptr<AppOpenConfig>& config);
-    void createAd(const std::shared_ptr<InterstitialConfig>& config);
-    void createAd(const std::shared_ptr<RewardedConfig>& config);
-
-    std::shared_ptr<IAdView>
-    createBannerAd(const std::shared_ptr<AdInstanceConfig>& config);
-    std::shared_ptr<IAdView>
-    createBannerAd(const std::shared_ptr<SingleInstanceConfig>& config);
-    std::shared_ptr<IAdView>
-    createBannerAd(const std::shared_ptr<WaterfallInstanceConfig>& config);
-
-    std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::shared_ptr<AdInstanceConfig>& config);
-    std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::shared_ptr<SingleInstanceConfig>& config);
-    std::shared_ptr<IInterstitialAd>
-    createAppOpenAd(const std::shared_ptr<WaterfallInstanceConfig>& config);
-
-    std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::shared_ptr<AdInstanceConfig>& config);
-    std::shared_ptr<IInterstitialAd>
-    createInterstitialAd(const std::shared_ptr<SingleInstanceConfig>& config);
-    std::shared_ptr<IInterstitialAd> createInterstitialAd(
-        const std::shared_ptr<WaterfallInstanceConfig>& config);
-
-    std::shared_ptr<IRewardedAd>
-    createRewardedAd(const std::shared_ptr<AdInstanceConfig>& config);
-    std::shared_ptr<IRewardedAd>
-    createRewardedAd(const std::shared_ptr<SingleInstanceConfig>& config);
-    std::shared_ptr<IRewardedAd>
-    createRewardedAd(const std::shared_ptr<WaterfallInstanceConfig>& config);
-
+    void initializeBannerAd();
+    void initializeAppOpenAd();
+    void initializeInterstitialAd();
+    void initializeRewardedAd();
+    
     static Task<bool> testConnection(float timeOut);
 
     bool initialized_;
     std::shared_ptr<AdsConfig> config_;
-    std::shared_ptr<IAdMob> adMob_;
-    std::shared_ptr<IAppLovin> appLovin_;
-    std::shared_ptr<IFacebookAds> facebookAds_;
-    std::shared_ptr<IIronSource> ironSource_;
-    std::shared_ptr<IUnityAds> unityAds_;
-    std::shared_ptr<IVungle> vungle_;
     std::shared_ptr<IAdView> bannerAd_;
-    std::shared_ptr<IInterstitialAd> appOpenAd_;
-    std::shared_ptr<IInterstitialAd> interstitialAd_;
-    std::shared_ptr<IRewardedAd> rewardedAd_;
+    std::shared_ptr<IFullScreenAd> appOpenAd_;
+    std::shared_ptr<IFullScreenAd> interstitialAd_;
+    std::shared_ptr<IFullScreenAd> rewardedAd_;
     bool isAppOpenAdCapped_;
     int appOpenAdInterval_;
     bool isInterstitialAdCapped_;

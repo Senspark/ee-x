@@ -7,6 +7,7 @@
 #include <ee/ads/MultiAdView.hpp>
 #include <ee/ads/MultiFullScreenAd.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
+#include <ee/cocos/CocosAdView.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/facebook_ads/FacebookBannerAdSize.hpp>
@@ -16,10 +17,36 @@
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
 
+#include "ee/services/internal/GenericAd.hpp"
+
 namespace ee {
 namespace services {
-std::shared_ptr<NetworkConfig>
-NetworkConfig::parse(const nlohmann::json& node) {
+NetworkConfigManager::NetworkConfigManager(const nlohmann::json& node) {
+    for (auto&& [key, value] : node["networks"].items()) {
+        auto network = INetworkConfig::parse(value);
+        networks_.push_back(network);
+    }
+}
+
+Task<> NetworkConfigManager::initialize() {
+    for (auto&& item : networks_) {
+        co_await item->initialize();
+    }
+}
+
+std::shared_ptr<IAd> NetworkConfigManager::createAd(Network network,
+                                                    AdFormat format,
+                                                    const std::string& id) {
+    for (auto&& item : networks_) {
+        if (item->network() == network) {
+            return item->createAd(format, id);
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<INetworkConfig>
+INetworkConfig::parse(const nlohmann::json& node) {
     auto&& network = node["network"];
     if (network == "ad_mob") {
         return std::make_shared<AdMobConfig>(node);
@@ -198,7 +225,26 @@ std::shared_ptr<IAd> VungleConfig::createAd(AdFormat format,
     }
 }
 
-std::shared_ptr<AdConfig> AdConfig::parse(const nlohmann::json& node) {
+AdConfigManager::AdConfigManager(
+    const std::shared_ptr<INetworkConfigManager>& manager,
+    const nlohmann::json& node)
+    : manager_(manager) {
+    for (auto&& [key, value] : node["ads"].items()) {
+        auto ad = IAdConfig::parse(value);
+        ads_.push_back(ad);
+    }
+}
+
+std::shared_ptr<IAd> AdConfigManager::createAd(AdFormat format) {
+    for (auto&& ad : ads_) {
+        if (ad->format() == format) {
+            return ad->createAd(manager_);
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
     auto&& format = node["format"];
     if (format == "banner") {
         return std::make_shared<BannerConfig>(node);
@@ -225,6 +271,12 @@ AdFormat BannerConfig::format() const {
     return AdFormat::Banner;
 }
 
+std::shared_ptr<IAd> BannerConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<CocosAdView>(ad);
+}
+
 AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
     interval_ = node.value("interval", 0);
     instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
@@ -233,6 +285,12 @@ AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
 
 AdFormat AppOpenConfig::format() const {
     return AdFormat::AppOpen;
+}
+
+std::shared_ptr<IAd> AppOpenConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<GenericAd>(ad, interval_);
 }
 
 int AppOpenConfig::interval() const {
@@ -249,6 +307,12 @@ AdFormat InterstitialConfig::format() const {
     return AdFormat::Interstitial;
 }
 
+std::shared_ptr<IAd> InterstitialConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<GenericAd>(ad, interval_);
+}
+
 int InterstitialConfig::interval() const {
     return interval_;
 }
@@ -260,6 +324,12 @@ RewardedConfig::RewardedConfig(const nlohmann::json& node) {
 
 AdFormat RewardedConfig::format() const {
     return AdFormat::Rewarded;
+}
+
+std::shared_ptr<IAd> RewardedConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<GenericAd>(ad, 0);
 }
 
 template <class Ad>
@@ -291,9 +361,9 @@ SingleInstanceConfig<Ad>::SingleInstanceConfig(AdFormat format,
 }
 
 template <class Ad>
-std::shared_ptr<Ad>
-SingleInstanceConfig<Ad>::createAd(INetworkConfigManager& manager) const {
-    auto ad = manager.createAd(network_, format_, id_);
+std::shared_ptr<Ad> SingleInstanceConfig<Ad>::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = manager->createAd(network_, format_, id_);
     return std::dynamic_pointer_cast<Ad>(ad);
 }
 
@@ -308,7 +378,7 @@ WaterfallInstanceConfig<Ad, MultiAd>::WaterfallInstanceConfig(
 
 template <class Ad, class MultiAd>
 std::shared_ptr<Ad> WaterfallInstanceConfig<Ad, MultiAd>::createAd(
-    INetworkConfigManager& manager) const {
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = std::make_shared<MultiAd>();
     for (auto&& instance : instances_) {
         ad->addItem(instance->createAd(manager));
@@ -325,29 +395,18 @@ std::shared_ptr<AdsConfig> Self::parse(const std::string& text) {
 
 std::shared_ptr<AdsConfig> Self::parse(const nlohmann::json& node) {
     auto result = std::make_shared<AdsConfig>();
-    for (auto&& [key, value] : node["networks"].items()) {
-        auto network = NetworkConfig::parse(value);
-        result->networks_[network->network()] = network;
-    }
-    for (auto&& [key, value] : node["ads"].items()) {
-        result->ads_.push_back(AdConfig::parse(value));
-    }
+    result->networkManager_ = std::make_shared<NetworkConfigManager>(node);
+    result->adManager_ =
+        std::make_shared<AdConfigManager>(result->networkManager_, node);
     return result;
 }
 
 Task<> Self::initialize() {
-    for (auto&& [key, value] : networks_) {
-        co_await value->initialize();
-    }
+    co_await networkManager_->initialize();
 }
 
 std::shared_ptr<IAd> Self::createAd(AdFormat format) {
-    for (auto&& ad : ads_) {
-        if (ad->format() == format) {
-            return ad->createAd(*this);
-        }
-    }
-    return nullptr;
+    return adManager_->createAd(format);
 }
 } // namespace services
 } // namespace ee

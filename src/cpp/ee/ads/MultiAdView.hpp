@@ -54,7 +54,7 @@ private:
     std::pair<float, float> anchor_;
 
     /// Custom position.
-    std::pair<int, int> position_;
+    std::pair<float, float> position_;
 
     /// Whether visible.
     bool visible_;

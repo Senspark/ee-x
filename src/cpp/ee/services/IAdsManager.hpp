@@ -7,17 +7,6 @@
 
 namespace ee {
 namespace services {
-enum class AdResult {
-    NotInitialized,
-    NotConfigured,
-    Capped,
-    NoInternet,
-    NotLoaded,
-    Failed,
-    Canceled,
-    Completed,
-};
-
 class IAdsManager {
 public:
     virtual ~IAdsManager() = default;

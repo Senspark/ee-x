@@ -5,6 +5,7 @@
 
 #include <ee/core/Core.hpp>
 
+#include "ee/services/AdResult.hpp"
 #include "ee/services/DefaultAdsManager.hpp"
 #include "ee/services/IAdsManager.hpp"
 

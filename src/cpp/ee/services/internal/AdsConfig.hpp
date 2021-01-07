@@ -1,9 +1,15 @@
 #ifndef EE_X_ADS_CONFIG_HPP
 #define EE_X_ADS_CONFIG_HPP
 
-#include "ee/services/ServicesFwd.hpp"
-
+#include <ee/ad_mob/AdMobFwd.hpp>
+#include <ee/app_lovin/AppLovinFwd.hpp>
+#include <ee/facebook_ads/FacebookAdsFwd.hpp>
+#include <ee/iron_source/IronSourceFwd.hpp>
 #include <ee/nlohmann/json_fwd.hpp>
+#include <ee/unity_ads/UnityAdsFwd.hpp>
+#include <ee/vungle/VungleFwd.hpp>
+
+#include "ee/services/ServicesFwd.hpp"
 
 namespace ee {
 namespace services {
@@ -23,13 +29,33 @@ enum class AdFormat {
     Rewarded,
 };
 
-class INetworkConfigManager;
+class INetworkConfig;
 
-class NetworkConfig {
+class INetworkConfigManager {
 public:
-    static std::shared_ptr<NetworkConfig> parse(const nlohmann::json& node);
+    virtual ~INetworkConfigManager() = default;
+    virtual Task<> initialize() = 0;
+    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
+                                          const std::string& id) = 0;
+};
 
-    virtual ~NetworkConfig() = default;
+class NetworkConfigManager : public INetworkConfigManager {
+public:
+    explicit NetworkConfigManager(const nlohmann::json& node);
+
+    virtual Task<> initialize() override;
+    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
+                                          const std::string& id) override;
+
+private:
+    std::vector<std::shared_ptr<INetworkConfig>> networks_;
+};
+
+class INetworkConfig {
+public:
+    static std::shared_ptr<INetworkConfig> parse(const nlohmann::json& node);
+
+    virtual ~INetworkConfig() = default;
 
     virtual Task<> initialize() = 0;
     virtual Network network() const = 0;
@@ -37,7 +63,7 @@ public:
                                           const std::string& id) = 0;
 };
 
-class AdMobConfig : public NetworkConfig {
+class AdMobConfig : public INetworkConfig {
 public:
     explicit AdMobConfig(const nlohmann::json& node);
 
@@ -50,7 +76,7 @@ private:
     std::shared_ptr<IAdMob> plugin_;
 };
 
-class AppLovinConfig : public NetworkConfig {
+class AppLovinConfig : public INetworkConfig {
 public:
     explicit AppLovinConfig(const nlohmann::json& node);
 
@@ -64,7 +90,7 @@ private:
     std::string appId_;
 };
 
-class FacebookAdsConfig : public NetworkConfig {
+class FacebookAdsConfig : public INetworkConfig {
 public:
     explicit FacebookAdsConfig(const nlohmann::json& node);
 
@@ -77,7 +103,7 @@ private:
     std::shared_ptr<IFacebookAds> plugin_;
 };
 
-class IronSourceConfig : public NetworkConfig {
+class IronSourceConfig : public INetworkConfig {
 public:
     explicit IronSourceConfig(const nlohmann::json& node);
 
@@ -91,7 +117,7 @@ private:
     std::string appId_;
 };
 
-class UnityAdsConfig : public NetworkConfig {
+class UnityAdsConfig : public INetworkConfig {
 public:
     explicit UnityAdsConfig(const nlohmann::json& node);
 
@@ -105,7 +131,7 @@ private:
     std::string appId_;
 };
 
-class VungleConfig : public NetworkConfig {
+class VungleConfig : public INetworkConfig {
 public:
     explicit VungleConfig(const nlohmann::json& node);
 
@@ -119,39 +145,62 @@ private:
     std::string appId_;
 };
 
-class AdConfig {
-public:
-    static std::shared_ptr<AdConfig> parse(const nlohmann::json& node);
+class IAdConfig;
 
-    virtual ~AdConfig() = default;
+class IAdConfigManager {
+public:
+    virtual ~IAdConfigManager() = default;
+    virtual std::shared_ptr<IAd> createAd(AdFormat format) = 0;
+};
+
+class AdConfigManager : public IAdConfigManager {
+public:
+    explicit AdConfigManager(
+        const std::shared_ptr<INetworkConfigManager>& manager,
+        const nlohmann::json& node);
+    virtual std::shared_ptr<IAd> createAd(AdFormat format) override;
+
+private:
+    std::shared_ptr<INetworkConfigManager> manager_;
+    std::vector<std::shared_ptr<IAdConfig>> ads_;
+};
+
+class IAdConfig {
+public:
+    static std::shared_ptr<IAdConfig> parse(const nlohmann::json& node);
+
+    virtual ~IAdConfig() = default;
 
     virtual AdFormat format() const = 0;
 
     virtual std::shared_ptr<IAd>
-    createAd(INetworkConfigManager& manager) const = 0;
+    createAd(const std::shared_ptr<INetworkConfigManager>& manager) const = 0;
 };
 
-class BannerConfig : public AdConfig {
+template <class Ad>
+class AdInstanceConfig;
+
+class BannerConfig : public IAdConfig {
 public:
     explicit BannerConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 
-    virtual std::shared_ptr<IAd>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
     std::shared_ptr<AdInstanceConfig<IAdView>> instance_;
 };
 
-class AppOpenConfig : public AdConfig {
+class AppOpenConfig : public IAdConfig {
 public:
     explicit AppOpenConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 
-    virtual std::shared_ptr<IAd>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
     int interval() const;
 
@@ -160,14 +209,14 @@ private:
     std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
 };
 
-class InterstitialConfig : public AdConfig {
+class InterstitialConfig : public IAdConfig {
 public:
     explicit InterstitialConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 
-    virtual std::shared_ptr<IAd>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
     int interval() const;
 
@@ -176,14 +225,14 @@ private:
     std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
 };
 
-class RewardedConfig : public AdConfig {
+class RewardedConfig : public IAdConfig {
 public:
     explicit RewardedConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 
-    virtual std::shared_ptr<IAd>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
     std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
@@ -199,7 +248,7 @@ public:
     virtual ~AdInstanceConfig() = default;
 
     virtual std::shared_ptr<Ad>
-    createAd(INetworkConfigManager& manager) const = 0;
+    createAd(const std::shared_ptr<INetworkConfigManager>& manager) const = 0;
 };
 
 template <class Ad>
@@ -207,8 +256,8 @@ class SingleInstanceConfig : public AdInstanceConfig<Ad> {
 public:
     explicit SingleInstanceConfig(AdFormat format, const nlohmann::json& node);
 
-    virtual std::shared_ptr<Ad>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<Ad> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
     AdFormat format_;
@@ -222,26 +271,16 @@ public:
     explicit WaterfallInstanceConfig(AdFormat format,
                                      const nlohmann::json& node);
 
-    virtual std::shared_ptr<Ad>
-    createAd(INetworkConfigManager& manager) const override;
+    virtual std::shared_ptr<Ad> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    AdFormat format_;
     std::vector<std::shared_ptr<AdInstanceConfig<Ad>>> instances_;
 };
 
-class INetworkConfigManager {
-public:
-    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
-                                          const std::string& id) = 0;
-};
-
-class AdsConfig : public INetworkConfigManager {
+class AdsConfig {
 public:
     static std::shared_ptr<AdsConfig> parse(const std::string& text);
-
-    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
-                                          const std::string& id) override;
 
     Task<> initialize();
     std::shared_ptr<IAd> createAd(AdFormat format);
@@ -249,8 +288,8 @@ public:
 private:
     static std::shared_ptr<AdsConfig> parse(const nlohmann::json& node);
 
-    std::map<Network, std::shared_ptr<NetworkConfig>> networks_;
-    std::vector<std::shared_ptr<AdConfig>> ads_;
+    std::shared_ptr<INetworkConfigManager> networkManager_;
+    std::shared_ptr<IAdConfigManager> adManager_;
 };
 } // namespace services
 } // namespace ee

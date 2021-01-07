@@ -3,36 +3,16 @@
 
 #ifdef __cplusplus
 
-#include <ee/ad_mob/AdMobFwd.hpp>
-#include <ee/app_lovin/AppLovinFwd.hpp>
-#include <ee/facebook_ads/FacebookAdsFwd.hpp>
-#include <ee/iron_source/IronSourceFwd.hpp>
-#include <ee/unity_ads/UnityAdsFwd.hpp>
-#include <ee/vungle/VungleFwd.hpp>
+#include <ee/core/CoreFwd.hpp>
 
 namespace ee {
 namespace services {
 enum class AdFormat;
 enum class AdResult;
-enum class Network;
 
 class AdsConfig;
-class NetworkConfig;
-class AdMobConfig;
-class AppLovinConfig;
-class FacebookAdsConfig;
-class IronSourceConfig;
-class UnityAdsConfig;
-class VungleConfig;
-class BannerConfig;
-class AppOpenConfig;
-class InterstitialConfig;
-class RewardedConfig;
-template <class Ad>
-class AdInstanceConfig;
-//class SingleInstanceConfig;
-//class WaterfallInstanceConfig;
-
+class LazyAdView;
+class GenericAd;
 class IAdsManager;
 class DefaultAdsManager;
 } // namespace services

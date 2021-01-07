@@ -7,6 +7,8 @@
 #include <optional>
 #include <string>
 
+#include <ee/ads/AdsFwd.hpp>
+
 #include "ee/services/IAdsManager.hpp"
 
 namespace ee {
@@ -35,23 +37,13 @@ private:
     void initializeAppOpenAd();
     void initializeInterstitialAd();
     void initializeRewardedAd();
-    
-    static Task<bool> testConnection(float timeOut);
 
     bool initialized_;
     std::shared_ptr<AdsConfig> config_;
-    std::shared_ptr<IAdView> bannerAd_;
-    std::shared_ptr<IFullScreenAd> appOpenAd_;
-    std::shared_ptr<IFullScreenAd> interstitialAd_;
-    std::shared_ptr<IFullScreenAd> rewardedAd_;
-    bool isAppOpenAdCapped_;
-    int appOpenAdInterval_;
-    bool isInterstitialAdCapped_;
-    int interstitialAdInterval_;
-    bool isBannerAdVisible_;
-    std::pair<float, float> bannerAdAnchor_;
-    std::pair<float, float> bannerAdPosition_;
-    std::optional<std::pair<float, float>> bannerAdSize_;
+    std::shared_ptr<LazyAdView> bannerAd_;
+    std::shared_ptr<GenericAd> appOpenAd_;
+    std::shared_ptr<GenericAd> interstitialAd_;
+    std::shared_ptr<GenericAd> rewardedAd_;
 };
 } // namespace services
 } // namespace ee

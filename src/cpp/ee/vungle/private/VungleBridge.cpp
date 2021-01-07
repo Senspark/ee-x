@@ -107,6 +107,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnLoaded);
     bridge_.deregisterHandler(kOnFailedToLoad);
     bridge_.deregisterHandler(kOnFailedToShow);
+    bridge_.deregisterHandler(kOnClicked);
     bridge_.deregisterHandler(kOnClosed);
     PluginManager::removePlugin(Plugin::Vungle);
 }

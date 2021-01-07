@@ -13,6 +13,7 @@
 
 #include <ee/core/Core.hpp>
 
+#include "ee/ads/IAd.hpp"
 #include "ee/ads/IAdView.hpp"
 #include "ee/ads/IFullScreenAd.hpp"
 #include "ee/ads/MultiAdView.hpp"

@@ -25,11 +25,11 @@ public:
     [[nodiscard]] virtual Task<bool> initialize(const std::string& appKey) = 0;
 
     /// Creates an interstitial ad with the specified placement ID.
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;
 
     /// Creates a rewarded vided with the specifie placement ID.
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) = 0;
 };
 } // namespace iron_source

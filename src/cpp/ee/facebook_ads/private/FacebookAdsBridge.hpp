@@ -44,18 +44,19 @@ private:
 
     std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
 
+    template <class Ad>
+    std::shared_ptr<IFullScreenAd>
+    createFullScreenAd(const std::string& handlerId, const std::string& adId);
+
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
+    bool destroyAd(const std::string& handlerId, const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-
-    std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
-    std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
-    std::map<std::string, std::shared_ptr<IFullScreenAd>> fullScreenAds_;
-
+    std::map<std::string, std::shared_ptr<IAd>> ads_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace facebook_ads

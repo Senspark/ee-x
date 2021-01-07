@@ -37,7 +37,7 @@ Self::~InterstitialAd() = default;
 
 void Self::destroy() {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    plugin_->destroyInterstitialAd(adId_);
+    plugin_->destroyAd(adId_);
 }
 
 bool Self::isLoaded() const {

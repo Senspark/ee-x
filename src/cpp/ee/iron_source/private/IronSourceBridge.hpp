@@ -15,9 +15,9 @@ public:
     virtual void destroy() override;
 
     virtual Task<bool> initialize(const std::string& appKey) override;
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
@@ -52,9 +52,9 @@ private:
 
     /// Share the same ad instance.
     std::shared_ptr<InterstitialAd> interstitialAd_;
-    std::shared_ptr<IInterstitialAd> sharedInterstitialAd_;
+    std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
     std::shared_ptr<RewardedAd> rewardedAd_;
-    std::shared_ptr<IRewardedAd> sharedRewardedAd_;
+    std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };

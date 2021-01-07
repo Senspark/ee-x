@@ -3,9 +3,7 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/IObserverManager.hpp>
-
-#include "ee/ads/AdObserver.hpp"
+#include "ee/ads/IAd.hpp"
 
 namespace ee {
 namespace ads {
@@ -20,18 +18,9 @@ enum class FullScreenAdResult {
     Completed,
 };
 
-class IFullScreenAd : public virtual IObserverManager<AdObserver> {
+class IFullScreenAd : public IAd {
 public:
     virtual ~IFullScreenAd() = default;
-
-    /// Destroys this ad.
-    virtual void destroy() = 0;
-
-    /// Checks whether this ad is loaded.
-    virtual bool isLoaded() const = 0;
-
-    /// Attempts to load this ad.
-    [[nodiscard]] virtual Task<bool> load() = 0;
 
     /// Attempts to show this ad.
     [[nodiscard]] virtual Task<FullScreenAdResult> show() = 0;

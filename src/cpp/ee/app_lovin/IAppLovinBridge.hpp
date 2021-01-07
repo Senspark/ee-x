@@ -29,7 +29,7 @@ public:
     /// Disabled by default.
     virtual void setMuted(bool enabled) = 0;
 
-    virtual std::shared_ptr<IRewardedAd> createRewardedAd() = 0;
+    virtual std::shared_ptr<IFullScreenAd> createRewardedAd() = 0;
 };
 } // namespace app_lovin
 } // namespace ee

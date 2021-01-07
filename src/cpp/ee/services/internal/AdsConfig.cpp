@@ -154,7 +154,7 @@ SingleInstanceConfig::SingleInstanceConfig(const nlohmann::json& node) {
     };
     auto&& network = node["network"];
     network_ = networks[network];
-    id_ = node["id"];
+    id_ = node.value("id", "");
 }
 
 Network SingleInstanceConfig::network() const {

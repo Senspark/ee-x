@@ -19,6 +19,7 @@ enum class FullScreenAdResult;
 
 struct AdObserver;
 
+class IAd;
 class IAdView;
 class IFullScreenAd;
 
@@ -51,6 +52,7 @@ using IAdViewObserver [[deprecated]] = AdObserver;
 using IInterstitialAdObserver [[deprecated]] = AdObserver;
 using IRewardedAdObserver [[deprecated]] = AdObserver;
 
+using ads::IAd;
 using ads::IAdView;
 using ads::IFullScreenAd;
 using IInterstitialAd [[deprecated]] = IFullScreenAd;
@@ -66,9 +68,9 @@ using ads::NullFullScreenAd;
 using NullInterstitialAd [[deprecated]] = NullFullScreenAd;
 using NullRewardedAd [[deprecated]] = NullFullScreenAd;
 
-using IRewardedVideo [[deprecated]] = IRewardedAd;
-using MultiRewardedVideo [[deprecated]] = MultiRewardedAd;
-using NullRewardedVideo [[deprecated]] = NullRewardedAd;
+using IRewardedVideo [[deprecated]] = IFullScreenAd;
+using MultiRewardedVideo [[deprecated]] = MultiFullScreenAd;
+using NullRewardedVideo [[deprecated]] = NullFullScreenAd;
 } // namespace ee
 
 #endif // __cplusplus

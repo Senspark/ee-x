@@ -25,7 +25,7 @@ public:
     virtual Task<bool> initialize(const std::string& key) override;
     virtual void setVerboseLogging(bool enabled) override;
     virtual void setMuted(bool enabled) override;
-    virtual std::shared_ptr<IRewardedAd> createRewardedAd() override;
+    virtual std::shared_ptr<IFullScreenAd> createRewardedAd() override;
 
 private:
     friend RewardedAd;

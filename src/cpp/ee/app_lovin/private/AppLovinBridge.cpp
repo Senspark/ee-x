@@ -261,7 +261,7 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd() {
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
-    rewardedAd_ = new RewardedAd(logger_, rewardedAdDisplayer_, this);
+    rewardedAd_ = new RewardedAd(logger_, displayer_, this);
     sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
         std::shared_ptr<RewardedAd>(rewardedAd_));
     return sharedRewardedAd_;

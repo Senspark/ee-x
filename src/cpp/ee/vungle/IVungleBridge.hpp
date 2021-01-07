@@ -22,7 +22,7 @@ public:
     [[nodiscard]] virtual Task<bool> initialize(const std::string& appId) = 0;
 
     /// Creates a rewarded video.
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) = 0;
 };
 } // namespace vungle

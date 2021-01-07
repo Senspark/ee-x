@@ -15,7 +15,7 @@ public:
     virtual void destroy() override;
 
     virtual Task<bool> initialize(const std::string& appId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
@@ -49,9 +49,9 @@ private:
             , raw(raw_) {}
     };
 
-    std::map<std::string, Entry<IRewardedAd, RewardedAd>> rewardedAds_;
+    std::map<std::string, Entry<IFullScreenAd, RewardedAd>> rewardedAds_;
 
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace vungle
 } // namespace ee

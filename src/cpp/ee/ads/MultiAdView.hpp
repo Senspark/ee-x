@@ -22,7 +22,7 @@
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class MultiAdView : public IAdView, public ObserverManager<AdObserver> {
 private:
     using Self = MultiAdView;
 

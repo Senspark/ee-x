@@ -52,7 +52,7 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    rewardedAdDisplayer_ = mediation.getAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
@@ -120,14 +120,13 @@ Task<bool> Self::initialize(const std::string& appId) {
     co_return core::toBool(response);
 }
 
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
         return iter->second.ad;
     }
-    auto raw =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
+    auto raw = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
     auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     rewardedAds_.try_emplace(adId, ad, raw);
     return ad;
@@ -209,7 +208,6 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
         iter->second.raw->onClosed(rewarded);
     } else {
         // Mediation.
-        assert(false);
         onMediationAdClosed(adId, rewarded);
     }
 }
@@ -217,9 +215,9 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
 void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
     logger_.debug("%s: %s", __PRETTY_FUNCTION__,
                   core::toString(rewarded).c_str());
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
         return;
     }
     assert(false);

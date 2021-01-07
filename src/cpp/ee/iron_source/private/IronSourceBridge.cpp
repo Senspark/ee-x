@@ -166,7 +166,7 @@ Task<bool> Self::initialize(const std::string& appKey) {
     co_return core::toBool(response);
 }
 
-std::shared_ptr<IInterstitialAd>
+std::shared_ptr<IFullScreenAd>
 Self::createInterstitialAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
@@ -190,7 +190,7 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     return true;
 }
 
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (sharedRewardedAd_) {

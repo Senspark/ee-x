@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/Delay.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Thread.hpp>
@@ -33,6 +34,7 @@ Self::InterstitialAd(
     , adId_(adId)
     , messageHelper_("FacebookInterstitialAd", adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    loadingCapped_ = false;
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
@@ -100,6 +102,14 @@ Task<bool> Self::load() {
     logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
+    if (loadingCapped_) {
+        co_return false;
+    }
+    loadingCapped_ = true;
+    noAwait([this]() -> Task<> {
+        co_await Delay(30.0f);
+        loadingCapped_ = false;
+    });
     auto result = co_await loader_->process(
         [this] { //
             bridge_.call(messageHelper_.load());

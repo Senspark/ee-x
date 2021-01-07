@@ -47,6 +47,7 @@ private:
     Bridge* plugin_;
     std::string adId_;
     ads::MessageHelper messageHelper_;
+    bool loadingCapped_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };

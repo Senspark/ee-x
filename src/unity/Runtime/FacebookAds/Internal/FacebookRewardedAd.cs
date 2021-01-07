@@ -9,6 +9,7 @@ namespace EE.Internal {
         private readonly FacebookAds _plugin;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
+        private bool _loadingCapped;
         private readonly IAsyncHelper<bool> _loader;
 
         public FacebookRewardedAd(
@@ -18,6 +19,7 @@ namespace EE.Internal {
             _plugin = plugin;
             _adId = adId;
             _messageHelper = new MessageHelper("FacebookRewardedAd", adId);
+            _loadingCapped = false;
             _loader = new AsyncHelper<bool>();
 
             _bridge.RegisterHandler(_ => {
@@ -58,8 +60,16 @@ namespace EE.Internal {
             }
         }
 
-        public Task<bool> Load() {
-            return _loader.Process(
+        public async Task<bool> Load() {
+            if (_loadingCapped) {
+                return false;
+            }
+            _loadingCapped = true;
+            Utils.NoAwait(async () => {
+                await Task.Delay(30000);
+                _loadingCapped = false;
+            });
+            return await _loader.Process(
                 () => _bridge.Call(_messageHelper.Load),
                 result => {
                     // OK.

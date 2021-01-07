@@ -16,48 +16,28 @@ namespace EE.Internal {
         private const string kDestroyBannerAd = kPrefix + "DestroyBannerAd";
         private const string kCreateNativeAd = kPrefix + "CreateNativeAd";
         private const string kDestroyNativeAd = kPrefix + "DestroyNativeAd";
+        private const string kCreateAppOpenAd = kPrefix + "CreateAppOpenAd";
+        private const string kDestroyAppOpenAd = kPrefix + "DestroyAppOpenAd";
         private const string kCreateInterstitialAd = kPrefix + "CreateInterstitialAd";
         private const string kDestroyInterstitialAd = kPrefix + "DestroyInterstitialAd";
         private const string kCreateRewardedAd = kPrefix + "CreateRewardedAd";
         private const string kDestroyRewardedAd = kPrefix + "DestroyRewardedAd";
-        private const string kCreateAppOpenAd = kPrefix + "CreateAppOpenAd";
-        private const string kDestroyAppOpenAd = kPrefix + "DestroyAppOpenAd";
 
         private readonly IMessageBridge _bridge;
-        private readonly Dictionary<string, IAdView> _bannerAds;
-        private readonly Dictionary<string, IInterstitialAd> _interstitialAds;
-        private readonly Dictionary<string, IRewardedAd> _rewardedAds;
-        private readonly Dictionary<string, IInterstitialAd> _appOpenAds;
-        private readonly IAsyncHelper<bool> _interstitialAdDisplayer;
-        private readonly IAsyncHelper<IRewardedAdResult> _rewardedAdDisplayer;
+        private readonly Dictionary<string, IAd> _ads;
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
 
         public AdMob(IMessageBridge bridge) {
             _bridge = bridge;
-            _bannerAds = new Dictionary<string, IAdView>();
-            _interstitialAds = new Dictionary<string, IInterstitialAd>();
-            _rewardedAds = new Dictionary<string, IRewardedAd>();
-            _appOpenAds = new Dictionary<string, IInterstitialAd>();
-            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
-            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
+            _ads = new Dictionary<string, IAd>();
+            _displayer = MediationManager.Instance.AdDisplayer;
         }
 
         public void Destroy() {
-            foreach (var ad in _bannerAds.Values) {
+            foreach (var ad in _ads.Values) {
                 ad.Destroy();
             }
-            foreach (var ad in _interstitialAds.Values) {
-                ad.Destroy();
-            }
-            foreach (var ad in _rewardedAds.Values) {
-                ad.Destroy();
-            }
-            foreach (var ad in _appOpenAds.Values) {
-                ad.Destroy();
-            }
-            _bannerAds.Clear();
-            _interstitialAds.Clear();
-            _rewardedAds.Clear();
-            _appOpenAds.Clear();
+            _ads.Clear();
         }
 
         public async Task<bool> Initialize() {
@@ -93,8 +73,8 @@ namespace EE.Internal {
         }
 
         public IAdView CreateBannerAd(string adId, AdMobBannerAdSize adSize) {
-            if (_bannerAds.TryGetValue(adId, out var result)) {
-                return result;
+            if (_ads.TryGetValue(adId, out var result)) {
+                return result as IAdView;
             }
             var request = new CreateBannerAdRequest {
                 adId = adId,
@@ -107,101 +87,65 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedAdView(new AdMobBannerAd(_bridge, this, adId, size));
-            _bannerAds.Add(adId, ad);
+            _ads.Add(adId, ad);
+            return ad;
+        }
+
+        public IFullScreenAd CreateAppOpenAd(string adId) {
+            return CreateFullScreenAd(kCreateAppOpenAd, adId,
+                () => new AdMobAppOpenAd(_bridge, _displayer, this, adId));
+        }
+
+        public IFullScreenAd CreateInterstitialAd(string adId) {
+            return CreateFullScreenAd(kCreateInterstitialAd, adId,
+                () => new AdMobInterstitialAd(_bridge, _displayer, this, adId));
+        }
+
+        public IFullScreenAd CreateRewardedAd(string adId) {
+            return CreateFullScreenAd(kCreateRewardedAd, adId,
+                () => new AdMobRewardedAd(_bridge, _displayer, this, adId));
+        }
+
+        private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {
+            if (_ads.TryGetValue(adId, out var result)) {
+                return result as IFullScreenAd;
+            }
+            var response = _bridge.Call(handlerId, adId);
+            if (!Utils.ToBool(response)) {
+                Assert.IsTrue(false);
+                return null;
+            }
+            var ad = new GuardedFullScreenAd(creator());
+            _ads.Add(adId, ad);
             return ad;
         }
 
         internal bool DestroyBannerAd(string adId) {
-            if (!_bannerAds.ContainsKey(adId)) {
-                return false;
-            }
-            var response = _bridge.Call(kDestroyBannerAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return false;
-            }
-            _bannerAds.Remove(adId);
-            return true;
-        }
-
-        public IInterstitialAd CreateInterstitialAd(string adId) {
-            if (_interstitialAds.TryGetValue(adId, out var result)) {
-                return result;
-            }
-            var response = _bridge.Call(kCreateInterstitialAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return null;
-            }
-            var ad = new GuardedInterstitialAd(new AdMobInterstitialAd(_bridge, _interstitialAdDisplayer, this, adId));
-            _interstitialAds.Add(adId, ad);
-            return ad;
-        }
-
-        internal bool DestroyInterstitialAd(string adId) {
-            if (!_interstitialAds.ContainsKey(adId)) {
-                return false;
-            }
-            var response = _bridge.Call(kDestroyInterstitialAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return false;
-            }
-            _interstitialAds.Remove(adId);
-            return true;
-        }
-
-        public IRewardedAd CreateRewardedAd(string adId) {
-            if (_rewardedAds.TryGetValue(adId, out var result)) {
-                return result;
-            }
-            var response = _bridge.Call(kCreateRewardedAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return null;
-            }
-            var ad = new GuardedRewardedAd(new AdMobRewardedAd(_bridge, _rewardedAdDisplayer, this, adId));
-            _rewardedAds.Add(adId, ad);
-            return ad;
-        }
-
-        internal bool DestroyRewardedAd(string adId) {
-            if (!_rewardedAds.ContainsKey(adId)) {
-                return false;
-            }
-            var response = _bridge.Call(kDestroyRewardedAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return false;
-            }
-            _rewardedAds.Remove(adId);
-            return true;
-        }
-
-        public IInterstitialAd CreateAppOpenAd(string adId) {
-            if (_appOpenAds.TryGetValue(adId, out var result)) {
-                return result;
-            }
-            var response = _bridge.Call(kCreateAppOpenAd, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return null;
-            }
-            var ad = new GuardedInterstitialAd(new AdMobAppOpenAd(_bridge, _interstitialAdDisplayer, this, adId));
-            _appOpenAds.Add(adId, ad);
-            return ad;
+            return DestroyAd(kDestroyBannerAd, adId);
         }
 
         internal bool DestroyAppOpenAd(string adId) {
-            if (!_appOpenAds.ContainsKey(adId)) {
+            return DestroyAd(kDestroyAppOpenAd, adId);
+        }
+
+        internal bool DestroyInterstitialAd(string adId) {
+            return DestroyAd(kDestroyInterstitialAd, adId);
+        }
+
+        internal bool DestroyRewardedAd(string adId) {
+            return DestroyAd(kDestroyRewardedAd, adId);
+        }
+
+        private bool DestroyAd(string handlerId, string adId) {
+            if (!_ads.ContainsKey(adId)) {
                 return false;
             }
-            var response = _bridge.Call(kDestroyAppOpenAd, adId);
+            var response = _bridge.Call(handlerId, adId);
             if (!Utils.ToBool(response)) {
                 Assert.IsTrue(false);
                 return false;
             }
-            _appOpenAds.Remove(adId);
+            _ads.Remove(adId);
             return true;
         }
     }

@@ -45,7 +45,7 @@ private:
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
 
-    void onMediationAdClosed(bool rewarded);
+    void onMediationAdClosed(FullScreenAdResult result);
 
     IMessageBridge& bridge_;
     const Logger& logger_;

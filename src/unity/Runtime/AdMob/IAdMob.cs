@@ -6,8 +6,8 @@ namespace EE {
         string GetEmulatorTestDeviceHash();
         void AddTestDevice(string hash);
         IAdView CreateBannerAd(string adId, AdMobBannerAdSize adSize);
-        IInterstitialAd CreateInterstitialAd(string adId);
-        IRewardedAd CreateRewardedAd(string adId);
-        IInterstitialAd CreateAppOpenAd(string adId);
+        IFullScreenAd CreateAppOpenAd(string adId);
+        IFullScreenAd CreateInterstitialAd(string adId);
+        IFullScreenAd CreateRewardedAd(string adId);
     }
 }

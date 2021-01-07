@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace EE {
-    public class MultiAdView : ObserverManager<IAdViewObserver>, IAdView {
+    public class MultiAdView : ObserverManager<AdObserver>, IAdView {
         private (float, float) _anchor;
         private (float, float) _position;
         private bool _visible;
@@ -21,7 +21,8 @@ namespace EE {
 
         public MultiAdView AddItem(IAdView item) {
             _items.Add(item);
-            _handle.Bind(item).AddObserver(new IAdViewObserver {
+            item.IsVisible = _visible;
+            _handle.Bind(item).AddObserver(new AdObserver {
                 OnLoaded = () => {
                     _loadedItems.Add(item);
                     DispatchEvent(observer => observer.OnLoaded?.Invoke());

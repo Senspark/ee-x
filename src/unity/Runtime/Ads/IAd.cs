@@ -2,18 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace EE {
-    public enum IRewardedAdResult {
-        /// Failed to display the ad.
-        Failed,
-
-        /// Succeeded to display the ad and the user has canceled the ad.
-        Canceled,
-
-        /// Succeeded to display the ad and the user has completed the ad.
-        Completed,
-    }
-
-    public class IRewardedAdObserver {
+    public class AdObserver {
         /// <summary>
         /// Occurs when this ad is loaded.
         /// </summary>
@@ -25,7 +14,7 @@ namespace EE {
         public Action OnClicked { get; set; }
     }
 
-    public interface IRewardedAd : IObserverManager<IRewardedAdObserver> {
+    public interface IAd : IObserverManager<AdObserver> {
         /// <summary>
         /// Destroys this ad.
         /// </summary>
@@ -40,10 +29,5 @@ namespace EE {
         /// Asynchronously loads this ad.
         /// </summary>
         Task<bool> Load();
-
-        /// <summary>
-        /// Asynchronously shows this ad.
-        /// </summary>
-        Task<IRewardedAdResult> Show();
     }
 }

@@ -2,8 +2,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class AdMobBannerAd
-        : ObserverManager<IAdViewObserver>, IAdView {
+    internal class AdMobBannerAd : ObserverManager<AdObserver>, IAdView {
         private readonly IMessageBridge _bridge;
         private readonly AdMob _plugin;
         private readonly string _adId;

@@ -3,18 +3,18 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace EE {
-    public class MultiRewardedAd : ObserverManager<IRewardedAdObserver>, IRewardedAd {
-        private readonly List<IRewardedAd> _items;
+    public class MultiFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
+        private readonly List<IFullScreenAd> _items;
         private readonly ObserverHandle _handle;
 
-        public MultiRewardedAd() {
-            _items = new List<IRewardedAd>();
+        public MultiFullScreenAd() {
+            _items = new List<IFullScreenAd>();
             _handle = new ObserverHandle();
         }
 
-        public MultiRewardedAd AddItem(IRewardedAd item) {
+        public MultiFullScreenAd AddItem(IFullScreenAd item) {
             _items.Add(item);
-            _handle.Bind(item).AddObserver(new IRewardedAdObserver {
+            _handle.Bind(item).AddObserver(new AdObserver {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });
@@ -44,10 +44,10 @@ namespace EE {
             return result;
         }
 
-        public async Task<IRewardedAdResult> Show() {
-            var result = IRewardedAdResult.Failed;
+        public async Task<FullScreenAdResult> Show() {
+            var result = FullScreenAdResult.Failed;
             foreach (var item in _items) {
-                if (result == IRewardedAdResult.Failed) {
+                if (result == FullScreenAdResult.Failed) {
                     // Only process if there isn't any successfully displayed ad.
                     result = await item.Show();
                 }

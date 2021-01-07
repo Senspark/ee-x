@@ -23,16 +23,14 @@ namespace EE.Internal {
 
         private readonly IMessageBridge _bridge;
         private IronSourceInterstitialAd _interstitialAd;
-        private IInterstitialAd _sharedInterstitialAd;
+        private IFullScreenAd _sharedInterstitialAd;
         private IronSourceRewardedAd _rewardedAd;
-        private IRewardedAd _sharedRewardedAd;
-        private readonly IAsyncHelper<bool> _interstitialAdDisplayer;
-        private readonly IAsyncHelper<IRewardedAdResult> _rewardedAdDisplayer;
+        private IFullScreenAd _sharedRewardedAd;
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
 
         public IronSource(IMessageBridge bridge) {
             _bridge = bridge;
-            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
-            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
+            _displayer = MediationManager.Instance.AdDisplayer;
 
             _bridge.RegisterHandler(_ => {
                 Thread.RunOnLibraryThread(OnInterstitialAdLoaded);
@@ -90,12 +88,12 @@ namespace EE.Internal {
             return Utils.ToBool(response);
         }
 
-        public IInterstitialAd CreateInterstitialAd(string adId) {
+        public IFullScreenAd CreateInterstitialAd(string adId) {
             if (_sharedInterstitialAd != null) {
                 return _sharedInterstitialAd;
             }
-            _interstitialAd = new IronSourceInterstitialAd(_interstitialAdDisplayer, this, adId);
-            _sharedInterstitialAd = new GuardedInterstitialAd(_interstitialAd);
+            _interstitialAd = new IronSourceInterstitialAd(_displayer, this, adId);
+            _sharedInterstitialAd = new GuardedFullScreenAd(_interstitialAd);
             return _sharedInterstitialAd;
         }
 
@@ -108,12 +106,12 @@ namespace EE.Internal {
             return true;
         }
 
-        public IRewardedAd CreateRewardedAd(string adId) {
+        public IFullScreenAd CreateRewardedAd(string adId) {
             if (_sharedRewardedAd != null) {
                 return _sharedRewardedAd;
             }
-            _rewardedAd = new IronSourceRewardedAd(_rewardedAdDisplayer, this, adId);
-            _sharedRewardedAd = new GuardedRewardedAd(_rewardedAd);
+            _rewardedAd = new IronSourceRewardedAd(_displayer, this, adId);
+            _sharedRewardedAd = new GuardedFullScreenAd(_rewardedAd);
             return _sharedRewardedAd;
         }
 
@@ -184,7 +182,7 @@ namespace EE.Internal {
             if (_interstitialAd != null) {
                 _interstitialAd.OnClosed();
             } else {
-                OnMediationAdClosed(false);
+                OnMediationAdClosed(FullScreenAdResult.Completed);
             }
         }
 
@@ -216,19 +214,15 @@ namespace EE.Internal {
             if (_rewardedAd != null) {
                 _rewardedAd.OnClosed(rewarded);
             } else {
-                OnMediationAdClosed(rewarded);
+                OnMediationAdClosed(rewarded
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled);
             }
         }
 
-        private void OnMediationAdClosed(bool rewarded) {
-            if (_interstitialAdDisplayer.IsProcessing) {
-                _interstitialAdDisplayer.Resolve(true);
-                return;
-            }
-            if (_rewardedAdDisplayer.IsProcessing) {
-                _rewardedAdDisplayer.Resolve(rewarded
-                    ? IRewardedAdResult.Completed
-                    : IRewardedAdResult.Canceled);
+        private void OnMediationAdClosed(FullScreenAdResult result) {
+            if (_displayer.IsProcessing) {
+                _displayer.Resolve(result);
                 return;
             }
             Assert.IsTrue(false);

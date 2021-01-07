@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class FacebookBannerAd
-        : ObserverManager<IAdViewObserver>, IAdView {
+    internal class FacebookBannerAd : ObserverManager<AdObserver>, IAdView {
         private readonly IMessageBridge _bridge;
         private readonly FacebookAds _plugin;
         private readonly string _adId;

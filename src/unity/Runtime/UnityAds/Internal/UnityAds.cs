@@ -20,10 +20,8 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private bool _displaying;
         private string _adId;
-        private readonly Dictionary<string, (IInterstitialAd, UnityInterstitialAd)> _interstitialAds;
-        private readonly Dictionary<string, (IRewardedAd, UnityRewardedAd)> _rewardedAds;
-        private readonly IAsyncHelper<bool> _interstitialAdDisplayer;
-        private readonly IAsyncHelper<IRewardedAdResult> _rewardedAdDisplayer;
+        private readonly Dictionary<string, (IAd, IAd)> _ads;
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
 
         [Serializable]
         private struct OnFailedToShowResponse {
@@ -40,10 +38,8 @@ namespace EE.Internal {
         public UnityAds(IMessageBridge bridge) {
             _bridge = bridge;
             _displaying = false;
-            _interstitialAds = new Dictionary<string, (IInterstitialAd, UnityInterstitialAd)>();
-            _rewardedAds = new Dictionary<string, (IRewardedAd, UnityRewardedAd)>();
-            _interstitialAdDisplayer = MediationManager.Instance.InterstitialAdDisplayer;
-            _rewardedAdDisplayer = MediationManager.Instance.RewardedAdDisplayer;
+            _ads = new Dictionary<string, (IAd, IAd)>();
+            _displayer = MediationManager.Instance.AdDisplayer;
 
             _bridge.RegisterHandler(message => {
                 Thread.RunOnLibraryThread(() => OnLoaded(message));
@@ -91,39 +87,29 @@ namespace EE.Internal {
             _bridge.Call(kSetDebugModeEnabled, Utils.ToString(enabled));
         }
 
-        public IInterstitialAd CreateInterstitialAd(string adId) {
-            if (_interstitialAds.TryGetValue(adId, out var result)) {
-                return result.Item1;
-            }
-            var weak = new UnityInterstitialAd(_interstitialAdDisplayer, this, adId);
-            var strong = new GuardedInterstitialAd(weak);
-            _interstitialAds.Add(adId, (strong, weak));
-            return strong;
+        public IFullScreenAd CreateInterstitialAd(string adId) {
+            return CreateFullScreenAd(adId, () => new UnityInterstitialAd(_displayer, this, adId));
         }
 
-        internal bool DestroyInterstitialAd(string adId) {
-            if (!_interstitialAds.ContainsKey(adId)) {
+        public IFullScreenAd CreateRewardedAd(string adId) {
+            return CreateFullScreenAd(adId, () => new UnityRewardedAd(_displayer, this, adId));
+        }
+
+        private IFullScreenAd CreateFullScreenAd(string adId, Func<IFullScreenAd> creator) {
+            if (_ads.TryGetValue(adId, out var result)) {
+                return result.Item1 as IFullScreenAd;
+            }
+            var raw = creator();
+            var ad = new GuardedFullScreenAd(raw);
+            _ads.Add(adId, (ad, raw));
+            return ad;
+        }
+
+        internal bool DestroyAd(string adId) {
+            if (!_ads.ContainsKey(adId)) {
                 return false;
             }
-            _interstitialAds.Remove(adId);
-            return true;
-        }
-
-        public IRewardedAd CreateRewardedAd(string adId) {
-            if (_rewardedAds.TryGetValue(adId, out var result)) {
-                return result.Item1;
-            }
-            var weak = new UnityRewardedAd(_rewardedAdDisplayer, this, adId);
-            var strong = new GuardedRewardedAd(weak);
-            _rewardedAds.Add(adId, (strong, weak));
-            return strong;
-        }
-
-        internal bool DestroyRewardedAd(string adId) {
-            if (!_rewardedAds.ContainsKey(adId)) {
-                return false;
-            }
-            _rewardedAds.Remove(adId);
+            _ads.Remove(adId);
             return true;
         }
 
@@ -145,13 +131,16 @@ namespace EE.Internal {
         }
 
         private void OnLoaded(string adId) {
-            if (_interstitialAds.TryGetValue(adId, out var interstitialAd)) {
-                interstitialAd.Item2.OnLoaded();
-                return;
-            }
-            if (_rewardedAds.TryGetValue(adId, out var rewardedAd)) {
-                rewardedAd.Item2.OnLoaded();
-                return;
+            if (_ads.TryGetValue(adId, out var iter)) {
+                var (_, ad) = iter;
+                switch (ad) {
+                    case UnityInterstitialAd item:
+                        item.OnLoaded();
+                        return;
+                    case UnityRewardedAd item:
+                        item.OnLoaded();
+                        return;
+                }
             }
             // Mediation.
         }
@@ -159,13 +148,18 @@ namespace EE.Internal {
         private void OnFailedToShow(string adId, string message) {
             if (_displaying) {
                 Assert.IsTrue(adId == _adId);
-                if (_interstitialAds.TryGetValue(adId, out var interstitialAd)) {
-                    interstitialAd.Item2.OnFailedToShow(message);
-                }
-                if (_rewardedAds.TryGetValue(adId, out var rewardedAd)) {
-                    rewardedAd.Item2.OnFailedToShow(message);
-                }
                 _displaying = false;
+                if (_ads.TryGetValue(adId, out var iter)) {
+                    var (_, ad) = iter;
+                    switch (ad) {
+                        case UnityInterstitialAd item:
+                            item.OnFailedToShow(message);
+                            return;
+                        case UnityRewardedAd item:
+                            item.OnFailedToShow(message);
+                            return;
+                    }
+                }
             } else {
                 OnMediationAdFailedToShow(adId, message);
             }
@@ -174,38 +168,36 @@ namespace EE.Internal {
         private void OnClosed(string adId, bool rewarded) {
             if (_displaying) {
                 Assert.IsTrue(adId == _adId);
-                if (_interstitialAds.TryGetValue(adId, out var interstitialAd)) {
-                    interstitialAd.Item2.OnClosed();
-                }
-                if (_rewardedAds.TryGetValue(adId, out var rewardedAd)) {
-                    rewardedAd.Item2.OnClosed(rewarded);
+                _displaying = false;
+                if (_ads.TryGetValue(adId, out var iter)) {
+                    var (_, ad) = iter;
+                    switch (ad) {
+                        case UnityInterstitialAd item:
+                            item.OnClosed();
+                            return;
+                        case UnityRewardedAd item:
+                            item.OnClosed(rewarded);
+                            return;
+                    }
                 }
             } else {
-                OnMediationAdClosed(adId, rewarded);
+                OnMediationAdClosed(adId, rewarded
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled);
             }
         }
 
         private void OnMediationAdFailedToShow(string adId, string message) {
-            if (_interstitialAdDisplayer.IsProcessing) {
-                _interstitialAdDisplayer.Resolve(false);
-                return;
-            }
-            if (_rewardedAdDisplayer.IsProcessing) {
-                _rewardedAdDisplayer.Resolve(IRewardedAdResult.Failed);
+            if (_displayer.IsProcessing) {
+                _displayer.Resolve(FullScreenAdResult.Failed);
                 return;
             }
             Assert.IsTrue(false);
         }
 
-        private void OnMediationAdClosed(string adId, bool rewarded) {
-            if (_interstitialAdDisplayer.IsProcessing) {
-                _interstitialAdDisplayer.Resolve(true);
-                return;
-            }
-            if (_rewardedAdDisplayer.IsProcessing) {
-                _rewardedAdDisplayer.Resolve(rewarded
-                    ? IRewardedAdResult.Completed
-                    : IRewardedAdResult.Canceled);
+        private void OnMediationAdClosed(string adId, FullScreenAdResult result) {
+            if (_displayer.IsProcessing) {
+                _displayer.Resolve(result);
                 return;
             }
             Assert.IsTrue(false);

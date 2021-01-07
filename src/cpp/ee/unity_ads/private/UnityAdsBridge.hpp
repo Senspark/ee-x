@@ -49,7 +49,8 @@ private:
 
     void onMediationAdFailedToShow(const std::string& adId,
                                    const std::string& message);
-    void onMediationAdClosed(const std::string& adId, bool rewarded);
+    void onMediationAdClosed(const std::string& adId,
+                             FullScreenAdResult result);
 
     IMessageBridge& bridge_;
     const Logger& logger_;

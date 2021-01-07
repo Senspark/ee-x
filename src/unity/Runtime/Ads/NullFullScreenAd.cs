@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using System.Xml.Xsl;
 
 namespace EE {
-    public class NullRewardedAd : ObserverManager<IRewardedAdObserver>, IRewardedAd {
+    public class NullRewardedAd : ObserverManager<AdObserver>, IFullScreenAd {
         public void Destroy() {
             throw new NotImplementedException();
         }
@@ -13,8 +14,8 @@ namespace EE {
             return Task.FromResult(false);
         }
 
-        public Task<IRewardedAdResult> Show() {
-            return Task.FromResult(IRewardedAdResult.Failed);
+        public Task<FullScreenAdResult> Show() {
+            return Task.FromResult(FullScreenAdResult.Failed);
         }
     }
 }

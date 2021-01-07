@@ -71,7 +71,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(messageHelper_.onFailedToShow());
     bridge_.deregisterHandler(messageHelper_.onClosed());
 
-    auto succeeded = plugin_->destroyInterstitialAd(adId_);
+    auto succeeded = plugin_->destroyAppOpenAd(adId_);
     assert(succeeded);
 }
 

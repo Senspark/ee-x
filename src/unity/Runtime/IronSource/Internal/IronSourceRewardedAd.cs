@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
-    internal class IronSourceRewardedAd
-        : ObserverManager<IRewardedAdObserver>, IRewardedAd {
-        private readonly IAsyncHelper<IRewardedAdResult> _displayer;
+    internal class IronSourceRewardedAd : ObserverManager<AdObserver>, IFullScreenAd {
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
         private readonly IronSource _plugin;
         private readonly string _adId;
 
         public IronSourceRewardedAd(
-            IAsyncHelper<IRewardedAdResult> displayer, IronSource plugin, string adId) {
+            IAsyncHelper<FullScreenAdResult> displayer, IronSource plugin, string adId) {
             _displayer = displayer;
             _plugin = plugin;
             _adId = adId;
@@ -26,7 +25,7 @@ namespace EE.Internal {
             return Task.FromResult(IsLoaded);
         }
 
-        public Task<IRewardedAdResult> Show() {
+        public Task<FullScreenAdResult> Show() {
             return _displayer.Process(
                 () => _plugin.ShowRewardedAd(_adId),
                 result => {
@@ -40,7 +39,7 @@ namespace EE.Internal {
 
         internal void OnFailedToShow(string message) {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(IRewardedAdResult.Failed);
+                _displayer.Resolve(FullScreenAdResult.Failed);
             } else {
                 Assert.IsTrue(false);
             }
@@ -53,8 +52,8 @@ namespace EE.Internal {
         internal void OnClosed(bool rewarded) {
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(rewarded
-                    ? IRewardedAdResult.Completed
-                    : IRewardedAdResult.Canceled);
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled);
             } else {
                 Assert.IsTrue(false);
             }

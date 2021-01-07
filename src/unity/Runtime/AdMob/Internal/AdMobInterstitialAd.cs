@@ -3,17 +3,16 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
-    internal class AdMobInterstitialAd
-        : ObserverManager<IInterstitialAdObserver>, IInterstitialAd {
+    internal class AdMobInterstitialAd : ObserverManager<AdObserver>, IFullScreenAd {
         private readonly IMessageBridge _bridge;
-        private readonly IAsyncHelper<bool> _displayer;
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
         private readonly AdMob _plugin;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly IAsyncHelper<bool> _loader;
 
         public AdMobInterstitialAd(
-            IMessageBridge bridge, IAsyncHelper<bool> displayer, AdMob plugin, string adId) {
+            IMessageBridge bridge, IAsyncHelper<FullScreenAdResult> displayer, AdMob plugin, string adId) {
             _bridge = bridge;
             _displayer = displayer;
             _plugin = plugin;
@@ -67,7 +66,7 @@ namespace EE.Internal {
                 });
         }
 
-        public Task<bool> Show() {
+        public Task<FullScreenAdResult> Show() {
             return _displayer.Process(
                 () => _bridge.Call(_messageHelper.Show),
                 result => {
@@ -94,7 +93,7 @@ namespace EE.Internal {
 
         private void OnFailedToShow(string message) {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(false);
+                _displayer.Resolve(FullScreenAdResult.Failed);
             } else {
                 Assert.IsTrue(false);
             }
@@ -106,7 +105,7 @@ namespace EE.Internal {
 
         private void OnClosed() {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(true);
+                _displayer.Resolve(FullScreenAdResult.Completed);
             } else {
                 Assert.IsTrue(false);
             }

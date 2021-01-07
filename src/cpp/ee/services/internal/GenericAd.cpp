@@ -7,6 +7,8 @@
 
 #include "ee/services/internal/GenericAd.hpp"
 
+#include <cassert>
+
 #include <ee/core/Delay.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Platform.hpp>

@@ -29,8 +29,8 @@ NetworkConfigManager::NetworkConfigManager(const nlohmann::json& node) {
 }
 
 Task<> NetworkConfigManager::initialize() {
-    for (auto&& item : networks_) {
-        co_await item->initialize();
+    for (auto&& network : networks_) {
+        co_await network->initialize();
     }
 }
 
@@ -263,8 +263,8 @@ std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
 }
 
 BannerConfig::BannerConfig(const nlohmann::json& node) {
-    instance_ = AdInstanceConfig<IAdView>::parse<MultiAdView>(AdFormat::Banner,
-                                                              node["instance"]);
+    instance_ = IAdInstanceConfig<IAdView>::parse<MultiAdView>(
+        AdFormat::Banner, node["instance"]);
 }
 
 AdFormat BannerConfig::format() const {
@@ -279,7 +279,7 @@ std::shared_ptr<IAd> BannerConfig::createAd(
 
 AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
     interval_ = node.value("interval", 0);
-    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+    instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::AppOpen, node["instance"]);
 }
 
@@ -293,13 +293,9 @@ std::shared_ptr<IAd> AppOpenConfig::createAd(
     return std::make_shared<GenericAd>(ad, interval_);
 }
 
-int AppOpenConfig::interval() const {
-    return interval_;
-}
-
 InterstitialConfig::InterstitialConfig(const nlohmann::json& node) {
     interval_ = node.value("interval", 0);
-    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+    instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::Interstitial, node["instance"]);
 }
 
@@ -313,12 +309,8 @@ std::shared_ptr<IAd> InterstitialConfig::createAd(
     return std::make_shared<GenericAd>(ad, interval_);
 }
 
-int InterstitialConfig::interval() const {
-    return interval_;
-}
-
 RewardedConfig::RewardedConfig(const nlohmann::json& node) {
-    instance_ = AdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+    instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::Rewarded, node["instance"]);
 }
 
@@ -334,8 +326,8 @@ std::shared_ptr<IAd> RewardedConfig::createAd(
 
 template <class Ad>
 template <class MultiAd>
-std::shared_ptr<AdInstanceConfig<Ad>>
-AdInstanceConfig<Ad>::parse(AdFormat format, const nlohmann::json& node) {
+std::shared_ptr<IAdInstanceConfig<Ad>>
+IAdInstanceConfig<Ad>::parse(AdFormat format, const nlohmann::json& node) {
     if (node.is_array()) {
         return std::make_shared<WaterfallInstanceConfig<Ad, MultiAd>>(format,
                                                                       node);
@@ -372,7 +364,7 @@ WaterfallInstanceConfig<Ad, MultiAd>::WaterfallInstanceConfig(
     AdFormat format, const nlohmann::json& node) {
     for (auto&& [key, value] : node.items()) {
         instances_.push_back(
-            AdInstanceConfig<Ad>::template parse<MultiAd>(format, value));
+            IAdInstanceConfig<Ad>::template parse<MultiAd>(format, value));
     }
 }
 

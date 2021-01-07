@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace EE {
-    public class MultiFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
+    public class MultiFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd, IMultiAd<IFullScreenAd> {
         private readonly List<IFullScreenAd> _items;
         private readonly ObserverHandle _handle;
 
@@ -12,13 +12,12 @@ namespace EE {
             _handle = new ObserverHandle();
         }
 
-        public MultiFullScreenAd AddItem(IFullScreenAd item) {
+        public void AddItem(IFullScreenAd item) {
             _items.Add(item);
             _handle.Bind(item).AddObserver(new AdObserver {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });
-            return this;
         }
 
         public void Destroy() {

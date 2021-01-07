@@ -178,7 +178,7 @@ public:
 };
 
 template <class Ad>
-class AdInstanceConfig;
+class IAdInstanceConfig;
 
 class BannerConfig : public IAdConfig {
 public:
@@ -190,7 +190,7 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    std::shared_ptr<AdInstanceConfig<IAdView>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IAdView>> instance_;
 };
 
 class AppOpenConfig : public IAdConfig {
@@ -202,11 +202,9 @@ public:
     virtual std::shared_ptr<IAd> createAd(
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
-    int interval() const;
-
 private:
     int interval_;
-    std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
 class InterstitialConfig : public IAdConfig {
@@ -218,11 +216,9 @@ public:
     virtual std::shared_ptr<IAd> createAd(
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
-    int interval() const;
-
 private:
     int interval_;
-    std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
 class RewardedConfig : public IAdConfig {
@@ -235,24 +231,24 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    std::shared_ptr<AdInstanceConfig<IFullScreenAd>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
 template <class Ad>
-class AdInstanceConfig {
+class IAdInstanceConfig {
 public:
     template <class MultiAd>
-    static std::shared_ptr<AdInstanceConfig> parse(AdFormat format,
-                                                   const nlohmann::json& node);
+    static std::shared_ptr<IAdInstanceConfig> parse(AdFormat format,
+                                                    const nlohmann::json& node);
 
-    virtual ~AdInstanceConfig() = default;
+    virtual ~IAdInstanceConfig() = default;
 
     virtual std::shared_ptr<Ad>
     createAd(const std::shared_ptr<INetworkConfigManager>& manager) const = 0;
 };
 
 template <class Ad>
-class SingleInstanceConfig : public AdInstanceConfig<Ad> {
+class SingleInstanceConfig : public IAdInstanceConfig<Ad> {
 public:
     explicit SingleInstanceConfig(AdFormat format, const nlohmann::json& node);
 
@@ -266,7 +262,7 @@ private:
 };
 
 template <class Ad, class MultiAd>
-class WaterfallInstanceConfig : public AdInstanceConfig<Ad> {
+class WaterfallInstanceConfig : public IAdInstanceConfig<Ad> {
 public:
     explicit WaterfallInstanceConfig(AdFormat format,
                                      const nlohmann::json& node);
@@ -275,7 +271,7 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    std::vector<std::shared_ptr<AdInstanceConfig<Ad>>> instances_;
+    std::vector<std::shared_ptr<IAdInstanceConfig<Ad>>> instances_;
 };
 
 class AdsConfig {

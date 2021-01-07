@@ -25,9 +25,9 @@ Task<bool> Self::initialize() {
     bannerAd_ = std::make_shared<LazyAdView>();
     co_await config_->initialize();
     initializeBannerAd();
-    initializeAppOpenAd();
-    initializeInterstitialAd();
-    initializeRewardedAd();
+    initializeFullScreenAd(AdFormat::AppOpen);
+    initializeFullScreenAd(AdFormat::Interstitial);
+    initializeFullScreenAd(AdFormat::Rewarded);
     initialized_ = true;
     co_return true;
 }
@@ -53,57 +53,14 @@ void Self::initializeBannerAd() {
         });
 }
 
-void Self::initializeAppOpenAd() {
-    auto ad = std::dynamic_pointer_cast<GenericAd>(
-        config_->createAd(AdFormat::AppOpen));
+void Self::initializeFullScreenAd(AdFormat format) {
+    auto ad = std::dynamic_pointer_cast<GenericAd>(config_->createAd(format));
     if (ad == nullptr) {
         return;
     }
-    appOpenAd_ = ad;
+    fullScreenAds_[format] = ad;
     (*handle_) //
-        .bind(*appOpenAd_)
-        .addObserver({
-            .onClicked =
-                [this] {
-                    dispatchEvent([](auto&& observer) {
-                        if (observer.onClicked) {
-                            observer.onClicked();
-                        }
-                    });
-                },
-        });
-}
-
-void Self::initializeInterstitialAd() {
-    auto ad = std::dynamic_pointer_cast<GenericAd>(
-        config_->createAd(AdFormat::Interstitial));
-    if (ad == nullptr) {
-        return;
-    }
-    interstitialAd_ = ad;
-    (*handle_) //
-        .bind(*interstitialAd_)
-        .addObserver({
-            .onClicked =
-                [this] {
-                    dispatchEvent([](auto&& observer) {
-                        if (observer.onClicked) {
-                            observer.onClicked();
-                        }
-                    });
-                },
-        });
-}
-
-void Self::initializeRewardedAd() {
-    auto ad = std::dynamic_pointer_cast<GenericAd>(
-        config_->createAd(AdFormat::Rewarded));
-    if (ad == nullptr) {
-        return;
-    }
-    rewardedAd_ = ad;
-    (*handle_) //
-        .bind(*rewardedAd_)
+        .bind(*ad)
         .addObserver({
             .onClicked =
                 [this] {
@@ -149,35 +106,26 @@ void Self::setBannerAdSize(float width, float height) {
 }
 
 Task<AdResult> Self::showAppOpenAd() {
-    if (!initialized_) {
-        co_return AdResult::NotInitialized;
-    }
-    if (interstitialAd_ == nullptr) {
-        co_return AdResult::NotConfigured;
-    }
-    auto result = co_await appOpenAd_->show();
-    co_return result;
+    co_return co_await showFullScreenAd(AdFormat::AppOpen);
 }
 
 Task<AdResult> Self::showInterstitialAd() {
-    if (!initialized_) {
-        co_return AdResult::NotInitialized;
-    }
-    if (interstitialAd_ == nullptr) {
-        co_return AdResult::NotConfigured;
-    }
-    auto result = co_await interstitialAd_->show();
-    co_return result;
+    co_return co_await showFullScreenAd(AdFormat::Interstitial);
 }
 
 Task<AdResult> Self::showRewardedAd() {
+    co_return co_await showFullScreenAd(AdFormat::Rewarded);
+}
+
+Task<AdResult> Self::showFullScreenAd(AdFormat format) {
     if (!initialized_) {
         co_return AdResult::NotInitialized;
     }
-    if (rewardedAd_ == nullptr) {
+    auto&& ad = fullScreenAds_[format];
+    if (ad == nullptr) {
         co_return AdResult::NotConfigured;
     }
-    auto result = co_await rewardedAd_->show();
+    auto result = co_await ad->show();
     co_return result;
 }
 } // namespace services

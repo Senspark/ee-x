@@ -36,16 +36,13 @@ public:
 private:
     Task<> initializeNetworks();
     void initializeBannerAd();
-    void initializeAppOpenAd();
-    void initializeInterstitialAd();
-    void initializeRewardedAd();
+    void initializeFullScreenAd(AdFormat format);
+    Task<AdResult> showFullScreenAd(AdFormat format);
 
     bool initialized_;
     std::shared_ptr<AdsConfig> config_;
     std::shared_ptr<LazyAdView> bannerAd_;
-    std::shared_ptr<GenericAd> appOpenAd_;
-    std::shared_ptr<GenericAd> interstitialAd_;
-    std::shared_ptr<GenericAd> rewardedAd_;
+    std::map<AdFormat, std::shared_ptr<GenericAd>> fullScreenAds_;
 
     std::unique_ptr<ObserverHandle> handle_;
 };

@@ -1,18 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace EE {
-    public enum AdResult {
-        NotInitialized,
-        NotConfigured,
-        Capped,
-        NoInternet,
-        NotLoaded,
-        Failed,
-        Canceled,
-        Completed
+    public class AdsObserver {
+        public Action OnClicked { get; set; }
     }
 
-    public interface IAdsManager {
+    public interface IAdsManager : IObserverManager<AdsObserver> {
         bool IsBannerAdVisible { get; set; }
         (float, float) BannerAdAnchor { get; set; }
         (float, float) BannerAdPosition { get; set; }

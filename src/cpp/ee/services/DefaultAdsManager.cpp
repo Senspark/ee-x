@@ -4,6 +4,7 @@
 
 #include <ee/cocos/CocosAdView.hpp>
 #include <ee/core/NoAwait.hpp>
+#include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
 
 #include "ee/services/AdResult.hpp"
@@ -17,6 +18,7 @@ using Self = DefaultAdsManager;
 
 Self::DefaultAdsManager(const std::string& configJson) {
     config_ = AdsConfig::parse(configJson);
+    handle_ = std::make_unique<ObserverHandle>();
 }
 
 Task<bool> Self::initialize() {
@@ -37,21 +39,81 @@ void Self::initializeBannerAd() {
         return;
     }
     bannerAd_->setAd(ad);
+    (*handle_) //
+        .bind(*bannerAd_)
+        .addObserver({
+            .onClicked =
+                [this] {
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onClicked) {
+                            observer.onClicked();
+                        }
+                    });
+                },
+        });
 }
 
 void Self::initializeAppOpenAd() {
-    appOpenAd_ = std::dynamic_pointer_cast<GenericAd>(
+    auto ad = std::dynamic_pointer_cast<GenericAd>(
         config_->createAd(AdFormat::AppOpen));
+    if (ad == nullptr) {
+        return;
+    }
+    appOpenAd_ = ad;
+    (*handle_) //
+        .bind(*appOpenAd_)
+        .addObserver({
+            .onClicked =
+                [this] {
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onClicked) {
+                            observer.onClicked();
+                        }
+                    });
+                },
+        });
 }
 
 void Self::initializeInterstitialAd() {
-    interstitialAd_ = std::dynamic_pointer_cast<GenericAd>(
+    auto ad = std::dynamic_pointer_cast<GenericAd>(
         config_->createAd(AdFormat::Interstitial));
+    if (ad == nullptr) {
+        return;
+    }
+    interstitialAd_ = ad;
+    (*handle_) //
+        .bind(*interstitialAd_)
+        .addObserver({
+            .onClicked =
+                [this] {
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onClicked) {
+                            observer.onClicked();
+                        }
+                    });
+                },
+        });
 }
 
 void Self::initializeRewardedAd() {
-    rewardedAd_ = std::dynamic_pointer_cast<GenericAd>(
+    auto ad = std::dynamic_pointer_cast<GenericAd>(
         config_->createAd(AdFormat::Rewarded));
+    if (ad == nullptr) {
+        return;
+    }
+    rewardedAd_ = ad;
+    (*handle_) //
+        .bind(*rewardedAd_)
+        .addObserver({
+            .onClicked =
+                [this] {
+                    dispatchEvent([](auto&& observer) {
+                        if (observer.onClicked) {
+                            observer.onClicked();
+                        }
+                    });
+                },
+        });
 }
 
 bool Self::isBannerAdVisible() const {

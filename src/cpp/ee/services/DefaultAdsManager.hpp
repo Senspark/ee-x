@@ -8,12 +8,14 @@
 #include <string>
 
 #include <ee/ads/AdsFwd.hpp>
+#include <ee/core/ObserverManager.hpp>
 
 #include "ee/services/IAdsManager.hpp"
 
 namespace ee {
 namespace services {
-class DefaultAdsManager : public IAdsManager {
+class DefaultAdsManager : public IAdsManager,
+                          public ObserverManager<AdObserver> {
 public:
     explicit DefaultAdsManager(const std::string& configJson);
 
@@ -44,6 +46,8 @@ private:
     std::shared_ptr<GenericAd> appOpenAd_;
     std::shared_ptr<GenericAd> interstitialAd_;
     std::shared_ptr<GenericAd> rewardedAd_;
+
+    std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace services
 } // namespace ee

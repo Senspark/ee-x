@@ -3,11 +3,19 @@
 
 #ifdef __cplusplus
 
+#include <functional>
+
+#include <ee/core/IObserverManager.hpp>
+
 #include "ee/services/ServicesFwd.hpp"
 
 namespace ee {
 namespace services {
-class IAdsManager {
+struct AdsObserver {
+    std::function<void()> onClicked;
+};
+
+class IAdsManager : public virtual IObserverManager<AdObserver> {
 public:
     virtual ~IAdsManager() = default;
     virtual bool isBannerAdVisible() const = 0;

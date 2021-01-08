@@ -17,6 +17,7 @@ namespace EE.Internal {
 
     internal enum AdFormat {
         Banner,
+        Rectangle,
         AppOpen,
         Interstitial,
         Rewarded
@@ -90,6 +91,8 @@ namespace EE.Internal {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, AdMobBannerAdSize.Normal);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, AdMobBannerAdSize.MediumRectangle);
                 case AdFormat.AppOpen:
                     return _plugin.CreateAppOpenAd(id);
                 case AdFormat.Interstitial:
@@ -120,6 +123,8 @@ namespace EE.Internal {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, FacebookBannerAdSize.BannerHeight50);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, FacebookBannerAdSize.RectangleHeight250);
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:
@@ -240,6 +245,21 @@ namespace EE.Internal {
         }
 
         public AdFormat Format => AdFormat.Banner;
+
+        public IAd CreateAd(INetworkConfigManager manager) {
+            var ad = _instance.CreateAd(manager);
+            return new UnityAdView(ad);
+        }
+    }
+
+    internal class RectangleConfig : IAdConfig {
+        private readonly IAdInstanceConfig<IAdView> _instance;
+
+        public RectangleConfig(JSONNode node) {
+            _instance = AdInstanceConfig<IAdView>.Parse<MultiAdView>(AdFormat.Rectangle, node["instance"]);
+        }
+
+        public AdFormat Format => AdFormat.Rectangle;
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);

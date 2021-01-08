@@ -9,12 +9,13 @@ namespace EE {
         private Task<bool> _initializer;
         private bool _initialized;
         private readonly AdsConfig _config;
-        private LazyAdView _bannerAd;
+        private readonly Dictionary<AdFormat, LazyAdView> _bannerAds;
         private readonly Dictionary<AdFormat, GenericAd> _fullScreenAds;
         private readonly ObserverHandle _handle;
 
         public DefaultAdsManager(string configJson) {
             _config = AdsConfig.Parse(configJson);
+            _bannerAds = new Dictionary<AdFormat, LazyAdView>();
             _fullScreenAds = new Dictionary<AdFormat, GenericAd>();
             _handle = new ObserverHandle();
         }
@@ -22,9 +23,11 @@ namespace EE {
         public Task<bool> Initialize() => _initializer ?? (_initializer = InitializeImpl());
 
         private async Task<bool> InitializeImpl() {
-            _bannerAd = new LazyAdView();
+            _bannerAds[AdFormat.Banner] = new LazyAdView();
+            _bannerAds[AdFormat.Rectangle] = new LazyAdView();
             await _config.Initialize();
-            InitializeBannerAd();
+            InitializeBannerAd(AdFormat.Banner);
+            InitializeBannerAd(AdFormat.Rectangle);
             InitializeFullScreenAd(AdFormat.AppOpen);
             InitializeFullScreenAd(AdFormat.Interstitial);
             InitializeFullScreenAd(AdFormat.Rewarded);
@@ -32,14 +35,14 @@ namespace EE {
             return true;
         }
 
-        private void InitializeBannerAd() {
+        private void InitializeBannerAd(AdFormat format) {
             if (_config.CreateAd(AdFormat.Banner) is IAdView ad) {
                 // OK.
             } else {
                 return;
             }
-            _bannerAd.Ad = ad;
-            _handle.Bind(_bannerAd)
+            _bannerAds[format].Ad = ad;
+            _handle.Bind(_bannerAds[format])
                 .AddObserver(new AdObserver {
                     OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
                 });
@@ -58,26 +61,48 @@ namespace EE {
                 });
         }
 
-        public bool isBannerAdLoaded => _bannerAd.IsLoaded;
+        public bool IsBannerAdLoaded => _bannerAds[AdFormat.Banner].IsLoaded;
 
         public bool IsBannerAdVisible {
-            get => _bannerAd.IsVisible;
-            set => _bannerAd.IsVisible = value;
+            get => _bannerAds[AdFormat.Banner].IsVisible;
+            set => _bannerAds[AdFormat.Banner].IsVisible = value;
         }
 
         public (float, float) BannerAdAnchor {
-            get => _bannerAd.Anchor;
-            set => _bannerAd.Anchor = value;
+            get => _bannerAds[AdFormat.Banner].Anchor;
+            set => _bannerAds[AdFormat.Banner].Anchor = value;
         }
 
         public (float, float) BannerAdPosition {
-            get => _bannerAd.Position;
-            set => _bannerAd.Position = value;
+            get => _bannerAds[AdFormat.Banner].Position;
+            set => _bannerAds[AdFormat.Banner].Position = value;
         }
 
         public (float, float) BannerAdSize {
-            get => _bannerAd.Size;
-            set => _bannerAd.Size = value;
+            get => _bannerAds[AdFormat.Banner].Size;
+            set => _bannerAds[AdFormat.Banner].Size = value;
+        }
+
+        public bool IsRectangleAdLoaded => _bannerAds[AdFormat.Rectangle].IsLoaded;
+
+        public bool IsRectangleAdVisible {
+            get => _bannerAds[AdFormat.Rectangle].IsVisible;
+            set => _bannerAds[AdFormat.Rectangle].IsVisible = value;
+        }
+
+        public (float, float) RectangleAdAnchor {
+            get => _bannerAds[AdFormat.Rectangle].Anchor;
+            set => _bannerAds[AdFormat.Rectangle].Anchor = value;
+        }
+
+        public (float, float) RectangleAdPosition {
+            get => _bannerAds[AdFormat.Rectangle].Position;
+            set => _bannerAds[AdFormat.Rectangle].Position = value;
+        }
+
+        public (float, float) RectangleAdSize {
+            get => _bannerAds[AdFormat.Rectangle].Size;
+            set => _bannerAds[AdFormat.Rectangle].Size = value;
         }
 
         public async Task<AdResult> ShowAppOpenAd() {

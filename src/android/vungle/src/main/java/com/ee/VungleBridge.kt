@@ -95,12 +95,6 @@ class VungleBridge(
         _bridge.deregisterHandler(kLoadRewardedAd)
     }
 
-    private fun checkInitialized() {
-        if (!_initialized) {
-            throw IllegalStateException("Please call initialize() first")
-        }
-    }
-
     @AnyThread
     suspend fun initialize(appId: String): Boolean {
         return suspendCancellableCoroutine { cont ->
@@ -160,7 +154,20 @@ class VungleBridge(
     @AnyThread
     private fun loadRewardedAd(adId: String) {
         Thread.runOnMainThread {
-            checkInitialized()
+            _logger.debug("$kTag: loadRewardedAd: id = $adId")
+            if (!_initialized) {
+                _logger.error("$kTag: ${this::loadRewardedAd.name}: not initialized")
+                @Serializable
+                @Suppress("unused")
+                class Response(
+                    val ad_id: String,
+                    val message: String
+                )
+
+                val response = Response(adId, "not initialized")
+                _bridge.callCpp(kOnFailedToLoad, response.serialize())
+                return@runOnMainThread
+            }
             Vungle.loadAd(adId, object : LoadAdCallback {
                 override fun onAdLoad(adId: String) {
                     Thread.runOnMainThread {
@@ -199,7 +206,19 @@ class VungleBridge(
     @AnyThread
     private fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
-            checkInitialized()
+            if (!_initialized) {
+                _logger.error("$kTag: ${this::showRewardedAd.name}: not initialized")
+                @Serializable
+                @Suppress("unused")
+                class Response(
+                    val ad_id: String,
+                    val message: String
+                )
+
+                val response = Response(adId, "not initialized")
+                _bridge.callCpp(kOnFailedToShow, response.serialize())
+                return@runOnMainThread
+            }
             _rewarded = false
             Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
                 override fun onError(adId: String, exception: VungleException) {

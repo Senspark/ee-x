@@ -21,6 +21,7 @@ public:
 
     Task<bool> initialize();
 
+    virtual bool isBannerAdLoaded() const override;
     virtual bool isBannerAdVisible() const override;
     virtual void setBannerAdVisible(bool visible) override;
     virtual std::pair<float, float> getBannerAdAnchor() const override;

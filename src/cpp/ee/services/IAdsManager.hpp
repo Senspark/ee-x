@@ -18,6 +18,7 @@ struct AdsObserver {
 class IAdsManager : public virtual IObserverManager<AdObserver> {
 public:
     virtual ~IAdsManager() = default;
+    virtual bool isBannerAdLoaded() const = 0;
     virtual bool isBannerAdVisible() const = 0;
     virtual void setBannerAdVisible(bool visible) = 0;
     virtual std::pair<float, float> getBannerAdAnchor() const = 0;

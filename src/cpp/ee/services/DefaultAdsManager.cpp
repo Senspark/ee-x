@@ -73,6 +73,10 @@ void Self::initializeFullScreenAd(AdFormat format) {
         });
 }
 
+bool Self::isBannerAdLoaded() const {
+    return bannerAd_->isLoaded();
+}
+
 bool Self::isBannerAdVisible() const {
     return bannerAd_->isVisible();
 }

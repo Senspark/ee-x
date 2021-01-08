@@ -58,6 +58,8 @@ namespace EE {
                 });
         }
 
+        public bool isBannerAdLoaded => _bannerAd.IsLoaded;
+
         public bool IsBannerAdVisible {
             get => _bannerAd.IsVisible;
             set => _bannerAd.IsVisible = value;

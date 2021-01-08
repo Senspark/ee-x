@@ -23,6 +23,7 @@ LOCAL_SRC_FILES := \
 	${shell find $(LOCAL_PATH)/notification -print} \
 	${shell find $(LOCAL_PATH)/play -print} \
 	${shell find $(LOCAL_PATH)/recorder -print} \
+	${shell find $(LOCAL_PATH)/services -print} \
 	${shell find $(LOCAL_PATH)/store -print} \
 	${shell find $(LOCAL_PATH)/unity_ads -print} \
 	${shell find $(LOCAL_PATH)/vungle -print}

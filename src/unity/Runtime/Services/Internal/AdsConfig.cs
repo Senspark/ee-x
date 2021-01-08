@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using SimpleJSON;
@@ -76,13 +75,15 @@ namespace EE.Internal {
 
     internal class AdMobConfig : INetworkConfig {
         private IAdMob _plugin;
+        private readonly int _timeOut;
 
         public AdMobConfig(JSONNode node) {
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IAdMob>();
-            await _plugin.Initialize();
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
         }
 
         public Network Network => Network.AdMob;
@@ -108,13 +109,15 @@ namespace EE.Internal {
 
     internal class FacebookAdsConfig : INetworkConfig {
         private IFacebookAds _plugin;
+        private readonly int _timeOut;
 
         public FacebookAdsConfig(JSONNode node) {
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IFacebookAds>();
-            await _plugin.Initialize();
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
         }
 
         public Network Network => Network.FacebookAds;
@@ -139,14 +142,16 @@ namespace EE.Internal {
     internal class IronSourceConfig : INetworkConfig {
         private IIronSource _plugin;
         private readonly string _appId;
+        private readonly int _timeOut;
 
         public IronSourceConfig(JSONNode node) {
             _appId = node["app_id"];
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IIronSource>();
-            await _plugin.Initialize(_appId);
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId));
         }
 
         public Network Network => Network.IronSource;
@@ -167,14 +172,16 @@ namespace EE.Internal {
     internal class UnityAdsConfig : INetworkConfig {
         private IUnityAds _plugin;
         private readonly string _appId;
+        private readonly int _timeOut;
 
         public UnityAdsConfig(JSONNode node) {
             _appId = node["app_id"];
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IUnityAds>();
-            await _plugin.Initialize(_appId, false);
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
         public Network Network => Network.IronSource;

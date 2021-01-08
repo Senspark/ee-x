@@ -35,8 +35,7 @@ Task<bool> Self::initialize() {
 }
 
 void Self::initializeBannerAd(AdFormat format) {
-    auto ad =
-        std::dynamic_pointer_cast<IAdView>(config_->createAd(AdFormat::Banner));
+    auto ad = std::dynamic_pointer_cast<IAdView>(config_->createAd(format));
     if (ad == nullptr) {
         return;
     }

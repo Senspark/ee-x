@@ -14,29 +14,26 @@ interface IMessageBridge {
      *
      * @param tag     The unique tag of the handler.
      * @param handler The handler.
-     * @return Whether the registration was successful.
      */
     @AnyThread
-    fun registerHandler(tag: String, handler: MessageHandler): Boolean
+    fun registerHandler(tag: String, handler: MessageHandler)
 
     /**
      * Registers a new async handler to receive messages from C++.
      *
      * @param tag     The unique tag of the handler.
      * @param handler The handler.
-     * @return Whether the registration was successful.
      */
     @AnyThread
-    fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler): Boolean
+    fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler)
 
     /**
      * Deregisters an existing handler not to receive messages from C++.
      *
-     * @param tag The unique
-     * @return Whether the deregistration was successful.
+     * @param tag The unique tag of the handler.
      */
     @AnyThread
-    fun deregisterHandler(tag: String): Boolean
+    fun deregisterHandler(tag: String)
 
     /**
      * Calls a handler from Java with a message.
@@ -52,18 +49,16 @@ interface IMessageBridge {
      * Calls a handler from C++ without a message.
      *
      * @param tag The unique tag of the handler.
-     * @return Reply message from c++.
      */
     @AnyThread
-    fun callCpp(tag: String): String
+    fun callCpp(tag: String)
 
     /**
      * Calls a handler from C++ with a message.
      *
      * @param tag     The unique tag of the handler.
      * @param message The message.
-     * @return Reply message from C++.
      */
     @AnyThread
-    fun callCpp(tag: String, message: String): String
+    fun callCpp(tag: String, message: String)
 }

@@ -31,9 +31,7 @@ namespace core {
 template <>
 std::shared_ptr<IAdMob>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::AdMob)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::AdMob);
     return std::make_shared<admob::Bridge>(bridge);
 }
 } // namespace core

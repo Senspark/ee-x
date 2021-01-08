@@ -27,9 +27,7 @@ namespace core {
 template <>
 std::shared_ptr<IAppLovin>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::AppLovin)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::AppLovin);
     return std::make_shared<app_lovin::Bridge>(bridge);
 }
 } // namespace core

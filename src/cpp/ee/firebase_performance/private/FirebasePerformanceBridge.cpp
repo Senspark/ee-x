@@ -18,9 +18,7 @@ namespace core {
 template <>
 std::shared_ptr<IFirebasePerformance>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::FirebasePerformance)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::FirebasePerformance);
     return std::make_shared<firebase::performance::Bridge>(bridge);
 }
 } // namespace core

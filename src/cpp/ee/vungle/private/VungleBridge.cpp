@@ -19,9 +19,7 @@ namespace core {
 template <>
 std::shared_ptr<IVungle>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::Vungle)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::Vungle);
     return std::make_shared<vungle::Bridge>(bridge);
 }
 } // namespace core

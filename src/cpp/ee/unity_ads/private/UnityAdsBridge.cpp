@@ -28,9 +28,7 @@ namespace core {
 template <>
 std::shared_ptr<IUnityAds>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::UnityAds)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::UnityAds);
     return std::make_shared<unity_ads::Bridge>(bridge);
 }
 } // namespace core

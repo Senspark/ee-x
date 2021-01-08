@@ -5,13 +5,12 @@ import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.MessageHandler
 import com.ee.PluginManager
-import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
-typealias MessageBridgeHandler = (tag: String, message: String) -> String
+typealias MessageBridgeHandler = (tag: String, message: String) -> Unit
 
 /**
  * Created by Zinge on 3/29/17.
@@ -36,20 +35,17 @@ class MessageBridge(
         _handlerLock = Any()
     }
 
-    override fun registerHandler(tag: String, handler: MessageHandler): Boolean {
+    override fun registerHandler(tag: String, handler: MessageHandler) {
         synchronized(_handlerLock) {
             if (_handlers.containsKey(tag)) {
-                _logger.error("$kTag: registerHandler: $tag already exists!")
-                assertThat(false).isTrue()
-                return false
+                throw IllegalArgumentException("$kTag: ${this::registerHandler.name}: $tag already exists!")
             }
             _handlers[tag] = handler
-            return true
         }
     }
 
     @InternalSerializationApi
-    override fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler): Boolean {
+    override fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler) {
         return registerHandler(tag) { message ->
             @Serializable
             class Request(
@@ -66,15 +62,12 @@ class MessageBridge(
         }
     }
 
-    override fun deregisterHandler(tag: String): Boolean {
+    override fun deregisterHandler(tag: String) {
         synchronized(_handlerLock) {
             if (!_handlers.containsKey(tag)) {
-                _logger.error("$kTag: deregisterHandler: $tag doesn't exist!")
-                assertThat(false).isTrue()
-                return false
+                throw IllegalArgumentException("$kTag: ${this::deregisterHandler.name}: $tag doesn't exist!")
             }
             _handlers.remove(tag)
-            return true
         }
     }
 
@@ -86,27 +79,24 @@ class MessageBridge(
 
     override fun call(tag: String, message: String): String {
         val handler = findHandler(tag)
-        if (handler == null) {
-            _logger.error("$kTag: call: $tag doesn't exist!")
-            assertThat(false).isTrue()
-            return ""
-        }
+            ?: throw IllegalArgumentException("$kTag: ${this::call.name}: $tag doesn't exist!")
         return handler(message)
     }
 
-    override fun callCpp(tag: String): String {
-        return callCpp(tag, "")
+    override fun callCpp(tag: String) {
+        callCpp(tag, "")
     }
 
-    override fun callCpp(tag: String, message: String): String {
-        return _handler(tag, message)
+    override fun callCpp(tag: String, message: String) {
+        _handler(tag, message)
     }
 }
 
-internal external fun ee_callCppInternal(tag: String, message: String): String
+@Suppress("FunctionName")
+external fun ee_callCppInternal(tag: String, message: String)
 
 @NativeThread
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_staticCall(tag: String, message: String): String {
     val bridge = PluginManager.getInstance().getBridge()
         ?: throw IllegalStateException("Bridge is null")

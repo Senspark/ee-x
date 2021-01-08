@@ -25,7 +25,7 @@ namespace core {
 using Self = PluginManager;
 
 template <>
-bool Self::initializePlugins<Library::Cocos>() {
+void Self::initializePlugins<Library::Cocos>() {
 #if defined(EE_X_ANDROID)
     // Must set JavaVM and activity first.
     auto vm = cocos2d::JniHelper::getJavaVM();
@@ -35,9 +35,7 @@ bool Self::initializePlugins<Library::Cocos>() {
     setActivity(activity);
 #endif // defined(EE_X_ANDROID)
 
-    if (not initializePlugins<Library::Core>()) {
-        return false;
-    }
+    initializePlugins<Library::Core>();
 
     auto id = std::this_thread::get_id();
     Thread::libraryThreadChecker_ = [id] { //
@@ -55,7 +53,6 @@ bool Self::initializePlugins<Library::Cocos>() {
         });
         return false;
     };
-    return true;
 }
 } // namespace core
 } // namespace ee

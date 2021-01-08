@@ -31,9 +31,7 @@ namespace core {
 template <>
 std::shared_ptr<IFacebookAds>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::FacebookAds)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::FacebookAds);
     return std::make_shared<facebook_ads::Bridge>(bridge);
 }
 } // namespace core

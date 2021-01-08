@@ -13,9 +13,7 @@ namespace core {
 template <>
 std::shared_ptr<IAdColony>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::AdColony)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::AdColony);
     return std::make_shared<ad_colony::Bridge>(bridge);
 }
 } // namespace core

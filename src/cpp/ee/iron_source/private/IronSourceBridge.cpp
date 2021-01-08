@@ -20,9 +20,7 @@ namespace core {
 template <>
 std::shared_ptr<IIronSource>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::IronSource)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::IronSource);
     return std::make_shared<iron_source::Bridge>(bridge);
 }
 } // namespace core

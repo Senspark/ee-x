@@ -1,10 +1,10 @@
 namespace EE.Internal {
     internal interface IPluginManagerImpl {
-        bool InitializePlugins(string version);
+        void InitializePlugins(string version);
         void SetLogLevel(LogLevel level);
         object GetActivity();
         void SetActivity(object activity);
-        bool AddPlugin(string name);
-        bool RemovePlugin(string name);
+        void AddPlugin(string name);
+        void RemovePlugin(string name);
     }
 }

@@ -63,22 +63,17 @@ namespace EE {
 
         private static IMessageBridge _bridge;
 
-        public static bool InitializePlugins() {
-            if (!_impl.InitializePlugins("2.1.2")) {
-                return false;
-            }
+        public static void InitializePlugins() {
+            _impl.InitializePlugins("2.1.2");
             _bridge = MessageBridge.Instance;
             Thread.Initialize();
             Platform.RegisterHandlers(_bridge);
-            return true;
         }
 
         public static T CreatePlugin<T>() where T : IPlugin {
             var type = typeof(T);
             var (plugin, constructor) = _pluginTypes[type];
-            if (!AddPlugin(plugin)) {
-                throw new Exception($"Can not add plugin {plugin}");
-            }
+            AddPlugin(plugin);
             var instance = (T) constructor(_bridge);
             _plugins.Add(plugin, instance);
             return instance;
@@ -87,9 +82,7 @@ namespace EE {
         public static void DestroyPlugin<T>() where T : IPlugin {
             var type = typeof(T);
             var (plugin, pluginType) = _pluginTypes[type];
-            if (!RemovePlugin(plugin)) {
-                throw new Exception($"Can not remove plugin {plugin}");
-            }
+            RemovePlugin(plugin);
             _plugins.Remove(plugin);
         }
 
@@ -105,14 +98,14 @@ namespace EE {
             _impl.SetActivity(activity);
         }
 
-        private static bool AddPlugin(Plugin plugin) {
+        private static void AddPlugin(Plugin plugin) {
             var name = _pluginNames[plugin];
-            return _impl.AddPlugin(name);
+            _impl.AddPlugin(name);
         }
 
-        private static bool RemovePlugin(Plugin plugin) {
+        private static void RemovePlugin(Plugin plugin) {
             var name = _pluginNames[plugin];
-            return _impl.RemovePlugin(name);
+            _impl.RemovePlugin(name);
         }
     }
 }

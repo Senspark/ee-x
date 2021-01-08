@@ -56,46 +56,31 @@ Self::Bridge(IMessageBridge& bridge)
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onLoaded(json["ad_id"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onLoaded(json["ad_id"]);
         },
         kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToLoad(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToLoad(json["ad_id"], json["message"]);
         },
         kOnFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToShow(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToShow(json["ad_id"], json["message"]);
         },
         kOnFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onClicked(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClicked(message);
         },
         kOnClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onClosed(json["ad_id"], json["rewarded"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onClosed(json["ad_id"], json["rewarded"]);
         },
         kOnClosed);
 }

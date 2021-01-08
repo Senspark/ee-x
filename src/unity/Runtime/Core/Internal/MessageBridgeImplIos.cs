@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using AOT;
 
 namespace EE.Internal {
-    using CallCppCallback = Func<string, string, string>;
+    using CallCppCallback = Action<string, string>;
 
     internal class MessageBridgeImplIos : IMessageBridgeImpl {
         private static CallCppCallback _callCppCallback;
@@ -16,8 +16,8 @@ namespace EE.Internal {
         private static extern void ee_initializeMessageBridge(IntPtr pointer);
 
         [MonoPInvokeCallback(typeof(CallCppCallback))]
-        private static string ee_callCppInternal(string tag, string message) {
-            return _callCppCallback(tag, message);
+        private static void ee_callCppInternal(string tag, string message) {
+            _callCppCallback(tag, message);
         }
 
         public MessageBridgeImplIos(CallCppCallback callback) {

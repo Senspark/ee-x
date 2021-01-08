@@ -13,7 +13,6 @@
 #include "ee/store/private/StoreAndroidJavaStore.hpp"
 #include "ee/store/private/StoreIPurchasingBinder.hpp"
 #include "ee/store/private/StoreIosStoreBindings.hpp"
-#include "ee/store/private/StoreScriptingUnityCallback.hpp"
 
 namespace ee {
 namespace store {
@@ -27,8 +26,7 @@ Self::getAndroidStore(const std::shared_ptr<IUnityCallback>& callback,
                       AppStore store,
                       const std::shared_ptr<IPurchasingBinder>& binder) const {
     if (store == AppStore::GooglePlay) {
-        auto store = std::make_shared<AndroidJavaStore>(
-            bridge_, std::make_shared<ScriptingUnityCallback>(callback));
+        auto store = std::make_shared<AndroidJavaStore>(bridge_, callback);
         binder->registerExtension<IGooglePlayStoreExtensions>(store);
         binder->registerConfiguration<IGooglePlayConfiguration>(store);
         return store;

@@ -28,35 +28,23 @@ Self::AppOpenAd(
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded();
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToLoad(message);
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToShow(message);
         },
         messageHelper_.onFailedToShow());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onClosed();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClosed();
         },
         messageHelper_.onClosed());
 }

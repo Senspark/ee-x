@@ -34,41 +34,32 @@ Self::RequestDelegate(IMessageBridge& bridge, int tag)
     , tag_(tag) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] {
-                if (successCallback_) {
-                    auto json = nlohmann::json::parse(message);
-                    auto&& requestId =
-                        json.value("requestId", std::string()); // Null iOS.
-                    auto&& requestRecipients =
-                        json.value("requestRecipients",
-                                   std::vector<std::string>()); // Null iOS.
-                    successCallback_(requestId, requestRecipients);
-                }
-                self_.reset();
-            });
-            return "";
+            if (successCallback_) {
+                auto json = nlohmann::json::parse(message);
+                auto&& requestId =
+                    json.value("requestId", std::string()); // Null iOS.
+                auto&& requestRecipients =
+                    json.value("requestRecipients",
+                               std::vector<std::string>()); // Null iOS.
+                successCallback_(requestId, requestRecipients);
+            }
+            self_.reset();
         },
         k__onSuccess(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] {
-                if (failureCallback_) {
-                    failureCallback_(message);
-                }
-                self_.reset();
-            });
-            return "";
+            if (failureCallback_) {
+                failureCallback_(message);
+            }
+            self_.reset();
         },
         k__onFailure(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] {
-                if (cancelCallback_) {
-                    cancelCallback_();
-                }
-                self_.reset();
-            });
-            return "";
+            if (cancelCallback_) {
+                cancelCallback_();
+            }
+            self_.reset();
         },
         k__onCancel(tag_));
 }

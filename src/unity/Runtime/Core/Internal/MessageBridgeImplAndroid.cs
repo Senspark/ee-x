@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 namespace EE.Internal {
-    using CallCppCallback = Func<string, string, string>;
+    using CallCppCallback = Action<string, string>;
 
     internal class MessageBridgeImplAndroid : IMessageBridgeImpl {
         private class Callback : AndroidJavaProxy {

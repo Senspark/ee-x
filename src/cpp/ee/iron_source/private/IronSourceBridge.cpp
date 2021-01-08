@@ -66,76 +66,49 @@ Self::Bridge(IMessageBridge& bridge)
     rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdLoaded();
         },
         kOnInterstitialAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onInterstitialAdFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdFailedToLoad(message);
         },
         kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onInterstitialAdFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdFailedToShow(message);
         },
         kOnInterstitialAdFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdClicked();
         },
         kOnInterstitialAdClicked);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdClosed();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdClosed();
         },
         kOnInterstitialAdClosed);
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onRewardedAdLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdLoaded();
         },
         kOnRewardedAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onRewardedAdFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdFailedToShow(message);
         },
         kOnRewardedAdFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onRewardedAdClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdClicked();
         },
         kOnRewardedAdClicked);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onRewardedAdClosed(core::toBool(message));
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdClosed(core::toBool(message));
         },
         kOnRewardedAdClosed);
 }

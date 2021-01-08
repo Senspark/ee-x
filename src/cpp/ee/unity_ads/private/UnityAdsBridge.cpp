@@ -62,29 +62,20 @@ Self::Bridge(IMessageBridge& bridge)
     displayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onLoaded(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded(message);
         },
         kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToShow(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToShow(json["ad_id"], json["message"]);
         },
         kOnFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onClosed(json["ad_id"], json["rewarded"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onClosed(json["ad_id"], json["rewarded"]);
         },
         kOnClosed);
 }

@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EE.Internal {
-    using MessageHandler = Func<string, string>;
+    using MessageHandler = Action<string>;
 
     internal class MessageBridge : IMessageBridge {
         public static MessageBridge Instance { get; } = new MessageBridge();
 
         private int _callbackCounter;
-        private SpinLock _handlerLock;
         private readonly Dictionary<string, MessageHandler> _handlers;
         private readonly IMessageBridgeImpl _impl;
 
         private MessageBridge() {
             _callbackCounter = 0;
-            _handlerLock = new SpinLock();
             _handlers = new Dictionary<string, MessageHandler>();
             _impl =
 #if UNITY_EDITOR
@@ -30,51 +28,23 @@ namespace EE.Internal {
 #endif
         }
 
-        public bool RegisterHandler(MessageHandler handler, string tag) {
-            var lockTaken = false;
-            try {
-                _handlerLock.Enter(ref lockTaken);
-                if (_handlers.ContainsKey(tag)) {
-                    System.Diagnostics.Debug.Assert(false);
-                    return false;
-                }
-                _handlers.Add(tag, handler);
-            } finally {
-                if (lockTaken) {
-                    _handlerLock.Exit(false);
-                }
+        public void RegisterHandler(MessageHandler handler, string tag) {
+            if (_handlers.ContainsKey(tag)) {
+                throw new ArgumentException($"Failed to register handler: {tag}");
             }
-            return true;
+            _handlers.Add(tag, handler);
         }
 
-        public bool DeregisterHandler(string tag) {
-            var lockTaken = false;
-            try {
-                _handlerLock.Enter(ref lockTaken);
-                if (!_handlers.ContainsKey(tag)) {
-                    System.Diagnostics.Debug.Assert(false);
-                    return false;
-                }
-                _handlers.Remove(tag);
-            } finally {
-                if (lockTaken) {
-                    _handlerLock.Exit(false);
-                }
+        public void DeregisterHandler(string tag) {
+            if (!_handlers.ContainsKey(tag)) {
+                throw new ArgumentException($"Failed to deregister handler: {tag}");
             }
-            return true;
+            _handlers.Remove(tag);
         }
 
         private MessageHandler FindHandler(string tag) {
-            var lockTaken = false;
-            try {
-                _handlerLock.Enter(ref lockTaken);
-                if (_handlers.TryGetValue(tag, out var handler)) {
-                    return handler;
-                }
-            } finally {
-                if (lockTaken) {
-                    _handlerLock.Exit(false);
-                }
+            if (_handlers.TryGetValue(tag, out var handler)) {
+                return handler;
             }
             return null;
         }
@@ -95,7 +65,6 @@ namespace EE.Internal {
             RegisterHandler(callbackMessage => {
                 DeregisterHandler(callbackTag);
                 source.SetResult(callbackMessage);
-                return "";
             }, callbackTag);
             var request = new CallAsyncRequest {
                 callback_tag = callbackTag,
@@ -105,13 +74,12 @@ namespace EE.Internal {
             return source.Task;
         }
 
-        private string CallCpp(string tag, string message) {
+        private void CallCpp(string tag, string message) {
             var handler = FindHandler(tag);
             if (handler == null) {
-                System.Diagnostics.Debug.Assert(false);
-                return "";
+                throw new ArgumentException($"Failed to call handler: {tag}");
             }
-            return handler(message);
+            handler(message);
         }
     }
 }

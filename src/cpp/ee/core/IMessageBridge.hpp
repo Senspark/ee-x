@@ -17,7 +17,7 @@
 
 namespace ee {
 namespace core {
-using MessageHandler = std::function<std::string(const std::string& message)>;
+using MessageHandler = std::function<void(const std::string& message)>;
 
 class IMessageBridge {
 public:
@@ -26,14 +26,12 @@ public:
     /// Registers a handler to receive messages from other platforms.
     /// @param handler The handler to handle the message.
     /// @param tag The unique tag of the handler.
-    /// @return Whether the registration was successful.
-    virtual bool registerHandler(const MessageHandler& handler,
+    virtual void registerHandler(const MessageHandler& handler,
                                  const std::string& tag) = 0;
 
     /// Deregisters a handler not to receive messages from other platforms.
     /// @param tag The unique tag of the handler.
-    /// @return Whether the deregistration was successful.
-    virtual bool deregisterHandler(const std::string& tag) = 0;
+    virtual void deregisterHandler(const std::string& tag) = 0;
 
     /// Calls a handler from other platforms with a message.
     /// @param tag The unique tag of the handler.

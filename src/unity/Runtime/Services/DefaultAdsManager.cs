@@ -36,7 +36,7 @@ namespace EE {
         }
 
         private void InitializeBannerAd(AdFormat format) {
-            if (_config.CreateAd(AdFormat.Banner) is IAdView ad) {
+            if (_config.CreateAd(format) is IAdView ad) {
                 // OK.
             } else {
                 return;

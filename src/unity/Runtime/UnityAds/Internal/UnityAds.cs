@@ -41,23 +41,14 @@ namespace EE.Internal {
             _ads = new Dictionary<string, (IAd, IAd)>();
             _displayer = MediationManager.Instance.AdDisplayer;
 
+            _bridge.RegisterHandler(OnLoaded, kOnLoaded);
             _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnLoaded(message));
-                return "";
-            }, kOnLoaded);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => {
-                    var response = JsonUtility.FromJson<OnFailedToShowResponse>(message);
-                    OnFailedToShow(response.ad_id, response.message);
-                });
-                return "";
+                var response = JsonUtility.FromJson<OnFailedToShowResponse>(message);
+                OnFailedToShow(response.ad_id, response.message);
             }, kOnFailedToShow);
             _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => {
-                    var response = JsonUtility.FromJson<OnClosedResponse>(message);
-                    OnClosed(response.ad_id, response.rewarded);
-                });
-                return "";
+                var response = JsonUtility.FromJson<OnClosedResponse>(message);
+                OnClosed(response.ad_id, response.rewarded);
             }, kOnClosed);
         }
 

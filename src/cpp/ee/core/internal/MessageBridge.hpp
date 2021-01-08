@@ -39,7 +39,6 @@ public:
     /// @warning This method should not be called manually.
     /// @param tag The unique tag of the handler.
     /// @param message The message.
-    /// @return Reply message from C++.
     void callCpp(const std::string& tag, const std::string& message);
 
 private:

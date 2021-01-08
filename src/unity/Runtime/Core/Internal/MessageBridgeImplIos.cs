@@ -17,7 +17,9 @@ namespace EE.Internal {
 
         [MonoPInvokeCallback(typeof(CallCppCallback))]
         private static void ee_callCppInternal(string tag, string message) {
-            _callCppCallback(tag, message);
+            Thread.RunOnLibraryThread(() => { //
+                _callCppCallback(tag, message);
+            });
         }
 
         public MessageBridgeImplIos(CallCppCallback callback) {

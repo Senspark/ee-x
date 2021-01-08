@@ -15,7 +15,9 @@ namespace EE.Internal {
             }
 
             private void callCpp(string tag, string message) {
-                _callCppCallback(tag, message);
+                Thread.RunOnLibraryThread(() => { //
+                    _callCppCallback(tag, message);
+                });
             }
         }
 

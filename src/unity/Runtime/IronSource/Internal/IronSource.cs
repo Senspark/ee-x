@@ -32,42 +32,15 @@ namespace EE.Internal {
             _bridge = bridge;
             _displayer = MediationManager.Instance.AdDisplayer;
 
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnInterstitialAdLoaded);
-                return "";
-            }, kOnInterstitialAdLoaded);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnInterstitialAdFailedToLoad(message));
-                return "";
-            }, kOnInterstitialAdFailedToLoad);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnInterstitialAdFailedToShow(message));
-                return "";
-            }, kOnInterstitialAdFailedToShow);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnInterstitialAdClicked);
-                return "";
-            }, kOnInterstitialAdClicked);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnInterstitialAdClosed);
-                return "";
-            }, kOnInterstitialAdClosed);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnRewardedAdLoaded);
-                return "";
-            }, kOnRewardedAdLoaded);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnRewardedAdFailedToShow(message));
-                return "";
-            }, kOnRewardedAdFailedToShow);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnRewardedAdClicked);
-                return "";
-            }, kOnRewardedAdClicked);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnRewardedAdClosed(Utils.ToBool(message)));
-                return "";
-            }, kOnRewardedAdClosed);
+            _bridge.RegisterHandler(_ => OnInterstitialAdLoaded(), kOnInterstitialAdLoaded);
+            _bridge.RegisterHandler(OnInterstitialAdFailedToLoad, kOnInterstitialAdFailedToLoad);
+            _bridge.RegisterHandler(OnInterstitialAdFailedToShow, kOnInterstitialAdFailedToShow);
+            _bridge.RegisterHandler(_ => OnInterstitialAdClicked(), kOnInterstitialAdClicked);
+            _bridge.RegisterHandler(_ => OnInterstitialAdClosed(), kOnInterstitialAdClosed);
+            _bridge.RegisterHandler(_ => OnRewardedAdLoaded(), kOnRewardedAdLoaded);
+            _bridge.RegisterHandler(OnRewardedAdFailedToShow, kOnRewardedAdFailedToShow);
+            _bridge.RegisterHandler(_ => OnRewardedAdClicked(), kOnRewardedAdClicked);
+            _bridge.RegisterHandler(message => OnRewardedAdClosed(Utils.ToBool(message)), kOnRewardedAdClosed);
         }
 
         public void Destroy() {

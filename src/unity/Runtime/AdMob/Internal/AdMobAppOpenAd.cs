@@ -20,22 +20,10 @@ namespace EE.Internal {
             _messageHelper = new MessageHelper("AdMobAppOpenAd", adId);
             _loader = new AsyncHelper<bool>();
 
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnLoaded);
-                return "";
-            }, _messageHelper.OnLoaded);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnFailedToLoad(message));
-                return "";
-            }, _messageHelper.OnFailedToLoad);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnFailedToShow(message));
-                return "";
-            }, _messageHelper.OnFailedToShow);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnClosed);
-                return "";
-            }, _messageHelper.OnClosed);
+            _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
+            _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
+            _bridge.RegisterHandler(OnFailedToShow, _messageHelper.OnFailedToShow);
+            _bridge.RegisterHandler(_ => OnClosed(), _messageHelper.OnClosed);
         }
 
         public void Destroy() {

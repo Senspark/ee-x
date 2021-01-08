@@ -13,7 +13,7 @@ namespace EETest {
 
         private void TestCore() {
             Debug.Log($"CurrentThreadId = {Thread.CurrentThread.ManagedThreadId}");
-            Debug.Log($"InitializePlugins = {EE.PluginManager.InitializePlugins()}");
+            EE.PluginManager.InitializePlugins();
             Debug.Log($"IsMainThread = {EE.Thread.IsMainThread()}");
 
             EE.Thread.RunOnMainThread(() => { //

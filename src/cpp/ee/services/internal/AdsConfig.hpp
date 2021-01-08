@@ -75,6 +75,7 @@ public:
 
 private:
     std::shared_ptr<IAdMob> plugin_;
+    int timeOut_;
 };
 
 class AppLovinConfig : public INetworkConfig {
@@ -89,6 +90,7 @@ public:
 private:
     std::shared_ptr<IAppLovin> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class FacebookAdsConfig : public INetworkConfig {
@@ -102,6 +104,7 @@ public:
 
 private:
     std::shared_ptr<IFacebookAds> plugin_;
+    int timeOut_;
 };
 
 class IronSourceConfig : public INetworkConfig {
@@ -116,6 +119,7 @@ public:
 private:
     std::shared_ptr<IIronSource> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class UnityAdsConfig : public INetworkConfig {
@@ -130,6 +134,7 @@ public:
 private:
     std::shared_ptr<IUnityAds> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class VungleConfig : public INetworkConfig {
@@ -144,6 +149,7 @@ public:
 private:
     std::shared_ptr<IVungle> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class IAdConfig;

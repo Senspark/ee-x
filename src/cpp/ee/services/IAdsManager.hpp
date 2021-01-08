@@ -27,6 +27,17 @@ public:
     virtual void setBannerAdPosition(float x, float y) = 0;
     virtual std::pair<float, float> getBannerAdSize() const = 0;
     virtual void setBannerAdSize(float x, float y) = 0;
+
+    virtual bool isRectangleAdLoaded() const = 0;
+    virtual bool isRectangleAdVisible() const = 0;
+    virtual void setRectangleAdVisible(bool visible) = 0;
+    virtual std::pair<float, float> getRectangleAdAnchor() const = 0;
+    virtual void setRectangleAdAnchor(float x, float y) = 0;
+    virtual std::pair<float, float> getRectangleAdPosition() const = 0;
+    virtual void setRectangleAdPosition(float x, float y) = 0;
+    virtual std::pair<float, float> getRectangleAdSize() const = 0;
+    virtual void setRectangleAdSize(float x, float y) = 0;
+
     virtual Task<AdResult> showInterstitialAd() = 0;
     virtual Task<AdResult> showRewardedAd() = 0;
     virtual Task<AdResult> showAppOpenAd() = 0;

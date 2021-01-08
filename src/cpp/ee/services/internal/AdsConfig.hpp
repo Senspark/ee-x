@@ -24,6 +24,7 @@ enum class Network {
 
 enum class AdFormat {
     Banner,
+    Rectangle,
     AppOpen,
     Interstitial,
     Rewarded,
@@ -183,6 +184,19 @@ class IAdInstanceConfig;
 class BannerConfig : public IAdConfig {
 public:
     explicit BannerConfig(const nlohmann::json& node);
+
+    virtual AdFormat format() const override;
+
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
+
+private:
+    std::shared_ptr<IAdInstanceConfig<IAdView>> instance_;
+};
+
+class RectangleConfig : public IAdConfig {
+public:
+    explicit RectangleConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 

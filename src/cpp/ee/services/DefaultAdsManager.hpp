@@ -30,19 +30,30 @@ public:
     virtual void setBannerAdPosition(float x, float y) override;
     virtual std::pair<float, float> getBannerAdSize() const override;
     virtual void setBannerAdSize(float width, float height) override;
+
+    virtual bool isRectangleAdLoaded() const override;
+    virtual bool isRectangleAdVisible() const override;
+    virtual void setRectangleAdVisible(bool visible) override;
+    virtual std::pair<float, float> getRectangleAdAnchor() const override;
+    virtual void setRectangleAdAnchor(float x, float y) override;
+    virtual std::pair<float, float> getRectangleAdPosition() const override;
+    virtual void setRectangleAdPosition(float x, float y) override;
+    virtual std::pair<float, float> getRectangleAdSize() const override;
+    virtual void setRectangleAdSize(float width, float height) override;
+
     virtual Task<AdResult> showAppOpenAd() override;
     virtual Task<AdResult> showInterstitialAd() override;
     virtual Task<AdResult> showRewardedAd() override;
 
 private:
     Task<> initializeNetworks();
-    void initializeBannerAd();
+    void initializeBannerAd(AdFormat format);
     void initializeFullScreenAd(AdFormat format);
     Task<AdResult> showFullScreenAd(AdFormat format);
 
     bool initialized_;
     std::shared_ptr<AdsConfig> config_;
-    std::shared_ptr<LazyAdView> bannerAd_;
+    std::map<AdFormat, std::shared_ptr<LazyAdView>> bannerAds_;
     std::map<AdFormat, std::shared_ptr<GenericAd>> fullScreenAds_;
 
     std::unique_ptr<ObserverHandle> handle_;

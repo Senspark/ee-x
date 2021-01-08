@@ -76,8 +76,8 @@ class IronSourceBridge(
             if (!_initialized) {
                 return@runOnMainThread
             }
-            IronSource.setInterstitialListener(null)
-            IronSource.setRewardedVideoListener(null)
+            IronSource.removeInterstitialListener()
+            IronSource.removeRewardedVideoListener()
         }
     }
 

@@ -3,8 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <vector>
-
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/NoAwait.hpp"
 #include "ee/core/Task.hpp"
@@ -13,7 +11,7 @@ namespace ee {
 namespace core {
 namespace detail {
 template <class T>
-void whenOne(const std::shared_ptr<int>& counter,
+void whenAllHelper(const std::shared_ptr<int>& counter,
              const std::function<void()>& resolve, T&& callable) {
     noAwait([counter, resolve, callable]() -> Task<> {
         co_await callable();
@@ -32,7 +30,7 @@ Task<> whenAll(Args&&... args) {
     co_await LambdaAwaiter<>([&callableTuple, counter](auto&& resolve) {
         std::apply(
             [counter, resolve](auto&&... callables) {
-                ((detail::whenOne(counter, resolve, callables)), ...);
+                ((detail::whenAllHelper(counter, resolve, callables)), ...);
             },
             callableTuple);
     });

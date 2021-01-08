@@ -8,8 +8,10 @@
 #include <ee/ads/MultiFullScreenAd.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
 #include <ee/cocos/CocosAdView.hpp>
+#include <ee/core/Delay.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
+#include <ee/core/WhenAny.hpp>
 #include <ee/facebook_ads/FacebookBannerAdSize.hpp>
 #include <ee/facebook_ads/IFacebookAdsBridge.hpp>
 #include <ee/iron_source/IIronSourceBridge.hpp>
@@ -70,11 +72,19 @@ INetworkConfig::parse(const nlohmann::json& node) {
     return nullptr;
 }
 
-AdMobConfig::AdMobConfig(const nlohmann::json& node) {}
+AdMobConfig::AdMobConfig(const nlohmann::json& node) {
+    timeOut_ = node.value("time_out", 30);
+}
 
 Task<> AdMobConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IAdMob>();
-    co_await plugin_->initialize();
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize();
+        });
 }
 
 Network AdMobConfig::network() const {
@@ -86,6 +96,8 @@ std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
     switch (format) {
     case AdFormat::Banner:
         return plugin_->createBannerAd(id, AdMobBannerAdSize::Normal);
+    case AdFormat::Rectangle:
+        return plugin_->createBannerAd(id, AdMobBannerAdSize::MediumRectangle);
     case AdFormat::AppOpen:
         return plugin_->createAppOpenAd(id);
     case AdFormat::Interstitial:
@@ -100,11 +112,18 @@ std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
 
 AppLovinConfig::AppLovinConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
+    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> AppLovinConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IAppLovin>();
-    co_await plugin_->initialize(appId_);
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize(appId_);
+        });
 }
 
 Network AppLovinConfig::network() const {
@@ -122,11 +141,19 @@ std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
     }
 }
 
-FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {}
+FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {
+    timeOut_ = node.value("time_out", 30);
+}
 
 Task<> FacebookAdsConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IFacebookAds>();
-    co_await plugin_->initialize();
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize();
+        });
 }
 
 Network FacebookAdsConfig::network() const {
@@ -139,6 +166,9 @@ std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
     case AdFormat::Banner:
         return plugin_->createBannerAd(id,
                                        FacebookBannerAdSize::BannerHeight50);
+    case AdFormat::Rectangle:
+        return plugin_->createBannerAd(
+            id, FacebookBannerAdSize::RectangleHeight250);
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:
@@ -151,11 +181,18 @@ std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
 
 IronSourceConfig::IronSourceConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
+    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> IronSourceConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IIronSource>();
-    co_await plugin_->initialize(appId_);
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize(appId_);
+        });
 }
 
 Network IronSourceConfig::network() const {
@@ -177,11 +214,18 @@ std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
 
 UnityAdsConfig::UnityAdsConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
+    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> UnityAdsConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IUnityAds>();
-    co_await plugin_->initialize(appId_, false);
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize(appId_, false);
+        });
 }
 
 Network UnityAdsConfig::network() const {
@@ -203,11 +247,18 @@ std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
 
 VungleConfig::VungleConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
+    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> VungleConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IVungle>();
-    co_await plugin_->initialize(appId_);
+    co_await whenAny(
+        [this]() -> Task<> { //
+            co_await Delay(timeOut_);
+        },
+        [this]() -> Task<> { //
+            co_await plugin_->initialize(appId_);
+        });
 }
 
 Network VungleConfig::network() const {
@@ -249,6 +300,9 @@ std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
     if (format == "banner") {
         return std::make_shared<BannerConfig>(node);
     }
+    if (format == "rect") {
+        return std::make_shared<RectangleConfig>(node);
+    }
     if (format == "app_open") {
         return std::make_shared<AppOpenConfig>(node);
     }
@@ -272,6 +326,21 @@ AdFormat BannerConfig::format() const {
 }
 
 std::shared_ptr<IAd> BannerConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<CocosAdView>(ad);
+}
+
+RectangleConfig::RectangleConfig(const nlohmann::json& node) {
+    instance_ = IAdInstanceConfig<IAdView>::parse<MultiAdView>(
+        AdFormat::Rectangle, node["instance"]);
+}
+
+AdFormat RectangleConfig::format() const {
+    return AdFormat::Rectangle;
+}
+
+std::shared_ptr<IAd> RectangleConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
     return std::make_shared<CocosAdView>(ad);

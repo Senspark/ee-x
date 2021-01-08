@@ -61,6 +61,7 @@ void Self::setAd(const std::shared_ptr<IAdView>& ad) {
     if (size_.has_value()) {
         ad->setSize(size_->first, size_->second);
     }
+    noAwait(ad_->load());
 }
 
 void Self::destroy() {

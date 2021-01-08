@@ -22,9 +22,11 @@ Self::DefaultAdsManager(const std::string& configJson) {
 }
 
 Task<bool> Self::initialize() {
-    bannerAd_ = std::make_shared<LazyAdView>();
+    bannerAds_[AdFormat::Banner] = std::make_shared<LazyAdView>();
+    bannerAds_[AdFormat::Rectangle] = std::make_shared<LazyAdView>();
     co_await config_->initialize();
-    initializeBannerAd();
+    initializeBannerAd(AdFormat::Banner);
+    initializeBannerAd(AdFormat::Rectangle);
     initializeFullScreenAd(AdFormat::AppOpen);
     initializeFullScreenAd(AdFormat::Interstitial);
     initializeFullScreenAd(AdFormat::Rewarded);
@@ -32,15 +34,14 @@ Task<bool> Self::initialize() {
     co_return true;
 }
 
-void Self::initializeBannerAd() {
-    auto ad =
-        std::dynamic_pointer_cast<IAdView>(config_->createAd(AdFormat::Banner));
+void Self::initializeBannerAd(AdFormat format) {
+    auto ad = std::dynamic_pointer_cast<IAdView>(config_->createAd(format));
     if (ad == nullptr) {
         return;
     }
-    bannerAd_->setAd(ad);
+    bannerAds_.at(format)->setAd(ad);
     (*handle_) //
-        .bind(*bannerAd_)
+        .bind(*bannerAds_.at(format))
         .addObserver({
             .onClicked =
                 [this] {
@@ -73,36 +74,76 @@ void Self::initializeFullScreenAd(AdFormat format) {
         });
 }
 
+bool Self::isBannerAdLoaded() const {
+    return bannerAds_.at(AdFormat::Banner)->isLoaded();
+}
+
 bool Self::isBannerAdVisible() const {
-    return bannerAd_->isVisible();
+    return bannerAds_.at(AdFormat::Banner)->isVisible();
 }
 
 void Self::setBannerAdVisible(bool visible) {
-    bannerAd_->setVisible(visible);
+    bannerAds_.at(AdFormat::Banner)->setVisible(visible);
 }
 
 std::pair<float, float> Self::getBannerAdAnchor() const {
-    return bannerAd_->getAnchor();
+    return bannerAds_.at(AdFormat::Banner)->getAnchor();
 }
 
 void Self::setBannerAdAnchor(float x, float y) {
-    bannerAd_->setAnchor(x, y);
+    bannerAds_.at(AdFormat::Banner)->setAnchor(x, y);
 }
 
 std::pair<float, float> Self::getBannerAdPosition() const {
-    return bannerAd_->getPosition();
+    return bannerAds_.at(AdFormat::Banner)->getPosition();
 }
 
 void Self::setBannerAdPosition(float x, float y) {
-    bannerAd_->setPosition(x, y);
+    bannerAds_.at(AdFormat::Banner)->setPosition(x, y);
 }
 
 std::pair<float, float> Self::getBannerAdSize() const {
-    return bannerAd_->getSize();
+    return bannerAds_.at(AdFormat::Banner)->getSize();
 }
 
 void Self::setBannerAdSize(float width, float height) {
-    bannerAd_->setSize(width, height);
+    bannerAds_.at(AdFormat::Banner)->setSize(width, height);
+}
+
+bool Self::isRectangleAdLoaded() const {
+    return bannerAds_.at(AdFormat::Rectangle)->isLoaded();
+}
+
+bool Self::isRectangleAdVisible() const {
+    return bannerAds_.at(AdFormat::Rectangle)->isVisible();
+}
+
+void Self::setRectangleAdVisible(bool visible) {
+    bannerAds_.at(AdFormat::Rectangle)->setVisible(visible);
+}
+
+std::pair<float, float> Self::getRectangleAdAnchor() const {
+    return bannerAds_.at(AdFormat::Rectangle)->getAnchor();
+}
+
+void Self::setRectangleAdAnchor(float x, float y) {
+    bannerAds_.at(AdFormat::Rectangle)->setAnchor(x, y);
+}
+
+std::pair<float, float> Self::getRectangleAdPosition() const {
+    return bannerAds_.at(AdFormat::Rectangle)->getPosition();
+}
+
+void Self::setRectangleAdPosition(float x, float y) {
+    bannerAds_.at(AdFormat::Rectangle)->setPosition(x, y);
+}
+
+std::pair<float, float> Self::getRectangleAdSize() const {
+    return bannerAds_.at(AdFormat::Rectangle)->getSize();
+}
+
+void Self::setRectangleAdSize(float width, float height) {
+    bannerAds_.at(AdFormat::Rectangle)->setSize(width, height);
 }
 
 Task<AdResult> Self::showAppOpenAd() {

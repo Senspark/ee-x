@@ -131,12 +131,6 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func checkInitialized() {
-        if !_initialized {
-            assert(false, "Please call initialize() first")
-        }
-    }
-
     func initialize(_ gameId: String, _ testModeEnabled: Bool) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -188,7 +182,9 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     func setDebugModeEnabled(_ enabled: Bool) {
         Thread.runOnMainThread {
-            self.checkInitialized()
+            if !self._initialized {
+                return
+            }
             UnityAds.setDebugMode(enabled)
         }
     }
@@ -204,7 +200,11 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
                 self._logger.debug("\(kTag): \(#function): id = \(adId)")
-                self.checkInitialized()
+                if !self._initialized {
+                    self._logger.debug("\(kTag): \(#function): not initialized")
+                    single(.success(false))
+                    return
+                }
                 single(.success(false))
                 /*
                   FIXME: use UnityAds 3.5.1
@@ -225,7 +225,14 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(adId)")
-            self.checkInitialized()
+            if !self._initialized {
+                self._logger.debug("\(kTag): \(#function): not initialized")
+                self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "message": ""
+                ]))
+                return
+            }
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return

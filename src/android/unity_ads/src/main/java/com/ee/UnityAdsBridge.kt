@@ -105,12 +105,6 @@ class UnityAdsBridge(
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    private fun checkInitialized() {
-        if (!_initialized) {
-            throw IllegalStateException("Please call initialize() first")
-        }
-    }
-
     @AnyThread
     suspend fun initialize(gameId: String, testModeEnabled: Boolean): Boolean {
         return suspendCancellableCoroutine { cont ->
@@ -173,7 +167,9 @@ class UnityAdsBridge(
     @AnyThread
     private fun setDebugModeEnabled(enabled: Boolean) {
         Thread.runOnMainThread {
-            checkInitialized()
+            if (!_initialized) {
+                return@runOnMainThread
+            }
             UnityAds.setDebugMode(enabled)
         }
     }
@@ -192,7 +188,11 @@ class UnityAdsBridge(
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 _logger.debug("$kTag: loadRewardedAd: id = $adId")
-                checkInitialized()
+                if (!_initialized) {
+                    _logger.error("$kTag: loadRewardedAd: not initialized")
+                    cont.resume(false)
+                    return@runOnMainThread
+                }
                 UnityAds.load(adId, object : IUnityAdsLoadListener {
                     override fun onUnityAdsAdLoaded(placementId: String?) {
                         Thread.runOnMainThread {
@@ -217,7 +217,19 @@ class UnityAdsBridge(
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::showRewardedAd.name}: id = $adId")
-            checkInitialized()
+            if (!_initialized) {
+                _logger.error("$kTag: ${this::showRewardedAd.name}: not initialized")
+                @Serializable
+                @Suppress("unused")
+                class ResponseA(
+                    val ad_id: String,
+                    val message: String
+                )
+
+                val response = ResponseA(adId, "not initialized")
+                _bridge.callCpp(kOnFailedToShow, response.serialize())
+                return@runOnMainThread
+            }
             UnityAds.addListener(this)
             UnityAds.show(_activity, adId)
         }

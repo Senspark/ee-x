@@ -39,6 +39,7 @@
 #include "ee/core/VideoPlayer.hpp"
 #include "ee/core/VideoPlayerManager.hpp"
 #include "ee/core/WhenAll.hpp"
+#include "ee/core/WhenAny.hpp"
 
 #endif // __cplusplus
 

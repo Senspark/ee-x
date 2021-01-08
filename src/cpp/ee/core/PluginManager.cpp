@@ -109,7 +109,7 @@ using Self = PluginManager;
 
 template <>
 void Self::initializePlugins<Library::Core>() {
-    ee_staticInitializePlugins("2.2.0");
+    ee_staticInitializePlugins("2.2.1");
     bridge_ = &MessageBridge::getInstance();
     Platform::registerHandlers(*bridge_);
 

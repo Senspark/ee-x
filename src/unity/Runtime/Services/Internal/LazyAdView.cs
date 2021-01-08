@@ -39,6 +39,7 @@ namespace EE.Internal {
                 if (_size.HasValue) {
                     _ad.Size = _size.Value;
                 }
+                Utils.NoAwait(async () => await _ad.Load());
             }
         }
 

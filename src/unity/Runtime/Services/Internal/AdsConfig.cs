@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using SimpleJSON;
@@ -17,6 +16,7 @@ namespace EE.Internal {
 
     internal enum AdFormat {
         Banner,
+        Rectangle,
         AppOpen,
         Interstitial,
         Rewarded
@@ -75,13 +75,15 @@ namespace EE.Internal {
 
     internal class AdMobConfig : INetworkConfig {
         private IAdMob _plugin;
+        private readonly int _timeOut;
 
         public AdMobConfig(JSONNode node) {
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IAdMob>();
-            await _plugin.Initialize();
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
         }
 
         public Network Network => Network.AdMob;
@@ -90,6 +92,8 @@ namespace EE.Internal {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, AdMobBannerAdSize.Normal);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, AdMobBannerAdSize.MediumRectangle);
                 case AdFormat.AppOpen:
                     return _plugin.CreateAppOpenAd(id);
                 case AdFormat.Interstitial:
@@ -105,13 +109,15 @@ namespace EE.Internal {
 
     internal class FacebookAdsConfig : INetworkConfig {
         private IFacebookAds _plugin;
+        private readonly int _timeOut;
 
         public FacebookAdsConfig(JSONNode node) {
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IFacebookAds>();
-            await _plugin.Initialize();
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
         }
 
         public Network Network => Network.FacebookAds;
@@ -120,6 +126,8 @@ namespace EE.Internal {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, FacebookBannerAdSize.BannerHeight50);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, FacebookBannerAdSize.RectangleHeight250);
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:
@@ -134,14 +142,16 @@ namespace EE.Internal {
     internal class IronSourceConfig : INetworkConfig {
         private IIronSource _plugin;
         private readonly string _appId;
+        private readonly int _timeOut;
 
         public IronSourceConfig(JSONNode node) {
             _appId = node["app_id"];
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IIronSource>();
-            await _plugin.Initialize(_appId);
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId));
         }
 
         public Network Network => Network.IronSource;
@@ -162,14 +172,16 @@ namespace EE.Internal {
     internal class UnityAdsConfig : INetworkConfig {
         private IUnityAds _plugin;
         private readonly string _appId;
+        private readonly int _timeOut;
 
         public UnityAdsConfig(JSONNode node) {
             _appId = node["app_id"];
+            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IUnityAds>();
-            await _plugin.Initialize(_appId, false);
+            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
         public Network Network => Network.IronSource;
@@ -240,6 +252,21 @@ namespace EE.Internal {
         }
 
         public AdFormat Format => AdFormat.Banner;
+
+        public IAd CreateAd(INetworkConfigManager manager) {
+            var ad = _instance.CreateAd(manager);
+            return new UnityAdView(ad);
+        }
+    }
+
+    internal class RectangleConfig : IAdConfig {
+        private readonly IAdInstanceConfig<IAdView> _instance;
+
+        public RectangleConfig(JSONNode node) {
+            _instance = AdInstanceConfig<IAdView>.Parse<MultiAdView>(AdFormat.Rectangle, node["instance"]);
+        }
+
+        public AdFormat Format => AdFormat.Rectangle;
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);

@@ -24,6 +24,7 @@ enum class Network {
 
 enum class AdFormat {
     Banner,
+    Rectangle,
     AppOpen,
     Interstitial,
     Rewarded,
@@ -74,6 +75,7 @@ public:
 
 private:
     std::shared_ptr<IAdMob> plugin_;
+    int timeOut_;
 };
 
 class AppLovinConfig : public INetworkConfig {
@@ -88,6 +90,7 @@ public:
 private:
     std::shared_ptr<IAppLovin> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class FacebookAdsConfig : public INetworkConfig {
@@ -101,6 +104,7 @@ public:
 
 private:
     std::shared_ptr<IFacebookAds> plugin_;
+    int timeOut_;
 };
 
 class IronSourceConfig : public INetworkConfig {
@@ -115,6 +119,7 @@ public:
 private:
     std::shared_ptr<IIronSource> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class UnityAdsConfig : public INetworkConfig {
@@ -129,6 +134,7 @@ public:
 private:
     std::shared_ptr<IUnityAds> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class VungleConfig : public INetworkConfig {
@@ -143,6 +149,7 @@ public:
 private:
     std::shared_ptr<IVungle> plugin_;
     std::string appId_;
+    int timeOut_;
 };
 
 class IAdConfig;
@@ -183,6 +190,19 @@ class IAdInstanceConfig;
 class BannerConfig : public IAdConfig {
 public:
     explicit BannerConfig(const nlohmann::json& node);
+
+    virtual AdFormat format() const override;
+
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
+
+private:
+    std::shared_ptr<IAdInstanceConfig<IAdView>> instance_;
+};
+
+class RectangleConfig : public IAdConfig {
+public:
+    explicit RectangleConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 

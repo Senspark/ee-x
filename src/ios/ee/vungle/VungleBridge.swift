@@ -84,12 +84,6 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 
-    func checkInitialized() {
-        if !_initialized {
-            assert(false, "Please call initialize() first")
-        }
-    }
-
     func initialize(_ appId: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
@@ -127,7 +121,15 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
 
     func loadRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
-            self.checkInitialized()
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
+            if !self._initialized {
+                self._logger.debug("\(kTag): \(#function): not initialized")
+                self._bridge.callCpp(kOnFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "message": "not initialized"
+                ]))
+                return
+            }
             do {
                 self._loadingAdIds.insert(adId)
                 try self._sdk.loadPlacement(withID: adId)
@@ -145,7 +147,15 @@ class VungleBridge: NSObject, IPlugin, VungleSDKDelegate {
 
     func showRewardedAd(_ adId: String) {
         Thread.runOnMainThread {
-            self.checkInitialized()
+            self._logger.debug("\(kTag): \(#function): id = \(adId)")
+            if !self._initialized {
+                self._logger.debug("\(kTag): \(#function): not initialized")
+                self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "ad_id": adId,
+                    "message": "not initialized"
+                ]))
+                return
+            }
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Root view is null")
                 return
